@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED1CAC64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 21:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A78EC64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 21:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 999C681753;
-	Tue, 28 Feb 2023 21:40:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 999C681753
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3256681753;
+	Tue, 28 Feb 2023 21:41:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3256681753
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3pF2yRoAhZMQ; Tue, 28 Feb 2023 21:40:29 +0000 (UTC)
+	with ESMTP id L4OHY_1djea3; Tue, 28 Feb 2023 21:41:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA3958149E;
-	Tue, 28 Feb 2023 21:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA3958149E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B74661BF2BF
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 21:40:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A9AF8149E;
+	Tue, 28 Feb 2023 21:41:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A9AF8149E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0826A1BF2BF
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 21:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E7098149E
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 21:40:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E7098149E
+ by smtp2.osuosl.org (Postfix) with ESMTP id E472E40191
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 21:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E472E40191
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qu0yjAsEvKF3 for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 21:40:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A8ED0bPNfCym for <buildroot@lists.busybox.net>;
+ Tue, 28 Feb 2023 21:41:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A756F813FC
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 21:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A756F813FC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B16F400C8
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 21:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B16F400C8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9640486DF0; Tue, 28 Feb 2023 21:40:26 +0000 (UTC)
+ id EE0B686DF5; Tue, 28 Feb 2023 21:41:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 22:31:28 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 2f8b83f5e4ff3484fc39987652c31e1847ac1725
-X-Git-Newrev: 4621c597416b75ca60f9b61270dca5fe26181652
+Date: Tue, 28 Feb 2023 22:32:08 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 4f9cbe8bc85ac6234c628c1a8ca04bda796fb7d0
+X-Git-Newrev: 160d949f05137dcf280c20efeca6d832f034c5bb
 X-Patchwork-Hint: ignore
-Message-Id: <20230228214026.9640486DF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/zabbix: fix
+Message-Id: <20230228214133.EE0B686DF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/zabbix: fix
  BR2_SHARED_STATIC_LIBS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4621c597416b75ca60f9b61270dca5fe26181652
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=160d949f05137dcf280c20efeca6d832f034c5bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 zabbix uses custom --enable-{static,shared} options, instead of standard
 libtool directives resulting in the following build failure with openssl
