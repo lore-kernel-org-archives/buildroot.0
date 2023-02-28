@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 095F7C64ED6
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96927C64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:54:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2DC561189;
-	Tue, 28 Feb 2023 15:54:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2DC561189
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32FC161171;
+	Tue, 28 Feb 2023 15:54:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32FC161171
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jqwJFpACCWSG; Tue, 28 Feb 2023 15:54:20 +0000 (UTC)
+	with ESMTP id 39I9ObU0IJnw; Tue, 28 Feb 2023 15:54:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE33761171;
-	Tue, 28 Feb 2023 15:54:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE33761171
+	by smtp3.osuosl.org (Postfix) with ESMTP id 630E0611A3;
+	Tue, 28 Feb 2023 15:54:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 630E0611A3
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4BEF31BF2AA
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:53:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DC8EF1BF2AA
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B72784025F
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:53:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B72784025F
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6C82417D2
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6C82417D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G19sOdCNVW3T for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67E5D40342
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67E5D40342
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53B5886CE9; Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
+ with ESMTP id AiBYYw_6mcIw for <buildroot@lists.busybox.net>;
+ Tue, 28 Feb 2023 15:52:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EB4B41904
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5EB4B41904
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:52:50 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3D403100009
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:52:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1pX2HW-009pbc-9M
+ for buildroot@buildroot.org; Tue, 28 Feb 2023 16:52:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 16:46:55 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 10ae94b6bbfac57c23508129b942f052f0797dce
-X-Git-Newrev: 0407c5ed01f8b4e0ddb8f0f6132c18c758e61f7a
-X-Patchwork-Hint: ignore
-Message-Id: <20230228155307.53B5886CE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/xz: fix
- microblaze compiles
+References: <20230207170040.3503236-1-peter@korsgaard.com>
+ <20230207170040.3503236-2-peter@korsgaard.com>
+Date: Tue, 28 Feb 2023 16:52:46 +0100
+In-Reply-To: <20230207170040.3503236-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 7 Feb 2023 18:00:40 +0100")
+Message-ID: <878rghkcs1.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 2/2] support/dependencies/dependencies.sh:
+ ensure git is >= 2.0.0 for vendoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,96 +64,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0407c5ed01f8b4e0ddb8f0f6132c18c758e61f7a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Patch xz to check if __attribute__((symver ..)) is supported via a
-compile check during configure.
+ > The go vendoring fails on CentOS 7 (which uses git 1.8.3.1) with errors
+ > related to shallow clones:
 
-Fixes:
-  http://autobuild.buildroot.org/results/c0d/c0de72e5a34b379e0c516ad08984bb2c4b0abb5c//
+ > make docker-compose-source
+ > ..
+ > go: downloading github.com/matttproud/golang_protobuf_extensions v1.0.4
+ > github.com/docker/compose/v2/pkg/mocks imports
+ >         github.com/theupdateframework/notary/client imports
+ >         github.com/docker/go/canonical/json: github.com/docker/go@v1.5.1-1.0.20160303222718-d30aec9fd63c: invalid pseudo-version: git fetch --unshallow -f origin in /home/jacmet/source/buildroot-mirror/output/host/share/go-path/pkg/mod/cache/vcs/48fbd2dfabec81f4c93170677bfc89087d4bec07a2d08f6ca5ce3d17962677ee: exit status 128:
+ >         fatal: git fetch-pack: expected shallow list
+ > make[1]: *** [/home/jacmet/source/buildroot-mirror/output/build/docker-compose-2.15.1/.stamp_downloaded] Error 1
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bed21bb9b462bece7cd1b9741643aa553ced4d35)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../xz/0001-Detect-symver-attribute-support.patch  | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ > It works with git 2.0.0 (released May 2014, included in Debian 8), so check
+ > for >= 2.0.0 with logic similar to the GNU patch version check.
 
-diff --git a/package/xz/0001-Detect-symver-attribute-support.patch b/package/xz/0001-Detect-symver-attribute-support.patch
-new file mode 100644
-index 0000000000..9ec43ea7a0
---- /dev/null
-+++ b/package/xz/0001-Detect-symver-attribute-support.patch
-@@ -0,0 +1,61 @@
-+From 231add523328ad9e021d8f2b02697b6a11719430 Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <vfazio@gmail.com>
-+Date: Tue, 7 Feb 2023 08:51:24 -0600
-+Subject: [PATCH] Detect symver attribute support
-+
-+On non-ELF platforms, such as microblaze, builds will fail when trying
-+to add symver information because  __attribute__((symver ..)) is not
-+supported even though __has_attribute(__symver__) returns true.
-+
-+Support for symver needs to be detected via a compile test since
-+__has_attribute can report false positives [0].
-+
-+Add a configure compile check for __attribute__((symver ..)) to ensure
-+it is supported and define a variable to advertise support.
-+
-+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c1
-+
-+Upstream: https://github.com/tukaani-project/xz/pull/32
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+---
-+ configure.ac                | 9 +++++++++
-+ src/liblzma/common/common.h | 2 +-
-+ 2 files changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5ad5589..08c623a 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -791,6 +791,15 @@ else
-+ 				time with Libtool if neither --with-pic nor
-+ 				--without-pic is used). This define must be
-+ 				used together with liblzma_linux.map.])
-++			OLD_CFLAGS="$CFLAGS"
-++			CFLAGS="$CFLAGS -Werror"  # we need -Werror to make sure the attribute is not ignored
-++			AC_COMPILE_IFELSE([AC_LANG_SOURCE(
-++				[__attribute__ ((symver ("test@TEST"))) void foo(void) { }
-++				])],
-++				[AC_DEFINE([HAVE_SYMVER_ATTRIBUTE], [1],
-++					[Define to 1 if GCC supports the symver attribute])],
-++				[])
-++			CFLAGS="$OLD_CFLAGS"
-+ 			;;
-+ 		*)
-+ 			enable_symbol_versions=generic
-+diff --git a/src/liblzma/common/common.h b/src/liblzma/common/common.h
-+index 11fec52..1d2ef9c 100644
-+--- a/src/liblzma/common/common.h
-++++ b/src/liblzma/common/common.h
-+@@ -76,7 +76,7 @@
-+ // too (which doesn't support __symver__) so use it to detect if __symver__
-+ // is available. This should be far more reliable than looking at compiler
-+ // version macros as nowadays especially __GNUC__ is defined by many compilers.
-+-#	if lzma_has_attribute(__symver__)
-++#	if defined(HAVE_SYMVER_ATTRIBUTE) 
-+ #		define LZMA_SYMVER_API(extnamever, type, intname) \
-+ 			extern __attribute__((__symver__(extnamever))) \
-+ 					LZMA_API(type) intname
-+-- 
-+2.25.1
-+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2022.11.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
