@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9DF7C64EC7
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 16:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88E57C64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 16:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63DCB60E46;
-	Tue, 28 Feb 2023 16:00:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63DCB60E46
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36E98611BA;
+	Tue, 28 Feb 2023 16:00:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E98611BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b7_mnJ4m3y-a; Tue, 28 Feb 2023 16:00:02 +0000 (UTC)
+	with ESMTP id LMosoqQPEPIT; Tue, 28 Feb 2023 16:00:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78485611B4;
-	Tue, 28 Feb 2023 16:00:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78485611B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4138F611BF;
+	Tue, 28 Feb 2023 16:00:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4138F611BF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BF8901BF20F
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:59:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0CD291BF20F
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93FEB418E7
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:59:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93FEB418E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7EB6418AD
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:59:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7EB6418AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WrvSNN4anx6u for <buildroot@lists.busybox.net>;
+ with ESMTP id ytOCado5wQJE for <buildroot@lists.busybox.net>;
  Tue, 28 Feb 2023 15:59:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58E47418B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76095418CC
  for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58E47418B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76095418CC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4533B86D10; Tue, 28 Feb 2023 15:59:09 +0000 (UTC)
+ id 5C38D86D0D; Tue, 28 Feb 2023 15:59:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 16:47:31 +0100
+Date: Tue, 28 Feb 2023 16:52:38 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f260466243b3a87b11e6af3eb85b767a95f582f3
-X-Git-Newrev: 30f7426bce3fc340d3970d2e5e9e798257611466
+X-Git-Oldrev: ace092f8f372c6e68a05e93ca24831e0af73e8ba
+X-Git-Newrev: ff9115673eb413e300aa7cb7e868413489d9024a
 X-Patchwork-Hint: ignore
-Message-Id: <20230228155909.4533B86D10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/xz: patch
- configure due to microblaze patch
+Message-Id: <20230228155909.5C38D86D0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ support/dependencies/dependencies.sh: ensure git is >= 2.0.0 for vendoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,135 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30f7426bce3fc340d3970d2e5e9e798257611466
+commit: https://git.buildroot.net/buildroot/commit/?id=ff9115673eb413e300aa7cb7e868413489d9024a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit bed21bb9b added a patch to change configure.ac but failed to
-update configure which caused build failures due to the timestamp
-difference between configure and configure.ac and the makefile attempting
-to run aclocal.
+The go vendoring fails on CentOS 7 (which uses git 1.8.3.1) with errors
+related to shallow clones:
 
-XZ_AUTORECONF = YES creates a circular dependency where the host autotools
-need host-xz which also gets patched.  Because of this, we need to patch
-xz's configure script manually and NOT patch configure.ac so its timestamp
-stays older than Makefile.in.
+make docker-compose-source
+..
+go: downloading github.com/matttproud/golang_protobuf_extensions v1.0.4
+github.com/docker/compose/v2/pkg/mocks imports
+        github.com/theupdateframework/notary/client imports
+        github.com/docker/go/canonical/json: github.com/docker/go@v1.5.1-1.0.20160303222718-d30aec9fd63c: invalid pseudo-version: git fetch --unshallow -f origin in /home/jacmet/source/buildroot-mirror/output/host/share/go-path/pkg/mod/cache/vcs/48fbd2dfabec81f4c93170677bfc89087d4bec07a2d08f6ca5ce3d17962677ee: exit status 128:
+        fatal: git fetch-pack: expected shallow list
+make[1]: *** [/home/jacmet/source/buildroot-mirror/output/build/docker-compose-2.15.1/.stamp_downloaded] Error 1
 
-While we're doing this, correct the language in the commit body of the
-patch, remove a stray whitespace, and fix the offset for configure.ac
+It works with git 2.0.0 (released May 2014, included in Debian 8), so check
+for >= 2.0.0 with logic similar to the GNU patch version check.
 
-Fixes: bed21bb9b ("package/xz: fix microblaze compiles")
-Fixes: http://autobuild.buildroot.net/results/958/9586f21e447ef9923606b1385ff333138406b685/
-
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-[Peter: Only patch configure]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e5a83df8da04f5854c2e248e23dea3af620954cd)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f229564c36ec64c1f1292b7281ae0bd33840d7a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xz/0001-Detect-symver-attribute-support.patch  | 71 ++++++++++++----------
- 1 file changed, 40 insertions(+), 31 deletions(-)
+ support/dependencies/dependencies.sh | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/xz/0001-Detect-symver-attribute-support.patch b/package/xz/0001-Detect-symver-attribute-support.patch
-index 9ec43ea7a0..462fa9d86b 100644
---- a/package/xz/0001-Detect-symver-attribute-support.patch
-+++ b/package/xz/0001-Detect-symver-attribute-support.patch
-@@ -1,11 +1,11 @@
--From 231add523328ad9e021d8f2b02697b6a11719430 Mon Sep 17 00:00:00 2001
-+From f0e0e8bd08b4d4e7c89a5a3b7d9a3c083f7e5432 Mon Sep 17 00:00:00 2001
- From: Vincent Fazio <vfazio@gmail.com>
--Date: Tue, 7 Feb 2023 08:51:24 -0600
-+Date: Wed, 8 Feb 2023 12:58:37 +0000
- Subject: [PATCH] Detect symver attribute support
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 3822f0ca0e..89ed3c9df9 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -183,6 +183,16 @@ for prog in perl tar wget cpio unzip rsync bc cmp find xargs ${DL_TOOLS} ; do
+ 			echo "  xargs is usually part of the findutils package in your distribution"
+ 		fi
+ 	fi
++
++	# we need git >= 2.0.0 for shallow clones / vendoring
++	if test $prog = "git" ; then
++		GIT_VERSION="$(git --version | sed -n 's/^git version \(.*\)/\1/p')"
++		GIT_MAJOR="$(echo "${GIT_VERSION}" | cut -d . -f 1)"
++		if [ "${GIT_MAJOR}" -lt 2 ]; then
++			echo "You have git '${GIT_VERSION}' installed. Git >= 2.0.0 is required"
++			exit 1
++		fi
++	fi
+ done
  
--On non-ELF platforms, such as microblaze, builds will fail when trying
--to add symver information because  __attribute__((symver ..)) is not
--supported even though __has_attribute(__symver__) returns true.
-+On Microblaze, builds will fail when trying to add symver information
-+because  __attribute__((symver ..)) is not supported even though
-+__has_attribute(__symver__) returns true.
- 
- Support for symver needs to be detected via a compile test since
- __has_attribute can report false positives [0].
-@@ -18,33 +18,16 @@ it is supported and define a variable to advertise support.
- Upstream: https://github.com/tukaani-project/xz/pull/32
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+[Peter: patch configure instead of configure.ac so autoreconf isn't
-+triggered at build time]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- ---
-- configure.ac                | 9 +++++++++
-- src/liblzma/common/common.h | 2 +-
-- 2 files changed, 10 insertions(+), 1 deletion(-)
-+ configure                   | 15 +++++++++++++++
-+ src/liblzma/common/common.h |  2 +-
-+ 2 files changed, 16 insertions(+), 1 deletion(-)
- 
--diff --git a/configure.ac b/configure.ac
--index 5ad5589..08c623a 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -791,6 +791,15 @@ else
-- 				time with Libtool if neither --with-pic nor
-- 				--without-pic is used). This define must be
-- 				used together with liblzma_linux.map.])
--+			OLD_CFLAGS="$CFLAGS"
--+			CFLAGS="$CFLAGS -Werror"  # we need -Werror to make sure the attribute is not ignored
--+			AC_COMPILE_IFELSE([AC_LANG_SOURCE(
--+				[__attribute__ ((symver ("test@TEST"))) void foo(void) { }
--+				])],
--+				[AC_DEFINE([HAVE_SYMVER_ATTRIBUTE], [1],
--+					[Define to 1 if GCC supports the symver attribute])],
--+				[])
--+			CFLAGS="$OLD_CFLAGS"
-- 			;;
-- 		*)
-- 			enable_symbol_versions=generic
- diff --git a/src/liblzma/common/common.h b/src/liblzma/common/common.h
--index 11fec52..1d2ef9c 100644
-+index 671d3bc..27b56ee 100644
- --- a/src/liblzma/common/common.h
- +++ b/src/liblzma/common/common.h
- @@ -76,7 +76,7 @@
-@@ -52,10 +35,36 @@ index 11fec52..1d2ef9c 100644
-  // is available. This should be far more reliable than looking at compiler
-  // version macros as nowadays especially __GNUC__ is defined by many compilers.
- -#	if lzma_has_attribute(__symver__)
--+#	if defined(HAVE_SYMVER_ATTRIBUTE) 
-++#	if defined(HAVE_SYMVER_ATTRIBUTE)
-  #		define LZMA_SYMVER_API(extnamever, type, intname) \
-  			extern __attribute__((__symver__(extnamever))) \
-  					LZMA_API(type) intname
-+diff --git a/configure b/configure
-+index ff0eed5..e685b30 100755
-+--- a/configure
-++++ b/configure
-+@@ -16687,6 +16687,21 @@ printf "%s\n" "" >&6; }
-+ 
-+ printf "%s\n" "#define HAVE_SYMBOL_VERSIONS_LINUX $have_symbol_versions_linux" >>confdefs.h
-+ 
-++			OLD_CFLAGS="$CFLAGS"
-++			CFLAGS="$CFLAGS -Werror"  # we need -Werror to make sure the attribute is not ignored
-++			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-++/* end confdefs.h.  */
-++__attribute__ ((symver ("test@TEST"))) void foo(void) { }
-++
-++_ACEOF
-++if ac_fn_c_try_compile "$LINENO"
-++then :
-++
-++printf "%s\n" "#define HAVE_SYMVER_ATTRIBUTE 1" >>confdefs.h
-++
-++fi
-++rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
-++			CFLAGS="$OLD_CFLAGS"
-+ 			;;
-+ 		*)
-+ 			enable_symbol_versions=generic
- -- 
--2.25.1
-+2.34.1
- 
+ if test "${missing_progs}" = "yes" ; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
