@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10440C64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:36:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C79D5C64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:36:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E4FC60AE2;
-	Tue, 28 Feb 2023 20:36:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E4FC60AE2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 656CD60AD5;
+	Tue, 28 Feb 2023 20:36:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 656CD60AD5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8kHafBXLGIrG; Tue, 28 Feb 2023 20:36:20 +0000 (UTC)
+	with ESMTP id OqYT77vYFRpg; Tue, 28 Feb 2023 20:36:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0DB260AD5;
-	Tue, 28 Feb 2023 20:36:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0DB260AD5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 702C21BF293
+	by smtp3.osuosl.org (Postfix) with ESMTP id 570A560AD6;
+	Tue, 28 Feb 2023 20:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 570A560AD6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 982231BF870
  for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5870C400D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7ECE060AF2
  for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:35:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5870C400D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ECE060AF2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9Y8Ic2DMomWv for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0i3EQcqXgnRl for <buildroot@lists.busybox.net>;
  Tue, 28 Feb 2023 20:35:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98325400FC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D18860AD5
  for <buildroot@buildroot.org>; Tue, 28 Feb 2023 20:35:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98325400FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D18860AD5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8342F86DB0; Tue, 28 Feb 2023 20:35:20 +0000 (UTC)
+ id 6C6E686DAD; Tue, 28 Feb 2023 20:35:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 21:34:30 +0100
+Date: Tue, 28 Feb 2023 21:21:36 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 72697a95c72d02cf852a1f59d9d48351deff2f08
-X-Git-Newrev: 1d613d478ee2e4f16cf68e508451d1a26a7a612a
+X-Git-Oldrev: 5048dfff7c72660d9e7fc934713ed43849fb6c4e
+X-Git-Newrev: 305b06687d312159deeb162d3288d0e9e47c7a16
 X-Patchwork-Hint: ignore
-Message-Id: <20230228203520.8342F86DB0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ssdp-responder;
- drop systemd unit installation, not needed
+Message-Id: <20230228203520.6C6E686DAD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ configs/asus_tinker_rk3288: fix boot by prepending tpl to spl+u-boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d613d478ee2e4f16cf68e508451d1a26a7a612a
+commit: https://git.buildroot.net/buildroot/commit/?id=305b06687d312159deeb162d3288d0e9e47c7a16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-When systemd is enabled the ssdp-responder build system already installs
-the unit file, with the correct name, so we can safely drop this.
+During the last U-boot version bump it's not been noted that the TPL
+was not prepended to SPL anymore preventing the board to boot, so
+let's copy TPL to the image folder, prepend it to u-boot-spl-dtb.bin
+and place it at offset 32KB, where RK3288 bootrom expects to find
+it. Let's also place u-boot-dtb separated from SPL at offset 8M, where
+the SPL expects it to find it.
 
-This fixes the recurring autobuilder problems that cropped up the last
-week+ or so after fixing the spelling error in 6e0ba6b.
-
- - http://autobuild.buildroot.net/results/f6912d6f79155c5d12811beeb6cb43860e37e7e7
- - http://autobuild.buildroot.net/results/7ee4ed26de7e45b52a9f6f36b839e578d2319247
- - http://autobuild.buildroot.net/results/33d9c10ea58a7cd3b3e2ed75d586007a92ccdaf0
- - http://autobuild.buildroot.net/results/f1238081fc94e3004aebb8e849fdd567a92a2d39
- - http://autobuild.buildroot.net/results/f7f2cf790f51e6224dca258c52bd31d21d621074
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d6e3d36a85f19acedd2ed58f5b8616dbf24f57a4)
+(cherry picked from commit e738d5b7251918a62922f3f3b6491b642f9ec182)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ssdp-responder/ssdp-responder.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ board/asus/tinker/genimage.cfg       | 11 +++++++++--
+ board/asus/tinker/post-build.sh      |  4 ++--
+ configs/asus_tinker_rk3288_defconfig |  3 +--
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
-index d878e3c629..9b477e48cc 100644
---- a/package/ssdp-responder/ssdp-responder.mk
-+++ b/package/ssdp-responder/ssdp-responder.mk
-@@ -25,9 +25,4 @@ define SSDP_RESPONDER_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50ssdpd
- endef
+diff --git a/board/asus/tinker/genimage.cfg b/board/asus/tinker/genimage.cfg
+index a4b1e8d608..fa7fd734f2 100644
+--- a/board/asus/tinker/genimage.cfg
++++ b/board/asus/tinker/genimage.cfg
+@@ -2,12 +2,19 @@ image sdcard.img {
+ 	hdimage {
+ 	}
  
--define SSDP_RESPONDER_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 $(@D)/ssdp-responder.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/ssdp-responder.service
--endef
--
- $(eval $(autotools-package))
+-	partition u-boot-spl-dtb {
++	partition u-boot-tpl-spl-dtb {
+ 		in-partition-table = "no"
+-		image = "u-boot-spl-dtb.img"
++		image = "u-boot-tpl-spl-dtb.img"
+ 		offset = 32K
+ 	}
+ 
++	partition u-boot-dtb {
++		in-partition-table = "no"
++		image = "u-boot-dtb.img"
++		offset = 8M
++		size = 30M
++	}
++
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
+diff --git a/board/asus/tinker/post-build.sh b/board/asus/tinker/post-build.sh
+index 8108ed83ff..ffbbcdeb58 100755
+--- a/board/asus/tinker/post-build.sh
++++ b/board/asus/tinker/post-build.sh
+@@ -3,7 +3,7 @@
+ MKIMAGE=$HOST_DIR/bin/mkimage
+ BOARD_DIR="$(dirname $0)"
+ 
+-$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
+-cat $BINARIES_DIR/u-boot-dtb.bin >> $BINARIES_DIR/u-boot-spl-dtb.img
++$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-tpl.bin $BINARIES_DIR/u-boot-tpl.img
++cat $BINARIES_DIR/u-boot-tpl.img $BINARIES_DIR/u-boot-spl-dtb.bin > $BINARIES_DIR/u-boot-tpl-spl-dtb.img
+ 
+ install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
+index 6963fa939f..02b340a7f1 100644
+--- a/configs/asus_tinker_rk3288_defconfig
++++ b/configs/asus_tinker_rk3288_defconfig
+@@ -17,9 +17,8 @@ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
++BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
