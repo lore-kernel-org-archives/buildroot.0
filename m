@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5258CC64ED6
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:59:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C173BC64ED6
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC69C60AD4;
-	Tue, 28 Feb 2023 15:59:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC69C60AD4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CECE6110F;
+	Tue, 28 Feb 2023 15:59:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CECE6110F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1Hs2ixWySkz7; Tue, 28 Feb 2023 15:59:25 +0000 (UTC)
+	with ESMTP id qlQ-m8xkYpSA; Tue, 28 Feb 2023 15:59:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 140C66117B;
-	Tue, 28 Feb 2023 15:59:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 140C66117B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3D9AC1BF2AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79FDF6115B;
+	Tue, 28 Feb 2023 15:59:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79FDF6115B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AD8811BF20F
  for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1751F60E46
+ by smtp4.osuosl.org (Postfix) with ESMTP id 840C0418DF
  for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:59:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1751F60E46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 840C0418DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lJK03ToeCo1m for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yoJpnigdv1ac for <buildroot@lists.busybox.net>;
  Tue, 28 Feb 2023 15:59:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38780600CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EF03418AD
  for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38780600CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EF03418AD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2517286D0B; Tue, 28 Feb 2023 15:59:09 +0000 (UTC)
+ id 3AFA186D0E; Tue, 28 Feb 2023 15:59:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 16:47:13 +0100
+Date: Tue, 28 Feb 2023 16:47:23 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f176b6fa3708fd27740a69d6c31411439c2be08d
-X-Git-Newrev: 36f98b644c7d7376fdb6f3815f284cf8fff9ea14
+X-Git-Oldrev: f5d7c229e43c95309692c33c5830a39cf5e2799a
+X-Git-Newrev: f260466243b3a87b11e6af3eb85b767a95f582f3
 X-Patchwork-Hint: ignore
-Message-Id: <20230228155909.2517286D0B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/xz: bump to
- version 5.2.7
+Message-Id: <20230228155909.3AFA186D0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/xz: fix
+ microblaze compiles
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36f98b644c7d7376fdb6f3815f284cf8fff9ea14
+commit: https://git.buildroot.net/buildroot/commit/?id=f260466243b3a87b11e6af3eb85b767a95f582f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Drop patch (already in version)
+Patch xz to check if __attribute__((symver ..)) is supported via a
+compile check during configure.
 
-https://git.tukaani.org/?p=xz.git;a=blob;f=NEWS;h=0205423e79ce8297102096b0fc8b030ddf5b2023;hb=d24a57b7fc7e5e9267b84367cb0788d3acf7f569
+Fixes:
+  http://autobuild.buildroot.org/results/c0d/c0de72e5a34b379e0c516ad08984bb2c4b0abb5c//
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3ac7d91c874ae9212ae8aee400a194356e301169)
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bed21bb9b462bece7cd1b9741643aa553ced4d35)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xz/xz.hash | 3 +--
- package/xz/xz.mk   | 6 +-----
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ .../xz/0001-Detect-symver-attribute-support.patch  | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index 9577e98e80..3aa68791fd 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,6 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  5117f930900b341493827d63aa910ff5e011e0b994197c3b71c08a20228a42df  xz-5.2.5.tar.bz2
--sha256  98c6cb1042284fe704ec30083f3fc87364ce9ed2ea51f62bbb0ee9d3448717ec  xzgrep-ZDI-CAN-16587.patch
-+sha256  b65f1d0c2708e57716f4dd2216989a73847ac6fdb4168ffceb155767e22b834b  xz-5.2.7.tar.bz2
- 
- # Hash for license files
- sha256  bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c  COPYING
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index cdb01e06a9..004eea94b2 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XZ_VERSION = 5.2.5
-+XZ_VERSION = 5.2.7
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = https://tukaani.org/xz
- XZ_INSTALL_STAGING = YES
-@@ -13,10 +13,6 @@ XZ_LICENSE = Public Domain, GPL-2.0+, GPL-3.0+, LGPL-2.1+
- XZ_LICENSE_FILES = COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
- XZ_CPE_ID_VENDOR = tukaani
- 
--XZ_PATCH = xzgrep-ZDI-CAN-16587.patch
--# xzgrep-ZDI-CAN-16587.patch
--XZ_IGNORE_CVES += CVE-2022-1271
--
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- XZ_CONF_OPTS += --enable-threads
- else
+diff --git a/package/xz/0001-Detect-symver-attribute-support.patch b/package/xz/0001-Detect-symver-attribute-support.patch
+new file mode 100644
+index 0000000000..9ec43ea7a0
+--- /dev/null
++++ b/package/xz/0001-Detect-symver-attribute-support.patch
+@@ -0,0 +1,61 @@
++From 231add523328ad9e021d8f2b02697b6a11719430 Mon Sep 17 00:00:00 2001
++From: Vincent Fazio <vfazio@gmail.com>
++Date: Tue, 7 Feb 2023 08:51:24 -0600
++Subject: [PATCH] Detect symver attribute support
++
++On non-ELF platforms, such as microblaze, builds will fail when trying
++to add symver information because  __attribute__((symver ..)) is not
++supported even though __has_attribute(__symver__) returns true.
++
++Support for symver needs to be detected via a compile test since
++__has_attribute can report false positives [0].
++
++Add a configure compile check for __attribute__((symver ..)) to ensure
++it is supported and define a variable to advertise support.
++
++[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c1
++
++Upstream: https://github.com/tukaani-project/xz/pull/32
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++---
++ configure.ac                | 9 +++++++++
++ src/liblzma/common/common.h | 2 +-
++ 2 files changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5ad5589..08c623a 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -791,6 +791,15 @@ else
++ 				time with Libtool if neither --with-pic nor
++ 				--without-pic is used). This define must be
++ 				used together with liblzma_linux.map.])
+++			OLD_CFLAGS="$CFLAGS"
+++			CFLAGS="$CFLAGS -Werror"  # we need -Werror to make sure the attribute is not ignored
+++			AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+++				[__attribute__ ((symver ("test@TEST"))) void foo(void) { }
+++				])],
+++				[AC_DEFINE([HAVE_SYMVER_ATTRIBUTE], [1],
+++					[Define to 1 if GCC supports the symver attribute])],
+++				[])
+++			CFLAGS="$OLD_CFLAGS"
++ 			;;
++ 		*)
++ 			enable_symbol_versions=generic
++diff --git a/src/liblzma/common/common.h b/src/liblzma/common/common.h
++index 11fec52..1d2ef9c 100644
++--- a/src/liblzma/common/common.h
+++++ b/src/liblzma/common/common.h
++@@ -76,7 +76,7 @@
++ // too (which doesn't support __symver__) so use it to detect if __symver__
++ // is available. This should be far more reliable than looking at compiler
++ // version macros as nowadays especially __GNUC__ is defined by many compilers.
++-#	if lzma_has_attribute(__symver__)
+++#	if defined(HAVE_SYMVER_ATTRIBUTE) 
++ #		define LZMA_SYMVER_API(extnamever, type, intname) \
++ 			extern __attribute__((__symver__(extnamever))) \
++ 					LZMA_API(type) intname
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
