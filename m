@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 635DFC64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:14:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0122DC64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 102A86076C;
-	Tue, 28 Feb 2023 20:14:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 102A86076C
+	by smtp3.osuosl.org (Postfix) with ESMTP id A19E8607B4;
+	Tue, 28 Feb 2023 20:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A19E8607B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kaDJ1DiLof2i; Tue, 28 Feb 2023 20:14:21 +0000 (UTC)
+	with ESMTP id qQpLGdr7btW1; Tue, 28 Feb 2023 20:21:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D9F96117B;
-	Tue, 28 Feb 2023 20:14:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D9F96117B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 31E661BF870
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:12:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5E8B607E1;
+	Tue, 28 Feb 2023 20:21:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5E8B607E1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 336D81BF293
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:21:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C1B140126
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:12:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C1B140126
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C44A418A9
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:21:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C44A418A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vdWAOXRgH5bf for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 20:12:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41F8A400D8
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 20:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41F8A400D8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3068686D99; Tue, 28 Feb 2023 20:12:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AtI7aZ_s969q for <buildroot@lists.busybox.net>;
+ Tue, 28 Feb 2023 20:21:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99509418A5
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 99509418A5
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 20:21:10 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 68F3E40005;
+ Tue, 28 Feb 2023 20:21:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pX6TC-00BJEz-9W; Tue, 28 Feb 2023 21:21:06 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 17:23:58 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: f27eea92640b6e0e75196c983085a2e61fbaf551
-X-Git-Newrev: d80c54ba7bfad405a472d47330b91ebe417b5af9
-X-Patchwork-Hint: ignore
-Message-Id: <20230228201209.3068686D99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/wpewebkit: Build
- with ninja
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20230210223129.C431885174@busybox.osuosl.org>
+Date: Tue, 28 Feb 2023 21:21:06 +0100
+In-Reply-To: <20230210223129.C431885174@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Fri, 10 Feb 2023 23:29:10 +0100")
+Message-ID: <87ttz5h77x.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] configs/asus_tinker_rk3288: fix boot
+ by prepending tpl to spl+u-boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,59 +64,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d80c54ba7bfad405a472d47330b91ebe417b5af9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Wpewebkit needs cmake >= 3.20 when building with the make backend since
-wpewebkit 3.8.0.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=e738d5b7251918a62922f3f3b6491b642f9ec182
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cmake 3.20 is above our minimal version in
-support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
-with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
+ > During the last U-boot version bump it's not been noted that the TPL
+ > was not prepended to SPL anymore preventing the board to boot, so
+ > let's copy TPL to the image folder, prepend it to u-boot-spl-dtb.bin
+ > and place it at offset 32KB, where RK3288 bootrom expects to find
+ > it. Let's also place u-boot-dtb separated from SPL at offset 8M, where
+ > the SPL expects it to find it.
 
-https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wpewebkit/wpewebkit.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+This is presumably the case since commit cb3b484505d6e1
+(configs/asus_tinker_rk3288: bump to Linux kernel 5.14.13 and u-boot
+2021.10), so committed to 2022.11.x and 2022.02.x, thanks.
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index b2bbc0301b..8ddee503e0 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -103,4 +103,23 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
- 
-+# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
-+# above our minimal version in
-+# support/dependencies/check-host-cmake.mk, so use the ninja backend:
-+# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-+WPEWEBKIT_CONF_OPTS += -GNinja
-+WPEWEBKIT_DEPENDENCIES += host-ninja
-+
-+define WPEWEBKIT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
-+endef
-+
-+define WPEWEBKIT_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
-+endef
-+
-+define WPEWEBKIT_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
-+endef
-+
- $(eval $(cmake-package))
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
