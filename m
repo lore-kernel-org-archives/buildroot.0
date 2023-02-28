@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96927C64EC7
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:54:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5807C64ED6
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32FC161171;
-	Tue, 28 Feb 2023 15:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32FC161171
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D9A76115D;
+	Tue, 28 Feb 2023 15:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D9A76115D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 39I9ObU0IJnw; Tue, 28 Feb 2023 15:54:33 +0000 (UTC)
+	with ESMTP id Wl4--d466MYe; Tue, 28 Feb 2023 15:54:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 630E0611A3;
-	Tue, 28 Feb 2023 15:54:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 630E0611A3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DC8EF1BF2AA
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:52:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCD69611A4;
+	Tue, 28 Feb 2023 15:54:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCD69611A4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7FAEA1BF2AA
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6C82417D2
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6C82417D2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 59DD681916
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:53:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59DD681916
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AiBYYw_6mcIw for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 15:52:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EB4B41904
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5EB4B41904
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:52:50 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3D403100009
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:52:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1pX2HW-009pbc-9M
- for buildroot@buildroot.org; Tue, 28 Feb 2023 16:52:46 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Pi-1JPJE3lgU for <buildroot@lists.busybox.net>;
+ Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E60481B83
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E60481B83
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6CC6F86CEE; Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230207170040.3503236-1-peter@korsgaard.com>
- <20230207170040.3503236-2-peter@korsgaard.com>
-Date: Tue, 28 Feb 2023 16:52:46 +0100
-In-Reply-To: <20230207170040.3503236-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 7 Feb 2023 18:00:40 +0100")
-Message-ID: <878rghkcs1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] support/dependencies/dependencies.sh:
- ensure git is >= 2.0.0 for vendoring
+Date: Tue, 28 Feb 2023 16:51:31 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 3f3e133330d96946ceede50d745c8e80487dffd0
+X-Git-Newrev: d62b7f7f91ca6fa1bd761fca183a17131ceef751
+X-Patchwork-Hint: ignore
+Message-Id: <20230228155307.6CC6F86CEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/pkg-generic.mk:
+ require git on the host for packages using cargo/go vendoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,34 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d62b7f7f91ca6fa1bd761fca183a17131ceef751
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > The go vendoring fails on CentOS 7 (which uses git 1.8.3.1) with errors
- > related to shallow clones:
+The vendoring done for cargo / go packages (may) need git, so ensure we
+check for it in dependencies, similar to how it is done for packages
+directly using git.
 
- > make docker-compose-source
- > ..
- > go: downloading github.com/matttproud/golang_protobuf_extensions v1.0.4
- > github.com/docker/compose/v2/pkg/mocks imports
- >         github.com/theupdateframework/notary/client imports
- >         github.com/docker/go/canonical/json: github.com/docker/go@v1.5.1-1.0.20160303222718-d30aec9fd63c: invalid pseudo-version: git fetch --unshallow -f origin in /home/jacmet/source/buildroot-mirror/output/host/share/go-path/pkg/mod/cache/vcs/48fbd2dfabec81f4c93170677bfc89087d4bec07a2d08f6ca5ce3d17962677ee: exit status 128:
- >         fatal: git fetch-pack: expected shallow list
- > make[1]: *** [/home/jacmet/source/buildroot-mirror/output/build/docker-compose-2.15.1/.stamp_downloaded] Error 1
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8c8ee42bbe6ebb7f20978b06a581c42733197ae2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-generic.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > It works with git 2.0.0 (released May 2014, included in Debian 8), so check
- > for >= 2.0.0 with logic similar to the GNU patch version check.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2022.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f9c0ea71e1..31a8006216 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1250,6 +1250,13 @@ else ifeq ($$($(2)_SITE_METHOD),cvs)
+ DL_TOOLS_DEPENDENCIES += cvs
+ endif # SITE_METHOD
+ 
++# cargo/go vendoring (may) need git
++ifeq ($$($(2)_DOWNLOAD_POST_PROCESS),cargo)
++DL_TOOLS_DEPENDENCIES += git
++else ifeq ($$($(2)_DOWNLOAD_POST_PROCESS),go)
++DL_TOOLS_DEPENDENCIES += git
++endif
++
+ DL_TOOLS_DEPENDENCIES += $$(call extractor-system-dependency,$$($(2)_SOURCE))
+ 
+ # Ensure all virtual targets are PHONY. Listed alphabetically.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
