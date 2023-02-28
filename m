@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74763C64EC7
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8EB2C64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D61C6117B;
-	Tue, 28 Feb 2023 15:37:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D61C6117B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 743DC61189;
+	Tue, 28 Feb 2023 15:37:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 743DC61189
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k-n-4WqG_XTS; Tue, 28 Feb 2023 15:37:15 +0000 (UTC)
+	with ESMTP id EA5WdMMk7E-E; Tue, 28 Feb 2023 15:37:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 190B6611A3;
-	Tue, 28 Feb 2023 15:37:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 190B6611A3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7800B1BF2AA
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:35:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91E01611BA;
+	Tue, 28 Feb 2023 15:37:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91E01611BA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 258211BF2AA
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:36:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FD038146A
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:35:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FD038146A
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3AA36117C
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3AA36117C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0SYBofgPyFPv for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 15:35:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zrJNk1sXW94n for <buildroot@lists.busybox.net>;
+ Tue, 28 Feb 2023 15:36:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63A2E81490
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:35:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63A2E81490
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2676461171
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2676461171
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 51C5486CA7; Tue, 28 Feb 2023 15:35:24 +0000 (UTC)
+ id 136C686CC2; Tue, 28 Feb 2023 15:36:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 16:33:36 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 34c193e697a45ad41d7e6e5590f4372a6ad7f92a
-X-Git-Newrev: 348b2e25df76b9a603639dc9a99c03442ab673e1
+Date: Tue, 28 Feb 2023 16:28:26 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 35ddf2f7707d33c8272fddeb2a0fae5647ed8426
+X-Git-Newrev: f21a9f61c59bf1110b051fcbc73f3dcd9bea32ea
 X-Patchwork-Hint: ignore
-Message-Id: <20230228153524.51C5486CA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/wolfssl: disable
- assembly when not supported
+Message-Id: <20230228153629.136C686CC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ support/dependencies/dependencies.sh: silence gcc plugin test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=348b2e25df76b9a603639dc9a99c03442ab673e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f21a9f61c59bf1110b051fcbc73f3dcd9bea32ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-wolfssl contains some assembly code and its configure.ac script
-enables the assembly code depending on the CPU architecture. However,
-the detection logic is not sufficient and leads to using the assembly
-code in situation where it should not.
+The gcc plugin test was not using the -q option to grep causing it to print
+the line to stdout, so fix that.
 
-Here are two examples:
+While we're at it, adjust the locale check to use grep -q instead of
+redirecting to /dev/null for consistency with the other checks.
 
- - As soon as the architecture is mips64/mips64el, it uses assembly
-   code, but that assembly code is not mips64r6 compatible.
-
- - As soon as the architecture is RISC-V, it uses assembly code, but
-   that assembly code uses multiplication instructions, without paying
-   attention that the "M" extension may not be available in the RISC-V
-   CPU instruction set.
-
-In order to avoid this, we introduce a
-BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS hidden boolean to decide when to
-enable/disable assembly code. We set an initial value with the
-supported CPU architectures, with the exclusion of the problematic
-cases described above.
-
-It is pretty likely that this variable will need tuning progressively,
-as it is difficult to determine which CPU variants exactly are
-supported by the assembly code in wolfssl.
-
-Fixes:
-
- - MIPS64 case: http://autobuild.buildroot.net/results/43e/43ee1a457cbeb986d958c9a70cac0676377661c0/
- - RISC-V case: http://autobuild.buildroot.net/results/f05/f056ebe7749a69994afba39a9d4967e2774c45ea/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d8dc5315eb712eca0a5cbf793a6714a47ab6e57e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4fbd2f6d2cf26225f73f584c3a0cacb1b2476f5f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/Config.in  | 12 ++++++++++++
- package/wolfssl/wolfssl.mk |  6 ++++++
- 2 files changed, 18 insertions(+)
+ support/dependencies/dependencies.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
-index 3a97125e8d..c41bdb6888 100644
---- a/package/wolfssl/Config.in
-+++ b/package/wolfssl/Config.in
-@@ -1,3 +1,15 @@
-+config BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	default y if BR2_arm || BR2_armeb
-+	default y if BR2_powerpc
-+	default y if BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_mips64 && !BR2_MIPS_CPU_MIPS32R6
-+	default y if BR2_mips64el && !BR2_MIPS_CPU_MIPS32R6
-+	default y if BR2_mips || BR2_mipsel
-+	default y if BR2_riscv && BR2_RISCV_ISA_RVM
-+	default y if BR2_s390x
-+
- config BR2_PACKAGE_WOLFSSL
- 	bool "wolfssl"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 8f6cba56ec..9f06bb1b4b 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -32,6 +32,12 @@ else
- WOLFSSL_CONF_OPTS += --disable-sslv3
- endif
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index cd0e900ff6..3822f0ca0e 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -203,7 +203,7 @@ if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -l
+ 	exit 1;
+ fi
  
-+ifeq ($(BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS),y)
-+WOLFSSL_CONF_OPTS += --enable-asm
-+else
-+WOLFSSL_CONF_OPTS += --disable-asm
-+endif
-+
- # enable ARMv8 hardware acceleration
- ifeq ($(BR2_aarch64),y)
- WOLFSSL_CONF_OPTS += --enable-armasm
+-if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
++if grep -q ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG ; then
+ 	if ! which locale > /dev/null ; then
+ 		echo
+ 		echo "You need locale support on your build machine to build a toolchain supporting locales"
+@@ -263,7 +263,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
+ 	fi
+ fi
+ 
+-if grep ^BR2_NEEDS_HOST_GCC_PLUGIN_SUPPORT=y $BR2_CONFIG ; then
++if grep -q ^BR2_NEEDS_HOST_GCC_PLUGIN_SUPPORT=y $BR2_CONFIG ; then
+ 	if ! echo "#include <gcc-plugin.h>" | $HOSTCXX_NOCCACHE -I$($HOSTCXX_NOCCACHE -print-file-name=plugin)/include -x c++ -c - -o /dev/null ; then
+ 		echo
+ 		echo "Your Buildroot configuration needs a host compiler capable of building gcc plugins."
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
