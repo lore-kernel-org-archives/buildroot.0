@@ -1,63 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E2EFC64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 23:56:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93873C64EC7
+	for <buildroot@archiver.kernel.org>; Wed,  1 Mar 2023 00:55:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3BFD60B0F;
-	Tue, 28 Feb 2023 23:56:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3BFD60B0F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 021D1402B1;
+	Wed,  1 Mar 2023 00:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 021D1402B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eiuGwlALf4xb; Tue, 28 Feb 2023 23:56:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rfd47fx4ECuF; Wed,  1 Mar 2023 00:55:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2969360B33;
-	Tue, 28 Feb 2023 23:56:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2969360B33
+	by smtp2.osuosl.org (Postfix) with ESMTP id 427AF4026F;
+	Wed,  1 Mar 2023 00:55:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 427AF4026F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 49AD51BF383
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 23:56:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D01D1BF94D
+ for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 00:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 239AF4168B
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 23:56:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 239AF4168B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 336B4416C6
+ for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 00:55:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 336B4416C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sTGAKY_LqWKt for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 23:55:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B68941601
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0B68941601
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 23:55:57 +0000 (UTC)
-Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 6AEFF5C00F2;
- Wed,  1 Mar 2023 00:55:54 +0100 (CET)
-From: Stefan Agner <stefan@agner.ch>
+ with ESMTP id ErfabTM1isW2 for <buildroot@lists.busybox.net>;
+ Wed,  1 Mar 2023 00:55:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9391D416C4
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com
+ [209.85.214.180])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9391D416C4
+ for <buildroot@buildroot.org>; Wed,  1 Mar 2023 00:55:01 +0000 (UTC)
+Received: by mail-pl1-f180.google.com with SMTP id a2so1895392plm.4
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 16:55:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HFp5BW5k6K49f4o7H9B0LVjAeoaO5APAvEGdnx9+8Tc=;
+ b=cj5xcyAcij9hWoItaXwidVpRVLjk3GIIYRwLp8isxVbieLISs+i8lFCA/JYx8LE+va
+ 14JroP1Hmm3ThO2Ob070EegBe9U94Ejp9dQcPVLnD1GO1gq3/SjNWyB5fGtmfoo0Qpik
+ sLUnin9yl1T8NkRnt2i0xU19myP7wrTpvbjo+Warv/V73p+Wwbg/aGUkEMSnWL7dq8U9
+ 4BsT4Bucb5AfWs4Xwb/EtjtFjt0tNx0anqoIFJ94Qw1jrLQItjyiQadwY05xxlaI7Br+
+ Ub2hJQoHFQyt/cNbP2hSG2aweTCfnt/fE4tnDn7IvPrBMqeL0d3ZQt5jktAVg0onN9vS
+ Vx2Q==
+X-Gm-Message-State: AO0yUKVPrnb/OOEukY5hlh72xXkn5T8sHqTMnE1PZLPh+/7+0P8ncV76
+ JwyuATHIPDbah1/pLYKKBrHKB318cXnKjA==
+X-Google-Smtp-Source: AK7set+OioZ/WtxbXK0jO7SwjeGQNuZ/hJS8MOAyfj3uY48VwE8c46nOwwLqQTDRaqa05GsKufjXXg==
+X-Received: by 2002:a17:902:ab1e:b0:192:4f85:b91d with SMTP id
+ ik30-20020a170902ab1e00b001924f85b91dmr4448976plb.46.1677632100101; 
+ Tue, 28 Feb 2023 16:55:00 -0800 (PST)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ c4-20020a170902d90400b00198ac2769aesm7038993plz.135.2023.02.28.16.54.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 28 Feb 2023 16:54:59 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Wed,  1 Mar 2023 00:55:47 +0100
-Message-Id: <674d788fda128807b203f3b1d8b407b5bb85948b.1677628527.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.39.1
+Date: Tue, 28 Feb 2023 16:54:56 -0800
+Message-Id: <20230301005456.250709-1-christian@paral.in>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1677628554;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=zCcW418TKRH5a2No4POqmcabVniBkk0z44reWw+Hzaw=;
- b=X1zcEA/jyAFZ1PIPcgstKdZgPaZQpJaSkwbHH7h9mmUWjPJLwkf42XCyEBVdTLJhdb8N4Z
- ACLw1qoucdNXclpzpv7p263sOLSoFhc3pyYSdpvdHAFvRSm/tgyO4Icwy0jPUGRqNTr8rn
- q0euYY7TYUnPVpXkYJM0AAa9NAAHNGM=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=X1zcEA/j
-Subject: [Buildroot] [PATCH] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.66
+Subject: [Buildroot] [PATCH v1 1/1] package/qemu: check if qemu-system is
+ enabled when creating symlink
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,62 +79,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grzegorz Blach <grzegorz@blach.pl>, Stefan Agner <stefan@agner.ch>,
- Marcin Bis <marcin@bis.org.pl>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-bluez 5.66 contains various fixes and initial support for Basic Audio
-Profile and Volume Control Profile.
+Commit c6b9cd9a11fe7fec6bfec2ddbd42c2851dba0011 added a symlink to qemu-system
+as a post install hook. However, it does not check if qemu-system is actually
+enabled with BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE.
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Add the check to make sure we only create the symlink if that is enabled.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
- package/bluez5_utils/bluez5_utils.hash               | 2 +-
- package/bluez5_utils/bluez5_utils.mk                 | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/qemu/qemu.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 565511120f..8ca3764935 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 58b4ff10a5..cc8dc42a24 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -488,10 +488,12 @@ define HOST_QEMU_INSTALL_CMDS
+ endef
  
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.65
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.66
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index e0c9f3cdb9..9467647592 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4  bluez-5.65.tar.xz
-+sha256  39fea64b590c9492984a0c27a89fc203e1cdc74866086efb8f4698677ab2b574  bluez-5.66.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 76070dc3a9..4059b34556 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ # install symlink to qemu-system
++ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
+ define HOST_QEMU_POST_INSTALL_SYMLINK
+ 	ln -sf ./qemu-system-$(HOST_QEMU_ARCH) $(HOST_DIR)/bin/qemu-system
+ endef
+ HOST_QEMU_POST_INSTALL_HOOKS += HOST_QEMU_POST_INSTALL_SYMLINK
++endif
  
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.65
-+BLUEZ5_UTILS_VERSION = 5.66
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+ $(eval $(host-generic-package))
+ 
 -- 
-2.39.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
