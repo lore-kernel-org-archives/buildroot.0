@@ -4,60 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8036CC64ED6
-	for <buildroot@archiver.kernel.org>; Wed,  1 Mar 2023 09:46:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27435C7EE30
+	for <buildroot@archiver.kernel.org>; Wed,  1 Mar 2023 09:47:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EE9860ACC;
-	Wed,  1 Mar 2023 09:46:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EE9860ACC
+	by smtp3.osuosl.org (Postfix) with ESMTP id AABFD611F9;
+	Wed,  1 Mar 2023 09:47:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AABFD611F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id saSB5Yy0O5hF; Wed,  1 Mar 2023 09:46:57 +0000 (UTC)
+	with ESMTP id egeeyrr6Q9Ca; Wed,  1 Mar 2023 09:47:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5928860DFF;
-	Wed,  1 Mar 2023 09:46:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5928860DFF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE5D91BF86B
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAF8060E9D;
+	Wed,  1 Mar 2023 09:47:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAF8060E9D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D53951BF94D
  for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 09:46:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A50BF81DCA
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEBAC418E9
  for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 09:46:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A50BF81DCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEBAC418E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id miiyFHK0oK8f for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VG4y82KZWi8y for <buildroot@lists.busybox.net>;
  Wed,  1 Mar 2023 09:46:53 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 089CE81D68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0787B418A9
 Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 089CE81D68
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0787B418A9
  for <buildroot@buildroot.org>; Wed,  1 Mar 2023 09:46:52 +0000 (UTC)
 Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 5B17D5C4FFF;
+ by mail.kmu-office.ch (Postfix) with ESMTPSA id E3BD35C5002;
  Wed,  1 Mar 2023 10:46:50 +0100 (CET)
 From: Stefan Agner <stefan@agner.ch>
 To: buildroot@buildroot.org
-Date: Wed,  1 Mar 2023 10:46:40 +0100
-Message-Id: <c5c998e135a5915b35bde46cd6c191610777aaf8.1677663986.git.stefan@agner.ch>
+Date: Wed,  1 Mar 2023 10:46:41 +0100
+Message-Id: <f757263ae4444a2a3e4ff4dae9223364c229a426.1677663986.git.stefan@agner.ch>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <c5c998e135a5915b35bde46cd6c191610777aaf8.1677663986.git.stefan@agner.ch>
+References: <c5c998e135a5915b35bde46cd6c191610777aaf8.1677663986.git.stefan@agner.ch>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=agner.ch; s=dkim; t=1677664010;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=387sCP3ZxAiF1hx2+LV+BkqFTXrDNRgMbbas4oNiLoY=;
- b=Z9aOfZkoUA3e+OCAnDbEFrpyfJ02JhjhafEhqv/kE33EvU4MpO4mGAK8DAomGhZ6j+QW1m
- TtnH99ESq4OxUy66irlLEfJWiEchW+wB5keFKuvRPJu+HaUJYW3iP9BiY9fh1iugB6Wwjd
- 25JSMU+1MbC0mLA6aYplvDl0GBZNFtA=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FHWJzZfgCTwZXJzFeP1KQzNIL4aiygA7o36hvHDwOL8=;
+ b=RIwpdDUQZkRYGCVUaXxbVyq/iqn3uXEkscV9lvSGmKUU+7lb5K6629JtwUCQqBsCBXExlP
+ 7BLH7toG4WLOKxcQ6dPlAQar0eGu1E2WQjxKyibz5QZIh+8oHljclAnvKhz9C5UIC14rBV
+ YsQDrn8O18lfm6pv7oH2G1HkqA/QTzw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=Z9aOfZko
-Subject: [Buildroot] [PATCH] package/docker-engine: remove non-existing
- build tags
+ header.a=rsa-sha256 header.s=dkim header.b=RIwpdDUQ
+Subject: [Buildroot] [PATCH] package/docker-engine: bump version to v23.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,30 +77,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The seccomp and apparmor build tags have been removed in 23.0.0. Don't
-use those buildtags anymore.
+This release contains some fixes and an improved error message. For the
+full list see:
+https://github.com/moby/moby/releases/tag/v23.0.1
 
 Signed-off-by: Stefan Agner <stefan@agner.ch>
 ---
- package/docker-engine/docker-engine.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/docker-cli/docker-cli.hash       | 2 +-
+ package/docker-cli/docker-cli.mk         | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index ff981be963..9b231f03b1 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3379d06cd6177832b91f4796c680b6bf15c7895773448716b4c3c5253f611d1b  docker-cli-23.0.0.tar.gz
++sha256  37bc1c71a782fc10d35aa6708c1b3c90a71f3947c33665cb0de68df25dc14d94  docker-cli-23.0.1.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index d61f47e46e..38d903150c 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CLI_VERSION = 23.0.0
++DOCKER_CLI_VERSION = 23.0.1
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 670cbd414b..99ab5e4003 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  94492508260e57eb93399257d53435cd5308ca6330e173ca6e6f3dbf4c6e12f3  docker-engine-23.0.0.tar.gz
++sha256  c8e6c0ac5f0c772023e3430f80190e0f86644b6d94cac63118b03561385f7b56  docker-engine-23.0.1.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
 diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index ca1aa27b0a..0ecb5d2251 100644
+index 0ecb5d2251..f8d31de0fe 100644
 --- a/package/docker-engine/docker-engine.mk
 +++ b/package/docker-engine/docker-engine.mk
-@@ -28,11 +28,9 @@ DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd cmd/docker-proxy
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
- DOCKER_ENGINE_DEPENDENCIES += libapparmor
--DOCKER_ENGINE_TAGS += apparmor
- endif
+-DOCKER_ENGINE_VERSION = 23.0.0
++DOCKER_ENGINE_VERSION = 23.0.1
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
--DOCKER_ENGINE_TAGS += seccomp
- DOCKER_ENGINE_DEPENDENCIES += libseccomp
- endif
- 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 -- 
 2.39.1
 
