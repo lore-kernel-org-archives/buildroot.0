@@ -1,91 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDDC3C64ED6
-	for <buildroot@archiver.kernel.org>; Wed,  1 Mar 2023 07:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E59CFC64ED6
+	for <buildroot@archiver.kernel.org>; Wed,  1 Mar 2023 08:36:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5399E80FB6;
-	Wed,  1 Mar 2023 07:43:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5399E80FB6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7288D40CA1;
+	Wed,  1 Mar 2023 08:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7288D40CA1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ohDHDjUiW56N; Wed,  1 Mar 2023 07:43:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4D6bIpKwUu89; Wed,  1 Mar 2023 08:36:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8EC780E9C;
-	Wed,  1 Mar 2023 07:43:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8EC780E9C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0AB381BF341
- for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 07:43:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA7B540C9E;
+	Wed,  1 Mar 2023 08:36:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA7B540C9E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9364D1BF859
+ for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 08:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DEA1060AA0
- for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 07:43:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEA1060AA0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 799EA4194A
+ for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 08:36:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 799EA4194A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fwGzrLJ5DnVM for <buildroot@lists.busybox.net>;
- Wed,  1 Mar 2023 07:43:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hD8tHDaZxogY for <buildroot@lists.busybox.net>;
+ Wed,  1 Mar 2023 08:36:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA6EA60760
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com
- [IPv6:2607:f8b0:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EA6EA60760
- for <buildroot@buildroot.org>; Wed,  1 Mar 2023 07:43:13 +0000 (UTC)
-Received: by mail-pg1-x530.google.com with SMTP id 130so7199120pgg.3
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 23:43:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31C2F4198C
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 31C2F4198C
+ for <buildroot@buildroot.org>; Wed,  1 Mar 2023 08:36:11 +0000 (UTC)
+Received: by mail-pj1-x102c.google.com with SMTP id
+ qa18-20020a17090b4fd200b0023750b675f5so16443632pjb.3
+ for <buildroot@buildroot.org>; Wed, 01 Mar 2023 00:36:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1677656593;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=WnmkKTlMqVsY5qme7sT8fmJzfz0TeQav/0zVQ19PaNE=;
- b=UqQxq9XgwbkeczfEhQxMU1MYmjKQofqH+OfH0GIySyIAE40wj3ZYZVP+cVIdLa0vm9
- LFOSl4A6l1xbYElEXYhgCuITeyvjgpWEDgimZPNGDgyO6wGzvMDzJCpJYwVqhY/5wg1I
- Rlwh0yhlR3FKNbFGdt9fHJoVqujx1YeO1CdLx2GWP8b7Ud5gHJpiQerdjRpH6RwhwTOl
- R6Im5E5wt6MHGII+7pEKEseubizV/O9U9jTjWyjQWTSY3mtgVx7X6l4E409ycBYt0Zif
- HtQXLqcq3+htNcg9eEtISfFwsTDarH+nPdOtaQCvZOPa83hVHow5ijT0KiZlwfV3Fml/
- DBWw==
-X-Gm-Message-State: AO0yUKVDW0+UbfmT2xNDNfUiwqIkfDAiz8kJe7SFKhGlhId+9R0lAoFT
- 5ZwSRq0iYaOZuPMJzHbdADK7sJtRqp8mpfxB3kuaTg==
-X-Google-Smtp-Source: AK7set8vImbRpu8+S6MfrtR4da/FJjLh7UtLi7/W9tPxZNcuNsSuO4ECTwGdf5jMe+Q4ReZ7OG9gPsUcOIS2klLMdbE=
-X-Received: by 2002:a62:ce85:0:b0:606:653c:f19b with SMTP id
- y127-20020a62ce85000000b00606653cf19bmr1016780pfg.5.1677656592636; Tue, 28
- Feb 2023 23:43:12 -0800 (PST)
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=bD8NWYw1V969SN8zqMye5+ead5Cybqhvu3aXN7uH2fE=;
+ b=ODgJlOwpiP6i2QcPyvqoaEn10dJ7SudEAWgJvJdEIazLaX6BNQ0w4hlBijr1MI2U3i
+ b+H5OlxJnbNZIpbO99PlrQjDbGgf4TU7Fgg8y+GoPGJNSpgPQ2MNFzGFmav6vYyYF1Ic
+ 7htpS6bkPROdHdCM0k2w4e03cQVs8Xt5zNiuyi/RP5CXdg8tjKpfpTnZ0YxHk8CBUeDf
+ mg9mgzRO2JPAYJnvkE2OKAxAjJyHp6QLFtOC+zEHJBhVAt9jJuQtONehZ2wvI+QnCo0f
+ zxfbKSX24mkeRpS3S517lJ0lccQRoX0iereBYEu/clRApXIQPlvvFwTmfG61au8khLQ7
+ ulaw==
+X-Gm-Message-State: AO0yUKWSGSpa9tCMNE6k2gCMuwGjK2UTenmzbBl5n/dnm34l4qkSDsCC
+ JsU/7IYmrv/wapkT5JBrI/1TZ1oxsx2sqk2kxpE=
+X-Google-Smtp-Source: AK7set86vlyZQhNuml/V1ikWfVznQeEGEPS2/nMJYeXREmQ1a+o8Pa++MQH/UjBwexntXn8IFTfX0w==
+X-Received: by 2002:a17:903:1245:b0:19c:be03:d18b with SMTP id
+ u5-20020a170903124500b0019cbe03d18bmr5832469plh.22.1677659769751; 
+ Wed, 01 Mar 2023 00:36:09 -0800 (PST)
+Received: from localhost.localdomain ([23.26.222.100])
+ by smtp.gmail.com with ESMTPSA id
+ ix1-20020a170902f80100b0019ab58f47a6sm7885199plb.105.2023.03.01.00.36.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 01 Mar 2023 00:36:09 -0800 (PST)
+From: Javad Rahimi <javad321javad@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  1 Mar 2023 12:05:56 +0330
+Message-Id: <20230301083556.2408221-1-javad321javad@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221224171920.11256-1-raphael.pavlidis@gmail.com>
- <20230222232157.380b6109@windsurf>
- <20230228130843.GC32199@carcass.dev.6wind.com>
- <CANqv2T3GWoqn6an34HQUW6njK2g=YZCqvoDMh-kfKooVacRMpA@mail.gmail.com>
- <886d6be9-94ba-2bc9-5583-4c9400bf3a76@gmail.com>
- <CANqv2T2r0sbnwdMinzdw7ryw9CUsx=jwCD0hvA3FT2mxVFQz8g@mail.gmail.com>
- <CANqv2T0Riojve2sNUNky28Vt8A=sMwVuZEsTZv66Zace1JnRWA@mail.gmail.com>
- <16816a3d-c62a-c1e9-9409-78541956b1ba@gmail.com>
-In-Reply-To: <16816a3d-c62a-c1e9-9409-78541956b1ba@gmail.com>
-From: stephane gonauer <stephane.gonauer@6wind.com>
-Date: Wed, 1 Mar 2023 08:43:01 +0100
-Message-ID: <CANqv2T2odbOu-B-ErOUA+07sdMPEWc8-T695zqumrB-wT6gmXg@mail.gmail.com>
-To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=6wind.com; s=google; t=1677656593;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=WnmkKTlMqVsY5qme7sT8fmJzfz0TeQav/0zVQ19PaNE=;
- b=KzoWv6H4/sYjoD96k/qyGqa+gH49ygiiK8BfOpT/EgSuPdxT3Zty0TmbWW1Uxk5FLM
- c6v3QW4AZ9OF5LkhjBp+D2c4zeh9eeqbBUnB/4P/n467laPTxFmSSCq+A0selCPoTW6z
- cUenG+IkCKMykU6MrueTq7Sey/sLMzMknz2ZNuAEGYb/Hs2+Fy0w3k7B7BB32sDZqZw1
- WVcq0A3FC1J6WZQZyiIxx8CHwoxeEzI41Z2P+G8WnHRCw2AUHUVIzpV4C5ZIcA0yTufq
- C/2BQy0qe8tLJ2lURnJRENSh4vOVkBzWEN+0llTfcqAiPBuF9KiVQEKVdgSjeacMmfMh
- 9nRQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com
- header.a=rsa-sha256 header.s=google header.b=KzoWv6H4
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/shadow: new package
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=bD8NWYw1V969SN8zqMye5+ead5Cybqhvu3aXN7uH2fE=;
+ b=fJhdylj6PNecxaiu6CvST6LvtYWUwY6GhbWVEzELqsXOxxtHxPbd9CQ2hjSd3hqMSd
+ cEg+lQa65Nc5K4pWHvR0oJwBdef3Ndc70z8fa0vEybNZSpvnBJlT5UuSMuAg6+6a2Qtj
+ 47FbAabBqMq6saCDZqp5b90ZoTokPDVoKCCdqpftWUM6hLD/CaLw9GMwXV+oi7wkTcxs
+ aiUlC7lF5U7oVS7B4o/NQDAP0MUmLRpzoBhRWblfrThuWs7WC36ID5LFHIoJvt74t4p/
+ SornhEUr0arJVKnvN0Sjcd6Y7hgK8akuIdGOh7xEV3idGOAsOy4/WOXhlGiZMxt5gVOR
+ VmMg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=fJhdylj6
+Subject: [Buildroot] [PATCH 1/1] configs/orangepi_pc2: add board support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,42 +94,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: javad321javad@gmail.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUmFwaGFlbCwKClRlc3Rpbmcgd2l0aCBxZW11IGlzIHByZXR0eSBlYXN5CkhlcmUgYXJlIHRo
-ZSBzdGVwIEkgZm9sbG93IDoKCmdpdCBjbG9uZSBodHRwczovL2dpdGh1Yi5jb20vYnVpbGRyb290
-L2J1aWxkcm9vdC5naXQKY2QgYnVpbGRyb290CmdpdCBjaGVja291dCAtdCBuZXh0Cm1ha2UgcWVt
-dV94ODZfNjRfZGVmY29uZmlnCm1ha2UgbWVudWNvbmZpZyA8PSB0byBhZGQgU0hBRE9XL0xJTlVY
-X1BBTSBldGMKbWFrZSAtajgKLi9vdXRwdXQvaW1hZ2VzL3N0YXJ0LXFlbXUuc2gKClRoZSBzY3Jp
-cHQgc3RhcnRzIGEgdm0gd2l0aCBhIHNlcmlhbCBjb25zb2xlIGFuZCBpdCBpcyBwYXJ0IG9mIHRo
-ZQpidWlsZHJvb3QgcmVwby4KClRoZW4gZWl0aGVyIEkgY2FuIGxvZ2luIChyb290IHdpdGhvdXQg
-cGFzc3dvcmQpIG9yIG5vdAoKU3TDqXBoYW5lCgpMZSBtYXIuIDI4IGbDqXZyLiAyMDIzIMOgIDIx
-OjM4LCBSYXBoYWVsIFBhdmxpZGlzCjxyYXBoYWVsLnBhdmxpZGlzQGdtYWlsLmNvbT4gYSDDqWNy
-aXQgOgo+Cj4gSGkgU3RlcGhhbmUsCj4KPiBPbiAyOC4wMi4yMyAxODoxMCwgc3RlcGhhbmUgZ29u
-YXVlciB3cm90ZToKPiA+IEhpLAo+ID4KPiA+IElmIG15IHByZXZpb3VzIGVtYWlsIGlzIG5vdCBj
-bGVhciA6Cj4gPgo+ID4gLSBxZW11X3g4Nl82NF9kZWZjb25maWcgKyBCUjJfUEFDS0FHRV9TSEFE
-T1cgLT4gd29ya3MKPiA+IC0gcWVtdV94ODZfNjRfZGVmY29uZmlnICsgQlIyX1BBQ0tBR0VfU0hB
-RE9XICArIEJSMl9QQUNLQUdFX0xJTlVYX1BBTQo+ID4gLT4gZmFpbHMgYW5kIHRoZXJlIGlzIG5v
-ICJzeXN0ZW0tYXV0aCIgZmlsZSBhbnl3aGVyZSBpbiB0aGUgYnVpbGQKPiA+IC0gcWVtdV94ODZf
-NjRfZGVmY29uZmlnICsgQlIyX1BBQ0tBR0VfU0hBRE9XICArIEJSMl9QQUNLQUdFX0xJTlVYX1BB
-TQo+ID4gKyBCUjJfSU5JVF9TWVNURU1ELT4gZmFpbHMsIHN5c3RlbS1hdXRoIGlzIG5vdCBpbiAv
-ZXRjL3BhbS5kIGluIHRoZQo+ID4gdGFyZ2V0IGZvbGRlci4gSSBkb24ndCBrbm93IHdoYXQgaGFw
-cGVuIGF0IHJ1bnRpbWUgKGJlY2F1c2UgSSBjYW5ub3QKPiA+IGxvZ2luKSAgaW4gdGhhdCBjYXNl
-IEkgYWxzbyBmaW5kCj4gPiB0YXJnZXQvdXNyL3NoYXJlL2ZhY3RvcnkvZXRjL3BhbS5kL3N5c3Rl
-bS1hdXRoCj4KPiBUaGFua3MgZm9yIHRoZSBjbGFyaWZpY2F0aW9uLgo+Cj4gPgo+ID4gRG8geW91
-IHRoaW5rIHdpdGgvd2l0aG91dCBzeXN0ZW1kIGNhc2Ugc2hvdWxkIGJlIGZpeGVkIGRpZmZlcmVu
-dGx5ID8KPiA+IEluIGFueSBjYXNlIHRoZSBtaXNzaW5nIGZpbGUgc2VlbXMgdG8gYmUgL2V0Yy9w
-YW0uZC9zeXN0ZW0tYXV0aC4KPgo+IFllcywgdGhlIGZpbGUgaXMgcHJlc2VudCB3aXRoIHN5c3Rl
-bWQsIGJ1dCBpdCBpcyBub3QgY29waWVkIGR1cmluZyBib290Cj4gYnkgc3lzdGVtZC10bXBmaWxl
-cy5zZXJ2aWNlLgo+Cj4gPgo+ID4gU3TDqXBoYW5lCj4gPgo+IFtTTklQXQo+Cj4gV291bGQgeW91
-IGxpa2UgdG8gdGVsbCBtZSwgd2hpY2ggY29tbWFuZCB5b3UgYXJlIHVzaW5nIHdpdGggUUVNVT8g
-SQo+IHdvdWxkIGxpa2UgdG8gY2hlY2ssIHdoYXQgaGFwcGVuZWQgKGlmIEkgZmluZCB0aGUgdGlt
-ZSB0bykuCj4KPiBUaGFua3MsCj4gUmFwaGFlbCBQYXZsaWRpcwpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+add board support for orangepi pc2
+
+Signed-off-by: Javad Rahimi <javad321javad@gmail.com>
+---
+ configs/orangepi_pc2_defconfig | 41 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 configs/orangepi_pc2_defconfig
+
+diff --git a/configs/orangepi_pc2_defconfig b/configs/orangepi_pc2_defconfig
+new file mode 100644
+index 0000000000..63ee554caf
+--- /dev/null
++++ b/configs/orangepi_pc2_defconfig
+@@ -0,0 +1,41 @@
++BR2_aarch64=y
++BR2_ARM_FPU_VFPV4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi PC2"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.1"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-pc2"
++BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LIBNL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc2"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
++BR2_PACKAGE_HOST_GENIMAGE=y
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
