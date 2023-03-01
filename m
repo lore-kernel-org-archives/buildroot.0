@@ -4,47 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FFE4C7EE23
-	for <buildroot@archiver.kernel.org>; Wed,  1 Mar 2023 21:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A989C7EE23
+	for <buildroot@archiver.kernel.org>; Wed,  1 Mar 2023 22:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D536401E3;
-	Wed,  1 Mar 2023 21:44:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D536401E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE315419AA;
+	Wed,  1 Mar 2023 22:02:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE315419AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AiY-YaM44sIZ; Wed,  1 Mar 2023 21:44:47 +0000 (UTC)
+	with ESMTP id GnP3I22iijBb; Wed,  1 Mar 2023 22:02:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A7C3401F1;
-	Wed,  1 Mar 2023 21:44:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A7C3401F1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 51F9B1BF964
- for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 21:44:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D8BA419A7;
+	Wed,  1 Mar 2023 22:02:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D8BA419A7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2054B1BF304
+ for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 22:02:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3905760E6A
- for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 21:44:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3905760E6A
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE64040602
+ for <buildroot@lists.busybox.net>; Wed,  1 Mar 2023 22:02:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE64040602
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Al0mB78pRuwS for <buildroot@lists.busybox.net>;
- Wed,  1 Mar 2023 21:44:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 444B460BEA
- for <buildroot@buildroot.org>; Wed,  1 Mar 2023 21:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 444B460BEA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3033786E64; Wed,  1 Mar 2023 21:44:29 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UrMfjmlg65NH for <buildroot@lists.busybox.net>;
+ Wed,  1 Mar 2023 22:02:18 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0918405F4
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A0918405F4
+ for <buildroot@buildroot.org>; Wed,  1 Mar 2023 22:02:17 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.167.224.61])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 7B57419F58D;
+ Wed,  1 Mar 2023 23:02:12 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 1 Mar 2023 22:41:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8b5253b1c0db4414dddbe0bc5ce583f5f19717f7
-X-Git-Newrev: e5f9cbd91a4fc4491587bfc097c6d89f1782c1d5
-X-Patchwork-Hint: ignore
-Message-Id: <20230301214429.3033786E64@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2022.02.10
+Date: Wed,  1 Mar 2023 23:01:58 +0100
+Message-Id: <20230301220159.161476-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1677708134;
+ bh=/W0W9NkWQLWMlEI/MkJFSyKdMCTEjIat3a9NFFnNipw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=fEiTNVXEop43WRV5NQrHqJmTHb3VkqZ0yvi8neA+5o0zRt99e1LKE5/Ag3iwqvHyE
+ LQ/4SvcqRfbnVKhThuxVzf4dViIeqz1pABCuDd6qkfEOvZrldhw/bbZq6wKC1K/Oo7
+ ysKzTN3hPvmEoZ4GDuvI93NS2VAkM/sWncwL+Af61LSNjfVTatGhyh3smzWa1VrWw4
+ BuXnOtihRzq3HmKtuyiBG5pIqX7zuxxPwoGV0FOZOSmiaonfXJcR5tRnS9eB7FZtYj
+ 17VCinx6EB3Wljdtm9dRGlwDV8RuBDMEVOK8hvDoQjI2ERVsT9fnQtGFMTHac5f+7p
+ gz9Uy87THY7Rw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fEiTNVXE
+Subject: [Buildroot] [PATCH next 1/2] package/kexec: bump to version 2.0.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,66 +70,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5f9cbd91a4fc4491587bfc097c6d89f1782c1d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+See release announce:
+https://lists.infradead.org/pipermail/kexec/2022-December/026399.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6fbe4b39017b0f05b70d6541ea7df4cd8cf59d0a)
-[Peter: drop Makefile change]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- CHANGES | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Patch tested on branch next at commit b793f3a with commands:
 
-diff --git a/CHANGES b/CHANGES
-index 6647c0c8e6..a3de4ba1d7 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -721,6 +721,38 @@
- 	#14731: BR2_PACKAGE_IOSTAT
- 	#14751: LVM2 Outdated Link
+    make check-package
+    ...
+    0 warnings generated
+
+    utils/test-pkg -a -p kexec
+    ...
+    45 builds, 14 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ package/kexec/kexec.hash | 2 +-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index 34e17339b9..4e16a53a35 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256  7ce2e5def38ec04f79feb107d02243dd586fbc68569eccf02f44bad3a13ec07d  kexec-tools-2.0.25.tar.xz
++sha256  7fe36a064101cd5c515e41b2be393dce3ca88adce59d6ee668e0af7c0c4570cd  kexec-tools-2.0.26.tar.xz
+ # locally calculated
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index ced7009ed3..c1411f6ab7 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+2022.02.10, released March 1st, 2023
-+
-+	Important / security related fixes.
-+
-+	Fix make O=..._defconfig builds (regression in 2022.02.9).
-+
-+	A number of additional/stricter checks have been added to
-+	./utils/check-package.
-+
-+	Build host dependencies check extended to check for a number
-+	of specific perl modules to better handle distributions (like
-+	Fedora) with very fine grained perl packages. Also ensure
-+	build host has git >= 2.0.0 when using packages written in
-+	go/rust because the vendoring may need it.
-+
-+	Defconfigs: ASUS tinker rk3288: Fix boot issue related to TPL
-+
-+	Updated/fixed packages: afboot-stm32, apache, barebox, c-ares,
-+	elf2flt, freeswitch, fwts, gcc, git, kodi, libgit2, libks,
-+	libopenssl, live555, lua, lxc, mesa3d-headers, modsecurity2,
-+	netopeer2, openjdk, openpowerlink, openvpn, opusfile,
-+	postgresql, pugixml, python-future, qt5, sdl2, sofia-sip,
-+	ssdp-responder, sudo, sunxi-mali-utgard, ti-sgx-km, tmux,
-+	uboot, upx, vim, webkitgtk, wolfssl, wpewebkit, xlib_libXpm,
-+	xserver_xorg-server, xxhash, xz, yajl, zabbix
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#15271: no start-qemu.sh
-+	#15291: BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS without location
-+	#15301: Selecting NAND Flash boot media (NAND_BOOT) breaks the uboot..
-+
- 2022.02.9, released January 18th, 2023
- 
- 	Important / security related fixes.
+-KEXEC_VERSION = 2.0.25
++KEXEC_VERSION = 2.0.26
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
