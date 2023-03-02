@@ -1,90 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94ACAC6FA8E
-	for <buildroot@archiver.kernel.org>; Thu,  2 Mar 2023 17:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7C9DC6FA8E
+	for <buildroot@archiver.kernel.org>; Thu,  2 Mar 2023 22:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30D7041BB3;
-	Thu,  2 Mar 2023 17:54:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30D7041BB3
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB75D40359;
+	Thu,  2 Mar 2023 22:12:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB75D40359
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IRyvjf_0Uhtf; Thu,  2 Mar 2023 17:54:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cZRqH3Bcpsz0; Thu,  2 Mar 2023 22:12:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A73841B8B;
-	Thu,  2 Mar 2023 17:54:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A73841B8B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 60EA81BF387
- for <buildroot@lists.busybox.net>; Thu,  2 Mar 2023 17:54:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0CCA24016C;
+	Thu,  2 Mar 2023 22:12:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CCA24016C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4139E1BF48D
+ for <buildroot@lists.busybox.net>; Thu,  2 Mar 2023 22:12:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3ABD881E7D
- for <buildroot@lists.busybox.net>; Thu,  2 Mar 2023 17:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ABD881E7D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A64160D63
+ for <buildroot@lists.busybox.net>; Thu,  2 Mar 2023 22:12:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A64160D63
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TRQxO9qcCGlj for <buildroot@lists.busybox.net>;
- Thu,  2 Mar 2023 17:54:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rMPmiDIzcX30 for <buildroot@lists.busybox.net>;
+ Thu,  2 Mar 2023 22:12:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F2E3811F9
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3F2E3811F9
- for <buildroot@buildroot.org>; Thu,  2 Mar 2023 17:54:07 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id k37so202161wms.0
- for <buildroot@buildroot.org>; Thu, 02 Mar 2023 09:54:07 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7192060BF3
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7192060BF3
+ for <buildroot@buildroot.org>; Thu,  2 Mar 2023 22:12:23 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id j2so532569wrh.9
+ for <buildroot@buildroot.org>; Thu, 02 Mar 2023 14:12:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1677779645;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=6pdLlDK/S9cCxUu+xmZfGAqqFLhiLa2c4oMi0uIKgjA=;
- b=VWsmhanTS7jJWVepCPMNOfGrkH3+Lfm5lLlTflpHolcJNZz54v/DRqS1b/RG8kY0C9
- FOYvXq5iPnqvbD/wkhC7iIhPys4QHz8h1l3VJFEPH+5QEYLbXlSs3s7+5cLTN/M6iJHO
- qTstYPDuWg5SVVU5IdBoBMNoQ1VWfGAR3S8Mb3JkGLluySkI2bjB17Qe4iZnJmv9qXm9
- 2WL6sroAk9GhQPKoFWs0X/+HxO1XbKF0qvP1kWzMx5PQpjrj6N5vnKhKdOFUktDk6/hB
- ALlWeHTmw8WSIMwIKqi4+Ht7/A75csAN9Y2OQImtyX5FYvTGMHuDiAl9to6XrQ0dkqMK
- fMcA==
-X-Gm-Message-State: AO0yUKXjvWjglfZ3TcRLr79/3jbKDzP5I9Z7QJNovKgrwrIJgCuW85cd
- S2ZzXgKzy8QIfpOigNrcqog0st5H7QU=
-X-Google-Smtp-Source: AK7set8kF8ADwEjXKhNJ/bzZuonW9zCnqGC4lArdBAJz1ciX1B9pRTvk0q/OOdMgUeFIgz02q8nGcQ==
-X-Received: by 2002:a05:600c:4d20:b0:3eb:2e66:8 with SMTP id
- u32-20020a05600c4d2000b003eb2e660008mr8576115wmp.35.1677779644920; 
- Thu, 02 Mar 2023 09:54:04 -0800 (PST)
+ d=1e100.net; s=20210112; t=1677795141;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=A9naZ5bK1JIej26+Hquw1LEEpOb5U1sYaTf5O7i595U=;
+ b=vEPKty9Q7YIt5u43FGlwIMKtBIYJotTcKYM6UQMufz3ZvbokPQIWi6QJ2g8PB0pKET
+ TYZEotZefALgW+KHqQf5hmTgFwXUT6lQ8E4Nb/CuA5qJxgyyl5Jiw+edwX0Cl8cSDFPS
+ YQhnpR3YHP1jsLaOIEh7PZKHG1FpWh4quTHXyXLjUjLAiD2iOFfpc2VgqukzbM+i1vci
+ I25lYRiGOQ0sFEufeO7G185S3I5f9BqhSI09rj0oCmvh9DVzYM40ik7+1U7rBGp4osUu
+ YFrmDhOj9jcVdxGk/avpO3a53QVNX3tJMwA4FcoDmtnKLL1Qs1d3Eh/60lJn8HZLMN/R
+ Fd0g==
+X-Gm-Message-State: AO0yUKXlf37rl8GcILiSkPHvnoYAvyUIqqWXHqwPSV3NVIPoIg6MvX/s
+ EnTxvUsg3J1/2sIq+Y35su7vT952BSE=
+X-Google-Smtp-Source: AK7set92t6z9UtWxRqJDJD+wt8mcm3cN+xbIxS9CUcnDs1W3iWd9uhUKzgEE8wFRMSU8KAk0KcMC6g==
+X-Received: by 2002:a5d:5009:0:b0:2cb:de45:77ff with SMTP id
+ e9-20020a5d5009000000b002cbde4577ffmr8157838wrt.28.1677795140966; 
+ Thu, 02 Mar 2023 14:12:20 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- g40-20020a05600c4ca800b003eb3933ef10sm162459wmp.46.2023.03.02.09.54.02
+ s10-20020adfea8a000000b002c7e1a39adcsm471267wrm.23.2023.03.02.14.12.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Mar 2023 09:54:04 -0800 (PST)
+ Thu, 02 Mar 2023 14:12:19 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  2 Mar 2023 18:53:50 +0100
-Message-Id: <20230302175350.183840-4-fontaine.fabrice@gmail.com>
+Date: Thu,  2 Mar 2023 23:12:17 +0100
+Message-Id: <20230302221217.585882-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230302175350.183840-1-fontaine.fabrice@gmail.com>
-References: <20230302175350.183840-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1677779645;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=6pdLlDK/S9cCxUu+xmZfGAqqFLhiLa2c4oMi0uIKgjA=;
- b=QmuUWIvuwB/TRiSdKLuEnA1uIoTQAJmbAcpgZGIRm1TnmwnWACZtlTkub678gQRJzc
- +kIvlH5+J+1LTen9d5Vwj3Xc2Q4uDno4e/olY3Jf50q3mmE2o8YpUZOcRbs4qydRCnu4
- I5EJikW9xO6JrW2D4BsjJQKj/UtYqahuFkr+nxOiHM+Mxnow+V9WVAE/u3q3lOUgefH1
- 9Nyi2HVGBvbuRGvXpYpxzUslSdj7k8JR4OPuSbGv+YO7+bDYCt4C+g/W4zFM6qAjGv3m
- sA5naxKpiu0HsiVbYuvxiDi7Gyb5pqBUiSRbyEE5vQQ2PU5HC3U6Wb/GuN8QmvePMMiS
- um+g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20210112; t=1677795141;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=A9naZ5bK1JIej26+Hquw1LEEpOb5U1sYaTf5O7i595U=;
+ b=kC3WyIf8p1E+cSO/y7PpBNwkr99AFh3UepXqDWDKQi6Bvp/8mfROhMYIu//BrphTpj
+ vikPCpVz/DwLnvUx4bZkfjk6FLpLT9CLhUz779pSgBBY7IZK8TWvhIbfeUe2+hkevVXt
+ s4mkcKCrdFJG9nLpfdi/B5NK+/K6PA0vx8gGS91CjTg5d1SDq7azirPb838Rfi71/TXT
+ RJentHAZUL0qAiUfzJOuyFh0XU5IZV5pCLhl07UZj9viddwC56dYwiQ1bT9GJEoT+LeA
+ a6PrJVABDS1MHpNFPjU30NaqoKVtJyFdeUkmEQsWxRNkVdkH3SHCDuog4m33ZoF7pVWH
+ txWA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=QmuUWIvu
-Subject: [Buildroot] [PATCH 4/4] package/gensio: add C++ optional dependency
+ header.a=rsa-sha256 header.s=20210112 header.b=kC3WyIf8
+Subject: [Buildroot] [PATCH 1/1] package/gr-osmosdr: drop
+ BR2_PACKAGE_GR_OSMOSDR_PYTHON
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,38 +94,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-C++ is available since 2.3.0 and
-https://github.com/cminyard/gensio/commit/3fda483f15a2668f9e2396517cdbf09693e6e3ff
+Drop BR2_PACKAGE_GR_OSMOSDR_PYTHON as disabling python will raise the
+following build failure if BR2_PACKAGE_GNURADIO_PYTHON is set since bump
+of gnuradio to version 3.10.4.0 in commit
+e37c110bead8b7b35cd97915673fa785ccb39f2d and
+https://github.com/gnuradio/gnuradio/commit/51d3ad973292763a6fc0cf8e971faa3cf89029e9:
+
+CMake Error at lib/CMakeLists.txt:51 (add_library):
+  Target "gnuradio-osmosdr" links to target "Python::Module" but the target
+  was not found.  Perhaps a find_package() call is missing for an IMPORTED
+  target, or an ALIAS target is missing?
+
+No entry in Config.in.legacy is needed as python support in gr-osmosdr
+will now automatically be enabled if BR2_PACKAGE_GNURADIO_PYTHON is set
+
+Fixes:
+ - http://autobuild.buildroot.org/results/49e9f7bf8bfc7008688c1a3bc3744b7d3be3ce18
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gensio/gensio.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/gr-osmosdr/Config.in     | 7 -------
+ package/gr-osmosdr/gr-osmosdr.mk | 2 +-
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 3374313c0f..2ba1b950d7 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -13,6 +13,12 @@ GENSIO_CONF_OPTS = \
- 	--without-swig \
- 	--without-python
+diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
+index 04fa10be80..d83de75282 100644
+--- a/package/gr-osmosdr/Config.in
++++ b/package/gr-osmosdr/Config.in
+@@ -11,13 +11,6 @@ config BR2_PACKAGE_GR_OSMOSDR
  
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+GENSIO_CONF_OPTS += --with-cplusplus
-+else
-+GENSIO_CONF_OPTS += --without-cplusplus
-+endif
-+
- ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
- GENSIO_DEPENDENCIES += alsa-lib
- GENSIO_CONF_OPTS += --with-alsa
+ if BR2_PACKAGE_GR_OSMOSDR
+ 
+-config BR2_PACKAGE_GR_OSMOSDR_PYTHON
+-	bool "python support"
+-	depends on BR2_PACKAGE_GNURADIO_PYTHON
+-	depends on BR2_PACKAGE_PYTHON3
+-	help
+-	  Enable Python support
+-
+ config BR2_PACKAGE_GR_OSMOSDR_IQFILE
+ 	bool "IQ File Source support"
+ 	help
+diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
+index 89907c1baa..6011a67539 100644
+--- a/package/gr-osmosdr/gr-osmosdr.mk
++++ b/package/gr-osmosdr/gr-osmosdr.mk
+@@ -22,7 +22,7 @@ GR_OSMOSDR_CONF_OPTS = \
+ # compile time.
+ GR_OSMOSDR_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_PACKAGE_GR_OSMOSDR_PYTHON),y)
++ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+ GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=ON
+ GR_OSMOSDR_DEPENDENCIES += python3
+ else
 -- 
 2.39.1
 
