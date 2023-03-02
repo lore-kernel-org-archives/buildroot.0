@@ -1,134 +1,134 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A255C678D4
-	for <buildroot@archiver.kernel.org>; Thu,  2 Mar 2023 08:50:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDE83C6FA8E
+	for <buildroot@archiver.kernel.org>; Thu,  2 Mar 2023 09:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D76D41964;
-	Thu,  2 Mar 2023 08:50:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D76D41964
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SSqet-dKFlYA; Thu,  2 Mar 2023 08:50:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9162E41836;
-	Thu,  2 Mar 2023 08:50:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9162E41836
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A0611BF97F
- for <buildroot@lists.busybox.net>; Thu,  2 Mar 2023 08:50:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F6EE60A63
- for <buildroot@lists.busybox.net>; Thu,  2 Mar 2023 08:50:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F6EE60A63
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8791860D5F;
+	Thu,  2 Mar 2023 09:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8791860D5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z22kGAB2R_Mu for <buildroot@lists.busybox.net>;
- Thu,  2 Mar 2023 08:50:41 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m18_WlZWAdVf; Thu,  2 Mar 2023 09:26:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C16A060BC6;
+	Thu,  2 Mar 2023 09:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C16A060BC6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AE3821BF322
+ for <buildroot@lists.busybox.net>; Thu,  2 Mar 2023 09:26:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8379D418FD
+ for <buildroot@lists.busybox.net>; Thu,  2 Mar 2023 09:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8379D418FD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HsuQ0yjNJq3O for <buildroot@lists.busybox.net>;
+ Thu,  2 Mar 2023 09:26:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C26D560746
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur04on0621.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe0e::621])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C26D560746
- for <buildroot@buildroot.org>; Thu,  2 Mar 2023 08:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B3C9418FE
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+ (mail-am6eur05on20603.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e1b::603])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1B3C9418FE
+ for <buildroot@buildroot.org>; Thu,  2 Mar 2023 09:26:08 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qob2SNj0bOz1Gf9i/WZ2C0n/EUMt0eOfG+OjpA4Bl4GBtd08sGsB8dWyTKgSuDvt2xGQbtSYnSTLULfeezksrzDv7zDgA6zMwZ1OPrw2Ub5xKnQ1gE1xCDyFbk9K02vbbasGGT6wCYxf3khNgV5/Ctq/nNwUajMrpkNgP1UG1dvLgTVi2hARv2a50qvDAYt2BexRXlD47Ms3pJZmR1nIhLIEYwrVYzd26YE0PmKsZAsiZ4SdMThfiN7xFKn6YAV8+5unxZUr/oXFWAa/CyPb2iA2JbAE7MmhJmCIdEOGMisgsUsMnm6EyhABKP3+Vc0T1RzgCaVy4oZjpfy7Bu9ZDA==
+ b=KkDrClAO05Ltst+zyaZH+O6KdmFoID/5DydqeEFGaUf8PCyVZkUOuP0y1ET6ebso4Ybqe7TK1G0GPqtboYhT9nUMrKlWdjAgyJNQhVmWUhaQZjc0hTX6ew+bkuDK+sFIobPkjMJZDNa8Mzo1M+CvxcsIaoKvzTP7XGcENJmLl74LEAVkdx8C+mQK3wZSQxIwYCrpYE4jjYpD2CbV1OV0eiN25dVoMnJk5t9Q+NsRQ7hyaCm7Cai4WGJ3/fZ2gBv4Ckt6vXCbHorPtwwmuI54CWHNQDmZ3HptGOwSRmfDo7jW2+JWxgdMvSmAokty8HuVPrZtEMEQKGsZ0k/zM3LzOg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4fUiAkXVRoQZoyCmkuC7ljwbwLH2WEa0wBk55pG7CLg=;
- b=TSDaiwz3d5/wT81RjZYVuDDWIOIDS3lUeYqLBmXMeufaSE6K7xch1bJ1s5GvH37/niQWPoux/6wjL3Yp0LJZiaAgLZ4lgLUvGWI+lQ0BaVil5cFzDhCjwyWrJOk6e+3z1ptTmS77brS/JGDa1zCPPgOquc8nFmoGkfRo9xLf9JHBXmwNfyGU4eGFXjQ3X9sNMKSX4+nBMTnTYx57nE+rtAW2p1xBFjgWIQs62s0ZpCwDqVCrcltNcNwMwcJyfCXHAqHjPyDSntd//DjIdiYMsJjfDKr8woj6TbJR9BMDhcqD/nS5H0XdRHG7h9v/nWVo5mlecIXNA1Qhi0w6ejZJ0A==
+ bh=W36HrXBo/8LYD9XAgid7AGFdneNtOWAJrf3sBlEBMY0=;
+ b=apC4VTAgrGeXs+OClYuV3QcYlaroIMzDolLlc0COR4VV8dZjQVqYrPs/7PdX0RL3hiNKD61TWemaI3t7rC2H7fQCpN50K7A4Uz0NA8PF13j5190de5QHepAG5Fs2W+Ry0GLwIHn202R6hKtfnrY4A/8OumGH/KIWgxkNdiGyWm2G/9K0uFqJa2yYiaHKwxodCSUnrILkV6dPZve7p96nr3/lDMZOAJOMOY0o5D292lKzNY60nW4R6DTt3KVfIzvbbC42qnXUsulkaT55vUkrzgdBXygf2o2Ij2d0tB32f/hkb+sfKI/nmdVVYjiToPrjD77BtpN9x4ZKPaSz2qKL2Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
  dkim=pass header.d=abatec.at; arc=none
 Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
- by AS8P190MB1887.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:520::18) with
+ by AM7P190MB0757.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:11c::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17; Thu, 2 Mar
- 2023 08:50:35 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
+ 2023 09:26:03 +0000
 Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::154e:a633:142d:bb0f]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::154e:a633:142d:bb0f%4]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
- 08:50:35 +0000
+ 09:26:03 +0000
 To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH] package/pkg-autotools: force cross compiling
-Thread-Index: AQHZTOOwiKwRJkOlc0am+70bZmr8lQ==
-Date: Thu, 2 Mar 2023 08:50:35 +0000
-Message-ID: <VI1P190MB0493CA480A72DCB0A86ECFAE9FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Thread-Topic: [PATCH] package/swupdate: fix ipc header include
+Thread-Index: AQHZTOjtqDE/XSpQYU2rIkz4lPTDWw==
+Date: Thu, 2 Mar 2023 09:26:03 +0000
+Message-ID: <VI1P190MB0493D233ECC579510F8C0FC69FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 Accept-Language: en-GB, en-US
 Content-Language: en-GB
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1P190MB0493:EE_|AS8P190MB1887:EE_
-x-ms-office365-filtering-correlation-id: 8473bd26-d757-461f-4237-08db1afb304d
+x-ms-traffictypediagnostic: VI1P190MB0493:EE_|AM7P190MB0757:EE_
+x-ms-office365-filtering-correlation-id: 6e3271f9-d045-4da9-989d-08db1b0024d8
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hWvow1VCiywIu619nDllWyyMYeqQrbhUMdF38oaZlK1b8O/QrlYhjqUKy1pKEne75ucp7Gurkj/S2HfH/OZPXGh8qXkNMe2Fjs9ajrHZ3qsggU8L/VP8oL7ODA4viQ0ejh9SyNfGwR4djUSLlcoPbPt0oUW8UWlqoZApTz+V3d/ABU34fFUOXO7d36rnWnf3jwhJMHXePfurPNpfgw5055093uZ6oB136vhbtqtH0mA+SVwiMbWojJyvBGDKkeCkYtEQ4sDAR2Aeg6MwKrEFugoqFBry+7uDB1JmtsD0TTaGjnbh9y03XUicdtV0di3lfoR/t6i+elWhsBmjBWM8+2m1y58vaF6jtkwtyc8M25lA7WDF/p++i5rkDvfZq1bg2qOrD+U0q6KTHyCmTqJ1dZ4mPXIVZ0QEx2LOc8kMmvlEsV/c+Ol2B/i75kgTlG/rxj6Op1hD1veAZfAxyLCwimoqZM0N5NyRCxA3IrNb3L27pbHizraur9XQvUyQtt4iQmSx9fU9jPnxvS2Lm9gF8bBcmQj68ndGlHvPNAiAo8j4dPalwGJSNB1nGRJGR2/NKaHstYQ8A6MVsguR1Ly8KF82iGjkqF12Yb0BAi1Ag8GfnBaZoYmmyAYKf6W1B1TIc+VbalJFJDDbdKLZNDR8iuLr2wjxlQ7V1MYCNKV3R0EsRPoRgBJ+4RsPReCY/UGx
+x-microsoft-antispam-message-info: HeOPk8F+WYtBtsy0UBLmGeMYIk9/9xfT3WGuew1XoHY5gJHxFWNzU3lsKGBBMcrZbRxRewvBef8mPnbBhoU7dozDpdYjINDC68QSxjaz4NavXfL6o51trmxbf1E1aFqzrQFkpn4Pj8EsX1UheF7EVlTdSOKeVD3JrKQxnk+KvFInQBmZQRGTYVMm3TNKXq5VUpjRbBkpK9Qb9McWWAdjvpyI3rkduECJM1Y2500m2qI72PpYLuaCOfnnCb3tWlNmKtYMvwm/TrEzvIvFYOOKvcaxHc1/yDLZfGVD7sJpYgysWUUu6BBwKEEPHzRmUjpN/NVJxsdIkNX8yrjnOZuPLSNd5XhZALU5IKckfEh/mKMy5+1X14YFNSiNWXovXqJct+BCGUoiorInAJNZkCpX5Q+Z02iMnBQu2LJySXekxRM9Y9IGS5R3iX31htF0kcTkwmWcbSXdIRWsU2zRYULLa4Z8Wy1mlVolmpfPMvE9cQpta50ewxMZ/BKjn4F09VE+/1Z2RctG2JrGIr5mc4X2IwZxbCHI76bFpd+lXt+/38gic9gTryRXLNxsplXGktV9uHA++gR0WFbrYbMW8ddYVw5jsH7OpB/glSg08qupwPp2+ZuC1hoWc6U4wp6NfT5VqeYqmTh5k7yGvh86c7pzujHrKQflNo0n7BVvSPKeKwI9ISNakOUwfrb/MtrubL+V
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230025)(4636009)(346002)(39840400004)(396003)(376002)(366004)(136003)(451199018)(33656002)(8936002)(5660300002)(966005)(316002)(478600001)(71200400001)(186003)(9686003)(6506007)(26005)(4326008)(64756008)(6916009)(7696005)(86362001)(66476007)(66556008)(66946007)(8676002)(66446008)(55016003)(41300700001)(38070700005)(76116006)(52536014)(122000001)(38100700002)(2906002);
+ SFS:(13230025)(4636009)(366004)(396003)(39830400003)(136003)(346002)(376002)(451199018)(83380400001)(38100700002)(122000001)(8936002)(5660300002)(33656002)(52536014)(478600001)(66946007)(71200400001)(86362001)(38070700005)(55016003)(9686003)(186003)(26005)(6506007)(66476007)(76116006)(66556008)(7696005)(2906002)(8676002)(66446008)(45080400002)(64756008)(6916009)(316002)(41300700001);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?PmY5Jyebuj2Q00bWXunPRxa/wfLo+YdDIfmsIX5znM71VJlFBQZfrq9Rnl?=
- =?iso-8859-1?Q?EkJgkntkmPpUyOyp+E18TKJjLw6J/fgCZqHPORQHm0hLl+oigY47NsbfTk?=
- =?iso-8859-1?Q?Wk+GcspsjaQhOyLOuoTueMgTNakv+x4R03iZzGNt6yQVv9IfZbqIYXriYs?=
- =?iso-8859-1?Q?zteee8dCXUNyEwE4wlVlW++NZSx+rUkTQlghRWUI/dsruEfIBVegJiDMqB?=
- =?iso-8859-1?Q?v6nqL3EcH7my2oJkt/pVuK+qKbqoiCegX4n7aws6GPQuOUreG0zcIN1eS9?=
- =?iso-8859-1?Q?knF+ZaoIoTw9Msq4fyZSgq59cRmqzng19a00qAOJxWNq4Dud99dgqy0YIY?=
- =?iso-8859-1?Q?WPHvhqWqFyVqmM5DC33XNRISiyd46aJpU7IHk5T9ocgb/zy4tPKV4DC9T3?=
- =?iso-8859-1?Q?GE391FweYvWNU+XHwOwOCQVpQLuQ0X+VHALGZyN8DACeEN3io61KJ8CKZ6?=
- =?iso-8859-1?Q?Emco4yN6HEF6OwjSRtEnE3Q8NaduHoqzoycH1dZJ6j0idjl3gyzppV4Y6D?=
- =?iso-8859-1?Q?/0lSCxmjBzyyhYHU75jz0frJi/lpyXvOA1/hGwJuozO6c936ZK8227g/wN?=
- =?iso-8859-1?Q?/x3842pC3gpeuFym+jNKgACi7P1gKY+AFtMaon8rDSuEkIV6A5kMSniPvy?=
- =?iso-8859-1?Q?mF2L61uavMaK2WEkQJb810LNz7R7H6fDFj+HkrLBckgnqiXNblO20qp9Uv?=
- =?iso-8859-1?Q?UVF0fvi+ns0ZtOtVJQMgjiObZPYn/veyz2604yhh5eyqnwfjuydTLgS5H8?=
- =?iso-8859-1?Q?Fpcw2ihrUJi22OWFDW6YHjOU8SOLNYK0Ok0CsECm7hpkTjgP3/yTpZ9kVF?=
- =?iso-8859-1?Q?kXtbda0jMJxjhv81jFuPdBOwVXSrOsOxdKKNehDXzFmLCoO3mEP1eM8zi/?=
- =?iso-8859-1?Q?Q47o5uSPXzhCdnlcS65BK0ZRt4CoFWKdvj2pR0t0m3F34B4iecw744zg0e?=
- =?iso-8859-1?Q?hV7KrHCzb+QOdyRqiSFqe91SY+u4apzg892zFvk9MRanTVvaMOVewDYuwh?=
- =?iso-8859-1?Q?218TI90WssuoLHbIp/XE3D4HKK6RnNYq5pLpxasvljwijSauuDLELCqNIo?=
- =?iso-8859-1?Q?HmZW3YNbhSHBfag5BBrojXMQ1VQnaWahD4AMNWnQUulSDfkD9bAj8SeE+0?=
- =?iso-8859-1?Q?GR3ykQs1DrGNFAHz1Sy93DZjw54IoeVGTJPerBwY4RbKYmnR4h5qBTbORR?=
- =?iso-8859-1?Q?+lznLmhMC4XiUda7gId1wf6imNHBtpMcojfPWKUk4+Nb5fnGGjvRrSSEn/?=
- =?iso-8859-1?Q?zgFBCcmpg/aZtS7slSDHAN0zG710kLcfcBfKvxH6nQ0/DC058aAFBraFeX?=
- =?iso-8859-1?Q?xWK6+j1RpTZaHynC9cBT02JRN41yOo1ICUkbFV96MuRs1mvCS2scpKFggC?=
- =?iso-8859-1?Q?fwDKY20hq8BXC7I2Owk6OZ38Ldm2W7acJRXXl3Wht580zkDsNZ9gCvMWFi?=
- =?iso-8859-1?Q?VF9T9tYfkC53/QkV5U5DFSk0BK5HBAft5F1hWwVbNnUGgqF2ABehbYn39S?=
- =?iso-8859-1?Q?NfEBkmyPWY3XNN4oSnVjXRcSOYyfedTCVtfOGyES83KT4wFd3wq+PL5Bl7?=
- =?iso-8859-1?Q?myCT8tNNRbmNnQ3M0rMozvpibuzW2rUbIYfTSB/JJ/hNdiO44pi2Svy+AC?=
- =?iso-8859-1?Q?SzPjAd+d+4bO0=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?nyDa0MIqPl7V5Ig9GEcZw2AB6H5nNhrIMQfPGuCkQZ0ntEfytPmH1PTvqH?=
+ =?iso-8859-1?Q?NKOlu6oIbwHEdg4ygc3Iv7+4F5QeEtBFtKxOmmG7kgZ8rZt9f74MgRq7us?=
+ =?iso-8859-1?Q?aNBjapJYU5viXLTS3zOGP0SOhY2xsCy1Kgb9GE5rrvhb3Aj8e7jL6xZXTG?=
+ =?iso-8859-1?Q?o80pZEpoEfo6XEy6EaO1Qg79nnlA35490HsVNUioLseySpNPN7lMXB7NRI?=
+ =?iso-8859-1?Q?N5up+kee+sA/MT9qBI2WUq1puQijolyw5Pa/Zu+fTXL/g+LSl06BaNnAvb?=
+ =?iso-8859-1?Q?9WvK3zV44igUhnUYNJWh8BnfxOo9AlhtzcG0chIS0NKEHbG+v20rZSKKNc?=
+ =?iso-8859-1?Q?4Ap3ZwhJ9mXlVTqxtS7R4p9x5fi2FIC9ExAtVPhY44CppbUqTeyyv2WAMC?=
+ =?iso-8859-1?Q?GrAcLZyMiysdOmGz9qBV5PCr4UCpKwJyrtosYwGUTL8DVglopEaRWomw9X?=
+ =?iso-8859-1?Q?D0rBmktu3qhQ6+agjxz8YyiV964BbOUIXkC1NG23nwUUAOKO9zYaSncIjd?=
+ =?iso-8859-1?Q?Su6EV2tibORJ7Mxu16XatQrrQC6UqEjSPn8VC+EcihAud9ts6O0tYDoaqC?=
+ =?iso-8859-1?Q?b5yu0x4OmBeuRVL0+dmBOYp5duoGhV1qx6ViL4zfA52hYMFUCOE2l7m/pa?=
+ =?iso-8859-1?Q?Ttw30UcOR7ppvFahSHfcV5PUwuAs0xhWtu7uBr7C286dR4APGvQyxShfLD?=
+ =?iso-8859-1?Q?EG8ZQdKUjGQjYJc97etMiWCIMjJjI+xstdxFFWuL6bh61/NAIJgDPeFymc?=
+ =?iso-8859-1?Q?ofqz5bj22gzLvotcE75zK2UbO9V/SXdngzVAFgSioKIXSPbUiCmC3slRG4?=
+ =?iso-8859-1?Q?Pfs3TZNyIqK4XA19dlQs/qOl1eGsSFvXrU7BqOufwhQxNgbAiqYbWm8Gyz?=
+ =?iso-8859-1?Q?jibcpWpZ7bHIopF4IbHCTFJMxd5R945HwRQRw4wFI+7y8SUgra9RyXxMmT?=
+ =?iso-8859-1?Q?xRPNJukRtjTajLbwqfkKZ747+GWpPnEc+B7Jnuqiw/E8OSmTgO9RPbELm+?=
+ =?iso-8859-1?Q?n/ozmoLIqduzlA/SGEWNHFI50PGa26/EByFZnNvrlpV9pgfitwrORbDdiI?=
+ =?iso-8859-1?Q?7l6Uje9CXxdtxg6Doy5MJLq7A18rxxXYjWCQHJuJQf7Nz0L/csbibitF1M?=
+ =?iso-8859-1?Q?UO26Z4HK+YexiwzrKsurNEsnRlBSPbTuwGkMA+/ZciHnZMHcHZdv8panVC?=
+ =?iso-8859-1?Q?uWtVjwGq7pRO7VXNDOxbydml9VTEKlPc5Gjbi1HeXvS8DUE0UUzMFau5ej?=
+ =?iso-8859-1?Q?jjkTw7L60gGt/XyYL2PkPvTgAODdJclkjbwEoqZ6pZ5V8CgOZEQZsMsxeA?=
+ =?iso-8859-1?Q?IvIntznELE9IQ90b5GAGva61DciRNFYRsHnuVxt0iPWdvsmGoIGS2rw00+?=
+ =?iso-8859-1?Q?z0AgnqPvv++jRPgXL9N4xBFP0Mn+ifvqKikkn6DMtTwo7qPBKGSMbRaqEJ?=
+ =?iso-8859-1?Q?moCdtx2q9zKxr1EHw0fjoS9bxayZaIcIQjr3L0XJHNpSZ/iL69NWZF9gig?=
+ =?iso-8859-1?Q?zAhmzJnGmuohSbjU/vwRgHFvToxu0Unf7+bbH/uNrwqlZHWXnbUOwE0iCR?=
+ =?iso-8859-1?Q?HqYwaEIKer2bt/LkTlCg8/6iyuWrRBvb3js0H/guchUeMCkjMXD8g14xxh?=
+ =?iso-8859-1?Q?glF5BeG/CmBmY=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: abatec.at
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8473bd26-d757-461f-4237-08db1afb304d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 08:50:35.2227 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e3271f9-d045-4da9-989d-08db1b0024d8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 09:26:03.4869 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uMS1sOhrmjYKaUGJkr7u73llw6gMZT9CV8Jpbtqu1Xw0XH5TzIbxsHFuAISrwHQR74FPv6y5+uYhcA/hzVmhcw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P190MB1887
+X-MS-Exchange-CrossTenant-userprincipalname: nBLem5ttOaAs6UF6vm2vLjD3t7d8PqDBtlpYqsYsviDorf8FbBq0mfokVvoygfJfO/L2GBOPA7KMEmZVcH0Upg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7P190MB0757
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=abatec.at; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4fUiAkXVRoQZoyCmkuC7ljwbwLH2WEa0wBk55pG7CLg=;
- b=jcv2LE7+SU1yLJR0bO4anTlVBrt6bAi+0TJmxOjcDA7HJbAv/oh/WL3f2TdZ9Xel5QwbtvBfssW31GovQ0VyBwcaRdiDdhDFa7IImo67Tw1LvSnhYGX3CWaOvNR4oKRJsSG7VcUgvIXA+Nv5LNWWJ69BKZVJXynppX4Yg71bc1w=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=W36HrXBo/8LYD9XAgid7AGFdneNtOWAJrf3sBlEBMY0=;
+ b=itDMfCudbnYUPR8DYCc9esU4tOuThWXJ0yhLjG+nudY36Zg5PetdFvXzG3j4yljtWVb6zhvdTh8bmGBF0ZVpJgNUNbHJcWFW4P/y0GyvcJqvocnfTOfaP45t29JB2bnLqZALh1gsPv3zLdbMIJXH0ZkSTDScFTEYzbhy6rKHPew=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=jcv2LE7+
+ header.s=selector1 header.b=itDMfCud
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH] package/pkg-autotools: force cross compiling
+Subject: [Buildroot] [PATCH] package/swupdate: fix ipc header include
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -142,51 +142,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Lang Daniel via buildroot <buildroot@buildroot.org>
 Reply-To: Lang Daniel <d.lang@abatec.at>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-By default autotools enters cross-compiling mode if --build and --host
-differ [0]. Depending on the host architecture and how toolchain
-providers set the triplet it might be the same. This triggers autotools to
-compile and run a program on the host. If it is executable
-cross-compiling isn't entered.
-As pointed out by the autoconf mailing list [1] one can force cross
-compiling.
-
-[0]: https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.71/html_node/Hosts-and-Cross_002dCompilation.html
-[1]: https://lists.gnu.org/archive/html/bug-autoconf/2023-03/msg00001.html
-
-Fixes:
- - http://autobuild.buildroot.net/results/6d4/6d4bc520c12313508d0fadee11d5b88c35a3cba9/
+Compilation for other programs trying to use swupdate headers will fail
+because the header is located in $STAGING_DIR/usr/include/swupdate and
+not $STAGING_DIR/usr/include.
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 ---
- package/pkg-autotools.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ .../swupdate/0001-progress_ipc-include.patch  | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/swupdate/0001-progress_ipc-include.patch
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 717ff81593..aac80369e0 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -195,6 +195,7 @@ define $(2)_CONFIGURE_CMDS
- 		--disable-documentation \
- 		--with-xmlto=no \
- 		--with-fop=no \
-+		cross_compiling=yes \
- 		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
- 		--enable-ipv6 \
- 		$$(NLS_OPTS) \
-@@ -229,6 +230,7 @@ define $(2)_CONFIGURE_CMDS
- 		--with-xmlto=no \
- 		--with-fop=no \
- 		--disable-nls \
-+		cross_compiling=no \
- 		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
- 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
- 	)
+diff --git a/package/swupdate/0001-progress_ipc-include.patch b/package/swupdate/0001-progress_ipc-include.patch
+new file mode 100644
+index 0000000000..cb555bc63b
+--- /dev/null
++++ b/package/swupdate/0001-progress_ipc-include.patch
+@@ -0,0 +1,33 @@
++From d073bf21c1021d313ae3edc92c8e89993e01fae4 Mon Sep 17 00:00:00 2001
++From: Lang Daniel <d.lang@abatec.at>
++Date: Thu, 2 Mar 2023 08:43:33 +0100
++Subject: [PATCH] process: fix include
++
++The header might be installed to a subdirectory of /usr/include (like
++with buildroot which sets /usr/include/swupdate). swupdate_status.h will
++not be found in this case.
++
++
++Signed-off-by: Daniel Lang <d.lang@abatec.at>
++[Upstream status:
++https://patchwork.ozlabs.org/project/swupdate/patch/VI1P190MB0493A1E34DC101CFDD5DFBB59FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM/]
++---
++ include/progress_ipc.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/progress_ipc.h b/include/progress_ipc.h
++index 5d0be1c..30e5266 100644
++--- a/include/progress_ipc.h
+++++ b/include/progress_ipc.h
++@@ -9,7 +9,7 @@
++ #define _PROGRESS_IPC_H
++ 
++ #include <stdbool.h>
++-#include <swupdate_status.h>
+++#include "swupdate_status.h"
++ 
++ #ifdef __cplusplus
++ extern "C" {
++-- 
++2.25.1
++
 -- 
 2.25.1
 _______________________________________________
