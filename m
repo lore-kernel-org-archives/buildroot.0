@@ -1,69 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7828CC64EC4
-	for <buildroot@archiver.kernel.org>; Fri,  3 Mar 2023 12:15:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BE2DC64EC4
+	for <buildroot@archiver.kernel.org>; Fri,  3 Mar 2023 12:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B291141C9D;
-	Fri,  3 Mar 2023 12:15:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B291141C9D
+	by smtp2.osuosl.org (Postfix) with ESMTP id B986F4118B;
+	Fri,  3 Mar 2023 12:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B986F4118B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3p5YGls3d9Tf; Fri,  3 Mar 2023 12:15:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gJt9vM8QwM_8; Fri,  3 Mar 2023 12:23:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E05941CA1;
-	Fri,  3 Mar 2023 12:15:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E05941CA1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 354B81BF239
- for <buildroot@lists.busybox.net>; Fri,  3 Mar 2023 12:15:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D4144118A;
+	Fri,  3 Mar 2023 12:23:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D4144118A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 19F6B1BF239
+ for <buildroot@lists.busybox.net>; Fri,  3 Mar 2023 12:23:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B98B61391
- for <buildroot@lists.busybox.net>; Fri,  3 Mar 2023 12:15:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B98B61391
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE00E4118B
+ for <buildroot@lists.busybox.net>; Fri,  3 Mar 2023 12:23:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE00E4118B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rmFvx6hn4Tn2 for <buildroot@lists.busybox.net>;
- Fri,  3 Mar 2023 12:15:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE4C161397
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BE4C161397
- for <buildroot@buildroot.org>; Fri,  3 Mar 2023 12:15:49 +0000 (UTC)
-Received: from [81.174.171.191] (helo=donbot)
- by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
- (Exim 4.95) (envelope-from <john@metanate.com>) id 1pY4K9-0005sF-KU;
- Fri, 03 Mar 2023 12:15:45 +0000
-Date: Fri, 3 Mar 2023 12:15:39 +0000
-From: John Keeping <john@metanate.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <ZAHk6987hSiKPc6I@donbot>
-References: <Y/4etrPX5MZiUpdq@donbot>
- <20230228155528.2430203-1-thomas.devoogdt@barco.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id teXWfOSZRxOZ for <buildroot@lists.busybox.net>;
+ Fri,  3 Mar 2023 12:23:00 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C28940242
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2C28940242
+ for <buildroot@buildroot.org>; Fri,  3 Mar 2023 12:23:00 +0000 (UTC)
+X-IronPort-AV: E=Sophos;i="5.98,230,1673884800"; d="scan'208";a="224726808"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
+ ([199.255.45.14])
+ by ob1.hgst.iphmx.com with ESMTP; 03 Mar 2023 20:22:56 +0800
+IronPort-SDR: ZLE3bQtb/jJR8dJnwHHCPjw3NzphxS2AJ/3BX+RJzTfTGaVEtFwaRT8QDZ5YR8RAMSAglC+Oay
+ kGNa7FTRR4r3gRZKFBpkhAGIDmaHAME/jnanD3Tu5609Jwzs2IOcUeuFnrCXnKKSyq5pga8Ygo
+ Rms35bo9vFKsbUPwHbgTiqMO1lNl+6+uJ4W7DHyANzEj1Semy/FqDhB2k5kRaX9hEcVDfKbxSi
+ ct90+VJNZvQXuhB7Qaftt4w9VAf2t778uVclmi4nQ+th79Z0A1Hb+o118wpQ9e/ccqHHYsIY0X
+ EZ0=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+ by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 03 Mar 2023 03:39:41 -0800
+IronPort-SDR: KaOKG4dxxrlkxRl2e2lrVQ1stkdrlwWw/eu9yTcU1Tx6+0VsBC8B2zKWqjc3u8XrgDNA4/+Cm4
+ 3KmVfxoOQYoJiifUvsv7ll69HXz3QehL7W/hQSwu6HyUzlIdGLfWj1isuJPQLmwG/GDpzEqw9T
+ A5tb+jvkL5u82V8tXRhyrZjfGNvyETYxvH+lWCS4ytkvxeEfjvu02wxLtcF+egALKP9Gljofla
+ vlaWNrLr6GvS9FrU0/PIeS5civ+MX6h7coV4IHJSA79nOQMK1draXHTtwZCiUcO/If6fne+61r
+ nSU=
+WDCIronportException: Internal
+Received: from unknown (HELO x1-carbon.lan) ([10.225.164.35])
+ by uls-op-cesaip01.wdc.com with ESMTP; 03 Mar 2023 04:22:55 -0800
+To: buildroot@buildroot.org
+Date: Fri,  3 Mar 2023 13:22:48 +0100
+Message-Id: <20230303122251.3392998-1-niklas.cassel@wdc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230228155528.2430203-1-thomas.devoogdt@barco.com>
-X-Authenticated: YES
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
- Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description; bh=TYSgWEXQJKwMTRw47auPLt91SZleNBg4JReuqasrieY=; b=ViqhY
- BLKbDlnDOSFvSzXl06abxyeqpXQkx5WU80fsiL3gpJ4xWJe7A3Ahpu2gGpucDtK71eabPu+n9dVdM
- 5qBlakv6mKyQ6Mk2TJ/ItTt7reVfMN+ryDqzqNAHARqJ1upxYJcHufpwVyort6pIHXZ5ZBegF9FX/
- nUPKwfsYtJbhdSXY18Gn8svb9PO0+ps1Mb8X/cQRS8JJbs7v1hIhJ6KcC2mxrhWM6pEqbnz0NyQvG
- 17+TvcqlYAqUk2exQg/j/xVrWtsyyYwu+WNvNPiHynZkxKaswmDL0FfcSqer7trX37R+cOs51sL3W
- 3aloj5/pccDvfnuVS18pEmZR7W6QQ==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=metanate.com header.i=@metanate.com
- header.a=rsa-sha256 header.s=stronger header.b=ViqhYBLK
-Subject: Re: [Buildroot] [PATCH v3 1/3] pkg-cmake: add option to select the
- Ninja generator
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+ t=1677846179; x=1709382179;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=XBdCwhWOqS9iS6Ci5nhGKmLmK9DEmXeQlCBn1a2h4pg=;
+ b=gdL3lwTTZRMbnxgb9l/wPnOpZkGw3HlOwrSC7HwGISm+8gv45ID+Fi+L
+ 30+rZW04wEBGAdxDxNkRHE1izJ8Vpqq8is2F2tGjzhqjA7Ga69i7vM1Bd
+ RFu4brmnh6hahZIsL60NOe4sVEsXpzAnWo6gitAarcW8f+J2aff+qIUWP
+ yHbw/aPd61kdZL9jZUzrSzHE9LTCUQygFzuL0+h3MWytNoQve8hoG1A91
+ +FkPKe+TCO3i7+8Nf6+D/XpZAA15GpdENjVVg/bVqDHcsroTJlFn0X4IQ
+ RnkcfLXT+sifuctOo8gOJ2BRs4dHS6v2EDYo9jeFVySXuuV0HUYGaQDh1
+ w==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
+ header.a=rsa-sha256 header.s=dkim.wdc.com header.b=gdL3lwTT
+Subject: [Buildroot] [PATCH v2 0/3] misc aarch64-sbsa cleanups
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,235 +88,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Adrian Perez de Castro <aperez@igalia.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Reply-To: Niklas Cassel <niklas.cassel@wdc.com>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Feb 28, 2023 at 04:55:26PM +0100, Thomas Devoogdt wrote:
-> E.g. Commit 16e5c92ff5fd2b44a1126bd7d7538c68ce838213 can now be replaced by:
-> WEBKITGTK_CMAKE_NINJA = YES
-> 
-> Packages that are selecting Ninja (or overtime another generator),
-> should also use the _BUILD_{ENV,OPTS} variables iso the _MAKE variables.
-> 
-> No _INSTALL{,_STAGING,_TARGET}_OPTS used so far:
-> 
->     $ grep '_INSTALL_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
->     $ grep '_INSTALL_STAGING_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
->     $ grep '_INSTALL_TARGET_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
-> 
-> The _MAKE_{ENV,OPTS} are translated to _BUILD_{ENV,OPTS}:
-> 
->     $ grep '_MAKE_ENV =' $(grep -rl "cmake-package" package/*/*.mk)
-> 
-> > package/netopeer2/netopeer2.mk:NETOPEER2_MAKE_ENV = \
-> > package/racehound/racehound.mk:RACEHOUND_MAKE_ENV = $(LINUX_MAKE_FLAGS)
-> 
->     $ grep '_MAKE_OPTS =' $(grep -rl "cmake-package" package/*/*.mk)
-> 
-> > package/mariadb/mariadb.mk:HOST_MARIADB_MAKE_OPTS = import_executables
-> > package/zeek/zeek.mk:HOST_ZEEK_MAKE_OPTS = binpac bifcl
-> 
-> Only "musepack" seems to overwrite MAKE to enforce -j1, so replace it:
-> 
->     $ grep '_MAKE =' $(grep -rl "cmake-package" package/*/*.mk)
-> 
-> > package/musepack/musepack.mk:MUSEPACK_MAKE = $(MAKE1)
-> 
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> ---
-> v2:
->  - made generator use more generic, other generators can now easily be added if required
-> v3:
->  - add _GENERATOR_PROGRAM
->  - add _GENERATOR_PARALLEL for make
->  - dropped BUILD_OPTS
->  - fix gdal.mk
-> ---
->  package/gdal/gdal.mk           |  2 +-
->  package/musepack/musepack.mk   |  2 +-
->  package/netopeer2/netopeer2.mk |  2 +-
->  package/pkg-cmake.mk           | 31 +++++++++++++++++++------------
->  package/racehound/racehound.mk |  2 +-
->  5 files changed, 23 insertions(+), 16 deletions(-)
-> 
-> diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
-> index a3b11c53af..d8ce623283 100644
-> --- a/package/gdal/gdal.mk
-> +++ b/package/gdal/gdal.mk
-> @@ -19,7 +19,7 @@ GDAL_SUPPORTS_IN_SOURCE_BUILD = NO
->  # autotools in gdal. We need to force 'make' to use the Makefile,
->  # which is generated by CMake. GNUmakefile and autoconf are dropped in
->  # 3.6 so this can be dropped in future version.
-> -GDAL_MAKE_OPTS += -f Makefile
-> +GDAL_BUILD_OPTS += -f Makefile
+Hello,
 
-Do we need "--" here before the flag?
+Here come some small aarch64-sbsa cleanups.
+Please consider for inclusion.
 
-The documentation says:
+Changes since v1:
+-Modified test_edk2.py to use the same kernel config as
+ qemu_aarch64_sbsa_defconfig. (Thanks Vincent.)
 
-	cmake --build <dir> [<options>] [-- <build-tool-options>]
 
-implying that this is necessary.
+Kind regards,
+Niklas
 
-But is the option even needed with `cmake --build`?  I wonder if CMake
-always uses the right Makefile anyway.
 
->  # gdal at its core only needs host-pkgconf, libgeotiff, proj and tiff
->  # but since by default mrf driver support is enabled, it also needs
-> diff --git a/package/musepack/musepack.mk b/package/musepack/musepack.mk
-> index fc66c684a5..d4dd08df36 100644
-> --- a/package/musepack/musepack.mk
-> +++ b/package/musepack/musepack.mk
-> @@ -9,7 +9,7 @@ MUSEPACK_SITE = http://files.musepack.net/source
->  MUSEPACK_SOURCE = musepack_src_$(MUSEPACK_VERSION).tar.gz
->  MUSEPACK_DEPENDENCIES = libcuefile libreplaygain
->  MUSEPACK_INSTALL_STAGING = YES
-> -MUSEPACK_MAKE = $(MAKE1)
-> +MUSEPACK_BUILD_OPTS = -j1
->  MUSEPACK_LICENSE = BSD-3-Clause (*mpcdec), LGPL-2.1+ (*mpcenc)
->  MUSEPACK_LICENSE_FILES = libmpcdec/COPYING libmpcenc/quant.c
->  
-> diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
-> index 47fcd31acd..2ebb23eccd 100644
-> --- a/package/netopeer2/netopeer2.mk
-> +++ b/package/netopeer2/netopeer2.mk
-> @@ -24,7 +24,7 @@ NETOPEER2_CONF_OPTS = \
->  # affected mutualy.
->  NETOPEER2_SYSREPO_SHM_PREFIX = sr_buildroot$(subst /,_,$(CONFIG_DIR))_netopeer2
->  
-> -NETOPEER2_MAKE_ENV = \
-> +NETOPEER2_BUILD_ENV = \
->  	SYSREPOCTL_EXECUTABLE=$(HOST_DIR)/bin/sysrepoctl \
->  	SYSREPO_SHM_PREFIX=$(NETOPEER2_SYSREPO_SHM_PREFIX)
->  
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 8c375779cb..5f5988beb8 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -51,11 +51,6 @@ endif
->  
->  define inner-cmake-package
->  
-> -$(2)_MAKE			?= $$(MAKE)
-> -$(2)_INSTALL_OPTS		?= install
-> -$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
-> -$(2)_INSTALL_TARGET_OPTS	?= DESTDIR=$$(TARGET_DIR) install/fast
-> -
->  $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
->  
->  
-> @@ -65,6 +60,16 @@ else
->  $(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
->  endif
->  
-> +ifeq ($$($(3)_CMAKE_NINJA),YES)
-> +$(2)_DEPENDENCIES += host-ninja
-> +$(2)_GENERATOR			= "Ninja"
-> +$(2)_GENERATOR_PROGRAM	= $(HOST_DIR)/bin/ninja
-> +else
-> +$(2)_GENERATOR			= "Unix Makefiles"
-> +$(2)_GENERATOR_PROGRAM	= $(firstword $(BR2_MAKE))
-> +$(2)_GENERATOR_PARALLEL	= -j$(PARALLEL_JOBS)
+Niklas Cassel (3):
+  board/qemu/aarch64-sbsa: use PARTLABEL to specify root
+  board/qemu/aarch64-sbsa: use the default console specified by ACPI
+  support/testing: use the arch default kernel config in test_edk2.py
 
-Should this be passed to ninja as well?  The default may be higher than
-the number of parallel jobs configured.
+ board/qemu/aarch64-sbsa/grub.cfg        |  2 +-
+ board/qemu/aarch64-sbsa/linux.config    | 68 -------------------------
+ support/testing/tests/boot/test_edk2.py |  7 +--
+ 3 files changed, 5 insertions(+), 72 deletions(-)
+ delete mode 100644 board/qemu/aarch64-sbsa/linux.config
 
-And for make should we use:
+-- 
+2.39.2
 
-	$(wordlist 2,$(words $(BR2_MAKE)),$(BR2_MAKE))
-
-?  Although that requires passing build options after "--" which breaks
-the generic $(PKG)_BUILD_OPTS handling; "-j" is special in that cmake
-recognises the option itself.
-
-> +endif
-> +
->  #
->  # Configure step. Only define it if not already defined by the package
->  # .mk file. And take care of the differences between host and target
-> @@ -88,7 +93,8 @@ define $(2)_CONFIGURE_CMDS
->  	rm -f CMakeCache.txt && \
->  	PATH=$$(BR_PATH) \
->  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-> -		-G"Unix Makefiles" \
-> +		-G$$($$(PKG)_GENERATOR) \
-> +		-DCMAKE_MAKE_PROGRAM="$$($$(PKG)_GENERATOR_PROGRAM)" \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
->  		-DCMAKE_INSTALL_PREFIX="/usr" \
->  		-DCMAKE_INSTALL_RUNSTATEDIR="/run" \
-> @@ -119,7 +125,8 @@ define $(2)_CONFIGURE_CMDS
->  	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
->  	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
->  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-> -		-G"Unix Makefiles" \
-> +		-G$$($$(PKG)_GENERATOR) \
-> +		-DCMAKE_MAKE_PROGRAM="$$($$(PKG)_GENERATOR_PROGRAM)" \
->  		-DCMAKE_INSTALL_SO_NO_EXE=0 \
->  		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
->  		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
-> @@ -166,11 +173,11 @@ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
->  ifndef $(2)_BUILD_CMDS
->  ifeq ($(4),target)
->  define $(2)_BUILD_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
-> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) $$($$(PKG)_GENERATOR_PARALLEL) $$($$(PKG)_BUILD_OPTS)
->  endef
->  else
->  define $(2)_BUILD_CMDS
-> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
-> +	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) $$($$(PKG)_GENERATOR_PARALLEL) $$($$(PKG)_BUILD_OPTS)
->  endef
->  endif
->  endif
-> @@ -181,7 +188,7 @@ endif
->  #
->  ifndef $(2)_INSTALL_CMDS
->  define $(2)_INSTALL_CMDS
-> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
-> +	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_OPTS)
->  endef
->  endif
->  
-> @@ -191,7 +198,7 @@ endif
->  #
->  ifndef $(2)_INSTALL_STAGING_CMDS
->  define $(2)_INSTALL_STAGING_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
-> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(STAGING_DIR) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_STAGING_OPTS)
->  endef
->  endif
->  
-> @@ -201,7 +208,7 @@ endif
->  #
->  ifndef $(2)_INSTALL_TARGET_CMDS
->  define $(2)_INSTALL_TARGET_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
-> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(TARGET_DIR) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_TARGET_OPTS)
->  endef
->  endif
->  
-> diff --git a/package/racehound/racehound.mk b/package/racehound/racehound.mk
-> index 6499e166d8..f63bb233f6 100644
-> --- a/package/racehound/racehound.mk
-> +++ b/package/racehound/racehound.mk
-> @@ -22,6 +22,6 @@ RACEHOUND_CONF_OPTS += \
->  	-DKBUILD_VERSION_STRING=$(LINUX_VERSION_PROBED)
->  
->  # cross compile environment for linux kernel module
-> -RACEHOUND_MAKE_ENV = $(LINUX_MAKE_FLAGS)
-> +RACEHOUND_BUILD_ENV = $(LINUX_MAKE_FLAGS)
->  
->  $(eval $(cmake-package))
-> -- 
-> 2.39.2
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
