@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B1A9C64EC4
-	for <buildroot@archiver.kernel.org>; Fri,  3 Mar 2023 19:06:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70CB9C7EE2F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Mar 2023 19:07:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 686CD41D39;
-	Fri,  3 Mar 2023 19:06:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 686CD41D39
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5B5A41C25;
+	Fri,  3 Mar 2023 19:07:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5B5A41C25
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mp8_cxiLJlgW; Fri,  3 Mar 2023 19:06:14 +0000 (UTC)
+	with ESMTP id 8Ya2gyYbbJEz; Fri,  3 Mar 2023 19:07:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58E1D41CF6;
-	Fri,  3 Mar 2023 19:06:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58E1D41CF6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C0F5F1BF3E1
- for <buildroot@lists.busybox.net>; Fri,  3 Mar 2023 19:06:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE2C841CF6;
+	Fri,  3 Mar 2023 19:07:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE2C841CF6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 804A21BF3E1
+ for <buildroot@lists.busybox.net>; Fri,  3 Mar 2023 19:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99628617B0
- for <buildroot@lists.busybox.net>; Fri,  3 Mar 2023 19:06:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99628617B0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 597E2416A1
+ for <buildroot@lists.busybox.net>; Fri,  3 Mar 2023 19:07:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 597E2416A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nyCwF9a7j_rk for <buildroot@lists.busybox.net>;
- Fri,  3 Mar 2023 19:06:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V97qeeWfc_Il for <buildroot@lists.busybox.net>;
+ Fri,  3 Mar 2023 19:07:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0931860E28
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0931860E28
- for <buildroot@buildroot.org>; Fri,  3 Mar 2023 19:06:09 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id v16so3320011wrn.0
- for <buildroot@buildroot.org>; Fri, 03 Mar 2023 11:06:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82E084168E
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 82E084168E
+ for <buildroot@buildroot.org>; Fri,  3 Mar 2023 19:07:40 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id l25so3287745wrb.3
+ for <buildroot@buildroot.org>; Fri, 03 Mar 2023 11:07:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1677870368;
+ d=1e100.net; s=20210112; t=1677870458;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HWuAhMMdCxTt5dJPQ4LW0OJIEzs5pLcdFZylZEZLXTg=;
- b=b0xNKI5PjT6GdH8WkCWcllf/2VstgopZ6li/cm/LpdJEP/Po2z5tg+hIcPwolt3blg
- D2EFu1Y7a/7+lncvVzNreOhuyaFcgsxR4A/jka+33HATqGY8/S3lJdJjuHcorunXHF02
- l1JtQFuY3la6PC3bXQRrg2sUJw4kN1nSyxfQeoguZn3H19mdMk+u5p0J6ZTNvc1mirIG
- umxoVugwVYz0eiba6szmzyza6kDgHz/JxBQaulfSPe26QAMjzlHHcoSX/66/dhOOqTCh
- teEkS5IlVe4DbLq0GSDWjH2tt6Hs7vm3hlvN2+6tVwAVSyI4qX6eN1fUW2tlX6KTc91j
- t0dA==
-X-Gm-Message-State: AO0yUKVzHdsd/BZetRmsVifb0rnWnp2uXa2t2cHcNTs2WIbVJyB3Qihv
- 4viZXWgiVvQX4LlQLydvczoFcBmSu5U=
-X-Google-Smtp-Source: AK7set/HDhYPRWL/cOw+HsBn5Gicgd6j4wkTINYlYLWKYPQ31d0aZGgOBIEz+xz6tbO2fIzomwLnfA==
-X-Received: by 2002:adf:e9c2:0:b0:2c7:1d75:b0cc with SMTP id
- l2-20020adfe9c2000000b002c71d75b0ccmr1982744wrn.43.1677870367746; 
- Fri, 03 Mar 2023 11:06:07 -0800 (PST)
+ bh=VbUobonffcuWw2Eyx5mdQd4/RNu+gvklVYnGV/RXU9o=;
+ b=azHozrY/s0GS9Fcsf+3x4lGQo41IoutnU8NyosUQu47wGcOXn31gCJDkpIK3oMTkVl
+ vtjTlZJrAy+ghIsFC6ZlYwXYyXYaLBtY3uJ6KfIwQcBHP0MSnQFDXImiqDiXpHfCFFym
+ BHB6axOfW8gRaKGVrIyQ65rjlpwwQmREYo0ZQdgpGbAwGjtSLHhjCqMyZ+51jRcanY1X
+ FZmpUs0FPPTQ3S+WHf8TyZotyaH7ORlNGfJd8aRFGbL5iXELBHcjFuinhfScWB9RnI+l
+ 9FAlKAUNbX1MgLbQ7m1XpgFWDdJN3mhPTVNJrSIcrxf5d07GXJgroGuQVr4SGailPiMH
+ gufw==
+X-Gm-Message-State: AO0yUKUAw2fFOX/WkFyT8s75F4tHdLBFrhWjmK1x1JdecMwYh9zLylOv
+ k7KtR7Yf7WLALqIumEOgAQGXeeTBNf4=
+X-Google-Smtp-Source: AK7set8zJ1G3uOViebaxniDWx9g2fzD1Uv0QdZhMMGLLAx6DZ6PZwSoU2q/EUoX9hOMpDwYEPyK2LQ==
+X-Received: by 2002:a5d:6148:0:b0:2c5:5335:73f3 with SMTP id
+ y8-20020a5d6148000000b002c5533573f3mr5008315wrt.34.1677870458236; 
+ Fri, 03 Mar 2023 11:07:38 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- f2-20020adfdb42000000b002c54fb024b2sm2878232wrj.61.2023.03.03.11.06.06
+ p14-20020a05600c468e00b003eb369abd92sm7928496wmo.2.2023.03.03.11.07.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Mar 2023 11:06:06 -0800 (PST)
+ Fri, 03 Mar 2023 11:07:37 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  3 Mar 2023 20:06:05 +0100
-Message-Id: <20230303190605.3528-1-fontaine.fabrice@gmail.com>
+Date: Fri,  3 Mar 2023 20:07:26 +0100
+Message-Id: <20230303190726.4421-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1677870368;
+ d=gmail.com; s=20210112; t=1677870458;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HWuAhMMdCxTt5dJPQ4LW0OJIEzs5pLcdFZylZEZLXTg=;
- b=e/26XKdEqIDTmiiziyj4hznUnANzDV/TOy4nTtJHNHmqRBOnkRI11OMLnxO9qijOZi
- /T3UyD9/5GwF/gn7sO++go85jz/7AlDvGeJacW4+2UPkUkNyC4tJ5ckKEBJ05zGddm34
- +4FK3YccMseLEOj1+FIRaNTwyTwmouzAnsehI8tBeWOZzR2KXoZOT4Cy0+m/h0yJytxM
- /9dznMyZzegxT/gDjUZFBxq61aGfroc6oqUQIMgLDPafvEkbUQWQUT38thECzTmQoDwN
- IN51EOYbp9eUW1sTaN27F6T1LbqLTim6mABYVBlfX5Ihs3nxA/8d3nFl4b6PZfFj17Eg
- W5rA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=VbUobonffcuWw2Eyx5mdQd4/RNu+gvklVYnGV/RXU9o=;
+ b=cYhrWLokTUyDI0R5MSEnB+GtTdsb68o90bxEndsmOB0gv9QOXQu8q88n+a9pXh7Uxj
+ p00Ha3RZ7VtPyb9aYBXf2YgQhNew9RuJ15DYW+Eio++GPTMlgegGCjE6BjHgKdTenC7T
+ sZtAPhgpKjzg0c+9rN8nOtTXlkOfX+zkR+dskrO6iES8txqkpr1YZYxZvkKwAriR2fXd
+ ggORdmjy41nuh1Y6xNi8YwaYkJJPlmfmXt9cYZMq9jpqaPbXuLtaWtuEh0skqbAamLLB
+ 71ltCfmli+u1yldNBAqLucBO9+risuVcpL0Jw1sYySHrMQ+UN6j9PcGTCWphzfqFbl9z
+ 5MuQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=e/26XKdE
-Subject: [Buildroot] [PATCH 1/1] package/f2fs-tools: add
- F2FS_TOOLS_CPE_ID_VENDOR
+ header.a=rsa-sha256 header.s=20210112 header.b=cYhrWLok
+Subject: [Buildroot] [PATCH 1/1] package/libglfw: add wayland dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,35 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grzegorz Blach <grzegorz@blach.pl>,
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:f2fs-tools_project:f2fs-tools is a valid CPE identifier for
-this package:
+Fix added by commit 0bbb12eff3b9f9d9719c48644c2b3d563e80de48 was
+incomplete resulting in the following build failure:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Af2fs-tools_project%3Af2fs-tools
+-- Checking for modules 'wayland-client>=0.2.7;wayland-cursor>=0.2.7;wayland-egl>=0.2.7;xkbcommon'
+--   Package 'wayland-client', required by 'virtual:world', not found
+--   Package 'wayland-cursor', required by 'virtual:world', not found
+--   Package 'wayland-egl', required by 'virtual:world', not found
+CMake Error at /home/autobuild/autobuild/instance-9/output-1/host/share/cmake-3.22/Modules/FindPkgConfig.cmake:603 (message):
+  A required package was not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/9c032902418a4ab0c9aa655eb29eddee0711815d
+ - http://autobuild.buildroot.org/results/7381e114fa5c796c6edbb2c8e3987563bb32b6fa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/f2fs-tools/f2fs-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libglfw/libglfw.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index 60f1004d77..f94244f2ad 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -14,6 +14,7 @@ F2FS_TOOLS_AUTORECONF = YES
- F2FS_TOOLS_INSTALL_STAGING = YES
- F2FS_TOOLS_LICENSE = GPL-2.0
- F2FS_TOOLS_LICENSE_FILES = COPYING
-+F2FS_TOOLS_CPE_ID_VENDOR = f2fs-tools_project
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+index eee8e7b298..f5d254eec3 100644
+--- a/package/libglfw/libglfw.mk
++++ b/package/libglfw/libglfw.mk
+@@ -29,7 +29,7 @@ LIBGLFW_DEPENDENCIES += libgles
+ endif
  
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- F2FS_TOOLS_CONF_OPTS += --with-selinux
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+-LIBGLFW_DEPENDENCIES += libxkbcommon wayland-protocols
++LIBGLFW_DEPENDENCIES += libxkbcommon wayland wayland-protocols
+ # Override pkg-config pkgdatadir variable, it needs the prefix
+ LIBGLFW_CONF_OPTS += \
+ 	-DGLFW_USE_WAYLAND=1 \
 -- 
 2.39.1
 
