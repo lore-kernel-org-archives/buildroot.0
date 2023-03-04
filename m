@@ -4,62 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E9EC678D5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 21:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B15C678D5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 21:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C722F409B1;
-	Sat,  4 Mar 2023 21:41:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C722F409B1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A5A041695;
+	Sat,  4 Mar 2023 21:57:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A5A041695
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KDvl2H5jGFaD; Sat,  4 Mar 2023 21:41:36 +0000 (UTC)
+	with ESMTP id AGjvCEgvrUQ1; Sat,  4 Mar 2023 21:57:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C30BE415C3;
-	Sat,  4 Mar 2023 21:41:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C30BE415C3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D23531BF82D
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 21:41:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AEEA41696;
+	Sat,  4 Mar 2023 21:57:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AEEA41696
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B283D1BF855
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 21:56:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B80AA415C3
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 21:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B80AA415C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A71F40502
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 21:56:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A71F40502
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 51WhgToDh1fF for <buildroot@lists.busybox.net>;
- Sat,  4 Mar 2023 21:41:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53228409B1
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 53228409B1
- for <buildroot@buildroot.org>; Sat,  4 Mar 2023 21:41:33 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.167.186.38])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id BEBCC2003C6;
- Sat,  4 Mar 2023 22:41:28 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 28GyEZmHjvNk for <buildroot@lists.busybox.net>;
+ Sat,  4 Mar 2023 21:56:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C4FB40150
+ for <buildroot@buildroot.org>; Sat,  4 Mar 2023 21:56:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C4FB40150
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 89A81861A4; Sat,  4 Mar 2023 21:56:56 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Mar 2023 22:41:20 +0100
-Message-Id: <20230304214120.136162-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1677966090;
- bh=Sn7IjWg6kL7aRu/GtfTZdhaTmjiLTk0D25dhZe6xTSU=;
- h=From:To:Cc:Subject:Date:From;
- b=N7q5WlnMCh8sSnXST8xo9+CeugCfHyZkgnIErecm4nVFI6r3ruw+sxTn4wdYbVWTU
- Vzj6oVynfE2t6Z69akv2GVPv4fxxArUi1k3JHjAgK1T77U5R0xWuQJFu9hq8VjqSLa
- rbRh0Q+F9kgxpC/b5gOuIUI4QkAHJ2J4a5QF5EXCNW4PF5B5zFHffxG13kAr9hX882
- vuNxRJU1mg7zoJSA4mo900RAffbebJ8okLx+uZRinwhMvYwDZgwuu+qnF6Iafsvfet
- 5NC81E6azUE19hDglgCy+PPQH9NIsM/hmQ5wLf853wczdUGkXdLrHM0TtJNKQOUcBF
- w+01rDhi/BWpQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=N7q5WlnM
-Subject: [Buildroot] [PATCH next 1/1]
- support/testing/tests/package/test_mtools.py: new runtime test
+Date: Sat, 4 Mar 2023 22:56:20 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: d9a2d19b53774d42418df21e9f3bcc4f06f21873
+X-Git-Newrev: 3c028bf8295c4028bc78aa10fa884f8ec98ab4ca
+X-Patchwork-Hint: ignore
+Message-Id: <20230304215656.89A81861A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x]
+ package/python-cryptography: bump to version 38.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,123 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=3c028bf8295c4028bc78aa10fa884f8ec98ab4ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0f0ceb49be6a5e3439fa6da226d4e414b5a208ad)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Patch tested on branch next at commit b793f3a with commands:
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-    python3 -m flake8 support/testing/tests/package/test_mtools.py
-    [no-output]
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_mtools
-    ...
-    OK
----
- DEVELOPERS                                   |  1 +
- support/testing/tests/package/test_mtools.py | 72 ++++++++++++++++++++
- 2 files changed, 73 insertions(+)
- create mode 100644 support/testing/tests/package/test_mtools.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d052e59122..48b8a713ad 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1719,6 +1719,7 @@ F:	support/testing/tests/package/test_gnupg2.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
- F:	support/testing/tests/package/test_libjxl.py
-+F:	support/testing/tests/package/test_mtools.py
- F:	support/testing/tests/package/test_ncdu.py
- F:	support/testing/tests/package/test_octave.py
- F:	support/testing/tests/package/test_ola.py
-diff --git a/support/testing/tests/package/test_mtools.py b/support/testing/tests/package/test_mtools.py
-new file mode 100644
-index 0000000000..51e5138481
---- /dev/null
-+++ b/support/testing/tests/package/test_mtools.py
-@@ -0,0 +1,72 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestMtools(infra.basetest.BRTest):
-+    # We use a glibc toolchain to have iconv conversion working for
-+    # codepage 850.
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
-+        BR2_PACKAGE_MTOOLS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        dos_img = "dos-fat.img"
-+        mtools_opts = f"-i {dos_img}"
-+
-+        self.assertRunOk("mtools --version")
-+
-+        # Create an empty image file to hold the FAT partition
-+        self.assertRunOk(f"dd if=/dev/zero of={dos_img} bs=1M count=1")
-+
-+        # Any Mtools command is expected to fail on an unformated
-+        # partition.
-+        cmd = f"minfo {mtools_opts} ::"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertNotEqual(exit_code, 0)
-+
-+        # Now, let's format the partition file to FAT
-+        self.assertRunOk(f"mformat {mtools_opts} ::")
-+
-+        # Run some Mtools commands on this empty partition
-+        self.assertRunOk(f"minfo {mtools_opts} ::")
-+        self.assertRunOk(f"mdir {mtools_opts} ::")
-+        self.assertRunOk(f"mlabel {mtools_opts} -N 12345678 ::BUILDROOT")
-+
-+        # Create a reference file on our Linux filesystem
-+        self.assertRunOk("echo 'Hello Buildroot!' > file1.txt")
-+
-+        # Copy the reference file into the DOS image, then perform
-+        # various file manipulations
-+        self.assertRunOk(f"mcopy {mtools_opts} file1.txt ::file2.txt")
-+        self.assertRunOk(f"mcopy {mtools_opts} ::file2.txt ::file3.txt")
-+        self.assertRunOk(f"mdel {mtools_opts} ::file2.txt")
-+        self.assertRunOk(f"mren {mtools_opts} ::file3.txt ::file4.txt")
-+        self.assertRunOk(f"mmd {mtools_opts} ::dir1")
-+        self.assertRunOk(f"mmove {mtools_opts} ::file4.txt ::dir1")
-+        self.assertRunOk(f"mdir {mtools_opts} ::dir1")
-+        self.assertRunOk(f"mdu {mtools_opts} -a ::")
-+
-+        # Copy back the file from the DOS image to the Linux
-+        # filesystem
-+        self.assertRunOk(f"mcopy {mtools_opts} ::dir1/file4.txt file5.txt")
-+
-+        # We expect this last copied file to have the same content as
-+        # the reference one created at the beginning
-+        self.assertRunOk("cmp file1.txt file5.txt")
-+
-+        # Delete a directory tree containing a file
-+        self.assertRunOk(f"mdeltree {mtools_opts} ::dir1")
--- 
-2.39.2
-
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 40d217f666..a01c8810e3 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  cd0b4536eabc6fcb80aa03430fc2ca485d33249eea0cd23f76c1dd9da410c66c  cryptography-38.0.3.tar.gz
++sha256  2abbeb6d42e8844de036bf2e0d78a42feeee1d57ebf29a07684490f98bdcab37  cryptography-38.0.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 69eb90d795..4254fa3557 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CRYPTOGRAPHY_VERSION = 38.0.3
++PYTHON_CRYPTOGRAPHY_VERSION = 38.0.4
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/13/dd/a9608b7aebe5d2dc0c98a4b2090a6b815628efa46cc1c046b89d8cd25f4c
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/e3/3f/41186b1f2fd86a542d399175f6b8e43f82cd4dfa51235a0b030a042b811a
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
