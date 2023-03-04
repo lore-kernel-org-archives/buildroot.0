@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2FCCC678DB
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 12:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8DFFC6FA8E
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 12:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 973E4605D5;
-	Sat,  4 Mar 2023 12:56:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 973E4605D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8453F605EA;
+	Sat,  4 Mar 2023 12:57:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8453F605EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ALVY-xY9AZQB; Sat,  4 Mar 2023 12:56:09 +0000 (UTC)
+	with ESMTP id P-T-zLvTk6rR; Sat,  4 Mar 2023 12:57:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAC6B60644;
-	Sat,  4 Mar 2023 12:56:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAC6B60644
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFE0D605D5;
+	Sat,  4 Mar 2023 12:57:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFE0D605D5
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5381D1BF853
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 12:55:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 20A2C1BF228
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 12:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2EF34404B4
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 12:55:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EF34404B4
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF814404B4
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 12:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF814404B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y16953I6Xk4b for <buildroot@lists.busybox.net>;
- Sat,  4 Mar 2023 12:55:53 +0000 (UTC)
+ with ESMTP id sTUd0IsuxFhW for <buildroot@lists.busybox.net>;
+ Sat,  4 Mar 2023 12:56:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F18C04016F
- for <buildroot@buildroot.org>; Sat,  4 Mar 2023 12:55:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F18C04016F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E5E64016F
+ for <buildroot@buildroot.org>; Sat,  4 Mar 2023 12:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E5E64016F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DEEA2860E7; Sat,  4 Mar 2023 12:55:52 +0000 (UTC)
+ id 2DA8A860FB; Sat,  4 Mar 2023 12:56:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Mar 2023 12:27:49 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 81d754698df5c57a0376ef8f5c394122cdac23da
-X-Git-Newrev: 500cc1f46f048febd6fe3dd2c3a5e61f9926dbec
+Date: Sat, 4 Mar 2023 12:27:55 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: acbae4d115023b6dea601ca86e3023e3cefaa543
+X-Git-Newrev: 1a0906f3cb570a52da3b538a475d95e9fdbf09d4
 X-Patchwork-Hint: ignore
-Message-Id: <20230304125552.DEEA2860E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/pkg-golang:
+Message-Id: <20230304125658.2DA8A860FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/pkg-golang:
  disable version control information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=500cc1f46f048febd6fe3dd2c3a5e61f9926dbec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1a0906f3cb570a52da3b538a475d95e9fdbf09d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 By default go tries to include version control (VCS) information in
 binaries. Since Buildroot separates version control from the build
