@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FBA3C678DB
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 14:22:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9538C64EC4
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 14:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6173416CA;
-	Sat,  4 Mar 2023 14:22:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6173416CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 653544109F;
+	Sat,  4 Mar 2023 14:22:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 653544109F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UGVYOSVIxmOc; Sat,  4 Mar 2023 14:22:25 +0000 (UTC)
+	with ESMTP id uLbnJPsCr3bX; Sat,  4 Mar 2023 14:22:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C39F3416C2;
-	Sat,  4 Mar 2023 14:22:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C39F3416C2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EFB001BF357
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B19F416E5;
+	Sat,  4 Mar 2023 14:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B19F416E5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B6F91BF853
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9D4081E27
+ by smtp3.osuosl.org (Postfix) with ESMTP id E97A260AC9
  for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9D4081E27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E97A260AC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aUUssL4v4FlW for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wBk6yWjp9BQy for <buildroot@lists.busybox.net>;
  Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0AEB181E18
- for <buildroot@buildroot.org>; Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AEB181E18
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0223960AC1
+ for <buildroot@buildroot.org>; Sat,  4 Mar 2023 14:22:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0223960AC1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF25C860FD; Sat,  4 Mar 2023 14:22:22 +0000 (UTC)
+ id E491186107; Sat,  4 Mar 2023 14:22:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Mar 2023 15:12:57 +0100
+Date: Sat, 4 Mar 2023 14:39:51 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 811a67f7f1411ded045232561084c2b59ac76c64
-X-Git-Newrev: 4ffddc2fd8920f9076baf6cf015c8a0192fd8ef8
+X-Git-Oldrev: c5b4b31f79aec068f4939fda447c62f137e4ed45
+X-Git-Newrev: 811a67f7f1411ded045232561084c2b59ac76c64
 X-Patchwork-Hint: ignore
-Message-Id: <20230304142222.EF25C860FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/php: security
- bump to version 8.1.16
+Message-Id: <20230304142222.E491186107@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/dmalloc: don't
+ use SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ffddc2fd8920f9076baf6cf015c8a0192fd8ef8
+commit: https://git.buildroot.net/buildroot/commit/?id=811a67f7f1411ded045232561084c2b59ac76c64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.1.16
+dmalloc directly calls into $(LD) to generate a shared library our of
+the static one.
 
-Fixes CVE-2023-0567, CVE-2023-0568 & CVE-2023-0662.
+To detect what command it should run, ./configure tries various
+incantations of ld with various command line options until one does not
+fail. One of those is (basically):
+    $(LD) --whole-archive -o contest.o.t contest.a
 
+This makes ./configure conclude what the command to link a shared
+library in the Makefile should be, and thus stores that in a variable:
+    shlinkargs='$(LD) --whole-archive -o $@'
+
+... which is then AC_SUBST()ed into Makefile.in with a rule like:
+
+    $(SHLIB): $(LIBRARY)
+        @shlinkargs@ $(LIRARY)
+
+which once substiuted, gives:
+
+    $(SHLIB): $(LIBRARY)
+        $(LD) --whole-archive -o $@ $(LIRARY)
+
+However, when SSP is enabled, the __stack_chk_fail_local and co symbols
+are provided by additional libraries or object files, and that is the
+responsibility of gcc to pass those when linking. But as dmalloc
+directly calls ld, it misses those.
+
+Changing dmalloc to use $(CC) is not trivial, however.
+
+First, we can't pass LD=$(TARGET_CC), otherwise the whole package
+explodes [0]: indeed --whole-archive is unknown to gcc, so it must be
+passed as -Wl,--whole archive instead. So we'd need to add a new test
+that uses $(CC), like so:
+    $(CC) -Wl,--whole-archive -o contest.o.t contest.a
+
+However, in that case, gcc does pass additional libs/objs (like, for
+eample, the SSP ones) to the linker. But then those are also included
+in the whole-archive section. This causes the linker to add all the
+symbols form those libs/objs, even those not needed for SSP; on some
+archs, like PPC, that may require floating point symbols (__muldiv3 et
+al.) which are in another library, and thus the linker can't find them.
+
+The proper solution wouild be to add -Wl,--no-whole-archive, but that
+would have to be added _after_ the library we want to link, i.e.e we
+should be able to evntually run:
+
+    $(CC) -Wl,--whole-archive -o $@ $(LIRARY) -Wl,--no-whole-archive
+
+That would require that we introduce a new variable that is added
+_after_ the $(LIBRARY), e.g. @shlinkargs_post@ or so...
+
+This is a bigger endeavour than we want to pursue...
+
+Since dmalloc is a debugging utility, it is not supposed to go into
+production builds, and during debugging, it would not be surprising that
+it needs to poke around arrays to debug them.
+
+So, we go the easier route: disable SSP altogether.
+
+[0] with lots of nice colors, but that's not the point, is it?
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3481674ee36fe9fa695e2e6c255bf02b5ab380b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dmalloc/dmalloc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 23ec84f19f..646892d6ce 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  e16e47a872d58685913ac848ce92ec49f42c1828110c98c65fb6265a08724a1a  php-8.1.14.tar.xz
-+sha256  d61f13d96a58b93c39672b58f25e1ee4ce88500f4acb1430cb01a514875c1258  php-8.1.16.tar.xz
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 6b90f810b2..5bd6691725 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -14,6 +14,13 @@ DMALLOC_LICENSE_FILES = LICENSE.txt
+ DMALLOC_INSTALL_STAGING = YES
+ DMALLOC_CFLAGS = $(TARGET_CFLAGS)
  
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 23dd4ba96f..89a35b7dd6 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.1.14
-+PHP_VERSION = 8.1.16
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
++# dmalloc uses $(LD) to link, and thus misses the object files or libs that
++# are needed to provide the __stack_chk_fail_local and co. symbols. Changing
++# to use $(CC) is really more complex that we'd like. Since dmalloc is
++# involved in debugging memory allocation, it is not expected to be a
++# production library, so we do not care that much that it has SSP.
++DMALLOC_CFLAGS += -fno-stack-protector
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DMALLOC_CONF_OPTS += --disable-shlib
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
