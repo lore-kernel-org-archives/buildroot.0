@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9538C64EC4
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 14:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD46C64EC4
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 14:22:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 653544109F;
-	Sat,  4 Mar 2023 14:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 653544109F
+	by smtp4.osuosl.org (Postfix) with ESMTP id C3456416E8;
+	Sat,  4 Mar 2023 14:22:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3456416E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uLbnJPsCr3bX; Sat,  4 Mar 2023 14:22:39 +0000 (UTC)
+	with ESMTP id zZse8bQAAYMZ; Sat,  4 Mar 2023 14:22:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B19F416E5;
-	Sat,  4 Mar 2023 14:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B19F416E5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1B6F91BF853
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD991416F4;
+	Sat,  4 Mar 2023 14:22:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD991416F4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 781BE1BF357
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E97A260AC9
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E97A260AC9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 987494109F
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 987494109F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wBk6yWjp9BQy for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XTq4E1SY4B75 for <buildroot@lists.busybox.net>;
  Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0223960AC1
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECD7C416C2
  for <buildroot@buildroot.org>; Sat,  4 Mar 2023 14:22:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0223960AC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECD7C416C2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E491186107; Sat,  4 Mar 2023 14:22:22 +0000 (UTC)
+ id D724A86103; Sat,  4 Mar 2023 14:22:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Mar 2023 14:39:51 +0100
+Date: Sat, 4 Mar 2023 14:39:40 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: c5b4b31f79aec068f4939fda447c62f137e4ed45
-X-Git-Newrev: 811a67f7f1411ded045232561084c2b59ac76c64
+X-Git-Oldrev: 3536574469a757f87c05223c382280c8a0029445
+X-Git-Newrev: c5b4b31f79aec068f4939fda447c62f137e4ed45
 X-Patchwork-Hint: ignore
-Message-Id: <20230304142222.E491186107@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/dmalloc: don't
- use SSP
+Message-Id: <20230304142222.D724A86103@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/dmalloc: use
+ actual patches rather than sed-ing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,97 +63,290 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=811a67f7f1411ded045232561084c2b59ac76c64
+commit: https://git.buildroot.net/buildroot/commit/?id=c5b4b31f79aec068f4939fda447c62f137e4ed45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-dmalloc directly calls into $(LD) to generate a shared library our of
-the static one.
+Our dmalloc packaging is very old and carries historical baggage and
+idiosyncracies that we have long stopped doing in the rest ofthe code
+base.
 
-To detect what command it should run, ./configure tries various
-incantations of ld with various command line options until one does not
-fail. One of those is (basically):
-    $(LD) --whole-archive -o contest.o.t contest.a
+Drop our post-patch hooks that seds the configure and Makefile.in files,
+and add patches (that could be upstreamed one day).
 
-This makes ./configure conclude what the command to link a shared
-library in the Makefile should be, and thus stores that in a variable:
-    shlinkargs='$(LD) --whole-archive -o $@'
+We provide the results in the environment, like would be done with
+actual autoconf cache variables (ac_cv_*).
 
-... which is then AC_SUBST()ed into Makefile.in with a rule like:
+Note: those are the result of cleaning up for further patches that did
+not manifest because it was too complex to add proper SSP support to
+dmalloc (instead, we're going to forcibly disable it in the following
+commit).
 
-    $(SHLIB): $(LIBRARY)
-        @shlinkargs@ $(LIRARY)
+Note-2: those patches have not been submitted upstream, as it's mostly
+dead: even though there's been some commit activities recently-ish, there
+has been no review or comments or the many PR pending for many years
+now.
 
-which once substiuted, gives:
-
-    $(SHLIB): $(LIBRARY)
-        $(LD) --whole-archive -o $@ $(LIRARY)
-
-However, when SSP is enabled, the __stack_chk_fail_local and co symbols
-are provided by additional libraries or object files, and that is the
-responsibility of gcc to pass those when linking. But as dmalloc
-directly calls ld, it misses those.
-
-Changing dmalloc to use $(CC) is not trivial, however.
-
-First, we can't pass LD=$(TARGET_CC), otherwise the whole package
-explodes [0]: indeed --whole-archive is unknown to gcc, so it must be
-passed as -Wl,--whole archive instead. So we'd need to add a new test
-that uses $(CC), like so:
-    $(CC) -Wl,--whole-archive -o contest.o.t contest.a
-
-However, in that case, gcc does pass additional libs/objs (like, for
-eample, the SSP ones) to the linker. But then those are also included
-in the whole-archive section. This causes the linker to add all the
-symbols form those libs/objs, even those not needed for SSP; on some
-archs, like PPC, that may require floating point symbols (__muldiv3 et
-al.) which are in another library, and thus the linker can't find them.
-
-The proper solution wouild be to add -Wl,--no-whole-archive, but that
-would have to be added _after_ the library we want to link, i.e.e we
-should be able to evntually run:
-
-    $(CC) -Wl,--whole-archive -o $@ $(LIRARY) -Wl,--no-whole-archive
-
-That would require that we introduce a new variable that is added
-_after_ the $(LIBRARY), e.g. @shlinkargs_post@ or so...
-
-This is a bigger endeavour than we want to pursue...
-
-Since dmalloc is a debugging utility, it is not supposed to go into
-production builds, and during debugging, it would not be surprising that
-it needs to poke around arrays to debug them.
-
-So, we go the easier route: disable SSP altogether.
-
-[0] with lots of nice colors, but that's not the point, is it?
+Note-3: we patch both configure and configure.ac, rather than
+autoreconf, for two reasons: 1. the both are in the upstream git tree,
+so submitting these patches would require patching both, and 2. dmalloc
+does not autoreconf nicely out of the box, and it was deemed too much
+hassle to fix that in addition.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3481674ee36fe9fa695e2e6c255bf02b5ab380b0)
+(cherry picked from commit b259dac22a4179494e9947c485b6b171d8fef52e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dmalloc/dmalloc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ...003-configure-allow-overriding-some-tests.patch | 80 ++++++++++++++++++++++
+ ...e-the-configure-detected-or-user-supplied.patch | 50 ++++++++++++++
+ ...onfigure-use-LD-instead-of-hard-coding-ld.patch | 67 ++++++++++++++++++
+ package/dmalloc/dmalloc.mk                         | 17 ++---
+ 4 files changed, 202 insertions(+), 12 deletions(-)
 
+diff --git a/package/dmalloc/0003-configure-allow-overriding-some-tests.patch b/package/dmalloc/0003-configure-allow-overriding-some-tests.patch
+new file mode 100644
+index 0000000000..3003e8cbe4
+--- /dev/null
++++ b/package/dmalloc/0003-configure-allow-overriding-some-tests.patch
+@@ -0,0 +1,80 @@
++From 9d57d4353c82110c609f36f91986277343d4ee45 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Wed, 8 Feb 2023 13:26:56 +0100
++Subject: [PATCH] configure: allow overriding some tests
++
++Some tests use AC_RUN_IFELSE, so they do not work for cross-compilation.
++
++Allow the user to provide these results from the environment.
++
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ configure    | 6 +++---
++ configure.ac | 6 +++---
++ 2 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/configure b/configure
++index c18dfb2..d165962 100755
++--- a/configure
+++++ b/configure
++@@ -4540,7 +4540,7 @@ fi
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking strdup macro" >&5
++ $as_echo_n "checking strdup macro... " >&6; }
++ if test "$cross_compiling" = yes; then :
++-  ac_cv_strdup_macro=no
+++  ac_cv_strdup_macro="${ac_cv_strdup_macro-no}"
++ 
++ else
++   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++@@ -4578,7 +4578,7 @@ $as_echo "$ac_cv_strdup_macro" >&6; }
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking strndup macro" >&5
++ $as_echo_n "checking strndup macro... " >&6; }
++ if test "$cross_compiling" = yes; then :
++-  ac_cv_strndup_macro=no
+++  ac_cv_strndup_macro="${ac_cv_strndup_macro-no}"
++ 
++ else
++   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++@@ -4753,7 +4753,7 @@ done
++ 
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking basic-block size" >&5
++ $as_echo_n "checking basic-block size... " >&6; }
++-ac_cv_page_size=0
+++ac_cv_page_size="${ac_cv_page_size-0}"
++ if test $ac_cv_page_size = 0; then
++    if test "$cross_compiling" = yes; then :
++    ac_cv_page_size=0
++diff --git a/configure.ac b/configure.ac
++index 9740fdc..51bdf4d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -292,7 +292,7 @@ int main() { return 1; }
++ ]])],
++ [ac_cv_strdup_macro=yes],
++ [ac_cv_strdup_macro=no],
++-[ac_cv_strdup_macro=no]
+++[ac_cv_strdup_macro="${ac_cv_strdup_macro-no}"]
++ )
++ AC_MSG_RESULT([$ac_cv_strdup_macro])
++ 
++@@ -316,7 +316,7 @@ int main() { return 1; }
++ ]])],
++ [ac_cv_strndup_macro=yes],
++ [ac_cv_strndup_macro=no],
++-[ac_cv_strndup_macro=no]
+++[ac_cv_strndup_macro="${ac_cv_strndup_macro-no}"]
++ )
++ AC_MSG_RESULT([$ac_cv_strndup_macro])
++ 
++@@ -390,7 +390,7 @@ AC_MSG_RESULT([$ac_cv_use_mmap])
++ #
++ AC_CHECK_FUNCS(getpagesize)
++ AC_MSG_CHECKING([basic-block size])
++-ac_cv_page_size=0
+++ac_cv_page_size="${ac_cv_page_size-0}"
++ if test $ac_cv_page_size = 0; then
++    AC_RUN_IFELSE([AC_LANG_SOURCE([
++ #if HAVE_UNISTD_H
++-- 
++2.25.1
++
+diff --git a/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch b/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
+new file mode 100644
+index 0000000000..394e7ca34e
+--- /dev/null
++++ b/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
+@@ -0,0 +1,50 @@
++From c958fd5cd7d5ff03c0a023608b53b74997c514b3 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Wed, 8 Feb 2023 13:43:55 +0100
++Subject: [PATCH] Makefile: use the configure-detected or user-supplied ar
++ program
++
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ Makefile.in | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 86d3cca..089ac99 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -303,11 +303,11 @@ $(LIB_SL) : $(LIBRARY)
++ 	mv $@.t $@
++ 
++ $(LIBRARY) : $(OBJS) $(NORMAL_OBJS)
++-	ar cr $@ $?
+++	$(AR) cr $@ $?
++ 	@RANLIB@ $@
++ 
++ $(LIB_TH) : $(OBJS) $(THREAD_OBJS)
++-	ar cr $@ $?
+++	$(AR) cr $@ $?
++ 	@RANLIB@ $@
++ 
++ $(LIB_TH_SL) : $(LIB_TH)
++@@ -316,7 +316,7 @@ $(LIB_TH_SL) : $(LIB_TH)
++ 	mv $@.t $@
++ 
++ $(LIB_CXX) : $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
++-	ar cr $@ $?
+++	$(AR) cr $@ $?
++ 	@RANLIB@ $@
++ 
++ $(LIB_CXX_SL) : $(LIB_CXX)
++@@ -325,7 +325,7 @@ $(LIB_CXX_SL) : $(LIB_CXX)
++ 	mv $@.t $@
++ 
++ $(LIB_TH_CXX) : $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
++-	ar cr $@ $?
+++	$(AR) cr $@ $?
++ 	@RANLIB@ $@
++ 
++ $(LIB_TH_CXX_SL) : $(LIB_TH_CXX)
++-- 
++2.25.1
++
+diff --git a/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch b/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch
+new file mode 100644
+index 0000000000..3ba6ee3dc7
+--- /dev/null
++++ b/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch
+@@ -0,0 +1,67 @@
++From d77e5f3d45b0cbae850e3a6e23d52edc137be803 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Wed, 8 Feb 2023 13:52:05 +0100
++Subject: [PATCH] configure: use ${LD} instead of hard-coding 'ld'
++
++When doing cross-compilation, we do not want to use the native tools to
++test, but the target tools.
++
++Note that the weird quoting is inherited from a legacy patch in
++Buildroot, which dates back ages (at least 2006), and as it has not been
++identified as breaking things, we keep it as-is... Meh...
++
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ configure    | 12 ++++++------
++ configure.ac | 12 ++++++------
++ 2 files changed, 12 insertions(+), 12 deletions(-)
++
++diff --git a/configure b/configure
++index 810636e..30a7ea3 100755
++--- a/configure
+++++ b/configure
++@@ -4377,12 +4377,12 @@ if ac_fn_c_try_compile "$LINENO"; then :
++             ac_cv_shared_link_args='# Could not configure shlib linking'
++             enable_shlib=no
++           fi
++-       elif (ld -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
++-		ac_cv_shared_link_args='ld -shared --whole-archive -soname $@ -o $@.t'
++-	elif (ld -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
++-		ac_cv_shared_link_args='ld -shared -o $@.t -all -soname $@ -none -lc -all'
++-	elif (ld -G -o conftest.so.t conftest.a) 2>&5; then
++-		ac_cv_shared_link_args='ld -G -o $@.t'
+++       elif (${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
+++		ac_cv_shared_link_args="${LD-ld}"' -shared --whole-archive -soname $@ -o $@.t'
+++	elif (${LD-ld} -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
+++		ac_cv_shared_link_args="${LD-ld}"' -shared -o $@.t -all -soname $@ -none -lc -all'
+++	elif (${LD-ld} -G -o conftest.so.t conftest.a) 2>&5; then
+++		ac_cv_shared_link_args="${LD-ld}"' -G -o $@.t'
++ 	else
++ 		# oh well, toss an error
++ 		ac_cv_shared_link_args='# Could not configure shlib linking'
++diff --git a/configure.ac b/configure.ac
++index 51bdf4d..0d80a78 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -169,12 +169,12 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([ int foo(int val) { return val + 1; } ])],[
++             ac_cv_shared_link_args='# Could not configure shlib linking'
++             enable_shlib=no
++           fi
++-       elif (ld -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
++-		ac_cv_shared_link_args='ld -shared --whole-archive -soname $@ -o $@.t'
++-	elif (ld -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
++-		ac_cv_shared_link_args='ld -shared -o $@.t -all -soname $@ -none -lc -all'
++-	elif (ld -G -o conftest.so.t conftest.a) 2>&5; then
++-		ac_cv_shared_link_args='ld -G -o $@.t'
+++       elif (${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
+++		ac_cv_shared_link_args="${LD-ld}"' -shared --whole-archive -soname $@ -o $@.t'
+++	elif (${LD-ld} -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
+++		ac_cv_shared_link_args="${LD-ld}"' -shared -o $@.t -all -soname $@ -none -lc -all'
+++	elif (${LD-ld} -G -o conftest.so.t conftest.a) 2>&5; then
+++		ac_cv_shared_link_args="${LD-ld}"' -G -o $@.t'
++ 	else
++ 		# oh well, toss an error
++ 		ac_cv_shared_link_args='# Could not configure shlib linking'
++-- 
++2.25.1
++
 diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index 6b90f810b2..5bd6691725 100644
+index 81ac467277..6b90f810b2 100644
 --- a/package/dmalloc/dmalloc.mk
 +++ b/package/dmalloc/dmalloc.mk
-@@ -14,6 +14,13 @@ DMALLOC_LICENSE_FILES = LICENSE.txt
- DMALLOC_INSTALL_STAGING = YES
- DMALLOC_CFLAGS = $(TARGET_CFLAGS)
+@@ -44,18 +44,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_63261),y)
+ DMALLOC_CFLAGS += -O0
+ endif
  
-+# dmalloc uses $(LD) to link, and thus misses the object files or libs that
-+# are needed to provide the __stack_chk_fail_local and co. symbols. Changing
-+# to use $(CC) is really more complex that we'd like. Since dmalloc is
-+# involved in debugging memory allocation, it is not expected to be a
-+# production library, so we do not care that much that it has SSP.
-+DMALLOC_CFLAGS += -fno-stack-protector
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- DMALLOC_CONF_OPTS += --disable-shlib
- else
+-DMALLOC_CONF_ENV = CFLAGS="$(DMALLOC_CFLAGS)"
+-
+-define DMALLOC_POST_PATCH
+-	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(@D)/configure
+-	$(SED) 's/ac_cv_strdup_macro=no$$/ac_cv_strdup_macro=yes/' $(@D)/configure
+-	$(SED) 's/ac_cv_strndup_macro=no$$/ac_cv_strndup_macro=yes/' $(@D)/configure
+-	$(SED) 's/(ld -/($${LD-ld} -/' $(@D)/configure
+-	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(@D)/configure
+-	$(SED) 's/ar cr/$$(AR) cr/' $(@D)/Makefile.in
+-endef
+-
+-DMALLOC_POST_PATCH_HOOKS += DMALLOC_POST_PATCH
++DMALLOC_CONF_ENV = \
++	CFLAGS="$(DMALLOC_CFLAGS)" \
++	ac_cv_page_size=12 \
++	ac_cv_strdup_macro=yes \
++	ac_cv_strndup_macro=yes
+ 
+ # both DESTDIR and PREFIX are ignored..
+ define DMALLOC_INSTALL_STAGING_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
