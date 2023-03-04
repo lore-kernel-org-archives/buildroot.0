@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5969C678DB
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 10:46:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C778C678DB
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 10:47:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E2B64183A;
-	Sat,  4 Mar 2023 10:46:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E2B64183A
+	by smtp4.osuosl.org (Postfix) with ESMTP id C511641832;
+	Sat,  4 Mar 2023 10:47:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C511641832
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2gYVjZKYyQL4; Sat,  4 Mar 2023 10:46:55 +0000 (UTC)
+	with ESMTP id KW0xb3MN0MEu; Sat,  4 Mar 2023 10:47:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D434F419B2;
-	Sat,  4 Mar 2023 10:46:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D434F419B2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4322F41B86;
+	Sat,  4 Mar 2023 10:47:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4322F41B86
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 673FD1BF831
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 10:46:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 126021BF831
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 10:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FCB941821
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C07C41821
  for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 10:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FCB941821
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C07C41821
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XjCtkF003ZDt for <buildroot@lists.busybox.net>;
+ with ESMTP id qWR7nTbetDfN for <buildroot@lists.busybox.net>;
  Sat,  4 Mar 2023 10:46:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44101418FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37713418F6
  for <buildroot@buildroot.org>; Sat,  4 Mar 2023 10:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44101418FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37713418F6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32198860B9; Sat,  4 Mar 2023 10:46:24 +0000 (UTC)
+ id 256B6860BB; Sat,  4 Mar 2023 10:46:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Mar 2023 10:06:18 +0100
+Date: Sat, 4 Mar 2023 10:05:07 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 82408c593175b63ec948c97404e169e91eb73397
-X-Git-Newrev: 7b084be2cee5b3c2333e2630ca033c7a7c672669
+X-Git-Oldrev: 62b2303df35faaabcbe7e0f451ec77f4c40e7b56
+X-Git-Newrev: 82408c593175b63ec948c97404e169e91eb73397
 X-Patchwork-Hint: ignore
-Message-Id: <20230304104624.32198860B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/go: security bump
- to version 1.19.6
+Message-Id: <20230304104624.256B6860BB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/libmdbx: bump
+ version to 0.11.14 "Sergey Kapitsa"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,57 +58,101 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1304563302983445261=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b084be2cee5b3c2333e2630ca033c7a7c672669
+--===============1304563302983445261==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=82408c593175b63ec948c97404e169e91eb73397
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-go1.19.6 (released 2023-02-14) includes security fixes to the crypto/tls,
-mime/multipart, net/http, and path/filepath packages, as well as bug fixes to
-the go command, the linker, the runtime, and the crypto/x509, net/http, and time
-packages. See the Go 1.19.6 milestone on the Go issue tracker for details.
+This is stable bugfix release of libmdbx,
+in memory of Sergey Kapitsa (Russian physicist and demographer) on his 95th birthday.
 
-CVE-2022-41725: net/http, mime/multipart: denial of service from excessive resource consumption
-CVE-2022-41724: crypto/tls: large handshake records may cause panics
-CVE-2022-41723: net/http: avoid quadratic complexity in HPACK decoding
+It is reasonable to backport this patch to all applicable releases/branches of Buildroot,
+at least this release fixes build for sh4 arch.
 
-https://go.dev/doc/devel/release#go1.19.minor
+Release notes for v0.11.14
+--------------------------
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Fixes:
+
+ - backport: Refined the `__cold`/`__hot` macros to avoid the
+   `error: inlining failed in call to ‘always_inline FOO(...)’: target specific option mismatch`
+   issue during build using GCC >10.x for SH4 arch.
+   Actually this is GCC' SH4-backend bug which triggered by the `__attribute__((__optimize__("Os")))`
+   used in conjunction with the `__attribute__((__cold__))`.
+
+ - backport: Fixed `SIGSEGV` or an erroneous call to `free()` in case where
+   errors occur when reopening by `mdbx_env_open()` of a previously used
+   environment.
+
+ - backport: Fixed `cursor_put_nochecklen()` internals for case when dupsort'ed named subDb
+   contains a single key with multiple values (aka duplicates), which are replaced
+   with a single value by put-operation with the `MDBX_UPSERT+MDBX_ALLDUPS` flags.
+   In this case, the database becomes completely empty, without any pages.
+   However exactly this condition was not considered and thus wasn't handled correctly.
+   See [issue#8](https://gitflic.ru/project/erthink/libmdbx/issue/8) for more information.
+
+ - backport: Fixed extra assertion inside `override_meta()`, which could
+   lead to false-positive failing of the assertion in a debug builds during
+   DB recovery and/or auto-rollback.
+
+Minors:
+
+ - backport: Fixed typos.
+ - backport: Refined `const` and `noexcept` for few C++ API methods.
+ - backport: Resolve false-posirive `used uninitialized` warning from GCC >10.x
+   while build for SH4 arch.
+ - backport: Fixed insignificant typo of `||` inside `#if` byte-order condition.
+
+The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
+
+Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 98e0452ebb7cb25311d4f615e07df89a5776268b)
+(cherry picked from commit efdcc850be902de2596412dbf0f142c3f679ce35)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/libmdbx/libmdbx.hash | 2 +-
+ package/libmdbx/libmdbx.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 4c22f0f274..8254a91524 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  8e486e8e85a281fc5ce3f0bedc5b9d2dbf6276d7db0b25d3ec034f313da0375f  go1.19.5.src.tar.gz
-+sha256  d7f0013f82e6d7f862cc6cb5c8cdb48eef5f2e239b35baa97e2f1a7466043767  go1.19.6.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index c38ae0b99c..a9056da47b 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index e3fb309461..b1a2891b91 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
+-sha256  9449fd357119e19902363ab90134d82c9a713b706394c2a1389b5bb4787b5164  libmdbx-amalgamated-0.11.13.tar.xz
++sha256  97b03965b5b61727dc4232c50ccb174c632470a3d24438b3c52315bef6fb4033  libmdbx-amalgamated-0.11.14.tar.xz
+ 
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index a139e062f6..5e7995f8c8 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.19.5
-+GO_VERSION = 1.19.6
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-LIBMDBX_VERSION = 0.11.13
++LIBMDBX_VERSION = 0.11.14
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
+ LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
+
+--===============1304563302983445261==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1304563302983445261==--
