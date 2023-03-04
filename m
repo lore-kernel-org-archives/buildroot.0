@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A1DFC678D5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 19:31:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A19B1C64EC4
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 19:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1618441625;
-	Sat,  4 Mar 2023 19:31:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1618441625
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEEBC41679;
+	Sat,  4 Mar 2023 19:37:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEEBC41679
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id geWMXLVf2guy; Sat,  4 Mar 2023 19:31:53 +0000 (UTC)
+	with ESMTP id a4T1jdRszbj0; Sat,  4 Mar 2023 19:37:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D4FE4163E;
-	Sat,  4 Mar 2023 19:31:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D4FE4163E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 456601BF337
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 19:31:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A8AF41625;
+	Sat,  4 Mar 2023 19:37:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A8AF41625
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8960F1BF337
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 19:37:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 201F9405F7
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 19:31:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 201F9405F7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5CFE560C0C
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 19:37:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CFE560C0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MvgQNmCTpX52 for <buildroot@lists.busybox.net>;
- Sat,  4 Mar 2023 19:31:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D44140386
- for <buildroot@buildroot.org>; Sat,  4 Mar 2023 19:31:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D44140386
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C82A86145; Sat,  4 Mar 2023 19:31:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HcPKsFE9sioK for <buildroot@lists.busybox.net>;
+ Sat,  4 Mar 2023 19:37:23 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E51C60C07
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2E51C60C07
+ for <buildroot@buildroot.org>; Sat,  4 Mar 2023 19:37:22 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E498C40004;
+ Sat,  4 Mar 2023 19:37:20 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pYXh2-000WDT-2V; Sat, 04 Mar 2023 20:37:20 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 4 Mar 2023 20:11:10 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 0e60a48520631d2e2fd5b0dd11936a5d87e3c876
-X-Git-Newrev: 7a6a4c8f17af92d76de9f3070598ea6953ef8055
-X-Patchwork-Hint: ignore
-Message-Id: <20230304193150.2C82A86145@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/git: security
- bump to version 2.31.7
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230219161453.87903-1-fontaine.fabrice@gmail.com>
+Date: Sat, 04 Mar 2023 20:37:20 +0100
+In-Reply-To: <20230219161453.87903-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 19 Feb 2023 17:14:53 +0100")
+Message-ID: <87a60scnpr.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/ipmiutil: fix uclibc build
+ without wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +64,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: David Bachelart <david.bachelart@bbright.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a6a4c8f17af92d76de9f3070598ea6953ef8055
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes the following security issues:
+ > For an unknown reason, wchar_t is incorrectly detected with uclibc
+ > resulting in the following build failure:
 
- * CVE-2023-22490:
+ > In file included from igetevent.c:136:
+ > imb_api.h:150:5: error: unknown type name 'wchar_t'
+ >   150 |     wchar_t *Buffer;
+ >       |     ^~~~~~~
 
-   Using a specially-crafted repository, Git can be tricked into using
-   its local clone optimization even when using a non-local transport.
-   Though Git will abort local clones whose source $GIT_DIR/objects
-   directory contains symbolic links (c.f., CVE-2022-39253), the objects
-   directory itself may still be a symbolic link.
+ > The build failure can be reproduced even when reverting bump to version
+ > 3.1.8.
 
-   These two may be combined to include arbitrary files based on known
-   paths on the victim's filesystem within the malicious repository's
-   working copy, allowing for data exfiltration in a similar manner as
-   CVE-2022-39253.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/e9ff3bd08e106dc834968bf5e4296ce8299027f8
 
- * CVE-2023-23946:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-   By feeding a crafted input to "git apply", a path outside the
-   working tree can be overwritten as the user who is running "git
-   apply".
+Committed to 2022.11.x and 2022.02.x, thanks.
 
-For more details, see the announcement:
-https://lore.kernel.org/git/xmqqr0us5dio.fsf@gitster.g/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 9a472b49ec..90e43aed80 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  e0fa851e4ccb990c57793a3cfcbf7c8981fbacab175025ea15db9ecd57434cee  git-2.31.6.tar.xz
-+sha256  30674629605a12d3ef4f9c752d5561862f04a48952b1799b9815f9884e4e0f6d  git-2.31.7.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 0b4e93a8b6..581f194807 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.31.6
-+GIT_VERSION = 2.31.7
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
