@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EF4EC678DB
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 19:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1A63C678DB
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 19:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A8BC416AF;
-	Sat,  4 Mar 2023 19:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A8BC416AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 628FB41695;
+	Sat,  4 Mar 2023 19:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 628FB41695
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MASZye3I9mDB; Sat,  4 Mar 2023 19:52:17 +0000 (UTC)
+	with ESMTP id Ux6RnAIHEYvX; Sat,  4 Mar 2023 19:52:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 881CE416BC;
-	Sat,  4 Mar 2023 19:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 881CE416BC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 45ECA1BF855
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 19:51:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 286AC416C7;
+	Sat,  4 Mar 2023 19:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 286AC416C7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DABD1BF337
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 19:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2107E41695
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 19:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2107E41695
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC2BE408B6
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 19:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC2BE408B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jr82MD1Mf79h for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lLn9wtECLQWr for <buildroot@lists.busybox.net>;
  Sat,  4 Mar 2023 19:51:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C0D64168C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14A354063C
  for <buildroot@buildroot.org>; Sat,  4 Mar 2023 19:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C0D64168C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14A354063C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB62686164; Sat,  4 Mar 2023 19:51:32 +0000 (UTC)
+ id 0402086165; Sat,  4 Mar 2023 19:51:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Mar 2023 20:39:34 +0100
+Date: Sat, 4 Mar 2023 20:40:03 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 9f0acac3f7608a17489c9a40ad646dbaea8788b5
-X-Git-Newrev: 26034f21a399d7ad88d1caf2b4e4857d8ac0b5aa
+X-Git-Oldrev: 26034f21a399d7ad88d1caf2b4e4857d8ac0b5aa
+X-Git-Newrev: e99acbda3c525ca657e0b1a3876028c4b33bfe49
 X-Patchwork-Hint: ignore
-Message-Id: <20230304195132.EB62686164@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/libcurl: bump
- version to 7.88.0
+Message-Id: <20230304195133.0402086165@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/wpewebkit:
+ security bump to version 2.38.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26034f21a399d7ad88d1caf2b4e4857d8ac0b5aa
+commit: https://git.buildroot.net/buildroot/commit/?id=e99acbda3c525ca657e0b1a3876028c4b33bfe49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Changelog: https://curl.se/changes.html#7_88_0
+Bugfix release, fixes zero-day CVE-2023-23529 and includes a few build
+and behaviour patches as well.
 
-Updated license hash due to copyright year bump:
-https://github.com/curl/curl/commit/2bc1d775f510196154283374284f98d3eae03544#diff-400d38e5cfee181230373a8b02d38f50271a5bf62c62410382efddb8e8b19e22
+Release notes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  https://wpewebkit.org/release/wpewebkit-2.38.5.html
+
+Accompanying security advisory:
+
+  https://wpewebkit.org/security/WSA-2023-0002.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 14ca6b5fdb6a5e0fa99b04461240772d93076b2e)
+(cherry picked from commit 7852618c23756d8a79809a4e9e9c331a8fb0cf16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 6 +++---
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 230ec8d704..714b02acb0 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-7.87.0.tar.xz.asc
-+# https://curl.se/download/curl-7.88.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff  curl-7.87.0.tar.xz
--sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
-+sha256  fd17432cf28714a4cf39d89e26b8ace0d8901199fe5d01d75eb0ae3bbfcc731f  curl-7.88.0.tar.xz
-+sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 994b685d34..eb481e4782 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index dcd082e045..0fa1018721 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.38.4.tar.xz.sums
+-md5  1c947ef5b73049fc6c102c92013009bf  wpewebkit-2.38.4.tar.xz
+-sha1  7fe9a7d98401256b0c9872f1c2b702e56840cbd3  wpewebkit-2.38.4.tar.xz
+-sha256  8c1bc113ef151fb0be2640824d323bc755dc97295ab7a1bc05e7ec589937a07b  wpewebkit-2.38.4.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.38.5.tar.xz.sums
++md5  73f7abd0c1cc808032869f72602166e3  wpewebkit-2.38.5.tar.xz
++sha1  3f10a04758eeb349f63f841aff765dae25bcde1b  wpewebkit-2.38.5.tar.xz
++sha256  ff00fd3d0a4c6d551850a78a7dfe4883b6b7ebd93c5549e1121b2f43d3ac1661  wpewebkit-2.38.5.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index b9c2fef395..48e5c2f8cd 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.87.0
-+LIBCURL_VERSION = 7.88.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-WPEWEBKIT_VERSION = 2.38.4
++WPEWEBKIT_VERSION = 2.38.5
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
