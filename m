@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B194C678DB
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 14:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FBA3C678DB
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 14:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 286D04161F;
-	Sat,  4 Mar 2023 14:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 286D04161F
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6173416CA;
+	Sat,  4 Mar 2023 14:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6173416CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G5mYi2ctu7wv; Sat,  4 Mar 2023 14:22:04 +0000 (UTC)
+	with ESMTP id UGVYOSVIxmOc; Sat,  4 Mar 2023 14:22:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D48034161D;
-	Sat,  4 Mar 2023 14:22:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D48034161D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ACC9F1BF357
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:21:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C39F3416C2;
+	Sat,  4 Mar 2023 14:22:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C39F3416C2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EFB001BF357
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 859C74049A
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:21:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 859C74049A
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9D4081E27
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9D4081E27
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WXQVSchBk0-O for <buildroot@lists.busybox.net>;
- Sat,  4 Mar 2023 14:21:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aUUssL4v4FlW for <buildroot@lists.busybox.net>;
+ Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7051B4016F
- for <buildroot@buildroot.org>; Sat,  4 Mar 2023 14:21:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7051B4016F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0AEB181E18
+ for <buildroot@buildroot.org>; Sat,  4 Mar 2023 14:22:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AEB181E18
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DEBE85FAC; Sat,  4 Mar 2023 14:21:18 +0000 (UTC)
+ id EF25C860FD; Sat,  4 Mar 2023 14:22:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Mar 2023 14:40:32 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 58d46a4373806d6193f256b589d22f85dd45c18a
-X-Git-Newrev: 9e83ef725017e628eab75acd743d3b7ba4002f24
+Date: Sat, 4 Mar 2023 15:12:57 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 811a67f7f1411ded045232561084c2b59ac76c64
+X-Git-Newrev: 4ffddc2fd8920f9076baf6cf015c8a0192fd8ef8
 X-Patchwork-Hint: ignore
-Message-Id: <20230304142118.5DEBE85FAC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/dmalloc: convert
- existing patch to git format
+Message-Id: <20230304142222.EF25C860FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/php: security
+ bump to version 8.1.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,169 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e83ef725017e628eab75acd743d3b7ba4002f24
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4ffddc2fd8920f9076baf6cf015c8a0192fd8ef8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-We're going to add more patches, so let's cleanup our historical
-baggage...
+Changelog: https://www.php.net/ChangeLog-8.php#8.1.16
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a7bd0fdb88a15b15d4b41bdc82a37cf35ab2b268)
+Fixes CVE-2023-0567, CVE-2023-0568 & CVE-2023-0662.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../dmalloc/0001-configure-fix-build-on-mips.patch | 90 ++++++++++++++++++++++
- package/dmalloc/0001-mips.patch                    | 45 -----------
- 2 files changed, 90 insertions(+), 45 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dmalloc/0001-configure-fix-build-on-mips.patch b/package/dmalloc/0001-configure-fix-build-on-mips.patch
-new file mode 100644
-index 0000000000..9b1525d0d1
---- /dev/null
-+++ b/package/dmalloc/0001-configure-fix-build-on-mips.patch
-@@ -0,0 +1,90 @@
-+From af6adb3f5f05be4faa88a5aa83296c388c8085e7 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 12:30:10 +0100
-+Subject: [PATCH] configure: fix build on mips
-+
-+This patch is a historical baggage that Buildroot has carried for ages
-+(since 2006), and the reason for it are notentirely clear.
-+
-+Since dmalloc is pretty tricky, and as this patch has not been
-+identified as causing issues, we keep it; we just add the configure.ac
-+patchlet to match the one in configure.
-+
-+As for the title, the original patch was named dmalloc-mips.patch, so
-+presumably it fixes some mips issue; let's title the commit that way.
-+
-+[Fabrice: Updated for 5.6.5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[yann.morin.1998@free.fr: make it a git-formatted patch]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ configure    |  4 ++--
-+ configure.ac |  2 +-
-+ return.h     | 16 +++-------------
-+ 3 files changed, 6 insertions(+), 16 deletions(-)
-+
-+diff --git a/configure b/configure
-+index d52a1e8..c18dfb2 100755
-+--- a/configure
-++++ b/configure
-+@@ -5413,8 +5413,8 @@ fi
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking return.h macros work" >&5
-+ $as_echo_n "checking return.h macros work... " >&6; }
-+ if test "$cross_compiling" = yes; then :
-+-   $as_echo "#define RETURN_MACROS_WORK 0" >>confdefs.h
-+- { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-++   $as_echo "#define RETURN_MACROS_WORK 1" >>confdefs.h
-++ { $as_echo "$as_me:${as_lineno-$LINENO}: result: assume yes (cross-compiling)" >&5
-+ $as_echo "no" >&6; }
-+ 
-+ else
-+diff --git a/configure.ac b/configure.ac
-+index a5295f1..9740fdc 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -705,7 +705,7 @@ int main()
-+ ])],
-+ [ AC_DEFINE(RETURN_MACROS_WORK, 1) AC_MSG_RESULT([yes]) ],
-+ [ AC_DEFINE(RETURN_MACROS_WORK, 0) AC_MSG_RESULT([no]) ],
-+-[ AC_DEFINE(RETURN_MACROS_WORK, 0) AC_MSG_RESULT([no]) ]
-++[ AC_DEFINE(RETURN_MACROS_WORK, 1) AC_MSG_RESULT([assume yes (cross-compiling)]) ]
-+ )
-+ 
-+ ##############################################################################
-+diff --git a/return.h b/return.h
-+index 9d3f5f1..d916c7a 100644
-+--- a/return.h
-++++ b/return.h
-+@@ -117,26 +117,16 @@
-+ /*************************************/
-+ 
-+ /*
-+- * For DEC Mips machines running Ultrix
-++ * For Mips machines running Linux
-+  */
-+ #if __mips
-+ 
-+-/*
-+- * I have no idea how to get inline assembly with the default cc.
-+- * Anyone know how?
-+- */
-+-
-+-#if 0
-+-
-+ /*
-+  * NOTE: we assume here that file is global.
-+  *
-+- * $31 is the frame pointer.  $2 looks to be the return address but maybe
-+- * not consistently.
-++ * $31 is the return address.
-+  */
-+-#define GET_RET_ADDR(file)	asm("sw $2, file")
-+-
-+-#endif
-++#define GET_RET_ADDR(file)	asm("sw $31, %0" : "=m" (file))
-+ 
-+ #endif /* __mips */
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/0001-mips.patch b/package/dmalloc/0001-mips.patch
-deleted file mode 100644
-index 3150d030ec..0000000000
---- a/package/dmalloc/0001-mips.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--[Fabrice: Updated for 5.6.5]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----- a/configure
--+++ b/configure
--@@ -7107,7 +7107,7 @@
-- { $as_echo "$as_me:${as_lineno-$LINENO}: checking return.h macros work" >&5
-- $as_echo_n "checking return.h macros work... " >&6; }
-- if test "$cross_compiling" = yes; then :
---   $as_echo "#define RETURN_MACROS_WORK 0" >>confdefs.h
--+   $as_echo "#define RETURN_MACROS_WORK 1" >>confdefs.h
--  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-- $as_echo "no" >&6; }
-- 
----- a/return.h
--+++ b/return.h
--@@ -106,26 +106,16 @@
-- /*************************************/
-- 
-- /*
--- * For DEC Mips machines running Ultrix
--+ * For Mips machines running Linux
--  */
-- #if __mips
-- 
-- /*
--- * I have no idea how to get inline assembly with the default cc.
--- * Anyone know how?
--- */
---
---#if 0
---
---/*
--  * NOTE: we assume here that file is global.
--  *
--- * $31 is the frame pointer.  $2 looks to be the return address but maybe
--- * not consistently.
--+ * $31 is the return address.
--  */
---#define GET_RET_ADDR(file)	asm("sw $2, file")
---
---#endif
--+#define GET_RET_ADDR(file)	asm("sw $31, %0" : "=m" (file))
-- 
-- #endif /* __mips */
-- 
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 23ec84f19f..646892d6ce 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  e16e47a872d58685913ac848ce92ec49f42c1828110c98c65fb6265a08724a1a  php-8.1.14.tar.xz
++sha256  d61f13d96a58b93c39672b58f25e1ee4ce88500f4acb1430cb01a514875c1258  php-8.1.16.tar.xz
+ 
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 23dd4ba96f..89a35b7dd6 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.1.14
++PHP_VERSION = 8.1.16
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
