@@ -4,67 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4D0FC678D5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 22:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09ED4C678DB
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 22:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F4A960BFB;
-	Sat,  4 Mar 2023 22:11:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F4A960BFB
+	by smtp3.osuosl.org (Postfix) with ESMTP id A19B260F7B;
+	Sat,  4 Mar 2023 22:26:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A19B260F7B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kW8bMptg6C_2; Sat,  4 Mar 2023 22:11:56 +0000 (UTC)
+	with ESMTP id nmVHSyNOzDNQ; Sat,  4 Mar 2023 22:26:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5BA960F7B;
-	Sat,  4 Mar 2023 22:11:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5BA960F7B
+	by smtp3.osuosl.org (Postfix) with ESMTP id D546460B35;
+	Sat,  4 Mar 2023 22:26:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D546460B35
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D7EB21BF591
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 22:11:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BFD311BF591
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 22:26:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF34381E93
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 22:11:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF34381E93
+ by smtp1.osuosl.org (Postfix) with ESMTP id A68C881EA5
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 22:26:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A68C881EA5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jb_qn6MEOmPX for <buildroot@lists.busybox.net>;
- Sat,  4 Mar 2023 22:11:51 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C69E80ED1
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5C69E80ED1
- for <buildroot@buildroot.org>; Sat,  4 Mar 2023 22:11:51 +0000 (UTC)
-Received: from 91-153-34-99.elisa-laajakaista.fi ([91.153.34.99] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1pYa6W-0053ve-51; Sat, 04 Mar 2023 23:11:48 +0100
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 201e915b;
- Sat, 4 Mar 2023 22:11:45 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
+ with ESMTP id ORGCk_3ZtTGt for <buildroot@lists.busybox.net>;
+ Sat,  4 Mar 2023 22:26:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D6DE81DF7
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7D6DE81DF7
+ for <buildroot@buildroot.org>; Sat,  4 Mar 2023 22:26:14 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id j3so3583510wms.2
+ for <buildroot@buildroot.org>; Sat, 04 Mar 2023 14:26:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1677968772;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gJq4mTnMT8KmRjqAx63Kbj40dMMJ2ZTsQnL50fZ/5oo=;
+ b=7nK+V9zQwbXfWRT1W8yloAv6+nWdvZ50aVPOPQVzltV/WWiTa3tOGFcFv3XGf8seZk
+ eLZA5wLvaQ5TBajcjO+yq7u85Zc3FFx9N3WjIel/3BktgmSL8PcLFkCK8Jv0c15DIZ2c
+ DNLw9HYWtYzlh7l03gUXDcRlLedK40bQLPpf6iY5RvgJ2ghKWF+CbvCXJgIV5ofvKK41
+ hmH0NYc5xBiRWP7CYuTNfPCc0ZnVbUdJmyY5/ZWv1LrBh917JyA3mQzjM587fKuIsm8I
+ 4rKakNJ1Wbm10GQcnGGgsvsFbwCHhthu+jIqfyTaA5OyTW8ruDU3EbVr3xkbO8QNCAzU
+ TQfA==
+X-Gm-Message-State: AO0yUKWCyk1qDL/XagrzY93CJTBdKbeKnGrdJWwW7MpBwZATIaOLK6MP
+ 5vCvjstjMElQOIxwIcAWq86/Qq4DoC8=
+X-Google-Smtp-Source: AK7set+nZZCqlFOiWJynFOtjIG1IPz0b+C86ZPtY/tvxiKWeCEe1qPJyZFqEO7LeKIA01rkTUdz+JA==
+X-Received: by 2002:a1c:f304:0:b0:3eb:29fe:734a with SMTP id
+ q4-20020a1cf304000000b003eb29fe734amr5267748wmq.39.1677968772087; 
+ Sat, 04 Mar 2023 14:26:12 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ x21-20020a05600c189500b003e71a6be279sm6073128wmp.37.2023.03.04.14.26.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 04 Mar 2023 14:26:11 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Mar 2023 00:11:45 +0200
-Message-Id: <20230304221145.3222530-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.39.2
+Date: Sat,  4 Mar 2023 23:25:44 +0100
+Message-Id: <20230304222544.20754-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=snXYh6bKekScov7Wldv5zOK/105HAr69WMO2cBF8WMM=; b=PInPuOvuDDWxfSTm2p7HestKrW
- gmTnVSfRz0Tw8tyEQEJdRERpLSuNhT9PanNEOrzNpPrF/NTAxNXvV/owBDWCVQgyCGkdU7BJrXsCj
- 9/7GtHCWo6PklQQfq/ewDalJDRctKYtPLw+6YAnWpegmSyEu/bzIHzAZNbprdNvTMEZVZggu9qMtq
- GPEhvtheMUPx0vXQLyq/U/zbbBuZh5CqeF43MB8zMdGODPo3b4LMKZFrCg46F615J09uEKTzbVoLk
- IckRIa8OEGpMbIY7Mcnv/8yd3CBSf++o5g8Xe3qpOV8wBXaegnLCG6cIJCulW1pfHsw/hR/HHNDy8
- FXucPKbA==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1677968772;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gJq4mTnMT8KmRjqAx63Kbj40dMMJ2ZTsQnL50fZ/5oo=;
+ b=o3K0o2fSCZc25VqNt6SqKBJmfOPlSsJz8G96G8kmArnu2RLbqs46PISWC6Qz4YcZpZ
+ 6JIE24WsGzDu5QSNaBFmhb2MdHqTWZ+Fjqv5IL+EGNaFvLsOcZaFqSGydFJX3u2uQ/RG
+ SqBCHHYz/UydWxIilS9ta9xJyIHtxckTG6gYbQ2pglgtRNqfbhGAPo4zHm7UHxeLUfd2
+ Ae3Sg/H8+a7NavnTW6z7HUkVTXSwLPX4CHNImLybQb4Xgkph3kTyyfx9L5XxaZCWRGee
+ BsQLarPVTWq13Cl0XFtN7qd+Wn/39X2nbwcC/DZ93xxoGbWIc6VWIz7HO4LVLYuM1DJ5
+ 88rQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=PInPuOvu
-Subject: [Buildroot] [PATCH] package/wpebackend-fdo: bump to version 1.14.1
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=o3K0o2fS
+Subject: [Buildroot] [PATCH 1/1] package/quickjs: add QUICKJS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,55 +93,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a bugfix release which includes important fixes which solve a
-memory leak and hitting a situation where the output no longer gets
-updated. Release notes:
+cpe:2.3:a:quickjs_project:quickjs is a valid CPE identifier for this
+package:
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.14.1.html
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aquickjs_project%3Aquickjs
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/quickjs/quickjs.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index e2f2c6c89f..d1a344a664 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.14.0.tar.xz.sums
--md5  ea62dfa9ecb366598a837d7446ed48ac  wpebackend-fdo-1.14.0.tar.xz
--sha1  1500be9212381a404f4a46b22b90a9880ba11c01  wpebackend-fdo-1.14.0.tar.xz
--sha256  e75b0cb2c7145448416e8696013d8883f675c66c11ed750e06865efec5809155  wpebackend-fdo-1.14.0.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.14.1.tar.xz.sums
-+md5  2b49218cdd16075b028bbaf5a4f57890  wpebackend-fdo-1.14.1.tar.xz
-+sha1  a68db2480d29d53d7fa24c69888bacbab6efea11  wpebackend-fdo-1.14.1.tar.xz
-+sha256  01938dd93c62b3a47b18dd13c70d50490a8b8a6caec23c8550a3dbdbcc6bbb50  wpebackend-fdo-1.14.1.tar.xz
+diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
+index a026eec4f0..ff39209100 100644
+--- a/package/quickjs/quickjs.mk
++++ b/package/quickjs/quickjs.mk
+@@ -9,6 +9,7 @@ QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
+ QUICKJS_SITE = https://bellard.org/quickjs
+ QUICKJS_LICENSE = MIT
+ QUICKJS_LICENSE_FILES = LICENSE
++QUICKJS_CPE_ID_VENDOR = quickjs_project
+ QUICKJS_INSTALL_STAGING = YES
  
- # Hashes for license files:
- sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index afe37b086e..c1e4e05796 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEBACKEND_FDO_VERSION = 1.14.0
-+WPEBACKEND_FDO_VERSION = 1.14.1
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
 -- 
-2.39.2
+2.39.1
 
 _______________________________________________
 buildroot mailing list
