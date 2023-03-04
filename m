@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D12F5C64EC4
-	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 13:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E05C678DB
+	for <buildroot@archiver.kernel.org>; Sat,  4 Mar 2023 13:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71E2260655;
-	Sat,  4 Mar 2023 13:03:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71E2260655
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EEC560757;
+	Sat,  4 Mar 2023 13:05:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EEC560757
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VQRAtBDL3JWL; Sat,  4 Mar 2023 13:03:57 +0000 (UTC)
+	with ESMTP id edjNvoF0AJ5W; Sat,  4 Mar 2023 13:05:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6340E605EA;
-	Sat,  4 Mar 2023 13:03:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6340E605EA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 286A11BF239
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 13:03:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52F3F60692;
+	Sat,  4 Mar 2023 13:05:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52F3F60692
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 478921BF3E3
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 13:05:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00858404B4
- for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 13:03:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00858404B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 219B041635
+ for <buildroot@lists.busybox.net>; Sat,  4 Mar 2023 13:05:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 219B041635
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U_Ybw4rLsl_x for <buildroot@lists.busybox.net>;
- Sat,  4 Mar 2023 13:03:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XtK0klzm-fx6 for <buildroot@lists.busybox.net>;
+ Sat,  4 Mar 2023 13:05:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D9BF34049A
- for <buildroot@buildroot.org>; Sat,  4 Mar 2023 13:03:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9BF34049A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2372B41634
+ for <buildroot@buildroot.org>; Sat,  4 Mar 2023 13:05:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2372B41634
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C57EC860FE; Sat,  4 Mar 2023 13:03:53 +0000 (UTC)
+ id 1052586106; Sat,  4 Mar 2023 13:05:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Mar 2023 13:57:24 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 1a0906f3cb570a52da3b538a475d95e9fdbf09d4
-X-Git-Newrev: 4d7b942fce6024af6e61c82e1cca19e65145c558
+Date: Sat, 4 Mar 2023 13:57:35 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 500cc1f46f048febd6fe3dd2c3a5e61f9926dbec
+X-Git-Newrev: 58d46a4373806d6193f256b589d22f85dd45c18a
 X-Patchwork-Hint: ignore
-Message-Id: <20230304130353.C57EC860FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] docs/manual: add
+Message-Id: <20230304130501.1052586106@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] docs/manual: add
  'menuconfig' to out-of-tree examples
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d7b942fce6024af6e61c82e1cca19e65145c558
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=58d46a4373806d6193f256b589d22f85dd45c18a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 If the examples given for launching an out-of-tree build are executed
 as-is, this will result in the error message
@@ -87,7 +87,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 9abd3799dd..bc78f4a871 100644
+index 9ba87a8339..b60b6d7f53 100644
 --- a/docs/manual/common-usage.txt
 +++ b/docs/manual/common-usage.txt
 @@ -30,13 +30,13 @@ the Linux kernel. To use it, add +O=<directory>+ to the make command
