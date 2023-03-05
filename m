@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 590FEC61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 10:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFC06C6FA8E
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 10:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3B8360BEB;
-	Sun,  5 Mar 2023 10:32:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3B8360BEB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A737605EC;
+	Sun,  5 Mar 2023 10:32:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A737605EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZJMwUWDnVr_Y; Sun,  5 Mar 2023 10:32:18 +0000 (UTC)
+	with ESMTP id TRoBYcS_wysy; Sun,  5 Mar 2023 10:32:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14E2A60FD0;
-	Sun,  5 Mar 2023 10:32:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E2A60FD0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6DAD91BF35F
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:31:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD890605D5;
+	Sun,  5 Mar 2023 10:32:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD890605D5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 27F2D1BF868
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:32:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 795F760BEB
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 795F760BEB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0241181365
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:32:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0241181365
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7F4P1hbG8wGw for <buildroot@lists.busybox.net>;
- Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QXpk-Xea6hGM for <buildroot@lists.busybox.net>;
+ Sun,  5 Mar 2023 10:32:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 615A660C30
- for <buildroot@buildroot.org>; Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 615A660C30
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2266781363
+ for <buildroot@buildroot.org>; Sun,  5 Mar 2023 10:32:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2266781363
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A92B86200; Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
+ id 1287686239; Sun,  5 Mar 2023 10:32:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 11:21:28 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: edfb71c6d50d77e00ed915ef525915cd26b961c3
-X-Git-Newrev: c88787ada849749b001ed27bffaa53fdc08166c1
+Date: Sun, 5 Mar 2023 11:20:23 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: ebd36288dbfedccdb2e4aa0ebed0e1384bf5e7d3
+X-Git-Newrev: 4af566b5adb4f2080f70b4755d628159c3d31976
 X-Patchwork-Hint: ignore
-Message-Id: <20230305103136.4A92B86200@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/webkitgtk:
- security bump to version 2.38.5
+Message-Id: <20230305103248.1287686239@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/glslsandbox-player: add wayland-protocols optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,88 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c88787ada849749b001ed27bffaa53fdc08166c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4af566b5adb4f2080f70b4755d628159c3d31976
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Bugfix release, with many security fixes, including (but not limited to)
-a patch for CVE-2023-23529.
+wayland-protocols is an optional dependency which is enabled by default
+resulting in the following wayland build failure since the addition of
+the package in commit f201ca9d0d25b491ec5e1ed4e1d02fd52d027997:
 
-Release notes:
+checking for wayland_client... yes
+checking for wayland_egl... yes
+configure: Wayland EGL support enabled
+checking for wayland_protocols... no
+configure: error: Package requirements (wayland-protocols >= 1.12) were not met:
 
-  https://webkitgtk.org/2023/02/15/webkitgtk2.38.5-released.html
+Package 'wayland-protocols', required by 'virtual:world', not found
 
-Accompanying security advisory:
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-  https://webkitgtk.org/security/WSA-2023-0002.html
+Alternatively, you may set the environment variables wayland_protocols_CFLAGS
+and wayland_protocols_LIBS to avoid the need to call pkg-config.
 
-Also raise the minimal GCC version to 8.3, which was already required since webkitgtk-2.36.4.
-Similar to commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4,
-we do check on >= GCC 8, because we can't check on >= GCC 8.3.
+Fixes:
+ - http://autobuild.buildroot.org/results/865af860f9e52fe5311bb0c6a246ff871ae5a989
 
-  https://github.com/WebKit/WebKit/commit/f812c5db1ff22bcbe1070ca4ed613085cd36499b
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4c7fcbbe75de5c535e8d5dd7182900b6d09e2b03)
+(cherry picked from commit ee13e3fb41dc7c0c001127733b5a599c1e509747)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in      | 4 ++--
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/glslsandbox-player/Config.in             | 5 ++++-
+ package/glslsandbox-player/glslsandbox-player.mk | 6 ++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index cafe497491..1a42a79c01 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -16,7 +16,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
+index 132705584e..530c158fc3 100644
+--- a/package/glslsandbox-player/Config.in
++++ b/package/glslsandbox-player/Config.in
+@@ -111,8 +111,11 @@ endchoice
+ if BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL
+ config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_IVI
+ 	bool "Wayland IVI shell support"
+-endif
  
--comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
-+comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 8, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
-@@ -32,7 +32,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_USE_WCHAR # icu, libsoup
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 34fd19d3de..c771297b5a 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.38.4.tar.xz.sums
--md5  1c9ca83a0ad7e4ca9e933094572cb7d9  webkitgtk-2.38.4.tar.xz
--sha1  38b47df2be9bfb97d68fce8c7fa2819966a79036  webkitgtk-2.38.4.tar.xz
--sha256  4f47ea29a2d4d5f15eef3dc9e2d6c6f067e8de863a3f64455e1ccf9693cc1d36  webkitgtk-2.38.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.38.5.tar.xz.sums
-+md5  de05d314a3ecb5fb3835e4d84f8f466d  webkitgtk-2.38.5.tar.xz
-+sha1  1774390c628bb3a524d4ed76f11de4a878078db6  webkitgtk-2.38.5.tar.xz
-+sha256  40c20c43022274df5893f22b1054fa894c3eea057389bb08aee08c5b0bb0c1a7  webkitgtk-2.38.5.tar.xz
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG
++	bool "Wayland XDG shell support"
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
++endif
+ endif
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index a6974db926..3263f7fea0 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.38.4
-+WEBKITGTK_VERSION = 2.38.5
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ comment "glslsandbox-player needs openGL ES and EGL driver"
+diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
+index f0a9475aa6..241f3475d2 100644
+--- a/package/glslsandbox-player/glslsandbox-player.mk
++++ b/package/glslsandbox-player/glslsandbox-player.mk
+@@ -72,6 +72,12 @@ GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-ivi
+ else
+ GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-ivi
+ endif
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += wayland-protocols
++GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-wlxdg
++else
++GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-wlxdg
++endif
+ else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11),y)
+ GLSLSANDBOX_PLAYER_DEPENDENCIES += xlib_libX11
+ GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=x11
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
