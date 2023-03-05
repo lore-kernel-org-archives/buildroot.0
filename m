@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40734C61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 18:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6963C61DA4
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 18:28:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B41FF60FA8;
-	Sun,  5 Mar 2023 18:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B41FF60FA8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 533DD60F99;
+	Sun,  5 Mar 2023 18:28:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 533DD60F99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xIbxWzzpJOIy; Sun,  5 Mar 2023 18:27:24 +0000 (UTC)
+	with ESMTP id vXCz68Setjcn; Sun,  5 Mar 2023 18:28:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC98660BE1;
-	Sun,  5 Mar 2023 18:27:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC98660BE1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 56BD91BF3DA
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 18:27:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95EC160E66;
+	Sun,  5 Mar 2023 18:28:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95EC160E66
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A5B5F1BF3DA
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 18:28:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D59D60BE1
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 18:27:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D59D60BE1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DA8E404DB
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 18:28:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DA8E404DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bsl1KlgBY6s6 for <buildroot@lists.busybox.net>;
- Sun,  5 Mar 2023 18:27:20 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27725605E3
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 27725605E3
- for <buildroot@buildroot.org>; Sun,  5 Mar 2023 18:27:19 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CC64F1BF204;
- Sun,  5 Mar 2023 18:27:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pYt4m-001kpx-T1; Sun, 05 Mar 2023 19:27:16 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MCOv0QbyZyaM for <buildroot@lists.busybox.net>;
+ Sun,  5 Mar 2023 18:28:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB497400F3
+ for <buildroot@buildroot.org>; Sun,  5 Mar 2023 18:28:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB497400F3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B8114866EE; Sun,  5 Mar 2023 18:28:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230302175107.32479-1-fontaine.fabrice@gmail.com>
-Date: Sun, 05 Mar 2023 19:27:16 +0100
-In-Reply-To: <20230302175107.32479-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 2 Mar 2023 18:51:07 +0100")
-Message-ID: <874jqz6ol7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/opus: force arm mode instead of
- Thumb mode
+To: buildroot@buildroot.org
+Date: Sun, 5 Mar 2023 19:20:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fd8db3d60c9194c1d27d1bc301f3e0c6b0c81109
+X-Git-Newrev: 7af75b36aaf5c048a2db3e506cb7ec10d4ba05dc
+X-Patchwork-Hint: ignore
+Message-Id: <20230305182821.B8114866EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/f2fs-tools: add
+ F2FS_TOOLS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +57,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7af75b36aaf5c048a2db3e506cb7ec10d4ba05dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix the following build failure:
- > /tmp/cckXvlOO.s:352: Error: selected processor does not support `smull
- > r6,ip,r5,r0' in Thumb mode
+cpe:2.3:a:f2fs-tools_project:f2fs-tools is a valid CPE identifier for
+this package:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/fdedcc8f68651ec34417d609b40effbac456c80d
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Af2fs-tools_project%3Af2fs-tools
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/f2fs-tools/f2fs-tools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Slightly tweaked comment and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index 60f1004d77..f94244f2ad 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -14,6 +14,7 @@ F2FS_TOOLS_AUTORECONF = YES
+ F2FS_TOOLS_INSTALL_STAGING = YES
+ F2FS_TOOLS_LICENSE = GPL-2.0
+ F2FS_TOOLS_LICENSE_FILES = COPYING
++F2FS_TOOLS_CPE_ID_VENDOR = f2fs-tools_project
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ F2FS_TOOLS_CONF_OPTS += --with-selinux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
