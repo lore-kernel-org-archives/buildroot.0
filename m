@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B266C6FA8E
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 10:33:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CD2EC6FA8E
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 10:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F5EA605D5;
-	Sun,  5 Mar 2023 10:33:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F5EA605D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2063260595;
+	Sun,  5 Mar 2023 10:33:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2063260595
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AiVvZmnMy9B0; Sun,  5 Mar 2023 10:33:04 +0000 (UTC)
+	with ESMTP id 3os_VRqyvBkp; Sun,  5 Mar 2023 10:33:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4704860BEB;
-	Sun,  5 Mar 2023 10:33:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4704860BEB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3A0C71BF869
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:32:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC4BC605D5;
+	Sun,  5 Mar 2023 10:33:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC4BC605D5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 50FF91BF35F
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:32:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14C694037E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35381605D5
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:32:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14C694037E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35381605D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wanHFNR44Orf for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jNbVUI7oBetg for <buildroot@lists.busybox.net>;
  Sun,  5 Mar 2023 10:32:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33C1B4018F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F49460595
  for <buildroot@buildroot.org>; Sun,  5 Mar 2023 10:32:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33C1B4018F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F49460595
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 21FA78623B; Sun,  5 Mar 2023 10:32:48 +0000 (UTC)
+ id 3C85386239; Sun,  5 Mar 2023 10:32:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 11:21:09 +0100
+Date: Sun, 5 Mar 2023 11:24:56 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 4af566b5adb4f2080f70b4755d628159c3d31976
-X-Git-Newrev: cb17a7337f98099db08efbd4d4e9631447e2cbba
+X-Git-Oldrev: 73a1b21d9ec66dbf95fcbc676209c49903579127
+X-Git-Newrev: c66588bd31bc0fb3f48ce242d8318c5ad269ef7a
 X-Patchwork-Hint: ignore
-Message-Id: <20230305103248.21FA78623B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rockchip-mali:
- needs C++
+Message-Id: <20230305103248.3C85386239@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ support/dependencies/dependencies.sh: require FileHandle perl package for
+ syslinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb17a7337f98099db08efbd4d4e9631447e2cbba
+commit: https://git.buildroot.net/buildroot/commit/?id=c66588bd31bc0fb3f48ce242d8318c5ad269ef7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-rockchip-mali pre-built libraries needs C++ since the addition of the
-package in commit 97c74a73e5dee17530647f89b2c7d8692781eb14:
+syslinux needs FileHandle module:
 
-readelf -a output/build/rockchip-mali-721653b5b3b525a4f80d15aa7e2f9df7b7e60427/lib/aarch64-linux-gnu/libmali-bifrost-g31-rxp0-gbm.so|grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdrm.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
- 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
- 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
-
-While at it, add a comment when dependencies are not met
+Can't locate FileHandle.pm in @INC (you may need to install the FileHandle module) (@INC contains: /home/buildroot/autobuild/instance-0/output-1/host/lib/perl /usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5) at /home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/makeerrlist.pl line 8.
+BEGIN failed--compilation aborted at /home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/makeerrlist.pl line 8.
+/home/buildroot/autobuild/instance-0/output-1/host/bin/i586-buildroot-linux-gnu-gcc -Wp,-MT,errlist.o,-MD,./.errlist.o.d -Os -march=i386 -falign-functions=0 -falign-jumps=0 -falign-labels=0 -ffast-math -fomit-frame-pointer -std=gnu99 -m32 -mpreferred-stack-boundary=2 -fno-stack-protector -fwrapv -freg-struct-return -fPIC -fno-exceptions -fno-asynchronous-unwind-tables -fno-strict-aliasing -falign-functions=0 -falign-jumps=0 -falign-labels=0 -falign-loops=0 -g -D__COM32__ -D__FIRMWARE_BIOS__ -nostdinc -iwithprefix include -I. -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/sys -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/../include -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/include/sys -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/core/include -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/ -I/home/buildroot/autobuild/instance-0/output-1/bu
+ ild/syslinux-6.03/com32/lib/sys/module -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/bios/com32/lib//../.. -W -Wall -Wstrict-prototypes  -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Winline -DDYNAMIC_CRC_TABLE -DPNG_NO_CONSOLE_IO -DPNG_NO_WRITE_SUPPORTED -DPNG_NO_MNG_FEATURES -DPNG_NO_READ_tIME -DPNG_NO_WRITE_tIME -mregparm=3 -DREGPARM=3 -c -o errlist.o errlist.c
+cc1: fatal error: errlist.c: No such file or directory
 
 Fixes:
- - No autobuilder failures (yet), found when debugging an issue with
-   rockchip-mali and glslsandbox-player
+ - http://autobuild.buildroot.org/results/de88089888b2ca354b28af3550abf846560da7d5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5f1858e859833da272fce70bf445ca1b53ebffe1)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 474196d6bb410c0a9f5e1c8bb7018594a29a57bb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rockchip-mali/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ support/dependencies/dependencies.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/rockchip-mali/Config.in b/package/rockchip-mali/Config.in
-index d616284911..5a23954af3 100644
---- a/package/rockchip-mali/Config.in
-+++ b/package/rockchip-mali/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ROCKCHIP_MALI
- 	bool "rockchip-mali"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_ARM_EABIHF || BR2_aarch64
- 	# lidbrm. This would normally need a Config.in comment, but
-@@ -30,3 +31,8 @@ config BR2_PACKAGE_PROVIDES_LIBGBM
- 	default "rockchip-mali"
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 70e951a7e6..1224220ac9 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -307,6 +307,10 @@ if grep -q -E '^BR2_PACKAGE_(WEBKITGTK|WPEWEBKIT)=y' $BR2_CONFIG ; then
+     required_perl_modules="${required_perl_modules} JSON::PP"
+ fi
  
- endif
++if grep -q ^BR2_TARGET_SYSLINUX=y $BR2_CONFIG ; then
++    required_perl_modules="$required_perl_modules FileHandle"
++fi
 +
-+comment "rockchip-mali needs a glibc toolchain w/ C++, threads"
-+	depends on BR2_ARM_EABIHF || BR2_aarch64
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
+ # This variable will keep the modules that are missing in your system.
+ missing_perl_modules=""
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
