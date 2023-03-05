@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 999F0C61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 10:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16A53C61DA4
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 10:31:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35D7F60E66;
-	Sun,  5 Mar 2023 10:31:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35D7F60E66
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3FCC605A7;
+	Sun,  5 Mar 2023 10:31:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3FCC605A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id agd_5u7aEWSz; Sun,  5 Mar 2023 10:31:40 +0000 (UTC)
+	with ESMTP id jUC4ivP29sr9; Sun,  5 Mar 2023 10:31:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F67360C30;
-	Sun,  5 Mar 2023 10:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F67360C30
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4E8E11BF35F
+	by smtp3.osuosl.org (Postfix) with ESMTP id DADC260FA4;
+	Sun,  5 Mar 2023 10:31:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DADC260FA4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 770B81BF868
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 283EB60E66
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51BAD40227
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:31:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 283EB60E66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51BAD40227
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8lgaSiYe-UEP for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2JyX38TPGK3L for <buildroot@lists.busybox.net>;
  Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44458605A7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AA604018F
  for <buildroot@buildroot.org>; Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44458605A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AA604018F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3435F861FE; Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
+ id 54C2486201; Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 11:19:36 +0100
+Date: Sun, 5 Mar 2023 11:24:52 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 869cd715f748e8a289dc75852198d978cb69ebeb
-X-Git-Newrev: 4bd484ee5df9868dad0e81618fb71ad60ed61f28
+X-Git-Oldrev: c88787ada849749b001ed27bffaa53fdc08166c1
+X-Git-Newrev: 3e3ac87a9b6839126fc8a8ff33985d9a44039177
 X-Patchwork-Hint: ignore
-Message-Id: <20230305103136.3435F861FE@busybox.osuosl.org>
+Message-Id: <20230305103136.54C2486201@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.11.x]
- package/glslsandbox-player: add wayland-protocols optional dependency
+ support/dependencies/dependencies.sh: require FileHandle perl package for
+ syslinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bd484ee5df9868dad0e81618fb71ad60ed61f28
+commit: https://git.buildroot.net/buildroot/commit/?id=3e3ac87a9b6839126fc8a8ff33985d9a44039177
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-wayland-protocols is an optional dependency which is enabled by default
-resulting in the following wayland build failure since the addition of
-the package in commit f201ca9d0d25b491ec5e1ed4e1d02fd52d027997:
+syslinux needs FileHandle module:
 
-checking for wayland_client... yes
-checking for wayland_egl... yes
-configure: Wayland EGL support enabled
-checking for wayland_protocols... no
-configure: error: Package requirements (wayland-protocols >= 1.12) were not met:
-
-Package 'wayland-protocols', required by 'virtual:world', not found
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables wayland_protocols_CFLAGS
-and wayland_protocols_LIBS to avoid the need to call pkg-config.
+Can't locate FileHandle.pm in @INC (you may need to install the FileHandle module) (@INC contains: /home/buildroot/autobuild/instance-0/output-1/host/lib/perl /usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5) at /home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/makeerrlist.pl line 8.
+BEGIN failed--compilation aborted at /home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/makeerrlist.pl line 8.
+/home/buildroot/autobuild/instance-0/output-1/host/bin/i586-buildroot-linux-gnu-gcc -Wp,-MT,errlist.o,-MD,./.errlist.o.d -Os -march=i386 -falign-functions=0 -falign-jumps=0 -falign-labels=0 -ffast-math -fomit-frame-pointer -std=gnu99 -m32 -mpreferred-stack-boundary=2 -fno-stack-protector -fwrapv -freg-struct-return -fPIC -fno-exceptions -fno-asynchronous-unwind-tables -fno-strict-aliasing -falign-functions=0 -falign-jumps=0 -falign-labels=0 -falign-loops=0 -g -D__COM32__ -D__FIRMWARE_BIOS__ -nostdinc -iwithprefix include -I. -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/sys -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/../include -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/include/sys -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/core/include -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/com32/lib/ -I/home/buildroot/autobuild/instance-0/output-1/bu
+ ild/syslinux-6.03/com32/lib/sys/module -I/home/buildroot/autobuild/instance-0/output-1/build/syslinux-6.03/bios/com32/lib//../.. -W -Wall -Wstrict-prototypes  -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Winline -DDYNAMIC_CRC_TABLE -DPNG_NO_CONSOLE_IO -DPNG_NO_WRITE_SUPPORTED -DPNG_NO_MNG_FEATURES -DPNG_NO_READ_tIME -DPNG_NO_WRITE_tIME -mregparm=3 -DREGPARM=3 -c -o errlist.o errlist.c
+cc1: fatal error: errlist.c: No such file or directory
 
 Fixes:
- - http://autobuild.buildroot.org/results/865af860f9e52fe5311bb0c6a246ff871ae5a989
+ - http://autobuild.buildroot.org/results/de88089888b2ca354b28af3550abf846560da7d5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ee13e3fb41dc7c0c001127733b5a599c1e509747)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 474196d6bb410c0a9f5e1c8bb7018594a29a57bb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glslsandbox-player/Config.in             | 5 ++++-
- package/glslsandbox-player/glslsandbox-player.mk | 6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ support/dependencies/dependencies.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
-index 132705584e..530c158fc3 100644
---- a/package/glslsandbox-player/Config.in
-+++ b/package/glslsandbox-player/Config.in
-@@ -111,8 +111,11 @@ endchoice
- if BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL
- config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_IVI
- 	bool "Wayland IVI shell support"
--endif
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 70e951a7e6..1224220ac9 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -307,6 +307,10 @@ if grep -q -E '^BR2_PACKAGE_(WEBKITGTK|WPEWEBKIT)=y' $BR2_CONFIG ; then
+     required_perl_modules="${required_perl_modules} JSON::PP"
+ fi
  
-+config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG
-+	bool "Wayland XDG shell support"
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+endif
- endif
++if grep -q ^BR2_TARGET_SYSLINUX=y $BR2_CONFIG ; then
++    required_perl_modules="$required_perl_modules FileHandle"
++fi
++
+ # This variable will keep the modules that are missing in your system.
+ missing_perl_modules=""
  
- comment "glslsandbox-player needs openGL ES and EGL driver"
-diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
-index f0a9475aa6..241f3475d2 100644
---- a/package/glslsandbox-player/glslsandbox-player.mk
-+++ b/package/glslsandbox-player/glslsandbox-player.mk
-@@ -72,6 +72,12 @@ GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-ivi
- else
- GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-ivi
- endif
-+ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG),y)
-+GLSLSANDBOX_PLAYER_DEPENDENCIES += wayland-protocols
-+GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-wlxdg
-+else
-+GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-wlxdg
-+endif
- else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11),y)
- GLSLSANDBOX_PLAYER_DEPENDENCIES += xlib_libX11
- GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=x11
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
