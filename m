@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CDAC678DB
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 14:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDEFDC678DB
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 14:27:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E1C281E0D;
-	Sun,  5 Mar 2023 14:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E1C281E0D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D76181B25;
+	Sun,  5 Mar 2023 14:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D76181B25
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 07PJiu-3PlPk; Sun,  5 Mar 2023 14:27:16 +0000 (UTC)
+	with ESMTP id srACXfs2lH91; Sun,  5 Mar 2023 14:27:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DCAE81B52;
-	Sun,  5 Mar 2023 14:27:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DCAE81B52
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 615B61BF41B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B023A81CA0;
+	Sun,  5 Mar 2023 14:27:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B023A81CA0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C27071BF41B
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 14:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3AD8460C00
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA22740907
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 14:27:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AD8460C00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA22740907
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lDfqhERw5WH0 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LetQR_yyDiSc for <buildroot@lists.busybox.net>;
  Sun,  5 Mar 2023 14:27:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6752960644
+ by smtp4.osuosl.org (Postfix) with ESMTP id 96BCD408F9
  for <buildroot@buildroot.org>; Sun,  5 Mar 2023 14:27:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6752960644
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96BCD408F9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53D378629D; Sun,  5 Mar 2023 14:27:00 +0000 (UTC)
+ id 83D398629D; Sun,  5 Mar 2023 14:27:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 15:22:14 +0100
+Date: Sun, 5 Mar 2023 15:22:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 783cd8d90d37b5e0b59d6f0bfca6667855b2b9e1
-X-Git-Newrev: bc344d70d869fa10e44e098f38eda64a45450b68
+X-Git-Oldrev: d5c6ff24dccb7fec54e7fa43af9f987b95eba1f8
+X-Git-Newrev: 0c29b4281d5a1c55739c62438f8d7676d7a16823
 X-Patchwork-Hint: ignore
-Message-Id: <20230305142700.53D378629D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpebackend-fdo: bump to version
- 1.14.1
+Message-Id: <20230305142700.83D398629D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/exfat: security bump to version
+ 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc344d70d869fa10e44e098f38eda64a45450b68
+commit: https://git.buildroot.net/buildroot/commit/?id=0c29b4281d5a1c55739c62438f8d7676d7a16823
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a bugfix release which includes important fixes which solve a
-memory leak and hitting a situation where the output no longer gets
-updated. Release notes:
+- Fix CVE-2022-29973: relan exFAT 1.3.0 allows local users to obtain
+  sensitive information (data from deleted files in the filesystem) in
+  certain situations involving offsets beyond ValidDataLength.
+- libfuse3 is supported since
+  https://github.com/relan/exfat/commit/7cbc1544a4f68d8b4d33b187a053fc554405c56e
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.14.1.html
+https://github.com/relan/exfat/releases/tag/v1.4.0
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/exfat/Config.in  | 2 +-
+ package/exfat/exfat.hash | 2 +-
+ package/exfat/exfat.mk   | 6 ++++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index e2f2c6c89f..d1a344a664 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.14.0.tar.xz.sums
--md5  ea62dfa9ecb366598a837d7446ed48ac  wpebackend-fdo-1.14.0.tar.xz
--sha1  1500be9212381a404f4a46b22b90a9880ba11c01  wpebackend-fdo-1.14.0.tar.xz
--sha256  e75b0cb2c7145448416e8696013d8883f675c66c11ed750e06865efec5809155  wpebackend-fdo-1.14.0.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.14.1.tar.xz.sums
-+md5  2b49218cdd16075b028bbaf5a4f57890  wpebackend-fdo-1.14.1.tar.xz
-+sha1  a68db2480d29d53d7fa24c69888bacbab6efea11  wpebackend-fdo-1.14.1.tar.xz
-+sha256  01938dd93c62b3a47b18dd13c70d50490a8b8a6caec23c8550a3dbdbcc6bbb50  wpebackend-fdo-1.14.1.tar.xz
- 
- # Hashes for license files:
- sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index afe37b086e..c1e4e05796 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/exfat/Config.in b/package/exfat/Config.in
+index c0b4eabe11..c0ed2570d9 100644
+--- a/package/exfat/Config.in
++++ b/package/exfat/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_EXFAT
+ 	depends on BR2_USE_MMU # libfuse
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS # libfuse
+-	select BR2_PACKAGE_LIBFUSE
++	select BR2_PACKAGE_LIBFUSE3 if !BR2_PACKAGE_LIBFUSE
+ 	help
+ 	  A full-featured exFAT file system implementation for GNU/Linux
+ 	  and other Unix-like systems as a FUSE module.
+diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
+index b40fc7f0e5..c6082a403a 100644
+--- a/package/exfat/exfat.hash
++++ b/package/exfat/exfat.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  07652136064da5e4d32df5555f88c138ffa4835a23b88a5bae2015f21006e0d3  fuse-exfat-1.3.0.tar.gz
++sha256  a1cfedc55e0e7a12c184605aa0f0bf44b24a3fb272449b20b2c8bbe6edb3001e  fuse-exfat-1.4.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+index c0ef77a113..a8efe5b0ba 100644
+--- a/package/exfat/exfat.mk
++++ b/package/exfat/exfat.mk
+@@ -4,10 +4,12 @@
  #
  ################################################################################
  
--WPEBACKEND_FDO_VERSION = 1.14.0
-+WPEBACKEND_FDO_VERSION = 1.14.1
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+-EXFAT_VERSION = 1.3.0
++EXFAT_VERSION = 1.4.0
+ EXFAT_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_VERSION)
+ EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
+-EXFAT_DEPENDENCIES = libfuse host-pkgconf
++EXFAT_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_LIBFUSE3),libfuse3,libfuse) \
++	host-pkgconf
+ EXFAT_LICENSE = GPL-2.0+
+ EXFAT_LICENSE_FILES = COPYING
+ EXFAT_CPE_ID_VENDOR = exfat_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
