@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED565C6FA8E
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:40:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD25CC61DA4
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DCEB409FB;
-	Sun,  5 Mar 2023 17:40:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DCEB409FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 785CC40334;
+	Sun,  5 Mar 2023 17:40:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 785CC40334
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vjo6dYvGKDMr; Sun,  5 Mar 2023 17:40:32 +0000 (UTC)
+	with ESMTP id zMEgkhNqT-n1; Sun,  5 Mar 2023 17:40:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F177409F1;
-	Sun,  5 Mar 2023 17:40:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F177409F1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1920E1BF868
+	by smtp4.osuosl.org (Postfix) with ESMTP id 104FB409FB;
+	Sun,  5 Mar 2023 17:40:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 104FB409FB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CCF51BF869
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E1C9D60BE0
+ by smtp1.osuosl.org (Postfix) with ESMTP id C1655817B0
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1C9D60BE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1655817B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZxJMRemW9Kvl for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kupka-Pp9NQh for <buildroot@lists.busybox.net>;
  Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1E1660E46
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8262817C0
  for <buildroot@buildroot.org>; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E1660E46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8262817C0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E249686328; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
+ id D7F1F8631A; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 18:32:25 +0100
+Date: Sun, 5 Mar 2023 18:27:45 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: b9a06799e9ded0367c71a7b288d39a63a1cca9a5
-X-Git-Newrev: f8c1d7a2fa770e2194b566bae1a5c3e3968267ae
+X-Git-Oldrev: e1e3411270e71c5452ee8f54d2f04737f84ab872
+X-Git-Newrev: b9a06799e9ded0367c71a7b288d39a63a1cca9a5
 X-Patchwork-Hint: ignore
-Message-Id: <20230305173947.E249686328@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/netsurf: force
- libopenssl
+Message-Id: <20230305173947.D7F1F8631A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/wilc-driver: fix
+ build failure due to wrong pointer casts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8c1d7a2fa770e2194b566bae1a5c3e3968267ae
+commit: https://git.buildroot.net/buildroot/commit/?id=b9a06799e9ded0367c71a7b288d39a63a1cca9a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-netsurf raises the following build failure since bump of libressl to
-version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+Add local patch pending upstream[0] to fix the bug.
 
-content/fetchers/about.c: In function 'ns_X509_get_signature_nid':
-content/fetchers/about.c:548:25: error: dereferencing pointer to incomplete type 'X509 {aka struct x509_st}'
-  return OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
-                         ^~
+[0]: https://github.com/embeddedTS/wilc3000-external-module/pull/3
 
 Fixes:
- - http://autobuild.buildroot.org/results/c225aaac31398ba495921bd4b85e588199822561
+http://autobuild.buildroot.net/results/0a0/0a022d5c053bf8f7a53349b8bae4b2168a9cd134/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit efe2734fc58cc6bfcc8fa1b696bba81a9797efb9)
+(cherry picked from commit 293a878ae268cd0561fc3ab81c04b9a438acf921)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netsurf/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/wilc-driver/0005-Fix-cast-warnings.patch | 43 ++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
-index 4f7d5c2713..394befcf28 100644
---- a/package/netsurf/Config.in
-+++ b/package/netsurf/Config.in
-@@ -20,6 +20,7 @@ config BR2_PACKAGE_NETSURF
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_OPENSSL if BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL if BR2_PACKAGE_LIBCURL
- 	help
- 	  NetSurf is a compact graphical web browser which aims for
- 	  HTML5, CSS and JavaScript support.
+diff --git a/package/wilc-driver/0005-Fix-cast-warnings.patch b/package/wilc-driver/0005-Fix-cast-warnings.patch
+new file mode 100644
+index 0000000000..713a15e667
+--- /dev/null
++++ b/package/wilc-driver/0005-Fix-cast-warnings.patch
+@@ -0,0 +1,43 @@
++From ebd083223883d479b2dd6f8a0da272797f90d236 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sat, 31 Dec 2022 18:38:33 +0100
++Subject: [PATCH] Fix cast warnings
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ cfg80211.c | 2 +-
++ netdev.c   | 4 ++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/cfg80211.c b/cfg80211.c
++index 016aa06..2f40c9d 100644
++--- a/cfg80211.c
+++++ b/cfg80211.c
++@@ -1794,7 +1794,7 @@ static int start_ap(struct wiphy *wiphy, struct net_device *dev,
++ 	if (ret != 0)
++ 		netdev_err(dev, "Error in setting channel\n");
++ 
++-	wilc_wlan_set_bssid(dev, dev->dev_addr, WILC_AP_MODE);
+++	wilc_wlan_set_bssid(dev, (u8 *)dev->dev_addr, WILC_AP_MODE);
++ 
++ 	return wilc_add_beacon(vif, settings->beacon_interval,
++ 				   settings->dtim_period, &settings->beacon);
++diff --git a/netdev.c b/netdev.c
++index 824afea..5a1a51d 100644
++--- a/netdev.c
+++++ b/netdev.c
++@@ -899,9 +899,9 @@ static int wilc_mac_open(struct net_device *ndev)
++ 				vif->idx);
++ 
++ 	if (is_valid_ether_addr(ndev->dev_addr))
++-		wilc_set_mac_address(vif, ndev->dev_addr);
+++		wilc_set_mac_address(vif, (u8 *)ndev->dev_addr);
++ 	else
++-		wilc_get_mac_address(vif, ndev->dev_addr);
+++		wilc_get_mac_address(vif, (u8 *)ndev->dev_addr);
++ 	netdev_dbg(ndev, "Mac address: %pM\n", ndev->dev_addr);
++ 
++ 	if (!is_valid_ether_addr(ndev->dev_addr)) {
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
