@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5A4C61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 18:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6685C61DA4
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 18:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83993409FC;
-	Sun,  5 Mar 2023 18:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83993409FC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45738409FC;
+	Sun,  5 Mar 2023 18:21:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45738409FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cn2mH-febl3H; Sun,  5 Mar 2023 18:20:02 +0000 (UTC)
+	with ESMTP id 77r4iievbVyL; Sun,  5 Mar 2023 18:21:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 972924097E;
-	Sun,  5 Mar 2023 18:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 972924097E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 441121BF3DA
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 18:20:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E0504097E;
+	Sun,  5 Mar 2023 18:21:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E0504097E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C47BF1BF3DA
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 18:21:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D67F60FA8
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 18:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D67F60FA8
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABB8381429
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 18:21:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABB8381429
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1fDyW8bHtPej for <buildroot@lists.busybox.net>;
- Sun,  5 Mar 2023 18:19:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 15uxDHcK4h5L for <buildroot@lists.busybox.net>;
+ Sun,  5 Mar 2023 18:21:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A64B360E66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95717813D5
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A64B360E66
- for <buildroot@buildroot.org>; Sun,  5 Mar 2023 18:19:58 +0000 (UTC)
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 95717813D5
+ for <buildroot@buildroot.org>; Sun,  5 Mar 2023 18:21:19 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 57284C0002;
- Sun,  5 Mar 2023 18:19:55 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id B184AC0004;
+ Sun,  5 Mar 2023 18:21:17 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pYsxe-001kWt-G6; Sun, 05 Mar 2023 19:19:54 +0100
+ id 1pYsyy-001kaE-Sv; Sun, 05 Mar 2023 19:21:16 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230303190726.4421-1-fontaine.fabrice@gmail.com>
-Date: Sun, 05 Mar 2023 19:19:54 +0100
-In-Reply-To: <20230303190726.4421-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 3 Mar 2023 20:07:26 +0100")
-Message-ID: <87lekb6oxh.fsf@dell.be.48ers.dk>
+References: <20230303190605.3528-1-fontaine.fabrice@gmail.com>
+Date: Sun, 05 Mar 2023 19:21:16 +0100
+In-Reply-To: <20230303190605.3528-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 3 Mar 2023 20:06:05 +0100")
+Message-ID: <87h6uz6ov7.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libglfw: add wayland dependency
+Subject: Re: [Buildroot] [PATCH 1/1] package/f2fs-tools: add
+ F2FS_TOOLS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: Grzegorz Blach <grzegorz@blach.pl>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -71,19 +72,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix added by commit 0bbb12eff3b9f9d9719c48644c2b3d563e80de48 was
- > incomplete resulting in the following build failure:
+ > cpe:2.3:a:f2fs-tools_project:f2fs-tools is a valid CPE identifier for
+ > this package:
 
- > -- Checking for modules 'wayland-client>=0.2.7;wayland-cursor>=0.2.7;wayland-egl>=0.2.7;xkbcommon'
- > --   Package 'wayland-client', required by 'virtual:world', not found
- > --   Package 'wayland-cursor', required by 'virtual:world', not found
- > --   Package 'wayland-egl', required by 'virtual:world', not found
- > CMake Error at /home/autobuild/autobuild/instance-9/output-1/host/share/cmake-3.22/Modules/FindPkgConfig.cmake:603 (message):
- >   A required package was not found
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/9c032902418a4ab0c9aa655eb29eddee0711815d
- >  - http://autobuild.buildroot.org/results/7381e114fa5c796c6edbb2c8e3987563bb32b6fa
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Af2fs-tools_project%3Af2fs-tools
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
