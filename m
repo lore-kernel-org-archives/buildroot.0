@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84860C61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED565C6FA8E
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:40:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21C1C410A6;
-	Sun,  5 Mar 2023 17:40:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21C1C410A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DCEB409FB;
+	Sun,  5 Mar 2023 17:40:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DCEB409FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mNsLp-Zgjo4S; Sun,  5 Mar 2023 17:40:19 +0000 (UTC)
+	with ESMTP id Vjo6dYvGKDMr; Sun,  5 Mar 2023 17:40:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5BB4409F1;
-	Sun,  5 Mar 2023 17:40:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5BB4409F1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 109501BF865
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F177409F1;
+	Sun,  5 Mar 2023 17:40:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F177409F1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1920E1BF868
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB6BC4033C
+ by smtp3.osuosl.org (Postfix) with ESMTP id E1C9D60BE0
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB6BC4033C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1C9D60BE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HgwWSYRRYrWO for <buildroot@lists.busybox.net>;
- Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZxJMRemW9Kvl for <buildroot@lists.busybox.net>;
+ Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B161C40334
+ by smtp3.osuosl.org (Postfix) with ESMTP id F1E1660E46
  for <buildroot@buildroot.org>; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B161C40334
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E1660E46
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B24E86318; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
+ id E249686328; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 18:10:39 +0100
+Date: Sun, 5 Mar 2023 18:32:25 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 3e3ac87a9b6839126fc8a8ff33985d9a44039177
-X-Git-Newrev: 7f66598865f1fede86327967608afee46caec50c
+X-Git-Oldrev: b9a06799e9ded0367c71a7b288d39a63a1cca9a5
+X-Git-Newrev: f8c1d7a2fa770e2194b566bae1a5c3e3968267ae
 X-Patchwork-Hint: ignore
-Message-Id: <20230305173947.9B24E86318@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/libmodsecurity:
- needs dynamic library
+Message-Id: <20230305173947.E249686328@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/netsurf: force
+ libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f66598865f1fede86327967608afee46caec50c
+commit: https://git.buildroot.net/buildroot/commit/?id=f8c1d7a2fa770e2194b566bae1a5c3e3968267ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Commit 9fc652a373034118535397fdd4042ab9f8fd7adf was incomplete as
-mbedtls can be pulled in libcurl through libssh2 resulting in the
-following build failure:
+netsurf raises the following build failure since bump of libressl to
+version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 
-/home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/powerpc64le-buildroot-linux-musl/11.3.0/../../../../powerpc64le-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-4/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/lib//libmbedcrypto.a(md5.c.o): in function `mbedtls_md5_init':
-md5.c:(.text+0x0): multiple definition of `mbedtls_md5_init'; ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x0): first defined here
+content/fetchers/about.c: In function 'ns_X509_get_signature_nid':
+content/fetchers/about.c:548:25: error: dereferencing pointer to incomplete type 'X509 {aka struct x509_st}'
+  return OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
+                         ^~
 
 Fixes:
- - http://autobuild.buildroot.org/results/4c235e46188f23d1a48297f4e5942cec7b25959a
+ - http://autobuild.buildroot.org/results/c225aaac31398ba495921bd4b85e588199822561
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 97bdc0616c6027fe4b92bfa80dd9e7d43df20505)
+(cherry picked from commit efe2734fc58cc6bfcc8fa1b696bba81a9797efb9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodsecurity/Config.in    | 14 +++++++-------
- package/nginx-modsecurity/Config.in | 11 ++++-------
- 2 files changed, 11 insertions(+), 14 deletions(-)
+ package/netsurf/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
-index b15d808759..69bb0494cc 100644
---- a/package/libmodsecurity/Config.in
-+++ b/package/libmodsecurity/Config.in
-@@ -2,8 +2,10 @@ config BR2_PACKAGE_LIBMODSECURITY
- 	bool "libmodsecurity"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# libmodsecurity embeds several mbedtls source files
--	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS)
-+	# libmodsecurity embeds several mbedtls source files, causing
-+	# various issues when static linking and other dependencies of
-+	# libmodsecurity in turn use mbedtls
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_PCRE2
+diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
+index 4f7d5c2713..394befcf28 100644
+--- a/package/netsurf/Config.in
++++ b/package/netsurf/Config.in
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_NETSURF
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_OPENSSL if BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL if BR2_PACKAGE_LIBCURL
  	help
- 	  Libmodsecurity is one component of the ModSecurity
-@@ -17,8 +19,6 @@ config BR2_PACKAGE_LIBMODSECURITY
- 
- 	  https://github.com/SpiderLabs/ModSecurity
- 
--comment "libmodsecurity needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--
--comment "libmodsecurity needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
-+comment "libmodsecurity needs a toolchain w/ C++, threads, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
-index 5cbe57a866..0bbf05fad9 100644
---- a/package/nginx-modsecurity/Config.in
-+++ b/package/nginx-modsecurity/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- 	depends on BR2_PACKAGE_NGINX_HTTP
- 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
--	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS) # libmodsecurity
-+	depends on !BR2_STATIC_LIBS # libmodsecurity
- 	select BR2_PACKAGE_LIBMODSECURITY
- 	help
- 	  The ModSecurity-nginx connector is the connection
-@@ -12,10 +12,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- 
- 	  https://github.com/SpiderLabs/ModSecurity-nginx
- 
--comment "nginx-modsecurity needs a toolchain w/ C++, threads"
-+comment "nginx-modsecurity needs a toolchain w/ C++, threads, dynamic library"
- 	depends on BR2_PACKAGE_NGINX_HTTP
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--
--comment "nginx-modsecurity needs a toolchain w/ dynamic library"
--	depends on BR2_PACKAGE_NGINX_HTTP
--	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	  NetSurf is a compact graphical web browser which aims for
+ 	  HTML5, CSS and JavaScript support.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
