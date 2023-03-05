@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD25CC61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 630EDC61DA4
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 785CC40334;
-	Sun,  5 Mar 2023 17:40:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 785CC40334
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0631E4109F;
+	Sun,  5 Mar 2023 17:41:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0631E4109F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zMEgkhNqT-n1; Sun,  5 Mar 2023 17:40:46 +0000 (UTC)
+	with ESMTP id pGkZrKYATJiG; Sun,  5 Mar 2023 17:41:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 104FB409FB;
-	Sun,  5 Mar 2023 17:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 104FB409FB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1CCF51BF869
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAE28410C2;
+	Sun,  5 Mar 2023 17:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAE28410C2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 25F121BF870
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1655817B0
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1655817B0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00A0940600
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00A0940600
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kupka-Pp9NQh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bFXPngNiWDHW for <buildroot@lists.busybox.net>;
  Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8262817C0
- for <buildroot@buildroot.org>; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8262817C0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AE70400F3
+ for <buildroot@buildroot.org>; Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AE70400F3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D7F1F8631A; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
+ id EE49F86330; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 18:27:45 +0100
+Date: Sun, 5 Mar 2023 18:33:59 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: e1e3411270e71c5452ee8f54d2f04737f84ab872
-X-Git-Newrev: b9a06799e9ded0367c71a7b288d39a63a1cca9a5
+X-Git-Oldrev: f8c1d7a2fa770e2194b566bae1a5c3e3968267ae
+X-Git-Newrev: a1d2b230f8a176137ab051094755bfadbadbadab
 X-Patchwork-Hint: ignore
-Message-Id: <20230305173947.D7F1F8631A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/wilc-driver: fix
- build failure due to wrong pointer casts
+Message-Id: <20230305173947.EE49F86330@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/efivar: needs
+ threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +63,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9a06799e9ded0367c71a7b288d39a63a1cca9a5
+commit: https://git.buildroot.net/buildroot/commit/?id=a1d2b230f8a176137ab051094755bfadbadbadab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Add local patch pending upstream[0] to fix the bug.
+Add a thread dependency as Upstream quickly closed
+https://github.com/rhboot/efivar/pull/238 to fix the following build
+failure without threads raised since bump to version 38 in commit
+f24029b561fbda0953c7dbd93d2485b03873996d and
+https://github.com/rhboot/efivar/commit/cff88dd96b9d43e2c5875a24ba6180b196890ded:
 
-[0]: https://github.com/embeddedTS/wilc3000-external-module/pull/3
+thread-test.c:14:10: fatal error: pthread.h: No such file or directory
+   14 | #include <pthread.h>
+      |          ^~~~~~~~~~~
 
 Fixes:
-http://autobuild.buildroot.net/results/0a0/0a022d5c053bf8f7a53349b8bae4b2168a9cd134/
+ - http://autobuild.buildroot.org/results/f2da14f91dc602a32dd5b2b7bdf3d3aa43afa7f4
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 293a878ae268cd0561fc3ab81c04b9a438acf921)
+(cherry picked from commit c29f6d63e0adebc8502dd707d3e4050af254d342)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wilc-driver/0005-Fix-cast-warnings.patch | 43 ++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ package/efibootmgr/Config.in | 5 +++--
+ package/efivar/Config.in     | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/wilc-driver/0005-Fix-cast-warnings.patch b/package/wilc-driver/0005-Fix-cast-warnings.patch
-new file mode 100644
-index 0000000000..713a15e667
---- /dev/null
-+++ b/package/wilc-driver/0005-Fix-cast-warnings.patch
-@@ -0,0 +1,43 @@
-+From ebd083223883d479b2dd6f8a0da272797f90d236 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sat, 31 Dec 2022 18:38:33 +0100
-+Subject: [PATCH] Fix cast warnings
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ cfg80211.c | 2 +-
-+ netdev.c   | 4 ++--
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/cfg80211.c b/cfg80211.c
-+index 016aa06..2f40c9d 100644
-+--- a/cfg80211.c
-++++ b/cfg80211.c
-+@@ -1794,7 +1794,7 @@ static int start_ap(struct wiphy *wiphy, struct net_device *dev,
-+ 	if (ret != 0)
-+ 		netdev_err(dev, "Error in setting channel\n");
-+ 
-+-	wilc_wlan_set_bssid(dev, dev->dev_addr, WILC_AP_MODE);
-++	wilc_wlan_set_bssid(dev, (u8 *)dev->dev_addr, WILC_AP_MODE);
-+ 
-+ 	return wilc_add_beacon(vif, settings->beacon_interval,
-+ 				   settings->dtim_period, &settings->beacon);
-+diff --git a/netdev.c b/netdev.c
-+index 824afea..5a1a51d 100644
-+--- a/netdev.c
-++++ b/netdev.c
-+@@ -899,9 +899,9 @@ static int wilc_mac_open(struct net_device *ndev)
-+ 				vif->idx);
-+ 
-+ 	if (is_valid_ether_addr(ndev->dev_addr))
-+-		wilc_set_mac_address(vif, ndev->dev_addr);
-++		wilc_set_mac_address(vif, (u8 *)ndev->dev_addr);
-+ 	else
-+-		wilc_get_mac_address(vif, ndev->dev_addr);
-++		wilc_get_mac_address(vif, (u8 *)ndev->dev_addr);
-+ 	netdev_dbg(ndev, "Mac address: %pM\n", ndev->dev_addr);
-+ 
-+ 	if (!is_valid_ether_addr(ndev->dev_addr)) {
-+-- 
-+2.34.1
-+
+diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
+index 98ff71c996..5800e6c143 100644
+--- a/package/efibootmgr/Config.in
++++ b/package/efibootmgr/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_EFIBOOTMGR
+ 	bool "efibootmgr"
+ 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS # efivar
+ 	depends on !BR2_STATIC_LIBS # efivar
++	depends on BR2_TOOLCHAIN_HAS_THREADS # efivar
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+@@ -15,9 +16,9 @@ config BR2_PACKAGE_EFIBOOTMGR
+ 
+ 	  https://github.com/rhboot/efibootmgr
+ 
+-comment "efibootmgr needs a toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
++comment "efibootmgr needs a toolchain w/ dynamic library, threads, headers >= 3.12, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
+-	depends on BR2_STATIC_LIBS || \
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+diff --git a/package/efivar/Config.in b/package/efivar/Config.in
+index 74f2bb5abb..d4402dbcf7 100644
+--- a/package/efivar/Config.in
++++ b/package/efivar/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_EFIVAR
+ 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # linux/nvme.h
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4,
+ 	# and the efivar source handles that situation. However, some
+ 	# Sourcery CodeBench toolchains use 4.4 kernel headers but they
+@@ -22,9 +23,9 @@ config BR2_PACKAGE_EFIVAR
+ 
+ 	  https://github.com/rhboot/efivar
+ 
+-comment "efivar needs a toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
++comment "efivar needs a toolchain w/ dynamic library, threads, headers >= 3.12, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
+-	depends on BR2_STATIC_LIBS || \
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
