@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A9F7C61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 10:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 590FEC61DA4
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 10:32:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24DEE60FAF;
-	Sun,  5 Mar 2023 10:32:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24DEE60FAF
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3B8360BEB;
+	Sun,  5 Mar 2023 10:32:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3B8360BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 010mKCC_Qw-q; Sun,  5 Mar 2023 10:32:05 +0000 (UTC)
+	with ESMTP id ZJMwUWDnVr_Y; Sun,  5 Mar 2023 10:32:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46F8B60FC7;
-	Sun,  5 Mar 2023 10:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46F8B60FC7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14E2A60FD0;
+	Sun,  5 Mar 2023 10:32:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E2A60FD0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7A9401BF35F
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:31:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6DAD91BF35F
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5224A605A7
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:31:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5224A605A7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 795F760BEB
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 10:31:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 795F760BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N_CQxXtrCkta for <buildroot@lists.busybox.net>;
+ with ESMTP id 7F4P1hbG8wGw for <buildroot@lists.busybox.net>;
  Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F56D60BEB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 615A660C30
  for <buildroot@buildroot.org>; Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F56D60BEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 615A660C30
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EF64861FF; Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
+ id 4A92B86200; Sun,  5 Mar 2023 10:31:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 11:21:13 +0100
+Date: Sun, 5 Mar 2023 11:21:28 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 4bd484ee5df9868dad0e81618fb71ad60ed61f28
-X-Git-Newrev: edfb71c6d50d77e00ed915ef525915cd26b961c3
+X-Git-Oldrev: edfb71c6d50d77e00ed915ef525915cd26b961c3
+X-Git-Newrev: c88787ada849749b001ed27bffaa53fdc08166c1
 X-Patchwork-Hint: ignore
-Message-Id: <20230305103136.3EF64861FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/rockchip-mali:
- needs C++
+Message-Id: <20230305103136.4A92B86200@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/webkitgtk:
+ security bump to version 2.38.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edfb71c6d50d77e00ed915ef525915cd26b961c3
+commit: https://git.buildroot.net/buildroot/commit/?id=c88787ada849749b001ed27bffaa53fdc08166c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-rockchip-mali pre-built libraries needs C++ since the addition of the
-package in commit 97c74a73e5dee17530647f89b2c7d8692781eb14:
+Bugfix release, with many security fixes, including (but not limited to)
+a patch for CVE-2023-23529.
 
-readelf -a output/build/rockchip-mali-721653b5b3b525a4f80d15aa7e2f9df7b7e60427/lib/aarch64-linux-gnu/libmali-bifrost-g31-rxp0-gbm.so|grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdrm.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
- 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
- 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+Release notes:
 
-While at it, add a comment when dependencies are not met
+  https://webkitgtk.org/2023/02/15/webkitgtk2.38.5-released.html
 
-Fixes:
- - No autobuilder failures (yet), found when debugging an issue with
-   rockchip-mali and glslsandbox-player
+Accompanying security advisory:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://webkitgtk.org/security/WSA-2023-0002.html
+
+Also raise the minimal GCC version to 8.3, which was already required since webkitgtk-2.36.4.
+Similar to commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4,
+we do check on >= GCC 8, because we can't check on >= GCC 8.3.
+
+  https://github.com/WebKit/WebKit/commit/f812c5db1ff22bcbe1070ca4ed613085cd36499b
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Acked-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5f1858e859833da272fce70bf445ca1b53ebffe1)
+(cherry picked from commit 4c7fcbbe75de5c535e8d5dd7182900b6d09e2b03)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rockchip-mali/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/webkitgtk/Config.in      | 4 ++--
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/rockchip-mali/Config.in b/package/rockchip-mali/Config.in
-index d616284911..5a23954af3 100644
---- a/package/rockchip-mali/Config.in
-+++ b/package/rockchip-mali/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ROCKCHIP_MALI
- 	bool "rockchip-mali"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_ARM_EABIHF || BR2_aarch64
- 	# lidbrm. This would normally need a Config.in comment, but
-@@ -30,3 +31,8 @@ config BR2_PACKAGE_PROVIDES_LIBGBM
- 	default "rockchip-mali"
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index cafe497491..1a42a79c01 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
  
- endif
-+
-+comment "rockchip-mali needs a glibc toolchain w/ C++, threads"
-+	depends on BR2_ARM_EABIHF || BR2_aarch64
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
+-comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
++comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 8, host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+@@ -32,7 +32,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_USE_WCHAR # icu, libsoup
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 34fd19d3de..c771297b5a 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.38.4.tar.xz.sums
+-md5  1c9ca83a0ad7e4ca9e933094572cb7d9  webkitgtk-2.38.4.tar.xz
+-sha1  38b47df2be9bfb97d68fce8c7fa2819966a79036  webkitgtk-2.38.4.tar.xz
+-sha256  4f47ea29a2d4d5f15eef3dc9e2d6c6f067e8de863a3f64455e1ccf9693cc1d36  webkitgtk-2.38.4.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.38.5.tar.xz.sums
++md5  de05d314a3ecb5fb3835e4d84f8f466d  webkitgtk-2.38.5.tar.xz
++sha1  1774390c628bb3a524d4ed76f11de4a878078db6  webkitgtk-2.38.5.tar.xz
++sha256  40c20c43022274df5893f22b1054fa894c3eea057389bb08aee08c5b0bb0c1a7  webkitgtk-2.38.5.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index a6974db926..3263f7fea0 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.38.4
++WEBKITGTK_VERSION = 2.38.5
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
