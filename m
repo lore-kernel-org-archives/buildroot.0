@@ -1,64 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFB6CC61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 11:14:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35616C678DB
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 14:25:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 386E8600D1;
-	Sun,  5 Mar 2023 11:14:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 386E8600D1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cPvf7jO1JKgG; Sun,  5 Mar 2023 11:14:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BD3E606CB;
-	Sun,  5 Mar 2023 11:14:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BD3E606CB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 079E71BF5A5
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 11:14:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D59738197D
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 11:14:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D59738197D
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE64281AF5;
+	Sun,  5 Mar 2023 14:25:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE64281AF5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cna8ALCbyANn for <buildroot@lists.busybox.net>;
- Sun,  5 Mar 2023 11:14:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 319158190B
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 319158190B
- for <buildroot@buildroot.org>; Sun,  5 Mar 2023 11:14:20 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.226.240])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 9B2FA19F5BA;
- Sun,  5 Mar 2023 12:14:15 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun,  5 Mar 2023 12:14:10 +0100
-Message-Id: <20230305111410.237442-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.39.2
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id urdhS75G1bxw; Sun,  5 Mar 2023 14:25:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBF2F81A81;
+	Sun,  5 Mar 2023 14:24:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBF2F81A81
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 589891BF41B
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 14:24:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32BCA60BEB
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 14:24:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32BCA60BEB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9gWKm8a1f0aZ for <buildroot@lists.busybox.net>;
+ Sun,  5 Mar 2023 14:24:57 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFA8E60644
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BFA8E60644
+ for <buildroot@buildroot.org>; Sun,  5 Mar 2023 14:24:56 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8801B1C0002;
+ Sun,  5 Mar 2023 14:24:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pYpIA-001WMS-IP; Sun, 05 Mar 2023 15:24:50 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Adrian Perez de Castro <aperez@igalia.com>
+References: <20230304221145.3222530-1-aperez@igalia.com>
+ <20230305005158.GC46585@igalia.com>
+Date: Sun, 05 Mar 2023 15:24:50 +0100
+In-Reply-To: <20230305005158.GC46585@igalia.com> (Adrian Perez de Castro's
+ message of "Sun, 5 Mar 2023 00:51:58 +0200")
+Message-ID: <87wn3v9sy5.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1678014857;
- bh=7bIxMw9LPC6Yi3fNmfmDNIMvwbV3i+Pyjj7oeRS9r7I=;
- h=From:To:Cc:Subject:Date:From;
- b=GJn4hMs2Ulbw2ZFGsckwpUnpb+g8kVK7h99atMwJSioR5qV8Tj+MiAG8Rk7K6qGaP
- cvPNeEl8yGueT9yHAQ2DdnayNFITVJ3UxU3po+ArYM8B4KCPDHo81vezsVzKhgHkdT
- kd6gTb9hPbsaN7TfURB08p0fIdmlo40NKYzLaf6ziqnYhBYLDiRPREE2JKFUNGXXUw
- EQjoXpUyU3kqml1IMgK6WeHEwBgEqYnRAKmD7t7J13BR2Z0bRTDrpukYMFktec1+Mq
- 2BMzMA26u47ezIpXSlsKtLDDVgpQE5hpKR5G/R2s4dUXBTObw/nQU2pXeGrvwBWxOZ
- /+POutgY/nffQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=GJn4hMs2
-Subject: [Buildroot] [PATCH next 1/1] package/ddrescue: bump to version 1.27
+Subject: Re: [Buildroot] [PATCH] package/wpebackend-fdo: bump to version
+ 1.14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,58 +65,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see the release announce:
-https://lists.gnu.org/archive/html/info-gnu/2023-01/msg00011.html
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch next at commit b793f3a with commands:
+ > Hi,
+ > (Added Peter in CC.)
 
-    make check-package
-    ...
-    0 warnings generated
+ > On Sun, 05 Mar 2023 00:11:45 +0200 Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-    utils/test-pkg -a -p ddrescue
-    ...
-    45 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/ddrescue/ddrescue.hash | 4 ++--
- package/ddrescue/ddrescue.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ >> This is a bugfix release which includes important fixes which solve a
+ >> memory leak and hitting a situation where the output no longer gets
+ >> updated. Release notes:
+ >> 
+ >> https://wpewebkit.org/release/wpebackend-fdo-1.14.1.html
+ >> 
+ >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ >> ---
+ >> package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ >> package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ >> 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/ddrescue/ddrescue.hash b/package/ddrescue/ddrescue.hash
-index f7c82b086b..3caec5667f 100644
---- a/package/ddrescue/ddrescue.hash
-+++ b/package/ddrescue/ddrescue.hash
-@@ -1,4 +1,4 @@
--# From https://lists.gnu.org/archive/html/info-gnu/2022-01/msg00013.html
--sha256  e513cd3a90d9810dfdd91197d40aa40f6df01597bfb5ecfdfb205de1127c551f  ddrescue-1.26.tar.lz
-+# From https://lists.gnu.org/archive/html/info-gnu/2023-01/msg00011.html
-+sha256  38c80c98c5a44f15e53663e4510097fd68d6ec20758efdf3a925037c183232eb  ddrescue-1.27.tar.lz
- # Locally computed
- sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/ddrescue/ddrescue.mk b/package/ddrescue/ddrescue.mk
-index 6d16d8701f..f4376a9340 100644
---- a/package/ddrescue/ddrescue.mk
-+++ b/package/ddrescue/ddrescue.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DDRESCUE_VERSION = 1.26
-+DDRESCUE_VERSION = 1.27
- DDRESCUE_SOURCE = ddrescue-$(DDRESCUE_VERSION).tar.lz
- DDRESCUE_SITE = http://download.savannah.gnu.org/releases/ddrescue
- DDRESCUE_LICENSE = GPL-2.0+
+ > It would be *very desirable* to have this update in stable branches as well,
+ > because this contains bug fixes which make WebKit{GTK,WPE} actually usable
+ > in some cases (e.g. long running instances).
+
+With stable branches I guess you mean our (late) upcoming LTS release,
+2023.02? 2022.02.x and 2022.11.x use wpebackend-fdo 1.12.1, but they are
+almost EOL.
+
+Committed to master (which will become 2023.02), thanks.
+
 -- 
-2.39.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
