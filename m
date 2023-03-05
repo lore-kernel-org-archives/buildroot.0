@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09A1DC61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84860C61DA4
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7F444042F;
-	Sun,  5 Mar 2023 17:40:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7F444042F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21C1C410A6;
+	Sun,  5 Mar 2023 17:40:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21C1C410A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yxl0oaMTn19p; Sun,  5 Mar 2023 17:40:05 +0000 (UTC)
+	with ESMTP id mNsLp-Zgjo4S; Sun,  5 Mar 2023 17:40:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 858A6409FB;
-	Sun,  5 Mar 2023 17:40:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 858A6409FB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E7EBE1BF488
- for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5BB4409F1;
+	Sun,  5 Mar 2023 17:40:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5BB4409F1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 109501BF865
+ for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C0BD160E66
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB6BC4033C
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0BD160E66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB6BC4033C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6bpt0EUVATQ4 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HgwWSYRRYrWO for <buildroot@lists.busybox.net>;
  Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C971160BE0
+ by smtp4.osuosl.org (Postfix) with ESMTP id B161C40334
  for <buildroot@buildroot.org>; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C971160BE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B161C40334
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B7A1B86330; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
+ id 9B24E86318; Sun,  5 Mar 2023 17:39:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 18:23:17 +0100
+Date: Sun, 5 Mar 2023 18:10:39 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 0e2cab4bdb4e7f410ad45fa739779225858ad99f
-X-Git-Newrev: b570774e0958f9f3452f1fa223924447e37285ff
+X-Git-Oldrev: 3e3ac87a9b6839126fc8a8ff33985d9a44039177
+X-Git-Newrev: 7f66598865f1fede86327967608afee46caec50c
 X-Patchwork-Hint: ignore
-Message-Id: <20230305173947.B7A1B86330@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] boot/opensbi: fix build
- with empty OPENSBI_PLAT
+Message-Id: <20230305173947.9B24E86318@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/libmodsecurity:
+ needs dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b570774e0958f9f3452f1fa223924447e37285ff
+commit: https://git.buildroot.net/buildroot/commit/?id=7f66598865f1fede86327967608afee46caec50c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Fix the following build failure when OPENSBI_PLAT is empty raised since
-commit 9b5b7165deb91bad3cdb1ea0dd8f940eff75f3a9:
+Commit 9fc652a373034118535397fdd4042ab9f8fd7adf was incomplete as
+mbedtls can be pulled in libcurl through libssh2 resulting in the
+following build failure:
 
-/usr/bin/install -m 0644 -D /nvmedata/autobuild/instance-4/output-1/build/opensbi-0.9/build/platform//firmware/fw_jump.bin /nvmedata/autobuild/instance-4/output-1/images/fw_jump.bin
-/usr/bin/install: cannot stat '/nvmedata/autobuild/instance-4/output-1/build/opensbi-0.9/build/platform//firmware/fw_jump.bin': No such file or directory
+/home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/powerpc64le-buildroot-linux-musl/11.3.0/../../../../powerpc64le-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-4/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/lib//libmbedcrypto.a(md5.c.o): in function `mbedtls_md5_init':
+md5.c:(.text+0x0): multiple definition of `mbedtls_md5_init'; ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x0): first defined here
 
 Fixes:
- - http://autobuild.buildroot.org/results/8033327f090e4a3d84a7fce1f62b14fdf89dbd89
+ - http://autobuild.buildroot.org/results/4c235e46188f23d1a48297f4e5942cec7b25959a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bd061466f90e3f17d47d4e1641590d60c07a6cac)
+(cherry picked from commit 97bdc0616c6027fe4b92bfa80dd9e7d43df20505)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/opensbi/opensbi.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmodsecurity/Config.in    | 14 +++++++-------
+ package/nginx-modsecurity/Config.in | 11 ++++-------
+ 2 files changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 06ec87b2c3..dd113a0bf8 100644
---- a/boot/opensbi/opensbi.mk
-+++ b/boot/opensbi/opensbi.mk
-@@ -71,6 +71,7 @@ OPENSBI_INSTALL_IMAGES = YES
- OPENSBI_FW_IMAGES += payload
- endif
+diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
+index b15d808759..69bb0494cc 100644
+--- a/package/libmodsecurity/Config.in
++++ b/package/libmodsecurity/Config.in
+@@ -2,8 +2,10 @@ config BR2_PACKAGE_LIBMODSECURITY
+ 	bool "libmodsecurity"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# libmodsecurity embeds several mbedtls source files
+-	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS)
++	# libmodsecurity embeds several mbedtls source files, causing
++	# various issues when static linking and other dependencies of
++	# libmodsecurity in turn use mbedtls
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  Libmodsecurity is one component of the ModSecurity
+@@ -17,8 +19,6 @@ config BR2_PACKAGE_LIBMODSECURITY
  
-+ifneq ($(OPENSBI_PLAT),)
- define OPENSBI_INSTALL_IMAGES_CMDS
- 	$(foreach f,$(OPENSBI_FW_IMAGES),\
- 		$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_$(f).bin \
-@@ -79,6 +80,7 @@ define OPENSBI_INSTALL_IMAGES_CMDS
- 			$(BINARIES_DIR)/fw_$(f).elf
- 	)
- endef
-+endif
+ 	  https://github.com/SpiderLabs/ModSecurity
  
- # libsbi.a is not a library meant to be linked in user-space code, but
- # with bare metal code, which is why we don't install it in
+-comment "libmodsecurity needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "libmodsecurity needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
++comment "libmodsecurity needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
+index 5cbe57a866..0bbf05fad9 100644
+--- a/package/nginx-modsecurity/Config.in
++++ b/package/nginx-modsecurity/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
+-	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS) # libmodsecurity
++	depends on !BR2_STATIC_LIBS # libmodsecurity
+ 	select BR2_PACKAGE_LIBMODSECURITY
+ 	help
+ 	  The ModSecurity-nginx connector is the connection
+@@ -12,10 +12,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 
+ 	  https://github.com/SpiderLabs/ModSecurity-nginx
+ 
+-comment "nginx-modsecurity needs a toolchain w/ C++, threads"
++comment "nginx-modsecurity needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "nginx-modsecurity needs a toolchain w/ dynamic library"
+-	depends on BR2_PACKAGE_NGINX_HTTP
+-	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
