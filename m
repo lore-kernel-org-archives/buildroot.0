@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E8D1C61DA4
-	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:42:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56560C61DA4
+	for <buildroot@archiver.kernel.org>; Sun,  5 Mar 2023 17:43:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 225F840A00;
-	Sun,  5 Mar 2023 17:42:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 225F840A00
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF418401D1;
+	Sun,  5 Mar 2023 17:43:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF418401D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id doraN3zi2Pel; Sun,  5 Mar 2023 17:42:49 +0000 (UTC)
+	with ESMTP id M_qeik7tXm-o; Sun,  5 Mar 2023 17:43:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 248DF410DC;
-	Sun,  5 Mar 2023 17:42:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 248DF410DC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B6421BF488
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF107403AC;
+	Sun,  5 Mar 2023 17:43:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF107403AC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 319521BF865
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1280960E1D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AF0F400F3
  for <buildroot@lists.busybox.net>; Sun,  5 Mar 2023 17:40:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1280960E1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AF0F400F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5FSWYrzIIjOR for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J9VBVVP7opQE for <buildroot@lists.busybox.net>;
  Sun,  5 Mar 2023 17:40:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C55660BE0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1369C401D8
  for <buildroot@buildroot.org>; Sun,  5 Mar 2023 17:40:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C55660BE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1369C401D8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D14386561; Sun,  5 Mar 2023 17:40:58 +0000 (UTC)
+ id 0304D864FF; Sun,  5 Mar 2023 17:40:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Mar 2023 18:23:24 +0100
+Date: Sun, 5 Mar 2023 18:21:52 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9f019825b801223d654c814cc8e987ef803291f8
-X-Git-Newrev: 8c0a59f6fe8a7d39c7ea5c3a92d3acd65337e292
+X-Git-Oldrev: 05e97cdf8520ff0b9d3a81f0426b388c683790a9
+X-Git-Newrev: 9f019825b801223d654c814cc8e987ef803291f8
 X-Patchwork-Hint: ignore
-Message-Id: <20230305174058.0D14386561@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] boot/opensbi: fix build
- with empty OPENSBI_PLAT
+Message-Id: <20230305174058.0304D864FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] boot/at91dataflashboot:
+ disable stack-protector
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c0a59f6fe8a7d39c7ea5c3a92d3acd65337e292
+commit: https://git.buildroot.net/buildroot/commit/?id=9f019825b801223d654c814cc8e987ef803291f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure when OPENSBI_PLAT is empty raised since
-commit 9b5b7165deb91bad3cdb1ea0dd8f940eff75f3a9:
+Disable stack-protector to avoid the following build failure:
 
-/usr/bin/install -m 0644 -D /nvmedata/autobuild/instance-4/output-1/build/opensbi-0.9/build/platform//firmware/fw_jump.bin /nvmedata/autobuild/instance-4/output-1/images/fw_jump.bin
-/usr/bin/install: cannot stat '/nvmedata/autobuild/instance-4/output-1/build/opensbi-0.9/build/platform//firmware/fw_jump.bin': No such file or directory
+/home/buildroot/autobuild/instance-1/output-1/host/bin/arm-buildroot-linux-gnueabi-ld -T elf32-littlearm.lds -Ttext 0 -n -o DataflashBoot-1.05.out objs/cstartup_ram.o objs/at45.o objs/com.o objs/dataflash.o objs/div0.o objs/init.o objs/main.o objs/stdio.o objs/asm_isr.o objs/jump.o objs/_udivsi3.o objs/_umodsi3.o objs/led.o
+/home/buildroot/autobuild/instance-1/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: objs/main.o: in function `main':
+main.c:(.text.startup+0x834): undefined reference to `__stack_chk_guard'
 
 Fixes:
- - http://autobuild.buildroot.org/results/8033327f090e4a3d84a7fce1f62b14fdf89dbd89
+ - http://autobuild.buildroot.org/results/502c54be4978e628724d72ee2a75d4c5e0a6ace8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bd061466f90e3f17d47d4e1641590d60c07a6cac)
+(cherry picked from commit d868d09d3a0c0db2c5112964139e5ecae8b1da51)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/opensbi/opensbi.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ boot/at91dataflashboot/at91dataflashboot.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 8e055633a8..c99dc8f674 100644
---- a/boot/opensbi/opensbi.mk
-+++ b/boot/opensbi/opensbi.mk
-@@ -70,6 +70,7 @@ OPENSBI_INSTALL_IMAGES = YES
- OPENSBI_FW_IMAGES += payload
- endif
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 0ad8b6fc44..c66f27e343 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -12,7 +12,8 @@ AT91DATAFLASHBOOT_INSTALL_TARGET = NO
+ AT91DATAFLASHBOOT_INSTALL_IMAGES = YES
  
-+ifneq ($(OPENSBI_PLAT),)
- define OPENSBI_INSTALL_IMAGES_CMDS
- 	$(foreach f,$(OPENSBI_FW_IMAGES),\
- 		$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_$(f).bin \
-@@ -78,6 +79,7 @@ define OPENSBI_INSTALL_IMAGES_CMDS
- 			$(BINARIES_DIR)/fw_$(f).elf
- 	)
+ define AT91DATAFLASHBOOT_BUILD_CMDS
+-	make -C $(@D) CROSS_COMPILE=$(TARGET_CROSS)
++	make -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) \
++		CFLAGS="$(TARGET_CFLAGS) -fno-stack-protector"
  endef
-+endif
  
- # libsbi.a is not a library meant to be linked in user-space code, but
- # with bare metal code, which is why we don't install it in
+ define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
