@@ -1,92 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BC4FC6FD19
-	for <buildroot@archiver.kernel.org>; Mon,  6 Mar 2023 17:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD291C61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Mar 2023 18:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F51A41684;
-	Mon,  6 Mar 2023 17:31:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F51A41684
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39C9D40116;
+	Mon,  6 Mar 2023 18:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39C9D40116
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id erUrEnJfE6pM; Mon,  6 Mar 2023 17:30:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RwHMsqsB6py1; Mon,  6 Mar 2023 18:41:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B987B41619;
-	Mon,  6 Mar 2023 17:30:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B987B41619
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B0A361BF296
- for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 17:30:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74670404F0;
+	Mon,  6 Mar 2023 18:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74670404F0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CE181BF34D
+ for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 18:41:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96423415E3
- for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 17:30:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96423415E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43F5F6100C
+ for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 18:41:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43F5F6100C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q1ggtNvm8-HV for <buildroot@lists.busybox.net>;
- Mon,  6 Mar 2023 17:30:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC3B841619
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com
- [IPv6:2607:f8b0:4864:20::82f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BC3B841619
- for <buildroot@buildroot.org>; Mon,  6 Mar 2023 17:30:55 +0000 (UTC)
-Received: by mail-qt1-x82f.google.com with SMTP id l13so11425446qtv.3
- for <buildroot@buildroot.org>; Mon, 06 Mar 2023 09:30:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1678123854;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=aqqIlG2ZYP9RNQ20ki0sHpXJS7V8vUNtEIR0MFmNiiY=;
- b=seM9FC15tp1NPRAcD0YKYlpMKsblkOyclFnPJunw8cFjIlIq+qpm/pmIBKh24Tu65A
- btO1RVLcVz3jxQ/FdYTofc/T7sixjkFDmhvGn+8i6wfUgiKMD7h14steQ8pX3z6YbMca
- DNMjpNPgYZjn/DPXaOrbdpl3lcNX6L78B8qQFaNCc3/FyRBaWMyjoxyiUxqxF/B8RUNW
- OlSuX8G5EIdBNht9qtfjkjHvjYAA/r0honai5g9iNgCMKjyVUrFVKNM3LuGhtSWkenH0
- qLgzXXt0rm+CZUL/LodBb1j8VttOc4lOE+aT0S8azldvF1jaWPG/sUbRQWXNQSamOcKe
- VgdQ==
-X-Gm-Message-State: AO0yUKX01H6fBCkhWjY5mK3PJQPKiYAmmAp6XUVJXtSjNK68U5VjB5JI
- kjfG0XK2/2kSeMT32Pu/cOA=
-X-Google-Smtp-Source: AK7set+HWyT/tbPumytmfjBwxqYw+IZ5lh7Ow4QypHInofjoXM/J3K3vF78ZhuwEuQkM5j4T2Cp9YQ==
-X-Received: by 2002:a05:622a:14c6:b0:3bf:c04a:8d47 with SMTP id
- u6-20020a05622a14c600b003bfc04a8d47mr15760753qtx.18.1678123854520; 
- Mon, 06 Mar 2023 09:30:54 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
- by smtp.googlemail.com with ESMTPSA id
- g66-20020a37b645000000b00743049c2b15sm7829274qkf.66.2023.03.06.09.30.53
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 06 Mar 2023 09:30:53 -0800 (PST)
-Message-ID: <3fd8ea5a-d302-975c-b632-011ef6b26ccf@gmail.com>
-Date: Mon, 6 Mar 2023 09:30:52 -0800
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ex9Zuea0FOmP for <buildroot@lists.busybox.net>;
+ Mon,  6 Mar 2023 18:41:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FE8860FFF
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4FE8860FFF
+ for <buildroot@buildroot.org>; Mon,  6 Mar 2023 18:41:03 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.167.227.234])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id B2F615FFA7;
+ Mon,  6 Mar 2023 19:40:58 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon,  6 Mar 2023 19:40:50 +0100
+Message-Id: <20230306184050.7107-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To: Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
-References: <20230306134528.1198076-1-vfazio@xes-inc.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230306134528.1198076-1-vfazio@xes-inc.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1678123854;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=aqqIlG2ZYP9RNQ20ki0sHpXJS7V8vUNtEIR0MFmNiiY=;
- b=B8cp+2q4TjbgUa3HGfO59VRPDb1JhlRgD7G3nkPuAdjLFT2EcGhFjFdNS4DJC2LN/T
- KYduITB+IvajP8BG22y58bSwaOIulJF5Auoctr/BpLnq/LQvUyFOTjQ0ODy47mG10NL/
- t/5mrZxZdndhZfglTa7Vigygimb2J+JH94OUS28Qk3CIPjicN9W7BcWVQsIrIPPhK0LK
- x0o4xPSekAvaXxNw4YqIHciG99E1jPfqWnKDOIx5pSVtdH48NduY+LW1NOGCLmPjHzqd
- Wm0aXYCshff1KzQL5Q1BAJutKBYY0eiwrixFISao2eMankRKxAjPSzSgRIjj5iU5CtCO
- 5DOQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=B8cp+2q4
-Subject: Re: [Buildroot] [PATCH 1/1] package/ethtool: bump to version 6.2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1678128060;
+ bh=rSSCYguX+P5y3jZR8ryomp0FSOZZi3AqtBr0kReNuuo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hervKB2j6NY9g1xtoIdTmac7zOq8rUJHi8NPidY2RK1UyHPlw7LGC7TK2NmICMo4A
+ wO5n8XFDoDui+QZDx6rt8A5pBQnbzjl9A9YRPQ/t9ihyU4Jrxj38klL0+zrTsOp3i+
+ fSVqJXRtPZIovyv16Ern0T3HY1AXOfLXMXWCzc3HGj9NlgeFe7B0BKrqbb/4nDikOg
+ dtzR86q2MPPZcXr65dbJ0auuMkj2PaSOojfrAGGG8XSz7nrVAL688tRzH1G7uQP+8Q
+ T/6hd4M9+369e1tEKB0k67jQQJaisEI9TAgUTYxaR/i/YnNYddfpHnXSQfO8kVjord
+ HJXxbUZXxktjw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=hervKB2j
+Subject: [Buildroot] [PATCH next 1/1] package/unrar: bump to version 6.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,21 +70,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 3/6/23 05:45, Vincent Fazio wrote:
-> Drop our patches as they are included in the new version.
-> 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Uptream does not provide a change log.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+The package now needs a C++11 compiler. For example, the source file
+"blake2s.hpp" is using the "constexpr" keyword.
 
-Thanks Vincent!
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested on branch next at commit b793f3a, with commands:
+
+    make check-package
+    ...
+    0 warnings generated
+
+    utils/test-pkg -a -p unrar
+    ...
+    45 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ package/unrar/Config.in  | 4 +++-
+ package/unrar/unrar.hash | 2 +-
+ package/unrar/unrar.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/unrar/Config.in b/package/unrar/Config.in
+index 29696c35aa..8a3def699b 100644
+--- a/package/unrar/Config.in
++++ b/package/unrar/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_UNRAR
+ 	bool "unrar"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	help
+@@ -8,6 +9,7 @@ config BR2_PACKAGE_UNRAR
+ 
+ 	  http://www.rarlab.com/rar_add.htm
+ 
+-comment "unrar needs a toolchain w/ C++, wchar, threads"
++comment "unrar needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index 40e05a1a32..bc8f986875 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  de75b6136958173fdfc530d38a0145b72342cf0d3842bf7bb120d336602d88ed  unrarsrc-6.1.7.tar.gz
++sha256  0c2d4cbc8b34d0e3bec7b474e0f52bbcc6c4320ec089b4141223ee355f63c318  unrarsrc-6.2.6.tar.gz
+ sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  license.txt
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index fee9fb753b..f59d199558 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNRAR_VERSION = 6.1.7
++UNRAR_VERSION = 6.2.6
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+ UNRAR_SITE = https://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
+@@ -13,7 +13,7 @@ UNRAR_CPE_ID_VENDOR = rarlab
+ 
+ define UNRAR_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) CXX="$(TARGET_CXX)" STRIP="/bin/true" \
+-		CXXFLAGS="$(TARGET_CXXFLAGS) -pthread" \
++		CXXFLAGS="$(TARGET_CXXFLAGS) -pthread -std=c++11" \
+ 		LDFLAGS="$(TARGET_LDFLAGS) -pthread" -C $(@D)
+ endef
+ 
 -- 
-Florian
+2.39.2
 
 _______________________________________________
 buildroot mailing list
