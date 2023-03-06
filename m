@@ -4,54 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62AAFC64EC4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Mar 2023 21:07:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0045C6FD1A
+	for <buildroot@archiver.kernel.org>; Mon,  6 Mar 2023 21:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC32B61037;
-	Mon,  6 Mar 2023 21:07:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC32B61037
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3572E61026;
+	Mon,  6 Mar 2023 21:07:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3572E61026
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Uuv90q4vc-QJ; Mon,  6 Mar 2023 21:07:22 +0000 (UTC)
+	with ESMTP id U0fFYR6TsbgM; Mon,  6 Mar 2023 21:07:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 046EB6102F;
-	Mon,  6 Mar 2023 21:07:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 046EB6102F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6776F61029;
+	Mon,  6 Mar 2023 21:07:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6776F61029
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A79CF1BF2E4
- for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 21:07:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 016A21BF2E4
+ for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 21:07:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80CCF61029
- for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 21:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80CCF61029
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD1A861023
+ for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 21:07:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD1A861023
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Ve4Ob8fixt6 for <buildroot@lists.busybox.net>;
- Mon,  6 Mar 2023 21:07:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1D376102F
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C1D376102F
- for <buildroot@buildroot.org>; Mon,  6 Mar 2023 21:07:17 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 326FB2000C;
- Mon,  6 Mar 2023 21:07:13 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pZI37-002MQ1-2o; Mon, 06 Mar 2023 22:07:13 +0100
+ with ESMTP id wVaf59YpjJ5b for <buildroot@lists.busybox.net>;
+ Mon,  6 Mar 2023 21:07:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7EF46101C
+ for <buildroot@buildroot.org>; Mon,  6 Mar 2023 21:07:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7EF46101C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D54B08696D; Mon,  6 Mar 2023 21:07:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Christian Stewart <christian@paral.in>
-References: <20230306072558.31515-1-christian@paral.in>
-Date: Mon, 06 Mar 2023 22:07:13 +0100
-In-Reply-To: <20230306072558.31515-1-christian@paral.in> (Christian Stewart's
- message of "Sun, 5 Mar 2023 23:25:58 -0800")
-Message-ID: <878rg96132.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/rtl8821cu: switch to version
+To: buildroot@buildroot.org
+Date: Mon, 6 Mar 2023 22:06:19 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4789d37cc4c23b15a9fb95de73365b55e9fbd1aa
+X-Git-Newrev: cde69c668d6692114845a927c8c5534ed78019db
+X-Patchwork-Hint: ignore
+Message-Id: <20230306210730.D54B08696D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8821cu: switch to version
  20210916
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -64,41 +57,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cde69c668d6692114845a927c8c5534ed78019db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The author of the 8821cu repository has requested that we switch to a newer
- > major version of the driver located at 8821cu-20210916:
+The author of the 8821cu repository has requested that we switch to a newer
+major version of the driver located at 8821cu-20210916:
 
- > https://github.com/morrownr/8821cu-20210118/pull/93#issuecomment-1452675897
+https://github.com/morrownr/8821cu-20210118/pull/93#issuecomment-1452675897
 
- > Switch to that new repository.
+Switch to that new repository.
 
- > Fixes a build issue against PowerPC64.
+Fixes a build issue against PowerPC64.
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtl8821cu/rtl8821cu.hash | 2 +-
+ package/rtl8821cu/rtl8821cu.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > ---
-
- > v1 -> v2:
-
- >  - merged PR fixing PowerPC64: https://github.com/morrownr/8821cu-20210916/pull/73
- >  - supersedes:
- > https://patchwork.ozlabs.org/project/buildroot/patch/20230302151859.400567-1-giulio.benetti@benettiengineering.com/
-
- > Signed-off-by: Christian Stewart <christian@paral.in>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
+index efb9871472..e2d83adc0f 100644
+--- a/package/rtl8821cu/rtl8821cu.hash
++++ b/package/rtl8821cu/rtl8821cu.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  09b9fb4160003502d564d0d0d85d6f19b8b6d1627d1a339b3ddfca6a948d84fb  rtl8821cu-86cc5ceb7c28b9b997838e1c796847f6c395c382.tar.gz
++sha256  1d090da292c3f9322603846467a80278670211fcde3354dcabfe32c449992493  rtl8821cu-69c903b75bde36293c66b25c051916a74dbadf58.tar.gz
+ sha256  af54d00efc57cfce664171ac8be2a20c0f290b1b5c1a67bb2eba7b6380276c4e  LICENSE
+diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
+index 97f50d9633..b3e4ad3fc8 100644
+--- a/package/rtl8821cu/rtl8821cu.mk
++++ b/package/rtl8821cu/rtl8821cu.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-RTL8821CU_VERSION = 86cc5ceb7c28b9b997838e1c796847f6c395c382
+-RTL8821CU_SITE = $(call github,morrownr,8821cu-20210118,$(RTL8821CU_VERSION))
++RTL8821CU_VERSION = 69c903b75bde36293c66b25c051916a74dbadf58
++RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
+ RTL8821CU_LICENSE = GPL-2.0
+ RTL8821CU_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
