@@ -1,96 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6943C678D4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Mar 2023 11:03:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FFF6C61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Mar 2023 13:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38C8881437;
-	Mon,  6 Mar 2023 11:03:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38C8881437
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5311D40925;
+	Mon,  6 Mar 2023 13:45:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5311D40925
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QpS647m6phCG; Mon,  6 Mar 2023 11:03:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S0aDzGqi2dUi; Mon,  6 Mar 2023 13:45:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64B63813F9;
-	Mon,  6 Mar 2023 11:03:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64B63813F9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 516AD1BF3ED
- for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 11:03:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A0844092D;
+	Mon,  6 Mar 2023 13:45:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A0844092D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 075091BF358
+ for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 13:45:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B56840575
- for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 11:03:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B56840575
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2B714092D
+ for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 13:45:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2B714092D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vbpt_GJkJ9EV for <buildroot@lists.busybox.net>;
- Mon,  6 Mar 2023 11:03:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19604400C4
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19604400C4
- for <buildroot@buildroot.org>; Mon,  6 Mar 2023 11:03:00 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id cy23so36643728edb.12
- for <buildroot@buildroot.org>; Mon, 06 Mar 2023 03:03:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1678100579;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=l1Ii48fl6ws08tOqO2HB9YLvVeco79FSRHtOCmafkAM=;
- b=AWikNhROvFAyd+jg1HhKW9iM3s6D1gRPoxx7tZDBgmDpaeDQ55pMMTEsIQxiyIfkmD
- P2Y6+XGXE6le2YiPOE46rnhYB2Id/Vd4qJ+Jn95QSm11Atz7YeC77EVcNDG/9HWMohjh
- WmelR9ALqPCoZfm5gFQzjRnR3oY/W31NHuCPrM2VCwjTJpAoeFW28BTVVcrg7Ze61QJ3
- DA/MeCqQyY9+1DcS2QCPl1XtcoGYfS1Ji3h94RqpswUrqfMRmkp8TGiTHBAkC1VJKk0h
- A/ATNDtVcukHCSISlWMloIci+G+JDJ0SKTCmv87JaoeP3XSnJqKnwpahQmUMgY6FsBKl
- faxg==
-X-Gm-Message-State: AO0yUKWL48+BUW46egrsTyiNv0RZMdtXaKBL0ClBJYfT4OljggF1jB+m
- M3a4QqH12A2OAEOPWPa072VdP7XCBsFqiS9orzQ=
-X-Google-Smtp-Source: AK7set9dVibdNDput5ZoOo2SrMmODBzcSZoT/EjythwbsiHPYjkCHOH57ka3VM9Sc36pnJu+71ytlQ==
-X-Received: by 2002:aa7:dd06:0:b0:4aa:a4f1:3edb with SMTP id
- i6-20020aa7dd06000000b004aaa4f13edbmr9123421edv.29.1678100578543; 
- Mon, 06 Mar 2023 03:02:58 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- a25-20020a509b59000000b004c0eac41829sm4899445edj.63.2023.03.06.03.02.57
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 06 Mar 2023 03:02:57 -0800 (PST)
-Message-ID: <33536034-5b9e-e1f9-86eb-b64bb4691940@mind.be>
-Date: Mon, 6 Mar 2023 12:02:55 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0LBrCUaH6LPW for <buildroot@lists.busybox.net>;
+ Mon,  6 Mar 2023 13:45:39 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C96B340925
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C96B340925
+ for <buildroot@buildroot.org>; Mon,  6 Mar 2023 13:45:38 +0000 (UTC)
+Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
+ by mail.xes-mad.com (Postfix) with ESMTP id A02DC20170;
+ Mon,  6 Mar 2023 07:45:37 -0600 (CST)
+From: Vincent Fazio <vfazio@xes-inc.com>
+To: buildroot@buildroot.org
+Date: Mon,  6 Mar 2023 07:45:28 -0600
+Message-Id: <20230306134528.1198076-1-vfazio@xes-inc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-GB
-To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
-References: <Y/4etrPX5MZiUpdq@donbot>
- <20230228155528.2430203-1-thomas.devoogdt@barco.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230228155528.2430203-1-thomas.devoogdt@barco.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1678100579;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=l1Ii48fl6ws08tOqO2HB9YLvVeco79FSRHtOCmafkAM=;
- b=Nm+wmmwXqtUk499tWSdxmNQUdVjQDxpL9x7gStCaLUn+cWsM5BabB3Ho23HIx3bX2Y
- DdKi/g0ZvStIo1vtdJ1tMbTvjPNMs7YzV6mNN1j6jfmbsghTnsziSoJTxI+cZruARNuK
- fhVerNHTd1tB+WXWS2WdIuqwSo1E/ZG6iZOGTndOQnzEbzzu3IPW3dJyOhE2aL7SLpxu
- nOrTQaMYwueqfHK/nyn9FpnIad2aba6pgnxBgwDm2R8FX19WerAkFdCMOrpdMuhCb8hD
- XBSTf1KyemQp1SfpWBmsvh1VeNLdaZ4IlFX5grEx+dk8frcfzyysXkxeMKbJR5317N3m
- NU7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Nm+wmmwX
-Subject: Re: [Buildroot] [PATCH v3 1/3] pkg-cmake: add option to select the
- Ninja generator
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=xes-inc.com; s=mail; 
+ t=1678110337; bh=W/lWool2Pc0VywFRDprtK9DpjAUCenKRTpbwM8RUCNI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=rLvYTNg5gQCaqhYopccMdQxyW7Kg75pasTisied44bMHERZOX1fQIDVc11k7qW32m
+ r1eCCJmQF1AuB04POkAkQC4JQ0/6bgNYgmMKWmbh8HeaU54GzU/UhTj57ToCtmBgG4
+ 3Tu+OxZWl+0EF789T76ZgflsdDrtYiL9Mar4Ivic=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
+ header.a=rsa-sha256 header.s=mail header.b=rLvYTNg5
+Subject: [Buildroot] [PATCH 1/1] package/ethtool: bump to version 6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,48 +66,617 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, John Keeping <john@metanate.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>, Vincent Fazio <vfazio@xes-inc.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Thomas,
+Drop our patches as they are included in the new version.
 
-On 28/02/2023 16:55, Thomas Devoogdt wrote:
-[snip]
->   ifndef $(2)_BUILD_CMDS
->   ifeq ($(4),target)
->   define $(2)_BUILD_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
-> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) $$($$(PKG)_GENERATOR_PARALLEL) $$($$(PKG)_BUILD_OPTS)
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+---
+ package/ethtool/0001-uapi-Bring-in-if.h.patch | 483 ------------------
+ ...2-marvell.c-Fix-build-with-musl-libc.patch |  71 ---
+ package/ethtool/ethtool.hash                  |   2 +-
+ package/ethtool/ethtool.mk                    |   2 +-
+ 4 files changed, 2 insertions(+), 556 deletions(-)
+ delete mode 100644 package/ethtool/0001-uapi-Bring-in-if.h.patch
+ delete mode 100644 package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch
 
-  To avoid breaking existing (external) packages, I would add something like:
+diff --git a/package/ethtool/0001-uapi-Bring-in-if.h.patch b/package/ethtool/0001-uapi-Bring-in-if.h.patch
+deleted file mode 100644
+index faf264f61f..0000000000
+--- a/package/ethtool/0001-uapi-Bring-in-if.h.patch
++++ /dev/null
+@@ -1,483 +0,0 @@
+-From fd02caa75918401f2cb75af1f2a181c1959e070d Mon Sep 17 00:00:00 2001
+-From: Florian Fainelli <f.fainelli@gmail.com>
+-Date: Sat, 14 Jan 2023 08:34:09 -0800
+-Subject: [PATCH] uapi: Bring in if.h
+-
+-Bring in if.h from commit eec517cdb481 ("net: Add IF_OPER_TESTING") as
+-well as uapi/linux/hdlc/ioctl.h. Ensure that we define all of the
+-necessary guards to provide updated definitions of ifmap, ifreq and
+-IFNAMSIZ. This resolves build issues with kernel headers < 4.11 which
+-lacked 2618be7dccf8739b89e1906b64bd8d551af351e6 ("uapi: fix linux/if.h
+-userspace compilation errors").
+-
+-Fixes: 1fa60003a8b8 ("misc: header includes cleanup")
+-Reported-by: Markus Mayer <mmayer@broadcom.com>
+-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+-Message-Id: <20230114163411.3290201-2-f.fainelli@gmail.com>
+-
+-[Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20230114163411.3290201-2-f.fainelli@gmail.com/]
+-[vfazio@gmail.com: fix whitespace issues]
+-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+----
+- Makefile.am             |   6 +-
+- internal.h              |   7 +-
+- uapi/linux/hdlc/ioctl.h |  94 +++++++++++++
+- uapi/linux/if.h         | 296 ++++++++++++++++++++++++++++++++++++++++
+- 4 files changed, 397 insertions(+), 6 deletions(-)
+- create mode 100644 uapi/linux/hdlc/ioctl.h
+- create mode 100644 uapi/linux/if.h
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 663f40a..691a20e 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -7,7 +7,8 @@ EXTRA_DIST = LICENSE ethtool.8 ethtool.spec.in aclocal.m4 ChangeLog autogen.sh
+- 
+- sbin_PROGRAMS = ethtool
+- ethtool_SOURCES = ethtool.c uapi/linux/ethtool.h internal.h \
+--		  uapi/linux/net_tstamp.h rxclass.c common.c common.h \
+-+		  uapi/linux/net_tstamp.h uapi/linux/if.h uapi/linux/hdlc/ioctl.h \
+-+		  rxclass.c common.c common.h \
+- 		  json_writer.c json_writer.h json_print.c json_print.h \
+- 		  list.h
+- if ETHTOOL_ENABLE_PRETTY_DUMP
+-@@ -43,7 +44,8 @@ ethtool_SOURCES += \
+- 		  netlink/desc-rtnl.c netlink/cable_test.c netlink/tunnels.c \
+- 		  uapi/linux/ethtool_netlink.h \
+- 		  uapi/linux/netlink.h uapi/linux/genetlink.h \
+--		  uapi/linux/rtnetlink.h uapi/linux/if_link.h
+-+		  uapi/linux/rtnetlink.h uapi/linux/if_link.h \
+-+		  uapi/linux/if.h uapi/linux/hdlc/ioctl.h
+- AM_CPPFLAGS += @MNL_CFLAGS@
+- LDADD += @MNL_LIBS@
+- endif
+-diff --git a/internal.h b/internal.h
+-index b80f77a..3923719 100644
+---- a/internal.h
+-+++ b/internal.h
+-@@ -21,6 +21,9 @@
+- #include <unistd.h>
+- #include <endian.h>
+- #include <sys/ioctl.h>
+-+#define __UAPI_DEF_IF_IFNAMSIZ	1
+-+#define __UAPI_DEF_IF_IFMAP	1
+-+#define __UAPI_DEF_IF_IFREQ	1
+- #include <linux/if.h>
+- 
+- #include "json_writer.h"
+-@@ -52,10 +55,6 @@ typedef int32_t s32;
+- #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
+- #endif
+- 
+--#ifndef ALTIFNAMSIZ
+--#define ALTIFNAMSIZ 128
+--#endif
+--
+- #include <linux/ethtool.h>
+- #include <linux/net_tstamp.h>
+- 
+-diff --git a/uapi/linux/hdlc/ioctl.h b/uapi/linux/hdlc/ioctl.h
+-new file mode 100644
+-index 0000000..b06341a
+---- /dev/null
+-+++ b/uapi/linux/hdlc/ioctl.h
+-@@ -0,0 +1,94 @@
+-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-+#ifndef __HDLC_IOCTL_H__
+-+#define __HDLC_IOCTL_H__
+-+
+-+
+-+#define GENERIC_HDLC_VERSION 4	/* For synchronization with sethdlc utility */
+-+
+-+#define CLOCK_DEFAULT   0	/* Default setting */
+-+#define CLOCK_EXT	1	/* External TX and RX clock - DTE */
+-+#define CLOCK_INT	2	/* Internal TX and RX clock - DCE */
+-+#define CLOCK_TXINT	3	/* Internal TX and external RX clock */
+-+#define CLOCK_TXFROMRX	4	/* TX clock derived from external RX clock */
+-+
+-+
+-+#define ENCODING_DEFAULT	0 /* Default setting */
+-+#define ENCODING_NRZ		1
+-+#define ENCODING_NRZI		2
+-+#define ENCODING_FM_MARK	3
+-+#define ENCODING_FM_SPACE	4
+-+#define ENCODING_MANCHESTER	5
+-+
+-+
+-+#define PARITY_DEFAULT		0 /* Default setting */
+-+#define PARITY_NONE		1 /* No parity */
+-+#define PARITY_CRC16_PR0	2 /* CRC16, initial value 0x0000 */
+-+#define PARITY_CRC16_PR1	3 /* CRC16, initial value 0xFFFF */
+-+#define PARITY_CRC16_PR0_CCITT	4 /* CRC16, initial 0x0000, ITU-T version */
+-+#define PARITY_CRC16_PR1_CCITT	5 /* CRC16, initial 0xFFFF, ITU-T version */
+-+#define PARITY_CRC32_PR0_CCITT	6 /* CRC32, initial value 0x00000000 */
+-+#define PARITY_CRC32_PR1_CCITT	7 /* CRC32, initial value 0xFFFFFFFF */
+-+
+-+#define LMI_DEFAULT		0 /* Default setting */
+-+#define LMI_NONE		1 /* No LMI, all PVCs are static */
+-+#define LMI_ANSI		2 /* ANSI Annex D */
+-+#define LMI_CCITT		3 /* ITU-T Annex A */
+-+#define LMI_CISCO		4 /* The "original" LMI, aka Gang of Four */
+-+
+-+#ifndef __ASSEMBLY__
+-+
+-+typedef struct {
+-+	unsigned int clock_rate; /* bits per second */
+-+	unsigned int clock_type; /* internal, external, TX-internal etc. */
+-+	unsigned short loopback;
+-+} sync_serial_settings;          /* V.35, V.24, X.21 */
+-+
+-+typedef struct {
+-+	unsigned int clock_rate; /* bits per second */
+-+	unsigned int clock_type; /* internal, external, TX-internal etc. */
+-+	unsigned short loopback;
+-+	unsigned int slot_map;
+-+} te1_settings;                  /* T1, E1 */
+-+
+-+typedef struct {
+-+	unsigned short encoding;
+-+	unsigned short parity;
+-+} raw_hdlc_proto;
+-+
+-+typedef struct {
+-+	unsigned int t391;
+-+	unsigned int t392;
+-+	unsigned int n391;
+-+	unsigned int n392;
+-+	unsigned int n393;
+-+	unsigned short lmi;
+-+	unsigned short dce; /* 1 for DCE (network side) operation */
+-+} fr_proto;
+-+
+-+typedef struct {
+-+	unsigned int dlci;
+-+} fr_proto_pvc;          /* for creating/deleting FR PVCs */
+-+
+-+typedef struct {
+-+	unsigned int dlci;
+-+	char master[IFNAMSIZ];	/* Name of master FRAD device */
+-+}fr_proto_pvc_info;		/* for returning PVC information only */
+-+
+-+typedef struct {
+-+    unsigned int interval;
+-+    unsigned int timeout;
+-+} cisco_proto;
+-+
+-+typedef struct {
+-+	unsigned short dce; /* 1 for DCE (network side) operation */
+-+	unsigned int modulo; /* modulo (8 = basic / 128 = extended) */
+-+	unsigned int window; /* frame window size */
+-+	unsigned int t1; /* timeout t1 */
+-+	unsigned int t2; /* timeout t2 */
+-+	unsigned int n2; /* frame retry counter */
+-+} x25_hdlc_proto;
+-+
+-+/* PPP doesn't need any info now - supply length = 0 to ioctl */
+-+
+-+#endif /* __ASSEMBLY__ */
+-+#endif /* __HDLC_IOCTL_H__ */
+-diff --git a/uapi/linux/if.h b/uapi/linux/if.h
+-new file mode 100644
+-index 0000000..75ee7f4
+---- /dev/null
+-+++ b/uapi/linux/if.h
+-@@ -0,0 +1,296 @@
+-+/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+-+/*
+-+ * INET		An implementation of the TCP/IP protocol suite for the LINUX
+-+ *		operating system.  INET is implemented using the  BSD Socket
+-+ *		interface as the means of communication with the user level.
+-+ *
+-+ *		Global definitions for the INET interface module.
+-+ *
+-+ * Version:	@(#)if.h	1.0.2	04/18/93
+-+ *
+-+ * Authors:	Original taken from Berkeley UNIX 4.3, (c) UCB 1982-1988
+-+ *		Ross Biro
+-+ *		Fred N. van Kempen, <waltje@uWalt.NL.Mugnet.ORG>
+-+ *
+-+ *		This program is free software; you can redistribute it and/or
+-+ *		modify it under the terms of the GNU General Public License
+-+ *		as published by the Free Software Foundation; either version
+-+ *		2 of the License, or (at your option) any later version.
+-+ */
+-+#ifndef _LINUX_IF_H
+-+#define _LINUX_IF_H
+-+
+-+#include <linux/libc-compat.h>          /* for compatibility with glibc */
+-+#include <linux/types.h>		/* for "__kernel_caddr_t" et al	*/
+-+#include <linux/socket.h>		/* for "struct sockaddr" et al	*/
+-+		/* for "__user" et al           */
+-+
+-+#include <sys/socket.h>			/* for struct sockaddr.		*/
+-+
+-+#if __UAPI_DEF_IF_IFNAMSIZ
+-+#define	IFNAMSIZ	16
+-+#endif /* __UAPI_DEF_IF_IFNAMSIZ */
+-+#define	IFALIASZ	256
+-+#define	ALTIFNAMSIZ	128
+-+#include <linux/hdlc/ioctl.h>
+-+
+-+/* For glibc compatibility. An empty enum does not compile. */
+-+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO != 0 || \
+-+    __UAPI_DEF_IF_NET_DEVICE_FLAGS != 0
+-+/**
+-+ * enum net_device_flags - &struct net_device flags
+-+ *
+-+ * These are the &struct net_device flags, they can be set by drivers, the
+-+ * kernel and some can be triggered by userspace. Userspace can query and
+-+ * set these flags using userspace utilities but there is also a sysfs
+-+ * entry available for all dev flags which can be queried and set. These flags
+-+ * are shared for all types of net_devices. The sysfs entries are available
+-+ * via /sys/class/net/<dev>/flags. Flags which can be toggled through sysfs
+-+ * are annotated below, note that only a few flags can be toggled and some
+-+ * other flags are always preserved from the original net_device flags
+-+ * even if you try to set them via sysfs. Flags which are always preserved
+-+ * are kept under the flag grouping @IFF_VOLATILE. Flags which are __volatile__
+-+ * are annotated below as such.
+-+ *
+-+ * You should have a pretty good reason to be extending these flags.
+-+ *
+-+ * @IFF_UP: interface is up. Can be toggled through sysfs.
+-+ * @IFF_BROADCAST: broadcast address valid. Volatile.
+-+ * @IFF_DEBUG: turn on debugging. Can be toggled through sysfs.
+-+ * @IFF_LOOPBACK: is a loopback net. Volatile.
+-+ * @IFF_POINTOPOINT: interface is has p-p link. Volatile.
+-+ * @IFF_NOTRAILERS: avoid use of trailers. Can be toggled through sysfs.
+-+ *	Volatile.
+-+ * @IFF_RUNNING: interface RFC2863 OPER_UP. Volatile.
+-+ * @IFF_NOARP: no ARP protocol. Can be toggled through sysfs. Volatile.
+-+ * @IFF_PROMISC: receive all packets. Can be toggled through sysfs.
+-+ * @IFF_ALLMULTI: receive all multicast packets. Can be toggled through
+-+ *	sysfs.
+-+ * @IFF_MASTER: master of a load balancer. Volatile.
+-+ * @IFF_SLAVE: slave of a load balancer. Volatile.
+-+ * @IFF_MULTICAST: Supports multicast. Can be toggled through sysfs.
+-+ * @IFF_PORTSEL: can set media type. Can be toggled through sysfs.
+-+ * @IFF_AUTOMEDIA: auto media select active. Can be toggled through sysfs.
+-+ * @IFF_DYNAMIC: dialup device with changing addresses. Can be toggled
+-+ *	through sysfs.
+-+ * @IFF_LOWER_UP: driver signals L1 up. Volatile.
+-+ * @IFF_DORMANT: driver signals dormant. Volatile.
+-+ * @IFF_ECHO: echo sent packets. Volatile.
+-+ */
+-+enum net_device_flags {
+-+/* for compatibility with glibc net/if.h */
+-+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS
+-+	IFF_UP				= 1<<0,  /* sysfs */
+-+	IFF_BROADCAST			= 1<<1,  /* __volatile__ */
+-+	IFF_DEBUG			= 1<<2,  /* sysfs */
+-+	IFF_LOOPBACK			= 1<<3,  /* __volatile__ */
+-+	IFF_POINTOPOINT			= 1<<4,  /* __volatile__ */
+-+	IFF_NOTRAILERS			= 1<<5,  /* sysfs */
+-+	IFF_RUNNING			= 1<<6,  /* __volatile__ */
+-+	IFF_NOARP			= 1<<7,  /* sysfs */
+-+	IFF_PROMISC			= 1<<8,  /* sysfs */
+-+	IFF_ALLMULTI			= 1<<9,  /* sysfs */
+-+	IFF_MASTER			= 1<<10, /* __volatile__ */
+-+	IFF_SLAVE			= 1<<11, /* __volatile__ */
+-+	IFF_MULTICAST			= 1<<12, /* sysfs */
+-+	IFF_PORTSEL			= 1<<13, /* sysfs */
+-+	IFF_AUTOMEDIA			= 1<<14, /* sysfs */
+-+	IFF_DYNAMIC			= 1<<15, /* sysfs */
+-+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS */
+-+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO
+-+	IFF_LOWER_UP			= 1<<16, /* __volatile__ */
+-+	IFF_DORMANT			= 1<<17, /* __volatile__ */
+-+	IFF_ECHO			= 1<<18, /* __volatile__ */
+-+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO */
+-+};
+-+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO != 0 || __UAPI_DEF_IF_NET_DEVICE_FLAGS != 0 */
+-+
+-+/* for compatibility with glibc net/if.h */
+-+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS
+-+#define IFF_UP				IFF_UP
+-+#define IFF_BROADCAST			IFF_BROADCAST
+-+#define IFF_DEBUG			IFF_DEBUG
+-+#define IFF_LOOPBACK			IFF_LOOPBACK
+-+#define IFF_POINTOPOINT			IFF_POINTOPOINT
+-+#define IFF_NOTRAILERS			IFF_NOTRAILERS
+-+#define IFF_RUNNING			IFF_RUNNING
+-+#define IFF_NOARP			IFF_NOARP
+-+#define IFF_PROMISC			IFF_PROMISC
+-+#define IFF_ALLMULTI			IFF_ALLMULTI
+-+#define IFF_MASTER			IFF_MASTER
+-+#define IFF_SLAVE			IFF_SLAVE
+-+#define IFF_MULTICAST			IFF_MULTICAST
+-+#define IFF_PORTSEL			IFF_PORTSEL
+-+#define IFF_AUTOMEDIA			IFF_AUTOMEDIA
+-+#define IFF_DYNAMIC			IFF_DYNAMIC
+-+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS */
+-+
+-+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO
+-+#define IFF_LOWER_UP			IFF_LOWER_UP
+-+#define IFF_DORMANT			IFF_DORMANT
+-+#define IFF_ECHO			IFF_ECHO
+-+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO */
+-+
+-+#define IFF_VOLATILE	(IFF_LOOPBACK|IFF_POINTOPOINT|IFF_BROADCAST|IFF_ECHO|\
+-+		IFF_MASTER|IFF_SLAVE|IFF_RUNNING|IFF_LOWER_UP|IFF_DORMANT)
+-+
+-+#define IF_GET_IFACE	0x0001		/* for querying only */
+-+#define IF_GET_PROTO	0x0002
+-+
+-+/* For definitions see hdlc.h */
+-+#define IF_IFACE_V35	0x1000		/* V.35 serial interface	*/
+-+#define IF_IFACE_V24	0x1001		/* V.24 serial interface	*/
+-+#define IF_IFACE_X21	0x1002		/* X.21 serial interface	*/
+-+#define IF_IFACE_T1	0x1003		/* T1 telco serial interface	*/
+-+#define IF_IFACE_E1	0x1004		/* E1 telco serial interface	*/
+-+#define IF_IFACE_SYNC_SERIAL 0x1005	/* can't be set by software	*/
+-+#define IF_IFACE_X21D   0x1006          /* X.21 Dual Clocking (FarSite) */
+-+
+-+/* For definitions see hdlc.h */
+-+#define IF_PROTO_HDLC	0x2000		/* raw HDLC protocol		*/
+-+#define IF_PROTO_PPP	0x2001		/* PPP protocol			*/
+-+#define IF_PROTO_CISCO	0x2002		/* Cisco HDLC protocol		*/
+-+#define IF_PROTO_FR	0x2003		/* Frame Relay protocol		*/
+-+#define IF_PROTO_FR_ADD_PVC 0x2004	/*    Create FR PVC		*/
+-+#define IF_PROTO_FR_DEL_PVC 0x2005	/*    Delete FR PVC		*/
+-+#define IF_PROTO_X25	0x2006		/* X.25				*/
+-+#define IF_PROTO_HDLC_ETH 0x2007	/* raw HDLC, Ethernet emulation	*/
+-+#define IF_PROTO_FR_ADD_ETH_PVC 0x2008	/*  Create FR Ethernet-bridged PVC */
+-+#define IF_PROTO_FR_DEL_ETH_PVC 0x2009	/*  Delete FR Ethernet-bridged PVC */
+-+#define IF_PROTO_FR_PVC	0x200A		/* for reading PVC status	*/
+-+#define IF_PROTO_FR_ETH_PVC 0x200B
+-+#define IF_PROTO_RAW    0x200C          /* RAW Socket                   */
+-+
+-+/* RFC 2863 operational status */
+-+enum {
+-+	IF_OPER_UNKNOWN,
+-+	IF_OPER_NOTPRESENT,
+-+	IF_OPER_DOWN,
+-+	IF_OPER_LOWERLAYERDOWN,
+-+	IF_OPER_TESTING,
+-+	IF_OPER_DORMANT,
+-+	IF_OPER_UP,
+-+};
+-+
+-+/* link modes */
+-+enum {
+-+	IF_LINK_MODE_DEFAULT,
+-+	IF_LINK_MODE_DORMANT,	/* limit upward transition to dormant */
+-+	IF_LINK_MODE_TESTING,	/* limit upward transition to testing */
+-+};
+-+
+-+/*
+-+ *	Device mapping structure. I'd just gone off and designed a
+-+ *	beautiful scheme using only loadable modules with arguments
+-+ *	for driver options and along come the PCMCIA people 8)
+-+ *
+-+ *	Ah well. The get() side of this is good for WDSETUP, and it'll
+-+ *	be handy for debugging things. The set side is fine for now and
+-+ *	being very small might be worth keeping for clean configuration.
+-+ */
+-+
+-+/* for compatibility with glibc net/if.h */
+-+#if __UAPI_DEF_IF_IFMAP
+-+struct ifmap {
+-+	unsigned long mem_start;
+-+	unsigned long mem_end;
+-+	unsigned short base_addr;
+-+	unsigned char irq;
+-+	unsigned char dma;
+-+	unsigned char port;
+-+	/* 3 bytes spare */
+-+};
+-+#endif /* __UAPI_DEF_IF_IFMAP */
+-+
+-+struct if_settings {
+-+	unsigned int type;	/* Type of physical device or protocol */
+-+	unsigned int size;	/* Size of the data allocated by the caller */
+-+	union {
+-+		/* {atm/eth/dsl}_settings anyone ? */
+-+		raw_hdlc_proto		*raw_hdlc;
+-+		cisco_proto		*cisco;
+-+		fr_proto		*fr;
+-+		fr_proto_pvc		*fr_pvc;
+-+		fr_proto_pvc_info	*fr_pvc_info;
+-+		x25_hdlc_proto		*x25;
+-+
+-+		/* interface settings */
+-+		sync_serial_settings	*sync;
+-+		te1_settings		*te1;
+-+	} ifs_ifsu;
+-+};
+-+
+-+/*
+-+ * Interface request structure used for socket
+-+ * ioctl's.  All interface ioctl's must have parameter
+-+ * definitions which begin with ifr_name.  The
+-+ * remainder may be interface specific.
+-+ */
+-+
+-+/* for compatibility with glibc net/if.h */
+-+#if __UAPI_DEF_IF_IFREQ
+-+struct ifreq {
+-+#define IFHWADDRLEN	6
+-+	union
+-+	{
+-+		char	ifrn_name[IFNAMSIZ];		/* if name, e.g. "en0" */
+-+	} ifr_ifrn;
+-+
+-+	union {
+-+		struct	sockaddr ifru_addr;
+-+		struct	sockaddr ifru_dstaddr;
+-+		struct	sockaddr ifru_broadaddr;
+-+		struct	sockaddr ifru_netmask;
+-+		struct  sockaddr ifru_hwaddr;
+-+		short	ifru_flags;
+-+		int	ifru_ivalue;
+-+		int	ifru_mtu;
+-+		struct  ifmap ifru_map;
+-+		char	ifru_slave[IFNAMSIZ];	/* Just fits the size */
+-+		char	ifru_newname[IFNAMSIZ];
+-+		void *	ifru_data;
+-+		struct	if_settings ifru_settings;
+-+	} ifr_ifru;
+-+};
+-+#endif /* __UAPI_DEF_IF_IFREQ */
+-+
+-+#define ifr_name	ifr_ifrn.ifrn_name	/* interface name 	*/
+-+#define ifr_hwaddr	ifr_ifru.ifru_hwaddr	/* MAC address 		*/
+-+#define	ifr_addr	ifr_ifru.ifru_addr	/* address		*/
+-+#define	ifr_dstaddr	ifr_ifru.ifru_dstaddr	/* other end of p-p lnk	*/
+-+#define	ifr_broadaddr	ifr_ifru.ifru_broadaddr	/* broadcast address	*/
+-+#define	ifr_netmask	ifr_ifru.ifru_netmask	/* interface net mask	*/
+-+#define	ifr_flags	ifr_ifru.ifru_flags	/* flags		*/
+-+#define	ifr_metric	ifr_ifru.ifru_ivalue	/* metric		*/
+-+#define	ifr_mtu		ifr_ifru.ifru_mtu	/* mtu			*/
+-+#define ifr_map		ifr_ifru.ifru_map	/* device map		*/
+-+#define ifr_slave	ifr_ifru.ifru_slave	/* slave device		*/
+-+#define	ifr_data	ifr_ifru.ifru_data	/* for use by interface	*/
+-+#define ifr_ifindex	ifr_ifru.ifru_ivalue	/* interface index	*/
+-+#define ifr_bandwidth	ifr_ifru.ifru_ivalue    /* link bandwidth	*/
+-+#define ifr_qlen	ifr_ifru.ifru_ivalue	/* Queue length 	*/
+-+#define ifr_newname	ifr_ifru.ifru_newname	/* New name		*/
+-+#define ifr_settings	ifr_ifru.ifru_settings	/* Device/proto settings*/
+-+
+-+/*
+-+ * Structure used in SIOCGIFCONF request.
+-+ * Used to retrieve interface configuration
+-+ * for machine (useful for programs which
+-+ * must know all networks accessible).
+-+ */
+-+
+-+/* for compatibility with glibc net/if.h */
+-+#if __UAPI_DEF_IF_IFCONF
+-+struct ifconf  {
+-+	int	ifc_len;			/* size of buffer	*/
+-+	union {
+-+		char *ifcu_buf;
+-+		struct ifreq *ifcu_req;
+-+	} ifc_ifcu;
+-+};
+-+#endif /* __UAPI_DEF_IF_IFCONF */
+-+
+-+#define	ifc_buf	ifc_ifcu.ifcu_buf		/* buffer address	*/
+-+#define	ifc_req	ifc_ifcu.ifcu_req		/* array of structures	*/
+-+
+-+#endif /* _LINUX_IF_H */
+--- 
+-2.25.1
+-
+diff --git a/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch b/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch
+deleted file mode 100644
+index f13edbbe50..0000000000
+--- a/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From a26296eea68aa6c16b253f34825c9b9007269672 Mon Sep 17 00:00:00 2001
+-From: Florian Fainelli <f.fainelli@gmail.com>
+-Date: Sat, 14 Jan 2023 08:34:11 -0800
+-Subject: [PATCH] marvell.c: Fix build with musl-libc
+-
+-After commit 1fa60003a8b8 ("misc: header includes cleanup") we stopped
+-including net/if.h which resolved the proper defines to pull in
+-sys/types.h and provide a definition for u_int32_t. With musl-libc we
+-would need to define _GNU_SOURCE to ensure that sys/types.h does provide a
+-definition for u_int32_t.
+-
+-Rather, just replace u_uint{16,32}_t with the more standard
+-uint{16,32}_t types from stdint.h
+-
+-Fixes: 1fa60003a8b8 ("misc: header includes cleanup")
+-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+-
+-[Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20230114163411.3290201-4-f.fainelli@gmail.com/]
+-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+----
+- marvell.c | 34 +++++++++++++++++-----------------
+- 1 file changed, 17 insertions(+), 17 deletions(-)
+-
+-diff --git a/marvell.c b/marvell.c
+-index d3d570e..3f3aed8 100644
+---- a/marvell.c
+-+++ b/marvell.c
+-@@ -31,23 +31,23 @@ static void dump_timer(const char *name, const void *p)
+- static void dump_queue(const char *name, const void *a, int rx)
+- {
+- 	struct desc {
+--		u_int32_t		ctl;
+--		u_int32_t		next;
+--		u_int32_t		data_lo;
+--		u_int32_t		data_hi;
+--		u_int32_t		status;
+--		u_int32_t		timestamp;
+--		u_int16_t		csum2;
+--		u_int16_t		csum1;
+--		u_int16_t		csum2_start;
+--		u_int16_t		csum1_start;
+--		u_int32_t		addr_lo;
+--		u_int32_t		addr_hi;
+--		u_int32_t		count_lo;
+--		u_int32_t		count_hi;
+--		u_int32_t               byte_count;
+--		u_int32_t               csr;
+--		u_int32_t               flag;
+-+		uint32_t		ctl;
+-+		uint32_t		next;
+-+		uint32_t		data_lo;
+-+		uint32_t		data_hi;
+-+		uint32_t		status;
+-+		uint32_t		timestamp;
+-+		uint16_t		csum2;
+-+		uint16_t		csum1;
+-+		uint16_t		csum2_start;
+-+		uint16_t		csum1_start;
+-+		uint32_t		addr_lo;
+-+		uint32_t		addr_hi;
+-+		uint32_t		count_lo;
+-+		uint32_t		count_hi;
+-+		uint32_t		byte_count;
+-+		uint32_t		csr;
+-+		uint32_t		flag;
+- 	};
+- 	const struct desc *d = a;
+- 
+--- 
+-2.25.1
+-
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 609085aa5e..846ca7efc3 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  c41fc881ffa5a40432d2dd829eb44c64a49dee482e716baacf9262c64daa8f90  ethtool-6.1.tar.xz
++sha256  86df0114064d4d73f6bf72bf03e85c33964a519ee0c1d1ba65005ad2d0e570e1  ethtool-6.2.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 3381344e0a..a35e274bc4 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 6.1
++ETHTOOL_VERSION = 6.2
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
+-- 
+2.25.1
 
-$(2)_BUILD_OPTS ?= -- $(2)_MAKE_OPTS
-
-(inside the CMAKE_NINJA condition, only for make)
-
-  That way, existing packages would work unchanged (and it would remove the need 
-to change gdal and racehound in this patch).
-
-  Similarly for the environment.
-
-
-  Eventually we'll completely remove those variables, but then there should 
-still be a warning about their use, like we have for BUILDROOT_DL_DIR in 
-Makefile.legacy.
-
-
-  Regards,
-  Arnout
-
-
-[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
