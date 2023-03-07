@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E72C6FA99
-	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2DC1C678D5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:10:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EFD2600CD;
-	Tue,  7 Mar 2023 21:10:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EFD2600CD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EA8F61108;
+	Tue,  7 Mar 2023 21:10:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EA8F61108
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F6C6OHCY8GWt; Tue,  7 Mar 2023 21:10:27 +0000 (UTC)
+	with ESMTP id 3hy_HEe-lrAW; Tue,  7 Mar 2023 21:10:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF7761104;
-	Tue,  7 Mar 2023 21:10:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EF7761104
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E32FC1BF94D
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2000600CD;
+	Tue,  7 Mar 2023 21:10:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2000600CD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D1C241BF33B
  for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA5E14177A
+ by smtp3.osuosl.org (Postfix) with ESMTP id B8CB061104
  for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA5E14177A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8CB061104
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sr_QpLS5S1Io for <buildroot@lists.busybox.net>;
- Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cGPlzm9_IvhR for <buildroot@lists.busybox.net>;
+ Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C925241764
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3092600CD
  for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C925241764
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3092600CD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B418B86A0D; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
+ id D1EE686A16; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Mar 2023 22:01:15 +0100
+Date: Tue, 7 Mar 2023 22:05:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cde69c668d6692114845a927c8c5534ed78019db
-X-Git-Newrev: b3cf07d8db2ae0283bbac7e4a06f363c7bc39e58
+X-Git-Oldrev: f255abdceabc3ebbff795c753f7a33d44e905369
+X-Git-Newrev: a69ecf0e89b5f88dbd0bcadf9b8aabae10066289
 X-Patchwork-Hint: ignore
-Message-Id: <20230307210957.B418B86A0D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uqmi: fix compile error (gcc false
- error reporting)
+Message-Id: <20230307210957.D1EE686A16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gensio: add alsa-lib optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,104 +58,43 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5675730613491201767=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5675730613491201767==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b3cf07d8db2ae0283bbac7e4a06f363c7bc39e58
+commit: https://git.buildroot.net/buildroot/commit/?id=a69ecf0e89b5f88dbd0bcadf9b8aabae10066289
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream suggested patch ([1]) to avoid gcc false error reporting.
+alsa-lib is an optional dependency which is enabled by default since
+version 2.5.3 and
+https://github.com/cminyard/gensio/commit/dc9bad87d47588dcdd92ce118fcc4f41d10b671c
 
-Fixes:
-
-  - http://autobuild.buildroot.net/results/ce9e2074bb8486d1ee25232b985d47475faefd63
-
-  dev.c:217:23: error: storing the address of local variable 'complete' in '*req.complete' [-Werror=dangling-pointer=]
-    217 |         req->complete = &complete;
-        |         ~~~~~~~~~~~~~~^~~~~~~~~~~
-
-[1] http://lists.openwrt.org/pipermail/openwrt-devel/2023-March/040633.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...gcc-false-error-reporting-storing-the-add.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ package/gensio/gensio.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch b/package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch
-new file mode 100644
-index 0000000000..c940925767
---- /dev/null
-+++ b/package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch
-@@ -0,0 +1,54 @@
-+From 4c2eb926efb4de24af5a3b1e8c18195198827491 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 5 Mar 2023 22:08:13 +0100
-+Subject: [PATCH] uqmi: avoid gcc false error reporting (storing the address of
-+ local variable 'complete' in '*req.complete')
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index dafc0bf5d5..89c734eec0 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -14,6 +14,13 @@ GENSIO_CONF_OPTS = \
+ 	--without-swig \
+ 	--without-python
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
++GENSIO_DEPENDENCIES += alsa-lib
++GENSIO_CONF_OPTS += --with-alsa
++else
++GENSIO_CONF_OPTS += --without-alsa
++endif
 +
-+Avoid gcc false error reporting (req->complete is later reset to NULL
-+in case of use of local complete):
-+
-+  dev.c:217:23: error: storing the address of local variable 'complete' in '*req.complete' [-Werror=dangling-pointer=]
-+    217 |         req->complete = &complete;
-+        |         ~~~~~~~~~~~~~~^~~~~~~~~~~
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+
-+[Upstream: http://lists.openwrt.org/pipermail/openwrt-devel/2023-March/040633.html]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ dev.c | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+
-+diff --git a/dev.c b/dev.c
-+index bd10207..b8ac273 100644
-+--- a/dev.c
-++++ b/dev.c
-+@@ -203,6 +203,15 @@ void qmi_request_cancel(struct qmi_dev *qmi, struct qmi_request *req)
-+ 	__qmi_request_complete(qmi, req, NULL);
-+ }
-+ 
-++/* avoid gcc false error reporting:
-++ *   dev.c:217:23: error: storing the address of local variable ‘complete’ in ‘*req.complete’ [-Werror=dangling-pointer=]
-++ *     217 |         req->complete = &complete;
-++ *         |         ~~~~~~~~~~~~~~^~~~~~~~~~~
-++ */
-++#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-++#pragma GCC diagnostic push
-++#pragma GCC diagnostic ignored "-Wdangling-pointer"
-++#endif
-+ int qmi_request_wait(struct qmi_dev *qmi, struct qmi_request *req)
-+ {
-+ 	bool complete = false;
-+@@ -231,6 +240,9 @@ int qmi_request_wait(struct qmi_dev *qmi, struct qmi_request *req)
-+ 
-+ 	return req->ret;
-+ }
-++#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-++#pragma GCC diagnostic pop
-++#endif
-+ 
-+ struct qmi_connect_request {
-+ 	struct qmi_request req;
-+-- 
-+2.39.2
-+
-
---===============5675730613491201767==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+ GENSIO_DEPENDENCIES += host-pkgconf libglib2
+ GENSIO_CONF_OPTS += --with-glib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5675730613491201767==--
