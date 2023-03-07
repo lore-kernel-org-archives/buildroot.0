@@ -4,56 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18C30C6FA99
-	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:07:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37339C6FA99
+	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:10:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2C4461127;
-	Tue,  7 Mar 2023 21:07:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2C4461127
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9D10610EC;
+	Tue,  7 Mar 2023 21:10:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9D10610EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sR_uput2fV1l; Tue,  7 Mar 2023 21:07:26 +0000 (UTC)
+	with ESMTP id nv38Sw9I2_H0; Tue,  7 Mar 2023 21:10:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BD4661133;
-	Tue,  7 Mar 2023 21:07:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BD4661133
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E8CAF1BF59C
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35E1F60594;
+	Tue,  7 Mar 2023 21:10:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35E1F60594
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EF32C1BF95E
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C20044175F
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C20044175F
+ by smtp2.osuosl.org (Postfix) with ESMTP id C24114012B
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C24114012B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bv00rP_Ascai for <buildroot@lists.busybox.net>;
- Tue,  7 Mar 2023 21:06:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD84E41757
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD84E41757
- for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:06:55 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B3B1A240002;
- Tue,  7 Mar 2023 21:06:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pZeWK-003Lsw-TZ; Tue, 07 Mar 2023 22:06:52 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IQi0G6m9VMUi for <buildroot@lists.busybox.net>;
+ Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0828D400FE
+ for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0828D400FE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EAF0F86A0E; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230302175350.183840-1-fontaine.fabrice@gmail.com>
- <20230302175350.183840-4-fontaine.fabrice@gmail.com>
-Date: Tue, 07 Mar 2023 22:06:52 +0100
-In-Reply-To: <20230302175350.183840-4-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 2 Mar 2023 18:53:50 +0100")
-Message-ID: <87ilfc46fn.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 4/4] package/gensio: add C++ optional
- dependency
+To: buildroot@buildroot.org
+Date: Tue, 7 Mar 2023 22:06:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 847ac3d9c8df70a7f082bd8a6046c1d987cf6eee
+X-Git-Newrev: 47cb0c967f7c825e02e66d1df26ff9e893bf5235
+X-Patchwork-Hint: ignore
+Message-Id: <20230307210957.EAF0F86A0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gensio: add C++ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,23 +56,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=47cb0c967f7c825e02e66d1df26ff9e893bf5235
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > C++ is available since 2.3.0 and
- > https://github.com/cminyard/gensio/commit/3fda483f15a2668f9e2396517cdbf09693e6e3ff
+C++ is available since 2.3.0 and
+https://github.com/cminyard/gensio/commit/3fda483f15a2668f9e2396517cdbf09693e6e3ff
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gensio/gensio.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index 3374313c0f..2ba1b950d7 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -13,6 +13,12 @@ GENSIO_CONF_OPTS = \
+ 	--without-swig \
+ 	--without-python
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++GENSIO_CONF_OPTS += --with-cplusplus
++else
++GENSIO_CONF_OPTS += --without-cplusplus
++endif
++
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
+ GENSIO_DEPENDENCIES += alsa-lib
+ GENSIO_CONF_OPTS += --with-alsa
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
