@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2DC1C678D5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85D6DC678D5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:10:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9EA8F61108;
-	Tue,  7 Mar 2023 21:10:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EA8F61108
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32C80600CD;
+	Tue,  7 Mar 2023 21:10:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32C80600CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3hy_HEe-lrAW; Tue,  7 Mar 2023 21:10:39 +0000 (UTC)
+	with ESMTP id wAS8eSupPzgo; Tue,  7 Mar 2023 21:10:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2000600CD;
-	Tue,  7 Mar 2023 21:10:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2000600CD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C1A6610EC;
+	Tue,  7 Mar 2023 21:10:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C1A6610EC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D1C241BF33B
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2CA311BF33B
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8CB061104
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8CB061104
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F6D6600CD
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F6D6600CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cGPlzm9_IvhR for <buildroot@lists.busybox.net>;
+ with ESMTP id 5qhUabJ-l1No for <buildroot@lists.busybox.net>;
  Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3092600CD
- for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3092600CD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0FF896109E
+ for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FF896109E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1EE686A16; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
+ id 003E786A12; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Mar 2023 22:05:32 +0100
+Date: Tue, 7 Mar 2023 22:09:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f255abdceabc3ebbff795c753f7a33d44e905369
-X-Git-Newrev: a69ecf0e89b5f88dbd0bcadf9b8aabae10066289
+X-Git-Oldrev: 47cb0c967f7c825e02e66d1df26ff9e893bf5235
+X-Git-Newrev: d97fe11e59122c65df6216a7767f0b004fbd0dec
 X-Patchwork-Hint: ignore
-Message-Id: <20230307210957.D1EE686A16@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gensio: add alsa-lib optional
- dependency
+Message-Id: <20230307210958.003E786A12@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uacme: security bump to version
+ 1.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a69ecf0e89b5f88dbd0bcadf9b8aabae10066289
+commit: https://git.buildroot.net/buildroot/commit/?id=d97fe11e59122c65df6216a7767f0b004fbd0dec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-alsa-lib is an optional dependency which is enabled by default since
-version 2.5.3 and
-https://github.com/cminyard/gensio/commit/dc9bad87d47588dcdd92ce118fcc4f41d10b671c
+Includes https://github.com/ndilieto/uacme/commit/fe91f46b620f8c58805fcf48cb4f4a793c8a47a4
+Fixes https://github.com/ndilieto/uacme/issues/64
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gensio/gensio.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index dafc0bf5d5..89c734eec0 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -14,6 +14,13 @@ GENSIO_CONF_OPTS = \
- 	--without-swig \
- 	--without-python
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index 6c71f6b94d..063b0b57ac 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  0ec8e5bcb8ed2b532572ca4878d30b2a794f607b995348ebc176d566b64d73f9  uacme-1.7.3.tar.gz
++sha256  a638fe0878dba8fdda62f89e7a284243edbcd31b92c11b5cfdc7d3efd9547bca  uacme-1.7.4.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index a70ec3a635..9b2360937b 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
-+GENSIO_DEPENDENCIES += alsa-lib
-+GENSIO_CONF_OPTS += --with-alsa
-+else
-+GENSIO_CONF_OPTS += --without-alsa
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
- GENSIO_DEPENDENCIES += host-pkgconf libglib2
- GENSIO_CONF_OPTS += --with-glib
+-UACME_VERSION = 1.7.3
++UACME_VERSION = 1.7.4
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
