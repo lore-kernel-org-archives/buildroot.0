@@ -1,73 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D90E5C64EC4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Mar 2023 22:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4442C678D5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 09:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F27640A38;
-	Mon,  6 Mar 2023 22:25:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F27640A38
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3927C8196A;
+	Tue,  7 Mar 2023 09:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3927C8196A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rEgrT_IgAbNa; Mon,  6 Mar 2023 22:25:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8ElT9pZnr9Xk; Tue,  7 Mar 2023 09:05:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB4D1408DB;
-	Mon,  6 Mar 2023 22:25:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB4D1408DB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5F2301BF3AD
- for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 22:25:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91EBA81947;
+	Tue,  7 Mar 2023 09:05:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91EBA81947
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B0E081BF2BC
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 09:05:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38A77416DB
- for <buildroot@lists.busybox.net>; Mon,  6 Mar 2023 22:25:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38A77416DB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89DE381947
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 09:05:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89DE381947
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dSA1rfTIbOLD for <buildroot@lists.busybox.net>;
- Mon,  6 Mar 2023 22:25:45 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C750F416D9
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C750F416D9
- for <buildroot@buildroot.org>; Mon,  6 Mar 2023 22:25:44 +0000 (UTC)
-Received: from 91-152-140-132.elisa-laajakaista.fi ([91.152.140.132]
- helo=momiji.lan) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1pZJH3-007CaP-2Y; Mon, 06 Mar 2023 23:25:41 +0100
-Received: from localhost (momiji.lan [local])
- by momiji.lan (OpenSMTPD) with ESMTPA id 7c88c9bd;
- Mon, 6 Mar 2023 22:25:32 +0000 (UTC)
-Date: Tue, 7 Mar 2023 00:25:31 +0200
-Message-ID: <20230307002531.GB375908@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <87wn3v9sy5.fsf@dell.be.48ers.dk>
-References: <20230304221145.3222530-1-aperez@igalia.com>
- <20230305005158.GC46585@igalia.com> <87wn3v9sy5.fsf@dell.be.48ers.dk>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U7uftM-BAxLF for <buildroot@lists.busybox.net>;
+ Tue,  7 Mar 2023 09:05:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40DFE81919
+Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 40DFE81919
+ for <buildroot@busybox.net>; Tue,  7 Mar 2023 09:05:15 +0000 (UTC)
+Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 8BF44440F55;
+ Tue,  7 Mar 2023 11:00:35 +0200 (IST)
+To: buildroot@busybox.net
+Date: Tue,  7 Mar 2023 11:04:55 +0200
+Message-Id: <6a6f76bfb81e83d1ac5e694e87d7faf7f34397bf.1678179895.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=LEc6BGGq+FXsIVenT43PE76XGbjMrL3Vuq/CArX/URw=; b=Y+Efc8W+uUVcEN+B5pm5j1j4co
- zPO7RZcK2ZtJncXBSyIZEkIsGKB6vDTIz58iU8GO2OcLlfmlC0nrvNHdzm1DaUgZZruNJpW1jmwxm
- 18vLrlBYPeTbdY8qd09R0/E5kbppTdjg2ciDBekPpqKIQ5lc+iWzMg2MQHAW/PKkSnk0DdKpbx9E+
- tSm0Pxaed06ggsTzj+LGGV+yCedz8lTWN3PeR3fGYgfTHj99E/g2x7GU5jQ6XqjCKNkp5b3Q1qH3W
- RO/bH7tNWwGXkaDRJZWF+fiTyt5c/weVv7HTJaMDkKSDtABoboK3kwzvGJoRQtSyFJPbLG6Nt1Wez
- uuYAxe/Q==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=Y+Efc8W+
-Subject: Re: [Buildroot] [PATCH] package/wpebackend-fdo: bump to version
- 1.14.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1678179635;
+ bh=sWvL0J+vAMrUqujbd8E4uW4IKVrKp38EbAhCVGkjjtA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=pmNwuQjkBcC7hasMzgv9OX7TS+ICtj6SuFD6a4XlbIHTjYYt/9xQa1lzgWWk5djfy
+ Ndcj6otpokwuQHEh0+U+zfZVKdxGDL9/9l6lg8qre+CokFILeReX5EaEW5SQTG9V41
+ XdPZXyuGLHdIoga288+/qNUgbF/5Ig9cN/rJfWdLoxuUJ5b+EHgMh8lkH1b0x/QiWe
+ gCgxAAAaDslhPt/ShtJI22u35OgqpMJwvfRjrOD9ZcBE++KB/3FLBs1sZfG2oZcOwb
+ YB5ugBWdToZl56oI4HLs3GZJrtTmIvxgKTwAh9p1HhHwjhQNle+BElBFR7w6N53XVE
+ HCWgNYLufWSZA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=pmNwuQjk
+Subject: [Buildroot] [PATCH] libpcap: bump to version 1.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,68 +70,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============6241214113033881780=="
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libpcap/libpcap.hash | 4 ++--
+ package/libpcap/libpcap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---===============6241214113033881780==
-Content-Type: multipart/signed; boundary="Na6SqcW3jiS76/w3"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
-
-
---Na6SqcW3jiS76/w3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
-
-SGVsbG8gUGV0ZXIsCgpPbiBTdW4sIDA1IE1hciAyMDIzIDE1OjI0OjUwICswMTAwIFBldGVyIEtv
-cnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4gd3JvdGU6Cj4gPj4+Pj4gIkFkcmlhbiIgPT0g
-QWRyaWFuIFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+IHdyaXRlczoKPiAKPiAg
-PiBIaSwKPiAgPiAoQWRkZWQgUGV0ZXIgaW4gQ0MuKQo+IAo+ICA+IE9uIFN1biwgMDUgTWFyIDIw
-MjMgMDA6MTE6NDUgKzAyMDAgQWRyaWFuIFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5j
-b20+IHdyb3RlOgo+IAo+ICA+PiBUaGlzIGlzIGEgYnVnZml4IHJlbGVhc2Ugd2hpY2ggaW5jbHVk
-ZXMgaW1wb3J0YW50IGZpeGVzIHdoaWNoIHNvbHZlIGEKPiAgPj4gbWVtb3J5IGxlYWsgYW5kIGhp
-dHRpbmcgYSBzaXR1YXRpb24gd2hlcmUgdGhlIG91dHB1dCBubyBsb25nZXIgZ2V0cwo+ICA+PiB1
-cGRhdGVkLiBSZWxlYXNlIG5vdGVzOgo+ICA+PiAKPiAgPj4gaHR0cHM6Ly93cGV3ZWJraXQub3Jn
-L3JlbGVhc2Uvd3BlYmFja2VuZC1mZG8tMS4xNC4xLmh0bWwKPiAgPj4gCj4gID4+IFNpZ25lZC1v
-ZmYtYnk6IEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPgo+ICA+PiAt
-LS0KPiAgPj4gcGFja2FnZS93cGViYWNrZW5kLWZkby93cGViYWNrZW5kLWZkby5oYXNoIHwgOCAr
-KysrLS0tLQo+ICA+PiBwYWNrYWdlL3dwZWJhY2tlbmQtZmRvL3dwZWJhY2tlbmQtZmRvLm1rICAg
-fCAyICstCj4gID4+IDIgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9u
-cygtKQo+IAo+ICA+IEl0IHdvdWxkIGJlICp2ZXJ5IGRlc2lyYWJsZSogdG8gaGF2ZSB0aGlzIHVw
-ZGF0ZSBpbiBzdGFibGUgYnJhbmNoZXMgYXMgd2VsbCwKPiAgPiBiZWNhdXNlIHRoaXMgY29udGFp
-bnMgYnVnIGZpeGVzIHdoaWNoIG1ha2UgV2ViS2l0e0dUSyxXUEV9IGFjdHVhbGx5IHVzYWJsZQo+
-ICA+IGluIHNvbWUgY2FzZXMgKGUuZy4gbG9uZyBydW5uaW5nIGluc3RhbmNlcykuCj4gCj4gV2l0
-aCBzdGFibGUgYnJhbmNoZXMgSSBndWVzcyB5b3UgbWVhbiBvdXIgKGxhdGUpIHVwY29taW5nIExU
-UyByZWxlYXNlLAo+IDIwMjMuMDI/IDIwMjIuMDIueCBhbmQgMjAyMi4xMS54IHVzZSB3cGViYWNr
-ZW5kLWZkbyAxLjEyLjEsIGJ1dCB0aGV5IGFyZQo+IGFsbW9zdCBFT0wuCgpZZXMsIEkgbWVhbnQg
-MjAyMy4wMjsgdGhlIGJyYW5jaGVzIHRoYXQgYXJlIGJlaW5nIEVPTCdkIHNvb24gYXJlIHByb2Jh
-Ymx5Cm5vdCB3b3J0aCB1cGRhdGluZy4KCj4gQ29tbWl0dGVkIHRvIG1hc3RlciAod2hpY2ggd2ls
-bCBiZWNvbWUgMjAyMy4wMiksIHRoYW5rcy4KCkV4Y2VsbGVudCwgdGhhbmtzIQoKQ2hlZXJzLAri
-gJRBZHJpw6FuCg==
-
---Na6SqcW3jiS76/w3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZAZoWwAKCRCRxVnb5MkS
-O3e0AJ4lUnCZMwdnJUKzgTYqEfQAWhmBmACfQ5pZfU5xsEFZDZveln6J+TzqH/4=
-=uNoT
------END PGP SIGNATURE-----
-
---Na6SqcW3jiS76/w3--
-
---===============6241214113033881780==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index b87d9d04ef3a..270fd8869dac 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.tcpdump.org/release/libpcap-1.10.2.tar.gz.sig
+-sha256  db6d79d4ad03b8b15fb16c42447d093ad3520c0ec0ae3d331104dcfb1ce77560  libpcap-1.10.2.tar.gz
++# https://www.tcpdump.org/release/libpcap-1.10.3.tar.gz.sig
++sha256  2a8885c403516cf7b0933ed4b14d6caa30e02052489ebd414dc75ac52e7559e6  libpcap-1.10.3.tar.gz
+ 
+ # Hash for license file:
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 173207de63ca..d4292ae9a3fb 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPCAP_VERSION = 1.10.2
++LIBPCAP_VERSION = 1.10.3
+ LIBPCAP_SITE = https://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3-Clause
+ LIBPCAP_LICENSE_FILES = LICENSE
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6241214113033881780==--
