@@ -4,55 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 917BCC6FD1E
-	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:07:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18C30C6FA99
+	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:07:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 447F26112A;
-	Tue,  7 Mar 2023 21:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 447F26112A
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2C4461127;
+	Tue,  7 Mar 2023 21:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2C4461127
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4msdSPCBmjTi; Tue,  7 Mar 2023 21:07:13 +0000 (UTC)
+	with ESMTP id sR_uput2fV1l; Tue,  7 Mar 2023 21:07:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0BB061123;
-	Tue,  7 Mar 2023 21:07:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0BB061123
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A9AA91BF59C
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BD4661133;
+	Tue,  7 Mar 2023 21:07:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BD4661133
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E8CAF1BF59C
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8524A400FE
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8524A400FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id C20044175F
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C20044175F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9fDUh1kQsawB for <buildroot@lists.busybox.net>;
- Tue,  7 Mar 2023 21:06:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bv00rP_Ascai for <buildroot@lists.busybox.net>;
+ Tue,  7 Mar 2023 21:06:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89BEB4012B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD84E41757
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 89BEB4012B
- for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:06:49 +0000 (UTC)
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AD84E41757
+ for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:06:55 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 634F3240002;
- Tue,  7 Mar 2023 21:06:47 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id B3B1A240002;
+ Tue,  7 Mar 2023 21:06:53 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pZeWE-003Lsm-Fv; Tue, 07 Mar 2023 22:06:46 +0100
+ id 1pZeWK-003Lsw-TZ; Tue, 07 Mar 2023 22:06:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20230302175350.183840-1-fontaine.fabrice@gmail.com>
- <20230302175350.183840-3-fontaine.fabrice@gmail.com>
-Date: Tue, 07 Mar 2023 22:06:46 +0100
-In-Reply-To: <20230302175350.183840-3-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 2 Mar 2023 18:53:49 +0100")
-Message-ID: <87mt4o46ft.fsf@dell.be.48ers.dk>
+ <20230302175350.183840-4-fontaine.fabrice@gmail.com>
+Date: Tue, 07 Mar 2023 22:06:52 +0100
+In-Reply-To: <20230302175350.183840-4-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 2 Mar 2023 18:53:50 +0100")
+Message-ID: <87ilfc46fn.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/4] package/gensio: use mdns option
+Subject: Re: [Buildroot] [PATCH 4/4] package/gensio: add C++ optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,8 +73,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > mdns option is available since version 2.4.0 and
- > https://github.com/cminyard/gensio/commit/0b56fdd8205dff8f2343d1672e58b6583772f897
+ > C++ is available since 2.3.0 and
+ > https://github.com/cminyard/gensio/commit/3fda483f15a2668f9e2396517cdbf09693e6e3ff
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
