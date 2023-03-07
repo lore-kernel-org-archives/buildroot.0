@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20952C678D5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:11:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59D84C678D5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C153F6112F;
-	Tue,  7 Mar 2023 21:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C153F6112F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 119C461136;
+	Tue,  7 Mar 2023 21:11:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 119C461136
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jac11pidELdo; Tue,  7 Mar 2023 21:11:05 +0000 (UTC)
+	with ESMTP id YRq5qXJl0Bik; Tue,  7 Mar 2023 21:11:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E81A061101;
-	Tue,  7 Mar 2023 21:11:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E81A061101
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CB0821BF33B
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:10:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5214B6112A;
+	Tue,  7 Mar 2023 21:11:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5214B6112A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C6621BF33B
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3DA881DCA
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:09:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3DA881DCA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 138F86109E
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:10:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 138F86109E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sUnXUksL29Wr for <buildroot@lists.busybox.net>;
- Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mgcUhOBlCS3m for <buildroot@lists.busybox.net>;
+ Tue,  7 Mar 2023 21:09:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8BFB81DFB
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF4F160594
  for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8BFB81DFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF4F160594
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C762586A12; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
+ id DE9F486A0D; Tue,  7 Mar 2023 21:09:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Mar 2023 22:04:59 +0100
+Date: Tue, 7 Mar 2023 22:05:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a17fe68a3f9910b4dab2465bb0b06ed57704459
-X-Git-Newrev: f255abdceabc3ebbff795c753f7a33d44e905369
+X-Git-Oldrev: a69ecf0e89b5f88dbd0bcadf9b8aabae10066289
+X-Git-Newrev: 847ac3d9c8df70a7f082bd8a6046c1d987cf6eee
 X-Patchwork-Hint: ignore
-Message-Id: <20230307210957.C762586A12@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gensio: add libglib2 optional
- dependency
+Message-Id: <20230307210957.DE9F486A0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gensio: use mdns option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f255abdceabc3ebbff795c753f7a33d44e905369
+commit: https://git.buildroot.net/buildroot/commit/?id=847ac3d9c8df70a7f082bd8a6046c1d987cf6eee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libglib2 is an optional dependency which is enabled by default since
-version 2.3.0 and
-https://github.com/cminyard/gensio/commit/866924d69dabe8b8a981e19bd745d5c84e529881
-
-Handle it properly to avoid the following build failure since bump to
-version 2.5.2 in commit 5bb747f0b783a0d3f1712350ca3277263045b299:
-
-sparc64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/glib-2.0'
-
-Fixes:
- - http://autobuild.buildroot.org/results/3602c5cc2aff668211fd8e6eeab778b3fe287246
+mdns option is available since version 2.4.0 and
+https://github.com/cminyard/gensio/commit/0b56fdd8205dff8f2343d1672e58b6583772f897
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gensio/gensio.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/gensio/gensio.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 5538f97b19..dafc0bf5d5 100644
+index 89c734eec0..3374313c0f 100644
 --- a/package/gensio/gensio.mk
 +++ b/package/gensio/gensio.mk
-@@ -14,6 +14,13 @@ GENSIO_CONF_OPTS = \
+@@ -9,7 +9,6 @@ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+ GENSIO_INSTALL_STAGING = YES
+-GENSIO_DEPENDENCIES = $(if $(BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT),avahi)
+ GENSIO_CONF_OPTS = \
  	--without-swig \
  	--without-python
+@@ -21,6 +20,13 @@ else
+ GENSIO_CONF_OPTS += --without-alsa
+ endif
  
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+GENSIO_DEPENDENCIES += host-pkgconf libglib2
-+GENSIO_CONF_OPTS += --with-glib
++ifeq ($(BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT),y)
++GENSIO_DEPENDENCIES += avahi
++GENSIO_CONF_OPTS += --with-mdns
 +else
-+GENSIO_CONF_OPTS += --without-glib
++GENSIO_CONF_OPTS += --without-mdns
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENIPMI),y)
- GENSIO_DEPENDENCIES += openipmi
- GENSIO_CONF_OPTS += --with-openipmi
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+ GENSIO_DEPENDENCIES += host-pkgconf libglib2
+ GENSIO_CONF_OPTS += --with-glib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
