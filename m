@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA0E3C678D5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F257C678D5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DF0A61107;
-	Tue,  7 Mar 2023 21:06:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DF0A61107
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8E576110B;
+	Tue,  7 Mar 2023 21:07:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8E576110B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ZU3vVZDvfTD; Tue,  7 Mar 2023 21:06:43 +0000 (UTC)
+	with ESMTP id UHne_RPEGO1j; Tue,  7 Mar 2023 21:07:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE3B861104;
-	Tue,  7 Mar 2023 21:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE3B861104
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 717C61BF59C
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50D6961114;
+	Tue,  7 Mar 2023 21:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50D6961114
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BB041BF59C
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BE154012B
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BE154012B
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9ACB81DFB
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:06:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9ACB81DFB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QeYuq8k4-O9F for <buildroot@lists.busybox.net>;
- Tue,  7 Mar 2023 21:06:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q06yWQhX4vzt for <buildroot@lists.busybox.net>;
+ Tue,  7 Mar 2023 21:06:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3181C400FE
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3181C400FE
- for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:06:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0350081DCA
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0350081DCA
+ for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:06:44 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AEACC240005;
- Tue,  7 Mar 2023 21:06:37 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id ADAAD100006;
+ Tue,  7 Mar 2023 21:06:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pZeW4-003LsU-Jj; Tue, 07 Mar 2023 22:06:36 +0100
+ id 1pZeW9-003Lsd-SF; Tue, 07 Mar 2023 22:06:41 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20230302175350.183840-1-fontaine.fabrice@gmail.com>
-Date: Tue, 07 Mar 2023 22:06:36 +0100
-In-Reply-To: <20230302175350.183840-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 2 Mar 2023 18:53:47 +0100")
-Message-ID: <87v8jc46g3.fsf@dell.be.48ers.dk>
+ <20230302175350.183840-2-fontaine.fabrice@gmail.com>
+Date: Tue, 07 Mar 2023 22:06:41 +0100
+In-Reply-To: <20230302175350.183840-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 2 Mar 2023 18:53:48 +0100")
+Message-ID: <87r0u046fy.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/4] package/gensio: add libglib2 optional
+Subject: Re: [Buildroot] [PATCH 2/4] package/gensio: add alsa-lib optional
  dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -72,18 +73,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > libglib2 is an optional dependency which is enabled by default since
- > version 2.3.0 and
- > https://github.com/cminyard/gensio/commit/866924d69dabe8b8a981e19bd745d5c84e529881
-
- > Handle it properly to avoid the following build failure since bump to
- > version 2.5.2 in commit 5bb747f0b783a0d3f1712350ca3277263045b299:
-
- > sparc64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path
- > used in cross-compilation: '-I/usr/include/glib-2.0'
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/3602c5cc2aff668211fd8e6eeab778b3fe287246
+ > alsa-lib is an optional dependency which is enabled by default since
+ > version 2.5.3 and
+ > https://github.com/cminyard/gensio/commit/dc9bad87d47588dcdd92ce118fcc4f41d10b671c
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
