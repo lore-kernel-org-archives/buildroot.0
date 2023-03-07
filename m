@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11A83C678D5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:19:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21A83C6FA99
+	for <buildroot@archiver.kernel.org>; Tue,  7 Mar 2023 21:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BED056112C;
-	Tue,  7 Mar 2023 21:19:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BED056112C
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6C5B610F2;
+	Tue,  7 Mar 2023 21:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6C5B610F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A3cX328QjinS; Tue,  7 Mar 2023 21:19:33 +0000 (UTC)
+	with ESMTP id 8GB9Zr-k5Pb0; Tue,  7 Mar 2023 21:23:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EBA9C6110E;
-	Tue,  7 Mar 2023 21:19:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBA9C6110E
+	by smtp3.osuosl.org (Postfix) with ESMTP id F14DF6109A;
+	Tue,  7 Mar 2023 21:23:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F14DF6109A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A0D331BF33B
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:19:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8A6681BF3B0
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88A3541746
- for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88A3541746
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6516D40148
+ for <buildroot@lists.busybox.net>; Tue,  7 Mar 2023 21:23:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6516D40148
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F5in_lv2RWa7 for <buildroot@lists.busybox.net>;
- Tue,  7 Mar 2023 21:19:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7BDAF41744
- for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:19:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BDAF41744
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6663686A17; Tue,  7 Mar 2023 21:19:29 +0000 (UTC)
+ with ESMTP id nsdMub2Xfe9C for <buildroot@lists.busybox.net>;
+ Tue,  7 Mar 2023 21:23:16 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14C4D400E3
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 14C4D400E3
+ for <buildroot@buildroot.org>; Tue,  7 Mar 2023 21:23:15 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C46FA1BF204;
+ Tue,  7 Mar 2023 21:23:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pZem7-003Qyb-P6; Tue, 07 Mar 2023 22:23:11 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 7 Mar 2023 22:13:40 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d97fe11e59122c65df6216a7767f0b004fbd0dec
-X-Git-Newrev: 83e06196ab2193b73b4d7c1decc12bdd654a91e1
-X-Patchwork-Hint: ignore
-Message-Id: <20230307211929.6663686A17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-autotools: force cross
- compiling
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230226194427.979515-1-fontaine.fabrice@gmail.com>
+Date: Tue, 07 Mar 2023 22:23:11 +0100
+In-Reply-To: <20230226194427.979515-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 26 Feb 2023 20:44:27 +0100")
+Message-ID: <875ybc45og.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] linux: fix CIP RT kernel on microblaze
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +64,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83e06196ab2193b73b4d7c1decc12bdd654a91e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-By default autotools enters cross-compiling mode if --build and --host
-differ [0]. Depending on the host architecture and how toolchain
-providers set the triplet it might be the same. This triggers autotools to
-compile and run a program on the host. If it is executable
-cross-compiling isn't entered.
-As pointed out by the autoconf mailing list [1] one can force cross
-compiling.
+ > Fix the following build failure with CIP RT kernel on microblaze raised
+ > since bump to version 5.10.83-cip1-rt1 in commit
+ > b5778d7b76c098010a4abc339938f2694e8cf57f and
+ > https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/commit/?id=32ac92b5a39e2ef91308929bf5ed0804094b4183:
 
-[0]: https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.71/html_node/Hosts-and-Cross_002dCompilation.html
-[1]: https://lists.gnu.org/archive/html/bug-autoconf/2023-03/msg00001.html
+ > arch/microblaze/mm/init.c:71:2: error: #endif without #if
+ >    71 | #endif /* CONFIG_HIGHMEM */
+ >       |  ^~~~~
 
-Fixes:
- - http://autobuild.buildroot.net/results/6d4/6d4bc520c12313508d0fadee11d5b88c35a3cba9/
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/27291870cf7539d26e45c45f34322d24a6dbca33
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-autotools.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Move patch to correct directory
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 717ff81593..aac80369e0 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -195,6 +195,7 @@ define $(2)_CONFIGURE_CMDS
- 		--disable-documentation \
- 		--with-xmlto=no \
- 		--with-fop=no \
-+		cross_compiling=yes \
- 		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
- 		--enable-ipv6 \
- 		$$(NLS_OPTS) \
-@@ -229,6 +230,7 @@ define $(2)_CONFIGURE_CMDS
- 		--with-xmlto=no \
- 		--with-fop=no \
- 		--disable-nls \
-+		cross_compiling=no \
- 		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
- 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
- 	)
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
