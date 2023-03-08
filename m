@@ -1,93 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1C42C678D5
-	for <buildroot@archiver.kernel.org>; Wed,  8 Mar 2023 13:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C53DCC678D5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Mar 2023 17:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D25D40292;
-	Wed,  8 Mar 2023 13:16:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D25D40292
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F295610C4;
+	Wed,  8 Mar 2023 17:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F295610C4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zdEUqICMOJOW; Wed,  8 Mar 2023 17:31:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ACB061041;
+	Wed,  8 Mar 2023 17:31:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ACB061041
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 197731BF47D
+ for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 17:31:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7A3140C00
+ for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 17:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7A3140C00
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ywNr_PQhrFHv; Wed,  8 Mar 2023 13:16:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73D7140C01;
-	Wed,  8 Mar 2023 13:16:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73D7140C01
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 669991BF94D
- for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 13:16:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F2D3410E7
- for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F2D3410E7
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VtZo3afTL68l for <buildroot@lists.busybox.net>;
- Wed,  8 Mar 2023 13:16:07 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8601740A00
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8601740A00
- for <buildroot@buildroot.org>; Wed,  8 Mar 2023 13:16:07 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- o11-20020a05600c4fcb00b003eb33ea29a8so1129623wmq.1
- for <buildroot@buildroot.org>; Wed, 08 Mar 2023 05:16:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1678281365;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=16ZNoxZhc+vRoCXxROau6Sf2qj665W/vy2YWFMHoVe8=;
- b=g578ml+w4ihe0YmTpEO7gFEi4qH8tjLTKnNaUCaMBOyT+xzt8Kjb2chWiatqTLilGe
- fxuZcOpuDZpiUjx5CY2NzQHjVLrPu6plMRFPff08Hn/QEzz1QL0iYLYqyFt2qoZduNjY
- EjQR1tAzbVg44rBmJH5zyHNaPlwOtdRwJw1qXwy1ZjZ0qklyNTslxxXNdKaLNPrgNkj+
- 8eO6hT/A4W+1+zqFI0nsCQkeKHXIGWrYqq/6SZKgjqZbaxncZ3iC3O1MAUFbn1eX1ezN
- MpLcH9asSy2ic6obhclslZe02vgP8UXXHKPhm5YkWL+dtKISgOFLs4bHPNsEL6JGoU0M
- 8nFQ==
-X-Gm-Message-State: AO0yUKVZPXQvY4OdJsTI1dNiwH4M9xN4bbPnY4ic2ZKNjdqA5EzR/ykC
- HHI5gCeRgaef8eEVOt9drP3ijHYx/ZSz5YGkd8o=
-X-Google-Smtp-Source: AK7set9WLc0NzWaJjDHj4ibuxUHXMk8kHK8MSSo+SKIZUjxahUgx/56zHKJZfXHyIznp4CAL5wxDyw==
-X-Received: by 2002:a05:600c:1c20:b0:3eb:3945:d3f9 with SMTP id
- j32-20020a05600c1c2000b003eb3945d3f9mr16889320wms.4.1678281365358; 
- Wed, 08 Mar 2023 05:16:05 -0800 (PST)
-Received: from P-NAN-LIMA.lan ([2001:861:5384:6b50:3078:ab00:ee8d:4e07])
- by smtp.gmail.com with ESMTPSA id
- bi25-20020a05600c3d9900b003e89e3284fasm19677624wmb.36.2023.03.08.05.16.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Mar 2023 05:16:04 -0800 (PST)
-From: Sebastian Weyer <sebastian.weyer@smile.fr>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oapONKq5flcV for <buildroot@lists.busybox.net>;
+ Wed,  8 Mar 2023 17:31:18 +0000 (UTC)
+X-Greylist: delayed 00:05:05 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5907240153
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5907240153
+ for <buildroot@buildroot.org>; Wed,  8 Mar 2023 17:31:18 +0000 (UTC)
+Received: from evilbit.green-communications.fr ([92.154.77.116]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis)
+ id 1N8ojI-1qfRtn3Gmk-015pGK; Wed, 08 Mar 2023 18:26:09 +0100
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 To: buildroot@buildroot.org
-Date: Wed,  8 Mar 2023 14:15:53 +0100
-Message-Id: <20230308131554.642965-3-sebastian.weyer@smile.fr>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230308131554.642965-1-sebastian.weyer@smile.fr>
-References: <20230308131554.642965-1-sebastian.weyer@smile.fr>
+Date: Wed,  8 Mar 2023 18:25:33 +0100
+Message-Id: <20230308172533.773-1-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112; t=1678281365;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=16ZNoxZhc+vRoCXxROau6Sf2qj665W/vy2YWFMHoVe8=;
- b=xkx4vjszUnLBJUmOV7emTEO86KKDRsY1I/tVumKfQYK4jN7LI48aiwvNyVZjdm9n/n
- x4YeX7vfQLwmj2Ljx0WFEwboir62B/jsd+Xp56xwGqq0Uuu9KwTRt8EVK8tpCE/0FnN5
- CB5/rAftT0yor70cN/PJspYIfog3D9hJWMLNrUYN0HZXWJNCAIJv/s8JGyNzphugZVmN
- sIL0n9Pyj7upgtccPkzs95Y1TGPLK0mTLT9W6LP7MgMXhilvrgug9rkFpw5Dih5pWa5d
- ZC5HaYUkxqDfCOLygUCfrfuGpHyWw9LyCGLeF8UInNFevQKZvCkfYAaaocWYf8+9a6Ak
- +cdA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=xkx4vjsz
-Subject: [Buildroot] [PATCH v6 3/3]
- support/testing/tests/package/test_nu.py: New runtime test
+X-Provags-ID: V03:K1:+ZTCu1zfz80i7otIUHMD+qpXBU/bkgPGW8En0//tXyNd9lntHNi
+ yImumOT54aHQFAALKuu0U3ohXbz+MbARDj462G3ICQijQtUhkC2zHt1kZrhdcSq0oKpEHI1
+ Dcb6RNJtwKLt7g2D1sNFou+dTmELv5Q5444Amq7l4alz9Kqr/JcWstbubHPauHtis/9vPWJ
+ FE5/WUqXUljDcV04+XLaQ==
+UI-OutboundReport: notjunk:1;M01:P0:h5RMQUoicCU=;aRpWruovTSo5snz2Y3BEEN8ULMv
+ 3PES33UQARILCwlIivGo0nESdNpDI3CyoV6zzuqI4kWV8zlI4y0/J1sS45Pynn4n8JHA1bivr
+ ipR3slBEyMjnV0z7g+ZbdiFfurF4rtyXfXS4sF+MfFy+skt88yLcZSsObDh7bcbGC99i+EJfp
+ gLO3BmSQB7Swk1/c6AwlEcaajuP20EF0NhUxKqX72LgYHi8Ar5DcljlePf6E9NxiC3Tsa5qn/
+ v7f/Ge62Z8A0WlgrqEZ+H/BudsHCKe4oezJUC44q3nNbYgflXzpeUgNbSjJU/1mc1D+CvRhue
+ nAQ1ZjVn2xGZfzOqfnbEoWbIiVdRlfkuHdsvslyLw/dwpjrKCSNzxZ/pCy//5VNIMDSwdv7/u
+ 9TyfAig65qD5NmMd+LHV3EFa8oJKa5dJW8QMiv6+jxJviWR3er6PwBKnqC8wj8oYN3ju26LBW
+ FdonAUfLQnsfdUAyjGEMZW/26Z0z1ot8T1MmR9kq7CgyJl7tZrxuVglA2djlz7RHtTp3Xy36R
+ vMJdOI8l5sIhN1hf5kPzUOMzOIlvMhqItS/FmTvpY16swIjNoVYu7oXp2eTTVh92FSE0k1KbO
+ nfywFLBKYSEDFOOwoUanb1NI5zC+aSnlilHdA/IbrsFn1vqiSRgxys5yhGjANDiyKGpkegbpT
+ p4XN3mDzNPMIyp6QmHeyTDHWXx+okUu9MMzvuvtQ/w==
+Subject: [Buildroot] [PATCH next 1/1] package/janus-gateway: bump to version
+ 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,133 +72,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
-Content-Type: multipart/mixed; boundary="===============7674601216444835612=="
+Cc: Gregory Dymarek <gregd72002@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7674601216444835612==
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
+Remove patch applied upstream.
 
-Load sample script support/testing/tests/package/sample_nu.nu onto the
-target and verify proper execution by nushell
-
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 ---
- DEVELOPERS                                 |  2 +
- support/testing/tests/package/sample_nu.nu |  6 +++
- support/testing/tests/package/test_nu.py   | 62 ++++++++++++++++++++++
- 3 files changed, 70 insertions(+)
- create mode 100644 support/testing/tests/package/sample_nu.nu
- create mode 100644 support/testing/tests/package/test_nu.py
+ ...se-parentheses-to-ensure-compilation.patch | 27 -------------------
+ package/janus-gateway/janus-gateway.hash      |  2 +-
+ package/janus-gateway/janus-gateway.mk        |  2 +-
+ 3 files changed, 2 insertions(+), 29 deletions(-)
+ delete mode 100644 package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9e3855423e..9a7257c4b2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2552,6 +2552,8 @@ F:	package/ripgrep/
+diff --git a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
+deleted file mode 100644
+index f91c13d1f6..0000000000
+--- a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 51431c36cd5f2997c0f7723909195b9883ae0486 Mon Sep 17 00:00:00 2001
+-From: Benson Muite <bkmgit@users.noreply.github.com>
+-Date: Wed, 4 Jan 2023 13:33:36 +0300
+-Subject: [PATCH] Use parentheses to ensure compilation (#3138)
+-
+-Compiler fails with latest Curl release. Use parenthesis to ensure compiler evaluates expression correctly.
+-
+-[Retrieved from:
+-https://github.com/meetecho/janus-gateway/commit/51431c36cd5f2997c0f7723909195b9883ae0486]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/turnrest.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/turnrest.c b/src/turnrest.c
+-index b8560d22f2..42e6114de8 100644
+---- a/src/turnrest.c
+-+++ b/src/turnrest.c
+-@@ -165,7 +165,7 @@ janus_turnrest_response *janus_turnrest_request(const char *user) {
+- 	JANUS_LOG(LOG_VERB, "Sending request: %s\n", request_uri);
+- 	janus_mutex_unlock(&api_mutex);
+- 	curl_easy_setopt(curl, CURLOPT_URL, request_uri);
+--	curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
+-+	curl_easy_setopt(curl, (api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST), 1);
+- 	if(!api_http_get) {
+- 		/* FIXME Some servers don't like a POST with no data */
+- 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query_string);
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 7a87ae737a..a147a8afff 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bb83c19d6137e39833e8eb2b1deeecb33b5d19d4f503d51703bdcc478c447940  janus-gateway-1.1.1.tar.gz
++sha256  f721d62a22b38ba3a341a5502f06b8b3a5a4f7bd0e9cc6c53de257fe99695e17  janus-gateway-1.1.2.tar.gz
+ sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index dd898563e5..786bc211d4 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Sebastian Weyer <sebastian.weyer@smile.fr>
- F:	package/nushell/
-+F:	support/testing/tests/package/test_nu.py
-+F:	support/testing/tests/package/sample_nu.nu
- 
- N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
- F:	package/mmc-utils/
-diff --git a/support/testing/tests/package/sample_nu.nu b/support/testing/tests/package/sample_nu.nu
-new file mode 100644
-index 0000000000..5287862cf1
---- /dev/null
-+++ b/support/testing/tests/package/sample_nu.nu
-@@ -0,0 +1,6 @@
-+#! /usr/bin/nu
-+def greet [name] {
-+  ["hello" $name]
-+}
-+
-+greet "world"
-diff --git a/support/testing/tests/package/test_nu.py b/support/testing/tests/package/test_nu.py
-new file mode 100644
-index 0000000000..ba2ddb9851
---- /dev/null
-+++ b/support/testing/tests/package/test_nu.py
-@@ -0,0 +1,62 @@
-+import os
-+
-+import infra.basetest
-+
-+class TestNuBase(infra.basetest.BRTest):
-+    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it doesn't
-+    # support a host rustc which is necessary for nushell
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_PACKAGE_NUSHELL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd",img])
-+        self.emulator.login()
-+
-+# load a script on the target and check if it is executed correctly by nu
-+class TestNu(TestNuBase):
-+    config_sample_scripts = \
-+        """
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-+        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
-+                   "{sample_scripts}")
-+
-+    #simple hello world script found in the nushell doc
-+    sample_scripts = ["tests/package/sample_nu.nu"]
-+
-+    def __init__(self, names):
-+        """Add the scripts to the target in build time."""
-+        super(TestNuBase, self).__init__(names)
-+        scripts = [infra.filepath(s) for s in self.sample_scripts]
-+        self.config += self.config_sample_scripts.format(sample_scripts=" ".join(scripts))
-+
-+    def check_sample_scripts_exist(self):
-+        """Check the scripts were really added to the image."""
-+        scripts = [os.path.basename(s) for s in self.sample_scripts]
-+        cmd = "md5sum " + " ".join(scripts)
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+    def run_sample_scripts(self):
-+        """Run each script previously added to the image."""
-+        for script in self.sample_scripts:
-+            cmd = "nu " + os.path.basename(script)
-+            self.assertRunOk(cmd)
-+
-+    def test_run(self):
-+        self.login()
-+        self.check_sample_scripts_exist()
-+        self.run_sample_scripts()
+-JANUS_GATEWAY_VERSION = 1.1.1
++JANUS_GATEWAY_VERSION = 1.1.2
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 -- 
-2.25.1
-
-
---===============7674601216444835612==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7674601216444835612==--
