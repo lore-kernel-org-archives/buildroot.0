@@ -4,85 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42142C64EC4
-	for <buildroot@archiver.kernel.org>; Wed,  8 Mar 2023 13:16:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1C42C678D5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Mar 2023 13:16:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B37E940C00;
-	Wed,  8 Mar 2023 13:16:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B37E940C00
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D25D40292;
+	Wed,  8 Mar 2023 13:16:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D25D40292
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o-iP_uUwCMY2; Wed,  8 Mar 2023 13:16:24 +0000 (UTC)
+	with ESMTP id ywNr_PQhrFHv; Wed,  8 Mar 2023 13:16:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3C5B404F7;
-	Wed,  8 Mar 2023 13:16:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3C5B404F7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3F4CE1BF3EA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73D7140C01;
+	Wed,  8 Mar 2023 13:16:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73D7140C01
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 669991BF94D
  for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 13:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A69840292
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F2D3410E7
  for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A69840292
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F2D3410E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6ANEi8IkC0rn for <buildroot@lists.busybox.net>;
- Wed,  8 Mar 2023 13:16:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VtZo3afTL68l for <buildroot@lists.busybox.net>;
+ Wed,  8 Mar 2023 13:16:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D0FB400DD
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9D0FB400DD
- for <buildroot@buildroot.org>; Wed,  8 Mar 2023 13:16:04 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id az36so9794930wmb.1
- for <buildroot@buildroot.org>; Wed, 08 Mar 2023 05:16:04 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8601740A00
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8601740A00
+ for <buildroot@buildroot.org>; Wed,  8 Mar 2023 13:16:07 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ o11-20020a05600c4fcb00b003eb33ea29a8so1129623wmq.1
+ for <buildroot@buildroot.org>; Wed, 08 Mar 2023 05:16:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1678281362;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OsVU/Zk1CqKLWTrgJveU1yFf4S5KqM0w+6eacVZFoWc=;
- b=eMXuk4JwE1PDy0r2qSePB7GQhpne94NDlUHQQYeYOWVdJiH6LHEmITmKpyJ24uvL46
- Y+p9rQX7Lo3KEsMpAPWXoIbt6P4jKtSUqhM1NkXFh3HrOh2o2KkpqUFe6uRbmzEnPxPm
- CcZs+dI3DAarWvV0dApeynaOpEZhCCgpZfDufVQF/AGoU1CG7MNl0QkNxcKR21FjHryr
- pE5GcewYGhmDTjhaopSpagB+o6M9EQWkAmkKtkSclY4QL1KehqX0jV1B0CaRy/9qrYAL
- 1xXVs6n8oYXvKkZUWdMHmGSXtcw0t8b3jXwYZXHN/pOKk5ceeWy6WlLWdMQ6vI15N/u+
- viUg==
-X-Gm-Message-State: AO0yUKUWazMFC8BS4xEQU9gQ2ajEwwQX8eQ6Qur3sinmq8pqAXpDrsFJ
- w3IjlbwTZuoCxOh76f9X5oxBKj+sOA4u5H4LhQo=
-X-Google-Smtp-Source: AK7set+nbkOjPQKbQTXRFJKe73JJK+lL2fDQv5s3ex1oQeD8REmUEuP5HwwGAc/1MpZZX46QKt+Yzg==
-X-Received: by 2002:a05:600c:1c9e:b0:3ea:f883:180 with SMTP id
- k30-20020a05600c1c9e00b003eaf8830180mr16024713wms.7.1678281362353; 
- Wed, 08 Mar 2023 05:16:02 -0800 (PST)
+ d=1e100.net; s=20210112; t=1678281365;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=16ZNoxZhc+vRoCXxROau6Sf2qj665W/vy2YWFMHoVe8=;
+ b=g578ml+w4ihe0YmTpEO7gFEi4qH8tjLTKnNaUCaMBOyT+xzt8Kjb2chWiatqTLilGe
+ fxuZcOpuDZpiUjx5CY2NzQHjVLrPu6plMRFPff08Hn/QEzz1QL0iYLYqyFt2qoZduNjY
+ EjQR1tAzbVg44rBmJH5zyHNaPlwOtdRwJw1qXwy1ZjZ0qklyNTslxxXNdKaLNPrgNkj+
+ 8eO6hT/A4W+1+zqFI0nsCQkeKHXIGWrYqq/6SZKgjqZbaxncZ3iC3O1MAUFbn1eX1ezN
+ MpLcH9asSy2ic6obhclslZe02vgP8UXXHKPhm5YkWL+dtKISgOFLs4bHPNsEL6JGoU0M
+ 8nFQ==
+X-Gm-Message-State: AO0yUKVZPXQvY4OdJsTI1dNiwH4M9xN4bbPnY4ic2ZKNjdqA5EzR/ykC
+ HHI5gCeRgaef8eEVOt9drP3ijHYx/ZSz5YGkd8o=
+X-Google-Smtp-Source: AK7set9WLc0NzWaJjDHj4ibuxUHXMk8kHK8MSSo+SKIZUjxahUgx/56zHKJZfXHyIznp4CAL5wxDyw==
+X-Received: by 2002:a05:600c:1c20:b0:3eb:3945:d3f9 with SMTP id
+ j32-20020a05600c1c2000b003eb3945d3f9mr16889320wms.4.1678281365358; 
+ Wed, 08 Mar 2023 05:16:05 -0800 (PST)
 Received: from P-NAN-LIMA.lan ([2001:861:5384:6b50:3078:ab00:ee8d:4e07])
  by smtp.gmail.com with ESMTPSA id
- bi25-20020a05600c3d9900b003e89e3284fasm19677624wmb.36.2023.03.08.05.16.01
+ bi25-20020a05600c3d9900b003e89e3284fasm19677624wmb.36.2023.03.08.05.16.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Mar 2023 05:16:02 -0800 (PST)
+ Wed, 08 Mar 2023 05:16:04 -0800 (PST)
 From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Wed,  8 Mar 2023 14:15:51 +0100
-Message-Id: <20230308131554.642965-1-sebastian.weyer@smile.fr>
+Date: Wed,  8 Mar 2023 14:15:53 +0100
+Message-Id: <20230308131554.642965-3-sebastian.weyer@smile.fr>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230308131554.642965-1-sebastian.weyer@smile.fr>
+References: <20230308131554.642965-1-sebastian.weyer@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112; t=1678281362;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OsVU/Zk1CqKLWTrgJveU1yFf4S5KqM0w+6eacVZFoWc=;
- b=1qIPVpmEwvTl8ao/21AvlRSzsd1OUkLYFpSvl0UmRsfxZK/jeu4Cau+3d5g9FSxORq
- gUsg6SOOYEqZkS0OWHkvndQ8MHbopR8vNSmBShw+txE9FKzm977+YMyhdWgdWMpNMRJ4
- sL0rKNyd2P2/rDeTuayOjMTXF9WgkTTsEifqS8Ol8gC6bsVIl5VFnditB+4apmSZRJCH
- L3JZDnyuUWNjb8sDtwRc7LxTye5bMpKPTRPbLF/kV9Nu3MKOkBTSbxZuG/fjAJ9KPCMW
- Gf1eqfibiP98PcaaQ1v80GtjqqsWEOA9lfScC3CpDDU+XRy+p5/i6zudQhlym5QTSJno
- hYXg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112; t=1678281365;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=16ZNoxZhc+vRoCXxROau6Sf2qj665W/vy2YWFMHoVe8=;
+ b=xkx4vjszUnLBJUmOV7emTEO86KKDRsY1I/tVumKfQYK4jN7LI48aiwvNyVZjdm9n/n
+ x4YeX7vfQLwmj2Ljx0WFEwboir62B/jsd+Xp56xwGqq0Uuu9KwTRt8EVK8tpCE/0FnN5
+ CB5/rAftT0yor70cN/PJspYIfog3D9hJWMLNrUYN0HZXWJNCAIJv/s8JGyNzphugZVmN
+ sIL0n9Pyj7upgtccPkzs95Y1TGPLK0mTLT9W6LP7MgMXhilvrgug9rkFpw5Dih5pWa5d
+ ZC5HaYUkxqDfCOLygUCfrfuGpHyWw9LyCGLeF8UInNFevQKZvCkfYAaaocWYf8+9a6Ak
+ +cdA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
  header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=1qIPVpmE
-Subject: [Buildroot] [PATCH v6 1/3] package/nushell: new package
+ header.s=20210112 header.b=xkx4vjsz
+Subject: [Buildroot] [PATCH v6 3/3]
+ support/testing/tests/package/test_nu.py: New runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,123 +100,124 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
-Content-Type: multipart/mixed; boundary="===============4751895873928711472=="
+Content-Type: multipart/mixed; boundary="===============7674601216444835612=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4751895873928711472==
+--===============7674601216444835612==
 Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
 
-Nushell is a shell - written in Rust - that makes use of the nushell
-language to interact with the operating system
+Load sample script support/testing/tests/package/sample_nu.nu onto the
+target and verify proper execution by nushell
 
 Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 ---
-This new version adds ncurses-target-progs as a dependency which is a
-hidden dependency of nushell. With this option enabled, nushell is also
-usable without specifically replacing getty by agetty.
-
-Nushell is not POSIX compliant and therefore should not be used as login
-shell since some programs might assume a POSIX-compliant shell and
-therefore break the system.
-
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
----
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/nushell/Config.in    | 12 ++++++++++++
- package/nushell/nushell.hash |  3 +++
- package/nushell/nushell.mk   | 20 ++++++++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/nushell/Config.in
- create mode 100644 package/nushell/nushell.hash
- create mode 100644 package/nushell/nushell.mk
+ DEVELOPERS                                 |  2 +
+ support/testing/tests/package/sample_nu.nu |  6 +++
+ support/testing/tests/package/test_nu.py   | 62 ++++++++++++++++++++++
+ 3 files changed, 70 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_nu.nu
+ create mode 100644 support/testing/tests/package/test_nu.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6256576e02..9e3855423e 100644
+index 9e3855423e..9a7257c4b2 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2550,6 +2550,9 @@ F:	support/misc/toolchainfile.cmake.in
- N:	Sam Voss <sam.voss@gmail.com>
- F:	package/ripgrep/
+@@ -2552,6 +2552,8 @@ F:	package/ripgrep/
  
-+N:	Sebastian Weyer <sebastian.weyer@smile.fr>
-+F:	package/nushell/
-+
+ N:	Sebastian Weyer <sebastian.weyer@smile.fr>
+ F:	package/nushell/
++F:	support/testing/tests/package/test_nu.py
++F:	support/testing/tests/package/sample_nu.nu
+ 
  N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
  F:	package/mmc-utils/
- F:	package/python-flask-jsonrpc/
-diff --git a/package/Config.in b/package/Config.in
-index 3ace25c665..7fca46afb5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2577,6 +2577,7 @@ comment "Shells"
- 	source "package/bash/Config.in"
- 	source "package/dash/Config.in"
- 	source "package/mksh/Config.in"
-+	source "package/nushell/Config.in"
- 	source "package/zsh/Config.in"
- comment "Utilities"
- 	source "package/apg/Config.in"
-diff --git a/package/nushell/Config.in b/package/nushell/Config.in
+diff --git a/support/testing/tests/package/sample_nu.nu b/support/testing/tests/package/sample_nu.nu
 new file mode 100644
-index 0000000000..edb01d2f72
+index 0000000000..5287862cf1
 --- /dev/null
-+++ b/package/nushell/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_NUSHELL
-+	bool "nushell"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_HOST_PKGCONF
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PROGS
-+	help
-+	  A new type of shell.
++++ b/support/testing/tests/package/sample_nu.nu
+@@ -0,0 +1,6 @@
++#! /usr/bin/nu
++def greet [name] {
++  ["hello" $name]
++}
 +
-+	  https://github.com/nushell/nushell
-diff --git a/package/nushell/nushell.hash b/package/nushell/nushell.hash
++greet "world"
+diff --git a/support/testing/tests/package/test_nu.py b/support/testing/tests/package/test_nu.py
 new file mode 100644
-index 0000000000..b553a6c2bc
+index 0000000000..ba2ddb9851
 --- /dev/null
-+++ b/package/nushell/nushell.hash
-@@ -0,0 +1,3 @@
-+# Locally generated
-+sha256  352e807698d5f95e9bfdd9dd5512acab3cbef315379299a32e5f322a76eb718a  nushell-0.76.0.tar.gz
-+sha256  e189616e535e9f7bf410a72e6fc51ad1e0ae461c58d592e186c2669daa5d1e5d  LICENSE
-diff --git a/package/nushell/nushell.mk b/package/nushell/nushell.mk
-new file mode 100644
-index 0000000000..b9c1ee6434
---- /dev/null
-+++ b/package/nushell/nushell.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# nushell
-+#
-+################################################################################
++++ b/support/testing/tests/package/test_nu.py
+@@ -0,0 +1,62 @@
++import os
 +
-+NUSHELL_VERSION = 0.76.0
-+NUSHELL_SITE = $(call github,nushell,nushell,$(NUSHELL_VERSION))
-+NUSHELL_LICENSE = MIT
-+NUSHELL_LICENSE_FILES = LICENSE
-+NUSHELL_DEPENDENCIES = host-pkgconf openssl ncurses
++import infra.basetest
 +
-+# Add /usr/bin/nu to /etc/shells as in package/bash/bash.mk
-+define NUSHELL_ADD_NU_TO_SHELLS
-+	grep -qsE '^/usr/bin/nu$$' $(TARGET_DIR)/etc/shells \
-+		|| echo "/usr/bin/nu" >> $(TARGET_DIR)/etc/shells
-+endef
-+NUSHELL_TARGET_FINALIZE_HOOKS += NUSHELL_ADD_NU_TO_SHELLS
++class TestNuBase(infra.basetest.BRTest):
++    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it doesn't
++    # support a host rustc which is necessary for nushell
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_PACKAGE_NUSHELL=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        """
 +
-+$(eval $(cargo-package))
++    def login(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd",img])
++        self.emulator.login()
++
++# load a script on the target and check if it is executed correctly by nu
++class TestNu(TestNuBase):
++    config_sample_scripts = \
++        """
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
++        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
++                   "{sample_scripts}")
++
++    #simple hello world script found in the nushell doc
++    sample_scripts = ["tests/package/sample_nu.nu"]
++
++    def __init__(self, names):
++        """Add the scripts to the target in build time."""
++        super(TestNuBase, self).__init__(names)
++        scripts = [infra.filepath(s) for s in self.sample_scripts]
++        self.config += self.config_sample_scripts.format(sample_scripts=" ".join(scripts))
++
++    def check_sample_scripts_exist(self):
++        """Check the scripts were really added to the image."""
++        scripts = [os.path.basename(s) for s in self.sample_scripts]
++        cmd = "md5sum " + " ".join(scripts)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++    def run_sample_scripts(self):
++        """Run each script previously added to the image."""
++        for script in self.sample_scripts:
++            cmd = "nu " + os.path.basename(script)
++            self.assertRunOk(cmd)
++
++    def test_run(self):
++        self.login()
++        self.check_sample_scripts_exist()
++        self.run_sample_scripts()
 -- 
 2.25.1
 
 
---===============4751895873928711472==
+--===============7674601216444835612==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -222,4 +228,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4751895873928711472==--
+--===============7674601216444835612==--
