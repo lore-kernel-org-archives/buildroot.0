@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFFECC74A44
-	for <buildroot@archiver.kernel.org>; Wed,  8 Mar 2023 20:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49A83C64EC4
+	for <buildroot@archiver.kernel.org>; Wed,  8 Mar 2023 21:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D7BD404B5;
-	Wed,  8 Mar 2023 20:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D7BD404B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5943680E70;
+	Wed,  8 Mar 2023 21:27:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5943680E70
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zlZpJAyXC0YM; Wed,  8 Mar 2023 20:34:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PrwiOb7WgEsa; Wed,  8 Mar 2023 21:27:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8E8F40585;
-	Wed,  8 Mar 2023 20:34:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8E8F40585
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27F1C1BF95E
- for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 20:34:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A700080DB9;
+	Wed,  8 Mar 2023 21:27:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A700080DB9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E864B1BF287
+ for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 21:27:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0252060D68
- for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 20:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0252060D68
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF67A41839
+ for <buildroot@lists.busybox.net>; Wed,  8 Mar 2023 21:27:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF67A41839
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vb_jSMz-x8E7 for <buildroot@lists.busybox.net>;
- Wed,  8 Mar 2023 20:34:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CoY_YHdQ6PL5 for <buildroot@lists.busybox.net>;
+ Wed,  8 Mar 2023 21:27:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CC5060706
- for <buildroot@buildroot.org>; Wed,  8 Mar 2023 20:34:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CC5060706
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE6A74098D
+ for <buildroot@buildroot.org>; Wed,  8 Mar 2023 21:27:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE6A74098D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE82B86A63; Wed,  8 Mar 2023 20:34:04 +0000 (UTC)
+ id 95EC586A85; Wed,  8 Mar 2023 21:27:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Mar 2023 21:33:11 +0100
+Date: Wed, 8 Mar 2023 22:27:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c4d6288278b46b122ab9c011bbbdf8696281b88
-X-Git-Newrev: 720a68e33be7f46c8b5866d6b8f98b400f83f979
+X-Git-Oldrev: 720a68e33be7f46c8b5866d6b8f98b400f83f979
+X-Git-Newrev: 46abbffc9702be320e9d71de71ce89457a28c48e
 X-Patchwork-Hint: ignore
-Message-Id: <20230308203404.EE82B86A63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpv: needs NPTL
+Message-Id: <20230308212733.95EC586A85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mender: force libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,92 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=720a68e33be7f46c8b5866d6b8f98b400f83f979
+commit: https://git.buildroot.net/buildroot/commit/?id=46abbffc9702be320e9d71de71ce89457a28c48e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mpv unconditionally uses pthread_getcpuclockid since version 0.33.0 and
-https://github.com/mpv-player/mpv/commit/fd3caa264ea0848e7e30db94390063c87e247003
-resulting in the following build failure without NPTL since commit
-e3cf26dda31e6c1720c53e0229d93fe2a5ea18aa:
+mender raises the following build failure with libressl since at least
+version 3.1.0 (and probably since the addition of the package):
 
-../common/stats.c: In function 'get_thread_cpu_time_ns':
-../common/stats.c:75:9: error: implicit declaration of function 'pthread_getcpuclockid'; did you mean 'pthread_getspecific'? [-Werror=implicit-function-declaration]
-   75 |     if (pthread_getcpuclockid(thread, &id) == 0 &&
-      |         ^~~~~~~~~~~~~~~~~~~~~
-      |         pthread_getspecific
+vendor/github.com/mendersoftware/openssl/conn.go:103:61: could not determine kind of name for C.X509_V_ERR_DANE_NO_MATCH
 
 Fixes:
- - http://autobuild.buildroot.org/results/98cde5cbb0844c6ef483a75cf9a6f3fd3a46c693
+ - http://autobuild.buildroot.org/results/2b032d2a4e7cfbb20444c13821003120a4d00abd
+ - http://autobuild.buildroot.org/results/621c057c0b8b627c8140456a2b0af4f95d239dcc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpv/Config.in   | 6 +++---
- package/tovid/Config.in | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/mender/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 6811497d73..8efb353c33 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_MPV
- 	bool "mpv"
- 	depends on BR2_INSTALL_LIBSTDCPP # libass
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-@@ -34,10 +34,10 @@ config BR2_PACKAGE_MPV
- 
- 	  https://mpv.io/
- 
--comment "mpv needs a toolchain w/ C++, threads, gcc >= 4.9"
-+comment "mpv needs a toolchain w/ C++, NPTL, gcc >= 4.9"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/tovid/Config.in b/package/tovid/Config.in
-index 3dbb0e229e..c263acdd62 100644
---- a/package/tovid/Config.in
-+++ b/package/tovid/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_TOVID
- 	bool "tovid"
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mpv
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_PYTHON3
-@@ -29,12 +29,12 @@ config BR2_PACKAGE_TOVID
- 
- 	  http://tovid.wikia.com/wiki/Installing_tovid
- 
--comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.9"
-+comment "tovid needs a toolchain w/ NPTL, C++, wchar, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_HAS_THREADS \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
- 		|| !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_USE_WCHAR
-@@ -45,6 +45,6 @@ comment "tovid depends on python3"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+diff --git a/package/mender/Config.in b/package/mender/Config.in
+index cccb46361b..7d768cebec 100644
+--- a/package/mender/Config.in
++++ b/package/mender/Config.in
+@@ -4,8 +4,9 @@ config BR2_PACKAGE_MENDER
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160
+ 	help
+ 	  Mender is an open source over-the-air (OTA) software updater
+ 	  for embedded Linux devices. Mender comprises a client
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
