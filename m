@@ -4,94 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E684C64EC4
-	for <buildroot@archiver.kernel.org>; Thu,  9 Mar 2023 20:38:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08727C64EC4
+	for <buildroot@archiver.kernel.org>; Thu,  9 Mar 2023 20:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0334F61153;
-	Thu,  9 Mar 2023 20:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0334F61153
+	by smtp3.osuosl.org (Postfix) with ESMTP id A769A60DCB;
+	Thu,  9 Mar 2023 20:58:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A769A60DCB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BtLS19BYmVxc; Thu,  9 Mar 2023 20:38:36 +0000 (UTC)
+	with ESMTP id IGpTOvsrGojJ; Thu,  9 Mar 2023 20:58:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46C0D60BCE;
-	Thu,  9 Mar 2023 20:38:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46C0D60BCE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E93481BF3BA
- for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 20:38:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BC5A60E13;
+	Thu,  9 Mar 2023 20:58:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BC5A60E13
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EF821BF3BA
+ for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 20:58:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C39604053F
- for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 20:38:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C39604053F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 852DC415D5
+ for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 20:58:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 852DC415D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iFbDSHewcPYw for <buildroot@lists.busybox.net>;
- Thu,  9 Mar 2023 20:38:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9Db7wSheb37k for <buildroot@lists.busybox.net>;
+ Thu,  9 Mar 2023 20:58:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BC2C40386
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0BC2C40386
- for <buildroot@buildroot.org>; Thu,  9 Mar 2023 20:38:32 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id u9so12163451edd.2
- for <buildroot@buildroot.org>; Thu, 09 Mar 2023 12:38:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87175402B7
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 87175402B7
+ for <buildroot@buildroot.org>; Thu,  9 Mar 2023 20:58:32 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id o12so12293530edb.9
+ for <buildroot@buildroot.org>; Thu, 09 Mar 2023 12:58:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1678394311;
+ d=1e100.net; s=20210112; t=1678395510;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=GfbHlOzL4+1jvL3nLOToD8wpy5otDwUd3zDpcZLoyO8=;
- b=11CQtRN1rjQuqLVSERubTGxEWmWwQJqejhKz8dLEZHN9ePfKjJlSC1S8zYh7WZc2ED
- 42ea2KjWuWeI5Cco3ZjmGC9QvF/WF2oc6BiS/kIv066sOKrAM0FsNjcIr8mCxO+cAvzs
- CkUi24ELv7LwP1EKAjDTNYnSKbtPMknOFBy7d1izLstLCy4iElOH9rb02Efs0c4W2wEC
- bLEGE10nstMNe8tPGGHRe1INjm6KgUkvi2Trs9r4girhb7+rSs9Fqy7LlhyPISUzsLUy
- w9Z1Fe7kGZgvUa8mWtrQ4xFPs7yPyP2j9uIq3t97nGylhMbvJx0MGSabkobo1M2o/6pU
- F5Rg==
-X-Gm-Message-State: AO0yUKVFlW0ttLHIe1UoWM7PAVPzULYvRZ58McTmFyodqCc6X7fh+0h9
- iU/d641ilvpS9Lm1FrW685kQFg==
-X-Google-Smtp-Source: AK7set++3/v3StFo9Ax3T35w9dvvsaDwo2xZ01yQVFFhtwLg/HBIgxvkxcd1qHFoYLLAvUScAaqB4Q==
-X-Received: by 2002:a17:906:408f:b0:8b1:7968:7fb8 with SMTP id
- u15-20020a170906408f00b008b179687fb8mr24582286ejj.62.1678394311034; 
- Thu, 09 Mar 2023 12:38:31 -0800 (PST)
+ bh=oaHemdwX9vc3fQUzerVGDKJT/H2n+Kslr6GJPcNrtsY=;
+ b=Qib/OHZbrGrWxiqcH0dR53M57BL7jf4uUhjC9Phpl1FMYBun8oEiIzhwcsOBAv9AoQ
+ H77rqikrdmfVPImXp6NR9zFCwM2cSqvc78V8xjlH2Ham1Y6fG1n7DUe+BfdpBy+zCpZp
+ EacmNh1nL2tPRIxEDfOdXOByAMQcN5Htz4aEP1xzObhpml+AabWhMImnuP/47r/bop9M
+ e1KEIHVOEhVyYziOvyzVW+JjJt5+YTMg0eG0SHtoCNWFm0TYjH4IevtbYwLk8QksIJ7i
+ hZnNcw7weCs5a+rnoRH8kve77lNW0Y++sA1JRlPhECIF1WEsdN7gi1GGvOi/iBHNhSA4
+ b4BQ==
+X-Gm-Message-State: AO0yUKU6ZGyNghocmF3R8mMeJc+ol9zRn8F4JAu781oWOMb8ChMfTRbL
+ IiKEuuHyTQYfpGYfcEZUaGUZNg==
+X-Google-Smtp-Source: AK7set/vqkjt58GS4aFiZu7NA2waVqVZmY8sLUh7dscRyg0U+oHSkmBTMtPdRZOVE4GvYyO0OBBxuw==
+X-Received: by 2002:a17:906:938f:b0:8dc:cfe8:da53 with SMTP id
+ l15-20020a170906938f00b008dccfe8da53mr30457ejx.10.1678395510415; 
+ Thu, 09 Mar 2023 12:58:30 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- l15-20020a170906078f00b008ea8effe947sm9264582ejc.225.2023.03.09.12.38.29
+ b20-20020a170906195400b008cce6c5da29sm11888eje.70.2023.03.09.12.58.29
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 09 Mar 2023 12:38:30 -0800 (PST)
-Message-ID: <c5468831-c16c-841e-c3f3-be1a76202093@mind.be>
-Date: Thu, 9 Mar 2023 21:38:28 +0100
+ Thu, 09 Mar 2023 12:58:29 -0800 (PST)
+Message-ID: <b4b828db-5892-d4be-c80a-0c00d7c52d61@mind.be>
+Date: Thu, 9 Mar 2023 21:58:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 Content-Language: en-GB
-To: Peter Korsgaard <peter@korsgaard.com>,
- Lang Daniel via buildroot <buildroot@buildroot.org>
-References: <VI1P190MB04936D7377E09CA3A3AA93A49FAF9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
- <87sfermacm.fsf@dell.be.48ers.dk>
+To: Lang Daniel <d.lang@abatec.at>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <VI1P190MB04934E635705A3395768AC0A9FA89@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <87sfermacm.fsf@dell.be.48ers.dk>
+In-Reply-To: <VI1P190MB04934E635705A3395768AC0A9FA89@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1678394311;
+ d=mind.be; s=google; t=1678395510;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=GfbHlOzL4+1jvL3nLOToD8wpy5otDwUd3zDpcZLoyO8=;
- b=QlargyyF6VI+tG+wVpGGP43/DZyjH9U/SwVA5mNuetwAScBVT40h/M8f2HZ+rVEgFe
- a4i1/uZTDQRVTR71M7S50w23Yn7SqsU1XpEme0m2DGFTVM55pKhFrtL4omquha0DKODh
- 2ZoOeDiMk1oU2IqlEngeDYfXTGlRlKEEXmVdfd8N5TvMf9uHiKRj2l+NuOLR81Naxty9
- tARiEV3ELQGI7Owp0cxmNltkUyQhVZlHjNmxFlVQbalp6sAlgDcTju6dUr45jT9LSlFR
- NFZMszvlH7e6FXL1IMgrahHD0NXaUxDlmwm31MFjTpU+6ktzpOIFGTiEYnRtzIUC6Tbw
- Ciog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=oaHemdwX9vc3fQUzerVGDKJT/H2n+Kslr6GJPcNrtsY=;
+ b=NP7YqsxLZzrDVfhzJfUGHJ+kqurzHusPcO5vPsEYi8eIJ0rXBSK4+IAjpmEy99lhNu
+ hTaq/owNl5wDNSSqJwmcUbe0urWJBfXqISeZK4GI8DYb0NIYH4NUWyZSaLQjFI4C00Dh
+ IPKEG/NoRDjUeTpzvliINEII8N7ZkLBybxlEjdfA+G9b3XRwsYG31kMHsSsI/B1mZ2po
+ GCN8khE0H5PDHKbXxE9oEr+kb5XGPnIesWHdSczAT2r9CKyhewuQZw/+0btF9VjkkdbM
+ VkGjqZrMDKHzi0Jn4GFZdK4hy+nE22FGOK4ob922SrDpuKV5q+OZ1qhC2hlgQ1fKIv2p
+ 77tw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=QlargyyF
-Subject: Re: [Buildroot] [PATCH 3/3] linux: bump _KERNEL_LATEST_VERSION to
- 6.2
+ header.a=rsa-sha256 header.s=google header.b=NP7YqsxL
+Subject: Re: [Buildroot] [PATCH 3/6] package/atkmm2_28: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,7 +101,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lang Daniel <d.lang@abatec.at>
+Cc: "james.knight@collins.com" <james.knight@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -111,33 +109,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 27/02/2023 15:50, Peter Korsgaard wrote:
->>>>>> "Lang" == Lang Daniel via buildroot <buildroot@buildroot.org> writes:
-> 
->   > Signed-off-by: Daniel Lang <d.lang@abatec.at>
->   > ---
->   >  linux/Config.in | 6 +++---
->   >  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
->   > diff --git a/linux/Config.in b/linux/Config.in
->   > index 5cbef197ab..495fc48997 100644
->   > --- a/linux/Config.in
->   > +++ b/linux/Config.in
->   > @@ -28,8 +28,8 @@ choice
->   >  	prompt "Kernel version"
->   
->   >  config BR2_LINUX_KERNEL_LATEST_VERSION
->   > -	bool "Latest version (6.1)"
->   > -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
->   > +	bool "Latest version (6.2)"
->   > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2 if BR2_KERNEL_HEADERS_AS_KERNEL
-> 
-> Given that 6.1 is a LTS kernel I would prefer to wait with patch 2+3
-> until after 2023.02 is released (E.G. in a few days).
+On 24/02/2023 09:42, Lang Daniel via buildroot wrote:
+> |+ This is the last version before the API and ABI change + introduced in 2.36.0 
+> which requires C++17.|
 
-  I agree about this one, but wouldn't it make sense to add the *option* to 
-build 6.2 kernel headers or use them in an external toolchain still make sense 
-for 2023.02? I.e. patch 2 without changing the default kernel headers.
+  This sounds like we could use 2.34.0 instead of 2.28.0. Why did you choose 2.28.0?
 
   Regards,
   Arnout
