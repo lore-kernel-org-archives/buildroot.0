@@ -4,48 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88B84C61DA4
-	for <buildroot@archiver.kernel.org>; Thu,  9 Mar 2023 19:39:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05BAAC61DA4
+	for <buildroot@archiver.kernel.org>; Thu,  9 Mar 2023 19:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B59461775;
-	Thu,  9 Mar 2023 19:39:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B59461775
+	by smtp3.osuosl.org (Postfix) with ESMTP id A633960BF7;
+	Thu,  9 Mar 2023 19:40:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A633960BF7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IZIiHWj9opE6; Thu,  9 Mar 2023 19:39:29 +0000 (UTC)
+	with ESMTP id tRE7kgdzFQvO; Thu,  9 Mar 2023 19:40:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70B3860BF7;
-	Thu,  9 Mar 2023 19:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70B3860BF7
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD1ED60BE6;
+	Thu,  9 Mar 2023 19:40:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD1ED60BE6
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BCDEA1BF410
- for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 19:39:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A5CDE1BF410
+ for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 19:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 96B2C82026
- for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 19:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96B2C82026
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F496821DF
+ for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 19:40:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F496821DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KNy2oS1EaGwE for <buildroot@lists.busybox.net>;
- Thu,  9 Mar 2023 19:39:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B79328201B
- for <buildroot@buildroot.org>; Thu,  9 Mar 2023 19:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B79328201B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A46FF86B43; Thu,  9 Mar 2023 19:39:25 +0000 (UTC)
+ with ESMTP id lzxINqOLwRbD for <buildroot@lists.busybox.net>;
+ Thu,  9 Mar 2023 19:40:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75CC8820E4
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 75CC8820E4
+ for <buildroot@buildroot.org>; Thu,  9 Mar 2023 19:40:46 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id cy23so11385648edb.12
+ for <buildroot@buildroot.org>; Thu, 09 Mar 2023 11:40:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1678390844;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=TMLz+nCjtM9Va5LE3iksP+8ua38KVuu+Z9BzzhQXZH0=;
+ b=U5jZEyEulWo335Wk5cfRoi4frJyoGMFz547WyO4tp9sX2QyfaB1eBbsleh0A8zf5sl
+ zuEaOZJUV306q4R3hKHyHTYujMR9OYKx9LI7qYNKM+eT6PuyKdaOGfvT3BNfLb9fWCo8
+ Ct/SvimOUd/PnUqGwEd9hthgurtd2cTl0yhHuL/92I9c1fEZS6k5ounPHtVhx0kt4aza
+ F3U7+cQOFpG6HreATg1S44QVi601DHEhaTbLHZ91TFIipiMElV2uqaW+2LGo7qtsUfvd
+ 6Cnf4G2qcXuOECuy6RmtpXueiQjt+r3tL5n912+4TLYgy5hVSPAk5ULs7Q5NXRqVbq+d
+ bXhg==
+X-Gm-Message-State: AO0yUKUMphUPOsTroGm6Utw518i2YbM408Jn1Dh/c0nis9TkG+QyKqzL
+ 7fVtIrwZHFq11vKnlOMyvmw/hQ==
+X-Google-Smtp-Source: AK7set/fDWFmC2jbElglv6/Loy674s0aKEuUPMMmLw2cWiUy3x3+BTlfjSdkdaQNTJeYAt6MEAexPw==
+X-Received: by 2002:a17:906:9451:b0:8e1:d996:dca2 with SMTP id
+ z17-20020a170906945100b008e1d996dca2mr22008349ejx.64.1678390844654; 
+ Thu, 09 Mar 2023 11:40:44 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ a8-20020a17090680c800b008cd1f773754sm9104175ejx.5.2023.03.09.11.40.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 09 Mar 2023 11:40:44 -0800 (PST)
+Message-ID: <a8480700-e3a3-a90c-8ca2-ba19e416730e@mind.be>
+Date: Thu, 9 Mar 2023 20:40:42 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-GB
+To: Lang Daniel <d.lang@abatec.at>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <VI1P190MB04936329051AD467C99376869FB59@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 From: Arnout Vandecappelle <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Thu, 9 Mar 2023 20:38:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50d3883fba99eb5651e5059b5840529a25111ba1
-X-Git-Newrev: 5256ec9ca872518beacf827443fec72146ab7a0c
-X-Patchwork-Hint: ignore
-Message-Id: <20230309193925.A46FF86B43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apache: security bump version to
- 2.4.56
+In-Reply-To: <VI1P190MB04936329051AD467C99376869FB59@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1678390844;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=TMLz+nCjtM9Va5LE3iksP+8ua38KVuu+Z9BzzhQXZH0=;
+ b=NKw/RG0nVJnKetSfEiuk1nyN04mjsAV16/S6AD1f6NuxCsRghMkraYoi5TIu5qV5U6
+ ezn2PAJNhYG5WeAdvpo+9IYqx1aGVK0eAiB5a02Zkh4MRdpIrv/qgotLmohXJubODVlA
+ 077b4Hwaf5C/l0YyPtlEdxwU2mJ9bSZAb1wHc5X8Ho84hBKy3buwjOwki6pxDBnkIWMm
+ krDjtkiMkI+B2dOc54gxnDJbjNHzKNTsRxhliCboM1p1yteuf4QDdnwsY/neUxETydrN
+ zz8bskNRja9dnLyX/X0bqWqqxrYJaNiQRZtW0toPQx0En0tMCNJTZhrzLbtKiCuMVuMC
+ dwwQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=NKw/RG0n
+Subject: Re: [Buildroot] [PATCH] package/libgpg-error: force cross compiling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,56 +101,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5256ec9ca872518beacf827443fec72146ab7a0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.apache.org/thread/89vkczkfkdyz65d5q59pcyzrn5ts60s6
 
-Changelog: https://dlcdn.apache.org/httpd/CHANGES_2.4.56
+On 09/03/2023 08:15, Lang Daniel via buildroot wrote:
+> By default autotools enters cross-compiling mode if --build and --host
+> differ [0]. This should normally be the case as buildroot sets itself as
+> vendor in the toolchain triplet.
+> For libgpg-error the --host flag has to be set to a generic triplet
+> because this information is used to lookup the syscfg.
+> When compiling on aarch64 for aarch64 build and host would be the same,
+> therefore cross-compiling isn't activated, which results in a build failure.
+> 
+> Fixes:
+>   - http://autobuild.buildroot.net/results/6d4/6d4bc520c12313508d0fadee11d5b88c35a3cba9/
+> 
+> [0]: https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.71/html_node/Hosts-and-Cross_002dCompilation.html
+> 
+> Signed-off-by: Daniel Lang <d.lang@abatec.at>
 
-Fixes CVE-2023-25690 & CVE-2023-27522:
-https://httpd.apache.org/security/vulnerabilities_24.html
+  Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index a1185c5618..36144917fb 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.apache.org/httpd/httpd-2.4.54.tar.bz2.{sha256,sha512}
--sha256  11d6ba19e36c0b93ca62e47e6ffc2d2f2884942694bce0f23f39c71bdc5f69ac  httpd-2.4.55.tar.bz2
--sha512  94982f7a1fedac8961fc17b5a22cf763ac28cb27ee6facab2e6a15b249b927773667493fd3f7354fb13fcb34a6f1afc1bdd5cf4b7be030cba1dfb523e40d43fb  httpd-2.4.55.tar.bz2
-+# From https://downloads.apache.org/httpd/httpd-2.4.56.tar.bz2.{sha256,sha512}
-+sha256  d8d45f1398ba84edd05bb33ca7593ac2989b17cb9c7a0cafe5442d41afdb2d7c  httpd-2.4.56.tar.bz2
-+sha512  5f12cd9878d822384b1bb163fea4d8edee5e7a0dd8b2389264387971268145cccc6a5a27ddf0436c5f1f631acc5fdc4874da2a47911483e421ca40bf783e0e12  httpd-2.4.56.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 13018a9b1f..80205a6362 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.55
-+APACHE_VERSION = 2.4.56
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = https://downloads.apache.org/httpd
- APACHE_LICENSE = Apache-2.0
+> ---
+>   package/libgpg-error/libgpg-error.mk | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+> index 3f4a45a7e4..3ab8535a9c 100644
+> --- a/package/libgpg-error/libgpg-error.mk
+> +++ b/package/libgpg-error/libgpg-error.mk
+> @@ -14,6 +14,7 @@ LIBGPG_ERROR_INSTALL_STAGING = YES
+>   LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+>   LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+>   LIBGPG_ERROR_CONF_OPTS = \
+> +	cross_compiling=yes \
+>   	--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG) \
+>   	--enable-install-gpg-error-config \
+>   	--disable-tests \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
