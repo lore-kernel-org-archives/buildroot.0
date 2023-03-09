@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 513B7C64EC4
-	for <buildroot@archiver.kernel.org>; Thu,  9 Mar 2023 21:21:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB948C64EC4
+	for <buildroot@archiver.kernel.org>; Thu,  9 Mar 2023 21:21:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D535E8224B;
-	Thu,  9 Mar 2023 21:21:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D535E8224B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92C9F82246;
+	Thu,  9 Mar 2023 21:21:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92C9F82246
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ciOrYvN1aMdJ; Thu,  9 Mar 2023 21:21:17 +0000 (UTC)
+	with ESMTP id j3IdlSq3cmNT; Thu,  9 Mar 2023 21:21:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E433A82255;
-	Thu,  9 Mar 2023 21:21:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E433A82255
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 774541BF97A
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC59482255;
+	Thu,  9 Mar 2023 21:21:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC59482255
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D8401BF97E
  for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 21:21:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50F1160E8A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 676C482246
  for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 21:21:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50F1160E8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 676C482246
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AwljIXELLboc for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pZM49O1k02cx for <buildroot@lists.busybox.net>;
  Thu,  9 Mar 2023 21:21:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 517B960E7C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9125282244
  for <buildroot@buildroot.org>; Thu,  9 Mar 2023 21:21:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 517B960E7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9125282244
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FBFC86C92; Thu,  9 Mar 2023 21:21:00 +0000 (UTC)
+ id 814A086C9B; Thu,  9 Mar 2023 21:21:00 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 9 Mar 2023 21:45:51 +0100
+Date: Thu, 9 Mar 2023 22:18:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9b078380384f8ecd74857260d911e267c7a788b3
-X-Git-Newrev: 1723771209106d80d9c673c6f8b99bd08c1b0967
+X-Git-Oldrev: f91661108d85d4bb663fe555be82a246a7e6b027
+X-Git-Newrev: 6e817622b812cf579061abd78f08af029eba72ea
 X-Patchwork-Hint: ignore
-Message-Id: <20230309212100.3FBFC86C92@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/glibmm2_66: new package
+Message-Id: <20230309212100.814A086C9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gtkmm3: use correct versions of mm
+ packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,125 +63,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1723771209106d80d9c673c6f8b99bd08c1b0967
+commit: https://git.buildroot.net/buildroot/commit/?id=6e817622b812cf579061abd78f08af029eba72ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is the version needed for gtkmm3.
+Many of the C++ wrapper packages had API changes. These changes where
+never introduced in gtkmm3, meaning that older, but still maintained
+versions are needed to build gtkmm3.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/172/17263ac51f197031106eb7fd595126a2720f0397
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- DEVELOPERS                         |  2 ++
- package/Config.in                  |  1 +
- package/glibmm/Config.in           |  2 +-
- package/glibmm2_66/Config.in       | 21 +++++++++++++++++++++
- package/glibmm2_66/glibmm2_66.hash |  5 +++++
- package/glibmm2_66/glibmm2_66.mk   | 23 +++++++++++++++++++++++
- 6 files changed, 53 insertions(+), 1 deletion(-)
+ DEVELOPERS               |  1 +
+ package/gtkmm3/Config.in | 16 ++++++++--------
+ package/gtkmm3/gtkmm3.mk |  2 +-
+ 3 files changed, 10 insertions(+), 9 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 2786b1c050..32ab852084 100644
+index 27466de54a..1dc085b87f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -641,6 +641,8 @@ F:	package/dacapo/
- 
- N:	Daniel Lang <d.lang@abatec.at>
+@@ -647,6 +647,7 @@ F:	package/cairomm1_14/
  F:	package/dbus-cxx/
-+F:	package/glibmm/
-+F:	package/glibmm2_66/
+ F:	package/glibmm/
+ F:	package/glibmm2_66/
++F:	package/gtkmm3/
  F:	package/libsigc/
  F:	package/libsigc2/
  F:	package/paho-mqtt-cpp/
-diff --git a/package/Config.in b/package/Config.in
-index 522a22b76a..0f0980b57b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2037,6 +2037,7 @@ menu "Other"
- 	source "package/gflags/Config.in"
- 	source "package/gli/Config.in"
- 	source "package/glibmm/Config.in"
-+	source "package/glibmm2_66/Config.in"
- 	source "package/glm/Config.in"
- 	source "package/gmp/Config.in"
- 	source "package/gobject-introspection/Config.in"
-diff --git a/package/glibmm/Config.in b/package/glibmm/Config.in
-index 2dfc861817..b7bed195e9 100644
---- a/package/glibmm/Config.in
-+++ b/package/glibmm/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_GLIBMM
--	bool "glibmm"
-+	bool "glibmm (latest)"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libsigc
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # libglib2
-diff --git a/package/glibmm2_66/Config.in b/package/glibmm2_66/Config.in
-new file mode 100644
-index 0000000000..628584cae5
---- /dev/null
-+++ b/package/glibmm2_66/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_GLIBMM2_66
-+	bool "glibmm (2.66.x)"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # regex_replace
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBSIGC2
-+	help
-+	  The GLibmm package is a set of C++ bindings for GLib.
-+
-+	  This is the last version before the API and ABI change
-+	  introduced in 2.68.0 which requires C++17.
-+
-+	  http://www.gtkmm.org/
-+
-+comment "glibmm (2.66.x) needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
-+	depends on BR2_USE_MMU
+diff --git a/package/gtkmm3/Config.in b/package/gtkmm3/Config.in
+index 3c1c6f36e8..6b924c856b 100644
+--- a/package/gtkmm3/Config.in
++++ b/package/gtkmm3/Config.in
+@@ -1,7 +1,7 @@
+-comment "gtkmm3 needs libgtk3 and a toolchain w/ C++, wchar, threads, gcc >= 7"
++comment "gtkmm3 needs libgtk3 and a toolchain w/ C++, wchar, threads, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR \
 +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/glibmm2_66/glibmm2_66.hash b/package/glibmm2_66/glibmm2_66.hash
-new file mode 100644
-index 0000000000..b7d19b261c
---- /dev/null
-+++ b/package/glibmm2_66/glibmm2_66.hash
-@@ -0,0 +1,5 @@
-+# From https://download.gnome.org/sources/glibmm/2.66/glibmm-2.66.5.sha256sum
-+sha256  7b384662dd6ec3b86c0570331d32af05db2bd99a791602b767b4a0b2566ec149  glibmm-2.66.5.tar.xz
-+# License files, locally calculated
-+sha256  3ea7fa7c5d9a3a113e950eca9cfb85107f096270d8e4dd99daa9d8abdebc60e7  COPYING
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
-diff --git a/package/glibmm2_66/glibmm2_66.mk b/package/glibmm2_66/glibmm2_66.mk
-new file mode 100644
-index 0000000000..b58c7ca8df
---- /dev/null
-+++ b/package/glibmm2_66/glibmm2_66.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# glibmm2_66
-+#
-+################################################################################
-+
-+GLIBMM2_66_VERSION_MAJOR = 2.66
-+GLIBMM2_66_VERSION = $(GLIBMM2_66_VERSION_MAJOR).5
-+GLIBMM2_66_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
-+GLIBMM2_66_LICENSE_FILES = COPYING COPYING.tools
-+GLIBMM2_66_SOURCE = glibmm-$(GLIBMM2_66_VERSION).tar.xz
-+GLIBMM2_66_SITE = https://download.gnome.org/sources/glibmm/$(GLIBMM2_66_VERSION_MAJOR)
-+GLIBMM2_66_INSTALL_STAGING = YES
-+GLIBMM2_66_DEPENDENCIES = libglib2 libsigc2 host-pkgconf
-+GLIBMM2_66_CONF_OPTS = -Dbuild-examples=false
-+
-+GLIBMM2_66_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+GLIBMM2_66_CXXFLAGS += -O0
-+endif
-+
-+$(eval $(meson-package))
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS
+ 
+@@ -14,16 +14,16 @@ config BR2_PACKAGE_GTKMM3
+ 	depends on !BR2_nios2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pangomm, libgtk3 -> pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # glibmm, libpangomm -> glibmm/pango
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libsigc
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/libgtk3 -> libglib2
+ 	depends on BR2_USE_MMU # *mm/libgtk3 -> libglib2
+ 	depends on BR2_USE_WCHAR # *mm/libgtk3 -> libglib2
+ 	depends on BR2_PACKAGE_LIBGTK3
+-	select BR2_PACKAGE_ATKMM
+-	select BR2_PACKAGE_CAIROMM
+-	select BR2_PACKAGE_GLIBMM
+-	select BR2_PACKAGE_LIBSIGC
+-	select BR2_PACKAGE_PANGOMM
++	select BR2_PACKAGE_ATKMM2_28
++	select BR2_PACKAGE_CAIROMM1_14
++	select BR2_PACKAGE_GLIBMM2_66
++	select BR2_PACKAGE_LIBSIGC2
++	select BR2_PACKAGE_PANGOMM2_46
+ 	help
+ 	  The gtkmm3 package is a set of C++ bindings for GTK 3.
+ 
+diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
+index d717c08bd8..8bbcf224e6 100644
+--- a/package/gtkmm3/gtkmm3.mk
++++ b/package/gtkmm3/gtkmm3.mk
+@@ -11,6 +11,6 @@ GTKMM3_SITE = https://download.gnome.org/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
+ GTKMM3_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GTKMM3_LICENSE_FILES = COPYING COPYING.tools
+ GTKMM3_INSTALL_STAGING = YES
+-GTKMM3_DEPENDENCIES = atkmm cairomm glibmm libgtk3 libsigc pangomm host-pkgconf
++GTKMM3_DEPENDENCIES = atkmm2_28 cairomm1_14 glibmm2_66 libgtk3 libsigc2 pangomm2_46 host-pkgconf
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
