@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE37C64EC4
-	for <buildroot@archiver.kernel.org>; Thu,  9 Mar 2023 20:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6191C61DA4
+	for <buildroot@archiver.kernel.org>; Thu,  9 Mar 2023 20:29:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 393516179C;
-	Thu,  9 Mar 2023 20:29:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 393516179C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9978D605EA;
+	Thu,  9 Mar 2023 20:29:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9978D605EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2vywaO4U72fg; Thu,  9 Mar 2023 20:29:07 +0000 (UTC)
+	with ESMTP id 72Tz3tGcWqL0; Thu,  9 Mar 2023 20:29:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7468761795;
-	Thu,  9 Mar 2023 20:29:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7468761795
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 669391BF3BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id C51CB61795;
+	Thu,  9 Mar 2023 20:29:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C51CB61795
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7018A1BF97A
  for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 20:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 409928214B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 586E2403D6
  for <buildroot@lists.busybox.net>; Thu,  9 Mar 2023 20:29:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 409928214B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 586E2403D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id npdZyHmhl4eI for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lyfJ_ehc9coS for <buildroot@lists.busybox.net>;
  Thu,  9 Mar 2023 20:29:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7235A82150
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E89340386
  for <buildroot@buildroot.org>; Thu,  9 Mar 2023 20:29:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7235A82150
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E89340386
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 612A586B70; Thu,  9 Mar 2023 20:29:03 +0000 (UTC)
+ id 6B7DA86B71; Thu,  9 Mar 2023 20:29:03 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 9 Mar 2023 21:12:47 +0100
+Date: Thu, 9 Mar 2023 21:15:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33a208e5dac02df473f8325ee93c2e07489f9a62
-X-Git-Newrev: 1a5686823dbe83be74f819227bfefe4edca35e48
+X-Git-Oldrev: 1a5686823dbe83be74f819227bfefe4edca35e48
+X-Git-Newrev: 9cdccfdaae3395a8f3de0712175b1e60c2e62a2c
 X-Patchwork-Hint: ignore
-Message-Id: <20230309202903.612A586B70@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/speechd: fix libltdl
- enable/disable configure option
+Message-Id: <20230309202903.6B7DA86B71@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/speechd: add default configure
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a5686823dbe83be74f819227bfefe4edca35e48
+commit: https://git.buildroot.net/buildroot/commit/?id=9cdccfdaae3395a8f3de0712175b1e60c2e62a2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- libltdl usage is configured by --disable/enable-ltdl (see configure.ac
-  'AC_ARG_ENABLE([ltdl], [...])')
-
-Fixes:
-
-  configure: WARNING: unrecognized options: [...] --with-libltdl
+- add default configure options for all optional speechd features/
+  output modules (disable all with additional library dependencies, enable
+  oss)
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/speechd/speechd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/speechd/speechd.mk | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
-index ec62980986..b545863035 100644
+index b545863035..5944ea3a28 100644
 --- a/package/speechd/speechd.mk
 +++ b/package/speechd/speechd.mk
-@@ -24,9 +24,9 @@ SPEECHD_PRE_CONFIGURE_HOOKS += SPEECHD_TOUCH_CONFIG_RPATH
+@@ -14,7 +14,22 @@ SPEECHD_AUTORECONF = YES
+ SPEECHD_GETTEXTIZE = YES
+ SPEECHD_DEPENDENCIES = host-pkgconf dotconf libglib2 libsndfile
+ SPEECHD_CONF_ENV = ac_cv_prog_HELP2MAN=""
+-SPEECHD_CONF_OPTS = --without-kali
++SPEECHD_CONF_OPTS = \
++	--disable-python \
++	--without-espeak \
++	--without-espeak-ng \
++	--without-flite \
++	--without-ibmtts \
++	--without-voxin \
++	--without-ivona \
++	--without-pico \
++	--without-baratinoo \
++	--without-kali \
++	--without-pulse \
++	--without-libao \
++	--without-alsa \
++	--with-oss \
++	--without-nas
  
- ifeq ($(BR2_PACKAGE_LIBTOOL),y)
- SPEECHD_DEPENDENCIES += libtool
--SPEECHD_CONF_OPTS += --with-libltdl
-+SPEECHD_CONF_OPTS += --enable-ltdl
- else
--SPEECHD_CONF_OPTS += --without-libltdl
-+SPEECHD_CONF_OPTS += --disable-ltdl
- endif
- 
- define SPEECHD_INSTALL_INIT_SYSTEMD
+ # fix missing config.rpath (needed for autoreconf) in the codebase
+ define SPEECHD_TOUCH_CONFIG_RPATH
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
