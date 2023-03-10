@@ -1,65 +1,132 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74A79C6FD19
-	for <buildroot@archiver.kernel.org>; Fri, 10 Mar 2023 09:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FEB9C6FA99
+	for <buildroot@archiver.kernel.org>; Fri, 10 Mar 2023 13:48:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB724401B2;
-	Fri, 10 Mar 2023 09:02:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB724401B2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LS4pgT5UK_ZK; Fri, 10 Mar 2023 09:02:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DB2F40165;
-	Fri, 10 Mar 2023 09:02:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB2F40165
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 64C4D1BF31A
- for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 09:02:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D9AD820F5
- for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 09:02:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D9AD820F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89D7181FDF;
+	Fri, 10 Mar 2023 13:48:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89D7181FDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G32KrxaAAPFJ for <buildroot@lists.busybox.net>;
- Fri, 10 Mar 2023 09:02:23 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A99068208E
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A99068208E
- for <buildroot@buildroot.org>; Fri, 10 Mar 2023 09:02:22 +0000 (UTC)
-Received: from evilbit.green-communications.fr ([92.154.77.116]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis)
- id 1M89P3-1pefEm2LJr-005Lzt; Fri, 10 Mar 2023 10:02:19 +0100
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vZl8fzeMUVdz; Fri, 10 Mar 2023 13:48:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE01881FBB;
+	Fri, 10 Mar 2023 13:48:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE01881FBB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C8491BF292
+ for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 13:48:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06D3C402E6
+ for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 13:48:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06D3C402E6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DD5pGA-h5aZh for <buildroot@lists.busybox.net>;
+ Fri, 10 Mar 2023 13:48:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA34640123
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com
+ (mail-ve1eur01on062e.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe1f::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DA34640123
+ for <buildroot@buildroot.org>; Fri, 10 Mar 2023 13:48:43 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lnTBq92PaZ9NrwTusvDSJVXlPe3lLMmAoYv8qeDw9CZ5tQmtQ531fkcTYlswFy7Ta3T/DSyumiBb/XivDmG7WY4kdYL9nUeK456Q9dYv0hGxu3z0/JVU6aOopMQjFLPmEf2FE3wzBKD5Gx4FvNqrDXBKFkAVn34NQxKiTnn8CboCO8kztgC0NevIm2aCXZj5oKXlR+4kKA7ZXzNxmbNOPx0FYVXMcPxd6w9W1XkwvWQcTm1f2igfEHxuKzZUcfLc2K1df80vf08ZFi2fzBxEuc80zwT+aa8Tvtxg42i13TS9AYvO/ljts7Gm+kRtp1kUZowPGA1zUVsjG6W7IuOXLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b8R5DyYudN3qgINYlJyD1M1OV3T8qCdaYYKyWL6WiRI=;
+ b=OLHwJPBIz5M0dYAN62Bq39J+D1FIGmXTZB837vJ9TSOjDYws4uQHPXcWNeg6sDTASXJZqXuYPOpEbpf80EeZGPqW/cXTHOrVYLPmwBm+DIh/En29ggP+CeMgg2WEleMA9KcFXcwuKjqavAc3ep1Sem7hy8fUpxy+9Dxrpyb0AExGpCoYglWWC4hr/1nKu9BVAYsyGh9ylfy3kfEXWMn773rJ9WworWORl8nprv1/uNsMYkM27jdbnp2S1gwLvTJIkqU5s7nA2pubWg1O0+KY9WX2eZYGleP5v7qaZpJhGdjENYahZDLjnz20hYGBppE4nZyzQmpIm6pkYVQGoeJ7kQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vimar.com; dmarc=pass action=none header.from=vimar.com;
+ dkim=pass header.d=vimar.com; arc=none
+Received: from AS8PR08MB6870.eurprd08.prod.outlook.com (2603:10a6:20b:39a::21)
+ by GVXPR08MB7845.eurprd08.prod.outlook.com (2603:10a6:150:1::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.18; Fri, 10 Mar
+ 2023 13:48:38 +0000
+Received: from AS8PR08MB6870.eurprd08.prod.outlook.com
+ ([fe80::a3a5:f56f:536d:4fa]) by AS8PR08MB6870.eurprd08.prod.outlook.com
+ ([fe80::a3a5:f56f:536d:4fa%3]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
+ 13:48:38 +0000
 To: buildroot@buildroot.org
-Date: Fri, 10 Mar 2023 10:01:53 +0100
-Message-Id: <20230310090153.14053-1-nicolas.cavallari@green-communications.fr>
-X-Mailer: git-send-email 2.39.2
+Date: Fri, 10 Mar 2023 14:48:31 +0100
+Message-Id: <1678456111-30786-1-git-send-email-luca.pesce@vimar.com>
+X-Mailer: git-send-email 2.7.4
+X-ClientProxiedBy: ZR2P278CA0017.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:46::11) To AS8PR08MB6870.eurprd08.prod.outlook.com
+ (2603:10a6:20b:39a::21)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:mltvKy8IsAPk+8nxOh0uO5O7ZIVjpSpOTpB23kIQyjDk/azMMGA
- f55Y/N9mhF2hCLxEqYNZWlhYIP4UUKD8BC8V7vRIbRQv37RWrxxfLaoEmUB6ktxkK+CZZpT
- NcSipkEZLqlBe3vzLsJcmVw6i48qjW9+JIhbOHJArTobCRAHxx0L8rh4h6VzGPtrs1IMHr6
- xtvJd0xGHWKhEX7Rk1YhA==
-UI-OutboundReport: notjunk:1;M01:P0:w6sR7c+2BPM=;xaGe7oDcgNiQMipF/9RuTBUE5cF
- eug+uYiYnEr+h/DwdjncQnAJnDFkQ06LowIifl4u9nASYNqObyY2dVmuiC7RIh2q0u5dLnpbV
- 7VGpHlPLYRHsTjCse8G6UPFRnftCv5j3fMq0p5P97u11kICF213wlRpPRuXavOiLr42XeyjHT
- vUNB948aLwKkxGMFUgovxi5NfvNUikN9ViiDf9SZ2fH1ISUYaAN6rHTjRf52cx9mLjefMLMgv
- 3lCjNKsh4OHqBnJRanTutWFjnWqy9fWA5ApJPRCfCe619o6Ocmo6RV7pd6G3aKaPMfMEwF2bh
- +rvSFVTL5pTQfqaoOF6SrZRFl/bX1Vu6xlefgQDEEwcwU+A8DvVdWdqg7HiKXAb/T2EuY3XSB
- NervBbmK9yL/PfqOAy1aSMZGI3SgC2sGR8T7F5hUmPKTL6Iqg69aqMdyZlgd78C2OM3rJwtGO
- RLlwQetXd4q/eAjs3MVj9jnTkpHq7feYTa5RV/6NPVi0k4CNYv4wjimMSgjiF6CiYapaJB6I6
- OblsjaR+OVSl/FSZP+C+mx0YVWH/EGKdOjh7QmyFRysE4Fn172MhRWODGSeFXusgf3uZtUl6C
- ZNKhbPxsu4fjQSoxxD+FL0mQQxATtVuXy0Wnl+RUcYtd6gShW+Q2FQmHJfxcI+sPbjVcvefuF
- Er3jcZxuhbeaKo/Z+p/a4hACYSq654WAzhLtSC/yrg==
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: bump to version 1.6.2
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR08MB6870:EE_|GVXPR08MB7845:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ea85eb1-a60c-4be3-519f-08db216e26c6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pj3je1I85s8aA7mL2oe5nuecOwL4rsxSC1xOmmZUzt4hZvNWzPzjna48Au6nBvWuQfpOMEQLbYu9F+Np6dMsBWG0xWcNVowvlt6G0tf/fqeCytZk1zoCmZaSYnamzv7PxYN/ddTqGqVLAFqC86ScKeUns+54YvEgq67crSjR2IjDIeRS1ykBM8qs0KjfXtqKTIQ+xFvTg+ZIzT8vzgFZPbWm0s/wWM9zNkfu+VrTqG/LV12bxk6t70xZ+KUIfrHcS5p7YLHrpq2Nrb6Hr3W06bUT5jQEy2B8h85oRY9lrj7IktkrtA5QWXbiLqTrdnxrsIr2kulGqbz/+RK3CrBkaasTRCmUVWhZICOy+NiZXDFC8FQXazyVi6tpjMjBVOgYvyq9aCWraBirmpQdnoJnmm2mH2dgxuV10BRbpeg2u0S5Ledb1iwwXHNwTPPO24zSrwUXIk96nFlRMngbXOMfu0JINfNk9rCl18jt4QxpiXesTb911RhjfknniDGuX/HUyeuZLOxpQuxRJWPFuX699rif6D4WSGsvUm3I9H47PcRDB1f3hJVSTafyYk0VioDvA+Av9AJrktgOW4uxspIJJzW3ROPgkPnsZ8vDohJjm18OXlLF2usc46yNwhGan61nc4HkJuWgf633eig1ZlTMOPEK+j5Xv97DvXpdpENYtQ277+pNS0Dnu04mhDfMmvIn
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS8PR08MB6870.eurprd08.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230025)(4636009)(346002)(39850400004)(136003)(366004)(396003)(376002)(451199018)(2906002)(44832011)(5660300002)(26005)(36756003)(38350700002)(8936002)(66556008)(4326008)(41300700001)(66476007)(8676002)(66946007)(6916009)(316002)(86362001)(54906003)(478600001)(52116002)(966005)(6486002)(6666004)(38100700002)(6512007)(107886003)(6506007)(186003)(2616005)(83380400001);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ASICs+liJg9bH2d+Sz9IMmhVOLtKGoUZykrwbqkhbEVqygGgaDvOqWFaiIcF?=
+ =?us-ascii?Q?izd3pu5E0WbX/r8QdPa+q+1MKB5gnb3eKIf127d5Rz6YbTaN2SURJVQ26tx1?=
+ =?us-ascii?Q?lOlle3mWkVnR0MWc+l4Cq6xyeYTJbQonpJOM3YV517MbxPdOr4ypbXQEAy5Z?=
+ =?us-ascii?Q?ILeRplbOybCf40zCm7EysX3Ylug+IwDS1Vf70PDa3YStJjYOL8GZAfym9B6F?=
+ =?us-ascii?Q?PVvUXED2R3zZC7Dv1NYhfybltUf9lbSqdmhPExoiyjUQ1ehujBldLPUx1ZE7?=
+ =?us-ascii?Q?6EIca2XjMV/iGoRFKF8s0mAfBEd/ybEJZvm/sZ55kEIGBLEHrgNsBgNTJJc/?=
+ =?us-ascii?Q?m3Ld6q8MjuKbQVl6+DkbN84zpCGWVr1a5NbI+NkOCkEI+dHzbfSXicggNtPf?=
+ =?us-ascii?Q?khc8z72syBaoz6RoNSP4PJ4MAeBhDMRaEgw3vex1YSlouBawIRuzUX6M7F9n?=
+ =?us-ascii?Q?zJgIBiLG6A+Hn1NMjYzFFEOu5ck0Sn1fQCPKxxU9G6e8bqWaJBiRHyYILcIf?=
+ =?us-ascii?Q?+AxtizeGehm91xRFz1VnPTaKfLcb0TRSVyUqQmBvudi3V1J6losNYrxAh4l0?=
+ =?us-ascii?Q?XpWIQjJKiFu4IrZG8vOzUYu8PynAINpwSGWq4u4ymx08vPZ57rmQyuMPjlMX?=
+ =?us-ascii?Q?We3JvQS88mwu+S4RvbPl85GJfu5KJrT8zrHLNGR34n3mN5NF04sx5wZY8kEJ?=
+ =?us-ascii?Q?KcDV2aUC866IQoe8WkwIVMl4bsq9F7AjqzEmjIfG97Sjvez7mBh0/xqqz8MH?=
+ =?us-ascii?Q?y+oHpxBwK4UH4b2V5NqbqAEyXlzFirAG0XCjahbweUa2mfVcihznMvkev9D1?=
+ =?us-ascii?Q?+6UwyFG5LDtz5UT/5gh+BsLLM0l8Qiu8iyARSq0w9u+ryrpjd36OcvEXekfg?=
+ =?us-ascii?Q?0Gkwbt3tda/cxHY2iBclcAJYkoHP2Aim4Q74OhM/NcVTr54aAPlnZPUeH8Qa?=
+ =?us-ascii?Q?YeIzuASOSSUyNC2wVTKiI4vqsMLQwKSliZSUHbp0aCCfEtLXfL9jmRZxFQof?=
+ =?us-ascii?Q?ldnXLMtrPBssrdNz1eb/je+aS/k+MYOhjwrVavLwVjube7FnTbw5A6DOwkrZ?=
+ =?us-ascii?Q?Aoi3tP1nI5bSJ54cGSZ7kr/HWOwkBjrP2x9IVSw9J7plEVen5L+htDpWniDB?=
+ =?us-ascii?Q?JAlTk2cPIDp+72P2kDpcvDLJL1RkXMtU5E9MqK78+Js3NJizn1zFf8+kD1Dm?=
+ =?us-ascii?Q?EgY6Rzf6W/6uRujZheJ/NP+sPnyCxfMIufgfXdY/OUJld//zOyJ8sX0eRGlw?=
+ =?us-ascii?Q?ogZ32LNziBUTWfor/SC+fTtBhhGvDv6Cbhrdt8gV/sXZR1QoKgYx/xPbU/F5?=
+ =?us-ascii?Q?ZrRfzDtKbL0fmKkYUL2WOJLzqULejamWNLvEd2Moa3sjgvTGbSXbMo9tHmM/?=
+ =?us-ascii?Q?NHMhNvsc4k1ubegTSVDLnZPL6YH7+H6yVcBZI2A+PEUDE1yAB6nl2244KC5X?=
+ =?us-ascii?Q?362a3RuASwll/5y7nYQcWa1zBfbkmNruF68AWzRBpnU7KzglPkmqMoIs+W3u?=
+ =?us-ascii?Q?Du7apbUsi546j2Ylaq7ghOmogC3LgPie0a9vbn9TZPC6yhtMF7mHywlt746j?=
+ =?us-ascii?Q?U4LDdCKkJ6H+XLWaJkt9NBLbUmFqeKOjcnNlntg4BuxCBuAD4/KO4tX2N5qb?=
+ =?us-ascii?Q?jg=3D=3D?=
+X-OriginatorOrg: vimar.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ea85eb1-a60c-4be3-519f-08db216e26c6
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR08MB6870.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 13:48:38.5269 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a1f008bc-d59b-4c66-8f87-60fd9af15c7f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2uqzvMoBwmlyMbQPmCs2ssypwbJJt4jxO/Ze2B6uo4xNgpBFCRwqs9EEdMKrHaRI4zTfI5dj7M26zN5g74tMgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB7845
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=vimar.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b8R5DyYudN3qgINYlJyD1M1OV3T8qCdaYYKyWL6WiRI=;
+ b=Pp+SmX2GK9RVazyS4MYf0Vyd5quft6TK0bQDb+q7nZ/NZ1QH78qJQ7GMygOWZBLFL09pPHy5Kd2mOzD7vsKAFeEfJxJ3PAQK6lyVDOqZy0duQxmmT28D+RPuaj8sRnMFEtN10dL53K971tQoJwW6XHG1zKIoGMm3lNZjCWHDZvc=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=vimar.com header.i=@vimar.com header.a=rsa-sha256
+ header.s=selector1 header.b=Pp+SmX2G
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vimar.com;
+Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: enable libev and
+ libevent support indipendently
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,111 +138,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Luca Pesce via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Pesce <luca.pesce@vimar.com>
+Cc: Luca Pesce <luca.pesce@vimar.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* Fix the license because libgit2 has been using some android code
-  without attribution.
-* Building in-source is accidentely broken in this release and upstream
-  recommends a separate build directory anyway, so use a separate build
-  directory.
-* Some win32-specific declarations use wchar_t, add an upstreamed patch
-  to avoid a dependency to wchar_t elsewhere.
+libev and libevent can be enabled at the same time since version 4.1.0,
+thanks to the event lib support refactoring into plugins, which is enabled by
+default for unix platform builds (LWS_WITH_EVLIB_PLUGINS=ON):
+https://github.com/warmcat/libwebsockets/commit/c6c7ab2b4498c62bf9461b36395d8466e023575d
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+In this way, libwebsockets can be compiled with both libev and libevent
+support, which is then user-selectable at runtime.
+
+This basically restores the behavior changed by previous commit 27f257e.
+
+Signed-off-by: Luca Pesce <luca.pesce@vimar.com>
 ---
- ...clare-win32-functions-on-non-win32-p.patch | 35 +++++++++++++++++++
- package/libgit2/libgit2.hash                  |  4 +--
- package/libgit2/libgit2.mk                    |  7 ++--
- 3 files changed, 42 insertions(+), 4 deletions(-)
- create mode 100644 package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
+ package/libwebsockets/libwebsockets.mk | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
-new file mode 100644
-index 0000000000..6be66ffee3
---- /dev/null
-+++ b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
-@@ -0,0 +1,35 @@
-+From 20811c5aa9c528405eaa3f88ff22a9adebafa9e6 Mon Sep 17 00:00:00 2001
-+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+Date: Wed, 8 Mar 2023 14:00:52 +0100
-+Subject: [PATCH] sysdir: Do not declare win32 functions on non-win32 platforms
-+
-+These declaration poses problems on some embedded or retro Linux systems
-+that deliberately disable support for wchar_t from their libc.
-+
-+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+[Retrieved from:
-+https://github.com/libgit2/libgit2/commit/20811c5aa9c528405eaa3f88ff22a9adebafa9e6]
-+---
-+ src/libgit2/sysdir.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/libgit2/sysdir.h b/src/libgit2/sysdir.h
-+index 1d15bbf43..03f59e1de 100644
-+--- a/src/libgit2/sysdir.h
-++++ b/src/libgit2/sysdir.h
-+@@ -134,10 +134,12 @@ extern int git_sysdir_set(git_sysdir_t which, const char *paths);
-+  */
-+ extern int git_sysdir_reset(void);
-+ 
-++#ifdef GIT_WIN32
-+ /** Sets the registry system dir to a mock; for testing.  */
-+ extern int git_win32__set_registry_system_dir(const wchar_t *mock_sysdir);
-+ 
-+ /** Find the given system dir; for testing. */
-+ extern int git_win32__find_system_dirs(git_str *out, const char *subdir);
-++#endif
-+ 
-+ #endif
-+-- 
-+2.39.2
-+
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index e834525df5..baf43c66f7 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7074f1e2697992b82402501182db254fe62d64877b12f6e4c64656516f4cde88  libgit2-1.5.1.tar.gz
--sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
-+sha256  d557fbf35557bb5df53cbf38ae0081edb4a36494ec0d19741fa673e509245f8f  libgit2-1.6.2.tar.gz
-+sha256  6f3c2cd59b057e366c1acc073b038135c52d77892bb33bd4d931c5369d3f062b  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index c962c8030f..b31f5199e1 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,14 +4,15 @@
- #
- ################################################################################
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 7962494..fb0ee66 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -57,18 +57,16 @@ endif
  
--LIBGIT2_VERSION = 1.5.1
-+LIBGIT2_VERSION = 1.6.2
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
- 	MIT (sha1), \
- 	BSD-3-Clause (sha256), \
- 	wildmatch license (wildmatch), \
--	CC0-1.0 (xoroshiro256)
-+	CC0-1.0 (xoroshiro256), \
-+	BSD-2-Clause (basename_r)
- LIBGIT2_LICENSE_FILES = COPYING
- LIBGIT2_CPE_ID_VENDOR = libgit2_project
- LIBGIT2_INSTALL_STAGING = YES
-@@ -24,6 +25,8 @@ LIBGIT2_CONF_OPTS = \
- 	-DUSE_NTLMCLIENT=OFF \
- 	-DUSE_THREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
- 
-+LIBGIT2_SUPPORTS_IN_SOURCE_BUILD = NO
+ ifeq ($(BR2_PACKAGE_LIBEV),y)
+ LIBWEBSOCKETS_DEPENDENCIES += libev
+-LIBWEBSOCKETS_CONF_OPTS += \
+-	-DLWS_WITH_LIBEV=ON \
+-	-DLWS_WITH_LIBEVENT=OFF
+-else ifeq ($(BR2_PACKAGE_LIBEVENT),y)
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=ON
++else
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=OFF
++endif
 +
- LIBGIT2_DEPENDENCIES = zlib libhttpparser
++ifeq ($(BR2_PACKAGE_LIBEVENT),y)
+ LIBWEBSOCKETS_DEPENDENCIES += libevent
+-LIBWEBSOCKETS_CONF_OPTS += \
+-	-DLWS_WITH_LIBEV=OFF \
+-	-DLWS_WITH_LIBEVENT=ON
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=ON
+ else
+-LIBWEBSOCKETS_CONF_OPTS += \
+-	-DLWS_WITH_LIBEV=OFF \
+-	-DLWS_WITH_LIBEVENT=OFF
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=OFF
+ endif
  
- # If libiconv is available (for !locale toolchains), then we can use
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
 -- 
-2.39.2
+2.7.4
 
 _______________________________________________
 buildroot mailing list
