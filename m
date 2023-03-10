@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 523A2C6FD1E
-	for <buildroot@archiver.kernel.org>; Fri, 10 Mar 2023 21:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD55C6FA99
+	for <buildroot@archiver.kernel.org>; Fri, 10 Mar 2023 21:01:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F3C9141764;
-	Fri, 10 Mar 2023 21:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3C9141764
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3012D41753;
+	Fri, 10 Mar 2023 21:01:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3012D41753
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y-Kf7kTFrnUG; Fri, 10 Mar 2023 21:01:08 +0000 (UTC)
+	with ESMTP id wuZag4A0PIPi; Fri, 10 Mar 2023 21:01:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1EEC741748;
-	Fri, 10 Mar 2023 21:01:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EEC741748
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 950941BF390
- for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 21:01:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50D2D41781;
+	Fri, 10 Mar 2023 21:01:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50D2D41781
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AB261BF390
+ for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 21:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F78760FE1
- for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 21:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F78760FE1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 632424173E
+ for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 21:01:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 632424173E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zcQsmB60BwNQ for <buildroot@lists.busybox.net>;
- Fri, 10 Mar 2023 21:01:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0PsPDHj2dnmj for <buildroot@lists.busybox.net>;
+ Fri, 10 Mar 2023 21:01:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F84F6060A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F0724170F
  for <buildroot@buildroot.org>; Fri, 10 Mar 2023 21:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F84F6060A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F0724170F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E7A286E49; Fri, 10 Mar 2023 21:01:03 +0000 (UTC)
+ id 725F186E46; Fri, 10 Mar 2023 21:01:03 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Fri, 10 Mar 2023 21:59:49 +0100
+Date: Fri, 10 Mar 2023 21:56:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f1623664253853208773b7318165189b5cf94867
-X-Git-Newrev: 3279d8b9c45572f9c435ba0b356c2ec7f1fa85f3
+X-Git-Oldrev: 70d9f17c48f8aaf02e6cd4c17093c00d07eb56c8
+X-Git-Newrev: f1623664253853208773b7318165189b5cf94867
 X-Patchwork-Hint: ignore
-Message-Id: <20230310210103.7E7A286E49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rdma-core: needs NPTL
+Message-Id: <20230310210103.725F186E46@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: fix build with
+ -Dmodem_manager=false
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,49 +63,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3279d8b9c45572f9c435ba0b356c2ec7f1fa85f3
+commit: https://git.buildroot.net/buildroot/commit/?id=f1623664253853208773b7318165189b5cf94867
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-rdma-core unconditionally uses pthread_spin_lock since its addition in
-commit ea47e177f093d7378e8e8e1f50d6f4e3fce0a088 resulting in the
-following build failure:
+Fix the following build failure with -Dmodem_manager=false raised since
+commit c36f6938858d3246ca493dacc925717586e2ea0f:
 
-/home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/sh4-buildroot-linux-uclibc/12.2.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: CMakeFiles/hfi1verbs-rdmav34.dir/verbs.c.o: in function `post_recv':
-verbs.c:(.text+0xc4): undefined reference to `pthread_spin_lock'
+../output-1/build/network-manager-1.40.10/meson.build:1060:0: ERROR: Unknown variable "mobile_broadband_provider_info_database".
 
 Fixes:
- - http://autobuild.buildroot.org/results/a943e03b79c4cc328b7712046ecff09706045f81
+ - http://autobuild.buildroot.org/results/896879c8e8ce022556ee834216ced2f962ff279c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: John Keeping <john@metanate.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/rdma-core/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...-fix-build-failure-with-Dmodem_manager-fa.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/rdma-core/Config.in b/package/rdma-core/Config.in
-index 59f5ef63ae..3360e6873d 100644
---- a/package/rdma-core/Config.in
-+++ b/package/rdma-core/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_RDMA_CORE
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4  # iproute2
- 	depends on !BR2_STATIC_LIBS # dlopen()
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_IPROUTE2  # runtime
- 	select BR2_PACKAGE_LIBNL
- 	help
-@@ -13,8 +13,8 @@ config BR2_PACKAGE_RDMA_CORE
- 
- 	  https://github.com/linux-rdma/rdma-core
- 
--comment "rdma-core needs a toolchain w/ headers >= 3.4, threads, dynamic library"
-+comment "rdma-core needs a toolchain w/ headers >= 3.4, NPTL, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
--		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+diff --git a/package/network-manager/0002-meson.build-fix-build-failure-with-Dmodem_manager-fa.patch b/package/network-manager/0002-meson.build-fix-build-failure-with-Dmodem_manager-fa.patch
+new file mode 100644
+index 0000000000..648be027e0
+--- /dev/null
++++ b/package/network-manager/0002-meson.build-fix-build-failure-with-Dmodem_manager-fa.patch
+@@ -0,0 +1,38 @@
++From 736a2c356c1c4871e8c4e70be622c65c87d3bca8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 21 Feb 2023 13:03:00 +0100
++Subject: [PATCH] meson.build: fix build failure with -Dmodem_manager=false
++
++Fix the following build failure with -Dmodem_manager=false raised since
++https://gitlab.freedesktop.org/ffontaine/NetworkManager/-/commit/03ba04d4784fa4fc7ec31455070fb5ecf25ade23:
++
++../output-1/build/network-manager-1.40.10/meson.build:1060:0: ERROR: Unknown variable "mobile_broadband_provider_info_database".
++
++Fixes:
++ - http://autobuild.buildroot.org/results/896879c8e8ce022556ee834216ced2f962ff279c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/1544]
++---
++ meson.build | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 84ce52c736..b79240efc0 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -1057,7 +1057,9 @@ output += '  jansson: ' + jansson_msg + '\n'
++ output += '  iptables: ' + config_h.get('IPTABLES_PATH') + '\n'
++ output += '  nft: ' + config_h.get('NFT_PATH') + '\n'
++ output += '  modemmanager-1: ' + enable_modem_manager.to_string() + '\n'
++-output += '  mobile-broadband-provider-info-database: ' + mobile_broadband_provider_info_database + '\n'
+++if enable_modem_manager
+++  output += '  mobile-broadband-provider-info-database: ' + mobile_broadband_provider_info_database + '\n'
+++endif
++ output += '  ofono: ' + enable_ofono.to_string() + '\n'
++ output += '  concheck: ' + enable_concheck.to_string() + '\n'
++ output += '  libteamdctl: ' + enable_teamdctl.to_string() + '\n'
++-- 
++2.39.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
