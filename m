@@ -4,91 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EDA9C6FD19
-	for <buildroot@archiver.kernel.org>; Fri, 10 Mar 2023 19:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 453B2C6FD19
+	for <buildroot@archiver.kernel.org>; Fri, 10 Mar 2023 20:23:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B62041BA6;
-	Fri, 10 Mar 2023 19:55:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B62041BA6
+	by smtp4.osuosl.org (Postfix) with ESMTP id D91E8402CE;
+	Fri, 10 Mar 2023 20:23:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D91E8402CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3izaipKck5qD; Fri, 10 Mar 2023 19:55:01 +0000 (UTC)
+	with ESMTP id q_79O3Lr-Il1; Fri, 10 Mar 2023 20:23:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64FCD41C73;
-	Fri, 10 Mar 2023 19:54:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64FCD41C73
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C2AD61BF2F0
- for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 19:53:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 073FB4031B;
+	Fri, 10 Mar 2023 20:23:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 073FB4031B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 909801BF390
+ for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 20:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B89782302
- for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 19:53:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B89782302
+ by smtp2.osuosl.org (Postfix) with ESMTP id 771704098E
+ for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 20:23:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 771704098E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8fthX4qhlxja for <buildroot@lists.busybox.net>;
- Fri, 10 Mar 2023 19:53:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BaAxdyPVui2B for <buildroot@lists.busybox.net>;
+ Fri, 10 Mar 2023 20:23:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C99E82301
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4C99E82301
- for <buildroot@buildroot.org>; Fri, 10 Mar 2023 19:53:52 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id o12so25075218edb.9
- for <buildroot@buildroot.org>; Fri, 10 Mar 2023 11:53:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 661F640592
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 661F640592
+ for <buildroot@buildroot.org>; Fri, 10 Mar 2023 20:23:11 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id i34so25326908eda.7
+ for <buildroot@buildroot.org>; Fri, 10 Mar 2023 12:23:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1678478030;
+ d=1e100.net; s=20210112; t=1678479789;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=aXYRmvf7jIyIX33Av03intuLLS+8/HfWQS4zNv0hRzc=;
- b=0+Lg2O0vbTrJJ1UkJpwX+Irx8u3dBacuIuqqWYzFg2cgW9nduOSy4eNIwKHGziWNyk
- k0/Vd7YMr7WbWcf/RDzX7rtCCJzFpn/bByp/Qx8BTH6BaiYg42lDM23rfFggGjnmb7iC
- YMB60ADWbMZyG+maFvstmHhz7dUOz01ozWsVR/ueaLayZAoTh5EcgSy2F84sQamzsMIS
- X+IXh9Q9Xp2umKi5nkX4RWKPfX3SPw1Sg/sw5FU1QsvrhwUlJGqYLNOwYkU6D26gw0/j
- c22MO95XHVKaSF70g2q1tuAHKdoT49jGr3t/yfrmA+ZFS7O2pwSBUJUdoQ6oRstD5jl2
- /y2Q==
-X-Gm-Message-State: AO0yUKUrfUlON9mPICGOUt/wUCHIOEHnPQFOKbWSUTRvCm/oqnN14VFN
- stnSuUKqgEGqH6gw99onjvct2g==
-X-Google-Smtp-Source: AK7set9RjhsESuagppwSmYRX/exgtnCowPbsJzm1jQhumNBOVZSF02AJSRipSWkREL2tMWVyOPMoVg==
-X-Received: by 2002:a17:907:98d2:b0:8af:54d0:181d with SMTP id
- kd18-20020a17090798d200b008af54d0181dmr22892856ejc.35.1678478030389; 
- Fri, 10 Mar 2023 11:53:50 -0800 (PST)
+ bh=IDePchpKr1QAYjyo3BTCTqRQVyE+GU2Shxa0Hv2DD94=;
+ b=4UOcFzCuVUyZUHYF3rTyodvtGurIH56cm0nOvPcdwGPDK9Ub4zQoHbH9pCf8T6QFsf
+ OKdh2hPe/4TGoxamf9Srx6f/DbCYn+DfixI2Up7tg4rdcuIwy/uNfz1OtbiXBy7Fl2zY
+ ugS1URcm9KYu1sBTNkEwqlsKlQFkge8ffDP88WROpQLj5cAf3J9HuSiI7e/BH4IVwFGp
+ 6aoeEG5aLcQmP6pa9x5uEf6DUhFyTwAMa39vsb+k/B0C0JMnl2YSMYEGDDIxWnMQxheK
+ c01NkyARvebbo53l0JTvr5PE+zT2Y1/Uhqq4dRdCG0KMw1CL/jdCPokRePI+pZgsbYzA
+ 0YyQ==
+X-Gm-Message-State: AO0yUKVIOcVy+8nOyjCIqg6fgTBLbMk+Kpl3rNUCmpZkUpB2awM8qlFr
+ bXe4VAeRlsSjUCouomu7wDFqlQ==
+X-Google-Smtp-Source: AK7set//lHSV1r6Up14f3sdVkSK/HJQqh/5h2O2NBbyaPlu46R9qMIwz6Mr0Vgu2XqbWhWLzI7K8sw==
+X-Received: by 2002:aa7:c392:0:b0:4ac:d2b4:5e37 with SMTP id
+ k18-20020aa7c392000000b004acd2b45e37mr21883269edq.39.1678479789350; 
+ Fri, 10 Mar 2023 12:23:09 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- m15-20020a17090607cf00b00914fec9f40esm237809ejc.71.2023.03.10.11.53.49
+ w5-20020a170906b18500b0090953b9da51sm243565ejy.194.2023.03.10.12.23.08
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 10 Mar 2023 11:53:49 -0800 (PST)
-Message-ID: <e2b2a825-c8d6-deb9-6c65-ef0b1e4df3c0@mind.be>
-Date: Fri, 10 Mar 2023 20:53:48 +0100
+ Fri, 10 Mar 2023 12:23:08 -0800 (PST)
+Message-ID: <0d558369-1ec0-b06b-2e0d-5bd051d915b2@mind.be>
+Date: Fri, 10 Mar 2023 21:23:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20230310165900.46687-1-bernd.kuhls@t-online.de>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230223153236.914358-1-fontaine.fabrice@gmail.com>
+ <20230224000059.367730f1@windsurf>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230310165900.46687-1-bernd.kuhls@t-online.de>
+In-Reply-To: <20230224000059.367730f1@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1678478030;
+ d=mind.be; s=google; t=1678479789;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=aXYRmvf7jIyIX33Av03intuLLS+8/HfWQS4zNv0hRzc=;
- b=M+cva43cfFGoejP3dmWjSEUvNEwcbjHUqDeHYvFOGoi9OTfZXZx6uMMxUAx7qlE8vA
- Tgoxh1CPdcfl1g/dpWSxwP0L22fIr8rReTIJTmFZM3pWPPUhUihcGGdIr/rYWDxOfpQr
- BPmpQQdq0KG5I17aTvs8nJ2F5jgX3X6RnLt1a8nJWc4TrJGqvcT9LAupleSPdCyfN8sn
- HH2NqI1HL/BzJ4WSyTsnUB1ksi6hT2NyRykUGPEyu41enrluAxUN/QM0wUGHshLZ5EzK
- r7oOgLeu8CAuTKJWQHtt696tbOtqt/53DrqxMOEsQdtfg5YJ3haP4NXJq9XIrD8MHp3g
- Wnzg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=IDePchpKr1QAYjyo3BTCTqRQVyE+GU2Shxa0Hv2DD94=;
+ b=Gz0o6R8/lHpvGGzssmavsUK+OtBjklHaTZcU7zZpwgqcLOZYNNeuLeD0ualNq1MlKv
+ IjF9aXjrmQTvL3d4OdEUPx9iNMT9TJq/qUQvq5I3uLkSWIrvG2IZH2bXdgJ7rpqN6oJh
+ 0D9h44OwrOcoGHgcNZ5npIp42PaK4j0EomyKxYBTjSremBkMOPbLl6aFpI0F5AT4SHpK
+ X2y1TDFtjsZ4muj635Z0LS5uUcQ8OjfTTn9yIbk2/7xE8xKOxKLu88QX2MhKg9f9J2Th
+ Yc96PaiBS6TmRYcZxtN5eiLlxh8+StW2rhZr/yDv/K06jHx/As/mQxHjDYun+mkJ7tIq
+ NW8A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=M+cva43c
-Subject: Re: [Buildroot] [PATCH 1/1] package/znc: Fix build with LibreSSL
+ header.a=rsa-sha256 header.s=google header.b=Gz0o6R8/
+Subject: Re: [Buildroot] [PATCH 1/1] package/cairo: fix pthread detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,7 +102,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?C=c3=a9dric_Ch=c3=a9pied?= <cedric.chepied@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -108,169 +110,98 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/03/2023 17:59, Bernd Kuhls wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/3fe/3fec5c3a21af47b5f4e8adcaf4ce1fff5070e00a/
+On 24/02/2023 00:00, Thomas Petazzoni via buildroot wrote:
+> Hello,
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> On Thu, 23 Feb 2023 16:32:36 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> 
+>> pthreads detection fails if a warning is emitted resulting in the
+>> following build failure with some toolchains:
+>>
+>> onfigure:34189: checking for cairo's pthread feature
+>> configure:34300: /home/buildroot/autobuild/instance-1/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O0 -g2  -D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lrt -latomic -lexecinfo -lm -lpthread >&5
+>> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: warning: /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/crtend.o: missing .note.GNU-stack section implies executable stack
+>> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+>> configure:34300: $? = 0
+> 
+> So this returns success.
+> 
+>> configure:34419: /home/buildroot/autobuild/instance-1/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O0 -g2  -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lrt -latomic -lexecinfo -lm  >&5
+>> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: warning: /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/crtend.o: missing .note.GNU-stack section implies executable stack
+>> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+>> configure:34419: $? = 0
+> 
+> This as well.
+> 
+>> configure:34500: /home/buildroot/autobuild/instance-1/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O0 -g2  -D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lrt -latomic -lexecinfo -lm  >&5
+>> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: warning: /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/crtend.o: missing .note.GNU-stack section implies executable stack
+>> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+>> configure:34500: $? = 0
+> 
+> This as well.
+> 
+>> configure:34555: checking whether cairo's pthread feature could be enabled
+>> configure:34557: result: no (can't link with -lpthread or -pthread)
+> 
+> So why does it conclude that thread support is not available?
 
-  Applied to master, thanks.
+  Because the configure script is stupid. Extract from the script:
+
+> ac_fn_c_try_compile ()
+> {
+> [...]
+>   (eval "$ac_compile") 2>conftest.err
+>   ac_status=$?
+>   if test -s conftest.err; then
+>     grep -v '^ *+' conftest.err >conftest.er1
+>     cat conftest.er1 >&5
+>     mv -f conftest.er1 conftest.err
+>   fi
+>   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+>   test $ac_status = 0; } && {
+>          test -z "$ac_c_werror_flag" ||
+>          test ! -s conftest.err
+            ^^^^^^^^^^^^^^^^^^^^^^
+  This test will fail (conftest.err is not empty).
+
+>        } && test -s conftest.$ac_objext; then :
+>   ac_retval=0
+> else
+>   $as_echo "$as_me: failed program was:" >&5
+> [...]
+> } # ac_fn_c_try_compile
+
+
+> 
+> 
+>> + 	dnl Make sure we scored some pthreads.
+>> + 	if test "x$enable_pthread" = "xyes" -a "x$have_pthread" != "xyes"; then
+>> +-		AC_MSG_ERROR([pthread requested but not found])
+>> ++		AC_MSG_WARN([pthread requested but not found])
+>> ++		have_pthread=yes
+> 
+> This looks odd because you're basically "ignoring" the
+> detection/validation of thread support.
+
+  Yeah, the alternative is to patch host-autoconf to not do that stupid check of 
+conftest.err. Which is perhaps a better idea, because it solves things globally. 
+But who knows, maybe some checks actually rely on this?
+
+  Or alternative, do something with binutils 2.39 (which is the one that 
+introduced the warning) to suppress the warning. It probably won't fix external 
+toolchains then though.
+
+  Note that cairo upstream has moved to meson four years ago, we just haven't 
+updated cairo in a long time.
 
   Regards,
   Arnout
 
-> ---
->   ...0001-LibreSSL-3.5-opaqued-structures.patch | 27 ++++++++
->   .../znc/0002-Fix-build-with-libressl.patch    | 68 +++++++++++++++++++
->   ...DH_get0_key-have-existed-since-Libre.patch | 30 ++++++++
->   3 files changed, 125 insertions(+)
->   create mode 100644 package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
->   create mode 100644 package/znc/0002-Fix-build-with-libressl.patch
->   create mode 100644 package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
 > 
-> diff --git a/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch b/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
-> new file mode 100644
-> index 0000000000..d0019e21a4
-> --- /dev/null
-> +++ b/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
-> @@ -0,0 +1,27 @@
-> +From 87f3dac8ba8dea5628b05416bdef454b4ef2d236 Mon Sep 17 00:00:00 2001
-> +From: Charlie Li <git@vishwin.info>
-> +Date: Mon, 14 Mar 2022 17:36:36 -0400
-> +Subject: [PATCH] LibreSSL 3.5 opaqued structures
-> +
-> +Downloaded from upstream commit
-> +https://github.com/znc/Csocket/commit/87f3dac8ba8dea5628b05416bdef454b4ef2d236
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +(rebased for znc)
-> +---
-> + Csocket.cc | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/Csocket.cc b/Csocket.cc
-> +index 46a3bfd..a30da14 100644
-> +--- a/third_party/Csocket/Csocket.cc
-> ++++ b/third_party/Csocket/Csocket.cc
-> +@@ -61,7 +61,7 @@
-> + #  define OPENSSL_NO_TLS1_1            /* 1.0.1-pre~: openssl/openssl@637f374ad49d5f6d4f81d87d7cdd226428aa470c */
-> + #  define OPENSSL_NO_TLS1_2            /* 1.0.1-pre~: openssl/openssl@7409d7ad517650db332ae528915a570e4e0ab88b */
-> + # endif
-> +-# ifndef LIBRESSL_VERSION_NUMBER /* forked from OpenSSL 1.0.1g, sets high version "with the idea of discouraging software from relying on magic numbers for detecting features"(!) */
-> ++# if !defined(LIBRESSL_VERSION_NUMBER) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x03050000fL)
-> + #  if OPENSSL_VERSION_NUMBER >= 0x10100000
-> + #   undef HAVE_ERR_REMOVE_THREAD_STATE /* 1.1.0-pre4: openssl/openssl@8509dcc9f319190c565ab6baad7c88d37a951d1c */
-> + #   undef OPENSSL_NO_SSL2              /* 1.1.0-pre4: openssl/openssl@e80381e1a3309f5d4a783bcaa508a90187a48882 */
-> diff --git a/package/znc/0002-Fix-build-with-libressl.patch b/package/znc/0002-Fix-build-with-libressl.patch
-> new file mode 100644
-> index 0000000000..b8d22445fb
-> --- /dev/null
-> +++ b/package/znc/0002-Fix-build-with-libressl.patch
-> @@ -0,0 +1,68 @@
-> +From dcb5f3df82fcfec48aab356252067dc897fb98cf Mon Sep 17 00:00:00 2001
-> +From: Alexey Sokolov <alexey+znc@asokolov.org>
-> +Date: Sun, 14 Nov 2021 00:45:01 +0000
-> +Subject: [PATCH] Fix build with libressl
-> +
-> +It got another feature of openssl implemented, which broke this
-> +
-> +Downloaded from upstream commit
-> +https://github.com/znc/znc/commit/dcb5f3df82fcfec48aab356252067dc897fb98cf
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + CMakeLists.txt                   | 14 ++++++++++++++
-> + include/znc/zncconfig.h.cmake.in |  1 +
-> + modules/schat.cpp                |  3 +--
-> + 3 files changed, 16 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 0913ff2691..1f77f5632b 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -82,6 +82,20 @@ endmacro()
-> + tristate_option(OPENSSL "Support SSL")
-> + if(WANT_OPENSSL)
-> + 	find_package(OpenSSL ${TRISTATE_OPENSSL_REQUIRED})
-> ++
-> ++	if(OPENSSL_FOUND)
-> ++		# SSL_SESSION was made opaque in OpenSSL 1.1.0;
-> ++		# LibreSSL gained that function later too.
-> ++		# TODO: maybe remove this check at some point, and stop supporting old
-> ++		# libssl versions
-> ++		function(check_SSL_SESSION_get0_cipher)
-> ++			set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
-> ++			set(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
-> ++			check_cxx_symbol_exists(SSL_SESSION_get0_cipher openssl/ssl.h
-> ++				HAVE_SSL_SESSION_get0_cipher)
-> ++		endfunction()
-> ++		check_SSL_SESSION_get0_cipher()
-> ++	endif()
-> + endif()
-> + set(HAVE_LIBSSL "${OPENSSL_FOUND}")
-> +
-> +diff --git a/include/znc/zncconfig.h.cmake.in b/include/znc/zncconfig.h.cmake.in
-> +index 5426b828af..7b07b99aec 100644
-> +--- a/include/znc/zncconfig.h.cmake.in
-> ++++ b/include/znc/zncconfig.h.cmake.in
-> +@@ -31,6 +31,7 @@
-> + #define HAVE_PTHREAD 1
-> + #cmakedefine HAVE_THREADED_DNS 1
-> + #cmakedefine HAVE_LIBSSL 1
-> ++#cmakedefine HAVE_SSL_SESSION_get0_cipher 1
-> + #cmakedefine HAVE_IPV6 1
-> + #cmakedefine HAVE_ZLIB 1
-> + #cmakedefine HAVE_I18N 1
-> +diff --git a/modules/schat.cpp b/modules/schat.cpp
-> +index aa7a338dcd..66e67e695c 100644
-> +--- a/modules/schat.cpp
-> ++++ b/modules/schat.cpp
-> +@@ -25,8 +25,7 @@
-> + #include <znc/User.h>
-> + #include <znc/IRCNetwork.h>
-> +
-> +-#if !defined(OPENSSL_VERSION_NUMBER) || defined(LIBRESSL_VERSION_NUMBER) || \
-> +-    OPENSSL_VERSION_NUMBER < 0x10100007
-> ++#ifndef HAVE_SSL_SESSION_get0_cipher
-> + /* SSL_SESSION was made opaque in OpenSSL 1.1.0, cipher accessor was added 2
-> + weeks before the public release.
-> + See openssl/openssl@e92813234318635639dba0168c7ef5568757449b. */
-> diff --git a/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch b/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
-> new file mode 100644
-> index 0000000000..a2946643fc
-> --- /dev/null
-> +++ b/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
-> @@ -0,0 +1,30 @@
-> +From 7c8ac8981a8516edaba469641aff4d8ec452ae9e Mon Sep 17 00:00:00 2001
-> +From: Charlie Li <git@vishwin.info>
-> +Date: Mon, 14 Mar 2022 18:32:46 -0400
-> +Subject: [PATCH] DH_set0_pqg and DH_get0_key have existed since LibreSSL 2.7
-> +
-> +https://github.com/libressl-portable/openbsd/commit/848e2a019c796b685fc8c5848283b86e48fbe0bf
-> +https://github.com/libressl-portable/openbsd/commit/3789e379353c1d53313a249461b3d735de4ac742
-> +
-> +Downloaded from upstream commit
-> +https://github.com/znc/znc/commit/7c8ac8981a8516edaba469641aff4d8ec452ae9e
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + modules/crypt.cpp | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/modules/crypt.cpp b/modules/crypt.cpp
-> +index 7655371b6e..68f7aafcea 100644
-> +--- a/modules/crypt.cpp
-> ++++ b/modules/crypt.cpp
-> +@@ -68,7 +68,8 @@ class CCryptMod : public CModule {
-> +     CString m_sPrivKey;
-> +     CString m_sPubKey;
-> +
-> +-#if OPENSSL_VERSION_NUMBER < 0X10100000L || defined(LIBRESSL_VERSION_NUMBER)
-> ++#if OPENSSL_VERSION_NUMBER < 0X10100000L || \
-> ++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x02070000fL)
-> +     static int DH_set0_pqg(DH* dh, BIGNUM* p, BIGNUM* q, BIGNUM* g) {
-> +         /* If the fields p and g in dh are nullptr, the corresponding input
-> +          * parameters MUST be non-nullptr.  q may remain nullptr.
+> Best regards,
+> 
+> Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
