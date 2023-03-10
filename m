@@ -1,60 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C54AC64EC4
-	for <buildroot@archiver.kernel.org>; Fri, 10 Mar 2023 17:14:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14820C6FD1C
+	for <buildroot@archiver.kernel.org>; Fri, 10 Mar 2023 17:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FABB41B94;
-	Fri, 10 Mar 2023 17:14:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FABB41B94
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63E0741695;
+	Fri, 10 Mar 2023 17:53:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63E0741695
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4GYVTVh240q6; Fri, 10 Mar 2023 17:14:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j7VtRVPBtMse; Fri, 10 Mar 2023 17:53:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4BEB41B91;
-	Fri, 10 Mar 2023 17:14:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4BEB41B91
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2020F1BF3B8
- for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 17:14:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8743F41696;
+	Fri, 10 Mar 2023 17:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8743F41696
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 22BE41BF3B8
+ for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 17:53:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ECE84822DB
- for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 17:14:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECE84822DB
+ by smtp3.osuosl.org (Postfix) with ESMTP id F09FB61ACE
+ for <buildroot@lists.busybox.net>; Fri, 10 Mar 2023 17:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F09FB61ACE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8Vu3DjsQE9Ow for <buildroot@lists.busybox.net>;
- Fri, 10 Mar 2023 17:14:39 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB7D9822CE
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB7D9822CE
- for <buildroot@buildroot.org>; Fri, 10 Mar 2023 17:14:38 +0000 (UTC)
-Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
- by mailout11.t-online.de (Postfix) with SMTP id 2CC7DA3EE
- for <buildroot@buildroot.org>; Fri, 10 Mar 2023 18:14:15 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.179.197]) by fwd79.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pagJk-0oCFX70; Fri, 10 Mar 2023 18:14:08 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51668)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pagJj-0003A8-2p
- for buildroot@buildroot.org; Fri, 10 Mar 2023 18:14:07 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Fri, 10 Mar 2023 18:14:07 +0100
-Message-Id: <20230310171407.429975-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G3hvAyigspqZ for <buildroot@lists.busybox.net>;
+ Fri, 10 Mar 2023 17:53:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B23461ABA
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7B23461ABA
+ for <buildroot@buildroot.org>; Fri, 10 Mar 2023 17:53:16 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.54])
+ by smtp2-g21.free.fr (Postfix) with ESMTP id 8927F2003FF;
+ Fri, 10 Mar 2023 18:53:13 +0100 (CET)
+Received: from [37.167.136.57]
+	by webmail.free.fr
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1678468448-BFFFE9DF-1964DFF3/0/0 CLEAN NORMAL
-X-TOI-MSGID: 32c75237-a09a-420a-9a2b-847f2ee432b1
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-qxl:
- Update broken URL in Config.in helptext
+Date: Fri, 10 Mar 2023 18:53:13 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <997d670a-8843-0686-995b-63b671cca1c5@mind.be>
+References: <20230305232504.232860-1-ju.o@free.fr>
+ <997d670a-8843-0686-995b-63b671cca1c5@mind.be>
+Message-ID: <6e9d8313f1d606ff3da0495c77c023f8@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1678470793;
+ bh=BV5mzEQiuM4AqAGc0IPtupGW6tkDXYWZsWVte/ySFSw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=bmlkOr5MObGaInEiuPodwnHGmCl78St1gLbrWgfr+qln8FwY8ILSSRarN/6mAFEQA
+ e6lla7z33Qm/KR78vOpo6xdxLJKuYEU8LQ9e+RqpWyPdcZMTayT4CS23DKh1jfJtqd
+ H0F2QtwChHKkq++hxIzXMqx3lTGHj5/v2wdir7k5q8ZVYGlU1/8qgp4U2OiEuyZVQL
+ NC5s43sHoRGQbjAzjws67VLczTjhwMTlSXV/sL++LQ0Pi1quZ/LFDsTWsnc5a80xlL
+ Ih5OEoHtRU7yx/LRpxmyehCnOL/rmtxkDPh/XS6i1P1G6eyrJKwpyRncwMKegUQmPL
+ s4hMymhqUEVXQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=bmlkOr5M
+Subject: Re: [Buildroot] [PATCH next 1/1] package/bridge-utils: update
+ project URL in Config.in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,29 +76,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xdriver_xf86-video-qxl/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Arnout,
 
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/Config.in b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-index 40f61fd69f..0c6b13eda2 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-@@ -9,4 +9,4 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_QXL
- 	help
- 	  QEMU QXL paravirt video driver
- 
--	  http://www.spice-space.org/page/XorgQXL
-+	  https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl
--- 
-2.39.2
+On 09/03/2023 21:04, Arnout Vandecappelle wrote:
+> On 06/03/2023 00:25, Julien Olivain wrote:
+>> The old URL no longer works and shows "No repositories found".
+>> Replace it with:
+>> https://wiki.linuxfoundation.org/networking/bridge
+>> 
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> 
+>  Applied to master, thanks.
+> 
+>  Why did you mark this for next? It's clearly a fix, right?
 
+You are right, it is clearly a fix. I overlooked it as it was mixed with 
+several
+other improvements and bumps for next.
+
+>  Regards,
+>  Arnout
+> 
+>> ---
+>>   package/bridge-utils/Config.in | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/package/bridge-utils/Config.in 
+>> b/package/bridge-utils/Config.in
+>> index de5883f063..2d886e2cb0 100644
+>> --- a/package/bridge-utils/Config.in
+>> +++ b/package/bridge-utils/Config.in
+>> @@ -8,4 +8,4 @@ config BR2_PACKAGE_BRIDGE_UTILS
+>>   	  added. Instead use the bridge command from the iproute2
+>>   	  package which supports more features.
+>>   -	  
+>> https://git.kernel.org/cgit/linux/kernel/git/shemminger/bridge-utils.git/
+>> +	  https://wiki.linuxfoundation.org/networking/bridge
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
