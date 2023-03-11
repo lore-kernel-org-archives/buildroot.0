@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91BFEC61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 11 Mar 2023 13:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9989CC61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 11 Mar 2023 13:09:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7DB681FBD;
-	Sat, 11 Mar 2023 13:08:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7DB681FBD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4540D81FC9;
+	Sat, 11 Mar 2023 13:09:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4540D81FC9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VLq_6dZsmpSm; Sat, 11 Mar 2023 13:08:57 +0000 (UTC)
+	with ESMTP id jD3M5clU0Yoz; Sat, 11 Mar 2023 13:09:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6B0581FC9;
-	Sat, 11 Mar 2023 13:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6B0581FC9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 50FA91BF33C
- for <buildroot@lists.busybox.net>; Sat, 11 Mar 2023 13:08:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92FE282033;
+	Sat, 11 Mar 2023 13:09:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92FE282033
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DFC281BF33C
+ for <buildroot@lists.busybox.net>; Sat, 11 Mar 2023 13:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A47660BB9
- for <buildroot@lists.busybox.net>; Sat, 11 Mar 2023 13:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A47660BB9
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA1D340140
+ for <buildroot@lists.busybox.net>; Sat, 11 Mar 2023 13:09:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA1D340140
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pvVrmshnr3e6 for <buildroot@lists.busybox.net>;
- Sat, 11 Mar 2023 13:08:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 49lmrwO57nIN for <buildroot@lists.busybox.net>;
+ Sat, 11 Mar 2023 13:08:59 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2FAF60AD2
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F2FAF60AD2
- for <buildroot@buildroot.org>; Sat, 11 Mar 2023 13:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AED674056D
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AED674056D
+ for <buildroot@buildroot.org>; Sat, 11 Mar 2023 13:08:58 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 96AAC60003;
- Sat, 11 Mar 2023 13:08:49 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id CA3F1100006;
+ Sat, 11 Mar 2023 13:08:54 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1payxs-007UP5-E6; Sat, 11 Mar 2023 14:08:48 +0100
+ id 1payxx-007UPJ-O5; Sat, 11 Mar 2023 14:08:53 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
 References: <20221220202049.3292021-1-bernd.kuhls@t-online.de>
-Date: Sat, 11 Mar 2023 14:08:48 +0100
-In-Reply-To: <20221220202049.3292021-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 20 Dec 2022 21:20:48 +0100")
-Message-ID: <87pm9f1llr.fsf@dell.be.48ers.dk>
+ <20221220202049.3292021-2-bernd.kuhls@t-online.de>
+Date: Sat, 11 Mar 2023 14:08:53 +0100
+In-Reply-To: <20221220202049.3292021-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 20 Dec 2022 21:20:49 +0100")
+Message-ID: <87lek31llm.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-glslang: add new host
- package
+Subject: Re: [Buildroot] [PATCH 2/2] package/mesa3d: add dependency to
+ host-python-glslang for Vulkan drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,7 +73,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Needed for mesa3d 22.3.x.
+ > glslangValidator is needed since mesa3d-22.3.0:
+ > https://gitlab.freedesktop.org/mesa/mesa/-/commit/9786d9ef2abb45a4e832cf1347581e3ca3aae9f0#3968b0378040deeb22000cfaf80d720905d989fc_0_130
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/06a/06a429dcdf776ca32de4570f9a408da6a7e7333d/
+
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
