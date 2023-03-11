@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9989CC61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 11 Mar 2023 13:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E24CC6FD1F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Mar 2023 13:09:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4540D81FC9;
-	Sat, 11 Mar 2023 13:09:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4540D81FC9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D92082033;
+	Sat, 11 Mar 2023 13:09:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D92082033
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jD3M5clU0Yoz; Sat, 11 Mar 2023 13:09:10 +0000 (UTC)
+	with ESMTP id LLQcBimsKrsy; Sat, 11 Mar 2023 13:09:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92FE282033;
-	Sat, 11 Mar 2023 13:09:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92FE282033
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DFC281BF33C
- for <buildroot@lists.busybox.net>; Sat, 11 Mar 2023 13:09:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8076C82160;
+	Sat, 11 Mar 2023 13:09:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8076C82160
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F9AC1BF33C
+ for <buildroot@lists.busybox.net>; Sat, 11 Mar 2023 13:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA1D340140
- for <buildroot@lists.busybox.net>; Sat, 11 Mar 2023 13:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA1D340140
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A083822B2
+ for <buildroot@lists.busybox.net>; Sat, 11 Mar 2023 13:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A083822B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 49lmrwO57nIN for <buildroot@lists.busybox.net>;
- Sat, 11 Mar 2023 13:08:59 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AED674056D
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AED674056D
- for <buildroot@buildroot.org>; Sat, 11 Mar 2023 13:08:58 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CA3F1100006;
- Sat, 11 Mar 2023 13:08:54 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1payxx-007UPJ-O5; Sat, 11 Mar 2023 14:08:53 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tq0qwxGFByTl for <buildroot@lists.busybox.net>;
+ Sat, 11 Mar 2023 13:09:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A4FA81FD4
+ for <buildroot@buildroot.org>; Sat, 11 Mar 2023 13:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A4FA81FD4
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 02601861BA; Sat, 11 Mar 2023 13:09:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20221220202049.3292021-1-bernd.kuhls@t-online.de>
- <20221220202049.3292021-2-bernd.kuhls@t-online.de>
-Date: Sat, 11 Mar 2023 14:08:53 +0100
-In-Reply-To: <20221220202049.3292021-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 20 Dec 2022 21:20:49 +0100")
-Message-ID: <87lek31llm.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/mesa3d: add dependency to
- host-python-glslang for Vulkan drivers
+To: buildroot@buildroot.org
+Date: Sat, 11 Mar 2023 14:05:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1c89f36821b8b37143efcd53558c9fda24788808
+X-Git-Newrev: f9fe0cf8f64f8ea48f3ee4af28053d7bea52b61f
+X-Patchwork-Hint: ignore
+Message-Id: <20230311130921.02601861BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-glslang: add new host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +57,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f9fe0cf8f64f8ea48f3ee4af28053d7bea52b61f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > glslangValidator is needed since mesa3d-22.3.0:
- > https://gitlab.freedesktop.org/mesa/mesa/-/commit/9786d9ef2abb45a4e832cf1347581e3ca3aae9f0#3968b0378040deeb22000cfaf80d720905d989fc_0_130
+Needed for mesa3d 22.3.x.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/06a/06a429dcdf776ca32de4570f9a408da6a7e7333d/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS                                 |  1 +
+ package/python-glslang/python-glslang.hash |  3 +++
+ package/python-glslang/python-glslang.mk   | 13 +++++++++++++
+ 3 files changed, 17 insertions(+)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1dc085b87f..7ef8f79a71 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -439,6 +439,7 @@ F:	package/pound/
+ F:	package/pure-ftpd/
+ F:	package/python-couchdb/
+ F:	package/python-cssutils/
++F:	package/python-glslang/
+ F:	package/python-mwclient/
+ F:	package/python-mwscrape/
+ F:	package/python-mwscrape2slob/
+diff --git a/package/python-glslang/python-glslang.hash b/package/python-glslang/python-glslang.hash
+new file mode 100644
+index 0000000000..df9127939e
+--- /dev/null
++++ b/package/python-glslang/python-glslang.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  592c98aeb03b3e81597ddaf83633c4e63068d14b18a766fd11033bad73127162  python-glslang-11.13.0.tar.gz
++sha256  adb783e734e906d1f46db5df29991dbde84bdb0ceab502ac2febb44fe3c2b5f4  LICENSE.txt
+diff --git a/package/python-glslang/python-glslang.mk b/package/python-glslang/python-glslang.mk
+new file mode 100644
+index 0000000000..94f480e30a
+--- /dev/null
++++ b/package/python-glslang/python-glslang.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-glslang
++#
++################################################################################
++
++PYTHON_GLSLANG_VERSION = 11.13.0
++PYTHON_GLSLANG_SITE = $(call github,KhronosGroup,glslang,$(PYTHON_GLSLANG_VERSION))
++PYTHON_GLSLANG_LICENSE = BSD-3-Clause
++PYTHON_GLSLANG_LICENSE_FILES = LICENSE.txt
++PYTHON_GLSLANG_DEPENDENCIES = host-python3
++
++$(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
