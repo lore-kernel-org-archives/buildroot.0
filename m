@@ -4,57 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0877FC6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB377C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A21F740895;
-	Sun, 12 Mar 2023 22:03:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A21F740895
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DEB54097F;
+	Sun, 12 Mar 2023 22:04:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DEB54097F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5ygHBg_Y4LaN; Sun, 12 Mar 2023 22:03:15 +0000 (UTC)
+	with ESMTP id XAklzMKn7V7d; Sun, 12 Mar 2023 22:04:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11BE9408DD;
-	Sun, 12 Mar 2023 22:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11BE9408DD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D54301BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:03:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C74940981;
+	Sun, 12 Mar 2023 22:04:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C74940981
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EA3E81BF868
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEB1A60C0A
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB1A60C0A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79E95819D1
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:04:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79E95819D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MvytD0q0OOEz for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 22:03:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mrYs5Ev6K0RZ for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 22:04:07 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 510FB60BFE
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 510FB60BFE
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 22:03:11 +0000 (UTC)
-Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
- by mailout08.t-online.de (Postfix) with SMTP id E4DC1233A5;
- Sun, 12 Mar 2023 23:02:54 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.204.131]) by fwd75.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pbTmI-2OrmZl0; Sun, 12 Mar 2023 23:02:54 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56712)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pbTmI-0005ph-01;
- Sun, 12 Mar 2023 23:02:54 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 23:02:53 +0100
-Message-Id: <20230312220253.285408-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AD52819F5
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2AD52819F5
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 22:04:05 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2B15CE0004;
+ Sun, 12 Mar 2023 22:04:03 +0000 (UTC)
+Date: Sun, 12 Mar 2023 23:04:02 +0100
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20230312230402.50be40b1@windsurf>
+In-Reply-To: <20230215073256.186476-3-christian@paral.in>
+References: <20230215073256.186476-1-christian@paral.in>
+ <20230215073256.186476-3-christian@paral.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1678658574-DB61A2C4-1C258A30/0/0 CLEAN NORMAL
-X-TOI-MSGID: 10c73ed6-e439-4c61-a20d-5e1d93b7b07c
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 23.0.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678658643;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=eTbc2qgtP3bxPJgUynnSjVDXVvMPqllSrloYvF1w9AM=;
+ b=HvM8Mg7hvms79ASbgLQDbg3Mljc1/1Rq7mrprr+jY9Y4ujZLSlPyQhHcQowsMLK94qz0Ur
+ PjFnUfhpRtn90RRvpOA7vGTBixxPgWj7/lfoleJjsJgBoCbBm1HCXP1CJSYtvu0mdTnz6G
+ SLtG2y7+wwxKliQt+2gLmdmS4R6QX7h+Wu52TmXYCvy72fjpSZYSU+oX9WDRN+rCdrbJvn
+ N9MI4gLCTZzMFdCY4o6VK1Nkcc7+bUmrroVh1DFLR95QSyKdLPr3XSuHk8nE7+M78xqXtG
+ SYiolblpNRjpd39S6CfUkcZSTcueqKd8EXo6B0lkP1BrrWg5prYA/XTC/jzANw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HvM8Mg7h
+Subject: Re: [Buildroot] [PATCH v3 3/3] package/go: use host compiler when
+ go-bootstrap unsupported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,66 +77,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://www.phoronix.com/news/Mesa-23.0-Released
-https://lists.freedesktop.org/archives/mesa-announce/2023-February/000706.html
+Hello Christian,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+On Tue, 14 Feb 2023 23:32:56 -0800
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index ad1999a30d..a9ab1de8ea 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 22.3.5
-+MESA3D_HEADERS_VERSION = 23.0.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 50c5bcc7fc..17dc2e7c00 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2023-February/000705.html
--sha256  3eed2ecae2bc674494566faab9fcc9beb21cd804c7ba2b59a1694f3d7236e6a9  mesa-22.3.5.tar.xz
--sha512  a4cad9b7e6501678fac279bd88a37e522633c7128afa8df04982f469c930e3557bb1d05b4b0f5ae16704d8d04e50c90a7489943a48861df17dd947704c329b85  mesa-22.3.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2023-February/000706.html
-+sha256  01f3cff3763f09e0adabcb8011e4aebc6ad48f6a4dd4bae904fe918707d253e4  mesa-23.0.0.tar.xz
-+sha512  127e2759a2a31cacd65a0891719ab7bb4a9188844022b4bccaebbedce9c550b9ccb160ad519178ea0d851c4bcb8f0f56febda248ed2ba82b5ddf804855e4694b  mesa-23.0.0.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index a744334c5b..a09c157b33 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 22.3.5
-+MESA3D_VERSION = 23.0.0
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+> The process for "bootstrapping" the Go compiler in Buildroot is:
+> 
+> 1. Compile a C/C++ cross-compiler (gcc) as the host toolchain.
+
+I find "host toolchain" confusing here. I generally understand "host
+toolchain" as "native toolchain".
+
+> diff --git a/package/go/go.mk b/package/go/go.mk
+> index 4db703a301..68f6d9e36b 100644
+> --- a/package/go/go.mk
+> +++ b/package/go/go.mk
+> @@ -12,7 +12,6 @@ GO_LICENSE = BSD-3-Clause
+>  GO_LICENSE_FILES = LICENSE
+>  GO_CPE_ID_VENDOR = golang
+>  
+> -HOST_GO_DEPENDENCIES = host-go-bootstrap-stage2
+>  HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+>  HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+>  HOST_GO_ROOT = $(HOST_DIR)/lib/go
+> @@ -109,6 +108,11 @@ else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>  HOST_GO_CGO_ENABLED = 1
+>  endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>  
+> +ifeq ($(HOST_GO_CGO_ENABLED),1)
+> +# For cgo support the toolchain needs to be available.
+> +HOST_GO_DEPENDENCIES += toolchain
+> +endif
+
+Why is this added as part of this commit? It seems completely
+unrelated. And in fact, shouldn't this be the correct thing to do
+instead of what PATCH 1/3 is doing with the toolchain dependency added
+on host-go-bootstrap-stage2 ?
+
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 4353e9585e..943c7d0daf 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -217,6 +217,10 @@ if grep -q ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG ; then
+>  	fi
+>  fi
+>  
+> +if grep -q ^BR2_NEEDS_HOST_GO=y $BR2_CONFIG ; then
+> +	check_prog_host "go"
+> +fi
+
+I think this is missing a version check on go: you need at least go
+1.17.x to be able to build a go >= 1.20. The check as written here does
+not check the go version.
+
+Also, I am wondering if we couldn't improve things a bit and use an
+already installed (and sufficiently recent) Go compiler to save on
+building host-go-bootstrap-stage{1,2} even on architectures where the
+full bootstrap build is supported.
+
+We would have the following cases:
+
+ - Architecture supported by bootstrap-stage{1,2}
+
+   - If system-provided Go is available and recent enough => use it and skip bootstrap
+   - If not, do bootstrapping
+
+ - Architecture not supported by bootstrap-stage{1,2}
+
+   - If system-provided Go is available and recent enough => use it
+   - If not, should not happen due to check
+
+It is of course not mandatory to implement this right now. It would be
+a nice to have, but not a must have for sure.
+
+Best regards,
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
