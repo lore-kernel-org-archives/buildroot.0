@@ -4,61 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01B0AC6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:22:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD1BBC6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:23:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 874CC81C26;
-	Sun, 12 Mar 2023 09:22:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 874CC81C26
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D91F81D02;
+	Sun, 12 Mar 2023 09:23:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D91F81D02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NLTFeaVvfh6P; Sun, 12 Mar 2023 09:22:31 +0000 (UTC)
+	with ESMTP id 1C4CbaX2uGxf; Sun, 12 Mar 2023 09:23:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7E3481B36;
-	Sun, 12 Mar 2023 09:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7E3481B36
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 034C21BF3C3
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:22:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F82A81CDC;
+	Sun, 12 Mar 2023 09:23:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F82A81CDC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E4ACE1BF3C3
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE94981B36
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:22:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE94981B36
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB3574046D
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:23:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB3574046D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hUMrmJmebfHb for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 09:22:27 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF0DC81B35
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF0DC81B35
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:22:27 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.169.126.28])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id E3DB22003F3;
- Sun, 12 Mar 2023 10:22:22 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:22:15 +0100
-Message-Id: <20230312092215.11954-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yggrFWkiEEgu for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 09:23:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54EF240438
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 54EF240438
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:23:46 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3E15C40003;
+ Sun, 12 Mar 2023 09:23:43 +0000 (UTC)
+Date: Sun, 12 Mar 2023 10:23:42 +0100
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230312102342.2f2393b0@windsurf>
+In-Reply-To: <20230311184148.183739-1-ju.o@free.fr>
+References: <20230311184148.183739-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1678612944;
- bh=X6vOZRWkvq2OeQMnYL0g5xC4vECIDFsmnXR9KThzP6k=;
- h=From:To:Cc:Subject:Date:From;
- b=dgDb08edNzZ/V3bboPCADP6AY8oi/4ocdqi4QNsGX9nDYvqky/q9NC1nI8Ne8I4Ld
- Ivztwgkz0Lr+J8CWYKOKtXqMxtDbXPpWZpKWBXPvyKYDa6CwL1UPPZNyw8wUo0yiQM
- 9XH5WNIhpfwt+ey+TTjivFzzMye8BU/MyliVlS+zmsywuCaSHB0SIEZCfdZkJtX2eS
- OBbZPW8VOl+Rh32UF1D7Gs4HQ06bAP55ZQ/P//D1povyBGbL4Ul3eJDaWp6JFwCzr3
- NSAfFeoItiV3EHMIFGfhe62iPRROgBfI7dYGM7HL7IAvnhPWFWSI2hJTivxRSU3/Pt
- /PxtIrmOz8dPw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dgDb08ed
-Subject: [Buildroot] [PATCH next 1/1] package/pcre2: update _SITE url
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678613023;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=cC4Jjodm4Tke7O8HHuyLkDvgJVZ9JugzWu1HWiG4e7o=;
+ b=PNInZ+L/nfKIM5ndVs8fumjGjIalDItZFJtu+SGeIxcI7yf9y17zydKCtzrCngcgsrDcOv
+ Vp+wlTPMuzlltYsTEGTj0zf1O0gwHrctRR5maF8aepL/d/3uQXscx8GugAlzXaIYrlR0hy
+ Gvdy12lrV60A1vpXCsgUyHlU1Hsk5y4rW9nezAN+jhtkzgibxHoUZjAifRqDXVw/VE5EBE
+ m/n95gwrCW1tj6mJuq1tvKCCS4DVApXIhUXvFLitAXN4fobOmulsqvchL1IAHNF8uk2CvV
+ RzvXF2xFWRpEaDhjSKIZW8ne+Hww9MRoqAHk+MyWjAP266PR2XNRmP6PHSFxdQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=PNInZ+L/
+Subject: Re: [Buildroot] [PATCH next 1/1] package/python-hwdata: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,44 +75,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The pcre2 url [1] is now redirecting to [2]. This change was
-announced in upstream commit [3] which was already included in
-pcre2 10.41.
+Hello Julien,
 
-This commit updates the PCRE2_SITE url accordingly. The package
-version remains unchanged.
+Thanks for this work!
 
-[1] https://github.com/PhilipHazel/pcre2
-[2] https://github.com/PCRE2Project/pcre2
-[3] https://github.com/PCRE2Project/pcre2/commit/66b3cb34dfe5411cb2bb939a8f4981081815d496
+On Sat, 11 Mar 2023 19:41:48 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/pcre2/pcre2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +PYTHON_HWDATA_VERSION = 2.3.7
+> +PYTHON_HWDATA_SOURCE = hwdata-$(PYTHON_HWDATA_VERSION).tar.gz
+> +PYTHON_HWDATA_SITE = https://files.pythonhosted.org/packages/15/26/f5bc1b42129fbcbd1c99c29714af1685fc89e2cf37680a9930d4fcac1808
+> +PYTHON_HWDATA_SETUP_TYPE = distutils
+> +PYTHON_HWDATA_LICENSE = GPL-2.0+
+> +PYTHON_HWDATA_LICENSE_FILES = LICENSE
 
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index aba378cab6..c35056f8a2 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PCRE2_VERSION = 10.42
--PCRE2_SITE = https://github.com/PhilipHazel/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
-+PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
- PCRE2_LICENSE_FILES = LICENCE
+This doesn't work because there is no LICENSE file in the PyPi tarball
+(and also the hash file does not have the hash of that file):
+
+>>> python-hwdata 2.3.7 Collecting legal info
+ERROR: No hash found for LICENSE
+cp: cannot stat '/home/thomas/projets/buildroot/output/build/python-hwdata-2.3.7/LICENSE': No such file or directory
+make: *** [package/python-hwdata/python-hwdata.mk:16: python-hwdata-legal-info] Error 1
+
+One thing you could do to address this is:
+
+PYTHON_HWDATA_EXTRA_DOWNLOADS = https://raw.githubusercontent.com/xsuchy/python-hwdata/python-hwdata-2.3.7-1/LICENSE
+
+and then add a post-extract hook that copies $(PYTHON_HWDATA_DLDIR) to
+$(@D), and then use LICENSE as the license file.
+
+This will of course require an update in the hash file.
+
+Do you think you could look into this? The rest of the patch looks
+good, of course.
+
+Best regards,
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
