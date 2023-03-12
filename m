@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77911C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73928C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25B8341C68;
-	Sun, 12 Mar 2023 22:01:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25B8341C68
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BFCB4092F;
+	Sun, 12 Mar 2023 22:01:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BFCB4092F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bMDm4sUrYg2t; Sun, 12 Mar 2023 22:01:32 +0000 (UTC)
+	with ESMTP id uuyXSuuux1YF; Sun, 12 Mar 2023 22:01:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 928BD41CBA;
-	Sun, 12 Mar 2023 22:01:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 928BD41CBA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E6CD41CD1;
+	Sun, 12 Mar 2023 22:01:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E6CD41CD1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BC3B51BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CCBB41BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87EC14062A
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87EC14062A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 520D440635
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 520D440635
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MHf-l9KZueof for <buildroot@lists.busybox.net>;
+ with ESMTP id HXce-SQXe0ha for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ED3DD408AF
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED3DD408AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9543408D3
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9543408D3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB1FB87007; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ id C78EA87007; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 14:13:08 +0100
+Date: Sun, 12 Mar 2023 22:30:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af9769ad23c67f9bd4d1b038709d41230501efef
-X-Git-Newrev: f69c972ae613719c0ebc5395ba3084c408023102
+X-Git-Oldrev: 30e96518cd7255048bcac024c20e203f51c377d4
+X-Git-Newrev: 00553ea186357fd3e2b3c89fa560e9711cc67472
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214624.DB1FB87007@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_kexec.py: new runtime test
+Message-Id: <20230312214625.C78EA87007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/stress-ng: bump to version V0.15.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,140 +63,354 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f69c972ae613719c0ebc5395ba3084c408023102
+commit: https://git.buildroot.net/buildroot/commit/?id=00553ea186357fd3e2b3c89fa560e9711cc67472
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This commit dropped the patch, included upstream in:
+https://github.com/ColinIanKing/stress-ng/commit/5d419c790e648c7a2f96f34ed1b93b326f725545
+which was included in V0.14.04.
+
+Three patches are also introduced to fix build issues (all
+upstream not but not yet in version).
+
+Also, this new version now depends on BR2_TOOLCHAIN_HAS_SYNC_4.
+
+Finally, a new _MAKE_FLAGS is introduced to prevent the package to
+modify too much its CFLAGS.
+
+For change log since V0.13.05, see:
+- https://github.com/ColinIanKing/stress-ng/blob/V0.15.04/debian/changelog
+or commit logs:
+- https://github.com/ColinIanKing/stress-ng/commits/V0.15.04
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  2 +
- support/testing/tests/package/test_kexec.py        | 93 ++++++++++++++++++++++
- .../tests/package/test_kexec/linux-kexec.fragment  |  5 ++
- 3 files changed, 100 insertions(+)
+ .../0001-Makefile-fix-build-with-kernel-5.6.patch  | 60 -----------------
+ ...-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch | 54 +++++++++++++++
+ .../0002-stress-regs-fix-build-on-riscv32.patch    | 43 ++++++++++++
+ ...file-introduce-PRESERVE_CFLAGS-build-flag.patch | 78 ++++++++++++++++++++++
+ package/stress-ng/Config.in                        |  2 +
+ package/stress-ng/stress-ng.hash                   |  2 +-
+ package/stress-ng/stress-ng.mk                     |  7 +-
+ 7 files changed, 183 insertions(+), 63 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7733d5a04e..f6e120d92b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1718,6 +1718,8 @@ F:	support/testing/tests/package/sample_python_spake2.py
- F:	support/testing/tests/package/test_gnupg2.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
-+F:	support/testing/tests/package/test_kexec.py
-+F:	support/testing/tests/package/test_kexec/
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lsof.py
- F:	support/testing/tests/package/test_ncdu.py
-diff --git a/support/testing/tests/package/test_kexec.py b/support/testing/tests/package/test_kexec.py
+diff --git a/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch b/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch
+deleted file mode 100644
+index 4c62da3241..0000000000
+--- a/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 5d419c790e648c7a2f96f34ed1b93b326f725545 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 13 Aug 2022 17:17:05 +0200
+-Subject: [PATCH] Makefile: fix build with kernel < 5.6
+-
+-Fix the following build failure with kernel >= 5.1 and < 5.5 (i.e.
+-before
+-https://github.com/torvalds/linux/commit/9e3aa61ae3e01ce1ce6361a41ef725e1f4d1d2bf)
+-raised since version 0.11.21 and
+-https://github.com/ColinIanKing/stress-ng/commit/3d6fccdbe53d0cbcb75dd4b91571aaaae7ee1ad4:
+-
+-In file included from stress-io-uring.c:26:
+-io-uring.h:1:9: error: macro names must be identifiers
+-    1 | #define #define HAVE_IORING_OP_NOP 0
+-      |         ^
+-
+-Moreover, IORING_OP_FALLOCATE is not available before kernel 5.6 and
+-https://github.com/torvalds/linux/commit/d63d1b5edb7b832210bfde587ba9e7549fa064eb
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/1bf3f2bbc849bdce531d56b1024fa87f0c1ae667
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved (and backported) from
+-https://github.com/ColinIanKing/stress-ng/commit/5d419c790e648c7a2f96f34ed1b93b326f725545]
+----
+- Makefile          | 2 +-
+- stress-io-uring.c | 6 +++++-
+- 2 files changed, 6 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 2f9cc9918..ee17ae08b 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -528,7 +528,7 @@ stress-personality.c: personality.h
+- #
+- io-uring.h:
+- 	$(V)$(CPP) $(CFLAGS) core-io-uring.c  | $(GREP) IORING_OP | sed 's/,//' | \
+--	sed 's/IORING_OP_/#define HAVE_IORING_OP_/' > io-uring.h
+-+	sed 's/.*\(IORING_OP_.*\)/#define HAVE_\1/' > io-uring.h
+- 	$(Q)echo "MK io-uring.h"
+- 
+- stress-io-uring.c: io-uring.h
+-diff --git a/stress-io-uring.c b/stress-io-uring.c
+-index ab9fd0749..84f463611 100644
+---- a/stress-io-uring.c
+-+++ b/stress-io-uring.c
+-@@ -311,7 +311,11 @@ static inline int stress_io_uring_complete(
+- 			break;
+- 
+- 		cqe = &cring->cqes[head & *submit->cq_ring.ring_mask];
+--		if ((cqe->res < 0) && (opcode != IORING_OP_FALLOCATE)) {
+-+		if ((cqe->res < 0)
+-+#ifdef HAVE_IORING_OP_FALLOCATE
+-+			&& (opcode != IORING_OP_FALLOCATE)
+-+#endif
+-+		) {
+- 			const int err = abs(cqe->res);
+- 
+- 			/* Silently ignore EOPNOTSUPP completion errors */
+diff --git a/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch b/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch
 new file mode 100644
-index 0000000000..77e383373e
+index 0000000000..41a2647133
 --- /dev/null
-+++ b/support/testing/tests/package/test_kexec.py
-@@ -0,0 +1,93 @@
-+import os
++++ b/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch
+@@ -0,0 +1,54 @@
++From 625dd7e458e6aa488f7dd4764e4a62b6fbf79a9d Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Thu, 23 Feb 2023 21:54:16 +0100
++Subject: [PATCH] stress-mmap: fix build with HAVE_SYSCALL or __NR_mmap2 is
++ undefined
 +
-+import infra.basetest
++Commit afae500a added macro tests for defined(HAVE_SYSCALL) and
++system call numbers.
 +
++More specifically, in stress-mmap.c, function mmap2_try() was defined
++only if __NR_mmap2 is defined.  See:
++https://github.com/ColinIanKing/stress-ng/commit/afae500a23b198b9df421ad0fd9270fcdf65c3fb#diff-ffb0db2473f6c5e1b93dd33bce389ee836671a628fff9f903d097733f7ddfc9c
 +
-+class TestKexec(infra.basetest.BRTest):
++This commit forgot to replicate the same test when the mmap2_try()
++function is used later at:
++https://github.com/ColinIanKing/stress-ng/blob/50f3ef2560e928c4694894be0bb652e663af5076/stress-mmap.c#L754
 +
-+    # A specific configuration is needed for using kexec:
-+    # - We use Aarch64 since it is well supported for kexec,
-+    # - A kernel config fragment enables all the kexec parts,
-+    # - The kernel Image is installed on target filesystem to be
-+    #   reloaded through kexec,
-+    # - We use a ext4 rootfs image exposed as a virtio storage (rather
-+    #   than cpio initrd). This avoids needing to install the initrd
-+    #   inside the rootfs.
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.15"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-+        BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_KEXEC=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+            infra.filepath("tests/package/test_kexec/linux-kexec.fragment")
-+        )
++When HAVE_SYSCALL or __NR_mmap2 is undefined, compilation fails with:
 +
-+    def test_run(self):
-+        hda = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        # Notes:
-+        # Sufficient memory is needed to load the kernel: having at
-+        # least 512MB works. kexec could silently fail if not enough
-+        # memory is present. KASLR needs to be disabled for the test:
-+        # we pass "nokaslr" to kernel bootargs, and also pass
-+        # "dtb-kaslr-seed=off" to qemu virt machine.
-+        bootargs = ["root=/dev/vda console=ttyAMA0 nokaslr"]
-+        qemu_opts = ["-M", "virt,dtb-kaslr-seed=off", "-cpu", "cortex-a57", "-m", "512M",
-+                     "-drive", f"file={hda},if=virtio,format=raw"]
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=bootargs,
-+                           options=qemu_opts)
-+        self.emulator.login()
++    stress-mmap.c: In function 'stress_mmap':
++    stress-mmap.c:809:31: error: 'mmap2_try' undeclared (first use in this function); did you mean 'mmap_prot'?
++       context.mmap = (mmap_func_t)mmap2_try;
++                                   ^~~~~~~~~
++                                   mmap_prot
++    stress-mmap.c:809:31: note: each undeclared identifier is reported only once for each function it appears in
 +
-+        # Test the program can execute
-+        self.assertRunOk("kexec --version")
++This patch fixes this issue.
 +
-+        # Check the kexec kernel is NOT loaded:
-+        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 0")
++Upstream-reference:
++https://github.com/ColinIanKing/stress-ng/commit/3da49180fdfa8a70307569202ed9431f5295913e
 +
-+        # Load the Kernel:
-+        # "--append br-test" adds a dummy kernel args we'll be able to
-+        # check in the second executed kernel.
-+        # We use the dtb image from /sys/firmware/fdt (since we don't
-+        # have the dtb file in the system)
-+        self.assertRunOk("kexec -d -l --dtb=/sys/firmware/fdt --reuse-cmdline --serial=ttyAMA0 --append=br-test /boot/Image")
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ stress-mmap.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+        # Check the kexec kernel IS loaded:
-+        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 1")
++diff --git a/stress-mmap.c b/stress-mmap.c
++index cf343078..68f5a9b8 100644
++--- a/stress-mmap.c
+++++ b/stress-mmap.c
++@@ -805,7 +805,9 @@ static int stress_mmap(const stress_args_t *args)
++ 		context.mmap_file = true;
++ 
++ 	if (mmap_mmap2) {
++-#if defined(HAVE_MMAP2)
+++#if defined(HAVE_MMAP2) && \
+++    defined(HAVE_SYSCALL) && \
+++    defined(__NR_mmap2)
++ 		context.mmap = (mmap_func_t)mmap2_try;
++ #else
++ 		if (args->instance == 0)
++-- 
++2.39.2
 +
-+        # Create a marker file in tmpfs which is supposed to disappear
-+        # after kexec kernel restart.
-+        self.assertRunOk("touch /dev/shm/br-kexec-marker")
-+
-+        # Execute the loaded kernel (i.e perform a kexec reboot)
-+        # qemu.sendline() is used here because no exit code nor
-+        # program return is expected, since kexec is like a
-+        # reboot. The login is expected to be reached after the
-+        # command is issued.
-+        self.emulator.qemu.sendline("kexec -d -e")
-+
-+        # Wait for the login, and log again
-+        self.emulator.login()
-+
-+        # Check the "br-test" dummy kernel arg is present
-+        self.assertRunOk("grep br-test /proc/cmdline")
-+
-+        # Check the test marker file is no longer here
-+        self.assertRunOk("test ! -e /dev/shm/br-kexec-marker")
-+
-+        # After restart, the kernel is not supposed to have a kexec
-+        # loaded image:
-+        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 0")
-diff --git a/support/testing/tests/package/test_kexec/linux-kexec.fragment b/support/testing/tests/package/test_kexec/linux-kexec.fragment
+diff --git a/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch b/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch
 new file mode 100644
-index 0000000000..04c65f5cae
+index 0000000000..cb2a507bfd
 --- /dev/null
-+++ b/support/testing/tests/package/test_kexec/linux-kexec.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_KEXEC=y
-+CONFIG_KEXEC_FILE=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_KALLSYMS_ALL=y
++++ b/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch
+@@ -0,0 +1,43 @@
++From 40309f5d313524f4189f4ef158920391e92e226d Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Thu, 23 Feb 2023 21:38:25 +0100
++Subject: [PATCH] stress-regs: fix build on riscv32
++
++RISC-V register test routine is using 64bit registers only.
++When compiling on 32bit RISC-V, compilation fails with output:
++
++    stress-regs.c: In function 'stress_regs_helper':
++    stress-regs.c:485:27: error: register specified for 's1' isn't suitable for data type
++      485 |         register uint64_t s1  __asm__("s1")  = v;
++          |                           ^~
++    stress-regs.c:495:27: error: register specified for 's11' isn't suitable for data type
++      495 |         register uint64_t s11 __asm__("s11") = s1 ^ 0xa5a5a5a5a5a5a5a5ULL;
++          |                           ^~~
++
++This patch fix this issue by protecting the stress_regs_helper()
++function with an additional test, to restrict to 64bit.
++
++Upstream-reference:
++https://github.com/ColinIanKing/stress-ng/commit/6c335ac3abba535e79ddbddf34591ef5b9ee0a96
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ stress-regs.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/stress-regs.c b/stress-regs.c
++index 4d4d32d2..0ffac4d1 100644
++--- a/stress-regs.c
+++++ b/stress-regs.c
++@@ -473,7 +473,7 @@ do {			\
++ }
++ #endif
++ 
++-#if defined(STRESS_ARCH_RISCV)
+++#if defined(STRESS_ARCH_RISCV) && (__riscv_xlen == 64)
++ 
++ #define STRESS_REGS_HELPER
++ /*
++-- 
++2.39.2
++
+diff --git a/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch b/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch
+new file mode 100644
+index 0000000000..beb5429dc1
+--- /dev/null
++++ b/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch
+@@ -0,0 +1,78 @@
++From d3ab0bad6afc2e8f4be70fe38dd24788f1b3d4be Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Fri, 24 Feb 2023 21:11:30 +0100
++Subject: [PATCH] Makefile: introduce PRESERVE_CFLAGS build flag
++
++The stress-ng Makefile includes many nice environment auto-detection
++features to adjust compilation flags. This is very convenient in
++many compilation use-cases. However, in some other specific cross
++compilation environments, those automatic CFLAGS adjustments may
++create compilation failures.
++
++For example, commit c00e695ed5 added -fstack-protector-strong if the
++compiler recognize the flag. In some situations, for example a gcc
++toolchain based on uClibc-ng without stack-protector libssp
++enabled, gcc will recognize the option. Then, the Makefile adds the
++option to CFLAGS, and the compilation/link fails at link time with an
++error like:
++
++    /toolchain/arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp_nonshared: No such file or directory
++    /toolchain/arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp: No such file or directory
++
++stress-ng is included in the Buildroot build system [1] [2], which
++supports many architectures and toolchain configurations. This build
++system carefully controls its CFLAGS. In such a case, it is
++preferable for a package to avoid changing compilation flags.
++
++This patch introduces the PRESERVE_CFLAGS Makefile variable which will
++disable those CFLAGS adjustments, if set to 1. The current build
++behavior is preserved if unset.
++
++Upstream-reference:
++https://github.com/ColinIanKing/stress-ng/commit/3d87d50561505a5a79008c01e35fc2e100000160
++
++[1] https://buildroot.org/
++[2] https://git.buildroot.org/buildroot/tree/package/stress-ng?h=2022.11.1
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ Makefile | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index 7a969aba..35151d74 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -45,6 +45,7 @@ endif
++ # Test for hardening flags and apply them if applicable
++ #
++ MACHINE = $(shell uname -m)
+++ifneq ($(PRESERVE_CFLAGS),1)
++ ifneq ($(MACHINE),$(filter $(MACHINE),alpha parisc))
++ ifeq ($(shell $(CC) $(CFLAGS) -fstack-protector-strong -E -xc /dev/null > /dev/null 2>& 1 && echo 1),1)
++ CFLAGS += -fstack-protector-strong
++@@ -58,6 +59,7 @@ ifeq ($(shell $(CC) $(CFLAGS) -D_FORTIFY_SOURCE=2 -E -xc /dev/null > /dev/null 2
++ CFLAGS += -D_FORTIFY_SOURCE=2
++ endif
++ endif
+++endif
++ 
++ #
++ # Expected build warnings
++@@ -83,11 +85,13 @@ PRE_V=
++ PRE_Q=@#
++ endif
++ 
+++ifneq ($(PRESERVE_CFLAGS),1)
++ ifeq ($(findstring icc,$(CC)),icc)
++ CFLAGS += -no-inline-max-size -no-inline-max-total-size
++ CFLAGS += -axAVX,CORE-AVX2,CORE-AVX-I,CORE-AVX512,SSE2,SSE3,SSSE3,SSE4.1,SSE4.2,SANDYBRIDGE,SKYLAKE,SKYLAKE-AVX512,TIGERLAKE,SAPPHIRERAPIDS
++ CFLAGS += -ip -falign-loops -funroll-loops -ansi-alias -fma -qoverride-limits
++ endif
+++endif
++ 
++ #ifeq ($(findstring clang,$(CC)),clang)
++ #CFLAGS += -Weverything
++-- 
++2.39.2
++
+diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
+index 839cbb1cc0..918c3db194 100644
+--- a/package/stress-ng/Config.in
++++ b/package/stress-ng/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_STRESS_NG
+ 	bool "stress-ng"
+ 	depends on BR2_USE_MMU # fork()
+ 	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2 and ARC
+ 	depends on !BR2_nios2
+@@ -16,5 +17,6 @@ config BR2_PACKAGE_STRESS_NG
+ 
+ comment "stress-ng needs a toolchain w/ headers >= 3.3"
+ 	depends on !BR2_nios2 && !BR2_arc
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index 2e3f998769..5b967d2b95 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3de49e1100866634f549e99c1644283d0cde817b844a69dcf7f80afa2227d350  stress-ng-0.13.05.tar.gz
++sha256  92922b979b5ca6ee05b03fd792c32a0b25a01fea6161b418b5e672c64ffb549f  stress-ng-0.15.04.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 0b2287c7fb..28116b455d 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,11 +4,14 @@
+ #
+ ################################################################################
+ 
+-STRESS_NG_VERSION = 0.13.05
++STRESS_NG_VERSION = 0.15.04
+ STRESS_NG_SITE = $(call github,ColinIanKing,stress-ng,V$(STRESS_NG_VERSION))
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
+ 
++STRESS_NG_MAKE_FLAGS = \
++	PRESERVE_CFLAGS=1
++
+ ifeq ($(BR2_PACKAGE_LIBBSD),y)
+ STRESS_NG_DEPENDENCIES += libbsd
+ endif
+@@ -18,7 +21,7 @@ STRESS_NG_DEPENDENCIES += keyutils
+ endif
+ 
+ define STRESS_NG_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(STRESS_NG_MAKE_FLAGS)
+ endef
+ 
+ # Don't use make install otherwise stress-ng will be rebuild without
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
