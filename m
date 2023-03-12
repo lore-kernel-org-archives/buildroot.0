@@ -4,66 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD09C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE82CC74A4B
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:07:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFB2440281;
-	Sun, 12 Mar 2023 22:07:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFB2440281
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74AFA40236;
+	Sun, 12 Mar 2023 22:07:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74AFA40236
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pxpH-TxQUN8c; Sun, 12 Mar 2023 22:07:09 +0000 (UTC)
+	with ESMTP id CqmTOet1-cV0; Sun, 12 Mar 2023 22:07:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0D3D4029F;
-	Sun, 12 Mar 2023 22:07:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0D3D4029F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CA4240868;
+	Sun, 12 Mar 2023 22:07:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CA4240868
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 12FF41BF334
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:06:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 086081BF334
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:06:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1CF9408CD
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:06:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1CF9408CD
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFB3F408FB
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:06:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFB3F408FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JnlWnj-j-hZw for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 22:06:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B56264061D
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B56264061D
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 22:06:43 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BCEFD1C0002;
- Sun, 12 Mar 2023 22:06:40 +0000 (UTC)
-Date: Sun, 12 Mar 2023 23:06:40 +0100
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20230312230640.1fef9a18@windsurf>
-In-Reply-To: <20230306155252.476859-1-heiko.thiery@gmail.com>
-References: <20230306155252.476859-1-heiko.thiery@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+ with ESMTP id dIstF6QA9RdG for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 22:06:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA92840522
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AA92840522
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 22:06:52 +0000 (UTC)
+Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
+ by mailout12.t-online.de (Postfix) with SMTP id 737B3CD43;
+ Sun, 12 Mar 2023 23:06:50 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.204.131]) by fwd88.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pbTq6-2yFJi50; Sun, 12 Mar 2023 23:06:50 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52464)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pbTq5-0006XP-3B;
+ Sun, 12 Mar 2023 23:06:50 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sun, 12 Mar 2023 23:06:49 +0100
+Message-Id: <20230312220649.288302-3-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230312220649.288302-1-bernd.kuhls@t-online.de>
+References: <20230312220649.288302-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1678658801;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zACh5HLcE8AGHosx/HhcejbcAcO7GEbKHl80Ypv7sHQ=;
- b=VCPkENjmc+157MqAlyct4wDOms8xt4oCDAShZAPk7nbt5s11uZb0tGIFEMaH4fCxr06eJ8
- bw6NKp3Sd6GhOEL2nwBPfAU6olz9PHz247scdr/uaSz0PjAp2O+lB4hKqbOibuNaPvkdTa
- +PBxldB8mPLdZWirMFwHOWVTLsbcmkZRjORVykesChKMHV8E98VQk2vNjNKe+2FbarXVh2
- CFoBOhiL280iIITYuLfQvkPoMqfl7N7U55gRSzNYKtlyP5H/xxiGKcis5I1LoiUzyX2PRF
- F/8y1hzsuBOuhPLeyoeBa/NOW33V/Hkz0guloP+dEaUuHZEHHvxovMBBwi/TuQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VCPkENjm
-Subject: Re: [Buildroot] [PATCH 2/3] package/rauc: switch to meson build
+X-TOI-EXPURGATEID: 150726::1678658810-726BD7D8-A5209A00/0/0 CLEAN NORMAL
+X-TOI-MSGID: 2af72bcf-be3d-407c-b236-9321f5c43b50
+Subject: [Buildroot] [PATCH 3/3] package/intel-mediasdk: bump version to
+ 23.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,30 +68,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Andrey Yurovsky <yurovsky@gmail.com>, buildroot@buildroot.org
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  6 Mar 2023 16:52:53 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  package/rauc/rauc.mk | 36 +++++++++++++++++++-----------------
->  1 file changed, 19 insertions(+), 17 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index a2c4243790..bdd4c7f3a6 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9208c35641ba995760d662689426a6c433973cf5283b8510f9cfb774e4b9cb38  intel-mediasdk-23.1.0.tar.gz
++sha256  f1bb11ddaa44d5827562600e0a989ca20550e1b021314bce32bc4957352da110  intel-mediasdk-23.1.3.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 462d487ebe..9843ec3502 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MEDIASDK_VERSION = 23.1.0
++INTEL_MEDIASDK_VERSION = 23.1.3
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
