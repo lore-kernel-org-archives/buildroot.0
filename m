@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A916C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:43:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30895C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:58:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9B3981584;
-	Sun, 12 Mar 2023 09:43:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9B3981584
+	by smtp1.osuosl.org (Postfix) with ESMTP id B69D1818A1;
+	Sun, 12 Mar 2023 09:58:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B69D1818A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gl7tHBIt-hsK; Sun, 12 Mar 2023 09:43:27 +0000 (UTC)
+	with ESMTP id 6hgyjYrvBaK8; Sun, 12 Mar 2023 09:58:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AA8881518;
-	Sun, 12 Mar 2023 09:43:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AA8881518
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 25DBD1BF3C3
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:43:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6F6E8186A;
+	Sun, 12 Mar 2023 09:58:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6F6E8186A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B56A1BF3C3
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 000FD40256
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:43:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 000FD40256
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65EF581678
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:58:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65EF581678
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VAdp105t7QwK for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 09:43:22 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8948740136
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8948740136
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:43:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.243.54])
- by smtp5-g21.free.fr (Postfix) with ESMTP id 15E1C5FFAC;
- Sun, 12 Mar 2023 10:43:19 +0100 (CET)
-Received: from [37.169.126.28]
-	by webmail.free.fr
-MIME-Version: 1.0
-Date: Sun, 12 Mar 2023 10:43:19 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20230312102342.2f2393b0@windsurf>
-References: <20230311184148.183739-1-ju.o@free.fr>
- <20230312102342.2f2393b0@windsurf>
-Message-ID: <7672ac6c9aff94c22e7738df5e1c6316@free.fr>
-X-Sender: ju.o@free.fr
-User-Agent: Webmail Free/1.3.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1678614199;
- bh=IYy4xSC55BU39K4blttk3w913dVq5p/7VKLzpd2hpa8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=fICBSoC5i+fDPDILVUNr558YmU+PFE4KFxjavP4x/Hjgb5UT8s0I9z1DiVGMpf7Bw
- Eal2/ZXvIrAkDfLczsHkcJLDdp9vTxmvtK0xIJnhFkSAzk2NpIIOxJ0+NtpYFQ/NDs
- vgFmS6UToM/kDrzQBWaRM8FmVWlwdzr0Dbrjj6G6p3uzT+MRQILDL5L7okm3W3GqQA
- C/vnntfufASyuIpMS7gTAeR3UHNJHbJvjhyvliZ49pQk8dlvM2BHfIu3NXVagSpp/J
- B9sbpgqy5d4NkwIkQh7zBLV8SNc8Zy7AgpIQ8xrVwOu0FgseF98SnHZSH1lwtDJHwY
- eR+wy1wekh0QQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fICBSoC5
-Subject: Re: [Buildroot] [PATCH next 1/1] package/python-hwdata: new package
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rGu1PPIuJ3yx for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 09:58:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7DF1E81638
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:58:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DF1E81638
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6B07786E93; Sun, 12 Mar 2023 09:58:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 12 Mar 2023 10:55:23 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 773535fbac1acd9bc08cde5b44db0d4c1e19de31
+X-Git-Newrev: f32176a7671d8842b175077a92e268226fcec78f
+X-Patchwork-Hint: ignore
+Message-Id: <20230312095802.6B07786E93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libgit2: bump to
+ version 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,67 +56,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=f32176a7671d8842b175077a92e268226fcec78f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 12/03/2023 10:23, Thomas Petazzoni wrote:
-> Hello Julien,
-> 
-> Thanks for this work!
-> 
-> On Sat, 11 Mar 2023 19:41:48 +0100
-> Julien Olivain <ju.o@free.fr> wrote:
-> 
->> +PYTHON_HWDATA_VERSION = 2.3.7
->> +PYTHON_HWDATA_SOURCE = hwdata-$(PYTHON_HWDATA_VERSION).tar.gz
->> +PYTHON_HWDATA_SITE = 
->> https://files.pythonhosted.org/packages/15/26/f5bc1b42129fbcbd1c99c29714af1685fc89e2cf37680a9930d4fcac1808
->> +PYTHON_HWDATA_SETUP_TYPE = distutils
->> +PYTHON_HWDATA_LICENSE = GPL-2.0+
->> +PYTHON_HWDATA_LICENSE_FILES = LICENSE
-> 
-> This doesn't work because there is no LICENSE file in the PyPi tarball
-> (and also the hash file does not have the hash of that file):
+* Fix the license because libgit2 has been using some android code
+  without attribution. This explains the change of the hash in the
+  license file, which now includes the text of the BSD-2-Clause
+  license.
+* Building in-source is accidentely broken in this release and upstream
+  recommends a separate build directory anyway, so use a separate build
+  directory.
+* Some win32-specific declarations use wchar_t, add an upstreamed patch
+  to avoid a dependency to wchar_t elsewhere.
 
-I also realized that, but I sent the wrong patch version.  Sorry about 
-that.
-My fixed version was just included a "no license file" comment. I'll 
-send
-a fixed v2.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ot-declare-win32-functions-on-non-win32-p.patch | 35 ++++++++++++++++++++++
+ package/libgit2/libgit2.hash                       |  4 +--
+ package/libgit2/libgit2.mk                         |  7 +++--
+ 3 files changed, 42 insertions(+), 4 deletions(-)
 
->>>> python-hwdata 2.3.7 Collecting legal info
-> ERROR: No hash found for LICENSE
-> cp: cannot stat
-> '/home/thomas/projets/buildroot/output/build/python-hwdata-2.3.7/LICENSE':
-> No such file or directory
-> make: *** [package/python-hwdata/python-hwdata.mk:16:
-> python-hwdata-legal-info] Error 1
-> 
-> One thing you could do to address this is:
-> 
-> PYTHON_HWDATA_EXTRA_DOWNLOADS =
-> https://raw.githubusercontent.com/xsuchy/python-hwdata/python-hwdata-2.3.7-1/LICENSE
-> 
-> and then add a post-extract hook that copies $(PYTHON_HWDATA_DLDIR) to
-> $(@D), and then use LICENSE as the license file.
-> 
-> This will of course require an update in the hash file.
-> 
-> Do you think you could look into this? The rest of the patch looks
-> good, of course.
-
-Sure! I'll rework the patch to include your suggestion.  I never thought 
-about
-this workaround for this situation.
-
-Best regards,
-
-Julien.
+diff --git a/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
+new file mode 100644
+index 0000000000..6be66ffee3
+--- /dev/null
++++ b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
+@@ -0,0 +1,35 @@
++From 20811c5aa9c528405eaa3f88ff22a9adebafa9e6 Mon Sep 17 00:00:00 2001
++From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++Date: Wed, 8 Mar 2023 14:00:52 +0100
++Subject: [PATCH] sysdir: Do not declare win32 functions on non-win32 platforms
++
++These declaration poses problems on some embedded or retro Linux systems
++that deliberately disable support for wchar_t from their libc.
++
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++[Retrieved from:
++https://github.com/libgit2/libgit2/commit/20811c5aa9c528405eaa3f88ff22a9adebafa9e6]
++---
++ src/libgit2/sysdir.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/libgit2/sysdir.h b/src/libgit2/sysdir.h
++index 1d15bbf43..03f59e1de 100644
++--- a/src/libgit2/sysdir.h
+++++ b/src/libgit2/sysdir.h
++@@ -134,10 +134,12 @@ extern int git_sysdir_set(git_sysdir_t which, const char *paths);
++  */
++ extern int git_sysdir_reset(void);
++ 
+++#ifdef GIT_WIN32
++ /** Sets the registry system dir to a mock; for testing.  */
++ extern int git_win32__set_registry_system_dir(const wchar_t *mock_sysdir);
++ 
++ /** Find the given system dir; for testing. */
++ extern int git_win32__find_system_dirs(git_str *out, const char *subdir);
+++#endif
++ 
++ #endif
++-- 
++2.39.2
++
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index e834525df5..baf43c66f7 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7074f1e2697992b82402501182db254fe62d64877b12f6e4c64656516f4cde88  libgit2-1.5.1.tar.gz
+-sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
++sha256  d557fbf35557bb5df53cbf38ae0081edb4a36494ec0d19741fa673e509245f8f  libgit2-1.6.2.tar.gz
++sha256  6f3c2cd59b057e366c1acc073b038135c52d77892bb33bd4d931c5369d3f062b  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index c962c8030f..b31f5199e1 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,14 +4,15 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.5.1
++LIBGIT2_VERSION = 1.6.2
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
+ 	MIT (sha1), \
+ 	BSD-3-Clause (sha256), \
+ 	wildmatch license (wildmatch), \
+-	CC0-1.0 (xoroshiro256)
++	CC0-1.0 (xoroshiro256), \
++	BSD-2-Clause (basename_r)
+ LIBGIT2_LICENSE_FILES = COPYING
+ LIBGIT2_CPE_ID_VENDOR = libgit2_project
+ LIBGIT2_INSTALL_STAGING = YES
+@@ -24,6 +25,8 @@ LIBGIT2_CONF_OPTS = \
+ 	-DUSE_NTLMCLIENT=OFF \
+ 	-DUSE_THREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
+ 
++LIBGIT2_SUPPORTS_IN_SOURCE_BUILD = NO
++
+ LIBGIT2_DEPENDENCIES = zlib libhttpparser
+ 
+ # If libiconv is available (for !locale toolchains), then we can use
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
