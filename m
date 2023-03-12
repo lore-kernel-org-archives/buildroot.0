@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0365C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8001C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:32:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06C5840883;
-	Sun, 12 Mar 2023 21:32:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06C5840883
+	by smtp4.osuosl.org (Postfix) with ESMTP id 550F040A05;
+	Sun, 12 Mar 2023 21:32:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 550F040A05
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gz5oeuanFU8Z; Sun, 12 Mar 2023 21:32:29 +0000 (UTC)
+	with ESMTP id 7ONxjRgLtOsS; Sun, 12 Mar 2023 21:32:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1389A40298;
-	Sun, 12 Mar 2023 21:32:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1389A40298
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A00C31BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:32:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D504040883;
+	Sun, 12 Mar 2023 21:32:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D504040883
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 00FD31BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77E2081345
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF09A40298
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77E2081345
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF09A40298
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NMzRMsXi4nYs for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z3GUCOefIZi4 for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:32:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFF42812FD
+ by smtp4.osuosl.org (Postfix) with ESMTP id A82F940248
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:32:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFF42812FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A82F940248
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E47686FEB; Sun, 12 Mar 2023 21:32:25 +0000 (UTC)
+ id 8EFC186FEA; Sun, 12 Mar 2023 21:32:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 22:30:33 +0100
+Date: Sun, 12 Mar 2023 20:31:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f50259d6a0c0e8ba2149aea04c7dc98fe4707abb
-X-Git-Newrev: 30e96518cd7255048bcac024c20e203f51c377d4
+X-Git-Oldrev: 9c3cdee11a21380f8141ec4379f8a67dea4481a7
+X-Git-Newrev: f50259d6a0c0e8ba2149aea04c7dc98fe4707abb
 X-Patchwork-Hint: ignore
-Message-Id: <20230312213225.9E47686FEB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/testing/tests/package/test_stress_ng.py: new runtime test
+Message-Id: <20230312213225.8EFC186FEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dbus-broker: bump to
+ release 33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,56 +64,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30e96518cd7255048bcac024c20e203f51c377d4
+commit: https://git.buildroot.net/buildroot/commit/?id=f50259d6a0c0e8ba2149aea04c7dc98fe4707abb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+This release contains mostly a bugfixes, with some improvements around
+error handling for unimplemented functionality and resiliency against
+runtime changes of dbus service-files.
+
+Also update hashes of license files. There was no change in license,
+the hashes changed due to copyright date bump and additional authors
+listend in the same files.
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                      |  1 +
- support/testing/tests/package/test_stress_ng.py | 22 ++++++++++++++++++++++
- 2 files changed, 23 insertions(+)
+ package/dbus-broker/dbus-broker.hash | 6 +++---
+ package/dbus-broker/dbus-broker.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ff26021d1d..e28b46967c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1736,6 +1736,7 @@ F:	support/testing/tests/package/test_python_pyalsa.py
- F:	support/testing/tests/package/test_python_spake2.py
- F:	support/testing/tests/package/test_rdma_core.py
- F:	support/testing/tests/package/test_rdma_core/
-+F:	support/testing/tests/package/test_stress_ng.py
- F:	support/testing/tests/package/test_z3.py
- F:	support/testing/tests/package/test_z3/
+diff --git a/package/dbus-broker/dbus-broker.hash b/package/dbus-broker/dbus-broker.hash
+index f6c2cbe160..06c8f229b7 100644
+--- a/package/dbus-broker/dbus-broker.hash
++++ b/package/dbus-broker/dbus-broker.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  bea7f653e7251063c5f427e9e3f93562d38a0d8667ae6d49fb56f113605985de  dbus-broker-32.tar.xz
++sha256  23713f25624749fdb274907e429080fa2d8f4dbe76acd87bb6d21a3c818c7841  dbus-broker-33.tar.xz
+ sha256  3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4  LICENSE
+ sha256  20ea1f96abc15553695c6725bb3dcabff4b43b85b7ca7d675a2b8860e3b01f87  subprojects/libcdvar-1/AUTHORS
+ sha256  8153c478102dc209b30dd4627cf5bb3596263f99692bf3eec174b1e17bbf8a3b  subprojects/libcdvar-1/README.md
+@@ -11,7 +11,7 @@ sha256  23f24eeaaded5fedd6e7840b6f7b73838f9a4e2112ad6a12fe1ef958f73d0214  subpro
+ sha256  05113a24aca4c537819dd0d91b95b13edb85bea4b6a77a6d9269becb397ed374  subprojects/libcrbtree-3/README.md
+ sha256  6d63b1fb794d4c02622595ad30357c90398aa883864e5a275479139c8f03208f  subprojects/libcshquote-1/AUTHORS
+ sha256  cad109dd33062518a437ebee145ba863fe0e047d4e3db9c28b0bf3c6148f10c2  subprojects/libcshquote-1/README.md
+-sha256  32913ba08dc041f3f4ca361fc0d68014120e1c612772aabbcc901556df499ce5  subprojects/libcstdaux-1/AUTHORS
+-sha256  7c4b6c325b0bc02150089112f65132ee999b0f44500b73d1fc06d96c93161037  subprojects/libcstdaux-1/README.md
++sha256  e796182869fe0892347d069f3f423774124987d6c45d016854fc51530633c177  subprojects/libcstdaux-1/AUTHORS
++sha256  92006886d7f28894fef08bf97e35ef52147067bd3c4d4d6381da7c59f9901dae  subprojects/libcstdaux-1/README.md
+ sha256  7e660796fea0400a1a9a539226c345b3c656a745a334e323e33258de7864e985  subprojects/libcutf8-1/AUTHORS
+ sha256  106099cc1c488cbf8911f56da7977a955f6b27a7bb5b815985e59d9fae0e6fe7  subprojects/libcutf8-1/README.md
+diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
+index e82b79220d..c4e3679a2e 100644
+--- a/package/dbus-broker/dbus-broker.mk
++++ b/package/dbus-broker/dbus-broker.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/support/testing/tests/package/test_stress_ng.py b/support/testing/tests/package/test_stress_ng.py
-new file mode 100644
-index 0000000000..12fd6ec9e6
---- /dev/null
-+++ b/support/testing/tests/package/test_stress_ng.py
-@@ -0,0 +1,22 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestStressNG(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_STRESS_NG=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.assertRunOk("stress-ng --version")
-+        self.assertRunOk("stress-ng --cpu 1 --timeout 3")
+-DBUS_BROKER_VERSION = 32
++DBUS_BROKER_VERSION = 33
+ DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
+ DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
