@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF58BC6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:57:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B517C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33859408FF;
-	Sun, 12 Mar 2023 21:57:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33859408FF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CC454032D;
+	Sun, 12 Mar 2023 21:57:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CC454032D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sVj0Zk3LmYkA; Sun, 12 Mar 2023 21:57:13 +0000 (UTC)
+	with ESMTP id FTPrJqgk6loN; Sun, 12 Mar 2023 21:57:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 335CE408D3;
-	Sun, 12 Mar 2023 21:57:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 335CE408D3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 45E931BF2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id D42C3408C1;
+	Sun, 12 Mar 2023 21:57:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D42C3408C1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D7A9F1BF863
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9274960E37
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9274960E37
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDBBA408B1
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDBBA408B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CGlcQI9T2Qfo for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RSL2uanNRUmu for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D73F760E15
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CF894012B
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D73F760E15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CF894012B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6E4B87006; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ id 22BE787007; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 13:35:51 +0100
+Date: Sun, 12 Mar 2023 10:15:57 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 69053186c9f1561855357be574c70c0b3ad0ddcb
-X-Git-Newrev: af9769ad23c67f9bd4d1b038709d41230501efef
+X-Git-Oldrev: da3ef3e8b828cc99f49c95ad6bef39c55f87e512
+X-Git-Newrev: 773535fbac1acd9bc08cde5b44db0d4c1e19de31
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214624.C6E4B87006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/htpdate: bump to version 1.3.7
+Message-Id: <20230312214624.22BE787007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_lsof.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +64,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af9769ad23c67f9bd4d1b038709d41230501efef
+commit: https://git.buildroot.net/buildroot/commit/?id=773535fbac1acd9bc08cde5b44db0d4c1e19de31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/htpdate/htpdate.hash | 2 +-
- package/htpdate/htpdate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_lsof.py | 41 ++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
-index f572fb1e84..b711773af5 100644
---- a/package/htpdate/htpdate.hash
-+++ b/package/htpdate/htpdate.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  3cdc558ec8e53ef374a42490b2f28c0b23981fa8754a6d7182044707828ad1e9  htpdate-1.3.6.tar.gz
-+sha256  88c52fe475308ee95f560fd7cf68c75bc6e9a6abf56be7fed203a7f762fe7ab2  htpdate-1.3.7.tar.gz
- sha256  7989949df09a0489434723c571541604cd3f2e0418c6a6aa9179bfaf8ec807cc  LICENSE
-diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-index 2d4a11dd9d..20be904d3d 100644
---- a/package/htpdate/htpdate.mk
-+++ b/package/htpdate/htpdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HTPDATE_VERSION = 1.3.6
-+HTPDATE_VERSION = 1.3.7
- HTPDATE_SITE = $(call github,twekkel,htpdate,v$(HTPDATE_VERSION))
- HTPDATE_LICENSE = GPL-2.0+
- HTPDATE_LICENSE_FILES = LICENSE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d052e59122..7733d5a04e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1719,6 +1719,7 @@ F:	support/testing/tests/package/test_gnupg2.py
+ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
+ F:	support/testing/tests/package/test_libjxl.py
++F:	support/testing/tests/package/test_lsof.py
+ F:	support/testing/tests/package/test_ncdu.py
+ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
+diff --git a/support/testing/tests/package/test_lsof.py b/support/testing/tests/package/test_lsof.py
+new file mode 100644
+index 0000000000..b0478dfbb7
+--- /dev/null
++++ b/support/testing/tests/package/test_lsof.py
+@@ -0,0 +1,41 @@
++import os
++
++import infra.basetest
++
++
++class TestLsof(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_LSOF=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        test_file = "/tmp/this-is-a-test-file"
++
++        # Check the program can execute
++        self.assertRunOk("lsof -v")
++
++        # Check a normal program invocation
++        self.assertRunOk("lsof")
++
++        # Check lsof fails if requested file is not opened
++        _, exit_code = self.emulator.run("lsof {}".format(test_file))
++        self.assertNotEqual(exit_code, 0)
++
++        # Open the test file from the shell on descriptor 10
++        self.assertRunOk("exec 10> {}".format(test_file))
++
++        # Check that lsof now show the file
++        output, exit_code = self.emulator.run("lsof {}".format(test_file))
++        self.assertEqual(exit_code, 0)
++        # output[0] is the lsof header line
++        self.assertIn(test_file, output[1])
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
