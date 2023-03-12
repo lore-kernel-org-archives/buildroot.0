@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42039C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 13:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AEA6C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 13:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB5A24051D;
-	Sun, 12 Mar 2023 13:18:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB5A24051D
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9E3960B32;
+	Sun, 12 Mar 2023 13:21:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9E3960B32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YpwMe6JLu9AS; Sun, 12 Mar 2023 13:18:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sccGoGAVeirs; Sun, 12 Mar 2023 13:21:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED61740376;
-	Sun, 12 Mar 2023 13:18:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED61740376
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C891A1BF339
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:18:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA5E0607BC;
+	Sun, 12 Mar 2023 13:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA5E0607BC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AE2711BF339
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A25BA41570
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:18:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A25BA41570
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94142606E6
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94142606E6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uJ0ETSRdaIaA for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 13:18:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 930DA4156E
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 13:18:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 930DA4156E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E20186F00; Sun, 12 Mar 2023 13:18:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 14:16:08 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 06fa870d7e8ba385de00e64116df74c1e3b9b31a
-X-Git-Newrev: 620098889f74ad924676fca7d8d56eb401a7d0be
-X-Patchwork-Hint: ignore
-Message-Id: <20230312131843.7E20186F00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/testing/tests/package/test_iperf3.py: new runtime test
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id siKw81l-RIxB for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 13:21:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A3DC607BC
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5A3DC607BC
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 13:21:14 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 69E371C0004;
+ Sun, 12 Mar 2023 13:21:11 +0000 (UTC)
+Date: Sun, 12 Mar 2023 14:21:10 +0100
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230312142110.2313b627@windsurf>
+In-Reply-To: <20230304163101.3986363-1-ju.o@free.fr>
+References: <20230304163101.3986363-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678627271;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=f1Caxg7L1cd115g0r/Mwye8dsOu9c0nY5naKcWLhRa8=;
+ b=Y9su5570LnXkakDYriElyZVZhOROXhyhN923IlqBhdkduQe/IyiXTUFmpjv+VmWiRN9KAW
+ mE/5GVafM35TOSFDwir4d1eh1J1n7h2JnR/2oeXoNH2z8S0NrSXMLz1jfAx4ZK25Hmh4Rw
+ R6DBJ9fFYTeUOq8ZSTArB6PL552pr4HzbKKsoPkE33D1L8jQRDweFGf9p7DXIJhEOZ3v2b
+ vLR/C1um8RwxXEvmMGMO9Qt54RbUOJ8w7zjawqVmghwyMXu4sleJ5AOjVCZAgg7uWq3iYV
+ /ZNlJ0Jm+lA+qZEr5k7XlTuOrH2ISmhJD3Mak1jWZqFpYAdJsSZRRw8s6V8EAw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Y9su5570
+Subject: Re: [Buildroot] [PATCH next 1/2] package/iperf3: bump to version
+ 3.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,63 +78,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=620098889f74ad924676fca7d8d56eb401a7d0be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sat,  4 Mar 2023 17:31:00 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                   |  1 +
- support/testing/tests/package/test_iperf3.py | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+> LICENSE file hash changed, due to year update.
+> 
+> For change log, see:
+> https://github.com/esnet/iperf/blob/3.13/RELNOTES.md#iperf-313-2023-02-16
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested on branch next at commit b793f3a with commands:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f6e120d92b..ff26021d1d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1718,6 +1718,7 @@ F:	support/testing/tests/package/sample_python_spake2.py
- F:	support/testing/tests/package/test_gnupg2.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
-+F:	support/testing/tests/package/test_iperf3.py
- F:	support/testing/tests/package/test_kexec.py
- F:	support/testing/tests/package/test_kexec/
- F:	support/testing/tests/package/test_libjxl.py
-diff --git a/support/testing/tests/package/test_iperf3.py b/support/testing/tests/package/test_iperf3.py
-new file mode 100644
-index 0000000000..9aac4c6fd0
---- /dev/null
-+++ b/support/testing/tests/package/test_iperf3.py
-@@ -0,0 +1,23 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestIperf3(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_IPERF3=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.assertRunOk("iperf3 --version")
-+        self.assertRunOk("iperf3 -s -D")
-+        self.assertRunOk("iperf3 -c 127.0.0.1 -t 3")
+Both applied to next. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
