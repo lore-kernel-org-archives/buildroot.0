@@ -1,68 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5533C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 06:59:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB259C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 15:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B592418DD;
-	Sun, 12 Mar 2023 06:59:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B592418DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0705404ED;
+	Sun, 12 Mar 2023 15:17:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0705404ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q8nv7GSo3Oua; Sun, 12 Mar 2023 06:59:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T5oQV-JLMcyA; Sun, 12 Mar 2023 15:17:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FFB6416F2;
-	Sun, 12 Mar 2023 06:59:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FFB6416F2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 122D21BF20D
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 06:59:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09BAC40487;
+	Sun, 12 Mar 2023 15:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09BAC40487
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C6071BF57C
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 15:17:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECBF1416F2
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 06:59:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECBF1416F2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 528CE81836
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 15:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 528CE81836
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MFmy9i2980vv for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 06:59:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nq05g0optrVK for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 15:17:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0079B4159D
- for <buildroot@uclibc.org>; Sun, 12 Mar 2023 06:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0079B4159D
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0011817F5
+ for <buildroot@uclibc.org>; Sun, 12 Mar 2023 15:17:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0011817F5
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id DD2A686136; Sun, 12 Mar 2023 06:59:09 +0000 (UTC)
+ id 8D64886F3B; Sun, 12 Mar 2023 15:17:47 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 12 Mar 2023 06:59:09 +0000
+Date: Sun, 12 Mar 2023 15:17:47 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02.8
+X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: tvirus347@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
+X-Bugzilla-Severity: blocker
+X-Bugzilla-Who: jacmet@uclibc.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: WORKSFORME
+X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15381-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-15306-163-imPMex5YB8@https.bugs.busybox.net/>
+In-Reply-To: <bug-15306-163@https.bugs.busybox.net/>
+References: <bug-15306-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15381] New: toolchainfile.cmake.in
- RELOCATED_HOST_DIR error
+Subject: [Buildroot] [Bug 15306] glibc build fails in Docker container
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,44 +78,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15381
+https://bugs.busybox.net/show_bug.cgi?id=15306
 
-            Bug ID: 15381
-           Summary: toolchainfile.cmake.in  RELOCATED_HOST_DIR  error
-           Product: buildroot
-           Version: 2022.02.8
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: tvirus347@gmail.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-ubuntu22, x64
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
-when my work path is like /home/a/share/buildroot-2022.02.8/.... , then build
-cmake package failed:
-
-CMake Error at CMakeLists.txt:51 (project):
-  The CMAKE_C_COMPILER:
-
-    /home/a-2022.02.8/output/host/bin/gcc
-
-  is not a full path to an existing compiler tool.
-
-i think this line:
-string(REPLACE "/share/buildroot" "" RELOCATED_HOST_DIR
-${CMAKE_CURRENT_LIST_DIR})
-
-in
-support\misc\toolchainfile.cmake.in
-
-should be:
-string(REGEX REPLACE "/share/buildroot$"
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> ---
+Unable to reproduce with upstream Buildroot
 
 -- 
 You are receiving this mail because:
