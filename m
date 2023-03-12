@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F0C0C6FD1C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 17:44:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E653C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 17:45:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB8C160B2E;
-	Sun, 12 Mar 2023 17:44:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB8C160B2E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 338C760B32;
+	Sun, 12 Mar 2023 17:45:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 338C760B32
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aVBOT1-zHwDR; Sun, 12 Mar 2023 17:44:45 +0000 (UTC)
+	with ESMTP id MQtw7Uqjbyab; Sun, 12 Mar 2023 17:45:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04F0760AFE;
-	Sun, 12 Mar 2023 17:44:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04F0760AFE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BD6801BF574
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 17:44:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7207860B26;
+	Sun, 12 Mar 2023 17:45:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7207860B26
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BA771BF574
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 17:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 797C4415ED
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 17:44:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 797C4415ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9DE140102
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 17:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9DE140102
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vfMGlX_rnddk for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 17:44:41 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E53C5415E7
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E53C5415E7
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 17:44:40 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 38990240007;
- Sun, 12 Mar 2023 17:44:39 +0000 (UTC)
-Date: Sun, 12 Mar 2023 18:44:38 +0100
-To: Casey Reeves <casey@xogium.me>
-Message-ID: <20230312184438.6265163d@windsurf>
-In-Reply-To: <20230226113307.4088933-1-casey@xogium.me>
-References: <20230226113307.4088933-1-casey@xogium.me>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1678643079;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=kSwDvILvTZW53MOrlr70ozlcdMML2Lpj5Sj1MaM2PCw=;
- b=HpSj6/W9CHCimF4Ewg2uMdCZh2o5kbkqd87MG72DxSYz4haJHg+lICqXWioQgw42Ftmwn2
- p5IcqHO4UTvCbnf5H5r4v2cNa0nONmTDfTtda7KSilWIX3TRV3nMWhXMCVLhXX2AJZaldv
- 1y6dyWRACzhqt4EKGvM15GdnBjH9sMn8MQcIEc8PLdJG5UZ+2J+95ZuD/wnDZQpbSq3Zmk
- SrbNjdeVJJ3DeAd/bzWLMbyjGqOj9zsPqgw+DE0lzjlb/ENn4+dhoGQ/bloImJw98FAjHI
- X8EuTQC/sRGYY4xhRvXeqKE7s1rmOM0ifTLyjlwYAEAh+/QCASGls9ZR3xNmoA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HpSj6/W9
-Subject: Re: [Buildroot] [PATCH v3] package/lzop: bump to version 1.04
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 88ulUAxNuv_Q for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 17:45:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36A62400A4
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 17:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36A62400A4
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2625B86F59; Sun, 12 Mar 2023 17:45:18 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 12 Mar 2023 18:45:08 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: ce952170e1e8229da0bdac81566a627a87e56bee
+X-Git-Newrev: 38c581b05cd8e7967783410b36c14b9b561acd12
+X-Patchwork-Hint: ignore
+Message-Id: <20230312174518.2625B86F59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/spike_riscv64: bump
+ kernel to 6.1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,43 +58,68 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=38c581b05cd8e7967783410b36c14b9b561acd12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 26 Feb 2023 12:33:08 +0100
-Casey Reeves <casey@xogium.me> wrote:
+Linux Kernel 6.1 now being officially promoted to be a LTS, this
+commit bump the kernel version of this defconfig to 6.1.14.
 
-> +LZOP_LIBTOOL_PATCH=NO
+A Kernel config fragment "linux.fragment" is now needed as the kernel
+no longer enable SBI v0.1 support and the earlycon RISC-V SBI in its
+riscv arch defconfig. See [1] [2].
 
-Spaces needed around = sign.
+The Spike riscv-isa-sim was updated upstream accordingly [3].
 
-> +define LZOP_LIBTOOL_FIXUP
-> +	patch -i support/libtool/buildroot-libtool-v2.4.4.patch $(@D)/autoconf/ltmain.sh
-> +endef
-> +
-> +LZOP_POST_PATCH_HOOKS += LZOP_LIBTOOL_FIXUP
+In order to keep a smooth transition, this kernel config fragment
+re-enable those options to make sure this kernel will work with
+both old Spike versions (not including commit [3] like the v1.1.0
+currently included in Buildroot), and newer versions. This commit
+was also successfully tested with riscv-isa-sim at commit
+0d1a48c0c0.
 
-Even though admittedly the libtool fixup is probably not that needed
-for the host package, the host-autotools-package infra normally applies
-the libtool fixup as well. So I've added:
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=6f562570b9c5d6a3e30d87aec60a9d8f22a3203c
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=3938d5a2f9369d1ebd56320629fed395ce327e9c
+[3] https://github.com/riscv-software-src/riscv-isa-sim/commit/191634d2854dfed448fc323195f9b65c305e2d77
 
-HOST_LZOP_POST_PATCH_HOOKS += LZOP_LIBTOOL_FIXUP
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/spike/riscv64/linux.fragment | 3 +++
+ configs/spike_riscv64_defconfig    | 5 +++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-I've also added a small comment above this to explain why we're doing
-the libtool fixup manually.
-
-Applied to next with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/board/spike/riscv64/linux.fragment b/board/spike/riscv64/linux.fragment
+new file mode 100644
+index 0000000000..b443b0ab36
+--- /dev/null
++++ b/board/spike/riscv64/linux.fragment
+@@ -0,0 +1,3 @@
++CONFIG_RISCV_SBI_V01=y
++CONFIG_HVC_RISCV_SBI=y
++CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
+diff --git a/configs/spike_riscv64_defconfig b/configs/spike_riscv64_defconfig
+index e23f1ce32c..73ea566084 100644
+--- a/configs/spike_riscv64_defconfig
++++ b/configs/spike_riscv64_defconfig
+@@ -2,9 +2,10 @@ BR2_riscv=y
+ BR2_RISCV_64=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.86"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.14"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/spike/riscv64/linux.fragment"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_ROOTFS_CPIO=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_OPENSBI=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
