@@ -4,54 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E297C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 16:51:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06E4EC6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 16:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB0A6403FD;
-	Sun, 12 Mar 2023 16:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB0A6403FD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E57C40522;
+	Sun, 12 Mar 2023 16:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E57C40522
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JcdNTLvBz0Q4; Sun, 12 Mar 2023 16:51:37 +0000 (UTC)
+	with ESMTP id PRiDfZPRevhS; Sun, 12 Mar 2023 16:51:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 458ED401A3;
-	Sun, 12 Mar 2023 16:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 458ED401A3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 888E11BF35E
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 16:51:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4816403FD;
+	Sun, 12 Mar 2023 16:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4816403FD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 468FB1BF35E
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 16:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F34180C2F
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 16:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F34180C2F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2DCC9605E9
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 16:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DCC9605E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y8Uyq_27YwpH for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 16:51:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EDE280853
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4EDE280853
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 16:51:32 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5585D240004;
- Sun, 12 Mar 2023 16:51:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pbOuu-008FZ7-EU; Sun, 12 Mar 2023 17:51:28 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LZkpk9xuszaD for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 16:51:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 564DD60634
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 16:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 564DD60634
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4375786F46; Sun, 12 Mar 2023 16:51:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230312144516.1949734-1-peter@korsgaard.com>
-Date: Sun, 12 Mar 2023 17:51:28 +0100
-In-Reply-To: <20230312144516.1949734-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 12 Mar 2023 15:45:15 +0100")
-Message-ID: <87h6upzze7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.19.7
+Date: Sun, 12 Mar 2023 17:51:21 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 02c8901791d8d65094ecf56d9773babe74dd1845
+X-Git-Newrev: e93f96b717f31ab26d047c8daac8ae55622396bd
+X-Patchwork-Hint: ignore
+Message-Id: <20230312165153.4375786F46@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: security bump to version 1.19.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e93f96b717f31ab26d047c8daac8ae55622396bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > go1.19.7 (released 2023-03-07) includes a security fix to the
- > crypto/elliptic package, as well as bug fixes to the linker, the runtime,
- > and the crypto/x509 and syscall packages.
+go1.19.7 (released 2023-03-07) includes a security fix to the
+crypto/elliptic package, as well as bug fixes to the linker, the runtime,
+and the crypto/x509 and syscall packages.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 8254a91524..89e2fd952f 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  d7f0013f82e6d7f862cc6cb5c8cdb48eef5f2e239b35baa97e2f1a7466043767  go1.19.6.src.tar.gz
++sha256  775bdf285ceaba940da8a2fe20122500efd7a0b65dbcee85247854a8d7402633  go1.19.7.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index a9056da47b..a94603f268 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.19.6
++GO_VERSION = 1.19.7
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
