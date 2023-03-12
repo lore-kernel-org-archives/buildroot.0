@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25D46C6FD1C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 18:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6895C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 18:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D165D60B3F;
-	Sun, 12 Mar 2023 18:02:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D165D60B3F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D06760B44;
+	Sun, 12 Mar 2023 18:02:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D06760B44
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0jVQGK8fzs65; Sun, 12 Mar 2023 18:02:18 +0000 (UTC)
+	with ESMTP id lStSrInqwfxE; Sun, 12 Mar 2023 18:02:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26F5860B32;
-	Sun, 12 Mar 2023 18:02:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26F5860B32
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 69F791BF20D
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 18:02:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F40160B26;
+	Sun, 12 Mar 2023 18:02:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F40160B26
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 95B031BF20D
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 18:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43DA681308
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 18:02:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43DA681308
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5CABF60593
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 18:02:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CABF60593
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Be-p4fq2OFMc for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 18:02:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1301E81345
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1301E81345
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 18:02:13 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 949ECE0004;
- Sun, 12 Mar 2023 18:02:11 +0000 (UTC)
-Date: Sun, 12 Mar 2023 19:02:10 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230312190210.41b7b49d@windsurf>
-In-Reply-To: <20230312160909.921651-1-giulio.benetti@benettiengineering.com>
-References: <20230312160909.921651-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1678644132;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XNRyvzGgWv2UhtlU0bWhpxxNggpsRv3AFOLMeymmRdM=;
- b=ENgixQG2zMUS0pZJHSremEuuh3B0rN/YPDbHa9Dy7bfJPcLw9hW7hW5cvX7w3SvmxTfoLH
- I4QphxyUwSnIxM0XtqzmYPB2tWcn1pKdf5heYK/z4xONr4IozgzVW1cSco/Z5m7EdrIPeI
- xpmvKBjN6eNyRer9b+KXxdO5dfR7CY/D1Pmn1Dr9UJ4XQTVf3QLxtEfsCNkaFFLdMV+ziU
- nU3xHZiaCDYiZ/p1H8Bu/M1Sy7CYmhWfEzp5X4deFIugb9iu7X/ppV+3ZGrFHgN/XUDrA+
- IHuqD3yoyhjKUG+bAVIVGjkfXRVvDJQsnNsI+TnggeWv6x2q89uzd2mL/EvFFw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ENgixQG2
-Subject: Re: [Buildroot] [PATH for-next] package/rtl8192eu: bump to version
- 2023-03-12 on branch 5.11.2.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IWyQAmFvcx-t for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 18:02:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C10560B3F
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 18:02:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C10560B3F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EEFDD86F7B; Sun, 12 Mar 2023 18:02:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 12 Mar 2023 19:01:19 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c6c79d6d40e37fada0c50430f27b9aeaf68bae74
+X-Git-Newrev: bcf9d2f51cd5c80191b63020412631a548e32a7d
+X-Patchwork-Hint: ignore
+Message-Id: <20230312180242.EEFDD86F7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/openmpi: bump to
+ version 4.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,32 +58,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 12 Mar 2023 17:09:09 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bcf9d2f51cd5c80191b63020412631a548e32a7d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Drop local patch that has been upstreamed.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  ...02-Fix-conflicting-get_ra-on-PowerPC.patch | 124 ------------------
->  package/rtl8192eu/rtl8192eu.hash              |   2 +-
->  package/rtl8192eu/rtl8192eu.mk                |   2 +-
->  3 files changed, 2 insertions(+), 126 deletions(-)
->  delete mode 100644 package/rtl8192eu/0002-Fix-conflicting-get_ra-on-PowerPC.patch
+For change log, see:
+https://github.com/open-mpi/ompi/blob/v4.1.5/NEWS#L61
 
-Applied to next, thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openmpi/openmpi.hash | 6 +++---
+ package/openmpi/openmpi.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/openmpi/openmpi.hash b/package/openmpi/openmpi.hash
+index 745ed7c580..567ffe4833 100644
+--- a/package/openmpi/openmpi.hash
++++ b/package/openmpi/openmpi.hash
+@@ -1,6 +1,6 @@
+ # From: https://www.open-mpi.org/software/ompi/v4.1/
+-md5  f057e12aabaf7dd5a6a658180fca404e  openmpi-4.1.4.tar.bz2
+-sha1  357c61a8e06e103d987c0e4a054e8780a034c8b1  openmpi-4.1.4.tar.bz2
+-sha256  92912e175fd1234368c8730c03f4996fe5942e7479bb1d10059405e7f2b3930d  openmpi-4.1.4.tar.bz2
++md5  bb045df2d600744c2231c78b31a20da3  openmpi-4.1.5.tar.bz2
++sha1  eba2e6f9ee0c39fbca0a8cf53a79c9ed29643284  openmpi-4.1.5.tar.bz2
++sha256  a640986bc257389dd379886fdae6264c8cfa56bc98b71ce3ae3dfbd8ce61dbe3  openmpi-4.1.5.tar.bz2
+ # Locally computed
+ sha256  2db71de9577ebfe15c186605844c470dcecd3717f4ef0118c9440d801c0f58f8  LICENSE
+diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
+index f14b55ced5..82a4b3eb1c 100644
+--- a/package/openmpi/openmpi.mk
++++ b/package/openmpi/openmpi.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ OPENMPI_VERSION_MAJOR = 4.1
+-OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).4
++OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).5
+ OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
+ OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
+ OPENMPI_LICENSE = BSD-3-Clause
+@@ -15,7 +15,7 @@ OPENMPI_INSTALL_STAGING = YES
+ # The macro searching for IME (Infinite Memory Engine) filesystem
+ # brings "-I/usr/local/include" in the CPPFLAGS, even if not
+ # found. This makes the configuration fail. See:
+-# https://github.com/open-mpi/ompi/blob/v4.1.4/config/ompi_check_ime.m4#L35
++# https://github.com/open-mpi/ompi/blob/v4.1.5/config/ompi_check_ime.m4#L35
+ # Disable explicitly to avoid the issue.
+ OPENMPI_CONF_OPTS = --without-ime
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
