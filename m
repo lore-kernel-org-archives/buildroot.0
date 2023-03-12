@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51271C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC597C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:55:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E59E84177E;
-	Sun, 12 Mar 2023 21:55:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E59E84177E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55CC7417AF;
+	Sun, 12 Mar 2023 21:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55CC7417AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MJSBqhjR0Igd; Sun, 12 Mar 2023 21:55:36 +0000 (UTC)
+	with ESMTP id PxJNlCcM2qp1; Sun, 12 Mar 2023 21:55:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85EAE417AF;
-	Sun, 12 Mar 2023 21:55:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85EAE417AF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 620AE1BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60780417A0;
+	Sun, 12 Mar 2023 21:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60780417A0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 305ED1BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65BB94160A
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65BB94160A
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE89260E24
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE89260E24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PU5DPvbLaApw for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lt22yBUxE4MT for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72744415FE
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72744415FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C21560BC9
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C21560BC9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6FC7587008; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+ id 0397987006; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 19:00:05 +0100
+Date: Sun, 12 Mar 2023 10:08:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0a46e6c1981c9a326c7cd3713bd312f9f9bc8f99
-X-Git-Newrev: c6c79d6d40e37fada0c50430f27b9aeaf68bae74
+X-Git-Oldrev: 92f6a843b81479a9c8f8769d9e728767646b9901
+X-Git-Newrev: 3ecff27df15c2c22f7b9d8f7554119bc0346ff5b
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214625.6FC7587008@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.66
+Message-Id: <20230312214624.0397987006@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: move the kernel config
+ only used by test_edk2.py
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,57 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6c79d6d40e37fada0c50430f27b9aeaf68bae74
+commit: https://git.buildroot.net/buildroot/commit/?id=3ecff27df15c2c22f7b9d8f7554119bc0346ff5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bluez 5.66 contains various fixes and initial support for Basic Audio
-Profile and Volume Control Profile.
+The kernel config board/qemu/aarch64-sbsa/linux.config has never been in
+use by qemu_aarch64_sbsa_defconfig, neither via
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE, nor via
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES.
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+test_edk2.py is using the kernel config
+board/qemu/aarch64-sbsa/linux.config. However, storing a kernel config
+that is not used by qemu_aarch64_sbsa_defconfig, in a directory that is
+"owned" by qemu_aarch64_sbsa_defconfig, is bound to cause confusion.
+
+Therefore, move the config file to a new subdirectory:
+support/testing/tests/boot/test_edk2/
+
+This is similar to how e.g. test_grub.py has a subdirectory:
+support/testing/tests/boot/test_grub/
+where it keeps the kernel config that is only used by test_grub.py.
+
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
- package/bluez5_utils/bluez5_utils.hash               | 2 +-
- package/bluez5_utils/bluez5_utils.mk                 | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/tests/boot/test_edk2.py                                 | 2 +-
+ .../aarch64-sbsa => support/testing/tests/boot/test_edk2}/linux.config  | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 565511120f..8ca3764935 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.65
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.66
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index e0c9f3cdb9..9467647592 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4  bluez-5.65.tar.xz
-+sha256  39fea64b590c9492984a0c27a89fc203e1cdc74866086efb8f4698677ab2b574  bluez-5.66.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 76070dc3a9..4059b34556 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.65
-+BLUEZ5_UTILS_VERSION = 5.66
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
+index c1be8fad95..623e77e992 100644
+--- a/support/testing/tests/boot/test_edk2.py
++++ b/support/testing/tests/boot/test_edk2.py
+@@ -18,7 +18,7 @@ class TestEdk2(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-sbsa/linux.config"
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="support/testing/tests/boot/test_edk2/linux.config"
+         BR2_TARGET_EDK2=y
+         BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
+         BR2_TARGET_GRUB2=y
+diff --git a/board/qemu/aarch64-sbsa/linux.config b/support/testing/tests/boot/test_edk2/linux.config
+similarity index 100%
+rename from board/qemu/aarch64-sbsa/linux.config
+rename to support/testing/tests/boot/test_edk2/linux.config
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
