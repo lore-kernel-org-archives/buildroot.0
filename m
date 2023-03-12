@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C40C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 19:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5305AC6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 20:06:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6258440491;
-	Sun, 12 Mar 2023 19:28:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6258440491
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8398E415E5;
+	Sun, 12 Mar 2023 20:06:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8398E415E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zYM4738wlQ1U; Sun, 12 Mar 2023 19:28:37 +0000 (UTC)
+	with ESMTP id S4bO8Znz8Djy; Sun, 12 Mar 2023 20:06:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B63C404CC;
-	Sun, 12 Mar 2023 19:28:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B63C404CC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 89DF61BF41A
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 19:28:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A872B415E1;
+	Sun, 12 Mar 2023 20:05:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A872B415E1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F80A1BF4E3
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 20:05:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6492140453
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 19:28:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6492140453
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6906381586
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 20:05:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6906381586
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hqt8ZjAKW7Sd for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 19:28:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9528640106
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 19:28:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9528640106
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 815DD86FA5; Sun, 12 Mar 2023 19:28:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 20:27:31 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bcf9d2f51cd5c80191b63020412631a548e32a7d
-X-Git-Newrev: 9c3cdee11a21380f8141ec4379f8a67dea4481a7
-X-Patchwork-Hint: ignore
-Message-Id: <20230312192833.815DD86FA5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/testing/tests/package/test_shadow.py: drop blank line at end of
- file
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wXY9lzSILgrV for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 20:05:57 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FA818146B
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2FA818146B
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 20:05:56 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8ABD9240005;
+ Sun, 12 Mar 2023 20:05:53 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pbRx2-00B2qP-KT; Sun, 12 Mar 2023 21:05:52 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230215224921.20138-1-fontaine.fabrice@gmail.com>
+Date: Sun, 12 Mar 2023 21:05:52 +0100
+In-Reply-To: <20230215224921.20138-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 15 Feb 2023 23:49:21 +0100")
+Message-ID: <87ttypybtr.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/docker-engine: libseccomp is
+ mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,39 +64,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c3cdee11a21380f8141ec4379f8a67dea4481a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
+ > libseccomp is mandatory since bump to version 23.0.0 in commit
+ > 485b47e025541a58358d8852c600b8e7644b4ec6:
+ > https://github.com/moby/moby/pull/42501
 
-support/testing/tests/package/test_shadow.py:55:1: W391 blank line at end of file
-1     W391 blank line at end of file
-make: *** [Makefile:1253: check-flake8] Error 123
+ > Fixes:
+ >  - https://bugs.buildroot.org/show_bug.cgi?id=15321
 
-https://gitlab.com/buildroot.org/buildroot/-/jobs/3918132888
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/tests/package/test_shadow.py | 1 -
- 1 file changed, 1 deletion(-)
+Committed, thanks.
 
-diff --git a/support/testing/tests/package/test_shadow.py b/support/testing/tests/package/test_shadow.py
-index c5151b4fdb..09b580de59 100644
---- a/support/testing/tests/package/test_shadow.py
-+++ b/support/testing/tests/package/test_shadow.py
-@@ -52,4 +52,3 @@ class TestShadow(BRTest):
-         self.assertRunOk(f'usermod {username} --home {new_home}')
-         self.assertRunOk(f'test $(su {username} -c \'echo $HOME\') = {new_home}')
-         self.assertRunOk(f'userdel {username}')
--
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
