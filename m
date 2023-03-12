@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A759CC6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:00:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD81C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:00:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 572F441CA1;
-	Sun, 12 Mar 2023 22:00:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 572F441CA1
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7F2B41702;
+	Sun, 12 Mar 2023 22:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7F2B41702
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nhcHH1wQnjZ3; Sun, 12 Mar 2023 22:00:11 +0000 (UTC)
+	with ESMTP id Y2fIl4D5FDII; Sun, 12 Mar 2023 22:00:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E09F41C9D;
-	Sun, 12 Mar 2023 22:00:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E09F41C9D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C218741CA1;
+	Sun, 12 Mar 2023 22:00:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C218741CA1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9C0AD1BF863
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9EAA21BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F2B060BC9
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0C4560E38
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F2B060BC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0C4560E38
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PG8xdsXZmdnp for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ with ESMTP id KPk4GsMOHEVB for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69F6360E1A
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69F6360E1A
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7A4960E27
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7A4960E27
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5391F87006; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ id D8CC087006; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:59:03 +0100
+Date: Sun, 12 Mar 2023 22:43:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a8e1e220fb283d57f07d68e96312a5215afd517
-X-Git-Newrev: 9ce280ba180f8668bfcd92175842a3c2d9567223
+X-Git-Oldrev: 00553ea186357fd3e2b3c89fa560e9711cc67472
+X-Git-Newrev: acfe5c70b2301bc147ec524e7bc2d4a95e1cee66
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214624.5391F87006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcamera-apps: bump to version
- 1.1.2
+Message-Id: <20230312214625.D8CC087006@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rt-tests: bump version to 2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,86 +58,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3129494784049659140=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ce280ba180f8668bfcd92175842a3c2d9567223
+--===============3129494784049659140==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=acfe5c70b2301bc147ec524e7bc2d4a95e1cee66
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ore-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch | 35 ----------------------
- package/libcamera-apps/libcamera-apps.hash         |  2 +-
- package/libcamera-apps/libcamera-apps.mk           |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
+ package/rt-tests/rt-tests.hash | 2 +-
+ package/rt-tests/rt-tests.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcamera-apps/0001-core-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch b/package/libcamera-apps/0001-core-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch
-deleted file mode 100644
-index fbd1d2d4ba..0000000000
---- a/package/libcamera-apps/0001-core-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From a65682a97e19f96b86aeceb3ca3befb1687e3861 Mon Sep 17 00:00:00 2001
--From: Marcus Folkesson <marcus.folkesson@gmail.com>
--Date: Tue, 31 Jan 2023 09:14:15 +0100
--Subject: [PATCH] core: pass VIDIOC_QUERYCAP as unsigned long
--
--VIDIOC_QUARYCAP is an unsigned long and should be passed as one.
--
--Get rid of the following error:
--core/libcamera_app.cpp:33:22: error: overflow in conversion from 'long unsigned int' to 'int' changes value from '2154321408' to '-2140645888' [-Werror=overflow]
--   33 |  int ret = ioctl(fd, VIDIOC_QUERYCAP, &caps);
--
--Upstream: https://github.com/raspberrypi/libcamera-apps/commit/a65682a97e19f96b86aeceb3ca3befb1687e3861
--Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-----
-- core/libcamera_app.cpp | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/core/libcamera_app.cpp b/core/libcamera_app.cpp
--index 04696fb..8cb6563 100644
----- a/core/libcamera_app.cpp
--+++ b/core/libcamera_app.cpp
--@@ -30,7 +30,9 @@ static void check_camera_stack()
-- 		return;
-- 
-- 	v4l2_capability caps;
---	int ret = ioctl(fd, VIDIOC_QUERYCAP, &caps);
--+	unsigned long request = VIDIOC_QUERYCAP;
--+
--+	int ret = ioctl(fd, request, &caps);
-- 	close(fd);
-- 
-- 	if (ret < 0 || strcmp((char *)caps.driver, "bm2835 mmal"))
---- 
--2.38.1
--
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-index fbb3150cb5..20a06aa8fe 100644
---- a/package/libcamera-apps/libcamera-apps.hash
-+++ b/package/libcamera-apps/libcamera-apps.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c05e29e02da05fa92739941295d96dcb93324805f7b348ad182e7e29e7e0c520  libcamera-apps-1.1.1.tar.gz
-+sha256  a19f3960b97ec1c0d42df8af972868ff0d4c48be6096e7ac02dbaaa4c7c75636  libcamera-apps-1.1.2.tar.gz
- sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index 290ee9a026..ba45ab21ca 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
+index 49df8313f9..eb28f4d441 100644
+--- a/package/rt-tests/rt-tests.hash
++++ b/package/rt-tests/rt-tests.hash
+@@ -1,4 +1,4 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
+-sha256  393457f0c91cce57e82b876ecb9b672871f898e6cecafc751548079512bcc808  rt-tests-2.4.tar.xz
++sha256  2ed2e4c965c7f336a15d3354dec090e27a0b1e9ada91ae0b9ef18bbcb993874e  rt-tests-2.5.tar.xz
+ # locally computed hash
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index 74290211ce..8ad4215ee1 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -6,7 +6,7 @@
  
--LIBCAMERA_APPS_VERSION = 1.1.1
-+LIBCAMERA_APPS_VERSION = 1.1.2
- LIBCAMERA_APPS_SITE = $(call github,raspberrypi,libcamera-apps,v$(LIBCAMERA_APPS_VERSION))
- LIBCAMERA_APPS_LICENSE = BSD-2-Clause
- LIBCAMERA_APPS_LICENSE_FILES = license.txt
+ RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
+ RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
+-RT_TESTS_VERSION = 2.4
++RT_TESTS_VERSION = 2.5
+ RT_TESTS_LICENSE = GPL-2.0+
+ RT_TESTS_LICENSE_FILES = COPYING
+ 
+
+--===============3129494784049659140==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3129494784049659140==--
