@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A83BC74A4B
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 12:34:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F3C9C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 12:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C4EF40522;
-	Sun, 12 Mar 2023 12:34:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C4EF40522
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD92840936;
+	Sun, 12 Mar 2023 12:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD92840936
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QeeVdgq2yrBC; Sun, 12 Mar 2023 12:34:57 +0000 (UTC)
+	with ESMTP id 6DbseP_Jkbe0; Sun, 12 Mar 2023 12:35:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59B1F40376;
-	Sun, 12 Mar 2023 12:34:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59B1F40376
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 426E61BF584
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 12:34:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86C2D408CD;
+	Sun, 12 Mar 2023 12:35:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86C2D408CD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 996FA1BF584
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 12:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CC8C81947
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 12:34:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CC8C81947
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70AA141626
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 12:34:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70AA141626
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y3vDZMrJfP2U for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 12:34:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 372168148D
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 12:34:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 372168148D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2148486ED7; Sun, 12 Mar 2023 12:34:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 13:34:45 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: af2cfc61a2a3e630824ac693d961b74f858c0407
-X-Git-Newrev: 69053186c9f1561855357be574c70c0b3ad0ddcb
-X-Patchwork-Hint: ignore
-Message-Id: <20230312123454.2148486ED7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kexec: bump to version
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LH0BvT7npBne for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 12:34:57 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46458416E4
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 46458416E4
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 12:34:57 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 75A1B40004;
+ Sun, 12 Mar 2023 12:34:55 +0000 (UTC)
+Date: Sun, 12 Mar 2023 13:34:54 +0100
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230312133454.2ff18f94@windsurf>
+In-Reply-To: <20230301220159.161476-1-ju.o@free.fr>
+References: <20230301220159.161476-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678624495;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fMRkXp4H8Qd8Se8/tCuqFtjN2R8ISK2zyMkUtSRn/e0=;
+ b=bwjTB8WA3ch/GUZL4duPb1KbHw5hTGn+bRvxptRFL8wbngYGQPXONP8ihuJHOGyY16XYtm
+ A+1vu+GSckGCBwR4QTu6qSdZSsELJU+qZXsQZAzF07dducfNi4sWOGQrBWpTUha+YuR0SL
+ EG2WD/AwAoeJ+8FxM7b48SFCbCe4rd8oVWjJoVeWx1Oc9X+DSYNTAv1lvvozcx66cGFx+t
+ nUkPbjnFBEJFvLdeYTxljO3u3UUu1sqAskHzn2lg2IGgxwLxub0wceUujJScS08rHxLZdL
+ ERAHKGwBBnW45VSk7CXtXVgoVudMe1gMTG/DJJsWiyFn+xVXdH6rSMQanzxhLA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=bwjTB8WA
+Subject: Re: [Buildroot] [PATCH next 1/2] package/kexec: bump to version
  2.0.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,48 +78,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69053186c9f1561855357be574c70c0b3ad0ddcb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed,  1 Mar 2023 23:01:58 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-See release announce:
-https://lists.infradead.org/pipermail/kexec/2022-December/026399.html
+> See release announce:
+> https://lists.infradead.org/pipermail/kexec/2022-December/026399.html
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested on branch next at commit b793f3a with commands:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kexec/kexec.hash | 2 +-
- package/kexec/kexec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index 34e17339b9..4e16a53a35 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256  7ce2e5def38ec04f79feb107d02243dd586fbc68569eccf02f44bad3a13ec07d  kexec-tools-2.0.25.tar.xz
-+sha256  7fe36a064101cd5c515e41b2be393dce3ca88adce59d6ee668e0af7c0c4570cd  kexec-tools-2.0.26.tar.xz
- # locally calculated
- sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index ced7009ed3..c1411f6ab7 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_VERSION = 2.0.25
-+KEXEC_VERSION = 2.0.26
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
