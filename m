@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4F53C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 10:08:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C459C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 10:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3816B819C8;
-	Sun, 12 Mar 2023 10:08:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3816B819C8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1539440348;
+	Sun, 12 Mar 2023 10:27:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1539440348
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 588Rs_Irn08U; Sun, 12 Mar 2023 10:08:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BiW9gQXxxXOc; Sun, 12 Mar 2023 10:27:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7ECDB81BA9;
-	Sun, 12 Mar 2023 10:08:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7ECDB81BA9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EEEEC1BF310
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 10:08:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7A90402B1;
+	Sun, 12 Mar 2023 10:27:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7A90402B1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 395D31BF310
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 10:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C866360B26
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 10:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C866360B26
+ by smtp2.osuosl.org (Postfix) with ESMTP id 211124013B
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 10:27:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 211124013B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xna3p1gjirXH for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 10:08:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC5E560B19
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BC5E560B19
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 10:08:11 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 12667100003;
- Sun, 12 Mar 2023 10:08:09 +0000 (UTC)
-Date: Sun, 12 Mar 2023 11:08:09 +0100
-To: Marcus Folkesson <marcus.folkesson@gmail.com>
-Message-ID: <20230312110809.1772d71c@windsurf>
-In-Reply-To: <20230309220414.4174769-1-marcus.folkesson@gmail.com>
-References: <20230309220414.4174769-1-marcus.folkesson@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1678615690;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=9Lr+nP7MVe9EPJN+4hjJh3dFFTQKny5Xmy0Hh183Hag=;
- b=fLhvOa+2bY+oC/w5TEdIWmITLRWix0QVJKnAhaeyKFD4koyjJMIKSC1kJ9dOxX0uQFC76X
- ObplhqFTBiA4g6jQsQ4h1MozxfAvzHx4td61kb+CZrikHhbmFF6QaMu552pWWyjz9hHxP2
- 3VbWBZrsiJnv/XJ24UkxKRPuw12+fXwFzXQ8BWC79vDsFbab0BdDlAAR9P78nbGgo7tR4b
- IDHkUyM85rNI7GEYE9GTdsjPrDXKqF37O2pFw3ZaaUv/Ltld8w0wVW53+ntRIXt9/bONlP
- jX3MrdhclBWYNv5993SyFZQMYiOut/Lo9Gu5Q7rv5OqAF/SYDMRy2nEi23uNKg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fLhvOa+2
-Subject: Re: [Buildroot] [PATCH] package/libcamera-apps: bump to version
- 1.1.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GxAwoU7VerLM for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 10:27:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EACA4010F
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 10:27:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EACA4010F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2B1CB86EAC; Sun, 12 Mar 2023 10:27:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 12 Mar 2023 11:08:21 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 9ce280ba180f8668bfcd92175842a3c2d9567223
+X-Git-Newrev: b83550bd0c2bbfc894d1c82ec0ea330c8283deee
+X-Patchwork-Hint: ignore
+Message-Id: <20230312102709.2B1CB86EAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/janus-gateway: bump to
+ version 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,30 +58,80 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  9 Mar 2023 23:04:14 +0100
-Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b83550bd0c2bbfc894d1c82ec0ea330c8283deee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  ...ass-VIDIOC_QUERYCAP-as-unsigned-long.patch | 35 -------------------
->  package/libcamera-apps/libcamera-apps.hash    |  2 +-
->  package/libcamera-apps/libcamera-apps.mk      |  2 +-
->  3 files changed, 2 insertions(+), 37 deletions(-)
->  delete mode 100644 package/libcamera-apps/0001-core-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch
+Remove patch applied upstream.
 
-Applied to next, thanks.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...003-Use-parentheses-to-ensure-compilation.patch | 27 ----------------------
+ package/janus-gateway/janus-gateway.hash           |  2 +-
+ package/janus-gateway/janus-gateway.mk             |  2 +-
+ 3 files changed, 2 insertions(+), 29 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
+deleted file mode 100644
+index f91c13d1f6..0000000000
+--- a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 51431c36cd5f2997c0f7723909195b9883ae0486 Mon Sep 17 00:00:00 2001
+-From: Benson Muite <bkmgit@users.noreply.github.com>
+-Date: Wed, 4 Jan 2023 13:33:36 +0300
+-Subject: [PATCH] Use parentheses to ensure compilation (#3138)
+-
+-Compiler fails with latest Curl release. Use parenthesis to ensure compiler evaluates expression correctly.
+-
+-[Retrieved from:
+-https://github.com/meetecho/janus-gateway/commit/51431c36cd5f2997c0f7723909195b9883ae0486]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/turnrest.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/turnrest.c b/src/turnrest.c
+-index b8560d22f2..42e6114de8 100644
+---- a/src/turnrest.c
+-+++ b/src/turnrest.c
+-@@ -165,7 +165,7 @@ janus_turnrest_response *janus_turnrest_request(const char *user) {
+- 	JANUS_LOG(LOG_VERB, "Sending request: %s\n", request_uri);
+- 	janus_mutex_unlock(&api_mutex);
+- 	curl_easy_setopt(curl, CURLOPT_URL, request_uri);
+--	curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
+-+	curl_easy_setopt(curl, (api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST), 1);
+- 	if(!api_http_get) {
+- 		/* FIXME Some servers don't like a POST with no data */
+- 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query_string);
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 7a87ae737a..a147a8afff 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bb83c19d6137e39833e8eb2b1deeecb33b5d19d4f503d51703bdcc478c447940  janus-gateway-1.1.1.tar.gz
++sha256  f721d62a22b38ba3a341a5502f06b8b3a5a4f7bd0e9cc6c53de257fe99695e17  janus-gateway-1.1.2.tar.gz
+ sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index dd898563e5..786bc211d4 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANUS_GATEWAY_VERSION = 1.1.1
++JANUS_GATEWAY_VERSION = 1.1.2
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
