@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0A40C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:03:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78D9EC6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71CA3605F6;
-	Sun, 12 Mar 2023 09:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71CA3605F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F82A60FAE;
+	Sun, 12 Mar 2023 09:03:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F82A60FAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F-eI1xkzb3vJ; Sun, 12 Mar 2023 09:03:22 +0000 (UTC)
+	with ESMTP id 2oyL4Fu4KV2Y; Sun, 12 Mar 2023 09:03:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3703606B0;
-	Sun, 12 Mar 2023 09:03:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3703606B0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E4B411BF3E9
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:03:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4578260F81;
+	Sun, 12 Mar 2023 09:03:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4578260F81
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EDFA1BF865
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CCD8440256
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA4F9606B0
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:03:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCD8440256
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA4F9606B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id foO2Q8iPepYa for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Il9qi-UR5LQR for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 09:03:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00B8840136
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:03:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00B8840136
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED3B6605F6
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:03:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED3B6605F6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2F2F86D78; Sun, 12 Mar 2023 09:03:18 +0000 (UTC)
+ id D925C86D72; Sun, 12 Mar 2023 09:03:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:02:29 +0100
+Date: Sun, 12 Mar 2023 10:02:25 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5bfc02c0ad879f3e692cbe0330317e6a35507651
-X-Git-Newrev: b07c7eb6f48004753e0959b304f8489132ff7b39
+X-Git-Oldrev: f969665d8f66864a760693b42b395a93cb4020a1
+X-Git-Newrev: 5bfc02c0ad879f3e692cbe0330317e6a35507651
 X-Patchwork-Hint: ignore
-Message-Id: <20230312090318.E2F2F86D78@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/strace: bump to
- version 6.2
+Message-Id: <20230312090318.D925C86D72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/openfpgaloader: fix
+ typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +59,93 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7085468566557675582=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b07c7eb6f48004753e0959b304f8489132ff7b39
+--===============7085468566557675582==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5bfc02c0ad879f3e692cbe0330317e6a35507651
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fix a typo in the name of two configuration options.
+This repairs the selection of libgpiod support.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+Cc: Jean Burgat <jeanburgat33@gmail.com>
+Acked-by: Gwenhael Goavec-merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy                         | 9 +++++++++
+ package/openfpgaloader/Config.in         | 2 +-
+ package/openfpgaloader/openfpgaloader.mk | 4 ++--
+ 3 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 9478fbd459..d49abf1f16 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.1/strace-6.1.tar.xz.asc
--sha256  2579e9cec37dbb786f6ea0bebd15f40dd561ef2bde2a2a2ecdce5963b01859fd  strace-6.1.tar.xz
-+# https://strace.io/files/6.2/strace-6.2.tar.xz.asc
-+sha256  0c7d38a449416268d3004029a220a15a77c2206a03cc88120f37f46e949177e8  strace-6.2.tar.xz
- sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index cbb574559e..730a91d277 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7f69462f2e..1d247fe1a0 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,15 @@ endif
  
--STRACE_VERSION = 6.1
-+STRACE_VERSION = 6.2
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+ ###############################################################################
+ 
++comment "Legacy options removed in 2023.05"
++
++config BR2_PACAKGE_OPENFPGALOADER_CMSIS
++	bool "openfpgaloader cmsis option name fixed"
++	select BR2_LEGACY
++	help
++	  A typo on BR2_PACAKGE_OPENFPGALOADER_CMSIS was fixed by
++	  renaming the option to BR2_PACKAGE_OPENFPGALOADER_CMSIS.
++
+ comment "Legacy options removed in 2023.02"
+ 
+ config BR2_KERNEL_HEADERS_6_0
+diff --git a/package/openfpgaloader/Config.in b/package/openfpgaloader/Config.in
+index 4ba01d12d3..bd83ad415b 100644
+--- a/package/openfpgaloader/Config.in
++++ b/package/openfpgaloader/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_OPENFPGALOADER
+ 
+ if BR2_PACKAGE_OPENFPGALOADER
+ 
+-config BR2_PACAKGE_OPENFPGALOADER_CMSIS
++config BR2_PACKAGE_OPENFPGALOADER_CMSIS
+ 	bool "CMSIS-DAP support"
+ 	depends on BR2_PACKAGE_HAS_UDEV # hidapi
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # hidapi
+diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
+index 042b16612e..6d7fbd9850 100644
+--- a/package/openfpgaloader/openfpgaloader.mk
++++ b/package/openfpgaloader/openfpgaloader.mk
+@@ -17,14 +17,14 @@ else
+ OPENFPGALOADER_CONF_OPTS += -DENABLE_UDEV=OFF
+ endif
+ 
+-ifeq ($(BR2_PACAKGE_OPENFPGALOADER_CMSIS),y)
++ifeq ($(BR2_PACKAGE_OPENFPGALOADER_CMSIS),y)
+ OPENFPGALOADER_DEPENDENCIES += hidapi
+ OPENFPGALOADER_CONF_OPTS += -DENABLE_CMSISDAP=ON
+ else
+ OPENFPGALOADER_CONF_OPTS += -DENABLE_CMSISDAP=OFF
+ endif
+ 
+-ifeq ($(BR2_PACAKGE_OPENFPGALOADER_LIBGPIOD),y)
++ifeq ($(BR2_PACKAGE_OPENFPGALOADER_LIBGPIOD),y)
+ OPENFPGALOADER_DEPENDENCIES += libgpiod
+ OPENFPGALOADER_CONF_OPTS += -DENABLE_LIBGPIOD=ON
+ else
+
+--===============7085468566557675582==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7085468566557675582==--
