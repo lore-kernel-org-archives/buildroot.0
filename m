@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2088C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:15:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5316C74A4B
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:16:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E3C441CD7;
-	Sun, 12 Mar 2023 22:15:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E3C441CD7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5604C40073;
+	Sun, 12 Mar 2023 22:16:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5604C40073
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wy6JJoX7rT29; Sun, 12 Mar 2023 22:15:05 +0000 (UTC)
+	with ESMTP id GIF6lfF83MIl; Sun, 12 Mar 2023 22:16:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43536417A7;
-	Sun, 12 Mar 2023 22:15:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43536417A7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E08F1BF334
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:15:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51ECB40281;
+	Sun, 12 Mar 2023 22:16:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51ECB40281
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 861131BF863
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:16:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8E704058B
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:15:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8E704058B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5F19D80E91
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:16:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F19D80E91
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IGfLa5pxLPer for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 22:15:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0LIsFIMsgLu1 for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 22:16:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CFEB40610
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 22:15:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CFEB40610
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93D6580E87
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 22:16:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93D6580E87
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C7D587045; Sun, 12 Mar 2023 22:15:02 +0000 (UTC)
+ id 826948706A; Sun, 12 Mar 2023 22:16:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 23:13:43 +0100
+Date: Sun, 12 Mar 2023 23:15:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6dfa40b9ab3d0425c7760f0b27e5ecc91c659bac
-X-Git-Newrev: 0d8b27841fe6aad8e9bb4a083c3aeb863d3e0913
+X-Git-Oldrev: 1ec5d3547691888311502b936313b1807f658d80
+X-Git-Newrev: 52ef625e67645d7fffc7b0082bfe6367ec6eb883
 X-Patchwork-Hint: ignore
-Message-Id: <20230312221502.1C7D587045@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kexec: add KEXEC_CPE_ID_{PRODUCT,
- VENDOR}
+Message-Id: <20230312221654.826948706A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediasdk: bump version to
+ 23.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,32 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d8b27841fe6aad8e9bb4a083c3aeb863d3e0913
+commit: https://git.buildroot.net/buildroot/commit/?id=52ef625e67645d7fffc7b0082bfe6367ec6eb883
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:kexec-tools_project:kexec-tools is a valid CPE identifier
-for this package:
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akexec-tools_project%3Akexec-tools
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kexec/kexec.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index c1411f6ab7..562b09012b 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -9,6 +9,8 @@ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
- KEXEC_LICENSE_FILES = COPYING
-+KEXEC_CPE_ID_PRODUCT = kexec-tools
-+KEXEC_CPE_ID_VENDOR = kexec-tools_project
- KEXEC_SELINUX_MODULES = kdump
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index a2c4243790..bdd4c7f3a6 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9208c35641ba995760d662689426a6c433973cf5283b8510f9cfb774e4b9cb38  intel-mediasdk-23.1.0.tar.gz
++sha256  f1bb11ddaa44d5827562600e0a989ca20550e1b021314bce32bc4957352da110  intel-mediasdk-23.1.3.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 462d487ebe..9843ec3502 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Makefile expects $STRIP -o to work, so needed for !BR2_STRIP_strip
+-INTEL_MEDIASDK_VERSION = 23.1.0
++INTEL_MEDIASDK_VERSION = 23.1.3
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
