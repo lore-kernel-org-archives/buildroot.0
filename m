@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8EF4C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 13:18:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42039C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 13:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 529A940376;
-	Sun, 12 Mar 2023 13:18:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529A940376
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB5A24051D;
+	Sun, 12 Mar 2023 13:18:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB5A24051D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YW9rxPsQeqEK; Sun, 12 Mar 2023 13:18:46 +0000 (UTC)
+	with ESMTP id YpwMe6JLu9AS; Sun, 12 Mar 2023 13:18:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91F894013F;
-	Sun, 12 Mar 2023 13:18:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91F894013F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D82A1BF339
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED61740376;
+	Sun, 12 Mar 2023 13:18:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED61740376
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C891A1BF339
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:18:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5752D81836
+ by smtp4.osuosl.org (Postfix) with ESMTP id A25BA41570
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:18:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5752D81836
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A25BA41570
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xpdhVS_Roo7p for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uJ0ETSRdaIaA for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 13:18:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86D96817EB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 930DA4156E
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 13:18:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86D96817EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 930DA4156E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 739D686EFE; Sun, 12 Mar 2023 13:18:43 +0000 (UTC)
+ id 7E20186F00; Sun, 12 Mar 2023 13:18:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 14:15:21 +0100
+Date: Sun, 12 Mar 2023 14:16:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f1c5671ffef3d68979f6514a687815abd4c1f357
-X-Git-Newrev: 06fa870d7e8ba385de00e64116df74c1e3b9b31a
+X-Git-Oldrev: 06fa870d7e8ba385de00e64116df74c1e3b9b31a
+X-Git-Newrev: 620098889f74ad924676fca7d8d56eb401a7d0be
 X-Patchwork-Hint: ignore
-Message-Id: <20230312131843.739D686EFE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/iperf3: bump to
- version 3.13
+Message-Id: <20230312131843.7E20186F00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ support/testing/tests/package/test_iperf3.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +64,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06fa870d7e8ba385de00e64116df74c1e3b9b31a
+commit: https://git.buildroot.net/buildroot/commit/?id=620098889f74ad924676fca7d8d56eb401a7d0be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-LICENSE file hash changed, due to year update.
-
-For change log, see:
-https://github.com/esnet/iperf/blob/3.13/RELNOTES.md#iperf-313-2023-02-16
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iperf3/iperf3.hash | 6 +++---
- package/iperf3/iperf3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                                   |  1 +
+ support/testing/tests/package/test_iperf3.py | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 15c75b6dac..b2c89df98a 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.es.net/pub/iperf/iperf-3.12.tar.gz.sha256
--sha256  72034ecfb6a7d6d67e384e19fb6efff3236ca4f7ed4c518d7db649c447e1ffd6  iperf-3.12.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.13.tar.gz.sha256
-+sha256  bee427aeb13d6a2ee22073f23261f63712d82befaa83ac8cb4db5da4c2bdc865  iperf-3.13.tar.gz
- # Locally computed
--sha256  a5c2e3d799f2835156e565a3de4fad33d32ed289cdc9e414dfaf75719fd12ef9  LICENSE
-+sha256  35aa7c4618b9884d6faa9b43a4e70291b35ea9f89329d5d33becd852e85221b0  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 9041c86575..129319d78a 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPERF3_VERSION = 3.12
-+IPERF3_VERSION = 3.13
- IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f6e120d92b..ff26021d1d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1718,6 +1718,7 @@ F:	support/testing/tests/package/sample_python_spake2.py
+ F:	support/testing/tests/package/test_gnupg2.py
+ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
++F:	support/testing/tests/package/test_iperf3.py
+ F:	support/testing/tests/package/test_kexec.py
+ F:	support/testing/tests/package/test_kexec/
+ F:	support/testing/tests/package/test_libjxl.py
+diff --git a/support/testing/tests/package/test_iperf3.py b/support/testing/tests/package/test_iperf3.py
+new file mode 100644
+index 0000000000..9aac4c6fd0
+--- /dev/null
++++ b/support/testing/tests/package/test_iperf3.py
+@@ -0,0 +1,23 @@
++import os
++
++import infra.basetest
++
++
++class TestIperf3(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_IPERF3=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("iperf3 --version")
++        self.assertRunOk("iperf3 -s -D")
++        self.assertRunOk("iperf3 -c 127.0.0.1 -t 3")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
