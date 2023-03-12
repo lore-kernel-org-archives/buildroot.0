@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8001C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83C59C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 550F040A05;
-	Sun, 12 Mar 2023 21:32:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 550F040A05
+	by smtp4.osuosl.org (Postfix) with ESMTP id B857F40248;
+	Sun, 12 Mar 2023 21:32:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B857F40248
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ONxjRgLtOsS; Sun, 12 Mar 2023 21:32:43 +0000 (UTC)
+	with ESMTP id cqBaLKsBI4Rn; Sun, 12 Mar 2023 21:32:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D504040883;
-	Sun, 12 Mar 2023 21:32:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D504040883
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 00FD31BF2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id B42EA410EA;
+	Sun, 12 Mar 2023 21:32:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B42EA410EA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5036A1BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CF09A40298
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF09A40298
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A70A812FD
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:32:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A70A812FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z3GUCOefIZi4 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JgfWNjN0Q9zC for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:32:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A82F940248
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF67881308
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:32:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A82F940248
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF67881308
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EFC186FEA; Sun, 12 Mar 2023 21:32:25 +0000 (UTC)
+ id AD3AF86FEC; Sun, 12 Mar 2023 21:32:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 20:31:01 +0100
+Date: Sun, 12 Mar 2023 22:30:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9c3cdee11a21380f8141ec4379f8a67dea4481a7
-X-Git-Newrev: f50259d6a0c0e8ba2149aea04c7dc98fe4707abb
+X-Git-Oldrev: 30e96518cd7255048bcac024c20e203f51c377d4
+X-Git-Newrev: 00553ea186357fd3e2b3c89fa560e9711cc67472
 X-Patchwork-Hint: ignore
-Message-Id: <20230312213225.8EFC186FEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dbus-broker: bump to
- release 33
+Message-Id: <20230312213225.AD3AF86FEC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/stress-ng: bump to
+ version V0.15.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,58 +64,354 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f50259d6a0c0e8ba2149aea04c7dc98fe4707abb
+commit: https://git.buildroot.net/buildroot/commit/?id=00553ea186357fd3e2b3c89fa560e9711cc67472
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This release contains mostly a bugfixes, with some improvements around
-error handling for unimplemented functionality and resiliency against
-runtime changes of dbus service-files.
+This commit dropped the patch, included upstream in:
+https://github.com/ColinIanKing/stress-ng/commit/5d419c790e648c7a2f96f34ed1b93b326f725545
+which was included in V0.14.04.
 
-Also update hashes of license files. There was no change in license,
-the hashes changed due to copyright date bump and additional authors
-listend in the same files.
+Three patches are also introduced to fix build issues (all
+upstream not but not yet in version).
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Also, this new version now depends on BR2_TOOLCHAIN_HAS_SYNC_4.
+
+Finally, a new _MAKE_FLAGS is introduced to prevent the package to
+modify too much its CFLAGS.
+
+For change log since V0.13.05, see:
+- https://github.com/ColinIanKing/stress-ng/blob/V0.15.04/debian/changelog
+or commit logs:
+- https://github.com/ColinIanKing/stress-ng/commits/V0.15.04
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus-broker/dbus-broker.hash | 6 +++---
- package/dbus-broker/dbus-broker.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-Makefile-fix-build-with-kernel-5.6.patch  | 60 -----------------
+ ...-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch | 54 +++++++++++++++
+ .../0002-stress-regs-fix-build-on-riscv32.patch    | 43 ++++++++++++
+ ...file-introduce-PRESERVE_CFLAGS-build-flag.patch | 78 ++++++++++++++++++++++
+ package/stress-ng/Config.in                        |  2 +
+ package/stress-ng/stress-ng.hash                   |  2 +-
+ package/stress-ng/stress-ng.mk                     |  7 +-
+ 7 files changed, 183 insertions(+), 63 deletions(-)
 
-diff --git a/package/dbus-broker/dbus-broker.hash b/package/dbus-broker/dbus-broker.hash
-index f6c2cbe160..06c8f229b7 100644
---- a/package/dbus-broker/dbus-broker.hash
-+++ b/package/dbus-broker/dbus-broker.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch b/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch
+deleted file mode 100644
+index 4c62da3241..0000000000
+--- a/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 5d419c790e648c7a2f96f34ed1b93b326f725545 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 13 Aug 2022 17:17:05 +0200
+-Subject: [PATCH] Makefile: fix build with kernel < 5.6
+-
+-Fix the following build failure with kernel >= 5.1 and < 5.5 (i.e.
+-before
+-https://github.com/torvalds/linux/commit/9e3aa61ae3e01ce1ce6361a41ef725e1f4d1d2bf)
+-raised since version 0.11.21 and
+-https://github.com/ColinIanKing/stress-ng/commit/3d6fccdbe53d0cbcb75dd4b91571aaaae7ee1ad4:
+-
+-In file included from stress-io-uring.c:26:
+-io-uring.h:1:9: error: macro names must be identifiers
+-    1 | #define #define HAVE_IORING_OP_NOP 0
+-      |         ^
+-
+-Moreover, IORING_OP_FALLOCATE is not available before kernel 5.6 and
+-https://github.com/torvalds/linux/commit/d63d1b5edb7b832210bfde587ba9e7549fa064eb
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/1bf3f2bbc849bdce531d56b1024fa87f0c1ae667
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved (and backported) from
+-https://github.com/ColinIanKing/stress-ng/commit/5d419c790e648c7a2f96f34ed1b93b326f725545]
+----
+- Makefile          | 2 +-
+- stress-io-uring.c | 6 +++++-
+- 2 files changed, 6 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 2f9cc9918..ee17ae08b 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -528,7 +528,7 @@ stress-personality.c: personality.h
+- #
+- io-uring.h:
+- 	$(V)$(CPP) $(CFLAGS) core-io-uring.c  | $(GREP) IORING_OP | sed 's/,//' | \
+--	sed 's/IORING_OP_/#define HAVE_IORING_OP_/' > io-uring.h
+-+	sed 's/.*\(IORING_OP_.*\)/#define HAVE_\1/' > io-uring.h
+- 	$(Q)echo "MK io-uring.h"
+- 
+- stress-io-uring.c: io-uring.h
+-diff --git a/stress-io-uring.c b/stress-io-uring.c
+-index ab9fd0749..84f463611 100644
+---- a/stress-io-uring.c
+-+++ b/stress-io-uring.c
+-@@ -311,7 +311,11 @@ static inline int stress_io_uring_complete(
+- 			break;
+- 
+- 		cqe = &cring->cqes[head & *submit->cq_ring.ring_mask];
+--		if ((cqe->res < 0) && (opcode != IORING_OP_FALLOCATE)) {
+-+		if ((cqe->res < 0)
+-+#ifdef HAVE_IORING_OP_FALLOCATE
+-+			&& (opcode != IORING_OP_FALLOCATE)
+-+#endif
+-+		) {
+- 			const int err = abs(cqe->res);
+- 
+- 			/* Silently ignore EOPNOTSUPP completion errors */
+diff --git a/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch b/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch
+new file mode 100644
+index 0000000000..41a2647133
+--- /dev/null
++++ b/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch
+@@ -0,0 +1,54 @@
++From 625dd7e458e6aa488f7dd4764e4a62b6fbf79a9d Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Thu, 23 Feb 2023 21:54:16 +0100
++Subject: [PATCH] stress-mmap: fix build with HAVE_SYSCALL or __NR_mmap2 is
++ undefined
++
++Commit afae500a added macro tests for defined(HAVE_SYSCALL) and
++system call numbers.
++
++More specifically, in stress-mmap.c, function mmap2_try() was defined
++only if __NR_mmap2 is defined.  See:
++https://github.com/ColinIanKing/stress-ng/commit/afae500a23b198b9df421ad0fd9270fcdf65c3fb#diff-ffb0db2473f6c5e1b93dd33bce389ee836671a628fff9f903d097733f7ddfc9c
++
++This commit forgot to replicate the same test when the mmap2_try()
++function is used later at:
++https://github.com/ColinIanKing/stress-ng/blob/50f3ef2560e928c4694894be0bb652e663af5076/stress-mmap.c#L754
++
++When HAVE_SYSCALL or __NR_mmap2 is undefined, compilation fails with:
++
++    stress-mmap.c: In function 'stress_mmap':
++    stress-mmap.c:809:31: error: 'mmap2_try' undeclared (first use in this function); did you mean 'mmap_prot'?
++       context.mmap = (mmap_func_t)mmap2_try;
++                                   ^~~~~~~~~
++                                   mmap_prot
++    stress-mmap.c:809:31: note: each undeclared identifier is reported only once for each function it appears in
++
++This patch fixes this issue.
++
++Upstream-reference:
++https://github.com/ColinIanKing/stress-ng/commit/3da49180fdfa8a70307569202ed9431f5295913e
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ stress-mmap.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/stress-mmap.c b/stress-mmap.c
++index cf343078..68f5a9b8 100644
++--- a/stress-mmap.c
+++++ b/stress-mmap.c
++@@ -805,7 +805,9 @@ static int stress_mmap(const stress_args_t *args)
++ 		context.mmap_file = true;
++ 
++ 	if (mmap_mmap2) {
++-#if defined(HAVE_MMAP2)
+++#if defined(HAVE_MMAP2) && \
+++    defined(HAVE_SYSCALL) && \
+++    defined(__NR_mmap2)
++ 		context.mmap = (mmap_func_t)mmap2_try;
++ #else
++ 		if (args->instance == 0)
++-- 
++2.39.2
++
+diff --git a/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch b/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch
+new file mode 100644
+index 0000000000..cb2a507bfd
+--- /dev/null
++++ b/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch
+@@ -0,0 +1,43 @@
++From 40309f5d313524f4189f4ef158920391e92e226d Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Thu, 23 Feb 2023 21:38:25 +0100
++Subject: [PATCH] stress-regs: fix build on riscv32
++
++RISC-V register test routine is using 64bit registers only.
++When compiling on 32bit RISC-V, compilation fails with output:
++
++    stress-regs.c: In function 'stress_regs_helper':
++    stress-regs.c:485:27: error: register specified for 's1' isn't suitable for data type
++      485 |         register uint64_t s1  __asm__("s1")  = v;
++          |                           ^~
++    stress-regs.c:495:27: error: register specified for 's11' isn't suitable for data type
++      495 |         register uint64_t s11 __asm__("s11") = s1 ^ 0xa5a5a5a5a5a5a5a5ULL;
++          |                           ^~~
++
++This patch fix this issue by protecting the stress_regs_helper()
++function with an additional test, to restrict to 64bit.
++
++Upstream-reference:
++https://github.com/ColinIanKing/stress-ng/commit/6c335ac3abba535e79ddbddf34591ef5b9ee0a96
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ stress-regs.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/stress-regs.c b/stress-regs.c
++index 4d4d32d2..0ffac4d1 100644
++--- a/stress-regs.c
+++++ b/stress-regs.c
++@@ -473,7 +473,7 @@ do {			\
++ }
++ #endif
++ 
++-#if defined(STRESS_ARCH_RISCV)
+++#if defined(STRESS_ARCH_RISCV) && (__riscv_xlen == 64)
++ 
++ #define STRESS_REGS_HELPER
++ /*
++-- 
++2.39.2
++
+diff --git a/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch b/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch
+new file mode 100644
+index 0000000000..beb5429dc1
+--- /dev/null
++++ b/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch
+@@ -0,0 +1,78 @@
++From d3ab0bad6afc2e8f4be70fe38dd24788f1b3d4be Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Fri, 24 Feb 2023 21:11:30 +0100
++Subject: [PATCH] Makefile: introduce PRESERVE_CFLAGS build flag
++
++The stress-ng Makefile includes many nice environment auto-detection
++features to adjust compilation flags. This is very convenient in
++many compilation use-cases. However, in some other specific cross
++compilation environments, those automatic CFLAGS adjustments may
++create compilation failures.
++
++For example, commit c00e695ed5 added -fstack-protector-strong if the
++compiler recognize the flag. In some situations, for example a gcc
++toolchain based on uClibc-ng without stack-protector libssp
++enabled, gcc will recognize the option. Then, the Makefile adds the
++option to CFLAGS, and the compilation/link fails at link time with an
++error like:
++
++    /toolchain/arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp_nonshared: No such file or directory
++    /toolchain/arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp: No such file or directory
++
++stress-ng is included in the Buildroot build system [1] [2], which
++supports many architectures and toolchain configurations. This build
++system carefully controls its CFLAGS. In such a case, it is
++preferable for a package to avoid changing compilation flags.
++
++This patch introduces the PRESERVE_CFLAGS Makefile variable which will
++disable those CFLAGS adjustments, if set to 1. The current build
++behavior is preserved if unset.
++
++Upstream-reference:
++https://github.com/ColinIanKing/stress-ng/commit/3d87d50561505a5a79008c01e35fc2e100000160
++
++[1] https://buildroot.org/
++[2] https://git.buildroot.org/buildroot/tree/package/stress-ng?h=2022.11.1
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ Makefile | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index 7a969aba..35151d74 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -45,6 +45,7 @@ endif
++ # Test for hardening flags and apply them if applicable
++ #
++ MACHINE = $(shell uname -m)
+++ifneq ($(PRESERVE_CFLAGS),1)
++ ifneq ($(MACHINE),$(filter $(MACHINE),alpha parisc))
++ ifeq ($(shell $(CC) $(CFLAGS) -fstack-protector-strong -E -xc /dev/null > /dev/null 2>& 1 && echo 1),1)
++ CFLAGS += -fstack-protector-strong
++@@ -58,6 +59,7 @@ ifeq ($(shell $(CC) $(CFLAGS) -D_FORTIFY_SOURCE=2 -E -xc /dev/null > /dev/null 2
++ CFLAGS += -D_FORTIFY_SOURCE=2
++ endif
++ endif
+++endif
++ 
++ #
++ # Expected build warnings
++@@ -83,11 +85,13 @@ PRE_V=
++ PRE_Q=@#
++ endif
++ 
+++ifneq ($(PRESERVE_CFLAGS),1)
++ ifeq ($(findstring icc,$(CC)),icc)
++ CFLAGS += -no-inline-max-size -no-inline-max-total-size
++ CFLAGS += -axAVX,CORE-AVX2,CORE-AVX-I,CORE-AVX512,SSE2,SSE3,SSSE3,SSE4.1,SSE4.2,SANDYBRIDGE,SKYLAKE,SKYLAKE-AVX512,TIGERLAKE,SAPPHIRERAPIDS
++ CFLAGS += -ip -falign-loops -funroll-loops -ansi-alias -fma -qoverride-limits
++ endif
+++endif
++ 
++ #ifeq ($(findstring clang,$(CC)),clang)
++ #CFLAGS += -Weverything
++-- 
++2.39.2
++
+diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
+index 839cbb1cc0..918c3db194 100644
+--- a/package/stress-ng/Config.in
++++ b/package/stress-ng/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_STRESS_NG
+ 	bool "stress-ng"
+ 	depends on BR2_USE_MMU # fork()
+ 	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2 and ARC
+ 	depends on !BR2_nios2
+@@ -16,5 +17,6 @@ config BR2_PACKAGE_STRESS_NG
+ 
+ comment "stress-ng needs a toolchain w/ headers >= 3.3"
+ 	depends on !BR2_nios2 && !BR2_arc
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index 2e3f998769..5b967d2b95 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  bea7f653e7251063c5f427e9e3f93562d38a0d8667ae6d49fb56f113605985de  dbus-broker-32.tar.xz
-+sha256  23713f25624749fdb274907e429080fa2d8f4dbe76acd87bb6d21a3c818c7841  dbus-broker-33.tar.xz
- sha256  3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4  LICENSE
- sha256  20ea1f96abc15553695c6725bb3dcabff4b43b85b7ca7d675a2b8860e3b01f87  subprojects/libcdvar-1/AUTHORS
- sha256  8153c478102dc209b30dd4627cf5bb3596263f99692bf3eec174b1e17bbf8a3b  subprojects/libcdvar-1/README.md
-@@ -11,7 +11,7 @@ sha256  23f24eeaaded5fedd6e7840b6f7b73838f9a4e2112ad6a12fe1ef958f73d0214  subpro
- sha256  05113a24aca4c537819dd0d91b95b13edb85bea4b6a77a6d9269becb397ed374  subprojects/libcrbtree-3/README.md
- sha256  6d63b1fb794d4c02622595ad30357c90398aa883864e5a275479139c8f03208f  subprojects/libcshquote-1/AUTHORS
- sha256  cad109dd33062518a437ebee145ba863fe0e047d4e3db9c28b0bf3c6148f10c2  subprojects/libcshquote-1/README.md
--sha256  32913ba08dc041f3f4ca361fc0d68014120e1c612772aabbcc901556df499ce5  subprojects/libcstdaux-1/AUTHORS
--sha256  7c4b6c325b0bc02150089112f65132ee999b0f44500b73d1fc06d96c93161037  subprojects/libcstdaux-1/README.md
-+sha256  e796182869fe0892347d069f3f423774124987d6c45d016854fc51530633c177  subprojects/libcstdaux-1/AUTHORS
-+sha256  92006886d7f28894fef08bf97e35ef52147067bd3c4d4d6381da7c59f9901dae  subprojects/libcstdaux-1/README.md
- sha256  7e660796fea0400a1a9a539226c345b3c656a745a334e323e33258de7864e985  subprojects/libcutf8-1/AUTHORS
- sha256  106099cc1c488cbf8911f56da7977a955f6b27a7bb5b815985e59d9fae0e6fe7  subprojects/libcutf8-1/README.md
-diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-index e82b79220d..c4e3679a2e 100644
---- a/package/dbus-broker/dbus-broker.mk
-+++ b/package/dbus-broker/dbus-broker.mk
-@@ -4,7 +4,7 @@
+-sha256  3de49e1100866634f549e99c1644283d0cde817b844a69dcf7f80afa2227d350  stress-ng-0.13.05.tar.gz
++sha256  92922b979b5ca6ee05b03fd792c32a0b25a01fea6161b418b5e672c64ffb549f  stress-ng-0.15.04.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 0b2287c7fb..28116b455d 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,11 +4,14 @@
  #
  ################################################################################
  
--DBUS_BROKER_VERSION = 32
-+DBUS_BROKER_VERSION = 33
- DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
- DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
+-STRESS_NG_VERSION = 0.13.05
++STRESS_NG_VERSION = 0.15.04
+ STRESS_NG_SITE = $(call github,ColinIanKing,stress-ng,V$(STRESS_NG_VERSION))
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
  
++STRESS_NG_MAKE_FLAGS = \
++	PRESERVE_CFLAGS=1
++
+ ifeq ($(BR2_PACKAGE_LIBBSD),y)
+ STRESS_NG_DEPENDENCIES += libbsd
+ endif
+@@ -18,7 +21,7 @@ STRESS_NG_DEPENDENCIES += keyutils
+ endif
+ 
+ define STRESS_NG_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(STRESS_NG_MAKE_FLAGS)
+ endef
+ 
+ # Don't use make install otherwise stress-ng will be rebuild without
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
