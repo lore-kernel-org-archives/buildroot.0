@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78565C6FD1C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:09:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07566C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:09:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B53B60709;
-	Sun, 12 Mar 2023 09:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B53B60709
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA2BB60C0A;
+	Sun, 12 Mar 2023 09:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA2BB60C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rkzBYQBwogEp; Sun, 12 Mar 2023 09:09:10 +0000 (UTC)
+	with ESMTP id SmFEihFcxXfJ; Sun, 12 Mar 2023 09:09:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6939E60FBA;
-	Sun, 12 Mar 2023 09:09:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6939E60FBA
+	by smtp3.osuosl.org (Postfix) with ESMTP id D32BD60709;
+	Sun, 12 Mar 2023 09:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D32BD60709
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 025211BF865
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:08:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B09111BF3C3
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:08:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D01DC60FBA
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D01DC60FBA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EE0160C0A
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:08:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EE0160C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N_ewV8sYt1Gx for <buildroot@lists.busybox.net>;
+ with ESMTP id B8jfozRMKfHf for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 09:08:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 108F760C0A
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 108F760C0A
+ by smtp3.osuosl.org (Postfix) with ESMTP id F2DD1606B0
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:08:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2DD1606B0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F302286E5E; Sun, 12 Mar 2023 09:08:53 +0000 (UTC)
+ id DE99486E56; Sun, 12 Mar 2023 09:08:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:08:43 +0100
+Date: Sun, 12 Mar 2023 10:08:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 92f6a843b81479a9c8f8769d9e728767646b9901
-X-Git-Newrev: 3ecff27df15c2c22f7b9d8f7554119bc0346ff5b
+X-Git-Oldrev: b07c7eb6f48004753e0959b304f8489132ff7b39
+X-Git-Newrev: d1b87a346a0c0b775ee44ec7090bee03ba8be7ba
 X-Patchwork-Hint: ignore
-Message-Id: <20230312090853.F302286E5E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing: move the
- kernel config only used by test_edk2.py
+Message-Id: <20230312090853.DE99486E56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/qemu/aarch64-sbsa: use
+ PARTLABEL to specify root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,50 +64,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ecff27df15c2c22f7b9d8f7554119bc0346ff5b
+commit: https://git.buildroot.net/buildroot/commit/?id=d1b87a346a0c0b775ee44ec7090bee03ba8be7ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The kernel config board/qemu/aarch64-sbsa/linux.config has never been in
-use by qemu_aarch64_sbsa_defconfig, neither via
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE, nor via
-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES.
+Specifying /dev/sda2 is ambigious, and when booting my arm64 machine
+this tries to mount the second partition of my ATA drive, instead of
+the second partition of the USB-stick, simply because the ATA driver
+is probed earlier than the USB controller driver.
 
-test_edk2.py is using the kernel config
-board/qemu/aarch64-sbsa/linux.config. However, storing a kernel config
-that is not used by qemu_aarch64_sbsa_defconfig, in a directory that is
-"owned" by qemu_aarch64_sbsa_defconfig, is bound to cause confusion.
-
-Therefore, move the config file to a new subdirectory:
-support/testing/tests/boot/test_edk2/
-
-This is similar to how e.g. test_grub.py has a subdirectory:
-support/testing/tests/boot/test_grub/
-where it keeps the kernel config that is only used by test_grub.py.
+To solve this problem, use PARTLABEL=root to specify the root filesystem.
+This is similar to how it is currently done for board/aarch64-efi/grub.cfg
+and board/qemu/aarch64-ebbr/grub.cfg.
 
 Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/boot/test_edk2.py                                 | 2 +-
- .../aarch64-sbsa => support/testing/tests/boot/test_edk2}/linux.config  | 0
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ board/qemu/aarch64-sbsa/grub.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
-index c1be8fad95..623e77e992 100644
---- a/support/testing/tests/boot/test_edk2.py
-+++ b/support/testing/tests/boot/test_edk2.py
-@@ -18,7 +18,7 @@ class TestEdk2(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-sbsa/linux.config"
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="support/testing/tests/boot/test_edk2/linux.config"
-         BR2_TARGET_EDK2=y
-         BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
-         BR2_TARGET_GRUB2=y
-diff --git a/board/qemu/aarch64-sbsa/linux.config b/support/testing/tests/boot/test_edk2/linux.config
-similarity index 100%
-rename from board/qemu/aarch64-sbsa/linux.config
-rename to support/testing/tests/boot/test_edk2/linux.config
+diff --git a/board/qemu/aarch64-sbsa/grub.cfg b/board/qemu/aarch64-sbsa/grub.cfg
+index cd486caf4c..39b7842f8f 100644
+--- a/board/qemu/aarch64-sbsa/grub.cfg
++++ b/board/qemu/aarch64-sbsa/grub.cfg
+@@ -2,5 +2,5 @@ set default="0"
+ set timeout="5"
+ 
+ menuentry "Buildroot" {
+-	linux /Image root=/dev/sda2 rootwait console=ttyAMA0
++	linux /Image root=PARTLABEL=root rootwait console=ttyAMA0
+ }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
