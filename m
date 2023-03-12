@@ -4,56 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BB87C6FD1C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:33:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A916C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 09:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B283E80B1B;
-	Sun, 12 Mar 2023 09:33:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B283E80B1B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9B3981584;
+	Sun, 12 Mar 2023 09:43:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9B3981584
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jXZiqJEkGFic; Sun, 12 Mar 2023 09:32:58 +0000 (UTC)
+	with ESMTP id Gl7tHBIt-hsK; Sun, 12 Mar 2023 09:43:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FEC2813AD;
-	Sun, 12 Mar 2023 09:32:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FEC2813AD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 97CDE1BF3C3
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:32:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AA8881518;
+	Sun, 12 Mar 2023 09:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AA8881518
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 25DBD1BF3C3
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C914813AD
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:32:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C914813AD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 000FD40256
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 09:43:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 000FD40256
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id omOCFYdjXCZp for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 09:32:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VAdp105t7QwK for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 09:43:22 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2428480B1B
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2428480B1B
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:32:54 +0000 (UTC)
-Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
- by mailout02.t-online.de (Postfix) with SMTP id 36E3E2B1F6
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 10:32:51 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.204.131]) by fwd71.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pbI4P-1KEztB0; Sun, 12 Mar 2023 10:32:49 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43944)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pbI4P-0001ZT-0x
- for buildroot@buildroot.org; Sun, 12 Mar 2023 10:32:49 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:32:49 +0100
-Message-Id: <20230312093249.256425-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8948740136
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8948740136
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 09:43:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.54])
+ by smtp5-g21.free.fr (Postfix) with ESMTP id 15E1C5FFAC;
+ Sun, 12 Mar 2023 10:43:19 +0100 (CET)
+Received: from [37.169.126.28]
+	by webmail.free.fr
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1678613569-437ECC4D-0020F2C5/0/0 CLEAN NORMAL
-X-TOI-MSGID: d6fef37d-a317-4d29-b6eb-f00831503e03
-Subject: [Buildroot] [PATCH 1/1] package/rsync: link with -latomic if needed
+Date: Sun, 12 Mar 2023 10:43:19 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20230312102342.2f2393b0@windsurf>
+References: <20230311184148.183739-1-ju.o@free.fr>
+ <20230312102342.2f2393b0@windsurf>
+Message-ID: <7672ac6c9aff94c22e7738df5e1c6316@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1678614199;
+ bh=IYy4xSC55BU39K4blttk3w913dVq5p/7VKLzpd2hpa8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=fICBSoC5i+fDPDILVUNr558YmU+PFE4KFxjavP4x/Hjgb5UT8s0I9z1DiVGMpf7Bw
+ Eal2/ZXvIrAkDfLczsHkcJLDdp9vTxmvtK0xIJnhFkSAzk2NpIIOxJ0+NtpYFQ/NDs
+ vgFmS6UToM/kDrzQBWaRM8FmVWlwdzr0Dbrjj6G6p3uzT+MRQILDL5L7okm3W3GqQA
+ C/vnntfufASyuIpMS7gTAeR3UHNJHbJvjhyvliZ49pQk8dlvM2BHfIu3NXVagSpp/J
+ B9sbpgqy5d4NkwIkQh7zBLV8SNc8Zy7AgpIQ8xrVwOu0FgseF98SnHZSH1lwtDJHwY
+ eR+wy1wekh0QQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fICBSoC5
+Subject: Re: [Buildroot] [PATCH next 1/1] package/python-hwdata: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +75,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/9eb9a92871622472b8f9eb3797aadd3651fc78a4/
+Hi Thomas,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/rsync/rsync.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+On 12/03/2023 10:23, Thomas Petazzoni wrote:
+> Hello Julien,
+> 
+> Thanks for this work!
+> 
+> On Sat, 11 Mar 2023 19:41:48 +0100
+> Julien Olivain <ju.o@free.fr> wrote:
+> 
+>> +PYTHON_HWDATA_VERSION = 2.3.7
+>> +PYTHON_HWDATA_SOURCE = hwdata-$(PYTHON_HWDATA_VERSION).tar.gz
+>> +PYTHON_HWDATA_SITE = 
+>> https://files.pythonhosted.org/packages/15/26/f5bc1b42129fbcbd1c99c29714af1685fc89e2cf37680a9930d4fcac1808
+>> +PYTHON_HWDATA_SETUP_TYPE = distutils
+>> +PYTHON_HWDATA_LICENSE = GPL-2.0+
+>> +PYTHON_HWDATA_LICENSE_FILES = LICENSE
+> 
+> This doesn't work because there is no LICENSE file in the PyPi tarball
+> (and also the hash file does not have the hash of that file):
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index d2fa47d39a..3fd2ef257e 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -20,6 +20,10 @@ RSYNC_CONF_OPTS = \
- 	--disable-roll-simd \
- 	--disable-md5-asm
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+RSYNC_CONF_ENV += LIBS=-latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_ACL),y)
- RSYNC_DEPENDENCIES += acl
- else
--- 
-2.39.2
+I also realized that, but I sent the wrong patch version.  Sorry about 
+that.
+My fixed version was just included a "no license file" comment. I'll 
+send
+a fixed v2.
 
+>>>> python-hwdata 2.3.7 Collecting legal info
+> ERROR: No hash found for LICENSE
+> cp: cannot stat
+> '/home/thomas/projets/buildroot/output/build/python-hwdata-2.3.7/LICENSE':
+> No such file or directory
+> make: *** [package/python-hwdata/python-hwdata.mk:16:
+> python-hwdata-legal-info] Error 1
+> 
+> One thing you could do to address this is:
+> 
+> PYTHON_HWDATA_EXTRA_DOWNLOADS =
+> https://raw.githubusercontent.com/xsuchy/python-hwdata/python-hwdata-2.3.7-1/LICENSE
+> 
+> and then add a post-extract hook that copies $(PYTHON_HWDATA_DLDIR) to
+> $(@D), and then use LICENSE as the license file.
+> 
+> This will of course require an update in the hash file.
+> 
+> Do you think you could look into this? The rest of the patch looks
+> good, of course.
+
+Sure! I'll rework the patch to include your suggestion.  I never thought 
+about
+this workaround for this situation.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
