@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4CAEC6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 19:10:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D112C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 19:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CBCE60C2F;
-	Sun, 12 Mar 2023 19:10:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CBCE60C2F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 224F260E38;
+	Sun, 12 Mar 2023 19:10:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 224F260E38
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GJN6UZsvYnRO; Sun, 12 Mar 2023 19:10:40 +0000 (UTC)
+	with ESMTP id 7FaRayN0AaW6; Sun, 12 Mar 2023 19:10:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8483D60C11;
-	Sun, 12 Mar 2023 19:10:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8483D60C11
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B76261BF868
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 19:10:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECAEE60C11;
+	Sun, 12 Mar 2023 19:10:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECAEE60C11
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E66841BF41A
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 19:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 912A3410C8
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF16581467
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 19:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 912A3410C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF16581467
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6H9inJhZA6_E for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IhAk3zYTqdOo for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 19:10:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E66F410C5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8636F81464
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 19:10:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E66F410C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8636F81464
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C9C286F9C; Sun, 12 Mar 2023 19:10:11 +0000 (UTC)
+ id 76E9486F9E; Sun, 12 Mar 2023 19:10:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 19:47:19 +0100
+Date: Sun, 12 Mar 2023 19:48:58 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 9be3fa0da2c9e8db8bbf64c659ee3bcc73a9516e
-X-Git-Newrev: 6480bbb206080701157d481f32d5dc6f2ffa77fd
+X-Git-Oldrev: 6480bbb206080701157d481f32d5dc6f2ffa77fd
+X-Git-Newrev: e392183150517469e91e6bc1461660f569df0b6b
 X-Patchwork-Hint: ignore
-Message-Id: <20230312191011.6C9C286F9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/intel-gmmlib:
- needs threads
+Message-Id: <20230312191011.76E9486F9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/ntpsec: bump
+ version to 1.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,69 +58,283 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5659424476721338292=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6480bbb206080701157d481f32d5dc6f2ffa77fd
+--===============5659424476721338292==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e392183150517469e91e6bc1461660f569df0b6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-threads are mandatory since version 19.1.1 and
-https://github.com/intel/gmmlib/commit/9e4aa143fb7e7e87332fcb7c9871040ff4a1a1da
-resulting in the following build failure since commit
-cd206d9b808a322a00294b4caad203a892ed4c92:
+- remove 001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch
+  (upstream applied, see [1])
 
-CMake Error at /home/thomas/autobuild/instance-2/output-1/host/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
-  Could NOT find Threads (missing: Threads_FOUND)
+- rename 0002-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch
+  to 0001-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch
 
-Fixes:
- - http://autobuild.buildroot.org/results/c1120932e8c212820b239ee8cd4a057623a73376
+- remove 0003-fix-build-with-libressl.patch
+  (upstream applied, see [2])
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b5d310772d71f547146684673c7113f208a31b5f)
+- update license file list (change from LICENSE.adoc to LICENSES/BSD-2,
+  LICENSES/BSD-3, LICENSES/CC-BY-4.0, LICENSES/MIT, LICENSES/NTP)
+
+For details see [3].
+
+[1] https://gitlab.com/NTPsec/ntpsec/-/commit/0bea0bef36ff9cfa3ff52de25a839c283cf46cf7
+[2] https://gitlab.com/NTPsec/ntpsec/-/commit/128b66ae122d7b41ce4b99f427383fd6a5923d71
+[3] https://gitlab.com/NTPsec/ntpsec/-/blob/master/NEWS.adoc
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 658ece1afa84e916503e3e949c40b3c0d24c6335)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-gmmlib/Config.in      | 6 ++++--
- package/intel-mediadriver/Config.in | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ ...-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch | 90 ----------------------
+ ...ve-checks-for-bsd-string.h-fixes-host-co.patch} |  0
+ package/ntpsec/0003-fix-build-with-libressl.patch  | 80 -------------------
+ package/ntpsec/ntpsec.hash                         |  8 +-
+ package/ntpsec/ntpsec.mk                           | 12 ++-
+ 5 files changed, 15 insertions(+), 175 deletions(-)
 
-diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
-index b6f93f7416..a3d0d2610b 100644
---- a/package/intel-gmmlib/Config.in
-+++ b/package/intel-gmmlib/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_INTEL_GMMLIB
- 	depends on BR2_x86_64
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  The Intel(R) Graphics Memory Management Library provides
- 	  device specific and buffer management for the Intel(R)
-@@ -11,5 +12,6 @@ config BR2_PACKAGE_INTEL_GMMLIB
+diff --git a/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch b/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch
+deleted file mode 100644
+index aa3cb183c3..0000000000
+--- a/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch
++++ /dev/null
+@@ -1,90 +0,0 @@
+-From aa9ed14c7f4d0edbda9370760b44be045638f8a0 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Mon, 4 Oct 2021 22:25:58 +0200
+-Subject: [PATCH] ntptime: fix jfmt5/ofmt5 jfmt6/ofmt6 related compile failure
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Use same define guard for definiton as for usage ('HAVE_STRUCT_NTPTIMEVAL_TAI'
+-instead of 'NTP_API && NTP_API > 3').
+-
+-While at it use HAVE_STRUCT_NTPTIMEVAL_TAI define guard for the two remaining
+-places using NTP_API (which is not defined by the uclibc sys/timex.h header).
+-
+-Fixes:
+-
+-  ../../ntptime/ntptime.c: In function ‘main’:
+-  ../../ntptime/ntptime.c:349:17: error: ‘jfmt5’ undeclared (first use in this function); did you mean ‘jfmt6’?
+-    349 |   printf(json ? jfmt5 : ofmt5, (long)ntv.tai);
+-        |                 ^~~~~
+-        |                 jfmt6
+-  ../../ntptime/ntptime.c:349:17: note: each undeclared identifier is reported only once for each function it appears in
+-  ../../ntptime/ntptime.c:349:25: error: ‘ofmt5’ undeclared (first use in this function); did you mean ‘ofmt6’?
+-    349 |   printf(json ? jfmt5 : ofmt5, (long)ntv.tai);
+-        |                         ^~~~~
+-        |                         ofmt6
+-  ../../ntptime/ntptime.c:321:15: warning: unused variable ‘jfmt6’ [-Wunused-variable]
+-    321 |   const char *jfmt6 = "";
+-        |               ^~~~~
+-  ../../ntptime/ntptime.c:311:15: warning: unused variable ‘ofmt6’ [-Wunused-variable]
+-    311 |   const char *ofmt6 = "\n";
+-        |               ^~~~~
+-
+-[Upstream: https://gitlab.com/NTPsec/ntpsec/-/merge_requests/1245]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- ntptime/ntptime.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/ntptime/ntptime.c b/ntptime/ntptime.c
+-index ff861cb3b..7fbd09977 100644
+---- a/ntptime/ntptime.c
+-+++ b/ntptime/ntptime.c
+-@@ -138,7 +138,7 @@ main(
+- 			ntx.modes |= MOD_NANO;
+- 			break;
+- #endif
+--#if defined NTP_API && NTP_API > 3
+-+#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
+- 		case 'T':
+- 			ntx.modes = MOD_TAI;
+- 			ntx.constant = atoi(ntp_optarg);
+-@@ -222,7 +222,7 @@ main(
+- #else
+- "",
+- #endif
+--#if defined NTP_API && NTP_API > 3
+-+#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
+- "-T tai_offset	set TAI offset\n",
+- #else
+- "",
+-@@ -305,21 +305,21 @@ main(
+- 		const char *ofmt2 = "  time %s, (.%0*d),\n";
+- 		const char *ofmt3 = "  maximum error %lu us, estimated error %lu us";
+- 		const char *ofmt4 = "  ntptime=%x.%x unixtime=%x.%0*d %s";
+--#if defined NTP_API && NTP_API > 3
+-+#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
+- 		const char *ofmt5 = ", TAI offset %ld\n";
+- #else
+- 		const char *ofmt6 = "\n";
+--#endif /* NTP_API */
+-+#endif /* HAVE_STRUCT_NTPTIMEVAL_TAI */
+- 		/* JSON formats */
+- 		const char *jfmt1 = "{\"gettime-code\":%d,\"gettime-status\":\"%s\",";
+- 		const char *jfmt2 = "\"time\":\"%s\",\"fractional-time\":\".%0*d\",";
+- 		const char *jfmt3 = "\"maximum-error\":%lu,\"estimated-error\":%lu,";
+- 		const char *jfmt4 = "\"raw-ntp-time\":\"%x.%x\",\"raw-unix-time\":\"%x.%0*d %s\",";
+--#if defined NTP_API && NTP_API > 3
+-+#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
+- 		const char *jfmt5 = "\"TAI-offset\":%d,";
+- #else
+- 		const char *jfmt6 = "";
+--#endif /* NTP_API */
+-+#endif /* HAVE_STRUCT_NTPTIMEVAL_TAI */
+- 		printf(json ? jfmt1 : ofmt1, status, timex_state(status));
+- 		time_frac = ntv.time.tv_frac_sec;
+- #ifdef STA_NANO
+--- 
+-2.34.1
+-
+diff --git a/package/ntpsec/0002-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch b/package/ntpsec/0001-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch
+similarity index 100%
+rename from package/ntpsec/0002-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch
+rename to package/ntpsec/0001-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch
+diff --git a/package/ntpsec/0003-fix-build-with-libressl.patch b/package/ntpsec/0003-fix-build-with-libressl.patch
+deleted file mode 100644
+index a5c9543157..0000000000
+--- a/package/ntpsec/0003-fix-build-with-libressl.patch
++++ /dev/null
+@@ -1,80 +0,0 @@
+-From 743f16fb3fed9a05e601226f184be236614efe9a Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 12 Aug 2022 23:35:52 +0200
+-Subject: [PATCH] fix build with libressl
+-
+-Fix the following build failure with libressl:
+-
+-/home/buildroot/autobuild/instance-0/output-1/host/lib/gcc/armeb-buildroot-linux-gnueabi/11.3.0/../../../../armeb-buildroot-linux-gnueabi/bin/ld: libntp/libntp.a(ntp_random.c.1.o): in function `ntp_RAND_priv_bytes':
+-ntp_random.c:(.text+0xac): undefined reference to `RAND_priv_bytes'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/a6a825b7f0efc7c82e8ecf792a1f9951ffb047c5
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.com/NTPsec/ntpsec/-/merge_requests/1285]
+----
+- attic/cmac-timing.c | 2 ++
+- attic/random.c      | 8 ++++++++
+- libntp/ntp_random.c | 2 +-
+- 3 files changed, 11 insertions(+), 1 deletion(-)
+-
+-diff --git a/attic/cmac-timing.c b/attic/cmac-timing.c
+-index 464daa76b..4f2fd3338 100644
+---- a/attic/cmac-timing.c
+-+++ b/attic/cmac-timing.c
+-@@ -204,7 +204,9 @@ static void DoPKEY(
+- 		printf("## Oops, EVP_MD_CTX_new() failed.\n");
+- 		return;
+- 	}
+-+#ifdef EVP_MD_CTX_FLAG_FINALISE
+- 	EVP_MD_CTX_set_flags(ctx, EVP_MD_CTX_FLAG_FINALISE);
+-+#endif
+- 
+- 	clock_gettime(CLOCK_MONOTONIC, &start);
+- 	for (int i = 0; i < SAMPLESIZE; i++) {
+-diff --git a/attic/random.c b/attic/random.c
+-index 446c68535..8530ecd25 100644
+---- a/attic/random.c
+-+++ b/attic/random.c
+-@@ -127,7 +127,11 @@ static int do_avg_priv(unsigned int bytes) {
+- 
+- 	clock_gettime(CLOCK_REALTIME, &start);
+- 	for (int i = 0; i < BATCHSIZE; i++) {
+-+#ifdef LIBRESSL_VERSION_NUMBER
+-+            err += RAND_bytes((unsigned char *)&rnd, bytes);
+-+#else
+-             err += RAND_priv_bytes((unsigned char *)&rnd, bytes);
+-+#endif
+- 	}
+- 	clock_gettime(CLOCK_REALTIME, &stop);
+- 
+-@@ -209,7 +213,11 @@ static int do_fast_priv(unsigned bytes) {
+- 
+- 	for (int i = 0; i < BATCHSIZE; i++) {
+-                 clock_gettime(CLOCK_REALTIME, &start);
+-+#ifdef LIBRESSL_VERSION_NUMBER
+-+                err += RAND_bytes((unsigned char *)&rnd, bytes);
+-+#else
+-                 err += RAND_priv_bytes((unsigned char *)&rnd, bytes);
+-+#endif
+- 		clock_gettime(CLOCK_REALTIME, &stop);
+- 		sec = (stop.tv_sec-start.tv_sec);
+- 		nanos = sec*BILLION + (stop.tv_nsec-start.tv_nsec);
+-diff --git a/libntp/ntp_random.c b/libntp/ntp_random.c
+-index 9304a790d..adb375b24 100644
+---- a/libntp/ntp_random.c
+-+++ b/libntp/ntp_random.c
+-@@ -29,7 +29,7 @@ void ntp_RAND_bytes(unsigned char *buf, int num) {
+- 
+- void ntp_RAND_priv_bytes(unsigned char *buf, int num) {
+- 	int err;
+--#if (OPENSSL_VERSION_NUMBER > 0x1010100fL)
+-+#if (OPENSSL_VERSION_NUMBER > 0x1010100fL) && !defined(LIBRESSL_VERSION_NUMBER)
+- 	err = RAND_priv_bytes(buf, num);
+- #else
+- 	err = RAND_bytes(buf, num);
+--- 
+-2.35.1
+-
+diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
+index 49dc4e4d52..44e04b2403 100644
+--- a/package/ntpsec/ntpsec.hash
++++ b/package/ntpsec/ntpsec.hash
+@@ -1,4 +1,8 @@
+ # Locally calculated
+-sha256  71c9f4bde6953bbc048bbaf278da81c451a56cc08d6772542b4ad37c67d72e89  ntpsec-NTPsec_1_2_1.tar.bz2
+-sha256  b4db4de3317c3b0554ed91eb692968800bdfd6ad2c16ffbeee8ce4895ed91da4  LICENSE.adoc
++sha256  ad45f5b88d08a159bc9f44ecb79e08358d26d3d22bb6c96ab7aaa3734de130e6  ntpsec-NTPsec_1_2_2.tar.bz2
++sha256  899261d6eb6c922cf8f051225411f27b738ba0014be18c2eaf6afbf30d421bb1  LICENSES/BSD-2
++sha256  5fe38d8724c53ff4e69f0a3492a368b4a6719700ac16f706efeb01a45c62f2b5  LICENSES/BSD-3
++sha256  9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411  LICENSES/CC-BY-4.0
++sha256  074415b57c6ba1780483d89e55f40dec3ded96c28aaf47d63c486683ba553e7c  LICENSES/MIT
++sha256  62fec6cd79721af81b7c12f1a679535235fdd22800ab17653042f024187ff274  LICENSES/NTP
+ sha256  d3b21470adadd9abd9c6d675378f8c371ac5a4ea6dbec91859e02fadca3c0856  docs/copyright.adoc
+diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
+index ac4b90e37a..c7fa2f85a8 100644
+--- a/package/ntpsec/ntpsec.mk
++++ b/package/ntpsec/ntpsec.mk
+@@ -6,12 +6,18 @@
  
- 	  https://github.com/intel/gmmlib
+ NTPSEC_VERSION_MAJOR = 1
+ NTPSEC_VERSION_MINOR = 2
+-NTPSEC_VERSION_POINT = 1
++NTPSEC_VERSION_POINT = 2
+ NTPSEC_VERSION = $(NTPSEC_VERSION_MAJOR)_$(NTPSEC_VERSION_MINOR)_$(NTPSEC_VERSION_POINT)
+ NTPSEC_SOURCE = ntpsec-NTPsec_$(NTPSEC_VERSION).tar.bz2
+ NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(NTPSEC_VERSION)
+-NTPSEC_LICENSE = BSD-2-Clause, NTP, BSD-3-Clause, MIT
+-NTPSEC_LICENSE_FILES = LICENSE.adoc docs/copyright.adoc
++NTPSEC_LICENSE = BSD-2-Clause, NTP, BSD-3-Clause, MIT, CC-BY-4.0 (docs)
++NTPSEC_LICENSE_FILES = \
++	LICENSES/BSD-2 \
++	LICENSES/BSD-3 \
++	LICENSES/CC-BY-4.0 \
++	LICENSES/MIT \
++	LICENSES/NTP \
++	docs/copyright.adoc
  
--comment "intel-gmmlib needs a toolchain w/ dynamic library, C++"
--	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
-+comment "intel-gmmlib needs a toolchain w/ dynamic library, C++, threads"
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
-index ad56590008..537e4abd2f 100644
---- a/package/intel-mediadriver/Config.in
-+++ b/package/intel-mediadriver/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_INTEL_MEDIADRIVER
- 	depends on !BR2_STATIC_LIBS # mesa3d, libva
- 	depends on BR2_INSTALL_LIBSTDCPP # intel-gmmlib, mesa3d
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # intel-gmmlib, libva
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mesa3d
- 	select BR2_PACKAGE_INTEL_GMMLIB
- 	select BR2_PACKAGE_LIBPCIACCESS
+ NTPSEC_CPE_ID_VENDOR = ntpsec
+ NTPSEC_CPE_ID_VERSION = $(NTPSEC_VERSION_MAJOR).$(NTPSEC_VERSION_MINOR)
+
+--===============5659424476721338292==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5659424476721338292==--
