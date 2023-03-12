@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB0EC6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 14:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E870C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 14:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB31340376;
-	Sun, 12 Mar 2023 14:50:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB31340376
+	by smtp2.osuosl.org (Postfix) with ESMTP id 57DB240484;
+	Sun, 12 Mar 2023 14:51:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57DB240484
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Uf1liti2KDtT; Sun, 12 Mar 2023 14:50:24 +0000 (UTC)
+	with ESMTP id dO9EplAo6FS8; Sun, 12 Mar 2023 14:51:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DDE1040518;
-	Sun, 12 Mar 2023 14:50:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDE1040518
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90B9940283;
+	Sun, 12 Mar 2023 14:51:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90B9940283
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11B1A1BF31F
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 14:49:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DF7AF1BF31F
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 14:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC68D40484
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 14:49:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC68D40484
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7C6840283
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 14:51:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7C6840283
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T7i0MvKplWao for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 14:49:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB31F40518
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 14:49:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB31F40518
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C865D86F21; Sun, 12 Mar 2023 14:49:43 +0000 (UTC)
+ with ESMTP id jYpXJo-jwilo for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 14:51:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B42B940025
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B42B940025
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 14:51:13 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 86CCF20002;
+ Sun, 12 Mar 2023 14:51:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pbN2T-008Bbc-IJ; Sun, 12 Mar 2023 15:51:09 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 15:48:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ca0250eb991570f6137a84ceab86d9cb9cd9ac5
-X-Git-Newrev: 9f388f0b4ca276bdcddd244454811382d447b383
-X-Patchwork-Hint: ignore
-Message-Id: <20230312144943.C865D86F21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8192eu: fix build failure on
- PowerPC
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230221152722.2418893-1-fontaine.fabrice@gmail.com>
+Date: Sun, 12 Mar 2023 15:51:09 +0100
+In-Reply-To: <20230221152722.2418893-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 21 Feb 2023 16:27:22 +0100")
+Message-ID: <87y1o2yqea.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/janet: needs gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,159 +63,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f388f0b4ca276bdcddd244454811382d447b383
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Add local patch pending upstream[0] to fix build failure for conflicting
-get_ra() on PowerPC architecture.
+ > janet needs gcc >= 4.9 for stdatomic.h since version 1.26.0 and
+ > https://github.com/janet-lang/janet/commit/bfcfd58259911b92ff516bab9216831b34653805
+ > resulting in the following build failure since commit
+ > 5c6f32bd255fc97823d464beacfa905a141066ec:
 
-Fixes:
-http://autobuild.buildroot.net/results/b248203c7affe183dd297075a540389a82cdae8f
+ > src/core/abstract.c:35:23: fatal error: stdatomic.h: No such file or directory
 
-[0]: package/rtl8192eu/0002-Fix-conflicting-get_ra-on-PowerPC.patch
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a2b40adb93b751221ba2cdf9a705f86c30499021
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-Fix-conflicting-get_ra-on-PowerPC.patch   | 124 +++++++++++++++++++++
- 1 file changed, 124 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/rtl8192eu/0002-Fix-conflicting-get_ra-on-PowerPC.patch b/package/rtl8192eu/0002-Fix-conflicting-get_ra-on-PowerPC.patch
-new file mode 100644
-index 0000000000..dbc4ddd2e8
---- /dev/null
-+++ b/package/rtl8192eu/0002-Fix-conflicting-get_ra-on-PowerPC.patch
-@@ -0,0 +1,124 @@
-+From 4a7e9c3c02a759d818a68c5d23ad7623d8b82ee6 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sat, 11 Mar 2023 19:26:32 +0100
-+Subject: [PATCH] Fix conflicting get_ra() on PowerPC
-+
-+In PowerPc Linux only get_ra() exists[0] and conflicts with local get_ra()
-+that has a completely different purpose. So let's rename local get_ra()
-+to rtl_get_ra() to make it different from Linux's get_ra().
-+
-+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/include/asm/disassemble.h?h=v6.1-rc7#n49
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ core/rtw_odm.c                | 6 +++---
-+ core/rtw_recv.c               | 6 +++---
-+ hal/hal_com.c                 | 2 +-
-+ include/wifi.h                | 2 +-
-+ os_dep/linux/ioctl_cfg80211.c | 2 +-
-+ 5 files changed, 9 insertions(+), 9 deletions(-)
-+
-+diff --git a/core/rtw_odm.c b/core/rtw_odm.c
-+index 750598c..18e0222 100644
-+--- a/core/rtw_odm.c
-++++ b/core/rtw_odm.c
-+@@ -258,7 +258,7 @@ void rtw_odm_parse_rx_phy_status_chinfo(union recv_frame *rframe, u8 *phys)
-+ 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u)\n"
-+ 					, *phys & 0xf
-+ 					, MAC_ARG(get_ta(wlanhdr))
-+-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-++					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
-+ 					, HDATA_RATE(attrib->data_rate)
-+ 					, phys_t0->band, phys_t0->channel, phys_t0->rxsc
-+ 				);
-+@@ -368,7 +368,7 @@ type1_end:
-+ 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, rf_mode:%u, l_rxsc:%u, ht_rxsc:%u) => %u,%u\n"
-+ 					, *phys & 0xf
-+ 					, MAC_ARG(get_ta(wlanhdr))
-+-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-++					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
-+ 					, HDATA_RATE(attrib->data_rate)
-+ 					, phys_t1->band, phys_t1->channel, phys_t1->rf_mode, phys_t1->l_rxsc, phys_t1->ht_rxsc
-+ 					, pkt_cch, pkt_bw
-+@@ -386,7 +386,7 @@ type1_end:
-+ 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u, ht_rxsc:%u)\n"
-+ 					, *phys & 0xf
-+ 					, MAC_ARG(get_ta(wlanhdr))
-+-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-++					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
-+ 					, HDATA_RATE(attrib->data_rate)
-+ 					, phys_t2->band, phys_t2->channel, phys_t2->l_rxsc, phys_t2->ht_rxsc
-+ 				);
-+diff --git a/core/rtw_recv.c b/core/rtw_recv.c
-+index 63ecbc6..d52a7bb 100755
-+--- a/core/rtw_recv.c
-++++ b/core/rtw_recv.c
-+@@ -4245,7 +4245,7 @@ int recv_func(_adapter *padapter, union recv_frame *rframe)
-+ 
-+ 	if (check_fwstate(mlmepriv, WIFI_MONITOR_STATE) 
-+ #ifdef RTW_SIMPLE_CONFIG
-+-		|| (check_fwstate(mlmepriv, WIFI_AP_STATE) && padapter->rtw_simple_config == _TRUE && IS_MCAST(get_ra(ptr)))
-++		|| (check_fwstate(mlmepriv, WIFI_AP_STATE) && padapter->rtw_simple_config == _TRUE && IS_MCAST(rtl_get_ra(ptr)))
-+ #endif
-+ 		) {
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
-+@@ -4598,7 +4598,7 @@ void rx_query_phy_status(
-+ 	wlanhdr = get_recvframe_data(precvframe);
-+ 
-+ 	ta = get_ta(wlanhdr);
-+-	ra = get_ra(wlanhdr);
-++	ra = rtl_get_ra(wlanhdr);
-+ 	is_ra_bmc = IS_MCAST(ra);
-+ 
-+ 	if (_rtw_memcmp(adapter_mac_addr(padapter), ta, ETH_ALEN) == _TRUE) {
-+@@ -4746,7 +4746,7 @@ s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
-+ {
-+ 	s32 ret = _SUCCESS;
-+ 	u8 *pbuf = precvframe->u.hdr.rx_data;
-+-	u8 *ra = get_ra(pbuf);
-++	u8 *ra = rtl_get_ra(pbuf);
-+ 	u8 ra_is_bmc = IS_MCAST(ra);
-+ 	bool phy_queried = 0;
-+ 	_adapter *primary_padapter = precvframe->u.hdr.adapter;
-+diff --git a/hal/hal_com.c b/hal/hal_com.c
-+index 96c7ade..fe5b156 100755
-+--- a/hal/hal_com.c
-++++ b/hal/hal_com.c
-+@@ -13590,7 +13590,7 @@ void rtw_store_phy_info(_adapter *padapter, union recv_frame *prframe)
-+ 
-+ 			/*RTW_INFO("=>%s WIFI_DATA_TYPE or WIFI_QOS_DATA_TYPE\n", __FUNCTION__);*/
-+ 			if (psta) {
-+-				if (IS_MCAST(get_ra(get_recvframe_data(prframe))))
-++				if (IS_MCAST(rtl_get_ra(get_recvframe_data(prframe))))
-+ 					psta_dframe_info = &psta->sta_dframe_info_bmc;
-+ 				else
-+ 					psta_dframe_info = &psta->sta_dframe_info;
-+diff --git a/include/wifi.h b/include/wifi.h
-+index 322cfba..dd289f2 100644
-+--- a/include/wifi.h
-++++ b/include/wifi.h
-+@@ -459,7 +459,7 @@ __inline static int IS_MCAST(const u8 *da)
-+ 		return _FALSE;
-+ }
-+ 
-+-__inline static unsigned char *get_ra(unsigned char *pframe)
-++__inline static unsigned char *rtl_get_ra(unsigned char *pframe)
-+ {
-+ 	unsigned char	*ra;
-+ 	ra = GetAddr1Ptr(pframe);
-+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
-+index 942971f..f36c77a 100755
-+--- a/os_dep/linux/ioctl_cfg80211.c
-++++ b/os_dep/linux/ioctl_cfg80211.c
-+@@ -7076,7 +7076,7 @@ void rtw_cfg80211_rx_p2p_action_public(_adapter *adapter, union recv_frame *rfra
-+ indicate:
-+ #endif
-+ 	#if defined(RTW_DEDICATED_P2P_DEVICE)
-+-	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), get_ra(frame), &wdev))
-++	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), rtl_get_ra(frame), &wdev))
-+ 		if (0)
-+ 			RTW_INFO("redirect to pd_wdev:%p\n", wdev);
-+ 	#endif
-+-- 
-+2.34.1
-+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
