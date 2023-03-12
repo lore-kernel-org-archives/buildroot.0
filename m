@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26903C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 10:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4F53C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 10:08:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C651A8174F;
-	Sun, 12 Mar 2023 10:08:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C651A8174F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3816B819C8;
+	Sun, 12 Mar 2023 10:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3816B819C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tPrhWq0uirHs; Sun, 12 Mar 2023 10:08:09 +0000 (UTC)
+	with ESMTP id 588Rs_Irn08U; Sun, 12 Mar 2023 10:08:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09D50813EA;
-	Sun, 12 Mar 2023 10:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09D50813EA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C98AD1BF310
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 10:08:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7ECDB81BA9;
+	Sun, 12 Mar 2023 10:08:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7ECDB81BA9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EEEEC1BF310
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 10:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C444813EA
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 10:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C444813EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id C866360B26
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 10:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C866360B26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CUYY2NINC1EJ for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 10:08:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F6C7813B9
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 10:08:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F6C7813B9
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8389986EA5; Sun, 12 Mar 2023 10:08:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:59:03 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6a8e1e220fb283d57f07d68e96312a5215afd517
-X-Git-Newrev: 9ce280ba180f8668bfcd92175842a3c2d9567223
-X-Patchwork-Hint: ignore
-Message-Id: <20230312100805.8389986EA5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libcamera-apps: bump
- to version 1.1.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xna3p1gjirXH for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 10:08:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC5E560B19
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BC5E560B19
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 10:08:11 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 12667100003;
+ Sun, 12 Mar 2023 10:08:09 +0000 (UTC)
+Date: Sun, 12 Mar 2023 11:08:09 +0100
+To: Marcus Folkesson <marcus.folkesson@gmail.com>
+Message-ID: <20230312110809.1772d71c@windsurf>
+In-Reply-To: <20230309220414.4174769-1-marcus.folkesson@gmail.com>
+References: <20230309220414.4174769-1-marcus.folkesson@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678615690;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9Lr+nP7MVe9EPJN+4hjJh3dFFTQKny5Xmy0Hh183Hag=;
+ b=fLhvOa+2bY+oC/w5TEdIWmITLRWix0QVJKnAhaeyKFD4koyjJMIKSC1kJ9dOxX0uQFC76X
+ ObplhqFTBiA4g6jQsQ4h1MozxfAvzHx4td61kb+CZrikHhbmFF6QaMu552pWWyjz9hHxP2
+ 3VbWBZrsiJnv/XJ24UkxKRPuw12+fXwFzXQ8BWC79vDsFbab0BdDlAAR9P78nbGgo7tR4b
+ IDHkUyM85rNI7GEYE9GTdsjPrDXKqF37O2pFw3ZaaUv/Ltld8w0wVW53+ntRIXt9/bONlP
+ jX3MrdhclBWYNv5993SyFZQMYiOut/Lo9Gu5Q7rv5OqAF/SYDMRy2nEi23uNKg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fLhvOa+2
+Subject: Re: [Buildroot] [PATCH] package/libcamera-apps: bump to version
+ 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,86 +77,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ce280ba180f8668bfcd92175842a3c2d9567223
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Thu,  9 Mar 2023 23:04:14 +0100
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ore-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch | 35 ----------------------
- package/libcamera-apps/libcamera-apps.hash         |  2 +-
- package/libcamera-apps/libcamera-apps.mk           |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
+>  ...ass-VIDIOC_QUERYCAP-as-unsigned-long.patch | 35 -------------------
+>  package/libcamera-apps/libcamera-apps.hash    |  2 +-
+>  package/libcamera-apps/libcamera-apps.mk      |  2 +-
+>  3 files changed, 2 insertions(+), 37 deletions(-)
+>  delete mode 100644 package/libcamera-apps/0001-core-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch
 
-diff --git a/package/libcamera-apps/0001-core-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch b/package/libcamera-apps/0001-core-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch
-deleted file mode 100644
-index fbd1d2d4ba..0000000000
---- a/package/libcamera-apps/0001-core-pass-VIDIOC_QUERYCAP-as-unsigned-long.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From a65682a97e19f96b86aeceb3ca3befb1687e3861 Mon Sep 17 00:00:00 2001
--From: Marcus Folkesson <marcus.folkesson@gmail.com>
--Date: Tue, 31 Jan 2023 09:14:15 +0100
--Subject: [PATCH] core: pass VIDIOC_QUERYCAP as unsigned long
--
--VIDIOC_QUARYCAP is an unsigned long and should be passed as one.
--
--Get rid of the following error:
--core/libcamera_app.cpp:33:22: error: overflow in conversion from 'long unsigned int' to 'int' changes value from '2154321408' to '-2140645888' [-Werror=overflow]
--   33 |  int ret = ioctl(fd, VIDIOC_QUERYCAP, &caps);
--
--Upstream: https://github.com/raspberrypi/libcamera-apps/commit/a65682a97e19f96b86aeceb3ca3befb1687e3861
--Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-----
-- core/libcamera_app.cpp | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/core/libcamera_app.cpp b/core/libcamera_app.cpp
--index 04696fb..8cb6563 100644
----- a/core/libcamera_app.cpp
--+++ b/core/libcamera_app.cpp
--@@ -30,7 +30,9 @@ static void check_camera_stack()
-- 		return;
-- 
-- 	v4l2_capability caps;
---	int ret = ioctl(fd, VIDIOC_QUERYCAP, &caps);
--+	unsigned long request = VIDIOC_QUERYCAP;
--+
--+	int ret = ioctl(fd, request, &caps);
-- 	close(fd);
-- 
-- 	if (ret < 0 || strcmp((char *)caps.driver, "bm2835 mmal"))
---- 
--2.38.1
--
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-index fbb3150cb5..20a06aa8fe 100644
---- a/package/libcamera-apps/libcamera-apps.hash
-+++ b/package/libcamera-apps/libcamera-apps.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c05e29e02da05fa92739941295d96dcb93324805f7b348ad182e7e29e7e0c520  libcamera-apps-1.1.1.tar.gz
-+sha256  a19f3960b97ec1c0d42df8af972868ff0d4c48be6096e7ac02dbaaa4c7c75636  libcamera-apps-1.1.2.tar.gz
- sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index 290ee9a026..ba45ab21ca 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCAMERA_APPS_VERSION = 1.1.1
-+LIBCAMERA_APPS_VERSION = 1.1.2
- LIBCAMERA_APPS_SITE = $(call github,raspberrypi,libcamera-apps,v$(LIBCAMERA_APPS_VERSION))
- LIBCAMERA_APPS_LICENSE = BSD-2-Clause
- LIBCAMERA_APPS_LICENSE_FILES = license.txt
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
