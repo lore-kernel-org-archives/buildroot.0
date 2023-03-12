@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF7A9C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C48BC6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:58:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74F4940571;
-	Sun, 12 Mar 2023 21:57:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74F4940571
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5BB640896;
+	Sun, 12 Mar 2023 21:58:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5BB640896
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id acCcFoye4xBu; Sun, 12 Mar 2023 21:57:54 +0000 (UTC)
+	with ESMTP id Lua_Th98jHN4; Sun, 12 Mar 2023 21:58:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73553410C6;
-	Sun, 12 Mar 2023 21:57:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73553410C6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EA6921BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B30AC416B5;
+	Sun, 12 Mar 2023 21:58:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B30AC416B5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 59CA11BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CEB840614
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CEB840614
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3073B60DC2
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3073B60DC2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xWjWPRL6fWUe for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y6d1AxVGA4FW for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4762D40603
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4762D40603
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DD7460D64
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DD7460D64
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 446EA87007; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ id 4EE2987006; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:58:24 +0100
+Date: Sun, 12 Mar 2023 18:59:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f32176a7671d8842b175077a92e268226fcec78f
-X-Git-Newrev: 6a8e1e220fb283d57f07d68e96312a5215afd517
+X-Git-Oldrev: 38c581b05cd8e7967783410b36c14b9b561acd12
+X-Git-Newrev: a1f00209c20e6d5fc2712c8b4746f3ac5d94df7f
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214624.446EA87007@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libwebsockets: enable libev and
- libevent support indipendently
+Message-Id: <20230312214625.4EE2987006@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 7.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,56 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a8e1e220fb283d57f07d68e96312a5215afd517
+commit: https://git.buildroot.net/buildroot/commit/?id=a1f00209c20e6d5fc2712c8b4746f3ac5d94df7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libev and libevent can be enabled at the same time since version 4.1.0,
-thanks to the event lib support refactoring into plugins, which is enabled by
-default for unix platform builds (LWS_WITH_EVLIB_PLUGINS=ON):
-https://github.com/warmcat/libwebsockets/commit/c6c7ab2b4498c62bf9461b36395d8466e023575d
+Since the major release changed all the packages that have direct
+dependency to harfbuzz has been succesfully built:
+- efl
+- libass
+- mupdf
+- pango
+- qt5base
+- qt5webengine
+- qt6base
+- sdl2_ttf
+- supertuxkart
+- vlc
+- webkitgtk
+- wpewebkit
 
-In this way, libwebsockets can be compiled with both libev and libevent
-support, which is then user-selectable at runtime.
-
-This basically restores the behavior changed by previous commit 27f257e.
-
-Signed-off-by: Luca Pesce <luca.pesce@vimar.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libwebsockets/libwebsockets.mk | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 79624948a5..fb0ee66883 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -57,18 +57,16 @@ endif
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 9489f25c6a..e881f58510 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d  harfbuzz-5.3.1.tar.xz
++sha256  f135a61cd464c9ed6bc9823764c188f276c3850a8dc904628de2a87966b7077b  harfbuzz-7.1.0.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index b0112168e1..24c6f3ef27 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBEV),y)
- LIBWEBSOCKETS_DEPENDENCIES += libev
--LIBWEBSOCKETS_CONF_OPTS += \
--	-DLWS_WITH_LIBEV=ON \
--	-DLWS_WITH_LIBEVENT=OFF
--else ifeq ($(BR2_PACKAGE_LIBEVENT),y)
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=ON
-+else
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBWEBSOCKETS_DEPENDENCIES += libevent
--LIBWEBSOCKETS_CONF_OPTS += \
--	-DLWS_WITH_LIBEV=OFF \
--	-DLWS_WITH_LIBEVENT=ON
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=ON
- else
--LIBWEBSOCKETS_CONF_OPTS += \
--	-DLWS_WITH_LIBEV=OFF \
--	-DLWS_WITH_LIBEVENT=OFF
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+-HARFBUZZ_VERSION = 5.3.1
++HARFBUZZ_VERSION = 7.1.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
