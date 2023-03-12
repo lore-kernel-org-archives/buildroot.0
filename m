@@ -4,46 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7271BC6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14692C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:59:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A17F41748;
-	Sun, 12 Mar 2023 21:59:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A17F41748
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACCDC4194B;
+	Sun, 12 Mar 2023 21:59:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACCDC4194B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FI71hAl2n-Wk; Sun, 12 Mar 2023 21:59:43 +0000 (UTC)
+	with ESMTP id kfctpqXFW0YJ; Sun, 12 Mar 2023 21:59:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F60F41768;
-	Sun, 12 Mar 2023 21:59:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F60F41768
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 88E8A1BF863
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 654D541CB5;
+	Sun, 12 Mar 2023 21:59:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 654D541CB5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 96B021BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B24A60E1B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C2764061C
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B24A60E1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C2764061C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L6xTOgpWB6VS for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 53dsn6RkpYBC for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A19A060E38
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9899F408A6
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A19A060E38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9899F408A6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F87787008; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+ id 9174987007; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 20:31:01 +0100
+Date: Sun, 12 Mar 2023 20:27:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c3cdee11a21380f8141ec4379f8a67dea4481a7
-X-Git-Newrev: f50259d6a0c0e8ba2149aea04c7dc98fe4707abb
+X-Git-Oldrev: bcf9d2f51cd5c80191b63020412631a548e32a7d
+X-Git-Newrev: 9c3cdee11a21380f8141ec4379f8a67dea4481a7
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214625.9F87787008@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus-broker: bump to release 33
+Message-Id: <20230312214625.9174987007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_shadow.py: drop blank line at end of
+ file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f50259d6a0c0e8ba2149aea04c7dc98fe4707abb
+commit: https://git.buildroot.net/buildroot/commit/?id=9c3cdee11a21380f8141ec4379f8a67dea4481a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release contains mostly a bugfixes, with some improvements around
-error handling for unimplemented functionality and resiliency against
-runtime changes of dbus service-files.
+Fixes:
 
-Also update hashes of license files. There was no change in license,
-the hashes changed due to copyright date bump and additional authors
-listend in the same files.
+support/testing/tests/package/test_shadow.py:55:1: W391 blank line at end of file
+1     W391 blank line at end of file
+make: *** [Makefile:1253: check-flake8] Error 123
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+https://gitlab.com/buildroot.org/buildroot/-/jobs/3918132888
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus-broker/dbus-broker.hash | 6 +++---
- package/dbus-broker/dbus-broker.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/testing/tests/package/test_shadow.py | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/dbus-broker/dbus-broker.hash b/package/dbus-broker/dbus-broker.hash
-index f6c2cbe160..06c8f229b7 100644
---- a/package/dbus-broker/dbus-broker.hash
-+++ b/package/dbus-broker/dbus-broker.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  bea7f653e7251063c5f427e9e3f93562d38a0d8667ae6d49fb56f113605985de  dbus-broker-32.tar.xz
-+sha256  23713f25624749fdb274907e429080fa2d8f4dbe76acd87bb6d21a3c818c7841  dbus-broker-33.tar.xz
- sha256  3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4  LICENSE
- sha256  20ea1f96abc15553695c6725bb3dcabff4b43b85b7ca7d675a2b8860e3b01f87  subprojects/libcdvar-1/AUTHORS
- sha256  8153c478102dc209b30dd4627cf5bb3596263f99692bf3eec174b1e17bbf8a3b  subprojects/libcdvar-1/README.md
-@@ -11,7 +11,7 @@ sha256  23f24eeaaded5fedd6e7840b6f7b73838f9a4e2112ad6a12fe1ef958f73d0214  subpro
- sha256  05113a24aca4c537819dd0d91b95b13edb85bea4b6a77a6d9269becb397ed374  subprojects/libcrbtree-3/README.md
- sha256  6d63b1fb794d4c02622595ad30357c90398aa883864e5a275479139c8f03208f  subprojects/libcshquote-1/AUTHORS
- sha256  cad109dd33062518a437ebee145ba863fe0e047d4e3db9c28b0bf3c6148f10c2  subprojects/libcshquote-1/README.md
--sha256  32913ba08dc041f3f4ca361fc0d68014120e1c612772aabbcc901556df499ce5  subprojects/libcstdaux-1/AUTHORS
--sha256  7c4b6c325b0bc02150089112f65132ee999b0f44500b73d1fc06d96c93161037  subprojects/libcstdaux-1/README.md
-+sha256  e796182869fe0892347d069f3f423774124987d6c45d016854fc51530633c177  subprojects/libcstdaux-1/AUTHORS
-+sha256  92006886d7f28894fef08bf97e35ef52147067bd3c4d4d6381da7c59f9901dae  subprojects/libcstdaux-1/README.md
- sha256  7e660796fea0400a1a9a539226c345b3c656a745a334e323e33258de7864e985  subprojects/libcutf8-1/AUTHORS
- sha256  106099cc1c488cbf8911f56da7977a955f6b27a7bb5b815985e59d9fae0e6fe7  subprojects/libcutf8-1/README.md
-diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-index e82b79220d..c4e3679a2e 100644
---- a/package/dbus-broker/dbus-broker.mk
-+++ b/package/dbus-broker/dbus-broker.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_BROKER_VERSION = 32
-+DBUS_BROKER_VERSION = 33
- DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
- DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
- 
+diff --git a/support/testing/tests/package/test_shadow.py b/support/testing/tests/package/test_shadow.py
+index c5151b4fdb..09b580de59 100644
+--- a/support/testing/tests/package/test_shadow.py
++++ b/support/testing/tests/package/test_shadow.py
+@@ -52,4 +52,3 @@ class TestShadow(BRTest):
+         self.assertRunOk(f'usermod {username} --home {new_home}')
+         self.assertRunOk(f'test $(su {username} -c \'echo $HOME\') = {new_home}')
+         self.assertRunOk(f'userdel {username}')
+-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
