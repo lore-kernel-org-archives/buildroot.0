@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48EC6C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 13:13:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2825C74A5B
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 13:13:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A815A40025;
-	Sun, 12 Mar 2023 13:13:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A815A40025
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2078A40283;
+	Sun, 12 Mar 2023 13:13:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2078A40283
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xqS1ghWjrrlV; Sun, 12 Mar 2023 13:13:36 +0000 (UTC)
+	with ESMTP id TMl9LWjWUv5k; Sun, 12 Mar 2023 13:13:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CAA5F40283;
-	Sun, 12 Mar 2023 13:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAA5F40283
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 66CA31BF339
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:13:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4585940484;
+	Sun, 12 Mar 2023 13:13:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4585940484
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B57481BF339
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:13:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E5DF81518
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:13:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E5DF81518
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B91C607BC
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 13:13:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B91C607BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CCzaseuMOtRd for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dncuXiPvu7mm for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 13:13:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62BD5605AF
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 62BD5605AF
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 13:13:35 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 80DA4C0002;
  Sun, 12 Mar 2023 13:13:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 558A281467
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 13:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 558A281467
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E6E486EE9; Sun, 12 Mar 2023 13:13:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 14:13:08 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: af9769ad23c67f9bd4d1b038709d41230501efef
-X-Git-Newrev: f69c972ae613719c0ebc5395ba3084c408023102
-X-Patchwork-Hint: ignore
-Message-Id: <20230312131333.3E6E486EE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
+Date: Sun, 12 Mar 2023 14:13:32 +0100
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230312141332.39f358b9@windsurf>
+In-Reply-To: <20230303222658.157671-2-ju.o@free.fr>
+References: <20230303222658.157671-1-ju.o@free.fr>
+ <20230303222658.157671-2-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678626813;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FSOT4OM1CpavWWVZTHvDsMjaOJ1FWJQ3rNQz1C2Lb9c=;
+ b=Dd7AdlLNTXKjk0Bj8Iakt11nCtg5sULIOvxsDD2ECALTI1QY4MXZBONUbUDPsAN77b2/OT
+ oXqqX9s6qMUFZDcz6JAjwVNIN+Q8ii+GpOvxehJ+y4DW59eNMrNKXQDGzbfTf62LSYSuPn
+ YgaI5PZLP/TMfqn47pUYi9NxwBibnVSvsdXZi2VHf3jUE52YTP7pGhgjLA6slIKyew1zLv
+ cxpdmoM2eHlB+k3R/fdkbBfyS2v2brGc1me6WO07UtjU8aDXxlChA8UH4r/Lg1nrdoB1cp
+ crh8a4eExESxigaLw+i8jBjd28C18zcOTfe/KnKXoLbLvc8QNlM4FChdDjML+A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Dd7AdlLN
+Subject: Re: [Buildroot] [PATCH next 2/2]
  support/testing/tests/package/test_kexec.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,146 +79,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f69c972ae613719c0ebc5395ba3084c408023102
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri,  3 Mar 2023 23:26:58 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  2 +
- support/testing/tests/package/test_kexec.py        | 93 ++++++++++++++++++++++
- .../tests/package/test_kexec/linux-kexec.fragment  |  5 ++
- 3 files changed, 100 insertions(+)
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested on branch next at commit b793f3a with commands:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7733d5a04e..f6e120d92b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1718,6 +1718,8 @@ F:	support/testing/tests/package/sample_python_spake2.py
- F:	support/testing/tests/package/test_gnupg2.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
-+F:	support/testing/tests/package/test_kexec.py
-+F:	support/testing/tests/package/test_kexec/
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lsof.py
- F:	support/testing/tests/package/test_ncdu.py
-diff --git a/support/testing/tests/package/test_kexec.py b/support/testing/tests/package/test_kexec.py
-new file mode 100644
-index 0000000000..77e383373e
---- /dev/null
-+++ b/support/testing/tests/package/test_kexec.py
-@@ -0,0 +1,93 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestKexec(infra.basetest.BRTest):
-+
-+    # A specific configuration is needed for using kexec:
-+    # - We use Aarch64 since it is well supported for kexec,
-+    # - A kernel config fragment enables all the kexec parts,
-+    # - The kernel Image is installed on target filesystem to be
-+    #   reloaded through kexec,
-+    # - We use a ext4 rootfs image exposed as a virtio storage (rather
-+    #   than cpio initrd). This avoids needing to install the initrd
-+    #   inside the rootfs.
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.15"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-+        BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_KEXEC=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+            infra.filepath("tests/package/test_kexec/linux-kexec.fragment")
-+        )
-+
-+    def test_run(self):
-+        hda = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        # Notes:
-+        # Sufficient memory is needed to load the kernel: having at
-+        # least 512MB works. kexec could silently fail if not enough
-+        # memory is present. KASLR needs to be disabled for the test:
-+        # we pass "nokaslr" to kernel bootargs, and also pass
-+        # "dtb-kaslr-seed=off" to qemu virt machine.
-+        bootargs = ["root=/dev/vda console=ttyAMA0 nokaslr"]
-+        qemu_opts = ["-M", "virt,dtb-kaslr-seed=off", "-cpu", "cortex-a57", "-m", "512M",
-+                     "-drive", f"file={hda},if=virtio,format=raw"]
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=bootargs,
-+                           options=qemu_opts)
-+        self.emulator.login()
-+
-+        # Test the program can execute
-+        self.assertRunOk("kexec --version")
-+
-+        # Check the kexec kernel is NOT loaded:
-+        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 0")
-+
-+        # Load the Kernel:
-+        # "--append br-test" adds a dummy kernel args we'll be able to
-+        # check in the second executed kernel.
-+        # We use the dtb image from /sys/firmware/fdt (since we don't
-+        # have the dtb file in the system)
-+        self.assertRunOk("kexec -d -l --dtb=/sys/firmware/fdt --reuse-cmdline --serial=ttyAMA0 --append=br-test /boot/Image")
-+
-+        # Check the kexec kernel IS loaded:
-+        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 1")
-+
-+        # Create a marker file in tmpfs which is supposed to disappear
-+        # after kexec kernel restart.
-+        self.assertRunOk("touch /dev/shm/br-kexec-marker")
-+
-+        # Execute the loaded kernel (i.e perform a kexec reboot)
-+        # qemu.sendline() is used here because no exit code nor
-+        # program return is expected, since kexec is like a
-+        # reboot. The login is expected to be reached after the
-+        # command is issued.
-+        self.emulator.qemu.sendline("kexec -d -e")
-+
-+        # Wait for the login, and log again
-+        self.emulator.login()
-+
-+        # Check the "br-test" dummy kernel arg is present
-+        self.assertRunOk("grep br-test /proc/cmdline")
-+
-+        # Check the test marker file is no longer here
-+        self.assertRunOk("test ! -e /dev/shm/br-kexec-marker")
-+
-+        # After restart, the kernel is not supposed to have a kexec
-+        # loaded image:
-+        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 0")
-diff --git a/support/testing/tests/package/test_kexec/linux-kexec.fragment b/support/testing/tests/package/test_kexec/linux-kexec.fragment
-new file mode 100644
-index 0000000000..04c65f5cae
---- /dev/null
-+++ b/support/testing/tests/package/test_kexec/linux-kexec.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_KEXEC=y
-+CONFIG_KEXEC_FILE=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_KALLSYMS_ALL=y
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
