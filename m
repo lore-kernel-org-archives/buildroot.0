@@ -4,47 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F7EC6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 14:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 557C7C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 14:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B45C94060E;
-	Sun, 12 Mar 2023 14:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B45C94060E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C79740487;
+	Sun, 12 Mar 2023 14:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C79740487
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DLH7vavi9gZ2; Sun, 12 Mar 2023 14:51:54 +0000 (UTC)
+	with ESMTP id vZP7Jq8o7WK2; Sun, 12 Mar 2023 14:52:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5D3C40283;
-	Sun, 12 Mar 2023 14:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5D3C40283
+	by smtp2.osuosl.org (Postfix) with ESMTP id 618BF40283;
+	Sun, 12 Mar 2023 14:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 618BF40283
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 891F01BF33B
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 14:51:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EBC381BF31F
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 14:52:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 714B8404BA
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 14:51:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 714B8404BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id D442A40283
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 14:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D442A40283
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KSSMfFdJzM3D for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 14:51:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A04B240025
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 14:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A04B240025
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DBE286F2D; Sun, 12 Mar 2023 14:51:37 +0000 (UTC)
+ with ESMTP id stcPIw7FM5uF for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 14:52:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A04BB4023B
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A04BB4023B
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 14:52:20 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E109AE0002;
+ Sun, 12 Mar 2023 14:52:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pbN3Y-008Bfm-Qj; Sun, 12 Mar 2023 15:52:16 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 15:50:40 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d82fea26623e3934e1e6f82d9f6fce078914419b
-X-Git-Newrev: 3bac7eb69d8a9141e11076628df78ddffae349ba
-X-Patchwork-Hint: ignore
-Message-Id: <20230312145137.8DBE286F2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janet: fix build without threads
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230221151128.1926887-1-fontaine.fabrice@gmail.com>
+Date: Sun, 12 Mar 2023 15:52:16 +0100
+In-Reply-To: <20230221151128.1926887-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 21 Feb 2023 16:11:28 +0100")
+Message-ID: <87pm9eyqcf.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/rtl_433: fix build without
+ threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,64 +64,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bac7eb69d8a9141e11076628df78ddffae349ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix the following build failure without threads raised since bump to
-version 1.26.0 in commit 5c6f32bd255fc97823d464beacfa905a141066ec:
+ > Fix the following build failure without threads raised since bump to
+ > version 22.11 in commit 6f848c068f8ab0cc67fb48582e00221158ddc8cb:
 
-ffi.c:(.text+0x9d8): undefined reference to `janet_abstract_threaded'
+ > In file included from /home/buildroot/autobuild/instance-3/output-1/build/rtl_433-22.11/src/data_tag.c:17:
+ > /home/buildroot/autobuild/instance-3/output-1/build/rtl_433-22.11/include/mongoose.h:407:10: fatal error: pthread.h: No such file or directory
+ >   407 | #include <pthread.h>
+ >       |          ^~~~~~~~~~~
 
-Fixes:
- - http://autobuild.buildroot.org/results/20108e76990d8af7f47d474eadbbea8562ef6728
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/9f1677fc5a4568be0b9c121060c5d821ac2ae21b
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Update-for-more-minimal-builds.patch      | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/janet/0001-Update-for-more-minimal-builds.patch b/package/janet/0001-Update-for-more-minimal-builds.patch
-new file mode 100644
-index 0000000000..ba36a9beba
---- /dev/null
-+++ b/package/janet/0001-Update-for-more-minimal-builds.patch
-@@ -0,0 +1,29 @@
-+From 746ff5307d309536984b648460e7b5c5dac44453 Mon Sep 17 00:00:00 2001
-+From: Calvin Rose <calsrose@gmail.com>
-+Date: Sun, 12 Feb 2023 12:14:11 -0600
-+Subject: [PATCH] Update for more minimal builds.
-+
-+[Retrieved (and backported) from:
-+https://github.com/janet-lang/janet/commit/746ff5307d309536984b648460e7b5c5dac44453]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/core/ffi.c   | 4 ++++
-+ src/core/marsh.c | 2 ++
-+ 2 files changed, 6 insertions(+)
-+
-+diff --git a/src/core/ffi.c b/src/core/ffi.c
-+index 45a498c7..b453f1f6 100644
-+--- a/src/core/ffi.c
-++++ b/src/core/ffi.c
-+@@ -1311,7 +1311,11 @@ JANET_CORE_FN(cfun_ffi_jitfn,
-+     size_t alloc_size = ((size_t) bytes.len + FFI_PAGE_MASK) & ~FFI_PAGE_MASK;
-+ 
-+ #ifdef JANET_FFI_JIT
-++#ifdef JANET_EV
-+     JanetFFIJittedFn *fn = janet_abstract_threaded(&janet_type_ffijit, sizeof(JanetFFIJittedFn));
-++#else
-++    JanetFFIJittedFn *fn = janet_abstract(&janet_type_ffijit, sizeof(JanetFFIJittedFn));
-++#endif
-+     fn->function_pointer = NULL;
-+     fn->size = 0;
-+ #ifdef JANET_WINDOWS
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
