@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BAD9C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77911C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27CBF41CCD;
-	Sun, 12 Mar 2023 22:01:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27CBF41CCD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25B8341C68;
+	Sun, 12 Mar 2023 22:01:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25B8341C68
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XXh6fbiY3PHr; Sun, 12 Mar 2023 22:01:19 +0000 (UTC)
+	with ESMTP id bMDm4sUrYg2t; Sun, 12 Mar 2023 22:01:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAA8741CBA;
-	Sun, 12 Mar 2023 22:01:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAA8741CBA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 928BD41CBA;
+	Sun, 12 Mar 2023 22:01:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 928BD41CBA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B8DB61BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BC3B51BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4ECEE40522
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87EC14062A
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ECEE40522
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87EC14062A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I1o6Fw677uKb for <buildroot@lists.busybox.net>;
+ with ESMTP id MHf-l9KZueof for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71716408B8
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71716408B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED3DD408AF
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED3DD408AF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5FC5787007; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+ id DB1FB87007; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 18:59:40 +0100
+Date: Sun, 12 Mar 2023 14:13:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1f00209c20e6d5fc2712c8b4746f3ac5d94df7f
-X-Git-Newrev: 0a46e6c1981c9a326c7cd3713bd312f9f9bc8f99
+X-Git-Oldrev: af9769ad23c67f9bd4d1b038709d41230501efef
+X-Git-Newrev: f69c972ae613719c0ebc5395ba3084c408023102
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214625.5FC5787007@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mtools: bump to version 4.0.42
+Message-Id: <20230312214624.DB1FB87007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_kexec.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +64,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a46e6c1981c9a326c7cd3713bd312f9f9bc8f99
+commit: https://git.buildroot.net/buildroot/commit/?id=f69c972ae613719c0ebc5395ba3084c408023102
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release announce:
-https://lists.gnu.org/archive/html/info-mtools/2022-10/msg00000.html
-
-For change log since 4.0.38, see:
-https://svn.savannah.gnu.org/viewvc/mtools/tags/4.0.42/NEWS?view=markup
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mtools/mtools.hash | 2 +-
- package/mtools/mtools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/package/test_kexec.py        | 93 ++++++++++++++++++++++
+ .../tests/package/test_kexec/linux-kexec.fragment  |  5 ++
+ 3 files changed, 100 insertions(+)
 
-diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
-index a162bfdc95..b81830a7d2 100644
---- a/package/mtools/mtools.hash
-+++ b/package/mtools/mtools.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  7086821b399a39b8a3c5a372d064de4860f3c195b4911dd4e8b76219fcabe75c  mtools-4.0.38.tar.lz
-+sha256  40a98fd9bcc865997866015013c3c64a304d98c2892fe4ab892ffd6ac3dd9bae  mtools-4.0.42.tar.lz
- 
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
-index c875814bc7..407ac1a2c6 100644
---- a/package/mtools/mtools.mk
-+++ b/package/mtools/mtools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MTOOLS_VERSION = 4.0.38
-+MTOOLS_VERSION = 4.0.42
- MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
- MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
- MTOOLS_LICENSE = GPL-3.0+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7733d5a04e..f6e120d92b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1718,6 +1718,8 @@ F:	support/testing/tests/package/sample_python_spake2.py
+ F:	support/testing/tests/package/test_gnupg2.py
+ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
++F:	support/testing/tests/package/test_kexec.py
++F:	support/testing/tests/package/test_kexec/
+ F:	support/testing/tests/package/test_libjxl.py
+ F:	support/testing/tests/package/test_lsof.py
+ F:	support/testing/tests/package/test_ncdu.py
+diff --git a/support/testing/tests/package/test_kexec.py b/support/testing/tests/package/test_kexec.py
+new file mode 100644
+index 0000000000..77e383373e
+--- /dev/null
++++ b/support/testing/tests/package/test_kexec.py
+@@ -0,0 +1,93 @@
++import os
++
++import infra.basetest
++
++
++class TestKexec(infra.basetest.BRTest):
++
++    # A specific configuration is needed for using kexec:
++    # - We use Aarch64 since it is well supported for kexec,
++    # - A kernel config fragment enables all the kexec parts,
++    # - The kernel Image is installed on target filesystem to be
++    #   reloaded through kexec,
++    # - We use a ext4 rootfs image exposed as a virtio storage (rather
++    #   than cpio initrd). This avoids needing to install the initrd
++    #   inside the rootfs.
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.15"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
++        BR2_LINUX_KERNEL_INSTALL_TARGET=y
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_KEXEC=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """.format(
++            infra.filepath("tests/package/test_kexec/linux-kexec.fragment")
++        )
++
++    def test_run(self):
++        hda = os.path.join(self.builddir, "images", "rootfs.ext4")
++        kern = os.path.join(self.builddir, "images", "Image")
++        # Notes:
++        # Sufficient memory is needed to load the kernel: having at
++        # least 512MB works. kexec could silently fail if not enough
++        # memory is present. KASLR needs to be disabled for the test:
++        # we pass "nokaslr" to kernel bootargs, and also pass
++        # "dtb-kaslr-seed=off" to qemu virt machine.
++        bootargs = ["root=/dev/vda console=ttyAMA0 nokaslr"]
++        qemu_opts = ["-M", "virt,dtb-kaslr-seed=off", "-cpu", "cortex-a57", "-m", "512M",
++                     "-drive", f"file={hda},if=virtio,format=raw"]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=bootargs,
++                           options=qemu_opts)
++        self.emulator.login()
++
++        # Test the program can execute
++        self.assertRunOk("kexec --version")
++
++        # Check the kexec kernel is NOT loaded:
++        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 0")
++
++        # Load the Kernel:
++        # "--append br-test" adds a dummy kernel args we'll be able to
++        # check in the second executed kernel.
++        # We use the dtb image from /sys/firmware/fdt (since we don't
++        # have the dtb file in the system)
++        self.assertRunOk("kexec -d -l --dtb=/sys/firmware/fdt --reuse-cmdline --serial=ttyAMA0 --append=br-test /boot/Image")
++
++        # Check the kexec kernel IS loaded:
++        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 1")
++
++        # Create a marker file in tmpfs which is supposed to disappear
++        # after kexec kernel restart.
++        self.assertRunOk("touch /dev/shm/br-kexec-marker")
++
++        # Execute the loaded kernel (i.e perform a kexec reboot)
++        # qemu.sendline() is used here because no exit code nor
++        # program return is expected, since kexec is like a
++        # reboot. The login is expected to be reached after the
++        # command is issued.
++        self.emulator.qemu.sendline("kexec -d -e")
++
++        # Wait for the login, and log again
++        self.emulator.login()
++
++        # Check the "br-test" dummy kernel arg is present
++        self.assertRunOk("grep br-test /proc/cmdline")
++
++        # Check the test marker file is no longer here
++        self.assertRunOk("test ! -e /dev/shm/br-kexec-marker")
++
++        # After restart, the kernel is not supposed to have a kexec
++        # loaded image:
++        self.assertRunOk("test \"$(cat /sys/kernel/kexec_loaded)\" -eq 0")
+diff --git a/support/testing/tests/package/test_kexec/linux-kexec.fragment b/support/testing/tests/package/test_kexec/linux-kexec.fragment
+new file mode 100644
+index 0000000000..04c65f5cae
+--- /dev/null
++++ b/support/testing/tests/package/test_kexec/linux-kexec.fragment
+@@ -0,0 +1,5 @@
++CONFIG_KEXEC=y
++CONFIG_KEXEC_FILE=y
++CONFIG_PROC_KCORE=y
++CONFIG_DEBUG_KERNEL=y
++CONFIG_KALLSYMS_ALL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
