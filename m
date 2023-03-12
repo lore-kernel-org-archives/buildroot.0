@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D5D0C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:44:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05EF7C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BF0641625;
-	Sun, 12 Mar 2023 21:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BF0641625
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD5BF415ED;
+	Sun, 12 Mar 2023 21:44:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD5BF415ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1qC9QS2zwgAH; Sun, 12 Mar 2023 21:44:28 +0000 (UTC)
+	with ESMTP id f--dBe7-0NJo; Sun, 12 Mar 2023 21:44:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C2F641626;
-	Sun, 12 Mar 2023 21:44:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C2F641626
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D16891BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:44:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8C29415E5;
+	Sun, 12 Mar 2023 21:44:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8C29415E5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3289C1BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B85EB60C2A
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:44:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B85EB60C2A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C3B6415E5
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:44:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C3B6415E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5TdiqTuis4Ir for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:44:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E735060BC9
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E735060BC9
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4DC186FF1; Sun, 12 Mar 2023 21:44:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 22:43:46 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 00553ea186357fd3e2b3c89fa560e9711cc67472
-X-Git-Newrev: acfe5c70b2301bc147ec524e7bc2d4a95e1cee66
-X-Patchwork-Hint: ignore
-Message-Id: <20230312214424.D4DC186FF1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rt-tests: bump version
- to 2.5
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0jAnTn3LEd_e for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:44:53 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBDEC415E3
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BBDEC415E3
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:44:52 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 00D40240002;
+ Sun, 12 Mar 2023 21:44:49 +0000 (UTC)
+Date: Sun, 12 Mar 2023 22:44:49 +0100
+To: =?UTF-8?B?U8OpYmFzdGllbg==?= Szymanski <sebastien.szymanski@armadeus.com>
+Message-ID: <20230312224449.0f5f1ee9@windsurf>
+In-Reply-To: <20230223085604.28572-1-sebastien.szymanski@armadeus.com>
+References: <20230223085604.28572-1-sebastien.szymanski@armadeus.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678657490;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=grD4FaNHrTmjF/jYGt4FEnYHZUpHdAoROawkhJsjhD4=;
+ b=VaArsc8fFT3RifZvQ6U+HKW206mELW4ExrDCYnVzS+Uc2LxdVTereJpvuUW1wRndMkxTzU
+ XmVZdo+x9bfRy30ie2eic7i7hbza9dIOKNt0MXzOqHS7lxgkaBu9kLkSuVZuX6Lfnrjpof
+ JG6wqzfdEsvWvC5DMdZECQyzkKDd/TxG7NknEj882y51WfeEuSFU9DoY+K8+lzqGuNDjLm
+ xWvFeChMWBZnGGMgIpuSglk6YnKiBPveW2s5P4ZktGQS2WrPyqOdeNOn9ZHWeckT9nzUg8
+ padZWbYxWt59QNz6syuGBts2fR3wGmp99yVKJcqAGzgwB35uPtjjB2RkAfQxpA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VaArsc8f
+Subject: Re: [Buildroot] [PATCH 1/1] package/rt-tests: bump version to 2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,57 +76,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4855419786700713610=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4855419786700713610==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=acfe5c70b2301bc147ec524e7bc2d4a95e1cee66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rt-tests/rt-tests.hash | 2 +-
- package/rt-tests/rt-tests.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
-index 49df8313f9..eb28f4d441 100644
---- a/package/rt-tests/rt-tests.hash
-+++ b/package/rt-tests/rt-tests.hash
-@@ -1,4 +1,4 @@
- # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
--sha256  393457f0c91cce57e82b876ecb9b672871f898e6cecafc751548079512bcc808  rt-tests-2.4.tar.xz
-+sha256  2ed2e4c965c7f336a15d3354dec090e27a0b1e9ada91ae0b9ef18bbcb993874e  rt-tests-2.5.tar.xz
- # locally computed hash
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index 74290211ce..8ad4215ee1 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -6,7 +6,7 @@
- 
- RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
- RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
--RT_TESTS_VERSION = 2.4
-+RT_TESTS_VERSION = 2.5
- RT_TESTS_LICENSE = GPL-2.0+
- RT_TESTS_LICENSE_FILES = COPYING
- 
-
---===============4855419786700713610==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4855419786700713610==--
+T24gVGh1LCAyMyBGZWIgMjAyMyAwOTo1NjowNCArMDEwMApTw6liYXN0aWVuIFN6eW1hbnNraSA8
+c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+IHdyb3RlOgoKPiBTaWduZWQtb2ZmLWJ5
+OiBTw6liYXN0aWVuIFN6eW1hbnNraSA8c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+
+Cj4gLS0tCj4gIHBhY2thZ2UvcnQtdGVzdHMvcnQtdGVzdHMuaGFzaCB8IDIgKy0KPiAgcGFja2Fn
+ZS9ydC10ZXN0cy9ydC10ZXN0cy5tayAgIHwgMiArLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDIgaW5z
+ZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCkFwcGxpZWQgdG8gbmV4dCwgdGhhbmtzLgoKVGhv
+bWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5k
+IEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
