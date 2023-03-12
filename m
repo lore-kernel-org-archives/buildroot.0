@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62C55C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:56:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B956C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:56:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0893D4097D;
-	Sun, 12 Mar 2023 21:56:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0893D4097D
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD67D41C98;
+	Sun, 12 Mar 2023 21:56:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD67D41C98
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GEIJBKHnTNBZ; Sun, 12 Mar 2023 21:56:32 +0000 (UTC)
+	with ESMTP id 0ZQlbw5s4VP2; Sun, 12 Mar 2023 21:56:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBEEB4174D;
-	Sun, 12 Mar 2023 21:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBEEB4174D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 33D331BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98B6641C90;
+	Sun, 12 Mar 2023 21:56:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98B6641C90
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BB041BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39C6F60D68
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C6F60D68
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF420408AE
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF420408AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z0vDTDolQVyh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X6oRqL6GbQwK for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 359A460D64
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 359A460D64
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0125340614
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0125340614
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32D8787006; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ id E3E6D87007; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:55:23 +0100
+Date: Sun, 12 Mar 2023 10:08:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 773535fbac1acd9bc08cde5b44db0d4c1e19de31
-X-Git-Newrev: f32176a7671d8842b175077a92e268226fcec78f
+X-Git-Oldrev: d1b87a346a0c0b775ee44ec7090bee03ba8be7ba
+X-Git-Newrev: 92f6a843b81479a9c8f8769d9e728767646b9901
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214624.32D8787006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgit2: bump to version 1.6.2
+Message-Id: <20230312214623.E3E6D87007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/qemu/aarch64-sbsa: use the default
+ console specified by ACPI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,109 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f32176a7671d8842b175077a92e268226fcec78f
+commit: https://git.buildroot.net/buildroot/commit/?id=92f6a843b81479a9c8f8769d9e728767646b9901
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Fix the license because libgit2 has been using some android code
-  without attribution. This explains the change of the hash in the
-  license file, which now includes the text of the BSD-2-Clause
-  license.
-* Building in-source is accidentely broken in this release and upstream
-  recommends a separate build directory anyway, so use a separate build
-  directory.
-* Some win32-specific declarations use wchar_t, add an upstreamed patch
-  to avoid a dependency to wchar_t elsewhere.
+ARM SBBR (Server Base Boot Requirements) defines SPCR (Serial Port
+Console Redirection Table) as a mandatory ACPI table that specifies
+the configuration of a serial console.
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+In the linux kernel, ARM developers have decided that consoles defined
+by SPCR are always enabled when existing, see e.g.:
+https://lore.kernel.org/linux-serial/20200430161438.17640-1-alpernebiyasak@gmail.com/T/
+
+Specifying console=ttyAMA0 (which is a serial console) is thus
+redundant for an ARM SBSA board. (It also blindly assumes that
+the serial console is on ttyAMA0, which might not be true.)
+
+Drop the explicit console=ttyAMA0 on the kernel command line,
+such that the kernel can pick up the default console defined
+by SPCR.
+
+This is similar to how it is currently done for
+board/aarch64-efi/grub.cfg.
+
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ot-declare-win32-functions-on-non-win32-p.patch | 35 ++++++++++++++++++++++
- package/libgit2/libgit2.hash                       |  4 +--
- package/libgit2/libgit2.mk                         |  7 +++--
- 3 files changed, 42 insertions(+), 4 deletions(-)
+ board/qemu/aarch64-sbsa/grub.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
-new file mode 100644
-index 0000000000..6be66ffee3
---- /dev/null
-+++ b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
-@@ -0,0 +1,35 @@
-+From 20811c5aa9c528405eaa3f88ff22a9adebafa9e6 Mon Sep 17 00:00:00 2001
-+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+Date: Wed, 8 Mar 2023 14:00:52 +0100
-+Subject: [PATCH] sysdir: Do not declare win32 functions on non-win32 platforms
-+
-+These declaration poses problems on some embedded or retro Linux systems
-+that deliberately disable support for wchar_t from their libc.
-+
-+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+[Retrieved from:
-+https://github.com/libgit2/libgit2/commit/20811c5aa9c528405eaa3f88ff22a9adebafa9e6]
-+---
-+ src/libgit2/sysdir.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/libgit2/sysdir.h b/src/libgit2/sysdir.h
-+index 1d15bbf43..03f59e1de 100644
-+--- a/src/libgit2/sysdir.h
-++++ b/src/libgit2/sysdir.h
-+@@ -134,10 +134,12 @@ extern int git_sysdir_set(git_sysdir_t which, const char *paths);
-+  */
-+ extern int git_sysdir_reset(void);
-+ 
-++#ifdef GIT_WIN32
-+ /** Sets the registry system dir to a mock; for testing.  */
-+ extern int git_win32__set_registry_system_dir(const wchar_t *mock_sysdir);
-+ 
-+ /** Find the given system dir; for testing. */
-+ extern int git_win32__find_system_dirs(git_str *out, const char *subdir);
-++#endif
-+ 
-+ #endif
-+-- 
-+2.39.2
-+
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index e834525df5..baf43c66f7 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7074f1e2697992b82402501182db254fe62d64877b12f6e4c64656516f4cde88  libgit2-1.5.1.tar.gz
--sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
-+sha256  d557fbf35557bb5df53cbf38ae0081edb4a36494ec0d19741fa673e509245f8f  libgit2-1.6.2.tar.gz
-+sha256  6f3c2cd59b057e366c1acc073b038135c52d77892bb33bd4d931c5369d3f062b  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index c962c8030f..b31f5199e1 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,14 +4,15 @@
- #
- ################################################################################
+diff --git a/board/qemu/aarch64-sbsa/grub.cfg b/board/qemu/aarch64-sbsa/grub.cfg
+index 39b7842f8f..d99e19c4cd 100644
+--- a/board/qemu/aarch64-sbsa/grub.cfg
++++ b/board/qemu/aarch64-sbsa/grub.cfg
+@@ -2,5 +2,5 @@ set default="0"
+ set timeout="5"
  
--LIBGIT2_VERSION = 1.5.1
-+LIBGIT2_VERSION = 1.6.2
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
- 	MIT (sha1), \
- 	BSD-3-Clause (sha256), \
- 	wildmatch license (wildmatch), \
--	CC0-1.0 (xoroshiro256)
-+	CC0-1.0 (xoroshiro256), \
-+	BSD-2-Clause (basename_r)
- LIBGIT2_LICENSE_FILES = COPYING
- LIBGIT2_CPE_ID_VENDOR = libgit2_project
- LIBGIT2_INSTALL_STAGING = YES
-@@ -24,6 +25,8 @@ LIBGIT2_CONF_OPTS = \
- 	-DUSE_NTLMCLIENT=OFF \
- 	-DUSE_THREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
- 
-+LIBGIT2_SUPPORTS_IN_SOURCE_BUILD = NO
-+
- LIBGIT2_DEPENDENCIES = zlib libhttpparser
- 
- # If libiconv is available (for !locale toolchains), then we can use
+ menuentry "Buildroot" {
+-	linux /Image root=PARTLABEL=root rootwait console=ttyAMA0
++	linux /Image root=PARTLABEL=root rootwait
+ }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
