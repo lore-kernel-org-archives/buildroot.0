@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A781C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 12:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7DA6C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 12:32:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 35F71403B7;
-	Sun, 12 Mar 2023 12:32:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35F71403B7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D06F4051D;
+	Sun, 12 Mar 2023 12:32:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D06F4051D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zxJ0FJHMI7Vu; Sun, 12 Mar 2023 12:32:16 +0000 (UTC)
+	with ESMTP id WiQ1rqaeH2nT; Sun, 12 Mar 2023 12:32:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26128405BF;
-	Sun, 12 Mar 2023 12:32:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26128405BF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 778C640484;
+	Sun, 12 Mar 2023 12:32:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 778C640484
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CC94D1BF584
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 12:32:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F1D541BF584
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 12:32:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5C7181285
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 12:32:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5C7181285
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB58A8142F
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 12:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB58A8142F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Etwyc2l7OI6 for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 12:32:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FDB280C30
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2FDB280C30
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 12:32:01 +0000 (UTC)
+ with ESMTP id bMndGX0QT0gq for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 12:32:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 508CE813E6
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 508CE813E6
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 12:32:28 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4D909C0003;
- Sun, 12 Mar 2023 12:31:59 +0000 (UTC)
-Date: Sun, 12 Mar 2023 13:31:58 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id C7CE7240004;
+ Sun, 12 Mar 2023 12:32:25 +0000 (UTC)
+Date: Sun, 12 Mar 2023 13:32:24 +0100
 To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230312133158.721f6917@windsurf>
-In-Reply-To: <20230306211435.2283414-1-ju.o@free.fr>
-References: <20230306211435.2283414-1-ju.o@free.fr>
+Message-ID: <20230312133224.0598454f@windsurf>
+In-Reply-To: <20230312092215.11954-1-ju.o@free.fr>
+References: <20230312092215.11954-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1678624319;
+ d=bootlin.com; s=gm1; t=1678624346;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=7EHpdgI1fbFIrqNGxwz9i8uWn+7WhNYnIkMKFRCpIGQ=;
- b=Ovd5yseCTelUqmxXZdt1hBmdGK9MyXvZBnG/QJgKl1Am6xNtf13l/Y4AJM48buJWzKzovP
- nDa/jMdpAXsjXuQampsiiwhlj/cs4uer8ICVvPao00DX1JuG4QMmXx/Fp3dYI9+xrVsPIC
- nVK/C7dpf1ZB2a9HqdkWu9HEyOognWCT1DWu48S0AgphDSLfopJBz11CBzydjuV1vOcAai
- S9Tma/4ONM2QEY0CXCfb8SrlCVaaTWEde6Eg/RdyWI7ssCZFtcZ0HLYgUvAvU1dmaWk1D2
- ZvTheIIUtNk5vMQ0skQ2FdX8vq755tHlxTZFzISyWlh8VNgzYvahRtiPqzXQJQ==
+ bh=n6Kgs/HKys8FKpoGMbyaOt6KHLmoIlzKa1RQdYE06Xc=;
+ b=Z/fx2ial/iXXzUdSPoMsZj4gYxUcvEJ2NaOFu4MQcZSPm+Pb/QgRYPQgsB+hgJ+L/P/Unc
+ 63JMicE86GQ05sewSDxO0/G2bwEeSszjZQF8epZ0ViZZbq5VFiwEmXwmVxG1/we/PeOFz7
+ U+cINHiGwC69DcS+yAF6HiDF82TXXb6xQAPQ0uKBGyz6klU1dvin1lpv+syUlTYQ7ys8Gs
+ iStHltJqHODitPQcIL6zpuEkG5txc/b0r3x/TkCjTf0OZlxepGqIJvZhE6I+ELHkubj+mX
+ h3y7AsX9moK/nJF19tzcwWrfaA+S26X/nT7yfuKDdV5QCdlioiWHYCwJ53UBzg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ovd5yseC
-Subject: Re: [Buildroot] [PATCH next 1/1] package/gsl: bump to version 2.7.1
+ header.s=gm1 header.b=Z/fx2ial
+Subject: Re: [Buildroot] [PATCH next 1/1] package/pcre2: update _SITE url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,18 +83,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  6 Mar 2023 22:14:35 +0100
+On Sun, 12 Mar 2023 10:22:15 +0100
 Julien Olivain <ju.o@free.fr> wrote:
 
-> For change log since 2.6, see:
-> https://git.savannah.gnu.org/cgit/gsl.git/tree/NEWS?h=release-2-7
+> The pcre2 url [1] is now redirecting to [2]. This change was
+> announced in upstream commit [3] which was already included in
+> pcre2 10.41.
 > 
-> This 2.7.1 version includes a minor libtool version fixup on top of 2.7:
-> https://git.savannah.gnu.org/cgit/gsl.git/commit/?id=77e7c7d008707dace56626020eaa6181912e9841
+> This commit updates the PCRE2_SITE url accordingly. The package
+> version remains unchanged.
+> 
+> [1] https://github.com/PhilipHazel/pcre2
+> [2] https://github.com/PCRE2Project/pcre2
+> [3] https://github.com/PCRE2Project/pcre2/commit/66b3cb34dfe5411cb2bb939a8f4981081815d496
 > 
 > Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
-> Patch tested on branch next at commit b793f3a with commands:
+>  package/pcre2/pcre2.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to next, thanks.
 
