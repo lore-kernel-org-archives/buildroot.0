@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 547D8C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1828C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F26734194B;
-	Sun, 12 Mar 2023 22:00:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F26734194B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97BE641CC5;
+	Sun, 12 Mar 2023 22:01:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97BE641CC5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Rt5WJHzI5y0; Sun, 12 Mar 2023 22:00:52 +0000 (UTC)
+	with ESMTP id KC_MFfqSpEPv; Sun, 12 Mar 2023 22:01:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E175241CA5;
-	Sun, 12 Mar 2023 22:00:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E175241CA5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A21231BF2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87E5941C68;
+	Sun, 12 Mar 2023 22:01:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87E5941C68
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A961B1BF863
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B710760E1A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DB0840620
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B710760E1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DB0840620
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HM9_H_q_38Fs for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VIhGt4yTVIwQ for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB05260C2A
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB05260C2A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4100940522
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4100940522
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A8FE087006; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ id 3E34187007; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 13:32:07 +0100
+Date: Sun, 12 Mar 2023 18:45:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e48f8358e519f9c24262a6549d8f6c78ee01add
-X-Git-Newrev: af2cfc61a2a3e630824ac693d961b74f858c0407
+X-Git-Oldrev: ce952170e1e8229da0bdac81566a627a87e56bee
+X-Git-Newrev: 38c581b05cd8e7967783410b36c14b9b561acd12
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214624.A8FE087006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pcre2: update _SITE url
+Message-Id: <20230312214625.3E34187007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/spike_riscv64: bump kernel to
+ 6.1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +64,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af2cfc61a2a3e630824ac693d961b74f858c0407
+commit: https://git.buildroot.net/buildroot/commit/?id=38c581b05cd8e7967783410b36c14b9b561acd12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The pcre2 url [1] is now redirecting to [2]. This change was
-announced in upstream commit [3] which was already included in
-pcre2 10.41.
+Linux Kernel 6.1 now being officially promoted to be a LTS, this
+commit bump the kernel version of this defconfig to 6.1.14.
 
-This commit updates the PCRE2_SITE url accordingly. The package
-version remains unchanged.
+A Kernel config fragment "linux.fragment" is now needed as the kernel
+no longer enable SBI v0.1 support and the earlycon RISC-V SBI in its
+riscv arch defconfig. See [1] [2].
 
-[1] https://github.com/PhilipHazel/pcre2
-[2] https://github.com/PCRE2Project/pcre2
-[3] https://github.com/PCRE2Project/pcre2/commit/66b3cb34dfe5411cb2bb939a8f4981081815d496
+The Spike riscv-isa-sim was updated upstream accordingly [3].
+
+In order to keep a smooth transition, this kernel config fragment
+re-enable those options to make sure this kernel will work with
+both old Spike versions (not including commit [3] like the v1.1.0
+currently included in Buildroot), and newer versions. This commit
+was also successfully tested with riscv-isa-sim at commit
+0d1a48c0c0.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=6f562570b9c5d6a3e30d87aec60a9d8f22a3203c
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=3938d5a2f9369d1ebd56320629fed395ce327e9c
+[3] https://github.com/riscv-software-src/riscv-isa-sim/commit/191634d2854dfed448fc323195f9b65c305e2d77
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pcre2/pcre2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/spike/riscv64/linux.fragment | 3 +++
+ configs/spike_riscv64_defconfig    | 5 +++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index aba378cab6..c35056f8a2 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PCRE2_VERSION = 10.42
--PCRE2_SITE = https://github.com/PhilipHazel/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
-+PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
- PCRE2_LICENSE_FILES = LICENCE
+diff --git a/board/spike/riscv64/linux.fragment b/board/spike/riscv64/linux.fragment
+new file mode 100644
+index 0000000000..b443b0ab36
+--- /dev/null
++++ b/board/spike/riscv64/linux.fragment
+@@ -0,0 +1,3 @@
++CONFIG_RISCV_SBI_V01=y
++CONFIG_HVC_RISCV_SBI=y
++CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
+diff --git a/configs/spike_riscv64_defconfig b/configs/spike_riscv64_defconfig
+index e23f1ce32c..73ea566084 100644
+--- a/configs/spike_riscv64_defconfig
++++ b/configs/spike_riscv64_defconfig
+@@ -2,9 +2,10 @@ BR2_riscv=y
+ BR2_RISCV_64=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.86"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.14"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/spike/riscv64/linux.fragment"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_ROOTFS_CPIO=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_OPENSBI=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
