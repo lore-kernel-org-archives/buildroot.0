@@ -4,63 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFCF9C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0877FC6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97F2A40360;
-	Sun, 12 Mar 2023 22:02:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97F2A40360
+	by smtp4.osuosl.org (Postfix) with ESMTP id A21F740895;
+	Sun, 12 Mar 2023 22:03:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A21F740895
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GXQceVpzemVt; Sun, 12 Mar 2023 22:02:43 +0000 (UTC)
+	with ESMTP id 5ygHBg_Y4LaN; Sun, 12 Mar 2023 22:03:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 890BE4032D;
-	Sun, 12 Mar 2023 22:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 890BE4032D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B42011BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:59:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11BE9408DD;
+	Sun, 12 Mar 2023 22:03:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11BE9408DD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D54301BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D08D41702
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D08D41702
+ by smtp3.osuosl.org (Postfix) with ESMTP id AEB1A60C0A
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 22:03:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB1A60C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iZ9T6tkb9hpB for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:59:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EC2441C9D
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5EC2441C9D
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:59:56 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.174.98.73])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id AF7647802BE;
- Sun, 12 Mar 2023 22:59:51 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MvytD0q0OOEz for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 22:03:11 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 510FB60BFE
+Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 510FB60BFE
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 22:03:11 +0000 (UTC)
+Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
+ by mailout08.t-online.de (Postfix) with SMTP id E4DC1233A5;
+ Sun, 12 Mar 2023 23:02:54 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.204.131]) by fwd75.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pbTmI-2OrmZl0; Sun, 12 Mar 2023 23:02:54 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56712)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pbTmI-0005ph-01;
+ Sun, 12 Mar 2023 23:02:54 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 22:59:45 +0100
-Message-Id: <20230312215945.168367-1-ju.o@free.fr>
+Date: Sun, 12 Mar 2023 23:02:53 +0100
+Message-Id: <20230312220253.285408-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230301220159.161476-2-ju.o@free.fr>
-References: <20230301220159.161476-2-ju.o@free.fr>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1678658393;
- bh=zB6eeCCfhU4rSMybhk+FnqLwJQcfE1t5dzF3QBVdNIE=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=aGratDsSkPSVounKFdGnJeDhOuPAzeG8+QW5ToYq8gU7/F2sAX5ILrES9Ej4YmgKp
- E8d8sEO/ZpocdRBbZbda7+VMInXeiorcW4hgyTx+scGJB6voOWFURxUO3+p48dGZsx
- dtZ/VFIPtKkTyZIDRCmu/8k9ZinBqmnMPP9Dk7CiJk9ORh4OiRTFpaYpbv7ngl5S1s
- FUeF0z6dw6hoYMD+Fh4uk+XRigtmUHNPRcQwkrQaYWiwL7ugUazjion8DRBjfQrc6S
- bUT0ha0aiq83EejQPG1xOuU4CpLf8PlobyeYMamUx//1jK9VNsS/QdaQY0e8gb3nrw
- Jmpi0IYfr/0jA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=aGratDsS
-Subject: [Buildroot] [PATCH v2 1/1] package/kexec: add KEXEC_CPE_ID_{PRODUCT, VENDOR}
+X-TOI-EXPURGATEID: 150726::1678658574-DB61A2C4-1C258A30/0/0 CLEAN NORMAL
+X-TOI-MSGID: 10c73ed6-e439-4c61-a20d-5e1d93b7b07c
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 23.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,38 +66,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:kexec-tools_project:kexec-tools is a valid CPE identifier
-for this package:
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akexec-tools_project%3Akexec-tools
+Release notes:
+https://www.phoronix.com/news/Mesa-23.0-Released
+https://lists.freedesktop.org/archives/mesa-announce/2023-February/000706.html
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-- Add the missing "KEXEC_CPE_ID_PRODUCT = kexec-tools"
-  as reported by Thomas.
----
- package/kexec/kexec.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index c1411f6ab7..562b09012b 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -9,6 +9,8 @@ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
- KEXEC_LICENSE_FILES = COPYING
-+KEXEC_CPE_ID_PRODUCT = kexec-tools
-+KEXEC_CPE_ID_VENDOR = kexec-tools_project
- KEXEC_SELINUX_MODULES = kdump
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index ad1999a30d..a9ab1de8ea 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- # Makefile expects $STRIP -o to work, so needed for !BR2_STRIP_strip
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.3.5
++MESA3D_HEADERS_VERSION = 23.0.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 50c5bcc7fc..17dc2e7c00 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2023-February/000705.html
+-sha256  3eed2ecae2bc674494566faab9fcc9beb21cd804c7ba2b59a1694f3d7236e6a9  mesa-22.3.5.tar.xz
+-sha512  a4cad9b7e6501678fac279bd88a37e522633c7128afa8df04982f469c930e3557bb1d05b4b0f5ae16704d8d04e50c90a7489943a48861df17dd947704c329b85  mesa-22.3.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-February/000706.html
++sha256  01f3cff3763f09e0adabcb8011e4aebc6ad48f6a4dd4bae904fe918707d253e4  mesa-23.0.0.tar.xz
++sha512  127e2759a2a31cacd65a0891719ab7bb4a9188844022b4bccaebbedce9c550b9ccb160ad519178ea0d851c4bcb8f0f56febda248ed2ba82b5ddf804855e4694b  mesa-23.0.0.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index a744334c5b..a09c157b33 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.3.5
++MESA3D_VERSION = 23.0.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.39.2
 
