@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD81C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1170C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 22:00:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7F2B41702;
-	Sun, 12 Mar 2023 22:00:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7F2B41702
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C94F41CA1;
+	Sun, 12 Mar 2023 22:00:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C94F41CA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y2fIl4D5FDII; Sun, 12 Mar 2023 22:00:24 +0000 (UTC)
+	with ESMTP id Rys5hSHGYhAi; Sun, 12 Mar 2023 22:00:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C218741CA1;
-	Sun, 12 Mar 2023 22:00:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C218741CA1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9EAA21BF2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D97E41C6C;
+	Sun, 12 Mar 2023 22:00:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D97E41C6C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A6D8B1BF863
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0C4560E38
+ by smtp2.osuosl.org (Postfix) with ESMTP id 750D3408C9
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0C4560E38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 750D3408C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KPk4GsMOHEVB for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yP7Fv8zzAc1c for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7A4960E27
+ by smtp2.osuosl.org (Postfix) with ESMTP id B506E40620
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7A4960E27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B506E40620
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8CC087006; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+ id B212F87006; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 22:43:46 +0100
+Date: Sun, 12 Mar 2023 22:30:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 00553ea186357fd3e2b3c89fa560e9711cc67472
-X-Git-Newrev: acfe5c70b2301bc147ec524e7bc2d4a95e1cee66
+X-Git-Oldrev: f50259d6a0c0e8ba2149aea04c7dc98fe4707abb
+X-Git-Newrev: 30e96518cd7255048bcac024c20e203f51c377d4
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214625.D8CC087006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rt-tests: bump version to 2.5
+Message-Id: <20230312214625.B212F87006@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_stress_ng.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,56 +59,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3129494784049659140=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3129494784049659140==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=acfe5c70b2301bc147ec524e7bc2d4a95e1cee66
+commit: https://git.buildroot.net/buildroot/commit/?id=30e96518cd7255048bcac024c20e203f51c377d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rt-tests/rt-tests.hash | 2 +-
- package/rt-tests/rt-tests.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                      |  1 +
+ support/testing/tests/package/test_stress_ng.py | 22 ++++++++++++++++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
-index 49df8313f9..eb28f4d441 100644
---- a/package/rt-tests/rt-tests.hash
-+++ b/package/rt-tests/rt-tests.hash
-@@ -1,4 +1,4 @@
- # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
--sha256  393457f0c91cce57e82b876ecb9b672871f898e6cecafc751548079512bcc808  rt-tests-2.4.tar.xz
-+sha256  2ed2e4c965c7f336a15d3354dec090e27a0b1e9ada91ae0b9ef18bbcb993874e  rt-tests-2.5.tar.xz
- # locally computed hash
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index 74290211ce..8ad4215ee1 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -6,7 +6,7 @@
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ff26021d1d..e28b46967c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1736,6 +1736,7 @@ F:	support/testing/tests/package/test_python_pyalsa.py
+ F:	support/testing/tests/package/test_python_spake2.py
+ F:	support/testing/tests/package/test_rdma_core.py
+ F:	support/testing/tests/package/test_rdma_core/
++F:	support/testing/tests/package/test_stress_ng.py
+ F:	support/testing/tests/package/test_z3.py
+ F:	support/testing/tests/package/test_z3/
  
- RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
- RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
--RT_TESTS_VERSION = 2.4
-+RT_TESTS_VERSION = 2.5
- RT_TESTS_LICENSE = GPL-2.0+
- RT_TESTS_LICENSE_FILES = COPYING
- 
-
---===============3129494784049659140==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/support/testing/tests/package/test_stress_ng.py b/support/testing/tests/package/test_stress_ng.py
+new file mode 100644
+index 0000000000..12fd6ec9e6
+--- /dev/null
++++ b/support/testing/tests/package/test_stress_ng.py
+@@ -0,0 +1,22 @@
++import os
++
++import infra.basetest
++
++
++class TestStressNG(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_STRESS_NG=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("stress-ng --version")
++        self.assertRunOk("stress-ng --cpu 1 --timeout 3")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3129494784049659140==--
