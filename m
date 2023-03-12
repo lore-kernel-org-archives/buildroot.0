@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2C7CC6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 19:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FD85C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 19:09:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95AB960C24;
-	Sun, 12 Mar 2023 19:09:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95AB960C24
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEEB460C11;
+	Sun, 12 Mar 2023 19:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEEB460C11
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 61e-yU0RClob; Sun, 12 Mar 2023 19:09:03 +0000 (UTC)
+	with ESMTP id DAA8Ios-McKL; Sun, 12 Mar 2023 19:09:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C32A260C01;
-	Sun, 12 Mar 2023 19:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C32A260C01
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C81191BF41A
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 19:09:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16BB160C2F;
+	Sun, 12 Mar 2023 19:09:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16BB160C2F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 14FF31BF41A
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 19:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEDDE81467
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0011415E3
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 19:09:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEDDE81467
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0011415E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q3WlCnP9dFUC for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4zxdDt7jiJft for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 19:09:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4A3281464
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE222410C5
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 19:09:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4A3281464
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE222410C5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B37BA86F8C; Sun, 12 Mar 2023 19:09:00 +0000 (UTC)
+ id A838D86F8B; Sun, 12 Mar 2023 19:09:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 20:04:36 +0100
+Date: Sun, 12 Mar 2023 19:47:30 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6f4a6c053a65f8afe88b1bb58e6c50792962a774
-X-Git-Newrev: 1292fef706b8ced55396f241375b3e6f5b9db68e
+X-Git-Oldrev: eccd359f9c475778489b1df5f02ddcc9d12bde04
+X-Git-Newrev: 6f4a6c053a65f8afe88b1bb58e6c50792962a774
 X-Patchwork-Hint: ignore
-Message-Id: <20230312190900.B37BA86F8C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/asterisk: fix
- build with libressl
+Message-Id: <20230312190900.A838D86F8B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/intel-gmmlib:
+ needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +63,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1292fef706b8ced55396f241375b3e6f5b9db68e
+commit: https://git.buildroot.net/buildroot/commit/?id=6f4a6c053a65f8afe88b1bb58e6c50792962a774
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure with libressl by using SSL_is_server
-which is available since version 2.7.0 and
-https://github.com/libressl-portable/openbsd/commit/d7ec516916c5eaac29b02d7a8ac6570f63b458f7:
+threads are mandatory since version 19.1.1 and
+https://github.com/intel/gmmlib/commit/9e4aa143fb7e7e87332fcb7c9871040ff4a1a1da
+resulting in the following build failure since commit
+cd206d9b808a322a00294b4caad203a892ed4c92:
 
-iostream.c: In function 'ast_iostream_close':
-iostream.c:559:41: error: invalid use of incomplete typedef 'SSL' {aka 'struct ssl_st'}
-  559 |                         if (!stream->ssl->server) {
-      |                                         ^~
+CMake Error at /home/thomas/autobuild/instance-2/output-1/host/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
+  Could NOT find Threads (missing: Threads_FOUND)
 
 Fixes:
- - http://autobuild.buildroot.org/results/ce4d62d00bb77ba5b303cacf6be7e350581a62f9
+ - http://autobuild.buildroot.org/results/c1120932e8c212820b239ee8cd4a057623a73376
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c8985cf50cca852cc5cc840a605e01713e758d40)
+(cherry picked from commit b5d310772d71f547146684673c7113f208a31b5f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...6-main-iostream.c-fix-build-with-libressl.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/intel-gmmlib/Config.in      | 6 ++++--
+ package/intel-mediadriver/Config.in | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/0006-main-iostream.c-fix-build-with-libressl.patch b/package/asterisk/0006-main-iostream.c-fix-build-with-libressl.patch
-new file mode 100644
-index 0000000000..cdd3aa8cfb
---- /dev/null
-+++ b/package/asterisk/0006-main-iostream.c-fix-build-with-libressl.patch
-@@ -0,0 +1,38 @@
-+From 9569fa20fec49f530170a3042afb99556cf66a2e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 17 Apr 2022 10:52:42 +0200
-+Subject: [PATCH] main/iostream.c: fix build with libressl
-+
-+Fix the following build failure with libressl by using SSL_is_server
-+which is available since version 2.7.0 and
-+https://github.com/libressl-portable/openbsd/commit/d7ec516916c5eaac29b02d7a8ac6570f63b458f7:
-+
-+iostream.c: In function 'ast_iostream_close':
-+iostream.c:559:41: error: invalid use of incomplete typedef 'SSL' {aka 'struct ssl_st'}
-+  559 |                         if (!stream->ssl->server) {
-+      |                                         ^~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/ce4d62d00bb77ba5b303cacf6be7e350581a62f9
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ main/iostream.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/main/iostream.c b/main/iostream.c
-+index d060b6d6d4..b8ab80ec91 100644
-+--- a/main/iostream.c
-++++ b/main/iostream.c
-+@@ -553,7 +553,7 @@ int ast_iostream_close(struct ast_iostream *stream)
-+ 					ERR_error_string(sslerr, err), ssl_error_to_string(sslerr, res));
-+ 			}
-+ 
-+-#if !defined(LIBRESSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x10100000L)
-++#if !(defined(LIBRESSL_VERSION_NUMBER) && (LIBRESSL_VERSION_NUMBER < 0x2070000L)) && (OPENSSL_VERSION_NUMBER >= 0x10100000L)
-+ 			if (!SSL_is_server(stream->ssl)) {
-+ #else
-+ 			if (!stream->ssl->server) {
-+-- 
-+2.35.1
-+
+diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
+index b6f93f7416..a3d0d2610b 100644
+--- a/package/intel-gmmlib/Config.in
++++ b/package/intel-gmmlib/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_INTEL_GMMLIB
+ 	depends on BR2_x86_64
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  The Intel(R) Graphics Memory Management Library provides
+ 	  device specific and buffer management for the Intel(R)
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_INTEL_GMMLIB
+ 
+ 	  https://github.com/intel/gmmlib
+ 
+-comment "intel-gmmlib needs a toolchain w/ dynamic library, C++"
+-	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
++comment "intel-gmmlib needs a toolchain w/ dynamic library, C++, threads"
++	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
+index ad56590008..537e4abd2f 100644
+--- a/package/intel-mediadriver/Config.in
++++ b/package/intel-mediadriver/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_INTEL_MEDIADRIVER
+ 	depends on !BR2_STATIC_LIBS # mesa3d, libva
+ 	depends on BR2_INSTALL_LIBSTDCPP # intel-gmmlib, mesa3d
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
++	depends on BR2_TOOLCHAIN_HAS_THREADS # intel-gmmlib, libva
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mesa3d
+ 	select BR2_PACKAGE_INTEL_GMMLIB
+ 	select BR2_PACKAGE_LIBPCIACCESS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
