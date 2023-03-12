@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C48BC6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3908C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5BB640896;
-	Sun, 12 Mar 2023 21:58:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5BB640896
+	by smtp4.osuosl.org (Postfix) with ESMTP id 742C54049F;
+	Sun, 12 Mar 2023 21:58:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 742C54049F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lua_Th98jHN4; Sun, 12 Mar 2023 21:58:07 +0000 (UTC)
+	with ESMTP id bAOCCcDQkzaT; Sun, 12 Mar 2023 21:58:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B30AC416B5;
-	Sun, 12 Mar 2023 21:58:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B30AC416B5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 59CA11BF2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B286416F5;
+	Sun, 12 Mar 2023 21:58:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B286416F5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ED0981BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3073B60DC2
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3073B60DC2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A8A240603
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A8A240603
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y6d1AxVGA4FW for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RAzty2Hshjli for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DD7460D64
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DD7460D64
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7753A40620
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7753A40620
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EE2987006; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+ id 61D2387008; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 18:59:17 +0100
+Date: Sun, 12 Mar 2023 11:08:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 38c581b05cd8e7967783410b36c14b9b561acd12
-X-Git-Newrev: a1f00209c20e6d5fc2712c8b4746f3ac5d94df7f
+X-Git-Oldrev: 9ce280ba180f8668bfcd92175842a3c2d9567223
+X-Git-Newrev: b83550bd0c2bbfc894d1c82ec0ea330c8283deee
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214625.4EE2987006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 7.1.0
+Message-Id: <20230312214624.61D2387008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/janus-gateway: bump to version
+ 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +64,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1f00209c20e6d5fc2712c8b4746f3ac5d94df7f
+commit: https://git.buildroot.net/buildroot/commit/?id=b83550bd0c2bbfc894d1c82ec0ea330c8283deee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the major release changed all the packages that have direct
-dependency to harfbuzz has been succesfully built:
-- efl
-- libass
-- mupdf
-- pango
-- qt5base
-- qt5webengine
-- qt6base
-- sdl2_ttf
-- supertuxkart
-- vlc
-- webkitgtk
-- wpewebkit
+Remove patch applied upstream.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...003-Use-parentheses-to-ensure-compilation.patch | 27 ----------------------
+ package/janus-gateway/janus-gateway.hash           |  2 +-
+ package/janus-gateway/janus-gateway.mk             |  2 +-
+ 3 files changed, 2 insertions(+), 29 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 9489f25c6a..e881f58510 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+diff --git a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
+deleted file mode 100644
+index f91c13d1f6..0000000000
+--- a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 51431c36cd5f2997c0f7723909195b9883ae0486 Mon Sep 17 00:00:00 2001
+-From: Benson Muite <bkmgit@users.noreply.github.com>
+-Date: Wed, 4 Jan 2023 13:33:36 +0300
+-Subject: [PATCH] Use parentheses to ensure compilation (#3138)
+-
+-Compiler fails with latest Curl release. Use parenthesis to ensure compiler evaluates expression correctly.
+-
+-[Retrieved from:
+-https://github.com/meetecho/janus-gateway/commit/51431c36cd5f2997c0f7723909195b9883ae0486]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/turnrest.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/turnrest.c b/src/turnrest.c
+-index b8560d22f2..42e6114de8 100644
+---- a/src/turnrest.c
+-+++ b/src/turnrest.c
+-@@ -165,7 +165,7 @@ janus_turnrest_response *janus_turnrest_request(const char *user) {
+- 	JANUS_LOG(LOG_VERB, "Sending request: %s\n", request_uri);
+- 	janus_mutex_unlock(&api_mutex);
+- 	curl_easy_setopt(curl, CURLOPT_URL, request_uri);
+--	curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
+-+	curl_easy_setopt(curl, (api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST), 1);
+- 	if(!api_http_get) {
+- 		/* FIXME Some servers don't like a POST with no data */
+- 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query_string);
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 7a87ae737a..a147a8afff 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d  harfbuzz-5.3.1.tar.xz
-+sha256  f135a61cd464c9ed6bc9823764c188f276c3850a8dc904628de2a87966b7077b  harfbuzz-7.1.0.tar.xz
- sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index b0112168e1..24c6f3ef27 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+-sha256  bb83c19d6137e39833e8eb2b1deeecb33b5d19d4f503d51703bdcc478c447940  janus-gateway-1.1.1.tar.gz
++sha256  f721d62a22b38ba3a341a5502f06b8b3a5a4f7bd0e9cc6c53de257fe99695e17  janus-gateway-1.1.2.tar.gz
+ sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index dd898563e5..786bc211d4 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 5.3.1
-+HARFBUZZ_VERSION = 7.1.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-JANUS_GATEWAY_VERSION = 1.1.1
++JANUS_GATEWAY_VERSION = 1.1.2
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
