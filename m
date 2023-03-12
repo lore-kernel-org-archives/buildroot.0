@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBBD3C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 08:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37931C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 08:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F35160F81;
-	Sun, 12 Mar 2023 08:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F35160F81
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCD4060F91;
+	Sun, 12 Mar 2023 08:58:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCD4060F91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aLmRsvVs74pf; Sun, 12 Mar 2023 08:58:40 +0000 (UTC)
+	with ESMTP id 2X4HG9VMMmTh; Sun, 12 Mar 2023 08:58:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5BC560F8B;
-	Sun, 12 Mar 2023 08:58:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5BC560F8B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2C90C1BF3E9
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 08:58:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35AAA60F85;
+	Sun, 12 Mar 2023 08:58:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35AAA60F85
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 109F21BF3E9
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 08:58:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06BD040869
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 08:58:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06BD040869
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE0F581DF4
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 08:58:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE0F581DF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FBXX0P3BOnvq for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 08:58:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07BD841674
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 08:58:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07BD841674
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E7E8F86B4A; Sun, 12 Mar 2023 08:58:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 09:57:44 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c4a2c66f6c9b479cedfde8774ac0ac386345334d
-X-Git-Newrev: f969665d8f66864a760693b42b395a93cb4020a1
-X-Patchwork-Hint: ignore
-Message-Id: <20230312085824.E7E8F86B4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pango: bump to version
- 1.50.14
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mAFsnZe2EywK for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 08:58:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC931819B4
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BC931819B4
+ for <buildroot@busybox.net>; Sun, 12 Mar 2023 08:58:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3C235240009;
+ Sun, 12 Mar 2023 08:58:42 +0000 (UTC)
+Date: Sun, 12 Mar 2023 09:58:41 +0100
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230312095841.486c5c84@windsurf>
+In-Reply-To: <20230308085055.126427-1-francois.perrad@gadz.org>
+References: <20230308085055.126427-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678611523;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=vrOqPnO+UWDdT+VZpO3erdqu63ZE6qJRprKp8XpYOnA=;
+ b=eRpWtcl51VcdzFSZmWkZ9h/KsjJMyzSStCJgU8fmp5pue4vxH3fnGbSCgjU1l6SBcz7Er6
+ cdAwQX9lpTXhzbOgJiELXILbT4F/79LK7dT9o0DRIyvTpi6qLh2QwUtEdltshafQsWgIEc
+ yA3NNlXAKENLUQnopSl45+aydT/bN7cA6bW/nlnK5JHEz6YHre79k2cfgAdBB9MEpDYPCG
+ 9/btksl4t86eD8GC9CM5XVR9Hs8OBke+J3lAOGJcMliMH2p7Z3ltAbscxIVB3BeVesSVFX
+ FyIzJ7nzA9zOxWbNfJdhoU00ohZ5+r9Yw2LtNZ7exiUE+8AZ2Vvdd4qV0pTX4w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eRpWtcl5
+Subject: Re: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +76,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f969665d8f66864a760693b42b395a93cb4020a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed,  8 Mar 2023 09:50:55 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/libgtk3/libgtk3.hash | 4 ++--
+>  package/libgtk3/libgtk3.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 1dbc5c9197..3e609e6e04 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/pango/1.50/pango-1.50.12.sha256sum
--sha256  caef96d27bbe792a6be92727c73468d832b13da57c8071ef79b9df69ee058fe3  pango-1.50.12.tar.xz
-+# From https://download.gnome.org/sources/pango/1.50/pango-1.50.14.sha256sum
-+sha256  1d67f205bfc318c27a29cfdfb6828568df566795df0cb51d2189cde7f2d581e8  pango-1.50.14.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index f19faf0502..723e6d2288 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PANGO_VERSION_MAJOR = 1.50
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).12
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).14
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = https://download.gnome.org/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
