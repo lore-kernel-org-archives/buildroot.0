@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D55A6C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D9FC6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79F574175B;
-	Sun, 12 Mar 2023 21:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79F574175B
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3FB44175B;
+	Sun, 12 Mar 2023 21:51:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3FB44175B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HPtmWs4NA8-K; Sun, 12 Mar 2023 21:51:27 +0000 (UTC)
+	with ESMTP id yJX7rqwxHX2p; Sun, 12 Mar 2023 21:51:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 195EB4177B;
-	Sun, 12 Mar 2023 21:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 195EB4177B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EEE7F1BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C301A4177B;
+	Sun, 12 Mar 2023 21:51:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C301A4177B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FDB21BF863
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C3DB860DDF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3DB860DDF
+ by smtp4.osuosl.org (Postfix) with ESMTP id E189341606
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E189341606
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XcT5bckSo94B for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qjQr-lGCQAQJ for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D803C60D5F
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D803C60D5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id E32ED4160A
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32ED4160A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0C2187006; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+ id D324A87008; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:01:45 +0100
+Date: Sun, 12 Mar 2023 10:08:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db97a1d196da07d2c1d1f41061dcac851c110915
-X-Git-Newrev: ec7258f3f4ea4442cd1f8c78a066a062a4d0cbd0
+X-Git-Oldrev: b07c7eb6f48004753e0959b304f8489132ff7b39
+X-Git-Newrev: d1b87a346a0c0b775ee44ec7090bee03ba8be7ba
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214622.C0C2187006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openmpi: bump to version 4.1.4
+Message-Id: <20230312214623.D324A87008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/qemu/aarch64-sbsa: use PARTLABEL to
+ specify root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,111 +64,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec7258f3f4ea4442cd1f8c78a066a062a4d0cbd0
+commit: https://git.buildroot.net/buildroot/commit/?id=d1b87a346a0c0b775ee44ec7090bee03ba8be7ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Notable changes in this commit:
+Specifying /dev/sda2 is ambigious, and when booting my arm64 machine
+this tries to mount the second partition of my ATA drive, instead of
+the second partition of the USB-stick, simply because the ATA driver
+is probed earlier than the USB controller driver.
 
-- change from v4.0.x to v4.1.x "current" version series,
+To solve this problem, use PARTLABEL=root to specify the root filesystem.
+This is similar to how it is currently done for board/aarch64-efi/grub.cfg
+and board/qemu/aarch64-ebbr/grub.cfg.
 
-- move the sha256 hash out of the "Locally computed" section,
-  as the value comes from the download page,
-
-- the LICENSE file hash changed, as the file was updated
-  (copyright years updated and new contributors added),
-
-- the IME (Infinite Memory Engine), introduced in v4.1.x,
-  is disabled to workaround a failure when cross-compiled,
-
-- the package now requires a toolchain with atomic support,
-  and needs to link against libatomic when needed.
-
-For change log since v4.0.0, see:
-- https://github.com/open-mpi/ompi/blob/v4.1.4/NEWS#L61
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openmpi/Config.in    |  2 ++
- package/openmpi/openmpi.hash | 10 +++++-----
- package/openmpi/openmpi.mk   | 17 ++++++++++++++---
- 3 files changed, 21 insertions(+), 8 deletions(-)
+ board/qemu/aarch64-sbsa/grub.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openmpi/Config.in b/package/openmpi/Config.in
-index 4413c55f9c..e64eb81c3e 100644
---- a/package/openmpi/Config.in
-+++ b/package/openmpi/Config.in
-@@ -1,5 +1,6 @@
- comment "openmpi needs a toolchain w/ dynamic library, NPTL, wchar, C++"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_sparc
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-@@ -8,6 +9,7 @@ config BR2_PACKAGE_OPENMPI
- 	bool "openmpi"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
-diff --git a/package/openmpi/openmpi.hash b/package/openmpi/openmpi.hash
-index a399adc758..745ed7c580 100644
---- a/package/openmpi/openmpi.hash
-+++ b/package/openmpi/openmpi.hash
-@@ -1,6 +1,6 @@
--# From: https://www.open-mpi.org/software/ompi/v4.0/
--md5  e3da67df1e968c8798827e0e5fe9a510  openmpi-4.0.0.tar.bz2
--sha1  fee1d0287abfb150bae16957de342752c9bdd4e8  openmpi-4.0.0.tar.bz2
-+# From: https://www.open-mpi.org/software/ompi/v4.1/
-+md5  f057e12aabaf7dd5a6a658180fca404e  openmpi-4.1.4.tar.bz2
-+sha1  357c61a8e06e103d987c0e4a054e8780a034c8b1  openmpi-4.1.4.tar.bz2
-+sha256  92912e175fd1234368c8730c03f4996fe5942e7479bb1d10059405e7f2b3930d  openmpi-4.1.4.tar.bz2
- # Locally computed
--sha256  2f0b8a36cfeb7354b45dda3c5425ef8393c9b04115570b615213faaa3f97366b  openmpi-4.0.0.tar.bz2
--sha256  8298a80ed5f09cfd007bae1c0e7d67d1c2810c6389876778dad070c31a691dac  LICENSE
-+sha256  2db71de9577ebfe15c186605844c470dcecd3717f4ef0118c9440d801c0f58f8  LICENSE
-diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
-index 8bdc3fa188..f14b55ced5 100644
---- a/package/openmpi/openmpi.mk
-+++ b/package/openmpi/openmpi.mk
-@@ -4,14 +4,21 @@
- #
- ################################################################################
+diff --git a/board/qemu/aarch64-sbsa/grub.cfg b/board/qemu/aarch64-sbsa/grub.cfg
+index cd486caf4c..39b7842f8f 100644
+--- a/board/qemu/aarch64-sbsa/grub.cfg
++++ b/board/qemu/aarch64-sbsa/grub.cfg
+@@ -2,5 +2,5 @@ set default="0"
+ set timeout="5"
  
--OPENMPI_VERSION_MAJOR = 4.0
--OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).0
-+OPENMPI_VERSION_MAJOR = 4.1
-+OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).4
- OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
- OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
- OPENMPI_LICENSE = BSD-3-Clause
- OPENMPI_LICENSE_FILES = LICENSE
- OPENMPI_INSTALL_STAGING = YES
- 
-+# The macro searching for IME (Infinite Memory Engine) filesystem
-+# brings "-I/usr/local/include" in the CPPFLAGS, even if not
-+# found. This makes the configuration fail. See:
-+# https://github.com/open-mpi/ompi/blob/v4.1.4/config/ompi_check_ime.m4#L35
-+# Disable explicitly to avoid the issue.
-+OPENMPI_CONF_OPTS = --without-ime
-+
- # Enabling Fortran support requires pre-seeding the configure script
- # with various values that cannot be guessed, so we provide cache
- # files for various architectures.
-@@ -43,6 +50,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- OPENMPI_CFLAGS += -O0
- endif
- 
--OPENMPI_CONF_ENV = CFLAGS="$(OPENMPI_CFLAGS)"
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+OPENMPI_LIBS += -latomic
-+endif
-+
-+OPENMPI_CONF_ENV = CFLAGS="$(OPENMPI_CFLAGS)" LIBS="$(OPENMPI_LIBS)"
- 
- $(eval $(autotools-package))
+ menuentry "Buildroot" {
+-	linux /Image root=/dev/sda2 rootwait console=ttyAMA0
++	linux /Image root=PARTLABEL=root rootwait console=ttyAMA0
+ }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
