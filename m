@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D77A8C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62C55C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:56:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81F1A418E3;
-	Sun, 12 Mar 2023 21:56:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81F1A418E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0893D4097D;
+	Sun, 12 Mar 2023 21:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0893D4097D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id taeJyKh5D8zm; Sun, 12 Mar 2023 21:56:18 +0000 (UTC)
+	with ESMTP id GEIJBKHnTNBZ; Sun, 12 Mar 2023 21:56:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EDEC41C80;
-	Sun, 12 Mar 2023 21:56:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EDEC41C80
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B8401BF863
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBEEB4174D;
+	Sun, 12 Mar 2023 21:56:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBEEB4174D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 33D331BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96D72405F4
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96D72405F4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39C6F60D68
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C6F60D68
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GCczZz3sXdTp for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z0vDTDolQVyh for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C483B4062A
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C483B4062A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 359A460D64
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 359A460D64
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B329587007; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+ id 32D8787006; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 10:02:25 +0100
+Date: Sun, 12 Mar 2023 10:55:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f969665d8f66864a760693b42b395a93cb4020a1
-X-Git-Newrev: 5bfc02c0ad879f3e692cbe0330317e6a35507651
+X-Git-Oldrev: 773535fbac1acd9bc08cde5b44db0d4c1e19de31
+X-Git-Newrev: f32176a7671d8842b175077a92e268226fcec78f
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214623.B329587007@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openfpgaloader: fix typos
+Message-Id: <20230312214624.32D8787006@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgit2: bump to version 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,93 +58,115 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1791414278683995106=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1791414278683995106==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5bfc02c0ad879f3e692cbe0330317e6a35507651
+commit: https://git.buildroot.net/buildroot/commit/?id=f32176a7671d8842b175077a92e268226fcec78f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix a typo in the name of two configuration options.
-This repairs the selection of libgpiod support.
+* Fix the license because libgit2 has been using some android code
+  without attribution. This explains the change of the hash in the
+  license file, which now includes the text of the BSD-2-Clause
+  license.
+* Building in-source is accidentely broken in this release and upstream
+  recommends a separate build directory anyway, so use a separate build
+  directory.
+* Some win32-specific declarations use wchar_t, add an upstreamed patch
+  to avoid a dependency to wchar_t elsewhere.
 
-Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
-Cc: Jean Burgat <jeanburgat33@gmail.com>
-Acked-by: Gwenhael Goavec-merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                         | 9 +++++++++
- package/openfpgaloader/Config.in         | 2 +-
- package/openfpgaloader/openfpgaloader.mk | 4 ++--
- 3 files changed, 12 insertions(+), 3 deletions(-)
+ ...ot-declare-win32-functions-on-non-win32-p.patch | 35 ++++++++++++++++++++++
+ package/libgit2/libgit2.hash                       |  4 +--
+ package/libgit2/libgit2.mk                         |  7 +++--
+ 3 files changed, 42 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7f69462f2e..1d247fe1a0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,15 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2023.05"
+diff --git a/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
+new file mode 100644
+index 0000000000..6be66ffee3
+--- /dev/null
++++ b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
+@@ -0,0 +1,35 @@
++From 20811c5aa9c528405eaa3f88ff22a9adebafa9e6 Mon Sep 17 00:00:00 2001
++From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++Date: Wed, 8 Mar 2023 14:00:52 +0100
++Subject: [PATCH] sysdir: Do not declare win32 functions on non-win32 platforms
 +
-+config BR2_PACAKGE_OPENFPGALOADER_CMSIS
-+	bool "openfpgaloader cmsis option name fixed"
-+	select BR2_LEGACY
-+	help
-+	  A typo on BR2_PACAKGE_OPENFPGALOADER_CMSIS was fixed by
-+	  renaming the option to BR2_PACKAGE_OPENFPGALOADER_CMSIS.
++These declaration poses problems on some embedded or retro Linux systems
++that deliberately disable support for wchar_t from their libc.
 +
- comment "Legacy options removed in 2023.02"
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++[Retrieved from:
++https://github.com/libgit2/libgit2/commit/20811c5aa9c528405eaa3f88ff22a9adebafa9e6]
++---
++ src/libgit2/sysdir.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/libgit2/sysdir.h b/src/libgit2/sysdir.h
++index 1d15bbf43..03f59e1de 100644
++--- a/src/libgit2/sysdir.h
+++++ b/src/libgit2/sysdir.h
++@@ -134,10 +134,12 @@ extern int git_sysdir_set(git_sysdir_t which, const char *paths);
++  */
++ extern int git_sysdir_reset(void);
++ 
+++#ifdef GIT_WIN32
++ /** Sets the registry system dir to a mock; for testing.  */
++ extern int git_win32__set_registry_system_dir(const wchar_t *mock_sysdir);
++ 
++ /** Find the given system dir; for testing. */
++ extern int git_win32__find_system_dirs(git_str *out, const char *subdir);
+++#endif
++ 
++ #endif
++-- 
++2.39.2
++
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index e834525df5..baf43c66f7 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7074f1e2697992b82402501182db254fe62d64877b12f6e4c64656516f4cde88  libgit2-1.5.1.tar.gz
+-sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
++sha256  d557fbf35557bb5df53cbf38ae0081edb4a36494ec0d19741fa673e509245f8f  libgit2-1.6.2.tar.gz
++sha256  6f3c2cd59b057e366c1acc073b038135c52d77892bb33bd4d931c5369d3f062b  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index c962c8030f..b31f5199e1 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,14 +4,15 @@
+ #
+ ################################################################################
  
- config BR2_KERNEL_HEADERS_6_0
-diff --git a/package/openfpgaloader/Config.in b/package/openfpgaloader/Config.in
-index 4ba01d12d3..bd83ad415b 100644
---- a/package/openfpgaloader/Config.in
-+++ b/package/openfpgaloader/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_OPENFPGALOADER
+-LIBGIT2_VERSION = 1.5.1
++LIBGIT2_VERSION = 1.6.2
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
+ 	MIT (sha1), \
+ 	BSD-3-Clause (sha256), \
+ 	wildmatch license (wildmatch), \
+-	CC0-1.0 (xoroshiro256)
++	CC0-1.0 (xoroshiro256), \
++	BSD-2-Clause (basename_r)
+ LIBGIT2_LICENSE_FILES = COPYING
+ LIBGIT2_CPE_ID_VENDOR = libgit2_project
+ LIBGIT2_INSTALL_STAGING = YES
+@@ -24,6 +25,8 @@ LIBGIT2_CONF_OPTS = \
+ 	-DUSE_NTLMCLIENT=OFF \
+ 	-DUSE_THREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
  
- if BR2_PACKAGE_OPENFPGALOADER
++LIBGIT2_SUPPORTS_IN_SOURCE_BUILD = NO
++
+ LIBGIT2_DEPENDENCIES = zlib libhttpparser
  
--config BR2_PACAKGE_OPENFPGALOADER_CMSIS
-+config BR2_PACKAGE_OPENFPGALOADER_CMSIS
- 	bool "CMSIS-DAP support"
- 	depends on BR2_PACKAGE_HAS_UDEV # hidapi
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # hidapi
-diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
-index 042b16612e..6d7fbd9850 100644
---- a/package/openfpgaloader/openfpgaloader.mk
-+++ b/package/openfpgaloader/openfpgaloader.mk
-@@ -17,14 +17,14 @@ else
- OPENFPGALOADER_CONF_OPTS += -DENABLE_UDEV=OFF
- endif
- 
--ifeq ($(BR2_PACAKGE_OPENFPGALOADER_CMSIS),y)
-+ifeq ($(BR2_PACKAGE_OPENFPGALOADER_CMSIS),y)
- OPENFPGALOADER_DEPENDENCIES += hidapi
- OPENFPGALOADER_CONF_OPTS += -DENABLE_CMSISDAP=ON
- else
- OPENFPGALOADER_CONF_OPTS += -DENABLE_CMSISDAP=OFF
- endif
- 
--ifeq ($(BR2_PACAKGE_OPENFPGALOADER_LIBGPIOD),y)
-+ifeq ($(BR2_PACKAGE_OPENFPGALOADER_LIBGPIOD),y)
- OPENFPGALOADER_DEPENDENCIES += libgpiod
- OPENFPGALOADER_CONF_OPTS += -DENABLE_LIBGPIOD=ON
- else
-
---===============1791414278683995106==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # If libiconv is available (for !locale toolchains), then we can use
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1791414278683995106==--
