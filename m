@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3908C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2CD4C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 742C54049F;
-	Sun, 12 Mar 2023 21:58:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 742C54049F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 507784032D;
+	Sun, 12 Mar 2023 21:58:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 507784032D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bAOCCcDQkzaT; Sun, 12 Mar 2023 21:58:21 +0000 (UTC)
+	with ESMTP id hrlpO8N35eLb; Sun, 12 Mar 2023 21:58:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B286416F5;
-	Sun, 12 Mar 2023 21:58:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B286416F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38C2C4049F;
+	Sun, 12 Mar 2023 21:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38C2C4049F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED0981BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 509801BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A8A240603
+ by smtp2.osuosl.org (Postfix) with ESMTP id 70443408BC
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A8A240603
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70443408BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RAzty2Hshjli for <buildroot@lists.busybox.net>;
+ with ESMTP id 0eaD5viGO6u3 for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7753A40620
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CB9F408A6
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7753A40620
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CB9F408A6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61D2387008; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ id 9902087007; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 11:08:21 +0100
+Date: Sun, 12 Mar 2023 13:31:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9ce280ba180f8668bfcd92175842a3c2d9567223
-X-Git-Newrev: b83550bd0c2bbfc894d1c82ec0ea330c8283deee
+X-Git-Oldrev: c4cad5405fdd5def2d713a0bd14dc3c29b7bfb36
+X-Git-Newrev: 3e48f8358e519f9c24262a6549d8f6c78ee01add
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214624.61D2387008@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janus-gateway: bump to version
- 1.1.2
+Message-Id: <20230312214624.9902087007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gsl: bump to version 2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,74 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b83550bd0c2bbfc894d1c82ec0ea330c8283deee
+commit: https://git.buildroot.net/buildroot/commit/?id=3e48f8358e519f9c24262a6549d8f6c78ee01add
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove patch applied upstream.
+For change log since 2.6, see:
+https://git.savannah.gnu.org/cgit/gsl.git/tree/NEWS?h=release-2-7
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+This 2.7.1 version includes a minor libtool version fixup on top of 2.7:
+https://git.savannah.gnu.org/cgit/gsl.git/commit/?id=77e7c7d008707dace56626020eaa6181912e9841
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...003-Use-parentheses-to-ensure-compilation.patch | 27 ----------------------
- package/janus-gateway/janus-gateway.hash           |  2 +-
- package/janus-gateway/janus-gateway.mk             |  2 +-
- 3 files changed, 2 insertions(+), 29 deletions(-)
+ package/gsl/gsl.hash | 2 +-
+ package/gsl/gsl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
-deleted file mode 100644
-index f91c13d1f6..0000000000
---- a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 51431c36cd5f2997c0f7723909195b9883ae0486 Mon Sep 17 00:00:00 2001
--From: Benson Muite <bkmgit@users.noreply.github.com>
--Date: Wed, 4 Jan 2023 13:33:36 +0300
--Subject: [PATCH] Use parentheses to ensure compilation (#3138)
--
--Compiler fails with latest Curl release. Use parenthesis to ensure compiler evaluates expression correctly.
--
--[Retrieved from:
--https://github.com/meetecho/janus-gateway/commit/51431c36cd5f2997c0f7723909195b9883ae0486]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/turnrest.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/turnrest.c b/src/turnrest.c
--index b8560d22f2..42e6114de8 100644
----- a/src/turnrest.c
--+++ b/src/turnrest.c
--@@ -165,7 +165,7 @@ janus_turnrest_response *janus_turnrest_request(const char *user) {
-- 	JANUS_LOG(LOG_VERB, "Sending request: %s\n", request_uri);
-- 	janus_mutex_unlock(&api_mutex);
-- 	curl_easy_setopt(curl, CURLOPT_URL, request_uri);
---	curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
--+	curl_easy_setopt(curl, (api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST), 1);
-- 	if(!api_http_get) {
-- 		/* FIXME Some servers don't like a POST with no data */
-- 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query_string);
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index 7a87ae737a..a147a8afff 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
+diff --git a/package/gsl/gsl.hash b/package/gsl/gsl.hash
+index 0d40a75497..153ae4131d 100644
+--- a/package/gsl/gsl.hash
++++ b/package/gsl/gsl.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  bb83c19d6137e39833e8eb2b1deeecb33b5d19d4f503d51703bdcc478c447940  janus-gateway-1.1.1.tar.gz
-+sha256  f721d62a22b38ba3a341a5502f06b8b3a5a4f7bd0e9cc6c53de257fe99695e17  janus-gateway-1.1.2.tar.gz
- sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index dd898563e5..786bc211d4 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
+ # Locally calculated after checking pgp signature
+-sha256  b782339fc7a38fe17689cb39966c4d821236c28018b6593ddb6fd59ee40786a8  gsl-2.6.tar.gz
++sha256  dcb0fbd43048832b757ff9942691a8dd70026d5da0ff85601e52687f6deeb34b  gsl-2.7.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
+index 3604f9836c..575cb75462 100644
+--- a/package/gsl/gsl.mk
++++ b/package/gsl/gsl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JANUS_GATEWAY_VERSION = 1.1.1
-+JANUS_GATEWAY_VERSION = 1.1.2
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
- JANUS_GATEWAY_LICENSE_FILES = COPYING
+-GSL_VERSION = 2.6
++GSL_VERSION = 2.7.1
+ GSL_SITE = $(BR2_GNU_MIRROR)/gsl
+ GSL_INSTALL_STAGING = YES
+ GSL_LICENSE = GPL-3.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
