@@ -1,87 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29707C6FD19
-	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 18:32:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96155C61DA4
+	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 18:47:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DA4D4037A;
-	Mon, 13 Mar 2023 18:32:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DA4D4037A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 295DD60F4E;
+	Mon, 13 Mar 2023 18:47:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 295DD60F4E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hj2-_r7UfNyh; Mon, 13 Mar 2023 18:32:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wCUePho6ik0B; Mon, 13 Mar 2023 18:47:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9600640342;
-	Mon, 13 Mar 2023 18:32:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9600640342
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D22341BF365
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 18:32:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6735A60E83;
+	Mon, 13 Mar 2023 18:47:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6735A60E83
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F5C91BF365
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 18:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACB63402E7
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 18:32:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACB63402E7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58EB060E83
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 18:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58EB060E83
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yxny0mrevDwb for <buildroot@lists.busybox.net>;
- Mon, 13 Mar 2023 18:32:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A697A40181
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A697A40181
- for <buildroot@buildroot.org>; Mon, 13 Mar 2023 18:32:42 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id x3so52437552edb.10
- for <buildroot@buildroot.org>; Mon, 13 Mar 2023 11:32:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1678732360;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=8JU9v7jrYruRMDJfNhcq5X1N/iwX2sSSfH4GrViappI=;
- b=0GZADIsByP87fNh1dJcmbY8ZXzQkz1m/IVTLYxD1VRsgYwQxW1WfvPjsKpwn9iGREd
- zGKPPUScupXBgMRZcxbivDZXGMRRL/v/NgvA/PeRn6E4KVRXzuNCc352O3BEj4YGRc+F
- 38a0bWmGYclRXw3EAAhlU0A0hGDKPf7Zw+EBaqGJ8YPFQeQZqUfHYdnQFpQ8TTqJdA3h
- VURMc0DDLS6hLkztSb93pHerYYybSIRwhXblbF6WsnxBDWoFZERRDrCdNAtlX0FbCpZg
- /xJw9IQMC9jz70UH6Gf50pqNbqV4J14ajAAEuA4BXUnEQnUtVbXqvl0UrR7+4JYwLvse
- ryyA==
-X-Gm-Message-State: AO0yUKUjYo8Fdbabu1Zwp3OeekSJqyH0Fpp5KgxMQdDX49FXU27gU3U4
- nak6QFq0VmOR8cTzts29dO5Fo+NvQ0zbF//P
-X-Google-Smtp-Source: AK7set8Cu1uYaTOLLMaelazjONxiTkDPJrWcdhoGekIm3UHZuDwdZk2kqaifiV+kFb2GilieUINMog==
-X-Received: by 2002:a17:907:3f9d:b0:923:c55d:efd2 with SMTP id
- hr29-20020a1709073f9d00b00923c55defd2mr2015293ejc.68.1678732360562; 
- Mon, 13 Mar 2023 11:32:40 -0700 (PDT)
-Received: from romans-MBP.lampertdns.at (194-208-157-122.lampert.tv.
- [194.208.157.122]) by smtp.gmail.com with ESMTPSA id
- z92-20020a509e65000000b004bf5981ef3dsm98970ede.94.2023.03.13.11.32.39
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Mon, 13 Mar 2023 11:32:40 -0700 (PDT)
-From: Roman Passler <roman.passler@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 13 Mar 2023 19:32:35 +0100
-Message-Id: <20230313183235.2665-1-roman.passler@gmail.com>
-X-Mailer: git-send-email 2.39.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 49Ix39hhmQcH for <buildroot@lists.busybox.net>;
+ Mon, 13 Mar 2023 18:47:39 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBDD260E63
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DBDD260E63
+ for <buildroot@buildroot.org>; Mon, 13 Mar 2023 18:47:38 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D36D820003;
+ Mon, 13 Mar 2023 18:47:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pbnCo-0006bc-Ix; Mon, 13 Mar 2023 19:47:34 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230223225942.313435-1-fontaine.fabrice@gmail.com>
+Date: Mon, 13 Mar 2023 19:47:34 +0100
+In-Reply-To: <20230223225942.313435-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 23 Feb 2023 23:59:42 +0100")
+Message-ID: <877cvk8p4p.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1678732360;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8JU9v7jrYruRMDJfNhcq5X1N/iwX2sSSfH4GrViappI=;
- b=afXUGL/ZWjykOfcFOJIPyvvsCe65W4VXvP8hq45mRBVqCsHdbIE8IiPBFB4on4S00h
- BmSTKorYEtq6Qgmwr3oVpX3Et79Vp/ZQsQcG67QFVgLeSkqri/9pqrV8QVEP1ma4eQdI
- 36NfG0KCHo9m+KedZx7fmIAkWff0s6hB8KyfphmJU18oEvTBWB+m3pmDztLBqIKo8ZgH
- dzHcM1u2o0cTVvfPbMM82mGpj/Tes4HAhCDVEgoK3YSwkwFx+1mRvZhRM20zehreiSji
- j0QMeEp9uZtUxTVQkUn4bGTthsjPiOlydUMMuwvgYTw1Ydu+yHoqrzetfp8W3l4AeagC
- 4gWw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=afXUGL/Z
-Subject: [Buildroot] [PATCH 1/1] package/openocd: bump to 0.12.0
+Subject: Re: [Buildroot] [PATCH 1/1] support/dependencies/dependencies.sh:
+ require MD5 perl package for netsurf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +64,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roman Passler <roman.passler@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Change-Id: Ie76a4f365af3f59c80241fe4935129d1098b140d
-Signed-off-by: Roman Passler <roman.passler@gmail.com>
----
- package/openocd/openocd.hash | 6 +++---
- package/openocd/openocd.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/openocd/openocd.hash b/package/openocd/openocd.hash
-index 91eb56d930..325f55bf04 100644
---- a/package/openocd/openocd.hash
-+++ b/package/openocd/openocd.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/openocd/files/openocd/0.11.0/
--sha256  43a3ce734aff1d3706ad87793a9f3a5371cb0e357f0ffd0a151656b06b3d1e7d  openocd-0.11.0.tar.bz2
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+# From http://sourceforge.net/projects/openocd/files/openocd/0.12.0/
-+sha256  af254788be98861f2bd9103fe6e60a774ec96a8c374744eef9197f6043075afa  openocd-0.12.0.tar.bz2
-+sha256  1b8f7e37ee5afbbf95c2a4d62b12b25232e29538692663b434318503a9a88419  COPYING
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 37a06ca848..95a7fd3c2a 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENOCD_VERSION = 0.11.0
-+OPENOCD_VERSION = 0.12.0
- OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
- OPENOCD_SITE = http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VERSION)
- OPENOCD_LICENSE = GPL-2.0+
+ > Fix the following build failure:
+ > Can't locate object method "hexhash" via package "MD5" at utils/git-testament.pl line 47
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/3dddcbbe7f6ecae5a2db6fac11fb659719452f73
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.11.x and 2022.02.x, thanks.
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
