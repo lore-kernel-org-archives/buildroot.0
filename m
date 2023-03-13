@@ -1,64 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1F88C6FD19
-	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 21:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBD6FC6FD19
+	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 21:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BB0E417A6;
-	Mon, 13 Mar 2023 21:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BB0E417A6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CF0181757;
+	Mon, 13 Mar 2023 21:51:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CF0181757
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ggmuZy3sFpNS; Mon, 13 Mar 2023 21:35:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sKC1HsYXFJea; Mon, 13 Mar 2023 21:51:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96787417A7;
-	Mon, 13 Mar 2023 21:35:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96787417A7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9E37A1BF282
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 21:35:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86D3A8174C;
+	Mon, 13 Mar 2023 21:51:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86D3A8174C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 859C21BF282
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 21:51:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78B81402D0
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 21:35:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78B81402D0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5EE63815AB
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 21:51:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EE63815AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kLPzojVq15I4 for <buildroot@lists.busybox.net>;
- Mon, 13 Mar 2023 21:35:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JJHAlppsStPc for <buildroot@lists.busybox.net>;
+ Mon, 13 Mar 2023 21:51:10 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB933400D0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BB933400D0
- for <buildroot@buildroot.org>; Mon, 13 Mar 2023 21:35:35 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.117.172])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id AC20619F57E;
- Mon, 13 Mar 2023 22:35:27 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 13 Mar 2023 22:34:39 +0100
-Message-Id: <20230313213439.277675-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.39.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A8CF813FC
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1A8CF813FC
+ for <buildroot@buildroot.org>; Mon, 13 Mar 2023 21:51:09 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B52EC60003;
+ Mon, 13 Mar 2023 21:51:06 +0000 (UTC)
+Date: Mon, 13 Mar 2023 22:51:05 +0100
+To: Stefan Agner <stefan@agner.ch>
+Message-ID: <20230313225105.6a8d5954@windsurf>
+In-Reply-To: <189b4d81990997b87dec82c4865a3d25e35573b0.1678714004.git.stefan@agner.ch>
+References: <189b4d81990997b87dec82c4865a3d25e35573b0.1678714004.git.stefan@agner.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1678743332;
- bh=hrqzAO5gP8HUCnq9bSoutaWjLQKUl1JNOHkTSeDs2as=;
- h=From:To:Cc:Subject:Date:From;
- b=P39S/lX3GoE+rrvSQqziBg6BHs8DiFjT57BObL/Tw7gz3kIfJuw26kTFQKtZezdvU
- FI85oVVXRIL7go1zJR8/EdzCstj6VRZWHJAJnVy24xtAZX0y8ZaK1Y0caOpv85wlkY
- oox8X6L4Q8CswHss4kYuOdK1ATdM8ggsUcoCgvYea7o+MZH3BzD+lIfXyfariYH4zq
- p+x9q6rjBdnWbxTx09PB1I4kAAs7w7QDTUkN7LxpfkpL3m5/Mzp31CeKZdqD9I/N3H
- YF+crvnRxgQzUz8AYiV679RuYlQ2C2RQ1p2zChQnxFbgRLEr3DmGApKnS9P7ab2KPW
- 2khK8H6bO7Jaw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=P39S/lX3
-Subject: [Buildroot] [PATCH v2 1/1] package/python-hwdata: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678744267;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=gARYFJUhcCim2MYkQNHaC5H9aeT0JKBVEOwvw6eVJS8=;
+ b=deSJ1ZlsKG8sRxtxqkpo+L6eQShcowIQ3EBBfc8P9lwWo2G/qDnxz+B7mFY8hx7CGgcL90
+ XDMXdASJZGzYRPoFifaQwfahLOiv6VVn5aZQ+w+3j8200yNJ7XCkfqNdceQI0tAzwp8TUk
+ frlFC4LVyqnWx0C4udUkhvq6BBIDIhkno09LuL5Jcs5bCTfvim3IZq8DxWUNaIOtFmtkaa
+ eoVjsxNqBY0DH1rwvZkBkmK+iopdPIQd2UmGxPieg7M9A2dmdgE+3lGQQwx2klvKdUQ1S+
+ +wwWS2wgxPsfsBj6G++d37dEJ2SYhOEWwmEgLL9UPLc16/Kj0dqbiFSZMGUaNg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=deSJ1Zls
+Subject: Re: [Buildroot] [PATCH] package/gptfdisk: fix another runtime
+ failure with popt 1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,221 +76,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Provides python interface to database stored in hwdata
-package. It allows you to get human readable description of
-USB and PCI devices.
+Hello Stefan,
 
-https://github.com/xsuchy/python-hwdata
+On Mon, 13 Mar 2023 14:34:18 +0100
+Stefan Agner <stefan@agner.ch> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Changes v1 -> v2:
-- Add the LICENSE file from upstream git,
-  suggested by Thomas.
+> Fix the following runtime failure raised since bump of popt to version
+> 1.19 in commit 895bfba93f6e5535f2132aeea144d2cd87ebc71b:
+> 
+> Segmentation fault (core dumped)
+> 
+> Fixes:
+>  - No autobuilder failure
 
-Patch tested on branch master at commit 61ba55e with commands:
+Well, if it's a runtime failure, pretty obviously there's no
+autobuilder failure :-)
 
-    make check-package
-    ...
-    0 warnings generated
+> diff --git a/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
+> new file mode 100644
+> index 0000000000..8541fd2772
+> --- /dev/null
+> +++ b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
+> @@ -0,0 +1,41 @@
+> +From f5de3401b974ce103ffd93af8f9d43505a04aaf9 Mon Sep 17 00:00:00 2001
+> +Message-Id: <f5de3401b974ce103ffd93af8f9d43505a04aaf9.1678702777.git.stefan@agner.ch>
+> +From: Damian Kurek <starfire24680@gmail.com>
+> +Date: Thu, 7 Jul 2022 03:39:16 +0000
+> +Subject: [PATCH] Fix NULL dereference when duplicating string argument
+> +
+> +poptGetArg can return NULL if there are no additional arguments, which
+> +makes strdup dereference NULL on strlen
 
-    python3 -m flake8 \
-        support/testing/tests/package/sample_python_hwdata.py \
-        support/testing/tests/package/test_python_hwdata.py
-    [no-output]
+Where is this patch coming from? Could you add a link to where the
+patch was found? Is this patch a backport from upstream?
 
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_python_hwdata
-    ...
-    OK
----
- DEVELOPERS                                    |  3 ++
- package/Config.in                             |  1 +
- package/python-hwdata/Config.in               | 12 ++++++
- package/python-hwdata/python-hwdata.hash      |  5 +++
- package/python-hwdata/python-hwdata.mk        | 23 +++++++++++
- .../tests/package/sample_python_hwdata.py     | 40 +++++++++++++++++++
- .../tests/package/test_python_hwdata.py       | 12 ++++++
- 7 files changed, 96 insertions(+)
- create mode 100644 package/python-hwdata/Config.in
- create mode 100644 package/python-hwdata/python-hwdata.hash
- create mode 100644 package/python-hwdata/python-hwdata.mk
- create mode 100644 support/testing/tests/package/sample_python_hwdata.py
- create mode 100644 support/testing/tests/package/test_python_hwdata.py
+Also, we need your Signed-off-by line inside the patch.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 592c0e6b9c..b49491da7a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1715,6 +1715,7 @@ F:	package/ptm2human/
- F:	package/python-distro/
- F:	package/python-gnupg/
- F:	package/python-hkdf/
-+F:	package/python-hwdata/
- F:	package/python-magic-wormhole/
- F:	package/python-magic-wormhole-mailbox-server/
- F:	package/python-magic-wormhole-transit-relay/
-@@ -1727,6 +1728,7 @@ F:	package/z3/
- F:	package/zynaddsubfx/
- F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
-+F:	support/testing/tests/package/sample_python_hwdata.py
- F:	support/testing/tests/package/sample_python_pyalsa.py
- F:	support/testing/tests/package/sample_python_spake2.py
- F:	support/testing/tests/package/test_ddrescue.py
-@@ -1748,6 +1750,7 @@ F:	support/testing/tests/package/test_perftest.py
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
- F:	support/testing/tests/package/test_python_hkdf.py
-+F:	support/testing/tests/package/test_python_hwdata.py
- F:	support/testing/tests/package/test_python_magic_wormhole.py
- F:	support/testing/tests/package/test_python_pyalsa.py
- F:	support/testing/tests/package/test_python_spake2.py
-diff --git a/package/Config.in b/package/Config.in
-index f8ce83365e..0f8dab3e71 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1082,6 +1082,7 @@ menu "External python modules"
- 	source "package/python-httplib2/Config.in"
- 	source "package/python-huepy/Config.in"
- 	source "package/python-humanize/Config.in"
-+	source "package/python-hwdata/Config.in"
- 	source "package/python-hyperframe/Config.in"
- 	source "package/python-hyperlink/Config.in"
- 	source "package/python-ibmiotf/Config.in"
-diff --git a/package/python-hwdata/Config.in b/package/python-hwdata/Config.in
-new file mode 100644
-index 0000000000..923d0a7d8a
---- /dev/null
-+++ b/package/python-hwdata/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_HWDATA
-+	bool "python-hwdata"
-+	select BR2_PACKAGE_HWDATA # runtime
-+	select BR2_PACKAGE_HWDATA_PCI_IDS
-+	select BR2_PACKAGE_HWDATA_PNP_IDS
-+	select BR2_PACKAGE_HWDATA_USB_IDS
-+	help
-+	  Provides python interface to database stored in hwdata
-+	  package. It allows you to get human readable description of
-+	  USB and PCI devices.
-+
-+	  https://github.com/xsuchy/python-hwdata
-diff --git a/package/python-hwdata/python-hwdata.hash b/package/python-hwdata/python-hwdata.hash
-new file mode 100644
-index 0000000000..0c7ca31476
---- /dev/null
-+++ b/package/python-hwdata/python-hwdata.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/hwdata/json
-+md5  dccf3b28d06fb9c6f56875e148356c24  hwdata-2.3.7.tar.gz
-+sha256  9e5c96be38d9218ffde40834d4ca03344b8dfaed29c8c5afe0030125ea03db03  hwdata-2.3.7.tar.gz
-+# Locally computed
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/python-hwdata/python-hwdata.mk b/package/python-hwdata/python-hwdata.mk
-new file mode 100644
-index 0000000000..8eeec6efa8
---- /dev/null
-+++ b/package/python-hwdata/python-hwdata.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# python-hwdata
-+#
-+################################################################################
-+
-+PYTHON_HWDATA_VERSION = 2.3.7
-+PYTHON_HWDATA_SOURCE = hwdata-$(PYTHON_HWDATA_VERSION).tar.gz
-+PYTHON_HWDATA_SITE = https://files.pythonhosted.org/packages/15/26/f5bc1b42129fbcbd1c99c29714af1685fc89e2cf37680a9930d4fcac1808
-+PYTHON_HWDATA_SETUP_TYPE = distutils
-+PYTHON_HWDATA_LICENSE = GPL-2.0+
-+PYTHON_HWDATA_LICENSE_FILES = LICENSE
-+
-+# There is no LICENSE file in the PyPi tarball, but it is available in
-+# upstream git repository:
-+PYTHON_HWDATA_EXTRA_DOWNLOADS = https://raw.githubusercontent.com/xsuchy/python-hwdata/python-hwdata-$(PYTHON_HWDATA_VERSION)-1/LICENSE
-+
-+define PYTHON_HWDATA_ADD_LICENSE_FILE
-+	cp $(PYTHON_HWDATA_DL_DIR)/LICENSE $(@D)
-+endef
-+PYTHON_HWDATA_POST_EXTRACT_HOOKS += PYTHON_HWDATA_ADD_LICENSE_FILE
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_hwdata.py b/support/testing/tests/package/sample_python_hwdata.py
-new file mode 100644
-index 0000000000..a13c08b32e
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_hwdata.py
-@@ -0,0 +1,40 @@
-+#! /usr/bin/env python3
-+
-+from hwdata import PCI, PNP, USB
-+
-+# Test PCI IDs
-+pci_vendor_id = '1af4'
-+pci_device_id = '1003'
-+
-+pci = PCI()
-+
-+pci_vendor = pci.get_vendor(pci_vendor_id)
-+print("PCI Vendor: %s" % pci_vendor)
-+assert (pci_vendor == "Red Hat, Inc.")
-+
-+pci_device = pci.get_device(pci_vendor_id, pci_device_id)
-+print("PCI Device: %s" % pci_device)
-+assert (pci_device == "Virtio console")
-+
-+# Test USB IDs
-+usb_vendor_id = '1d6b'
-+usb_device_id = '0001'
-+
-+usb = USB()
-+
-+usb_vendor = usb.get_vendor(usb_vendor_id)
-+print("USB Vendor: %s" % usb_vendor)
-+assert (usb_vendor == "Linux Foundation")
-+
-+usb_device = usb.get_device(usb_vendor_id, usb_device_id)
-+print("USB Device: %s" % usb_device)
-+assert (usb_device == "1.1 root hub")
-+
-+# Test PNP IDs
-+pnp_id = 'RHT'
-+
-+pnp = PNP()
-+
-+pnp_vendor = pnp.get_vendor(pnp_id)
-+print("PNP Vendor: %s" % pnp_vendor)
-+assert (pnp_vendor == "Red Hat, Inc.")
-diff --git a/support/testing/tests/package/test_python_hwdata.py b/support/testing/tests/package/test_python_hwdata.py
-new file mode 100644
-index 0000000000..7028d1dd59
---- /dev/null
-+++ b/support/testing/tests/package/test_python_hwdata.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonHwdata(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_HWDATA=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_hwdata.py"]
-+    timeout = 10
+Thanks a lot!
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
