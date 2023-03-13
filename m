@@ -1,63 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E85C6FD19
-	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 13:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79818C6FD19
+	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 17:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F03560AC4;
-	Mon, 13 Mar 2023 13:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F03560AC4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0960941706;
+	Mon, 13 Mar 2023 17:09:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0960941706
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KyZwwY-xu39T; Mon, 13 Mar 2023 13:34:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gp5zLmuC3uFM; Mon, 13 Mar 2023 17:09:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4FE460B24;
-	Mon, 13 Mar 2023 13:34:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4FE460B24
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14EA6416B5;
+	Mon, 13 Mar 2023 17:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14EA6416B5
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 295921BF2A4
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 13:34:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D2231BF384
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 17:09:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F0FAD403C2
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 13:34:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0FAD403C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54E0C400CB
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 17:09:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54E0C400CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RAAF_UugTV1C for <buildroot@lists.busybox.net>;
- Mon, 13 Mar 2023 13:34:29 +0000 (UTC)
+ with ESMTP id 8b-SkaZLhIcN for <buildroot@lists.busybox.net>;
+ Mon, 13 Mar 2023 17:09:13 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73E424016C
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 73E424016C
- for <buildroot@buildroot.org>; Mon, 13 Mar 2023 13:34:29 +0000 (UTC)
-Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 117585C32B2;
- Mon, 13 Mar 2023 14:34:26 +0100 (CET)
-From: Stefan Agner <stefan@agner.ch>
-To: buildroot@buildroot.org
-Date: Mon, 13 Mar 2023 14:34:18 +0100
-Message-Id: <189b4d81990997b87dec82c4865a3d25e35573b0.1678714004.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.39.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BA35409DB
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BA35409DB
+ for <buildroot@buildroot.org>; Mon, 13 Mar 2023 17:09:13 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6E8341C0007;
+ Mon, 13 Mar 2023 17:09:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pblfa-0004VN-KE; Mon, 13 Mar 2023 18:09:10 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230224105148.1780818-1-fontaine.fabrice@gmail.com>
+Date: Mon, 13 Mar 2023 18:09:10 +0100
+In-Reply-To: <20230224105148.1780818-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 24 Feb 2023 11:51:48 +0100")
+Message-ID: <87bkkw8top.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1678714466;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=yQApfFPAat83U4IOLOCC92wlGnn8gp1PCcxgQ8VceKc=;
- b=LAScR3xAEfzFNioRMnQrp3gqrFC9M86ySd1Wh5NqBFLfXR21JW+y9l+pQh3q30LM3swy7L
- xwQEwLT3kQLN8iXKaBkGN/XfKdAbRErL5/mTOIXd1i314R9M8dpYLDNuE+sOyj3k/D/zdF
- nmgGD3pTGQhraILu3dzG7Z22YqVyewI=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=LAScR3xA
-Subject: [Buildroot] [PATCH] package/gptfdisk: fix another runtime failure
- with popt 1.19
+Subject: Re: [Buildroot] [PATCH 1/1] package/ntpsec: fix build without
+ stack-protector
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,76 +64,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Stefan Agner <stefan@agner.ch>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following runtime failure raised since bump of popt to version
-1.19 in commit 895bfba93f6e5535f2132aeea144d2cd87ebc71b:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Segmentation fault (core dumped)
+ > Fix the following build failure without stack-protector raised since the
+ > addition of the package in commit
+ > 27b8d0ba8c4004819e092fb81c0f64f284b3aa4a:
 
-Fixes:
- - No autobuilder failure
+ > Checking for library ssp                 : not found
+ > Checking for library ssp_nonshared       : not found
+ > Checking if C compiler supports -fstack-protector-all : yes
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
----
- ...ence-when-duplicating-string-argumen.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
+ > [...]
 
-diff --git a/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
-new file mode 100644
-index 0000000000..8541fd2772
---- /dev/null
-+++ b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
-@@ -0,0 +1,41 @@
-+From f5de3401b974ce103ffd93af8f9d43505a04aaf9 Mon Sep 17 00:00:00 2001
-+Message-Id: <f5de3401b974ce103ffd93af8f9d43505a04aaf9.1678702777.git.stefan@agner.ch>
-+From: Damian Kurek <starfire24680@gmail.com>
-+Date: Thu, 7 Jul 2022 03:39:16 +0000
-+Subject: [PATCH] Fix NULL dereference when duplicating string argument
-+
-+poptGetArg can return NULL if there are no additional arguments, which
-+makes strdup dereference NULL on strlen
-+---
-+ gptcl.cc | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/gptcl.cc b/gptcl.cc
-+index 0d578eb..ab95239 100644
-+--- a/gptcl.cc
-++++ b/gptcl.cc
-+@@ -155,10 +155,11 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
-+    } // while
-+ 
-+    // Assume first non-option argument is the device filename....
-+-   device = strdup((char*) poptGetArg(poptCon));
-+-   poptResetContext(poptCon);
-++   device = (char*) poptGetArg(poptCon);
-+ 
-+    if (device != NULL) {
-++      device = strdup(device);
-++      poptResetContext(poptCon);
-+       JustLooking(); // reset as necessary
-+       BeQuiet(); // Tell called functions to be less verbose & interactive
-+       if (LoadPartitions((string) device)) {
-+@@ -498,6 +499,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
-+          cerr << "Error encountered; not saving changes.\n";
-+          retval = 4;
-+       } // if
-++      free(device);
-+    } // if (device != NULL)
-+    poptFreeContext(poptCon);
-+    return retval;
-+-- 
-+2.39.2
-+
+ > The configuration failed
+ > (complete log in /home/autobuild/autobuild/instance-2/output-1/build/ntpsec-1_2_2/build/config.log)
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/f38abc6b7f8464836231192cfe078a5b27319a8a
+ >  - http://autobuild.buildroot.org/results/62be818e2f2eac07b4a2de6f4a8898cc4cc05b1f
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.11.x, thanks.
+
 -- 
-2.39.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
