@@ -4,132 +4,136 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DFF3C61DA4
-	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 09:16:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B868C6FD19
+	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 09:33:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B54E140905;
-	Mon, 13 Mar 2023 09:16:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B54E140905
+	by smtp4.osuosl.org (Postfix) with ESMTP id C607A410C8;
+	Mon, 13 Mar 2023 09:33:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C607A410C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lyXV-stfngUS; Mon, 13 Mar 2023 09:16:41 +0000 (UTC)
+	with ESMTP id AL_PyMw4ZvCQ; Mon, 13 Mar 2023 09:33:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77450414C2;
-	Mon, 13 Mar 2023 09:16:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77450414C2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03E321BF2A5
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 09:16:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A40CB410CF;
+	Mon, 13 Mar 2023 09:33:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A40CB410CF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A36921BF2A5
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 09:33:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA71E80C37
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 09:16:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA71E80C37
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CFF540556
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 09:33:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CFF540556
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BQwXmzzvO1qn for <buildroot@lists.busybox.net>;
- Mon, 13 Mar 2023 09:16:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pdvjazlPXTIX for <buildroot@lists.busybox.net>;
+ Mon, 13 Mar 2023 09:33:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5091F80BE3
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur04on062c.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe0e::62c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5091F80BE3
- for <buildroot@buildroot.org>; Mon, 13 Mar 2023 09:16:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 234FE400E4
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com
+ (mail-am0eur02on2062e.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe13::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 234FE400E4
+ for <buildroot@buildroot.org>; Mon, 13 Mar 2023 09:33:18 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zh+jqBbweE1hnHj9gtozaEs8CB9kDs+OF3zJsVsD1/jY3caxn0F2F/eHOT/em8zICoSMsuNQ4RIIo2WrXQySSoGj8gyJMDJ2AUqW5p186olDARaKKfG/EdDFn85BDou2xK3lTUwew+mWbGJ0QO52V2qN6G2Vbm63zksBOj33jJorAALSiQ1YEoYVvidx2fD5K6gtDQVvu03maUl7ycZIUUXJJuJCilRhpE30WvHk3hKw2v8RtXETz+Wg5+mWoflbb04l99NRVVphvyKrmUOf6Rjw2BwNgGscbQCMeoaDDqHhwa3ap/PuxCRBtv5ntiP7/FlDFFx4rkoUhyIFBqXrRg==
+ b=aSAXAkeZBJVk2UJP0pxYCtm7U0xundfAfTR7MaYW1ZFT9rYiRiy8B+N++GAfnSUARKdcPdeKbkUtf1019teIWsPg2dtJexbiMFfiZnONfd5so8dkXL1CkFAH6SIhOTMGZohfsd2OhogqNthQvs5S3xIR/YY65CdI/lCwuevtXriMLW2SGSEzgRt0zIXPJVAwlreBSCu22LcejvQnvpgg0IlVRFArdXbvkA6i3Q8p7lsqWkbOtGf1kEVVYmEEblyZq0V5ZXh4muZSCgXoMszmr+STGTXZJcU8OS8+Cf5azSjS04lJQ2cwOK/0mxmqz6I8j0HjuPHdqV+VVTe9UTsrjA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Itafvd6arHnEoFgRYDeRyRqRCHAYGw4ntmHXRmJdOog=;
- b=lCGGIEK7ybj+4XZJ358Z/hHCYhTjSpZrXI1nuik58qwGLgNGmm2LMESZOwLFUPi3mMa6t7yssGwz06m4vDf5eyrcuofwuzDLpSFWszvHp3ik7d4m0FLtTUJ4F/BC4aiFuLDe0GVz3uZB3mL583h+/0VXCWzTrd43EDgHOLdsOBOwmg4X1saBDWW4Va5A1xtgmV0fy9+11dLyC0xzOgZkypqew3YKlcGanOWAKPBvHphEPotAW8Ef49AnmxttnBX9O+d70i5Cv+LPXH3uiwIL2XnI8RqjSQwz+YpNSciUfZZsHthZ6AlGko56L7MPqVK60kXXYNa0GohveUUtbN0atQ==
+ bh=hzsD0r7psmlShjJT6okDXjLDmgh4KG1+kPWt5bXi92o=;
+ b=aah1yUfXUrc6wVBNdzLMx2VLnCdPzsDVLtyWBLJ2n6zD5CX+ZTxNxg0/TyldkIIBhSEmxke6g7fgp+zAnTVCwjcbVSdp6HU3Tdmgo4lUhElmqQyi8KAg9mrM3uh6y40Dp/5GTNRdM2xxrJ98LuyN3/w6wB+978V6QE6nob6WgJGjO8oBbSh3oNfuXhW4WpHoRl/RsZ72ZMa0Z8AUoFqtdojgVDzbxa389Ek3ufwdBiEUvSMDciE2fR3ODnEczvv+gx9QAh9pCc3qPaOcF4D0VzIGUYoxJTmXp3ac0bUdN6bZJ7JDsTJf4xiaYxjPEyNs/iO60xbfhNIhk79ORHVrdw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
  dkim=pass header.d=abatec.at; arc=none
 Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
- by AM7P190MB0727.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:114::9) with
+ by DB8P190MB0633.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:fd::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 09:16:31 +0000
+ 2023 09:33:14 +0000
 Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::154e:a633:142d:bb0f]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::154e:a633:142d:bb0f%4]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 09:16:31 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH v3] package/freescale-imx/imx-gpu-viv: fix aarch64
- framebuffer support
-Thread-Index: AQHZVYo3EOKXACjOcUqEhXr/dlHYlg==
-Date: Mon, 13 Mar 2023 09:16:31 +0000
-Message-ID: <VI1P190MB04933DDA75BE1BC9A23B06929FB99@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+ 09:33:13 +0000
+To: Arnout Vandecappelle <arnout@mind.be>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [PATCH v2] package/freescale-imx/imx-gpu-viv: fix
+ aarch64 framebuffer support
+Thread-Index: AQHZUSIuKkfj9FY/kU6AzLFEyq4sva7y4aoAgAWZntc=
+Date: Mon, 13 Mar 2023 09:33:13 +0000
+Message-ID: <VI1P190MB04932A667DFB448FB1FE2BA49FB99@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+References: <VI1P190MB049368DE3CF489381F94420B9FB79@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+ <bb076129-af4c-2f15-857c-e5555b7f6c0c@mind.be>
+In-Reply-To: <bb076129-af4c-2f15-857c-e5555b7f6c0c@mind.be>
 Accept-Language: en-GB, en-US
 Content-Language: en-GB
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1P190MB0493:EE_|AM7P190MB0727:EE_
-x-ms-office365-filtering-correlation-id: 89143499-3335-4e12-6143-08db23a3a24c
+x-ms-traffictypediagnostic: VI1P190MB0493:EE_|DB8P190MB0633:EE_
+x-ms-office365-filtering-correlation-id: 19b054b3-115a-41a3-7a48-08db23a5f7dd
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: djaNWv/IQDqqcsGOFg1Xu7LZ6SapHjIDbc8frAjohQj0hi4gVNSJKrZIhzc/B+IRpiTpmO8exEPSNjaVbVUXtBcAu8WDNr5TamMkZO7IHVBlp68VcmU3wYCXvO/hxMdtUCQNQZudEDWMISLYsW3iPrFkBNFoiqMKF7oKx05xkG1VpQKWBP1EIjn8VcbPCp4YjBnDyHq0bVRqKYb1QXe94FErcmRGeYISvS8Q8BVrf42LB/TVtCBYJMAATRIv5Cnh1NCEKKrO/UHor8+Y1/d3ALaZHd2iwrIe/3MPVWsf+9K0I4JMr7W4DGvwxFOR3BPVkkukezLfoJ1GSKjawgdAGJq2YnK0lea8TDO7EU5fYEvu9MyF0PRtUlrubTVYUNedMHgQJ58F5a5fkp9s9jAP0x1sVNBVNxe4veuvhxXwYTS6B8b5BrpoFHV6HRCeRpgok4bqPPMus3WT7m+KkFjCWz4pFXSBmtYY3Hogd2JBvx1FqH09TKdaoP60HmC/qvguBoB2SvAd4RmjzJHIqdE73mOPl13nq12QDMGxgo2oKnGxx8kiapFLFnzsJOyYEI0+8XevS9QnrlYpKv9ChiCXx7sHJB+zzApspxI+zuUCCsF28L+7EZPMoHWWyCcZWddfp2Bpg7xm4ZVx1DEgGOkaj5lhzdksNf/47NsqE4nQS5/Kl5Yx4/Y4kz9BiphgCfO7
+x-microsoft-antispam-message-info: mD0D00ULAaHn3aYcDQ501pIgeVoqBLks/wVz6XuMEu4yHYS9fgAcU8+ISEjAcQdIsxfsOSP4Meq5v8kwQPSjbod75SeH3n9zaZw3gbamX3Pa5gyqmxncju++hLqNfkpmcvJBJRfqNRK5RyRNeWVgz5a/R4eDkRdH6B2yYV1dlRiGu1ivw5qKf43mO4TYQMqPLh9bquNWUroTg/DuGWR1oxN5e3en4zp+4e75zbd/gFfo0ppzhng7ii+p7sDyOvUux5/XCiPzsh9cA5UxWrJWMvvPP5VBn6KjwQrwTxiaurmp6DP3rWBViD7EY5kgK0MPve7b8a+ar6N8+kMGjx8f/1i80JxguMWPdvVV9rSy9zOO2rveeNPsrunjkvMwaoMppKdO0dRglFsePautTNTWLEf2zupCB+eBarO0Md0eDJ52hLs+4RCC5gbKfLYhNajmgkMHZUhgRtv5VNmHS0nmEiQkQgN4+2yxB0/0hF8hH4se7sv+LFjAurJIHzxT0QUNR5pIZAtC8JBvZZ5mtUctytgWnRppXHu0IeiPqXmsurWKGZmtZfUdPGRjYYv2onUiv/JOyHx7CvG3tP9zb4SqkEorqWHgyVwVgjva1+uwHhM6jtluh8A6ZXNCgglGgKgyJqrtrLsTOULTFRvVa6H+zWJ0YudM4HeLv5GtfCv/JD1tpSKQqh51w1PBG5B0lEML
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230025)(4636009)(396003)(366004)(39830400003)(346002)(136003)(376002)(451199018)(86362001)(33656002)(6916009)(9686003)(41300700001)(186003)(26005)(6506007)(5660300002)(4326008)(52536014)(8936002)(316002)(54906003)(55016003)(71200400001)(478600001)(966005)(8676002)(76116006)(66476007)(66556008)(64756008)(66446008)(7696005)(66946007)(122000001)(38070700005)(38100700002)(2906002)(83380400001);
+ SFS:(13230025)(4636009)(136003)(396003)(366004)(346002)(376002)(39840400004)(451199018)(5660300002)(83380400001)(478600001)(26005)(71200400001)(966005)(53546011)(6506007)(7696005)(9686003)(38070700005)(8676002)(66476007)(76116006)(66446008)(33656002)(64756008)(66946007)(52536014)(66556008)(186003)(4326008)(41300700001)(8936002)(86362001)(54906003)(110136005)(316002)(38100700002)(55016003)(122000001)(2906002);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?SE+TYbjK/k0/FO1qNyHGmKxQrntRK6OhnvZSBjrHpoMaiHJQUzrmxVX8FV?=
- =?iso-8859-1?Q?dTc8TVcpvFGvbA7Cm4AiR0xjO0fPHewOcY0Cit/JwnJD2kjsV9c1PBH0+3?=
- =?iso-8859-1?Q?hrMJrTfxkksrsTKKnq5NcVIsI2Sit3zNCpd/ZbaQ/wQwfjgc+9XzjBCXQQ?=
- =?iso-8859-1?Q?S1ZRAoyTdqv/cofwie+mP6jp2qik5nKNLMff3cCDpoG5JYNyl8E4xIWo9g?=
- =?iso-8859-1?Q?queJ8Z78uRPL/eBvQos6/0UjACUPcWg1mHK4EW0nsCp16eZl97k2inIneg?=
- =?iso-8859-1?Q?M9TL5fjMolE2b4jOlOzyoUuYAuQCMSec/fM+BnoNQsWuA965h7732tyrVt?=
- =?iso-8859-1?Q?fykWUBVxpGm9eHlwl2ARv/okfd8CSX0FRhOPtwArYjXz5PLJjaM/+SJjQp?=
- =?iso-8859-1?Q?AdKa9xYPvk3t5rA2UW64QUAC4asOixIHuotjdFo31mfk9iAAjfYCIqPpEL?=
- =?iso-8859-1?Q?0cduuqYfVtGT859Fzrodm3G4l3NhtAsClGMAVnXT9qIiVZQSyIgtfC3RtE?=
- =?iso-8859-1?Q?7LEeTl5ZaUgZG8UXhI2ThKGoofcL9m2e8sh5lioS/lMMIzfnx57rFofEdE?=
- =?iso-8859-1?Q?/E4mfE29se18rAvYZZ+UhShgTk0D1EkkJe+vlYbcymXRIOEFbK7e1z1HgJ?=
- =?iso-8859-1?Q?wP3X1e7UupbjW1aQCwv/mFhV4LoRWTV2+6R5iOlAMywx/gD75ZVlfisiSe?=
- =?iso-8859-1?Q?h8Qduvc/RBjiXrhMWUCLQC2kCTGlH3I3RyU5i7bU1w0/3UE1Odc/29q42v?=
- =?iso-8859-1?Q?tWKDkiPxMOvQBr5bRe74KA+ZGEqhwKgaSayxqp9MDssnyxSe4aoA0WZhee?=
- =?iso-8859-1?Q?TvPngbjI0xIJDG2eJAcSQikx3g4ZRi1dmHXt3Ka3H0yDu9lUgrKbDcpmrx?=
- =?iso-8859-1?Q?mptr6Kxvai3SOOfDH/K+90Upjq9zYPTZu9FVv4cgYME0HiSIsWHo43Y9v2?=
- =?iso-8859-1?Q?isSx0RtNwEX2pwm/46a85pJ3KbXspn7uZdGBLG9R6oUFKXPjj8yHbCdFaI?=
- =?iso-8859-1?Q?jiCseUKVTI2McxwjZVSjX4cKnDCzTeCpIxGSLulnq4D3HhsJ1iss/fNfHM?=
- =?iso-8859-1?Q?dLQz3QNWu1xd0cNtZlKunWx0TpJgoCZWIQ6rB4yBdfvHMjdSCjYJoBAOuz?=
- =?iso-8859-1?Q?pJ0bM36zIPS4tQ/u0wtm8MeMtJmi2k2POAfXdWkxXg1JIqh2Y3bFMeuI9e?=
- =?iso-8859-1?Q?E1Fo3UnumQnJR0rBsPIbHnrSW/+ZFOf7QbRSDbW3+sq2SrtdGZ1uclmyEV?=
- =?iso-8859-1?Q?IWhHsaq3B8X9Vjr+dv7TtFaFtVW4uDOeCYocEQy4PIos3Vv2kizNwzYE+Z?=
- =?iso-8859-1?Q?q/vUtW6q7tmZV917OR8QL57u+r/gV2nLfMk0DkDbfmAfwb8RWV1m21NMe0?=
- =?iso-8859-1?Q?HrdvhwpdmK+fPGruHt02Ho4c7cihEIlzUOCQrTkyJ83DDK1KXnOshmAmuL?=
- =?iso-8859-1?Q?cEgUA7+kMO6kl2j0xn76o6AyM95JDBQmf2bvH2pFogHwUIN8jhK+Sgtjw4?=
- =?iso-8859-1?Q?CovsEAdF4fczDHLf5dVC9UroCm/leFQQZuwuVyGxPpoLlw6O/9/0sac2Tt?=
- =?iso-8859-1?Q?yN9/LE3Ut48MkggI2L3wG3n7xQH/geJKz7b36v4GX72jBwAOqEAHu95IUB?=
- =?iso-8859-1?Q?QXkHcHko8UBj8=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?UgEZ/VDVrYxDdaQJBwp1c46x7tJeoSSOmODn5QaKocAC3HXPJwJxufrN7E?=
+ =?iso-8859-1?Q?T/9ofcWAphs9EOMexp4t3GaM45K5PjoQSNYptdO+XDEfGZr32bvLcmDEBZ?=
+ =?iso-8859-1?Q?E/xX7SIhs9m0gNfXsimu/5uhBsJa7f/KIib9FbOrCS6gzTfC1eLk3B+6nU?=
+ =?iso-8859-1?Q?HdDxd47sJ/w5PujfDI0CmkcThmJUX27lKJoIlEjJf9nW6Wk+E6Lqym62qp?=
+ =?iso-8859-1?Q?SWM1SE2uCVyaiHQCZxS1p/1FhIG7p4WVvncZnc0MTi/cBp1QQj65+iVpn5?=
+ =?iso-8859-1?Q?nzeeqb3mVO+wgYN06s4lDemmlAZ+IRhds9DyAdzIybWEo0767B47hlTSFb?=
+ =?iso-8859-1?Q?Dt6eMCkkTPg7tMFEBlXrVRjf9UWHkJmubV2xy24H85f8XXKF6tRR/y/04V?=
+ =?iso-8859-1?Q?YELRjdxL17h0109b3a5l35XyDyCI6rmDpLeyf47jQtynUwEwP6SamiKwu2?=
+ =?iso-8859-1?Q?umtY1rHESdYNgnRESjYjWsKNqKwM4l3+TMczbNDTY6GjP+djc7RZG6rAOP?=
+ =?iso-8859-1?Q?eW74kAsyiu6//ePv15nzxGOI5vY+U5HgDGm09aCvXylknxePCpTBQ3NSYL?=
+ =?iso-8859-1?Q?4PZ5gpv1BwBiQ/yB0yyiqE7zYCv0AFesfLJnogP/pu02P9K30pFTNpYXtq?=
+ =?iso-8859-1?Q?WfS5onU6NirMgP2qrjS9M3+nXA2W8J/06KOMeeoznwncsTmcQSLutZ0OjA?=
+ =?iso-8859-1?Q?SOtMWG1nqDy47387ghqT1uSjrKcKokM/8uJgSmK7IF6ZiMp6m07o0cdIVH?=
+ =?iso-8859-1?Q?KlrMpJUdtLCH8Z/YqmZdcy4Q9tiws24AcHsadFA/BP8a5nnquQVJ1MBN7w?=
+ =?iso-8859-1?Q?fqV1k9kyJhIlI4CtvJeHSm84HA4KrIjXmtCkxyaS+hFnio1BViVDXYM7OZ?=
+ =?iso-8859-1?Q?TIKUMEsTGqjZW/q8DrtS2Rw0TNaOo+CGIO0DS6ZWTvvjW3qzp57Ts32Lr7?=
+ =?iso-8859-1?Q?ftpPNGslfV/KDH7aCF7lUYDTl5PJf9Ecw/6sDTLgHX2nYZ2yoOaqPLWQ+K?=
+ =?iso-8859-1?Q?y950iniDVBJhuGFYkknecWx81RR1gOEPP45QUo7sq7MqH5VERlaVCL8uN8?=
+ =?iso-8859-1?Q?/8XMchzGNdB/f1SIF1nAwhCkXHJ/+SomUIA/sgSmqaQfMsLFDwgoThv2NU?=
+ =?iso-8859-1?Q?InnvIHDk+GpdHib2lPIfS+CYcQxq40wKOQgcUfCIIkDvI2/RtsIgs1pIj8?=
+ =?iso-8859-1?Q?i5Hd5oaiYQBvWA52qXxQU75ayxhfL6OlOML/I4dq0iad0+K0+dyiLIKCn7?=
+ =?iso-8859-1?Q?ozQvBoCybaIvX3z9zma+jW8pDehi6xicQ66e+fqUzL2g1YrQxsvKMgxJdS?=
+ =?iso-8859-1?Q?UvyznxAfwQatVUNwMIzfJnksGYA7v4gueLDmnobfVD1+E71AwR9CVw3cLp?=
+ =?iso-8859-1?Q?/C/r+4csLQHnk+E6SYrx7aU+yUXpjrC5+ryZCiRgiD8iUccI4LR3GhsO4X?=
+ =?iso-8859-1?Q?f3lq6UPtVktuFRpQ6skDod3iQ5wTa8LaXcKI9DRDIGude47gY93lmUzg9k?=
+ =?iso-8859-1?Q?ef0CVE+tEdFRSujMWL+6HA6VDXzwaAxrKWU8f0H+DUxnxWeXBAYiqF6LCh?=
+ =?iso-8859-1?Q?ugJtvk5ku7sD1oX0WfnayMXsdFTdNCVyC3amaSW/9kZuOCs8Pta8AGh9+P?=
+ =?iso-8859-1?Q?ittM5golmASiY=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: abatec.at
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89143499-3335-4e12-6143-08db23a3a24c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 09:16:31.2144 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19b054b3-115a-41a3-7a48-08db23a5f7dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 09:33:13.7964 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: baQ3rkdq8R0XWgKiw5pX+mCCJvktS9TUgtnlHqs/bODasCu1/YcM9ZUJAoqDTtq5SHE8Urpo7lq+NqVCqeAiMQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7P190MB0727
+X-MS-Exchange-CrossTenant-userprincipalname: qtWD7kIZsGSKrZzjFeNAUjEhUeghxScoM4OTz+2mRtOagXNjTNspWUvb0lwPGlgNSO7M0WKW3A1vcS0DPh31lQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P190MB0633
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=abatec.at; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Itafvd6arHnEoFgRYDeRyRqRCHAYGw4ntmHXRmJdOog=;
- b=1P+ULxsXSvfTtxfV6cwK0Xx5K3CgY39+mbnureniuJzaDQ0MQC+cyp/obW6YJJrXHdiLRYuTrSKbk5fA6g7DCqwpfzq0S7MbKI/WrtixyCyadkjBW17/mUJLF3T3c8RT7c/5z3FchgZBMz+sZCFI9hbwDP5Ur1tkZins7QmjBXc=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=hzsD0r7psmlShjJT6okDXjLDmgh4KG1+kPWt5bXi92o=;
+ b=j87m/OrXeE9qkpo3d/arBaKM95lDCXG56PyZE402quJxNF9ZIk9k+fZDI/766J3FcDyk0f13YBJY9WZvJCSrkIQvJhmYgBBqrSzVeDGGfiKkv8imTLayKoQAUZxP706rdID43+WAJvGIDTVyqHs48JKdVmewsFW7AilI2Mr0pXc=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=1P+ULxsX
+ header.s=selector1 header.b=j87m/OrX
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH v3] package/freescale-imx/imx-gpu-viv: fix
+Subject: Re: [Buildroot] [PATCH v2] package/freescale-imx/imx-gpu-viv: fix
  aarch64 framebuffer support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -151,123 +155,172 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since e8df0f7 (package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p4.4)
-the fb folder for aarch64 is no longer included in the archive.
+> On 07/03/2023 19:27, Lang Daniel via buildroot wrote:
+>> Since e8df0f7 (package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p4.4)
+>> the fb folder is no longer included in the archive.
+>> 
+>> imx-gpu-viv 6.4.3.p4.4-aarch64 Building
+>> cp -dpfr /home/d.lang/buildroot/output/build/imx-gpu-viv-6.4.3.p4.4-aarch64/gpu-core/usr/lib/fb/* /home/d.lang/buildroot/output/build/imx-gpu-viv-6.4.3.p4.4-aarch64/gpu-core/usr/lib/
+>> cp: cannot stat '/home/d.lang/buildroot/output/build/imx-gpu-viv-6.4.3.p4.4-aarch64/gpu-core/usr/lib/fb/*': No such file or directory
+> 
+>   So this fixes something? Please indicate that with a Fixes: tag (we don't have 
+> it very formalized; some people would put "Fixes: e8df0f7", other people would 
+> put "Fixes: cp: cannot stat '....'). That way we can see immediately in 
+> patchwork that it should be applied to master, not next.
+> 
 
-According to meta-freescale [0] the framebuffer output can be enabled on
-IMX8 by using the wayland libraries together with egl.pc.
+Sorry for that, added it in v3.
 
-Tested on an imx8mn by running kmscube. EGL and GLES support detected.
+Basically the story as far as I could work out is, that framebuffer support
+was meant to be disabled for imx8 boards (aarch64), therefore the
+depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M was added.
+When other boards were added the depends was never updated which made the option
+available.
+With the version bump mentioned in the commit message, the fb folder was
+dropped by NXP, which broke framebuffer support for those that had the option
+by mistake.
 
-[0]: https://git.yoctoproject.org/meta-freescale/tree/recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc
+>> 
+>> According to meta-freescale [0] the framebuffer output can be enabled on
+>> IMX8 by using the wayland libraries together with egl.pc.
+>> 
+>> Tested on an imx8mn by running kmscube. EGL and GLES support detected.
+>> 
+>> [0]: https://git.yoctoproject.org/meta-freescale/tree/recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc
+>> 
+>> Signed-off-by: Daniel Lang <d.lang@abatec.at>
+>> ---
+>> v1 -> v2:
+>>   - Mention current build failure
+>>   - Add information for egl.pc selection
+>> ---
+>>   package/freescale-imx/imx-gpu-viv/Config.in   |  4 +--
+>>   .../freescale-imx/imx-gpu-viv/imx-gpu-viv.mk  | 27 ++++++++++++-------
+>>   2 files changed, 20 insertions(+), 11 deletions(-)
+>> 
+>> diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+>> index 3e095b730c..1e3bdd6b3d 100644
+>> --- a/package/freescale-imx/imx-gpu-viv/Config.in
+>> +++ b/package/freescale-imx/imx-gpu-viv/Config.in
+>> @@ -45,8 +45,8 @@ choice
+>>   
+>>   config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
+>>   	bool "Framebuffer"
+>> -	# The i.MX8 blob doesn't support FB output
+>> -	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+>> +	# Framebuffer output on aarch64 is linked wayland library.
+>> +	select BR2_PACKAGE_WAYLAND if BR2_aarch64
+>>   
+>>   config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+>>   	bool "Wayland"
+>> diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+>> index f72735e093..00c95cc5d2 100644
+>> --- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+>> +++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+>> @@ -26,28 +26,37 @@ endif
+>>   
+>>   IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
+>>   
+>> -# Libraries are linked against libdrm, except framebuffer output on ARM
+>> +# Libraries are linked against libdrm and wayland,
+>> +# except framebuffer output on ARM
+>>   ifneq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
+> 
+>   The condition here is !(fb && arm), but in the Config.in the condition is !fb 
+> || aarch64.
+> 
+>   Since the condition is a bit complicated, I think it's best to introduce an 
+> extra symbol in Config.in, something like:
+> 
+> # Library binaries are linked against libdrm.so.2 and libwayland.so, except
+> # framebuffer output on ARM
+> config  BR2_PACKAGE_IMX_GPU_VIV_USES_WAYLAND
+> 	bool
+> 	default y if !(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB && BR2_arm)
+> 	select BR2_PACKAGE_LIBDRM
+> 	select BR2_PACKAGE_WAYLAND
+> 
+>   This would also replace the existing select BR2_PACKAGE_LIBDRM. And we 
+> wouldn't need to repeat the comment in 3 places.
+> 
+> In the .mk file, you can then use conditions on 
+> BR2_PACKAGE_IMX_GPU_VIV_USES_WAYLAND instead of the complicated double condition.
+> 
 
-Fixes:
-cp: cannot stat '/home/d.lang/buildroot/output/build/imx-gpu-viv-6.4.3.p4.4-aarch64/gpu-core/usr/lib/fb/*': No such file or directory
+Added in v3.
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
----
-v1 -> v2:
- - Mention current build failure
- - Add information for egl.pc selection
-v2 -> v3:
-- Introduce BR2_PACKAGE_IMX_GPU_VIV_USES_WAYLAND
----
- package/freescale-imx/imx-gpu-viv/Config.in   | 16 +++++++++-----
- .../freescale-imx/imx-gpu-viv/imx-gpu-viv.mk  | 22 +++++++++++--------
- 2 files changed, 23 insertions(+), 15 deletions(-)
+>> 
+>> -IMX_GPU_VIV_DEPENDENCIES += libdrm
+>> -endif
+>> -
+>> -ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+>> -IMX_GPU_VIV_DEPENDENCIES += wayland
+>> +IMX_GPU_VIV_DEPENDENCIES += libdrm wayland
+>>   endif
+>>   
+>>   define IMX_GPU_VIV_EXTRACT_CMDS
+>>   	$(call NXP_EXTRACT_HELPER,$(IMX_GPU_VIV_DL_DIR)/$(IMX_GPU_VIV_SOURCE))
+>>   endef
+>>   
+>> -ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
+>> +# The package comes with multiple versions of egl.pc,
+>> +# depending on the output the original egl.pc is replaced
+>> +# with a symlink:
+>> +# - arm/frambuffer: symlink to egl_linuxfb.pc
+>> +# - aarch64/framebuffer: original egl.pc without a symlink
+>> +# - wayland: symblink to egl_wayland.pc
+>> +ifeq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
+>> +IMX_GPU_VIV_BACKEND_DIR = fb
+> 
+>   The commit message says that the fb folder is not included, but here you still 
+> use it?
 
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index 3e095b730c..0e759f6183 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -12,9 +12,6 @@ config BR2_PACKAGE_IMX_GPU_VIV
- 	depends on (BR2_arm && BR2_ARM_EABIHF) || BR2_aarch64
- 	# Library binaries are linked against libc.so.6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
--	# Library binaries are linked against libdrm.so.2, except framebuffer
--	# output on ARM
--	select BR2_PACKAGE_LIBDRM if !(BR2_arm && BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB)
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	# gbm is only available in the aarch64 blobs
-@@ -45,12 +42,9 @@ choice
- 
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
- 	bool "Framebuffer"
--	# The i.MX8 blob doesn't support FB output
--	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
- 
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
- 	bool "Wayland"
--	select BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 
- endchoice
-@@ -85,6 +79,16 @@ config BR2_PACKAGE_IMX_GPU_VIV_PLATFORM
- 	default "mx8qm" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
- 	default "mx8qxp" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 
-+# Library binaries are linked against libdrm and wayland,
-+# except framebuffer output on ARM.
-+# Framebuffer output on aarch64 uses the same libraries
-+# as wayland output.
-+config BR2_PACKAGE_IMX_GPU_VIV_USES_WAYLAND
-+	bool
-+	default y if !(BR2_arm && BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB)
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_WAYLAND
-+
- endif
- 
- config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index f72735e093..359dcc5923 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -26,20 +26,24 @@ endif
- 
- IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
- 
--# Libraries are linked against libdrm, except framebuffer output on ARM
--ifneq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
--IMX_GPU_VIV_DEPENDENCIES += libdrm
--endif
--
--ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
--IMX_GPU_VIV_DEPENDENCIES += wayland
-+ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_USES_WAYLAND),y)
-+IMX_GPU_VIV_DEPENDENCIES += libdrm wayland
-+IMX_GPU_VIV_OUTPUT_DIR = wayland
-+else
-+IMX_GPU_VIV_OUTPUT_DIR = fb
- endif
- 
- define IMX_GPU_VIV_EXTRACT_CMDS
- 	$(call NXP_EXTRACT_HELPER,$(IMX_GPU_VIV_DL_DIR)/$(IMX_GPU_VIV_SOURCE))
- endef
- 
--ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
-+# The package comes with multiple versions of egl.pc,
-+# depending on the output the original egl.pc is replaced
-+# with a symlink:
-+# - arm/frambuffer: symlink to egl_linuxfb.pc
-+# - aarch64/framebuffer: original egl.pc without a symlink
-+# - wayland: symblink to egl_wayland.pc
-+ifeq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
- define IMX_GPU_VIV_FIXUP_PKGCONFIG
- 	ln -sf egl_linuxfb.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
- endef
-@@ -60,7 +64,7 @@ endif
- # in the upstream archive here. We also remove unused backend files.
- # Make sure these commands are idempotent.
- define IMX_GPU_VIV_BUILD_CMDS
--	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
-+	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_OUTPUT_DIR)/* $(@D)/gpu-core/usr/lib/
- 	$(foreach backend,fb wayland, \
- 		$(RM) -r $(@D)/gpu-core/usr/lib/$(backend)
- 	)
--- 
-2.25.1
+fb folder still exists for arm. Updated v3 commit message.
+
+> 
+>>   define IMX_GPU_VIV_FIXUP_PKGCONFIG
+>>   	ln -sf egl_linuxfb.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
+>>   endef
+>> -else ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+>> +else
+>> +# Framebuffer output on aarch64 uses the same libraries as wayland output
+>> +# but without replaceing egl.pc.
+>> +IMX_GPU_VIV_BACKEND_DIR = wayland
+>> +ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+> 
+>   So, in the fb aarch64 case, the original egl.pc is used? We have 3 versions: 
+> egl.pc that is used for fb on aarch64, egl_linuxfb.pc that is used for fb on 
+> arm, and egl_wayland.pc that is used for wayland?
+> 
+
+Correct. When using egl_linuxfb and egl_wayland a symlink is recreated that
+replaces egl.pc
+
+> 
+>   All this was a bit too complicated for me to fix up while applying, so I 
+> marked as Changes Requested.
+> 
+>   Regards,
+>   Arnout
+> 
+> 
+>>   define IMX_GPU_VIV_FIXUP_PKGCONFIG
+>>   	ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
+>>   endef
+>>   endif
+>> +endif
+>>   
+>>   IMX_GPU_VIV_PLATFORM_DIR = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_PLATFORM))
+>>   ifneq ($(IMX_GPU_VIV_PLATFORM_DIR),)
+>> @@ -60,7 +69,7 @@ endif
+>>   # in the upstream archive here. We also remove unused backend files.
+>>   # Make sure these commands are idempotent.
+>>   define IMX_GPU_VIV_BUILD_CMDS
+>> -	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
+>> +	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_BACKEND_DIR)/* $(@D)/gpu-core/usr/lib/
+>>   	$(foreach backend,fb wayland, \
+>>   		$(RM) -r $(@D)/gpu-core/usr/lib/$(backend)
+>>   	)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
