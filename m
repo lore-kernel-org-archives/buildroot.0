@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D617CC6FD19
-	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 17:09:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F0CBC61DA4
+	for <buildroot@archiver.kernel.org>; Mon, 13 Mar 2023 17:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72A02416D8;
-	Mon, 13 Mar 2023 17:09:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72A02416D8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A154416D8;
+	Mon, 13 Mar 2023 17:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A154416D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UAyOXEk9QvX9; Mon, 13 Mar 2023 17:09:44 +0000 (UTC)
+	with ESMTP id ThWBQEIzej6h; Mon, 13 Mar 2023 17:09:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45B424175D;
-	Mon, 13 Mar 2023 17:09:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45B424175D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 149F11BF870
+	by smtp4.osuosl.org (Postfix) with ESMTP id D912F4175D;
+	Mon, 13 Mar 2023 17:09:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D912F4175D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A4B741BF384
  for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 17:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E05378195D
- for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 17:09:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E05378195D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AB6E60AAA
+ for <buildroot@lists.busybox.net>; Mon, 13 Mar 2023 17:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AB6E60AAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uzADBkeiezLE for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PHeotD3z26-2 for <buildroot@lists.busybox.net>;
  Mon, 13 Mar 2023 17:09:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2497E8194A
+ by smtp3.osuosl.org (Postfix) with ESMTP id B30EE605A6
  for <buildroot@buildroot.org>; Mon, 13 Mar 2023 17:09:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2497E8194A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B30EE605A6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11B038708B; Mon, 13 Mar 2023 17:09:40 +0000 (UTC)
+ id A01848708C; Mon, 13 Mar 2023 17:09:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Mar 2023 18:07:47 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 1292fef706b8ced55396f241375b3e6f5b9db68e
-X-Git-Newrev: ffce626f33ca3415b954c9af4f58bd77a0b2f7e2
+Date: Mon, 13 Mar 2023 18:08:23 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: ab72abd65237ce76e3b132087922d24801f259f3
+X-Git-Newrev: 7041f3f7bd2d869540de269a245fcb91c324d133
 X-Patchwork-Hint: ignore
-Message-Id: <20230313170940.11B038708B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libblockdev:
- needs locale
+Message-Id: <20230313170940.A01848708C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/ntpsec: fix build
+ without stack-protector
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +63,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffce626f33ca3415b954c9af4f58bd77a0b2f7e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7041f3f7bd2d869540de269a245fcb91c324d133
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-locale_t is unconditionally used since version 1.5 and
-https://github.com/storaged-project/libblockdev/commit/4ed6f0b3a46fc77554dab661c22150829aa75966
-resulting in the following build failure since the addition of the
-package in commit 0c52826291d1884db0f8f35130216065fbc7b574:
+Fix the following build failure without stack-protector raised since the
+addition of the package in commit
+27b8d0ba8c4004819e092fb81c0f64f284b3aa4a:
 
-module.c:33:37: error: unknown type name 'locale_t'
-   33 | static char *strerror_l(int errnum, locale_t locale UNUSED)
-      |                                     ^~~~~~~~
+Checking for library ssp                 : not found
+Checking for library ssp_nonshared       : not found
+Checking if C compiler supports -fstack-protector-all : yes
+
+[...]
+
+The configuration failed
+(complete log in /home/autobuild/autobuild/instance-2/output-1/build/ntpsec-1_2_2/build/config.log)
 
 Fixes:
- - http://autobuild.buildroot.org/results/ede9eb1f13d56c77005cc448416fb2efa9d16ff0
+ - http://autobuild.buildroot.org/results/f38abc6b7f8464836231192cfe078a5b27319a8a
+ - http://autobuild.buildroot.org/results/62be818e2f2eac07b4a2de6f4a8898cc4cc05b1f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a6b4217312815379a7c52bf5d53752dbe0838645)
+(cherry picked from commit 4a99d6611f0de6b1844cdbdc81d0ff25949c2b16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libblockdev/Config.in | 6 ++++--
- package/udisks/Config.in      | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ ...wscript-fix-build-without-stack-protector.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 4389fd794c..4f98621bd8 100644
---- a/package/libblockdev/Config.in
-+++ b/package/libblockdev/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBBLOCKDEV
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_KMOD
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
-@@ -66,7 +67,8 @@ config BR2_PACKAGE_LIBBLOCKDEV_SWAP
- 
- endif
- 
--comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
-+comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library, locale"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_HAS_UDEV || BR2_STATIC_LIBS || \
--		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-index 5d0b96f3c0..ad68d4f14d 100644
---- a/package/udisks/Config.in
-+++ b/package/udisks/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_UDISKS
- 	bool "udisks"
--	depends on BR2_ENABLE_LOCALE # parted
-+	depends on BR2_ENABLE_LOCALE # libblockdev, parted
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # polkit -> C++17
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # polkit
+diff --git a/package/ntpsec/0002-wscript-fix-build-without-stack-protector.patch b/package/ntpsec/0002-wscript-fix-build-without-stack-protector.patch
+new file mode 100644
+index 0000000000..f494bf479c
+--- /dev/null
++++ b/package/ntpsec/0002-wscript-fix-build-without-stack-protector.patch
+@@ -0,0 +1,50 @@
++From 0a3ce09c14eb9c7e36aa30a4dafe40e56676d678 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 24 Feb 2023 11:33:32 +0100
++Subject: [PATCH] wscript: fix build without stack-protector
++
++-fstack-protector-all can depends on ssp library availability (e.g. on musl) so
++move the test from cc_test_flags to ld_hardening_flags, this will avoid the
++following build failure:
++
++Checking for library ssp                 : not found
++Checking for library ssp_nonshared       : not found
++Checking if C compiler supports -fstack-protector-all : yes
++
++[...]
++
++The configuration failed
++(complete log in /home/autobuild/autobuild/instance-2/output-1/build/ntpsec-1_2_2/build/config.log)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/f38abc6b7f8464836231192cfe078a5b27319a8a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/ntpsec/ntpsec/pull/6]
++---
++ wscript | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/wscript b/wscript
++index be396b33b..f301809fc 100644
++--- a/wscript
+++++ b/wscript
++@@ -298,7 +298,6 @@ def configure(ctx):
++         ctx.env.LDFLAGS += ["-lssp_nonshared"]
++ 
++     cc_test_flags = [
++-        ('f_stack_protector_all', '-fstack-protector-all'),
++         ('PIC', '-fPIC'),
++         ('PIE', '-pie -fPIE'),
++         # this quiets most of macOS warnings on -fpie
++@@ -332,6 +331,7 @@ def configure(ctx):
++ 
++     # Check which linker flags are supported
++     ld_hardening_flags = [
+++        ('f_stack_protector_all', '-fstack-protector-all'),
++         ("z_now", "-Wl,-z,now"),     # no deferred symbol resolution
++     ]
++ 
++-- 
++2.39.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
