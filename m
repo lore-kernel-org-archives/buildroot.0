@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA42FC6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 08:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1860AC6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 08:51:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BA844184E;
-	Tue, 14 Mar 2023 08:50:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BA844184E
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEBFB41869;
+	Tue, 14 Mar 2023 08:51:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEBFB41869
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gX7EIEEpSdTw; Tue, 14 Mar 2023 08:50:51 +0000 (UTC)
+	with ESMTP id cMA4yonAvIo4; Tue, 14 Mar 2023 08:51:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43DAF4185D;
-	Tue, 14 Mar 2023 08:50:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43DAF4185D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BDED81BF33F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CFEA41864;
+	Tue, 14 Mar 2023 08:51:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CFEA41864
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E70B31BF95E
  for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:50:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9826981836
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF2684011F
  for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:50:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9826981836
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF2684011F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k4mj1GsyAP0V for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 08:50:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id am-mzFmmXcpg for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 08:50:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1DD4815CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED42D400D7
  for <buildroot@buildroot.org>; Tue, 14 Mar 2023 08:50:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1DD4815CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED42D400D7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0AB287142; Tue, 14 Mar 2023 08:50:47 +0000 (UTC)
+ id DB4AB87144; Tue, 14 Mar 2023 08:50:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 09:49:29 +0100
+Date: Tue, 14 Mar 2023 09:50:22 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 26f52b75e574d04c0c394562e7b5e811b3420ae4
-X-Git-Newrev: 51281f21d6e639e03cbe17e8d7ced01d4295c5b0
+X-Git-Oldrev: 44f5d8aff75f45d9c8d0831a37a97d4e22ea3fd0
+X-Git-Newrev: 40bfe7d7152c89ece8a2b90110d0b4f01958ae1e
 X-Patchwork-Hint: ignore
-Message-Id: <20230314085047.C0AB287142@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/python-werkzeug:
- bump to version 2.2.2
+Message-Id: <20230314085047.DB4AB87144@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/bind: security
+ bump to version 9.16.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51281f21d6e639e03cbe17e8d7ced01d4295c5b0
+commit: https://git.buildroot.net/buildroot/commit/?id=40bfe7d7152c89ece8a2b90110d0b4f01958ae1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d6f194c5131b6ed76e4b954399a04859e64a6c25)
+- Fix CVE-2022-3094, CVE-2022-3736 and CVE-2022-3924
+- Update hash of COPYRIGHT (year updated with
+  https://gitlab.isc.org/isc-projects/bind9/-/commit/1a5d707f52282117c9912a27dcc89f2ec412577a)
+
+https://downloads.isc.org/isc/bind9/9.16.38/doc/arm/html/notes.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7abc9a0554cc1c1bbc1ad4273622024020fa2c7e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 4 ++--
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
+ package/bind/bind.hash | 6 +++---
+ package/bind/bind.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 73fa6b5630..13b95bc448 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/Werkzeug/json
--md5  5835c8738b8081c53367cbcc5db8784c  Werkzeug-2.1.2.tar.gz
--sha256  1ce08e8093ed67d638d63879fd1ba3735817f7a80de3674d293f5984f25fb6e6  Werkzeug-2.1.2.tar.gz
-+md5  9d7e50c5bb3a9fc12823b5faf374b90e  Werkzeug-2.2.2.tar.gz
-+sha256  7ea2d48322cc7c0f8b3a215ed73eabd7b5d75d0b50e31ab006286ccff9e00b8f  Werkzeug-2.2.2.tar.gz
- # Locally computed sha256 checksums
- sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 9b32fdf097..3ebae3c165 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index d41a9bbc5e..32804b5ce0 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.16.33/bind-9.16.33.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.16.38/bind-9.16.38.tar.xz.asc
+ # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
+-sha256  ec4fbea4b2e368d1824971509e33fa159224ad14b436034c6bcd46104c328d91  bind-9.16.33.tar.xz
+-sha256  daf6f1eddf5983ed664a2d125b619e56e2e93917c19d0d41c7586ea153ba2155  COPYRIGHT
++sha256  8df44c9d9a84a28ab8b49d55f3c33b624b90ef8f6a8b9ee6a4c33cc17c14c50f  bind-9.16.38.tar.xz
++sha256  13491a682dc0f5ee2273cebd3949e2be62f9470fe659419a03a308d4f444773b  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index cfacf0e56b..2af6096fad 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 2.1.2
-+PYTHON_WERKZEUG_VERSION = 2.2.2
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/cf/97eb1a3847c01ae53e8376bc21145555ac95279523a935963dc8ff96c50b
-+PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/f8/c1/1c8e539f040acd80f844c69a5ef8e2fccdf8b442dabb969e497b55d544e1
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
+-BIND_VERSION = 9.16.33
++BIND_VERSION = 9.16.38
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
