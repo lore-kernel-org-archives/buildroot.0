@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80021C7618B
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 21:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24836C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 21:56:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28A8A40B59;
-	Tue, 14 Mar 2023 21:55:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28A8A40B59
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8FE840B5C;
+	Tue, 14 Mar 2023 21:56:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8FE840B5C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wp4tZTuaUMaV; Tue, 14 Mar 2023 21:55:54 +0000 (UTC)
+	with ESMTP id JJ5k34YRvQMG; Tue, 14 Mar 2023 21:56:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B60240B56;
-	Tue, 14 Mar 2023 21:55:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B60240B56
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E78311BF38B
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:55:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F34FD40B59;
+	Tue, 14 Mar 2023 21:56:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F34FD40B59
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B9B7F1BF38B
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1629813BA
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:55:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1629813BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94EDD40B59
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:56:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94EDD40B59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JcqlatlfwrCH for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 21:55:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 432A8813A4
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 432A8813A4
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 21:55:50 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D93B0FF804;
- Tue, 14 Mar 2023 21:55:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pcCcT-001Wfw-OW; Tue, 14 Mar 2023 22:55:45 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id koHUeyVuJKrK for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 21:56:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D8C4E40B56
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 21:56:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8C4E40B56
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C85148732A; Tue, 14 Mar 2023 21:56:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230227161040.2239744-1-peter@korsgaard.com>
-Date: Tue, 14 Mar 2023 22:55:45 +0100
-In-Reply-To: <20230227161040.2239744-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 27 Feb 2023 17:10:39 +0100")
-Message-ID: <87ilf3576m.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libcurl: bump version to 7.88.1
+Date: Tue, 14 Mar 2023 22:53:54 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: dbf4bfff6790bed0fca2e8337f28df07ecb9be7a
+X-Git-Newrev: 17eec679246fb73ca49fcb5c2950af02b5f0002b
+X-Patchwork-Hint: ignore
+Message-Id: <20230314215614.C85148732A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] boot/mxs-bootlets: fix
+ build without any bootstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,23 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=17eec679246fb73ca49fcb5c2950af02b5f0002b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Bugfix release fixing a number of issues introduced in 7.88.0:
- > https://curl.se/changes.html#7_88_1
- > https://daniel.haxx.se/blog/2023/02/20/7-88-1-the-second-final-one/
+Fix the following build failure raised since the addition of the package
+in commit 2a636d15217cd326b4546e7017538c7a9e9d399c:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+sed -i 's,[^ *]power_prep.*;,\tpower_prep="/home/autobuild/autobuild/instance-9/output-1/build/mxs-bootlets-10.12.01/power_prep/power_prep";,' /home/autobuild/autobuild/instance-9/output-1/build/mxs-bootlets-10.12.01/
+sed: couldn't edit /home/autobuild/autobuild/instance-9/output-1/build/mxs-bootlets-10.12.01/: not a regular file
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/b4b26f6b02fd1991f46eba5db240e5050b96d333
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8c4435190773195fc5d1a97f819e1160f4bd52ca)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/mxs-bootlets/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/boot/mxs-bootlets/Config.in b/boot/mxs-bootlets/Config.in
+index b3e392afa8..8f9334b610 100644
+--- a/boot/mxs-bootlets/Config.in
++++ b/boot/mxs-bootlets/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_TARGET_MXS_BOOTLETS
+ 	bool "mxs-bootlets"
+ 	depends on BR2_arm
++	depends on BR2_TARGET_BAREBOX || BR2_LINUX_KERNEL || \
++		BR2_TARGET_UBOOT
+ 	help
+ 	  Stage1 bootloaders for Freescale iMX23/iMX28 SoCs
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
