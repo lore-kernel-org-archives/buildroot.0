@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AF64C6FD1C
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 14:03:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 141E4C6FD1D
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 14:04:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22CC760AA3;
-	Tue, 14 Mar 2023 14:03:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22CC760AA3
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC88061031;
+	Tue, 14 Mar 2023 14:04:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC88061031
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M77B2epnDXit; Tue, 14 Mar 2023 14:03:30 +0000 (UTC)
+	with ESMTP id 6wctcZF5lACq; Tue, 14 Mar 2023 14:04:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44833610D8;
-	Tue, 14 Mar 2023 14:03:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44833610D8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 47A3E1BF329
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 14:03:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4D2C610AB;
+	Tue, 14 Mar 2023 14:04:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4D2C610AB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 270011BF329
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 14:04:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FB1B414C6
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 14:03:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FB1B414C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01CB4405E9
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 14:04:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01CB4405E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QawkH6C2E4s4 for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 14:03:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oOWjPDV-VZ6K for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 14:04:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1366141496
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 14:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1366141496
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C15F404B2
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 14:04:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C15F404B2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F0F468730F; Tue, 14 Mar 2023 14:03:13 +0000 (UTC)
+ id 2C2498730F; Tue, 14 Mar 2023 14:04:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 15:01:46 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: bd6c387ddba9b3d6216d466b6bf0d70b2f430bbf
-X-Git-Newrev: dbf4bfff6790bed0fca2e8337f28df07ecb9be7a
+Date: Tue, 14 Mar 2023 15:01:42 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 6f7baf456fcc43f019677e4cdecc512019d06d86
+X-Git-Newrev: 458a78b4dd5b8b6f8486a770cb535e111ad1808f
 X-Patchwork-Hint: ignore
-Message-Id: <20230314140313.F0F468730F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/pcm-tools: needs
+Message-Id: <20230314140416.2C2498730F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/pcm-tools: needs
  NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbf4bfff6790bed0fca2e8337f28df07ecb9be7a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=458a78b4dd5b8b6f8486a770cb535e111ad1808f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 pcm-tools needs NPTL since its addition in commit
 60eb2cec80e5258a0c43090f539749606744e182:
