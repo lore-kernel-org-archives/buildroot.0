@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B254C7618B
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 21:56:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7653FC6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 21:56:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D815440B77;
-	Tue, 14 Mar 2023 21:56:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D815440B77
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F3B940B72;
+	Tue, 14 Mar 2023 21:56:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F3B940B72
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6QDAuvyWQPC3; Tue, 14 Mar 2023 21:56:44 +0000 (UTC)
+	with ESMTP id BingjOZQBMRQ; Tue, 14 Mar 2023 21:56:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F059C40B73;
-	Tue, 14 Mar 2023 21:56:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F059C40B73
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA84D1BF95E
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:56:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D96B40B56;
+	Tue, 14 Mar 2023 21:56:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D96B40B56
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F7BD1BF38B
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2182D4188F
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:56:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2182D4188F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 270D260E11
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:56:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 270D260E11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P8KJEYlmLLHT for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 21:56:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0512B4188A
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 21:56:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0512B4188A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DCB268732D; Tue, 14 Mar 2023 21:56:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rcIvtkzcBkDn for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 21:56:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C72560BC2
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0C72560BC2
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 21:56:44 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B991320002;
+ Tue, 14 Mar 2023 21:56:41 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pcCdM-001Wkw-HT; Tue, 14 Mar 2023 22:56:40 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 22:56:05 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a1b396770e8e6f84e3e6ff61defa3ade8e91acae
-X-Git-Newrev: ff075f8dd540b0cfa05b1b869f8f1dd567ab09c4
-X-Patchwork-Hint: ignore
-Message-Id: <20230314215614.DCB268732D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/paho-mqtt-c:
- security bump to version 1.3.12
+To: Lang Daniel via buildroot <buildroot@buildroot.org>
+References: <VI1P190MB04936158D6DA5D95425FF1E69FAC9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Date: Tue, 14 Mar 2023 22:56:40 +0100
+In-Reply-To: <VI1P190MB04936158D6DA5D95425FF1E69FAC9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+ (Lang Daniel via buildroot's message of "Tue, 28 Feb 2023 09:48:21
+ +0000")
+Message-ID: <87edpr5753.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: security bump to
+ version 1.3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,56 +65,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Lang Daniel <d.lang@abatec.at>,
+ Julien Grossholtz <julien.grossholtz@openest.io>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff075f8dd540b0cfa05b1b869f8f1dd567ab09c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Lang" == Lang Daniel via buildroot <buildroot@buildroot.org> writes:
 
-Contains a fix for a possible race condition that can lead to use after
-free:
-https://github.com/eclipse/paho.mqtt.c/commit/911488a9f0fdad31c85ec86712be52587afdbbb8
+ > Contains a fix for a possible race condition that can lead to use after
+ > free:
+ > https://github.com/eclipse/paho.mqtt.c/commit/911488a9f0fdad31c85ec86712be52587afdbbb8
 
-https://github.com/eclipse/paho.mqtt.c/milestone/19?closed=1
+ > https://github.com/eclipse/paho.mqtt.c/milestone/19?closed=1
 
-https://github.com/eclipse/paho.mqtt.c/releases/tag/v1.3.12
+ > https://github.com/eclipse/paho.mqtt.c/releases/tag/v1.3.12
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cc9acffa8a9263c51a66a54b4f2ff39421365b80)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Daniel Lang <d.lang@abatec.at>
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 1949abdf1a..529c538ff2 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  d7bba3f8b8978802e11e2b1f28e96e6b7f4ed5d8a268af52a4d3b1bcbd1db16b  paho-mqtt-c-1.3.11.tar.gz
-+sha256  6a70a664ed3bbcc1eafdc45a5dc11f3ad70c9bac12a54c2f8cef15c0e7d0a93b  paho-mqtt-c-1.3.12.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 30daf863ad..8d1fe009a7 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.11
-+PAHO_MQTT_C_VERSION = 1.3.12
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+Committed to 2022.11.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
