@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A4CFC6FD1C
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 10:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 270FEC74A44
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 11:15:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C48A340919;
-	Tue, 14 Mar 2023 10:46:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C48A340919
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1261D81DED;
+	Tue, 14 Mar 2023 11:15:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1261D81DED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zn8l5uSCTNEf; Tue, 14 Mar 2023 10:46:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n9uGM7zWvZy7; Tue, 14 Mar 2023 11:15:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A489F40A90;
-	Tue, 14 Mar 2023 10:46:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A489F40A90
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E5C781D5C;
+	Tue, 14 Mar 2023 11:15:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E5C781D5C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EC5E61BF95E
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 10:45:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2FD8A1BF418
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 11:15:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D3D5E81CFE
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 10:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3D5E81CFE
+ by smtp1.osuosl.org (Postfix) with ESMTP id D400881DED
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 11:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D400881DED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OzPkbQWa-C2F for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 10:45:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF52681CE1
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 10:45:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF52681CE1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF7B587172; Tue, 14 Mar 2023 10:45:57 +0000 (UTC)
+ with ESMTP id wnji_MZY4W1D for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 11:15:02 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C35E581CA0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C35E581CA0
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 11:15:01 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 85EBC60014;
+ Tue, 14 Mar 2023 11:14:58 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pc2cL-001GU3-KJ; Tue, 14 Mar 2023 12:14:57 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 10:50:25 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: bd10f4a80a7993b20bb5c1d406e831907c4d1ce0
-X-Git-Newrev: ee76409a62af2c65fa2e4ea1adff6a7253c131d2
-X-Patchwork-Hint: ignore
-Message-Id: <20230314104557.AF7B587172@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/python-m2crypto:
- fix CVE-2020-25657
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230226133946.102275-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Mar 2023 12:14:57 +0100
+In-Reply-To: <20230226133946.102275-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 26 Feb 2023 14:39:46 +0100")
+Message-ID: <87zg8f60um.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/tiff: fix CVE-2022-48281
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,221 +63,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee76409a62af2c65fa2e4ea1adff6a7253c131d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-A flaw was found in all released versions of m2crypto, where they are
-vulnerable to Bleichenbacher timing attacks in the RSA decryption API
-via the timed processing of valid PKCS#1 v1.5 Ciphertext. The highest
-threat from this vulnerability is to confidentiality.
+ > processCropSelections in tools/tiffcrop.c in LibTIFF through 4.5.0 has a
+ > heap-based buffer overflow (e.g., "WRITE of size 307203") via a crafted
+ > TIFF image.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a86d44a3eb009d3deb5b558f7ccb0870eb877c6a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-in-the-RSA-decryption-API-CVE-2020-25657.patch | 174 +++++++++++++++++++++
- package/python-m2crypto/python-m2crypto.mk         |   3 +
- 2 files changed, 177 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/python-m2crypto/0001-Mitigate-the-Bleichenbacher-timing-attacks-in-the-RSA-decryption-API-CVE-2020-25657.patch b/package/python-m2crypto/0001-Mitigate-the-Bleichenbacher-timing-attacks-in-the-RSA-decryption-API-CVE-2020-25657.patch
-new file mode 100644
-index 0000000000..68200b7d9b
---- /dev/null
-+++ b/package/python-m2crypto/0001-Mitigate-the-Bleichenbacher-timing-attacks-in-the-RSA-decryption-API-CVE-2020-25657.patch
-@@ -0,0 +1,174 @@
-+From 84c53958def0f510e92119fca14d74f94215827a Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Mat=C4=9Bj=20Cepl?= <mcepl@cepl.eu>
-+Date: Tue, 28 Jun 2022 21:17:01 +0200
-+Subject: [PATCH] Mitigate the Bleichenbacher timing attacks in the RSA
-+ decryption API (CVE-2020-25657)
-+
-+Fixes #282
-+
-+[Retrieved from:
-+https://gitlab.com/m2crypto/m2crypto/-/commit/84c53958def0f510e92119fca14d74f94215827a]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/SWIG/_m2crypto_wrap.c | 20 ++++++++++++--------
-+ src/SWIG/_rsa.i           | 20 ++++++++++++--------
-+ tests/test_rsa.py         | 15 +++++++--------
-+ 3 files changed, 31 insertions(+), 24 deletions(-)
-+
-+diff --git a/src/SWIG/_m2crypto_wrap.c b/src/SWIG/_m2crypto_wrap.c
-+index aba9eb6d..a9f30da9 100644
-+--- a/src/SWIG/_m2crypto_wrap.c
-++++ b/src/SWIG/_m2crypto_wrap.c
-+@@ -7040,9 +7040,10 @@ PyObject *rsa_private_encrypt(RSA *rsa, PyObject *from, int padding) {
-+     tlen = RSA_private_encrypt(flen, (unsigned char *)fbuf,
-+         (unsigned char *)tbuf, rsa, padding);
-+     if (tlen == -1) {
-+-        m2_PyErr_Msg(_rsa_err);
-++        ERR_clear_error();
-++        PyErr_Clear();
-+         PyMem_Free(tbuf);
-+-        return NULL;
-++        Py_RETURN_NONE;
-+     }
-+ 
-+     ret = PyBytes_FromStringAndSize((const char *)tbuf, tlen);
-+@@ -7070,9 +7071,10 @@ PyObject *rsa_public_decrypt(RSA *rsa, PyObject *from, int padding) {
-+     tlen = RSA_public_decrypt(flen, (unsigned char *)fbuf,
-+         (unsigned char *)tbuf, rsa, padding);
-+     if (tlen == -1) {
-+-        m2_PyErr_Msg(_rsa_err);
-++        ERR_clear_error();
-++        PyErr_Clear();
-+         PyMem_Free(tbuf);
-+-        return NULL;
-++        Py_RETURN_NONE;
-+     }
-+ 
-+     ret = PyBytes_FromStringAndSize((const char *)tbuf, tlen);
-+@@ -7097,9 +7099,10 @@ PyObject *rsa_public_encrypt(RSA *rsa, PyObject *from, int padding) {
-+     tlen = RSA_public_encrypt(flen, (unsigned char *)fbuf,
-+         (unsigned char *)tbuf, rsa, padding);
-+     if (tlen == -1) {
-+-        m2_PyErr_Msg(_rsa_err);
-++        ERR_clear_error();
-++        PyErr_Clear();
-+         PyMem_Free(tbuf);
-+-        return NULL;
-++        Py_RETURN_NONE;
-+     }
-+ 
-+     ret = PyBytes_FromStringAndSize((const char *)tbuf, tlen);
-+@@ -7124,9 +7127,10 @@ PyObject *rsa_private_decrypt(RSA *rsa, PyObject *from, int padding) {
-+     tlen = RSA_private_decrypt(flen, (unsigned char *)fbuf,
-+         (unsigned char *)tbuf, rsa, padding);
-+     if (tlen == -1) {
-+-        m2_PyErr_Msg(_rsa_err);
-++        ERR_clear_error();
-++        PyErr_Clear();
-+         PyMem_Free(tbuf);
-+-        return NULL;
-++        Py_RETURN_NONE;
-+     }
-+     ret = PyBytes_FromStringAndSize((const char *)tbuf, tlen);
-+ 
-+diff --git a/src/SWIG/_rsa.i b/src/SWIG/_rsa.i
-+index bc714e01..1377b8be 100644
-+--- a/src/SWIG/_rsa.i
-++++ b/src/SWIG/_rsa.i
-+@@ -239,9 +239,10 @@ PyObject *rsa_private_encrypt(RSA *rsa, PyObject *from, int padding) {
-+     tlen = RSA_private_encrypt(flen, (unsigned char *)fbuf,
-+         (unsigned char *)tbuf, rsa, padding);
-+     if (tlen == -1) {
-+-        m2_PyErr_Msg(_rsa_err);
-++        ERR_clear_error();
-++        PyErr_Clear();
-+         PyMem_Free(tbuf);
-+-        return NULL;
-++        Py_RETURN_NONE;
-+     }
-+ 
-+     ret = PyBytes_FromStringAndSize((const char *)tbuf, tlen);
-+@@ -269,9 +270,10 @@ PyObject *rsa_public_decrypt(RSA *rsa, PyObject *from, int padding) {
-+     tlen = RSA_public_decrypt(flen, (unsigned char *)fbuf,
-+         (unsigned char *)tbuf, rsa, padding);
-+     if (tlen == -1) {
-+-        m2_PyErr_Msg(_rsa_err);
-++        ERR_clear_error();
-++        PyErr_Clear();
-+         PyMem_Free(tbuf);
-+-        return NULL;
-++        Py_RETURN_NONE;
-+     }
-+ 
-+     ret = PyBytes_FromStringAndSize((const char *)tbuf, tlen);
-+@@ -296,9 +298,10 @@ PyObject *rsa_public_encrypt(RSA *rsa, PyObject *from, int padding) {
-+     tlen = RSA_public_encrypt(flen, (unsigned char *)fbuf,
-+         (unsigned char *)tbuf, rsa, padding);
-+     if (tlen == -1) {
-+-        m2_PyErr_Msg(_rsa_err);
-++        ERR_clear_error();
-++        PyErr_Clear();
-+         PyMem_Free(tbuf);
-+-        return NULL;
-++        Py_RETURN_NONE;
-+     }
-+ 
-+     ret = PyBytes_FromStringAndSize((const char *)tbuf, tlen);
-+@@ -323,9 +326,10 @@ PyObject *rsa_private_decrypt(RSA *rsa, PyObject *from, int padding) {
-+     tlen = RSA_private_decrypt(flen, (unsigned char *)fbuf,
-+         (unsigned char *)tbuf, rsa, padding);
-+     if (tlen == -1) {
-+-        m2_PyErr_Msg(_rsa_err);
-++        ERR_clear_error();
-++        PyErr_Clear();
-+         PyMem_Free(tbuf);
-+-        return NULL;
-++        Py_RETURN_NONE;
-+     }
-+     ret = PyBytes_FromStringAndSize((const char *)tbuf, tlen);
-+ 
-+diff --git a/tests/test_rsa.py b/tests/test_rsa.py
-+index 7bb3af75..5e75d681 100644
-+--- a/tests/test_rsa.py
-++++ b/tests/test_rsa.py
-+@@ -109,8 +109,9 @@ class RSATestCase(unittest.TestCase):
-+         # The other paddings.
-+         for padding in self.s_padding_nok:
-+             p = getattr(RSA, padding)
-+-            with self.assertRaises(RSA.RSAError):
-+-                priv.private_encrypt(self.data, p)
-++            # Exception disabled as a part of mitigation against CVE-2020-25657
-++            # with self.assertRaises(RSA.RSAError):
-++            priv.private_encrypt(self.data, p)
-+         # Type-check the data to be encrypted.
-+         with self.assertRaises(TypeError):
-+             priv.private_encrypt(self.gen_callback, RSA.pkcs1_padding)
-+@@ -127,10 +128,12 @@ class RSATestCase(unittest.TestCase):
-+             self.assertEqual(ptxt, self.data)
-+ 
-+         # no_padding
-+-        with six.assertRaisesRegex(self, RSA.RSAError, 'data too small'):
-+-            priv.public_encrypt(self.data, RSA.no_padding)
-++        # Exception disabled as a part of mitigation against CVE-2020-25657
-++        # with six.assertRaisesRegex(self, RSA.RSAError, 'data too small'):
-++        priv.public_encrypt(self.data, RSA.no_padding)
-+ 
-+         # Type-check the data to be encrypted.
-++        # Exception disabled as a part of mitigation against CVE-2020-25657
-+         with self.assertRaises(TypeError):
-+             priv.public_encrypt(self.gen_callback, RSA.pkcs1_padding)
-+ 
-+@@ -146,10 +149,6 @@ class RSATestCase(unittest.TestCase):
-+                          b'\000\000\000\003\001\000\001')  # aka 65537 aka 0xf4
-+         with self.assertRaises(RSA.RSAError):
-+             setattr(rsa, 'e', '\000\000\000\003\001\000\001')
-+-        with self.assertRaises(RSA.RSAError):
-+-            rsa.private_encrypt(1)
-+-        with self.assertRaises(RSA.RSAError):
-+-            rsa.private_decrypt(1)
-+         assert rsa.check_key()
-+ 
-+     def test_loadpub_bad(self):
-+-- 
-+GitLab
-+
-diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
-index 02ad76d3f4..3c28fa3b0d 100644
---- a/package/python-m2crypto/python-m2crypto.mk
-+++ b/package/python-m2crypto/python-m2crypto.mk
-@@ -15,4 +15,7 @@ PYTHON_M2CRYPTO_CPE_ID_PRODUCT = m2crypto
- PYTHON_M2CRYPTO_DEPENDENCIES = openssl host-swig
- PYTHON_M2CRYPTO_BUILD_OPTS = --openssl=$(STAGING_DIR)/usr
- 
-+# 0001-Mitigate-the-Bleichenbacher-timing-attacks-in-the-RSA-decryption-API-CVE-2020-25657.patch
-+PYTHON_M2CRYPTO_IGNORE_CVES += CVE-2020-25657
-+
- $(eval $(python-package))
+Committed to 2022.11.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
