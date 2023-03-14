@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96CBEC6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 21:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDD87C7618B
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 21:57:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DA1A40B66;
-	Tue, 14 Mar 2023 21:57:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DA1A40B66
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D00540B7F;
+	Tue, 14 Mar 2023 21:57:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D00540B7F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tvdhrSvOwRDr; Tue, 14 Mar 2023 21:57:44 +0000 (UTC)
+	with ESMTP id H6cGm5E8rdPY; Tue, 14 Mar 2023 21:57:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 527EF40B64;
-	Tue, 14 Mar 2023 21:57:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 527EF40B64
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 452371BF38B
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9DAA40B7D;
+	Tue, 14 Mar 2023 21:57:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9DAA40B7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ABC731BF38B
  for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:57:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 204A94035F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 870FA403D6
  for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 21:57:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 204A94035F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 870FA403D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9WXBD2bsBXC1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 22YLjbgn9ExO for <buildroot@lists.busybox.net>;
  Tue, 14 Mar 2023 21:57:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD7CB40200
+ by smtp2.osuosl.org (Postfix) with ESMTP id B29A840B56
  for <buildroot@buildroot.org>; Tue, 14 Mar 2023 21:57:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD7CB40200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B29A840B56
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB91F8733B; Tue, 14 Mar 2023 21:57:28 +0000 (UTC)
+ id A227F8733A; Tue, 14 Mar 2023 21:57:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 22:56:16 +0100
+Date: Tue, 14 Mar 2023 22:55:05 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 56aacb8249c735ac4c76edfd7c989cad28543b9e
-X-Git-Newrev: 8e3c40e55e8d89be241312a1ceded314047ff2f2
+X-Git-Oldrev: 0cafa277ed9b0d4daf9c3c45f1188976941243da
+X-Git-Newrev: 56aacb8249c735ac4c76edfd7c989cad28543b9e
 X-Patchwork-Hint: ignore
-Message-Id: <20230314215728.AB91F8733B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/paho-mqtt-c:
- security bump to version 1.3.12
+Message-Id: <20230314215728.A227F8733A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/libcurl: bump
+ version to 7.88.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e3c40e55e8d89be241312a1ceded314047ff2f2
+commit: https://git.buildroot.net/buildroot/commit/?id=56aacb8249c735ac4c76edfd7c989cad28543b9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Contains a fix for a possible race condition that can lead to use after
-free:
-https://github.com/eclipse/paho.mqtt.c/commit/911488a9f0fdad31c85ec86712be52587afdbbb8
+Bugfix release fixing a number of issues introduced in 7.88.0:
 
-https://github.com/eclipse/paho.mqtt.c/milestone/19?closed=1
+https://curl.se/changes.html#7_88_1
+https://daniel.haxx.se/blog/2023/02/20/7-88-1-the-second-final-one/
 
-https://github.com/eclipse/paho.mqtt.c/releases/tag/v1.3.12
-
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cc9acffa8a9263c51a66a54b4f2ff39421365b80)
+(cherry picked from commit eb566be8dc0e3a36270fe76d669fe51379d498f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 1949abdf1a..529c538ff2 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 714b02acb0..32b3d0b5e2 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,5 +1,5 @@
- # Locally computed:
--sha256  d7bba3f8b8978802e11e2b1f28e96e6b7f4ed5d8a268af52a4d3b1bcbd1db16b  paho-mqtt-c-1.3.11.tar.gz
-+sha256  6a70a664ed3bbcc1eafdc45a5dc11f3ad70c9bac12a54c2f8cef15c0e7d0a93b  paho-mqtt-c-1.3.12.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 30daf863ad..8d1fe009a7 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-7.88.0.tar.xz.asc
++# https://curl.se/download/curl-7.88.1.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  fd17432cf28714a4cf39d89e26b8ace0d8901199fe5d01d75eb0ae3bbfcc731f  curl-7.88.0.tar.xz
++sha256  1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f  curl-7.88.1.tar.xz
+ sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index eb481e4782..1a1594a45e 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PAHO_MQTT_C_VERSION = 1.3.11
-+PAHO_MQTT_C_VERSION = 1.3.12
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+-LIBCURL_VERSION = 7.88.0
++LIBCURL_VERSION = 7.88.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
