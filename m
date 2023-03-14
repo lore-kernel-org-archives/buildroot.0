@@ -4,62 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89591C6FD1C
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 07:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46248C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 07:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D070813E6;
-	Tue, 14 Mar 2023 07:53:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D070813E6
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCAF5813E0;
+	Tue, 14 Mar 2023 07:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCAF5813E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kDdw2N14ndAU; Tue, 14 Mar 2023 07:53:44 +0000 (UTC)
+	with ESMTP id wPcvJ_DmWQIB; Tue, 14 Mar 2023 07:55:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D776813D2;
-	Tue, 14 Mar 2023 07:53:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D776813D2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 313451BF2CC
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 07:53:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A6B6813D1;
+	Tue, 14 Mar 2023 07:55:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A6B6813D1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 16C871BF2CC
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 07:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0375241805
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 07:53:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0375241805
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0C0E403FB
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 07:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0C0E403FB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 00cf9EcUrlVs for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 07:53:39 +0000 (UTC)
-X-Greylist: delayed 00:07:15 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25CDB41802
-Received: from serv15.avernis.de (serv15.avernis.de
- [IPv6:2a01:4f8:151:30a2::163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 25CDB41802
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 07:53:39 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id 8A318BDE2684;
- Tue, 14 Mar 2023 08:46:19 +0100 (CET)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wx8aYl9r6j7k for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 07:55:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DADFC4011F
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DADFC4011F
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 07:55:43 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CDD53FF803;
+ Tue, 14 Mar 2023 07:55:40 +0000 (UTC)
+Date: Tue, 14 Mar 2023 08:55:39 +0100
+To: Lang Daniel via buildroot <buildroot@buildroot.org>
+Message-ID: <20230314085539.0f281cbc@windsurf>
+In-Reply-To: <VI1P190MB0493A37AA63B6E45036E0F0B9FBE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+References: <VI1P190MB0493A37AA63B6E45036E0F0B9FBE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Tue, 14 Mar 2023 07:46:16 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: C D <dellicker@live.com>
-In-Reply-To: <mailman.10087.1678750430.50374.buildroot@buildroot.org>
-References: <mailman.10087.1678750430.50374.buildroot@buildroot.org>
-Message-ID: <70f71def3775c5412b70ddae1b3caac0@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.8 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1678779981; bh=wcC0hqFVsTivCf8W3o4ZKyD89XdVpcFfn2p1mqXkJp4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=PgAKOw3ghhGKbZhXiFp9ppKsgA08XYK8sVhXu8eck/BWZwgECxmTIeGPt9wrXBjBU
- IHXmRY522UmA+VQM9ij82Ipxl1Ehsyq7IWLTfTuNwWvz7+UolWFTCQkXHfN+ffIavN
- G/ITrVrfAuaVuSgoTwCOw0XgkfsCjYbv/7Nfy7jc=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=umbiko.net header.i=@umbiko.net
- header.a=rsa-sha256 header.s=mail header.b=PgAKOw3g
-Subject: Re: [Buildroot] Forcing linker to look at right library path?
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678780541;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=mLuLL/vCOHa7J+3rjYdTbFPggAlCG4saHBoYHiNkPxY=;
+ b=NlRNl5M6HU4rYhBIJ8OXWCicxieLCoSEROzbYcOQ5+8cJFmlUehNiIpzJ8AJum8clUJrOZ
+ IOII0eR3/Wc/tpYX6DjtXuWAdkjnU498G4Zs2wgH7XbRyM5AvMm3qWElmOKMHdBo5MEvGu
+ 3ixp3mlFoMi5Og+lmJzjxVVRvzZSagWzAJ0zenYh6HJX/sEcP7mhGCMKGnTqxtw7FgctOe
+ iIvyavOcSrsw1FM99Zj1jf22jFnolTtshV9o7p/phQVhGMJ0jE452WHd+uAc+12zFKrOFU
+ ZncSr66QVdrI1vBPx8IbeRzGkFQul9dnTnHxilA7RV9qYXdMEozZb9yQ3DVaaA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=NlRNl5M6
+Subject: Re: [Buildroot] [PATCH 1/2] package/lzop: fix COPYING hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,63 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Lang Daniel <d.lang@abatec.at>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Chris,
+On Tue, 14 Mar 2023 07:48:28 +0000
+Lang Daniel via buildroot <buildroot@buildroot.org> wrote:
 
-On 2023-03-13 23:33, C D <dellicker@live.com> wrote:
+> The version bump in ce95217 forgot to update the hash of the license
+> file.
+> Changes include a new address for Free Software Foundation, Inc.
 > 
-> Good afternoon,
-> 
-> I'm running in to an issue with a package linking against libubsan and 
-> libasan.  I've figured out how to compile Buildroot so that it copies 
-> those libraries to the correct output/target/lib and 
-> output/target/lib64 locations, but it seems like the package is linking 
-> to the versions installed in my OS (RHEL 8.7) in /usr/lib64 instead.
+> Fixes:
+>  - http://autobuild.buildroot.net/results/c8a/c8ab973077067b2aa57e4f3ab51bd41ca1543d6f/
+> ---
+>  package/lzop/lzop.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Did you use BR2_TOOLCHAIN_EXTRA_LIBS? I would expect them to appear 
-under /usr/lib[64] on the target.
+Thanks a lot for fixing this (and sorry for missing this issue when
+applying the original patch).
 
-> So, in /usr/lib64 I have libasan.so.5 and libubsan.so.1, and in 
-> Buildroot's output/target/lib64 I have libasan.so.6; when I boot into 
-> Buildroot and run my program, it errors out because it's looking for 
-> libasan.so.5.
+However, I can't apply your patches because your Signed-off-by line is
+missing in both patches of this series.
 
-The libraries and pkg-config files need to be present in the toolchain 
-directory, usually located under output/host/<toolchain-name>/sysroot 
-(normally ./usr/lib and ./usr/lib/pkg-config).
+Could you resend with your SoB line added?
 
-> What do I need to do for it to point to the correct library location 
-> when linking?  Is this a Buildroot config option, or something I need 
-> to set up in my Makefile?
+Thanks a lot!
 
-This is highly specific to (a) the build system used and (b) the 
-interaction between Buildroot's and the package's make file.
-
-Standard include paths for headers and libraries are preset in the 
-toolchain binaries.
-
-Buildroot sets the binary path, and standard environment variables 
-before executing make in the package build directory.
-
-If your Makefile uses variables that can be overridden, set them from 
-the Buildroot package make file, using e.g. CONF_ENV (autotools) or 
-MAKE_ENV (generic).
-
-If the project Makefile uses pkg-config to determine include paths, you 
-need a build-time dependency on host-pkgconf (and probably set 
-PKG_CONFIG_PATH).
-
-> 
-> Thanks,
-> Chris
-
-Kind regards,
-Andreas
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
