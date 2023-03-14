@@ -4,48 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2B5DC6FD1C
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 07:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0216C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 07:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8784F8142C;
-	Tue, 14 Mar 2023 07:28:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8784F8142C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 419C48144F;
+	Tue, 14 Mar 2023 07:38:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 419C48144F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zPHZrpbwkMH1; Tue, 14 Mar 2023 07:28:38 +0000 (UTC)
+	with ESMTP id GeAd40mwr5G5; Tue, 14 Mar 2023 07:38:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B135381C46;
-	Tue, 14 Mar 2023 07:28:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B135381C46
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C69461BF95E
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 07:28:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76FA181445;
+	Tue, 14 Mar 2023 07:38:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76FA181445
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E03A1BF2CC
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 07:38:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ACE7381417
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 07:28:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACE7381417
+ by smtp2.osuosl.org (Postfix) with ESMTP id 696C740328
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 07:38:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 696C740328
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FNPNFvByl8JR for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 07:28:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5A588133F
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 07:28:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5A588133F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3820870EC; Tue, 14 Mar 2023 07:28:22 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 08:26:32 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: eecb4a6630ada80c96d9544282c3bdb8f42a55f7
-X-Git-Newrev: d2a00c83ae6a772e84dd238bde31bd526972412d
-X-Patchwork-Hint: ignore
-Message-Id: <20230314072822.B3820870EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/python-numpy:
- needs C++
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8qUnde1vsRrH for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 07:38:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ED8F4011F
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4ED8F4011F
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 07:38:46 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 18E66E0005;
+ Tue, 14 Mar 2023 07:38:41 +0000 (UTC)
+Date: Tue, 14 Mar 2023 08:38:41 +0100
+To: roman <roman.passler@gmail.com>
+Message-ID: <20230314083841.294bfd43@windsurf>
+In-Reply-To: <CAJYrM9Kk8tG2x4Zpv_OPH0kQCvrv6ddgBbe7SX1S1xnKdFCH+w@mail.gmail.com>
+References: <20230313183235.2665-1-roman.passler@gmail.com>
+ <20230313225431.45802c0f@windsurf>
+ <CAJYrM9Kk8tG2x4Zpv_OPH0kQCvrv6ddgBbe7SX1S1xnKdFCH+w@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678779522;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8+tFPCIdefRvBxKU5MoYrXsFre4zgDVadY8tsHY0NtI=;
+ b=eF26tFqtu8uGS8l7BGNzOVRea/mCUvL4GEO6in/kzqcHLYnHGeCCgC7rZwELJY2eSBVCb9
+ JdAxB/ZH1l7N+oMJ8gSxSGgYPiDoSWSdnN6a9HBR45Q27usIWQisx9J9Bf3SKEpxVtT2XG
+ ch2pVYyb9tbTvOhWFZQO6BCupanP/iQ3cMaDNtOKrjQeRbqAFyxiw5Y6S9WL2ZO56ecmnL
+ 6whPBXDCcqPX+UyNE3ww/S1UumefIKXNabgPvBIP5pxCne7mspe4/7JINrxFRcCiX2GcLy
+ uWY5oVXs3ETrBDIVzwegqKPUa6YfYQOEJ2LVQSN6TQaRt/ci+tNOCUly2ebsrQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eF26tFqt
+Subject: Re: [Buildroot] [PATCH 1/1] package/openocd: bump to 0.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,100 +77,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2a00c83ae6a772e84dd238bde31bd526972412d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+Hello Roman,
 
-C++ is mandatory since at least version 1.23.0 and
-https://github.com/numpy/numpy/commit/c91a7d0c5691c9d78bd75284777fda73f225155d
-resulting in the following build failure since bump to version 1.23.4 in
-commit 32d8e23b977a5bba1f23e3821709c6aa9ff3bc55:
+On Tue, 14 Mar 2023 08:25:27 +0100
+roman <roman.passler@gmail.com> wrote:
 
-RuntimeError: Broken toolchain: cannot link a simple C++ program. note: A compiler with support for C++11 language features is required.
+> The license files have been relocated to the LICENSES/* directory (available
+> at https://sourceforge.net/p/openocd/code/ci/v0.12.0/tree/LICENSES/).
+> The license files have been moved to the LICENSES/* directory, which can be
+> found at https://sourceforge.net/p/openocd/code/ci/v0.12.0/tree/LICENSES/.
+> Should they be added to the hash file, or is the COPYING file at
+> https://sourceforge.net/p/openocd/code/ci/v0.12.0/tree/COPYING sufficient?
 
-Fixes:
- - http://autobuild.buildroot.org/results/2d048d9b669ad60f37eeb2162b0a4f9fb425be1e
+Yes, it would be good to add the files in LICENSES/ in the
+OPENOCD_LICENSE variable, and therefore in the hash file as well;
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cc5a6c4af7e7809fccdb72b7140b33dacbbd1a94)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/piglit/Config.in       | 6 ++++--
- package/python-numpy/Config.in | 6 ++++--
- package/python-zlmdb/Config.in | 6 ++++--
- 3 files changed, 12 insertions(+), 6 deletions(-)
+Thanks a lot!
 
-diff --git a/package/piglit/Config.in b/package/piglit/Config.in
-index 736fd95d71..5e957a555a 100644
---- a/package/piglit/Config.in
-+++ b/package/piglit/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_PIGLIT
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
-+	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBPNG
-@@ -31,5 +32,6 @@ config BR2_PACKAGE_PIGLIT
- 
- 	  https://piglit.freedesktop.org
- 
--comment "piglit needs glibc or musl"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+comment "piglit needs a glibc or musl toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index a65164d9d5..132c3f7a82 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- config BR2_PACKAGE_PYTHON_NUMPY
- 	bool "python-numpy"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	# python-numpy needs fenv.h which is not provided by uclibc
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	help
-@@ -27,6 +28,7 @@ config BR2_PACKAGE_PYTHON_NUMPY
- 
- 	  http://www.numpy.org/
- 
--comment "python-numpy needs glibc or musl"
-+comment "python-numpy needs a glibc or musl toolchain w/ C++"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-diff --git a/package/python-zlmdb/Config.in b/package/python-zlmdb/Config.in
-index ac4ee05442..8eba2d7946 100644
---- a/package/python-zlmdb/Config.in
-+++ b/package/python-zlmdb/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_ZLMDB
- 	bool "python-zlmdb"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
-+	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_PYTHON_CBOR2 # runtime
- 	select BR2_PACKAGE_PYTHON_CFFI # runtime
-@@ -17,6 +18,7 @@ config BR2_PACKAGE_PYTHON_ZLMDB
- 
- 	  https://github.com/crossbario/zlmdb
- 
--comment "python-zlmdb needs glibc or musl"
-+comment "python-zlmdb needs a glibc or musl toolchain w/ C++"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
