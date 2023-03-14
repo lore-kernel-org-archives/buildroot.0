@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A527BC6FD1D
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 12:30:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64A1CC6FD1C
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 12:41:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50B7141868;
-	Tue, 14 Mar 2023 12:30:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50B7141868
+	by smtp4.osuosl.org (Postfix) with ESMTP id B80E0418FD;
+	Tue, 14 Mar 2023 12:41:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B80E0418FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kq_GX-ahfRg2; Tue, 14 Mar 2023 12:30:39 +0000 (UTC)
+	with ESMTP id OQz5pkMKsItH; Tue, 14 Mar 2023 12:41:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33F0641869;
-	Tue, 14 Mar 2023 12:30:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33F0641869
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D5C5F1BF3D4
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 12:30:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4296C41913;
+	Tue, 14 Mar 2023 12:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4296C41913
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B74551BF3D4
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 12:41:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFA5A6108A
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 12:30:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFA5A6108A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D07440AA3
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 12:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D07440AA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jvKIOIjRsDZf for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 12:30:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7AFB61069
-Received: from smtpdh20-1.aruba.it (smtpdh20-1.aruba.it [62.149.155.164])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C7AFB61069
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 12:30:34 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.142.131])
- by Aruba Outgoing Smtp  with ESMTPSA
- id c3nTpHZLpcQY3c3nTpkjEt; Tue, 14 Mar 2023 13:30:31 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 13:30:30 +0100
-Message-Id: <20230314123030.2523162-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230314085947.231281ad@windsurf>
-References: <20230314085947.231281ad@windsurf>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bV2cvNEVXOOW for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 12:41:02 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21949400A6
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 21949400A6
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 12:41:01 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0A18540006;
+ Tue, 14 Mar 2023 12:40:58 +0000 (UTC)
+Date: Tue, 14 Mar 2023 13:40:58 +0100
+To: Sebastian Weyer <sebastian.weyer@smile.fr>
+Message-ID: <20230314134058.73f5f35d@windsurf>
+In-Reply-To: <20230314121507.2597723-1-sebastian.weyer@smile.fr>
+References: <20230314121507.2597723-1-sebastian.weyer@smile.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfLJponuQ/X45/kSlZPeSCHSmAVX2vQ36QEtfWbIxoOutAb6lJYA5ZXkYnd12IvycdPL4gHoSUDuNahq7xULuPuBbubHkERpm+SM5ouyJaMihEOLg/tPe
- S2+y0IHArw+VboQuH+v8cuqMHTHrIgF4/n/mSapkffWHKJTBzltppbEb0nXscCHElEZUuKIqN6L7i9Pmkc5e/Np+9bvMeUfMCO7jiXjtVrMUkeGxl8CdZI/9
- qiaigWhJNGkA6upH5Y0kL0aW6DZjCVd/epDldOU44LmXLdmky+AVUZ9Oo0ZUnv1h08vnGDW4g0F2pdoKthIfGL/ZE8hydo/CmygQnFqE+Ds=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1678797031; bh=B8EvUqXsO7iSt8lOxuiqJVf0Y9ZrKwTPcCgXhnCNvUo=;
- h=From:To:Subject:Date:MIME-Version;
- b=jfEbR59Q/DLY0NlEfGDTXXD2HX514Myqrp/Aml2Az6RYDQSibBLddGqYuIRXP/Vm6
- 29ugJT+o1sdcuGjocz7CZUNM0CspmQXAlVsfutfMAflI3So3omXOUSeVnkMSaV63Kv
- qpdRwvaTXuc7f0CTPA2y/zV3LFJALXl9E967g0NzJsp49F0qCnbj8mtMXugo3F5aKx
- zymN0abj/S5ip4r9NAjXLJ/ZMyJOZwdAwT2meZY61jiKe3clpTdzUPx7umm4H1y8wk
- ngMOOZDnp4u2uSRHEJYq5DjdLIr5jWWyek0rOpJz/HGNRKoeAidnwieI4CboVQrR4l
- BOA3gAqRgd6Rw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=jfEbR59Q
-Subject: [Buildroot] [PATCH v2] package/swugenerator: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678797659;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6lOx6g6NJXiaKT9LRojmDBxA/dZ4SP66sHBMPl0ENqA=;
+ b=jEaXQlHwO+z6/MU+pfZ2IqmN1UKcMfTSO1z71x6WnKPOEsiQIpmymfyOwBMRM5aptvgy2r
+ nbk3KBACdyecT/o/1Jo/K83RPVaLwzEHyQmlbNG1rsnu9Wm6icQL6HhpwUXSUBExLplcrL
+ omq47bvzX7fGV0y4d3yFomMs6HKPDfM3DxTi4k7sLHRm2rDzBeRDTlayWfYqD0SVx0+JxP
+ mCDF+mFOo/oULLf1qDS45TacQxD2qLyAJ0YbjkGVep/dXQ6gTSb0So+gf+tGE4wtQSB6Qd
+ 95Fihb6+FyaJw6lGP9r0CFsT5h8Gb6GnTMczRuwwCXzJe37Iw29IxfYg4FU+ag==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=jEaXQlHw
+Subject: Re: [Buildroot] [PATCH 1/4] package/uutils-coreutils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,100 +75,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Sebastian Weyer <sebatian.weyer@smile.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add swugenerator as host utility to generate images for swupdate with all
-the possible options available like encryption, passkey etc. Let's also
-add Giulio Benetti as package maintainer to DEVELOPERS file.
+Hello,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* use github macro for package _SITE as pointed by Thomas Petazzoni
----
- DEVELOPERS                             |  1 +
- package/Config.in.host                 |  1 +
- package/swugenerator/Config.in.host    |  6 ++++++
- package/swugenerator/swugenerator.hash |  4 ++++
- package/swugenerator/swugenerator.mk   | 13 +++++++++++++
- 5 files changed, 25 insertions(+)
- create mode 100644 package/swugenerator/Config.in.host
- create mode 100644 package/swugenerator/swugenerator.hash
- create mode 100644 package/swugenerator/swugenerator.mk
+On Tue, 14 Mar 2023 13:15:03 +0100
+Sebastian Weyer <sebastian.weyer@smile.fr> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b49491da7a..3228f2b709 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1182,6 +1182,7 @@ F:	package/rtl8821cu/
- F:	package/sunxi-mali-utgard/
- F:	package/sunxi-mali-utgard-driver/
- F:	package/sunxi-tools/
-+F:	package/swugenerator/
- F:	package/trace-cmd/
- F:	package/udisks/
- F:	package/wilc-driver/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index dcadbfdfc1..e47b7b5de9 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -100,6 +100,7 @@ menu "Host utilities"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/swig/Config.in.host"
-+	source "package/swugenerator/Config.in.host"
- 	source "package/systemd/Config.in.host"
- 	source "package/tegrarcm/Config.in.host"
- 	source "package/ti-cgt-pru/Config.in.host"
-diff --git a/package/swugenerator/Config.in.host b/package/swugenerator/Config.in.host
-new file mode 100644
-index 0000000000..df0e9a5170
---- /dev/null
-+++ b/package/swugenerator/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_SWUGENERATOR
-+	bool "host swugenerator"
-+	help
-+	  A host tool to generate SWU update package for SWUpdate.
-+
-+	  https://github.com/sbabic/swugenerator
-diff --git a/package/swugenerator/swugenerator.hash b/package/swugenerator/swugenerator.hash
-new file mode 100644
-index 0000000000..2125be3d1c
---- /dev/null
-+++ b/package/swugenerator/swugenerator.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  b5c47c47be0df4df476d2bf596f58a7296a4b0cebe6c8de42251605475b37d25  swugenerator-0.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
-new file mode 100644
-index 0000000000..db43b18af6
---- /dev/null
-+++ b/package/swugenerator/swugenerator.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# swugenerator
-+#
-+################################################################################
-+
-+SWUGENERATOR_VERSION = 0.2
-+SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
-+SWUGENERATOR_LICENSE = GPL-3.0
-+SWUGENERATOR_LICENSE_FILES = LICENSE
-+HOST_SWUGENERATOR_SETUP_TYPE = setuptools
-+
-+$(eval $(host-python-package))
+> This package is an implementation of coreutils written completely in rust.
+> 
+> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+
+Thanks for working on this!
+
+
+> diff --git a/package/uutils-coreutils/0001-GNUMakefile-remove-dependency-on-build-during-instal.patch b/package/uutils-coreutils/0001-GNUMakefile-remove-dependency-on-build-during-instal.patch
+> new file mode 100644
+> index 0000000000..0540d9becb
+> --- /dev/null
+> +++ b/package/uutils-coreutils/0001-GNUMakefile-remove-dependency-on-build-during-instal.patch
+> @@ -0,0 +1,29 @@
+> +From cbec6b8ee3c4418f8f04760678ec655f05e79220 Mon Sep 17 00:00:00 2001
+> +From: Sebastian Weyer <sebastian.weyer@smile.fr>
+> +Date: Fri, 10 Mar 2023 10:52:00 +0100
+> +Subject: [PATCH] GNUMakefile: remove dependency on build during install
+> +
+> +When we call install we already built the application so we don't want
+> +to have to rebuild
+> +
+> +Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+
+It would be good to add the upstream status of this patch here. Was it
+sent upstream? If so, a link?
+
+
+> diff --git a/package/uutils-coreutils/Config.in b/package/uutils-coreutils/Config.in
+> new file mode 100644
+> index 0000000000..76ce5b174d
+> --- /dev/null
+> +++ b/package/uutils-coreutils/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_UUTILS_COREUTILS
+> +	bool "uutils-coreutils"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> +	help
+> +	  uutils is an attempt at writing universal (as in
+> +	  cross-platform) CLI utilities in Rust. While all programs have
+> +	  been implemented, some options might be missing or different
+> +	  behavior might be experienced.
+
+We like to have a blank line followed by the URL of the project
+homepage, at the end of the Config.in help text.
+
+> diff --git a/package/uutils-coreutils/uutils-coreutils.hash b/package/uutils-coreutils/uutils-coreutils.hash
+> new file mode 100644
+> index 0000000000..b4855222fd
+> --- /dev/null
+> +++ b/package/uutils-coreutils/uutils-coreutils.hash
+> @@ -0,0 +1,2 @@
+> +#Locally generated
+
+Nit: space after #
+
+> +sha256  5bc773bcbc66851aa17979df44224c66c0b5323044c3c9cefb925b44ee9cd81b  uutils-coreutils-0.0.17.tar.gz
+
+We also need a hash for the license file.
+
+> diff --git a/package/uutils-coreutils/uutils-coreutils.mk b/package/uutils-coreutils/uutils-coreutils.mk
+> new file mode 100644
+> index 0000000000..37a647a1f0
+> --- /dev/null
+> +++ b/package/uutils-coreutils/uutils-coreutils.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# uutils-coreutils
+> +#
+> +################################################################################
+> +
+> +UUTILS_COREUTILS_VERSION = 0.0.17
+> +UUTILS_COREUTILS_SITE = $(call github,uutils,coreutils,$(UUTILS_COREUTILS_VERSION))
+> +UUTILS_COREUTILS_LICENSE = MIT
+> +UUTILS_COREUTILS_LICENSE_FILES = LICENSE
+
+There is no dependency on host-rustc ? How can the rust compiler be
+available prior to building this package then ?
+
+> +UUTILS_COREUTILS_BUILD_OPTS = PROFILE=release MULTICALL=y PREFIX=$(TARGET_DIR)
+> +UUTILS_COREUTILS_INSTALL_OPTS = $(UUTILS_COREUTILS_BUILD_OPTS) install
+
+Is PREFIX= needed at build time ?
+
+> +
+> +define UUTILS_COREUTILS_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(UUTILS_COREUTILS_BUILD_OPTS) -C $(@D)
+> +endef
+> +
+> +define UUTILS_COREUTILS_INSTALL_TARGET_CMDS
+> +	$(TARGET_ENV) $(MAKE) $(UUTILS_COREUTILS_INSTALL_OPTS) -C $(@D)
+
+I think we will prefer to not have BUILD_OPTS/INSTALL_OPTS but instead:
+
+UUTILS_COREUTILS_MAKE_OPTS = \
+	PROFILE=release \
+	MULTICALL=y
+
+define UUTILS_COREUTILS_BUILD_CMDS
+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+		$(UUTILS_COREUTILS_MAKE_OPTS) -C $(@D)
+endef
+
+define UUTILS_COREUTILS_INSTALL_TARGET_CMDS
+	$(TARGET_MAKE_ENV) $(MAKE) \
+		$(UUTILS_COREUTILS_MAKE_OPTS) -C $(@D) \
+		PREFIX=$(TARGET_DIR) install
+endef
+
+(assuming PREFIX= is only needed at install time)
+
+It does the same, but the above suggestion is a bit more idiomatic in
+Buildroot.
+
+Best regards,
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
