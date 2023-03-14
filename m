@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A04AC6FD1C
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 08:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3589BC6FD1C
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 08:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1882F41833;
-	Tue, 14 Mar 2023 08:42:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1882F41833
+	by smtp4.osuosl.org (Postfix) with ESMTP id B018740902;
+	Tue, 14 Mar 2023 08:43:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B018740902
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sUs0Z2r888Qo; Tue, 14 Mar 2023 08:42:30 +0000 (UTC)
+	with ESMTP id TAml-29FWUfo; Tue, 14 Mar 2023 08:43:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE0DF4059D;
-	Tue, 14 Mar 2023 08:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE0DF4059D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0723D1BF2C3
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:42:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7BE7408A9;
+	Tue, 14 Mar 2023 08:43:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7BE7408A9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 23FF11BF2C3
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:43:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1CD34011F
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1CD34011F
+ by smtp1.osuosl.org (Postfix) with ESMTP id E4FEC8140D
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:43:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4FEC8140D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id USAFWjDBmQNA for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 08:42:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA50540525
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 08:42:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA50540525
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C879C87108; Tue, 14 Mar 2023 08:42:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 09:41:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97ce2f621d46a3da0e6149815d66d7ccfcf9c020
-X-Git-Newrev: 65f49b2cb3e7902fe90403e56a9ba7931504d99c
-X-Patchwork-Hint: ignore
-Message-Id: <20230314084212.C879C87108@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/network-manager: fix
- CONTRIBUTING.md hash
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a4T9pJWdgld6 for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 08:43:06 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5F5381413
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D5F5381413
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 08:43:05 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 060DDC000B;
+ Tue, 14 Mar 2023 08:43:03 +0000 (UTC)
+Date: Tue, 14 Mar 2023 09:43:03 +0100
+To: Lang Daniel via buildroot <buildroot@buildroot.org>
+Message-ID: <20230314094303.2e7dc5bd@windsurf>
+In-Reply-To: <VI1P190MB049361B7F42628BA25F562D89FBE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+References: <VI1P190MB049361B7F42628BA25F562D89FBE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1678783384;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=celesXpeos9A0FWz1IRanrwC1zUjr383/6DK22EBJvo=;
+ b=UTBEgLuf1cPqDoiqW5S7OofbdOEBv9AKCpwtDy/DYQiVNv9vC45xyEjPDeSm0WSe/SMH0d
+ yKr+BwKHsXdgQYddPtVzajf3Huy221CYcIjpYWJExXeFAMWILvBsmIAhGkOFXNDgWL7QcB
+ 6SczYxlZgD2eZEym9a/jgXMrOC6fh3BrJ2Ps+rbI4lK1KP1fJxGW368HIzA8rD8JhUCtqT
+ 4NrArb8pBZuU9h3eyZeRJ4owbYM/Rd3udqq4+mGz5QDQs8fp1F+0xC31k4N11xWigCBk9N
+ GygMwxicXupejsRjfAtWXd9qthf93oanSM69xB3cacg1LHXyGraeUkaJ1iaWfg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UTBEgLuf
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/lzop: fix COPYING hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,39 +77,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Lang Daniel <d.lang@abatec.at>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65f49b2cb3e7902fe90403e56a9ba7931504d99c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 14 Mar 2023 08:08:26 +0000
+Lang Daniel via buildroot <buildroot@buildroot.org> wrote:
 
-The version bump in e3706f1 forgot to update the hash for
-CONTRIBUTING.md
-The file includes various changes unrelated to the legal information
-(mailing list, how to build,...).
+> The version bump in ce95217 forgot to update the hash of the license
+> file.
+> Changes include a new address for Free Software Foundation, Inc.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/c8a/c8ab973077067b2aa57e4f3ab51bd41ca1543d6f/
+>  
+> Signed-off-by: Daniel Lang <d.lang@abatec.at>
+> ---
+> v1 -> v2:
+> - Add Signed-off-by
+> ---
+>  package/lzop/lzop.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fixes:
- - http://autobuild.buildroot.net/results/bbd0db06663b6df82973173bb044b57f013e844b
+Both applied, thanks a lot!
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/network-manager/network-manager.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 270699d63a..895351a537 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -3,4 +3,4 @@ sha256  2f6756d507bb6b46716594b67e6fe7491891e1b5b167bbafc5157dfa7753d5b4  Networ
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256  f3c5ae3cafa27c24590cf89e732581cbeb4d25d950fe49ce7e4042963012b105  CONTRIBUTING.md
-+sha256  cfb6c71f6df5898e1724be3debe9adac48c115b903915406c1e7dfd362b57892  CONTRIBUTING.md
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
