@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58510C6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 08:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E52FDC6FD1C
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 08:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED1AF408F9;
-	Tue, 14 Mar 2023 08:52:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED1AF408F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 867DE4187B;
+	Tue, 14 Mar 2023 08:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 867DE4187B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gO5JirG5kmYm; Tue, 14 Mar 2023 08:52:19 +0000 (UTC)
+	with ESMTP id 4UydVuSJL8TH; Tue, 14 Mar 2023 08:52:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6973F41775;
-	Tue, 14 Mar 2023 08:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6973F41775
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6F5B1BF95E
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:52:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FFC240901;
+	Tue, 14 Mar 2023 08:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FFC240901
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 286501BF33F
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE33E4011F
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE33E4011F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E7724028F
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E7724028F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g2nh9raShhgr for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 08:52:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id shhZLOOBlkHE for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 08:52:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA8CF400D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5E084020C
  for <buildroot@buildroot.org>; Tue, 14 Mar 2023 08:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA8CF400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5E084020C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA9A78715A; Tue, 14 Mar 2023 08:52:00 +0000 (UTC)
+ id D4E748715B; Tue, 14 Mar 2023 08:52:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 09:26:59 +0100
+Date: Tue, 14 Mar 2023 09:48:45 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 8b430fd5256c8dffacba6a0bd72afae579e84535
-X-Git-Newrev: a27e9e9860a05196f6cbd72b27c02b11285524e3
+X-Git-Oldrev: a27e9e9860a05196f6cbd72b27c02b11285524e3
+X-Git-Newrev: 083bde239a7545f0e813bfb4625860390697abf5
 X-Patchwork-Hint: ignore
-Message-Id: <20230314085200.CA9A78715A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/gdal: fix build
- without NPTL
+Message-Id: <20230314085200.D4E748715B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/python-werkzeug:
+ bump to version 2.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,137 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a27e9e9860a05196f6cbd72b27c02b11285524e3
+commit: https://git.buildroot.net/buildroot/commit/?id=083bde239a7545f0e813bfb4625860390697abf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Fix the following build failure without NPTL raised since the addition
-of the package in commit 1e64fa2956171cdc9d6e6c8896b4b589ce573513:
-
-/tmp/instance-7/output-1/build/gdal-3.5.2/port/cpl_multiproc.cpp: In function 'CPLSpinLock* CPLCreateSpinLock()':
-/tmp/instance-7/output-1/build/gdal-3.5.2/port/cpl_multiproc.cpp:2265:9: error: 'pthread_spin_init' was not declared in this scope; did you mean 'pthread_cond_init'?
- 2265 |         pthread_spin_init(&(psSpin->spin), PTHREAD_PROCESS_PRIVATE) == 0 )
-      |         ^~~~~~~~~~~~~~~~~
-      |         pthread_cond_init
-
-Fixes:
- - http://autobuild.buildroot.org/results/aa2a88990a07e551c40efb0c2180768add600c4f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 93f5ba38533edb66e9446086266da6f9be904a80)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d6f194c5131b6ed76e4b954399a04859e64a6c25)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gdal/0001-fix-uclibc-build-without-NPTL.patch  | 102 +++++++++++++++++++++
- 1 file changed, 102 insertions(+)
+ package/python-werkzeug/python-werkzeug.hash | 4 ++--
+ package/python-werkzeug/python-werkzeug.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gdal/0001-fix-uclibc-build-without-NPTL.patch b/package/gdal/0001-fix-uclibc-build-without-NPTL.patch
-new file mode 100644
-index 0000000000..6ecbfc7f95
---- /dev/null
-+++ b/package/gdal/0001-fix-uclibc-build-without-NPTL.patch
-@@ -0,0 +1,102 @@
-+From 0d3ee8a7661dcd85a9d7b636124af32de8d1b2f1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 26 Feb 2023 11:31:23 +0100
-+Subject: [PATCH] fix uclibc build without NPTL
-+
-+Check for pthread_spin_lock instead of pthread_spin_lock_t to avoid the
-+following uclibc build failure:
-+
-+/tmp/instance-7/output-1/build/gdal-3.5.2/port/cpl_multiproc.cpp: In function 'CPLSpinLock* CPLCreateSpinLock()':
-+/tmp/instance-7/output-1/build/gdal-3.5.2/port/cpl_multiproc.cpp:2265:9: error: 'pthread_spin_init' was not declared in this scope; did you mean 'pthread_cond_init'?
-+ 2265 |         pthread_spin_init(&(psSpin->spin), PTHREAD_PROCESS_PRIVATE) == 0 )
-+      |         ^~~~~~~~~~~~~~~~~
-+      |         pthread_cond_init
-+/tmp/instance-7/output-1/build/gdal-3.5.2/port/cpl_multiproc.cpp: In function 'int CPLAcquireSpinLock(CPLSpinLock*)':
-+/tmp/instance-7/output-1/build/gdal-3.5.2/port/cpl_multiproc.cpp:2283:12: error: 'pthread_spin_lock' was not declared in this scope; did you mean 'pthread_spinlock_t'?
-+ 2283 |     return pthread_spin_lock( &(psSpin->spin) ) == 0;
-+      |            ^~~~~~~~~~~~~~~~~
-+      |            pthread_spinlock_t
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/aa2a88990a07e551c40efb0c2180768add600c4f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/OSGeo/gdal/pull/7318]
-+---
-+ cmake/helpers/configure.cmake  | 4 ++--
-+ cmake/template/cpl_config.h.in | 4 ++--
-+ port/cpl_config.h.in           | 4 ++--
-+ port/cpl_multiproc.cpp         | 4 ++--
-+ 4 files changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/cmake/helpers/configure.cmake b/cmake/helpers/configure.cmake
-+index 08549df434..62a4f636ba 100644
-+--- a/cmake/helpers/configure.cmake
-++++ b/cmake/helpers/configure.cmake
-+@@ -110,9 +110,9 @@ else ()
-+     "
-+         #define _GNU_SOURCE
-+         #include <pthread.h>
-+-        int main() { pthread_spinlock_t spin; return 1; }
-++        int main() { pthread_spinlock_t spin; return pthread_spin_lock(&spin); }
-+         "
-+-    HAVE_PTHREAD_SPINLOCK)
-++    HAVE_PTHREAD_SPIN_LOCK)
-+ 
-+   check_c_source_compiles(
-+     "
-+diff --git a/cmake/template/cpl_config.h.in b/cmake/template/cpl_config.h.in
-+index cfa7da94aa..d1fd80bda9 100644
-+--- a/cmake/template/cpl_config.h.in
-++++ b/cmake/template/cpl_config.h.in
-+@@ -61,8 +61,8 @@
-+ /* Define to 1 if you have the `PTHREAD_MUTEX_ADAPTIVE_NP' constant. */
-+ #cmakedefine HAVE_PTHREAD_MUTEX_ADAPTIVE_NP 1
-+ 
-+-/* Define to 1 if you have the `pthread_spinlock_t' type. */
-+-#cmakedefine HAVE_PTHREAD_SPINLOCK 1
-++/* Define to 1 if you have the `pthread_spin_lock' function. */
-++#cmakedefine HAVE_PTHREAD_SPIN_LOCK 1
-+ 
-+ /* Define to 1 if you have the `pthread_atfork' function. */
-+ #cmakedefine HAVE_PTHREAD_ATFORK 1
-+diff --git a/port/cpl_config.h.in b/port/cpl_config.h.in
-+index ea28efb3f0..09a48f242d 100644
-+--- a/port/cpl_config.h.in
-++++ b/port/cpl_config.h.in
-+@@ -51,8 +51,8 @@
-+ /* Define to 1 if you have the `PTHREAD_MUTEX_ADAPTIVE_NP' constant. */
-+ #undef HAVE_PTHREAD_MUTEX_ADAPTIVE_NP
-+ 
-+-/* Define to 1 if you have the `pthread_spinlock_t' type. */
-+-#undef HAVE_PTHREAD_SPINLOCK
-++/* Define to 1 if you have the `pthread_spin_lock' function. */
-++#undef HAVE_PTHREAD_SPIN_LOCK
-+ 
-+ /* Define to 1 if you have the 5 args `mremap' function. */
-+ #undef HAVE_5ARGS_MREMAP
-+diff --git a/port/cpl_multiproc.cpp b/port/cpl_multiproc.cpp
-+index 7f5bcd9127..474ff5bb29 100644
-+--- a/port/cpl_multiproc.cpp
-++++ b/port/cpl_multiproc.cpp
-+@@ -2232,7 +2232,7 @@ void CPLCleanupTLS()
-+ /*                          CPLCreateSpinLock()                         */
-+ /************************************************************************/
-+ 
-+-#if defined(HAVE_PTHREAD_SPINLOCK)
-++#if defined(HAVE_PTHREAD_SPIN_LOCK)
-+ #define HAVE_SPINLOCK_IMPL
-+ 
-+ struct _CPLSpinLock
-+@@ -2310,7 +2310,7 @@ void CPLDestroySpinLock(CPLSpinLock *psSpin)
-+     pthread_spin_destroy(&(psSpin->spin));
-+     free(psSpin);
-+ }
-+-#endif  // HAVE_PTHREAD_SPINLOCK
-++#endif  // HAVE_PTHREAD_SPIN_LOCK
-+ 
-+ #endif  // def CPL_MULTIPROC_PTHREAD
-+ 
-+-- 
-+2.39.1
-+
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index 73fa6b5630..13b95bc448 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/Werkzeug/json
+-md5  5835c8738b8081c53367cbcc5db8784c  Werkzeug-2.1.2.tar.gz
+-sha256  1ce08e8093ed67d638d63879fd1ba3735817f7a80de3674d293f5984f25fb6e6  Werkzeug-2.1.2.tar.gz
++md5  9d7e50c5bb3a9fc12823b5faf374b90e  Werkzeug-2.2.2.tar.gz
++sha256  7ea2d48322cc7c0f8b3a215ed73eabd7b5d75d0b50e31ab006286ccff9e00b8f  Werkzeug-2.2.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index 9b32fdf097..3ebae3c165 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WERKZEUG_VERSION = 2.1.2
++PYTHON_WERKZEUG_VERSION = 2.2.2
+ PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+-PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/cf/97eb1a3847c01ae53e8376bc21145555ac95279523a935963dc8ff96c50b
++PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/f8/c1/1c8e539f040acd80f844c69a5ef8e2fccdf8b442dabb969e497b55d544e1
+ PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+ PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+ PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
