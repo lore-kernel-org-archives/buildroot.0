@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6364BC6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 08:14:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3621BC6FD1C
+	for <buildroot@archiver.kernel.org>; Tue, 14 Mar 2023 08:25:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC2F441819;
-	Tue, 14 Mar 2023 08:14:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC2F441819
+	by smtp4.osuosl.org (Postfix) with ESMTP id C41EC41823;
+	Tue, 14 Mar 2023 08:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C41EC41823
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3DvA8j9BER5O; Tue, 14 Mar 2023 08:14:34 +0000 (UTC)
+	with ESMTP id tifTnCZD88Z5; Tue, 14 Mar 2023 08:25:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D21AD41680;
-	Tue, 14 Mar 2023 08:14:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D21AD41680
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6FA4D1BF2C3
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:14:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEEE24181C;
+	Tue, 14 Mar 2023 08:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEEE24181C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E82651BF2C3
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4819841680
- for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:14:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4819841680
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF2A281980
+ for <buildroot@lists.busybox.net>; Tue, 14 Mar 2023 08:25:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF2A281980
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nXFTzXM2DwPH for <buildroot@lists.busybox.net>;
- Tue, 14 Mar 2023 08:14:31 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4009E41606
- for <buildroot@buildroot.org>; Tue, 14 Mar 2023 08:14:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4009E41606
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 273FF870F4; Tue, 14 Mar 2023 08:14:31 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 14 Mar 2023 09:14:05 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0c28688054e06bb84906ae309da1f64d45ced0d3
-X-Git-Newrev: 27ea8958e1595a92b92f7057bcf005db0fa363f1
-X-Patchwork-Hint: ignore
-Message-Id: <20230314081431.273FF870F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ptm2human: bump to latest commit
- d0b8b6b
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WE5OLib-QK1m for <buildroot@lists.busybox.net>;
+ Tue, 14 Mar 2023 08:25:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F203814BA
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5F203814BA
+ for <buildroot@buildroot.org>; Tue, 14 Mar 2023 08:25:52 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5DECD1C0008;
+ Tue, 14 Mar 2023 08:25:49 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pbzye-000tha-E3; Tue, 14 Mar 2023 09:25:48 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230225172806.9444-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Mar 2023 09:25:48 +0100
+In-Reply-To: <20230225172806.9444-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 25 Feb 2023 18:28:06 +0100")
+Message-ID: <87pm9b7n8z.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/pistache: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,49 +63,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27ea8958e1595a92b92f7057bcf005db0fa363f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-For change log since commit d0b8b6b, see project commit log:
-https://github.com/hwangcc23/ptm2human/commits/c8c5e7d5bdacd73114f4f244355e88c7f4e7d64a
+ > Fix the following libressl build failure which is probably raised since
+ > the addition of the package in commit
+ > 65d891efc2fb069f9cf707f47302776f7076b80c:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ptm2human/ptm2human.hash | 2 +-
- package/ptm2human/ptm2human.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > ../src/server/listener.cc: In member function 'void
+ > Pistache::Tcp::Listener::setupSSLAuth(const std::string&, const
+ > std::string&, int (*)(int, void*))':
+ > ../src/server/listener.cc:582:29: error: 'SSL_verify_cb' was not declared in this scope; did you mean 'RSA_verify'?
+ >   582 |                            (SSL_verify_cb)cb
+ >       |                             ^~~~~~~~~~~~~
+ >       |                             RSA_verify
 
-diff --git a/package/ptm2human/ptm2human.hash b/package/ptm2human/ptm2human.hash
-index 0346019667..d581491bde 100644
---- a/package/ptm2human/ptm2human.hash
-+++ b/package/ptm2human/ptm2human.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  28947eeb458d8b6a362cbeb8c5cb6098006274af04ebb4f5da70eac89f927d95  ptm2human-d0b8b6be9897ea5b04fd6460038a4773cec078bc.tar.gz
-+sha256  4c66e9429dfb92b5f4332b08050db0436511581102d1ec56555eb8229d9c2c74  ptm2human-c8c5e7d5bdacd73114f4f244355e88c7f4e7d64a.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/ptm2human/ptm2human.mk b/package/ptm2human/ptm2human.mk
-index 28a7b7ab48..edba21d401 100644
---- a/package/ptm2human/ptm2human.mk
-+++ b/package/ptm2human/ptm2human.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PTM2HUMAN_VERSION = d0b8b6be9897ea5b04fd6460038a4773cec078bc
-+PTM2HUMAN_VERSION = c8c5e7d5bdacd73114f4f244355e88c7f4e7d64a
- PTM2HUMAN_SITE = $(call github,hwangcc23,ptm2human,$(PTM2HUMAN_VERSION))
- PTM2HUMAN_LICENSE = GPL-2.0
- PTM2HUMAN_LICENSE_FILES = LICENSE
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/066fc078980e5216f38411eee455088e15fa1101
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
