@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E03A9C7618D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 15:07:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F7EC6FD1D
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 15:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7FB7540359;
-	Wed, 15 Mar 2023 15:07:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FB7540359
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61D95401F5;
+	Wed, 15 Mar 2023 15:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61D95401F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mZzG_5cd1NWz; Wed, 15 Mar 2023 15:07:11 +0000 (UTC)
+	with ESMTP id xQc0vbv11uo4; Wed, 15 Mar 2023 15:07:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D0F34038C;
-	Wed, 15 Mar 2023 15:07:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D0F34038C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 158891BF97A
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 15:06:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13E6C415BF;
+	Wed, 15 Mar 2023 15:07:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13E6C415BF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D79F1BF31E
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 15:06:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E416B60B11
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 15:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E416B60B11
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0360C40489
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 15:06:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0360C40489
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kr4jU6YKv2kw for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eBIQVf3LKVBX for <buildroot@lists.busybox.net>;
  Wed, 15 Mar 2023 15:06:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21A3E60B03
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3114840452
  for <buildroot@buildroot.org>; Wed, 15 Mar 2023 15:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21A3E60B03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3114840452
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0EEC787457; Wed, 15 Mar 2023 15:06:27 +0000 (UTC)
+ id 1B90687458; Wed, 15 Mar 2023 15:06:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 16:04:24 +0100
+Date: Wed, 15 Mar 2023 16:05:32 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: c37f7127377619ed30008804305abe8b7d4b3d26
-X-Git-Newrev: 46f842205224157f9b8e6361e0f0b873ca42dd2a
+X-Git-Oldrev: 46f842205224157f9b8e6361e0f0b873ca42dd2a
+X-Git-Newrev: df84b0f118cf775aa2c9e9186c29bc8640356a0b
 X-Patchwork-Hint: ignore
-Message-Id: <20230315150627.0EEC787457@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/mender: force
- libopenssl
+Message-Id: <20230315150627.1B90687458@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/apache: security
+ bump version to 2.4.56
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46f842205224157f9b8e6361e0f0b873ca42dd2a
+commit: https://git.buildroot.net/buildroot/commit/?id=df84b0f118cf775aa2c9e9186c29bc8640356a0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-mender raises the following build failure with libressl since at least
-version 3.1.0 (and probably since the addition of the package):
+Release notes:
+https://lists.apache.org/thread/89vkczkfkdyz65d5q59pcyzrn5ts60s6
 
-vendor/github.com/mendersoftware/openssl/conn.go:103:61: could not determine kind of name for C.X509_V_ERR_DANE_NO_MATCH
+Changelog: https://dlcdn.apache.org/httpd/CHANGES_2.4.56
 
-Fixes:
- - http://autobuild.buildroot.org/results/2b032d2a4e7cfbb20444c13821003120a4d00abd
- - http://autobuild.buildroot.org/results/621c057c0b8b627c8140456a2b0af4f95d239dcc
+Fixes CVE-2023-25690 & CVE-2023-27522:
+https://httpd.apache.org/security/vulnerabilities_24.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 46abbffc9702be320e9d71de71ce89457a28c48e)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 5256ec9ca872518beacf827443fec72146ab7a0c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mender/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/apache/apache.hash | 6 +++---
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index cccb46361b..7d768cebec 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -4,8 +4,9 @@ config BR2_PACKAGE_MENDER
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160
- 	help
- 	  Mender is an open source over-the-air (OTA) software updater
- 	  for embedded Linux devices. Mender comprises a client
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index a1185c5618..36144917fb 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.apache.org/httpd/httpd-2.4.54.tar.bz2.{sha256,sha512}
+-sha256  11d6ba19e36c0b93ca62e47e6ffc2d2f2884942694bce0f23f39c71bdc5f69ac  httpd-2.4.55.tar.bz2
+-sha512  94982f7a1fedac8961fc17b5a22cf763ac28cb27ee6facab2e6a15b249b927773667493fd3f7354fb13fcb34a6f1afc1bdd5cf4b7be030cba1dfb523e40d43fb  httpd-2.4.55.tar.bz2
++# From https://downloads.apache.org/httpd/httpd-2.4.56.tar.bz2.{sha256,sha512}
++sha256  d8d45f1398ba84edd05bb33ca7593ac2989b17cb9c7a0cafe5442d41afdb2d7c  httpd-2.4.56.tar.bz2
++sha512  5f12cd9878d822384b1bb163fea4d8edee5e7a0dd8b2389264387971268145cccc6a5a27ddf0436c5f1f631acc5fdc4874da2a47911483e421ca40bf783e0e12  httpd-2.4.56.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 13018a9b1f..80205a6362 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.55
++APACHE_VERSION = 2.4.56
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = https://downloads.apache.org/httpd
+ APACHE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
