@@ -4,125 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 608C2C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 19:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2374C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 20:44:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A97DB6114E;
-	Wed, 15 Mar 2023 19:59:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A97DB6114E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CFFA60E02;
+	Wed, 15 Mar 2023 20:44:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CFFA60E02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ienB55LZIACG; Wed, 15 Mar 2023 19:59:16 +0000 (UTC)
+	with ESMTP id Zl70u3cbSvph; Wed, 15 Mar 2023 20:44:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D508E60BE0;
-	Wed, 15 Mar 2023 19:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D508E60BE0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 032FE1BF283
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 19:59:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3139560E80;
+	Wed, 15 Mar 2023 20:44:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3139560E80
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9FFA51BF41C
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 20:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFD898141A
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 19:59:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFD898141A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 867F940459
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 20:44:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 867F940459
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X8YkLjLZtIKX for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 19:59:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EU0Ic8F2nR5T for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 20:44:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C013C813F6
-Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com
- (mail-centralusazlp170120005.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c111::5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C013C813F6
- for <buildroot@buildroot.org>; Wed, 15 Mar 2023 19:59:12 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YwIbKxDaIqIUV92kHFBzFKHOFVWR8zZ0oung3Wk3gOWVkWnr1OyBUS6Opry8KxtKQNUJbvR7ys3CiIQXBvOoFI24BeT9DEPMDKW3UrVGxP2of8sy5hulK9EYLV7q0jQANsCCerdP2WR1QlZh1UbjnHgTRCpoETCEjbKSXI5kQhltkuuKhc2wtdnNbQbx5hV5I85j4XEf+2OQfMZCv8gXCHgQme+sSmsM//b6KdbqbpGiyiyhXFTIEuZ+IHte1wOI4KDAfN6badBU+AqSwcS1+eUAT6TQPembrJTXNvbOPTmizl+TuU17tSGNTDxvJwgb350CyNS8sDxVZoyw2jyYAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pCRPajH3vS5D7a1W+WyPk7ziMxELN1x3JPCZ89rzwUg=;
- b=Tu9MXsYGBYoN+Ji5nQwaCO9K5WRNZUO0QuE5OVbOtSOZc1WDqYOQQ64fyvGL9N93snETUFepu5v/YQ3N1qcB9FMvcikcrk7SJQv48fbczVOuz98g8wtQAJ2wJVO9Dtzq89joJ2vIuMheLDrCZhE4RdXWquIta1GI7cTmReF6lH59igGc2mtdGBdP60ZIvgPRRO6gg/Ow7l+VeZ2RXRLdJ0ZMaYKW6CpLZ/Zab806L+sym4PE6NybWTCsRRQ5NHXZJM1/fD/K+d9UR+vme9e2Tk86ed9wHjTVj+5rl9kIGk6WM/snP99/wog/3WJeBx7Ob4NRwMrZ9N0FEq+C5wh/lA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from PH0PR05MB7622.namprd05.prod.outlook.com (2603:10b6:510:49::8)
- by MN2PR05MB6559.namprd05.prod.outlook.com (2603:10b6:208:db::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Wed, 15 Mar
- 2023 19:59:10 +0000
-Received: from PH0PR05MB7622.namprd05.prod.outlook.com
- ([fe80::e15:a6ce:260b:b01]) by PH0PR05MB7622.namprd05.prod.outlook.com
- ([fe80::e15:a6ce:260b:b01%5]) with mapi id 15.20.6178.019; Wed, 15 Mar 2023
- 19:59:10 +0000
-From: C D <dellicker@live.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Thread-Topic: Forcing linker to look at right library path?
-Thread-Index: AQHZVw5Utjh19g/7jk6GqYyjqpAzvK78Puzt
-Date: Wed, 15 Mar 2023 19:59:10 +0000
-Message-ID: <PH0PR05MB76228FDB895F3F8CA6A44C6DD4BF9@PH0PR05MB7622.namprd05.prod.outlook.com>
-References: <SJ0PR05MB7625D8C1B77DE29365DEDB13D4B99@SJ0PR05MB7625.namprd05.prod.outlook.com>
- <20230314085823.5a37e5e9@windsurf>
- <SJ0PR05MB7625BB7889E5DD3876C01E89D4BE9@SJ0PR05MB7625.namprd05.prod.outlook.com>
- <87jzzi4h51.fsf@dell.be.48ers.dk>
-In-Reply-To: <87jzzi4h51.fsf@dell.be.48ers.dk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn: [zqzDFLLktkdh7xybX/cr4TeW1v2p0hqP]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR05MB7622:EE_|MN2PR05MB6559:EE_
-x-ms-office365-filtering-correlation-id: 7d742ffd-b2b5-4c82-fd67-08db258fbe10
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bqKtslEdiWxqidOFpJX9qMXeEJSI2ZOwiITlNcrIJOw3cplML3MT4+NA0o2GiqUW6Plamrvo0e+6QKSpkc1GmLkOAMsXqa2lrIXoh2lVNyLd6Q3EJCyMHw6FKbnIbArNXZY8L0ry7wtNCHt2K3y9LtoVety3oE9/lLXy+UI/mdrR5aCLIIsB0EVEgAqDobnIdg/Hp+9wqciKQy9+Ktn0O03h1cJTEQiVDTgIYxxBdWBggnTNzcRW3sWvEBbrky9VtmYdSnmHDmUuvMZRgXIVfpHbtGrvVVWNLc5J+WQFxJ9AtE/KTe6UQzCiWAy0E7q5FU+FqETmcIByNSukL803ZB2D0glsjsM2jZPuCr8sZziSBZXwpyEqd+sBAdVdQetpAxuj9BmfDwe3PlaNgOPTzE+SX9EwAHH8ZdtKes7a8o/C9RutO4sBQE1I4l/EDr4Kas7gwShxTeFQpFyBq4i1s6my70Fc7yZpt52M7OERNi6bcxMDwqjPe4RB+9LJQEmMKTIJcvsgEXiYmifcDjoHsd8d2MavvTUyFQpC6HcgTGBVcfTC03wQsEwft4lhedDfmKzgcUN/KLZR1G6dwoU5re/GPpjmSIDPU8ugiCoRVIUWAUaDRCOTH2XvfwVFaM37xjYze7LnTc/N/SzQQ9D+0Q==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?k6VNj2dXnz9Nx/HkC4IRqHSytZN0PQgqsx2QB8BWAaOl7dHS1us0hcOkpO?=
- =?iso-8859-1?Q?PkJNqHLgRMqj4nJ0cbvNb4wdQUVDu6PpCjSvkZjEes6fXa+TLFM9fcC9lx?=
- =?iso-8859-1?Q?sfIUVT1M36rkUhbRdmaQ1I9nt6gbLo5HJ87ZHZmLzNnQStesoigohDCPSd?=
- =?iso-8859-1?Q?b4EX9gPAC6r1gWGwT19t1wSNYiVKheBvUIEIyJvfPcJvR+2WqpB0cs8UjH?=
- =?iso-8859-1?Q?Eosn4YPZpuUhM33XbwCfWAKUr+A8cq4dZctx3zMute3Dfd/BlibdAKCpR1?=
- =?iso-8859-1?Q?SeASl864RAEh+Cj/5HSlae5a91NrTxXBhNyursHgbIqu+ZmcVaVFoMn/uY?=
- =?iso-8859-1?Q?KM61xkdyK/3vpn0WXK1JFhTG4ISdNGr0yZH2bMoMHwPsQtoFPZPh8OoMeh?=
- =?iso-8859-1?Q?2aUozeeBkynE4pkGOL/7YEb3kq+IfQZz55/28Wqz/2/JtsrWC74VC8vt+n?=
- =?iso-8859-1?Q?RRaLEApAOt298doTk5dxxA/qRqyy3h02Yp85mSLRIn7W3om86zlkkN4Ny2?=
- =?iso-8859-1?Q?/FvsIBEileRIXN5makzaFFM4QfP+kOKAbTuWvWdgKMGTxRmcMVDdjOUt9w?=
- =?iso-8859-1?Q?l6gsiJP3Rof3pEamqbsYE1+61+UCiC8SpnEGkZBAwIyup5XguF9iqcaPvF?=
- =?iso-8859-1?Q?7qisUC3YuN5EWRTVRNZPrjvJso5qhqoLJnteQm9xEBrhAUT2NLKFOQfty1?=
- =?iso-8859-1?Q?BOrZVeTSiTWQ/EMO+bnrYij4aGa3YGxCRetS82zArYSRyR7ppE8s1T66Nc?=
- =?iso-8859-1?Q?XVkUvb1k03/wOpZjicrWVOAj/HJKpNgbfU8rBowsXO+/8PmZLkB3yK0TdF?=
- =?iso-8859-1?Q?9vpIYO4RWJpuoHzq2MbnUF08VNVzkad0vy4i1e7awm3aM4JJGSdraoNxz8?=
- =?iso-8859-1?Q?L+tET/W7cOmqJFTyN9SsIlqT8xnkH64cHLagEHqpChaC0NEyQ682iSEDmf?=
- =?iso-8859-1?Q?6NYqq+qYncl+C9YNOzWs9YwCM8MieVHGdAU2MFwWN0sMCXTA4RiotIQUOV?=
- =?iso-8859-1?Q?M780RjWp5YU6EC5Cm4AujZglENHzVtm9JI2TjCb9jULN4LeRTDeHWJJQ/S?=
- =?iso-8859-1?Q?V7W0Mokt9sOzs9z9n3z+EHQDKKaNG/WbZAtsszXxPU9LfgBxXWkvFqjoTh?=
- =?iso-8859-1?Q?p/hj5ZqxqYPx+otNxbYbFOZb5ISR0T2eSpyOvEzYRhTAVHjqEckOU+64iD?=
- =?iso-8859-1?Q?F791W6BNuGsDNfov4TU3o64KfQ8AvCvVoULfttLvXJIz6xefE7YyBVi3lB?=
- =?iso-8859-1?Q?R4b/22NhyNTo9QP9YHDmS34eFSeJOevb9YpsyYe0vedBwAeh7J2srnC/YN?=
- =?iso-8859-1?Q?D7h2?=
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CAE1400AF
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9CAE1400AF
+ for <buildroot@buildroot.org>; Wed, 15 Mar 2023 20:44:21 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id y4so51002539edo.2
+ for <buildroot@buildroot.org>; Wed, 15 Mar 2023 13:44:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1678913059;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=xbCXvUB3mR1vfweX+43WQEMmMiYzFY6niWCAOefd9GU=;
+ b=KHcoHTukfPch0IdmUE4QQapkCvxZHkLAbRebgHsdM1VwL2fuUXQDEQtuNWZ8j2wlGa
+ UIZso7DUHSBE2xu3BD0wTgBN7PSntcHDMT1r+hToGMXkQm/6LENqARtTJ2cq/hxCxLS5
+ nxjyQed7MEEJBSS1VzBI7t81xjK8C9gIavctkdE7XIXJPAXX2epnXCkvtYgrdwykqS3y
+ iZoG9bRrxJPAqS7ubTj84NT2A/WAo2HPayJJbfm2TTdI8cWPdFLNKhlB4Y05nWw4FM3x
+ plBM3vWyp30Sl3/n7hzK+Gwyq0LML21Niu5fFmqHSz7Z24XOZ4gjr1+1eFcAQFroGtFb
+ XE4Q==
+X-Gm-Message-State: AO0yUKWAFe8gfm0ALSgzRmAAMzSRzhaaT9KvQ3JIhmn2KNwaMdX2JuXJ
+ kL6KWuc5T9M2aZ7DN6+7xH0kRGSLMBGh21g68DQ=
+X-Google-Smtp-Source: AK7set9QbQ0Sm+8IcCHHiLBPSvf9oqspVWBjqt+LHS/qSKrnn+1ATSCzp455IR64q97CsBPlxYJXZg==
+X-Received: by 2002:a17:906:c047:b0:926:8992:4310 with SMTP id
+ bm7-20020a170906c04700b0092689924310mr8835725ejb.38.1678913059365; 
+ Wed, 15 Mar 2023 13:44:19 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ pw13-20020a17090720ad00b008e40853a712sm2947444ejb.97.2023.03.15.13.44.18
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 15 Mar 2023 13:44:18 -0700 (PDT)
+Message-ID: <7ebc84b5-de98-bd18-a997-9d1dbfb3fdbd@mind.be>
+Date: Wed, 15 Mar 2023 21:44:16 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4823-7-msonline-outlook-84f76.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB7622.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d742ffd-b2b5-4c82-fd67-08db258fbe10
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 19:59:10.1924 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR05MB6559
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Roman Passler <roman.passler@gmail.com>
+References: <20230313183235.2665-1-roman.passler@gmail.com>
+ <20230314121332.250268-1-roman.passler@gmail.com>
+ <20230314233336.648cfa0f@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20230314233336.648cfa0f@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=live.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pCRPajH3vS5D7a1W+WyPk7ziMxELN1x3JPCZ89rzwUg=;
- b=QLiIIQDJ66oYOpnymu0wPb7pTc0kb4O57TrQc6FsL2L28ovEwZXiSH9QsYCPMnGNK+p467joyY86KPV2fMCKURjStnXko1myEn3Q+dewndVgpG4vtSjBhTXWfWEtQ04PLJRf1hmruO5WfLmXA3qvRo7IkvuxZm4YWUPskz41vjf3/KaQRf7N1Rt5x9YPgFTYx4hVfhDFN8c5D2sloq8ZpnhA9L1ECpPDXN1Qu1qV4VcypailXdi2h5byZIjwMRFaqvsZLW/PG3FJ0COBOMU/PK5gGEwS0yyNT75TVOYuYFfxge0OGpUrgCHxHIO+SwIuL6p21HtkwWyiQ9gYOKswzg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
- header.s=selector1 header.b=QLiIIQDJ
-Subject: Re: [Buildroot] Forcing linker to look at right library path?
+ d=mind.be; s=google; t=1678913059;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=xbCXvUB3mR1vfweX+43WQEMmMiYzFY6niWCAOefd9GU=;
+ b=KJe7/jymtmYSuizT3+XdA37SMX87PZ1vTlZ3DLTrOEgZUi4vyEHf6Zn6QgWQPwo+rI
+ YQuI1a1MLkGfS8vU6bI56khEzDbQdPqCDjPDNBQCnjeEyPV4XsAVjAPaVfKt4tqFy2+7
+ u6qrptoTJQF1JZyHSoTGf1lW+zAhoyJv7CkLhEroOy/KJ/HP+58vz1i6JTEm1clvl5CV
+ qgXxllWYirif4mOOxblmlY9kfC5YxT6/lx+gOOT7kGGP1bomOGhckj45lZjkwDCeialw
+ e6iySuTS8x4Z4QQrsHb5zFsHTK4JqaGLGligCTEufvbNplywgmcb+czbF8twU+LlXn+c
+ UuCg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=KJe7/jym
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/openocd: bump to 0.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -134,53 +103,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-> From: Peter Korsgaard <peter@korsgaard.com>
-> Sent: Wednesday, March 15, 2023 12:18 AM
-> To: C D
-> Cc: Thomas Petazzoni; buildroot@buildroot.org
-> Subject: Re: Forcing linker to look at right library path?
+
+
+On 14/03/2023 23:33, Thomas Petazzoni wrote:
+> Hello Roman,
 > 
-> >>>>> "C" == C D <dellicker@live.com> writes:
+> Thanks for this new iteration. I still have some concern about the
+> licensing, so I've added other maintainers in Cc.
 > 
-> Hi,
+> On Tue, 14 Mar 2023 13:13:32 +0100
+> Roman Passler <roman.passler@gmail.com> wrote:
 > 
->  > I'm trying to build sedcli
->  
+>> diff --git a/package/openocd/openocd.hash b/package/openocd/openocd.hash
+>> index 91eb56d930..7f828172f1 100644
+>> --- a/package/openocd/openocd.hash
+>> +++ b/package/openocd/openocd.hash
+>> @@ -1,3 +1,15 @@
+>> -# From http://sourceforge.net/projects/openocd/files/openocd/0.11.0/
+>> -sha256  43a3ce734aff1d3706ad87793a9f3a5371cb0e357f0ffd0a151656b06b3d1e7d  openocd-0.11.0.tar.bz2
+>> -sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>> +# From http://sourceforge.net/projects/openocd/files/openocd/0.12.0/
+>> +sha256  af254788be98861f2bd9103fe6e60a774ec96a8c374744eef9197f6043075afa  openocd-0.12.0.tar.bz2
+>> +sha256  1b8f7e37ee5afbbf95c2a4d62b12b25232e29538692663b434318503a9a88419  COPYING
+>> +sha256  0a37155eb8bc0cb94477a0cae4f030e39da9317374e8a9f597e9229fd09aff78  LICENSES/license-rules.txt
+>> +sha256  034da732b4f3079b8783fff756613c1cff89dec5ac80c5cdd90532b7539922a1  LICENSES/exceptions/eCos-exception-2.0
+>> +sha256  f3ba76203a7b6993db31f987559cc4c621ae1ff78119ced2a669756c2c5fd3b1  LICENSES/preferred/BSD-1-Clause
+>> +sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSES/preferred/BSD-2-Clause
+>> +sha256  1483f15e9fddc73b5df0acab1c42d21ecd0bf6ade8a79179fb90c09f13d03dcd  LICENSES/preferred/BSD-2-Clause-Views
+>> +sha256  7a83b1aeb460458db9a4bd521d7f237c45b1650f6e60ea5ffc71e49472454de3  LICENSES/preferred/BSD-3-Clause
+>> +sha256  5cf024f6e3611d5c6fb98748d1a0ad99b8cf9ffe46f2d60fa10c299cd29e0a75  LICENSES/preferred/BSD-Source-Code
+>> +sha256  f35396f4095619f986736ca5e2976b313d381463a35c921c9ae677cc7eb83e28  LICENSES/preferred/GFDL-1.2
+>> +sha256  76515be2d7334a1a038f775238c9a4c2b37e19514248e5eea0434cdfee526f9d  LICENSES/preferred/gfdl-1.2.texi.readme
+>> +sha256  7d35bc44da7bb763022e3c2c32cfc0125dd222060bc50992420599d8e65f6c0a  LICENSES/preferred/GPL-2.0
+>> +sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+>> +sha256  9a41b56594cd89743ca72f188318c9871661847074dd16497ae0c695fe3ab9c9  LICENSES/stand-alone/GPL-3.0
+>> diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+>> index 37a06ca848..95a7fd3c2a 100644
+>> --- a/package/openocd/openocd.mk
+>> +++ b/package/openocd/openocd.mk
+>> @@ -4,7 +4,7 @@
+>>   #
+>>   ################################################################################
+>>   
+>> -OPENOCD_VERSION = 0.11.0
+>> +OPENOCD_VERSION = 0.12.0
+>>   OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
+>>   OPENOCD_SITE = http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VERSION)
+>>   OPENOCD_LICENSE = GPL-2.0+
+> 
+> Roman: one thing that isn't good is that you are not adding the new
+> license files in the OPENOCD_LICENSE_FILES variable, it makes the new
+> hashes quite useless.
+> 
+> Arnout, Peter, Yann: the COPYING file states that overall the OpenOCD
+> license is GPL-2.0+.
+> 
+> The doc is GFDL.
+> 
+> There are 3 files in contrib/ (apparently not installed in the
+> Buildroot context) which are under GPL-3.0+.
+> 
+> So, do we list all license files in <pkg>_LICENSE_FILES ? Even if in
+> fact we don't install anything that's under GFDL or GPL-3.0+ ? I'm
+> particularly concerned by the GPL-3.0+ of course, which is seen by some
+> companies as a red flag (for good or bad reasons, that's not the point
+> here). If our installation of OpenOCD does not include GPL-3.0+ code, I
+> think we should not mention that GPL-3.0+ code is distributed.
 
-<snip>
+  Typically there should be a _LICENSE_FILES for every individual license 
+mentioned in _LICENSE, plus an overall README-style file that (in broad strokes) 
+specifies which license applies when. And in _LICENSE, we should only mention 
+stuff that goes on the target (or in host/staging/images, actually).
+
+  So, for this particular case, _LICENSE is still GPL-2.0+ because we don't 
+install the doc or contrib. And _LICENSE_FILES should have COPYING and 
+LICENSES/preferred/GPL-2.0 (and possibly LICENSES/license-rules.txt as well, I 
+don't know what that contains).
+
+  Unless the GPL-2.0+ statement is not actually correct and there are source 
+files that end up on the target that have a different license; those should then 
+be added to _LICENSE and _LICENSE_FILES as well, of course.
+
+  Regards,
+  Arnout
 
 > 
-> It sounds like you have configured this as an autotools package, but
-> looking at https://github.com/sedcli/sedcli/blob/master/src/configure I
-> see that it is a custom hand written script, so that is why it doesn't
-> understand all of these options. Use generic-package instead.
->
-
-Thanks, that's a helpful starting point.  I'm a bit down that road now, but
-having some troubles getting the .mk file set up correctly.  I'm very much
-still in my early phases of learning how all this is put together. :)
-
-
-> Notice that we already have a package for sedutil, which sounds as if it
-> does more-or-less the same as this sedcli.
-
-Thanks, I did look at sedutil also, but sedcli has a few important features
-that sedutil does not; most importantly, it supports KMIP integration which
-is essential when using it at scale as part of an automated boot process.
-
+> Your opinion?
 > 
-> --
-> Bye, Peter Korsgaard
-
-Thanks,
-Chris
+> Best regards,
+> 
+> Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
