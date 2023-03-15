@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8366DC6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 13:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8744AC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 13:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C5214192E;
-	Wed, 15 Mar 2023 13:08:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C5214192E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 131744195B;
+	Wed, 15 Mar 2023 13:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 131744195B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ln72IpXvIQ6f; Wed, 15 Mar 2023 13:08:00 +0000 (UTC)
+	with ESMTP id qM91_Rv2VAXf; Wed, 15 Mar 2023 13:08:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19D6441935;
-	Wed, 15 Mar 2023 13:07:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19D6441935
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B609B1BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C46E941950;
+	Wed, 15 Mar 2023 13:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C46E941950
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DBEE11BF962
  for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 913E74098E
+ by smtp3.osuosl.org (Postfix) with ESMTP id B67BE60E3F
  for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:07:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 913E74098E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B67BE60E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QMl_t3w4ReC1 for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uTzlgiaEppxq for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 13:07:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3FB840184
+ by smtp3.osuosl.org (Postfix) with ESMTP id ECD1160AA3
  for <buildroot@buildroot.org>; Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3FB840184
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECD1160AA3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B056A873D8; Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
+ id DA35C873D8; Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 14:01:56 +0100
+Date: Wed, 15 Mar 2023 14:06:32 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: c18b427bc7241818249e4189f541893960c5ad56
-X-Git-Newrev: 38ffb8ad019f1388908274f3fd202ec93e33a789
+X-Git-Oldrev: 4c6520b0af709667879f0dea10c3549a59e56824
+X-Git-Newrev: 121bfe87be6b0f2bc70d28db2d93bca66c515b37
 X-Patchwork-Hint: ignore
-Message-Id: <20230315130756.B056A873D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/exfat: security
- bump to version 1.4.0
+Message-Id: <20230315130756.DA35C873D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/bash: fix naming
+ of target-finalize-hook
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,68 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38ffb8ad019f1388908274f3fd202ec93e33a789
+commit: https://git.buildroot.net/buildroot/commit/?id=121bfe87be6b0f2bc70d28db2d93bca66c515b37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-- Fix CVE-2022-29973: relan exFAT 1.3.0 allows local users to obtain
-  sensitive information (data from deleted files in the filesystem) in
-  certain situations involving offsets beyond ValidDataLength.
-- libfuse3 is supported since
-  https://github.com/relan/exfat/commit/7cbc1544a4f68d8b4d33b187a053fc554405c56e
+When the target-finalize-hook for bash was added in commit
+311c9eebc4dcfb764e3a7082706daf68e0603188 in order to write bash into
+/etc/shells, it was done at the same time as for package/mksh and it was
+incorrectly copied and MKSH still appeared in the name of the hook.
 
-https://github.com/relan/exfat/releases/tag/v1.4.0
+The hook is now correctly named BASH_ADD_BASH_TO_SHELLS
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0c29b4281d5a1c55739c62438f8d7676d7a16823)
+(cherry picked from commit 7f96255f4a40a5cbc0c37a69126c5a06fe8773b6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exfat/Config.in  | 2 +-
- package/exfat/exfat.hash | 2 +-
- package/exfat/exfat.mk   | 6 ++++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/bash/bash.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exfat/Config.in b/package/exfat/Config.in
-index c0b4eabe11..c0ed2570d9 100644
---- a/package/exfat/Config.in
-+++ b/package/exfat/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_EXFAT
- 	depends on BR2_USE_MMU # libfuse
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS # libfuse
--	select BR2_PACKAGE_LIBFUSE
-+	select BR2_PACKAGE_LIBFUSE3 if !BR2_PACKAGE_LIBFUSE
- 	help
- 	  A full-featured exFAT file system implementation for GNU/Linux
- 	  and other Unix-like systems as a FUSE module.
-diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
-index b40fc7f0e5..c6082a403a 100644
---- a/package/exfat/exfat.hash
-+++ b/package/exfat/exfat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  07652136064da5e4d32df5555f88c138ffa4835a23b88a5bae2015f21006e0d3  fuse-exfat-1.3.0.tar.gz
-+sha256  a1cfedc55e0e7a12c184605aa0f0bf44b24a3fb272449b20b2c8bbe6edb3001e  fuse-exfat-1.4.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
-index c0ef77a113..a8efe5b0ba 100644
---- a/package/exfat/exfat.mk
-+++ b/package/exfat/exfat.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 3aca22898e..9a7b768241 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -62,10 +62,10 @@ endif
  
--EXFAT_VERSION = 1.3.0
-+EXFAT_VERSION = 1.4.0
- EXFAT_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_VERSION)
- EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
--EXFAT_DEPENDENCIES = libfuse host-pkgconf
-+EXFAT_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_LIBFUSE3),libfuse3,libfuse) \
-+	host-pkgconf
- EXFAT_LICENSE = GPL-2.0+
- EXFAT_LICENSE_FILES = COPYING
- EXFAT_CPE_ID_VENDOR = exfat_project
+ # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
+ # can reject the user connection. See man shells.
+-define BASH_ADD_MKSH_TO_SHELLS
++define BASH_ADD_BASH_TO_SHELLS
+ 	grep -qsE '^/bin/bash$$' $(TARGET_DIR)/etc/shells \
+ 		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
+ endef
+-BASH_TARGET_FINALIZE_HOOKS += BASH_ADD_MKSH_TO_SHELLS
++BASH_TARGET_FINALIZE_HOOKS += BASH_ADD_BASH_TO_SHELLS
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
