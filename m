@@ -4,98 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0282CC61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 08:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDFE7C6FD1D
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 08:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9908B408F1;
-	Wed, 15 Mar 2023 08:47:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9908B408F1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CC4441765;
+	Wed, 15 Mar 2023 08:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CC4441765
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9cHSraXEzTtQ; Wed, 15 Mar 2023 08:47:25 +0000 (UTC)
+	with ESMTP id 6-JqlBdQ9Eox; Wed, 15 Mar 2023 08:47:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DFF2408D1;
-	Wed, 15 Mar 2023 08:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DFF2408D1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11A891BF2AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E01E41745;
+	Wed, 15 Mar 2023 08:47:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E01E41745
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 41BA31BF962
  for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 08:46:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0FAB405BA
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 08:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0FAB405BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1956F416AF
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 08:46:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1956F416AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yYvBZk6AxDeW for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 08:46:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E66TEq06hV_y for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 08:46:42 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F20BD40590
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82A32415D3
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com
  [66.111.4.25])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F20BD40590
- for <buildroot@uclibc.org>; Wed, 15 Mar 2023 08:46:43 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
- by mailout.nyi.internal (Postfix) with ESMTP id 1CDD55C0A07;
- Wed, 15 Mar 2023 04:46:38 -0400 (EDT)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 82A32415D3
+ for <buildroot@uclibc.org>; Wed, 15 Mar 2023 08:46:42 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+ by mailout.nyi.internal (Postfix) with ESMTP id 3E3B45C0894;
+ Wed, 15 Mar 2023 04:46:40 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
- by compute2.internal (MEProxy); Wed, 15 Mar 2023 04:46:38 -0400
-X-ME-Sender: <xms:7YURZBIcTtakXEOmFDxTvFqph96mQgsNnVReIr_kZJR4Ps1scBs3wA>
- <xme:7YURZNI7CDFB2HW5_93f_q0XZNqS7VJ3JFtn1Bqu9Qh2jvaWXZ8sbOas9TL75c4ih
- aX6Emu_08ZV2lWOMTE>
-X-ME-Received: <xmr:7YURZJt8OH-0KFLawa44QR3_89awlA-Zj49UQYbhCMvcTEng926XuCNV8etkWalninTx8v_7Zx2sFIsbL8p3WFE831L897h3X52LibNmeGT_ppkjn19v8WsAgLh1>
+ by compute3.internal (MEProxy); Wed, 15 Mar 2023 04:46:40 -0400
+X-ME-Sender: <xms:8IURZE5hCP0MSwcASoGJsnDw1WGO30i5qTr4y59O0gTuc0KYc_2aZQ>
+ <xme:8IURZF6e2-PkUPWubnepBriIZUh2LOohtVkTOYRiOKTePAdFKH7DvK1mVPfE68g-h
+ ejmGDq-T0jO4Y7rdT4>
+X-ME-Received: <xmr:8IURZDc6085BRHT5LMIRWIqaN-fvadUbJ2OVb_BrWnX-HB5XkIYklHa-O653piHA8l8v-L2vqWVYqAS2QYPGGUs5K_ediRPl_7nQ_ZcrMzagi8sSpBMMpl4Nxlq8>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvjedguddvtdcutefuodetggdotefrod
  ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
- necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
- dtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhj
- ohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpeejffekheffffejhfdtieffhfehge
- dvvdefveehlefgteeltdeivdejvdekieduleenucffohhmrghinheplhhisghsughlrdho
- rhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplh
- hukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:7oURZCa8x3hdQO1oyTZv4e4dXMTZRiCnqocG8Zf3mY8ehsNssQpvxg>
- <xmx:7oURZIYEYYMDW781rnWAJPEt1QU_U3YmWX5Ci_pLL-G_8cqarWpAPg>
- <xmx:7oURZGDtzfrWzGRpm-BJygtf30Ow6J6zjzrbXTR_ZrA0cbXrlVi2Vw>
- <xmx:7oURZO1WVfLFrHM5kj71drDloAfFYggMhpTxzdipKwx77TLm0WN25Q>
+ necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestd
+ ekredtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvges
+ lhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpeeiffdvfefgtdevleehffekue
+ ejueehtedulefgieekgfdtfeeiffdtuefhteevheenucffohhmrghinheplhhisghsughl
+ rdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+ eplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:8IURZJKf1HdTkj7QMHoHF8PlrGG1TrkGfgcIaHpw26ru2cMdpybvaA>
+ <xmx:8IURZILhwP8XLLk9gwRh6Q3Zr9wHlIJkRlnivvv8QRP984U-YAXixw>
+ <xmx:8IURZKxseVCugJJOiV9eE6tuaCY05Qy1ybfFypsjy7A7IhdyBXVWrg>
+ <xmx:8IURZPn-BXyUaR2Wju9PvK1BJMn3wIfobGvNPz9jbUo3jt0pR4w99w>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Mar 2023 04:46:37 -0400 (EDT)
+ 15 Mar 2023 04:46:39 -0400 (EDT)
 From: "Luke D. Jones" <luke@ljones.dev>
 To: buildroot@uclibc.org
-Date: Wed, 15 Mar 2023 09:46:20 +0100
-Message-Id: <20230315084624.1665061-1-luke@ljones.dev>
+Date: Wed, 15 Mar 2023 09:46:22 +0100
+Message-Id: <20230315084624.1665061-3-luke@ljones.dev>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230315084624.1665061-1-luke@ljones.dev>
+References: <20230315084624.1665061-1-luke@ljones.dev>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=ljones.dev; h=cc
  :cc:content-transfer-encoding:content-type:date:date:from:from
- :in-reply-to:message-id:mime-version:reply-to:sender:subject
- :subject:to:to; s=fm3; t=1678869998; x=1678956398; bh=DNDfBnptyp
- e7wETXd2YP3ETq93G85sPnHnhHv5nxmgs=; b=XFu6xZOlHDLYwN0bYxD/zvQech
- ptdA6MtCW8erDHxu9acN5bkK6l/fAa0kkD3VsjsjiYw0arkkK8vkdkIfNNKDhfHE
- DUpFOq0axUYMV6rR6x0QuKAr7ejxOqbbm4/JlKsaYMqvzxKf4TpleZO9FKCKU6Ru
- g06VXExgaQbO1IAwQWPYWNn4ccKcLVfXOHhTz621oNTittowUA0wMgMuDlLCDstR
- oHfATUQyHIsxdg9392yJWMACZnSsroWkzunk6y56DCCLpEHf0hHuSoiYynpEfyWo
- nTH+GvY0NnCz8ZPu0Glsk0U9siELeNcWFzyF3w5Z8WJdig3mI2l3qUUbuJOA==
+ :in-reply-to:in-reply-to:message-id:mime-version:references
+ :reply-to:sender:subject:subject:to:to; s=fm3; t=1678870000; x=
+ 1678956400; bh=E0sFdcJlyILV/vwlCJiuLxFY4jqKy6q4gIDrvBLC29k=; b=l
+ XNYznflgKKnbWlhb8BpG+Zy5Ma6IfF1couIl0iYiCKbNgoaE2i5gd7zlDKqh5Dr8
+ PJM783vCnndlFJhglhX/kFD8MaT7uYC9JnUw0NUlhPaLNDPadQlrn7uZEggMquXZ
+ mcjOPX6xXxNk/12HhD3p3v1gSZaN1vNQNP7gCQMmJhSwlA5jWQNoMa3hk01Op8sF
+ aN/s/7erLMGGMqrp1Wuekx0vtrn2biYFjqacQgju2QzdocvW0i8uAZDVpI7/3YEz
+ xvuxpWrVGtO0rH0LVINfFF4lb+jC3c49GiUuU0QLMbPHPlPeymUmAsRqi2JAvnw7
+ QjqYX+Wobqvx6MSg+vsVg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
  messagingengine.com; h=cc:cc:content-transfer-encoding
  :content-type:date:date:feedback-id:feedback-id:from:from
- :in-reply-to:message-id:mime-version:reply-to:sender:subject
- :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
- :x-sasl-enc; s=fm2; t=1678869998; x=1678956398; bh=DNDfBnptype7w
- ETXd2YP3ETq93G85sPnHnhHv5nxmgs=; b=dEpoBifnJKURLrLYPqIVT/QWq02RS
- bb2FJIqa5+Ae6VW2JQoxEYbtqm1tBuCU326IwvYW2jjzLpL1FsaGHm7RvpYyAufw
- h1NZkSRQozsB+FDhAleUgVKQtrShiFL8c0QDqYaTyQiCPguv6HvetBp05xG+NXwN
- YfY2WBERxGj3iZuNSfF3rr1NwcJE9jsLIb7D2C7JsZegwbmCiEyIPpVfotAPAd9w
- LtT8sFVQ9INTqC5Y3dBv4LmTZoWAMcQXdhCsVDPgtSSXBSbCuuoeGmHgACnluUm5
- o0XpZmrazbNAQL9oASCJz7kT7BFoHfzmK5zAUZM+fVq2hU5Jyc8Gh9DXQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :in-reply-to:in-reply-to:message-id:mime-version:references
+ :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+ :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1678870000; x=
+ 1678956400; bh=E0sFdcJlyILV/vwlCJiuLxFY4jqKy6q4gIDrvBLC29k=; b=R
+ +nAFoysB6oxRmo8lleelT/FIQx62vKE+ZnDXiHVADIzoHmzgF2UP2R4j3vxRSSAU
+ g9nu56DwZYzw3b+1atCxCzCfQYf12X67BwUCmUkfdVA9HvN289VgyNZ1FCaQnqL7
+ VEwaPkO2LOwVI8wM+VkVw+8Y2bbl617VoJcURSV9IzwlfgXKx8ef8fyoi0pCeaNT
+ hhk7OJJY6MAoOEyR75bMd/1S2YZwcVl/pFGO5mmcaq2ejcslNtAKyEf0reybUQvK
+ Knb7GwXqznjabnBpD7jkr2qquadRVfBFwh7dYqFcKEupEn1BtP/vJrn+zi3fM0oe
+ lZm1yhoFjhRAzJVgAx9IA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=ljones.dev header.i=@ljones.dev
- header.a=rsa-sha256 header.s=fm3 header.b=XFu6xZOl; 
+ header.a=rsa-sha256 header.s=fm3 header.b=lXNYznfl; 
  dkim=pass (2048-bit key,
  unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm2 header.b=dEpoBifn
-Subject: [Buildroot] [PATCH 1/5] package/sdl2: bump version to 2.26.4
+ header.a=rsa-sha256 header.s=fm2 header.b=R+nAFoys
+Subject: [Buildroot] [PATCH 3/5] package/sdl2_image: bump version to 2.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,34 +119,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
+ package/sdl2_image/sdl2_image.hash | 4 ++--
+ package/sdl2_image/sdl2_image.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index e26dcee30160..8232e66bb13d 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.3.tar.gz.sig
--sha256  c661205a553b7d252425f4b751ff13209e5e020b876bbfa1598494af61790057  SDL2-2.26.3.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.4.tar.gz.sig
-+sha256  1a0f686498fb768ad9f3f80b39037a7d006eac093aad39cb4ebcc832a8887231  SDL2-2.26.4.tar.gz
- # Locally calculated
- sha256  9928507f684c1965d07f2b6ef4b4723d5efc2f6b4ab731f743a413c51c319927  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 12bfe0eb1592..8504b345feb0 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
+diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
+index e1efa4debe6b..f20bccc9165d 100644
+--- a/package/sdl2_image/sdl2_image.hash
++++ b/package/sdl2_image/sdl2_image.hash
+@@ -1,3 +1,3 @@
+-# Locally calculated after checking https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.6.2.tar.gz.sig
+-sha256  48355fb4d8d00bac639cd1c4f4a7661c4afef2c212af60b340e06b7059814777  SDL2_image-2.6.2.tar.gz
++# Locally calculated after checking https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.6.3.tar.gz.sig
++sha256  931c9be5bf1d7c8fae9b7dc157828b7eee874e23c7f24b44ba7eff6b4836312c  SDL2_image-2.6.3.tar.gz
+ sha256  28aabfed22b3cb0b7e23ef40385e4f66297c960082f029c96d073cc1d4e008d5  LICENSE.txt
+diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+index 953742de28ab..aaf379788cc4 100644
+--- a/package/sdl2_image/sdl2_image.mk
++++ b/package/sdl2_image/sdl2_image.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_VERSION = 2.26.3
-+SDL2_VERSION = 2.26.4
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+-SDL2_IMAGE_VERSION = 2.6.2
++SDL2_IMAGE_VERSION = 2.6.3
+ SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
+ SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL2_IMAGE_INSTALL_STAGING = YES
 -- 
 2.39.2
 
