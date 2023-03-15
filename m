@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7503C6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 13:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 304ACC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 13:08:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6874B40218;
-	Wed, 15 Mar 2023 13:08:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6874B40218
+	by smtp4.osuosl.org (Postfix) with ESMTP id D82A9401D9;
+	Wed, 15 Mar 2023 13:08:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D82A9401D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I7Axy4pU3k6l; Wed, 15 Mar 2023 13:08:41 +0000 (UTC)
+	with ESMTP id JBrEL8gEvozZ; Wed, 15 Mar 2023 13:08:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C33A41971;
-	Wed, 15 Mar 2023 13:08:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C33A41971
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7DA31BF31D
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:07:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8B2841971;
+	Wed, 15 Mar 2023 13:08:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8B2841971
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 678561BF31D
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:07:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1223409EF
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:07:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1223409EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3909940863
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:07:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3909940863
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qcUrh7u1YEU3 for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sZ7HHVJJG43w for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 13:07:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D611640948
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0B3A41938
  for <buildroot@buildroot.org>; Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D611640948
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0B3A41938
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4293873DA; Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
+ id CD848873DB; Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 14:05:14 +0100
+Date: Wed, 15 Mar 2023 14:05:49 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 7b72b30c758e395bc7796dec8e120ef556e312a8
-X-Git-Newrev: 18807592f4bced3abf0d45ee7fc267ecd8d02b15
+X-Git-Oldrev: 18807592f4bced3abf0d45ee7fc267ecd8d02b15
+X-Git-Newrev: 4c6520b0af709667879f0dea10c3549a59e56824
 X-Patchwork-Hint: ignore
-Message-Id: <20230315130756.C4293873DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/libglfw: add
- wayland dependency
+Message-Id: <20230315130756.CD848873DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/f2fs-tools: add
+ F2FS_TOOLS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18807592f4bced3abf0d45ee7fc267ecd8d02b15
+commit: https://git.buildroot.net/buildroot/commit/?id=4c6520b0af709667879f0dea10c3549a59e56824
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Fix added by commit 0bbb12eff3b9f9d9719c48644c2b3d563e80de48 was
-incomplete resulting in the following build failure:
+cpe:2.3:a:f2fs-tools_project:f2fs-tools is a valid CPE identifier for
+this package:
 
--- Checking for modules 'wayland-client>=0.2.7;wayland-cursor>=0.2.7;wayland-egl>=0.2.7;xkbcommon'
---   Package 'wayland-client', required by 'virtual:world', not found
---   Package 'wayland-cursor', required by 'virtual:world', not found
---   Package 'wayland-egl', required by 'virtual:world', not found
-CMake Error at /home/autobuild/autobuild/instance-9/output-1/host/share/cmake-3.22/Modules/FindPkgConfig.cmake:603 (message):
-  A required package was not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/9c032902418a4ab0c9aa655eb29eddee0711815d
- - http://autobuild.buildroot.org/results/7381e114fa5c796c6edbb2c8e3987563bb32b6fa
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Af2fs-tools_project%3Af2fs-tools
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fd8db3d60c9194c1d27d1bc301f3e0c6b0c81109)
+(cherry picked from commit 7af75b36aaf5c048a2db3e506cb7ec10d4ba05dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libglfw/libglfw.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/f2fs-tools/f2fs-tools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
-index 0a3986f662..09dbb18ef2 100644
---- a/package/libglfw/libglfw.mk
-+++ b/package/libglfw/libglfw.mk
-@@ -29,7 +29,7 @@ LIBGLFW_DEPENDENCIES += libgles
- endif
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index 60f1004d77..f94244f2ad 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -14,6 +14,7 @@ F2FS_TOOLS_AUTORECONF = YES
+ F2FS_TOOLS_INSTALL_STAGING = YES
+ F2FS_TOOLS_LICENSE = GPL-2.0
+ F2FS_TOOLS_LICENSE_FILES = COPYING
++F2FS_TOOLS_CPE_ID_VENDOR = f2fs-tools_project
  
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
--LIBGLFW_DEPENDENCIES += libxkbcommon wayland-protocols
-+LIBGLFW_DEPENDENCIES += libxkbcommon wayland wayland-protocols
- # Override pkg-config pkgdatadir variable, it needs the prefix
- LIBGLFW_CONF_OPTS += \
- 	-DGLFW_USE_WAYLAND=1 \
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ F2FS_TOOLS_CONF_OPTS += --with-selinux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
