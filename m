@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34C47C6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 14:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03879C6FD1D
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 14:12:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBCCC40B6B;
-	Wed, 15 Mar 2023 14:11:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBCCC40B6B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93E8340B74;
+	Wed, 15 Mar 2023 14:12:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93E8340B74
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Of_oVGAfSZAw; Wed, 15 Mar 2023 14:11:53 +0000 (UTC)
+	with ESMTP id TMlXnBvIOtdo; Wed, 15 Mar 2023 14:12:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 445D440B5C;
-	Wed, 15 Mar 2023 14:11:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 445D440B5C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A37F21BF3C5
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC57E40B7B;
+	Wed, 15 Mar 2023 14:12:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC57E40B7B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F2EC21BF3C5
  for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 14:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B17280BF4
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA1004183F
  for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 14:11:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B17280BF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA1004183F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vELJ0OAd5bP3 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id txTj6z2cb8vq for <buildroot@lists.busybox.net>;
  Wed, 15 Mar 2023 14:11:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6FE680BF0
+ by smtp4.osuosl.org (Postfix) with ESMTP id D80004183B
  for <buildroot@buildroot.org>; Wed, 15 Mar 2023 14:11:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6FE680BF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D80004183B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B718887400; Wed, 15 Mar 2023 14:11:49 +0000 (UTC)
+ id C4CE787403; Wed, 15 Mar 2023 14:11:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 15:09:44 +0100
+Date: Wed, 15 Mar 2023 15:10:13 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 6771ba24d8a0f197b491c2e011471f9e33fea6d3
-X-Git-Newrev: fb1ba8f28064e5329d74096495ce29e54103e842
+X-Git-Oldrev: fb1ba8f28064e5329d74096495ce29e54103e842
+X-Git-Newrev: ef2bd60926ec78669b549cc7c154616102633b4a
 X-Patchwork-Hint: ignore
-Message-Id: <20230315141149.B718887400@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/proftpd: add
- pcre2 optional dependency
+Message-Id: <20230315141149.C4CE787403@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/proftpd: needs
+ dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb1ba8f28064e5329d74096495ce29e54103e842
+commit: https://git.buildroot.net/buildroot/commit/?id=ef2bd60926ec78669b549cc7c154616102633b4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-pcre2 is an optional dependency since version 1.3.8 and
-https://github.com/proftpd/proftpd/commit/e63cf016f574890c4096d587b8b1f55d87ac05d5
+proftpd doesn't build statically because it does not use pkg-config to
+retrieve its dependencies since its addition in commit
+5d173ec4122b89857e6d93fc337311b1f87631c9:
+
+/tmp/instance-13/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: /tmp/instance-13/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/lib/libidn2.a(libunistring_la-striconveh.o): in function `iconv_carefully_1':
+buildroot/build/libidn2-2.3.4/unistring/striconveh.c:233: undefined reference to `libiconv'
+
+[...]
+
+/tmp/instance-5/output-1/host/lib/gcc/arceb-buildroot-linux-uclibc/10.2.0/../../../../arceb-buildroot-linux-uclibc/bin/ld: /tmp/instance-5/output-1/host/arceb-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(bio_lib.o): in function `BIO_free':
+bio_lib.c:(.text+0x3f2): undefined reference to `__atomic_fetch_sub_4'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/09f3f37b63dc68d31b18816b818df86fa3be095c
+ - http://autobuild.buildroot.org/results/2aba5297206e44dc086c3138ace70e85739196f3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 091655d9ad3a3b3f05be4216b5936b644a596267)
+(cherry picked from commit b1312da7650b41d95aecf29fab85fd6a9903c507)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/proftpd/proftpd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/proftpd/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index d3b6308185..398155222d 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -31,6 +31,13 @@ ifeq ($(BR2_PACKAGE_LIBIDN2),y)
- PROFTPD_DEPENDENCIES += libidn2
- endif
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index aed1958b8d..7b9f74895a 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PROFTPD
+ 	bool "proftpd"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  ProFTPD, a highly configurable FTP server.
  
-+ifeq ($(BR2_PACKAGE_PCRE2),y)
-+PROFTPD_CONF_OPTS += --enable-pcre2
-+PROFTPD_DEPENDENCIES += pcre2
-+else
-+PROFTPD_CONF_OPTS += --disable-pcre2
-+endif
+@@ -104,3 +105,7 @@ config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
+ 	  0 uses the default size of 1024.
+ 
+ endif
 +
- ifeq ($(BR2_PACKAGE_PROFTPD_MOD_CAP),y)
- PROFTPD_CONF_OPTS += --enable-cap
- PROFTPD_DEPENDENCIES += libcap
++comment "proftpd needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
