@@ -1,57 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 475ACC6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 14:41:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B487FC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 20:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA8A141894;
-	Wed, 15 Mar 2023 14:41:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA8A141894
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4229C4053E;
+	Wed, 15 Mar 2023 20:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4229C4053E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GLHGp_lYQZpK; Wed, 15 Mar 2023 14:41:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gnWWTL3mqwYn; Wed, 15 Mar 2023 20:56:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1BBF41876;
-	Wed, 15 Mar 2023 14:41:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1BBF41876
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E376B1BF3C5
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 14:41:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F3B340459;
+	Wed, 15 Mar 2023 20:56:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F3B340459
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D9B121BF41C
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 20:56:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD8F180BEA
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 14:41:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD8F180BEA
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4B6340459
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 20:56:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4B6340459
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dfRYSa5hGX7X for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 14:41:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE44F80B52
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CE44F80B52
- for <buildroot@buildroot.net>; Wed, 15 Mar 2023 14:41:52 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 541851BF212;
- Wed, 15 Mar 2023 14:41:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pcSK5-0029Wb-Fo; Wed, 15 Mar 2023 15:41:49 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Nicola Di Lieto <nicola.dilieto@gmail.com>
-References: <ZABq61t3vEixCwpm@einstein.dilieto.eu>
-Date: Wed, 15 Mar 2023 15:41:49 +0100
-In-Reply-To: <ZABq61t3vEixCwpm@einstein.dilieto.eu> (Nicola Di Lieto's message
- of "Thu, 2 Mar 2023 10:22:51 +0100")
-Message-ID: <87ttym13gy.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TV4jJu6OKwoc for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 20:56:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C4D984053E
+ for <buildroot@uclibc.org>; Wed, 15 Mar 2023 20:56:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4D984053E
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id B3BB185D50; Wed, 15 Mar 2023 20:56:04 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Wed, 15 Mar 2023 20:56:04 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: unspecified
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jbglaw@lug-owl.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15396-163-PvGhmdsDpS@https.bugs.busybox.net/>
+In-Reply-To: <bug-15396-163@https.bugs.busybox.net/>
+References: <bug-15396-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] package/uacme: bump version to 1.7.4
+Subject: [Buildroot] [Bug 15396] Document build dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,25 +73,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Nicola" == Nicola Di Lieto <nicola.dilieto@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=15396
 
- > Includes https://github.com/ndilieto/uacme/commit/fe91f46b620f8c58805fcf48cb4f4a793c8a47a4
- > Fixes https://github.com/ndilieto/uacme/issues/64
+--- Comment #3 from Jan-Benedict Glaw <jbglaw@lug-owl.de> ---
+Hi Thomas!
 
- > Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
- > ---
- > Changes v1 -> v2: fix patch whitespace damage by email client
+As I read through your comment again, you're running your CI builds on the
+Gitlab.com platform? Or on a self-hosted system?
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+If it's self-hosted, you can easily change configuration to allow for longer
+running jobs. All CI testing I do is strictly non-parallel (to allow to diff
+log files), so it takes its time (eg. right now, a build for
+qemu_aarch64_sbsa_defconfig is already running for 7h 50m right now), though
+I'm not using Gitlab, but Laminar (self-hosted in my basement.) On my hardware,
+I guess (don't have numbers yet) an average buildroot build will take 4.5h,
+times 280 builds, resulting in some 75k build minutes just for one complete
+run. That's already quite more than Gitlab.com's "Ultimate" plan. :/
+
+While I currently pay for electricity myself, let me know if I'd do helpful
+work in that area in the long run. As I do Buildroot builds only as a side
+project (my main target for http://toolchain.lug-owl.de/ is to keep GCC running
+for VAX, keep NetBSD for VAX alive), even running a small RasPi cluster as
+build nodes would probably beneficial. It wouldn't be _fast_ either, but it
+could properly build all configurations and start from the beginning once a
+complete round is finished.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
