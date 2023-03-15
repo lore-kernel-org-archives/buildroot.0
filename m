@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92574C74A5B
-	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 21:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F2B8C74A5B
+	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 21:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3885F41927;
-	Thu, 16 Mar 2023 21:35:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3885F41927
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00DE141B40;
+	Thu, 16 Mar 2023 21:36:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00DE141B40
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Aslq8--twSK4; Thu, 16 Mar 2023 21:35:58 +0000 (UTC)
+	with ESMTP id O6cJYtx-EEmm; Thu, 16 Mar 2023 21:36:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39D3C41B32;
-	Thu, 16 Mar 2023 21:35:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39D3C41B32
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 84D921BF31B
+	by smtp4.osuosl.org (Postfix) with ESMTP id C01D541B24;
+	Thu, 16 Mar 2023 21:36:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C01D541B24
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 870491BF97E
  for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F68042343
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E749820C1
  for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F68042343
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E749820C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DuPful8uxJZD for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2FWGQlDca38S for <buildroot@lists.busybox.net>;
  Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B8AA4046D
+ by smtp1.osuosl.org (Postfix) with ESMTP id A7C6C820C0
  for <buildroot@buildroot.org>; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B8AA4046D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7C6C820C0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A3878747B; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
+ id 95C3E8747C; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 18:17:10 +0100
+Date: Wed, 15 Mar 2023 18:17:28 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: df84b0f118cf775aa2c9e9186c29bc8640356a0b
-X-Git-Newrev: 441dcb4a9bc33f825e0f626bc57ec7cb05d73ad6
+X-Git-Oldrev: 441dcb4a9bc33f825e0f626bc57ec7cb05d73ad6
+X-Git-Newrev: 94cef87272660246c4237a6416f7694e85bb7113
 X-Patchwork-Hint: ignore
-Message-Id: <20230316213546.8A3878747B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] DEVELOPERS: add Heiko
- Thiery for package/rauc
+Message-Id: <20230316213546.95C3E8747C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/bridge-utils:
+ update project URL in Config.in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +58,37 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1374884769147407480=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1374884769147407480==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=441dcb4a9bc33f825e0f626bc57ec7cb05d73ad6
+commit: https://git.buildroot.net/buildroot/commit/?id=94cef87272660246c4237a6416f7694e85bb7113
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+The old URL no longer works and shows "No repositories found".
+Replace it with:
+https://wiki.linuxfoundation.org/networking/bridge
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 6bec87810252d123f768af03e0e2ab53d2b61f03)
+(cherry picked from commit e8ad4f2d07462d8b022643c663e0fd7e9c7b5201)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/bridge-utils/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8da3db127b..d5de9d86b2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1236,6 +1236,7 @@ F:	package/libnetconf2/
- F:	package/libyang/
- F:	package/linuxptp/
- F:	package/netopeer2/
-+F:	package/rauc/
- F:	package/sysrepo/
+diff --git a/package/bridge-utils/Config.in b/package/bridge-utils/Config.in
+index de5883f063..2d886e2cb0 100644
+--- a/package/bridge-utils/Config.in
++++ b/package/bridge-utils/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_BRIDGE_UTILS
+ 	  added. Instead use the bridge command from the iproute2
+ 	  package which supports more features.
  
- N:	Hervé Codina <herve.codina@bootlin.com>
-
---===============1374884769147407480==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-	  https://git.kernel.org/cgit/linux/kernel/git/shemminger/bridge-utils.git/
++	  https://wiki.linuxfoundation.org/networking/bridge
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1374884769147407480==--
