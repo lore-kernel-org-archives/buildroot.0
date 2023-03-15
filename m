@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3D4DC6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 14:41:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6896C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 14:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 821CA418E7;
-	Wed, 15 Mar 2023 14:41:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 821CA418E7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 486FC40936;
+	Wed, 15 Mar 2023 14:42:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 486FC40936
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mc78zdXa_oRy; Wed, 15 Mar 2023 14:41:20 +0000 (UTC)
+	with ESMTP id HIE5Ogx3KZNJ; Wed, 15 Mar 2023 14:42:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91CA4418CF;
-	Wed, 15 Mar 2023 14:41:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91CA4418CF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 20D4D1BF3C5
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 14:40:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45F1C401A2;
+	Wed, 15 Mar 2023 14:42:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45F1C401A2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4D86D1BF3C5
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 14:42:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0801B418D6
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 14:40:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0801B418D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 281BA40467
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 14:42:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 281BA40467
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SO4G2BJgUfYV for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 14:40:47 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C13F141876
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C13F141876
- for <buildroot@buildroot.org>; Wed, 15 Mar 2023 14:40:46 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7A89D1BF207;
- Wed, 15 Mar 2023 14:40:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pcSIz-0029Pk-RL; Wed, 15 Mar 2023 15:40:41 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vp-vSMTQ4kzU for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 14:42:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E4AC403BF
+ for <buildroot@buildroot.org>; Wed, 15 Mar 2023 14:42:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E4AC403BF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4873B8740C; Wed, 15 Mar 2023 14:42:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230302175350.183840-1-fontaine.fabrice@gmail.com>
- <20230302175350.183840-4-fontaine.fabrice@gmail.com>
-Date: Wed, 15 Mar 2023 15:40:41 +0100
-In-Reply-To: <20230302175350.183840-4-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 2 Mar 2023 18:53:50 +0100")
-Message-ID: <87y1ny13iu.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 4/4] package/gensio: add C++ optional
- dependency
+To: buildroot@buildroot.org
+Date: Wed, 15 Mar 2023 15:41:19 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 0a23e43132425bf67137e3e0128fe80a58db1046
+X-Git-Newrev: 395e3414a2a2f50bf0aa1fdc2af36748d5191650
+X-Patchwork-Hint: ignore
+Message-Id: <20230315144208.4873B8740C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/uacme: security
+ bump to version 1.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,23 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=395e3414a2a2f50bf0aa1fdc2af36748d5191650
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > C++ is available since 2.3.0 and
- > https://github.com/cminyard/gensio/commit/3fda483f15a2668f9e2396517cdbf09693e6e3ff
+Includes https://github.com/ndilieto/uacme/commit/fe91f46b620f8c58805fcf48cb4f4a793c8a47a4
+Fixes https://github.com/ndilieto/uacme/issues/64
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d97fe11e59122c65df6216a7767f0b004fbd0dec)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2022.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index 6c71f6b94d..063b0b57ac 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  0ec8e5bcb8ed2b532572ca4878d30b2a794f607b995348ebc176d566b64d73f9  uacme-1.7.3.tar.gz
++sha256  a638fe0878dba8fdda62f89e7a284243edbcd31b92c11b5cfdc7d3efd9547bca  uacme-1.7.4.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index a70ec3a635..9b2360937b 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UACME_VERSION = 1.7.3
++UACME_VERSION = 1.7.4
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
