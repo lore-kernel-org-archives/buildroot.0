@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D051C7618B
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 07:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A568FC6FD1D
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 07:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC30280C3E;
-	Wed, 15 Mar 2023 07:16:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC30280C3E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5409A80C3E;
+	Wed, 15 Mar 2023 07:17:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5409A80C3E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tdT0Mj2LgySn; Wed, 15 Mar 2023 07:16:53 +0000 (UTC)
+	with ESMTP id XCo3NrxDWdhP; Wed, 15 Mar 2023 07:17:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0C8880C67;
-	Wed, 15 Mar 2023 07:16:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0C8880C67
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5C08F1BF97A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 771A280C25;
+	Wed, 15 Mar 2023 07:17:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 771A280C25
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9096B1BF47E
  for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 07:16:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3646E80B74
+ by smtp4.osuosl.org (Postfix) with ESMTP id 60954415DD
  for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 07:16:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3646E80B74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60954415DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IPGbW5UZFHN8 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HS60qB0Zq33q for <buildroot@lists.busybox.net>;
  Wed, 15 Mar 2023 07:16:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FCFA80BAF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58734414D1
  for <buildroot@buildroot.org>; Wed, 15 Mar 2023 07:16:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FCFA80BAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58734414D1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1FFFD873BB; Wed, 15 Mar 2023 07:16:25 +0000 (UTC)
+ id 44C4E873BE; Wed, 15 Mar 2023 07:16:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 07:17:46 +0100
+Date: Wed, 15 Mar 2023 08:11:08 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 8e3c40e55e8d89be241312a1ceded314047ff2f2
-X-Git-Newrev: c320582d40a668420c8340506291fa3496bcc93e
+X-Git-Oldrev: 0f9ac5ceea8d211f97430552a36ed962514afd94
+X-Git-Newrev: b110ed88653201e0cd856fc5d2a3af709475fe65
 X-Patchwork-Hint: ignore
-Message-Id: <20230315071625.1FFFD873BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/libpjsip: fix
- CVE-2022-235{3, 4}7
+Message-Id: <20230315071625.44C4E873BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/quickjs: add
+ QUICKJS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,204 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c320582d40a668420c8340506291fa3496bcc93e
+commit: https://git.buildroot.net/buildroot/commit/?id=b110ed88653201e0cd856fc5d2a3af709475fe65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-https://github.com/pjsip/pjproject/security/advisories/GHSA-9pfh-r8x4-w26w
-https://github.com/pjsip/pjproject/security/advisories/GHSA-cxwq-5g9x-x7fr
+cpe:2.3:a:quickjs_project:quickjs is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aquickjs_project%3Aquickjs
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 26344644eebca5cde9b02be849d29e38d5885741)
+(cherry picked from commit f820a978f835c2d1fb5df73068b4eb7b6809f86a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch | 99 ++++++++++++++++++++++
- ...rge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch | 54 ++++++++++++
- package/libpjsip/libpjsip.mk                       |  6 ++
- 3 files changed, 159 insertions(+)
+ package/quickjs/quickjs.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libpjsip/0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch b/package/libpjsip/0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch
-new file mode 100644
-index 0000000000..01e1878189
---- /dev/null
-+++ b/package/libpjsip/0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch
-@@ -0,0 +1,99 @@
-+From d8440f4d711a654b511f50f79c0445b26f9dd1e1 Mon Sep 17 00:00:00 2001
-+From: Nanang Izzuddin <nanang@teluu.com>
-+Date: Tue, 20 Dec 2022 11:39:12 +0700
-+Subject: [PATCH] Merge pull request from GHSA-9pfh-r8x4-w26w
-+
-+* Fix buffer overread in STUN message decoder
-+
-+* Updates based on comments
-+
-+[Retrieved from:
-+https://github.com/pjsip/pjproject/commit/d8440f4d711a654b511f50f79c0445b26f9dd1e1]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ pjnath/include/pjnath/stun_msg.h |  4 ++++
-+ pjnath/src/pjnath/stun_msg.c     | 14 +++++++++++---
-+ 2 files changed, 15 insertions(+), 3 deletions(-)
-+
-+diff --git a/pjnath/include/pjnath/stun_msg.h b/pjnath/include/pjnath/stun_msg.h
-+index b52f95c586..e49f096f3a 100644
-+--- a/pjnath/include/pjnath/stun_msg.h
-++++ b/pjnath/include/pjnath/stun_msg.h
-+@@ -442,6 +442,7 @@ typedef enum pj_stun_status
-+ 
-+    \endverbatim
-+  */
-++#pragma pack(1)
-+ typedef struct pj_stun_msg_hdr
-+ {
-+     /**
-+@@ -473,6 +474,7 @@ typedef struct pj_stun_msg_hdr
-+     pj_uint8_t          tsx_id[12];
-+ 
-+ } pj_stun_msg_hdr;
-++#pragma pack()
-+ 
-+ 
-+ /**
-+@@ -490,6 +492,7 @@ typedef struct pj_stun_msg_hdr
-+ 
-+    \endverbatim
-+  */
-++#pragma pack(1)
-+ typedef struct pj_stun_attr_hdr
-+ {
-+     /**
-+@@ -506,6 +509,7 @@ typedef struct pj_stun_attr_hdr
-+     pj_uint16_t         length;
-+ 
-+ } pj_stun_attr_hdr;
-++#pragma pack()
-+ 
-+ 
-+ /**
-+diff --git a/pjnath/src/pjnath/stun_msg.c b/pjnath/src/pjnath/stun_msg.c
-+index 3def6b3eac..e904a0ba47 100644
-+--- a/pjnath/src/pjnath/stun_msg.c
-++++ b/pjnath/src/pjnath/stun_msg.c
-+@@ -746,7 +746,7 @@ PJ_DEF(int) pj_stun_set_padding_char(int chr)
-+ 
-+ #define INIT_ATTR(a,t,l)    (a)->hdr.type=(pj_uint16_t)(t), \
-+                             (a)->hdr.length=(pj_uint16_t)(l)
-+-#define ATTR_HDR_LEN        4
-++#define ATTR_HDR_LEN        sizeof(pj_stun_attr_hdr)
-+ 
-+ static pj_uint16_t GETVAL16H(const pj_uint8_t *buf, unsigned pos)
-+ {
-+@@ -2327,6 +2327,14 @@ PJ_DEF(pj_status_t) pj_stun_msg_decode(pj_pool_t *pool,
-+         status = pj_stun_msg_check(pdu, pdu_len, options);
-+         if (status != PJ_SUCCESS)
-+             return status;
-++    } else {
-++        /* For safety, verify packet length at least */
-++        pj_uint32_t msg_len = GETVAL16H(pdu, 2) + 20;
-++        if (msg_len > pdu_len ||
-++            ((options & PJ_STUN_IS_DATAGRAM) && msg_len != pdu_len))
-++        {
-++            return PJNATH_EINSTUNMSGLEN;
-++        }
-+     }
-+ 
-+     /* Create the message, copy the header, and convert to host byte order */
-+@@ -2345,7 +2353,7 @@ PJ_DEF(pj_status_t) pj_stun_msg_decode(pj_pool_t *pool,
-+         p_response = NULL;
-+ 
-+     /* Parse attributes */
-+-    while (pdu_len >= 4) {
-++    while (pdu_len >= ATTR_HDR_LEN) {
-+         unsigned attr_type, attr_val_len;
-+         const struct attr_desc *adesc;
-+ 
-+@@ -2357,7 +2365,7 @@ PJ_DEF(pj_status_t) pj_stun_msg_decode(pj_pool_t *pool,
-+         attr_val_len = (attr_val_len + 3) & (~3);
-+ 
-+         /* Check length */
-+-        if (pdu_len < attr_val_len) {
-++        if (pdu_len < attr_val_len + ATTR_HDR_LEN) {
-+             pj_str_t err_msg;
-+             char err_msg_buf[80];
-+ 
-diff --git a/package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch b/package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch
-new file mode 100644
-index 0000000000..82249a2076
---- /dev/null
-+++ b/package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch
-@@ -0,0 +1,54 @@
-+From bc4812d31a67d5e2f973fbfaf950d6118226cf36 Mon Sep 17 00:00:00 2001
-+From: sauwming <ming@teluu.com>
-+Date: Fri, 23 Dec 2022 15:05:28 +0800
-+Subject: [PATCH] Merge pull request from GHSA-cxwq-5g9x-x7fr
-+
-+* Fixed heap buffer overflow when parsing STUN errcode attribute
-+
-+* Also fixed uint parsing
-+
-+[Retrieved from:
-+https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ pjnath/src/pjnath/stun_msg.c | 11 ++++++-----
-+ 1 file changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/pjnath/src/pjnath/stun_msg.c b/pjnath/src/pjnath/stun_msg.c
-+index c6b0bdd284..b55d29849a 100644
-+--- a/pjnath/src/pjnath/stun_msg.c
-++++ b/pjnath/src/pjnath/stun_msg.c
-+@@ -1438,12 +1438,12 @@ static pj_status_t decode_uint_attr(pj_pool_t *pool,
-+     attr = PJ_POOL_ZALLOC_T(pool, pj_stun_uint_attr);
-+     GETATTRHDR(buf, &attr->hdr);
-+ 
-+-    attr->value = GETVAL32H(buf, 4);
-+-
-+     /* Check that the attribute length is valid */
-+     if (attr->hdr.length != 4)
-+         return PJNATH_ESTUNINATTRLEN;
-+ 
-++    attr->value = GETVAL32H(buf, 4);
-++
-+     /* Done */
-+     *p_attr = attr;
-+ 
-+@@ -1757,14 +1757,15 @@ static pj_status_t decode_errcode_attr(pj_pool_t *pool,
-+     attr = PJ_POOL_ZALLOC_T(pool, pj_stun_errcode_attr);
-+     GETATTRHDR(buf, &attr->hdr);
-+ 
-++    /* Check that the attribute length is valid */
-++    if (attr->hdr.length < 4)
-++        return PJNATH_ESTUNINATTRLEN;
-++
-+     attr->err_code = buf[6] * 100 + buf[7];
-+ 
-+     /* Get pointer to the string in the message */
-+     value.ptr = ((char*)buf + ATTR_HDR_LEN + 4);
-+     value.slen = attr->hdr.length - 4;
-+-    /* Make sure the length is never negative */
-+-    if (value.slen < 0)
-+-        value.slen = 0;
-+ 
-+     /* Copy the string to the attribute */
-+     pj_strdup(pool, &attr->reason, &value);
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 5cc0423f5d..24db641446 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -15,6 +15,12 @@ LIBPJSIP_CPE_ID_PRODUCT = pjsip
- LIBPJSIP_INSTALL_STAGING = YES
- LIBPJSIP_MAKE = $(MAKE1)
+diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
+index a026eec4f0..ff39209100 100644
+--- a/package/quickjs/quickjs.mk
++++ b/package/quickjs/quickjs.mk
+@@ -9,6 +9,7 @@ QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
+ QUICKJS_SITE = https://bellard.org/quickjs
+ QUICKJS_LICENSE = MIT
+ QUICKJS_LICENSE_FILES = LICENSE
++QUICKJS_CPE_ID_VENDOR = quickjs_project
+ QUICKJS_INSTALL_STAGING = YES
  
-+# 0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch
-+LIBPJSIP_IGNORE_CVES += CVE-2022-23537
-+
-+# 0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch
-+LIBPJSIP_IGNORE_CVES += CVE-2022-23547
-+
- LIBPJSIP_CFLAGS = $(TARGET_CFLAGS) -DPJ_HAS_IPV6=1
- 
- # relocation truncated to fit: R_68K_GOT16O
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
