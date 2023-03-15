@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09001C74A5B
-	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92574C74A5B
+	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 21:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7402341B1B;
-	Thu, 16 Mar 2023 21:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7402341B1B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3885F41927;
+	Thu, 16 Mar 2023 21:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3885F41927
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kmUy6NiZBa22; Thu, 16 Mar 2023 21:35:44 +0000 (UTC)
+	with ESMTP id Aslq8--twSK4; Thu, 16 Mar 2023 21:35:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7382041B26;
-	Thu, 16 Mar 2023 21:35:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7382041B26
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E0C531BF31B
- for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39D3C41B32;
+	Thu, 16 Mar 2023 21:35:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39D3C41B32
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 84D921BF31B
+ for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB72F41B19
- for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB72F41B19
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F68042343
+ for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F68042343
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dOV3yNgNDIYl for <buildroot@lists.busybox.net>;
- Thu, 16 Mar 2023 21:35:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56E3041934
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 56E3041934
- for <buildroot@buildroot.org>; Thu, 16 Mar 2023 21:35:34 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4B080E0005;
- Thu, 16 Mar 2023 21:35:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pcvFy-003O7d-Ds; Thu, 16 Mar 2023 22:35:30 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DuPful8uxJZD for <buildroot@lists.busybox.net>;
+ Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B8AA4046D
+ for <buildroot@buildroot.org>; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B8AA4046D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8A3878747B; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230222143753.1563322-1-fontaine.fabrice@gmail.com>
-Date: Thu, 16 Mar 2023 22:35:30 +0100
-In-Reply-To: <20230222143753.1563322-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 22 Feb 2023 15:37:53 +0100")
-Message-ID: <87y1nwz8f1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libev: force arm mode instead
- of Thumb mode
+To: buildroot@buildroot.org
+Date: Wed, 15 Mar 2023 18:17:10 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: df84b0f118cf775aa2c9e9186c29bc8640356a0b
+X-Git-Newrev: 441dcb4a9bc33f825e0f626bc57ec7cb05d73ad6
+X-Patchwork-Hint: ignore
+Message-Id: <20230316213546.8A3878747B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] DEVELOPERS: add Heiko
+ Thiery for package/rauc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1374884769147407480=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+--===============1374884769147407480==
+Content-Type: text/plain
 
- > Fix the following build failure:
- > /tmp/ccHc3Awn.s:825: Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
+commit: https://git.buildroot.net/buildroot/commit/?id=441dcb4a9bc33f825e0f626bc57ec7cb05d73ad6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/1c597c9da724d6cac06b09b1ecd456a28440a3a3
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 6bec87810252d123f768af03e0e2ab53d2b61f03)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8da3db127b..d5de9d86b2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1236,6 +1236,7 @@ F:	package/libnetconf2/
+ F:	package/libyang/
+ F:	package/linuxptp/
+ F:	package/netopeer2/
++F:	package/rauc/
+ F:	package/sysrepo/
+ 
+ N:	Hervé Codina <herve.codina@bootlin.com>
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+--===============1374884769147407480==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
--- 
-Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1374884769147407480==--
