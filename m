@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 304ACC61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 13:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A08C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 13:09:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D82A9401D9;
-	Wed, 15 Mar 2023 13:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D82A9401D9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B48041996;
+	Wed, 15 Mar 2023 13:09:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B48041996
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JBrEL8gEvozZ; Wed, 15 Mar 2023 13:08:55 +0000 (UTC)
+	with ESMTP id 3ouhd9ojFcR8; Wed, 15 Mar 2023 13:09:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8B2841971;
-	Wed, 15 Mar 2023 13:08:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8B2841971
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 678561BF31D
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:07:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EF6341971;
+	Wed, 15 Mar 2023 13:09:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EF6341971
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E9FC1BF31D
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:09:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3909940863
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:07:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3909940863
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDF534098E
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 13:09:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDF534098E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sZ7HHVJJG43w for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 13:07:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dvAnZR6jc7qm for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 13:09:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0B3A41938
- for <buildroot@buildroot.org>; Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0B3A41938
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33727403AE
+ for <buildroot@buildroot.org>; Wed, 15 Mar 2023 13:09:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33727403AE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD848873DB; Wed, 15 Mar 2023 13:07:56 +0000 (UTC)
+ id 22EF5873E7; Wed, 15 Mar 2023 13:09:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 14:05:49 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 18807592f4bced3abf0d45ee7fc267ecd8d02b15
-X-Git-Newrev: 4c6520b0af709667879f0dea10c3549a59e56824
+Date: Wed, 15 Mar 2023 14:05:54 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: cb2d0c50e63383768fad45e4fae17a84b620e59a
+X-Git-Newrev: c59348420fa9e010c98609c881b1163b6827df4e
 X-Patchwork-Hint: ignore
-Message-Id: <20230315130756.CD848873DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/f2fs-tools: add
+Message-Id: <20230315130904.22EF5873E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/f2fs-tools: add
  F2FS_TOOLS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c6520b0af709667879f0dea10c3549a59e56824
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c59348420fa9e010c98609c881b1163b6827df4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 cpe:2.3:a:f2fs-tools_project:f2fs-tools is a valid CPE identifier for
 this package:
