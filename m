@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12690C6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 10:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B7CC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 10:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5B2260E7C;
-	Wed, 15 Mar 2023 10:08:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5B2260E7C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5413A60ECD;
+	Wed, 15 Mar 2023 10:09:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5413A60ECD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r-N-B7BAkOnz; Wed, 15 Mar 2023 10:08:57 +0000 (UTC)
+	with ESMTP id p4OvcWHXnUPu; Wed, 15 Mar 2023 10:09:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7E6660BAB;
-	Wed, 15 Mar 2023 10:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7E6660BAB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D7ABC1BF5E0
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 10:08:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 662C860EF2;
+	Wed, 15 Mar 2023 10:09:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 662C860EF2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 01C5F1BF962
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 10:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B094B408C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id DCE8A81CA3
  for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 10:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B094B408C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCE8A81CA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u0maCmXLOuZO for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 10:08:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1vWhFRF1Rvtn for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 10:08:54 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FF20408B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93C05813CA
 Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FF20408B3
- for <buildroot@buildroot.org>; Wed, 15 Mar 2023 10:08:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 93C05813CA
+ for <buildroot@buildroot.org>; Wed, 15 Mar 2023 10:08:53 +0000 (UTC)
 Received: from localhost.localdomain ([151.36.255.68])
  by Aruba Outgoing Smtp  with ESMTPSA
- id cO3sppOaMBDVWcO3spMB99; Wed, 15 Mar 2023 11:08:49 +0100
+ id cO3sppOaMBDVWcO3tpMB9N; Wed, 15 Mar 2023 11:08:50 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 11:08:47 +0100
-Message-Id: <20230315100848.57061-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 15 Mar 2023 11:08:48 +0100
+Message-Id: <20230315100848.57061-2-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230314233719.55e2f430@windsurf>
+In-Reply-To: <20230315100848.57061-1-giulio.benetti@benettiengineering.com>
 References: <20230314233719.55e2f430@windsurf>
+ <20230315100848.57061-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfHvSqR3fur64d9jcDex2VsDBKHgBcWUnJ6Kzm6cbkVxco1iXjf1y78Oa5thZ99rDVrslvGcriJl+yUr3dAp8sHkZosCr1lpjDHZCNiMrCn2vjR/3qiNZ
- Go6tCTWfueBSqA0Th7MlTctp6+s6KDTdZqztsBxrL60DMCoSGg7GXbXvjTn254Jio6lgnb17ixvGKysSf18HZ9n+WjcrItrd33Ht9I/8BNtc0YRB8+YRGgwx
- WxZb4tGuPrujxK05P30pra9KjcBXmJV68Cu4RYtuUQ8mx1Q/soZgfrEGucd/Vxm5cDaiieweC8+sT4LwLi3mdc2NF6LyqJ0BHL/PwuL1e1nLqKxBAaS3MdVX
- 4Y4ewwTS5WLnXLSfrwIA/dCyWrBaPxfHVdXIHjOdvuf3i2BZ93A=
+X-CMAE-Envelope: MS4xfPGs+hhr5gvM+vqwYVMOGTHzqKsZagHGrsmTe7HxU1vgXRcO9o14Hm5z6uBUrcCHbHKgVIVooDMn37Yat5w8IK8016VAWKARIZBQzNrLHJlH3QyTKwO1
+ v1WX/hwul+IOzRnW3n005kYn00D1o+yL7A8XTDowF1s4TQ9vkOmMtQJimBpyi0XaTtBDa4JbEVFdCcdcITMOeioC8djSqaeMTJHZ3JbxE632FrMVAFS19Yec
+ nVQHMWQ6IPLV3OHAYjIZs8ZN6LhEcQ7bWyF0lkFNlEhJYPL78r8eBQVBSiZU60uJVCPLtlgZbP97JbYtPa2FXXOs342n1x4cFkB2iDoA2GezLExdzatOA6Zm
+ +w+NxbPdJjnQyEMG1WzmDxUhxIkTerk3YpJoRWSJ24GSIDm3iIE=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1678874929; bh=fnuHs7gn+tbGRjb9PBroQTzn6ID2Gu6dYyydOb+bGlk=;
+ t=1678874930; bh=S+QfmbKNOPtYyYxku6vrmeAM/D7SvQR5vnGsfQ9x/Vk=;
  h=From:To:Subject:Date:MIME-Version;
- b=kqhJvKv2mwLRVEOXzs0xSvb5ceafYOjqjCOKhG+57Cz6hwocZqcyQgyW8giyqg8Dn
- JfrQRaedANceUX3Jsz4PCj270DBKfUmtIFZ2ODnY+yBhaH0T5IBnUN/tAGIVxDR16s
- XZ6ScLjcorrIjgNCIujyaf7Dj2GS7cFDH1MRW6CUpVHgwOrN5h6JfvodQxjpRHV1Tq
- GSBZSwcRx72QPFPC0J/izSLTJMjhzCRnWJwDUCto67DAmhBXfMs6QWsQYqv+K7y6ZQ
- 1NWFdqkyO4dDH1XZNar3wx8Kbq2oEoTsi2cu9Jo9MESY0XagCNXOVpKdiU25BK9KUQ
- l08ymNyIYMnVg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=UkLkOwPSH3X7DABr9n4WYfvvwmJZD+OwpF5EX2ZwEI7aQi/KeyU77AGFqsO4MC6mR
+ amJBYJdPFoLCkbSLOoCPBTCJ0OwQe5VpeZZI134jg3+QoT+cj42lj2ZEp6g6hdON+7
+ 1XcMS3TG+ys2NpRgIbsaBNBzjgV0pNjAibjXBfxEI2WLcfuCOZAgBBPYP7qkQZHonQ
+ oNJnZ8NQG4AG1Z/JFG37L4TrgMl37MU4ObM6607gZhWjRFHBVVvXdiNy5a+v2Uewtm
+ K3APuTfAa7S+nPxwNDtfK9ENhDPLZ3uwY30jNinYzIUOUf8NeoHu9hgj/fRZJzvuCj
+ rMn75dBVAsz9w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=kqhJvKv2
-Subject: [Buildroot] [PATCH v2 1/2] package/python-libconf: new package
+ header.a=rsa-sha256 header.s=a1 header.b=UkLkOwPS
+Subject: [Buildroot] [PATCH v2 2/2] package/swugenerator: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,92 +84,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-python-libconf is a pure-Python reader/writer for configuration files in
-libconfig format, which is often used in C/C++ projects.
-
-https://github.com/ChrisAichinger/python-libconf
+Add swugenerator as host utility to generate images for swupdate with all
+the possible options available like encryption, passkey etc. Let's also
+add Giulio Benetti as package maintainer to DEVELOPERS file.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 V1->V2:
-* add python-libconf package since it's required by swugenerator as
-  pointed by Thomas Petazzoni
+* add host dependency to python-libconf
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in.host                     |  1 +
- package/python-libconf/Config.in.host      |  7 +++++++
- package/python-libconf/python-libconf.hash |  4 ++++
- package/python-libconf/python-libconf.mk   | 13 +++++++++++++
+ DEVELOPERS                             |  1 +
+ package/Config.in.host                 |  1 +
+ package/swugenerator/Config.in.host    |  6 ++++++
+ package/swugenerator/swugenerator.hash |  4 ++++
+ package/swugenerator/swugenerator.mk   | 14 ++++++++++++++
  5 files changed, 26 insertions(+)
- create mode 100644 package/python-libconf/Config.in.host
- create mode 100644 package/python-libconf/python-libconf.hash
- create mode 100644 package/python-libconf/python-libconf.mk
+ create mode 100644 package/swugenerator/Config.in.host
+ create mode 100644 package/swugenerator/swugenerator.hash
+ create mode 100644 package/swugenerator/swugenerator.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b6d288c54f..8ddffbf428 100644
+index 8ddffbf428..453fbf4b0f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1171,6 +1171,7 @@ F:	package/mali-driver/
- F:	package/minicom/
- F:	package/mmc-utils/
- F:	package/nfs-utils/
-+F:	package/python-libconf/
- F:	package/python-uvloop/
- F:	package/qt5/
- F:	package/rockchip-mali/
+@@ -1186,6 +1186,7 @@ F:	package/rtl8821cu/
+ F:	package/sunxi-mali-utgard/
+ F:	package/sunxi-mali-utgard-driver/
+ F:	package/sunxi-tools/
++F:	package/swugenerator/
+ F:	package/trace-cmd/
+ F:	package/udisks/
+ F:	package/wilc-driver/
 diff --git a/package/Config.in.host b/package/Config.in.host
-index dcadbfdfc1..edfe7ce4b3 100644
+index edfe7ce4b3..7059d78eb8 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -80,6 +80,7 @@ menu "Host utilities"
- 	source "package/python-greenlet/Config.in.host"
- 	source "package/python-iniparse/Config.in.host"
- 	source "package/python-kflash/Config.in.host"
-+	source "package/python-libconf/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
- 	source "package/python-pyyaml/Config.in.host"
- 	source "package/python-six/Config.in.host"
-diff --git a/package/python-libconf/Config.in.host b/package/python-libconf/Config.in.host
+@@ -101,6 +101,7 @@ menu "Host utilities"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
+ 	source "package/swig/Config.in.host"
++	source "package/swugenerator/Config.in.host"
+ 	source "package/systemd/Config.in.host"
+ 	source "package/tegrarcm/Config.in.host"
+ 	source "package/ti-cgt-pru/Config.in.host"
+diff --git a/package/swugenerator/Config.in.host b/package/swugenerator/Config.in.host
 new file mode 100644
-index 0000000000..65e8d3a241
+index 0000000000..df0e9a5170
 --- /dev/null
-+++ b/package/python-libconf/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_PYTHON_LIBCONF
-+	bool "host python-libconf"
++++ b/package/swugenerator/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_SWUGENERATOR
++	bool "host swugenerator"
 +	help
-+	  libconf is a pure-Python reader/writer for configuration files
-+	  in libconfig format, which is often used in C/C++ projects.
++	  A host tool to generate SWU update package for SWUpdate.
 +
-+	  https://github.com/ChrisAichinger/python-libconf/
-\ No newline at end of file
-diff --git a/package/python-libconf/python-libconf.hash b/package/python-libconf/python-libconf.hash
++	  https://github.com/sbabic/swugenerator
+diff --git a/package/swugenerator/swugenerator.hash b/package/swugenerator/swugenerator.hash
 new file mode 100644
-index 0000000000..d05efd37fd
+index 0000000000..2125be3d1c
 --- /dev/null
-+++ b/package/python-libconf/python-libconf.hash
++++ b/package/swugenerator/swugenerator.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  66897870fcafce05624eafcc99e2dc8e150124e91019d9c29cc4f3bef64311dd  python-libconf-2.0.1.tar.gz
++sha256  b5c47c47be0df4df476d2bf596f58a7296a4b0cebe6c8de42251605475b37d25  swugenerator-0.2.tar.gz
 +# Locally computed sha256 checksums
-+sha256  3c2afc8c9f7a12032f225e6fa870e85af14d1b71236afe28d94a4b67e5e8c873  LICENSE
-diff --git a/package/python-libconf/python-libconf.mk b/package/python-libconf/python-libconf.mk
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
+diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
 new file mode 100644
-index 0000000000..b349e3e60e
+index 0000000000..f4ead1d229
 --- /dev/null
-+++ b/package/python-libconf/python-libconf.mk
-@@ -0,0 +1,13 @@
++++ b/package/swugenerator/swugenerator.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-libconf
++# swugenerator
 +#
 +################################################################################
 +
-+PYTHON_LIBCONF_VERSION = 2.0.1
-+PYTHON_LIBCONF_SITE = $(call github,ChrisAichinger,python-libconf,$(PYTHON_LIBCONF_VERSION))
-+PYTHON_LIBCONF_SETUP_TYPE = setuptools
-+PYTHON_LIBCONF_LICENSE = MIT
-+PYTHON_LIBCONF_LICENSE_FILES = LICENSE
++SWUGENERATOR_VERSION = 0.2
++SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
++SWUGENERATOR_LICENSE = GPL-3.0
++SWUGENERATOR_LICENSE_FILES = LICENSE
++HOST_SWUGENERATOR_SETUP_TYPE = setuptools
++HOST_SWUGENERATOR_DEPENDENCIES = host-python-libconf
 +
 +$(eval $(host-python-package))
 -- 
