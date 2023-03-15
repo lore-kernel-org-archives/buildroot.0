@@ -1,72 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61C19C6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 10:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E67AC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 10:48:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFEC060E7C;
-	Wed, 15 Mar 2023 10:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFEC060E7C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NTOT9N03ldBY; Wed, 15 Mar 2023 10:13:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29A4F60BAB;
-	Wed, 15 Mar 2023 10:13:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29A4F60BAB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D555E1BF5E0
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 10:13:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AED92813BE
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 10:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AED92813BE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93F4981E08;
+	Wed, 15 Mar 2023 10:48:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93F4981E08
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hV6qSVqYY5C0 for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 10:13:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5227C813B0
-Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5227C813B0
- for <buildroot@buildroot.org>; Wed, 15 Mar 2023 10:13:31 +0000 (UTC)
-Received: from [172.20.10.9] ([151.36.255.68])
- by Aruba Outgoing Smtp  with ESMTPSA
- id cO8NppT7dBDVWcO8NpMEuJ; Wed, 15 Mar 2023 11:13:28 +0100
-Message-ID: <08b690c2-155b-3036-4abc-ed41f4996316@benettiengineering.com>
-Date: Wed, 15 Mar 2023 11:13:27 +0100
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qk3IE_cwFIkT; Wed, 15 Mar 2023 10:48:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE19181E02;
+	Wed, 15 Mar 2023 10:48:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE19181E02
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9545D1BF5E0
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 10:48:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B7CE60B35
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 10:48:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B7CE60B35
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1rixBSupdHi5 for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 10:48:33 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44E4060B2A
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 44E4060B2A
+ for <buildroot@buildroot.org>; Wed, 15 Mar 2023 10:48:33 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id g18so542759wmk.0
+ for <buildroot@buildroot.org>; Wed, 15 Mar 2023 03:48:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1678877311;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=N/HUclagUv8qPKnAFtstV/DxTOHbgG1YehTZ/MDp24E=;
+ b=qW7FTQCy1UCY+7XHbGnd0jVYVBmQHBfcw/Xeby6ieqUwqVzozJstVWrx8A6FpgEmmq
+ rJvl6cMzrGUP0ylqRwzJSZn2RsSLQXP/pajEYOiyIuMW/PBLVTniMMAYqclUMl7HAuDf
+ NL2aIyUp/4eHnUAAZoYrKf2U4BAoU2XBu/kHB04hdK42J/rWVf3Wfx7r1Ovm97eT0Qm4
+ bvlgiULEsgjf+n+w93c1zox+BBMsm4QjgMIw361+lY59TllMaeJylsGKEIwzwHBbR6wp
+ NBY6PcgXE7B9VhqZvfX5kNfPWXnxfFMGJIeGh/kqyWWiNryh56hnIJJEmuP3IFr1vJFv
+ 28Sg==
+X-Gm-Message-State: AO0yUKXJMoJL+XEq08IaRDi3FQCJqD5XGEBQ1A0bhZrwzPcDW0u5BSY1
+ cBYrq3La5g8x9qm3KqveogYFHSDUFIUedQUAPkM=
+X-Google-Smtp-Source: AK7set++uV+XwwRDOmR631660ZsMphmi6sygEAm50kJU8nXGS8PufkkRdqalSpq8jHlQub9PNlzqcQ==
+X-Received: by 2002:a05:600c:5398:b0:3ed:2b49:5c77 with SMTP id
+ hg24-20020a05600c539800b003ed2b495c77mr6294608wmb.6.1678877311382; 
+ Wed, 15 Mar 2023 03:48:31 -0700 (PDT)
+Received: from [10.5.2.223]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ bg5-20020a05600c3c8500b003e7f1086660sm1606298wmb.15.2023.03.15.03.48.30
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 15 Mar 2023 03:48:31 -0700 (PDT)
+Message-ID: <cf691a42-93a9-61f4-54b3-2725ee68abbe@smile.fr>
+Date: Wed, 15 Mar 2023 11:48:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Content-Language: en-US, it
-To: buildroot@buildroot.org
-References: <20230314233719.55e2f430@windsurf>
- <20230315100848.57061-1-giulio.benetti@benettiengineering.com>
- <20230315100848.57061-2-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230315100848.57061-2-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfEHMlxuwogzfSbwH6xvGcQKVJKeBsmFWbpqNNGKKJDr/WZ2aZ+04mw9zxV0jrYdL5BHL/JS0M+VCkyZPa5rgOoxlTfCcth/HwGfyRdMvrow3PeraEiVx
- 0+B656bKXLEdBa0tgR20Qmq52xxts7lFtkj9UE3MwDvfDPrZVSP9umHP/YMA2OFk3gIPMtoGaS4WQY/ck1UAPjvFfLGpdqrqdqqv/IpabFHqWa+ktqWW4Ggs
- c57x3MUFGX9T1ekJHvDVPCSMObD1DhrnaF8Wp4XIZ2DF3Sf6g3Ii+zfiJbtpvb3t
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1678875208; bh=d/Tdo6mCGxfjifBzAaSt0jE/xx0mMwAApwOIFCeZmyk=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Qsn6MGwhG+hVwnuOrq8NMh0aOnNwFdLGxRdpSWplkbGQkdrPHZdDRtCPZ3NvPhRDp
- 0qemFhSor5p8RAPK27rfueErLmiUWbGtoz4CcqVQy1egA2PsFbKr05Tp5e6tQVPKM/
- xWp+cVaRutYqRvGQqxRf/FSO1dwZqyStw0ucF26LAjT3RXWMEypP+yVrjEUkI9Q0h7
- nnm7vsskdwVv+BgsFgRjG4BH7/Fam78Ya8hgXEraQJsylvQvQ5WzUyjvVKmbmWhP40
- ejffxoRKfeSHLZx6nzBECIZyljDetZkRCCfVkiinXe74OtqA6xss0rnWfVMcVHQMR0
- u4dY69pUdLIFA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Qsn6MGwh
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/swugenerator: new package
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230314121507.2597723-1-sebastian.weyer@smile.fr>
+ <20230314121507.2597723-3-sebastian.weyer@smile.fr>
+ <20230314134710.5cb2c988@windsurf>
+From: Sebastian WEYER <sebastian.weyer@smile.fr>
+In-Reply-To: <20230314134710.5cb2c988@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112; t=1678877311;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=N/HUclagUv8qPKnAFtstV/DxTOHbgG1YehTZ/MDp24E=;
+ b=kx8csXWIk8Vkioi0DTydr51Y2ZG79hz9s1VMdwW29mF8UD2+eSn1RA9FiR8juE1KqE
+ r082qUuhWp5HCydZtP9Z/E2+G0assaCflWml6VlMrVFY1ygCrpzG796Ih5RgaOFE10Ed
+ u6Tr2DVpn10vmDtz3JsKQCW1Rtsv8YIK25qUfcTj5quwjviz7JRwfE7h6UWmoHe28qqt
+ MsUH6rswS2xK93rRaNab0tiP1EElzrcMxSXArRY1Hr0qCNqYtFK+63eMJJVlFUcFb8C9
+ qf1q88nDUQsDM//cVIOyxLA6Wbt4/4Qddjwp/v4C52xNMesc8jjJaXl9AM9E4pTWMjvM
+ uUVg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=kx8csXWI
+Subject: Re: [Buildroot] [PATCH 3/4] package/coreutils: rename package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,111 +102,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is V3... Sorry!
+Hello Thomas,
 
-On 15/03/23 11:08, Giulio Benetti wrote:
-> Add swugenerator as host utility to generate images for swupdate with all
-> the possible options available like encryption, passkey etc. Let's also
-> add Giulio Benetti as package maintainer to DEVELOPERS file.
+> As it is proposed, this patch will break existing configurations that
+> have BR2_PACKAGE_COREUTILS=y enabled, as the option is being renamed.
+>
+> A solution to that would be to substitute package/coreutils by a
+> virtual package *and* rename package/coreutils into
+> package/gnu-coreutils in the same patch.
+
+It's actually what I did initially and then I pulled the two apart because the
+commit was very cluttered. I then didn't think about the possible breaking of
+existing configurations.
+
+> So I really don't think a virtual package is needed. We can handle the
+> two coreutils implementation manually in the very few places where it
+> is needed, and perhaps where it does matter for people.
+
+I agree that it is not necessarily needed and considering the few places where
+it appears it is manageable manualy. I just thought it could be a nice way to
+implement it. If it's not wanted for whatever reason I'll change it, no problem :).
+
+> Virtual packages are not "free" in terms of complexity and code churn.
+> In addition, I am almost sure that uutils-coreutils is not a 100%
+> drop-in replacement for coreutils. Most likely there are a few tools
+> that are missing, or a few options that are not supported, or differ in
+> behavior. And virtual packages for which the different implementations
+> are not strictly compatible generally cause quite a lot of pain (see
+> the mess around libopenssl vs. libressl for example).
+
+I did think about the problem of it not being a drop-in replacement that's why
+for now I changed the dependencies of the concerned packages to the new name for
+coreutils instead of depending on the virtual package.
+
+Considering what you mentioned earlier, I guess the renaming of
+BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES to
+BR2_PACKAGE_GNU_COREUTILS_INDIVIDUAL_BINARIES would bring the same kind of
+potential breaking of existing configurations so this will need to be handled too.
+
+Best regards,
+Sebastian
+
+
+On 14/03/2023 13:47, Thomas Petazzoni wrote:
+> Hello Sebastian,
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-> V1->V2:
-* use github macro for package _SITE as pointed by Thomas Petazzoni
-V2->V3:
-> * add host dependency to python-libconf
-
-Sorry again for the noise
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> ---
->   DEVELOPERS                             |  1 +
->   package/Config.in.host                 |  1 +
->   package/swugenerator/Config.in.host    |  6 ++++++
->   package/swugenerator/swugenerator.hash |  4 ++++
->   package/swugenerator/swugenerator.mk   | 14 ++++++++++++++
->   5 files changed, 26 insertions(+)
->   create mode 100644 package/swugenerator/Config.in.host
->   create mode 100644 package/swugenerator/swugenerator.hash
->   create mode 100644 package/swugenerator/swugenerator.mk
+> On Tue, 14 Mar 2023 13:15:05 +0100
+> Sebastian Weyer <sebastian.weyer@smile.fr> wrote:
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8ddffbf428..453fbf4b0f 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1186,6 +1186,7 @@ F:	package/rtl8821cu/
->   F:	package/sunxi-mali-utgard/
->   F:	package/sunxi-mali-utgard-driver/
->   F:	package/sunxi-tools/
-> +F:	package/swugenerator/
->   F:	package/trace-cmd/
->   F:	package/udisks/
->   F:	package/wilc-driver/
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index edfe7ce4b3..7059d78eb8 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -101,6 +101,7 @@ menu "Host utilities"
->   	source "package/squashfs/Config.in.host"
->   	source "package/sunxi-tools/Config.in.host"
->   	source "package/swig/Config.in.host"
-> +	source "package/swugenerator/Config.in.host"
->   	source "package/systemd/Config.in.host"
->   	source "package/tegrarcm/Config.in.host"
->   	source "package/ti-cgt-pru/Config.in.host"
-> diff --git a/package/swugenerator/Config.in.host b/package/swugenerator/Config.in.host
-> new file mode 100644
-> index 0000000000..df0e9a5170
-> --- /dev/null
-> +++ b/package/swugenerator/Config.in.host
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_HOST_SWUGENERATOR
-> +	bool "host swugenerator"
-> +	help
-> +	  A host tool to generate SWU update package for SWUpdate.
-> +
-> +	  https://github.com/sbabic/swugenerator
-> diff --git a/package/swugenerator/swugenerator.hash b/package/swugenerator/swugenerator.hash
-> new file mode 100644
-> index 0000000000..2125be3d1c
-> --- /dev/null
-> +++ b/package/swugenerator/swugenerator.hash
-> @@ -0,0 +1,4 @@
-> +# Locally calculated
-> +sha256  b5c47c47be0df4df476d2bf596f58a7296a4b0cebe6c8de42251605475b37d25  swugenerator-0.2.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-> diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
-> new file mode 100644
-> index 0000000000..f4ead1d229
-> --- /dev/null
-> +++ b/package/swugenerator/swugenerator.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# swugenerator
-> +#
-> +################################################################################
-> +
-> +SWUGENERATOR_VERSION = 0.2
-> +SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
-> +SWUGENERATOR_LICENSE = GPL-3.0
-> +SWUGENERATOR_LICENSE_FILES = LICENSE
-> +HOST_SWUGENERATOR_SETUP_TYPE = setuptools
-> +HOST_SWUGENERATOR_DEPENDENCIES = host-python-libconf
-> +
-> +$(eval $(host-python-package))
-
+>> In preparation for the addition of a virtual package providing the
+>> coreutils functionality, the package package/coreutils has been renamed
+>> to package/coreutils.
+>>
+>> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+> 
+> As it is proposed, this patch will break existing configurations that
+> have BR2_PACKAGE_COREUTILS=y enabled, as the option is being renamed.
+> 
+> A solution to that would be to substitute package/coreutils by a
+> virtual package *and* rename package/coreutils into
+> package/gnu-coreutils in the same patch.
+> 
+> However, I'd like to challenge the need of turning package/coreutils
+> into a virtual package in the first place. Virtual packages are very
+> useful for libraries that have multiple implementations, but also a
+> large number of users: OpenGL libraries, zlib, openssl, jpeg, etc.
+> 
+> Coreutils has almost no reverse dependencies in Buildroot:
+> 
+> package/e2fsprogs/Config.in:    depends on BR2_PACKAGE_COREUTILS  # runtime
+> package/e2fsprogs/Config.in:    depends on !BR2_PACKAGE_BASH || !BR2_PACKAGE_COREUTILS \
+> package/glslsandbox-player/Config.in:   select BR2_PACKAGE_COREUTILS # runtime (timeout)
+> package/opkg-utils/Config.in:   select BR2_PACKAGE_COREUTILS if !BR2_PACKAGE_BUSYBOX # runt
+> 
+> So I really don't think a virtual package is needed. We can handle the
+> two coreutils implementation manually in the very few places where it
+> is needed, and perhaps where it does matter for people.
+> 
+> Virtual packages are not "free" in terms of complexity and code churn.
+> In addition, I am almost sure that uutils-coreutils is not a 100%
+> drop-in replacement for coreutils. Most likely there are a few tools
+> that are missing, or a few options that are not supported, or differ in
+> behavior. And virtual packages for which the different implementations
+> are not strictly compatible generally cause quite a lot of pain (see
+> the mess around libopenssl vs. libressl for example).
+> 
+> What do you think?
+> 
+> Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
