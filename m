@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E423C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 07:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DD72C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 07:16:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A98C81076;
-	Wed, 15 Mar 2023 07:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A98C81076
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8C1081208;
+	Wed, 15 Mar 2023 07:16:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8C1081208
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F5ovrsziROwk; Wed, 15 Mar 2023 07:13:54 +0000 (UTC)
+	with ESMTP id JkGZy6UOF54E; Wed, 15 Mar 2023 07:16:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D642E813B0;
-	Wed, 15 Mar 2023 07:13:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D642E813B0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7B60D1BF47E
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 07:12:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 187D381076;
+	Wed, 15 Mar 2023 07:16:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 187D381076
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 424BA1BF47E
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 07:16:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 455C980BAF
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 07:12:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 455C980BAF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2989140503
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 07:16:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2989140503
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9abfNCjF6Adm for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 07:12:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7d-6a6CF04MM for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 07:16:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 02A0081062
- for <buildroot@buildroot.org>; Wed, 15 Mar 2023 07:12:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02A0081062
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67C5640139
+ for <buildroot@buildroot.org>; Wed, 15 Mar 2023 07:16:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67C5640139
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5A8F8739B; Wed, 15 Mar 2023 07:12:47 +0000 (UTC)
+ id 54CC4873BB; Wed, 15 Mar 2023 07:16:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 08:11:53 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 61425d7a6c9b6963131255f24b8270614cc0f2b5
-X-Git-Newrev: 8b8137852afbf41fbc311597b052eec610020e18
+Date: Wed, 15 Mar 2023 08:11:25 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: b110ed88653201e0cd856fc5d2a3af709475fe65
+X-Git-Newrev: 88f42191722586f6ebcd2882b4b258055e648f86
 X-Patchwork-Hint: ignore
-Message-Id: <20230315071247.E5A8F8739B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libolm: add CPE
- variables
+Message-Id: <20230315071625.54CC4873BB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/quazip: add
+ QUAZIP_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b8137852afbf41fbc311597b052eec610020e18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=88f42191722586f6ebcd2882b4b258055e648f86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-cpe:2.3:a:matrix:olm is a valid CPE identifier for this package:
+cpe:2.3:a:quazip_project:quazip is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amatrix%3Aolm
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aquazip_project%3Aquazip
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d5c6ff24dccb7fec54e7fa43af9f987b95eba1f8)
+(cherry picked from commit 25c67417160b176776233aad9b0d685643695f8e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libolm/libolm.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/quazip/quazip.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libolm/libolm.mk b/package/libolm/libolm.mk
-index 607e50702f..6f06686555 100644
---- a/package/libolm/libolm.mk
-+++ b/package/libolm/libolm.mk
-@@ -9,6 +9,8 @@ LIBOLM_SOURCE = olm-$(LIBOLM_VERSION).tar.gz
- LIBOLM_SITE = https://gitlab.matrix.org/matrix-org/olm/-/archive/$(LIBOLM_VERSION)
- LIBOLM_LICENSE = Apache-2.0
- LIBOLM_LICENSE_FILES = LICENSE
-+LIBOLM_CPE_ID_VENDOR = matrix
-+LIBOLM_CPE_ID_PRODUCT = olm
- LIBOLM_INSTALL_STAGING = YES
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index 7731e59d94..7d58877ac2 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
+@@ -12,5 +12,6 @@ QUAZIP_DEPENDENCIES = \
+ 	qt5base
+ QUAZIP_LICENSE = LGPL-2.1
+ QUAZIP_LICENSE_FILES = COPYING
++QUAZIP_CPE_ID_VENDOR = quazip_project
  
- LIBOLM_CONF_OPTS = -DOLM_TESTS=OFF
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
