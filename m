@@ -1,51 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F7EC6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 15:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 838B3C6FD1D
+	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 15:45:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61D95401F5;
-	Wed, 15 Mar 2023 15:07:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61D95401F5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0697460AC1;
+	Wed, 15 Mar 2023 15:45:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0697460AC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xQc0vbv11uo4; Wed, 15 Mar 2023 15:07:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uJN7PNNfBySE; Wed, 15 Mar 2023 15:45:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13E6C415BF;
-	Wed, 15 Mar 2023 15:07:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13E6C415BF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D79F1BF31E
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 15:06:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D0C260743;
+	Wed, 15 Mar 2023 15:45:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D0C260743
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E3B101BF31E
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 15:45:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0360C40489
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 15:06:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0360C40489
+ by smtp1.osuosl.org (Postfix) with ESMTP id BDAE081BCB
+ for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 15:45:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDAE081BCB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eBIQVf3LKVBX for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 15:06:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3114840452
- for <buildroot@buildroot.org>; Wed, 15 Mar 2023 15:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3114840452
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B90687458; Wed, 15 Mar 2023 15:06:27 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 15 Mar 2023 16:05:32 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 46f842205224157f9b8e6361e0f0b873ca42dd2a
-X-Git-Newrev: df84b0f118cf775aa2c9e9186c29bc8640356a0b
-X-Patchwork-Hint: ignore
-Message-Id: <20230315150627.1B90687458@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/apache: security
- bump version to 2.4.56
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hHwTWCfn4HAh for <buildroot@lists.busybox.net>;
+ Wed, 15 Mar 2023 15:45:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53BCA814B6
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 53BCA814B6
+ for <buildroot@busybox.net>; Wed, 15 Mar 2023 15:45:29 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id cn21so47096301edb.0
+ for <buildroot@busybox.net>; Wed, 15 Mar 2023 08:45:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1678895127;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ty0meAHH74QNwCIA+seEc53E4l3SnAtAuH4OIdgTKyI=;
+ b=7h2QP4VNUo0v8gy4pCqnpEK39IGdbS09l09YreeEyR7T5Hez9k5o4a+vxoEPmNaND3
+ K7d482a9zwv8bzmuV3MkKdIMXS70U8QftM1cw93XQVF2SfJph2XTqIzvDhC776ZBW3Sz
+ boPC4Gis8NyNX6lrMW1c/rXQ11xy3ZORpCH7fczzXnc4x7pX68wL5J0ijCMfZsHHbe19
+ oLffWhl1vWPWsYArjVihL7Gge1H71GcRXym6U9SRV+uUpepnrVcPmWg+osifIBxrCp7g
+ EbUEYoGlrqEnhevlKzV+YaVwDCnxpzClRtcoEyRIM2jp3Hr2rTUXPOK+AALjy1fX5EFQ
+ xnBg==
+X-Gm-Message-State: AO0yUKUkFEyZuocC2J1pu9/zJg3rlQ+5RumOHdAiTiXUDUgvgKC9gh7i
+ +oromCHjJrlkMWi9TUz88hss5s1uP9I=
+X-Google-Smtp-Source: AK7set/BPvGWQ84tfDwWL8dED6JI7/356E4DE72do1TIpXwT+G4B9A2DKIW3rD3dBeMTBjLhO6z6/w==
+X-Received: by 2002:a17:907:72c1:b0:920:388c:5c60 with SMTP id
+ du1-20020a17090772c100b00920388c5c60mr8565902ejc.41.1678895127182; 
+ Wed, 15 Mar 2023 08:45:27 -0700 (PDT)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ l1-20020a170906644100b0091f5e98abd5sm2663166ejn.133.2023.03.15.08.45.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 15 Mar 2023 08:45:26 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Wed, 15 Mar 2023 16:45:00 +0100
+Message-Id: <20230315154500.1054297-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1678895127;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ty0meAHH74QNwCIA+seEc53E4l3SnAtAuH4OIdgTKyI=;
+ b=qS5PlKKjUrrx2VHRMa6sCRFZra1nxt78zZzRYXqlzf7YYEdSoRB06O9Y3FgmUcDKma
+ K9urYp8Wmu41mEfWhlduVQXMWzbVDkqhsHjS6/dKJlFVm3oR+Y9J9RinqIg3Bim7TrnW
+ HDZuzHe5+h6CTZzLYZIglM2G/9qatHO7KNO9uR049SQbcqst9kUjk7uV8boSxmKquQJS
+ xklyNhPmYPu0Ms2UHaadSvlgfdH1RIM9ExipzC/vi3Qjd1kUh0veWOPfxd07EpMYrhD5
+ kTwxvuF3YMN5jkM9JQ1jc8l+MrpoqLGDfysllGAgOTGHLIZ6Q6X4HXV9orWPavseuHeZ
+ CeUA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=qS5PlKKj
+Subject: [Buildroot] [PATCH] configs/olimex_stmp157: bump Linux and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,58 +94,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df84b0f118cf775aa2c9e9186c29bc8640356a0b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
-
-Release notes:
-https://lists.apache.org/thread/89vkczkfkdyz65d5q59pcyzrn5ts60s6
-
-Changelog: https://dlcdn.apache.org/httpd/CHANGES_2.4.56
-
-Fixes CVE-2023-25690 & CVE-2023-27522:
-https://httpd.apache.org/security/vulnerabilities_24.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 5256ec9ca872518beacf827443fec72146ab7a0c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/olimex_stmp157_olinuxino_lime_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index a1185c5618..36144917fb 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.apache.org/httpd/httpd-2.4.54.tar.bz2.{sha256,sha512}
--sha256  11d6ba19e36c0b93ca62e47e6ffc2d2f2884942694bce0f23f39c71bdc5f69ac  httpd-2.4.55.tar.bz2
--sha512  94982f7a1fedac8961fc17b5a22cf763ac28cb27ee6facab2e6a15b249b927773667493fd3f7354fb13fcb34a6f1afc1bdd5cf4b7be030cba1dfb523e40d43fb  httpd-2.4.55.tar.bz2
-+# From https://downloads.apache.org/httpd/httpd-2.4.56.tar.bz2.{sha256,sha512}
-+sha256  d8d45f1398ba84edd05bb33ca7593ac2989b17cb9c7a0cafe5442d41afdb2d7c  httpd-2.4.56.tar.bz2
-+sha512  5f12cd9878d822384b1bb163fea4d8edee5e7a0dd8b2389264387971268145cccc6a5a27ddf0436c5f1f631acc5fdc4874da2a47911483e421ca40bf783e0e12  httpd-2.4.56.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 13018a9b1f..80205a6362 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.55
-+APACHE_VERSION = 2.4.56
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = https://downloads.apache.org/httpd
- APACHE_LICENSE = Apache-2.0
+diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
+index 60c34d7fa..3b56fefec 100644
+--- a/configs/olimex_stmp157_olinuxino_lime_defconfig
++++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
+@@ -17,8 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/stmp1_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/OLIMEX/linux-olimex.git"
+-# branch release-20221011-v5.10.105
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1b955f3ee7ef3234f290f65dbea108063996aea0"
++# branch release-20230217-v5.10.105
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c5a31724bdfaac894553b51c5a0fb92c1f10f3db"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/stmp1_olinuxino/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -35,8 +35,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/OLIMEX/u-boot-olinuxino.git"
+-# release-20220927, based on 2021.04
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="98ab5ecb0a16eeb426f34b2a1a28e56658c1a59c"
++# release-20230110, based on 2021.04
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="9a49a20f71c698f538defbb69a6c6cb657d4315f"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="STM32-OLinuXino-LIME"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+-- 
+2.37.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
