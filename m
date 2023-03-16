@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA96AC6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 21:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25FB2C6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 21:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E03341B42;
-	Thu, 16 Mar 2023 21:37:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E03341B42
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB50F41927;
+	Thu, 16 Mar 2023 21:37:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB50F41927
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id djV_ugqT6mnN; Thu, 16 Mar 2023 21:37:20 +0000 (UTC)
+	with ESMTP id vcgxVoqsIGpu; Thu, 16 Mar 2023 21:37:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3465041B1C;
-	Thu, 16 Mar 2023 21:37:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3465041B1C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EF7271BF97E
+	by smtp4.osuosl.org (Postfix) with ESMTP id AACB241B62;
+	Thu, 16 Mar 2023 21:37:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AACB241B62
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F2C0D1BF97F
  for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:36:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CA04F4060B
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA87A60E39
  for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:36:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA04F4060B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA87A60E39
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nKvKNSGrVpdB for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bSn2sZ_cksVU for <buildroot@lists.busybox.net>;
  Thu, 16 Mar 2023 21:36:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 138954046D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 07C8960AFB
  for <buildroot@buildroot.org>; Thu, 16 Mar 2023 21:36:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 138954046D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07C8960AFB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 032FB87499; Thu, 16 Mar 2023 21:36:54 +0000 (UTC)
+ id EBF0E87497; Thu, 16 Mar 2023 21:36:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Mar 2023 22:32:37 +0100
+Date: Thu, 16 Mar 2023 22:32:33 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b54aa2be6756d43562ff8aae30a40dbc65bc3c2d
-X-Git-Newrev: d407399dd7d1854d20bd3e1a6a143c4e1443e8d2
+X-Git-Oldrev: 3c3e3e64c74ec85cb0a45318d72eff0634bc775e
+X-Git-Newrev: b54aa2be6756d43562ff8aae30a40dbc65bc3c2d
 X-Patchwork-Hint: ignore
-Message-Id: <20230316213654.032FB87499@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/audit: force arm
+Message-Id: <20230316213653.EBF0E87497@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libmad: force arm
  mode instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,42 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d407399dd7d1854d20bd3e1a6a143c4e1443e8d2
+commit: https://git.buildroot.net/buildroot/commit/?id=b54aa2be6756d43562ff8aae30a40dbc65bc3c2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Fix the following build failure:
 
-/tmp/ccY5gl3z.s:2145: Error: selected processor does not support `mcr p15,0,r2,c7,c10,5' in Thumb mode
+/tmp/ccv8mDeW.s:93: Error: selected processor does not support `smull r6,r7,r3,r1' in Thumb mode
 
 Fixes:
- - http://autobuild.buildroot.org/results/9d18a0d360b2e2f9e87c55daedda62d6ce198bb9
+ - http://autobuild.buildroot.org/results/92a3f19b4fa12a7724f9e3d99284da4ad2beecb2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 53d70dbe40232a7539559f1a4f807b8022737ed8)
+(cherry picked from commit 0aaadd525f2df02911349ffe1518814fa095bf96)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/audit/audit.mk | 7 +++++++
+ package/libmad/libmad.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index aa8ef515e6..77e7c24000 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -15,6 +15,13 @@ AUDIT_INSTALL_STAGING = YES
+diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+index 33134e26d4..084a533cc0 100644
+--- a/package/libmad/libmad.mk
++++ b/package/libmad/libmad.mk
+@@ -31,6 +31,13 @@ LIBMAD_IGNORE_CVES += CVE-2017-8374
+ # is able to properly behave in the face of a missing C++ compiler.
+ LIBMAD_AUTORECONF = YES
  
- AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
- 
-+# src/libev has some assembly function that is not present in Thumb mode:
-+# Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
++# libmad has some assembly function that is not present in Thumb mode:
++# Error: selected processor does not support `smull r6,r7,r3,r1' in Thumb mode
 +# so, we desactivate Thumb mode
 +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+AUDIT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
++LIBMAD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- AUDIT_DEPENDENCIES += libcap-ng
- AUDIT_CONF_OPTS += --with-libcap-ng=yes
+ define LIBMAD_INSTALL_STAGING_PC
+ 	$(INSTALL) -D package/libmad/mad.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/mad.pc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
