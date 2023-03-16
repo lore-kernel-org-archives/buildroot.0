@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B487FC61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Mar 2023 20:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC2EDC6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 10:49:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4229C4053E;
-	Wed, 15 Mar 2023 20:56:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4229C4053E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C16B4185D;
+	Thu, 16 Mar 2023 10:49:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C16B4185D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gnWWTL3mqwYn; Wed, 15 Mar 2023 20:56:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M66N-wo0_gvM; Thu, 16 Mar 2023 10:49:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F3B340459;
-	Wed, 15 Mar 2023 20:56:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F3B340459
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D9B121BF41C
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 20:56:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B3ED404A6;
+	Thu, 16 Mar 2023 10:49:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B3ED404A6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B33C1BF473
+ for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 10:49:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4B6340459
- for <buildroot@lists.busybox.net>; Wed, 15 Mar 2023 20:56:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4B6340459
+ by smtp3.osuosl.org (Postfix) with ESMTP id 548F060B4D
+ for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 10:49:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 548F060B4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TV4jJu6OKwoc for <buildroot@lists.busybox.net>;
- Wed, 15 Mar 2023 20:56:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VF3Az1zZvKGQ for <buildroot@lists.busybox.net>;
+ Thu, 16 Mar 2023 10:49:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4D984053E
- for <buildroot@uclibc.org>; Wed, 15 Mar 2023 20:56:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4D984053E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81BD760B49
+ for <buildroot@uclibc.org>; Thu, 16 Mar 2023 10:49:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81BD760B49
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B3BB185D50; Wed, 15 Mar 2023 20:56:04 +0000 (UTC)
+ id 6E5B786F5A; Thu, 16 Mar 2023 10:49:13 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 15 Mar 2023 20:56:04 +0000
+Date: Thu, 16 Mar 2023 10:49:13 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -55,7 +55,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15396-163-PvGhmdsDpS@https.bugs.busybox.net/>
+Message-ID: <bug-15396-163-9tBqK5DkbP@https.bugs.busybox.net/>
 In-Reply-To: <bug-15396-163@https.bugs.busybox.net/>
 References: <bug-15396-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -80,28 +80,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15396
 
---- Comment #3 from Jan-Benedict Glaw <jbglaw@lug-owl.de> ---
-Hi Thomas!
+--- Comment #4 from Jan-Benedict Glaw <jbglaw@lug-owl.de> ---
+NB: A rough estimate shows that tonight a full round of all Buildroot sample
+configurations should be finished. (Some were built with a Docker container
+containing libssl-dev, I removed that again, so I might miss a few
+configurations that were in need of BR2_TARGET_UBOOT_NEEDS_OPENSSL=y)
 
-As I read through your comment again, you're running your CI builds on the
-Gitlab.com platform? Or on a self-hosted system?
-
-If it's self-hosted, you can easily change configuration to allow for longer
-running jobs. All CI testing I do is strictly non-parallel (to allow to diff
-log files), so it takes its time (eg. right now, a build for
-qemu_aarch64_sbsa_defconfig is already running for 7h 50m right now), though
-I'm not using Gitlab, but Laminar (self-hosted in my basement.) On my hardware,
-I guess (don't have numbers yet) an average buildroot build will take 4.5h,
-times 280 builds, resulting in some 75k build minutes just for one complete
-run. That's already quite more than Gitlab.com's "Ultimate" plan. :/
-
-While I currently pay for electricity myself, let me know if I'd do helpful
-work in that area in the long run. As I do Buildroot builds only as a side
-project (my main target for http://toolchain.lug-owl.de/ is to keep GCC running
-for VAX, keep NetBSD for VAX alive), even running a small RasPi cluster as
-build nodes would probably beneficial. It wouldn't be _fast_ either, but it
-could properly build all configurations and start from the beginning once a
-complete round is finished.
+Alas... Tomorrow, I'll be able to give a summary and/or open tickets for
+configurations that failed to build. Right now, i have about 12 failed builds
+(out of around 210 that were scheduled and are done.)
 
 -- 
 You are receiving this mail because:
