@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30258C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 08:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E5BBC6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 08:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C669581F33;
-	Thu, 16 Mar 2023 08:36:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C669581F33
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14FE6813AC;
+	Thu, 16 Mar 2023 08:36:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14FE6813AC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id so6Ruba9mjux; Thu, 16 Mar 2023 08:36:22 +0000 (UTC)
+	with ESMTP id vF6YaGqZpiXE; Thu, 16 Mar 2023 08:36:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD94381F47;
-	Thu, 16 Mar 2023 08:36:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD94381F47
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16BE71BF3D5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 097A981F27;
+	Thu, 16 Mar 2023 08:36:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 097A981F27
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A8521BF97E
  for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 08:35:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D910408D4
- for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 08:35:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D910408D4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32C0D60F6E
+ for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 08:35:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32C0D60F6E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IZYWIdMs1NpD for <buildroot@lists.busybox.net>;
- Thu, 16 Mar 2023 08:35:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C-drKiKqAxvB for <buildroot@lists.busybox.net>;
+ Thu, 16 Mar 2023 08:35:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D39D6408A5
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D39D6408A5
- for <buildroot@buildroot.org>; Thu, 16 Mar 2023 08:35:03 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id m22so450239ioy.4
- for <buildroot@buildroot.org>; Thu, 16 Mar 2023 01:35:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E36BA60F66
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E36BA60F66
+ for <buildroot@buildroot.org>; Thu, 16 Mar 2023 08:35:05 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id s4so437124ioj.11
+ for <buildroot@buildroot.org>; Thu, 16 Mar 2023 01:35:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1678955703;
+ d=1e100.net; s=20210112; t=1678955705;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=6ToZBQfiHuQuDFKwD93uO4eXCNw/XmN8vvT493SXP+4=;
- b=5mrebc94bxBdRGc+Cb1GGsGJuEqiN0LwT2kYQUd4vzvfEtqJDmZOTxXUIMR4rdGdVe
- nsfL8MzpKkq8Rvxjj5q44Enf3secSvJYNCz2ibfp+pufDZCyJnvJXQUVg5sJdj1EDPre
- D1SVRUekCkLLYB6y+2519Rkohbesq+58qkTN5w5UTddwcAKjGLetUOJcc5/Gsg+WKNyK
- pDHkCOk1o1TUYabhQJGhMeDfTg/8UvQG2q5A7uQUO9fyAYxp+EGVA/7dVZJpSnjP6ma+
- H5hN406zJOzJHXcEUTniIz/Q6o/pxJiCxzIN80c0WjQakQOMIWPph+9MFCKvFcIcMEdp
- +jvA==
-X-Gm-Message-State: AO0yUKXrom+HXN3SSjsQphfUqi3qhlnINgZVTq7Frgc1KhtLVTeyMFkF
- 8IAT5uYGgEctgVuxwnQa+PzcFJ9AcVDHrQ==
-X-Google-Smtp-Source: AK7set9TyX9Xm4i2HcdWBCyuBTr1RQbhfS1UYTCzyjPiF+2QTWdvFVVuFMB6p4W7sIlJS5BkSeV/Mg==
-X-Received: by 2002:a6b:d601:0:b0:74f:a1c6:762 with SMTP id
- w1-20020a6bd601000000b0074fa1c60762mr5806751ioa.11.1678955703289; 
- Thu, 16 Mar 2023 01:35:03 -0700 (PDT)
+ bh=ZfgLnS9FHedGhpQJSi3RfeuXC2+qCco5zgV5BgAKMio=;
+ b=I+PkDUQi9lOtsbLOj5lUb1byHe7MLHfR+6UV1YuhaIdHsjauivG+26ttJPpRJwcYbM
+ Y7x9JC6zxQjTJ+Ba0bpNtXm5MdQqe9T29h9ZktqwbXVpj+2EEMEDXbHkiT8bgKZukHxx
+ /zlHsxBxQyWH+r02nWHgAoMLpZRUw0ZN1TA5c1eFv3F87aOnJpO2WxwK5scKtIskkKKn
+ 6kdV8omoZIhPS2Ix23kkfl9tLToG1daYNzH9dIWt0OzDxh02bYo+uUogFfcz8Xtwiugb
+ r+0qV7rInqDjoDjJhfZ1aGpHaBHzSG+4vqw+1BDempctooeLyGOEmF0RDRUSNVWdZ1if
+ 1svQ==
+X-Gm-Message-State: AO0yUKX502dEusSNtfFGXvH9JV3M0ZknaoTFBCj/aOWl1rl7tccLx2Uo
+ V5rJ1Z/cXDZRUPKDytRyMsmcV6otjUpnpw==
+X-Google-Smtp-Source: AK7set889XgE3YlHEyefyon9X70OcDF9bvTsrE/Wny37wgvmLfRFf3dmNlEEhwAlWF4XeWbZo3KRFg==
+X-Received: by 2002:a6b:a07:0:b0:74c:a9a5:2c56 with SMTP id
+ z7-20020a6b0a07000000b0074ca9a52c56mr27706038ioi.21.1678955704724; 
+ Thu, 16 Mar 2023 01:35:04 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-149-35.hlrn.qwest.net.
  [97.118.149.35]) by smtp.gmail.com with ESMTPSA id
- y34-20020a029525000000b003b331f0bbdfsm534630jah.97.2023.03.16.01.35.02
+ y34-20020a029525000000b003b331f0bbdfsm534630jah.97.2023.03.16.01.35.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Mar 2023 01:35:02 -0700 (PDT)
+ Thu, 16 Mar 2023 01:35:04 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Mar 2023 02:34:36 -0600
-Message-Id: <20230316083440.3466725-6-james.hilliard1@gmail.com>
+Date: Thu, 16 Mar 2023 02:34:38 -0600
+Message-Id: <20230316083440.3466725-8-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230316083440.3466725-1-james.hilliard1@gmail.com>
 References: <20230316083440.3466725-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1678955703;
+ d=gmail.com; s=20210112; t=1678955705;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=6ToZBQfiHuQuDFKwD93uO4eXCNw/XmN8vvT493SXP+4=;
- b=DgJcK7ZrpQwoG3uRicS5OOQzg9LErbG+6/0cQKzwxP0jn7m0XNIIJackkM1eNBFg2d
- JnMqdxNKS4D7Sx9/sFFFNQXJ07KXAuZMlJ5AI/hKwUdR4jhSz4820y9EzwrjcH3c1Q/L
- q8oHx9Bp1h/TKlzCUZEHWIZd2PvP2SBHFUi52DK/kLBq+00RSbTyDi0QEttm6DfXFtNl
- Ff2e+yIgEPL+qHTrfk1Sif66m0uhZn/6xH19meSUGraDOuB/D2UtO7aV0n21M83A58jn
- ZpGDjE4zqYZmUCvDA7kYuO3hTJ6a0mBpSiGoRE0mBQ9Pgr+TFP+cLlsFLxu5UJ967E44
- Apdg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ZfgLnS9FHedGhpQJSi3RfeuXC2+qCco5zgV5BgAKMio=;
+ b=HpS3Sc8mEV+zE6/Tyd3eYOcih+oI6W0bHCk40tsxBu1AG/z+Lxdwcnt79008F+jXwh
+ kjeXhmh++ylaEx4w1k6hu/3t2rlMaMUtaIIDuXsmm6FgeP4RkmPln7JEVfcryzjErY3P
+ YZgmJaCbfw0pKsfmywG0PkYDSsavwZf1/0nuCpqJ/G3N4ACeWexIv2Vs6p3biigJup8I
+ PsC+dt2YiYcjAIWpsXU4CCrghGQfVTo8+JOBtUi7etv2oobvsRY6Rn8ant1qV03JLv+4
+ ZeUiod77ktJDvRfTX9EtbnqC7xKVHUPPlGXcEFns73lSH8fS6zwlFOZWJ8jAThZ0LS1e
+ 1+lA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=DgJcK7Zr
-Subject: [Buildroot] [PATCH v6 06/10] package/fp16: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=HpS3Sc8m
+Subject: [Buildroot] [PATCH v6 08/10] package/fft2d: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,157 +105,108 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+From: Stefan Hager <stefan.hager@ginzinger.com>
+
 This package is required by tensorflow-lite.
 
-We need to add a patch to remove the c++ requirement.
+This package doesn't provide a conventional install mechanism so
+we need to install it manually.
 
+Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v5 -> v6:
-  - add patch fixing build without c++
 Changes v4 -> v5:
-  - add comment indicating library is header only
+  - add comment indicating library is header/source only
+Changes v3 -> v4:
+  - fix license
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...le-CXX-unless-building-tests-benchma.patch | 48 +++++++++++++++++++
- package/fp16/Config.in                        |  8 ++++
- package/fp16/fp16.hash                        |  4 ++
- package/fp16/fp16.mk                          | 20 ++++++++
- 6 files changed, 82 insertions(+)
- create mode 100644 package/fp16/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
- create mode 100644 package/fp16/Config.in
- create mode 100644 package/fp16/fp16.hash
- create mode 100644 package/fp16/fp16.mk
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/fft2d/Config.in  |  7 +++++++
+ package/fft2d/fft2d.hash |  4 ++++
+ package/fft2d/fft2d.mk   | 23 +++++++++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/fft2d/Config.in
+ create mode 100644 package/fft2d/fft2d.hash
+ create mode 100644 package/fft2d/fft2d.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 24c571544d..12b33c5fbc 100644
+index 90c0508105..da79dd3022 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2687,6 +2687,7 @@ F:	package/ti-gfx/
- 
+@@ -2688,6 +2688,7 @@ F:	package/ti-gfx/
  N:	Stefan Hager <stefan.hager@ginzinger.com>
  F:	package/cpuinfo/
-+F:	package/fp16/
+ F:	package/fp16/
++F:	package/fft2d/
  F:	package/gemmlowp/
  F:	package/psimd/
  F:	package/pthreadpool/
 diff --git a/package/Config.in b/package/Config.in
-index ac9241f18b..4878e8ba2f 100644
+index 6f6c5beca8..893d5facdc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2036,6 +2036,7 @@ menu "Other"
+@@ -2032,6 +2032,7 @@ menu "Other"
+ 	source "package/elfutils/Config.in"
+ 	source "package/ell/Config.in"
+ 	source "package/falcosecurity-libs/Config.in"
++	source "package/fft2d/Config.in"
+ 	source "package/fftw/Config.in"
  	source "package/flann/Config.in"
  	source "package/flatbuffers/Config.in"
- 	source "package/flatcc/Config.in"
-+	source "package/fp16/Config.in"
- 	source "package/fxdiv/Config.in"
- 	source "package/gconf/Config.in"
- 	source "package/gdal/Config.in"
-diff --git a/package/fp16/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch b/package/fp16/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
+diff --git a/package/fft2d/Config.in b/package/fft2d/Config.in
 new file mode 100644
-index 0000000000..b3c5219d59
+index 0000000000..38394f6170
 --- /dev/null
-+++ b/package/fp16/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
-@@ -0,0 +1,48 @@
-+From eba14b5277ed8f155eb333f4bbe9f99366e3dece Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sun, 29 Jan 2023 21:43:50 -0700
-+Subject: [PATCH] CMake: don't enable CXX unless building tests/benchmarks
-+
-+We only need CXX support when building tests/benchmarks.
-+
-+Fixes:
-+CMake Error at CMakeLists.txt:6 (PROJECT):
-+  No CMAKE_CXX_COMPILER could be found.
-+
-+  Tell CMake where to find the compiler by setting either the environment
-+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
-+  to the compiler, or to the compiler name if it is in the PATH.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://github.com/Maratyszcza/FP16/pull/22]
-+---
-+ CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 5e7d127..8028c07 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -3,13 +3,17 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR)
-+ INCLUDE(GNUInstallDirs)
-+ 
-+ # ---[ Project
-+-PROJECT(FP16 C CXX)
-++PROJECT(FP16 C)
-+ 
-+ # ---[ Options.
-+ OPTION(FP16_BUILD_TESTS "Build FP16 unit tests" ON)
-+ OPTION(FP16_BUILD_BENCHMARKS "Build FP16 micro-benchmarks" ON)
-+ 
-+ # ---[ CMake options
-++IF(FP16_BUILD_TESTS OR FP16_BUILD_BENCHMARKS)
-++  ENABLE_LANGUAGE(CXX)
-++ENDIF()
-++
-+ IF(FP16_BUILD_TESTS)
-+   ENABLE_TESTING()
-+ ENDIF()
-+-- 
-+2.34.1
-+
-diff --git a/package/fp16/Config.in b/package/fp16/Config.in
-new file mode 100644
-index 0000000000..e07c6ebb8a
---- /dev/null
-+++ b/package/fp16/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_FP16
-+	bool "fp16"
-+	select BR2_PACKAGE_PSIMD
++++ b/package/fft2d/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_FFT2D
++	bool "fft2d"
 +	help
-+	  Header-only library for conversion to/from half-precision
-+	  floating point formats.
++	  This is a package to calculate Discrete Fourier/Cosine/Sine
++	  Transforms of 2,3-dimensional sequences of length 2^N.
 +
-+	  https://github.com/Maratyszcza/FP16
-diff --git a/package/fp16/fp16.hash b/package/fp16/fp16.hash
++	  http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html
+diff --git a/package/fft2d/fft2d.hash b/package/fft2d/fft2d.hash
 new file mode 100644
-index 0000000000..63634eb2cf
+index 0000000000..a1b1a326ae
 --- /dev/null
-+++ b/package/fp16/fp16.hash
++++ b/package/fft2d/fft2d.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  a91f4770ff9c39f4d72e339c379f566b3bbb359fa66122d85fc0bae3dde7abc7  fp16-0a92994d729ff76a58f692d3028ca1b64b145d91.tar.gz
++sha256  ada7e99087c4ed477bfdf11413f2ba8db8a840ba9bbf8ac94f4f3972e2a7cec9  fft2d.tgz
 +# License files, locally calculated
-+sha256  17e4f539024be2749ee729d1e2f01d24cef12ece8c9bf18e91a4349be29c80bf  LICENSE
-diff --git a/package/fp16/fp16.mk b/package/fp16/fp16.mk
++sha256  0b2a2082537735a2a576dbec2e8f9c1a09812eac6df6a389502a6ba860072906  readme2d.txt
+diff --git a/package/fft2d/fft2d.mk b/package/fft2d/fft2d.mk
 new file mode 100644
-index 0000000000..80710523fb
+index 0000000000..781b545e2e
 --- /dev/null
-+++ b/package/fp16/fp16.mk
-@@ -0,0 +1,20 @@
++++ b/package/fft2d/fft2d.mk
+@@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# fp16
++# fft2d
 +#
 +################################################################################
 +
-+FP16_VERSION = 0a92994d729ff76a58f692d3028ca1b64b145d91
-+FP16_SITE = $(call github,Maratyszcza,FP16,$(FP16_VERSION))
-+FP16_LICENSE = MIT
-+FP16_LICENSE_FILES = LICENSE
-+FP16_INSTALL_STAGING = YES
-+# Only installs a header
-+FP16_INSTALL_TARGET = NO
-+FP16_DEPENDENCIES = psimd
-+FP16_CONF_OPTS = \
-+	-DFP16_BUILD_TESTS=OFF \
-+	-DFP16_BUILD_BENCHMARKS=OFF \
-+	-DPSIMD_SOURCE_DIR="$(PSIMD_DIR)"
++FFT2D_VERSION = 2006.12.28
++FFT2D_SITE = https://www.kurims.kyoto-u.ac.jp/~ooura
++FFT2D_SOURCE = fft2d.tgz
++FFT2D_LICENSE = MIT-like
++FFT2D_LICENSE_FILES = readme2d.txt
++FFT2D_INSTALL_STAGING = YES
++# Only installs headers/sources
++FFT2D_INSTALL_TARGET = NO
 +
-+$(eval $(cmake-package))
++define FFT2D_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/fft2d
++	$(INSTALL) -m 0644 $(@D)/*.c $(STAGING_DIR)/usr/include/fft2d
++	$(INSTALL) -m 0644 $(@D)/*.f $(STAGING_DIR)/usr/include/fft2d
++	$(INSTALL) -m 0644 $(@D)/*.h $(STAGING_DIR)/usr/include/fft2d
++endef
++
++$(eval $(generic-package))
 -- 
 2.34.1
 
