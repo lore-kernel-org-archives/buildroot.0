@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F6EC6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 21:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E959C6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 16 Mar 2023 21:36:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8138541B1A;
-	Thu, 16 Mar 2023 21:36:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8138541B1A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14C1841B45;
+	Thu, 16 Mar 2023 21:36:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14C1841B45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ucZaYDNAul3f; Thu, 16 Mar 2023 21:36:25 +0000 (UTC)
+	with ESMTP id SI2laz7464z8; Thu, 16 Mar 2023 21:36:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6854941B43;
-	Thu, 16 Mar 2023 21:36:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6854941B43
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE08A41B42;
+	Thu, 16 Mar 2023 21:36:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE08A41B42
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C0A5A1BF31B
- for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 09E2D1BF31B
+ for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9AC18610AD
+ by smtp3.osuosl.org (Postfix) with ESMTP id E53C4610AD
  for <buildroot@lists.busybox.net>; Thu, 16 Mar 2023 21:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AC18610AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E53C4610AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zklR4t6NI6DJ for <buildroot@lists.busybox.net>;
+ with ESMTP id TgS9UPsS8TgX for <buildroot@lists.busybox.net>;
  Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF56060E39
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE11860AFB
  for <buildroot@buildroot.org>; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF56060E39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE11860AFB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B88C78747B; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
+ id ACAAF8747F; Thu, 16 Mar 2023 21:35:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Mar 2023 22:32:52 +0100
+Date: Thu, 16 Mar 2023 22:32:26 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 2d73e7652304897e948b7e25c2d44247fc98cc5d
-X-Git-Newrev: 2010ab7ac26e6e866ffea6ed25950c7fc61a4152
+X-Git-Oldrev: 68ed22329bc91b406afc6c6f2ad294be399be049
+X-Git-Newrev: 2d73e7652304897e948b7e25c2d44247fc98cc5d
 X-Patchwork-Hint: ignore
-Message-Id: <20230316213546.B88C78747B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/libev: force arm
+Message-Id: <20230316213546.ACAAF8747F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/audit: force arm
  mode instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,42 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2010ab7ac26e6e866ffea6ed25950c7fc61a4152
+commit: https://git.buildroot.net/buildroot/commit/?id=2d73e7652304897e948b7e25c2d44247fc98cc5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 Fix the following build failure:
 
-/tmp/ccHc3Awn.s:825: Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
+/tmp/ccY5gl3z.s:2145: Error: selected processor does not support `mcr p15,0,r2,c7,c10,5' in Thumb mode
 
 Fixes:
- - http://autobuild.buildroot.org/results/1c597c9da724d6cac06b09b1ecd456a28440a3a3
+ - http://autobuild.buildroot.org/results/9d18a0d360b2e2f9e87c55daedda62d6ce198bb9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 964254bfd99a5bb7c405a03bdd165f11ddc36f4a)
+(cherry picked from commit 53d70dbe40232a7539559f1a4f807b8022737ed8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libev/libev.mk | 7 +++++++
+ package/audit/audit.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index 9f3c19d46c..cbd5433d76 100644
---- a/package/libev/libev.mk
-+++ b/package/libev/libev.mk
-@@ -10,6 +10,13 @@ LIBEV_INSTALL_STAGING = YES
- LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
- LIBEV_LICENSE_FILES = LICENSE
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index aa8ef515e6..77e7c24000 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -15,6 +15,13 @@ AUDIT_INSTALL_STAGING = YES
  
-+# libev has some assembly function that is not present in Thumb mode:
+ AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
+ 
++# src/libev has some assembly function that is not present in Thumb mode:
 +# Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
 +# so, we desactivate Thumb mode
 +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+LIBEV_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
++AUDIT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
 +endif
 +
- # The 'compatibility' event.h header conflicts with libevent
- # It's completely unnecessary for BR packages so remove it
- define LIBEV_DISABLE_EVENT_H_INSTALL
+ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ AUDIT_DEPENDENCIES += libcap-ng
+ AUDIT_CONF_OPTS += --with-libcap-ng=yes
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
