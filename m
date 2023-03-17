@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A84AC74A5B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BFDFC76195
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EE1140362;
-	Fri, 17 Mar 2023 08:38:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EE1140362
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D3D64160B;
+	Fri, 17 Mar 2023 08:38:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D3D64160B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kkSZK-TqvrBL; Fri, 17 Mar 2023 08:38:27 +0000 (UTC)
+	with ESMTP id H5SxqTn3bYpF; Fri, 17 Mar 2023 08:38:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 881E0410C5;
-	Fri, 17 Mar 2023 08:38:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 881E0410C5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 125411BF276
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA5AB410CB;
+	Fri, 17 Mar 2023 08:38:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA5AB410CB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 58A9C1BF97F
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CC76416B1
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CC76416B1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 325C9613B3
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:38:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 325C9613B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AnR2-2i20g6E for <buildroot@lists.busybox.net>;
- Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZguoIx8RfxkB for <buildroot@lists.busybox.net>;
+ Fri, 17 Mar 2023 08:38:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E362841568
- for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:36:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E362841568
+ by smtp3.osuosl.org (Postfix) with ESMTP id 64E4860F5D
+ for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:38:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64E4860F5D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D0811874D3; Fri, 17 Mar 2023 08:36:32 +0000 (UTC)
+ id 54BC1874F4; Fri, 17 Mar 2023 08:38:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Mar 2023 09:26:12 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 2e0122dd4d832c2e10f87ec726259fbde1082684
-X-Git-Newrev: 5d4b9bcf08cea85460fdc839a9786e3693f1def7
+Date: Fri, 17 Mar 2023 09:18:19 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 160828f4431eafde024aed85a30efd7960513f98
+X-Git-Newrev: afb90502dae53b2a4dffd3b0125cf2eda20ce49d
 X-Patchwork-Hint: ignore
-Message-Id: <20230317083632.D0811874D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/znc: Fix build
- with LibreSSL
+Message-Id: <20230317083810.54BC1874F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libgcrypt: fix
+ Thumb mode workaround
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,165 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d4b9bcf08cea85460fdc839a9786e3693f1def7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=afb90502dae53b2a4dffd3b0125cf2eda20ce49d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+
+Fix the following build failure:
+
+/tmp/ccRqWxnA.s:98: Error: instruction not supported in Thumb16 mode -- `adds ip,fp,r0'
 
 Fixes:
-http://autobuild.buildroot.net/results/3fe/3fec5c3a21af47b5f4e8adcaf4ce1fff5070e00a/
+ - http://autobuild.buildroot.org/results/4b96f4e41724e5c9c806a6c7df397a58d1ae1b1e
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit dfc3b05c05c8fa1a86affdd0a42fa4f6a0bf0171)
+(cherry picked from commit cda8dabfeb8f53b1a7dd1341ad9fc7e37bff516e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../znc/0001-LibreSSL-3.5-opaqued-structures.patch | 27 +++++++++
- package/znc/0002-Fix-build-with-libressl.patch     | 68 ++++++++++++++++++++++
- ...-and-DH_get0_key-have-existed-since-Libre.patch | 30 ++++++++++
- 3 files changed, 125 insertions(+)
+ package/libgcrypt/libgcrypt.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch b/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
-new file mode 100644
-index 0000000000..d0019e21a4
---- /dev/null
-+++ b/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
-@@ -0,0 +1,27 @@
-+From 87f3dac8ba8dea5628b05416bdef454b4ef2d236 Mon Sep 17 00:00:00 2001
-+From: Charlie Li <git@vishwin.info>
-+Date: Mon, 14 Mar 2022 17:36:36 -0400
-+Subject: [PATCH] LibreSSL 3.5 opaqued structures
-+
-+Downloaded from upstream commit
-+https://github.com/znc/Csocket/commit/87f3dac8ba8dea5628b05416bdef454b4ef2d236
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+(rebased for znc)
-+---
-+ Csocket.cc | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Csocket.cc b/Csocket.cc
-+index 46a3bfd..a30da14 100644
-+--- a/third_party/Csocket/Csocket.cc
-++++ b/third_party/Csocket/Csocket.cc
-+@@ -61,7 +61,7 @@
-+ #  define OPENSSL_NO_TLS1_1            /* 1.0.1-pre~: openssl/openssl@637f374ad49d5f6d4f81d87d7cdd226428aa470c */
-+ #  define OPENSSL_NO_TLS1_2            /* 1.0.1-pre~: openssl/openssl@7409d7ad517650db332ae528915a570e4e0ab88b */
-+ # endif
-+-# ifndef LIBRESSL_VERSION_NUMBER /* forked from OpenSSL 1.0.1g, sets high version "with the idea of discouraging software from relying on magic numbers for detecting features"(!) */
-++# if !defined(LIBRESSL_VERSION_NUMBER) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x03050000fL)
-+ #  if OPENSSL_VERSION_NUMBER >= 0x10100000
-+ #   undef HAVE_ERR_REMOVE_THREAD_STATE /* 1.1.0-pre4: openssl/openssl@8509dcc9f319190c565ab6baad7c88d37a951d1c */
-+ #   undef OPENSSL_NO_SSL2              /* 1.1.0-pre4: openssl/openssl@e80381e1a3309f5d4a783bcaa508a90187a48882 */
-diff --git a/package/znc/0002-Fix-build-with-libressl.patch b/package/znc/0002-Fix-build-with-libressl.patch
-new file mode 100644
-index 0000000000..b8d22445fb
---- /dev/null
-+++ b/package/znc/0002-Fix-build-with-libressl.patch
-@@ -0,0 +1,68 @@
-+From dcb5f3df82fcfec48aab356252067dc897fb98cf Mon Sep 17 00:00:00 2001
-+From: Alexey Sokolov <alexey+znc@asokolov.org>
-+Date: Sun, 14 Nov 2021 00:45:01 +0000
-+Subject: [PATCH] Fix build with libressl
-+
-+It got another feature of openssl implemented, which broke this
-+
-+Downloaded from upstream commit
-+https://github.com/znc/znc/commit/dcb5f3df82fcfec48aab356252067dc897fb98cf
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ CMakeLists.txt                   | 14 ++++++++++++++
-+ include/znc/zncconfig.h.cmake.in |  1 +
-+ modules/schat.cpp                |  3 +--
-+ 3 files changed, 16 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 0913ff2691..1f77f5632b 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -82,6 +82,20 @@ endmacro()
-+ tristate_option(OPENSSL "Support SSL")
-+ if(WANT_OPENSSL)
-+ 	find_package(OpenSSL ${TRISTATE_OPENSSL_REQUIRED})
-++
-++	if(OPENSSL_FOUND)
-++		# SSL_SESSION was made opaque in OpenSSL 1.1.0;
-++		# LibreSSL gained that function later too.
-++		# TODO: maybe remove this check at some point, and stop supporting old
-++		# libssl versions
-++		function(check_SSL_SESSION_get0_cipher)
-++			set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
-++			set(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
-++			check_cxx_symbol_exists(SSL_SESSION_get0_cipher openssl/ssl.h
-++				HAVE_SSL_SESSION_get0_cipher)
-++		endfunction()
-++		check_SSL_SESSION_get0_cipher()
-++	endif()
-+ endif()
-+ set(HAVE_LIBSSL "${OPENSSL_FOUND}")
-+ 
-+diff --git a/include/znc/zncconfig.h.cmake.in b/include/znc/zncconfig.h.cmake.in
-+index 5426b828af..7b07b99aec 100644
-+--- a/include/znc/zncconfig.h.cmake.in
-++++ b/include/znc/zncconfig.h.cmake.in
-+@@ -31,6 +31,7 @@
-+ #define HAVE_PTHREAD 1
-+ #cmakedefine HAVE_THREADED_DNS 1
-+ #cmakedefine HAVE_LIBSSL 1
-++#cmakedefine HAVE_SSL_SESSION_get0_cipher 1
-+ #cmakedefine HAVE_IPV6 1
-+ #cmakedefine HAVE_ZLIB 1
-+ #cmakedefine HAVE_I18N 1
-+diff --git a/modules/schat.cpp b/modules/schat.cpp
-+index aa7a338dcd..66e67e695c 100644
-+--- a/modules/schat.cpp
-++++ b/modules/schat.cpp
-+@@ -25,8 +25,7 @@
-+ #include <znc/User.h>
-+ #include <znc/IRCNetwork.h>
-+ 
-+-#if !defined(OPENSSL_VERSION_NUMBER) || defined(LIBRESSL_VERSION_NUMBER) || \
-+-    OPENSSL_VERSION_NUMBER < 0x10100007
-++#ifndef HAVE_SSL_SESSION_get0_cipher
-+ /* SSL_SESSION was made opaque in OpenSSL 1.1.0, cipher accessor was added 2
-+ weeks before the public release.
-+ See openssl/openssl@e92813234318635639dba0168c7ef5568757449b. */
-diff --git a/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch b/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
-new file mode 100644
-index 0000000000..a2946643fc
---- /dev/null
-+++ b/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
-@@ -0,0 +1,30 @@
-+From 7c8ac8981a8516edaba469641aff4d8ec452ae9e Mon Sep 17 00:00:00 2001
-+From: Charlie Li <git@vishwin.info>
-+Date: Mon, 14 Mar 2022 18:32:46 -0400
-+Subject: [PATCH] DH_set0_pqg and DH_get0_key have existed since LibreSSL 2.7
-+
-+https://github.com/libressl-portable/openbsd/commit/848e2a019c796b685fc8c5848283b86e48fbe0bf
-+https://github.com/libressl-portable/openbsd/commit/3789e379353c1d53313a249461b3d735de4ac742
-+
-+Downloaded from upstream commit
-+https://github.com/znc/znc/commit/7c8ac8981a8516edaba469641aff4d8ec452ae9e
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ modules/crypt.cpp | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/modules/crypt.cpp b/modules/crypt.cpp
-+index 7655371b6e..68f7aafcea 100644
-+--- a/modules/crypt.cpp
-++++ b/modules/crypt.cpp
-+@@ -68,7 +68,8 @@ class CCryptMod : public CModule {
-+     CString m_sPrivKey;
-+     CString m_sPubKey;
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0X10100000L || defined(LIBRESSL_VERSION_NUMBER)
-++#if OPENSSL_VERSION_NUMBER < 0X10100000L || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x02070000fL)
-+     static int DH_set0_pqg(DH* dh, BIGNUM* p, BIGNUM* q, BIGNUM* g) {
-+         /* If the fields p and g in dh are nullptr, the corresponding input
-+          * parameters MUST be non-nullptr.  q may remain nullptr.
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index e5fdfcfc8e..e8ffe00d73 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -26,8 +26,8 @@ LIBGCRYPT_CONF_OPTS += --disable-asm
+ endif
+ 
+ # Code doesn't build in thumb mode
+-ifeq ($(BR2_arm),y)
+-LIBGCRYPT_CONF_ENV += CFLAGS="$(patsubst -mthumb,,$(TARGET_CFLAGS))"
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++LIBGCRYPT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+ endif
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
