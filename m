@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE30BC6FD1D
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B06CAC74A5B
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 09:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 714514188B;
-	Fri, 17 Mar 2023 08:40:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 714514188B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1315C416E3;
+	Fri, 17 Mar 2023 09:17:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1315C416E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i41LLUbqCnVG; Fri, 17 Mar 2023 08:40:04 +0000 (UTC)
+	with ESMTP id dwS2s6UvFjXS; Fri, 17 Mar 2023 09:17:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C8D0418FD;
-	Fri, 17 Mar 2023 08:40:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C8D0418FD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CE6241620;
+	Fri, 17 Mar 2023 09:17:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CE6241620
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 193681BF97F
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:38:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E37E11BF2FE
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E326401BE
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E326401BE
+ by smtp4.osuosl.org (Postfix) with ESMTP id C663541620
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C663541620
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V71Jd6d68s34 for <buildroot@lists.busybox.net>;
- Fri, 17 Mar 2023 08:38:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A62154184E
- for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:38:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A62154184E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80606874F4; Fri, 17 Mar 2023 08:38:10 +0000 (UTC)
+ with ESMTP id vrXOCoH4Irgt for <buildroot@lists.busybox.net>;
+ Fri, 17 Mar 2023 09:17:24 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72DE241612
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 72DE241612
+ for <buildroot@buildroot.org>; Fri, 17 Mar 2023 09:17:24 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 29B1B240007;
+ Fri, 17 Mar 2023 09:17:21 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pd6DB-0052UR-4J; Fri, 17 Mar 2023 10:17:21 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 17 Mar 2023 09:33:50 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d9a6f6a6e8b7179fbeef2c7a7d7238c7e2ae20e6
-X-Git-Newrev: bef793ae124c1843d5bfaa697d17559e5e713d43
-X-Patchwork-Hint: ignore
-Message-Id: <20230317083810.80606874F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rsync: link with
- -latomic if needed
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230221135658.1489271-1-fontaine.fabrice@gmail.com>
+Date: Fri, 17 Mar 2023 10:17:21 +0100
+In-Reply-To: <20230221135658.1489271-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 21 Feb 2023 14:56:58 +0100")
+Message-ID: <87v8izybxa.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/nut: ensure time_t is defined
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,41 +63,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, "Yann
+ E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bef793ae124c1843d5bfaa697d17559e5e713d43
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/9eb9a92871622472b8f9eb3797aadd3651fc78a4/
+ > Ensure time_t is defined to fix the following collectd build failure on
+ > musl:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b9a062b354953f3fbfee702bb5b5007598299925)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rsync/rsync.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > src/nut.c:40:2: error: #error "Unable to determine the UPS connection type."
+ >    40 | #error "Unable to determine the UPS connection type."
+ >       |  ^~~~~
+ > src/nut.c:46:3: error: unknown type name 'collectd_upsconn_t'
+ >    46 |   collectd_upsconn_t *conn;
+ >       |   ^~~~~~~~~~~~~~~~~~
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 9dd66aeb8c..22584f6039 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -24,6 +24,10 @@ RSYNC_CONF_OPTS = \
- 	--disable-lz4 \
- 	--disable-md5-asm
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+RSYNC_CONF_ENV += LIBS=-latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_ACL),y)
- RSYNC_DEPENDENCIES += acl
- else
+ > libupsclient is an optional dependency of nut plugin since version
+ > 5.10.0 of collectd and
+ > https://github.com/collectd/collectd/commit/bc2d94024d0250211c1e498db1b43bb4525324da
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/22b758097e8fb72c68e41329cbc7abc748d81ca6
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
