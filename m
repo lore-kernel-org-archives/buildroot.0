@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6D30C6FD1D
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 09:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36CB0C74A5B
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 09:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BDB7402A7;
-	Fri, 17 Mar 2023 09:20:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BDB7402A7
+	by smtp4.osuosl.org (Postfix) with ESMTP id B93DE416E3;
+	Fri, 17 Mar 2023 09:20:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B93DE416E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gs22untawDc5; Fri, 17 Mar 2023 09:20:27 +0000 (UTC)
+	with ESMTP id VG0aowf2V6kq; Fri, 17 Mar 2023 09:20:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59E0D4033D;
-	Fri, 17 Mar 2023 09:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59E0D4033D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95E774033D;
+	Fri, 17 Mar 2023 09:20:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95E774033D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 032771BF2FE
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:20:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A48281BF2FE
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D106E81FA0
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:20:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D106E81FA0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7EC0D8219C
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:20:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EC0D8219C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pv-vdMtF4G7s for <buildroot@lists.busybox.net>;
- Fri, 17 Mar 2023 09:20:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5CA981EC8
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D5CA981EC8
- for <buildroot@buildroot.org>; Fri, 17 Mar 2023 09:20:23 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9CDE520013;
- Fri, 17 Mar 2023 09:20:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pd6G4-0052dM-KL; Fri, 17 Mar 2023 10:20:20 +0100
+ with ESMTP id dZoXU8XIx_Bo for <buildroot@lists.busybox.net>;
+ Fri, 17 Mar 2023 09:20:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA10D81FE2
+ for <buildroot@buildroot.org>; Fri, 17 Mar 2023 09:20:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA10D81FE2
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A9EF5874FA; Fri, 17 Mar 2023 09:20:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230312144516.1949734-1-peter@korsgaard.com>
-Date: Fri, 17 Mar 2023 10:20:20 +0100
-In-Reply-To: <20230312144516.1949734-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 12 Mar 2023 15:45:15 +0100")
-Message-ID: <87r0tnybsb.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.19.7
+Date: Fri, 17 Mar 2023 09:53:38 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 75693dbdd01a3a9fbb486b1603edee9e054ad640
+X-Git-Newrev: 5ca621375ab5885ad3de1dfa6d88bbcd19bce0e5
+X-Patchwork-Hint: ignore
+Message-Id: <20230317092052.A9EF5874FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/nut: ensure
+ time_t is defined
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +57,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5ca621375ab5885ad3de1dfa6d88bbcd19bce0e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > go1.19.7 (released 2023-03-07) includes a security fix to the
- > crypto/elliptic package, as well as bug fixes to the linker, the runtime,
- > and the crypto/x509 and syscall packages.
+Ensure time_t is defined to fix the following collectd build failure on
+musl:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+src/nut.c:40:2: error: #error "Unable to determine the UPS connection type."
+   40 | #error "Unable to determine the UPS connection type."
+      |  ^~~~~
+src/nut.c:46:3: error: unknown type name 'collectd_upsconn_t'
+   46 |   collectd_upsconn_t *conn;
+      |   ^~~~~~~~~~~~~~~~~~
 
-Committed to 2022.11.x, thanks.
+libupsclient is an optional dependency of nut plugin since version
+5.10.0 of collectd and
+https://github.com/collectd/collectd/commit/bc2d94024d0250211c1e498db1b43bb4525324da
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+ - http://autobuild.buildroot.org/results/22b758097e8fb72c68e41329cbc7abc748d81ca6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 02c8901791d8d65094ecf56d9773babe74dd1845)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ents-upsclient-h-ensure-time_t-is-defined.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/package/nut/0001-clients-upsclient-h-ensure-time_t-is-defined.patch b/package/nut/0001-clients-upsclient-h-ensure-time_t-is-defined.patch
+new file mode 100644
+index 0000000000..c9fb04b8cd
+--- /dev/null
++++ b/package/nut/0001-clients-upsclient-h-ensure-time_t-is-defined.patch
+@@ -0,0 +1,35 @@
++From cafd77993ec5e16634b774b65bf6da9b34a21fc5 Mon Sep 17 00:00:00 2001
++From: Jim Klimov <jimklimov+nut@gmail.com>
++Date: Wed, 31 Aug 2022 11:24:19 +0200
++Subject: [PATCH] clients/upsclient.h: ensure time_t is defined
++
++[Retrieved from:
++https://github.com/networkupstools/nut/commit/cafd77993ec5e16634b774b65bf6da9b34a21fc5]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ clients/upsclient.h | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/clients/upsclient.h b/clients/upsclient.h
++index 08574b8f8b..e346d8f519 100644
++--- a/clients/upsclient.h
+++++ b/clients/upsclient.h
++@@ -41,6 +41,18 @@
++ 	#include <limits.h>
++ #endif
++ 
+++/* Not including NUT timehead.h because this is part of end-user API */
+++#ifdef TIME_WITH_SYS_TIME
+++# include <sys/time.h>
+++# include <time.h>
+++#else
+++# ifdef HAVE_SYS_TIME_H
+++#  include <sys/time.h>
+++# else
+++#  include <time.h>
+++# endif
+++#endif
+++
++ #ifdef __cplusplus
++ /* *INDENT-OFF* */
++ extern "C" {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
