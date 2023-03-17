@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8AE7C74A5B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E2BC7618A
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:37:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B9FF416D8;
-	Fri, 17 Mar 2023 08:36:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B9FF416D8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CE70416E5;
+	Fri, 17 Mar 2023 08:37:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CE70416E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6sXYFH24qAFS; Fri, 17 Mar 2023 08:36:51 +0000 (UTC)
+	with ESMTP id pcoNK3Fz-Y4O; Fri, 17 Mar 2023 08:37:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62092416CE;
-	Fri, 17 Mar 2023 08:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62092416CE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 022B41BF97F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10B91416CE;
+	Fri, 17 Mar 2023 08:37:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B91416CE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 05DBE1BF982
  for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D00888213E
+ by smtp2.osuosl.org (Postfix) with ESMTP id E234A408BB
  for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D00888213E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E234A408BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lIO0YtE6vDrs for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ui2NSzohd8VS for <buildroot@lists.busybox.net>;
  Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 005FC82139
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09688408BA
  for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:36:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 005FC82139
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09688408BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE9E2874D1; Fri, 17 Mar 2023 08:36:32 +0000 (UTC)
+ id EC1C48747A; Fri, 17 Mar 2023 08:36:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Mar 2023 09:27:11 +0100
+Date: Fri, 17 Mar 2023 09:29:24 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 5d4b9bcf08cea85460fdc839a9786e3693f1def7
-X-Git-Newrev: 770c8f80adc3aa45c42a30c4bd3cdf79d05ec212
+X-Git-Oldrev: 770c8f80adc3aa45c42a30c4bd3cdf79d05ec212
+X-Git-Newrev: babb3aca01e0c24149a240a5c4705e3198670fc6
 X-Patchwork-Hint: ignore
-Message-Id: <20230317083632.DE9E2874D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/s6-linux-utils:
- fix build with glibc < 2.25
+Message-Id: <20230317083632.EC1C48747A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/ace: fix build
+ with libressl >= 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,72 +63,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=770c8f80adc3aa45c42a30c4bd3cdf79d05ec212
+commit: https://git.buildroot.net/buildroot/commit/?id=babb3aca01e0c24149a240a5c4705e3198670fc6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Fix the following build failure with glibc < 2.25 raised since bump to
-version 2.6.0.0 in commit 5aac1d0105a73133fd886acc6c5195ca28f7e17f and
-https://github.com/skarnet/s6-linux-utils/commit/ad5973028c42d947440cdae5e4f106152c3dda28:
+Fix the following build failure with libressl raised since bump to
+version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 
-src/minutils/rngseed.c:15:24: fatal error: sys/random.h: No such file or directory
- #include <sys/random.h>
-                        ^
+/tmp/instance-17/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:45:19: error: variable 'BIO_METHOD methods_ACE' has initializer but incomplete type
+   45 | static BIO_METHOD methods_ACE =
+      |                   ^~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/214bcecfc389cb412b68627c831300478d614a3a
+ - http://autobuild.buildroot.org/results/7f40d6dde03134238151c248fbbd66e4713546cb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 863811974e04b3332c4959c07a20e3e97050835c)
+(cherry picked from commit 4ec39bad8062878cebd6dc95b712e33209b4e585)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...inux-utils-rngseed.c-fix-build-with-glibc.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ ...-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/package/s6-linux-utils/0001-src-s6-linux-utils-rngseed.c-fix-build-with-glibc.patch b/package/s6-linux-utils/0001-src-s6-linux-utils-rngseed.c-fix-build-with-glibc.patch
+diff --git a/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch b/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
 new file mode 100644
-index 0000000000..2df8a99700
+index 0000000000..4f9fde5579
 --- /dev/null
-+++ b/package/s6-linux-utils/0001-src-s6-linux-utils-rngseed.c-fix-build-with-glibc.patch
-@@ -0,0 +1,39 @@
-+From 3ab8bdc1c657f91a2a96f4e6db308d17098de0c4 Mon Sep 17 00:00:00 2001
++++ b/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+@@ -0,0 +1,56 @@
++From 82b139f921ddb549c1bd236030bbc86e314852b3 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 23 Feb 2023 12:09:11 +0100
-+Subject: [PATCH] src/s6-linux-utils/rngseed.c: fix build with glibc <
++Date: Tue, 21 Feb 2023 14:20:11 +0100
++Subject: [PATCH] ACE/ace/SSL/SSL_Asynch_BIO.cpp: fix build with libressl >=
++ 3.5.0
 +
-+getrandom and sys/random.h are only available since glibc 2.25 resulting
-+in the following build failure since version 2.6.0.0 and
-+https://github.com/skarnet/s6-linux-utils/commit/ad5973028c42d947440cdae5e4f106152c3dda28:
++Fix the following build failure with libressl >= 3.5.0:
 +
-+src/minutils/rngseed.c:15:24: fatal error: sys/random.h: No such file or directory
-+ #include <sys/random.h>
-+                        ^
++/tmp/instance-17/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:45:19: error: variable 'BIO_METHOD methods_ACE' has initializer but incomplete type
++   45 | static BIO_METHOD methods_ACE =
++      |                   ^~~~~~~~~~~
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/214bcecfc389cb412b68627c831300478d614a3a
++ - http://autobuild.buildroot.org/results/7f40d6dde03134238151c248fbbd66e4713546cb
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/skarnet/s6-linux-utils/pull/2]
++[Upstream status: https://github.com/DOCGroup/ACE_TAO/pull/2053]
 +---
-+ src/s6-linux-utils/rngseed.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++ ACE/ace/SSL/SSL_Asynch_BIO.cpp | 8 +++++---
++ 1 file changed, 5 insertions(+), 3 deletions(-)
 +
-+diff --git a/src/minutils/rngseed.c b/src/minutils/rngseed.c
-+index 2b1772c..223f50a 100644
-+--- a/src/minutils/rngseed.c
-++++ b/src/minutils/rngseed.c
-+@@ -12,7 +12,9 @@
-+ #include <unistd.h>
-+ #include <sys/stat.h>
-+ #include <sys/ioctl.h>
-++#ifdef SKALIBS_HASGETRANDOM
-+ #include <sys/random.h>
-++#endif
-+ #include <linux/random.h>
++diff --git a/ace/SSL/SSL_Asynch_BIO.cpp b/ace/SSL/SSL_Asynch_BIO.cpp
++index 0faa775fc0..5543598873 100644
++--- a/ace/SSL/SSL_Asynch_BIO.cpp
+++++ b/ace/SSL/SSL_Asynch_BIO.cpp
++@@ -41,7 +41,8 @@ extern "C"
 + 
-+ #include <skalibs/types.h>
++ #define BIO_TYPE_ACE  ( 21 | BIO_TYPE_SOURCE_SINK )
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+++	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
++ static BIO_METHOD methods_ACE =
++   {
++     BIO_TYPE_ACE, // BIO_TYPE_PROXY_SERVER,
++@@ -68,14 +69,15 @@ static BIO_METHOD methods_ACE =
++ #else
++ static BIO_METHOD* methods_ACE;
++ # define BIO_set_num(b, val)
++-#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER) */
+++#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L) */
++ 
++ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
++ 
++ BIO *
++ ACE_SSL_make_BIO (void * ssl_asynch_stream)
++ {
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+++	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
++   BIO * const pBIO = BIO_new (&methods_ACE);
++ #else
++   if (!methods_ACE)
 +-- 
-+2.39.1
++2.39.0
 +
 _______________________________________________
 buildroot mailing list
