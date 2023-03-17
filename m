@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B06CAC74A5B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 09:17:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6D30C6FD1D
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 09:20:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1315C416E3;
-	Fri, 17 Mar 2023 09:17:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1315C416E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BDB7402A7;
+	Fri, 17 Mar 2023 09:20:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BDB7402A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dwS2s6UvFjXS; Fri, 17 Mar 2023 09:17:28 +0000 (UTC)
+	with ESMTP id Gs22untawDc5; Fri, 17 Mar 2023 09:20:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CE6241620;
-	Fri, 17 Mar 2023 09:17:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CE6241620
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E37E11BF2FE
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:17:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59E0D4033D;
+	Fri, 17 Mar 2023 09:20:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59E0D4033D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 032771BF2FE
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:20:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C663541620
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:17:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C663541620
+ by smtp1.osuosl.org (Postfix) with ESMTP id D106E81FA0
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:20:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D106E81FA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vrXOCoH4Irgt for <buildroot@lists.busybox.net>;
- Fri, 17 Mar 2023 09:17:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pv-vdMtF4G7s for <buildroot@lists.busybox.net>;
+ Fri, 17 Mar 2023 09:20:24 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72DE241612
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 72DE241612
- for <buildroot@buildroot.org>; Fri, 17 Mar 2023 09:17:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5CA981EC8
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D5CA981EC8
+ for <buildroot@buildroot.org>; Fri, 17 Mar 2023 09:20:23 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 29B1B240007;
- Fri, 17 Mar 2023 09:17:21 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9CDE520013;
+ Fri, 17 Mar 2023 09:20:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pd6DB-0052UR-4J; Fri, 17 Mar 2023 10:17:21 +0100
+ id 1pd6G4-0052dM-KL; Fri, 17 Mar 2023 10:20:20 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230221135658.1489271-1-fontaine.fabrice@gmail.com>
-Date: Fri, 17 Mar 2023 10:17:21 +0100
-In-Reply-To: <20230221135658.1489271-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 21 Feb 2023 14:56:58 +0100")
-Message-ID: <87v8izybxa.fsf@dell.be.48ers.dk>
+To: buildroot@buildroot.org
+References: <20230312144516.1949734-1-peter@korsgaard.com>
+Date: Fri, 17 Mar 2023 10:20:20 +0100
+In-Reply-To: <20230312144516.1949734-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 12 Mar 2023 15:45:15 +0100")
+Message-ID: <87r0tnybsb.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/nut: ensure time_t is defined
+Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.19.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, "Yann
- E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Anisse Astier <anisse@astier.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Ensure time_t is defined to fix the following collectd build failure on
- > musl:
+ > go1.19.7 (released 2023-03-07) includes a security fix to the
+ > crypto/elliptic package, as well as bug fixes to the linker, the runtime,
+ > and the crypto/x509 and syscall packages.
 
- > src/nut.c:40:2: error: #error "Unable to determine the UPS connection type."
- >    40 | #error "Unable to determine the UPS connection type."
- >       |  ^~~~~
- > src/nut.c:46:3: error: unknown type name 'collectd_upsconn_t'
- >    46 |   collectd_upsconn_t *conn;
- >       |   ^~~~~~~~~~~~~~~~~~
-
- > libupsclient is an optional dependency of nut plugin since version
- > 5.10.0 of collectd and
- > https://github.com/collectd/collectd/commit/bc2d94024d0250211c1e498db1b43bb4525324da
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/22b758097e8fb72c68e41329cbc7abc748d81ca6
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2022.11.x, thanks.
 
