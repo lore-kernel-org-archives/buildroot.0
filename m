@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B587C74A5B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 09:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F41D3C6FD1D
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 09:55:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A9144241E;
-	Fri, 17 Mar 2023 09:55:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A9144241E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D5EC42408;
+	Fri, 17 Mar 2023 09:55:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D5EC42408
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C_W1XlCiBSL1; Fri, 17 Mar 2023 09:55:09 +0000 (UTC)
+	with ESMTP id g53i21OBPotM; Fri, 17 Mar 2023 09:55:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8559642463;
-	Fri, 17 Mar 2023 09:55:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8559642463
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4BF461BF2FE
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:55:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA6F44240C;
+	Fri, 17 Mar 2023 09:55:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA6F44240C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B634B1BF2FE
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2571D6131A
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:55:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2571D6131A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90B514240C
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 09:55:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90B514240C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HGWdPNIKs2I2 for <buildroot@lists.busybox.net>;
- Fri, 17 Mar 2023 09:55:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3ciS4Ya3lvFX for <buildroot@lists.busybox.net>;
+ Fri, 17 Mar 2023 09:55:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79FA860F82
- for <buildroot@uclibc.org>; Fri, 17 Mar 2023 09:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79FA860F82
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9EF740002
+ for <buildroot@uclibc.org>; Fri, 17 Mar 2023 09:55:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9EF740002
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 69D2C873FD; Fri, 17 Mar 2023 09:55:04 +0000 (UTC)
+ id D6F98873FD; Fri, 17 Mar 2023 09:55:55 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 17 Mar 2023 09:55:04 +0000
+Date: Fri, 17 Mar 2023 09:55:55 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -54,8 +54,8 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.ispatch
-Message-ID: <bug-15401-163-KwimrJQLz1@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-15401-163-CU7fbNdBfV@https.bugs.busybox.net/>
 In-Reply-To: <bug-15401-163@https.bugs.busybox.net/>
 References: <bug-15401-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,12 +81,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15401
 
-alban.at.ifd@gmail.com changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #9531|1                           |0
-           is patch|                            |
+--- Comment #1 from alban.at.ifd@gmail.com ---
+Created attachment 9536
+  --> https://bugs.busybox.net/attachment.cgi?id=9536&action=edit
+Possible workaround
 
 -- 
 You are receiving this mail because:
