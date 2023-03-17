@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 567BDC74A5B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81899C74A5B
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED957416CA;
-	Fri, 17 Mar 2023 08:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED957416CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2450440134;
+	Fri, 17 Mar 2023 08:38:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2450440134
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G3ZtpYkldOLQ; Fri, 17 Mar 2023 08:37:59 +0000 (UTC)
+	with ESMTP id AO4Zmg0XcY9e; Fri, 17 Mar 2023 08:38:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C375541528;
-	Fri, 17 Mar 2023 08:37:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C375541528
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 85A1B1BF276
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA05540184;
+	Fri, 17 Mar 2023 08:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA05540184
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C8461BF97F
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2439341528
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1EC5C40002
  for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2439341528
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EC5C40002
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BF06M3LJb0hQ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ULAMoDufgFal for <buildroot@lists.busybox.net>;
  Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 161B641578
+ by smtp2.osuosl.org (Postfix) with ESMTP id 298E642269
  for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 161B641578
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 298E642269
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03B61874D4; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
+ id 26CFA874D2; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Mar 2023 09:30:16 +0100
+Date: Fri, 17 Mar 2023 09:35:00 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: babb3aca01e0c24149a240a5c4705e3198670fc6
-X-Git-Newrev: 0e760462d8de2c6273e3a96f2241ac48e243b015
+X-Git-Oldrev: 377d8d632838a19140d1cc370b09a7d119b337e7
+X-Git-Newrev: 75693dbdd01a3a9fbb486b1603edee9e054ad640
 X-Patchwork-Hint: ignore
-Message-Id: <20230317083633.03B61874D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- support/dependencies/dependencies.sh: require FileHandle perl package for
- ace
+Message-Id: <20230317083633.26CFA874D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/uqmi: update
+ patch for fix compile error (gcc false error reporting)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +58,113 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8817229680687470094=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e760462d8de2c6273e3a96f2241ac48e243b015
+--===============8817229680687470094==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=75693dbdd01a3a9fbb486b1603edee9e054ad640
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-ace needs FileHandle module:
-
-Can't locate FileHandle.pm in @INC (you may need to install the FileHandle module) (@INC contains: /home/buildroot/autobuild/instance-0/output-1/host/lib/perl /usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5) at /home/buildroot/autobuild/instance-0/output-1/build/ace-7.0.6/MPC/prj_install.pl line 17.
-BEGIN failed--compilation aborted at /home/buildroot/autobuild/instance-0/output-1/build/ace-7.0.6/MPC/prj_install.pl line 17.
+Update the patch to to avoid gcc false error reporting (apply pragma ignored
+only for gcc >= 12.x (as the warning '-Wdangling-pointer' was introduced
+with gcc-12.x).
 
 Fixes:
- - http://autobuild.buildroot.org/results/9dee7c09fd7b41d276df0285a0f3dcae1a71f041
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  - http://autobuild.buildroot.net/results/df380f921b74527b77290a658de0c57680083afa
+
+  .../build/uqmi-0a19b5b77140465c29e2afa7d611fe93abc9672f/dev.c:213:32: error: unknown option after '#pragma GCC diagnostic' kind [-Werror=pragmas]
+    213 | #pragma GCC diagnostic ignored "-Wdangling-pointer"
+        |                                ^~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1c89f36821b8b37143efcd53558c9fda24788808)
+(cherry picked from commit 6219046db6a434d549706e039f221c46464cee21)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...cc-12.x-false-error-reporting-storing-th.patch} | 23 ++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index b99dca1294..f421d9bb8e 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -311,7 +311,7 @@ if grep -q -E '^BR2_PACKAGE_(WEBKITGTK|WPEWEBKIT)=y' $BR2_CONFIG ; then
-     required_perl_modules="${required_perl_modules} JSON::PP"
- fi
+diff --git a/package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch b/package/uqmi/0001-uqmi-avoid-gcc-12.x-false-error-reporting-storing-th.patch
+similarity index 71%
+rename from package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch
+rename to package/uqmi/0001-uqmi-avoid-gcc-12.x-false-error-reporting-storing-th.patch
+index c940925767..e2199228b9 100644
+--- a/package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch
++++ b/package/uqmi/0001-uqmi-avoid-gcc-12.x-false-error-reporting-storing-th.patch
+@@ -1,10 +1,10 @@
+-From 4c2eb926efb4de24af5a3b1e8c18195198827491 Mon Sep 17 00:00:00 2001
++From 63ab887be90c7fe37d537ea75e60eb95d6d87d3f Mon Sep 17 00:00:00 2001
+ From: Peter Seiderer <ps.report@gmx.net>
+ Date: Sun, 5 Mar 2023 22:08:13 +0100
+-Subject: [PATCH] uqmi: avoid gcc false error reporting (storing the address of
+- local variable 'complete' in '*req.complete')
++Subject: [PATCH] uqmi: avoid gcc-12.x false error reporting (storing the
++ address of local variable 'complete' in '*req.complete')
  
--if grep -q ^BR2_TARGET_SYSLINUX=y $BR2_CONFIG ; then
-+if grep -q -E '^BR2_(PACKAGE_ACE|TARGET_SYSLINUX)=y' $BR2_CONFIG ; then
-     required_perl_modules="$required_perl_modules FileHandle"
- fi
+-Avoid gcc false error reporting (req->complete is later reset to NULL
++Avoid gcc-12.x false error reporting (req->complete is later reset to NULL
+ in case of use of local complete):
  
+   dev.c:217:23: error: storing the address of local variable 'complete' in '*req.complete' [-Werror=dangling-pointer=]
+@@ -12,27 +12,30 @@ in case of use of local complete):
+         |         ~~~~~~~~~~~~~~^~~~~~~~~~~
+ 
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-
+-[Upstream: http://lists.openwrt.org/pipermail/openwrt-devel/2023-March/040633.html]
++[Upstream: http://lists.openwrt.org/pipermail/openwrt-devel/2023-March/040667.html]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++Changes v1 -> v2:
++  - apply pragma ignored only for gcc >= 12.x (as the warning
++    '-Wdangling-pointer' was introduced with gcc-12.x)
+ ---
+  dev.c | 12 ++++++++++++
+  1 file changed, 12 insertions(+)
+ 
+ diff --git a/dev.c b/dev.c
+-index bd10207..b8ac273 100644
++index bd10207..dbd42d4 100644
+ --- a/dev.c
+ +++ b/dev.c
+ @@ -203,6 +203,15 @@ void qmi_request_cancel(struct qmi_dev *qmi, struct qmi_request *req)
+  	__qmi_request_complete(qmi, req, NULL);
+  }
+  
+-+/* avoid gcc false error reporting:
+++/* avoid gcc-12.x false error reporting:
+ + *   dev.c:217:23: error: storing the address of local variable ‘complete’ in ‘*req.complete’ [-Werror=dangling-pointer=]
+ + *     217 |         req->complete = &complete;
+ + *         |         ~~~~~~~~~~~~~~^~~~~~~~~~~
+ + */
+-+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+++#if __GNUC__ >= 12
+ +#pragma GCC diagnostic push
+ +#pragma GCC diagnostic ignored "-Wdangling-pointer"
+ +#endif
+@@ -43,7 +46,7 @@ index bd10207..b8ac273 100644
+  
+  	return req->ret;
+  }
+-+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+++#if __GNUC__ >= 12
+ +#pragma GCC diagnostic pop
+ +#endif
+  
+
+--===============8817229680687470094==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8817229680687470094==--
