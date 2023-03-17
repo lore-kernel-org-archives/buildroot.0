@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F14A0C74A5B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DC2FC7618A
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86579415D3;
-	Fri, 17 Mar 2023 08:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86579415D3
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF03241578;
+	Fri, 17 Mar 2023 08:36:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF03241578
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MJMOF5UxkllL; Fri, 17 Mar 2023 08:35:46 +0000 (UTC)
+	with ESMTP id zc0ZiYUaDLbF; Fri, 17 Mar 2023 08:36:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80BF341568;
-	Fri, 17 Mar 2023 08:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80BF341568
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3BA5A1BF276
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:35:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8721415D3;
+	Fri, 17 Mar 2023 08:36:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8721415D3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ED29A1BF276
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14F5F6131A
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:35:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14F5F6131A
+ by smtp2.osuosl.org (Postfix) with ESMTP id C5D86423BA
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5D86423BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rMQsKlea3NMl for <buildroot@lists.busybox.net>;
- Fri, 17 Mar 2023 08:35:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC21860F49
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BC21860F49
- for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:35:38 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4D76624000E;
- Fri, 17 Mar 2023 08:35:36 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pd5Yl-003bKl-Dx; Fri, 17 Mar 2023 09:35:35 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VhM94HNoIsMd for <buildroot@lists.busybox.net>;
+ Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 206DD408BB
+ for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 206DD408BB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0D8F1874D3; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20230311120925.9147-1-ps.report@gmx.net>
-Date: Fri, 17 Mar 2023 09:35:35 +0100
-In-Reply-To: <20230311120925.9147-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sat, 11 Mar 2023 13:09:25 +0100")
-Message-ID: <87zg8byduw.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/uqmi: update patch for fix
- compile error (gcc false error reporting)
+To: buildroot@buildroot.org
+Date: Fri, 17 Mar 2023 09:31:29 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 0e760462d8de2c6273e3a96f2241ac48e243b015
+X-Git-Newrev: 7be1347a59583ab2c24ad7dc8e0a5e10070a898e
+X-Patchwork-Hint: ignore
+Message-Id: <20230317083633.0D8F1874D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/rsync: link with
+ -latomic if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,32 +57,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7be1347a59583ab2c24ad7dc8e0a5e10070a898e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > Update the patch to to avoid gcc false error reporting (apply pragma ignored
- > only for gcc >= 12.x (as the warning '-Wdangling-pointer' was introduced
- > with gcc-12.x).
+Fixes:
+http://autobuild.buildroot.net/results/9eb9a92871622472b8f9eb3797aadd3651fc78a4/
 
- > Fixes:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b9a062b354953f3fbfee702bb5b5007598299925)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rsync/rsync.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- >   - http://autobuild.buildroot.net/results/df380f921b74527b77290a658de0c57680083afa
-
- >   .../build/uqmi-0a19b5b77140465c29e2afa7d611fe93abc9672f/dev.c:213:32: error: unknown option after '#pragma GCC diagnostic' kind [-Werror=pragmas]
- >     213 | #pragma GCC diagnostic ignored "-Wdangling-pointer"
- >         |                                ^~~~~~~~~~~~~~~~~~~~
-
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Committed to 2022.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 8c7ad462ac..7a01b2a48f 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -24,6 +24,10 @@ RSYNC_CONF_OPTS = \
+ 	--disable-lz4 \
+ 	--disable-md5-asm
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++RSYNC_CONF_ENV += LIBS=-latomic
++endif
++
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ RSYNC_DEPENDENCIES += acl
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
