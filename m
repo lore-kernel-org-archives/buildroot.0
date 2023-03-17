@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81899C74A5B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A84AC74A5B
+	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 08:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2450440134;
-	Fri, 17 Mar 2023 08:38:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2450440134
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EE1140362;
+	Fri, 17 Mar 2023 08:38:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EE1140362
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AO4Zmg0XcY9e; Fri, 17 Mar 2023 08:38:14 +0000 (UTC)
+	with ESMTP id kkSZK-TqvrBL; Fri, 17 Mar 2023 08:38:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA05540184;
-	Fri, 17 Mar 2023 08:38:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA05540184
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4C8461BF97F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 881E0410C5;
+	Fri, 17 Mar 2023 08:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 881E0410C5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 125411BF276
  for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1EC5C40002
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EC5C40002
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CC76416B1
+ for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 08:36:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CC76416B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ULAMoDufgFal for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AnR2-2i20g6E for <buildroot@lists.busybox.net>;
  Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 298E642269
- for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 298E642269
+ by smtp4.osuosl.org (Postfix) with ESMTP id E362841568
+ for <buildroot@buildroot.org>; Fri, 17 Mar 2023 08:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E362841568
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26CFA874D2; Fri, 17 Mar 2023 08:36:33 +0000 (UTC)
+ id D0811874D3; Fri, 17 Mar 2023 08:36:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Mar 2023 09:35:00 +0100
+Date: Fri, 17 Mar 2023 09:26:12 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 377d8d632838a19140d1cc370b09a7d119b337e7
-X-Git-Newrev: 75693dbdd01a3a9fbb486b1603edee9e054ad640
+X-Git-Oldrev: 2e0122dd4d832c2e10f87ec726259fbde1082684
+X-Git-Newrev: 5d4b9bcf08cea85460fdc839a9786e3693f1def7
 X-Patchwork-Hint: ignore
-Message-Id: <20230317083633.26CFA874D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/uqmi: update
- patch for fix compile error (gcc false error reporting)
+Message-Id: <20230317083632.D0811874D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/znc: Fix build
+ with LibreSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,113 +58,171 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8817229680687470094=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8817229680687470094==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=75693dbdd01a3a9fbb486b1603edee9e054ad640
+commit: https://git.buildroot.net/buildroot/commit/?id=5d4b9bcf08cea85460fdc839a9786e3693f1def7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Update the patch to to avoid gcc false error reporting (apply pragma ignored
-only for gcc >= 12.x (as the warning '-Wdangling-pointer' was introduced
-with gcc-12.x).
-
 Fixes:
+http://autobuild.buildroot.net/results/3fe/3fec5c3a21af47b5f4e8adcaf4ce1fff5070e00a/
 
-  - http://autobuild.buildroot.net/results/df380f921b74527b77290a658de0c57680083afa
-
-  .../build/uqmi-0a19b5b77140465c29e2afa7d611fe93abc9672f/dev.c:213:32: error: unknown option after '#pragma GCC diagnostic' kind [-Werror=pragmas]
-    213 | #pragma GCC diagnostic ignored "-Wdangling-pointer"
-        |                                ^~~~~~~~~~~~~~~~~~~~
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6219046db6a434d549706e039f221c46464cee21)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit dfc3b05c05c8fa1a86affdd0a42fa4f6a0bf0171)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...cc-12.x-false-error-reporting-storing-th.patch} | 23 ++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ .../znc/0001-LibreSSL-3.5-opaqued-structures.patch | 27 +++++++++
+ package/znc/0002-Fix-build-with-libressl.patch     | 68 ++++++++++++++++++++++
+ ...-and-DH_get0_key-have-existed-since-Libre.patch | 30 ++++++++++
+ 3 files changed, 125 insertions(+)
 
-diff --git a/package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch b/package/uqmi/0001-uqmi-avoid-gcc-12.x-false-error-reporting-storing-th.patch
-similarity index 71%
-rename from package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch
-rename to package/uqmi/0001-uqmi-avoid-gcc-12.x-false-error-reporting-storing-th.patch
-index c940925767..e2199228b9 100644
---- a/package/uqmi/0001-uqmi-avoid-gcc-false-error-reporting-storing-the-add.patch
-+++ b/package/uqmi/0001-uqmi-avoid-gcc-12.x-false-error-reporting-storing-th.patch
-@@ -1,10 +1,10 @@
--From 4c2eb926efb4de24af5a3b1e8c18195198827491 Mon Sep 17 00:00:00 2001
-+From 63ab887be90c7fe37d537ea75e60eb95d6d87d3f Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Sun, 5 Mar 2023 22:08:13 +0100
--Subject: [PATCH] uqmi: avoid gcc false error reporting (storing the address of
-- local variable 'complete' in '*req.complete')
-+Subject: [PATCH] uqmi: avoid gcc-12.x false error reporting (storing the
-+ address of local variable 'complete' in '*req.complete')
- 
--Avoid gcc false error reporting (req->complete is later reset to NULL
-+Avoid gcc-12.x false error reporting (req->complete is later reset to NULL
- in case of use of local complete):
- 
-   dev.c:217:23: error: storing the address of local variable 'complete' in '*req.complete' [-Werror=dangling-pointer=]
-@@ -12,27 +12,30 @@ in case of use of local complete):
-         |         ~~~~~~~~~~~~~~^~~~~~~~~~~
- 
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
--
--[Upstream: http://lists.openwrt.org/pipermail/openwrt-devel/2023-March/040633.html]
-+[Upstream: http://lists.openwrt.org/pipermail/openwrt-devel/2023-March/040667.html]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+diff --git a/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch b/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
+new file mode 100644
+index 0000000000..d0019e21a4
+--- /dev/null
++++ b/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
+@@ -0,0 +1,27 @@
++From 87f3dac8ba8dea5628b05416bdef454b4ef2d236 Mon Sep 17 00:00:00 2001
++From: Charlie Li <git@vishwin.info>
++Date: Mon, 14 Mar 2022 17:36:36 -0400
++Subject: [PATCH] LibreSSL 3.5 opaqued structures
++
++Downloaded from upstream commit
++https://github.com/znc/Csocket/commit/87f3dac8ba8dea5628b05416bdef454b4ef2d236
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(rebased for znc)
 +---
-+Changes v1 -> v2:
-+  - apply pragma ignored only for gcc >= 12.x (as the warning
-+    '-Wdangling-pointer' was introduced with gcc-12.x)
- ---
-  dev.c | 12 ++++++++++++
-  1 file changed, 12 insertions(+)
- 
- diff --git a/dev.c b/dev.c
--index bd10207..b8ac273 100644
-+index bd10207..dbd42d4 100644
- --- a/dev.c
- +++ b/dev.c
- @@ -203,6 +203,15 @@ void qmi_request_cancel(struct qmi_dev *qmi, struct qmi_request *req)
-  	__qmi_request_complete(qmi, req, NULL);
-  }
-  
--+/* avoid gcc false error reporting:
-++/* avoid gcc-12.x false error reporting:
- + *   dev.c:217:23: error: storing the address of local variable ‘complete’ in ‘*req.complete’ [-Werror=dangling-pointer=]
- + *     217 |         req->complete = &complete;
- + *         |         ~~~~~~~~~~~~~~^~~~~~~~~~~
- + */
--+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-++#if __GNUC__ >= 12
- +#pragma GCC diagnostic push
- +#pragma GCC diagnostic ignored "-Wdangling-pointer"
- +#endif
-@@ -43,7 +46,7 @@ index bd10207..b8ac273 100644
-  
-  	return req->ret;
-  }
--+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-++#if __GNUC__ >= 12
- +#pragma GCC diagnostic pop
- +#endif
-  
-
---===============8817229680687470094==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++ Csocket.cc | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Csocket.cc b/Csocket.cc
++index 46a3bfd..a30da14 100644
++--- a/third_party/Csocket/Csocket.cc
+++++ b/third_party/Csocket/Csocket.cc
++@@ -61,7 +61,7 @@
++ #  define OPENSSL_NO_TLS1_1            /* 1.0.1-pre~: openssl/openssl@637f374ad49d5f6d4f81d87d7cdd226428aa470c */
++ #  define OPENSSL_NO_TLS1_2            /* 1.0.1-pre~: openssl/openssl@7409d7ad517650db332ae528915a570e4e0ab88b */
++ # endif
++-# ifndef LIBRESSL_VERSION_NUMBER /* forked from OpenSSL 1.0.1g, sets high version "with the idea of discouraging software from relying on magic numbers for detecting features"(!) */
+++# if !defined(LIBRESSL_VERSION_NUMBER) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x03050000fL)
++ #  if OPENSSL_VERSION_NUMBER >= 0x10100000
++ #   undef HAVE_ERR_REMOVE_THREAD_STATE /* 1.1.0-pre4: openssl/openssl@8509dcc9f319190c565ab6baad7c88d37a951d1c */
++ #   undef OPENSSL_NO_SSL2              /* 1.1.0-pre4: openssl/openssl@e80381e1a3309f5d4a783bcaa508a90187a48882 */
+diff --git a/package/znc/0002-Fix-build-with-libressl.patch b/package/znc/0002-Fix-build-with-libressl.patch
+new file mode 100644
+index 0000000000..b8d22445fb
+--- /dev/null
++++ b/package/znc/0002-Fix-build-with-libressl.patch
+@@ -0,0 +1,68 @@
++From dcb5f3df82fcfec48aab356252067dc897fb98cf Mon Sep 17 00:00:00 2001
++From: Alexey Sokolov <alexey+znc@asokolov.org>
++Date: Sun, 14 Nov 2021 00:45:01 +0000
++Subject: [PATCH] Fix build with libressl
++
++It got another feature of openssl implemented, which broke this
++
++Downloaded from upstream commit
++https://github.com/znc/znc/commit/dcb5f3df82fcfec48aab356252067dc897fb98cf
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ CMakeLists.txt                   | 14 ++++++++++++++
++ include/znc/zncconfig.h.cmake.in |  1 +
++ modules/schat.cpp                |  3 +--
++ 3 files changed, 16 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0913ff2691..1f77f5632b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -82,6 +82,20 @@ endmacro()
++ tristate_option(OPENSSL "Support SSL")
++ if(WANT_OPENSSL)
++ 	find_package(OpenSSL ${TRISTATE_OPENSSL_REQUIRED})
+++
+++	if(OPENSSL_FOUND)
+++		# SSL_SESSION was made opaque in OpenSSL 1.1.0;
+++		# LibreSSL gained that function later too.
+++		# TODO: maybe remove this check at some point, and stop supporting old
+++		# libssl versions
+++		function(check_SSL_SESSION_get0_cipher)
+++			set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
+++			set(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
+++			check_cxx_symbol_exists(SSL_SESSION_get0_cipher openssl/ssl.h
+++				HAVE_SSL_SESSION_get0_cipher)
+++		endfunction()
+++		check_SSL_SESSION_get0_cipher()
+++	endif()
++ endif()
++ set(HAVE_LIBSSL "${OPENSSL_FOUND}")
++ 
++diff --git a/include/znc/zncconfig.h.cmake.in b/include/znc/zncconfig.h.cmake.in
++index 5426b828af..7b07b99aec 100644
++--- a/include/znc/zncconfig.h.cmake.in
+++++ b/include/znc/zncconfig.h.cmake.in
++@@ -31,6 +31,7 @@
++ #define HAVE_PTHREAD 1
++ #cmakedefine HAVE_THREADED_DNS 1
++ #cmakedefine HAVE_LIBSSL 1
+++#cmakedefine HAVE_SSL_SESSION_get0_cipher 1
++ #cmakedefine HAVE_IPV6 1
++ #cmakedefine HAVE_ZLIB 1
++ #cmakedefine HAVE_I18N 1
++diff --git a/modules/schat.cpp b/modules/schat.cpp
++index aa7a338dcd..66e67e695c 100644
++--- a/modules/schat.cpp
+++++ b/modules/schat.cpp
++@@ -25,8 +25,7 @@
++ #include <znc/User.h>
++ #include <znc/IRCNetwork.h>
++ 
++-#if !defined(OPENSSL_VERSION_NUMBER) || defined(LIBRESSL_VERSION_NUMBER) || \
++-    OPENSSL_VERSION_NUMBER < 0x10100007
+++#ifndef HAVE_SSL_SESSION_get0_cipher
++ /* SSL_SESSION was made opaque in OpenSSL 1.1.0, cipher accessor was added 2
++ weeks before the public release.
++ See openssl/openssl@e92813234318635639dba0168c7ef5568757449b. */
+diff --git a/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch b/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
+new file mode 100644
+index 0000000000..a2946643fc
+--- /dev/null
++++ b/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
+@@ -0,0 +1,30 @@
++From 7c8ac8981a8516edaba469641aff4d8ec452ae9e Mon Sep 17 00:00:00 2001
++From: Charlie Li <git@vishwin.info>
++Date: Mon, 14 Mar 2022 18:32:46 -0400
++Subject: [PATCH] DH_set0_pqg and DH_get0_key have existed since LibreSSL 2.7
++
++https://github.com/libressl-portable/openbsd/commit/848e2a019c796b685fc8c5848283b86e48fbe0bf
++https://github.com/libressl-portable/openbsd/commit/3789e379353c1d53313a249461b3d735de4ac742
++
++Downloaded from upstream commit
++https://github.com/znc/znc/commit/7c8ac8981a8516edaba469641aff4d8ec452ae9e
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ modules/crypt.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/modules/crypt.cpp b/modules/crypt.cpp
++index 7655371b6e..68f7aafcea 100644
++--- a/modules/crypt.cpp
+++++ b/modules/crypt.cpp
++@@ -68,7 +68,8 @@ class CCryptMod : public CModule {
++     CString m_sPrivKey;
++     CString m_sPubKey;
++ 
++-#if OPENSSL_VERSION_NUMBER < 0X10100000L || defined(LIBRESSL_VERSION_NUMBER)
+++#if OPENSSL_VERSION_NUMBER < 0X10100000L || \
+++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x02070000fL)
++     static int DH_set0_pqg(DH* dh, BIGNUM* p, BIGNUM* q, BIGNUM* g) {
++         /* If the fields p and g in dh are nullptr, the corresponding input
++          * parameters MUST be non-nullptr.  q may remain nullptr.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8817229680687470094==--
