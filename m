@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31EB2C74A5B
-	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 09:32:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E73EC74A5B
+	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 09:33:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA6CD4190B;
-	Sat, 18 Mar 2023 09:32:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA6CD4190B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 163FF408A1;
+	Sat, 18 Mar 2023 09:33:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 163FF408A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RDOi2Rot6nNH; Sat, 18 Mar 2023 09:32:46 +0000 (UTC)
+	with ESMTP id VaRo0nvr_Phx; Sat, 18 Mar 2023 09:33:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AB0741B62;
-	Sat, 18 Mar 2023 09:32:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AB0741B62
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A85A1BF865
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 09:32:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11E6B402C2;
+	Sat, 18 Mar 2023 09:33:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11E6B402C2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AE29F1BF3A3
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 09:33:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 734C941B10
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 09:32:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 734C941B10
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84FD482170
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 09:33:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84FD482170
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hw1xZ5qCc-mu for <buildroot@lists.busybox.net>;
- Sat, 18 Mar 2023 09:32:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nOGSrfzdqftT for <buildroot@lists.busybox.net>;
+ Sat, 18 Mar 2023 09:33:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 644A94192F
- for <buildroot@buildroot.org>; Sat, 18 Mar 2023 09:32:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 644A94192F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A41BB82164
+ for <buildroot@buildroot.org>; Sat, 18 Mar 2023 09:33:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A41BB82164
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5228986FA6; Sat, 18 Mar 2023 09:32:10 +0000 (UTC)
+ id 9444686FC3; Sat, 18 Mar 2023 09:33:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 18 Mar 2023 10:31:16 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7225efefa559ec5e8aa2cb98cc2474be8dee9106
-X-Git-Newrev: 499947acac5b6f1a565261c631406f0d420fab82
+Date: Sat, 18 Mar 2023 10:27:26 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 0fac4a91fb99abc7864567e1c67874442281a2be
+X-Git-Newrev: 141d359a105f3cacd0d1ec4878d7de3940d578c0
 X-Patchwork-Hint: ignore
-Message-Id: <20230318093210.5228986FA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libmodsecurity:
+Message-Id: <20230318093319.9444686FC3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/libmodsecurity:
  security bump to version 3.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=499947acac5b6f1a565261c631406f0d420fab82
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=141d359a105f3cacd0d1ec4878d7de3940d578c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.8
 https://coreruleset.org/20220919/crs-version-3-3-3-and-3-2-2-covering-several-cves/
