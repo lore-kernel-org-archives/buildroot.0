@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D32CC74A5B
-	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 21:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3349DC74A5B
+	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 21:42:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3AB981F5C;
-	Sat, 18 Mar 2023 21:22:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3AB981F5C
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC1F881F3E;
+	Sat, 18 Mar 2023 21:42:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC1F881F3E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eO5n7EkhaDcV; Sat, 18 Mar 2023 21:22:02 +0000 (UTC)
+	with ESMTP id fEnJGQ9FuQIm; Sat, 18 Mar 2023 21:42:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08ABF82070;
-	Sat, 18 Mar 2023 21:22:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08ABF82070
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0584B81F24;
+	Sat, 18 Mar 2023 21:41:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0584B81F24
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E7BD51BF378
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 21:21:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 606F71BF378
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 21:41:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C08138202B
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 21:21:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C08138202B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A51881F24
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 21:41:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A51881F24
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HXnGrrvvZhLp for <buildroot@lists.busybox.net>;
- Sat, 18 Mar 2023 21:21:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9756181F5C
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9756181F5C
- for <buildroot@buildroot.org>; Sat, 18 Mar 2023 21:21:46 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 30D2A240002;
- Sat, 18 Mar 2023 21:21:44 +0000 (UTC)
-Date: Sat, 18 Mar 2023 22:21:43 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230318222143.6a10465c@windsurf>
-In-Reply-To: <20230318123058.4103-1-fontaine.fabrice@gmail.com>
-References: <20230318123058.4103-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1679174504;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xZ80TlMe4fbKbL+5l4LHYO1pyzLBuArBjVb2iUvI7v8=;
- b=o36qaWKAYdJsSbOPbEQkar6RJqWBGjafEiMAYhju9vkmi9rh39Gj9JEQsbrvMULxEcWb8h
- e7lVR+zOp2xJwRI0P3jnx4ymJShA4dHFFeY363EyQ6gZ2SfI1rjWg6mmV+28G04d+YiRhi
- kvS0jdQtn/M/pgDEd2PN0w8Fck/na1JViUBsg88WHKqoVev1aNfw+2vLAjWTASaNAxlKNd
- uPDObyUEy6lOZRSZbbiQjyYwiNMJN0sF1+AlVGJj4j7STAEYvcckQcWrC5ff9m1cXxWOEW
- P+WjLLmgzmZ30PAou0ZPIAyngeMooBnevMlB2D0X8BTB8mNqqtB8UZCCZ2Ps0A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=o36qaWKA
-Subject: Re: [Buildroot] [PATCH 1/1] package/s390-tools: needs
- OpenSSL-enabled libcurl
+ with ESMTP id 8OMCfuqeEHbp for <buildroot@lists.busybox.net>;
+ Sat, 18 Mar 2023 21:41:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 537E681F0A
+ for <buildroot@buildroot.org>; Sat, 18 Mar 2023 21:41:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 537E681F0A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3FFCA86D72; Sat, 18 Mar 2023 21:41:56 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 18 Mar 2023 22:39:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 889fd54f809973d56b98e78677ae8a14e9e64da4
+X-Git-Newrev: e011fa0415883b9d44df616cfaf6956e1a11da88
+X-Patchwork-Hint: ignore
+Message-Id: <20230318214156.3FFCA86D72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/snmppp: security bump to version
+ 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,37 +58,96 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexander Egorenkov <egorenar@linux.ibm.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 18 Mar 2023 13:30:58 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e011fa0415883b9d44df616cfaf6956e1a11da88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure raised bump to version 2.17.0 in commit
-> eab9110afbef9c39569c4cc988aed15c48f7ce44 and
-> https://github.com/ibm-s390-linux/s390-tools/commit/56fecf1832c3ebc4626ddf5c598762833c362d5e:
-> 
-> Error: libcurl is not built with the OpenSSL backend
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/32aa8f0bece5da2a16d761f175d46c7d3e0a8965
->  - http://autobuild.buildroot.org/results/535253f483c927da456c0be292df6a58c1f39737
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/s390-tools/s390-tools.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+- Improved (security): Avoid timing attacks on authentication
+  verification.
+- Drop patch (already in version)
 
-Applied to master, thanks.
+https://www.agentpp.com/download/changes_snmp++v3.txt
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-fix-build-with-libressl-3-5-0.patch       | 39 ----------------------
+ package/snmppp/snmppp.hash                         |  2 +-
+ package/snmppp/snmppp.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
+
+diff --git a/package/snmppp/0001-fix-build-with-libressl-3-5-0.patch b/package/snmppp/0001-fix-build-with-libressl-3-5-0.patch
+deleted file mode 100644
+index f60f84f9a2..0000000000
+--- a/package/snmppp/0001-fix-build-with-libressl-3-5-0.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-fix build with libressl >= 3.5.0
+-
+-Fix the following build failure with libressl >= 3.5.0:
+-
+-auth_priv.cpp: In member function 'virtual int Snmp_pp::AuthMD5::password_to_key(const unsigned char*, unsigned int, const unsigned char*, unsigned int, unsigned char*, unsigned int*)':
+-auth_priv.cpp:1132:20: error: aggregate 'Snmp_pp::MD5HashStateType md5_hash_state' has incomplete type and cannot be defined
+-   MD5HashStateType md5_hash_state;
+-                    ^~~~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/b50b883c03e82564198a8b7e91bd14bf007772e0
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: merged (emailed to katz.agentpp.com@magenta.de)]
+-
+-diff -Naurp snmp++-3.4.9.orig/src/auth_priv.cpp snmp++-3.4.9/src/auth_priv.cpp
+---- snmp++-3.4.9.orig/src/auth_priv.cpp	2022-05-13 11:39:14.083038544 +0200
+-+++ snmp++-3.4.9/src/auth_priv.cpp	2022-05-13 15:00:42.576102348 +0200
+-@@ -79,8 +79,9 @@ static const char *loggerModuleName = "s
+- 
+- /* -- START: Defines for OpenSSL -- */
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+--// OpenSSL versions up to 1.0.x and LibreSSL
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
+-+// OpenSSL versions up to 1.0.x and LibreSSL versions up to 3.4.x
+- typedef EVP_MD_CTX            EVPHashStateType;
+- 
+- int evpAllocAndInit(EVP_MD_CTX *ctx, const EVP_MD *md)
+-@@ -138,7 +139,7 @@ typedef EVP_MD_CTX*           MD5HashSta
+- #define MD5_PROCESS(s, p, l)  EVP_DigestUpdate(*(s), p, l)
+- #define MD5_DONE(s, k)        evpDigestFinalAndFree(s, k)
+- 
+--#endif // OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#endif // OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
+- 
+- typedef DES_key_schedule      DESCBCType;
+- #define DES_CBC_START_ENCRYPT(c, iv, k, kl, r, s) \
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index 6dc3d39ced..74c6a3e98f 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d7a77fd05ecd99b25c51cbab08dfeef22a5edf2677875695c213631af59d5bae  snmp++-3.4.10.tar.gz
++sha256  43a433bd5f6fd67add5a26add6521ca664c41aead438405658ed57483664b4bf  snmp++-3.5.0.tar.gz
+ sha256  61337e799c8274e596e5783b22607beea8073ee296c6b27fc5c7487296e56851  src/v3.cpp
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 005a5a9f35..9f1916dd66 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNMPPP_VERSION = 3.4.10
++SNMPPP_VERSION = 3.5.0
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
