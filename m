@@ -1,66 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F5F0C74A5B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Mar 2023 20:28:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D24E1C74A5B
+	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 00:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D7A64026E;
-	Fri, 17 Mar 2023 20:28:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D7A64026E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oq89t1Yo4ocg; Fri, 17 Mar 2023 20:28:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6D74401BF;
-	Fri, 17 Mar 2023 20:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6D74401BF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BCBD71BF279
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 20:27:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 965EE6134D
- for <buildroot@lists.busybox.net>; Fri, 17 Mar 2023 20:27:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 965EE6134D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27A0960B60;
+	Sat, 18 Mar 2023 00:04:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27A0960B60
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y6URfp5pEEEs for <buildroot@lists.busybox.net>;
- Fri, 17 Mar 2023 20:27:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBC9860FAC
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EBC9860FAC
- for <buildroot@buildroot.org>; Fri, 17 Mar 2023 20:27:55 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.174.21.176])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JPoATyqq-op2; Sat, 18 Mar 2023 00:04:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 615AA60C33;
+	Sat, 18 Mar 2023 00:04:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 615AA60C33
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EFC051BF420
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 00:04:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C828D4092C
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 00:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C828D4092C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cJleu49fyPl8 for <buildroot@lists.busybox.net>;
+ Sat, 18 Mar 2023 00:04:51 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2695C4092B
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2695C4092B
+ for <buildroot@buildroot.org>; Sat, 18 Mar 2023 00:04:51 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.174.31.86])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 43EC378034D;
- Fri, 17 Mar 2023 21:27:47 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 9F2FB2003B4;
+ Sat, 18 Mar 2023 01:04:46 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 17 Mar 2023 21:27:24 +0100
-Message-Id: <20230317202724.79207-3-ju.o@free.fr>
+Date: Sat, 18 Mar 2023 01:04:39 +0100
+Message-Id: <20230318000439.2710306-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230317202724.79207-1-ju.o@free.fr>
-References: <20230317202724.79207-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1679084874;
- bh=e9XMOzb/AkktWCGTZHGHWbQjDo8cC9W1BfMpSX+grT0=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=gJN1i3f2dnq2xLCXM/jNcRwPatXSxSuhlG6PqQTqTR7VzrQqO2URb2bjEpW2GDIUu
- QmNWog+r9Pr++6AuO40sySnlZfH6F9Mvmr0PfcA+iL1nsRmgrLNxmYVDiqsNzg2vbY
- gMAECQn+Fvq6Fhse8geMJTmE4X2w3M/10jJ8ZbUCYRXToPwSokBPXgXvwEHZuKf4Zl
- yYB752rNrEgfM0AwGspM9H11Pis5C8m7LSiQJ3NonDid/rGUbObXXRJIFBKzpfY2bO
- 7PsojpDZ82QdaL6ZF9uFWqRVQuuF3rynJm8xeRqe12vVW8GdDeinzlIkI/fj7G3/jO
- 1cJCQwYeuiIkA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1679097887;
+ bh=HwAfalsWdPkx8FqrLmDRd76PDhab3Pd3rU/rdwPLHFQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=WxkRjBrXKHkUk7QNkccU0K3PWgDnF+INrTYp1HPkUEbQzfep/FdvSqEsrIJysUpHm
+ TYVkqDbu3vej3T11cvoRwkhWCqDlExC5UNsbs6Kb38/eb6rh7VrVGeDV9+QlWvEGoq
+ p6s/QPggqlEXTMg2qAI0nATnjXO2MbLub/VJ+Zx/jeyfv9u0QupFmQUkU4w5IQAGJF
+ 7Za0G9QcdlOVe96fxn0zXO+KAvZ2jHDS+isBY3ItIarxQ5eR1L0UfqPCUXgLpZXQ6x
+ VdPLpJ18SJuYN0EhrVhW7E+LIvxthgnclYETDpm2Vw5oGgvA2tvIIVYyy1GG+h8f4+
+ jmBUKQnGYKxDA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gJN1i3f2
-Subject: [Buildroot] [PATCH 3/3] utils/config: fix shellcheck warnings
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=WxkRjBrX
+Subject: [Buildroot] [PATCH 1/1] package/rdma-core: bump to version v45.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,59 +70,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Marcus Folkesson <marcus.folkesson@gmail.com>, Julien Olivain <ju.o@free.fr>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Pascal de Bruijn <p.debruijn@unilogic.nl>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When running "make check-package" on a system with shellcheck 0.9.0,
-the command fails with output:
-
-    make check-package
-    utils/config:0: run 'shellcheck' and fix the warnings
-    ...
-    1 warnings generated
-
-This commit fixes the warnings reported by the command:
-
-    shellcheck utils/config
-
-Fixes:
-
-    In utils/config line 175:
-		    if grep -q "# ${BR2_PREFIX}$ARG is not set" $FN ; then
-                                                                ^-^ SC2086 (info): Double quote to prevent globbing and word splitting.
-
-    In utils/config line 178:
-			    if V="$(grep "^${BR2_PREFIX}$ARG=" $FN)"; then
-                                                               ^-^ SC2086 (info): Double quote to prevent globbing and word splitting.
+For change log, see:
+https://github.com/linux-rdma/rdma-core/releases/tag/v45.0
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- utils/config | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Patch tested on branch master at commit d305189 with commands:
 
-diff --git a/utils/config b/utils/config
-index 5f5e4362e5..9107725a70 100755
---- a/utils/config
-+++ b/utils/config
-@@ -172,10 +172,10 @@ while [ "$1" != "" ] ; do
- 		;;
+    make check-package
+    ...
+    0 warnings generated
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_rdma_core
+    ...
+    OK
+
+    utils/test-pkg -a -p rdma-core
+    ...
+    45 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ package/rdma-core/rdma-core.hash | 2 +-
+ package/rdma-core/rdma-core.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
+index 1aff44f7f4..128ca54e3e 100644
+--- a/package/rdma-core/rdma-core.hash
++++ b/package/rdma-core/rdma-core.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  4a2eec55b37ac25f25e7680a372f71c1781c23808542bd31fb68dc0448b8cba2  rdma-core-44.0.tar.gz
++sha256  8725cf10f05579585c9fdebdce5613120e632f204fc098a77d24f5974a0c4321  rdma-core-45.0.tar.gz
+ sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
+ sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
+diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
+index 885821bf98..0cbe22d043 100644
+--- a/package/rdma-core/rdma-core.mk
++++ b/package/rdma-core/rdma-core.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	--state|-s)
--		if grep -q "# ${BR2_PREFIX}$ARG is not set" $FN ; then
-+		if grep -q "# ${BR2_PREFIX}$ARG is not set" "$FN" ; then
- 			echo n
- 		else
--			if V="$(grep "^${BR2_PREFIX}$ARG=" $FN)"; then
-+			if V="$(grep "^${BR2_PREFIX}$ARG=" "$FN")"; then
- 				V="${V/#${BR2_PREFIX}$ARG=/}"
- 				V="${V/#\"/}"
- 				V="${V/%\"/}"
+-RDMA_CORE_VERSION = 44.0
++RDMA_CORE_VERSION = 45.0
+ RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
+ RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
+ RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
 -- 
 2.40.0
 
