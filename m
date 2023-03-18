@@ -1,91 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55E5EC61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 17:52:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6006BC7618E
+	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 19:32:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9B4CE408CA;
-	Sat, 18 Mar 2023 17:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B4CE408CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id B375A60E22;
+	Sat, 18 Mar 2023 19:32:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B375A60E22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uz6_A2NvBBLg; Sat, 18 Mar 2023 17:52:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wmoyhp4kvQlJ; Sat, 18 Mar 2023 19:32:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2D45408AF;
-	Sat, 18 Mar 2023 17:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2D45408AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id F00EC60C2F;
+	Sat, 18 Mar 2023 19:32:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F00EC60C2F
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 936AF1BF599
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 17:52:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DB0471BF4E2
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 19:32:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 755298200E
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 17:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 755298200E
+ by smtp1.osuosl.org (Postfix) with ESMTP id B492D81EC8
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 19:32:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B492D81EC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P8fq59TDx-0K for <buildroot@lists.busybox.net>;
- Sat, 18 Mar 2023 17:52:31 +0000 (UTC)
+ with ESMTP id VJmtMlGy9x63 for <buildroot@lists.busybox.net>;
+ Sat, 18 Mar 2023 19:32:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2731D81FD8
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2731D81FD8
- for <buildroot@buildroot.org>; Sat, 18 Mar 2023 17:52:31 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id o12so32007029edb.9
- for <buildroot@buildroot.org>; Sat, 18 Mar 2023 10:52:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 076668204D
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 076668204D
+ for <buildroot@busybox.net>; Sat, 18 Mar 2023 19:32:07 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id y4so32659973edo.2
+ for <buildroot@busybox.net>; Sat, 18 Mar 2023 12:32:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679161949;
- h=content-transfer-encoding:mime-version:subject:references
- :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=dcj+AfYO1LBcUdFpT3DFGWBCcFs7CCTLB60NlzXOh4Y=;
- b=4ba2lcvX1IvHmisr/hscnGiRHZSOU8Sl791CrutuFDgGac79teGKcU8gNG0VONHqS3
- EUEqjKn5ECuoRkzlsELYMqSJLiVxPMPp137gJndRK/MZPqIDu69xQHa1VwLoxp7Uq/1y
- XvX1yLQjlSHNT7kZd8pIFbl6fykPXUhTWygqiEka8mZ/0sxnFs+bEm5LNA8U/OM0Bv98
- 1Hhtarx/YKKiPJmzWkQTRfvrOGE924ioQgq9V9tvsiF8TzHg/AkEDy/QpHP3e+g6LIDe
- inW9+OQswxR38i1JtazKtrUH/b4Ub18TZeXIkT0QxSM5VDigAbPvu2M3qCsKt+8XspY9
- xafg==
-X-Gm-Message-State: AO0yUKWxdaTIiQZlAabaYDISAB0mnyKItdeZ0lExl9QJ8CN/EZTMxV33
- ljARzxXm9h/8/uhHAhT2idzM72/CkhU=
-X-Google-Smtp-Source: AK7set/cG8QD0s8fOgITkwtO3Vzc+WAOyJDLwfPq8SjLlLEslEonjQdSwbt2+hE8wbFMc4Sj/E5YeA==
-X-Received: by 2002:a05:6402:68e:b0:4fb:59bb:ce7c with SMTP id
- f14-20020a056402068e00b004fb59bbce7cmr7890341edy.32.1679161949060; 
- Sat, 18 Mar 2023 10:52:29 -0700 (PDT)
-Received: from [127.0.0.1] (pd9fae977.dip0.t-ipconnect.de. [217.250.233.119])
+ d=1e100.net; s=20210112; t=1679167926;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HoI1SAnNjJnUPdiMU3GnIQLD95UoeGY6hUs7vgH7H28=;
+ b=jWpMuJ+aFS8ubO6q4sinGFpr3KA2PRrsS9F+UuLSmFQXJmxtQCiIdlkYIKttNaSGNu
+ 4JOm3ztYds/8M8CMc4G7cqBEnY9jkTHvkvy6tkiByTKftlFv9YncqNWkAnf02RyzSTkv
+ sJUazzxBDZi8FlMj1urWQZkCbiU4v4m7+FUA0vThKOiT0+gGkCaHOAwIzeri+00nkZuF
+ OHnWfM5YtC20rAWe5sWoi9TA95pSCPp/2eAX2WNVetEuE8YltEW11UxNQqvmVJF84y2j
+ Gy5yUOIyUV1B7Og5X7TJkjGD6JVt9IHQDzt9oBQWG3qCyltRf61ldeC+bGYfnQLwSQPJ
+ M+9Q==
+X-Gm-Message-State: AO0yUKXwjDeNhUaoHkDcaRU7MR/Fuch2UmuRX0LtPmhPrur2oAhJxTvr
+ A+DK4xadCTzPmlDi0vLR3+PVp4zaGzs=
+X-Google-Smtp-Source: AK7set+VYyGgi270n4OCF26su/D1nLSNmFJ+zWHXp3j1azrbrTNPAIi9ZENEzuF4BtLFacCR4mw0mA==
+X-Received: by 2002:aa7:de03:0:b0:4fb:fd9f:7375 with SMTP id
+ h3-20020aa7de03000000b004fbfd9f7375mr7465614edv.2.1679167925968; 
+ Sat, 18 Mar 2023 12:32:05 -0700 (PDT)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- c21-20020a50f615000000b004fce9ff4830sm2634734edn.88.2023.03.18.10.52.28
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 18 Mar 2023 10:52:28 -0700 (PDT)
-Date: Sat, 18 Mar 2023 18:52:27 +0100 (GMT+01:00)
-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <e258bff9-5090-414d-bbba-72d15c12d4c5@gmail.com>
-In-Reply-To: <20230318123010.3448-1-fontaine.fabrice@gmail.com>
-References: <20230318123010.3448-1-fontaine.fabrice@gmail.com>
+ 24-20020a508758000000b004fb419921e2sm2745137edv.57.2023.03.18.12.32.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 18 Mar 2023 12:32:05 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sat, 18 Mar 2023 20:31:58 +0100
+Message-Id: <20230318193159.1418922-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Correlation-ID: <e258bff9-5090-414d-bbba-72d15c12d4c5@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679161949;
- h=content-transfer-encoding:mime-version:subject:references
- :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
- :message-id:reply-to;
- bh=dcj+AfYO1LBcUdFpT3DFGWBCcFs7CCTLB60NlzXOh4Y=;
- b=gVxjuJ64wQj1pLP2+srNIvvxFYFHx0/M4eY7zQT+QO40ENjQfaVWm74TFPPG1HXXOF
- 2dY33eY+1zbeQHjt34CsvK5XqcsCeNNTHqRJ7qNUp3qKy5YV+7Z8/XcVpj/aWYqjXsnh
- jHVFsQ6kuQYNPolYJgWcOkjB/TQYAGmfjbkl2PUN17yfHuGziuLwd2XGcIrOrqJsk3Kp
- /rfyfMfys1yaIKhTVFb2yqaHsV53Hzp+Ika2KmBgY9ovWaphaM4+8tECxjvgPCF04MJb
- vBkf/wa69vtW4Ltupl1LTF+OiGkcKPzXFO2zAVlZlSg5r11pRpNOqrRxv/CpHWzZMStc
- dYRw==
+ d=gmail.com; s=20210112; t=1679167926;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HoI1SAnNjJnUPdiMU3GnIQLD95UoeGY6hUs7vgH7H28=;
+ b=ErOIaT9aAbJyAsQQoQlj+YDDM/wuhnRfuWcMG216kBWFrwMaz+06HvpcsV0Qs67qCG
+ kd1FTzuP/XZMZCNfk3crenNP9RrA7sK9kof962SLiQewU6j4Fi2YrKvFze3Pe22hsqgj
+ MJBivVcRwglOyoDzsiah4R2EHpDWphalbtiLMoFTXTH9+UtMPBuLVCk1ZeNpbGIoVWUR
+ 5yjS1gvawSrA9Egj3nSOOreOgBk4zBhasUAImruNZIdPY3EWib3aegnUkPvTS/jBGdW7
+ O9HXPQN7+6BYDYROuitrh0Qey+gg+lq+jR+b18sG3zkI0jv/xkDz2HGFwDEKmyJAMag1
+ PLMw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=gVxjuJ64
-Subject: Re: [Buildroot] [PATCH 1/1] package/shadow: fix libsemanage
- dependency
+ header.a=rsa-sha256 header.s=20210112 header.b=ErOIaT9a
+Subject: [Buildroot] [PATCH 1/2] package/graphene: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,35 +94,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRnJhYnJpY2UsCnRoYW5rcyBmb3IgdGhlIGZpeC4gVGhlIHBhdGNoIGxvb2tzIGdvb2QgZm9y
-IG1lLgoKQmVzaWRlcyB0aGF0LCBzaG91bGQgSSBub3QgZ2V0IGFuIGVtYWlsIGlmIGEgYnVpbGQg
-ZmFpbHMgaW4gYSBwYWNrYWdlLCB3aG9tIEkgYW0gdGhlIGRldmVsb3BlciBpbiBERVZFTE9QRVJT
-IGZpbGU/CgpUaGFua3MsClJhcGhhZWwgUGF2bGlkaXMKCjE4LjAzLjIwMjMgMTM6MzA6MTMgRmFi
-cmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+OgoKPiBGaXggdGhlIGZv
-bGxvd2luZyBidWlsZCBmYWlsdXJlIHJhaXNlZCBzaW5jZSB0aGUgYWRkaXRpb24gb2YgdGhlIHBh
-Y2thZ2UKPiBpbiBjb21taXQgZjc4YzVjYjVjYWU5M2E5ZTYzZGFkNDM2MWQ3OGUxNzg3NzU5Mzgy
-ZjoKPiAKPiBNYWtlZmlsZTo1NzY6ICoqKiBsaWJzZW1hbmFnZSBpcyBpbiB0aGUgZGVwZW5kZW5j
-eSBjaGFpbiBvZiBzaGFkb3cgdGhhdCBoYXMgYWRkZWQgaXQgdG8gaXRzIF9ERVBFTkRFTkNJRVMg
-dmFyaWFibGUgd2l0aG91dCBzZWxlY3RpbmcgaXQgb3IgZGVwZW5kaW5nIG9uIGl0IGZyb20gQ29u
-ZmlnLmluLsKgIFN0b3AuCj4gCj4gRml4ZXM6Cj4gLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9v
-dC5vcmcvcmVzdWx0cy9lNTI4ZTA3ODc0ODE1ZDdmMWNiOTUxMDg0ZWM5ODVkNzZmZTIyZDJlCj4g
-Cj4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFp
-bC5jb20+Cj4gLS0tCj4gcGFja2FnZS9zaGFkb3cvc2hhZG93Lm1rIHwgMiArLQo+IDEgZmlsZSBj
-aGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9w
-YWNrYWdlL3NoYWRvdy9zaGFkb3cubWsgYi9wYWNrYWdlL3NoYWRvdy9zaGFkb3cubWsKPiBpbmRl
-eCBkOGY5MTNhNjQ4Li40YmMzY2NlMDM3IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvc2hhZG93L3No
-YWRvdy5tawo+ICsrKyBiL3BhY2thZ2Uvc2hhZG93L3NoYWRvdy5tawo+IEBAIC04Nyw3ICs4Nyw3
-IEBAIGVsc2UKPiBTSEFET1dfQ09ORl9PUFRTICs9IC0td2l0aG91dC1saWJjcmFjawo+IGVuZGlm
-Cj4gCj4gLWlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCU0VMSU5VWCkseSkKPiAraWZlcSAoJChCUjJf
-UEFDS0FHRV9MSUJTRUxJTlVYKSQoQlIyX1BBQ0tBR0VfTElCU0VNQU5BR0UpLHl5KQo+IFNIQURP
-V19DT05GX09QVFMgKz0gLS13aXRoLXNlbGludXgKPiBTSEFET1dfREVQRU5ERU5DSUVTICs9IGxp
-YnNlbGludXggbGlic2VtYW5hZ2UKPiBlbHNlCj4gLS0gCj4gMi4zOS4xCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+a dependency for gtk4
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/graphene/Config.in     |  6 +++++
+ package/graphene/graphene.hash |  3 +++
+ package/graphene/graphene.mk   | 44 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
+ create mode 100644 package/graphene/Config.in
+ create mode 100644 package/graphene/graphene.hash
+ create mode 100644 package/graphene/graphene.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7ef8f79a7..5000d7230 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1057,6 +1057,7 @@ F:	package/copas/
+ F:	package/coxpcall/
+ F:	package/dado/
+ F:	package/ficl/
++F:	package/graphene/
+ F:	package/janet/
+ F:	package/libtomcrypt/
+ F:	package/libtommath/
+diff --git a/package/Config.in b/package/Config.in
+index c7bb52d27..272ea7f4a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1574,6 +1574,7 @@ menu "Graphics"
+ 	source "package/giblib/Config.in"
+ 	source "package/giflib/Config.in"
+ 	source "package/granite/Config.in"
++	source "package/graphene/Config.in"
+ 	source "package/graphite2/Config.in"
+ 	source "package/gtkmm3/Config.in"
+ 	source "package/gtksourceview/Config.in"
+diff --git a/package/graphene/Config.in b/package/graphene/Config.in
+new file mode 100644
+index 000000000..60f6073a1
+--- /dev/null
++++ b/package/graphene/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_GRAPHENE
++	bool "graphene"
++	help
++	  A thin layer of types for graphic libraries.
++
++	  https://ebassi.github.io/graphene/
+diff --git a/package/graphene/graphene.hash b/package/graphene/graphene.hash
+new file mode 100644
+index 000000000..7d2b56945
+--- /dev/null
++++ b/package/graphene/graphene.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  922dc109d2dc5dc56617a29bd716c79dd84db31721a8493a13a5f79109a4a4ed  graphene-1.10.8.tar.gz
++sha256  cfd9fd7b2be592d2c0910d32dc1d8910c08dc0670b1d9ce417a82fa9eb788df9  LICENSE.txt
+diff --git a/package/graphene/graphene.mk b/package/graphene/graphene.mk
+new file mode 100644
+index 000000000..efdae9140
+--- /dev/null
++++ b/package/graphene/graphene.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# graphene
++#
++################################################################################
++
++GRAPHENE_VERSION = 1.10.8
++GRAPHENE_SITE = $(call github,ebassi,graphene,$(GRAPHENE_VERSION))
++GRAPHENE_LICENSE = MIT
++GRAPHENE_LICENSE_FILES = LICENSE.txt
++GRAPHENE_INSTALL_STAGING = YES
++
++GRAPHENE_CONF_OPTS = \
++	-Dtests=false \
++	-Dinstalled_tests=false \
++	-Dgtk_doc=false
++
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++GRAPHENE_CONF_OPTS += -Dgobject_types=true
++GRAPHENE_DEPENDENCIES += libglib2
++else
++GRAPHENE_CONF_OPTS += -Dgobject_types=false
++endif
++
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++GRAPHENE_CONF_OPTS += -Dintrospection=enabled
++GRAPHENE_DEPENDENCIES += gobject-introspection
++else
++GRAPHENE_CONF_OPTS += -Dintrospection=disabled
++endif
++
++ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
++GRAPHENE_CONF_OPTS += -Dsse2=true
++else
++GRAPHENE_CONF_OPTS += -Dsse2=false
++endif
++
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++GRAPHENE_CONF_OPTS += -Darm_neon=true
++else
++GRAPHENE_CONF_OPTS += -Darm_neon=false
++endif
++
++$(eval $(meson-package))
+-- 
+2.37.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
