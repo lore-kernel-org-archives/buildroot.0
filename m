@@ -1,91 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7B1DC74A5B
-	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 19:32:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC04C74A5B
+	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 20:44:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CCF460C12;
-	Sat, 18 Mar 2023 19:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CCF460C12
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A8A240546;
+	Sat, 18 Mar 2023 20:44:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A8A240546
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hyENeqMOdoH8; Sat, 18 Mar 2023 19:32:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m59i8X-oCihJ; Sat, 18 Mar 2023 20:44:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6522960E24;
-	Sat, 18 Mar 2023 19:32:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6522960E24
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4A5CE1BF4E2
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 19:32:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA6D8401F1;
+	Sat, 18 Mar 2023 20:44:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA6D8401F1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 209C51BF332
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 20:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 240A981EC8
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 19:32:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 240A981EC8
+ by smtp4.osuosl.org (Postfix) with ESMTP id E8BF7410D8
+ for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 20:44:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8BF7410D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IolPdOl_SwSq for <buildroot@lists.busybox.net>;
- Sat, 18 Mar 2023 19:32:09 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3DAE81EA1
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F3DAE81EA1
- for <buildroot@busybox.net>; Sat, 18 Mar 2023 19:32:08 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id er8so20865850edb.0
- for <buildroot@busybox.net>; Sat, 18 Mar 2023 12:32:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679167927;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=2u6GKZRpdk2A6vsU3meweSr9BK/NikNL2X3EBO2Bkd4=;
- b=mLZHwwvJ0joi7tJWbsB84C/QwBZWhGG7x0UCi2Fn5iv0xwzPqdnM0gb5U34PBqVXQj
- 3FBv+7ckCLo2RkRcGVx6Sh7UlSbHztZinN8DayXrXzm/8joWr1tsjgBYDkwc/L3DUFMF
- 703CzyaWfGuQUQgNe8pUvfBGID2cy9otUORAnN1S+/lI+IrsyVt9I03YrzvwKRZWcgM5
- qs60HS0MNjbBLiZf0oyZP/AQeRUeqj9PxJUjjLT6b7P9sViD6ZKeFHGGOV+DcgsUEJ52
- IqcMpi5gvMA7NS2AY8vj9LoqppnN+p8fq7hiabbsck26umwHQNS7AAdjhPxhg2GUTybu
- i2Xw==
-X-Gm-Message-State: AO0yUKU/lj+juI6XraA0B7zGalsV0CyGGTlGkfIW+Hzz3dWLEaG1YSxJ
- gEiF3iqkdiZAFDuC8RBP109yCYmSbaI=
-X-Google-Smtp-Source: AK7set/x7h7mRtE0bBiow+p4vI46BnUqB8G5rqMSU/oViqmr8UkwURk/XLzt0W21qkc1uN6o9fj13A==
-X-Received: by 2002:aa7:d896:0:b0:4af:64b8:262e with SMTP id
- u22-20020aa7d896000000b004af64b8262emr7580567edq.6.1679167927057; 
- Sat, 18 Mar 2023 12:32:07 -0700 (PDT)
-Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- 24-20020a508758000000b004fb419921e2sm2745137edv.57.2023.03.18.12.32.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 Mar 2023 12:32:06 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat, 18 Mar 2023 20:31:59 +0100
-Message-Id: <20230318193159.1418922-2-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230318193159.1418922-1-francois.perrad@gadz.org>
-References: <20230318193159.1418922-1-francois.perrad@gadz.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VEZ0qLOA4WrH for <buildroot@lists.busybox.net>;
+ Sat, 18 Mar 2023 20:44:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5314410A2
+Received: from box.stevenhay.com (box.stevenhay.com
+ [IPv6:2a01:7e01:e001:325::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E5314410A2
+ for <buildroot@buildroot.org>; Sat, 18 Mar 2023 20:44:44 +0000 (UTC)
+Received: from authenticated-user (box.stevenhay.com [172.104.133.13])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by box.stevenhay.com (Postfix) with ESMTPSA id A4C7620413;
+ Sat, 18 Mar 2023 16:44:37 -0400 (EDT)
+To: buildroot@buildroot.org
+Date: Sat, 18 Mar 2023 21:44:06 +0100
+Message-Id: <20230318204407.2112290-1-me@stevenhay.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679167927;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=2u6GKZRpdk2A6vsU3meweSr9BK/NikNL2X3EBO2Bkd4=;
- b=UjUhXu5cNWneacUvhoD+vTF3lCYjV1tqSg7ftm765WESvmIH1ZLApRXDMJaRfA+LgG
- VPdPJgZxgmmm0wTSO7pA/yuWVfwDwd7U+rtCCUjRH2K2VXvaq2AEQwTvNb7L29eGJC+g
- J5YNGarUjBXzJgPdFe0crcIwWt6NrbzBtX1CeLqIZhjTbgSFDawuErz/5Vyxm3yRK0gV
- SCETTKRbybCIa9v2Lun6xebxUZQw/FYd0B7R4/CwgfFQ7MFbWxkyNjgTWMbj6OJbQhaR
- JB4CyDBhHaIw2VPLcUqHNrCUyfR5bJ2Ufcs9hjrDX4sSmU0eveFWmQKXttisu6xiSYfU
- 3U9Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UjUhXu5c
-Subject: [Buildroot] [PATCH 2/2] package/libgtk4: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=stevenhay.com; s=mail; t=1679172278;
+ bh=tvCOKPST7CMr6ho0SIiOZYhuhAgDij4AXM7ZuLKuoZU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=UmPLZlGmd2y/Xa0XG07wzSE+9O6UdEVD1fWDKDNFrag9aRf3s6ixRtgDsy/4Ok0Ex
+ CjJ2QQEBQXr24D2ZFbeX0WQ1X39wiDS2znLXIt2Lm4Hkqwlg8G/FYt4vGCfSvWduc0
+ 6wezvLtEzez6FSmSfCxNA8Temqe8nTQ1HShStZjQhC8deq+BEN+4NxpvUpx5Pl6Kaz
+ RnYHNGn7M6DphO3ISktsRoxCny6F9Q6Rtj2LQcxOhL7bCDZtWWaRfKW9nzE/30ssNv
+ sLK4PxQL0NQ0QiS5KfWB9lhwPE8Emmx5KgRJKO09/KvnYz3ZSDiU+eLQhmnyfPY68v
+ B3KM3iS4vqPEQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=stevenhay.com header.i=@stevenhay.com
+ header.a=rsa-sha256 header.s=mail header.b=UmPLZlGm
+Subject: [Buildroot] [PATCH] package/ca-certificates: bump version to
+ 20230311
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,288 +71,164 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Steve Hay via buildroot <buildroot@buildroot.org>
+Reply-To: Steve Hay <me@stevenhay.com>
+Cc: Martin Bark <martin@barkynet.com>, Steve Hay <me@stevenhay.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- DEVELOPERS                   |   1 +
- package/Config.in            |   1 +
- package/libgtk4/Config.in    | 106 +++++++++++++++++++++++++++++++++
- package/libgtk4/libgtk4.hash |   5 ++
- package/libgtk4/libgtk4.mk   | 110 +++++++++++++++++++++++++++++++++++
- 5 files changed, 223 insertions(+)
- create mode 100644 package/libgtk4/Config.in
- create mode 100644 package/libgtk4/libgtk4.hash
- create mode 100644 package/libgtk4/libgtk4.mk
+The impetus for this change was that wget fails to load pages signed by
+Let's Encrypt due to missing root certs. This version has the updated and
+correct certs.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5000d7230..61e6e281c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1059,6 +1059,7 @@ F:	package/dado/
- F:	package/ficl/
- F:	package/graphene/
- F:	package/janet/
-+F:	package/libgtk4/
- F:	package/libtomcrypt/
- F:	package/libtommath/
- F:	package/libwpe/
-diff --git a/package/Config.in b/package/Config.in
-index 272ea7f4a..9eff213c0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1612,6 +1612,7 @@ menu "Graphics"
- 	source "package/libgta/Config.in"
- 	source "package/libgtk2/Config.in"
- 	source "package/libgtk3/Config.in"
-+	source "package/libgtk4/Config.in"
- 	source "package/libjxl/Config.in"
- 	source "package/libmediaart/Config.in"
- 	source "package/libmng/Config.in"
-diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
-new file mode 100644
-index 000000000..cda183c8d
---- /dev/null
-+++ b/package/libgtk4/Config.in
-@@ -0,0 +1,106 @@
-+comment "libgtk4 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
+Signed-off-by: Steve Hay <me@stevenhay.com>
+---
+ ...2pem.py-make-cryptography-module-opt.patch | 31 +++++++++++--------
+ ...2pem.py-Fix-compat-with-cryptography.patch | 29 -----------------
+ package/ca-certificates/ca-certificates.hash  |  4 +--
+ package/ca-certificates/ca-certificates.mk    |  5 +--
+ 4 files changed, 22 insertions(+), 47 deletions(-)
+ delete mode 100644 package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
+
+diff --git a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+index b76c1bfd7f..ced593664e 100644
+--- a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
++++ b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+@@ -1,4 +1,10 @@
+-From bf18b564122e8f976681a2398862fde1eafd84ba Mon Sep 17 00:00:00 2001
++From a4e468a2a0afa80df174831c2f422184820bb0fa Mon Sep 17 00:00:00 2001
++From: Steve Hay <me@stevenhay.com>
++Date: Sat, 18 Mar 2023 17:57:18 +0100
++Subject: [PATCH] mozilla/certdata2pem.py: make cryptography module optional
 +
-+comment "libgtk4 needs an OpenGL or an OpenGL-EGL/wayland backend"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND && !BR2_PACKAGE_HAS_LIBGL
++Modified for a newer version of the ca-certificates module.
 +
-+config BR2_PACKAGE_LIBGTK4
-+	bool "libgtk4"
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
-+	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_CAIRO_PS
-+	select BR2_PACKAGE_CAIRO_PDF
-+	select BR2_PACKAGE_CAIRO_SVG
-+	select BR2_PACKAGE_GDK_PIXBUF
-+	select BR2_PACKAGE_GRAPHENE
-+	select BR2_PACKAGE_LIBEPOXY
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_PANGO
-+	select BR2_PACKAGE_TIFF
-+	# At least one backend is required
-+	select BR2_PACKAGE_LIBGTK4_BROADWAY if \
-+		!(BR2_PACKAGE_LIBGTK4_X11 || BR2_PACKAGE_LIBGTK4_WAYLAND)
-+	help
-+	  The GTK version 4 graphical user interface library
-+
-+	  https://www.gtk.org/
-+
-+if BR2_PACKAGE_LIBGTK4
-+
-+config BR2_PACKAGE_LIBGTK4_BROADWAY
-+	bool "Broadway GDK backend"
-+	default y
-+	  help
-+	  This enables the Broadway backend for GDK, which provides
-+	  support for displaying GTK+ applications in a web browser,
-+	  using HTML5 and web sockets.
-+
-+	  For example, to run gtk4-demo on a target which IP address is
-+	  192.168.0.1 and use it from a web browser, execute the
-+	  following commands:
-+
-+	  $ broadwayd -a 192.168.0.1 -p 8080 :2 &
-+	  $ export GDK_BACKEND=broadway
-+	  $ export BROADWAY_DISPLAY=:2
-+	  $ gtk4-demo
-+
-+	  Then open a web browser at address http://192.168.0.1:8080.
-+	  Javascript and web sockets should be enabled.
-+
-+comment "Wayland GDK backend needs an OpenGL EGL backend provided by mesa3d w/ headers >= 3.17"
-+	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+
-+config BR2_PACKAGE_LIBGTK4_WAYLAND
-+	bool "Wayland GDK backend"
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	help
-+	  This enables the Wayland backend for GDK.
-+
-+comment "X11 GDK backend needs an OpenGL provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-+
-+config BR2_PACKAGE_LIBGTK4_X11
-+	bool "X11 GDK backend"
-+	default y
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBXINERAMA
-+	help
-+	  This enables the X11 backend for GDK.
-+
-+config BR2_PACKAGE_LIBGTK4_GSTREAMER
-+	bool "gstreamer support"
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	help
-+	  Enable gstreamer support.
-+
-+config BR2_PACKAGE_LIBGTK4_DEMO
-+	bool "Install libgtk4 demo/example programs"
-+	select BR2_PACKAGE_SHARED_MIME_INFO
-+	select BR2_PACKAGE_HICOLOR_ICON_THEME
-+	help
-+	  The GTK source base contains demo/exmaple programs.
-+	  This option allows to install them to the target.
-+
-+endif
-diff --git a/package/libgtk4/libgtk4.hash b/package/libgtk4/libgtk4.hash
-new file mode 100644
-index 000000000..8edafb3ca
---- /dev/null
-+++ b/package/libgtk4/libgtk4.hash
-@@ -0,0 +1,5 @@
-+# From https://download.gnome.org/sources/gtk/4.10/gtk-4.10.1.sha256sum
-+sha256  e8fcac04bc7715b9da667c911a5ee8f262e200d1d6a50adf23645ca8cfcd0311  gtk-4.10.1.tar.xz
-+
-+# Hash for license file:
-+sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk4/libgtk4.mk b/package/libgtk4/libgtk4.mk
-new file mode 100644
-index 000000000..8f3d13046
---- /dev/null
-+++ b/package/libgtk4/libgtk4.mk
-@@ -0,0 +1,110 @@
-+################################################################################
-+#
-+# libgtk4
-+#
-+################################################################################
-+
-+LIBGTK4_VERSION_MAJOR = 4.10
-+LIBGTK4_VERSION = $(LIBGTK4_VERSION_MAJOR).1
-+LIBGTK4_SOURCE = gtk-$(LIBGTK4_VERSION).tar.xz
-+LIBGTK4_SITE = https://download.gnome.org/sources/gtk/$(LIBGTK4_VERSION_MAJOR)
-+LIBGTK4_LICENSE = LGPL-2.0+
-+LIBGTK4_LICENSE_FILES = COPYING
-+LIBGTK4_CPE_ID_VENDOR = gnome
-+LIBGTK4_CPE_ID_PRODUCT = gtk
-+LIBGTK4_INSTALL_STAGING = YES
-+
-+LIBGTK4_DEPENDENCIES = host-pkgconf host-libgtk4 \
-+	gdk-pixbuf graphene libepoxy libglib2 pango \
-+	$(TARGET_NLS_DEPENDENCIES)
-+
-+LIBGTK4_CONF_OPTS = -Dbuild-tests=false
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK4_X11),y)
-+LIBGTK4_DEPENDENCIES += xlib_libXcursor xlib_libXi xlib_libXinerama
-+LIBGTK4_CONF_OPTS += -Dx11-backend=true
-+else
-+LIBGTK4_CONF_OPTS += -Dx11-backend=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK4_WAYLAND),y)
-+LIBGTK4_DEPENDENCIES += wayland libxkbcommon
-+LIBGTK4_CONF_OPTS += -Dwayland-backend=true
-+else
-+LIBGTK4_CONF_OPTS += -Dwayland-backend=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK4_BROADWAY),y)
-+LIBGTK4_CONF_OPTS += -Dbroadway-backend=true
-+else
-+LIBGTK4_CONF_OPTS += -Dbroadway-backend=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK4_GSTREAMER),y)
-+LIBGTK4_CONF_OPTS += -Dmedia-gstreamer=enabled
-+LIBGTK4_DEPENDENCIES += gstreamer1 gst1-plugins-base gst1-plugins-bad
-+else
-+LIBGTK4_CONF_OPTS += -Dmedia-gstreamer=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CUPS),y)
-+LIBGTK4_CONF_OPTS += -Dprint-cups=enabled
-+LIBGTK4_DEPENDENCIES += cups
-+else
-+LIBGTK4_CONF_OPTS += -Dprint-cups=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK4_DEMO),y)
-+LIBGTK4_CONF_OPTS += -Ddemos=true -Dbuild-examples=true
-+LIBGTK4_DEPENDENCIES += hicolor-icon-theme shared-mime-info
-+else
-+LIBGTK4_CONF_OPTS += -Ddemos=false -Dbuild-examples=false
-+endif
-+
-+define LIBGTK4_COMPILE_GLIB_SCHEMAS
-+	$(HOST_DIR)/bin/glib-compile-schemas \
-+		$(TARGET_DIR)/usr/share/glib-2.0/schemas
-+endef
-+LIBGTK4_POST_INSTALL_TARGET_HOOKS += LIBGTK4_COMPILE_GLIB_SCHEMAS
-+
-+# here, we build a native gtk4-update-icon-cache as host-libgtk4
-+
-+HOST_LIBGTK4_DEPENDENCIES = \
-+	host-gdk-pixbuf \
-+	host-libglib2 \
-+	host-pkgconf
-+
-+HOST_LIBGTK4_CFLAGS = \
-+	-I $(@D)/gtk \
-+	`$(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY) --cflags --libs gdk-pixbuf-2.0`
-+
-+define HOST_LIBGTK4_CONFIGURE_CMDS
-+	echo "#define GETTEXT_PACKAGE \"gtk40\"" >> $(@D)/gtk/config.h
-+	echo "#define GTK_LOCALEDIR \"/usr/share/locale\"" >> $(@D)/gtk/config.h
-+	echo "#define HAVE_UNISTD_H 1" >> $(@D)/gtk/config.h
-+	echo "#define HAVE_FTW_H 1" >> $(@D)/gtk/config.h
-+endef
-+
-+define HOST_LIBGTK4_BUILD_CMDS
-+	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
-+		$(@D)/tools/updateiconcache.c $(@D)/gtk/gtkiconcachevalidator.c\
-+		$(HOST_LIBGTK4_CFLAGS) \
-+		-o $(@D)/tools/gtk4-update-icon-cache
-+endef
-+
-+define HOST_LIBGTK4_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/tools/gtk4-update-icon-cache \
-+		$(HOST_DIR)/bin/gtk4-update-icon-cache
-+endef
-+
-+# Create icon-theme.cache for each of the icon directories/themes
-+# It's not strictly necessary but speeds up lookups
-+define LIBGTK4_UPDATE_ICON_CACHE
-+	[ ! -d $(TARGET_DIR)/usr/share/icons ] || \
-+		find $(TARGET_DIR)/usr/share/icons -maxdepth 1 -mindepth 1 -type d \
-+			-exec $(HOST_DIR)/bin/gtk-update-icon-cache {} \;
-+endef
-+LIBGTK4_TARGET_FINALIZE_HOOKS += LIBGTK4_UPDATE_ICON_CACHE
-+
-+$(eval $(meson-package))
-+$(eval $(host-generic-package))
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Thu, 6 Jan 2022 23:15:00 +0100
+ Subject: [PATCH] mozilla/certdata2pem.py: make cryptography module optional
+@@ -15,37 +21,36 @@ the check is skipped.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ ---
+- mozilla/certdata2pem.py | 18 ++++++++++--------
+- 1 file changed, 10 insertions(+), 8 deletions(-)
++ mozilla/certdata2pem.py | 17 ++++++++++-------
++ 1 file changed, 10 insertions(+), 7 deletions(-)
+ 
+ diff --git a/mozilla/certdata2pem.py b/mozilla/certdata2pem.py
+-index ede23d4..a6261f8 100644
++index 4df86a2..3a6d7dc 100644
+ --- a/mozilla/certdata2pem.py
+ +++ b/mozilla/certdata2pem.py
+-@@ -28,9 +28,6 @@ import sys
++@@ -28,8 +28,6 @@ import sys
+  import textwrap
+  import io
+  
+ -from cryptography import x509
+ -
+--
++ 
+  objects = []
+  
+- # Dirty file parser.
+-@@ -122,11 +119,16 @@ for obj in objects:
++@@ -122,11 +120,16 @@ for obj in objects:
+          if not obj['CKA_LABEL'] in trust or not trust[obj['CKA_LABEL']]:
+              continue
+  
+--        cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+--        if cert.not_valid_after < datetime.datetime.now():
++-        cert = x509.load_der_x509_certificate(bytes(obj['CKA_VALUE']))
++-        if cert.not_valid_after < datetime.datetime.utcnow():
+ -            print('!'*74)
+ -            print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+ -            print('!'*74)
+ +        try:
+ +            from cryptography import x509
+ +
+-+            cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+-+            if cert.not_valid_after < datetime.datetime.now():
+++            cert = x509.load_der_x509_certificate(bytes(obj['CKA_VALUE']))
+++            if cert.not_valid_after < datetime.datetime.utcnow():
+ +                print('!'*74)
+ +                print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+ +                print('!'*74)
+@@ -55,5 +60,5 @@ index ede23d4..a6261f8 100644
+          bname = obj['CKA_LABEL'][1:-1].replace('/', '_')\
+                                        .replace(' ', '_')\
+ -- 
+-2.33.1
++2.30.2
+ 
+diff --git a/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch b/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
+deleted file mode 100644
+index 0537da9224..0000000000
+--- a/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 5e493ca307a031e81528ceddb96f3da40bc062cf Mon Sep 17 00:00:00 2001
+-From: Wataru Ashihara <wsh@iij.ad.jp>
+-Date: Wed, 2 Nov 2022 12:40:05 -0400
+-Subject: [PATCH] mozilla/certdata2pem.py: Fix compat with cryptography > 3.0
+-
+-In newer cryptography packages, load_der_x509_certificate is enforced to be 'bytes' rather than currently used 'bytearray'.  This fixes that.
+-
+-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1008244
+-Signed-off-by: Justin Wood <jwood@starry.com>
+----
+- mozilla/certdata2pem.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/mozilla/certdata2pem.py b/mozilla/certdata2pem.py
+-index a6261f8..c0fa52c 100644
+---- a/mozilla/certdata2pem.py
+-+++ b/mozilla/certdata2pem.py
+-@@ -122,7 +122,7 @@ for obj in objects:
+-         try:
+-             from cryptography import x509
+- 
+--            cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+-+            cert = x509.load_der_x509_certificate(bytes(obj['CKA_VALUE']))
+-             if cert.not_valid_after < datetime.datetime.now():
+-                 print('!'*74)
+-                 print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+--- 
+-2.38.1
+-
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index a1675b999e..8a5b48dd79 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,6 +1,4 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1  bce5a8fac45456dbebf256f3a812c6cd0a853e3e  ca-certificates_20211016.tar.xz
+-sha256  2ae9b6dc5f40c25d6d7fe55e07b54f12a8967d1955d3b7b2f42ee46266eeef88  ca-certificates_20211016.tar.xz
+-
++sha256  83de934afa186e279d1ed08ea0d73f5cf43a6fbfb5f00874b6db3711c64576f3  ca-certificates_20230311.tar.xz
+ # Locally computed
+ sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 0b6962ab7b..5246b6e543 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-CA_CERTIFICATES_VERSION = 20211016
++# batocera / version bump
++CA_CERTIFICATES_VERSION = 20230311
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20211022T144903Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20230317T205011Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 -- 
-2.37.2
+2.30.2
 
 _______________________________________________
 buildroot mailing list
