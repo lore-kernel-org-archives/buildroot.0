@@ -4,46 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4521C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 16:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58000C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 16:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52BC581ABA;
-	Sun, 19 Mar 2023 16:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52BC581ABA
+	by smtp1.osuosl.org (Postfix) with ESMTP id D249A81A92;
+	Sun, 19 Mar 2023 16:36:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D249A81A92
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LtR7mpHylBPB; Sun, 19 Mar 2023 16:28:27 +0000 (UTC)
+	with ESMTP id iaYoFy9XinUA; Sun, 19 Mar 2023 16:36:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94CCE81A73;
-	Sun, 19 Mar 2023 16:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94CCE81A73
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 536831BF2F8
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 16:28:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DEFB81440;
+	Sun, 19 Mar 2023 16:36:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DEFB81440
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 101D41BF2F8
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 16:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D83D81A73
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 16:28:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D83D81A73
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD00F60AD8
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 16:36:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD00F60AD8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lNpBJcAKMAgW for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 16:28:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 361AA81A6A
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 16:28:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 361AA81A6A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 232098742C; Sun, 19 Mar 2023 16:28:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Mar 2023 17:28:02 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1c36821be1ffa7a55a7c87da7e224b457091c562
-X-Git-Newrev: 25defd685737913fcac59b00819c82118df533f9
-X-Patchwork-Hint: ignore
-Message-Id: <20230319162824.232098742C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ifupdown: bump to 0.8.41
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ppcBQRJJIWDw for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 16:36:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C583D607B4
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C583D607B4
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 16:36:44 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B234120004;
+ Sun, 19 Mar 2023 16:36:41 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pdw1Q-006kz5-I5; Sun, 19 Mar 2023 17:36:40 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain <ju.o@free.fr>
+References: <20230301220159.161476-2-ju.o@free.fr>
+ <20230312215945.168367-1-ju.o@free.fr>
+Date: Sun, 19 Mar 2023 17:36:40 +0100
+In-Reply-To: <20230312215945.168367-1-ju.o@free.fr> (Julien Olivain's message
+ of "Sun, 12 Mar 2023 22:59:45 +0100")
+Message-ID: <87zg88wvdz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/kexec: add
+ KEXEC_CPE_ID_{PRODUCT, VENDOR}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,122 +65,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0912305903730129651=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0912305903730129651==
-Content-Type: text/plain
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25defd685737913fcac59b00819c82118df533f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > cpe:2.3:a:kexec-tools_project:kexec-tools is a valid CPE identifier
+ > for this package:
+ > https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akexec-tools_project%3Akexec-tools
 
-MUSL support is patched by defining FNM_EXTMATCH to zero, which omits
-GNU-only extended pattern matching.
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Changes v1 -> v2:
+ > - Add the missing "KEXEC_CPE_ID_PRODUCT = kexec-tools"
+ >   as reported by Thomas.
 
-Signed-off-by: Martin Hundebøll <martin@geanix.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch | 41 ++++++++++++++++++++++
- package/ifupdown/ifupdown.hash                     |  4 +--
- package/ifupdown/ifupdown.mk                       |  5 +--
- 3 files changed, 46 insertions(+), 4 deletions(-)
+Committed to 2023.02.x, thanks.
 
-diff --git a/package/ifupdown/0001-archcommon-define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch b/package/ifupdown/0001-archcommon-define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch
-new file mode 100644
-index 0000000000..b1b58f1e7e
---- /dev/null
-+++ b/package/ifupdown/0001-archcommon-define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch
-@@ -0,0 +1,41 @@
-+From e27fe4b483194ee57736c228b7a6c56696ae8a06 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
-+Date: Thu, 16 Mar 2023 09:29:20 +0100
-+Subject: [PATCH] archcommon: define GNU-only FNM_EXTMATCH to zero on non-glibc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+FNM_EXTMATCH is a GNU extension that enables extended pattern matching
-+for fnmatch(3). Defining it to zero on non-glibc builds makes ifupdown
-+usable, albeit with a sligthy reduced pattern matching feature set.
-+
-+Signed-off-by: Martin Hundebøll <martin@geanix.com>
-+Upstream-status: Denied [https://salsa.debian.org/debian/ifupdown/-/merge_requests/5]
-+---
-+ archcommon.h | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/archcommon.h b/archcommon.h
-+index 818b0b6..981e84f 100644
-+--- a/archcommon.h
-++++ b/archcommon.h
-+@@ -1,5 +1,15 @@
-+ #include "header.h"
-+ 
-++/*
-++ * FNM_EXTMATCH is a GNU extension, so it isn't available when compiling
-++ * with MUSL. Defining FNM_EXTMATCH to zero is safe, as the flag merely
-++ * enables extended pattern matching, which MUSL users should be able to
-++ * live without.
-++ */
-++#ifndef FNM_EXTMATCH
-++#define FNM_EXTMATCH 0
-++#endif
-++
-+ bool execable(const char *);
-+ 
-+ #define iface_is_link() (!_iface_has(ifd->real_iface, ":."))
-+-- 
-+2.39.2
-+
-diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
-index f8844a60a6..f5c2d2d34c 100644
---- a/package/ifupdown/ifupdown.hash
-+++ b/package/ifupdown/ifupdown.hash
-@@ -1,4 +1,4 @@
--# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.16.dsc
--sha256  601416c12e39ac29022951a2867aed5c607f732ac57fd51517bfba92a4cc4fb0  ifupdown_0.8.16.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20230222T205615Z/pool/main/i/ifupdown/ifupdown_0.8.41.dsc
-+sha256  222c5bef313a9e71d9be4b946c73c8606c98f9e0229153191d9c6d8fb9b3599c  ifupdown_0.8.41.tar.xz
- # Locally computed
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
-index e62c2a79c5..14c36db0db 100644
---- a/package/ifupdown/ifupdown.mk
-+++ b/package/ifupdown/ifupdown.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--IFUPDOWN_VERSION = 0.8.16
-+IFUPDOWN_VERSION = 0.8.41
- IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
--IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160922T165503Z/pool/main/i/ifupdown
-+IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20230222T205615Z/pool/main/i/ifupdown
- IFUPDOWN_LICENSE = GPL-2.0+
- IFUPDOWN_LICENSE_FILES = COPYING
- IFUPDOWN_CPE_ID_VENDOR = debian
-@@ -14,6 +14,7 @@ IFUPDOWN_CPE_ID_VENDOR = debian
- define IFUPDOWN_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
-+		ARCH=linux \
- 		-C $(@D)
- endef
- 
-
---===============0912305903730129651==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0912305903730129651==--
