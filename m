@@ -4,47 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B93A0C7618A
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 10:21:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A362C7618A
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 10:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E09F408D7;
-	Sun, 19 Mar 2023 10:21:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E09F408D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4112408EB;
+	Sun, 19 Mar 2023 10:45:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4112408EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CKJ7ESD5elvK; Sun, 19 Mar 2023 10:21:50 +0000 (UTC)
+	with ESMTP id 45PFMjlxILk0; Sun, 19 Mar 2023 10:45:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 902B740629;
-	Sun, 19 Mar 2023 10:21:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 902B740629
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 70A751BF3C1
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 10:21:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EF61408D7;
+	Sun, 19 Mar 2023 10:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EF61408D7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CF6E1BF3C1
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 10:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A00E415FD
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 10:21:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A00E415FD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16D588151E
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 10:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16D588151E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p9jmBmlbgznw for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 10:21:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D065415F0
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 10:21:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D065415F0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 069D88707E; Sun, 19 Mar 2023 10:21:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FRl8omMRoghk for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 10:45:16 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CFE0814B3
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8CFE0814B3
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 10:45:16 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7CA9A1C0005
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 10:45:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1pdqXI-006XbM-Bl
+ for buildroot@buildroot.org; Sun, 19 Mar 2023 11:45:12 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Mar 2023 11:20:22 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 499947acac5b6f1a565261c631406f0d420fab82
-X-Git-Newrev: 71a2706320dbc22b16397b70b2d53b903bde0752
-X-Patchwork-Hint: ignore
-Message-Id: <20230319102146.069D88707E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Update for 2022.02.11
+Date: Sun, 19 Mar 2023 11:45:12 +0100
+Message-ID: <874jqhxbnr.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: [Buildroot] Buildroot 2022.02.11 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,81 +60,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71a2706320dbc22b16397b70b2d53b903bde0752
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 21 +++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 24 insertions(+), 3 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 3ffae0f7cc..ee4ee1ff3f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,24 @@
-+2022.02.11, released March 19th, 2023
-+
-+	Important / security related fixes.
-+
-+	Updated/fixed packages: apache, apr, apr-util, asterisk,
-+	at91dataflashboot, audit, bash, bind, bridge-utils, clamav,
-+	dmalloc, exfat, exfat-utils, f2fs-tools, gcc, git,
-+	glslsandbox-player, go, haproxy, intel-gmmlib, ipmiutil, less,
-+	libblockdev, libcurl, libev, libgcrypt, libmad, libmdbx,
-+	libmodsecurity, libolm, libpjsip, lttng-babeltrace, mender,
-+	mpv, mutt, mxs-bootlets, opensbi, opus, paho-mqtt-c,
-+	pcm-tools, php, proxychains-ng, python-django,
-+	python-m2crypto, python-werkzeug, quazip, quickjs,
-+	rockchip-mali, rsync, sudo, tiff, uacme, uqmi, webkitgtk,
-+	wpebackend-fdo, wpewebkit, xdriver_xf86-video-qxl, znc
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#15306: glibc build fails in Docker container
-+	#15361: Buildroot linking error on Apple Silicon
-+
- 2022.02.10, released March 1st, 2023
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index a7ed8e5a80..7ce00cab0a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.02.10
-+export BR2_VERSION := 2022.02.11
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1677703000
-+BR2_VERSION_EPOCH = 1679221000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index bd48f6e600..bb3e6be4f3 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2022.02.10'
-+RELEASE='2022.02.11'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
+ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
+MjIuMDIuMTEgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBhdDoKCmh0dHA6Ly9idWlsZHJv
+b3Qub3JnL2Rvd25sb2Fkcy9idWlsZHJvb3QtMjAyMi4wMi4xMS50YXIuZ3oKCm9yCgpodHRwOi8v
+YnVpbGRyb290Lm9yZy9kb3dubG9hZHMvYnVpbGRyb290LTIwMjIuMDIuMTEudGFyLnh6CgpPciBn
+ZXQgaXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290Lm9yZy9idWlsZHJvb3QKCkJ1aWxk
+cm9vdCAyMDIyLjAyLjExIGlzIGEgYnVnZml4IHJlbGVhc2Ugb24gdGhlIGN1cnJlbnQgbG9uZyB0
+ZXJtCnJlbGVhc2UsIGZpeGluZyBhIG51bWJlciBvZiBpbXBvcnRhbnQgLyBzZWN1cml0eSByZWxh
+dGVkIGlzc3VlcwpkaXNjb3ZlcmVkIHNpbmNlIHRoZSAyMDIyLjAyLjEwIHJlbGVhc2UuCgotIFNl
+Y3VyaXR5IGZpeGVzIGZvciBhcGFjaGUsIGFwciwgYXByLXV0aWwsIGJpbmQsIGNsYW1hdiwgZXhm
+YXQsCiAgZXhmYXQtdXRpbHMsIGdpdCwgaGFwcm94eSwgbGVzcywgbGliY3VybCwgbGlibW9kc2Vj
+dXJpdHksIGxpYnBqc2lwLAogIHBhaG8tbXF0dC1jLCBwaHAsIHB5dGhvbi1kamFuZ28sIHB5dGhv
+bi1tMmNyeXB0bywgcHl0aG9uLXdlcmt6ZXVnLAogIHRpZmYsIHVhY21lLCB3ZWJraXRndGssIHdw
+ZXdlYmtpdAoKLSBGaXhlcyBmb3IgZG93bmxvYWQvY29tcGlsYXRpb24vcnVudGltZS9saWNlbnNl
+IGlzc3VlcyBpbiBhc3RlcmlzaywKICBhdDkxZGF0YWZsYXNoYm9vdCwgYXVkaXQsIGRtYWxsb2Ms
+IGYyZnMtdG9vbHMsIGdjYywKICBnbHNsc2FuZGJveC1wbGF5ZXIsIGdvLCBpbnRlbC1nbW1saWIs
+IGlwbWl1dGlsLCBsaWJibG9ja2RldiwgbGliZXYsCiAgbGliZ2NyeXB0LCBsaWJtYWQsIGxpYm1k
+YngsIGxpYm9sbSwgbHR0bmctYmFiZWx0cmFjZSwgbWVuZGVyLCBtcHYsCiAgbXV0dCwgbXhzLWJv
+b3RsZXRzLCBvcGVuc2JpLCBvcHVzLCBwY20tdG9vbHMsIHByb3h5Y2hhaW5zLW5nLCBxdWF6aXAs
+CiAgcXVpY2tqcywgcm9ja2NoaXAtbWFsaSwgcnN5bmMsIHN1ZG8sIHVxbWksIHdwZWJhY2tlbmQt
+ZmRvLCB6bmMKCkZvciBtb3JlIGRldGFpbHMsIHNlZSB0aGUgQ0hBTkdFUyBmaWxlOgoKaHR0cHM6
+Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJvb3QvcGxhaW4vQ0hBTkdFUz9pZD0yMDIyLjAyLjEx
+CgpVc2VycyBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMgYXJlIHN0cm9uZ2x5IGVuY291cmFnZWQg
+dG8gdXBncmFkZS4KCk1hbnkgdGhhbmtzIHRvIGFsbCB0aGUgcGVvcGxlIGNvbnRyaWJ1dGluZyB0
+byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXNuIDIwMjIuMDIuMTAuLgoKICAgIDQzICBG
+YWJyaWNlIEZvbnRhaW5lCiAgICAgOCAgUGV0ZXIgS29yc2dhYXJkCiAgICAgNiAgQmVybmQgS3Vo
+bHMKICAgICAzICBQZXRlciBTZWlkZXJlcgogICAgIDMgIFlhbm4gRS4gTU9SSU4KICAgICAyICBB
+ZHJpYW4gUGVyZXogZGUgQ2FzdHJvCiAgICAgMiAgSmFtZXMgSGlsbGlhcmQKICAgICAyICBMYW5n
+IERhbmllbAogICAgIDEgIEFybm91dCBWYW5kZWNhcHBlbGxlCiAgICAgMSAgSGVpa28gVGhpZXJ5
+CiAgICAgMSAgSnVsaWVuIE9saXZhaW4KICAgICAxICBNYXR0aGV3IFdlYmVyCiAgICAgMSAgTmlj
+b2xhIERpIExpZXRvCiAgICAgMSAgUm9tYWluIE5hb3VyCiAgICAgMSAgU2ViYXN0aWFuIFdleWVy
+CiAgICAgMSAgU3RlZmFuIEFnbmVyCiAgICAgMSAgVGhvbWFzIERldm9vZ2R0CiAgICAgMSAgVGhv
+bWFzIFBldGF6em9uaQogICAgIDEgINCb0LXQvtC90LjQtCDQrtGA0YzQtdCyIChMZW9uaWQgWXVy
+aWV2KQoKTm90aWNlIHRoYXQgdGhlIGxvbmcgdGVybSByZWxlYXNlIGZvciAyMDIzIGhhcyBiZWVu
+IHJlbGVhc2VkOgoyMDIzLjAyLiBUaGVyZSB3aWxsIGJlIG9uZSBtb3JlIGZpbmFsIHVwZGF0ZSBv
+ZiAyMDIyLjAyLnggYmVmb3JlIGl0IGdvZXMKRU9MLCBidXQgcGxlYXNlIGNvbnNpZGVyIG1pZ3Jh
+dGluZyB0byAyMDIzLjAyLnggaW4gdGhlIG5lYXIgZnV0dXJlLgoKLS0gCkJ5ZSwgUGV0ZXIgS29y
+c2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
