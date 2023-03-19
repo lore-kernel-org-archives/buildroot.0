@@ -1,68 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88159C74A5B
-	for <buildroot@archiver.kernel.org>; Sat, 18 Mar 2023 23:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D16F8C7618A
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 02:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0EC4E40469;
-	Sat, 18 Mar 2023 23:01:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EC4E40469
+	by smtp4.osuosl.org (Postfix) with ESMTP id 262E2414C3;
+	Sun, 19 Mar 2023 02:19:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 262E2414C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6bZNaLIDs49Y; Sat, 18 Mar 2023 23:01:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s8Mdu_cUKjx1; Sun, 19 Mar 2023 02:19:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1CF74402D0;
-	Sat, 18 Mar 2023 23:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CF74402D0
+	by smtp4.osuosl.org (Postfix) with ESMTP id C68BA414C5;
+	Sun, 19 Mar 2023 02:19:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C68BA414C5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7B2AC1BF3A3
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 23:01:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 080531BF3F6
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 02:19:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5502860E4E
- for <buildroot@lists.busybox.net>; Sat, 18 Mar 2023 23:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5502860E4E
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5E6660AD2
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 02:19:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5E6660AD2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rq1HAss3geiO for <buildroot@lists.busybox.net>;
- Sat, 18 Mar 2023 23:01:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB12760E19
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BB12760E19
- for <buildroot@buildroot.org>; Sat, 18 Mar 2023 23:01:04 +0000 (UTC)
-Received: from smtpclient.apple ([151.34.66.109])
- by Aruba Outgoing Smtp  with ESMTPA
- id dfXppyhYnXi9adfXppFt57; Sun, 19 Mar 2023 00:01:02 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Sun, 19 Mar 2023 00:01:00 +0100
-Message-Id: <4B628CF1-65C6-4661-BAFB-B969A770A66E@benettiengineering.com>
-References: <CA+fTLhhanWy3Q3mj96yTD+4Hjxaeu=Eh5en_mhpwEbZ+deBPWA@mail.gmail.com>
-In-Reply-To: <CA+fTLhhanWy3Q3mj96yTD+4Hjxaeu=Eh5en_mhpwEbZ+deBPWA@mail.gmail.com>
-To: Indrek Kruusa <indrek.kruusa@gmail.com>
-X-Mailer: iPhone Mail (20D67)
-X-CMAE-Envelope: MS4xfJd3zb9RhMvFoAAxpDpisnrofU27npRWbYs7mUJ/miFJ9BRQ76s0wWnU0Qxu6qa0EYBVTTHXzmaOYebHSgmOXGWgNf8pDEwhs5L82Ze6KMIxNQx+zLcT
- 1ZivyoAPA+qJFvl61CDFXGBJD2hPQliWN6DOKHPEGtREumlZBX0bYLGSK2a0xLAylsPFcycwAxGSlAPjLG1FwcWrFQI7q+s6RgprrvqaSLaCS3N/TXOGceuG
- A0ysQmF6sh0tZThr1maHgw==
+ with ESMTP id qftd6G67j5Jb for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 02:19:01 +0000 (UTC)
+X-Greylist: delayed 05:34:19 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 575D660ABE
+Received: from box.stevenhay.com (box.stevenhay.com [172.104.133.13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 575D660ABE
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 02:19:01 +0000 (UTC)
+Received: from authenticated-user (box.stevenhay.com [172.104.133.13])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by box.stevenhay.com (Postfix) with ESMTPSA id 5E34720318;
+ Sat, 18 Mar 2023 22:18:56 -0400 (EDT)
+To: buildroot@buildroot.org
+Date: Sun, 19 Mar 2023 03:18:50 +0100
+Message-Id: <20230319021851.2593117-1-me@stevenhay.com>
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1679180462; bh=KAAPeV9f0FtouZ8bAbxpRguPjzB4MLSpedEPylX0/hE=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=ZiimsiwqMTSm07ZYX10Ygile+vgUJlm6d1il3ZIJo+v4YhcfeH91keIxLi58tbboG
- w5xBImDL6rsxZg3CqrMnBAHA1F6tJy5H2VSTA/0xVOaWg0g5zY9SdElF7bevmWGsBt
- agl4BIOmARYXrraclNFZJBAK320v9lAvPiPcU28+lxSnKUczlUnwISWE0mtEZfNuzn
- KT4/iY6DXmWwqwjoWY1HRJQOxU0ruiHQwkRhgNOtF4uYn+jGdK6VI8vDlsk8XFDqwB
- VjkoBKGmSSX9F5vQqvOvmoVFE8ODFsuetlWQorgaKqKm+8TPC3UDvNKUUEXT1NO1Pz
- xO7aRGV8C3SWw==
+ d=stevenhay.com; s=mail; t=1679192337;
+ bh=CFM8OKWFjQuvXa5IG82f8tUxk+OASH/Sb+OJSF7b8x8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=WkFZYoCewCWv13ZT58odAGbBIlTfHlVS2rZMY2YMHcchC+rFXjdPiWayNhUbncoeQ
+ 0T+R0zlmehMqacNISR/rN9zF1Itld+pEHoNWL2QT6EIOTvv/gyMyeLgd1RiGiX1JwO
+ oOQg88u3aNgt/hzEdKOhh+SLB/WbQVCkoI5/QvAFOZ+15Khlxhib1U0OCShDc3Rg0U
+ jGocYRk/LsugilDdzn1s8UNDeqGt68NHNIQJVVDQnk2GuVs97J8G9YJndNdhi1H5ye
+ AdWfyUMjZItt+37dFEMtAKZ/YmyULipW+hi9LRUPf8EIuB2cvu8H8bjPLZBtACfGZM
+ FzowrzquoTOTA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Ziimsiwq
-Subject: Re: [Buildroot] package/rtl8189fs: bug in conf, and a question
+ dkim=pass (2048-bit key) header.d=stevenhay.com header.i=@stevenhay.com
+ header.a=rsa-sha256 header.s=mail header.b=WkFZYoCe
+Subject: [Buildroot] [PATCH] package/ca-certificates: bump version to
+ 20230311
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,151 +70,176 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============0806486448991703079=="
+From: Steve Hay via buildroot <buildroot@buildroot.org>
+Reply-To: Steve Hay <me@stevenhay.com>
+Cc: Martin Bark <martin@barkynet.com>, Steve Hay <me@stevenhay.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+The impetus for this change was that wget fails to load pages signed by
+Let's Encrypt due to missing root certs. This version has the updated and
+correct certs.
 
---===============0806486448991703079==
-Content-Type: multipart/alternative; boundary=Apple-Mail-26902FB9-0FB2-4D28-A748-67A2C8D56DF4
-Content-Transfer-Encoding: 7bit
+0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
 
+Patch dropped because the fix is incorporated upstream.
 
---Apple-Mail-26902FB9-0FB2-4D28-A748-67A2C8D56DF4
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Steve Hay <me@stevenhay.com>
 
-Hi Indkrek,
+---
+Changes v1 -> v2
+    - Removed the extraneous comment in the make file.
+    - Fixed patch header.
+    - Added note to the log as to why the patch was dropped.
+---
+ ...2pem.py-make-cryptography-module-opt.patch | 31 +++++++++++--------
+ ...2pem.py-Fix-compat-with-cryptography.patch | 29 -----------------
+ package/ca-certificates/ca-certificates.hash  |  4 +--
+ package/ca-certificates/ca-certificates.mk    |  5 +--
+ 4 files changed, 22 insertions(+), 47 deletions(-)
+ delete mode 100644 package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
 
-> Il giorno 18 mar 2023, alle ore 22:46, Indrek Kruusa <indrek.kruusa@gmail.=
-com> ha scritto:
->=20
-> =EF=BB=BF
-> Hi!
-> I'm trying to prepare a patch for MangoPi MQ (Allwinner D1s RISC-V). I'm a=
-lmost there - Samuel Holland managed to mainline initial support for this bo=
-ard, so vanilla linux kernel 6.3-rc2 boots fine (with proper/modified u-boot=
- version).
-> The WiFi module is based on rtl8189ftv chip (SDIO connection) and its driv=
-er seems to be problematic.
-> First, buildroot's package/rtl8189fs is currently broken; it points to the=
- wrong commit (seems to be copy paste error, inherited from package/rtl8189e=
-s). The result is unusable.
-
-as Thomas already pointed the commit works ok for me too.
-
-> I updated it to the correct commit (on the correct branch) and the driver b=
-uilds fine and loads fine.
-
-Which branch and commit have you used? Take care that the commit actually us=
-ed has not the support for Linux 6.3 that has been added later.
-
-> There are couple of issues though:
-> - for some reason the debug mode in driver is set
-> -  driver seems to constantly restart the module, and it emits endless deb=
-ug messages
-
-This could be bound to the branch/commit of the driver, if it includes Linux=
- 6.3 support or not.
-But it should, otherwise it should not build.
-Anyway I don=E2=80=99t know that much about other branches.
-Maybe you mean that master branch is for rtl8189es and rtl8189fs branch is f=
-or rtl8189fs?
-
-Also, how do you determine that rtl8189ftv is compatible with rtl8189fs?
-
->=20
-> So, is there anybody for whom the rtl8189fs linux driver works fine with k=
-ernel 6.3-rcX?
->=20
-> PS. I can prepare a patch to fix the package/rtl8189fs but I expect Giulio=
- to bump the version again for both package/rtl8189es and package/rtl8189fs s=
-oon.
-
-Sure I can do that, there is already a pending patch for rtl8189es but it=E2=
-=80=99s already superseded at this point.=20
-By Monday I=E2=80=99ll send the 2 patches or feel free to do it instead.
-
-Best regards
-Giulio
-
->=20
-> Best regards,
-> Indrek
->=20
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
---Apple-Mail-26902FB9-0FB2-4D28-A748-67A2C8D56DF4
-Content-Type: text/html;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
-utf-8"></head><body dir=3D"auto">Hi Indkrek,<br><div dir=3D"ltr"><br><blockq=
-uote type=3D"cite">Il giorno 18 mar 2023, alle ore 22:46, Indrek Kruusa &lt;=
-indrek.kruusa@gmail.com&gt; ha scritto:<br><br></blockquote></div><blockquot=
-e type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<div dir=3D"ltr">Hi!<div>I'm tryin=
-g to prepare a patch for MangoPi MQ (Allwinner D1s RISC-V). I'm almost there=
- - Samuel Holland&nbsp;managed to mainline initial support for this board, s=
-o vanilla linux kernel&nbsp;6.3-rc2 boots fine (with proper/modified u-boot v=
-ersion).</div><div>The WiFi module is based on rtl8189ftv chip (SDIO connect=
-ion) and its driver seems to be problematic.</div><div>First, buildroot's pa=
-ckage/rtl8189fs is currently broken; it points to the wrong commit (seems to=
- be copy paste error, inherited from package/rtl8189es). The result is unusa=
-ble.</div></div></div></blockquote><div><br></div><div><span style=3D"caret-=
-color: rgb(0, 0, 0); color: rgb(0, 0, 0);">as Thomas already pointed the com=
-mit works ok for me too.</span></div><br><blockquote type=3D"cite"><div dir=3D=
-"ltr"><div dir=3D"ltr"><div> I updated it to the correct commit (on the corr=
-ect branch) and the driver builds fine and loads fine.</div></div></div></bl=
-ockquote><div><br></div>Which branch and commit have you used? Take care tha=
-t the commit actually used has not the support for Linux 6.3 that has been a=
-dded later.<br><div><br></div><blockquote type=3D"cite"><div dir=3D"ltr"><di=
-v dir=3D"ltr"><div>There are couple of issues though:</div><div>- for some r=
-eason the debug mode in driver is set</div></div></div></blockquote><blockqu=
-ote type=3D"cite"><div dir=3D"ltr"><div dir=3D"ltr"><div>-&nbsp; driver seem=
-s to constantly&nbsp;restart the module, and it emits endless debug messages=
-</div></div></div></blockquote><div><br></div><div>This could be bound to th=
-e branch/commit of the driver, if it includes Linux 6.3 support or not.</div=
-><div>But it should, otherwise it should not build.</div><div>Anyway I don=E2=
-=80=99t know that much about other branches.</div><div>Maybe you mean that m=
-aster branch is for rtl8189es and rtl8189fs branch is for rtl8189fs?</div><d=
-iv><br></div><div>Also, how do you determine that rtl8189ftv is compatible w=
-ith rtl8189fs?</div><br><blockquote type=3D"cite"><div dir=3D"ltr"><div dir=3D=
-"ltr"><div><br></div><div>So, is there anybody for whom the rtl8189fs linux d=
-river works fine with kernel 6.3-rcX?</div></div></div></blockquote><blockqu=
-ote type=3D"cite"><div dir=3D"ltr"><div dir=3D"ltr"><div><br></div><div>PS. I=
- can&nbsp;prepare a patch&nbsp;to fix the package/rtl8189fs but I expect&nbs=
-p;<span style=3D"color:rgb(51,51,51);font-family:sans-serif;font-size:13.333=
-3px">Giulio to bump the version again for both&nbsp;</span>package/rtl8189es=
- and package/rtl8189fs soon.</div></div></div></blockquote><div><br></div><d=
-iv>Sure I can do that, there is already a pending patch for rtl8189es but it=
-=E2=80=99s already superseded at this point.&nbsp;</div><div>By Monday I=E2=80=
-=99ll send the 2 patches or feel free to do it instead.</div><div><br></div>=
-<div>Best regards</div><div>Giulio</div><br><blockquote type=3D"cite"><div d=
-ir=3D"ltr"><div dir=3D"ltr"><div><span style=3D"color:rgb(51,51,51);font-fam=
-ily:sans-serif;font-size:13.3333px"><br></span></div><div>Best regards,</div=
-><div>Indrek</div><div><br></div></div>
-<span>_______________________________________________</span><br><span>buildr=
-oot mailing list</span><br><span>buildroot@buildroot.org</span><br><span>htt=
-ps://lists.buildroot.org/mailman/listinfo/buildroot</span><br></div></blockq=
-uote></body></html>=
-
---Apple-Mail-26902FB9-0FB2-4D28-A748-67A2C8D56DF4--
-
---===============0806486448991703079==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+index b76c1bfd7f..ced593664e 100644
+--- a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
++++ b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+@@ -1,4 +1,10 @@
+-From bf18b564122e8f976681a2398862fde1eafd84ba Mon Sep 17 00:00:00 2001
++From a4e468a2a0afa80df174831c2f422184820bb0fa Mon Sep 17 00:00:00 2001
++From: Steve Hay <me@stevenhay.com>
++Date: Sat, 18 Mar 2023 17:57:18 +0100
++Subject: [PATCH] mozilla/certdata2pem.py: make cryptography module optional
++
++Modified for a newer version of the ca-certificates module.
++
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Thu, 6 Jan 2022 23:15:00 +0100
+ Subject: [PATCH] mozilla/certdata2pem.py: make cryptography module optional
+@@ -15,37 +21,36 @@ the check is skipped.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ ---
+- mozilla/certdata2pem.py | 18 ++++++++++--------
+- 1 file changed, 10 insertions(+), 8 deletions(-)
++ mozilla/certdata2pem.py | 17 ++++++++++-------
++ 1 file changed, 10 insertions(+), 7 deletions(-)
+ 
+ diff --git a/mozilla/certdata2pem.py b/mozilla/certdata2pem.py
+-index ede23d4..a6261f8 100644
++index 4df86a2..3a6d7dc 100644
+ --- a/mozilla/certdata2pem.py
+ +++ b/mozilla/certdata2pem.py
+-@@ -28,9 +28,6 @@ import sys
++@@ -28,8 +28,6 @@ import sys
+  import textwrap
+  import io
+  
+ -from cryptography import x509
+ -
+--
++ 
+  objects = []
+  
+- # Dirty file parser.
+-@@ -122,11 +119,16 @@ for obj in objects:
++@@ -122,11 +120,16 @@ for obj in objects:
+          if not obj['CKA_LABEL'] in trust or not trust[obj['CKA_LABEL']]:
+              continue
+  
+--        cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+--        if cert.not_valid_after < datetime.datetime.now():
++-        cert = x509.load_der_x509_certificate(bytes(obj['CKA_VALUE']))
++-        if cert.not_valid_after < datetime.datetime.utcnow():
+ -            print('!'*74)
+ -            print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+ -            print('!'*74)
+ +        try:
+ +            from cryptography import x509
+ +
+-+            cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+-+            if cert.not_valid_after < datetime.datetime.now():
+++            cert = x509.load_der_x509_certificate(bytes(obj['CKA_VALUE']))
+++            if cert.not_valid_after < datetime.datetime.utcnow():
+ +                print('!'*74)
+ +                print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+ +                print('!'*74)
+@@ -55,5 +60,5 @@ index ede23d4..a6261f8 100644
+          bname = obj['CKA_LABEL'][1:-1].replace('/', '_')\
+                                        .replace(' ', '_')\
+ -- 
+-2.33.1
++2.30.2
+ 
+diff --git a/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch b/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
+deleted file mode 100644
+index 0537da9224..0000000000
+--- a/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 5e493ca307a031e81528ceddb96f3da40bc062cf Mon Sep 17 00:00:00 2001
+-From: Wataru Ashihara <wsh@iij.ad.jp>
+-Date: Wed, 2 Nov 2022 12:40:05 -0400
+-Subject: [PATCH] mozilla/certdata2pem.py: Fix compat with cryptography > 3.0
+-
+-In newer cryptography packages, load_der_x509_certificate is enforced to be 'bytes' rather than currently used 'bytearray'.  This fixes that.
+-
+-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1008244
+-Signed-off-by: Justin Wood <jwood@starry.com>
+----
+- mozilla/certdata2pem.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/mozilla/certdata2pem.py b/mozilla/certdata2pem.py
+-index a6261f8..c0fa52c 100644
+---- a/mozilla/certdata2pem.py
+-+++ b/mozilla/certdata2pem.py
+-@@ -122,7 +122,7 @@ for obj in objects:
+-         try:
+-             from cryptography import x509
+- 
+--            cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+-+            cert = x509.load_der_x509_certificate(bytes(obj['CKA_VALUE']))
+-             if cert.not_valid_after < datetime.datetime.now():
+-                 print('!'*74)
+-                 print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+--- 
+-2.38.1
+-
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index a1675b999e..8a5b48dd79 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,6 +1,4 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1  bce5a8fac45456dbebf256f3a812c6cd0a853e3e  ca-certificates_20211016.tar.xz
+-sha256  2ae9b6dc5f40c25d6d7fe55e07b54f12a8967d1955d3b7b2f42ee46266eeef88  ca-certificates_20211016.tar.xz
+-
++sha256  83de934afa186e279d1ed08ea0d73f5cf43a6fbfb5f00874b6db3711c64576f3  ca-certificates_20230311.tar.xz
+ # Locally computed
+ sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 0b6962ab7b..5246b6e543 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-CA_CERTIFICATES_VERSION = 20211016
++# batocera / version bump
++CA_CERTIFICATES_VERSION = 20230311
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20211022T144903Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20230317T205011Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+-- 
+2.30.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0806486448991703079==--
