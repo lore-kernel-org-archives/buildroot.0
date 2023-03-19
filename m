@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31411C76195
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 19:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3434EC7618A
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 19:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F5A560AEA;
-	Sun, 19 Mar 2023 19:12:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F5A560AEA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CEE960AEA;
+	Sun, 19 Mar 2023 19:25:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CEE960AEA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sTwI3s7vngID; Sun, 19 Mar 2023 19:12:36 +0000 (UTC)
+	with ESMTP id edtbTbfyufWw; Sun, 19 Mar 2023 19:25:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE80660808;
-	Sun, 19 Mar 2023 19:12:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE80660808
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 96CB61BF59D
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 19:12:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4BF160808;
+	Sun, 19 Mar 2023 19:25:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4BF160808
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B5C461BF59D
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 19:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A2D340223
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 19:12:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A2D340223
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E66F817E4
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 19:25:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E66F817E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hl8HtXQJ3mnC for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 19:12:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aic6CaohEGQB for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 19:25:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B79D4013D
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5B79D4013D
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 19:12:32 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id m2so8516633wrh.6
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 12:12:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D522817D3
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1D522817D3
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 19:25:34 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id p16so6204893wmq.5
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 12:25:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679253150;
+ d=1e100.net; s=20210112; t=1679253932;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=kV+GQp/KqOCYu3cfJ48zJx85OUAwCqWb5wIvyl/KsSI=;
- b=Ui628OVCqEDiUvE1Cb5suhdeD3O9/q96PZbF/3Bmndlckv1lErSElcT8P3mx9XwXxA
- TQR4PzdroVvkUnw0YGb6fC0lrxustuJwSilXbdeIKuPp1yEzY37PIN7vfDqCTxj2Dbtr
- cQw+d2HkieOwlh01vM23dauAxPtymvUcFcfGa8N1hz8SQUV8iWPjJR+/VoFwPVdamUsW
- VSYZPuiZPip/uU+T/2f3T3Q8U3pN6IOVFsq5dCki1XCXo4et9aIJO/u8pBUri5ein7E5
- n5gRWAB0hz5oTpp1GHWCWYQc7jQNSNl25TVoPkp0H5VxRgu74fXx3DHE3ZWCbgU/DKyN
- 7ihQ==
-X-Gm-Message-State: AO0yUKUksf97OtJux/FhaRXheGYYPwDKFttgjwSsJ07BO+Coe3hj190E
- scWieNpaeCkbKIGfbhpR3T4NwaVMiyo=
-X-Google-Smtp-Source: AK7set9sNZOFhH6/cPd2KAsTaFbHCsyy2SO0WOci5pOTMv0CH3udhXsAgAix7uq+zaosKKsw1tejww==
-X-Received: by 2002:a5d:6ace:0:b0:2c5:594b:10d5 with SMTP id
- u14-20020a5d6ace000000b002c5594b10d5mr12625996wrw.1.1679253150055; 
- Sun, 19 Mar 2023 12:12:30 -0700 (PDT)
+ bh=AU2GjRsMry6HxaAkBaOmUndNbk9mJ6P+5qLQuxMxGpY=;
+ b=ie7o4danWFKt2BOAK6S8XfSHqzit0Jveaucv2z99g29k5YpK7S1DD0IIG/pj5eLDR/
+ X7DDcnIceBYNlrOEAEeYXA5WXC/203PQYMMrtyPy3lyoXw6mnpVhd7/DNu8fj1KaocJq
+ cUcvjUb8JWpj+LLT+SVfqVe2T04vcChymKDzRsVad+d+7HwU+wspcA8TP0FoFPdFmsPv
+ SgHU1dfOomkwWNbdwESo5rAKPpW8AMzwAWI9wGClXb/VWN5ISkYkp+nJHjNdBelcIYmX
+ T2F4gGbr05o0N+Ie2b6q2HFHpgzHZjSMiRh0cAEFtqZ318Ax2GdhFb+C+qmnIujLkOVL
+ ozvA==
+X-Gm-Message-State: AO0yUKWxicQ0QDMrQ3GXveXo6Fy4YaA4b9SxKl+offF8ZEcB7iyD7Mqn
+ xAjU51UlPRkoAQUd+21T7fuKFNGl6SA=
+X-Google-Smtp-Source: AK7set9BGLCxtGnoD0v3eQ2co7Nr32t9vrTUKThRoHN+ES4W97Y/8lDSyt7DSGUafYefry8hyGyavQ==
+X-Received: by 2002:a1c:4c17:0:b0:3ed:95a5:3257 with SMTP id
+ z23-20020a1c4c17000000b003ed95a53257mr6798156wmf.2.1679253931652; 
+ Sun, 19 Mar 2023 12:25:31 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- d6-20020a5d6dc6000000b002c53f6c7599sm7107050wrz.29.2023.03.19.12.12.29
+ r6-20020a05600c458600b003ebff290a52sm14756001wmo.28.2023.03.19.12.25.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Mar 2023 12:12:29 -0700 (PDT)
+ Sun, 19 Mar 2023 12:25:31 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Mar 2023 20:12:12 +0100
-Message-Id: <20230319191212.666401-1-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Mar 2023 20:25:26 +0100
+Message-Id: <20230319192526.915856-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679253150;
+ d=gmail.com; s=20210112; t=1679253932;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kV+GQp/KqOCYu3cfJ48zJx85OUAwCqWb5wIvyl/KsSI=;
- b=R+Omh9i5YURFskZrJuGF3rSrXjiK1eURNsdj/uIEOWQbQm3z1c5KCCJej0jbbYMAcf
- 8Acd6CqAp5fg3iQNPvxQSFsD+v+TUFXWY7orxtf2Vx7LoqY0qXB+Y1+esyIfQ9Ajh3OI
- BMm+aw3B9CW5BnQzhM+z+YGlF8KfVEJR6kzE6xp106wT4H8h3bPJ9+pNX7Ao9dwgtefb
- EFmH3jvmpXKWNhSMANmq2ivycwqRDobRKnQs0TRq0EMtEwj/d/cOUi7IAwYBfbsk58mm
- 2FG28kleT7qH9wq+wTzdl+wAgMmFNQbqfHQYwJoMVmLxjAMh+s92bKId/tQMfRjkagtB
- BsqA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=AU2GjRsMry6HxaAkBaOmUndNbk9mJ6P+5qLQuxMxGpY=;
+ b=VXQNUF8YK8n5xtR194Ac5KHXwOUbNgEF5fZn+1ZqMIPRM+4I/ZIJtyCbbBSoGLy9hk
+ r/YCU2dn22w1T5wNJof6q7BY6Mer11oktU6tLmAG9Segl3TXETQmK61LOEsrbZUMEbNj
+ wJVjQvTATy+Q5OdyebO2cisAz+kTG6ZkLXI1UweJbyvjfPYUC/+z5ReAqgLhfYJYWkt3
+ 8/r1YnNuT0vBVc3R9Y7VFuQ8Qt9wUvW9Co9vaiLsxuHe57ECQhnwCRnpx6RJaOSngl6h
+ wFOywwYyMNTXNHOw8TnYoWcCCyeUFh/VJKci9qfIpFix1ho6arA6eMIdOfWa0I3sTsNA
+ pkoA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=R+Omh9i5
-Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: security bump to
- version 0.9.76
+ header.a=rsa-sha256 header.s=20210112 header.b=VXQNUF8Y
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 4.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,51 +94,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Will Newton <will.newton@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-27371: GNU libmicrohttpd before 0.9.76 allows remote DoS
-(Denial of Service) due to improper parsing of a multipart/form-data
-boundary in the postprocessor.c MHD_create_post_processor() method. This
-allows an attacker to remotely send a malicious HTTP POST packet that
-includes one or more '\0' bytes in a multipart/form-data boundary field,
-which - assuming a specific heap layout - will result in an
-out-of-bounds read and a crash in the find_boundary() function.
+Fix CVE-2023-1161: ISO 15765 and ISO 10681 dissector crash in Wireshark
+4.0.0 to 4.0.3 and 3.6.0 to 3.6.11 allows denial of service via packet
+injection or crafted capture file
 
-https://lists.gnu.org/archive/html/libmicrohttpd/2023-02/msg00000.html
+https://www.wireshark.org/security/wnpa-sec-2023-08.html
+https://www.wireshark.org/news/20230302.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 7f95e78a6e..ce30e2ba11 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 7128b560ae..d89caa5de8 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.3.txt
+-sha1  243b0057cfe6d447662e81b5646110aaf8b63c81  wireshark-4.0.3.tar.xz
+-sha256  6c51e15bcc0afb93734e686dbff354ffd159f570bd2904bcbbad6f3feb7e9511  wireshark-4.0.3.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.4.txt
++sha1  ae3c28d6966c420ee3a8d058ea212a1b6adab50f  wireshark-4.0.4.tar.xz
++sha256  a4a09f6564f00639036ffe5064ac4dc2176adfa3e484c539c9c73f835436e74b  wireshark-4.0.4.tar.xz
+ 
  # Locally calculated
--sha256  9278907a6f571b391aab9644fd646a5108ed97311ec66f6359cebbedb0a4e3bb  libmicrohttpd-0.9.75.tar.gz
-+sha256  f0b1547b5a42a6c0f724e8e1c1cb5ce9c4c35fb495e7d780b9930d35011ceb4c  libmicrohttpd-0.9.76.tar.gz
- sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index f75178bc0a..4e7b72b65c 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 12c36575df..f5a8e1f070 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.75
-+LIBMICROHTTPD_VERSION = 0.9.76
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_CPE_ID_VENDOR = gnu
+-WIRESHARK_VERSION = 4.0.3
++WIRESHARK_VERSION = 4.0.4
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
 2.39.1
 
