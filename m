@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49AB6C7618A
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 20:15:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96B7FC6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 20:15:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BEBF2409A3;
-	Sun, 19 Mar 2023 20:15:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEBF2409A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AC11410A5;
+	Sun, 19 Mar 2023 20:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AC11410A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HfDNrF1A5Il6; Sun, 19 Mar 2023 20:15:20 +0000 (UTC)
+	with ESMTP id 9f849Z_lS6ai; Sun, 19 Mar 2023 20:15:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B68FF4099E;
-	Sun, 19 Mar 2023 20:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B68FF4099E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 58E6B1BF86D
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:15:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2625B40E46;
+	Sun, 19 Mar 2023 20:15:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2625B40E46
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 86FB51BF86D
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:15:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 408FD4099E
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 408FD4099E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DDD081AF5
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:15:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DDD081AF5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9MnBfbGGJ_Dg for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 20:15:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D962740992
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D962740992
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 20:15:15 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6DFEA240004;
- Sun, 19 Mar 2023 20:15:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pdzQt-007J5t-BI; Sun, 19 Mar 2023 21:15:11 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id paDa65t0z_xk for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 20:15:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5653F81B14
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 20:15:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5653F81B14
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4625C874FA; Sun, 19 Mar 2023 20:15:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230318123217.4940-1-fontaine.fabrice@gmail.com>
-Date: Sun, 19 Mar 2023 21:15:11 +0100
-In-Reply-To: <20230318123217.4940-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 18 Mar 2023 13:32:17 +0100")
-Message-ID: <87ilewwl9s.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/snmppp: security bump to
- version 3.5.0
+To: buildroot@buildroot.org
+Date: Sun, 19 Mar 2023 20:33:34 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: f9a4096917c1bb592036dda3eb383419af0aa96b
+X-Git-Newrev: 5a03ec843ddd5b5f20ae28ed4a380b0189c56371
+X-Patchwork-Hint: ignore
+Message-Id: <20230319201539.4625C874FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/s390-tools: needs
+ OpenSSL-enabled libcurl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,32 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a03ec843ddd5b5f20ae28ed4a380b0189c56371
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > - Improved (security): Avoid timing attacks on authentication
- >   verification.
- > - Drop patch (already in version)
+Fix the following build failure raised bump to version 2.17.0 in commit
+eab9110afbef9c39569c4cc988aed15c48f7ce44 and
+https://github.com/ibm-s390-linux/s390-tools/commit/56fecf1832c3ebc4626ddf5c598762833c362d5e:
 
- > https://www.agentpp.com/download/changes_snmp++v3.txt
+Error: libcurl is not built with the OpenSSL backend
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/32aa8f0bece5da2a16d761f175d46c7d3e0a8965
+ - http://autobuild.buildroot.org/results/535253f483c927da456c0be292df6a58c1f39737
 
-It looks like we also need to bump agentpp:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 889fd54f809973d56b98e78677ae8a14e9e64da4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/s390-tools/s390-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-http://autobuild.buildroot.net/results/d73/d7347b8b3953596b66da6ca6d85f084fb427934c/build-end.log
-
-https://agentpp.com/download/changes_agent++.txt
-
-Care to have a look at doing that?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index 8cd5491405..ec01a18cb0 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
+@@ -14,7 +14,7 @@ S390_TOOLS_MAKE_OPTS = \
+ 	ARCH=$(BR2_ARCH) \
+ 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+-ifeq ($(BR2_PACKAGE_LIBCURL),y)
++ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
+ S390_TOOLS_DEPENDENCIES += libcurl
+ S390_TOOLS_MAKE_OPTS += \
+ 	CURL_CONFIG=$(STAGING_DIR)/usr/bin/curl-config \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
