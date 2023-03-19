@@ -1,73 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DC4EC6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 12:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C32EC7618A
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 12:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0915E818E8;
-	Sun, 19 Mar 2023 12:04:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0915E818E8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F0CE60FBC;
+	Sun, 19 Mar 2023 12:24:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F0CE60FBC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UREXBceh-6zg; Sun, 19 Mar 2023 12:04:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9GnQ8MDuFcAW; Sun, 19 Mar 2023 12:24:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31444814A9;
-	Sun, 19 Mar 2023 12:04:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31444814A9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D119E1BF5A2
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 12:04:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4855D60FB2;
+	Sun, 19 Mar 2023 12:24:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4855D60FB2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 845BF1BF5A2
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 12:24:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B157340994
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 12:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B157340994
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E77640525
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 12:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E77640525
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TblWvZ891XIV for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 12:04:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B88CD40951
-Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B88CD40951
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 12:04:24 +0000 (UTC)
-Received: from [192.168.50.162] ([146.241.96.213])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1kNhKrxiinmO for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 12:24:08 +0000 (UTC)
+X-Greylist: delayed 00:07:04 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9DC140176
+Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C9DC140176
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 12:24:07 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.96.213])
  by Aruba Outgoing Smtp  with ESMTPSA
- id drltpsONmdwECdrlups6VN; Sun, 19 Mar 2023 13:04:22 +0100
-Message-ID: <30459231-2d17-cfcb-18bf-b59fa58ca1ce@benettiengineering.com>
-Date: Sun, 19 Mar 2023 13:04:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-To: Indrek Kruusa <indrek.kruusa@gmail.com>
-References: <CA+fTLhhanWy3Q3mj96yTD+4Hjxaeu=Eh5en_mhpwEbZ+deBPWA@mail.gmail.com>
- <4B628CF1-65C6-4661-BAFB-B969A770A66E@benettiengineering.com>
- <CA+fTLhgBT=oKNk6+RPqwck9iSG9gVs5_VgeLVa3Mbe7FW_mPjw@mail.gmail.com>
- <CA+fTLhgNJOodcZcADuKroNvD_-UQZdu2+=PcEvBSVKfyZwaFZg@mail.gmail.com>
-Content-Language: en-US, it
+ id dry8pQfQR9J5Hdry8pXwyL; Sun, 19 Mar 2023 13:17:01 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CA+fTLhgNJOodcZcADuKroNvD_-UQZdu2+=PcEvBSVKfyZwaFZg@mail.gmail.com>
-X-CMAE-Envelope: MS4xfCZun2i+aqpF4QZItdWqvmFyTktbG88712toGwvG75kfoNifYKbKO/e0GAF1KZZYciUWHsRZ4na0/8Fn1CqNfzOUpJNYOaycGQVbxpMYWeLOOPsUwo0a
- z/U4tdlIHK/HPQyvZAYZVSn3WiXCKzduZqnHWGgZoYiUOjverng+AyOQAv6cb2FwwTvUUbcFS/kBnR5cVFKFFLhUzUTXGPxkgb8UmninzSgYTuQ1B61IB7T9
- bglmTvdwBfJU2wXTjy1Q9rD7z0cSAaLqFXLLy1T4f6U=
+To: buildroot@buildroot.org
+Date: Sun, 19 Mar 2023 13:16:58 +0100
+Message-Id: <20230319121659.88039-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfKYdhobOo5PtnH3oFzs7x3BGaHhiHaS1ewLaUP7b2G/gbariXLpjMLbZaazFaxS87EFBAlVjPlliXD7zME549hQXbc+VlfK/l9nAVBhbTgeH8ZVG5xPe
+ /IdXfSGhHzhGQVYK2qWk3NLofoYXtsnvkSfBSRHk357vY8TAL1SoUUIsYus5D65W+Pqx5PCmqOaKBXTDZP/agjiGFzI+sDtVJFQkXtI57DsY7/VD/5SnOmWc
+ bo9d/yH7zLPtd+AeWGgLhBYZojRHqLsR67npjeonfrcWIoTq8P2O27R3ZE+FhdNoBYWUsZLgUnX4Ese2A+FpGxzEcUlDC3w7MW+xGxA89Y+LFUlL8+Lbdq7r
+ 1YOT5z56BE0b6fkmRApzryv16y1TW/ewx+ubsjwcpXWH8W9b9hA=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1679227462; bh=7LO0JSsuJ2uT6CknDfTHQxlW/BlsdUvJectgAHRb9MQ=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=UgXDVH+TcxcvSFCYkLiajE/Oi+pty6NxeF0wrykGFUtMq8QPFi5bK6cCcqQvH1cIn
- ioKqEyUw4+CeO4YMpcdTfDIXBxDrWlvME+6OO+V+Lz9bGm5iZoRonEeTOBjSvvll5W
- r3mU2fv5FelcdjHa3XGJFJXgFNc84NHuhgXQWMxkA986ZZcxtP2ntitaCbcvoXSvvu
- dO2OnroK0T9yQqGbJdclHGS3FV1D9QG9rORfRvc5HRZdYOoYcfIIwGH7qawlg0Kuhu
- pdWv7/4B1QTI/OgWVOCLaXqK5uvn5GoW3N4/pJVPcq2Bbwltsh+hBMF6NPHGALmmhQ
- pLyXaEZHckeUQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1679228221; bh=Hc4Q7NHPbpBarZQwXu2ux3+3qq2G0pCaayuxqV3+XhU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=cO7LuGnKEOH/uCBjMkn6b+5uBH0mMkzzgWx+yqmIEY8XVscaJ9DuBc/5knqSqCtfp
+ 1IOCTyuFt4xrxfA2odziGcmZrKr5MP1ewIC5S3TXrBHsGWmAP5Cq0LqRh50df7i8Ty
+ IcFxcDJNG04E9hKg356+gA3DXXLIuu/DsvGmOokzlZW33xpI7olJPhyOthvFPOLT/5
+ tet4N167To7e/69W0XIdRGy6yEWI0O4LfPLG34qdKBNPX4zllJCq9svzLnYFQAl4pc
+ Bh+3Jkju1Cj5/oV0KnpT5lgaf20PbiAxiz3Rf+Ki2F0Yq8Bmt35Hx6cqaEFZhYVmSR
+ rjbAk1pHsrX6A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=UgXDVH+T
-Subject: Re: [Buildroot] package/rtl8189fs: bug in conf, and a question
+ header.a=rsa-sha256 header.s=a1 header.b=cO7LuGnK
+Subject: [Buildroot] [PATCH] package/rtl8189es: bump to version 2023-03-14
+ on master branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,95 +74,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Indrek Kruusa <indrek.kruusa@gmail.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSW5kcmVrLAoKT24gMTkvMDMvMjMgMTE6MDcsIEluZHJlayBLcnV1c2Egd3JvdGU6Cj4gCj4g
-Cj4gS29udGFrdCBJbmRyZWsgS3J1dXNhICg8aW5kcmVrLmtydXVzYUBnbWFpbC5jb20gCj4gPG1h
-aWx0bzppbmRyZWsua3J1dXNhQGdtYWlsLmNvbT4+KSBraXJqdXRhcyBrdXVww6RldmFsIFAsIDE5
-LiBtw6RydHMgMjAyMyAKPiBrZWxsIDA5OjQzOgo+IAo+ICAgICBLb250YWt0IEdpdWxpbyBCZW5l
-dHRpICg8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbQo+ICAgICA8bWFpbHRv
-OmdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Pikga2lyanV0YXMga3V1cMOk
-ZXZhbAo+ICAgICBQLCAxOS4gbcOkcnRzIDIwMjMga2VsbCAwMTowMToKPiAKPiAgICAgICAgIEhp
-IEluZGtyZWssCj4gCj4+ICAgICAgICAgSWwgZ2lvcm5vIDE4IG1hciAyMDIzLCBhbGxlIG9yZSAy
-Mjo0NiwgSW5kcmVrIEtydXVzYQo+PiAgICAgICAgIDxpbmRyZWsua3J1dXNhQGdtYWlsLmNvbSA8
-bWFpbHRvOmluZHJlay5rcnV1c2FAZ21haWwuY29tPj4gaGEKPj4gICAgICAgICBzY3JpdHRvOgo+
-Pgo+PiAgICAgICAgIO+7vwo+PiAgICAgICAgIEhpIQo+PiAgICAgICAgIEknbSB0cnlpbmcgdG8g
-cHJlcGFyZSBhIHBhdGNoIGZvciBNYW5nb1BpIE1RIChBbGx3aW5uZXIgRDFzCj4+ICAgICAgICAg
-UklTQy1WKS4gSSdtIGFsbW9zdCB0aGVyZSAtIFNhbXVlbCBIb2xsYW5kwqBtYW5hZ2VkIHRvIG1h
-aW5saW5lCj4+ICAgICAgICAgaW5pdGlhbCBzdXBwb3J0IGZvciB0aGlzIGJvYXJkLCBzbyB2YW5p
-bGxhIGxpbnV4Cj4+ICAgICAgICAga2VybmVswqA2LjMtcmMyIGJvb3RzIGZpbmUgKHdpdGggcHJv
-cGVyL21vZGlmaWVkIHUtYm9vdCB2ZXJzaW9uKS4KPj4gICAgICAgICBUaGUgV2lGaSBtb2R1bGUg
-aXMgYmFzZWQgb24gcnRsODE4OWZ0diBjaGlwIChTRElPIGNvbm5lY3Rpb24pCj4+ICAgICAgICAg
-YW5kIGl0cyBkcml2ZXIgc2VlbXMgdG8gYmUgcHJvYmxlbWF0aWMuCj4+ICAgICAgICAgRmlyc3Qs
-IGJ1aWxkcm9vdCdzIHBhY2thZ2UvcnRsODE4OWZzIGlzIGN1cnJlbnRseSBicm9rZW47IGl0Cj4+
-ICAgICAgICAgcG9pbnRzIHRvIHRoZSB3cm9uZyBjb21taXQgKHNlZW1zIHRvIGJlIGNvcHkgcGFz
-dGUgZXJyb3IsCj4+ICAgICAgICAgaW5oZXJpdGVkIGZyb20gcGFja2FnZS9ydGw4MTg5ZXMpLiBU
-aGUgcmVzdWx0IGlzIHVudXNhYmxlLgo+IAo+ICAgICAgICAgYXMgVGhvbWFzIGFscmVhZHkgcG9p
-bnRlZCB0aGUgY29tbWl0IHdvcmtzIG9rIGZvciBtZSB0b28uCj4gCj4+ICAgICAgICAgSSB1cGRh
-dGVkIGl0IHRvIHRoZSBjb3JyZWN0IGNvbW1pdCAob24gdGhlIGNvcnJlY3QgYnJhbmNoKSBhbmQK
-Pj4gICAgICAgICB0aGUgZHJpdmVyIGJ1aWxkcyBmaW5lIGFuZCBsb2FkcyBmaW5lLgo+IAo+ICAg
-ICAgICAgV2hpY2ggYnJhbmNoIGFuZCBjb21taXQgaGF2ZSB5b3UgdXNlZD8gVGFrZSBjYXJlIHRo
-YXQgdGhlIGNvbW1pdAo+ICAgICAgICAgYWN0dWFsbHkgdXNlZCBoYXMgbm90IHRoZSBzdXBwb3J0
-IGZvciBMaW51eCA2LjMgdGhhdCBoYXMgYmVlbgo+ICAgICAgICAgYWRkZWQgbGF0ZXIuCj4gCj4+
-ICAgICAgICAgVGhlcmUgYXJlIGNvdXBsZSBvZiBpc3N1ZXMgdGhvdWdoOgo+PiAgICAgICAgIC0g
-Zm9yIHNvbWUgcmVhc29uIHRoZSBkZWJ1ZyBtb2RlIGluIGRyaXZlciBpcyBzZXQKPj4gICAgICAg
-ICAtwqAgZHJpdmVyIHNlZW1zIHRvIGNvbnN0YW50bHnCoHJlc3RhcnQgdGhlIG1vZHVsZSwgYW5k
-IGl0IGVtaXRzCj4+ICAgICAgICAgZW5kbGVzcyBkZWJ1ZyBtZXNzYWdlcwo+IAo+ICAgICAgICAg
-VGhpcyBjb3VsZCBiZSBib3VuZCB0byB0aGUgYnJhbmNoL2NvbW1pdCBvZiB0aGUgZHJpdmVyLCBp
-ZiBpdAo+ICAgICAgICAgaW5jbHVkZXMgTGludXggNi4zIHN1cHBvcnQgb3Igbm90Lgo+ICAgICAg
-ICAgQnV0IGl0IHNob3VsZCwgb3RoZXJ3aXNlIGl0IHNob3VsZCBub3QgYnVpbGQuCj4gICAgICAg
-ICBBbnl3YXkgSSBkb27igJl0IGtub3cgdGhhdCBtdWNoIGFib3V0IG90aGVyIGJyYW5jaGVzLgo+
-ICAgICAgICAgTWF5YmUgeW91IG1lYW4gdGhhdCBtYXN0ZXIgYnJhbmNoIGlzIGZvciBydGw4MTg5
-ZXMgYW5kIHJ0bDgxODlmcwo+ICAgICAgICAgYnJhbmNoIGlzIGZvciBydGw4MTg5ZnM/Cj4gCj4g
-ICAgICAgICBBbHNvLCBob3cgZG8geW91IGRldGVybWluZSB0aGF0IHJ0bDgxODlmdHYgaXMgY29t
-cGF0aWJsZSB3aXRoCj4gICAgICAgICBydGw4MTg5ZnM/Cj4gCj4+Cj4+ICAgICAgICAgU28sIGlz
-IHRoZXJlIGFueWJvZHkgZm9yIHdob20gdGhlIHJ0bDgxODlmcyBsaW51eCBkcml2ZXIgd29ya3MK
-Pj4gICAgICAgICBmaW5lIHdpdGgga2VybmVsIDYuMy1yY1g/Cj4+Cj4+ICAgICAgICAgUFMuIEkg
-Y2FuwqBwcmVwYXJlIGEgcGF0Y2jCoHRvIGZpeCB0aGUgcGFja2FnZS9ydGw4MTg5ZnMgYnV0IEkK
-Pj4gICAgICAgICBleHBlY3QgR2l1bGlvIHRvIGJ1bXAgdGhlIHZlcnNpb24gYWdhaW4gZm9yIGJv
-dGgKPj4gICAgICAgICBwYWNrYWdlL3J0bDgxODllcyBhbmQgcGFja2FnZS9ydGw4MTg5ZnMgc29v
-bi4KPiAKPiAgICAgICAgIFN1cmUgSSBjYW4gZG8gdGhhdCwgdGhlcmUgaXMgYWxyZWFkeSBhIHBl
-bmRpbmcgcGF0Y2ggZm9yCj4gICAgICAgICBydGw4MTg5ZXMgYnV0IGl04oCZcyBhbHJlYWR5IHN1
-cGVyc2VkZWQgYXQgdGhpcyBwb2ludC4KPiAgICAgICAgIEJ5IE1vbmRheSBJ4oCZbGwgc2VuZCB0
-aGUgMiBwYXRjaGVzIG9yIGZlZWwgZnJlZSB0byBkbyBpdCBpbnN0ZWFkLgo+IAo+IAo+IAo+ICAg
-ICBIaSEKPiAKPiAgICAgWWVzLCBmb3IgdGhlIHJ0bDgxODlmcyBrZXJuZWwgbW9kdWxlIHRoZSBj
-b2RlIG11c3QgYmUgY2hlY2tlZCBvdXQKPiAgICAgZnJvbSB0aGUgcnRsODE4OWZzIGJyYW5jaC4g
-Q3VycmVudGx5IHRoZSBjb21taXQgaGFzaCBmb3IgdGhlCj4gICAgIHBhY2thZ2UvcnRsODE4OWVz
-IGFuZCBwYWNrYWdlL3J0bDgxODlmcyBpcyB0aGUgc2FtZSBhbmQgaXQncyBmcm9tCj4gICAgIHJ0
-bDgxODlFU19saW51eC9tYXN0ZXIuIEl0IGJ1aWxkcyBidXQgaXQgcHJvZHVjZXMgdGhlIHdyb25n
-IHRoaW5nIGluCj4gICAgIHRoZSBjYXNlIG9mIHRoZSBydGw4MTg5ZnMuIEknbSBmaW5lIGlmIGl0
-IGdldHMgZml4ZWQgbmV4dCB3ZWVrIDspCgpGaW5lIEkndmUgY2hlY2tlZCBkZWVwZXIgdG9kYXkg
-YW5kIGZvdW5kIHRoZSBzYW1lIGFzIHlvdSd2ZSBmb3VuZC4KCj4gICAgIEFib3V0IHJ0bDgxODlm
-dHYgYW5kIGNvbXBhdGliaWxpdHkuIFRoZSBkaWZmZXJlbmNlIGJldHdlZW4KPiAgICAgcnRsODE4
-OGZ0diBhbmQgcnRsODE4OWZ0diBjaGlwIHNlZW1zIHRvIGJlIHRoZSBjb25uZWN0aW9uIGludGVy
-ZmFjZQo+ICAgICB0eXBlICh1c2IgYW5kIHNkaW8gYWNjb3JkaW5nbHkpLiBJdCBsb29rcyB0byBt
-ZSB0aGF0IHRoZSBydGw4MTg5ZnMKPiAgICAgZHJpdmVyIHN0aWxsIHJlbGllcyBvbiB0aGUgODE4
-OGYgc3BlY2lmaWMgY29kZSBidXQgaXQgYWRkcyBzZGlvCj4gICAgIGNhcGFiaWxpdHkgKHJvdWdo
-bHkgc3BlYWtpbmcpLiBBbHNvLAo+ICAgICBodHRwczovL2xpbnV4LXN1bnhpLm9yZy9XaWZpI1JU
-TDgxODlGVFYKPiAgICAgPGh0dHBzOi8vbGludXgtc3VueGkub3JnL1dpZmkjUlRMODE4OUZUVj4g
-c2F5cyB0aGF0IHRoZSBydGw4MTg5ZnMKPiAgICAgYnJhbmNoIGlzIHRoZSBvbmx5IHdvcmtpbmcg
-c29sdXRpb24gY3VycmVudGx5IChvciBoYXMgYmVlbiBhdCBsZWFzdCkuCgpPawoKPiAgICAgVGhl
-cmUgY2FuIGJlIHNldmVyYWwgcmVhc29ucyB3aHkgaXQgZG9lc24ndCB3b3JrIGZvciBtZS4gVGhh
-dCdzIHdoeQo+ICAgICBJIHdhcyBhc2tpbmcgZmlyc3QgYWJvdXQgdGhlIG90aGVycycgZXhwZXJp
-ZW5jZSBvbiBhY3R1YWwgaGFyZHdhcmUsCj4gICAgIG1heWJlIHdpdGggdGhlIGRpZmZlcmVudCAo
-bWF0dXJlKSBTT0MvcGxhdGZvcm0uCj4gCj4gCj4gT2gsIGFwcGFyZW50bHkgdGhlIE1hbmdvUGkg
-TVEgcmVxdWlyZXMgdGhlIGV4dGVybmFsIHdpZmkgYW50ZW5uYSAod2hpY2ggCj4gaXMgYnVuZGxl
-ZCB3aXRoIHRoZSBib2FyZCkgdG8gYmUgY29ubmVjdGVkIDspIFdpZmkgd29ya3Mgbm93IGZvciBt
-ZSB0b28gCj4gKHdpdGggdGhlIGZpeGVkIHJ0bDgxODlmcyBjb21taXQpLiBJdCBzZWVtcyB0aGF0
-IHByZXZpb3VzbHkgaXQgZ290IG5vIAo+IHNpZ25hbCBhbmQgd2FzIHJhcGlkbHkganVtcGluZyBp
-biBhbmQgb3V0IGZyb20gcG93ZXIgc2F2aW5nLgoKUGVyZmVjdCwgc28gSSdtIGNyZWF0aW5nIHRo
-ZSAyIHBhdGNoZXMsIDEgZm9yIHJ0bDgxODlldSBrZWVwaW5nIG1hc3RlcgpicmFuY2ggYnV0IGJ1
-bXBpbmcgdG8gbGFzdCBjb21taXQgYW5kIDEgZm9yIHJ0bDgxODlmcyB0aGF0IGJ1bXBzIHRvCmxh
-dGVzdCBjb21taXQgYnV0IG9mIHJ0bDgxODlmcyBicmFuY2guCgpUaGFuayB5b3UgZm9yIHBvaW50
-aW5nIHJ0bDgxODlmcyBicmFuY2ggYW5kIHRlc3RpbmchCgpCZXN0IHJlZ2FyZHMKLS0gCkdpdWxp
-byBCZW5ldHRpCkJlbmV0dGkgRW5naW5lZXJpbmcgc2FzCgo+IAo+IEluZHJlawo+IAo+IAo+IF9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290
-IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
-aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Let's drop local patch that has been upstreamed and note that this
+version supports up to Linux 6.3
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ .../0001-Fix-build-failure-on-PowerPC64.patch | 113 ------------------
+ package/rtl8189es/rtl8189es.hash              |   2 +-
+ package/rtl8189es/rtl8189es.mk                |   2 +-
+ 3 files changed, 2 insertions(+), 115 deletions(-)
+ delete mode 100644 package/rtl8189es/0001-Fix-build-failure-on-PowerPC64.patch
+
+diff --git a/package/rtl8189es/0001-Fix-build-failure-on-PowerPC64.patch b/package/rtl8189es/0001-Fix-build-failure-on-PowerPC64.patch
+deleted file mode 100644
+index 8c876f16ee..0000000000
+--- a/package/rtl8189es/0001-Fix-build-failure-on-PowerPC64.patch
++++ /dev/null
+@@ -1,113 +0,0 @@
+-From c7bf7590bc0d7252005fd0496898ad420a85e1ae Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 27 Feb 2023 09:12:39 +0100
+-Subject: [PATCH] Fix build failure on PowerPC64
+-
+-get_ra() is defined in Linux kernel for PowerPC64 architecture and it
+-conflicts with local get_ra() definition so let's rename local definition
+-as rtl_get_ra().
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- core/rtw_odm.c                | 6 +++---
+- core/rtw_recv.c               | 4 ++--
+- hal/hal_com.c                 | 2 +-
+- include/wifi.h                | 2 +-
+- os_dep/linux/ioctl_cfg80211.c | 2 +-
+- 5 files changed, 8 insertions(+), 8 deletions(-)
+-
+-diff --git a/core/rtw_odm.c b/core/rtw_odm.c
+-index 8a35816..d74e134 100644
+---- a/core/rtw_odm.c
+-+++ b/core/rtw_odm.c
+-@@ -273,7 +273,7 @@ void rtw_odm_parse_rx_phy_status_chinfo(union recv_frame *rframe, u8 *phys)
+- 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u)\n"
+- 					, *phys & 0xf
+- 					, MAC_ARG(get_ta(wlanhdr))
+--					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
+-+					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
+- 					, HDATA_RATE(attrib->data_rate)
+- 					, phys_t0->band, phys_t0->channel, phys_t0->rxsc
+- 				);
+-@@ -383,7 +383,7 @@ type1_end:
+- 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, rf_mode:%u, l_rxsc:%u, ht_rxsc:%u) => %u,%u\n"
+- 					, *phys & 0xf
+- 					, MAC_ARG(get_ta(wlanhdr))
+--					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
+-+					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
+- 					, HDATA_RATE(attrib->data_rate)
+- 					, phys_t1->band, phys_t1->channel, phys_t1->rf_mode, phys_t1->l_rxsc, phys_t1->ht_rxsc
+- 					, pkt_cch, pkt_bw
+-@@ -401,7 +401,7 @@ type1_end:
+- 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u, ht_rxsc:%u)\n"
+- 					, *phys & 0xf
+- 					, MAC_ARG(get_ta(wlanhdr))
+--					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
+-+					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
+- 					, HDATA_RATE(attrib->data_rate)
+- 					, phys_t2->band, phys_t2->channel, phys_t2->l_rxsc, phys_t2->ht_rxsc
+- 				);
+-diff --git a/core/rtw_recv.c b/core/rtw_recv.c
+-index dc65adf..a5a65f9 100644
+---- a/core/rtw_recv.c
+-+++ b/core/rtw_recv.c
+-@@ -4678,7 +4678,7 @@ void rx_query_phy_status(
+- 	wlanhdr = get_recvframe_data(precvframe);
+- 
+- 	ta = get_ta(wlanhdr);
+--	ra = get_ra(wlanhdr);
+-+	ra = rtl_get_ra(wlanhdr);
+- 	is_ra_bmc = IS_MCAST(ra);
+- 
+- 	if (_rtw_memcmp(adapter_mac_addr(padapter), ta, ETH_ALEN) == _TRUE) {
+-@@ -4818,7 +4818,7 @@ s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
+- {
+- 	s32 ret = _SUCCESS;
+- 	u8 *pbuf = precvframe->u.hdr.rx_data;
+--	u8 *pda = get_ra(pbuf);
+-+	u8 *pda = rtl_get_ra(pbuf);
+- 	u8 ra_is_bmc = IS_MCAST(pda);
+- 	_adapter *primary_padapter = precvframe->u.hdr.adapter;
+- #ifdef CONFIG_CONCURRENT_MODE
+-diff --git a/hal/hal_com.c b/hal/hal_com.c
+-index c28ae39..27b0825 100644
+---- a/hal/hal_com.c
+-+++ b/hal/hal_com.c
+-@@ -13406,7 +13406,7 @@ void rtw_store_phy_info(_adapter *padapter, union recv_frame *prframe)
+- 
+- 			/*RTW_INFO("=>%s WIFI_DATA_TYPE or WIFI_QOS_DATA_TYPE\n", __FUNCTION__);*/
+- 			if (psta) {
+--				if (IS_MCAST(get_ra(get_recvframe_data(prframe))))
+-+				if (IS_MCAST(rtl_get_ra(get_recvframe_data(prframe))))
+- 					psta_dframe_info = &psta->sta_dframe_info_bmc;
+- 				else
+- 					psta_dframe_info = &psta->sta_dframe_info;
+-diff --git a/include/wifi.h b/include/wifi.h
+-index def77a4..c2e7afb 100644
+---- a/include/wifi.h
+-+++ b/include/wifi.h
+-@@ -456,7 +456,7 @@ __inline static int IS_MCAST(const u8 *da)
+- 		return _FALSE;
+- }
+- 
+--__inline static unsigned char *get_ra(unsigned char *pframe)
+-+__inline static unsigned char *rtl_get_ra(unsigned char *pframe)
+- {
+- 	unsigned char	*ra;
+- 	ra = GetAddr1Ptr(pframe);
+-diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+-index 4e810e5..e744d69 100644
+---- a/os_dep/linux/ioctl_cfg80211.c
+-+++ b/os_dep/linux/ioctl_cfg80211.c
+-@@ -6347,7 +6347,7 @@ void rtw_cfg80211_rx_p2p_action_public(_adapter *adapter, union recv_frame *rfra
+- indicate:
+- #endif
+- 	#if defined(RTW_DEDICATED_P2P_DEVICE)
+--	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), get_ra(frame), &wdev))
+-+	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), rtl_get_ra(frame), &wdev))
+- 		if (0)
+- 			RTW_INFO("redirect to pd_wdev:%p\n", wdev);
+- 	#endif
+--- 
+-2.34.1
+-
+diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
+index 44d73e60f0..64f6158654 100644
+--- a/package/rtl8189es/rtl8189es.hash
++++ b/package/rtl8189es/rtl8189es.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  96347dbfedd95a217fb89b7b295fe417b711dbad3db896ef0c2fa733c6d150fd  rtl8189es-e58bd86c9d9408c648b1246a0dd76b16856ec172.tar.gz
++sha256  05d839c9b7820008bf7975c2f4a3dde6265dbae0c5dc48cefcee3a79492dc377  rtl8189es-ae7b31e55526ca0e01d2a3310118530bff4f1055.tar.gz
+diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
+index c2ee77f922..a40f656d3e 100644
+--- a/package/rtl8189es/rtl8189es.mk
++++ b/package/rtl8189es/rtl8189es.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8189ES_VERSION = e58bd86c9d9408c648b1246a0dd76b16856ec172
++RTL8189ES_VERSION = ae7b31e55526ca0e01d2a3310118530bff4f1055
+ RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
+ RTL8189ES_LICENSE = GPL-2.0
+ 
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
