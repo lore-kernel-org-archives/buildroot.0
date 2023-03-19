@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B47EC7618A
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 16:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4521C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 16:28:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C330E81A92;
-	Sun, 19 Mar 2023 16:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C330E81A92
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52BC581ABA;
+	Sun, 19 Mar 2023 16:28:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52BC581ABA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZJQi8_ZPXeuT; Sun, 19 Mar 2023 16:26:02 +0000 (UTC)
+	with ESMTP id LtR7mpHylBPB; Sun, 19 Mar 2023 16:28:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0ED7381A73;
-	Sun, 19 Mar 2023 16:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ED7381A73
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94CCE81A73;
+	Sun, 19 Mar 2023 16:28:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94CCE81A73
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A04081BF2F8
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 16:25:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 536831BF2F8
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 16:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 79F6A81A73
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 16:25:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79F6A81A73
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D83D81A73
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 16:28:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D83D81A73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ShR4Wlja2Kan for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 16:25:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 305B281A6A
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 305B281A6A
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 16:25:57 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 65D95C0004;
- Sun, 19 Mar 2023 16:25:55 +0000 (UTC)
-Date: Sun, 19 Mar 2023 17:25:54 +0100
-To: Simon Rowe <simon.rowe@nutanix.com>
-Message-ID: <20230319172554.0d5ea60c@windsurf>
-In-Reply-To: <20230316113615.138847-1-simon.rowe@nutanix.com>
-References: <20230316113615.138847-1-simon.rowe@nutanix.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1679243155;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=sbpY0TBQVCDlJYXKwn3G001rTQN4tPtA+TcQZFYR+/U=;
- b=jrNKYEZYicylDS5gzFCKeEPMTtPhSHqq7Vro1dSye1IiEu3t9igSUaxXUf1YMYP/ac9OER
- iz4ciizLbc/28zsusFzWlcOx8/fTSep4piDeZIbCKUTD3Boue6enwKWboIaBHEOkgVK8OW
- VP+bCxZ866cJsGzO6ZxmBlvatm4kvdlXNT6xUc0XjHUV42oQd4wWqJiQeo6WYF2Emz67m6
- T6cYNcQSaTZAeZBmZLyVEJ/S6hePalomfMqJub6gjltbeMaLAp2g+rxC33zcFrFQOHYN2m
- 6CeH3489GSt5f253OHwdRA1deRgCOEKlJhycOOO/2eIhkx8ESlgwbneQrdn59A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jrNKYEZY
-Subject: Re: [Buildroot] [PATCH 1/1] package/lvm2: enable package with musl
+ with ESMTP id lNpBJcAKMAgW for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 16:28:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 361AA81A6A
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 16:28:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 361AA81A6A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 232098742C; Sun, 19 Mar 2023 16:28:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 19 Mar 2023 17:28:02 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1c36821be1ffa7a55a7c87da7e224b457091c562
+X-Git-Newrev: 25defd685737913fcac59b00819c82118df533f9
+X-Patchwork-Hint: ignore
+Message-Id: <20230319162824.232098742C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ifupdown: bump to 0.8.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,53 +57,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0912305903730129651=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Simon,
+--===============0912305903730129651==
+Content-Type: text/plain
 
-On Thu, 16 Mar 2023 11:36:15 +0000
-Simon Rowe <simon.rowe@nutanix.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=25defd685737913fcac59b00819c82118df533f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> LVM uses some glibc-specific functions to try and control locking
-> memory in RAM. As a result the package is currently disabled when
-> using musl.
-> 
-> Apply patches taken from gentoo:
-> 
->     https://github.com/gentoo/gentoo/pull/25883
->     https://github.com/gentoo/gentoo/pull/26024
-> 
-> and drop the prohibition on musl in Config.in.
-> 
-> Signed-off-by: Simon Rowe <simon.rowe@nutanix.com>
+MUSL support is patched by defining FNM_EXTMATCH to zero, which omits
+GNU-only extended pattern matching.
 
-Thanks Simon for those patches! Could you rework the 4 patches so that
-they are generated with git format-patch and have your Signed-off-by? I
-recommend that you take the upstream Git repo of lvm2, checkout the tag
-corresponding to version 2.03.14, apply the 4 Gentoo patches, each time
-turning the changes into a proper commit.
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch | 41 ++++++++++++++++++++++
+ package/ifupdown/ifupdown.hash                     |  4 +--
+ package/ifupdown/ifupdown.mk                       |  5 +--
+ 3 files changed, 46 insertions(+), 4 deletions(-)
 
-Another thing to look at is that the multipath-tools package is
-selecting BR2_PACKAGE_LVM2_STANDARD_INSTALL, so you need to check
-whether the depends on !BR2_TOOLCHAIN_USES_MUSL used in
-BR2_PACKAGE_MULTIPATH_TOOLS is still needed? Perhaps thanks to your
-work on lvm2 it is now possible to build/use multipath-tools with musl.
+diff --git a/package/ifupdown/0001-archcommon-define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch b/package/ifupdown/0001-archcommon-define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch
+new file mode 100644
+index 0000000000..b1b58f1e7e
+--- /dev/null
++++ b/package/ifupdown/0001-archcommon-define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch
+@@ -0,0 +1,41 @@
++From e27fe4b483194ee57736c228b7a6c56696ae8a06 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
++Date: Thu, 16 Mar 2023 09:29:20 +0100
++Subject: [PATCH] archcommon: define GNU-only FNM_EXTMATCH to zero on non-glibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++FNM_EXTMATCH is a GNU extension that enables extended pattern matching
++for fnmatch(3). Defining it to zero on non-glibc builds makes ifupdown
++usable, albeit with a sligthy reduced pattern matching feature set.
++
++Signed-off-by: Martin Hundebøll <martin@geanix.com>
++Upstream-status: Denied [https://salsa.debian.org/debian/ifupdown/-/merge_requests/5]
++---
++ archcommon.h | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/archcommon.h b/archcommon.h
++index 818b0b6..981e84f 100644
++--- a/archcommon.h
+++++ b/archcommon.h
++@@ -1,5 +1,15 @@
++ #include "header.h"
++ 
+++/*
+++ * FNM_EXTMATCH is a GNU extension, so it isn't available when compiling
+++ * with MUSL. Defining FNM_EXTMATCH to zero is safe, as the flag merely
+++ * enables extended pattern matching, which MUSL users should be able to
+++ * live without.
+++ */
+++#ifndef FNM_EXTMATCH
+++#define FNM_EXTMATCH 0
+++#endif
+++
++ bool execable(const char *);
++ 
++ #define iface_is_link() (!_iface_has(ifd->real_iface, ":."))
++-- 
++2.39.2
++
+diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
+index f8844a60a6..f5c2d2d34c 100644
+--- a/package/ifupdown/ifupdown.hash
++++ b/package/ifupdown/ifupdown.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.16.dsc
+-sha256  601416c12e39ac29022951a2867aed5c607f732ac57fd51517bfba92a4cc4fb0  ifupdown_0.8.16.tar.xz
++# From http://snapshot.debian.org/archive/debian/20230222T205615Z/pool/main/i/ifupdown/ifupdown_0.8.41.dsc
++sha256  222c5bef313a9e71d9be4b946c73c8606c98f9e0229153191d9c6d8fb9b3599c  ifupdown_0.8.41.tar.xz
+ # Locally computed
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
+index e62c2a79c5..14c36db0db 100644
+--- a/package/ifupdown/ifupdown.mk
++++ b/package/ifupdown/ifupdown.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-IFUPDOWN_VERSION = 0.8.16
++IFUPDOWN_VERSION = 0.8.41
+ IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+-IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160922T165503Z/pool/main/i/ifupdown
++IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20230222T205615Z/pool/main/i/ifupdown
+ IFUPDOWN_LICENSE = GPL-2.0+
+ IFUPDOWN_LICENSE_FILES = COPYING
+ IFUPDOWN_CPE_ID_VENDOR = debian
+@@ -14,6 +14,7 @@ IFUPDOWN_CPE_ID_VENDOR = debian
+ define IFUPDOWN_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
++		ARCH=linux \
+ 		-C $(@D)
+ endef
+ 
 
-Another question is the upstream status of the Gentoo patches? Have
-they been submitted for inclusion by the upstream lvm2 project?
+--===============0912305903730129651==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0912305903730129651==--
