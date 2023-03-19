@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A374C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 13:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00790C7618A
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 20:36:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF047409BE;
-	Sun, 19 Mar 2023 13:50:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF047409BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72498409EB;
+	Sun, 19 Mar 2023 20:36:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72498409EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uvZyeZ0bn8kr; Sun, 19 Mar 2023 13:50:24 +0000 (UTC)
+	with ESMTP id 5RYlgoevW7Ez; Sun, 19 Mar 2023 20:36:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01578409A9;
-	Sun, 19 Mar 2023 13:50:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01578409A9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9DAD31BF577
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 13:50:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F0C4409AD;
+	Sun, 19 Mar 2023 20:36:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F0C4409AD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B6F9B1BF86D
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:36:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 843D360D4C
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 13:50:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 843D360D4C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D6DE81A58
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:36:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D6DE81A58
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m1PJ4hlsAlEg for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 13:50:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jUhNc3iuG_Hb for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 20:36:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFA8660ADC
- for <buildroot@uclibc.org>; Sun, 19 Mar 2023 13:50:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFA8660ADC
+ by smtp1.osuosl.org (Postfix) with ESMTP id C1A74817B5
+ for <buildroot@uclibc.org>; Sun, 19 Mar 2023 20:36:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1A74817B5
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id AF2818261A; Sun, 19 Mar 2023 13:50:20 +0000 (UTC)
+ id B1407870E9; Sun, 19 Mar 2023 20:36:02 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 19 Mar 2023 13:50:20 +0000
+Date: Sun, 19 Mar 2023 20:36:02 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,7 +47,7 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2023.02
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: freemp@freenet.de
+X-Bugzilla-Who: ps.report@gmx.net
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -55,7 +55,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15456-163-266CyzDokv@https.bugs.busybox.net/>
+Message-ID: <bug-15456-163-o07RnUxNPi@https.bugs.busybox.net/>
 In-Reply-To: <bug-15456-163@https.bugs.busybox.net/>
 References: <bug-15456-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,11 +81,50 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15456
 
---- Comment #2 from freemp@freenet.de ---
-(In reply to Peter Seiderer from comment #1)
-> Your mention 'raspberrypi4_defconfig' but the diff is from 'raspberrypi3_defconfig'..., did you test both?
+--- Comment #3 from Peter Seiderer <ps.report@gmx.net> ---
+Tested on raspberrypi_4, bash crashes with:
 
-No, this is just a typo. I was building for Raspi 3 only.
+    $ ./host/bin/arm-buildroot-linux-gnueabihf-gdb build/bash-5.2.15/bash
+core.199
+    Core was generated by `bash'.
+    Program terminated with signal SIGSEGV, Segmentation fault.
+    #0  0xb6d74b5c in ?? ()
+    (gdb) set sysroot ./staging
+    Reading symbols from ./staging/lib/libreadline.so.8...
+    Reading symbols from ./staging/lib/libhistory.so.8...
+    Reading symbols from ./staging/lib/libncurses.so.6...
+    Reading symbols from ./staging/lib/libc.so.6...
+    Reading symbols from ./staging/lib/ld-linux-armhf.so.3...
+    (gdb) where
+    #0  0xb6d74b5c in kill () at ../sysdeps/unix/syscall-template.S:120
+    #1  0x004d4f0c in kill_shell (sig=sig@entry=11) at sig.c:643
+    #2  0x004d5110 in termsig_handler (sig=11) at sig.c:624
+    #3  termsig_handler (sig=11) at sig.c:575
+    #4  0x004d5248 in termsig_sighandler (sig=<optimized out>) at sig.c:558
+    #5  <signal handler called>
+    #6  strlen () at ../sysdeps/arm/strlen.S:32
+    #7  0xb6f2fb20 in _rl_init_locale () at ../nls.c:150
+    #8  0xb6f2fba0 in _rl_init_eightbit () at ../nls.c:227
+    #9  0xb6f10f54 in readline_initialize_everything () at ../readline.c:1292
+    #10 rl_initialize () at ../readline.c:1183
+    #11 0x004e439c in initialize_readline () at bashline.c:522
+    #12 0x0048e63c in yy_readline_get ()
+        at /usr/local/src/chet/src/bash/src/parse.y:1514
+    #13 0x00491190 in shell_getc (
+        remove_quoted_newline=remove_quoted_newline@entry=1)
+        at /usr/local/src/chet/src/bash/src/parse.y:2393
+    #14 0x00493410 in read_token (command=0)
+        at /usr/local/src/chet/src/bash/src/parse.y:3404
+    #15 read_token (command=0) at /usr/local/src/chet/src/bash/src/parse.y:3355
+    #16 0x00496a64 in yylex () at /usr/local/src/chet/src/bash/src/parse.y:2892
+    #17 yyparse () at y.tab.c:1854
+    #18 0x0048da38 in parse_command () at eval.c:348
+    #19 0x0048db88 in read_command () at eval.c:392
+    #20 0x0048dd10 in reader_loop () at eval.c:139
+    #21 0x0048c7e8 in main (argc=5489868, argv=0x0, env=<optimized out>)
+        at shell.c:833
+
+But e.g. 'LANG=C bash' runs fine...
 
 -- 
 You are receiving this mail because:
