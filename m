@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96B7FC6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 20:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B4EFC7618A
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 20:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AC11410A5;
-	Sun, 19 Mar 2023 20:15:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AC11410A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id A440D409A2;
+	Sun, 19 Mar 2023 20:17:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A440D409A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9f849Z_lS6ai; Sun, 19 Mar 2023 20:15:43 +0000 (UTC)
+	with ESMTP id 4JQESFsAHbPA; Sun, 19 Mar 2023 20:17:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2625B40E46;
-	Sun, 19 Mar 2023 20:15:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2625B40E46
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 86FB51BF86D
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:15:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99F524099E;
+	Sun, 19 Mar 2023 20:17:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99F524099E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AAD3F1BF86D
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:17:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DDD081AF5
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:15:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DDD081AF5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8478660AEA
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:17:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8478660AEA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id paDa65t0z_xk for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 20:15:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6TVqeQ5TJSdq for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 20:17:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5653F81B14
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 20:15:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5653F81B14
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1FED60767
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 20:17:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1FED60767
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4625C874FA; Sun, 19 Mar 2023 20:15:39 +0000 (UTC)
+ id A07F08751B; Sun, 19 Mar 2023 20:17:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Mar 2023 20:33:34 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: f9a4096917c1bb592036dda3eb383419af0aa96b
-X-Git-Newrev: 5a03ec843ddd5b5f20ae28ed4a380b0189c56371
+Date: Sun, 19 Mar 2023 20:32:49 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 08ef726a3a2c926c77e850c60ad7ab26a4425107
+X-Git-Newrev: 8b641331d0b1fea1c70f910df70d7f045f9de162
 X-Patchwork-Hint: ignore
-Message-Id: <20230319201539.4625C874FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/s390-tools: needs
+Message-Id: <20230319201702.A07F08751B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/s390-tools: needs
  OpenSSL-enabled libcurl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a03ec843ddd5b5f20ae28ed4a380b0189c56371
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8b641331d0b1fea1c70f910df70d7f045f9de162
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Fix the following build failure raised bump to version 2.17.0 in commit
 eab9110afbef9c39569c4cc988aed15c48f7ce44 and
@@ -85,12 +85,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-index 8cd5491405..ec01a18cb0 100644
+index 328986bcb3..76d4480bf1 100644
 --- a/package/s390-tools/s390-tools.mk
 +++ b/package/s390-tools/s390-tools.mk
-@@ -14,7 +14,7 @@ S390_TOOLS_MAKE_OPTS = \
- 	ARCH=$(BR2_ARCH) \
- 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+@@ -16,7 +16,7 @@ S390_TOOLS_MAKE_OPTS = \
+ 	LINK="$(TARGET_CC)" \
+ 	LINKXX="$(TARGET_CXX)"
  
 -ifeq ($(BR2_PACKAGE_LIBCURL),y)
 +ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
