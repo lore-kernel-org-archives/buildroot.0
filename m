@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A9E8C7618A
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 12:24:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E9ACC6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 13:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC74860FE0;
-	Sun, 19 Mar 2023 12:24:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC74860FE0
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7C1B4097D;
+	Sun, 19 Mar 2023 13:44:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7C1B4097D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5x-sYj0LWfHP; Sun, 19 Mar 2023 13:44:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B63064098F;
+	Sun, 19 Mar 2023 13:44:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B63064098F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9CD221BF577
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 13:44:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B43260FBC
+ for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 13:44:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B43260FBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J8HkRj4WtHeM; Sun, 19 Mar 2023 12:24:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBADC60FD3;
-	Sun, 19 Mar 2023 12:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBADC60FD3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D78DB1BF5A2
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 12:24:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD58640176
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 12:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD58640176
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HcTpTL6Uzq3K for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 12:24:09 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D399740396
-Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D399740396
- for <buildroot@buildroot.org>; Sun, 19 Mar 2023 12:24:08 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.96.213])
- by Aruba Outgoing Smtp  with ESMTPSA
- id dry8pQfQR9J5Hdry9pXwyU; Sun, 19 Mar 2023 13:17:01 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Sun, 19 Mar 2023 13:16:59 +0100
-Message-Id: <20230319121659.88039-2-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230319121659.88039-1-giulio.benetti@benettiengineering.com>
-References: <20230319121659.88039-1-giulio.benetti@benettiengineering.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IXVg3pRVlWlN for <buildroot@lists.busybox.net>;
+ Sun, 19 Mar 2023 13:44:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C50BC60D4C
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C50BC60D4C
+ for <buildroot@buildroot.org>; Sun, 19 Mar 2023 13:44:41 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6ED07C0004;
+ Sun, 19 Mar 2023 13:44:38 +0000 (UTC)
+Date: Sun, 19 Mar 2023 14:44:36 +0100
+To: Steve Hay via buildroot <buildroot@buildroot.org>
+Message-ID: <20230319144436.3085aa75@windsurf>
+In-Reply-To: <20230319021851.2593117-1-me@stevenhay.com>
+References: <20230319021851.2593117-1-me@stevenhay.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfKYdhobOo5PtnH3oFzs7x3BGaHhiHaS1ewLaUP7b2G/gbariXLpjMLbZaazFaxS87EFBAlVjPlliXD7zME549hQXbc+VlfK/l9nAVBhbTgeH8ZVG5xPe
- /IdXfSGhHzhGQVYK2qWk3NLofoYXtsnvkSfBSRHk357vY8TAL1SoUUIsYus5D65W+Pqx5PCmqOaKBXTDZP/agjiGFzI+sDtVJFQkXtI57DsY7/VD/5SnOmWc
- bo9d/yH7zLPtd+AeWGgLhBYZojRHqLsR67npjeonfrcWIoTq8P2O27R3ZE+FhdNoBYWUsZLgUnX4Ese2A+FpGxzEcUlDC3w7MW+xGxA89Y+LFUlL8+Lbdq7r
- 1YOT5z56BE0b6fkmRApzryv16y1TW/ewx+ubsjwcpXWH8W9b9hA=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1679228221; bh=7UgIxikr46ihTR3Kcq5ggU85fFrsyL6NI0VpM0dWPt0=;
- h=From:To:Subject:Date:MIME-Version;
- b=YWrjz40oafj2UOQJILunhhLhkqjhMZGy+HEZExcV9ae80DYpFbtp3r8sHcOoJTFV/
- aaQ9jwchY/emAdq6MBqRWQutY0NF4somWHdfGYVqPo/7CN7ztkW8Jee60f8MLVeJKT
- X4UsB+sZLzy/dn/9qh+bK3+T/PZFjKSoRZgOG/d3vUDJdK8epN/M1lwuV40fOkj5Ml
- r75s9C2Wgo4YcWmhgGQf+tgXQHUgiErliFFrCSnhTMolmafPmSZNl6KZFPAtxWg0pi
- cGEXMCcDkBQ61jaYesH8uiL9tsoErSf6X1R0iAjH4TASUBDy72CUt+mbweF3n5rBVq
- pM86e/QaiOW2g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=YWrjz40o
-Subject: [Buildroot] [PATCH] package/rtl8189fs: bump to version 2023-03-13
- on branch rtl8189fs
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1679233478;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=PcQdGQ+fUveMHIHKXdbMznJfud2clH2YPmqBDiCrJZM=;
+ b=gYOPXWhCwWDXXDXvXvFPZaWk/Of6HHlZX/1y88B/UeM2b1tihw2QF2l5YdBSGFI2vCwc6b
+ N9suvTGOpsD2b3mTeuX6CL4wsapQsxt+JPdquWltveuIp74vnql0WTrt5vtrIJfnqlUTzv
+ bn0POop70+1Jvk8hDpzLG1sl/uaLiigcISoTSwy6tC4nFH64tQllz1IV3Hv0p0TnXQf+9a
+ /qNEuGC9lxbwiYjSgRu/5z8B+wVXxoyvtFjCOtwaFzBTX4EIPQD8q9FeN+0r6b5KXOkKLB
+ U2O7uck7tuwQ0Ei1vILI3RET3qMYNGaG7+A943TNyIrKYeL3T2ECCGERt49e5Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gYOPXWhC
+Subject: Re: [Buildroot] [PATCH] package/ca-certificates: bump version to
+ 20230311
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,49 +76,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Indrek Kruusa <indrek.kruusa@gmail.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Martin Bark <martin@barkynet.com>, Steve Hay <me@stevenhay.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-rtl8189fs branch is specific for rtl8189fs controller and diverged from
-master so let's switch branch from master to rtl8189s to fix runtime
-failure.
+Hello Steve,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/rtl8189fs/rtl8189fs.hash | 2 +-
- package/rtl8189fs/rtl8189fs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 19 Mar 2023 03:18:50 +0100
+Steve Hay via buildroot <buildroot@buildroot.org> wrote:
 
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index 4f117cfd14..018e5b8a77 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  96347dbfedd95a217fb89b7b295fe417b711dbad3db896ef0c2fa733c6d150fd  rtl8189fs-e58bd86c9d9408c648b1246a0dd76b16856ec172.tar.gz
-+sha256  20382dbb1ac33425e6b3198cc9be269b79cd1423ea656e0ccd16dedafa3e2a2a  rtl8189fs-ed6741b52bc998875298117b55d18b0d557c37a6.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index 15a5329a45..2dd9e6097c 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8189FS_VERSION = e58bd86c9d9408c648b1246a0dd76b16856ec172
-+RTL8189FS_VERSION = ed6741b52bc998875298117b55d18b0d557c37a6
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
- 
+> The impetus for this change was that wget fails to load pages signed by
+> Let's Encrypt due to missing root certs. This version has the updated and
+> correct certs.
+> 
+> 0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
+> 
+> Patch dropped because the fix is incorporated upstream.
+> 
+> Signed-off-by: Steve Hay <me@stevenhay.com>
+> 
+> ---
+> Changes v1 -> v2
+>     - Removed the extraneous comment in the make file.
+>     - Fixed patch header.
+
+Are you sure your generated the correct version of the patch?
+
+> diff --git a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+> index b76c1bfd7f..ced593664e 100644
+> --- a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+> +++ b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+> @@ -1,4 +1,10 @@
+> -From bf18b564122e8f976681a2398862fde1eafd84ba Mon Sep 17 00:00:00 2001
+> +From a4e468a2a0afa80df174831c2f422184820bb0fa Mon Sep 17 00:00:00 2001
+> +From: Steve Hay <me@stevenhay.com>
+> +Date: Sat, 18 Mar 2023 17:57:18 +0100
+> +Subject: [PATCH] mozilla/certdata2pem.py: make cryptography module optional
+> +
+> +Modified for a newer version of the ca-certificates module.
+> +
+>  From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  Date: Thu, 6 Jan 2022 23:15:00 +0100
+>  Subject: [PATCH] mozilla/certdata2pem.py: make cryptography module optional
+> @@ -15,37 +21,36 @@ the check is skipped.
+
+The header of the patch is still not correct.
+
+> -CA_CERTIFICATES_VERSION = 20211016
+> +# batocera / version bump
+
+And the comment is still there in the .mk file.
+
+Am I missing something here? :-)
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
