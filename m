@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B918DC7618A
-	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 08:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 246C5C7618A
+	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 09:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6222260BD7;
-	Mon, 20 Mar 2023 08:54:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6222260BD7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E8DD60BFB;
+	Mon, 20 Mar 2023 09:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E8DD60BFB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iiWRj8byMxp8; Mon, 20 Mar 2023 08:54:10 +0000 (UTC)
+	with ESMTP id 4ABVx6pshAVJ; Mon, 20 Mar 2023 09:04:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F2B460BDB;
-	Mon, 20 Mar 2023 08:54:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F2B460BDB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C78951BF35B
- for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:53:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D209860701;
+	Mon, 20 Mar 2023 09:04:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D209860701
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 94F4C1BF3D7
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 09:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A129B40872
- for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:53:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A129B40872
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A72440139
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 09:04:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A72440139
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BQ0yGyDs_99G for <buildroot@lists.busybox.net>;
- Mon, 20 Mar 2023 08:53:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 956DF40743
- for <buildroot@buildroot.org>; Mon, 20 Mar 2023 08:53:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 956DF40743
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8085587539; Mon, 20 Mar 2023 08:53:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rrkh7_0134ug for <buildroot@lists.busybox.net>;
+ Mon, 20 Mar 2023 09:04:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11AC0400F8
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 11AC0400F8
+ for <buildroot@buildroot.org>; Mon, 20 Mar 2023 09:04:06 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A110AFF804;
+ Mon, 20 Mar 2023 09:04:01 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1peBQv-007aXm-4d; Mon, 20 Mar 2023 10:04:01 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 20 Mar 2023 09:42:19 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 9581a99263cf866f8cfd60dec4ad299f7edc5c4c
-X-Git-Newrev: 91d669e7a004df0be95173252b9f87209c2b82a5
-X-Patchwork-Hint: ignore
-Message-Id: <20230320085354.8085587539@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/qt6base: network
- module needs libopenssl PSK feature
+To: Lang Daniel via buildroot <buildroot@buildroot.org>
+References: <VI1P190MB049333A9311E7A4ECAE13B7A9FBC9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Date: Mon, 20 Mar 2023 10:04:01 +0100
+In-Reply-To: <VI1P190MB049333A9311E7A4ECAE13B7A9FBC9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+ (Lang Daniel via buildroot's message of "Thu, 16 Mar 2023 13:53:14
+ +0000")
+Message-ID: <871qljx08u.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 2/2] package/bluez5_utils: fix SysV init
+ script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +65,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Lang Daniel <d.lang@abatec.at>, "marcin@bis.org.pl" <marcin@bis.org.pl>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91d669e7a004df0be95173252b9f87209c2b82a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Lang" == Lang Daniel via buildroot <buildroot@buildroot.org> writes:
 
-Fixes:
+ > - Use daemon name (bluetoothd) as file name.
+ > - Script doesn't need to be executable.
 
-  - http://autobuild.buildroot.net/results/fdf2b2eb252a24e81bddad1c81c4fdfb03dc0afe
+ > Signed-off-by: Daniel Lang <d.lang@abatec.at>
 
-  .../build/qt6base-6.4.2/src/plugins/tls/openssl/qdtls_openssl.cpp: In member function 'bool dtlsopenssl::DtlsState::initCtxAndConnection(QDtlsBasePrivate*)':
-  .../build/qt6base-6.4.2/src/plugins/tls/openssl/qdtls_openssl.cpp:669:9: error: 'q_SSL_set_psk_server_callback' was not declared in this scope; did you mean 'q_SSL_set_psk_use_session_callback'?
-    669 |         q_SSL_set_psk_server_callback(newConnection.data(), dtlscallbacks::q_PSK_server_callback);
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        |         q_SSL_set_psk_use_session_callback
-  .../build/qt6base-6.4.2/src/plugins/tls/openssl/qdtls_openssl.cpp:671:9: error: 'q_SSL_set_psk_client_callback' was not declared in this scope; did you mean 'q_SSL_set_info_callback'?
-    671 |         q_SSL_set_psk_client_callback(newConnection.data(), dtlscallbacks::q_PSK_client_callback);
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        |         q_SSL_set_info_callback
+Committed to 2023.02.x, thanks.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 971ae7b266d7d8df2d31f482d9fa44c0f3338c0a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt6/qt6base/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 7927975bff..f9fb2a2ad0 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -165,6 +165,7 @@ endif
- 
- config BR2_PACKAGE_QT6BASE_NETWORK
- 	bool "network module"
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  This options enables the Qt6Network library.
- 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
