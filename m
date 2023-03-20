@@ -1,68 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00790C7618A
-	for <buildroot@archiver.kernel.org>; Sun, 19 Mar 2023 20:36:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 257DCC7618A
+	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 02:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72498409EB;
-	Sun, 19 Mar 2023 20:36:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72498409EB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 817BD60AB9;
+	Mon, 20 Mar 2023 02:43:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 817BD60AB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5RYlgoevW7Ez; Sun, 19 Mar 2023 20:36:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4Ta6RdEAg6If; Mon, 20 Mar 2023 02:43:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F0C4409AD;
-	Sun, 19 Mar 2023 20:36:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F0C4409AD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B6F9B1BF86D
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:36:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA48360AA7;
+	Mon, 20 Mar 2023 02:43:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA48360AA7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 91A001BF346
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 02:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D6DE81A58
- for <buildroot@lists.busybox.net>; Sun, 19 Mar 2023 20:36:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D6DE81A58
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79AD540144
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 02:43:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79AD540144
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jUhNc3iuG_Hb for <buildroot@lists.busybox.net>;
- Sun, 19 Mar 2023 20:36:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HYBWc_FSse6O for <buildroot@lists.busybox.net>;
+ Mon, 20 Mar 2023 02:43:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1A74817B5
- for <buildroot@uclibc.org>; Sun, 19 Mar 2023 20:36:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1A74817B5
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7AAB400C4
+ for <buildroot@uclibc.org>; Mon, 20 Mar 2023 02:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7AAB400C4
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B1407870E9; Sun, 19 Mar 2023 20:36:02 +0000 (UTC)
+ id A257586122; Mon, 20 Mar 2023 02:43:26 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 19 Mar 2023 20:36:02 +0000
+Date: Mon, 20 Mar 2023 02:43:26 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
+X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2023.02
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ps.report@gmx.net
+X-Bugzilla-Who: info@resilience-theatre.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15456-163-o07RnUxNPi@https.bugs.busybox.net/>
-In-Reply-To: <bug-15456-163@https.bugs.busybox.net/>
-References: <bug-15456-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-15461-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15456] No more login on Raspberry Pi 3 since
- 2023.02
+Subject: [Buildroot] [Bug 15461] New: QtVirtualKeyboard segfaults
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,52 +78,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15456
+https://bugs.busybox.net/show_bug.cgi?id=15461
 
---- Comment #3 from Peter Seiderer <ps.report@gmx.net> ---
-Tested on raspberrypi_4, bash crashes with:
+            Bug ID: 15461
+           Summary: QtVirtualKeyboard segfaults
+           Product: buildroot
+           Version: 2023.02
+          Hardware: Other
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: info@resilience-theatre.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-    $ ./host/bin/arm-buildroot-linux-gnueabihf-gdb build/bash-5.2.15/bash
-core.199
-    Core was generated by `bash'.
-    Program terminated with signal SIGSEGV, Segmentation fault.
-    #0  0xb6d74b5c in ?? ()
-    (gdb) set sysroot ./staging
-    Reading symbols from ./staging/lib/libreadline.so.8...
-    Reading symbols from ./staging/lib/libhistory.so.8...
-    Reading symbols from ./staging/lib/libncurses.so.6...
-    Reading symbols from ./staging/lib/libc.so.6...
-    Reading symbols from ./staging/lib/ld-linux-armhf.so.3...
-    (gdb) where
-    #0  0xb6d74b5c in kill () at ../sysdeps/unix/syscall-template.S:120
-    #1  0x004d4f0c in kill_shell (sig=sig@entry=11) at sig.c:643
-    #2  0x004d5110 in termsig_handler (sig=11) at sig.c:624
-    #3  termsig_handler (sig=11) at sig.c:575
-    #4  0x004d5248 in termsig_sighandler (sig=<optimized out>) at sig.c:558
-    #5  <signal handler called>
-    #6  strlen () at ../sysdeps/arm/strlen.S:32
-    #7  0xb6f2fb20 in _rl_init_locale () at ../nls.c:150
-    #8  0xb6f2fba0 in _rl_init_eightbit () at ../nls.c:227
-    #9  0xb6f10f54 in readline_initialize_everything () at ../readline.c:1292
-    #10 rl_initialize () at ../readline.c:1183
-    #11 0x004e439c in initialize_readline () at bashline.c:522
-    #12 0x0048e63c in yy_readline_get ()
-        at /usr/local/src/chet/src/bash/src/parse.y:1514
-    #13 0x00491190 in shell_getc (
-        remove_quoted_newline=remove_quoted_newline@entry=1)
-        at /usr/local/src/chet/src/bash/src/parse.y:2393
-    #14 0x00493410 in read_token (command=0)
-        at /usr/local/src/chet/src/bash/src/parse.y:3404
-    #15 read_token (command=0) at /usr/local/src/chet/src/bash/src/parse.y:3355
-    #16 0x00496a64 in yylex () at /usr/local/src/chet/src/bash/src/parse.y:2892
-    #17 yyparse () at y.tab.c:1854
-    #18 0x0048da38 in parse_command () at eval.c:348
-    #19 0x0048db88 in read_command () at eval.c:392
-    #20 0x0048dd10 in reader_loop () at eval.c:139
-    #21 0x0048c7e8 in main (argc=5489868, argv=0x0, env=<optimized out>)
-        at shell.c:833
+QtVirtualKeybaord program which works on 2022.02.9 segfaults on 2023.02.
 
-But e.g. 'LANG=C bash' runs fine...
+My working defconfig for Pinephone (ARM) fails to run QT/QML program which
+incldues virtualkeyboard after upgrade to 2023.02.
+
+Steps to reproduce: 
+
+* Clone 2023.02 buildroot
+* Arm defconfig with all standard QT packages (5.15.8)
+* Setup QT Creator with toolchain and sysroot to BR produced
+* Create sample QML application and include QtVirtualKeyboard
+* Try to run program
+
+Results on 2023.02:
+
+ASSERT: "targetObjectIndex >= 0" in file
+../../include/QtQml/5.15.8/QtQml/private/../../../../../src/qml/qml/qqmlpropertycachecreator_p.h,
+line 828
+
+On 2022.02.9 this works without and erros.
 
 -- 
 You are receiving this mail because:
