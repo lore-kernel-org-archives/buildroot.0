@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C155AC6FD1D
-	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 08:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67AA1C6FD1D
+	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 08:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69E0660BF8;
-	Mon, 20 Mar 2023 08:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69E0660BF8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02E8760BD9;
+	Mon, 20 Mar 2023 08:53:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02E8760BD9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EC0tCLCf8ARn; Mon, 20 Mar 2023 08:52:39 +0000 (UTC)
+	with ESMTP id mtlXwDks_9iE; Mon, 20 Mar 2023 08:53:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7A6B60BDB;
-	Mon, 20 Mar 2023 08:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7A6B60BDB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 76E761BF35B
- for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:52:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4528560B9F;
+	Mon, 20 Mar 2023 08:53:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4528560B9F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 761C51BF35B
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5070C408FB
- for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5070C408FB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50A498139F
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:53:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50A498139F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R8N7HG5E4stM for <buildroot@lists.busybox.net>;
- Mon, 20 Mar 2023 08:52:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wUQbek_WnhGY for <buildroot@lists.busybox.net>;
+ Mon, 20 Mar 2023 08:53:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DA01408E3
- for <buildroot@buildroot.org>; Mon, 20 Mar 2023 08:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DA01408E3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 838518138D
+ for <buildroot@buildroot.org>; Mon, 20 Mar 2023 08:53:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 838518138D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3809E874FB; Mon, 20 Mar 2023 08:52:36 +0000 (UTC)
+ id 7338187538; Mon, 20 Mar 2023 08:53:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Mar 2023 09:37:27 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 8b641331d0b1fea1c70f910df70d7f045f9de162
-X-Git-Newrev: 75e04c691e580165b7f203261a3ca2a2d1e3e25c
+Date: Mon, 20 Mar 2023 09:36:20 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 5a03ec843ddd5b5f20ae28ed4a380b0189c56371
+X-Git-Newrev: 9581a99263cf866f8cfd60dec4ad299f7edc5c4c
 X-Patchwork-Hint: ignore
-Message-Id: <20230320085236.3809E874FB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
+Message-Id: <20230320085354.7338187538@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
  package/linux-tools/S10hyperv: fix shellcheck warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75e04c691e580165b7f203261a3ca2a2d1e3e25c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9581a99263cf866f8cfd60dec4ad299f7edc5c4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 When running "make check-package" on a system with shellcheck 0.9.0,
 the command fails with output:
@@ -96,12 +96,25 @@ Fixes:
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit c4173d8b08525f260fea8a2a1e805b806bcba9fc)
-[Peter: drop .checkpackageignore, not in 2022.02.x]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ .checkpackageignore           | 2 +-
  package/linux-tools/S10hyperv | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 405e1c5677..04966a9b06 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -94,7 +94,7 @@ package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch Sob
+ package/libiio/S99iiod Shellcheck Variables
+ package/libmad/0001-mips-h-constraint-removal.patch Sob
+ package/lighttpd/S50lighttpd EmptyLastLine Indent Shellcheck Variables
+-package/linux-tools/S10hyperv Indent Variables
++package/linux-tools/S10hyperv Variables
+ package/linuxptp/S65ptp4l Indent Shellcheck
+ package/linuxptp/S66phc2sys Indent Shellcheck
+ package/lirc-tools/S25lircd Indent Variables
 diff --git a/package/linux-tools/S10hyperv b/package/linux-tools/S10hyperv
 index ec934bc972..32887d1b6c 100644
 --- a/package/linux-tools/S10hyperv
