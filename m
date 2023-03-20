@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9351CC7618A
-	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 09:08:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 056E5C6FD1D
+	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 09:08:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4256860DCB;
-	Mon, 20 Mar 2023 09:08:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4256860DCB
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5E9D60B9F;
+	Mon, 20 Mar 2023 09:08:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5E9D60B9F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EDKNAAQ2o6dH; Mon, 20 Mar 2023 09:08:24 +0000 (UTC)
+	with ESMTP id YDegCx_vLfs0; Mon, 20 Mar 2023 09:08:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71E4860C0F;
-	Mon, 20 Mar 2023 09:08:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71E4860C0F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ED1541BF424
- for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 09:08:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC3BD60BC1;
+	Mon, 20 Mar 2023 09:08:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC3BD60BC1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 476D81BF424
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 09:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6EE181587
- for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 09:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6EE181587
+ by smtp4.osuosl.org (Postfix) with ESMTP id 20DBA411C6
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 09:08:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20DBA411C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9H193vaVazjH for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BjtapNNMRt2e for <buildroot@lists.busybox.net>;
  Mon, 20 Mar 2023 09:08:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11A3281584
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E965410E7
  for <buildroot@buildroot.org>; Mon, 20 Mar 2023 09:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11A3281584
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E965410E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F22E68750B; Mon, 20 Mar 2023 09:08:05 +0000 (UTC)
+ id E8FCA87566; Mon, 20 Mar 2023 09:08:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Mar 2023 10:06:01 +0100
+Date: Mon, 20 Mar 2023 10:05:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3b645ffda6529278212ab93eb038da28014502cd
-X-Git-Newrev: 9d39b2aed23dc822cfa56e6cc54fe605e0fd99d2
+X-Git-Oldrev: 9f5c8bd4305ab7667f3a36911ba58cef358b5aa8
+X-Git-Newrev: 3b645ffda6529278212ab93eb038da28014502cd
 X-Patchwork-Hint: ignore
-Message-Id: <20230320090805.F22E68750B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireshark: security bump to
- version 4.0.4
+Message-Id: <20230320090805.E8FCA87566@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmicrohttpd: security bump to
+ version 0.9.76
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d39b2aed23dc822cfa56e6cc54fe605e0fd99d2
+commit: https://git.buildroot.net/buildroot/commit/?id=3b645ffda6529278212ab93eb038da28014502cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2023-1161: ISO 15765 and ISO 10681 dissector crash in Wireshark
-4.0.0 to 4.0.3 and 3.6.0 to 3.6.11 allows denial of service via packet
-injection or crafted capture file
+Fix CVE-2023-27371: GNU libmicrohttpd before 0.9.76 allows remote DoS
+(Denial of Service) due to improper parsing of a multipart/form-data
+boundary in the postprocessor.c MHD_create_post_processor() method. This
+allows an attacker to remotely send a malicious HTTP POST packet that
+includes one or more '\0' bytes in a multipart/form-data boundary field,
+which - assuming a specific heap layout - will result in an
+out-of-bounds read and a crash in the find_boundary() function.
 
-https://www.wireshark.org/security/wnpa-sec-2023-08.html
-https://www.wireshark.org/news/20230302.html
+https://lists.gnu.org/archive/html/libmicrohttpd/2023-02/msg00000.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 7128b560ae..d89caa5de8 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.3.txt
--sha1  243b0057cfe6d447662e81b5646110aaf8b63c81  wireshark-4.0.3.tar.xz
--sha256  6c51e15bcc0afb93734e686dbff354ffd159f570bd2904bcbbad6f3feb7e9511  wireshark-4.0.3.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.4.txt
-+sha1  ae3c28d6966c420ee3a8d058ea212a1b6adab50f  wireshark-4.0.4.tar.xz
-+sha256  a4a09f6564f00639036ffe5064ac4dc2176adfa3e484c539c9c73f835436e74b  wireshark-4.0.4.tar.xz
- 
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 7f95e78a6e..ce30e2ba11 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 12c36575df..f5a8e1f070 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
+-sha256  9278907a6f571b391aab9644fd646a5108ed97311ec66f6359cebbedb0a4e3bb  libmicrohttpd-0.9.75.tar.gz
++sha256  f0b1547b5a42a6c0f724e8e1c1cb5ce9c4c35fb495e7d780b9930d35011ceb4c  libmicrohttpd-0.9.76.tar.gz
+ sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index f75178bc0a..4e7b72b65c 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 4.0.3
-+WIRESHARK_VERSION = 4.0.4
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-LIBMICROHTTPD_VERSION = 0.9.75
++LIBMICROHTTPD_VERSION = 0.9.76
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_CPE_ID_VENDOR = gnu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
