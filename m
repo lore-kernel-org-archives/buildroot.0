@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44916C6FD1D
-	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 08:42:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CB57C6FD1D
+	for <buildroot@archiver.kernel.org>; Mon, 20 Mar 2023 08:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD26E60BF8;
-	Mon, 20 Mar 2023 08:42:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD26E60BF8
+	by smtp3.osuosl.org (Postfix) with ESMTP id C52FF60BD9;
+	Mon, 20 Mar 2023 08:51:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C52FF60BD9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q_vW8FPf4K6l; Mon, 20 Mar 2023 08:42:58 +0000 (UTC)
+	with ESMTP id Ata8WI8qQUFk; Mon, 20 Mar 2023 08:51:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EABA60BE6;
-	Mon, 20 Mar 2023 08:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EABA60BE6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 524E51BF35B
- for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:42:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E97960BDB;
+	Mon, 20 Mar 2023 08:51:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E97960BDB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BB511BF35B
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:51:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2DD0D40139
- for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:42:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DD0D40139
+ by smtp4.osuosl.org (Postfix) with ESMTP id E993C408FB
+ for <buildroot@lists.busybox.net>; Mon, 20 Mar 2023 08:51:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E993C408FB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2n_Sz51mA4J5 for <buildroot@lists.busybox.net>;
- Mon, 20 Mar 2023 08:42:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R8ZXXAiB9arQ for <buildroot@lists.busybox.net>;
+ Mon, 20 Mar 2023 08:51:09 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CA70400F8
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0CA70400F8
- for <buildroot@buildroot.org>; Mon, 20 Mar 2023 08:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F24E9408E3
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F24E9408E3
+ for <buildroot@buildroot.org>; Mon, 20 Mar 2023 08:51:08 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BA3E0100020;
- Mon, 20 Mar 2023 08:42:47 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id C3BD310002A;
+ Mon, 20 Mar 2023 08:51:02 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1peB6M-007ZXf-Jk; Mon, 20 Mar 2023 09:42:46 +0100
+ id 1peBEL-007Zrm-Q2; Mon, 20 Mar 2023 09:51:01 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20230317193326.17298-1-ps.report@gmx.net>
-Date: Mon, 20 Mar 2023 09:42:46 +0100
-In-Reply-To: <20230317193326.17298-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 17 Mar 2023 20:33:26 +0100")
-Message-ID: <87a607x189.fsf@dell.be.48ers.dk>
+To: Zvi Vered <veredz72@gmail.com>
+References: <CABRndgw1EVFyDNDcRJ10gOPFfw-gH+7Gqx7P537EiSVr5Wq6Kw@mail.gmail.com>
+Date: Mon, 20 Mar 2023 09:51:01 +0100
+In-Reply-To: <CABRndgw1EVFyDNDcRJ10gOPFfw-gH+7Gqx7P537EiSVr5Wq6Kw@mail.gmail.com>
+ (Zvi Vered's message of "Fri, 17 Mar 2023 06:57:16 +0200")
+Message-ID: <875yavx0ui.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/qt6base: network module needs
- libopenssl PSK feature
+Subject: Re: [Buildroot] 2023.02 : pty_allocate: openpty: No such file or
+ directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,33 +63,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Zvi" == Zvi Vered <veredz72@gmail.com> writes:
 
- > Fixes:
- >   - http://autobuild.buildroot.net/results/fdf2b2eb252a24e81bddad1c81c4fdfb03dc0afe
+ > Hello,
+ > I built rootfs for aarch64 (little endian) and used it to boot cortex A-53
+ > with kernel 4.9.x
+ > After login (+password) I ran dropbear (included in buildroot) with:
+ > dropbear -F -R -E
+ > and got no errors.
 
- >   .../build/qt6base-6.4.2/src/plugins/tls/openssl/qdtls_openssl.cpp: In member function 'bool dtlsopenssl::DtlsState::initCtxAndConnection(QDtlsBasePrivate*)':
- >   .../build/qt6base-6.4.2/src/plugins/tls/openssl/qdtls_openssl.cpp:669:9: error: 'q_SSL_set_psk_server_callback' was not declared in this scope; did you mean 'q_SSL_set_psk_use_session_callback'?
- >     669 |         q_SSL_set_psk_server_callback(newConnection.data(), dtlscallbacks::q_PSK_server_callback);
- >         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- >         |         q_SSL_set_psk_use_session_callback
- >   .../build/qt6base-6.4.2/src/plugins/tls/openssl/qdtls_openssl.cpp:671:9:
- > error: 'q_SSL_set_psk_client_callback' was not declared in this scope;
- > did you mean 'q_SSL_set_info_callback'?
- >     671 |         q_SSL_set_psk_client_callback(newConnection.data(), dtlscallbacks::q_PSK_client_callback);
- >         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- >         |         q_SSL_set_info_callback
+ > Upon trying to connect via SSH from ssh client I got:
+ > pty_allocate: openpty: No such file or directory
+ > No pty was allocated, couldn't execute
+ > Exit (root) from <10.0.0.1:51333>: Error reading Connection reset by peer
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Can you please advise what can be done?
 
-Committed to 2023.02.x, thanks.
+Can you provide some more details, please? Dropbear installs an
+initscript so it should normally start up automatically.
+
+The openpty issue sounds like your kernel perhaps doesn't have pty
+support. Did you enable CONFIG_UNIX98_PTYS / CONFIG_LEGACY_PTYS in the
+kernel configuration?
 
 -- 
 Bye, Peter Korsgaard
