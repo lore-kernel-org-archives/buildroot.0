@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE07EC6FD1C
-	for <buildroot@archiver.kernel.org>; Tue, 21 Mar 2023 01:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ABD1C6FD1D
+	for <buildroot@archiver.kernel.org>; Tue, 21 Mar 2023 05:03:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 383B140ACB;
-	Tue, 21 Mar 2023 01:29:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 383B140ACB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nKQtKJBSOKgp; Tue, 21 Mar 2023 01:29:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F4B640AB9;
-	Tue, 21 Mar 2023 01:28:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F4B640AB9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 143921BF3E1
- for <buildroot@lists.busybox.net>; Tue, 21 Mar 2023 01:28:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E22CE81303
- for <buildroot@lists.busybox.net>; Tue, 21 Mar 2023 01:28:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E22CE81303
+	by smtp1.osuosl.org (Postfix) with ESMTP id C791081221;
+	Tue, 21 Mar 2023 05:03:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C791081221
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bp5y2V_t9sro for <buildroot@lists.busybox.net>;
- Tue, 21 Mar 2023 01:28:55 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A7kXfHwf8Ss9; Tue, 21 Mar 2023 05:03:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1D5E8105C;
+	Tue, 21 Mar 2023 05:03:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1D5E8105C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C5AC11BF3D2
+ for <buildroot@lists.busybox.net>; Tue, 21 Mar 2023 05:03:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5B7240137
+ for <buildroot@lists.busybox.net>; Tue, 21 Mar 2023 05:03:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5B7240137
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gj-Wf0rUnpvb for <buildroot@lists.busybox.net>;
+ Tue, 21 Mar 2023 05:03:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27A5781266
-Received: from AUS01-SY4-obe.outbound.protection.outlook.com
- (mail-sy4aus01on20613.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:7005::613])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 27A5781266
- for <buildroot@buildroot.org>; Tue, 21 Mar 2023 01:28:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8CA0400E7
+Received: from AUS01-ME3-obe.outbound.protection.outlook.com
+ (mail-me3aus01on20612.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:7004::612])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D8CA0400E7
+ for <buildroot@buildroot.org>; Tue, 21 Mar 2023 05:03:50 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eGM3FNuJO3StPHhRO6w/gY5k8FdGwDzt+Ywv9LEPk+jMP5A7Wxx+x63JoKQBa7qBDdUeTe+6otlNBOSFHLuBWAVFpil6fpVPld/fHrcZWfb4hkdWMtHdxnNQCy9eDOuvru7QDCFFJPtTbLSD78yqpWrfn1ill7lXnvw41ymCVwHlk/Mv9ApkSNM6tPB7LIN1/7aXJOXQa70o8YHQoIziTv3p/jcnmdqikyYLaeCNDvLwTB+krvAyivwB1lsWPOhkW3tsPePqYy8VWelPEj4cbxJRNWEdzresgLna4oHG38zDJhtDvVNgWMvBvEWifwq2xCnfIF1H9WToAFw5OBiv4Q==
+ b=abb07jG19933Ucf+rvdFGLD6s0yDi4ZJs2HsJtRm5xlCAYDxK6LqDmh+Q6Ho8UOG7eOe61pvuB0B724SQ0Pjt9mvLD1SUQgREEI4ASck5FHIycCUo/vaK9/wTSnOMahalnI02/WUGvga/wF5d23GzENdFAi05cxkciRDbTgceNqpXEm6YUfR5D8kiFzPk3p5ADfgHthVM1XmF3euX/qTEY522LtyTJcscJ34BcA6bD+71jZudunMOfB5Nn2TNbw5ppBtYOXsE28khmbmPCkkEfjOUXpbC2Y4wL4Jcq/Cyc/rnm9GbrlXhtBPxg2Su+7nZSU/XSSpmDTGC1EiWnVdOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VO0kiGYQVvrCMCury5Ur9/CRWWXRypqAPpa/H5XUYqc=;
- b=dMAkrnf0B6Exau2yDBq42t23XoZRL/0yBSQUwzSHFoVXy2U+wPVpNUE0okTZToEy3a7Ocnn3QjKhm8yfGcUmZwq+fH8DATVDhVcWTQXB3dR9cLOTNGDYCNoKP7rRD/BRdKFXmsllP3vYFkcJ5ABoQN4BXqWpMaSjaM47CfiykzZO0acPIOdxT1Vjy46XSOydcKHOxSqz5LqNcXeQXdt2k9xzc+7FSPbR/hsKpQKlt1YbgB7BXOFhgB8to9OKOBPyJ1BUnmSynj3l17MXaN6L0mEWavulewQyFD3YMaV9BSRng4oMgDCX4pZA7HGAnzc298AzFlWeH2TCcz6nKnhIYg==
+ bh=091LDhFUOH2P9njTrnWhsfeUEaWAniTdvcu6UZoaQfs=;
+ b=dhtcMWBhh6nprjjexfBWbLHlBK5spFq+t+2/b2DM5/zpTwQ0NUqvpaKSMa50Xd/B4n9ckGBW2oMK1bH89A0/yv1PRukoR3SicntZSWPadMdt9ZjNJHVnKeoOc3/+TUlvnbgY6vlwxkY90SR3SjCWmCddkWFpLP+QJDqW4SiqrALUDbnvIdRH03cSQ0WdSgxS1XRShKwg7yzIPPYhgRgjTNRueDTt95rx7ljWK1CWRF+9iRre7NpXCFQVNdzFTRlWPm96lcczH9wFvWO5A+0C0w1ik7MO+W+UoKJ9eCsJIe3wWXFBNYvzHIo8IcgBILzcmcJ6iBk92rreY3lUAIxHiQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  13.70.157.244) smtp.rcpttodomain=buildroot.org
  smtp.mailfrom=rigtechnologies.com.au; dmarc=bestguesspass action=none
  header.from=rigtechnologies.com.au; dkim=none (message not signed); arc=none
-Received: from SY5PR01CA0003.ausprd01.prod.outlook.com (2603:10c6:10:1fa::16)
- by ME2P282MB0289.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:4f::21) with
+Received: from ME1PR01CA0103.ausprd01.prod.outlook.com (2603:10c6:200:19::12)
+ by MEAP282MB0662.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:6a::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 21 Mar
- 2023 01:28:47 +0000
-Received: from SY4AUS01FT024.eop-AUS01.prod.protection.outlook.com
- (2603:10c6:10:1fa:cafe::c) by SY5PR01CA0003.outlook.office365.com
- (2603:10c6:10:1fa::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.8; Tue, 21 Mar
+ 2023 05:03:41 +0000
+Received: from ME3AUS01FT012.eop-AUS01.prod.protection.outlook.com
+ (2603:10c6:200:19:cafe::d6) by ME1PR01CA0103.outlook.office365.com
+ (2603:10c6:200:19::12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Tue, 21 Mar 2023 01:28:48 +0000
+ Transport; Tue, 21 Mar 2023 05:03:41 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.70.157.244)
  smtp.mailfrom=rigtechnologies.com.au; dkim=none (message not signed)
  header.d=none;dmarc=bestguesspass action=none
@@ -67,86 +67,83 @@ Received-SPF: Pass (protection.outlook.com: domain of rigtechnologies.com.au
  receiver=protection.outlook.com; client-ip=13.70.157.244;
  helo=au2.smtp.exclaimer.net; pr=C
 Received: from au2.smtp.exclaimer.net (13.70.157.244) by
- SY4AUS01FT024.mail.protection.outlook.com (10.114.156.125) with Microsoft
+ ME3AUS01FT012.mail.protection.outlook.com (10.114.155.166) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.6199.26 via Frontend Transport; Tue, 21 Mar 2023 01:28:46 +0000
-Received: from AUS01-SY4-obe.outbound.protection.outlook.com (104.47.71.170)
+ 15.20.6222.16 via Frontend Transport; Tue, 21 Mar 2023 05:03:39 +0000
+Received: from AUS01-SY4-obe.outbound.protection.outlook.com (104.47.71.169)
  by au2.smtp.exclaimer.net (13.70.157.244) with Exclaimer Signature Manager
  ESMTP Proxy au2.smtp.exclaimer.net (tlsversion=TLS12,
- tlscipher=TLS_ECDHE_WITH_AES256_SHA384); Tue, 21 Mar 2023 01:28:46 +0000
+ tlscipher=TLS_ECDHE_WITH_AES256_SHA384); Tue, 21 Mar 2023 05:03:39 +0000
 X-ExclaimerHostedSignatures-MessageProcessed: true
-X-ExclaimerProxyLatency: 22634637
-X-ExclaimerImprintLatency: 2210134
-X-ExclaimerImprintAction: 7d5ed0c1cbf54ffabc54a689dcf92ead
+X-ExclaimerProxyLatency: 23900208
+X-ExclaimerImprintLatency: 3824113
+X-ExclaimerImprintAction: 690059b1e34e47e0a2c71b33840e340d
 Received: from ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:8e::13)
- by SY4P282MB3614.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:17d::6) with
+ by MEAP282MB0391.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:67::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.8; Tue, 21 Mar
- 2023 01:28:43 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.10; Tue, 21 Mar
+ 2023 05:03:33 +0000
 Received: from ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM
  ([fe80::910c:2436:356c:7299]) by ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM
  ([fe80::910c:2436:356c:7299%6]) with mapi id 15.20.6222.008; Tue, 21 Mar 2023
- 01:28:42 +0000
+ 05:03:33 +0000
 From: Alberto Fahrenkrog <Alberto.Fahrenkrog@rigtechnologies.com.au>
 To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] PySerial issue, buildroot-2023.02-rc2
-Thread-Index: AQHZW5MmoHIw95eJQUmmBE26P+WisA==
-Date: Tue, 21 Mar 2023 01:28:42 +0000
-Message-ID: <ME3P282MB13479A857B70CA76AC387783B9819@ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM>
+Thread-Topic: [Buildroot] SSH Reset on Buildroot 2022.02
+Thread-Index: AQHZW6d6Vr0bhpaQAkGjYh2VXJ8qjw==
+Date: Tue, 21 Mar 2023 05:03:33 +0000
+Message-ID: <ME3P282MB1347EDB695F6E726349D27E0B9819@ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM>
 Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
+X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: 
 Authentication-Results-Original: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=rigtechnologies.com.au;
-x-ms-traffictypediagnostic: ME3P282MB1347:EE_|SY4P282MB3614:EE_|SY4AUS01FT024:EE_|ME2P282MB0289:EE_
-X-MS-Office365-Filtering-Correlation-Id: b8f8cffc-796f-42ac-d24c-08db29ab9dc3
+x-ms-traffictypediagnostic: ME3P282MB1347:EE_|MEAP282MB0391:EE_|ME3AUS01FT012:EE_|MEAP282MB0662:EE_
+X-MS-Office365-Filtering-Correlation-Id: 129d564e-fe73-4271-f1d7-08db29c9a283
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: P/hWzk2Ma2fuO7ZqYPJEHHktYm82zpW1Q69RG67eNQhLkrKYRCD/r2uyiHWt77Et0ZzkocryFRLZhZEP+vP4m0VbJV3H4O/goM9UI6fDlYuVYqGqAO6nL6wFUO7Lc0ZXSsezG6UyMu7RK9DznUjVrI23OyIcl9y6syJdvljDaIvJVNfpyERZlQ8FLydDpQcT7RwAxhaq6gUD30JusNF5kG+eVMqkYGWQrzPAFRfCxQiBGIz88UtSkOj9lXYVnTW+R4uRxLuon+TQsJAi3Awmx928MFm+1X1EcfjTT6adqIxbxNHtYKHDT/fnE9/6di+w67xN1axsPVWNk+nDDtyg+SrIQ7JZDOSv2/67xDO3Lw9OShe5Bh/hK+NooguAiycgi6gRoYICjvmG2nu54y4yu04kpp3pZiBZiafJgQk34sBPbIV696CtulS7qMR5EUwL72sAD4AxdguRwK56meJfxn9Rf0jk2/JbQpW3OPGIbKLVde9zygE/8lyfhWRL5oB3YSKogAE9FIfCZaU3NHziZtbX1p9Ffz16Gh4mSUp1XpMA5yI+PmmzAG5APtL3EBdAoQoATWRyiFn4s5BYl93t8IwpvjTfS39qF16PYRm7jWaWuIBmSHn4NuA+35EDqaTkegmY8XPxNGURl5UBufKvsxcfGpBdxNaVu5vt2hM84L9Q6dL8j03jlUJHPavJtg9L/VgkOWS7/Yj4iVonNydvCQ==
+X-Microsoft-Antispam-Message-Info-Original: FG59uqdKb/ErDyqxXlDBOw7Tj9/P59SyCojzbR8NIWfTU9mxmRInaCUtrkNwpVzF1W5/4tnaBf/f8C0uF0JcFMVJltV66cB0CRY1YrAv+PdBR360c7afjzjbx2JHmWr/NwdoToOz+SXplbOUoATgayE1CwgYKtfP05gw1wADld+j8NZDiUM1e377D5sQP94cgQegdVa4KPaGHTP6FMdEb5eI7Yl2Xelf02BC3NOqTk2k/p1o1saEGUOT2afouuysDGfsn5JC+o8rCHqbVmcSYumep3j4qHyMwrNtz2QaiKuI7yw1SZTHK8vg7Pm8nb3Fn2sbUcfX9SbKIVSFozk5Hv+3ls0DK0NxsDzojvWBVAEjkrt9GdT7U1PWPdtJKEiFg8A8vs/6mGsR8G81SaD1Ry2ng8z3rrCwou3ZsAF8RtY2/mDxKYfWw7HQoa1RMXwIlC2FULE7qg+pdc4aR7vZS4ilKsWH0fu3F989h4XJTwLjebHzwLlwyijU631IrY9apQteYhwqwbbM3HY+j2swXrbF8ts++i864JXSfQZKrdt4V/A3PwZ38vffeYnByS+nbGLBxq1U8qJ7fBLhOIIuMkTpj0fyaEXPyggRbCP52hMaQE0SnFJUgNKbUqxcuYSb7ojspLHpE09Kooey6MAAYohDbuXF1SB0cR6C6/w7nEiGzth7EG3kY620l/n+RtOQBaw1/bBFlF5RYB+oI+9UOg==
 X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255; CTRY:; LANG:en;
  SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM; PTR:;
  CAT:NONE;
- SFS:(13230025)(6029001)(4636009)(136003)(376002)(366004)(346002)(39850400004)(396003)(451199018)(8936002)(52536014)(33656002)(83380400001)(66574015)(55016003)(38070700005)(99936003)(122000001)(38100700002)(41300700001)(6916009)(66556008)(316002)(66446008)(64756008)(66946007)(8676002)(66476007)(5660300002)(76116006)(91956017)(86362001)(186003)(71200400001)(26005)(7696005)(9686003)(6506007)(478600001)(19627405001)(2906002);
+ SFS:(13230025)(4636009)(346002)(39850400004)(136003)(366004)(396003)(376002)(451199018)(122000001)(33656002)(55016003)(83380400001)(71200400001)(186003)(478600001)(6506007)(38070700005)(7696005)(26005)(9686003)(38100700002)(19627405001)(64756008)(91956017)(41300700001)(66556008)(66476007)(6916009)(76116006)(66446008)(66946007)(316002)(5660300002)(8936002)(2906002)(52536014)(86362001)(8676002);
  DIR:OUT; SFP:1101; 
-Content-Type: multipart/mixed;
- boundary="_004_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_"
 MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY4P282MB3614
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MEAP282MB0391
 X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: SY4AUS01FT024.eop-AUS01.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: ME3AUS01FT012.eop-AUS01.prod.protection.outlook.com
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: f36492b3-df81-412c-2348-08db29ab9b7f
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 68ea7c0c-687c-4b85-a7f9-08db29c99f0b
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AZyaRKZ4FZfjhgIcFb52b/w6e782oTsWL4/qSMoroAmaxmExouiydqmjBnXjDViG9Af4X3zVxN6bRPiQw4SBBWQqM7d2tSGWsss6Pfr7tu3VSK75c79aO2ksJSY2nRjVuZAJMMxQYzODik3igIn3aLre3OOVNxrGtYWg6xv7HanrhwXbrQsjO4z2C4ljMHZeyUOTCjxCqHLgyt7sykoIeUpVNxmkDkkdreV73QvBMYVedEmbUVhi/nSfs96VrwIkvfbuHzdWyqVw11UKMrSnAG9ZoxLPAtaN1udvlWie3TchDQfOexH+7BukWAsLXUh7ZZ8rsnhd+X7JiafZOHXAB0mwajfi26wqpEJmF6TmD531pbXgRnNY/OtmVPX/spJJ4u46HqhKeGhDnJ+5pGYVQYYrNah+7VY1gtXdIdlVu5HGRwoYWWkyf3rgZqGhUs88i1CPQw6BIRiowhSG6BWLgRHa15Aoh9KgerowLiyZ60ifohujYQxyVz7v7nZG0Yw19BNVVh4Tbc5wJUugNlh6Fmt/oqaywYUh/ngGAtKss9dpAxaPmrNutiXRWPlXdie96o3Cw4f0OV3K1mKnbmOUJQPECYPJ6fiqAHl8Axu2D20gjjspZ11QG7KApmYRLidLoIkGPgj66h3fh634rl9IRFmmUjHp4p2kZD5WxK2ajRf5LTBhVvD+VXnlnttrQ8Aa
+X-Microsoft-Antispam-Message-Info: 0+KfkdsIi3eqWqcMvCabjzSPSopPcRs5n68gy1DlrrNJrEN5mOEVpoKTGl+oVGcViGhsbM4uk2PFBCbsGeVIDUpzUSj460Ty6kTUGmMr4wfDgjtNmUP/5j/jkUkrh7jrRVDzKpf2KzH7Th6YmlwkMffzssv+rzJpTPOsoAdpG90GOwvxRgqN8Q4u87vM74nSMG537UCxDA8lwEJECKd3dR/cxY3JIBBlqcM1aX5vpyWC0SPl3AHGXmB34lSvdwlhe1batD5YrxLvSPXrNRj9ivCvu0ljH6nsDvHKaFT6riot1Ecc5YsGd8Czt1RdSljlhTLvGl3PFGog0lvz8HXhT8Y/BRB3Dw6CtVx9jiXXkwVlKAGmDxo9uFdbsIOx367Q0xzgfGWkHzC4hfd5Jf5UarfTqX1clgkk3IHcCRtTLXzOr0Y4db5FZ5YSBmeiMbSXVwMl6/XrouLliNWFtBsb034zTqSdSiZCVmayZxY35XemyCMbaiK6LkZFFF8RBbrD0RPHbgw1Uaj5NTP4Q/9QNKUMroikxkWhOjXcQP61iZHND0u9p6a5c2OiUYPK9PVepmrzVYA5IfzXVOmudAu/7w5Hd+w5eZDiwTTYs+QwvCz13ENh8Rtunpa6vLMKa84w4FJ6OGCMxxaHSiLnYlQZWNDX/JpcszitPKaxRQJZmvQE0Edl8aATKVq9hoQH3LP9
 X-Forefront-Antispam-Report: CIP:13.70.157.244; CTRY:AU; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:au2.smtp.exclaimer.net; PTR:au2.smtp.exclaimer.net;
  CAT:NONE;
- SFS:(13230025)(6029001)(4636009)(346002)(136003)(396003)(376002)(39850400004)(451199018)(36840700001)(46966006)(86362001)(356005)(82740400003)(36860700001)(99936003)(70206006)(7596003)(7636003)(8936002)(33656002)(2906002)(52536014)(5660300002)(235185007)(40480700001)(26005)(55016003)(6916009)(186003)(33964004)(316002)(6506007)(83380400001)(336012)(66574015)(47076005)(9686003)(82310400005)(478600001)(70586007)(41300700001)(7696005)(8676002)(19627405001);
+ SFS:(13230025)(4636009)(376002)(136003)(346002)(39850400004)(396003)(451199018)(46966006)(36840700001)(478600001)(33964004)(6506007)(316002)(9686003)(26005)(186003)(7696005)(82740400003)(82310400005)(7596003)(356005)(7636003)(33656002)(86362001)(55016003)(47076005)(336012)(19627405001)(6916009)(40480700001)(8936002)(5660300002)(52536014)(2906002)(41300700001)(83380400001)(36860700001)(70586007)(8676002)(70206006);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: rigtechnologies.com.au
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 01:28:46.2935 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8f8cffc-796f-42ac-d24c-08db29ab9dc3
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 05:03:39.0560 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 129d564e-fe73-4271-f1d7-08db29c9a283
 X-MS-Exchange-CrossTenant-Id: d9b9a834-a53c-4fa3-b2c0-12e53d54aec8
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d9b9a834-a53c-4fa3-b2c0-12e53d54aec8; Ip=[13.70.157.244];
  Helo=[au2.smtp.exclaimer.net]
-X-MS-Exchange-CrossTenant-AuthSource: SY4AUS01FT024.eop-AUS01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: ME3AUS01FT012.eop-AUS01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME2P282MB0289
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MEAP282MB0662
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=hopperindustrialgroup.onmicrosoft.com;
  s=selector1-hopperindustrialgroup-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VO0kiGYQVvrCMCury5Ur9/CRWWXRypqAPpa/H5XUYqc=;
- b=gcAlF5r7xsXaay6oxz5527Vn//4rvCLsp6EzuLZ0P+AV4xE0mxLHy0d2WESP4h7rqJ2uWjE2fDgGI0/PoFL3xth9upfzcRV9nDYSMzSePHKqXo7OWPl7cNORwwEfHJKa6NjLXLzSwiWwSy8l1lbAwb2Vq0PHospRdJRcdY0RFYfxUiI2snjzlpPVzVKimv6Y0HVjge2H/KmqrgyBeSLTHAk92/A9OpB8RARdhO7QewXV/oQLKyjh6V8prIuoJ8MEXurmTMiwVYiNy0QPohPIBVRLxvZeWCBk6OL6MGsdqHSDFQ1r9qhnlZEtSYy6VF/8UGHakazzYfSlTwzMHpAdGg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=091LDhFUOH2P9njTrnWhsfeUEaWAniTdvcu6UZoaQfs=;
+ b=zw8GVqgSQCgpWSBDaYVrXgHPZ2okalPN+m8sgmLuhfND3t8m3zkRD3NSIYFLq1nWZOenfMD2wWqsVYZo6kaDo5D/7sMNahx7t+Cri6D3839cjpV3IQHJzM7Z0YS2xkxQWooxvcr2feNWV2gsBSasqfp208p1XD0QKvqVmvOTdU1fzhMLe2kptZyP/Z0g7HW0JlRaXTTlWY6T4InOvTzGVuK7c50Uo58pRR74G8vmCFMb958XIQdB8btt9r8g3Ct02xPner1GuwHXlzQR90kzpjxgCXOiv38K5VNBJk8JTvUuoa6fD1zmu3EGfSlCxJSb0E8Q0Z8IVK/kmHTix/XdUA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=hopperindustrialgroup.onmicrosoft.com
  header.i=@hopperindustrialgroup.onmicrosoft.com header.a=rsa-sha256
- header.s=selector1-hopperindustrialgroup-onmicrosoft-com header.b=gcAlF5r7
-Subject: [Buildroot] PySerial issue, buildroot-2023.02-rc2
+ header.s=selector1-hopperindustrialgroup-onmicrosoft-com header.b=zw8GVqgS
+Subject: [Buildroot] SSH Reset on Buildroot 2022.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -158,47 +155,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============7791538445534495733=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 This is a multi-part message in MIME format.
 
---_004_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_
+--===============7791538445534495733==
 Content-Type: multipart/related;
-	boundary="----_=_NextPart_b4d007e6-3364-43c1-bd42-5994119ec39d"
+	boundary="----_=_NextPart_7cec4295-fad8-41d2-9281-a56c4cdff052"
 
-------_=_NextPart_b4d007e6-3364-43c1-bd42-5994119ec39d
+This is a multi-part message in MIME format.
+
+------_=_NextPart_7cec4295-fad8-41d2-9281-a56c4cdff052
+Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="_000_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_"
+	boundary="_000_ME3P282MB1347EDB695F6E726349D27E0B9819ME3P282MB1347AUSP_"
 
---_000_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_
+--_000_ME3P282MB1347EDB695F6E726349D27E0B9819ME3P282MB1347AUSP_
 Content-Type: text/plain;
 	charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-I'm not sure this a Buildroot issue per se, however, in the interest of eve=
-ryone else I thought I'd mention it in case someone comes across it.
+I've been tossing around different versions of Buildroot for a De10Nano (FP=
+GA + ARM) board on a project.
+2021.01 has been working very well and stable, but I needed an upgrade to P=
+ython 3.11. I switched to v2023.02-rc2 but I had a funky issue with PySeria=
+l that is part of another question, but irrelevant here. v2021.02 works lik=
+e a charm. I then decided to go in-between with v2022.02, but to my surpris=
+e, the SSH login did not work, even though it does on the other two version=
+s. I get this back:
 
-I'm using Python 3.11.2, Linux 6.1 and PySerial 3.5, which I believe are st=
-andard for Buildroot 2023.02 RC2. The board is a De10 Nano board with addit=
-ional FPGA fabric, an ARM platform.
+debug1: kex: algorithm: curve25519-sha256
+debug1: kex: host key algorithm: ecdsa-sha2-nistp256
+debug1: kex: server->client cipher: chacha20-poly1305@openssh.com MAC: <imp=
+licit> compression: none
+debug1: kex: client->server cipher: chacha20-poly1305@openssh.com MAC: <imp=
+licit> compression: none
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+Connection reset by 192.168.1.50 port 22
 
-During some tests I came across the weirdest issue. After sending a serial =
-request (serial.write(bytedata)) and reading data back in (serial.read(n)),=
- the response data was prepended with b'\x00', about 4096 NULL bytes. I che=
-cked the line with a logic analyzer and the data transfer is very clean wit=
-h 8 bytes request and 8 bytes response. I replicated the test by looping ba=
-ck RX and TX lines using a simple Python script (attached). This happened r=
-egularly every second attempt.
+So I'm back to 2021.02 confirming that all works as expected (thankfully it=
+ does) and have not had a deeper look into the SSH issue. Due to design con=
+straints, I don't have access to a serial console, however, I could organis=
+e that in time if something needs changing.
 
-I reverted to Python 3.9 and Buildroot 2021.02 and the issue has gone. I'm =
-building an image now with Buildroot 2022.02 and Python 3.10, and will see =
-what happens.
-
-If anyone has come across this issue or has a solution, I'd be happy to kno=
-w about it. I found little in terms of this over the Internet.
+I'd like to know if anyone else has experienced this before, it did throw m=
+e out of balance.
 
 Cheers,
 
@@ -209,7 +214,7 @@ Orica - Perth Technology Centre
 p: +61 (0) 8 6365 4056
 e: Alberto.Fahrenkrog@rigtechnologies.com.au
 
---_000_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_
+--_000_ME3P282MB1347EDB695F6E726349D27E0B9819ME3P282MB1347AUSP_
 Content-Type: text/html;
 	charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -233,8 +238,17 @@ Hi all,</div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
 =3D"elementToProof">
-I'm not sure this a Buildroot issue per se, however, in the interest of eve=
-ryone else I thought I'd mention it in case someone comes across it.</div>
+I've been tossing around different versions of Buildroot for a De10Nano (FP=
+GA + ARM) board on a project.</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof">
+2021.01 has been working very well and stable, but I needed an upgrade to P=
+ython 3.11. I switched to v2023.02-rc2 but I had a funky issue with PySeria=
+l that is part of another question, but irrelevant here. v2021.02 works lik=
+e a charm. I then decided to go
+ in-between with v2022.02, but to my surprise, the SSH login did not work, =
+even though it does on the other two versions. I get this back:</div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
 =3D"elementToProof">
@@ -242,64 +256,60 @@ ryone else I thought I'd mention it in case someone comes across it.</div>
 </div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
-I'm using Python 3.11.2, Linux 6.1 and PySerial 3.5, which I believe are st=
-andard for Buildroot 2023.02 RC2. The board is a De10 Nano board with addit=
-ional FPGA fabric, an ARM platform.</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
-During some tests I came across the weirdest issue. After sending a serial =
-request (serial.write(bytedata)) and reading data back in (serial.read(n)),=
- the response data was prepended with b'\x00', about 4096 NULL bytes. I che=
-cked the line with a logic analyzer
- and the data transfer is very clean with 8 bytes request and 8 bytes respo=
-nse. I replicated the test by looping back RX and TX lines using a simple P=
-ython script (attached). This happened regularly every second attempt.</div=
+=3D"elementToProof ContentPasted0">
+<i>debug1: kex: algorithm: curve25519-sha256</i>
+<div class=3D"ContentPasted0"><i>debug1: kex: host key algorithm: ecdsa-sha=
+2-nistp256</i></div>
+<div class=3D"ContentPasted0"><i>debug1: kex: server-&gt;client cipher: cha=
+cha20-poly1305@openssh.com MAC: &lt;implicit&gt; compression: none</i></div=
 >
+<div class=3D"ContentPasted0"><i>debug1: kex: client-&gt;server cipher: cha=
+cha20-poly1305@openssh.com MAC: &lt;implicit&gt; compression: none</i></div=
+>
+<div class=3D"ContentPasted0"><i>debug1: expecting SSH2_MSG_KEX_ECDH_REPLY<=
+/i></div>
+<i>Connection reset by 192.168.1.50 port 22</i><br>
+</div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
+=3D"elementToProof ContentPasted0">
 <br>
 </div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
-I reverted to Python 3.9 and Buildroot 2021.02 and the issue has gone. I'm =
-building an image now with Buildroot 2022.02 and Python 3.10, and will see =
-what happens.</div>
+=3D"elementToProof ContentPasted0">
+So I'm back to 2021.02 confirming that all works as expected (thankfully it=
+ does) and have not had a deeper look into the SSH issue. Due to design con=
+straints, I don't have access to a serial console, however, I could organis=
+e that in time if something needs
+ changing.</div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
+=3D"elementToProof ContentPasted0">
 <br>
 </div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
-If anyone has come across this issue or has a solution, I'd be happy to kno=
-w about it. I found little in terms of this over the Internet.</div>
+=3D"elementToProof ContentPasted0">
+I'd like to know if anyone else has experienced this before, it did throw m=
+e out of balance.</div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
+=3D"elementToProof ContentPasted0">
 <br>
 </div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
+=3D"elementToProof ContentPasted0">
 Cheers,</div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
+=3D"elementToProof ContentPasted0">
 <br>
 </div>
 <div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
 : 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
+=3D"elementToProof ContentPasted0">
 Alberto</div>
 <div dir=3D"ltr" style=3D"mso-line-height-rule:exactly;-webkit-text-size-ad=
 just:100%;font-size:1px;direction:ltr;"><table cellpadding=3D"0" cellspacin=
@@ -307,7 +317,7 @@ g=3D"0" border=3D"0" style=3D"width:100%;font-size:1px;"><tr style=3D"font-=
 size:0;"><td align=3D"left" style=3D"vertical-align:middle;"><table cellpad=
 ding=3D"0" cellspacing=3D"0" border=3D"0" style=3D"font-size:0;"><tr style=
 =3D"font-size:0;line-height:normal;"><td align=3D"left" style=3D"padding:0;=
-vertical-align:middle;"><img src=3D"cid:image430350.png@B0EC2D76.ADEBC01F" =
+vertical-align:middle;"><img src=3D"cid:image298707.png@8C1FA6AB.2ECD190D" =
 height=3D"60" border=3D"0" alt=3D"" style=3D"height:60px;min-height:60px;ma=
 x-height:60px;font-size:0;" /></td></tr><tr style=3D"font-size:0;"><td alig=
 n=3D"left" style=3D"padding:13px 0 0;vertical-align:top;"><table cellpaddin=
@@ -350,18 +360,18 @@ rto.Fahrenkrog@rigtechnologies.com.au</strong></a></td></tr></table></td></=
 tr></table></td></tr></table></div></body>
 </html>
 
---_000_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_--
+--_000_ME3P282MB1347EDB695F6E726349D27E0B9819ME3P282MB1347AUSP_--
 
-------_=_NextPart_b4d007e6-3364-43c1-bd42-5994119ec39d
+------_=_NextPart_7cec4295-fad8-41d2-9281-a56c4cdff052
 Content-Type: image/png;
-	name="image430350.png"
+	name="image298707.png"
 Content-Transfer-Encoding: base64
-Content-ID: <image430350.png@B0EC2D76.ADEBC01F>
-Content-Description: image430350.png
+Content-ID: <image298707.png@8C1FA6AB.2ECD190D>
+Content-Description: image298707.png
 Content-Disposition: inline;
-	creation-date="Tue, 21 Mar 2023 01:28:46 +0000";
-	filename=image430350.png;
-	modification-date="Tue, 21 Mar 2023 01:28:46 +0000";
+	creation-date="Tue, 21 Mar 2023 05:03:38 +0000";
+	filename=image298707.png;
+	modification-date="Tue, 21 Mar 2023 05:03:38 +0000";
 	size=14270
 
 iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
@@ -616,67 +626,10 @@ AIT2/8fFaDl/ngTwnhCyvKJi9lJTBbq4mESHNACHUlZW5qurqztHCHEOIM8B6BwAZ+GbfPsMYBYz
 HolEIrPg3hq4ZBAd3gC0RHl5uXj//fdP93qpr5Q4iYjymSkf4EaA3tq7d2/F/PnzG63W6eKSLv8P
 YUYrfJl7ad4AAAAASUVORK5CYII=
 
-------_=_NextPart_b4d007e6-3364-43c1-bd42-5994119ec39d--
+------_=_NextPart_7cec4295-fad8-41d2-9281-a56c4cdff052--
 
---_004_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_
-Content-Type: application/octet-stream; name="serial_test_nk.py"
-Content-Description: serial_test_nk.py
-Content-Disposition: attachment; filename="serial_test_nk.py"; size=2739;
-	creation-date="Tue, 21 Mar 2023 01:25:06 GMT";
-	modification-date="Tue, 21 Mar 2023 01:25:14 GMT"
-Content-Transfer-Encoding: base64
 
-aW1wb3J0IHNlcmlhbAppbXBvcnQgdGhyZWFkaW5nCmltcG9ydCB0aW1lCgpkZWYgcmVhZGVyKHNl
-cik6ICAgICAgICAKICAgIAogICAgYnl0ZXNfcmVhZCA9IGJ5dGVhcnJheSgpCiAgICB0b3RhbF9i
-eXRlcyA9IGJ5dGVhcnJheSgpCgogICAgZG9fbG9vcCA9IFRydWUKICAgIGZpcnN0X3RpbWVvdXRf
-b2sgPSBUcnVlCiAgICBzdGFydF90aW1lID0gdGltZS50aW1lKCkKICAgIAogICAgcHJpbnQoZiJC
-ZWdpbm5pbmcgSW4gV2FpdGluZzoge3Nlci5pbl93YWl0aW5nfSIpCiAgICBwcmludChmIkJlZ2lu
-bmluZyBPdXQgV2FpdGluZzoge3Nlci5vdXRfd2FpdGluZ30iKQoKICAgIHdoaWxlKGRvX2xvb3Ap
-OgogICAgICAgIGlmIHNlci5pbl93YWl0aW5nICE9IDA6CiAgICAgICAgICAgIHByaW50KGYiRmly
-c3QgTG9vcCBJbiBXYWl0aW5nOiB7c2VyLmluX3dhaXRpbmd9IikKICAgICAgICAgICAgcHJpbnQo
-ZiJGaXJzdCBMb29wIE91dCBXYWl0aW5nOiB7c2VyLm91dF93YWl0aW5nfSIpCiAgICAgICAgdHJ5
-OgogICAgICAgICAgICBieXRlc19yZWFkID0gc2VyLnJlYWQoMSkgIyBSZWFkIG91dCByZXBseQog
-ICAgICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZToKICAgICAgICAgICAgcHJpbnQoIkNvdWxkIG5v
-dCByZWFkIGRhdGEgLSB7fSIuZm9ybWF0KHJlcHIoZSkpKQogICAgICAgICAgICBkb19sb29wID0g
-RmFsc2UKICAgICAgICAgICAgcmV0dXJuIHRvdGFsX2J5dGVzCgogICAgICAgIGlmIDAgIT0gbGVu
-KGJ5dGVzX3JlYWQpOgogICAgICAgICAgICB0b3RhbF9ieXRlcyArPSBieXRlc19yZWFkCiAgICAg
-ICAgICAgIGRvX2xvb3AgPSBGYWxzZQogICAgICAgICAgICBmaXJzdF90aW1lb3V0X29rID0gVHJ1
-ZQogICAgICAgIGVsc2U6CiAgICAgICAgICAgIGlmKHRpbWUudGltZSgpIC0gc3RhcnRfdGltZSA+
-IDAuNSk6CiAgICAgICAgICAgICAgICBkb19sb29wID0gRmFsc2UKICAgICAgICAgICAgICAgIGZp
-cnN0X3RpbWVvdXRfb2sgPSBGYWxzZQogICAgICAgICAgICBlbHNlOgogICAgICAgICAgICAgICAg
-dGltZS5zbGVlcCgwLjAwMikKCiAgICBwcmludChmIlRpbWUgZWxhcHNlZCB0byB7bGVuKHRvdGFs
-X2J5dGVzKX0gYnl0ZXM6IHt0aW1lLnRpbWUoKSAtIHN0YXJ0X3RpbWV9c2VjcyIpCgogICAgaWYg
-Zmlyc3RfdGltZW91dF9vazoKICAgICAgICBzdGFydF90aW1lID0gdGltZS50aW1lKCkKICAgICAg
-ICBkb19sb29wID0gVHJ1ZQogICAgICAgIHByZXZfbGVuID0gbGVuKHRvdGFsX2J5dGVzKQoKICAg
-ICAgICBpZiBzZXIuaW5fd2FpdGluZyAhPSAwOgogICAgICAgICAgICBwcmludChmIkJlZm9yZSBz
-ZWNvbmQgbG9vcCBJbiBXYWl0aW5nOiB7c2VyLmluX3dhaXRpbmd9IikKICAgICAgICAgICAgcHJp
-bnQoZiJCZWZvcmUgc2Vjb25kIGxvb3AgT3V0IFdhaXRpbmc6IHtzZXIub3V0X3dhaXRpbmd9IikK
-CiAgICAgICAgd2hpbGUoZG9fbG9vcCk6CiAgICAgICAgICAgIHRyeToKICAgICAgICAgICAgICAg
-IGJ5dGVzX3JlYWQgPSBzZXIucmVhZCgxKSAjIFJlYWQgb3V0IHJlcGx5CiAgICAgICAgICAgIGV4
-Y2VwdCBFeGNlcHRpb24gYXMgZToKICAgICAgICAgICAgICAgIHByaW50KCJDb3VsZCBub3QgcmVh
-ZCBkYXRhIC0ge30iLmZvcm1hdChyZXByKGUpKSkKICAgICAgICAgICAgICAgIGRvX2xvb3AgPSBG
-YWxzZQogICAgICAgICAgICAgICAgcmV0dXJuIHRvdGFsX2J5dGVzCgogICAgICAgICAgICBpZiAw
-ICE9IGxlbihieXRlc19yZWFkKToKICAgICAgICAgICAgICAgIHRvdGFsX2J5dGVzICs9IGJ5dGVz
-X3JlYWQKCiAgICAgICAgICAgIGlmIGxlbih0b3RhbF9ieXRlcykgPiBwcmV2X2xlbjoKICAgICAg
-ICAgICAgICAgIHByZXZfbGVuID0gbGVuKHRvdGFsX2J5dGVzKQogICAgICAgICAgICBlbHNlOgog
-ICAgICAgICAgICAgICAgaWYodGltZS50aW1lKCkgLSBzdGFydF90aW1lID4gMC4wMDIpOgogICAg
-ICAgICAgICAgICAgICAgIGRvX2xvb3AgPSBGYWxzZQogICAgICAgICAgICAgICAgICAgIGZpcnN0
-X3RpbWVvdXRfb2sgPSBGYWxzZQogICAgICAgICAgICAgICAgZWxzZToKICAgICAgICAgICAgICAg
-ICAgICB0aW1lLnNsZWVwKDAuMDAxKQoKICAgICAgICBwcmludChmIlRpbWUgZWxhcHNlZCB0byB7
-bGVuKHRvdGFsX2J5dGVzKX0gYnl0ZXM6IHt0aW1lLnRpbWUoKSAtIHN0YXJ0X3RpbWV9c2VjcyIp
-CiAgICAgICAgaWYgbGVuKHRvdGFsX2J5dGVzKSA8IDQwMDA6CiAgICAgICAgICAgIHByaW50KHRv
-dGFsX2J5dGVzKQogICAgICAgIGVsc2U6CiAgICAgICAgICAgIHByaW50KHRvdGFsX2J5dGVzWy04
-Ol0pCiAgICAgICAgc2VyLmNsb3NlKCkKCmRlZiB3cml0ZXIoc2VyKToKICAgIHByaW50KCJ3cml0
-aW5nIikKICAgIHNlci53cml0ZShiJzxceDAwXHgwMFx4MGNceDAwXHgwMFx4ZjQ+JykKCmlmIF9f
-bmFtZV9fID09ICJfX21haW5fXyI6CiAgICBjb21wb3J0ID0gIi9kZXYvdHR5UzEiCiAgICBiYXVk
-cmF0ZSA9IDYyNTAwMAogICAgc2VyID0gc2VyaWFsLlNlcmlhbChjb21wb3J0LGJhdWRyYXRlLHRp
-bWVvdXQ9MC4wMDUpCiAgICBwcmludChzZXIpCgogICAgcnhUaHJlYWQgPSB0aHJlYWRpbmcuVGhy
-ZWFkKHRhcmdldCA9IHJlYWRlciwgYXJncyA9IChzZXIsKSwgZGFlbW9uID0gRmFsc2UpCiAgICB0
-eFRocmVhZCA9IHRocmVhZGluZy5UaHJlYWQodGFyZ2V0ID0gd3JpdGVyLCBhcmdzID0gKHNlciwp
-LCBkYWVtb24gPSBGYWxzZSkKICAgIHJ4VGhyZWFkLnN0YXJ0KCkKICAgIHR4VGhyZWFkLnN0YXJ0
-KCkK
-
---_004_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_
+--===============7791538445534495733==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -687,4 +640,6 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---_004_ME3P282MB13479A857B70CA76AC387783B9819ME3P282MB1347AUSP_--
+--===============7791538445534495733==--
+
+
