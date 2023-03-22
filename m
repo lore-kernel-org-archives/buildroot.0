@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 572C0C6FD1C
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49256C6FD1C
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE01283F8B;
-	Wed, 22 Mar 2023 22:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE01283F8B
+	by smtp1.osuosl.org (Postfix) with ESMTP id E485783F47;
+	Wed, 22 Mar 2023 22:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E485783F47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jy7ZTTz1i9ym; Wed, 22 Mar 2023 22:38:13 +0000 (UTC)
+	with ESMTP id fghOG16gsoSq; Wed, 22 Mar 2023 22:38:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DB3583F84;
-	Wed, 22 Mar 2023 22:38:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DB3583F84
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70DE483F58;
+	Wed, 22 Mar 2023 22:38:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70DE483F58
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 400E41BF909
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:38:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DD4211BF909
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 19EC3613D6
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:38:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19EC3613D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6956613F6
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6956613F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eCbAip1P8FvG for <buildroot@lists.busybox.net>;
- Wed, 22 Mar 2023 22:38:03 +0000 (UTC)
+ with ESMTP id z_ZZe_uaXADD for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 22:38:32 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A18CC613A1
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A18CC613A1
- for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:38:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E867613A1
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0E867613A1
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:38:31 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2F1C6240003;
- Wed, 22 Mar 2023 22:37:58 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id D48D6C0003;
+ Wed, 22 Mar 2023 22:38:28 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pf75i-00AhBv-3U; Wed, 22 Mar 2023 23:37:58 +0100
+ id 1pf76B-00AhEa-SP; Wed, 22 Mar 2023 23:38:27 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230320171543.1076609-1-fontaine.fabrice@gmail.com>
-Date: Wed, 22 Mar 2023 23:37:58 +0100
-In-Reply-To: <20230320171543.1076609-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 20 Mar 2023 18:15:43 +0100")
-Message-ID: <87sfdwtnsp.fsf@dell.be.48ers.dk>
+To: Peter Seiderer <ps.report@gmx.net>
+References: <20230321190303.18814-1-ps.report@gmx.net>
+Date: Wed, 22 Mar 2023 23:38:27 +0100
+In-Reply-To: <20230321190303.18814-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Tue, 21 Mar 2023 20:03:03 +0100")
+Message-ID: <87o7oktnrw.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/sudo: security bump to version
- 1.9.13p3
+Subject: Re: [Buildroot] [PATCH v1] package/coreutils: bump version to 9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,19 +69,12 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > - Fix CVE-2023-27320: Sudo before 1.9.13p3 has a double free in the
- >   per-command chroot feature.
- > - Update patch
- > - Update hash of LICENSE.md (year and indentation updated:
- >   https://github.com/sudo-project/sudo/commit/dd934d6a218c05d2df61b5306e38c71edaa6ac59
- >   https://github.com/sudo-project/sudo/commit/e5634ae99184d50afbdcb8a69dd4018b1a14871d)
+ > For details see [1].
+ > [1] https://lists.gnu.org/archive/html/info-gnu/2023-03/msg00005.html
 
- > https://www.sudo.ws/security/advisories/double_free
- > https://www.sudo.ws/releases/stable/#1.9.13p3
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed, thanks.
 
