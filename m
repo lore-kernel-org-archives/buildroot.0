@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79E7BC6FD1D
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 01:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D115C6FD20
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 01:19:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15A2040C16;
-	Wed, 22 Mar 2023 01:12:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15A2040C16
+	by smtp2.osuosl.org (Postfix) with ESMTP id AFB4040CA8;
+	Wed, 22 Mar 2023 01:19:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFB4040CA8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wDJNVJ8Y18FY; Wed, 22 Mar 2023 01:12:31 +0000 (UTC)
+	with ESMTP id Be_3Rzm8ewtn; Wed, 22 Mar 2023 01:19:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31DF540A53;
-	Wed, 22 Mar 2023 01:12:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31DF540A53
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 052CC1BF337
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 01:12:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF4C540CA7;
+	Wed, 22 Mar 2023 01:19:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF4C540CA7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 265D41BF337
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 01:19:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAEB6820E0
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 01:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAEB6820E0
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0B9840990
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 01:19:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0B9840990
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HX-L7qu3jMdZ for <buildroot@lists.busybox.net>;
- Wed, 22 Mar 2023 01:12:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ckbnvp49mJX3 for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 01:19:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9471582097
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
- [IPv6:2607:f8b0:4864:20::129])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9471582097
- for <buildroot@buildroot.org>; Wed, 22 Mar 2023 01:12:26 +0000 (UTC)
-Received: by mail-il1-x129.google.com with SMTP id h5so9106367ile.13
- for <buildroot@buildroot.org>; Tue, 21 Mar 2023 18:12:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3DB94097E
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C3DB94097E
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 01:19:34 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id x6so833026ile.3
+ for <buildroot@buildroot.org>; Tue, 21 Mar 2023 18:19:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679447545;
+ d=1e100.net; s=20210112; t=1679447973;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=0wqpO8/4h9FSidrB3nXjTKIZV9OaQ6OypUWKRSIDVE4=;
- b=A03Kcf5fuHsZuT5U+N4g61p/r5ELa+So6MWD+kbHmd7ghW/KqfzvQ89Ec4rHWYRiI0
- uFyACRyIJH/9rWIFr9aBPPwQvhE9gg9/F25wB3icyiwSoKnsCVNqqf0MQdbhBL4xVN65
- nLs8RAOSMsHzudpqyz1CZiDP6iDvaiuIwnAizw/NGMAuGk5XgZrpqFRNg59MV2hLijtN
- BKlPBj8zUAGqS1OZeefRvNtRSvunLT/yQqSyzdIU7vWKmBOkZetICNecrLx9+hAkcsNp
- RYJY9RYs8kD3NzXJ1Q3Bo5S3cqHTzRAIns6MD/NoMLvz5pky9Nme28cvtVV7Mx23NGsr
- 5m5Q==
-X-Gm-Message-State: AO0yUKUX1kRw4hlmksKBiviFZuqTz4Bt29j5WUczl/9jRHtpYlbq0/Si
- yh+o6mraRBHyc1VDiEdckUXGxCP13acEvA==
-X-Google-Smtp-Source: AK7set8AMYZTnw85nQ8+cAcDXxXCnQ7kHpqrfbD9nFUoLsgJ3PIzK4M6dInQo3qqPMGilSYofE20fA==
-X-Received: by 2002:a05:6e02:1d0b:b0:324:82f0:1958 with SMTP id
- i11-20020a056e021d0b00b0032482f01958mr526528ila.5.1679447545207; 
- Tue, 21 Mar 2023 18:12:25 -0700 (PDT)
+ bh=cdj+xz04yFV8Z3x2L1ZSzQ4lpYh97LSaMOvJ/+Xseo4=;
+ b=6BxuF7rGxDFUtLYg/sxUwLUKgJTopwzrHGcdtCxK5m+/JfiwafOom6R1qIFilgXr7N
+ +FfwtBoG3Xz/n2hlJPggtAGAsRkwuaI8xXqo7cev+jSYd+roSXUX989jsyiRYuRJaXru
+ nCAou5zOn7kQ63/WP8ndTFEc03qy7SXBQ3LRY2sz0YLsNboHMHeSONQMSRjM2MyqaD4r
+ Zm+pw5LotniBGWxRZ0fiVDNUgjNxacEzhwaUcv6jqgJorMV9HuugOZN9S6MBSHXdhhIf
+ SiPra2tUMtsrXXBCLXnrih8C6+Ymxqgilua0bJPnqJasvei6PoLr7nA3qluRSbu0XKDl
+ WxuQ==
+X-Gm-Message-State: AO0yUKXClOfDtpSttv95P2nKUa8oxUI9bbJQms+boE4zahgM4Y/HyZPy
+ p66fK9cw1tccybv5CCXT5GRi3JQK5SrmUg==
+X-Google-Smtp-Source: AK7set/+vlT9uOIreL4FuGHgN6w11nYFqAZbJCqPUXbzQ2IRnRgV08AUMUsZjNvonMoYaXbrDsw3rQ==
+X-Received: by 2002:a92:d206:0:b0:325:b96e:66fb with SMTP id
+ y6-20020a92d206000000b00325b96e66fbmr1102026ily.1.1679447973602; 
+ Tue, 21 Mar 2023 18:19:33 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-149-35.hlrn.qwest.net.
  [97.118.149.35]) by smtp.gmail.com with ESMTPSA id
- q1-20020a02b041000000b004061d6abcd2sm4583296jah.146.2023.03.21.18.12.24
+ x10-20020a92300a000000b0030c0dce44b1sm3943437ile.15.2023.03.21.18.19.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Mar 2023 18:12:24 -0700 (PDT)
+ Tue, 21 Mar 2023 18:19:33 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Mar 2023 19:12:17 -0600
-Message-Id: <20230322011217.4189542-1-james.hilliard1@gmail.com>
+Date: Tue, 21 Mar 2023 19:19:31 -0600
+Message-Id: <20230322011931.12599-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679447545;
+ d=gmail.com; s=20210112; t=1679447973;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0wqpO8/4h9FSidrB3nXjTKIZV9OaQ6OypUWKRSIDVE4=;
- b=bN5OChQKSkMvXsqsxnl2o9t1HmMXnVNkBRZOflu7p/3nU4wIQ+h6SpESOGtJM6oiMo
- H6xX2ppZQ0f+fpI6TOCeNQpm5wgJwd2lnKz+I5p/BVyoLPohu5vXkubObki5q3WZt6A/
- qXgYdfi6El3v2iz/kIfYASOCuUTnQdYt4NOFo6RRCC7ZHpJTjh+0mP0hZnFyG0LTIJxF
- qYlT5cEG4P5Jz8zZCyjAGRizBXT1AiywGVluA7/ta7TRWnJWz8zJTsrzg4zojQwtU2ZW
- d7NZ2DNvSDyhW4wy6iiVwv7g1yJ0eNkuXcJSE+y/CHXxDwiOrduDseS9ziTwDdR8cDI4
- ISdw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=cdj+xz04yFV8Z3x2L1ZSzQ4lpYh97LSaMOvJ/+Xseo4=;
+ b=NmMufDRLp5QW2YlL9XPH36VEoZRHz4RCuB6AJZLMHmgVHTSlR3nPc8fIMMZ2rep+Oc
+ LEz2KF4DFRmtTpVecK5XeI6PP3PUJItgDYzYaa5+qHw+WhLOYyDZm2dLG/RjspnAewc5
+ eKUJXnTlcp5nMovohthiQBPKgn5FCDpUtsdrRv0jNTxw951kHbtL516THoyPZdf/eG2r
+ 3VYEVAX1riGU7plZd39RqiGoyhtXPHZo6LZ6MK9GhEqBxlVD/JHlkhF/f9TbUC/mzbEx
+ Crfeb2MMu+kbHkX9y0A3nLxsrEo/nJff31f5ot92ubzya/6MMfqxjZplZXtH4Sv3B2hN
+ 02Hw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bN5OChQK
-Subject: [Buildroot] [PATCH 1/1] package/python-async-lru: bump to version
- 2.0.2
+ header.a=rsa-sha256 header.s=20210112 header.b=NmMufDRL
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to version
+ 23.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +94,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Mauro Condarelli <mc5686@mclink.it>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to copyright header change:
+https://github.com/crossbario/autobahn-python/commit/49c41440e16528ee6ab267df0f9989fb1ed81f7c
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-async-lru/python-async-lru.hash | 4 ++--
- package/python-async-lru/python-async-lru.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-autobahn/python-autobahn.hash | 6 +++---
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-async-lru/python-async-lru.hash b/package/python-async-lru/python-async-lru.hash
-index 231af32baa..c6f11aff1d 100644
---- a/package/python-async-lru/python-async-lru.hash
-+++ b/package/python-async-lru/python-async-lru.hash
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index f9b68dcb22..4fa7c451f5 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/async-lru/json
--md5  4dfcb328f2e9a8fdc9cf78dfdb6d3eef  async-lru-1.0.3.tar.gz
--sha256  c2cb9b2915eb14e6cf3e717154b40f715bf90e596d73623677affd0d1fbcd32a  async-lru-1.0.3.tar.gz
-+md5  825ff7d35d1cd76f1b1ae44f38bf69f5  async-lru-2.0.2.tar.gz
-+sha256  3b87ec4f2460c52cc7916a0138cc606b584c75d1ef7d661853c95d1d3acb869a  async-lru-2.0.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  98d8451385ccd8ece2d2fac023c61a19  autobahn-22.12.1.tar.gz
+-sha256  43b4e8b1aeaeb20a0cc0a81572e613dc958057c0ab248a7d6b41b2763270f925  autobahn-22.12.1.tar.gz
++md5  55cd275bc3d9c7e354f4b6a87b87f466  autobahn-23.1.2.tar.gz
++sha256  c5ef8ca7422015a1af774a883b8aef73d4954c9fcd182c9b5244e08e973f7c3a  autobahn-23.1.2.tar.gz
  # Locally computed sha256 checksums
- sha256  ea65975679bc2093be925d520358e41096bd96fddedee3e929160a5faadcf573  LICENSE
-diff --git a/package/python-async-lru/python-async-lru.mk b/package/python-async-lru/python-async-lru.mk
-index 872540b713..d707249e29 100644
---- a/package/python-async-lru/python-async-lru.mk
-+++ b/package/python-async-lru/python-async-lru.mk
+-sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
++sha256  ab1dd7a42dbdae302346c5a4571f2149691cc1ec06836232bf4923527e3fe41c  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 4c14151960..c44acb80aa 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASYNC_LRU_VERSION = 1.0.3
-+PYTHON_ASYNC_LRU_VERSION = 2.0.2
- PYTHON_ASYNC_LRU_SOURCE = async-lru-$(PYTHON_ASYNC_LRU_VERSION).tar.gz
--PYTHON_ASYNC_LRU_SITE = https://files.pythonhosted.org/packages/fe/67/4cb179c14ffa8b4a35fbe02255744bee4cbbaf61b35612c96ba4a618e4d5
-+PYTHON_ASYNC_LRU_SITE = https://files.pythonhosted.org/packages/92/16/be197573adca3d584dbd64d508488e95e36324ea036d751564d2f88d74bf
- PYTHON_ASYNC_LRU_SETUP_TYPE = setuptools
- PYTHON_ASYNC_LRU_LICENSE = MIT
- PYTHON_ASYNC_LRU_LICENSE_FILES = LICENSE
+-PYTHON_AUTOBAHN_VERSION = 22.12.1
++PYTHON_AUTOBAHN_VERSION = 23.1.2
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/a8/6f/78b90951f263232e468439627f31a2c0846e36043c95af96dc527a4aeee6
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/53/99/b6e0ffa0e8bafe9dfae1c9ab46d44d07317cbf297fbf8f07aff8a80e5bd8
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
 -- 
 2.34.1
 
