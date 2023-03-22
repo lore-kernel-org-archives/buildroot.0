@@ -1,86 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D85C6FD1C
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 17:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79B01C6FD1F
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 21:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A07C96148F;
-	Wed, 22 Mar 2023 17:37:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A07C96148F
+	by smtp1.osuosl.org (Postfix) with ESMTP id C839982330;
+	Wed, 22 Mar 2023 21:59:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C839982330
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DftQqD1dVMYi; Wed, 22 Mar 2023 21:59:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29E4382257;
+	Wed, 22 Mar 2023 21:59:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29E4382257
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F20F11BF21A
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 21:59:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9393614AF
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 21:59:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9393614AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7a4q6AdK3c_S; Wed, 22 Mar 2023 17:37:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D043661481;
-	Wed, 22 Mar 2023 17:37:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D043661481
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E1821BF2BA
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 17:37:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4645C41B81
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 17:37:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4645C41B81
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M2aq_hPr8Y1N for <buildroot@lists.busybox.net>;
- Wed, 22 Mar 2023 17:37:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E278D41B57
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E278D41B57
- for <buildroot@buildroot.org>; Wed, 22 Mar 2023 17:37:13 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- o40-20020a05600c512800b003eddedc47aeso6432126wms.3
- for <buildroot@buildroot.org>; Wed, 22 Mar 2023 10:37:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679506631;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=XAbVCnKau/wwo7oeM6za2E8152SBHO5xPPUvPJjPxFA=;
- b=1yIjo5vO0vb4kK3FhS/KucZ2g4Y+60xv0Gd8ZkOYPqDgtkg5F3p8DJueX/6thyiXaf
- JDWKJEGVJpibriCfLiFA4PoQyNxK0BMG6jEY6lw3VeIaddd9S+qtE2bIxi1xACRONL4G
- eBDpuFuhS4xhfIODJqV6sg9m/gyu/yLpYUNCXzM5ID2vSMyLJuZlVCK957OYxLqroqTn
- BNIHa0wIS2ROwMf+iqyC1737+0is42pDURP6NqgeRHWCmKuqRpQgBtbkOAsfurnsWD2F
- Q3/9AeeAhGKiDburt+wMenNf6SGerbDneI1yFmJvVUd9u91kf8IWgwKQzzjPt5zk2l4Y
- bH2Q==
-X-Gm-Message-State: AO0yUKXshWOt4Cba20+qtwynochrWp2x04VM5EXFPNBlKhVFJl8yzUoN
- Ecxb49RlwJAARciVVa9wtO8PqINndHlZRRmsNps=
-X-Google-Smtp-Source: AK7set8VTeDjkzs7LQ9jCogtOFGUHhoduFuDq2/CsLxqY6WKMSw/rP3JX54EBN7BLRktPsQuDvKKEw==
-X-Received: by 2002:a7b:c399:0:b0:3e2:19b0:887d with SMTP id
- s25-20020a7bc399000000b003e219b0887dmr245504wmj.25.1679506631572; 
- Wed, 22 Mar 2023 10:37:11 -0700 (PDT)
-Received: from localhost.localdomain (host085115199111.static.fidoka.tech.
- [85.115.199.111]) by smtp.gmail.com with ESMTPSA id
- j36-20020a05600c1c2400b003ebf73acf9asm3178259wms.3.2023.03.22.10.37.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Mar 2023 10:37:10 -0700 (PDT)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Wed, 22 Mar 2023 18:37:07 +0100
-Message-Id: <20230322173707.355775-1-angelo@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 89vbwjdrNXKl for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 21:59:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D69F6146C
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5D69F6146C
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 21:59:32 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EBE6AFF805;
+ Wed, 22 Mar 2023 21:59:28 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pf6UR-00AfIb-SM; Wed, 22 Mar 2023 22:59:27 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Zvi Vered <veredz72@gmail.com>
+References: <CABRndgw1EVFyDNDcRJ10gOPFfw-gH+7Gqx7P537EiSVr5Wq6Kw@mail.gmail.com>
+ <875yavx0ui.fsf@dell.be.48ers.dk>
+ <CABRndgyqeJXm6XqwYQ_QUaQAGB9EENSq4dc3qLaq6Y3RUhxFUg@mail.gmail.com>
+ <87edpiuehn.fsf@dell.be.48ers.dk>
+ <CABRndgwMRVDXzSAoGb5fU9PqM2b6z6we5rH40_NCs7w12LHiDA@mail.gmail.com>
+ <877cv9vr7v.fsf@dell.be.48ers.dk>
+ <CABRndgz8n37jikSwt3uBkGTM-UBObYcny6xEqhnFkDod9dae1Q@mail.gmail.com>
+Date: Wed, 22 Mar 2023 22:59:27 +0100
+In-Reply-To: <CABRndgz8n37jikSwt3uBkGTM-UBObYcny6xEqhnFkDod9dae1Q@mail.gmail.com>
+ (Zvi Vered's message of "Wed, 22 Mar 2023 20:03:35 +0200")
+Message-ID: <87355wv45c.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1679506631;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=XAbVCnKau/wwo7oeM6za2E8152SBHO5xPPUvPJjPxFA=;
- b=XYL47puLB+mz/QfKfX1Rz/G8eTTeotaVp98ea0Xj/DELDUDFxol6+ePdaRW/BONIKC
- 33lheid7c543OdARAh5+GHYkEaX1s1ULS4XGJ0Qe3qlnOyJjIeY1JtEq4eW6brFaiU7y
- zPuLbHuAvtMrxflneiNy17+kbcNa6lnV1wdJE=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=XYL47puL
-Subject: [Buildroot] [PATCH] package/cups-filters: bump to version 1.28.17
+Subject: Re: [Buildroot] 2023.02 : pty_allocate: openpty: No such file or
+ directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,49 +70,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update also the release url because the OpenPrinting https archive page
-is out of sync with the current release archive on the main github
-project.
+>>>>> "Zvi" == Zvi Vered <veredz72@gmail.com> writes:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/cups-filters/cups-filters.hash | 2 +-
- package/cups-filters/cups-filters.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Hi Peter,
+ > The output of: ls -la /dev/null :
+ > -rw-rw----    1 root           root       256 Dec 23   13:07 /dev/null
 
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index b910cdce13..7fb3badf46 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0ca77bb820719a040ff003ecb478d0c2ceffc94e8bd1cd03ddb5a199444127ba  cups-filters-1.28.16.tar.gz
-+sha256  01a2acbd6bb78f09638047e4e9ce305d7e5ef4cb9ed6949672b5d901b7321dd4  cups-filters-1.28.17.tar.gz
- sha256  38192ffdaca98b718f78b2d4abc38bb087f0bbcc9a16d212c98b903b985f900f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 3250649e07..19c859e602 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CUPS_FILTERS_VERSION = 1.28.16
--CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
-+CUPS_FILTERS_VERSION = 1.28.17
-+CUPS_FILTERS_SITE = https://github.com/OpenPrinting/cups-filters/releases/download/$(CUPS_FILTERS_VERSION)
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
- CUPS_FILTERS_CPE_ID_VENDOR = linuxfoundation
+So /dev/null is a regular file, not a character device?
+
+ > In S60rcma (my script, in /etc/init.d)  I added:
+ > mdev -s
+ > dropbear -R -E
+
+ > After login, ssh client works fine.
+ > It seems adding "mdev" solved the problem.
+ > I think buildroot rootfs should solve it without adding any script.
+
+It does. Again, please provide more details - E.G. how does your
+Buildroot .config look like and how do you get the rootfs onto your
+target?
+
 -- 
-2.25.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
