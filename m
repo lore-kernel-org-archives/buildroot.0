@@ -1,86 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B2FFC6FD1F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 16:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D85C6FD1C
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 17:37:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29DCB822B7;
-	Wed, 22 Mar 2023 16:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29DCB822B7
+	by smtp3.osuosl.org (Postfix) with ESMTP id A07C96148F;
+	Wed, 22 Mar 2023 17:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A07C96148F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wlZ3WY19cLLG; Wed, 22 Mar 2023 16:26:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7a4q6AdK3c_S; Wed, 22 Mar 2023 17:37:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E54883F97;
-	Wed, 22 Mar 2023 16:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E54883F97
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DFECD1BF35F
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 16:25:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D043661481;
+	Wed, 22 Mar 2023 17:37:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D043661481
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E1821BF2BA
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 17:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C2D3C80BEA
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 16:25:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2D3C80BEA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4645C41B81
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 17:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4645C41B81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BTn8UFDhYH6f for <buildroot@lists.busybox.net>;
- Wed, 22 Mar 2023 16:25:42 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B99B811E7
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6B99B811E7
- for <buildroot@buildroot.org>; Wed, 22 Mar 2023 16:25:41 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.208.182]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N0oG5-1qSSk21vnR-00wk1z for <buildroot@buildroot.org>; Wed, 22 Mar 2023
- 17:25:39 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M2aq_hPr8Y1N for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 17:37:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E278D41B57
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E278D41B57
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 17:37:13 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ o40-20020a05600c512800b003eddedc47aeso6432126wms.3
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 10:37:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1679506631;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=XAbVCnKau/wwo7oeM6za2E8152SBHO5xPPUvPJjPxFA=;
+ b=1yIjo5vO0vb4kK3FhS/KucZ2g4Y+60xv0Gd8ZkOYPqDgtkg5F3p8DJueX/6thyiXaf
+ JDWKJEGVJpibriCfLiFA4PoQyNxK0BMG6jEY6lw3VeIaddd9S+qtE2bIxi1xACRONL4G
+ eBDpuFuhS4xhfIODJqV6sg9m/gyu/yLpYUNCXzM5ID2vSMyLJuZlVCK957OYxLqroqTn
+ BNIHa0wIS2ROwMf+iqyC1737+0is42pDURP6NqgeRHWCmKuqRpQgBtbkOAsfurnsWD2F
+ Q3/9AeeAhGKiDburt+wMenNf6SGerbDneI1yFmJvVUd9u91kf8IWgwKQzzjPt5zk2l4Y
+ bH2Q==
+X-Gm-Message-State: AO0yUKXshWOt4Cba20+qtwynochrWp2x04VM5EXFPNBlKhVFJl8yzUoN
+ Ecxb49RlwJAARciVVa9wtO8PqINndHlZRRmsNps=
+X-Google-Smtp-Source: AK7set8VTeDjkzs7LQ9jCogtOFGUHhoduFuDq2/CsLxqY6WKMSw/rP3JX54EBN7BLRktPsQuDvKKEw==
+X-Received: by 2002:a7b:c399:0:b0:3e2:19b0:887d with SMTP id
+ s25-20020a7bc399000000b003e219b0887dmr245504wmj.25.1679506631572; 
+ Wed, 22 Mar 2023 10:37:11 -0700 (PDT)
+Received: from localhost.localdomain (host085115199111.static.fidoka.tech.
+ [85.115.199.111]) by smtp.gmail.com with ESMTPSA id
+ j36-20020a05600c1c2400b003ebf73acf9asm3178259wms.3.2023.03.22.10.37.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 22 Mar 2023 10:37:10 -0700 (PDT)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Mar 2023 17:25:38 +0100
-Message-Id: <20230322162538.19202-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.39.2
+Date: Wed, 22 Mar 2023 18:37:07 +0100
+Message-Id: <20230322173707.355775-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:oCmGt4uP4qQI+ONsuvs6KX1VwC0I2FnHDT3DibPXmG+ycSohS3l
- mQlkbS5K7WXvuvN4rDsdM2zalWCeUapfVbNZ+T28R3ed5mrJgkFd4XHskkQ3ikQd0io2mqZ
- 8TZrVVEZK11Qk3MI61pYZhInwtxl0BCboUUdt6/kCUsw0i/FXJuHkH4fNPlFB9cy8Ad8reU
- it60stpNdUL3O238ksU5A==
-UI-OutboundReport: notjunk:1;M01:P0:wwbL4BNxiN0=;FLjEeDKUTGS+bfolT+s+AjgPyy5
- 6/MjGIeMoKrEqaSKLMAloDqI6WGCbsypLKDzwi5ejte/5lXcG2g50Iz7tBrH9TuD1LmpeyEIR
- AqfTZpzNRe2fT41PT5103U2GleI5/M4JI+awu1TYXooZ+GUM+YC2rXgpxAYYQiuYiukHx4qk0
- vKkuc2VUzwAN8AhmspThkLifANsUwmZkNazWcQpPp/BCGNzPsJ8IyOBTed3bVHG4lANx7EcJ/
- 8CcK7eBcUpxSbRNvd/3Z70/2HHY15EoLn6X+rCKsgdro/paWcJfA6MrGQIBe6RZbRX9m70Rd3
- Kh4YFyFrRZJKeFAyjO5xIL3PrnWtayX2mbw2HfziHxzdNxeRIKhtg1jijsVV7p638T3FDkwus
- GIqIbV6sOP1+7yNTf/M9SH7sEARa8gJWRooIDSHIEa4PesihMB1ZBz7NQETw/haCICYQSfY7Z
- Spx2KskGv+68oIrhEIAa8E1XmtvZMZbwsQr7blriewblBVwE/Ggvuub9eGKcQllHpLB3VJ+b3
- J6RhJ0Iwz9pex1j3dsdcM+v15BG+jSdlcaY1SLphuhtly7fyTG17/lOi5uwf04hLmuxS8XnF/
- /QKzUtLEaAFyVCJpDwOFkV62j3UfokpNYWnZ3g2ZC1WfjLz7j7kKPdgecR4V04qBfhqa6V4rz
- N+ebuEQGxzhgLevI4ztyOnwBr9j31+tYFvoUEvJqHqO3GGkCS2gkVC4gEC1ieUshhxSbmseid
- XP7Y1GdRWOMt+R8CTl4rG/ii4G/tfNENSLh7QWfvz4Q5xv6p8YR1JBYWyhES7ZbmzAKeDFV1H
- +NAjc2D5YfSnpAq0ir3INCjMVyX/kCPDDMN8EknuqbgCMXMKkbBG9HOl78qNh7w5C4ZPIl/Wl
- DEuF+W6zE1/JWCZ526MCeyBUCI3aWtqnKGUY2HAYqEb+peKWp6nzw5WZmiP0XLzEyG9yvbRBP
- S2LsIwGC5tNftbZ8n9ad/6YReG8=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1679502339; i=ps.report@gmx.net;
- bh=EQa8z7xqEAng4cW4PK35HDsRGS5SU6qokhsf5UfyUSc=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=N0uGp+DvR8XsaEWkt6uGYCOtXK79yJI66PcfBeDTRBVUp9R0zTIgy8OolwouTmDuH
- rUNA3J0mfzxEyXpL3bW64be8mhWYYxb5UyFjVXGvaS8NyV+G3XCmKWDc4tBU8mJwSx
- GskcT5FXfyir7ZGGWYMvnaV3PMoIEP48ALZKwhpa+a5McY5Hlk/zMcSxaFQmjwxpKl
- dKJ5dwU+eZEs0sfxuwT7ZRNdkCWRIIMB+H1C/03SOOUXPn9y1EIyBAYiXYsZoCjsdE
- gLf+/vpqLjOxmQBRZ3AvpbksouijOgfzTQWgp5KJaskbB2e6XbZt20swOPAQ9aER7X
- 64xy22KawAoqw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=N0uGp+Dv
-Subject: [Buildroot] [PATCH v1] package/readline: add upstream patch to fix
- crash with invalid locale specification
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1679506631;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=XAbVCnKau/wwo7oeM6za2E8152SBHO5xPPUvPJjPxFA=;
+ b=XYL47puLB+mz/QfKfX1Rz/G8eTTeotaVp98ea0Xj/DELDUDFxol6+ePdaRW/BONIKC
+ 33lheid7c543OdARAh5+GHYkEaX1s1ULS4XGJ0Qe3qlnOyJjIeY1JtEq4eW6brFaiU7y
+ zPuLbHuAvtMrxflneiNy17+kbcNa6lnV1wdJE=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=XYL47puL
+Subject: [Buildroot] [PATCH] package/cups-filters: bump to version 1.28.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,75 +92,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add upstream patch to fix crash with invalid locale specification (see [1]
-for details).
+Update also the release url because the OpenPrinting https archive page
+is out of sync with the current release archive on the main github
+project.
 
-Fixes:
-
-  - https://bugs.busybox.net/show_bug.cgi?id=15456
-
-[1] https://lists.gnu.org/archive/html/bug-readline/2022-10/msg00002.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- ...ch-1-fix-crash-when-readline-is-star.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/readline/0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch
+ package/cups-filters/cups-filters.hash | 2 +-
+ package/cups-filters/cups-filters.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/readline/0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch b/package/readline/0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch
-new file mode 100644
-index 0000000000..b0f784b8ba
---- /dev/null
-+++ b/package/readline/0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch
-@@ -0,0 +1,41 @@
-+From b8d91eab12603fa88e095248855f5f772d182d05 Mon Sep 17 00:00:00 2001
-+From: Chet Ramey <chet.ramey@case.edu>
-+Date: Wed, 5 Oct 2022 10:41:16 -0400
-+Subject: [PATCH] Readline-8.2 patch 1: fix crash when readline is started with
-+ an invalid locale specification
-+
-+[Upstream: https://git.savannah.gnu.org/cgit/readline.git/patch/?id=7274faabe97ce53d6b464272d7e6ab6c1392837b
-+ Stripped unrelated ._.gitignore change]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ nls.c      | 4 ++++
-+ patchlevel | 2 +-
-+ 2 files changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/nls.c b/nls.c
-+index 5c6a13b..8c027d6 100644
-+--- a/nls.c
-++++ b/nls.c
-+@@ -141,6 +141,10 @@ _rl_init_locale (void)
-+   if (lspec == 0)
-+     lspec = "";
-+   ret = setlocale (LC_CTYPE, lspec);	/* ok, since it does not change locale */
-++  if (ret == 0 || *ret == 0)
-++    ret = setlocale (LC_CTYPE, (char *)NULL);
-++  if (ret == 0 || *ret == 0)
-++    ret = RL_DEFAULT_LOCALE;
-+ #else
-+   ret = (lspec == 0 || *lspec == 0) ? RL_DEFAULT_LOCALE : lspec;
-+ #endif
-+diff --git a/patchlevel b/patchlevel
-+index d8c9df7..fdf4740 100644
-+--- a/patchlevel
-++++ b/patchlevel
-+@@ -1,3 +1,3 @@
-+ # Do not edit -- exists only for use by patch
-+ 
-+-0
-++1
-+-- 
-+2.39.2
-+
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index b910cdce13..7fb3badf46 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  0ca77bb820719a040ff003ecb478d0c2ceffc94e8bd1cd03ddb5a199444127ba  cups-filters-1.28.16.tar.gz
++sha256  01a2acbd6bb78f09638047e4e9ce305d7e5ef4cb9ed6949672b5d901b7321dd4  cups-filters-1.28.17.tar.gz
+ sha256  38192ffdaca98b718f78b2d4abc38bb087f0bbcc9a16d212c98b903b985f900f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 3250649e07..19c859e602 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CUPS_FILTERS_VERSION = 1.28.16
+-CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
++CUPS_FILTERS_VERSION = 1.28.17
++CUPS_FILTERS_SITE = https://github.com/OpenPrinting/cups-filters/releases/download/$(CUPS_FILTERS_VERSION)
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
+ CUPS_FILTERS_CPE_ID_VENDOR = linuxfoundation
 -- 
-2.39.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
