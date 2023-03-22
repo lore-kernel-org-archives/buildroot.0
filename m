@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A887C6FD1F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B20EFC6FD1C
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDBB6840AA;
-	Wed, 22 Mar 2023 22:48:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDBB6840AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6ACD184015;
+	Wed, 22 Mar 2023 22:49:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ACD184015
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jsTOgUSyBHqJ; Wed, 22 Mar 2023 22:48:13 +0000 (UTC)
+	with ESMTP id KyNB4KkHhztL; Wed, 22 Mar 2023 22:49:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1CE9840A7;
-	Wed, 22 Mar 2023 22:48:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1CE9840A7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0D3A11BF909
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2AA283FFF;
+	Wed, 22 Mar 2023 22:49:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2AA283FFF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EFCF1BF909
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:49:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01DCF41C81
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01DCF41C81
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4695683FFF
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4695683FFF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kdhOQQUx1E3W for <buildroot@lists.busybox.net>;
- Wed, 22 Mar 2023 22:44:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lEBwuA5JTQ-X for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 22:49:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C32441C83
- for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C32441C83
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73A9A83FC2
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:49:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73A9A83FC2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 767138758D; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
+ id 5C6A27FAAB; Wed, 22 Mar 2023 22:49:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Mar 2023 23:41:43 +0100
+Date: Wed, 22 Mar 2023 23:48:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ff8d9b936638850279808848d631b42038eabeeb
-X-Git-Newrev: b3c4e0f3181ccfa3fc84230a33112dd25a0bd410
+X-Git-Oldrev: 2bd5301db0a5f30e863ebcb146d63653848f13e1
+X-Git-Newrev: 4b0346feda49237065ac4a80ed440b88b7dca315
 X-Patchwork-Hint: ignore
-Message-Id: <20230322224400.767138758D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-autobahn: bump to version
- 23.1.2
+Message-Id: <20230322224933.5C6A27FAAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/less: bump to version 608
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +62,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3c4e0f3181ccfa3fc84230a33112dd25a0bd410
+commit: https://git.buildroot.net/buildroot/commit/?id=4b0346feda49237065ac4a80ed440b88b7dca315
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to copyright header change:
-https://github.com/crossbario/autobahn-python/commit/49c41440e16528ee6ab267df0f9989fb1ed81f7c
+For change log, see:
+https://www.greenwoodsoftware.com/less/news.608.html
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Note 1: the package patch is kept, as it is included in version 609.
+Note 2: the license file hash changed due to the year update.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-autobahn/python-autobahn.hash | 6 +++---
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/less/less.hash | 6 +++---
+ package/less/less.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index f9b68dcb22..4fa7c451f5 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5  98d8451385ccd8ece2d2fac023c61a19  autobahn-22.12.1.tar.gz
--sha256  43b4e8b1aeaeb20a0cc0a81572e613dc958057c0ab248a7d6b41b2763270f925  autobahn-22.12.1.tar.gz
-+md5  55cd275bc3d9c7e354f4b6a87b87f466  autobahn-23.1.2.tar.gz
-+sha256  c5ef8ca7422015a1af774a883b8aef73d4954c9fcd182c9b5244e08e973f7c3a  autobahn-23.1.2.tar.gz
- # Locally computed sha256 checksums
--sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-+sha256  ab1dd7a42dbdae302346c5a4571f2149691cc1ec06836232bf4923527e3fe41c  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 4c14151960..c44acb80aa 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/less/less.hash b/package/less/less.hash
+index eed8340ec1..19be26cae0 100644
+--- a/package/less/less.hash
++++ b/package/less/less.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # using DSA key F153A7C833235259
+-# http://www.greenwoodsoftware.com/less/less-590.sig
+-sha256  6aadf54be8bf57d0e2999a3c5d67b1de63808bb90deb8f77b028eafae3a08e10  less-590.tar.gz
++# https://www.greenwoodsoftware.com/less/less-608.sig
++sha256  a69abe2e0a126777e021d3b73aa3222e1b261f10e64624d41ec079685a6ac209  less-608.tar.gz
+ # Locally calculated
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/less/less.mk b/package/less/less.mk
+index f01f94d6c8..dfbd411863 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 22.12.1
-+PYTHON_AUTOBAHN_VERSION = 23.1.2
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/a8/6f/78b90951f263232e468439627f31a2c0846e36043c95af96dc527a4aeee6
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/53/99/b6e0ffa0e8bafe9dfae1c9ab46d44d07317cbf297fbf8f07aff8a80e5bd8
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
+-LESS_VERSION = 590
++LESS_VERSION = 608
+ LESS_SITE = http://www.greenwoodsoftware.com/less
+ LESS_LICENSE = GPL-3.0+
+ LESS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
