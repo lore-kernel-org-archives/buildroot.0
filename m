@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18227C6FD1F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 008BDC6FD1C
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5FA384011;
-	Wed, 22 Mar 2023 22:43:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5FA384011
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63D0184025;
+	Wed, 22 Mar 2023 22:43:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63D0184025
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MGLDQr6IGRkL; Wed, 22 Mar 2023 22:43:25 +0000 (UTC)
+	with ESMTP id 0Sot1w9g-JTG; Wed, 22 Mar 2023 22:43:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DBAF83FC2;
-	Wed, 22 Mar 2023 22:43:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DBAF83FC2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0CFFC1BF909
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:43:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F70584008;
+	Wed, 22 Mar 2023 22:43:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F70584008
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E0A51BF909
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:43:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E655A41C76
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:43:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E655A41C76
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6916A83F4A
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6916A83F4A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FBwmazYU3n4K for <buildroot@lists.busybox.net>;
- Wed, 22 Mar 2023 22:43:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gxXvwHwtH26A for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 22:43:26 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41B29405BF
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 41B29405BF
- for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE5E684012
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AE5E684012
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:43:25 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 20C42240002;
- Wed, 22 Mar 2023 22:43:08 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id E024360005;
+ Wed, 22 Mar 2023 22:43:23 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pf7Ai-00Ahew-A3; Wed, 22 Mar 2023 23:43:08 +0100
+ id 1pf7Ax-00AhgT-4T; Wed, 22 Mar 2023 23:43:23 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: James Hilliard <james.hilliard1@gmail.com>
-References: <20230322015703.107728-1-james.hilliard1@gmail.com>
-Date: Wed, 22 Mar 2023 23:43:08 +0100
-In-Reply-To: <20230322015703.107728-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Tue, 21 Mar 2023 19:57:03 -0600")
-Message-ID: <87r0tgquf7.fsf@dell.be.48ers.dk>
+References: <20230322020032.115897-1-james.hilliard1@gmail.com>
+Date: Wed, 22 Mar 2023 23:43:23 +0100
+In-Reply-To: <20230322020032.115897-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Tue, 21 Mar 2023 20:00:32 -0600")
+Message-ID: <87mt44ques.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-botocore: bump to
- version 1.29.96
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-bottle: bump to version
+ 0.12.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,8 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
