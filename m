@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49B15C6FD20
-	for <buildroot@archiver.kernel.org>; Tue, 21 Mar 2023 20:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C8BEC6FD20
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 00:07:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC8E461310;
-	Tue, 21 Mar 2023 20:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC8E461310
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C58F40465;
+	Wed, 22 Mar 2023 00:07:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C58F40465
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VU_I9HM-Ve7P; Tue, 21 Mar 2023 20:12:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qtOXGTeVTvvH; Wed, 22 Mar 2023 00:07:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 003F16130C;
-	Tue, 21 Mar 2023 20:12:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 003F16130C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CEAD1BF357
- for <buildroot@lists.busybox.net>; Tue, 21 Mar 2023 20:12:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD54140A54;
+	Wed, 22 Mar 2023 00:07:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD54140A54
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 50FA11BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 00:07:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 180A06130A
- for <buildroot@lists.busybox.net>; Tue, 21 Mar 2023 20:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 180A06130A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39671403B7
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 00:07:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39671403B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JlBHA7DdVtYY for <buildroot@lists.busybox.net>;
- Tue, 21 Mar 2023 20:12:51 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B66D561127
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B66D561127
- for <buildroot@buildroot.org>; Tue, 21 Mar 2023 20:12:50 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([213.147.166.121]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MeU4y-1qF91Z06A0-00aWD6; Tue, 21 Mar 2023 21:12:25 +0100
-From: Daniel Lang <dalang@gmx.at>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 593gXMl4kFAl for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 00:07:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46FBC40154
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 46FBC40154
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 00:07:17 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id p17so6014225ioj.10
+ for <buildroot@buildroot.org>; Tue, 21 Mar 2023 17:07:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1679443636;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=MxItXUk7YAiAKAdG4N2t0CFmo1LfAW0WFt86K0NTahY=;
+ b=6pxpLqrqpwOXeAPyc0LHxufUwbEzZMWZ3k6Uvtya5mK/pbGF2KQbQBFtHm/yHgQg67
+ Dkx6Lj7PmL5pkgGv/84vh3Ddio3TRaMCuLjwdRynXGBAzZ9y3KIjrq1FoG7jngO2kP6G
+ 2td2jQ1PfaJMccmXN53UHlJmcxlPqayYeEzefKXW5Ej6YtVGC4Bg6XWvBjYJehPq/TKw
+ ZUBqfMMNrpzJaHkaoumctOxy91SGW5VprXZCqniUiOn8z4lEpJgkku1IQMdB2rQhFNHq
+ Krum0oVAQiI/ggclLaMjiOKIHxRb3I5JnTDqLEDm2yu4AD/PuNDJOgbTQcI2mhtORPx2
+ xt4A==
+X-Gm-Message-State: AO0yUKVvpHrqvfX5sc7SwNkvu2CeEgPfkjH1XP359EOnQTdRi9DTlzoD
+ jN/kXStWf91cvLy0saxsunLK7kvHnbzkAQ==
+X-Google-Smtp-Source: AK7set8t3qjNkz9r4W9KYdZSkxY7y4Cq+d9m4YwxnPfSAFQKdUOLZJTMA3XM52dP74uGzWrwMelyjg==
+X-Received: by 2002:a5d:8c8b:0:b0:71a:1b72:5afc with SMTP id
+ g11-20020a5d8c8b000000b0071a1b725afcmr2873456ion.19.1679443636172; 
+ Tue, 21 Mar 2023 17:07:16 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-149-35.hlrn.qwest.net.
+ [97.118.149.35]) by smtp.gmail.com with ESMTPSA id
+ az3-20020a056638418300b0040558314d81sm4565325jab.95.2023.03.21.17.07.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 21 Mar 2023 17:07:15 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Mar 2023 21:11:31 +0100
-Message-Id: <20230321201133.236692-2-dalang@gmx.at>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230321201133.236692-1-dalang@gmx.at>
-References: <20230321201133.236692-1-dalang@gmx.at>
+Date: Tue, 21 Mar 2023 18:07:14 -0600
+Message-Id: <20230322000714.4045454-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:dojij3UVDeswig92xaimD2BpTsRgHwvyFZ1pDROgJ4pO4CavgDL
- gzp39w8EFDzTwANVNECfLXTMUlf3fjZcrp1iOuNpge1W0BjO7qHinBP4JwFwmsNe7KTj3PY
- x/U/Yp4OP33d54DttkTFJwqNyl7P9g4gl6jGY2XTO7R2vh2KMIsuETV481kS4zfENc4iziH
- yFErJLD0yiduow1hSQUcA==
-UI-OutboundReport: notjunk:1;M01:P0:aCsSzt2vbW4=;zSjkvcPUkjLitOvpHclj8d5dcPf
- q9UaNl3mtXjmyzWN2BkepILgoR6L/th4l1W7+nSmPQSMG0UOmmqvzncBeKxLG4qzEjiuFXG2q
- BlrLwNV300c6xr2D3BGofyCKWfEUIw0O3ctbOtKKzyamNNWfTL9jCi6N70xdgkXT9ETlVqiNq
- +8zVNcLzg2zJDUNImKc4/d9HqSISD77nenwwEP3WL/Y1lGy9x4SUFLCYwvtkuufLPmcTDBLKO
- pYIOP3ZM716A07DE5Rm48DHpO1xxjvZj59Ds6KlxVhK9iHh72rxLfAaKDKmge+8ygPdzc5cxV
- mtXWOdlk2gfIynN6FT7uCkleux7Gx3Lt3ZMCzj9EDVvgMklZNMUwpOERPB8WlMSM8V37BK5hI
- zZRGG0rRB3fsQSL2kYkT+OXQlx6iAkjVXVIbvrpMdoPfJlwsFPxTG39o+tAqnCK8hSMZv2AdL
- fjCMnGVtvjGqSqatyl739wUQC+KB8Js5ZyjzbIGE25YspXn0qs75S5mktzNgwf1f5IWyAFGgU
- 3nGgO8fCclz+huq7q2vN1/GaP3nxRQhuZW0rbizg3RI4gtY0yGz3GXQmuCodjtH5herF5Ztio
- LmsO6ve/9zxbN66IFgijrl/F9SGODbNQSLZ2YsCVirhmsQxxY8yb68R91ZJ+wrURZnAwqTyIC
- 5kQrVQQJ31uzr48FLiykcmAvWMffT9+jhqtZY6tvllZ62+Y8rQHC0oJcIRD4Y3m1tnZL9r/Bj
- Wq2K3bFRioLIGL8/qwusxvZ0qvmYGbfnkyXAFWR91cUa8yxgDIYyt8ZWQBR+sUykAWoOterjX
- uO7n4EzOzxCiomJJKvCvKRRqamyqq68YXUf/vtBxG66KWteSOeHUB8gNTPrOp3y/ISjshp3vq
- B0Hnh729yfpz9YXrZ8Vy1EAkfMcn16Kyljvf9KiFNAmJXdJ7NNm9TsosOkXwfzkhHudrTpOXu
- YOfZoZ+2xI0y4WxVfRwf+1PWmlQ=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; s=s31663417; 
- t=1679429545; i=dalang@gmx.at;
- bh=AcMV+AySPFVvidj/0e/o2WM0KGllR3K78eBcHayACWU=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=A51QKj5Fd57j8RlbumXLHVprY/aV/acmogYYhg7+uuU+zfhYQLSIizrL23Eyb08Do
- NpNcVlPpUbtcau8XE3hUCkLWK/rtwWCqIciHM7v3KF0mbH+MRVSX3wmjquvtyzgYvM
- iecGdDV01nmwqq2IQ9XmeYnCAaa0hfRBP2bvenXp5eLefjqvXwv2o2EG8lPebVYms7
- zW946MMGUhxzq0gosrG8rIa8nHx7tBCLVLLgD5IKVhYKJgLFwnA1s6C2LCLWuj1PN4
- qYYmiOC/kpyNq7HINNbmRTCbr49020EXI3yoUUcweBRBrkdTmKdCAueF8KtnfHCxD7
- jzjaejWQXM3gA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=A51QKj5F
-Subject: [Buildroot] [PATCH 2/3] package/cairomm: use official website
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1679443636;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=MxItXUk7YAiAKAdG4N2t0CFmo1LfAW0WFt86K0NTahY=;
+ b=Nj7WAUfreAjwqWyET6xEUztLjLnflLLyNlwT543Cdx2EYaBcdt9rLLcmKkI/HuUF2I
+ 9iQ+C0ZBH+xGDDqVS12JKvFfWzBf3xGWJtk2OqsC7C7YsG0IZaMx7nmt6N/TFhJhxXIC
+ DZfht9W0nxX36nKwEXhij28i9Kfpu6NhosTM5DwBaIDSgJT/juvNHHTQ4znv82mokOpQ
+ ujOPG8hhtRVJZ57MvoRWV7pwGRkab/s7ZGxY9UfpSDpm/68H1zvlnmr6w1j9XtUa0wvv
+ tdLuKDIlenOIGYgOTfcPWyuiSmZ15GrHZzytfaP4xRmPirxXwsx0HA/Oz1q4JXPFHWks
+ RUrg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Nj7WAUfr
+Subject: [Buildroot] [PATCH 1/1] package/python-aexpect: bump to version
+ 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,66 +94,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Lang <d.lang@abatec.at>, James Knight <james.knight@collins.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The website [1] states that the released version can be downloaded from
-the cairo release area [2], which also features a sha1 hash.
+Drop no longer required six runtime dependency.
 
-[1]: https://www.cairographics.org/cairomm/
-[2]: https://www.cairographics.org/releases/
-
-Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/cairomm/Config.in    | 2 +-
- package/cairomm/cairomm.hash | 5 ++++-
- package/cairomm/cairomm.mk   | 3 ++-
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ package/python-aexpect/Config.in           | 1 -
+ package/python-aexpect/python-aexpect.hash | 4 ++--
+ package/python-aexpect/python-aexpect.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/cairomm/Config.in b/package/cairomm/Config.in
-index 75f6692b8a..174f3967ab 100644
---- a/package/cairomm/Config.in
-+++ b/package/cairomm/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_CAIROMM
+diff --git a/package/python-aexpect/Config.in b/package/python-aexpect/Config.in
+index cc805da657..59671621dc 100644
+--- a/package/python-aexpect/Config.in
++++ b/package/python-aexpect/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_AEXPECT
+ 	bool "python-aexpect"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
  	help
- 	  The cairomm package is a set of C++ bindings for Cairo.
+ 	  Aexpect.
  
--	  http://www.gtkmm.org/
-+	  https://www.cairographics.org/cairomm/
+diff --git a/package/python-aexpect/python-aexpect.hash b/package/python-aexpect/python-aexpect.hash
+index efe4f55fb8..ff30c765e3 100644
+--- a/package/python-aexpect/python-aexpect.hash
++++ b/package/python-aexpect/python-aexpect.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aexpect/json
+-md5  d37473ff0024c15938bfe86a543537e6  aexpect-1.6.4.tar.gz
+-sha256  3998aa84ae54963fd59488f0caa533f6edbb31bc6cb842da09b041cbad56ad88  aexpect-1.6.4.tar.gz
++md5  bb05319c277cfe97114780579d251c30  aexpect-1.7.0.tar.gz
++sha256  11bfeea78ef6147ac8f6e29c2a720bd332598383d88274cdca5e6413c2070d52  aexpect-1.7.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7be26abf35e531a226dc742d2379d42d372cb61f027a6e26477c0e2f1a03bfcb  LICENSE
+diff --git a/package/python-aexpect/python-aexpect.mk b/package/python-aexpect/python-aexpect.mk
+index 8b5e165135..1cfcc9ffaf 100644
+--- a/package/python-aexpect/python-aexpect.mk
++++ b/package/python-aexpect/python-aexpect.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- comment "cairomm needs a toolchain w/ C++, wchar, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
-diff --git a/package/cairomm/cairomm.hash b/package/cairomm/cairomm.hash
-index d14a65c2d6..dc32453220 100644
---- a/package/cairomm/cairomm.hash
-+++ b/package/cairomm/cairomm.hash
-@@ -1,3 +1,6 @@
-+# From https://www.cairographics.org/releases/cairomm-1.16.1.tar.xz.sha1
-+sha1  a2de9b7fbfe8176cb555d94bb531ba1a07f31cc4  cairomm-1.16.1.tar.xz
-+
- # Locally computed
--sha256  bb86d855041bd46d31b03e43ea355d233de44034b39d4200725b1e0947e63e67  cairomm-1.16.1.tar.gz
-+sha256  6f6060d8e98dd4b8acfee2295fddbdd38cf487c07c26aad8d1a83bb9bff4a2c6  cairomm-1.16.1.tar.xz
- sha256  bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd  COPYING
-diff --git a/package/cairomm/cairomm.mk b/package/cairomm/cairomm.mk
-index 856c9d67fc..6bb29ea051 100644
---- a/package/cairomm/cairomm.mk
-+++ b/package/cairomm/cairomm.mk
-@@ -7,7 +7,8 @@
- CAIROMM_VERSION = 1.16.1
- CAIROMM_LICENSE = LGPL-2.0+
- CAIROMM_LICENSE_FILES = COPYING
--CAIROMM_SITE = https://gitlab.freedesktop.org/cairo/cairomm/-/archive/$(CAIROMM_VERSION)
-+CAIROMM_SOURCE = cairomm-$(CAIROMM_VERSION).tar.xz
-+CAIROMM_SITE = https://cairographics.org/releases
- CAIROMM_INSTALL_STAGING = YES
- CAIROMM_DEPENDENCIES = cairo libglib2 libsigc host-pkgconf
- CAIROMM_CONF_OPTS = -Dbuild-examples=false -Dbuild-tests=false
+-PYTHON_AEXPECT_VERSION = 1.6.4
++PYTHON_AEXPECT_VERSION = 1.7.0
+ PYTHON_AEXPECT_SOURCE = aexpect-$(PYTHON_AEXPECT_VERSION).tar.gz
+-PYTHON_AEXPECT_SITE = https://files.pythonhosted.org/packages/3b/22/f87ffa70348dde4597d9314995be89c8d4c7728260033b972a8d691e3f7d
++PYTHON_AEXPECT_SITE = https://files.pythonhosted.org/packages/dd/32/738b5190adb5ed387d3e755885f646b714fbf9c22adbda7ff988db7ede49
+ PYTHON_AEXPECT_SETUP_TYPE = setuptools
+ PYTHON_AEXPECT_LICENSE = GPL-2.0+
+ PYTHON_AEXPECT_LICENSE_FILES = LICENSE
 -- 
-2.40.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
