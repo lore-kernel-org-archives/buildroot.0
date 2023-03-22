@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15626C6FD1C
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:47:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 741A6C6FD1F
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD67384085;
-	Wed, 22 Mar 2023 22:47:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD67384085
+	by smtp1.osuosl.org (Postfix) with ESMTP id 264DF83FEB;
+	Wed, 22 Mar 2023 22:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 264DF83FEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G6nfDdOrdRR1; Wed, 22 Mar 2023 22:47:35 +0000 (UTC)
+	with ESMTP id zz5kFadwliu3; Wed, 22 Mar 2023 22:47:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E183E8405A;
-	Wed, 22 Mar 2023 22:47:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E183E8405A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6945784080;
+	Wed, 22 Mar 2023 22:47:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6945784080
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5852E1BF95F
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A0331BF909
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5704C405BF
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE33A41C82
  for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5704C405BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE33A41C82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AiyErnGJOSTp for <buildroot@lists.busybox.net>;
+ with ESMTP id FcgpTS75Sv1b for <buildroot@lists.busybox.net>;
  Wed, 22 Mar 2023 22:44:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B113441C85
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86F6441C81
  for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B113441C85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86F6441C81
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC19A87585; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
+ id 81B5B87585; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Mar 2023 23:43:01 +0100
+Date: Wed, 22 Mar 2023 23:41:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c330736fa619e5ebc6af1ad6cfde9df0cd391f2
-X-Git-Newrev: 1197165d1ca3ffb1edb03ff9d4ed6e8ae4069414
+X-Git-Oldrev: b3c4e0f3181ccfa3fc84230a33112dd25a0bd410
+X-Git-Newrev: 49c65502439c0f24323906e96652387243879baa
 X-Patchwork-Hint: ignore
-Message-Id: <20230322224400.AC19A87585@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-botocore: bump to version
- 1.29.96
+Message-Id: <20230322224400.81B5B87585@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-babel: bump to version
+ 2.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1197165d1ca3ffb1edb03ff9d4ed6e8ae4069414
+commit: https://git.buildroot.net/buildroot/commit/?id=49c65502439c0f24323906e96652387243879baa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to year update:
+https://github.com/python-babel/babel/commit/9beda0bed2600af47827ad200b0c5864c542c617
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-botocore/python-botocore.hash | 4 ++--
- package/python-botocore/python-botocore.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-babel/python-babel.hash | 6 +++---
+ package/python-babel/python-babel.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
-index 0e9d0572d7..57d07a6711 100644
---- a/package/python-botocore/python-botocore.hash
-+++ b/package/python-botocore/python-botocore.hash
+diff --git a/package/python-babel/python-babel.hash b/package/python-babel/python-babel.hash
+index 2b2f56d8c6..f2026cafb3 100644
+--- a/package/python-babel/python-babel.hash
++++ b/package/python-babel/python-babel.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/botocore/json
--md5  3946a693e09b65a0f6615a1a30f606d7  botocore-1.29.45.tar.gz
--sha256  62ae03e591ff25555854aa338da35190ffe18c0b1be2ebf5cfb277164233691f  botocore-1.29.45.tar.gz
-+md5  c608709a5cf3e67442f4254a34d1faab  botocore-1.29.96.tar.gz
-+sha256  b9781108810e33f8406942c3e3aab748650c59d5cddb7c9d323f4e2682e7b0b6  botocore-1.29.96.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/babel/json
+-md5  9ee7784fd452d456206ecd3a12694010  Babel-2.11.0.tar.gz
+-sha256  5ef4b3226b0180dedded4229651c8b0e1a3a6a2837d45a073272f313e4cf97f6  Babel-2.11.0.tar.gz
++md5  9ac7d8aac42c17a1e6d922017058d2c8  Babel-2.12.1.tar.gz
++sha256  cc2d99999cd01d44420ae725a21c9e3711b3aadc7976d6147f622d8581963455  Babel-2.12.1.tar.gz
  # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
-diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
-index ceb3fbe6ea..6d0747c0df 100644
---- a/package/python-botocore/python-botocore.mk
-+++ b/package/python-botocore/python-botocore.mk
+-sha256  2499aec3c5f041c3ac2c448a15fb233314e4c20cbac1530be04ec31b2788631c  LICENSE
++sha256  908e0ad72053ae27c1d17e3340bd14cff9bf935992ed56526d17c983ab6e7af7  LICENSE
+diff --git a/package/python-babel/python-babel.mk b/package/python-babel/python-babel.mk
+index 35857dc127..890a8b02b9 100644
+--- a/package/python-babel/python-babel.mk
++++ b/package/python-babel/python-babel.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BOTOCORE_VERSION = 1.29.45
-+PYTHON_BOTOCORE_VERSION = 1.29.96
- PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
--PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/9d/4f/1c24126941d1f8c1f2ecf459f88959d59566af34a55a81d926368fd2e6e5
-+PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/2d/b5/4a986aeb4e3d182f7ef116705962d3c98c0263beaf87c49836b7dfb91837
- PYTHON_BOTOCORE_SETUP_TYPE = setuptools
- PYTHON_BOTOCORE_LICENSE = Apache-2.0
- PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt
+-PYTHON_BABEL_VERSION = 2.11.0
++PYTHON_BABEL_VERSION = 2.12.1
+ PYTHON_BABEL_SOURCE = Babel-$(PYTHON_BABEL_VERSION).tar.gz
+-PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/ff/80/45b42203ecc32c8de281f52e3ec81cb5e4ef16127e9e8543089d8b1649fb
++PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/ba/42/54426ba5d7aeebde9f4aaba9884596eb2fe02b413ad77d62ef0b0422e205
+ PYTHON_BABEL_SETUP_TYPE = setuptools
+ PYTHON_BABEL_LICENSE = BSD-3-Clause
+ PYTHON_BABEL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
