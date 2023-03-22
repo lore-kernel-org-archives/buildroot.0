@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0D81C6FD1F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CFA2C6FD1F
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:44:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AC2A83FC2;
-	Wed, 22 Mar 2023 22:43:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AC2A83FC2
+	by smtp1.osuosl.org (Postfix) with ESMTP id D6DDE84012;
+	Wed, 22 Mar 2023 22:44:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6DDE84012
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ktomcnncJj8N; Wed, 22 Mar 2023 22:43:50 +0000 (UTC)
+	with ESMTP id kdmWRHKLjpKl; Wed, 22 Mar 2023 22:44:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC58884015;
-	Wed, 22 Mar 2023 22:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC58884015
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D95451BF909
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:43:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26EE184024;
+	Wed, 22 Mar 2023 22:44:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26EE184024
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EFC701BF909
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B371641C75
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:43:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B371641C75
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5D0C8402A
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5D0C8402A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2WsyukRvD2su for <buildroot@lists.busybox.net>;
- Wed, 22 Mar 2023 22:43:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F181405BF
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0F181405BF
- for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:43:47 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E8FAC240002;
- Wed, 22 Mar 2023 22:43:45 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pf7BJ-00Ahim-5E; Wed, 22 Mar 2023 23:43:45 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RWl2MLMidff2 for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02DB184024
+ for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02DB184024
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E0CDF87581; Wed, 22 Mar 2023 22:43:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20230322020532.126682-1-james.hilliard1@gmail.com>
-Date: Wed, 22 Mar 2023 23:43:45 +0100
-In-Reply-To: <20230322020532.126682-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Tue, 21 Mar 2023 20:05:32 -0600")
-Message-ID: <87ilesque6.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-bsdiff4: bump to version
- 1.2.3
+To: buildroot@buildroot.org
+Date: Wed, 22 Mar 2023 23:36:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5f06ecf5e1516cac8911dbf9b05c66c0f7060379
+X-Git-Newrev: 11f8c11dfb61f1efa92d80de2d5ee915d73ff656
+X-Patchwork-Hint: ignore
+Message-Id: <20230322224359.E0CDF87581@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-web2py: security bump to
+ version 2.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,20 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=11f8c11dfb61f1efa92d80de2d5ee915d73ff656
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fix CVE-2023-22432: Open redirect vulnerability exists in web2py
+versions prior to 2.23.1. When using the tool, a web2py user may be
+redirected to an arbitrary website by accessing a specially crafted URL.
+As a result, the user may become a victim of a phishing attack.
 
-Committed, thanks.
+https://github.com/web2py/web2py/compare/v2.23.0...v2.23.1
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-web2py/python-web2py.hash | 2 +-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index a853497768..c0ce0cc352 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  356f88b671e2bcdd9c89df526ee063ee9d6f4f57b60182ec2684adddcc426e99  python-web2py-2.23.0.tar.gz
++sha256  f4066d76290b333bc1bb1cf4c23b612eebde712b7112e90a72e7609a14690d2c  python-web2py-2.23.1.tar.gz
+ sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 4425b09d12..2a666cae17 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEB2PY_VERSION = 2.23.0
++PYTHON_WEB2PY_VERSION = 2.23.1
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
