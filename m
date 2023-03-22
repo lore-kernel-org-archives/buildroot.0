@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA098C6FD1F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09B6BC6FD1F
+	for <buildroot@archiver.kernel.org>; Wed, 22 Mar 2023 22:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6725483F84;
-	Wed, 22 Mar 2023 22:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6725483F84
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADEB981316;
+	Wed, 22 Mar 2023 22:46:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADEB981316
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rpleLpAgH-Uh; Wed, 22 Mar 2023 22:46:21 +0000 (UTC)
+	with ESMTP id hZaUrJ0yKiIq; Wed, 22 Mar 2023 22:46:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F63B8137A;
-	Wed, 22 Mar 2023 22:46:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F63B8137A
+	by smtp1.osuosl.org (Postfix) with ESMTP id CECB584024;
+	Wed, 22 Mar 2023 22:46:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CECB584024
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 606401BF909
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2584D1BF95F
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E536041C76
- for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E536041C76
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58CFF41C79
+ for <buildroot@lists.busybox.net>; Wed, 22 Mar 2023 22:44:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58CFF41C79
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9P7ebfxNdXNc for <buildroot@lists.busybox.net>;
- Wed, 22 Mar 2023 22:44:01 +0000 (UTC)
+ with ESMTP id b3N1UCEc74U5 for <buildroot@lists.busybox.net>;
+ Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BDAD41C79
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A92B40191
  for <buildroot@buildroot.org>; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BDAD41C79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A92B40191
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5743587589; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
+ id 1922E87581; Wed, 22 Mar 2023 22:44:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Mar 2023 23:40:34 +0100
+Date: Wed, 22 Mar 2023 23:38:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1e7679a38edc3d4e4e71e6aed1ffd0f4b5fe312
-X-Git-Newrev: 42d45a4267d5ff92d85b9b5faeba21e4c46eb357
+X-Git-Oldrev: 812083c1d35f84d85a7e1a61ec00cf1162ebd64a
+X-Git-Newrev: 68ca5f1e1f9f3f79e5a48928ad2dfac0cceee843
 X-Patchwork-Hint: ignore
-Message-Id: <20230322224400.5743587589@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-alembic: bump to version
- 1.10.2
+Message-Id: <20230322224400.1922E87581@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openssh: security bump to version
+ 9.3p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42d45a4267d5ff92d85b9b5faeba21e4c46eb357
+commit: https://git.buildroot.net/buildroot/commit/?id=68ca5f1e1f9f3f79e5a48928ad2dfac0cceee843
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to date update:
-https://github.com/sqlalchemy/alembic/commit/e3055cd5baad328641366026af66639f333c520c
+From [1]:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ * sshd(8): fix a pre-authentication double-free memory fault
+   introduced in OpenSSH 9.1. This is not believed to be exploitable,
+   and it occurs in the unprivileged pre-auth process that is
+   subject to chroot(2) and is further sandboxed on most major
+   platforms.
+
+ * ssh(8): in OpenSSH releases after 8.7, the PermitRemoteOpen option
+   would ignore its first argument unless it was one of the special
+   keywords "any" or "none", causing the permission list to fail open
+   if only one permission was specified. bz3515
+
+ * ssh(1): if the CanonicalizeHostname and CanonicalizePermittedCNAMEs
+   options were enabled, and the system/libc resolver did not check
+   that names in DNS responses were valid, then use of these options
+   could allow an attacker with control of DNS to include invalid
+   characters (possibly including wildcards) in names added to
+   known_hosts files when they were updated. These names would still
+   have to match the CanonicalizePermittedCNAMEs allow-list, so
+   practical exploitation appears unlikely.
+
+From [2]:
+
+* ssh-add(1): when adding smartcard keys to ssh-agent(1) with the
+   per-hop destination constraints (ssh-add -h ...) added in OpenSSH
+   8.9, a logic error prevented the constraints from being
+   communicated to the agent. This resulted in the keys being added
+   without constraints. The common cases of non-smartcard keys and
+   keys without destination constraints are unaffected. This problem
+   was reported by Luci Stanescu.
+
+ * ssh(1): Portable OpenSSH provides an implementation of the
+   getrrsetbyname(3) function if the standard library does not
+   provide it, for use by the VerifyHostKeyDNS feature. A
+   specifically crafted DNS response could cause this function to
+   perform an out-of-bounds read of adjacent stack data, but this
+   condition does not appear to be exploitable beyond denial-of-
+   service to the ssh(1) client.
+
+   The getrrsetbyname(3) replacement is only included if the system's
+   standard library lacks this function and portable OpenSSH was not
+   compiled with the ldns library (--with-ldns). getrrsetbyname(3) is
+   only invoked if using VerifyHostKeyDNS to fetch SSHFP records. This
+   problem was found by the Coverity static analyzer.
+
+[1] https://www.openssh.com/txt/release-9.2
+[2] https://www.openssh.com/txt/release-9.3
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-alembic/python-alembic.hash | 6 +++---
- package/python-alembic/python-alembic.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/openssh/openssh.hash | 4 ++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-alembic/python-alembic.hash b/package/python-alembic/python-alembic.hash
-index f94f5ab10a..c84c46c84c 100644
---- a/package/python-alembic/python-alembic.hash
-+++ b/package/python-alembic/python-alembic.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/alembic/json
--md5  999392ffc900da18afbf10d2ac31bdc6  alembic-1.9.1.tar.gz
--sha256  f9f76e41061f5ebe27d4fe92600df9dd612521a7683f904dab328ba02cffa5a2  alembic-1.9.1.tar.gz
-+md5  de9d9f92a49a5e3ae5a978018927f474  alembic-1.10.2.tar.gz
-+sha256  457eafbdc0769d855c2c92cbafe6b7f319f916c80cf4ed02b8f394f38b51b89d  alembic-1.10.2.tar.gz
- # Locally computed sha256 checksums
--sha256  f0e3f7a5080879ccae798882d9bee3d48fe335d0bad84ca8eec86fa594375ea0  LICENSE
-+sha256  b285268a86f4416eaf4d05b2ae3880c156f7c59a8f935a402bc056eafb33af08  LICENSE
-diff --git a/package/python-alembic/python-alembic.mk b/package/python-alembic/python-alembic.mk
-index 64ce85bead..4f605b8f60 100644
---- a/package/python-alembic/python-alembic.mk
-+++ b/package/python-alembic/python-alembic.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index eefb11ec15..2be54431ec 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssh.com/txt/release-9.1 (base64 encoded)
+-sha256  19f85009c7e3e23787f0236fbb1578392ab4d4bf9f8ec5fe6bc1cd7e8bfdd288  openssh-9.1p1.tar.gz
++# From https://www.openssh.com/txt/release-9.3 (base64 encoded)
++sha256  e9baba7701a76a51f3d85a62c383a3c9dcd97fa900b859bc7db114c1868af8a8  openssh-9.3p1.tar.gz
+ # Locally calculated
+ sha256  05c30446ba738934b3f1efa965b454c122ca26cc4b268e5ae6843f58ccd1b16d  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index b70e327620..26d6bd504d 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_ALEMBIC_VERSION = 1.9.1
-+PYTHON_ALEMBIC_VERSION = 1.10.2
- PYTHON_ALEMBIC_SOURCE = alembic-$(PYTHON_ALEMBIC_VERSION).tar.gz
--PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/81/87/5c531d2923c61e7ae68b23c8660df289ae4241a0d38f3fbcbd8dba64ca6b
-+PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/d6/02/66ed327f944f3f85423096c438d7d290da5af21a7aecf9e5b9f09d9e34b2
- PYTHON_ALEMBIC_SETUP_TYPE = setuptools
- PYTHON_ALEMBIC_LICENSE = MIT
- PYTHON_ALEMBIC_LICENSE_FILES = LICENSE
+-OPENSSH_VERSION_MAJOR = 9.1
++OPENSSH_VERSION_MAJOR = 9.3
+ OPENSSH_VERSION_MINOR = p1
+ OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+ OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
