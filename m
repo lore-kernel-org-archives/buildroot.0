@@ -4,70 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80710C6FD1C
-	for <buildroot@archiver.kernel.org>; Thu, 23 Mar 2023 13:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A10AC6FD1C
+	for <buildroot@archiver.kernel.org>; Thu, 23 Mar 2023 13:15:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEC9541E57;
-	Thu, 23 Mar 2023 13:15:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEC9541E57
+	by smtp4.osuosl.org (Postfix) with ESMTP id 818A141E7E;
+	Thu, 23 Mar 2023 13:15:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 818A141E7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u9vkXsPnV3gc; Thu, 23 Mar 2023 13:15:27 +0000 (UTC)
+	with ESMTP id lDjSPF3172yV; Thu, 23 Mar 2023 13:15:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 979EE41E85;
-	Thu, 23 Mar 2023 13:15:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 979EE41E85
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 81AE91BF291
- for <buildroot@lists.busybox.net>; Thu, 23 Mar 2023 13:15:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 917EB41E89;
+	Thu, 23 Mar 2023 13:15:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 917EB41E89
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A398B1BF291
+ for <buildroot@lists.busybox.net>; Thu, 23 Mar 2023 13:15:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49B4F61573
- for <buildroot@lists.busybox.net>; Thu, 23 Mar 2023 13:15:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49B4F61573
+ by smtp4.osuosl.org (Postfix) with ESMTP id 858E241E8D
+ for <buildroot@lists.busybox.net>; Thu, 23 Mar 2023 13:15:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 858E241E8D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zwHmP1QcHpie for <buildroot@lists.busybox.net>;
- Thu, 23 Mar 2023 13:15:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1496860B10
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1496860B10
- for <buildroot@buildroot.org>; Thu, 23 Mar 2023 13:15:22 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E089610000E;
- Thu, 23 Mar 2023 13:15:19 +0000 (UTC)
-Date: Thu, 23 Mar 2023 14:15:18 +0100
-To: Simon Rowe <simon.rowe@nutanix.com>
-Message-ID: <20230323141518.7a5cde5f@windsurf>
-In-Reply-To: <DM8PR02MB81213985E6D21FD5B0B318ED93879@DM8PR02MB8121.namprd02.prod.outlook.com>
-References: <20230316113615.138847-1-simon.rowe@nutanix.com>
- <20230319172554.0d5ea60c@windsurf>
- <DM8PR02MB81219477CD31D864F078BC8493819@DM8PR02MB8121.namprd02.prod.outlook.com>
- <20230321145455.7dce4271@windsurf>
- <DM8PR02MB81213985E6D21FD5B0B318ED93879@DM8PR02MB8121.namprd02.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9yxxLuATLlh2 for <buildroot@lists.busybox.net>;
+ Thu, 23 Mar 2023 13:15:43 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDB5C41E89
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com
+ [IPv6:2607:f8b0:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EDB5C41E89
+ for <buildroot@buildroot.org>; Thu, 23 Mar 2023 13:15:42 +0000 (UTC)
+Received: by mail-ot1-x329.google.com with SMTP id
+ x8-20020a9d3788000000b0069f922cd5ceso3659068otb.12
+ for <buildroot@buildroot.org>; Thu, 23 Mar 2023 06:15:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1679577341; x=1682169341;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=10VDjdDPrezrEq8vf9OUdRpFhJK1/hCzgNcaseJ7XeA=;
+ b=zxB/ETwfzr9j79wiTpWB0BrB4Uk6q4nxiP14ucADNmEOkY51LxUb8sfR6uFbOvzPyo
+ PjhtSCTQukQX1tfZCYoCLLDAtg9IspYn6mc7m4AgJtsLQGr6ItFo62t6Is9QdLLOQ0/u
+ PlLHgo7M0JSkQuBU9CBW5IfsgMCrHvKGHHfTX9HxXyB5cvArE5dPSl4ld1tUzaHXiY7H
+ WCIfS0A8JCnDQyKzvzhdUoYz22twmbSwlkrPBOgnqMgHm3oWWuev3Rt615SKzU7oPvOf
+ wNGZ5GlXJ6zOH1VNJrUByMy+oZBcGmM7hAi+MZzcxeS2YxRsdiWZ/ML/fpMIW9A/yEIc
+ x2Cg==
+X-Gm-Message-State: AO0yUKUA9SSoUqtn18I/LS1td8ilrvrkSvhR5Fcj2nFnsgFRRCaNMB+V
+ KbJkUVNFkqV7i9oYpissD89KU+t+kWSpsg==
+X-Google-Smtp-Source: AK7set95dPrWZ5CBy86OboPw0VutefUpFMAZmnNbMUvlNrYHzGdET/yZADO3cmEqRWPwpGAqDM6CzQ==
+X-Received: by 2002:a9d:3b3:0:b0:69f:8ee5:3d60 with SMTP id
+ f48-20020a9d03b3000000b0069f8ee53d60mr4413558otf.0.1679577341187; 
+ Thu, 23 Mar 2023 06:15:41 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b69:4c56:116d:eccf:8809])
+ by smtp.gmail.com with ESMTPSA id
+ g13-20020a056830160d00b0069fa35f05aesm1535840otr.28.2023.03.23.06.15.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 23 Mar 2023 06:15:40 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 23 Mar 2023 10:15:36 -0300
+Message-Id: <20230323131536.3376306-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1679577320;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tpgHbtmcUWpcAKX8a92OlPXmegFJgtJ67PvANrM9hpA=;
- b=bNaBFNeLMR2h7pPvVaPVOAzoCuYUnZdWYGAJKZLSzsWl9zAeF2VMsTqw4AfKX6ksCtDpup
- xsIk5DfnNIWcc4oyXXKLOr3WjTu0JDFjty5fnl4v/xp5Cy3aes8Pltx0MdJfXzswjR5dPH
- 6MQ8ezxmwxll3ddBPJ6IJMxrDv/IrYh4Cg7GGjaJ+3qcNP1a0OULLzE3sqLfnLDQ+SG1Z4
- y53aD448U/lkyoHl+8wR0PlYJBZU0UMnDlEsFhCBlBYne5W+BSBEGJ1pnj9V9iZxcIczKs
- 7dqMowgnb3gg2N4hI0UlhuS1xNrAPWyTSIay76176PZtOZr/c3PLgg+4e0EK9A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bNaBFNeL
-Subject: Re: [Buildroot] [PATCH 1/1] package/lvm2: enable package with musl
+ d=gmail.com; s=20210112; t=1679577341; x=1682169341;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=10VDjdDPrezrEq8vf9OUdRpFhJK1/hCzgNcaseJ7XeA=;
+ b=KcoHQ3645d9erserYvQBgSZEK93N7k50mGJ80C296cXSh97KdqxaTLciHReMXE3irD
+ z4D7/cuv6QFuMpRI3HyQkpESUSgM+cPkTqpSQMS/KJGzZ6y4eUoAidBb5U/TLocduWSD
+ kMX9aUXT8OTIBLkn7TfG7gBSWN7FTN+bTCwvQEAWcZCUoveiqxAYOyR4pdLQAY2cQHgZ
+ eiX/cTojd+IKBq5PDec7jN+vpgwG0BXMqsMk6lXQtDGscBWEcXq9JZHahjcVbVKYIHkh
+ GuulyOzFpIgJ4L8t8rFbSMriFZSSoYbmM2+NXhPW9UQoOyJKe8/DwZ4I82QnZtDYvoxs
+ N07A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=KcoHQ364
+Subject: [Buildroot] [PATCH] configs/mx53loco: bump U-Boot and kernel
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,28 +95,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCAyMyBNYXIgMjAyMyAxMjozNjo1NCArMDAwMApTaW1vbiBSb3dlIDxzaW1vbi5yb3dl
-QG51dGFuaXguY29tPiB3cm90ZToKCj4gPiBJdCdzIGJlZW4gYSB3aGlsZSBhZ28uIFBlcmhhcHMg
-dGltZSB0byBkbyBhbm90aGVyIGF0dGVtcHQgYXQKPiA+IHVwc3RyZWFtaW5nIHRob3NlIHBhdGNo
-ZXM/ICAKPiAKPiBBZnRlciBhIGxpdHRsZSBtb3JlIHJlc2VhcmNoIEnigJl2ZSBkaXNjb3ZlcmVk
-IHRoYXQgc29tZSBvZiB0aGUgZml4ZXMKPiBhcmUgY292ZXJlZCBieSBjaGFuZ2VzZXRzIHByZXNl
-bnQgaW4gdGhlIHVwc3RyZWFtIG1hc3Rlci4gSeKAmWxsCj4gcmVwbGFjZSBteSBwYXRjaGVzIHdp
-dGggdGhvc2UgYW5kIHRyeSB0byB1cHN0cmVhbSB0aGUgcmVtYWluZGVyLgo+IAo+IEnigJl2ZSBj
-b25maXJtZWQgdGhhdCBtdWx0aXBhdGgtdG9vbHMgYnVpbGRzIHdpdGggbXVzbCBzbyBJ4oCZbGwg
-aW5jbHVkZQo+IGEgcGF0Y2ggZm9yIHRoaXMuIEnigJl2ZSBub3QgdGVzdGVkIGlmIHRoZSByZXN1
-bHRpbmcgYmluYXJ5IHdvcmtzCj4gdGhvdWdoLgoKVGhpcyBpcyBhbGwgZ3JlYXQgbmV3cy4gVGhh
-bmtzIGEgbG90IGZvciB0aGUgZXh0cmEgd29yaywgbG9va2luZwpmb3J3YXJkIHRvIHNlZWluZyB0
-aGUgcGF0Y2hlcyEKCkJlc3QgcmVnYXJkcywKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwg
-Y28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2lu
-ZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Bump to U-Boot 2023.01 and kernel 6.1.20 versions.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 18785aa0c8d8..212a032d84aa 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.20"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
