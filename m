@@ -1,74 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EF0CC76195
-	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 01:24:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7BD9C6FD1F
+	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 10:38:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A61F741F8F;
-	Sat, 25 Mar 2023 01:24:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A61F741F8F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54DF460B13;
+	Sat, 25 Mar 2023 10:38:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54DF460B13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nUUra5YNXakX; Sat, 25 Mar 2023 01:24:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l-IohPD3E9Wq; Sat, 25 Mar 2023 10:38:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B262341F1E;
-	Sat, 25 Mar 2023 01:24:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B262341F1E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F08C60AB3;
+	Sat, 25 Mar 2023 10:38:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F08C60AB3
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BD4591BF2F2
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 01:24:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 541D01BF29F
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 10:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9536741F1E
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 01:24:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9536741F1E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2576A41716
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 10:38:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2576A41716
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pWpAm1KE2IOs for <buildroot@lists.busybox.net>;
- Sat, 25 Mar 2023 01:24:11 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D096741DE8
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com
- [209.85.216.44])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D096741DE8
- for <buildroot@buildroot.org>; Sat, 25 Mar 2023 01:24:11 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id
- e15-20020a17090ac20f00b0023d1b009f52so6700739pjt.2
- for <buildroot@buildroot.org>; Fri, 24 Mar 2023 18:24:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679707450;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=UWM9Sq/oD3QAUxfIiSolpyj4XouzzxVUO+woNQTgfVE=;
- b=myL2pkb9OVbD7v4GFL7gCbt5t+Pq4W+TOB8RKqtzeYybAEJj/Q0ISz8k/m/7kukupb
- oLuro4h5WHDZLFb7AdGC9Da/Sj7EXyUgUj8EOM7cE/3ueE/RNU+p6enQMYQhIBeHYlwB
- +pw/X3CW0B44jFaFbLiDkDpBt68nesbI2DmwUpHUdBDtrZlZYuYiUtN1QnvEN5xW4tKo
- KDuZK3KfUnwbOv2jDh3a+VtsCKpE3d0yWUK9I8EyPuhAITv/80+U/Zia2WSrJ1w+w7nX
- wkPlv/eap+i0l3Di4KdPE9G0xxhFuYNeHDOLbCPo41QPknhZsc5hrehFD89BTBSZO3H0
- UyQQ==
-X-Gm-Message-State: AAQBX9dYJOLs4zZJ+IVnugiUEuF3hk5BlA0uZRJ0yz7ZWnPwDHRSaA6o
- 3PB/G9OqAQ6a+PosOyQDE13bu7KzlF4=
-X-Google-Smtp-Source: AKy350Y29tddffYbdsslLlXGeYeNPckG6whHs9GCixpvUVgFer6ZT/bAxEjKrSLOeDRjgI3DLXAV3A==
-X-Received: by 2002:a17:903:24d:b0:19e:ecaf:c4b4 with SMTP id
- j13-20020a170903024d00b0019eecafc4b4mr5463892plh.4.1679707450507; 
- Fri, 24 Mar 2023 18:24:10 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- p8-20020a1709028a8800b001a1d553de0fsm9710240plo.271.2023.03.24.18.24.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Mar 2023 18:24:10 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Fri, 24 Mar 2023 18:24:07 -0700
-Message-Id: <20230325012407.3785883-1-christian@paral.in>
-X-Mailer: git-send-email 2.40.0
+ with ESMTP id wAduhuq9x9tm for <buildroot@lists.busybox.net>;
+ Sat, 25 Mar 2023 10:37:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 554A141701
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 554A141701
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 10:37:57 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A368060002;
+ Sat, 25 Mar 2023 10:37:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pg1HV-00DG3O-M1; Sat, 25 Mar 2023 11:37:53 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Zvi Vered <veredz72@gmail.com>
+References: <CABRndgw1EVFyDNDcRJ10gOPFfw-gH+7Gqx7P537EiSVr5Wq6Kw@mail.gmail.com>
+ <875yavx0ui.fsf@dell.be.48ers.dk>
+ <CABRndgyqeJXm6XqwYQ_QUaQAGB9EENSq4dc3qLaq6Y3RUhxFUg@mail.gmail.com>
+ <87edpiuehn.fsf@dell.be.48ers.dk>
+ <CABRndgwMRVDXzSAoGb5fU9PqM2b6z6we5rH40_NCs7w12LHiDA@mail.gmail.com>
+ <877cv9vr7v.fsf@dell.be.48ers.dk>
+ <CABRndgz8n37jikSwt3uBkGTM-UBObYcny6xEqhnFkDod9dae1Q@mail.gmail.com>
+ <87355wv45c.fsf@dell.be.48ers.dk>
+ <CABRndgycL0_hvf5dizJDby8VeW_z4xSnTZkXUOsVsXwy==yheA@mail.gmail.com>
+ <875yasq7l8.fsf@dell.be.48ers.dk>
+ <CABRndgzV8hKy1pyRCNm+sgi_ePoHgYrS5h_4ca2bZd3E006nPQ@mail.gmail.com>
+ <877cv6psdx.fsf@dell.be.48ers.dk>
+ <CABRndgz5EeQhEkqHG0R=T0AvQnzOLHbabO+MjkYH9UHK53pL8g@mail.gmail.com>
+ <CABRndgwHc_rpSxXqMdMmGb+3yDy5FSAjk=UDqeA0CvRS13=oiQ@mail.gmail.com>
+Date: Sat, 25 Mar 2023 11:37:53 +0100
+In-Reply-To: <CABRndgwHc_rpSxXqMdMmGb+3yDy5FSAjk=UDqeA0CvRS13=oiQ@mail.gmail.com>
+ (Zvi Vered's message of "Sat, 25 Mar 2023 05:02:26 +0300")
+Message-ID: <87355tp14u.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/1] package/containerd: bump to LTS release
- 1.6.19
+Subject: Re: [Buildroot] 2023.02 : pty_allocate: openpty: No such file or
+ directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,52 +77,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Tian Yuanhao <tianyuanhao3@163.com>, Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-containerd 1.7.0 has been released as the final release before containerd 2.x,
-however, 1.6.x remains active as an LTS release series.
+>>>>> "Zvi" == Zvi Vered <veredz72@gmail.com> writes:
 
-Update to the most recent 1.6.x LTS release 1.6.19.
+ > Hi Peter,
+ > Did not try rootfs.cpio.uboot created by buildroot yet.
+ > But I tried to extract rootfs.cpio (created by buildroot)
+ > /dev contains the following:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > -------------------------------------------------------------------------------------------------
+ > drwxr-xr-x  4 zvivered zvivered 4096 Mar 12 22:20 .
+ > drwxr-xr-x 17 zvivered zvivered 4096 Mar 14 20:31 ..
+ > lrwxrwxrwx  1 zvivered zvivered   15 Mar 12 22:20 fd -> ../proc/self/fd
+ > lrwxrwxrwx  1 zvivered zvivered   10 Mar 12 22:20 log -> ../tmp/log
+ > drwxr-xr-x  2 zvivered zvivered 4096 Mar 12 22:20 pts
+ > drwxr-xr-x  2 zvivered zvivered 4096 Mar 12 22:20 shm
+ > lrwxrwxrwx  1 zvivered zvivered   17 Mar 12 22:20 stderr ->
+ > ../proc/self/fd/2
+ > lrwxrwxrwx  1 zvivered zvivered   17 Mar 12 22:20 stdin -> ../proc/self/fd/0
+ > lrwxrwxrwx  1 zvivered zvivered   17 Mar 12 22:20 stdout ->
+ > ../proc/self/fd/1
+ > ------------------------------------------------------------------------------------------------------
+ > Can you please explain how rest of /dev files are created during boot
+ > sequence ?
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 16474089d1..25713d054e 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  e0a893cf67df9dfaecbcde2ba4e896efb3a86ffe48dcfe0d2b26f7cf19b5af3a  containerd-1.6.16.tar.gz
-+sha256  7a90dc72f44e230eb5228ebac23b37e91f7d26d175d563099a8e1c0592047a28  containerd-1.6.19.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 4a0d6ec38b..ddb042b685 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONTAINERD_VERSION = 1.6.16
-+CONTAINERD_VERSION = 1.6.19
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+The default for Buildroot is to use the devtmpfs filesystem in the
+kernel to manage /dev, which will automatically create the needed device
+nodes (see system configuration -> /dev management). This requires that
+the kernel is built with CONFIG_DEVTMPFS=y and CONFIG_DEVTMPFS_MOUNT=y.
+
+
+ > None of the scripts contains mdev.
+ > I'm using the option:
+ > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ > Is this the best option for automatic creation of /dev files ?
+
+mdev is only needed if you need custom actions for device nodes,
+E.G. special symlinks or module loading. Mdev also relies on devtmpfs as
+explained above.
+
+If you have enabled BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV, then you
+should end up with a /etc/init.d/S10mdev init script to start up mdev.
+
 -- 
-2.40.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
