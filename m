@@ -4,84 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 003A1C6FD1C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 17:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D14C7C6FD1C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 18:20:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53BDE814B5;
-	Sat, 25 Mar 2023 17:58:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53BDE814B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DF3B81ED8;
+	Sat, 25 Mar 2023 18:20:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DF3B81ED8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p-AUu5E5H5Qb; Sat, 25 Mar 2023 17:58:43 +0000 (UTC)
+	with ESMTP id JAPgqoF3UwJL; Sat, 25 Mar 2023 18:20:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84440814BA;
-	Sat, 25 Mar 2023 17:58:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84440814BA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C8B181BF484
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 17:58:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D38A81EF2;
+	Sat, 25 Mar 2023 18:20:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D38A81EF2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 884051BF2C0
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 18:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A039D4174D
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 17:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A039D4174D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F11740298
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 18:20:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F11740298
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dn1rvKxhkumg for <buildroot@lists.busybox.net>;
- Sat, 25 Mar 2023 17:58:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EAEF4174C
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2EAEF4174C
- for <buildroot@buildroot.org>; Sat, 25 Mar 2023 17:58:39 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id i5so20319275eda.0
- for <buildroot@buildroot.org>; Sat, 25 Mar 2023 10:58:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679767117;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=XvWzIrDqqMjWD+av38xYPXvBgYzGeEXVRohOhcH/ghc=;
- b=VYCxBVb60m3WOw8Wleq+EzZ5D5VF1xbVvIzPPihs5Q8HpHUBmlKcXPUkIXU8C7yJmk
- WfoafCgOtkTs70PLGw0vX7ctkicrcNjQgkQfrWlb5ZXw+BXxHocm3riVqoIrK3o9H643
- IWLFnbGw0ZDOZDghb23mIGmCO4xFGD5joFAcFOX8AvM5K5zfvy5RTUSF3vPXK/Btlkqj
- VlhbQ5FOA6R39xhH0ruABm8G9zKFy0lU12U1ul76ed/hFAGVepS4R7pzlb6XUCXPr2MP
- NR2yLgZj5/uMEKHL2jVUvl9IOCCguluGASirLeNaAyn6WjtZAE9lXxVBeWUO1+spwQkt
- lVDA==
-X-Gm-Message-State: AAQBX9fZHg79hu06QkmtxTUZUV4ETh1ypJnfswNT+RX8kkEaHLhCrToN
- lti2x2vowr311bndlAfFKG4jvY9UH6OLSQ==
-X-Google-Smtp-Source: AKy350bwBjYpawdvbW4mXYZT7fLNbUSYkPpQxwEkcIEgdevV2bYqfSwgjXVBpymwHzD8Y/TD2Ei56A==
-X-Received: by 2002:a17:906:341a:b0:931:de76:c2e8 with SMTP id
- c26-20020a170906341a00b00931de76c2e8mr7667494ejb.9.1679767117465; 
- Sat, 25 Mar 2023 10:58:37 -0700 (PDT)
-Received: from LinkTed.fritz.box ([2a02:8070:4182:37a0:64cb:8203:42ee:ef04])
- by smtp.gmail.com with ESMTPSA id
- g10-20020a17090670ca00b0093b8c0952e4sm5604778ejk.219.2023.03.25.10.58.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Mar 2023 10:58:37 -0700 (PDT)
-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1qI23OKMNrBf for <buildroot@lists.busybox.net>;
+ Sat, 25 Mar 2023 18:20:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16CE440141
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 16CE440141
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 18:20:04 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([62.216.208.92]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRTN9-1ps0yo1Jw5-00NOvQ; Sat, 25
+ Mar 2023 19:19:59 +0100
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Sat, 25 Mar 2023 18:58:15 +0100
-Message-Id: <20230325175815.24876-1-raphael.pavlidis@gmail.com>
+Date: Sat, 25 Mar 2023 19:19:58 +0100
+Message-Id: <20230325181958.25542-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679767117;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=XvWzIrDqqMjWD+av38xYPXvBgYzGeEXVRohOhcH/ghc=;
- b=NOR9kYCu+GCQ6PgSphA1vYrRHwfRvaCanlGJqx8fcOkXMLUI6JBI/sORptyUWJuVs9
- bLyNtNRVRFXGKNsKZc2N+qviKu68hAJiY3IMjFMI+UX0Hp3Qjkk/BSGmyU5WNNWdyyKd
- PYlvXkdOYOb2rTOVzuAcz5pqKlq4VL5X42V+aXlWqbOhq9uzlwl9MSFqdC9Bb8YgjhOJ
- wpZdplO/qq5MwNfet61HSJ6P+dWZVJsfH8cS3NJy8q+MgbU8SczLB2AYxtbO/YMJkbKi
- 8bn62DTIkKzALMPqzWyrj/a5xVV7yOWN7zTNZunn192/wf0oM8lnY9TOS8SQqVVXcJRE
- kwoA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=NOR9kYCu
-Subject: [Buildroot] [PATCH v1 1/1] package/shadow: only yescrypt build
+X-Provags-ID: V03:K1:mNyvfCp0nc71ky8BdKl+ofqn33MTAa4UW4VjuWd/bF/IxuEMQzS
+ dKmUcudW+Br7ekmU+QJedv325KmEwbzQFSBy6M75HwKfKnTcHv+CzDKriJJobU+Ae26PO00
+ tAqt5yUkv1DpHWZGL8AMHgjCRYqJhiRPbTUnRP3zfXYQBoHOuHDPbC2MWQ/uNNMREoe4KbI
+ oFTa95BYRLPco4ETxPUlg==
+UI-OutboundReport: notjunk:1;M01:P0:DSJBW1mc/E8=;wKPbotDxHHRb/1fSNg2a+jss1eA
+ ivDVeqaU/SxWEJKiIljBALY0TO6tAS530/xdwdpHCMknU0nusdRcnnJwFQdgfLF7khP+Tq3Z+
+ n2EJB8JE26XpZTrlIJmMK5F1DipF1e8RYzqTnZzmJuxttJ2zNXHbx2UoyB2s5o390RBPi02Wl
+ Ga4efGe1wbEcWkNkUNY+wTfSFQN5eVIlQhxxELpDOFPuF4K6Prwfs3fWexcFTgohiUaI/YL4B
+ KZtpwaCTFW25uTBrqutubqtk2HxJ6hVUztmGhkE8ylhyJiXvNrzkRg0z07qkbhwDl/Ms4OTcw
+ lnr6uBvLK4Ep85zsekvKWy4wSlrKSKzehgObL4EqZzfFwnYbJ+QSteeCuRjmVN+OY7cil7mub
+ vBrZn9gg2MY+foikUZIpdtD7FxiLVmQSgsg/wB+Urpp9KTlRIOK0Clx8Ay5LjQK+zUW8wpuKV
+ /zYnUPVaj757U6bHdbpfQeqz/le9HA/jmjvuh5c0OVTnTgr5NMbwUn9rRBlc1+HY+Zs6ryEjb
+ EUQwTNIPIj+ISZeAgf7iUmHrGnu3Ldz9hKMyQz5wD8INNCFGi9A0vTyczqXeDpODo6MYQoh7X
+ 3Gji+UzuiFHJAHgsx8oYU+wXMfAeivl9iLwqjSBokjk95k9CJXgerVwVaO9fEHoZjN1SvpzDj
+ jlmByE5t1ZuyEGelDc4bSq4C2Y26nYP8JPeKgjTAIvT+vS1xyPzS3Ie6xwD+4AObDqd8Nymil
+ IbQ+OSL9EWWznJaqP7tji/51If4fgC5EEYNbMdLobogHiKsqhaJflP/j8pbUxjjMuOqip/gKE
+ hXZ20ydt/IGZ1xaV4tq37eiZDFdUrMh39yTwCzwoIEVwwQHIQ8v2YwDyBCCxt4snEXS6qaj8y
+ LV1XVfxpGbc0liRUpaBfNlOTedsQ7UmDd893e0WX79e322DOxXBqI4I8Aad5rzwuCUBK1xAqN
+ /jVbzHGg909SubmI0CWGvdHYVZ0=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; s=s31663417; 
+ t=1679768399; i=ps.report@gmx.net;
+ bh=ZWO4a230EHxL07xO62YrxskKnU4a4q5kyIdainoVT/Y=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=Ze37NsYYosTDymwzN4SH7QXdmldASK++73ByOiPvK6Bm3P9EKBRtWrUdG3FUou11Y
+ eFr3KJXTWjfWAeKp88qA7sLVPEqpOr3TRSAr2UXMo7x+iWvoox4TegElBQo9Vpg0el
+ c0+2n6MYPxA3ZWDSnsZ+r3bm/F+DNsgJCsvbJJ9tvJ//h79gQ/pGslqW76jT+b2A+l
+ /4r917TAgbK5NBw7KYM3ZBFpKxVWRT8p4vMS0k+QFHFx7R8fi7I2C/vE+aLnuBADDS
+ DQ0zyintFoU16AeQAuMkBQu+iErVjUlgoHqzeTY6EvwAIOBW/8k5YCLDedUpJnd0ov
+ 5yAOhCpV5CWmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=Ze37NsYY
+Subject: [Buildroot] [PATCH v1] package/libcurl: disable NTLM support
+ definitely
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,59 +91,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a patch to fix the build if only yescrypt is enabled.
+- do not only disable NTLM delegation to winbinds ntlm_auth but
+  disable NTLM support overall (and drop enforced libopenssl DES
+  dependency introduced by 'package/libcurl: make sure openssl
+  supports DES' (commit f25c820a4f93ad0ca7eaf5e504667bd4099b878c)
+- change man page hint to https URL
+- rearrange configure options to one option per line
 
-Fixes:
- - http://autobuild.buildroot.net/results/df6a16a55bf02cf2d7377f9636913f0b3bca574f
- - http://autobuild.buildroot.net/results/758d4fd297fbd77ef846d3a3d4c207021f866752
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...-sflg-for-USE_YESCRYPT-in-newusers.c.patch | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/shadow/0001-Define-sflg-for-USE_YESCRYPT-in-newusers.c.patch
+Patch works for libcurl-7.88.1 and libcurl-8.0.1
+---
+ package/libcurl/Config.in  |  1 -
+ package/libcurl/libcurl.mk | 21 ++++++++++++++-------
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/package/shadow/0001-Define-sflg-for-USE_YESCRYPT-in-newusers.c.patch b/package/shadow/0001-Define-sflg-for-USE_YESCRYPT-in-newusers.c.patch
-new file mode 100644
-index 0000000000..6c2a15d898
---- /dev/null
-+++ b/package/shadow/0001-Define-sflg-for-USE_YESCRYPT-in-newusers.c.patch
-@@ -0,0 +1,29 @@
-+From 8f7d5e8adae3aa16c0e3a4cb5db34d6764aa0495 Mon Sep 17 00:00:00 2001
-+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-+Date: Thu, 23 Mar 2023 19:16:12 +0100
-+Subject: [PATCH v1 1/1] Define sflg for USE_YESCRYPT in newusers.c
-+
-+If only yescrypt is used then the boolean sflg is not defined, but it is
-+access. Therefore, it causes a build error.
-+
-+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-+---
-+ src/newusers.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/newusers.c b/src/newusers.c
-+index dd6b4421..9c2a626a 100644
-+--- a/src/newusers.c
-++++ b/src/newusers.c
-+@@ -60,7 +60,7 @@ static bool rflg = false;	/* create a system account */
-+ #ifndef USE_PAM
-+ static /*@null@*//*@observer@*/char *crypt_method = NULL;
-+ #define cflg (NULL != crypt_method)
-+-#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT)
-++#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT) || defined(USE_YESCRYPT)
-+ static bool sflg = false;
-+ #endif
-+ #ifdef USE_SHA_CRYPT
-+-- 
-+2.39.2
-+
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index 218309ed56..adab1ca3e6 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -57,7 +57,6 @@ choice
+ config BR2_PACKAGE_LIBCURL_OPENSSL
+ 	bool "OpenSSL"
+ 	depends on BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 
+ config BR2_PACKAGE_LIBCURL_BEARSSL
+ 	bool "BearSSL"
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 1a1594a45e..1ff0ecc004 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -16,15 +16,22 @@ LIBCURL_CPE_ID_VENDOR = haxx
+ LIBCURL_CPE_ID_PRODUCT = libcurl
+ LIBCURL_INSTALL_STAGING = YES
+ 
+-# We disable NTLM support because it uses fork(), which doesn't work
+-# on non-MMU platforms. Moreover, this authentication method is
+-# probably almost never used. See
+-# http://curl.se/docs/manpage.html#--ntlm.
++# We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
++# support because it uses fork(), which doesn't work on non-MMU platforms.
++# Moreover, this authentication method is probably almost never used (see
++# https://curl.se/docs/manpage.html#--ntlm), so disable NTLM support overall.
++#
+ # Likewise, there is no compiler on the target, so libcurl-option (to
+ # generate C code) isn't very useful
+-LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+-	--with-random=/dev/urandom --disable-curldebug \
+-	--disable-libcurl-option --disable-ldap --disable-ldaps
++LIBCURL_CONF_OPTS = \
++	--disable-manual \
++	--disable-ntlm \
++	--disable-ntlm-wb \
++	--with-random=/dev/urandom \
++	--disable-curldebug \
++	--disable-libcurl-option \
++	--disable-ldap \
++	--disable-ldaps
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBCURL_CONF_OPTS += --enable-threaded-resolver
 -- 
 2.39.2
 
