@@ -4,83 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09DBCC76195
-	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 01:14:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EF0CC76195
+	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 01:24:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B2FD41F69;
-	Sat, 25 Mar 2023 01:14:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B2FD41F69
+	by smtp4.osuosl.org (Postfix) with ESMTP id A61F741F8F;
+	Sat, 25 Mar 2023 01:24:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A61F741F8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x0mzEfgdtlTs; Sat, 25 Mar 2023 01:14:34 +0000 (UTC)
+	with ESMTP id nUUra5YNXakX; Sat, 25 Mar 2023 01:24:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B32541BF0;
-	Sat, 25 Mar 2023 01:14:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B32541BF0
+	by smtp4.osuosl.org (Postfix) with ESMTP id B262341F1E;
+	Sat, 25 Mar 2023 01:24:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B262341F1E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5484E1BF2F2
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 01:14:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BD4591BF2F2
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 01:24:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C26B41BF0
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 01:14:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C26B41BF0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9536741F1E
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 01:24:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9536741F1E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F0HrmQHNhy56 for <buildroot@lists.busybox.net>;
- Sat, 25 Mar 2023 01:14:31 +0000 (UTC)
+ with ESMTP id pWpAm1KE2IOs for <buildroot@lists.busybox.net>;
+ Sat, 25 Mar 2023 01:24:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CDC441BE9
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com
- [IPv6:2607:f8b0:4864:20::e2d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0CDC441BE9
- for <buildroot@buildroot.org>; Sat, 25 Mar 2023 01:14:30 +0000 (UTC)
-Received: by mail-vs1-xe2d.google.com with SMTP id f23so2892281vsv.13
- for <buildroot@buildroot.org>; Fri, 24 Mar 2023 18:14:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D096741DE8
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com
+ [209.85.216.44])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D096741DE8
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 01:24:11 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id
+ e15-20020a17090ac20f00b0023d1b009f52so6700739pjt.2
+ for <buildroot@buildroot.org>; Fri, 24 Mar 2023 18:24:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679706870;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=VWm/mv51RZQC6GmFD7dL759cnMwIRylhJHhQVAMUU2s=;
- b=3uxEf9SsE3dI2Asn4pK1qJalT6MxgdOFKr+dGm5lp3EOM110JCz04NSeO9HEuSCJzR
- Cq8/wBHG6D7EspTg4wze5C55bMJoua0me98AXHXPx0UrAx1pp+E+aT1vBxKBjE/AhdHx
- YKMqJ2PNaZxCwftkaAgHZRF/dKT7uHPZhs8S4Vi0HKlEoEAS8Y0xqf70mrx3s2NLJNja
- mm9kOK+Az3TAP0e5QVw/eX7AenIClrpc0IUiZY6cEyyPWicICB4iKtVrQdbD2coS2d/s
- oaBPI1Ttl9e35uorwT4pQ+OcKvgyoMZCGiDFcp549y4rnrLCadhDP8IKYR14pbyniXqN
- JV5g==
-X-Gm-Message-State: AAQBX9fC+HDuLqX/LhH3FhthKSQYU4fVk7g9Lu3jgmpmo3V0K3iAAzCH
- gtxoWYOIGdwGe21rfb/VsLHfqq0i3ZS01cr/AjI=
-X-Google-Smtp-Source: AKy350bMd0Q0bk8bKxqyuC2M8N3NAFLwmwGeUxouBUG3TA50oACwpvTZuA5jG/4EkUjKAYdqraCXxktBuVf0k/psrU0=
-X-Received: by 2002:a67:e019:0:b0:414:4ef3:839 with SMTP id
- c25-20020a67e019000000b004144ef30839mr2503302vsl.7.1679706869830; Fri, 24 Mar
- 2023 18:14:29 -0700 (PDT)
+ d=1e100.net; s=20210112; t=1679707450;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=UWM9Sq/oD3QAUxfIiSolpyj4XouzzxVUO+woNQTgfVE=;
+ b=myL2pkb9OVbD7v4GFL7gCbt5t+Pq4W+TOB8RKqtzeYybAEJj/Q0ISz8k/m/7kukupb
+ oLuro4h5WHDZLFb7AdGC9Da/Sj7EXyUgUj8EOM7cE/3ueE/RNU+p6enQMYQhIBeHYlwB
+ +pw/X3CW0B44jFaFbLiDkDpBt68nesbI2DmwUpHUdBDtrZlZYuYiUtN1QnvEN5xW4tKo
+ KDuZK3KfUnwbOv2jDh3a+VtsCKpE3d0yWUK9I8EyPuhAITv/80+U/Zia2WSrJ1w+w7nX
+ wkPlv/eap+i0l3Di4KdPE9G0xxhFuYNeHDOLbCPo41QPknhZsc5hrehFD89BTBSZO3H0
+ UyQQ==
+X-Gm-Message-State: AAQBX9dYJOLs4zZJ+IVnugiUEuF3hk5BlA0uZRJ0yz7ZWnPwDHRSaA6o
+ 3PB/G9OqAQ6a+PosOyQDE13bu7KzlF4=
+X-Google-Smtp-Source: AKy350Y29tddffYbdsslLlXGeYeNPckG6whHs9GCixpvUVgFer6ZT/bAxEjKrSLOeDRjgI3DLXAV3A==
+X-Received: by 2002:a17:903:24d:b0:19e:ecaf:c4b4 with SMTP id
+ j13-20020a170903024d00b0019eecafc4b4mr5463892plh.4.1679707450507; 
+ Fri, 24 Mar 2023 18:24:10 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ p8-20020a1709028a8800b001a1d553de0fsm9710240plo.271.2023.03.24.18.24.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 24 Mar 2023 18:24:10 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Fri, 24 Mar 2023 18:24:07 -0700
+Message-Id: <20230325012407.3785883-1-christian@paral.in>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230322231511.551442-1-unixmania@gmail.com>
- <20230324111528.6fed9de7@windsurf>
-In-Reply-To: <20230324111528.6fed9de7@windsurf>
-From: Carlos Santos <unixmania@gmail.com>
-Date: Fri, 24 Mar 2023 22:14:18 -0300
-Message-ID: <CAJ4jsadrHeiTbVE=2VaxFQOg+UKKPRqii3BqbRDkuDO9sUZjbg@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679706870;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=VWm/mv51RZQC6GmFD7dL759cnMwIRylhJHhQVAMUU2s=;
- b=acdcqcoFmI9TlZyr6bCXNS57t7fwtpLsvhrMaZIkVrlZvZ7oAL3f1nMi3Qc+kKHGG6
- a1wtagTRBaYxeVwoz3j6U9ASen20EkptgrXT6BYW08Q0qqzFJ51hnHVEFLvCngtzRP7q
- IyW5m1LefTfaCRaRv+BlSW4XzXPchywPoNGbtGV7OWfx5RwLqJo+bR8wq2noYJyojfJn
- aZ2091NK5OOpxfE5Z8vft3qiJd/2GMhTE69sTJgQoU3OA4dw4ubpw8RzSn4WAN+k8ijV
- Happl0jfGXHwEOABCn3YMStAQ8DTr0OBvhNv1ZrJCNDkofcWO8w8HJhCmENy8lkJbciR
- kM3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=acdcqcoF
-Subject: Re: [Buildroot] [PATCH] package/qemu: allow building only the guest
- agent
+Subject: [Buildroot] [PATCH v1 1/1] package/containerd: bump to LTS release
+ 1.6.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,51 +80,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Tian Yuanhao <tianyuanhao3@163.com>, Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCBNYXIgMjQsIDIwMjMgYXQgNzoxNeKAr0FNIFRob21hcyBQZXRhenpvbmkKPHRob21h
-cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gT24gV2VkLCAyMiBNYXIgMjAyMyAy
-MDoxNToxMSAtMDMwMAo+IHVuaXhtYW5pYUBnbWFpbC5jb20gd3JvdGU6Cj4KPiA+IC0gICAgIHNl
-bGVjdCBCUjJfUEFDS0FHRV9RRU1VX1RPT0xTIGlmICFCUjJfUEFDS0FHRV9RRU1VX1NZU1RFTSAm
-JiAhQlIyX1BBQ0tBR0VfUUVNVV9MSU5VWF9VU0VSCj4KPiBJcyB0aGUgYnVpbGQgd29ya2luZyBP
-SyBpZiBuZWl0aGVyIHRoZSB0b29scywgbm9yIHFlbXUtc3lzdGVtLCBub3IKPiBxZW11LXVzZXIg
-bm9yIHFlbXUtcWEgYXJlIGVuYWJsZWQ/Cj4KPiBUaGFua3MhCj4KPiBUaG9tYXMKPiAtLQo+IFRo
-b21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51
-eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwo+IGh0dHBzOi8vYm9vdGxpbi5j
-b20KClllcy4gSXQganVzdCBkb2VzIG5vdCBpbnN0YWxsIGFueXRoaW5nIHVzZWZ1bDoKCiQgY2F0
-IGJ1aWxkL3FlbXUtNy4yLjAvLmZpbGVzLWxpc3QudHh0CnFlbXUsLi91c3Ivc2hhcmUvcWVtdS9r
-ZXltYXBzL3NsCnFlbXUsLi91c3Ivc2hhcmUvcWVtdS9rZXltYXBzL3N2CnFlbXUsLi91c3IvaW5j
-bHVkZS9xZW11LXBsdWdpbi5oCnFlbXUsLi91c3Ivc2hhcmUvcWVtdS9rZXltYXBzL2FyCnFlbXUs
-Li91c3Ivc2hhcmUvcWVtdS9rZXltYXBzL2JlcG8KcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1h
-cHMvY3oKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvZGEKcWVtdSwuL3Vzci9zaGFyZS9x
-ZW11L2tleW1hcHMvZGUKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvZGUtY2gKcWVtdSwu
-L3Vzci9zaGFyZS9xZW11L2tleW1hcHMvZW4tZ2IKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1h
-cHMvZW4tdXMKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvZXMKcWVtdSwuL3Vzci9zaGFy
-ZS9xZW11L2tleW1hcHMvZXQKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvZmkKcWVtdSwu
-L3Vzci9zaGFyZS9xZW11L2tleW1hcHMvZm8KcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMv
-ZnIKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvZnItYmUKcWVtdSwuL3Vzci9zaGFyZS9x
-ZW11L2tleW1hcHMvZnItY2EKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvZnItY2gKcWVt
-dSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvaHIKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1h
-cHMvaHUKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvaXMKcWVtdSwuL3Vzci9zaGFyZS9x
-ZW11L2tleW1hcHMvaXQKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvamEKcWVtdSwuL3Vz
-ci9zaGFyZS9xZW11L2tleW1hcHMvbHYKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvbHQK
-cWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvbWsKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tl
-eW1hcHMvbmwKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvbm8KcWVtdSwuL3Vzci9zaGFy
-ZS9xZW11L2tleW1hcHMvcGwKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvcHQKcWVtdSwu
-L3Vzci9zaGFyZS9xZW11L2tleW1hcHMvcHQtYnIKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1h
-cHMvcnUKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvdGgKcWVtdSwuL3Vzci9zaGFyZS9x
-ZW11L3RyYWNlLWV2ZW50cy1hbGwKcWVtdSwuL3Vzci9zaGFyZS9xZW11L2tleW1hcHMvdHIKClRo
-ZSBrZXltYXBzIHNob3VsZCBub3QgYmUgaW5zdGFsbGVkIGlmIG5vIHFlbXUtc3lzdGVtIGlzIGJ1
-aWx0LiBJCmFscmVhZHkgc2VudCBhIHBhdGNoIHVwc3RyZWFtIGF0dGVtcHRpbmcgdG8gZml4IHRo
-ZSBwcm9ibGVtIGJ1dCB0aGUKcHJvYmxlbSBpcyBzdGlsbCB0aGVyZToKCmh0dHBzOi8vbGlzdHMu
-Z251Lm9yZy9hcmNoaXZlL2h0bWwvcWVtdS1kZXZlbC8yMDIzLTAxL21zZzAwMDg0Lmh0bWwKCkkg
-YWxzbyBoYXZlIGEgcGF0Y2ggdG8gaW5zdGFsbCB0cmFjZS1ldmVudHMtYWxsIG9ubHkgaWYgbmVj
-ZXNzYXJ5LgpVbmZvcnR1bmF0ZWx5LCBtYWtpbmcgdGhlc2UgY2hhbmdlcyBoYXBwZW4gaW4gcWVt
-dSB0YWtlcyBhIGxvbmcgdGltZS4KCi0tIApDYXJsb3MgU2FudG9zIDx1bml4bWFuaWFAZ21haWwu
-Y29tPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+containerd 1.7.0 has been released as the final release before containerd 2.x,
+however, 1.6.x remains active as an LTS release series.
+
+Update to the most recent 1.6.x LTS release 1.6.19.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 16474089d1..25713d054e 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  e0a893cf67df9dfaecbcde2ba4e896efb3a86ffe48dcfe0d2b26f7cf19b5af3a  containerd-1.6.16.tar.gz
++sha256  7a90dc72f44e230eb5228ebac23b37e91f7d26d175d563099a8e1c0592047a28  containerd-1.6.19.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 4a0d6ec38b..ddb042b685 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONTAINERD_VERSION = 1.6.16
++CONTAINERD_VERSION = 1.6.19
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
+-- 
+2.40.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
