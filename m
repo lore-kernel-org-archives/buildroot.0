@@ -4,93 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50E0BC6FD20
-	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 20:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0897C6FD1C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 20:37:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E30408202B;
-	Sat, 25 Mar 2023 20:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E30408202B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 832A08202C;
+	Sat, 25 Mar 2023 20:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 832A08202C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TIRRvBkRJz6w; Sat, 25 Mar 2023 20:27:44 +0000 (UTC)
+	with ESMTP id 7vVK-BpQRhOy; Sat, 25 Mar 2023 20:37:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36E3C82026;
-	Sat, 25 Mar 2023 20:27:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36E3C82026
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 76E4D1BF32D
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 20:27:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D59518202A;
+	Sat, 25 Mar 2023 20:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D59518202A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BEA31BF32D
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 20:37:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F7F060AB1
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 20:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F7F060AB1
+ by smtp1.osuosl.org (Postfix) with ESMTP id E96708202A
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 20:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E96708202A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nh6pQ6NmNy-Q for <buildroot@lists.busybox.net>;
- Sat, 25 Mar 2023 20:27:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5e3NBcr5GN2O for <buildroot@lists.busybox.net>;
+ Sat, 25 Mar 2023 20:37:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8924560A99
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8924560A99
- for <buildroot@buildroot.org>; Sat, 25 Mar 2023 20:27:40 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id b20so21044746edd.1
- for <buildroot@buildroot.org>; Sat, 25 Mar 2023 13:27:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0E5E81FE0
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E0E5E81FE0
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 20:37:18 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id b20so21092491edd.1
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 13:37:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679776058;
+ d=1e100.net; s=20210112; t=1679776637;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=pFglTf8VJMcq6glrnugWh71z2fsgdTf75dOxoVfVhgQ=;
- b=lf2B1dlxnUUwza4krJxHMl5GK4AJxOwSvLLxma/FyIor+GcAtlv5MYCpNUPjj3NOhW
- t8YqHrl4Pn9xmzFzs8J37Gq4CzCQZCcv/uBsJZlM78NW5NTk3HV0c0AtYjFMsSurUf3i
- mqG/Kp1vYGaNhlzMiHX+GTt2UcUGFseXFOYfTaLJySl1KqRMUE7Kw5LAmI1o7/hRTqGF
- nX31l4cVWG/nDND9HDu/FW0fIFi2996bO6UT1w8YpbNdAaY8uskTZOtAYOyE+YOWYR7R
- 3KEB5LwI+8YFJ1da1IOMqT3aAz5diBjAEh5r2YL2bLWWSXPiXECFfA7sfccxyGXXxl8C
- 8vhQ==
-X-Gm-Message-State: AAQBX9e+N6cbnLgs/rzq+vrzsyGeOIjtd/QMbHVfDXYQ0HbJtOXmx6Or
- tXvif/uoshy4F9Yx7MYtsT9JFQ==
-X-Google-Smtp-Source: AKy350ZaOEpGsD76sVqipOA701X0erG0ZxJziWr9nMGh2ZPvUJOVcUjK1kPt7t1Altst03jTKEEj0A==
-X-Received: by 2002:aa7:d053:0:b0:4fa:e129:31cf with SMTP id
- n19-20020aa7d053000000b004fae12931cfmr7337624edo.23.1679776058827; 
- Sat, 25 Mar 2023 13:27:38 -0700 (PDT)
+ bh=vMk1jjZTt9DmgtRbdLZYQ3J47MhbPi4Cd7K8tYPzU6A=;
+ b=sDfjnkBs4mY08IfgYyp2zQaFr7bIfMUdMWp9NkB/CObxXfBjNep/W055+CKVuWmFUk
+ UandKheLWrjkDSPaujTjQ6bO208gs6AnoNuXefYQRtfUwLTpe3Z1YP2ldbGz71MVhcbO
+ s18lO3/5YufIo6q1WAm2VdH/dJzOe6pOZlywtSWq1Miop4mP0spqofZpsH6UBfKqS42L
+ TybX/N2/W3rYBsdwgDh01CCbtmzO6FASc/UTKyz2aIeP8Lhd4UoqiCYZYroYqXCocuEB
+ helvcaitbFgPddctRHXpr+BhaZ2RzuFL7QPOYD1Xl+NcVXgJMpfMoPBuezlgCB9ANu2T
+ XdVA==
+X-Gm-Message-State: AAQBX9c0sTP++Xsx6gDw3UozS6yuJ/+NA1FyrWyF/P1ujPSz12Xmi9ug
+ BvSOURTw4y2zVKlrP549+qEcAg==
+X-Google-Smtp-Source: AKy350bbuXMZVkD+AzTvaVitogCi/AJKYPPSfwSiabdo/iyBO9nLJwd+PUgHIIpF6EDoMFHHjDUTgQ==
+X-Received: by 2002:a17:907:6ea8:b0:930:a3a1:bede with SMTP id
+ sh40-20020a1709076ea800b00930a3a1bedemr9395469ejc.50.1679776637047; 
+ Sat, 25 Mar 2023 13:37:17 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:e7c3:8953:3ab9:2c18?
  (ptr-9fplejqcmbwz6qb22hk.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:e7c3:8953:3ab9:2c18])
  by smtp.gmail.com with ESMTPSA id
- u6-20020a50d506000000b004fd2aab4953sm12738946edi.45.2023.03.25.13.27.37
+ g4-20020a170906520400b0093a35f65a30sm6987023ejm.41.2023.03.25.13.37.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 25 Mar 2023 13:27:38 -0700 (PDT)
-Message-ID: <0bdc0734-157f-5465-47f4-d771385c6aa5@mind.be>
-Date: Sat, 25 Mar 2023 21:27:36 +0100
+ Sat, 25 Mar 2023 13:37:16 -0700 (PDT)
+Message-ID: <c9c5ba89-9be1-1fea-6ff1-2ecfc8234470@mind.be>
+Date: Sat, 25 Mar 2023 21:37:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
 Content-Language: en-GB
 To: Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
 References: <20230221172205.2450111-1-vfazio@xes-inc.com>
- <20230221172205.2450111-3-vfazio@xes-inc.com>
+ <20230221172205.2450111-9-vfazio@xes-inc.com>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230221172205.2450111-3-vfazio@xes-inc.com>
+In-Reply-To: <20230221172205.2450111-9-vfazio@xes-inc.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1679776058;
+ d=mind.be; s=google; t=1679776637;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=pFglTf8VJMcq6glrnugWh71z2fsgdTf75dOxoVfVhgQ=;
- b=SI4+63EPIa+LPVNMeiHtCzH8SZy/2DtUYdjjLxn8nUHRzWWr3IceRrfkx1AT+sjpcp
- sG6L0mkESbldXtV+JNNblq8FbZxt3hLX6JXXFJ8t3UNFH8V9HP1WaA+aevPlIbl7ty+o
- 2yceApInvrq5JZAeF11eicdOD/3iAjEEpzXGjv1UZY1/iJjgfwcE8OH3SGY8CjApfEf4
- 6O/MfZkFz20xMTjQ21pfNg6cPIn1Dx9TN5n1qpHisE/ZHpnsBJATKPb+zaPVXeVpJYJ0
- DDghqRchvUUjLO2WcemRcDnj/8XHgFnwdszpLJ3imF9X1mwPF+dvNmBak7hF83NN4CAY
- jkuw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=vMk1jjZTt9DmgtRbdLZYQ3J47MhbPi4Cd7K8tYPzU6A=;
+ b=JN35gjwhPtjHhYuUjoy4byQZPlLC9KEJr5eITkLRktEgM4NxFK4EFuKRGjVHX9Zfen
+ cH9B7xeU28WM/i79OA+N/+qxhyaH9sLcoAdfydtUBPh5WasZralKBtuDVmUwN9xbp+oV
+ KitB4wC+uH1Kw1MvpjDN69h9UsEY9Nr+ix5svejLZlsK9aQQ/dwHD12Pak0CeDVxZQni
+ NAFfvbzGK+kOR4ZH49Ci7jD8mkhRecAz8yH7oz+UaVX29NtyaTHH2lCNFbp+VxVRJugV
+ 2nIRzD1UiNNYE+7eNWSdmwW3uVydl0f+Phkk2daOpV8CrxanA7aa+L176SHAubNWmpze
+ 5Vow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SI4+63EP
-Subject: Re: [Buildroot] [PATCH 03/15] package/pkg-autotools: set AUTOPOINT
- via AUTOCONF_ENV
+ header.a=rsa-sha256 header.s=google header.b=JN35gjwh
+Subject: Re: [Buildroot] [PATCH 09/15] package/libuio: migrate to new
+ autopoint flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -117,46 +117,74 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 On 21/02/2023 18:21, Vincent Fazio wrote:
 > From: Vincent Fazio <vfazio@gmail.com>
 > 
-> Previously, AUTOPOINT was hardcoded to /bin/true in autoconf.mk.
-> 
-> Moving the definition of this variable into AUTOCONF_ENV as part of the
-> autotools infrastructure will allow us to conditionally set the variable
-> based on package flags to support migrating away from FOO_GETTEXTIZE.
+> Drop patch that is no longer necessary after moving to new package flag.
+> Add patch to fix builds due to missing required files.
 > 
 > Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 > ---
->   package/autoconf/autoconf.mk | 2 +-
->   package/pkg-autotools.mk     | 1 +
->   2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-> index 7e0850422b..3cac20cc34 100644
-> --- a/package/autoconf/autoconf.mk
-> +++ b/package/autoconf/autoconf.mk
-> @@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
->   # variables used by other packages
->   AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
->   AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true GTKDOCIZE=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
-> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" GTKDOCIZE=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
+>   ...0001-configure-remove-po-Makefile.in.patch | 26 ----------------
+>   ...c-set-automake-strictness-to-foreign.patch | 31 +++++++++++++++++++
+>   package/libuio/libuio.mk                      |  2 +-
+>   3 files changed, 32 insertions(+), 27 deletions(-)
+>   delete mode 100644 package/libuio/0001-configure-remove-po-Makefile.in.patch
+>   create mode 100644 package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch
+[snip]
+> diff --git a/package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch b/package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch
+> new file mode 100644
+> index 0000000000..1ce91f01f3
+> --- /dev/null
+> +++ b/package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch
+> @@ -0,0 +1,31 @@
+> +From 546e07b2405455c03b7eb0d392c331e189913bc4 Mon Sep 17 00:00:00 2001
+> +From: Vincent Fazio <vfazio@xes-inc.com>
+> +Date: Tue, 31 Jan 2023 19:06:29 -0600
+> +Subject: [PATCH] configure.ac: set automake strictness to foreign
+> +
+> +libuio does not conform to the GNU's strict layout requirements. [1]
+> +
+> +Set the strictness to foreign to account for this.
+> +
+> +[1] https://www.gnu.org/software/automake/manual/html_node/Strictness.html
+> +
+> +Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+> +---
+> + configure.ac | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 101abd3..ef46171 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -1,6 +1,6 @@
+> + dnl Every other copy of the package version number gets its value from here
+> + AC_INIT(libuio, 0.2.8, https://github.com/linutronix/libuio/issues)
+> +-AM_INIT_AUTOMAKE
+> ++AM_INIT_AUTOMAKE([foreign])
 
-  I took the opportunity to also split this ridiculously long line.
+  This looks absolutely applicable upstream, so please create a PR.
 
   Regards,
   Arnout
 
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index 55d95d204e..418cd10945 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -241,6 +241,7 @@ ifeq ($$($(2)_GETTEXTIZE),YES)
->   $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
->   $(2)_DEPENDENCIES += host-gettext
->   endif
-> +$(2)_AUTORECONF_ENV += AUTOPOINT=/bin/true
->   $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
->   # default values are not evaluated yet, so don't rely on this defaulting to YES
->   ifneq ($$($(2)_LIBTOOL_PATCH),NO)
+> +
+> + AM_CONFIG_HEADER(config.h)
+> +
+> +--
+> +2.25.1
+> +
+> diff --git a/package/libuio/libuio.mk b/package/libuio/libuio.mk
+> index a0285277ab..d5019af594 100644
+> --- a/package/libuio/libuio.mk
+> +++ b/package/libuio/libuio.mk
+> @@ -14,7 +14,7 @@ LIBUIO_LIBS = $(TARGET_NLS_LIBS)
+>   LIBUIO_INSTALL_STAGING = YES
+>   
+>   # Fetched from github, no pre-generated configure script provided
+> -LIBUIO_GETTEXTIZE = YES
+> +LIBUIO_AUTOPOINT = YES
+>   LIBUIO_AUTORECONF = YES
+>   
+>   # Avoid build issue when makeinfo is missing
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
