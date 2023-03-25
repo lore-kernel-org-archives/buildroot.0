@@ -4,82 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D14C7C6FD1C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 18:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33A73C6FD1C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 20:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DF3B81ED8;
-	Sat, 25 Mar 2023 18:20:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DF3B81ED8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99CB880BB3;
+	Sat, 25 Mar 2023 20:27:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99CB880BB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JAPgqoF3UwJL; Sat, 25 Mar 2023 18:20:09 +0000 (UTC)
+	with ESMTP id 5S99UbSZrK8b; Sat, 25 Mar 2023 20:27:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D38A81EF2;
-	Sat, 25 Mar 2023 18:20:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D38A81EF2
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2C378202B;
+	Sat, 25 Mar 2023 20:27:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2C378202B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 884051BF2C0
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 18:20:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 058961BF32D
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 20:27:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F11740298
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 18:20:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F11740298
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2F4B40447
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 20:27:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2F4B40447
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1qI23OKMNrBf for <buildroot@lists.busybox.net>;
- Sat, 25 Mar 2023 18:20:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16CE440141
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 16CE440141
- for <buildroot@buildroot.org>; Sat, 25 Mar 2023 18:20:04 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.208.92]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRTN9-1ps0yo1Jw5-00NOvQ; Sat, 25
- Mar 2023 19:19:59 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Sat, 25 Mar 2023 19:19:58 +0100
-Message-Id: <20230325181958.25542-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id axf1qCZVUJwp for <buildroot@lists.busybox.net>;
+ Sat, 25 Mar 2023 20:27:10 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77D1D40141
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 77D1D40141
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 20:27:09 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id h8so20924292ede.8
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 13:27:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1679776027;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=UZwVINN0y+J0R5Tow02TWTxuDm9cuTR8jLzjZ5Agv8M=;
+ b=tNs3PUGygPRuUxeaxVoG5Sm5YjxKtcURMMTQXnlN/poU8ULoB0d/eaTfhNf18rnG3M
+ C5eomUtDoiLYA/jckrvqo5Ma6kwVqS9MfIsCD5rV8M/whwxHhDC9dUcMO5l3IM+1TeXf
+ WyungvYIFch/Dx2RePc7qrElq3TqteuB8468Q+Z08xC1R5pNnUqZ+j8gmJfNu1tcrmrA
+ xx+opK+ZyeLjJTOQBXS0+oOiIL+h+s0598SrFQ38VRCZaVQ+OZjw3nTdP8LpHu2K4Auv
+ Wy1kHJhMNRHYXWZydW3K1uzuuZ/8iYcqaY0+kuCsqOMugfWIfTFpjK3HZZg8KVbVfEai
+ oCkQ==
+X-Gm-Message-State: AAQBX9fGpsZ9Ho0dWm6/9y1epqr8AWnzEPGSgjJvgOy6/yrxgF8A5zzM
+ WmmDaq5BZX8zmKfLVIhFLaxxEg==
+X-Google-Smtp-Source: AKy350atUnVYtiYCt5qsHYvlnGbYqI74k/61RxS/IXHoD6TZPdmNXJlNju0uW2luWIfBe1YmVsVDbw==
+X-Received: by 2002:a17:907:2099:b0:8b0:ad0b:7ab8 with SMTP id
+ pv25-20020a170907209900b008b0ad0b7ab8mr7531397ejb.14.1679776027457; 
+ Sat, 25 Mar 2023 13:27:07 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:e7c3:8953:3ab9:2c18?
+ (ptr-9fplejqcmbwz6qb22hk.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:e7c3:8953:3ab9:2c18])
+ by smtp.gmail.com with ESMTPSA id
+ l16-20020a1709061c5000b00939ad35d521sm7427531ejg.77.2023.03.25.13.27.06
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 25 Mar 2023 13:27:06 -0700 (PDT)
+Message-ID: <77d9b152-8734-89fd-9548-aec406f12cc4@mind.be>
+Date: Sat, 25 Mar 2023 21:27:04 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:mNyvfCp0nc71ky8BdKl+ofqn33MTAa4UW4VjuWd/bF/IxuEMQzS
- dKmUcudW+Br7ekmU+QJedv325KmEwbzQFSBy6M75HwKfKnTcHv+CzDKriJJobU+Ae26PO00
- tAqt5yUkv1DpHWZGL8AMHgjCRYqJhiRPbTUnRP3zfXYQBoHOuHDPbC2MWQ/uNNMREoe4KbI
- oFTa95BYRLPco4ETxPUlg==
-UI-OutboundReport: notjunk:1;M01:P0:DSJBW1mc/E8=;wKPbotDxHHRb/1fSNg2a+jss1eA
- ivDVeqaU/SxWEJKiIljBALY0TO6tAS530/xdwdpHCMknU0nusdRcnnJwFQdgfLF7khP+Tq3Z+
- n2EJB8JE26XpZTrlIJmMK5F1DipF1e8RYzqTnZzmJuxttJ2zNXHbx2UoyB2s5o390RBPi02Wl
- Ga4efGe1wbEcWkNkUNY+wTfSFQN5eVIlQhxxELpDOFPuF4K6Prwfs3fWexcFTgohiUaI/YL4B
- KZtpwaCTFW25uTBrqutubqtk2HxJ6hVUztmGhkE8ylhyJiXvNrzkRg0z07qkbhwDl/Ms4OTcw
- lnr6uBvLK4Ep85zsekvKWy4wSlrKSKzehgObL4EqZzfFwnYbJ+QSteeCuRjmVN+OY7cil7mub
- vBrZn9gg2MY+foikUZIpdtD7FxiLVmQSgsg/wB+Urpp9KTlRIOK0Clx8Ay5LjQK+zUW8wpuKV
- /zYnUPVaj757U6bHdbpfQeqz/le9HA/jmjvuh5c0OVTnTgr5NMbwUn9rRBlc1+HY+Zs6ryEjb
- EUQwTNIPIj+ISZeAgf7iUmHrGnu3Ldz9hKMyQz5wD8INNCFGi9A0vTyczqXeDpODo6MYQoh7X
- 3Gji+UzuiFHJAHgsx8oYU+wXMfAeivl9iLwqjSBokjk95k9CJXgerVwVaO9fEHoZjN1SvpzDj
- jlmByE5t1ZuyEGelDc4bSq4C2Y26nYP8JPeKgjTAIvT+vS1xyPzS3Ie6xwD+4AObDqd8Nymil
- IbQ+OSL9EWWznJaqP7tji/51If4fgC5EEYNbMdLobogHiKsqhaJflP/j8pbUxjjMuOqip/gKE
- hXZ20ydt/IGZ1xaV4tq37eiZDFdUrMh39yTwCzwoIEVwwQHIQ8v2YwDyBCCxt4snEXS6qaj8y
- LV1XVfxpGbc0liRUpaBfNlOTedsQ7UmDd893e0WX79e322DOxXBqI4I8Aad5rzwuCUBK1xAqN
- /jVbzHGg909SubmI0CWGvdHYVZ0=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1679768399; i=ps.report@gmx.net;
- bh=ZWO4a230EHxL07xO62YrxskKnU4a4q5kyIdainoVT/Y=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=Ze37NsYYosTDymwzN4SH7QXdmldASK++73ByOiPvK6Bm3P9EKBRtWrUdG3FUou11Y
- eFr3KJXTWjfWAeKp88qA7sLVPEqpOr3TRSAr2UXMo7x+iWvoox4TegElBQo9Vpg0el
- c0+2n6MYPxA3ZWDSnsZ+r3bm/F+DNsgJCsvbJJ9tvJ//h79gQ/pGslqW76jT+b2A+l
- /4r917TAgbK5NBw7KYM3ZBFpKxVWRT8p4vMS0k+QFHFx7R8fi7I2C/vE+aLnuBADDS
- DQ0zyintFoU16AeQAuMkBQu+iErVjUlgoHqzeTY6EvwAIOBW/8k5YCLDedUpJnd0ov
- 5yAOhCpV5CWmA==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-GB
+To: Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
+References: <20230221172205.2450111-1-vfazio@xes-inc.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20230221172205.2450111-1-vfazio@xes-inc.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1679776027;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=UZwVINN0y+J0R5Tow02TWTxuDm9cuTR8jLzjZ5Agv8M=;
+ b=JCAgAqgZtsmFqhu60z1f4dLjZgovl+LTZFdoAQycmvwtKSKV2dYp0KZDdrfwgO/bHX
+ zSfLY3rB2kL6mmHpYxtVXW1VtwR6iT4q1EVbwujHDLP85oUZcwMW2Vk6GigJhXPTKayr
+ aJSsoUz7sRM+Cz2/4wVOJIxdpNprEa+v2ygOMX2ajH22zOCOpVKtRjVDlu0NAsRALAD7
+ JqFDlhsxUjxvLpcCtSZlGkL1GbNOHU1i8XIUVgVRtCp5IOIjCdle1bUbVFUwBwd+9w5q
+ Q8muUad+Va5qqqWB9pe2rpDelZLCcrjFqzUg9lAms5K/5SL6Ar/5xsnXLGxMid50LXgR
+ 25yQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=Ze37NsYY
-Subject: [Buildroot] [PATCH v1] package/libcurl: disable NTLM support
- definitely
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=JCAgAqgZ
+Subject: Re: [Buildroot] [PATCH 01/15] package/pkg-autotools: drop
+ FOO_GETTEXTIZE_OPTS support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,75 +101,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Vincent Fazio <vfazio@gmail.com>, Joris Lijssens <joris.lijssens@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- do not only disable NTLM delegation to winbinds ntlm_auth but
-  disable NTLM support overall (and drop enforced libopenssl DES
-  dependency introduced by 'package/libcurl: make sure openssl
-  supports DES' (commit f25c820a4f93ad0ca7eaf5e504667bd4099b878c)
-- change man page hint to https URL
-- rearrange configure options to one option per line
+  Hi Vincent
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Patch works for libcurl-7.88.1 and libcurl-8.0.1
----
- package/libcurl/Config.in  |  1 -
- package/libcurl/libcurl.mk | 21 ++++++++++++++-------
- 2 files changed, 14 insertions(+), 8 deletions(-)
+On 21/02/2023 18:21, Vincent Fazio wrote:
+> From: Vincent Fazio <vfazio@gmail.com>
+> 
+> No package in the current tree is currently utilizing this option.
+> 
+> The long term solution is to use autopoint over gettextize in which case
+> these options aren't relevant anyway.
+> 
+> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 218309ed56..adab1ca3e6 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -57,7 +57,6 @@ choice
- config BR2_PACKAGE_LIBCURL_OPENSSL
- 	bool "OpenSSL"
- 	depends on BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 
- config BR2_PACKAGE_LIBCURL_BEARSSL
- 	bool "BearSSL"
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 1a1594a45e..1ff0ecc004 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -16,15 +16,22 @@ LIBCURL_CPE_ID_VENDOR = haxx
- LIBCURL_CPE_ID_PRODUCT = libcurl
- LIBCURL_INSTALL_STAGING = YES
- 
--# We disable NTLM support because it uses fork(), which doesn't work
--# on non-MMU platforms. Moreover, this authentication method is
--# probably almost never used. See
--# http://curl.se/docs/manpage.html#--ntlm.
-+# We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
-+# support because it uses fork(), which doesn't work on non-MMU platforms.
-+# Moreover, this authentication method is probably almost never used (see
-+# https://curl.se/docs/manpage.html#--ntlm), so disable NTLM support overall.
-+#
- # Likewise, there is no compiler on the target, so libcurl-option (to
- # generate C code) isn't very useful
--LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
--	--with-random=/dev/urandom --disable-curldebug \
--	--disable-libcurl-option --disable-ldap --disable-ldaps
-+LIBCURL_CONF_OPTS = \
-+	--disable-manual \
-+	--disable-ntlm \
-+	--disable-ntlm-wb \
-+	--with-random=/dev/urandom \
-+	--disable-curldebug \
-+	--disable-libcurl-option \
-+	--disable-ldap \
-+	--disable-ldaps
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBCURL_CONF_OPTS += --enable-threaded-resolver
--- 
-2.39.2
+  Series applied to master (well, I'm still busy with it so it may get 
+interrupted...). I'll make some comments on individual patches.
 
+  I must say, for a series that touches infrastructure and consist of 15 
+patches, I think it's incredible that v1 gets applied directly without need for 
+a v2. Kudos!
+
+  Regards,
+  Arnout
+
+> ---
+>   package/pkg-autotools.mk | 6 +-----
+>   package/pkg-generic.mk   | 9 ++++++++-
+>   2 files changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index 717ff81593..55d95d204e 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -92,7 +92,7 @@ endef
+>   #
+>   define GETTEXTIZE_HOOK
+>   	@$(call MESSAGE,"Gettextizing")
+> -	$(Q)cd $($(PKG)_SRCDIR) && $(GETTEXTIZE) $($(PKG)_GETTEXTIZE_OPTS)
+> +	$(Q)cd $($(PKG)_SRCDIR) && $(GETTEXTIZE)
+>   endef
+>   
+>   #
+> @@ -152,10 +152,6 @@ ifndef $(2)_GETTEXTIZE
+>    endif
+>   endif
+>   
+> -ifeq ($(4),host)
+> - $(2)_GETTEXTIZE_OPTS ?= $$($(3)_GETTEXTIZE_OPTS)
+> -endif
+> -
+>   ifeq ($(4),host)
+>    $(2)_AUTORECONF_OPTS ?= $$($(3)_AUTORECONF_OPTS)
+>   endif
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 82187d7db9..a6ef5efb5f 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -1206,9 +1206,16 @@ $(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_HOST_
+>   $(eval $(call check-deprecated-variable,$(2)_AUTORECONF_OPT,$(2)_AUTORECONF_OPTS))
+>   $(eval $(call check-deprecated-variable,$(2)_CONF_OPT,$(2)_CONF_OPTS))
+>   $(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
+> -$(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
+>   $(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
+>   
+> +# Check for deprecated variables that have no replacement
+> +ifneq ($$($(2)_GETTEXTIZE_OPT),)
+> +$$(error "$(2)_GETTEXTIZE_OPT is no longer supported. Please fix your .mk file.")
+> +endif
+> +ifneq ($$($(2)_GETTEXTIZE_OPTS),)
+> +$$(error "$(2)_GETTEXTIZE_OPTS is no longer supported. Please fix your .mk file.")
+> +endif
+> +
+>   PACKAGES += $(1)
+>   
+>   ifneq ($$($(2)_PERMISSIONS),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
