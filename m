@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84F75C6FD1C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 21:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8F1BC6FD1F
+	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 21:11:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 346B782075;
-	Sat, 25 Mar 2023 21:10:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 346B782075
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8256A82089;
+	Sat, 25 Mar 2023 21:11:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8256A82089
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xZqSjud4kKKM; Sat, 25 Mar 2023 21:10:48 +0000 (UTC)
+	with ESMTP id uMGkBfTJvvaK; Sat, 25 Mar 2023 21:11:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8621481FFB;
-	Sat, 25 Mar 2023 21:10:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8621481FFB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DD1E1BF39A
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6EF482079;
+	Sat, 25 Mar 2023 21:10:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6EF482079
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CABA91BF39A
  for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 21:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97C9D81E5A
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 21:07:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97C9D81E5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72BF9404AF
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 21:07:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72BF9404AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qb2rm3yx9ndx for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fi6X6c8Iz1DP for <buildroot@lists.busybox.net>;
  Sat, 25 Mar 2023 21:07:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E1EF81DED
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4A2B4047B
  for <buildroot@buildroot.org>; Sat, 25 Mar 2023 21:07:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E1EF81DED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4A2B4047B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5CCD882AA8; Sat, 25 Mar 2023 21:07:39 +0000 (UTC)
+ id B2A2B82AB5; Sat, 25 Mar 2023 21:07:39 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 25 Mar 2023 21:47:16 +0100
+Date: Sat, 25 Mar 2023 21:56:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 323abee789c7f63db3df14a235b3106e7adab4ba
-X-Git-Newrev: b75e7dc15a682f73832384e7116a6c36dca0acee
+X-Git-Oldrev: e9e1cd239f179e15f7f4214e274282d4e2bb5b7d
+X-Git-Newrev: 2bc95879f7d61d5e02bb5e90e3ba0eeade8fa166
 X-Patchwork-Hint: ignore
-Message-Id: <20230325210739.5CCD882AA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dc3dd: migrate to new autopoint
- flag
+Message-Id: <20230325210739.B2A2B82AB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] manual: drop LIBFOO_GETTEXTIZE,
+ add LIBFOO_AUTOPOINT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b75e7dc15a682f73832384e7116a6c36dca0acee
+commit: https://git.buildroot.net/buildroot/commit/?id=2bc95879f7d61d5e02bb5e90e3ba0eeade8fa166
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-[Arnout: also update comment]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/dc3dd/dc3dd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-autotools.txt | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/dc3dd/dc3dd.mk b/package/dc3dd/dc3dd.mk
-index cc89bb63d0..f47f34a81a 100644
---- a/package/dc3dd/dc3dd.mk
-+++ b/package/dc3dd/dc3dd.mk
-@@ -11,8 +11,8 @@ DC3DD_SITE = https://downloads.sourceforge.net/project/dc3dd/dc3dd/$(DC3DD_VERSI
- DC3DD_LICENSE = GPL-3.0+
- DC3DD_LICENSE_FILES = COPYING
- # We are patching Makefile.am, so we need to autoreconf. We also need to
--# enable gettextize as dc3dd comes with an old gettext infra.
-+# enable autopoint as dc3dd comes with an old gettext infra.
- DC3DD_AUTORECONF = YES
--DC3DD_GETTEXTIZE = YES
-+DC3DD_AUTOPOINT = YES
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+index 8655a79693..ad96957f3d 100644
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -130,10 +130,9 @@ cases, typical packages will therefore only use a few of them.
+   passed to the 'autoreconf' program if
+   +LIBFOO_AUTORECONF=YES+. By default, empty.
  
- $(eval $(autotools-package))
+-* +LIBFOO_GETTEXTIZE+, tells whether the package should be
+-  gettextized or not (i.e. if the package uses a different gettext
+-  version than Buildroot provides, and it is needed to run
+-  'gettextize'.) Only valid when +LIBFOO_AUTORECONF=YES+. Valid
++* +LIBFOO_AUTOPOINT+, tells whether the package should be
++  autopointed or not (i.e. if the package needs I18N infrastructure
++  copied in.) Only valid when +LIBFOO_AUTORECONF=YES+. Valid
+   values are +YES+ and +NO+. The default is +NO+.
+ 
+ * +LIBFOO_LIBTOOL_PATCH+ tells whether the Buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
