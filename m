@@ -1,71 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7BD9C6FD1F
-	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 10:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BFF7C6FD1F
+	for <buildroot@archiver.kernel.org>; Sat, 25 Mar 2023 10:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54DF460B13;
-	Sat, 25 Mar 2023 10:38:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54DF460B13
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0FCF822FE;
+	Sat, 25 Mar 2023 10:56:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0FCF822FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l-IohPD3E9Wq; Sat, 25 Mar 2023 10:38:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gDnnN1XzUqZh; Sat, 25 Mar 2023 10:56:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F08C60AB3;
-	Sat, 25 Mar 2023 10:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F08C60AB3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 541D01BF29F
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 10:38:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7A1E82253;
+	Sat, 25 Mar 2023 10:56:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7A1E82253
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B48351BF29F
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 10:56:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2576A41716
- for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 10:38:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2576A41716
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9735682253
+ for <buildroot@lists.busybox.net>; Sat, 25 Mar 2023 10:56:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9735682253
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wAduhuq9x9tm for <buildroot@lists.busybox.net>;
- Sat, 25 Mar 2023 10:37:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 554A141701
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 554A141701
- for <buildroot@buildroot.org>; Sat, 25 Mar 2023 10:37:57 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A368060002;
- Sat, 25 Mar 2023 10:37:54 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pg1HV-00DG3O-M1; Sat, 25 Mar 2023 11:37:53 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Zvi Vered <veredz72@gmail.com>
-References: <CABRndgw1EVFyDNDcRJ10gOPFfw-gH+7Gqx7P537EiSVr5Wq6Kw@mail.gmail.com>
- <875yavx0ui.fsf@dell.be.48ers.dk>
- <CABRndgyqeJXm6XqwYQ_QUaQAGB9EENSq4dc3qLaq6Y3RUhxFUg@mail.gmail.com>
- <87edpiuehn.fsf@dell.be.48ers.dk>
- <CABRndgwMRVDXzSAoGb5fU9PqM2b6z6we5rH40_NCs7w12LHiDA@mail.gmail.com>
- <877cv9vr7v.fsf@dell.be.48ers.dk>
- <CABRndgz8n37jikSwt3uBkGTM-UBObYcny6xEqhnFkDod9dae1Q@mail.gmail.com>
- <87355wv45c.fsf@dell.be.48ers.dk>
- <CABRndgycL0_hvf5dizJDby8VeW_z4xSnTZkXUOsVsXwy==yheA@mail.gmail.com>
- <875yasq7l8.fsf@dell.be.48ers.dk>
- <CABRndgzV8hKy1pyRCNm+sgi_ePoHgYrS5h_4ca2bZd3E006nPQ@mail.gmail.com>
- <877cv6psdx.fsf@dell.be.48ers.dk>
- <CABRndgz5EeQhEkqHG0R=T0AvQnzOLHbabO+MjkYH9UHK53pL8g@mail.gmail.com>
- <CABRndgwHc_rpSxXqMdMmGb+3yDy5FSAjk=UDqeA0CvRS13=oiQ@mail.gmail.com>
-Date: Sat, 25 Mar 2023 11:37:53 +0100
-In-Reply-To: <CABRndgwHc_rpSxXqMdMmGb+3yDy5FSAjk=UDqeA0CvRS13=oiQ@mail.gmail.com>
- (Zvi Vered's message of "Sat, 25 Mar 2023 05:02:26 +0300")
-Message-ID: <87355tp14u.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6o9zaTmtjWY2 for <buildroot@lists.busybox.net>;
+ Sat, 25 Mar 2023 10:56:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E50BD82245
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com
+ [IPv6:2607:f8b0:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E50BD82245
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 10:56:47 +0000 (UTC)
+Received: by mail-pf1-x432.google.com with SMTP id z11so2772172pfh.4
+ for <buildroot@buildroot.org>; Sat, 25 Mar 2023 03:56:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1679741807;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=7ZN8uYN5E6Y3rHsoV/oFaED3eoJIVK1x9EfnN5A+Cxg=;
+ b=v2Oq/KT7rJ8MG487nS6Xz2jWqOAlNzo1z+keTkCiNllTNJYrQ6XfVMepSVRf9TkZOS
+ R8ANwE0ptEnLFT+2+h5scQAU3SdDjCSkzGQ8R3SUttyq/K5vDVe5d0XApBsdsm1dAskk
+ 9REvm15+dq2NvB78YwoJ/r2sFtqcvTrLCbu/5wjwJsiCNunGjJtpWs5ROiOYd+GkE3Iy
+ ZSh4lxA+5oyPmpP7uaF9/qo9w8G1TtC0fpBt/QGP89bjp0vwTEK24V1Ul+TeUVh52oBV
+ MC7X2KxSghQGnnXueZ7U6EPGOxk09jyr4m7zsxjWZ40F14tOpsS5BA04+w5BSmic4Qyp
+ CVRQ==
+X-Gm-Message-State: AAQBX9fBsxckEv466uV39jjPw9IgKNZRP+QKWBsftHBgfSC6p90oA1Pw
+ slE14mN9EVRVsviFb1FkWQEl5YSsGqHryt1o091nSE+ENVA=
+X-Google-Smtp-Source: AKy350ahkmwPCxpAYZ3LS6yRPHS8PBazZHOPnoN7UZUakOlc8rjRTWyyrstif4C8mGvcb/YrJsJ38XelPzYeczD06lM=
+X-Received: by 2002:a63:4d52:0:b0:507:68f8:4369 with SMTP id
+ n18-20020a634d52000000b0050768f84369mr1457283pgl.12.1679741806832; Sat, 25
+ Mar 2023 03:56:46 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] 2023.02 : pty_allocate: openpty: No such file or
- directory
+From: Charles Lohr <lohr85@gmail.com>
+Date: Sat, 25 Mar 2023 06:56:35 -0400
+Message-ID: <CAGu26P9Mf9sWE_uxVyqT_-4bJTzz-nYc=hXYaVVDo0ugzg__uw@mail.gmail.com>
+To: buildroot <buildroot@buildroot.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1679741807;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=7ZN8uYN5E6Y3rHsoV/oFaED3eoJIVK1x9EfnN5A+Cxg=;
+ b=b8q0YRCCCWdya84CxcpyvvFzLz7DlZiktP7h6o3PqtbQxWI/6PizG4jyMjsB+Q7Yne
+ SGfNveNDN6mTu+zhXtdN45Mw0vkt9S79lqaakznczvUBQD+1FmjO9tclGo37LfO0yhnm
+ iXZ0gXbHPoW97EvN8npMoq69RXEPgf/nT+aOCYojkB7a74AZRmboFIZ6hUzUAa8DmdbR
+ UQHDwA52TadpFLvfcfoVm4+cAP1kGMlE8RaLIS5350BA2dxNop6QLrBJRvlAUveLnMuG
+ A8HlmmGOj9FUNBe9aO6DAoRQGFeMLHzh7qW8+EwgaKp3OXfiU3QtkKIo71xEn91Urhog
+ yYBg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=b8q0YRCC
+Subject: [Buildroot] host-gcc-final 12.2.0 with linuxthreads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,56 +86,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8726707461112194323=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Zvi" == Zvi Vered <veredz72@gmail.com> writes:
+--===============8726707461112194323==
+Content-Type: multipart/alternative; boundary="000000000000b5f31205f7b75d8f"
 
- > Hi Peter,
- > Did not try rootfs.cpio.uboot created by buildroot yet.
- > But I tried to extract rootfs.cpio (created by buildroot)
- > /dev contains the following:
+--000000000000b5f31205f7b75d8f
+Content-Type: text/plain; charset="UTF-8"
 
- > -------------------------------------------------------------------------------------------------
- > drwxr-xr-x  4 zvivered zvivered 4096 Mar 12 22:20 .
- > drwxr-xr-x 17 zvivered zvivered 4096 Mar 14 20:31 ..
- > lrwxrwxrwx  1 zvivered zvivered   15 Mar 12 22:20 fd -> ../proc/self/fd
- > lrwxrwxrwx  1 zvivered zvivered   10 Mar 12 22:20 log -> ../tmp/log
- > drwxr-xr-x  2 zvivered zvivered 4096 Mar 12 22:20 pts
- > drwxr-xr-x  2 zvivered zvivered 4096 Mar 12 22:20 shm
- > lrwxrwxrwx  1 zvivered zvivered   17 Mar 12 22:20 stderr ->
- > ../proc/self/fd/2
- > lrwxrwxrwx  1 zvivered zvivered   17 Mar 12 22:20 stdin -> ../proc/self/fd/0
- > lrwxrwxrwx  1 zvivered zvivered   17 Mar 12 22:20 stdout ->
- > ../proc/self/fd/1
- > ------------------------------------------------------------------------------------------------------
- > Can you please explain how rest of /dev files are created during boot
- > sequence ?
+I'm trying to re-up the RISC-V 32-bit NOMMU patch.
 
-The default for Buildroot is to use the devtmpfs filesystem in the
-kernel to manage /dev, which will automatically create the needed device
-nodes (see system configuration -> /dev management). This requires that
-the kernel is built with CONFIG_DEVTMPFS=y and CONFIG_DEVTMPFS_MOUNT=y.
+Is there any way of getting host-gcc-final 12.2.0 to compile without
+linuxthreads?
 
+It looks like it's basically required with gcc 12?
 
- > None of the scripts contains mdev.
- > I'm using the option:
- > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- > Is this the best option for automatic creation of /dev files ?
+/home/cnlohr/git/mini-rv32ima/buildroot/output/build/host-gcc-final-12.2.0/build/./gcc/xgcc
+-B/home/cnlohr/git/mini-rv32ima/buildroot/output/build/host-gcc-final-12.2.0/build/./gcc/
+-B/home/cnlohr/git/mini-rv32ima/buildroot/output/host/riscv32-buildroot-linux-uclibc/bin/
+-B/home/cnlohr/git/mini-rv32ima/buildroot/output/host/riscv32-buildroot-linux-uclibc/lib/
+-isystem
+/home/cnlohr/git/mini-rv32ima/buildroot/output/host/riscv32-buildroot-linux-uclibc/include
+-isystem
+/home/cnlohr/git/mini-rv32ima/buildroot/output/host/riscv32-buildroot-linux-uclibc/sys-include
+   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0
+-fPIC -Wl,-elf2flt=-r -static -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os -g0  -fPIC  -Wl,-elf2flt=-r -static -DIN_GCC
+ -DCROSS_DIRECTORY_STRUCTURE  -W -Wall -Wno-narrowing -Wwrite-strings
+-Wcast-qual -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition
+ -isystem ./include  -I. -I. -I../.././gcc -I../../../libgcc
+-I../../../libgcc/. -I../../../libgcc/../gcc -I../../../libgcc/../include
+-g0  -finhibit-size-directive -fno-inline -fno-exceptions
+-fno-zero-initialized-in-bss -fno-toplevel-reorder -fno-tree-vectorize
+-fbuilding-libgcc -fno-stack-protector    -I. -I. -I../.././gcc
+-I../../../libgcc -I../../../libgcc/. -I../../../libgcc/../gcc
+-I../../../libgcc/../include  -o crtendS.o -MT crtendS.o -MD -MP -MF
+crtendS.dep  -fPIC -c ../../../libgcc/crtstuff.c -DCRT_END -DCRTSTUFFS_O
+In file included from ../../../libgcc/gthr.h:148,
+                 from ../../../libgcc/emutls.c:31:
+./gthr-default.h:35:10: fatal error: pthread.h: No such file or directory
+   35 | #include <pthread.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
 
-mdev is only needed if you need custom actions for device nodes,
-E.G. special symlinks or module loading. Mdev also relies on devtmpfs as
-explained above.
+Any ideas?
 
-If you have enabled BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV, then you
-should end up with a /etc/init.d/S10mdev init script to start up mdev.
+--000000000000b5f31205f7b75d8f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Bye, Peter Korsgaard
+<div dir=3D"ltr"><div>I&#39;m trying to re-up the RISC-V 32-bit NOMMU patch=
+.</div><div><br></div><div>Is there any way of getting host-gcc-final 12.2.=
+0 to compile without linuxthreads?=C2=A0 <br></div><div><br></div><div>It l=
+ooks like it&#39;s basically required with gcc 12?</div><div><br></div><div=
+>/home/cnlohr/git/mini-rv32ima/buildroot/output/build/host-gcc-final-12.2.0=
+/build/./gcc/xgcc -B/home/cnlohr/git/mini-rv32ima/buildroot/output/build/ho=
+st-gcc-final-12.2.0/build/./gcc/ -B/home/cnlohr/git/mini-rv32ima/buildroot/=
+output/host/riscv32-buildroot-linux-uclibc/bin/ -B/home/cnlohr/git/mini-rv3=
+2ima/buildroot/output/host/riscv32-buildroot-linux-uclibc/lib/ -isystem /ho=
+me/cnlohr/git/mini-rv32ima/buildroot/output/host/riscv32-buildroot-linux-uc=
+libc/include -isystem /home/cnlohr/git/mini-rv32ima/buildroot/output/host/r=
+iscv32-buildroot-linux-uclibc/sys-include =C2=A0 =C2=A0-D_LARGEFILE_SOURCE =
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64 -Os -g0 -fPIC -Wl,-elf2flt=
+=3D-r -static -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_=
+BITS=3D64 =C2=A0-Os -g0 =C2=A0-fPIC =C2=A0-Wl,-elf2flt=3D-r -static -DIN_GC=
+C =C2=A0-DCROSS_DIRECTORY_STRUCTURE =C2=A0-W -Wall -Wno-narrowing -Wwrite-s=
+trings -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes -Wold-style-def=
+inition =C2=A0-isystem ./include =C2=A0-I. -I. -I../.././gcc -I../../../lib=
+gcc -I../../../libgcc/. -I../../../libgcc/../gcc -I../../../libgcc/../inclu=
+de =C2=A0 -g0 =C2=A0-finhibit-size-directive -fno-inline -fno-exceptions -f=
+no-zero-initialized-in-bss -fno-toplevel-reorder -fno-tree-vectorize -fbuil=
+ding-libgcc -fno-stack-protector =C2=A0 =C2=A0-I. -I. -I../.././gcc -I../..=
+/../libgcc -I../../../libgcc/. -I../../../libgcc/../gcc -I../../../libgcc/.=
+./include =C2=A0-o crtendS.o -MT crtendS.o -MD -MP -MF crtendS.dep =C2=A0-f=
+PIC -c ../../../libgcc/crtstuff.c -DCRT_END -DCRTSTUFFS_O<br>In file includ=
+ed from ../../../libgcc/gthr.h:148,<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0from ../../../libgcc/emutls.c:31:<br>./gthr-defa=
+ult.h:35:10: fatal error: pthread.h: No such file or directory<br>=C2=A0 =
+=C2=A035 | #include &lt;pthread.h&gt;<br>=C2=A0 =C2=A0 =C2=A0 | =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0^~~~~~~~~~~<br>compilation terminated.</div><div><b=
+r></div><div>Any ideas?<br></div></div>
+
+--000000000000b5f31205f7b75d8f--
+
+--===============8726707461112194323==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8726707461112194323==--
