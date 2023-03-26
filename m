@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5270C7619A
-	for <buildroot@archiver.kernel.org>; Sun, 26 Mar 2023 20:01:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 359E9C7619A
+	for <buildroot@archiver.kernel.org>; Sun, 26 Mar 2023 20:02:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 396AE4060F;
-	Sun, 26 Mar 2023 20:01:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 396AE4060F
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB3F140E47;
+	Sun, 26 Mar 2023 20:02:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB3F140E47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id doVJJ5L05NyZ; Sun, 26 Mar 2023 20:01:57 +0000 (UTC)
+	with ESMTP id 1oct-jqb8SRg; Sun, 26 Mar 2023 20:02:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B7CF41619;
-	Sun, 26 Mar 2023 20:01:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B7CF41619
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C0C7C1BF8A8
- for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 20:01:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3261416C8;
+	Sun, 26 Mar 2023 20:02:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3261416C8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 05C5A1BF3EC
+ for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 20:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B16C4052F
+ by smtp4.osuosl.org (Postfix) with ESMTP id DFB0540999
  for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 20:01:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B16C4052F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFB0540999
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ixjUeYW-GJ1f for <buildroot@lists.busybox.net>;
- Sun, 26 Mar 2023 20:01:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0DsAscTOJiYJ for <buildroot@lists.busybox.net>;
+ Sun, 26 Mar 2023 20:01:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC5E7400E2
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5C3A41690
  for <buildroot@buildroot.org>; Sun, 26 Mar 2023 20:01:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC5E7400E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5C3A41690
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C98D082AA7; Sun, 26 Mar 2023 20:01:16 +0000 (UTC)
+ id D3EC882D99; Sun, 26 Mar 2023 20:01:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 26 Mar 2023 21:59:25 +0200
+Date: Sun, 26 Mar 2023 21:59:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2b2a679dfba428014900f1adaffee05d515f0e20
-X-Git-Newrev: e81ca405164fbef1c43fc01aa2f95f67090d3bde
+X-Git-Oldrev: e81ca405164fbef1c43fc01aa2f95f67090d3bde
+X-Git-Newrev: 9611a3b323676637b9bc463268cfead66c8146fb
 X-Patchwork-Hint: ignore
-Message-Id: <20230326200116.C98D082AA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libosmium: fix double space in
+Message-Id: <20230326200116.D3EC882D99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/osm2pgsql: fix double space in
  Config.in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -64,28 +64,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e81ca405164fbef1c43fc01aa2f95f67090d3bde
+commit: https://git.buildroot.net/buildroot/commit/?id=9611a3b323676637b9bc463268cfead66c8146fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libosmium/Config.in | 2 +-
+ package/osm2pgsql/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libosmium/Config.in b/package/libosmium/Config.in
-index 3a4c64e9d2..825e2b7e33 100644
---- a/package/libosmium/Config.in
-+++ b/package/libosmium/Config.in
-@@ -13,6 +13,6 @@ config BR2_PACKAGE_LIBOSMIUM
+diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
+index e903e92c49..3e73572a80 100644
+--- a/package/osm2pgsql/Config.in
++++ b/package/osm2pgsql/Config.in
+@@ -22,7 +22,7 @@ config BR2_PACKAGE_OSM2PGSQL
  
- 	  https://osmcode.org/libosmium/
+ 	  https://osm2pgsql.org
  
--comment "libosmium needs a toolchain w/ C++,  wchar, threads, gcc >= 4.7"
-+comment "libosmium needs a toolchain w/ C++, wchar, threads, gcc >= 4.7"
+-comment "osm2pgsql needs a toolchain w/ C++,  wchar, threads, gcc >= 4.9"
++comment "osm2pgsql needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
