@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01829C7619A
-	for <buildroot@archiver.kernel.org>; Sun, 26 Mar 2023 21:23:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C41F9C74A5B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Mar 2023 21:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80E8D80D2A;
-	Sun, 26 Mar 2023 21:23:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80E8D80D2A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59E0660BA4;
+	Sun, 26 Mar 2023 21:30:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59E0660BA4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xjqvsjADp4-k; Sun, 26 Mar 2023 21:23:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nNA92PgQ8u7G; Sun, 26 Mar 2023 21:30:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44D1D8109A;
-	Sun, 26 Mar 2023 21:23:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44D1D8109A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1011F1BF309
- for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 21:23:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A3FE60BE0;
+	Sun, 26 Mar 2023 21:30:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A3FE60BE0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 84B331BF309
+ for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 21:30:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDBFD80D2A
- for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 21:23:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDBFD80D2A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6BB4760BE0
+ for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 21:30:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BB4760BE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bxr8LQ6DUNYi for <buildroot@lists.busybox.net>;
- Sun, 26 Mar 2023 21:23:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bbMGY-vtm1rm for <buildroot@lists.busybox.net>;
+ Sun, 26 Mar 2023 21:30:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F72980D1B
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F72980D1B
- for <buildroot@buildroot.org>; Sun, 26 Mar 2023 21:23:31 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- d11-20020a05600c3acb00b003ef6e6754c5so711986wms.5
- for <buildroot@buildroot.org>; Sun, 26 Mar 2023 14:23:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B47AB60BA4
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B47AB60BA4
+ for <buildroot@buildroot.org>; Sun, 26 Mar 2023 21:30:25 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id r11so6723303wrr.12
+ for <buildroot@buildroot.org>; Sun, 26 Mar 2023 14:30:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679865810;
+ d=1e100.net; s=20210112; t=1679866223;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=tv3zykUAD/XCUOXuDecoZQRuKDuvWNnOxcfko2vJGLM=;
- b=fWnRb+QZ3IDzUU3RUUFEvveTWBFwBq6tuJ4Wl5rN5RJmfUiw2vHSmBjU+oJMExw2VX
- T+YCUh97jmhILAzDpMZ9RNchotugHrYf33JKaWjFMZM36IhDg8NRxRsF1TTJmRs9sffk
- OhUaxOlmWIYkN9H5RzyvQYytjLNKuUCGLKL6gjwIqNmBsHbR1Cvln9Gy5nQjH4/hdoO6
- YMLNOVTbsirJP6pKfiMGpxSglI0F5M50XGnmY3tCccZ6oHX3pZN6zmm5u3W0wTL3wnC9
- UHz19DB59rhlqBQy+acq/fBYoh0kGZSjVyJ94bl2//K9XFihY3tjD2uQlheU70hDn//B
- EGEQ==
-X-Gm-Message-State: AO0yUKWriijPB8zb1YIDcNId2sm6Vn7eGH8vKbftdaZZoobGC2TpRnZ1
- PCvuoww7MJvzd98wJ68qFpK1SkVo/0g=
-X-Google-Smtp-Source: AK7set93ozPHT26hBF7YwVK+6IrYuZzCMxF1/ZHdzPyTVFLnGYmQssQ13Mdz5gsTfpUmjFrtBcX+6g==
-X-Received: by 2002:a7b:c398:0:b0:3ed:da87:3349 with SMTP id
- s24-20020a7bc398000000b003edda873349mr7463989wmj.1.1679865809567; 
- Sun, 26 Mar 2023 14:23:29 -0700 (PDT)
+ bh=d6PPmzw040X+QMNHLbImIljAB1mTdhixQog+QyYrFFU=;
+ b=756a6pWM+CAoc5Q7o1wNlttYEt0AWTCCSQkBzURX5S3E/mSPhJp4I/QxTm3Qb+fe5X
+ Sa/i/nalP2rIW7R8eAIc489+ODNSYbXpOY4oCDApRZp3HKDzDZsMXuTDrdBgQs2vMV+4
+ Tw8lzXiqGAfDayBqECUBfDCFiefbYc3TZK4yyFOcADJqPKPI6OiUljUG9tQJ2U/H2naK
+ 74emeTRzcUgMYoaxFgJL6QzbBkida695nTu4VejAy+zRkDPzBzWsg3lMXjboHFD+iyiZ
+ AWMcCLHN8pIHdJ7w97P2+i1U0t57a398nssYCNjMEGEAoM2HhpQPsPkiyzhUEVtw4zig
+ OUYg==
+X-Gm-Message-State: AAQBX9cUr6Jrs2oWmgpTSR5upYuvM+ShEPeL9QQwc3KtT77YFBJF1UG+
+ qUbkfAI24r4ziNludy2zgCM9JAKL6iM=
+X-Google-Smtp-Source: AKy350bzwFp2heEoLuVojmdlpKhgrr38lH1PmfgKtL5pJfJQn0s8HYRgfpnw9xD7IkDVPuiZ25IxFw==
+X-Received: by 2002:adf:e64d:0:b0:2c5:4af3:3d26 with SMTP id
+ b13-20020adfe64d000000b002c54af33d26mr8348808wrn.9.1679866223176; 
+ Sun, 26 Mar 2023 14:30:23 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- o39-20020a05600c512700b003edddae1068sm6640963wms.9.2023.03.26.14.23.28
+ j6-20020a5d5646000000b002d2f0e23acbsm23328012wrw.12.2023.03.26.14.30.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Mar 2023 14:23:29 -0700 (PDT)
+ Sun, 26 Mar 2023 14:30:22 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Mar 2023 23:23:27 +0200
-Message-Id: <20230326212327.754174-1-fontaine.fabrice@gmail.com>
+Date: Sun, 26 Mar 2023 23:30:20 +0200
+Message-Id: <20230326213020.758457-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679865810;
+ d=gmail.com; s=20210112; t=1679866223;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tv3zykUAD/XCUOXuDecoZQRuKDuvWNnOxcfko2vJGLM=;
- b=XUkcf7M9nE5RD9VbIT6niEJl69+9wvew712ddb9F6z0lmhL67r7MH9gaAt3x4VbjNs
- Vb6VfQUZlPIdwXQHC8ndP6BNGfj3FCPwFG6t2J86nl7ip6Xx5uEP45CiVNE+jlv4bAAx
- 7OQ5AL6XGAeYQ5Cx5ryU9sAZhZD5qa312P0Zot2I50ZJqLdQ7Y0R895QNI2Xk6SJVYQF
- dWGMpRwctTnNFBDIUA6i0L6c0GQgbPlTigqQ9k5HEl0Mmrrn1pQLWfdX1iwrA1RQzVlg
- y3LKHWZSygB1bxxC05P12KP5rFsKtCGg4bzeDFsIw1uWCNmbcAcFn5KWYslnK2Y5qXaL
- dItw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=d6PPmzw040X+QMNHLbImIljAB1mTdhixQog+QyYrFFU=;
+ b=Nws4NtwB93DakfPzOkfJcVjfGwf+ksXPUs8xcXNdBkfk8spfQb3SVgQQ2GLwGfiEnt
+ GwRO5px2saE2OIHv0zWnLbJJkdBfS2xJwrwT2EI3pgKgTF48V2LMI/iUtEmxWLZ84FEX
+ GucsYY8sbr3xP6/iV/0VrImSiXhK9qAF6f03HVJbD1dTUVpltyqCpZEHs9xCPWng/Zo8
+ hlilT2DvGDHIwot+YZgLA60dRMNOzG3I0ha8+iPpt9kh7DfbTU5bHXlwCX2HPDChyhNu
+ Gqz4eRPtpgVcqdWkX9eE6USGmkSH/5ZAl8oUQ6/GuD/1bcADUYb08aQLcfh7cCCGCkql
+ OFSg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=XUkcf7M9
-Subject: [Buildroot] [PATCH 1/1] package/libmemcached: bump to version 1.1.4
+ header.a=rsa-sha256 header.s=20210112 header.b=Nws4NtwB
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libmemcached: bump to version 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,6 +112,9 @@ https://awesomized.github.io/libmemcached/ChangeLog-1.1.html#v-1-1-4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Drop unneeded LIBMEMCACHED_CPE_ID_PRODUCT
+
  package/libmemcached/0001-disable-tests.patch | 42 -------------------
  .../libmemcached/0002-disable-sanitizer.patch | 25 -----------
  .../0003-move-ac_config_aux_dir.patch         | 25 -----------
@@ -119,8 +122,8 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  .../0005-fix-pointer-comparaison.patch        | 30 -------------
  package/libmemcached/Config.in                |  2 +-
  package/libmemcached/libmemcached.hash        |  6 +--
- package/libmemcached/libmemcached.mk          | 39 +++++++++--------
- 8 files changed, 25 insertions(+), 181 deletions(-)
+ package/libmemcached/libmemcached.mk          | 38 +++++++++--------
+ 8 files changed, 24 insertions(+), 181 deletions(-)
  delete mode 100644 package/libmemcached/0001-disable-tests.patch
  delete mode 100644 package/libmemcached/0002-disable-sanitizer.patch
  delete mode 100644 package/libmemcached/0003-move-ac_config_aux_dir.patch
@@ -343,10 +346,10 @@ index ccc31ee7ed..cb9daa8ae8 100644
 -sha256  4e9032d0f539276db05519ee3d09ca6167d2134ec91c556e8c80ef3efe633fd2  COPYING
 +sha256  65013ec8b416f28ae838ed3f23ea3ae47e5dbc70fe8492f39338e389a7970fd9  LICENSE
 diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-index 24955266d3..35be750f6c 100644
+index 24955266d3..bd63d78c97 100644
 --- a/package/libmemcached/libmemcached.mk
 +++ b/package/libmemcached/libmemcached.mk
-@@ -4,26 +4,29 @@
+@@ -4,26 +4,28 @@
  #
  ################################################################################
  
@@ -370,7 +373,6 @@ index 24955266d3..35be750f6c 100644
 -LIBMEMCACHED_LICENSE_FILES = COPYING
 +LIBMEMCACHED_LICENSE_FILES = LICENSE
 +LIBMEMCACHED_CPE_ID_VENDOR = awesome
-+LIBMEMCACHED_CPE_ID_PRODUCT = libmemcached
  
 -ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
 -LIBMEMCACHED_CONF_ENV += \
