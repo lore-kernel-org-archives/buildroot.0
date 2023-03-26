@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 967FEC74A5B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Mar 2023 20:01:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CC2FC74A5B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Mar 2023 20:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12B0A40999;
-	Sun, 26 Mar 2023 20:01:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12B0A40999
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BAA74168A;
+	Sun, 26 Mar 2023 20:01:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BAA74168A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9rJ5ixYrlQzQ; Sun, 26 Mar 2023 20:01:17 +0000 (UTC)
+	with ESMTP id rE_gOef0P7hd; Sun, 26 Mar 2023 20:01:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1239341684;
-	Sun, 26 Mar 2023 20:01:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1239341684
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BAF711BF3EC
- for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 20:01:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D79841690;
+	Sun, 26 Mar 2023 20:01:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D79841690
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B53941BF3EC
+ for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 20:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68C12400E2
- for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 20:01:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68C12400E2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CBA560F6C
+ for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 20:01:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CBA560F6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DxRgx1pEYVC0 for <buildroot@lists.busybox.net>;
- Sun, 26 Mar 2023 20:01:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F5CA4052F
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0F5CA4052F
- for <buildroot@buildroot.org>; Sun, 26 Mar 2023 20:01:11 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9154EE0002;
- Sun, 26 Mar 2023 20:01:08 +0000 (UTC)
-Date: Sun, 26 Mar 2023 22:01:07 +0200
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230326220107.394f4c9a@windsurf>
-In-Reply-To: <20230326080034.14629-1-ps.report@gmx.net>
-References: <20230326080034.14629-1-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1679860869;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XZdxDFpKV/MRuDoki81ZHWyl+s5k4IE7oyyklZ1sN28=;
- b=MQxhzNNe0XmnavH3wNO2jdPI/oP6fP2hRj9Bn+rvbKvpDvUBPnxWCaa5qFG1MBf1e0cyG0
- FMhZS331ychbJ9COuWtXNQhb07hi2RttXO9VApSGDZ5jpAiKmkEcBXJ3m1PCM5PlEVjDV/
- U0CIq9ajk8oBEtz6O2D42QuPa//NiQk4XVtueO3NCNHkgZ4BvIqdrsqa2hgirznM1rwhVt
- IUXt5n3GVWOIloyyZ6tLlj8D0FbvOUK1VNX6Vp9L0ZcHLQO1w3RjzsRNv3SGj0CaAqsyJG
- C7QTuueEUTwzfNvw3mDLH9PrQ39OfiJ2RX4p4/5DSb1Slm+6Dj+fjNk5Asa3Qw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MQxhzNNe
-Subject: Re: [Buildroot] [PATCH v1 1/5] package/protozero: fix double space
- in Config.in comment
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aPs1UawjCc0w for <buildroot@lists.busybox.net>;
+ Sun, 26 Mar 2023 20:01:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA5B260F18
+ for <buildroot@buildroot.org>; Sun, 26 Mar 2023 20:01:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA5B260F18
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B537882D9E; Sun, 26 Mar 2023 20:01:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 26 Mar 2023 21:59:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0472287484e5914f7437cfd9f05524ab38b810fe
+X-Git-Newrev: 2b2a679dfba428014900f1adaffee05d515f0e20
+X-Patchwork-Hint: ignore
+Message-Id: <20230326200116.B537882D9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lcdproc: fix double space in
+ Config.in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,29 +58,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>,
- Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@laposte.net>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 26 Mar 2023 10:00:30 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2b2a679dfba428014900f1adaffee05d515f0e20
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/protozero/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lcdproc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Series applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
+index 042abd69df..e5ff432d40 100644
+--- a/package/lcdproc/Config.in
++++ b/package/lcdproc/Config.in
+@@ -1,4 +1,4 @@
+-comment "lcdproc needs a toolchain w/  dynamic library"
++comment "lcdproc needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LCDPROC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
