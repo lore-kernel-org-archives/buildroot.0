@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 122CDC74A5B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Mar 2023 08:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6EBCC74A5B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Mar 2023 08:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB76760EB8;
-	Sun, 26 Mar 2023 08:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB76760EB8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EDCF60B8F;
+	Sun, 26 Mar 2023 08:01:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EDCF60B8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pKzjC7UbeBJs; Sun, 26 Mar 2023 08:01:08 +0000 (UTC)
+	with ESMTP id tWUSvJQSFoR2; Sun, 26 Mar 2023 08:01:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0ABFB60E4C;
-	Sun, 26 Mar 2023 08:01:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ABFB60E4C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6BA4A1BF2B6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62A5A60ECD;
+	Sun, 26 Mar 2023 08:01:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62A5A60ECD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D970E1BF2B6
  for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 08:00:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4467B40194
+ by smtp1.osuosl.org (Postfix) with ESMTP id B3CE081EB9
  for <buildroot@lists.busybox.net>; Sun, 26 Mar 2023 08:00:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4467B40194
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3CE081EB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ms_BcJTXYecu for <buildroot@lists.busybox.net>;
- Sun, 26 Mar 2023 08:00:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qkVSv5v_Z8Y8 for <buildroot@lists.busybox.net>;
+ Sun, 26 Mar 2023 08:00:40 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D7D4405B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 683D281EBB
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0D7D4405B6
- for <buildroot@buildroot.org>; Sun, 26 Mar 2023 08:00:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 683D281EBB
+ for <buildroot@buildroot.org>; Sun, 26 Mar 2023 08:00:39 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.fritz.box ([62.216.208.192]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MF3DW-1piTxk1ugq-00FTWz; Sun, 26 Mar 2023 10:00:36 +0200
+ 1MmULr-1qNtJc0FtJ-00iVgO; Sun, 26 Mar 2023 10:00:37 +0200
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Sun, 26 Mar 2023 10:00:32 +0200
-Message-Id: <20230326080034.14629-3-ps.report@gmx.net>
+Date: Sun, 26 Mar 2023 10:00:34 +0200
+Message-Id: <20230326080034.14629-5-ps.report@gmx.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326080034.14629-1-ps.report@gmx.net>
 References: <20230326080034.14629-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Ev4zpF0KFrM58//Xp6LVskp8YgYDts2qQYyyfNkGtQjGHwwCmmQ
- aEdWVu0+yXGRZFQkjmflIEET+GqCAXX3GBfMgEaHzlzo4QZZ/A7nNF+x51zT0ZhhrnwGU5R
- momDEe6UXNUU8k1ax+Kwy8AWoPq3H1m8fFFV2RsKYsbT5nk5Uj5iWDKYgyMUnD03hChZltu
- nDz+MKOZKQqLfk6btT/yw==
-UI-OutboundReport: notjunk:1;M01:P0:v5/sVLUopTQ=;I6I6hCK3e8LcuSI8cY/9s2eLbBM
- ADXwTROqc62hgNBk2o1Aav+ZcT9FepynHRsfQ9yUZR5NRDs706Gy7ndjQjth7QwFgv/UJu0ru
- En038tBR/z4GqcTCOKM2NSnKEGYhiCOqRBGP8hr5UGxTfOnwy6xY1tP4HXjz7hQ8LAcDcWMAw
- J9YFFqd37h/mhPSRlJIT23q7NG9nA3s1R3srNgi07CCtpt1Khwf9fFXmI/Xdekt8GbBSUa8iN
- hb7qqzBPfQZRa2kwSFhqGs8tamDql2/naN8rFGwwGS+KxbTEMWA6QSTIaAbFWqHijm6YZSg1G
- VU+BL5zMqR0d6u1h+zm79iWp3z+tTY7lIucEi11ppZjbbSRWrnsVVeQXq8tIenVvumYGtQKKK
- TIABOuI4mCowOGo4aVR67N+T2CIguFSnmfTpUfnOoY4KFtrOSzAxvDQnxypRQMUbxfOeaaVEi
- 4yFdIJNlguW45KkkYXnjpY76LloheWMSpUBzPHTqHuvcGn3yC6s0KAWGDv70CCzaH//Efgiz/
- qa9wEOk331tHcWjrCHHjmfveDkHJNwAbE0DVycD8us8k2nZmPHAPajIWxtB9TpfUtm7/q+qZ0
- Gw+DDymSpFfdMlLitIuA+9aXJ26K2qo0S/LNN4CeKj9Qdymq8XgGj9shrP06OxMRxorL5r+Ct
- 25keYc/1H6u+ke8MJnppCG9reY7cwRlzi+8YH37Ziiys59JbEtKRMpNCdKJxIKVKEdcTko9Rk
- 97SUNSqf+Rr69DI5wSyxSgffW7ytlC6fD5Dq46KOjlIysmWHEU+hwi86+fZMXkrgv8TmBRwWr
- +iwht6yrD9vtxnk3fif8r2omhBWLmPnVZxyFEzKBiXoqXbx90GjlHY938YpxraM5x7AamXAlD
- HU/gmNDVxlqh5dqfKT8uYSRZC7lSty79DRbJT1dwTpyNmeTGIdVlNXo981pHVqxJmY1vCRAaa
- f6bgmmGzyNtU9KHm1CKAeNjtc6M=
+X-Provags-ID: V03:K1:IwgvmDYuRwRU0az0tpFySeyzbPaFQDkSBMbeaIvQpNtJ+wJdYCg
+ qepkS+c+cz/ZWweRg2rt8hPBnAJFl6CgY8GFnySU3VPph5U386IXNo0viANWnYm6bgkFo8X
+ D15398xHoh3IdzxtV4BWfQF1LssPG0/q5J0HWbAulhgdUluffiN0MkhL2kG9OGujn30UnfC
+ RRHu17yiIlN+MfWQYsTLw==
+UI-OutboundReport: notjunk:1;M01:P0:M26xkDctkSg=;hLn2ujMMnDVirdwJNduMIzJvDae
+ wy458F29Jb2df1zajHuZaJXuvWTNOaVHTRywCe6sKWdcZ1ADUxe/1akEAjdcEeV74cB5T9hxw
+ FL66RKYCKOXPMLjGhm3pt9XIRgFlYo3pZhRSpJ83FAdI4iQ7mVgGXQyAsAonBntoBIYvfJRbS
+ EF6Ga573pSu4UBcj+NGCKqYuuryXyyO8CQQV1dTRH3+oS7EgisGN3aSdzG9mPoPo7pwi+OwhV
+ n5NaxPogv0GjzBNJrMGOznxSOeamIoONDdbKhEzhKm5/dCu0U3BTS5VihgZffSmpAJ4B4R9Cn
+ H6n2I6rySR8mvBMXh72pEF4RsWpi4WWNUzEFDJoB4VCa7rAWa8dJ86TxZlLGbx+rF2E5bS+t+
+ 5t3/FouPCqojx6WOExECjF0nP45xBkQmkoFnzN0TU/gIvuN0zspupVhrGv+p2KKh5oWnjkD7I
+ 16Kn5XWeiJsm2ZdifmNdNlNZJrw65f3WKAuW+7/KJLVaSim8l2fuN1eNgZxU4x+I4xJ648Tb/
+ TyzanHT1X84VZs4BzZmKZDSUwDaDxHGmXYuPcZ5QvHxyPw+OZSmFFDO0n921DRk5TUKTKt/Hl
+ k1OBgtG+IhcWuLJXk2RY5YrL2/83CcAwxVeJljkwgVU0zOPi7YpRFzl+pEOKvLmGcsoLhe0nR
+ ZFOePPrf36bCHuKOp5FVwBPeXdfcqk46QXoZlaILrJqOjTLDQJTmDRmc+GYwSFbzSO+P1f9/g
+ rXfhcf0oaKW/yD1N1PWsGbqLQg436zpPD+TTtIiHqDdfSPWklfUwlbjm2DJlVfUQjXaUQzO+e
+ 7jxu5bBKSrj9AjgCw8p9DjUH9t5moG1aucjDsORms+P2gjGq7R2rIL/z236wNhsHPupItltnV
+ 3i/r8KhTu4MvRvOlHZrz7CxJ8z1QaYD+cS82KZVMle1Dbxesv/I4XcvLrkz/zbpMkNfLSHECa
+ LQ9Vmm7JhT6LsdrlwmWgkdKaSUU=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.net; s=s31663417; 
- t=1679817636; i=ps.report@gmx.net;
- bh=ygB43AjpIULIpH0K+5N/UDHUvGIz2VM3eZg45sWta4s=;
+ t=1679817637; i=ps.report@gmx.net;
+ bh=HmMrLIZhuA6k6h/BmeM+aOUy688FI9LnwpR3x6Akdgo=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=miy92QTKbvuJZgl5623QrfXlLhU6PB/G44Wc7wUkllxl3fkrUx4n3aqi4c+PJVSQJ
- Ghc5c2yAOQAqWsNBd8BA5oAUTkE/eg6DRhPzkKsJsk+cxaW8yMN75YsciWZFaZX40h
- BR1G3eWGv7ZtpJ/pRV9J7u4KbWwv9CrRlo2rNTm8Tvuh1lZdZYaWTR/uUsXc0jH4WJ
- QNraMw7ZPv6C8UOSaCOfJCdDfA88R4JDv94glB2iLguZOP7O7JpJ2jPuJf+EFn18Gl
- 4MeoSApqEZ5+HMuU9pi5OcbVfi5WJxMWOP9QGZseuedzxT78zRhCp2fsR+voenW6Ef
- 9Gak4cxgvdULg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ubqf4ET8kvuzQuXMuzGnK069XzDr3RzFFQnjP3tbgUsq9KtUmrlz/R/ya69Q9l0Xn
+ GtBXNKkOAfKkjt999VqmKJfsdcPYK44xyfmM8hsLusdKzIvnAsMiWlJXuqmN5ARejC
+ SwbCQgG/QM1cranJvAwn620n1cM+OHVsIzxvWN1EgXC7zzJ6QQq09HLHIKrNJmQCqh
+ HJx1RSFnpvjFRHyCdRTdmwk/0J9UQspxYdvTED7HEfSUtAfkCocgzqt6Jhly3eO8ct
+ sHQ6zu2a1xRCTcl5Eer81H1oHEm+NUjf6XNfrggD5VG3Rc9nnvG5rsRZt+j2u/UVzz
+ 6kvyZKXEqCg0A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=miy92QTK
-Subject: [Buildroot] [PATCH v1 3/5] package/libosmium: fix double space in
+ header.a=rsa-sha256 header.s=s31663417 header.b=ubqf4ET8
+Subject: [Buildroot] [PATCH v1 5/5] package/zerofree: fix double space in
  Config.in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -102,21 +102,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libosmium/Config.in | 2 +-
+ package/zerofree/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libosmium/Config.in b/package/libosmium/Config.in
-index 3a4c64e9d2..825e2b7e33 100644
---- a/package/libosmium/Config.in
-+++ b/package/libosmium/Config.in
-@@ -13,6 +13,6 @@ config BR2_PACKAGE_LIBOSMIUM
+diff --git a/package/zerofree/Config.in b/package/zerofree/Config.in
+index 99466d6bae..e7007819d8 100644
+--- a/package/zerofree/Config.in
++++ b/package/zerofree/Config.in
+@@ -9,6 +9,6 @@ config BR2_PACKAGE_ZEROFREE
  
- 	  https://osmcode.org/libosmium/
+ 	  https://frippery.org/uml/
  
--comment "libosmium needs a toolchain w/ C++,  wchar, threads, gcc >= 4.7"
-+comment "libosmium needs a toolchain w/ C++, wchar, threads, gcc >= 4.7"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
+-comment "zerofree needs  a toolchain w/ dynamic library"
++comment "zerofree needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS
 -- 
 2.39.2
 
