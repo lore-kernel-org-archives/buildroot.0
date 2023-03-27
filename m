@@ -4,134 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ED88C76195
-	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 12:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75CB9C76195
+	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 12:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF35240AEE;
-	Mon, 27 Mar 2023 12:21:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF35240AEE
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA89240AF7;
+	Mon, 27 Mar 2023 12:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA89240AF7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CiAiykg0g-dt; Mon, 27 Mar 2023 12:21:23 +0000 (UTC)
+	with ESMTP id uHuZlTlWoYUr; Mon, 27 Mar 2023 12:22:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F04CF40AF7;
-	Mon, 27 Mar 2023 12:21:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F04CF40AF7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2781D40AF9;
+	Mon, 27 Mar 2023 12:22:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2781D40AF9
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DCC671BF409
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 12:21:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7FEB91BF34A
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 12:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F60D40AF9
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 12:21:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F60D40AF9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59EEA40AEE
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 12:22:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59EEA40AEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sfB0RDbNloAG for <buildroot@lists.busybox.net>;
- Mon, 27 Mar 2023 12:21:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AA0940AA8
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11on20626.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7eab::626])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3AA0940AA8
- for <buildroot@buildroot.org>; Mon, 27 Mar 2023 12:21:20 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UgbyVMmhJzsRn+Ewpbr2D7mSsRQLZKa+PouOTt/kr+ERUE2NSaBklnnBZg5bfHqzgu7WwstaLeaUjkTkVvgUlhah7r+QDNTV8cTEQun06et7wCuBepkc0KQrHKXxZZ4c+49MFNPijGQHPTvPq476x7qe5QyclmMGUpa2y44k6ZLdNqCgZDdQPqHLSpzZXkc71YOBxiTaRwZqO//z6CDwEGg2wCP8y0EaS91eCnse9bq229SoLrOOf1v+rrDzIkROZ7TDap+m/p/di0Sd/bNVwiHsoHgyGvOoE3rpCMKzJir8J1gvJtGGMdXrWwUpoGxdWt7ggkOSfT4IdWQKIYzd/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hCiYplZT8mU23lCgwhQ8Y7vcVuLjYQ2U8ibFAz+5+qQ=;
- b=FsH2w3N9HQmyp52m+Xxc6lwo64dqysG4yF2AmJ1EuwDI4BG4g5q/jrbu2MItuPxsBlEzEd2MyKjZ7xKrYuEq+YsIbMIMaQj6sZNzUusjr82+XiIx7bu1brnr5GgCF6JsnvB6AG/P3u6bXADiSyLLsqdCrgVptGisV5AiCVxuwU3WlrUy/HLGfHEZsfdWfeHnerONrXhynqQ0ZUYPvmacp3C9nAwq3h1l0A90vT1MCMxeRJaBf9RrcJEMpN77BshzGCmIdgQ21f9nFKBdVyAgB+y1asXfhQ9+wGrCn0UocL3NGU1Ph1YFw2AaAVHlJ5PNLtK7WQod9zJDgud/JDLCmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by DS0PR12MB6392.namprd12.prod.outlook.com (2603:10b6:8:cc::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Mon, 27 Mar
- 2023 12:21:16 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::9ef9:3671:7fbe:3ec]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::9ef9:3671:7fbe:3ec%3]) with mapi id 15.20.6222.028; Mon, 27 Mar 2023
- 12:21:16 +0000
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Neal Frager via buildroot
- <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH v1 1/2] package/zynqmp-firmware: new package
-Thread-Index: AQHZX+ylwlDcnFpbP0+plEFQFRl0H68NfNeAgAEO8lA=
-Date: Mon, 27 Mar 2023 12:21:16 +0000
-Message-ID: <CH2PR12MB50044744141F901308BAAF8AF08B9@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20230326140949.11262-1-neal.frager@amd.com>
- <20230326220543.057f381d@windsurf>
-In-Reply-To: <20230326220543.057f381d@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|DS0PR12MB6392:EE_
-x-ms-office365-filtering-correlation-id: d7d0b423-a1d0-42bd-184a-08db2ebdc35f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TJgkt87eYEBqU3gUV9wVXOLvVS3/sqn3n1U39YyiEum+jDLqWakm7Gi2gkug235T+RaZ/7tC2p6IS1ukf4ehEu6SZWtUqTU/ux2BaQEIpeO0IoemSyrGDgI9N6fcGiaF5Ldli+ghQB61W8h7Y53BKLRtLW6wTQZR0+JMsjjfFTQKOp3xtiIKeGS57tWp0nOMiPFIxKtzIlOxX5hgk2to/H9tYjZY9cqzywQImaq0QA/iTj/B70ogmAliFgWnPZmLHbJEpynqtpRiWUXafBXG5NyWuDuWVLg6komQzNj6uhK6jrNMlE4tcSIot51pj6oiYo/2NEUmOMnOD3ux7DIDqgzVDMwNFNT2TihJ0z39khIG+7I58gWst2IsleT55AKhNT1JY3riSjHE9VMIv5kVmv28xWApGcVMiUKmbVNEea4bSnRxygGZ8MPJJnD30Jx0fFJ0yTF9c4vwFVC0yuNx/zMo9tLGC3MBRwmAZJmgkS82lRMioxLU6gnvP5FmykGy0KUdehzsw83BdpcihuvMabVGe7mHNSUYhpqAasQN3WitUCNo8Ha8StgRRFMOFzxxeTWZgt/ILppGkUDn7xS9MLloj0wp8gkSPw4XBjAc1tM=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230028)(4636009)(366004)(396003)(136003)(39860400002)(376002)(346002)(451199021)(6506007)(9686003)(41300700001)(186003)(55016003)(7696005)(71200400001)(83380400001)(478600001)(54906003)(110136005)(316002)(4326008)(64756008)(38100700002)(2906002)(66446008)(76116006)(66476007)(66556008)(66946007)(8676002)(33656002)(52536014)(38070700005)(86362001)(5660300002)(8936002)(122000001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uZlzav7S8KE08WIuEjvKlqyI8+DLNdMBTC1OeP9eUmaAEKeI1Ne5YPFKgEQ3?=
- =?us-ascii?Q?56qTESEXGvzBHkrZGog5VPlK5qA/LQ41hIWJ1yEjbVFu5slNOG2BF7PvODMr?=
- =?us-ascii?Q?Xrd04N05vPo1/CixyDyfcV0rZ83CjCrJoFUsEB4wJLc8jfE8BexpygyHZePS?=
- =?us-ascii?Q?8OVo1Gxly2FcoO03rRF8e4v/OiECJWDNv6s+gg10qQkc+MDzG/ftlAVhM/79?=
- =?us-ascii?Q?OHob/mKj7+xu3mnSkHIM7OeW3PHHo8RPe0/LICzxVAAJ+mfQOM7cPk5OsRzW?=
- =?us-ascii?Q?SAnWJzl7ionyY0UzuSUT/1FPyVws/bj+L8s/RzuaZAG8Vg7fk/WacVd8TApj?=
- =?us-ascii?Q?CUS8e6t2rW3m7w7QJttqIbbRQ6PmXdMr5UXjqH0NvX0XuPmCFHcEefyPZRTZ?=
- =?us-ascii?Q?jQr0gEsFKafi7F89IZmf/3W2IbVftkD34paPOS6nz8tYFQ7z8iRARk9mPKFs?=
- =?us-ascii?Q?kiVMDp14wDGzSDzqNnZuZIlkYZeCcor8vUXaP+knjEb5UIsJbHJxLGSespHp?=
- =?us-ascii?Q?dDzHCwbgKD7+jL/sGai6JJD8MAShswTDRNyGq1r7iMcKy6ztNWellqPejfCD?=
- =?us-ascii?Q?DB19X7bEUtGaEGLw6Dw35Z32USYoUEup9Ityl79JxCP329GWeqwAXbRdKeq8?=
- =?us-ascii?Q?Ng1tnqb5osxIKlzfP6impjMfBB2bHddo7Fm4im6OTm3RjEB/cNCPdLetMym9?=
- =?us-ascii?Q?UkeIxB9dhG10GfGU17wyX5zm2aQD6WTFPivWmWoUX8vxnR316gArfzpiC58H?=
- =?us-ascii?Q?zurwmRwsJ3GNL0e0DIlCiVm9wKYK541B/T5yfSbBb5AtpTwQLFOX5zyAem52?=
- =?us-ascii?Q?IOhS5vjJmg7kIY+2Yl5oRzk+IGnSgDQml2T0ZnsLdqx+K1QUmp3DHAt/EK3P?=
- =?us-ascii?Q?gyWmdbQffYPfU9rJkdewMZGkQf+NnrVy1tfLZBqtDWmr+DcrwFSCghuBB7Yi?=
- =?us-ascii?Q?og5G1/2pgHuYB3N5gREVrLm2FXLODsc+jmbZTcZphs8sSwsgcdTqGhEIRjpf?=
- =?us-ascii?Q?MsjAm2ECB1+8HAGbIHvNCBBAKp9hd7hi9if2bg2iJXuiYj+fv9c3puyk81bD?=
- =?us-ascii?Q?IQDZ24TBfRsEprtWHsxg4Q0xVVOYnJnfVRXx7qm65xGu3+wW5xICsA2gC9eU?=
- =?us-ascii?Q?pKXwFPhqHOwFdGMMB6EVJX3NAJVNmy5ivgqZuBe01Ifm6Tg70uRWrOuilIOL?=
- =?us-ascii?Q?2q3APi8ntG4H8K89/m3dLIsSn31CHSJ92C/fyzpsgZMrD29xwl3UhLlmTkZH?=
- =?us-ascii?Q?j/ytjcsFe6KX7PlOghU0wSE43GRTlD0pSGZNOg3TigBmjKTzZ1drkI7Ous7L?=
- =?us-ascii?Q?WyfoCQicrIpZoNwMIr1eGI5cP+1Pvq54/yMLIDhMzAx4jF9gwZ7oWrviYmu8?=
- =?us-ascii?Q?Kgl47u435KSILWEVjVYxlxx/5Yot+mq1aLadyPweB9AU7l8pghDKs3psoF7Z?=
- =?us-ascii?Q?rPjB91d28NoeNBDTrd9U2Gg90NbeEfdsb2gFgEmbP+u3ztwAyYpmnhXANcqw?=
- =?us-ascii?Q?4oZLTULey1Q4uxrghOJCJb4FSvEt9RvNo9nKRTq546lfCKycA51evphrpxgU?=
- =?us-ascii?Q?/ibpDvPLvKqVRM1FRjNhwOqVQBxydPOC8y0J5LuVsRpkoIjRkluL9vFKdZdS?=
- =?us-ascii?Q?KldKXwIW/+jWW3lu/YIzy+E=3D?=
+ with ESMTP id r6yywmpRXvgH for <buildroot@lists.busybox.net>;
+ Mon, 27 Mar 2023 12:22:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C918440AA8
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C918440AA8
+ for <buildroot@buildroot.org>; Mon, 27 Mar 2023 12:22:34 +0000 (UTC)
+Received: from evilbit.green-communications.fr ([92.154.77.116]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis)
+ id 1MGQf5-1pfRPc1m29-00Gq7R; Mon, 27 Mar 2023 14:17:25 +0200
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+To: buildroot@buildroot.org
+Date: Mon, 27 Mar 2023 14:17:02 +0200
+Message-Id: <20230327121702.30959-1-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7d0b423-a1d0-42bd-184a-08db2ebdc35f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Mar 2023 12:21:16.4373 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Br18Q7iC57Cyr0bZxgs8mzMoSWiFNbFBO3FKO36czdAOkJll9X20YL8AOp4xW02M
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6392
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hCiYplZT8mU23lCgwhQ8Y7vcVuLjYQ2U8ibFAz+5+qQ=;
- b=bUe/ZrzCZ9rofA0e2qjaKLmj+Ww4d9dVWCtO8lyCMYAsScTdoEO+IsvN7ppx9jveixSiSGcoNDsf2AV1thvETb5D/hN9kLWNqlFfRq6mkVLADlazPlVxW6Aimt5XwBo3pWNqmd4skYPBMS9mXmaGWmbnO5nPKsAOOm+Yt6joBgM=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=bUe/ZrzC
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/zynqmp-firmware: new package
+X-Provags-ID: V03:K1:LkqkSxeucoNPQd0cNbP32cMC/XDgLMv63DOaEOvcgtqrAhBe1FC
+ M1hfUiqmGqObCh7PFrs1pKJ7LsOmMGCprtCGnqPfsoBXOlLCILdYDzmm6/86lydU2pl2AGa
+ Ck+2yf/8apmdfd63y42i41pXNOvPRJLPXSCcXKr0ufes56BH677mqTmI+/nsoCK9D+F17X6
+ K8rsXYQhGn85LXuVvCZFg==
+UI-OutboundReport: notjunk:1;M01:P0:6/EYCKDztBA=;1gj/7HUXRwBgXqIl4+wMq6IULyT
+ unxrkcDhtLWMJrVW44k1tSgWC7rnssmkzomGgZJ9P0GyJT1xRrUGEwfqbVmUycNOzToSKImkI
+ cwz/gMT2HMQu5pC3VSmMu6JsL/9iUaItNJboI7poVXhS7+/49Kod7T8CuBn7w1dx/h1ORbSLs
+ rrZ6DwVInyI9vNXbfM9BsbnP4MCe1XDWAAt38pXN5kYcImKu//9W9d8h8/K5TOHtu80Js6pan
+ Qb4YdUyEtZmkRo230XrizeEJu2L+X5RK5g2dRkTQpjFEs4MNbVKemxGEpg0ofJnK6fskFhhht
+ 8YvuiLdgdaV+DQXHcXZyj5c8ufdKQy+7aYOD1FuWy4x8VruTNy8D79L2Xc6MpfwVIBbUd3grx
+ iZO1QZByD922eKFRWfLaVNyeo5+t7RdJswe55tf8PW2rK/s9zvq0b5x2Yfh+5DDT4uCFFkUU+
+ /VdqHcHXgehSG5n8ETPnyg2wPjgzU5s2r1Cm8dgMqT78gq2BdmjKGilyNy31Q8sPl2eiLevh8
+ o/9kSGLlAv5jYlohzywtyMfY6iQwApnQqJbwJYlhPMnskM+NaitDB/z4c7pgOPbW4pehpxdpJ
+ ffAm26DVjDIKz0RAfFBqdTHK5vBZ/pKGj04KfyjLpdWeh46g32bX8ytr4Lpt4YmeT1yttDNqn
+ Ay8C1QhC6v0Lz0F289Tmr4T11RxmvczqWWIXstT3WQ==
+Subject: [Buildroot] [PATCH v2 1/1] package/libgit2: bump version to 1.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -143,104 +71,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Simek, Michal" <michal.simek@amd.com>,
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>, "Erkiaga Elorza,
- Ibai" <ibai.erkiaga-elorza@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+* Remove patch applied upstream.
+* Upstream fixed building inside the source tree, but still does not
+  recommend it, so keep LIBGIT2_SUPPORTS_IN_SOURCE_BUILD = NO
 
-> This patch adds a new package to buildroot for building the zynqmp 
-> pmufw with the requirement that the user must provide an external 
-> microblaze toolchain.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
-> This is not really nice :-/ Was this the conclusion of the discussion we had on this topic?
+---
 
-> +config BR2_PACKAGE_ZYNQMP_FIRMWARE_KRIA_K26
-> +	bool "kria-k26"
-> +	help
-> +	  Adds additional CFLAGS for Kria K26 SOMs.
+v2: fix hash file
+---
+ ...clare-win32-functions-on-non-win32-p.patch | 35 -------------------
+ package/libgit2/libgit2.hash                  |  2 +-
+ package/libgit2/libgit2.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
+ delete mode 100644 package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
 
-> This doesn't look super extensible. Why are these CFLAGS needed in particular for this platform? Is this a per-SoC or per-board configuration? Do we expect more platforms to need custom CFLAGS?
+diff --git a/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch b/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
+deleted file mode 100644
+index 6be66ffee3..0000000000
+--- a/package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 20811c5aa9c528405eaa3f88ff22a9adebafa9e6 Mon Sep 17 00:00:00 2001
+-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+-Date: Wed, 8 Mar 2023 14:00:52 +0100
+-Subject: [PATCH] sysdir: Do not declare win32 functions on non-win32 platforms
+-
+-These declaration poses problems on some embedded or retro Linux systems
+-that deliberately disable support for wchar_t from their libc.
+-
+-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+-[Retrieved from:
+-https://github.com/libgit2/libgit2/commit/20811c5aa9c528405eaa3f88ff22a9adebafa9e6]
+----
+- src/libgit2/sysdir.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/libgit2/sysdir.h b/src/libgit2/sysdir.h
+-index 1d15bbf43..03f59e1de 100644
+---- a/src/libgit2/sysdir.h
+-+++ b/src/libgit2/sysdir.h
+-@@ -134,10 +134,12 @@ extern int git_sysdir_set(git_sysdir_t which, const char *paths);
+-  */
+- extern int git_sysdir_reset(void);
+- 
+-+#ifdef GIT_WIN32
+- /** Sets the registry system dir to a mock; for testing.  */
+- extern int git_win32__set_registry_system_dir(const wchar_t *mock_sysdir);
+- 
+- /** Find the given system dir; for testing. */
+- extern int git_win32__find_system_dirs(git_str *out, const char *subdir);
+-+#endif
+- 
+- #endif
+--- 
+-2.39.2
+-
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index baf43c66f7..0c23944b6d 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d557fbf35557bb5df53cbf38ae0081edb4a36494ec0d19741fa673e509245f8f  libgit2-1.6.2.tar.gz
++sha256  a8e2a09835eabb24ace2fd597a78af182e1e199a894e99a90e4c87c849fcd9c4  libgit2-1.6.3.tar.gz
+ sha256  6f3c2cd59b057e366c1acc073b038135c52d77892bb33bd4d931c5369d3f062b  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index b31f5199e1..11f04042de 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.6.2
++LIBGIT2_VERSION = 1.6.3
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
+-- 
+2.39.2
 
-> +ZYNQMP_FIRMWARE_VERSION = $(call 
-> +qstrip,$(BR2_PACKAGE_ZYNQMP_FIRMWARE_VERSION))
-> +ZYNQMP_FIRMWARE_SOURCE = xilinx_$(ZYNQMP_FIRMWARE_VERSION).tar.gz
-> +ZYNQMP_FIRMWARE_SITE = 
-> +https://github.com/Xilinx/embeddedsw/archive/refs/tags
-
-> Use $(call github,...) instead
-
-> +ifeq ($(BR2_PACKAGE_ZYNQMP_FIRMWARE_KRIA_K26),y)
-> +ZYNQMP_CFLAGS = "-Os -flto -ffat-lto-objects -DBOARD_SHUTDOWN_PIN=2 -DBOARD_SHUTDOWN_PIN_STATE=0 \
-> +		-DENABLE_EM -DENABLE_MOD_OVERTEMP -DENABLE_DYNAMIC_MIO_CONFIG -DENABLE_IOCTL \
-> +		-DCONNECT_PMU_GPO_2_VAL=0"
-
-> All these CFLAGS are really weird... why isn't this part of the zynqmp-firmware build system itself?
-
-> +else
-> +ZYNQMP_CFLAGS = "-Os -flto -ffat-lto-objects"
-> +endif
-
-> In any case, this should be:
-
-> ZYNQMP_CFLAGS = -Os -flto -ffat-lto-objects
-
-> ifeq ($(BR2_PACKAGE_ZYNQMP_FIRMWARE_KRIA_K26),y)
-> ZYNQMP_CFLAGS += \
->	-DBOARD_SHUTDOWN_PIN=2 \
->	-DBOARD_SHUTDOWN_PIN_STATE=0 \
->	-DENABLE_EM \
->	-DENABLE_MOD_OVERTEMP \
->	-DENABLE_DYNAMIC_MIO_CONFIG \
->	-DENABLE_IOCTL \
->	-DCONNECT_PMU_GPO_2_VAL=0
-> endif
-
-> +
-> +define ZYNQMP_FIRMWARE_BUILD_CMDS
-> +	cd $(@D)/lib/sw_apps/zynqmp_pmufw/src && make \
-> +		COMPILER=$(ZYNQMP_FIRMWARE_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_TOOLCHAIN_PREFIX)gcc \
-> +		ARCHIVER=$(ZYNQMP_FIRMWARE_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_TOOLCHAIN_PREFIX)gcc-ar \
-> +		CC=$(ZYNQMP_FIRMWARE_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_TOOLCHAIN_PREFIX)gcc \
-> +		CFLAGS=$(ZYNQMP_CFLAGS)
-
-> Please use:
-
->	$(MAKE) -C $(@D)/lib/sw_apps/zynqmp_pmufw/src \
->		...
-
-Could I possibly ask you for some assistance?  I have implemented all of the changes except this last one.
-
-When I use:
-	$(MAKE) -C $(@D)/lib/sw_apps/zynqmp_pmufw/src \
-		COMPILER=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc \
-		ARCHIVER=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc-ar \
-		CC=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc \
-		CFLAGS=$(ZYNQMP_CFLAGS)
-
-The build fails as it does not seem to find the relative path ../misc containing necessary include files.
-
-But if I add a change directory command before the make, everything works fine using below:
-	cd $(@D)/lib/sw_apps/zynqmp_pmufw/src
-	$(MAKE) -C $(@D)/lib/sw_apps/zynqmp_pmufw/src \
-		COMPILER=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc \
-		ARCHIVER=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc-ar \
-		CC=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc \
-		CFLAGS=$(ZYNQMP_CFLAGS)
-
-Do you have any ideas why this would be?  Normally I would think the -C option would take care of this, but I am unable to get the zynqmp-firmware package to build without a manual change dir step.
-
-Do you have a clean way to fix this?
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
