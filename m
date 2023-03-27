@@ -4,84 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D654C76195
-	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 16:55:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30387C76195
+	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 17:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0D1B400F0;
-	Mon, 27 Mar 2023 16:55:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0D1B400F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E8A8409B0;
+	Mon, 27 Mar 2023 17:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E8A8409B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FJxKAEG23JgY; Mon, 27 Mar 2023 16:54:59 +0000 (UTC)
+	with ESMTP id Xs_EWjejDnKr; Mon, 27 Mar 2023 17:06:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 860E4401B3;
-	Mon, 27 Mar 2023 16:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 860E4401B3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 348371BF29A
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 16:54:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6287D409B4;
+	Mon, 27 Mar 2023 17:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6287D409B4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A14C1BF336
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 17:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E38860F47
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 16:54:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E38860F47
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BE8381C6E
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 17:06:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BE8381C6E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a2y5prjYkiGN for <buildroot@lists.busybox.net>;
- Mon, 27 Mar 2023 16:54:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HiHhPkwl1021 for <buildroot@lists.busybox.net>;
+ Mon, 27 Mar 2023 17:06:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B36160F3C
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9B36160F3C
- for <buildroot@buildroot.org>; Mon, 27 Mar 2023 16:54:54 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id w9so38972154edc.3
- for <buildroot@buildroot.org>; Mon, 27 Mar 2023 09:54:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679936092;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=180mIz6zrj2AtIlnNrBgAxqlp3eeyFYCDOcSb9I5z34=;
- b=tbRLKtmYzZQMpht8xFlredpJ4Pa3Mmv8sykiJs9o0eooqoc+sJkbRvZwznrHPyX0DL
- 42GG5X78FMHxiJTkJIm7NejdRKL9RY4otRvEYQqcWQMM75AzPU5mwDrQW+PIbqKAZwHd
- qncSkhWSLJlAa0cn+en6AKjbF+jLHDkSQlJkXUbXtXjb8O7dFPNXCa60vlMCIrXtMMry
- Sojdca/afVGOYoLBYpitdpmlZEZGAl1v0AONqio2TrPxAwNBIpqHrjaHMBXbXMvhx9zB
- csZwqgU1FUa+DxL1tPtuj7O3AjPnmw3G6Dn+TVxweijlk43tq8flH8YI8sP0DPOd4ymI
- D77A==
-X-Gm-Message-State: AAQBX9c1ZAxtSV4elhgt6h7DX/sQYoNP3tTWSo8asi4oAsM2Gn/xh6xO
- e5RWZPwIg8t4a3Atzw4RSdlw8IQJURU=
-X-Google-Smtp-Source: AKy350YF/Cb6MQGfII7otre52QSqXD2/ZOcpAqJhZtOQzvizpsHatIZZocn1ojNvGptxRGjDSPldJA==
-X-Received: by 2002:a17:906:9c84:b0:932:3ca:e228 with SMTP id
- fj4-20020a1709069c8400b0093203cae228mr16014720ejc.0.1679936092224; 
- Mon, 27 Mar 2023 09:54:52 -0700 (PDT)
-Received: from localhost.localdomain ([176.221.215.212])
- by smtp.gmail.com with ESMTPSA id
- g25-20020a50d0d9000000b00501c2a9e16dsm11981459edf.74.2023.03.27.09.54.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Mar 2023 09:54:51 -0700 (PDT)
-From: Maksim Kiselev <bigunclemax@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 27 Mar 2023 19:54:23 +0300
-Message-Id: <20230327165423.1059953-1-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9445F81BCB
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on20615.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eaa::615])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9445F81BCB
+ for <buildroot@buildroot.org>; Mon, 27 Mar 2023 17:06:13 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eOIqyEplX3nui3PZLweHAJQ6QH7qhvdiJF3iL0X1UxmHxm1pOyuPD1OY5O7IOrvYhO4syhbzSbWogHQiQtkevx/7IQJV6iF4mTmz995iBIllopUxu0cZiCmiF/4e0i5T4XMCehqf2YGy17C1xoYMAFo5TiZtK4ITQJfD0UqeMMby8vLzDRRFHV6wmGqHcE4fJRSPsETKh/HvHMazwBQ15DFI9RMsXMoQO4tIjTIbwWn4zTPJ2NeaCcD7G8f4+UbycXcXxjKHK6tH2Ep+tLtqNKs10YS7icwnlK8cqphg5STqwe/5jMA80Bar41s1XHEBkHPNP1q2KQOW+VGWL3x1Hg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fkLDVf0DOBNHz0jTiNcEWLmi/+jWpnHRxWqmEt4WIcA=;
+ b=Mbziw3M+Ue6V2mZISPjRucDQhtQ6gVHzGY6FZqoKzH8iIrJe8oGTB32nS4ASJhpx0ZyuZs2E65cu02ohfZ7anezOHFa5CxUAGRu6qJq36mlDRLohLpwbRqZll0ncBJlFQxp/Kn3Em8yMINXsL1uKAd3buugxORs50VW2pfZKD3LpC7RdzZrN0GpwKgvciZ2f8+Hvz+ijFMbBmbAbI4yI2CD5aFMK2zYMThZH5ERAgALawx+nvSA/4cpeinrKcejE/o+OUzO8RgUCyPZXbrRdJ4t/GoQ31Y0kXMV+4XcskBkPt0OHqQpEqfx2+FWrN3gDR2Eexlxlyh262od87cTRGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+Received: from MW4P220CA0016.NAMP220.PROD.OUTLOOK.COM (2603:10b6:303:115::21)
+ by SJ2PR12MB7920.namprd12.prod.outlook.com (2603:10b6:a03:4cc::6)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.28; Mon, 27 Mar
+ 2023 17:06:10 +0000
+Received: from CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:115:cafe::49) by MW4P220CA0016.outlook.office365.com
+ (2603:10b6:303:115::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41 via Frontend
+ Transport; Mon, 27 Mar 2023 17:06:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT040.mail.protection.outlook.com (10.13.174.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.21 via Frontend Transport; Mon, 27 Mar 2023 17:06:10 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Mar
+ 2023 12:06:09 -0500
+Received: from xirengwts08.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Mon, 27 Mar 2023 12:06:08 -0500
+To: <buildroot@buildroot.org>
+Date: Mon, 27 Mar 2023 18:06:03 +0100
+Message-ID: <20230327170604.22854-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT040:EE_|SJ2PR12MB7920:EE_
+X-MS-Office365-Filtering-Correlation-Id: f23a43e1-1aa1-42b1-9596-08db2ee59030
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: T7LzfaBTwNSD0RaNi2YSAqVI7maeGYIufCiA8GEOmczl67IFtgHWXJB4XBfvJie1G1D6Vln2Jdewo08z8LfbwMmiDaEo1jnomIGV4ujm2eEmgVD1txcrGvdP3bb5uFAQYtL/XxcqB4Feff35ueTb8Cpoal/JG8wFGdAe/snT3RS1641BYRnvRQ3RiG68xQyiYbWAokRxpT8RRE+R3s068PJFGx0tjTlkrUxAZhqqfkLMXOUo1uV2E4bGfoPcBP09n0ThnHKloxylH7IyaQxulrAWfsMne9fAychcGVUKngWaCj0568YsIFXM2iUx6n+j/TZt9v2zvNLveJgg0gG5iKvnt19leZilrUjMyYd1noPyx/WObCsjVn2fe8DkXc+ktzVoiQhVWizy538U9S/bPHG3DvV+llLEPc890Gelm/nQvs8QdDsUr9Lt0sLxrJc2iS1r+lHjo6XKOee4DRW3RjW+isNUmXdRvGjZrsyTIyB4pgeoqzoZBrgKVoOju/YypWg1uxamD1KQ9q8o54FI75KcY4yOt3w4BszHyw21NSWPNXGm5Hu4IoMpEC2VSsquiNeKHojeIFi9qX2crfjZWj7N+EqNAw3iOzqDe0blz7vR6FqlSrpuXZuI8xAsrpoMo1myEOsIRrtprMuwwFBNcDFRNAGxSpNS0dymCHD5opgUMvXR+tsAeE/Q+wjrs2bHag6nOpBTWZy0b/ljePYJhj8+FysB9822x/Q6qwYnf3w=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230028)(4636009)(39860400002)(346002)(136003)(376002)(396003)(451199021)(40470700004)(46966006)(36840700001)(2616005)(47076005)(336012)(426003)(36860700001)(41300700001)(44832011)(86362001)(36756003)(5660300002)(8936002)(356005)(81166007)(82740400003)(40460700003)(54906003)(478600001)(8676002)(70586007)(70206006)(4326008)(6916009)(2906002)(82310400005)(40480700001)(6666004)(26005)(1076003)(316002)(186003)(36900700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 17:06:10.2986 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f23a43e1-1aa1-42b1-9596-08db2ee59030
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7920
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679936092;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=180mIz6zrj2AtIlnNrBgAxqlp3eeyFYCDOcSb9I5z34=;
- b=c5zLqonlOMPr+V5R6oScb942j9JspapdIwosJSATj1D+itRmBXmKplFFAqzsKimGYB
- LVD4mqt4YOckhO1gEFXLpT3WvVzxx0/fDGRGk7sYAdwZP09Jah7nrf0lIOhf1ImrD5/G
- EekRjaVq24fzc4mpqvVxlWilIOEIuVewnqL4SDWSm8qtWinFhEgqOby8RXpWj25BBycd
- gnzUVplr76Nf4OR78XghPLRv6BMmDlov1MJNmsTKRznF5wxNTqu9zGu2lZ0Bd0Bp0SqI
- 6WhiX6qLGkmjfB1AZO33/5nEpMfQR89gUlHFpeatLewxoLJ2nNZr2zk+r0ogjKHu4AJd
- G4fA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=c5zLqonl
-Subject: [Buildroot] [PATCH] package/ledmon: new package
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fkLDVf0DOBNHz0jTiNcEWLmi/+jWpnHRxWqmEt4WIcA=;
+ b=WPx2ld/a18jenukhKJpAP6SNHH1kfVzBm/iE1KXwyBHpk6cUZXXm+tbnb6wwVNqowGF3kGvQkwVHhf9UNKDp8F6F757iH1/oJW9TAPjzxJCiSnSu4a4RjXPquCRK0P54TgAqRHQ5bkmV2tyNcBC6DqeojCfBQg9LWkdpEcq1AiY=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=WPx2ld/a
+Subject: [Buildroot] [PATCH v2 1/2] package/zynqmp-firmware: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,163 +123,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Maksim Kiselev <bigunclemax@gmail.com>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enclosure LED Utilities
+This patch adds a new package to buildroot for building the zynqmp pmufw
+with the requirement that the user must provide an external microblaze
+toolchain.
 
-ledmon and ledctl are userspace tools designed to control storage
-enclosure LEDs. The user must have root privileges to use these tools.
+The below example config options can be used to build the pmufw.elf v2022.2
+using the Xilinx toolchain.
 
-These tools use the SGPIO and SES-2 protocols to monitor and control LEDs.
-They been verified to work with Intel(R) storage controllers (i.e. the
-Intel(R) AHCI controller) and have not been tested with storage controllers of
-other vendors (especially SAS/SCSI controllers).
+BR2_PACKAGE_ZYNQMP_FIRMWARE=y
+BR2_PACKAGE_ZYNQMP_FIRMWARE_VERSION="v2022.2"
+BR2_PACKAGE_ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH="/opt/Xilinx/Vitis/2022.2/gnu/microblaze/lin"
+BR2_PACKAGE_ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX="microblaze-xilinx-elf-"
 
-For backplane enclosures attached to ISCI controllers, support is limited to
-Intel(R) Intelligent Backplanes.
-
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- package/Config.in                             |  1 +
- .../ledmon/0001-Add-disable-doc-option.patch  | 57 +++++++++++++++++++
- package/ledmon/Config.in                      | 11 ++++
- package/ledmon/ledmon.hash                    |  3 +
- package/ledmon/ledmon.mk                      | 14 +++++
- 5 files changed, 86 insertions(+)
- create mode 100644 package/ledmon/0001-Add-disable-doc-option.patch
- create mode 100644 package/ledmon/Config.in
- create mode 100644 package/ledmon/ledmon.hash
- create mode 100644 package/ledmon/ledmon.mk
+V1->V2:
+  - switched make command to $(MAKE1)
+  - removed kria config and replaced it with custom_flags
+  - using call github instead of the https path to the sources
+  - removed Xilinx/embeddedsw patch that is no longer required
+---
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/zynqmp-firmware/Config.in          | 32 ++++++++++++++++++++++
+ package/zynqmp-firmware/zynqmp-firmware.mk | 30 ++++++++++++++++++++
+ 4 files changed, 64 insertions(+)
+ create mode 100644 package/zynqmp-firmware/Config.in
+ create mode 100644 package/zynqmp-firmware/zynqmp-firmware.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b6d288c54f..d3436d40f2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2151,6 +2151,7 @@ F:	configs/zynqmp_zcu106_defconfig
+ F:	configs/zynqmp_kria_kv260_defconfig
+ F:	package/bootgen/
+ F:	package/versal-firmware/
++F:	package/zynqmp-firmware/
+ 
+ N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+ F:	package/uacme/
 diff --git a/package/Config.in b/package/Config.in
-index 0f8dab3e71..3c2f98bdda 100644
+index 0f8dab3e71..6c7419490d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -525,6 +525,7 @@ endmenu
- 	source "package/iucode-tool/Config.in"
- 	source "package/kbd/Config.in"
- 	source "package/lcdproc/Config.in"
-+	source "package/ledmon/Config.in"
- 	source "package/libiec61850/Config.in"
- 	source "package/libmanette/Config.in"
- 	source "package/libubootenv/Config.in"
-diff --git a/package/ledmon/0001-Add-disable-doc-option.patch b/package/ledmon/0001-Add-disable-doc-option.patch
+@@ -450,6 +450,7 @@ menu "Firmware"
+ 	source "package/wilc-firmware/Config.in"
+ 	source "package/wilink-bt-firmware/Config.in"
+ 	source "package/zd1211-firmware/Config.in"
++	source "package/zynqmp-firmware/Config.in"
+ endmenu
+ 	source "package/18xx-ti-utils/Config.in"
+ 	source "package/a10disp/Config.in"
+diff --git a/package/zynqmp-firmware/Config.in b/package/zynqmp-firmware/Config.in
 new file mode 100644
-index 0000000000..4803c37698
+index 0000000000..6513c9a995
 --- /dev/null
-+++ b/package/ledmon/0001-Add-disable-doc-option.patch
-@@ -0,0 +1,57 @@
-+From 4c356662faaa5aa2dc0b0eb713dc5134a70eb3b0 Mon Sep 17 00:00:00 2001
-+From: Maksim Kiselev <bigunclemax@gmail.com>
-+Date: Mon, 27 Mar 2023 17:45:15 +0300
-+Subject: [PATCH] Add '--disable-doc' option
-+
-+Introduce a configure option to disable documentation installation in case if it is not required.
-+
-+Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-+---
-+ Makefile.am  | 8 ++++++--
-+ configure.ac | 8 +++++++-
-+ 2 files changed, 13 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index d2b6f3a..f021768 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -20,6 +20,10 @@ if SYSTEMD_CONDITION
-+   OPTIONAL_SUBDIR = systemd
-+ endif
-+ 
-+-SUBDIRS = doc src $(OPTIONAL_SUBDIR)
-++if DOC_CONDITION
-++  DOC_SUBDIR = doc
-++  dist_doc_DATA = README.md
-++endif
-++
-++SUBDIRS = src $(DOC_SUBDIR) $(OPTIONAL_SUBDIR)
-+ EXTRA_DIST = config/config.h systemd/ledmon.service.in
-+-dist_doc_DATA = README.md
-+diff --git a/configure.ac b/configure.ac
-+index 001a049..510bb85 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -71,6 +71,12 @@ AS_IF([test "x$enable_systemd" = xyes], [SYSTEMD_STR=yes], [SYSTEMD_STR=no])
-+ 
-+ AM_CONDITIONAL([SYSTEMD_CONDITION], [test "$SYSTEMD_STR" = yes])
-+ 
-++AC_ARG_ENABLE(doc, AS_HELP_STRING([--disable-doc], [do not install ledmon documentaion]),,[enable_doc=yes])
-++
-++AS_IF([test "x$enable_doc" = xyes], [DOC_STR=yes], [DOC_STR=no])
-++
-++AM_CONDITIONAL([DOC_CONDITION], [test "$DOC_STR" = yes])
-++
-+ # target directory for ledmon service file
-+ AC_SUBST([SYSTEMD_PATH], "$(pkg-config systemd --variable=systemdsystemunitdir)")
-+ 
-+@@ -86,5 +92,5 @@ $PACKAGE_NAME $VERSION configuration:
-+   Preprocessor flags:      ${AM_CPPFLAGS} ${CPPFLAGS}
-+   C compiler flags:        ${AM_CFLAGS} ${CFLAGS}
-+   Common install location: ${prefix}
-+-  configure parameters:    --enable-systemd=${SYSTEMD_STR}
-++  configure parameters:    --enable-systemd=${SYSTEMD_STR} --enable-doc=${DOC_STR}
-+ ])
-+-- 
-+2.39.2
-+
-diff --git a/package/ledmon/Config.in b/package/ledmon/Config.in
-new file mode 100644
-index 0000000000..467a75fa56
---- /dev/null
-+++ b/package/ledmon/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LEDMON
-+	bool "ledmon"
-+	depends on BR2_PACKAGE_PCIUTILS
-+	depends on BR2_PACKAGE_SG3_UTILS
-+	depends on BR2_PACKAGE_HAS_UDEV
++++ b/package/zynqmp-firmware/Config.in
+@@ -0,0 +1,32 @@
++config BR2_PACKAGE_ZYNQMP_FIRMWARE
++	bool "zynqmp-firmware"
 +	help
-+	  Enclosure LED Utilities. The ledmon application is
-+	  a daemon process used to monitor a state of software
-+	  RAID devices (md only) or a state of block devices.
++	  This package builds the PMU Firmware application required to run
++	  U-Boot and Linux in the Zynq MPSoC devices.
 +
-+	  https://github.com/intel/ledmon
-diff --git a/package/ledmon/ledmon.hash b/package/ledmon/ledmon.hash
++if BR2_PACKAGE_ZYNQMP_FIRMWARE
++
++config BR2_PACKAGE_ZYNQMP_FIRMWARE_VERSION
++	string "firmware version"
++	default "xilinx_v2022.2"
++	help
++	  Release version of zynqmp firmware.
++
++config BR2_PACKAGE_ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH
++	string "external toolchain path"
++	default "/opt/Xilinx/Vitis/2022.2/gnu/microblaze/lin"
++	help
++	  Path to pre-installed external microblaze toolchain.
++
++config BR2_PACKAGE_ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX
++	string "external toolchain prefix"
++	default "microblaze-xilinx-elf-"
++	help
++	  Pre-installed external microblaze toolchain prefix.
++
++config BR2_PACKAGE_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS
++	string "custom cflags"
++	help
++	  Adds additional CFLAGS for building zynqmp firmware.
++
++endif # BR2_PACKAGE_ZYNQMP_FIRMWARE
+diff --git a/package/zynqmp-firmware/zynqmp-firmware.mk b/package/zynqmp-firmware/zynqmp-firmware.mk
 new file mode 100644
-index 0000000000..5c0c183ddc
+index 0000000000..25c8fbf699
 --- /dev/null
-+++ b/package/ledmon/ledmon.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  97534302a60f03b90e69228a6a56096cf3fdfc8eb31fea52a974445268fdf5d9  ledmon-v0.96.tar.gz
-+sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/ledmon/ledmon.mk b/package/ledmon/ledmon.mk
-new file mode 100644
-index 0000000000..dba8a99b8c
---- /dev/null
-+++ b/package/ledmon/ledmon.mk
-@@ -0,0 +1,14 @@
++++ b/package/zynqmp-firmware/zynqmp-firmware.mk
+@@ -0,0 +1,30 @@
 +################################################################################
 +#
-+# ledmon
++# zynqmp-firmware
 +#
 +################################################################################
 +
-+LEDMON_VERSION = v0.96
-+LEDMON_SITE = $(call github,intel,ledmon,$(LEDMON_VERSION))
-+LEDMON_DEPENDENCIES = pciutils sg3_utils udev
-+LEDMON_LICENSE = GPL-2.0
-+LEDMON_LICENSE_FILES = COPYING
-+LEDMON_AUTORECONF = YES
++ZYNQMP_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_ZYNQMP_FIRMWARE_VERSION))
++ZYNQMP_FIRMWARE_SITE = $(call github,Xilinx,embeddedsw,$(ZYNQMP_FIRMWARE_VERSION))
++ZYNQMP_FIRMWARE_LICENSE = MIT
++ZYNQMP_FIRMWARE_LICENSE_FILES = license.txt
++ZYNQMP_FIRMWARE_INSTALL_IMAGES = YES
++ZYNQMP_FIRMWARE_INSTALL_TARGET = NO
 +
-+$(eval $(autotools-package))
++ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH = $(call qstrip,$(BR2_PACKAGE_ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH))
++ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX = $(call qstrip,$(BR2_PACKAGE_ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX))
++ZYNQMP_CFLAGS = "-Os -flto -ffat-lto-objects $(call qstrip,$(BR2_PACKAGE_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS))"
++
++define ZYNQMP_FIRMWARE_BUILD_CMDS
++	$(MAKE1) -C $(@D)/lib/sw_apps/zynqmp_pmufw/src \
++		COMPILER=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc \
++		ARCHIVER=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc-ar \
++		CC=$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH)/$(ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX)gcc \
++		CFLAGS=$(ZYNQMP_CFLAGS)
++endef
++
++define ZYNQMP_FIRMWARE_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/lib/sw_apps/zynqmp_pmufw/src/executable.elf $(BINARIES_DIR)/pmufw.elf
++endef
++
++$(eval $(generic-package))
 -- 
-2.39.2
+2.17.1
 
 _______________________________________________
 buildroot mailing list
