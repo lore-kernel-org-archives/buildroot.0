@@ -1,89 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09284C761A6
-	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 20:13:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B288C6FD1D
+	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 21:14:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C69F80D20;
-	Mon, 27 Mar 2023 20:13:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C69F80D20
+	by smtp2.osuosl.org (Postfix) with ESMTP id D2849408B0;
+	Mon, 27 Mar 2023 21:14:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2849408B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 606aHaN0ncrF; Mon, 27 Mar 2023 20:13:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XdlIQWynh0_B; Mon, 27 Mar 2023 21:14:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E936780C17;
-	Mon, 27 Mar 2023 20:13:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E936780C17
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2571140BE4;
+	Mon, 27 Mar 2023 21:14:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2571140BE4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EF8061BF371
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 20:13:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 88F921BF2B4
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 21:14:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C8B5181E91
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 20:13:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8B5181E91
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6304781FE9
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 21:14:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6304781FE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4jTjwrzSg7Ov for <buildroot@lists.busybox.net>;
- Mon, 27 Mar 2023 20:13:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C41581E85
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1C41581E85
- for <buildroot@busybox.net>; Mon, 27 Mar 2023 20:13:17 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- o24-20020a05600c511800b003ef59905f26so6069997wms.2
- for <buildroot@busybox.net>; Mon, 27 Mar 2023 13:13:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679947996;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CkiDm4zm+RMFEFak8oFquiZi/xs7rpx6gmnT2cTc0xU=;
- b=082kgy9Vcsbv/T2/MXXGyL/3R4IHo5QyAzX0ylUqaqjb3A56BSEuAmGx3ZkAIdT7B8
- mz7XpSsZMQUX4KluVBsc5bfnZDBQYlEgSZPPcxSdtZxDEPWnAKfRZmdNHwyap6u79/0F
- HL62FmsAG2FuXlE5YLVk0O3AQ8myz80vvnETQyd21I0SU2F1lIy0ZhRKcMizqlWTR2DD
- DxD/PjU6GoGaUQ8X05tC/rx8mrpbM8tW9YkbKfYPt6ksN07p7vPrXf8CBtHgk1aX0OCa
- J5741evIqa8HKf3fVPGulTo0nGYYo94HpztfbZ2faKml/1+ifJRWkdDKV979slc+8eA3
- MO3g==
-X-Gm-Message-State: AO0yUKUOtPdhfBx0IYocn1CYJ43kdgQv+H9vF5UQ+oE9578b9cqlVh9X
- YzBz7yMz6lDuu27hmr4BldZzC5OXeWI=
-X-Google-Smtp-Source: AK7set9MvToRKxzw6mznGwYOkIKZqNM4WnHXb6/K+0R3h9cNLBldvIehhP25e/qVm9lOBtClgeCeIg==
-X-Received: by 2002:a7b:ce08:0:b0:3ee:da1:135f with SMTP id
- m8-20020a7bce08000000b003ee0da1135fmr10205373wmc.7.1679947996075; 
- Mon, 27 Mar 2023 13:13:16 -0700 (PDT)
-Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- p19-20020a05600c469300b003ee9f396dcesm9914870wmo.30.2023.03.27.13.13.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Mar 2023 13:13:15 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Mon, 27 Mar 2023 22:13:11 +0200
-Message-Id: <20230327201311.1483161-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.37.2
+ with ESMTP id SHm8IffWdcab for <buildroot@lists.busybox.net>;
+ Mon, 27 Mar 2023 21:14:30 +0000 (UTC)
+X-Greylist: delayed 00:07:05 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04D1081D7D
+Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 04D1081D7D
+ for <buildroot@buildroot.org>; Mon, 27 Mar 2023 21:14:28 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.97.239])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id gu3lpWleKt5Zogu3lpTqtg; Mon, 27 Mar 2023 23:07:22 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Mon, 27 Mar 2023 23:07:20 +0200
+Message-Id: <20230327210720.1509775-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679947996;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CkiDm4zm+RMFEFak8oFquiZi/xs7rpx6gmnT2cTc0xU=;
- b=jSpMxeP+hU7+5GBSZh61BdZ+HqSqtBxB/SJxFJArAh+mJj6n1igryPp2OYLFeB/aG7
- bh5NoKzATwwahn+6CUy/1UxthbHCte8n6UPAIHKbc/6aTWvi+rVWZaRE+hdwi+iQZ41G
- lQhfzgl6d7zYuKw8FOara5iAfiwDsH6Ig1O9aT9ZRmKLKB/GX4jtqgC+0WjTMzr6Rxnx
- E+buXRHVrTaJfBuKZ1TZACC7ABIBXBnnAZ449ggFa3Qf6AhLJASa/s7UXOrLw2EWLnuF
- 1oioDqtYCNM+VA0uKIUsp3U7r5FwqHlI8T44EOLYiPbSdZe9XZphwjohXAmbS5NYUpSH
- IwHw==
+X-CMAE-Envelope: MS4xfFxGI2+ex4vWJXVxUBtAh7Bsym3nx/7KwUK8CANP5Cq/tqSg7DPCgcWCgQxXjz4lF0OoKutQ7AgJwX5L+NH0UmDwtuIrqjtG6+sVjAMhvkzzBDlyN3OL
+ UoyWGuPmDAGwyaV6Sc0MT2j8TOt8uyZW5ro3KHkGZ18K+MrpArsbUCckOU0EGlOTHoXfbEsFEqNdzkmsE9tpPbZtygjKwT6uTiuP8fWE2+JBb5XNtpXIM/+D
+ CqmqxoNvZJ1cv/3TaCv0QuqnPtEyZ+QZrXTZtG1j+xBBi6BHpRuhxSeOHw2DwXicCeOh/mby9xK2DDylfCGxzfk6CQg4gZXsIT83Z7wqoRc=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1679951242; bh=ZuRj3VDE1NohTD/w4JPZYsJqsEeyW/j6tc2AMFE9Ghs=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=AEyeeEZtzVGgZTSetFMiEutd+IXrlEHCYGlNaufR8GNQHFfXormn2Zy62aJG5grOW
+ mMTKLUff0oJAPtG5u7zD9t1fTVkqJI1LBOQYbBktAogjqw5W8Kp60SVVq3jRR7K0Uv
+ Loz+CByDCKllEvEIRdqlNH3qE1xKxnC5Y1IA7yIsocxtPFw7UCbt98sJ+pCypa0gzN
+ apaKU1xCBTCZW9MfJB1ZrI367Qlb5eyAkqzH1Lu1WjXVXngn0QHzxyA+ddIA0z4sE7
+ puMge9ApbxcN7tBgXrGGvRv+kSqB5jx8PXYZ4YuGOAs/CWNEiqSMV9zxrIoyQzKVQ3
+ AVa9Zra6427kQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=jSpMxeP+
-Subject: [Buildroot] [PATCH] package/squashfs: bump to version 4.6.1
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=AEyeeEZt
+Subject: [Buildroot] [PATCH] package/rtl8723ds: fix typo CLAGS renaming with
+ CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,43 +73,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/squashfs/squashfs.hash | 2 +-
- package/squashfs/squashfs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rtl8723ds/rtl8723ds.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
-index 13d5aed71..bc45b4ab5 100644
---- a/package/squashfs/squashfs.hash
-+++ b/package/squashfs/squashfs.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  277b6e7f75a4a57f72191295ae62766a10d627a4f5e5f19eadfbc861378deea7  squashfs-4.5.1.tar.gz
-+sha256  94201754b36121a9f022a190c75f718441df15402df32c2b520ca331a107511c  squashfs-4.6.1.tar.gz
+diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
+index 1bb164fa86..f62ce2bf6c 100644
+--- a/package/rtl8723ds/rtl8723ds.mk
++++ b/package/rtl8723ds/rtl8723ds.mk
+@@ -9,7 +9,7 @@ RTL8723DS_SITE = $(call github,lwfinger,rtl8723ds,$(RTL8723DS_VERSION))
+ RTL8723DS_LICENSE = GPL-2.0
+ RTL8723DS_LICENSE_FILES = COPYING
  
- # License files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index 323908d94..082104b6d 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-RTL8723DS_USER_EXTRA_CLAGS = \
++RTL8723DS_USER_EXTRA_CFLAGS = \
+ 	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
+ 	-DCONFIG_IOCTL_CFG80211 \
+ 	-DRTW_USE_CFG80211_STA_EVENT \
+@@ -20,7 +20,7 @@ RTL8723DS_MODULE_MAKE_OPTS = \
+ 	CONFIG_RTL8723DS=m \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+ 	KSRC=$(LINUX_DIR) \
+-	USER_EXTRA_CFLAGS="$(RTL8723DS_USER_EXTRA_CLAGS)"
++	USER_EXTRA_CFLAGS="$(RTL8723DS_USER_EXTRA_CFLAGS)"
  
--SQUASHFS_VERSION = 4.5.1
-+SQUASHFS_VERSION = 4.6.1
- SQUASHFS_SITE = $(call github,plougher,squashfs-tools,$(SQUASHFS_VERSION))
- SQUASHFS_LICENSE = GPL-2.0+
- SQUASHFS_LICENSE_FILES = COPYING
+ define RTL8723DS_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
 -- 
-2.37.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
