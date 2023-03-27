@@ -4,89 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9306C77B6E
-	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 14:11:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44EFAC6FD1D
+	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 14:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 773AA41766;
-	Mon, 27 Mar 2023 14:11:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 773AA41766
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC5A14094A;
+	Mon, 27 Mar 2023 14:11:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC5A14094A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KY6iIMat-oWK; Mon, 27 Mar 2023 14:11:39 +0000 (UTC)
+	with ESMTP id Uj0XYeqCOgjP; Mon, 27 Mar 2023 14:11:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40B07408DF;
-	Mon, 27 Mar 2023 14:11:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40B07408DF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4AD0A1BF31A
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 14:11:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5A7341775;
+	Mon, 27 Mar 2023 14:11:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5A7341775
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BF8FD1BF31A
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 14:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FB8540964
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 14:11:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FB8540964
+ by smtp2.osuosl.org (Postfix) with ESMTP id 994BF40327
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 14:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 994BF40327
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 05IaJ_rvoDKa for <buildroot@lists.busybox.net>;
- Mon, 27 Mar 2023 14:11:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RXC6SSy757BD for <buildroot@lists.busybox.net>;
+ Mon, 27 Mar 2023 14:11:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09C3B408DF
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 09C3B408DF
- for <buildroot@buildroot.org>; Mon, 27 Mar 2023 14:11:10 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id t10so36670778edd.12
- for <buildroot@buildroot.org>; Mon, 27 Mar 2023 07:11:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4447400C6
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E4447400C6
+ for <buildroot@buildroot.org>; Mon, 27 Mar 2023 14:11:12 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id r11so36798534edd.5
+ for <buildroot@buildroot.org>; Mon, 27 Mar 2023 07:11:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679926269;
+ d=1e100.net; s=20210112; t=1679926270;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=qKVhK86upWi+BlUbNGyk5z/rlv1HUa2QjdSU7FAGn/Q=;
- b=rPcGhh4VTgK2ay8QqvoHPWj5vnBkuoOqN7OvdawxjP8IoZs7N9zQzjguzYIVzoJMmk
- DHgnehMF4nWAoLa0GRADM3A+pKvzjT3G4aHeNQhL07RKO2hNmYnFkQ6gXa76EGmQLy6e
- 4EGe5PSPNV1zoPEVbCukKCkS6gt4cQUeXSwpRIi85Mh4XIrb3KWnsFBcxx/XTX9Txy7l
- zyRNCkpqKbGeDk8WaSveRe5Kbi6Giuk1XsO+61lDINJoOu+B2/jNALNWtoS38XIEVEaf
- 3E3U7WPS5QYLAGzyeGRCvnC/zQ1bC7GXiu3K0A8l1FLlf2NjmsFyTJsZQfJSjvbDCRJ6
- x1ew==
-X-Gm-Message-State: AAQBX9f42plcYrKYcfuaSe6+v+bitinFm1JgTLfRWYQF8+EaNzDWUZYY
- 60yZkQkBEILUPpfUhyDXvr2Ctfcqtk+LmHDE
-X-Google-Smtp-Source: AKy350ZUQEZB0zmF3KhROIaoHzHFh0PhyBYhMAVEMt2a9KI7jAVAV+KU7nXdcfwfKb4J9DF5xUGb0w==
-X-Received: by 2002:a17:906:b159:b0:93d:b767:9fea with SMTP id
- bt25-20020a170906b15900b0093db7679feamr11032199ejb.31.1679926268877; 
- Mon, 27 Mar 2023 07:11:08 -0700 (PDT)
+ bh=pas9JfHpFU1LY22vQIvcMqdVSs3Dr1+RuMLVvJOr7bM=;
+ b=1iCPDRGUMT+rivF7Id38tW68YDmjT7yPXQHdCfecqVlUTCCoccA59r78IRNwcImTDW
+ tgfB2wSssTufz3jDylU+P5yugRQoXikzZgwmd+l5WJI1mOgQ59h0B4ifAfDULrnNozNv
+ JJc0zA8gzbPWzl+xC7GYIuiWPFw10op0YFEqipt4mJcGHbaL261oUwbgEpHjJlpbP4KP
+ EBmmUSqxs+kO+PpKtGtTAPdmcUIp9oPB9fb4b14Z56g+T+aSk/WTOOxZZqVYAD3vHWDm
+ u0vnfia/fHBzlOCeNJcykhNfDSJAR/R+DyTSGmA9CGhPnWVk+eyQmqunqiTlZuB5XbEC
+ JtjA==
+X-Gm-Message-State: AAQBX9dbAgEQ3hKsUVcesf/jlB38l+Xlc8F9w5HMQiIr9tIPfki+CNv1
+ RngWLhj+rmZAtaqqOn7zQmvhlvT64Z9s95Mb
+X-Google-Smtp-Source: AKy350ZIC0nWTd0p/DvIZAloF0tYTBwwpZtEt+kxiv9iD/DZ6cCpHkr+9VbQRUHpbjn15B5eftuA2Q==
+X-Received: by 2002:a17:907:1c93:b0:93e:908d:cfe2 with SMTP id
+ nb19-20020a1709071c9300b0093e908dcfe2mr12656469ejc.0.1679926270036; 
+ Mon, 27 Mar 2023 07:11:10 -0700 (PDT)
 Received: from localhost.localdomain
  ([2a02:a03f:eb68:2f00:22fc:f856:23e6:784b])
  by smtp.gmail.com with ESMTPSA id
- u2-20020a50a402000000b004c4eed3fe20sm14824386edb.5.2023.03.27.07.11.08
+ u2-20020a50a402000000b004c4eed3fe20sm14824386edb.5.2023.03.27.07.11.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Mar 2023 07:11:08 -0700 (PDT)
+ Mon, 27 Mar 2023 07:11:09 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Mar 2023 16:10:57 +0200
-Message-Id: <20230327141058.3669326-3-thomas.devoogdt@barco.com>
+Date: Mon, 27 Mar 2023 16:10:58 +0200
+Message-Id: <20230327141058.3669326-4-thomas.devoogdt@barco.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230327141058.3669326-1-thomas.devoogdt@barco.com>
 References: <20230327141058.3669326-1-thomas.devoogdt@barco.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1679926269;
+ d=gmail.com; s=20210112; t=1679926270;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qKVhK86upWi+BlUbNGyk5z/rlv1HUa2QjdSU7FAGn/Q=;
- b=aLtw9XX/SNJ+Joz//ryUlHRnfOzEbe1eE4t+/AwNcvZWR1n9mxG814Mya+Qt0mQMSx
- lpYNJ3mJGzA/xZ/SiRk9dHg+Vcxx+AOY2kcE1WjE0YOzlJwE/LIZcUfA9be2sDPH0IBd
- 7DtuAAy17i0po52kUZYXd/ZbOcchgxu1JJRDwZHCbWoHBUnen5QdoT/1j+Ub/TJCZcYS
- 5hJv1iCbQQ2CQyfatShX1tRuAgqePd10ripVFMQThowBHT4n0PhUUhCzy7XywxRi1INY
- lK4atH0VbWfHk46Oil4HR/OUEg7En7x9GYa8rdHjdOuqFB/4sjU1tecTA3+uIQHiI/hC
- K9EQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=pas9JfHpFU1LY22vQIvcMqdVSs3Dr1+RuMLVvJOr7bM=;
+ b=G8cunVy4CvCN8VNwYAMohvgh8QHgyRXXSdQRsBrgyPtG55tPM4zilYNZ4AeVkGmHol
+ u+nPnhbipLZ2xTEP8Kt+TuC5ICmyGr17e5EPxGqPOBE2Sq9IOdXJQ1tZSbZbAmycDPRO
+ mIU3mDb52rbqwV3zTIs6Byt00Iv7Qqr6cbF0xxJb7PCXn5d9lg2UztM5LKTtTZaVi7qu
+ E2ufCmiq+Gs+ySNaZLog0fr7c0H0NVaEw82ETSpe78gvAPUn2PsMp8NUmHybHoKAwgRL
+ qEBPqgpidQR10spscV021Z6Ogc6LeEoCPsESzAuCYTeDd8nnuwcQgl3Pxqfw7iTpIT2a
+ tIPQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=aLtw9XX/
-Subject: [Buildroot] [PATCH 3/4] package/fluent-bit: fix wasm uClibc support
+ header.a=rsa-sha256 header.s=20210112 header.b=G8cunVy4
+Subject: [Buildroot] [PATCH 4/4] package/fluent-bit: drop xtensa from
+ wasm-micro-runtime
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,69 +105,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream:
-
-https://github.com/bytecodealliance/wasm-micro-runtime/pull/2069
+According lib/wasm-micro-runtime-WAMR-1.1.1/README.md#supported-architectures-and-platforms,
+it should be supported, but I saw multiple build errors,
+so drop it until someone is able to properly build it.
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
- ...b-wasm-fix-POLL-RD-WR-NORM-in-uClibc.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/fluent-bit/0004-lib-wasm-fix-POLL-RD-WR-NORM-in-uClibc.patch
+ package/fluent-bit/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/fluent-bit/0004-lib-wasm-fix-POLL-RD-WR-NORM-in-uClibc.patch b/package/fluent-bit/0004-lib-wasm-fix-POLL-RD-WR-NORM-in-uClibc.patch
-new file mode 100644
-index 0000000000..91a6b8adc2
---- /dev/null
-+++ b/package/fluent-bit/0004-lib-wasm-fix-POLL-RD-WR-NORM-in-uClibc.patch
-@@ -0,0 +1,47 @@
-+From 286a59000d05969d00d908f187bc311a4f5b2a52 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Mon, 27 Mar 2023 15:01:49 +0200
-+Subject: [PATCH] lib: wasm: fix POLL{RD,WR}NORM in uClibc
-+
-+Not defined in uClibc, so replace them with the equivalent POLL{OUT,IN}.
-+
-+https://www.man7.org/linux/man-pages/man2/poll.2.html
-+
-+       POLLWRNORM
-+              Equivalent to POLLOUT.
-+
-+       POLLRDNORM
-+              Equivalent to POLLIN.
-+
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ .../libc-wasi/sandboxed-system-primitives/src/posix.c       | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/lib/wasm-micro-runtime-WAMR-1.1.1/core/iwasm/libraries/libc-wasi/sandboxed-system-primitives/src/posix.c b/lib/wasm-micro-runtime-WAMR-1.1.1/core/iwasm/libraries/libc-wasi/sandboxed-system-primitives/src/posix.c
-+index e43ba8ce0..b0e92c3a8 100644
-+--- a/lib/wasm-micro-runtime-WAMR-1.1.1/core/iwasm/libraries/libc-wasi/sandboxed-system-primitives/src/posix.c
-++++ b/lib/wasm-micro-runtime-WAMR-1.1.1/core/iwasm/libraries/libc-wasi/sandboxed-system-primitives/src/posix.c
-+@@ -2644,8 +2644,8 @@ wasmtime_ssp_poll_oneoff(
-+                     pfds[i] = (struct pollfd){
-+                         .fd = fd_number(fos[i]),
-+                         .events = s->u.type == __WASI_EVENTTYPE_FD_READ
-+-                                      ? POLLRDNORM
-+-                                      : POLLWRNORM,
-++                                      ? POLLIN
-++                                      : POLLOUT,
-+                     };
-+                 }
-+                 else {
-+@@ -2756,7 +2756,7 @@ wasmtime_ssp_poll_oneoff(
-+                             __WASI_EVENT_FD_READWRITE_HANGUP,
-+                     };
-+                 }
-+-                else if ((pfds[i].revents & (POLLRDNORM | POLLWRNORM)) != 0) {
-++                else if ((pfds[i].revents & (POLLIN | POLLOUT)) != 0) {
-+                     // Read or write possible.
-+                     out[(*nevents)++] = (__wasi_event_t){
-+                         .userdata = in[i].userdata,
-+-- 
-+2.34.1
-+
+diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
+index 91fdf02134..2fc74a6446 100644
+--- a/package/fluent-bit/Config.in
++++ b/package/fluent-bit/Config.in
+@@ -38,7 +38,6 @@ config BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
+ 	default y if BR2_aarch64 || BR2_aarch64_be
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_RISCV_64
+-	default y if BR2_xtensa
+ 
+ config BR2_PACKAGE_FLUENT_BIT_WASM
+ 	bool "wasm runtime support"
 -- 
 2.34.1
 
