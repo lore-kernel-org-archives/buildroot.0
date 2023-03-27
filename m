@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FDC0C76195
-	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 14:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4EA3C6FD1D
+	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 14:52:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D132641796;
-	Mon, 27 Mar 2023 14:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D132641796
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7666061070;
+	Mon, 27 Mar 2023 14:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7666061070
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kixARlcy7Oba; Mon, 27 Mar 2023 14:52:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF3306106D;
+	Mon, 27 Mar 2023 14:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF3306106D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 84EBC1BF31A
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 14:52:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 51EDC410CB
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 14:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51EDC410CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cLAYxCNvamr8; Mon, 27 Mar 2023 14:12:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4E2141729;
-	Mon, 27 Mar 2023 14:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4E2141729
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 852AE1BF31A
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 14:11:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F75840327
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 14:11:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F75840327
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3hUM8-vrrp7p for <buildroot@lists.busybox.net>;
- Mon, 27 Mar 2023 14:11:40 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aYcDMSBP7RT6 for <buildroot@lists.busybox.net>;
+ Mon, 27 Mar 2023 14:52:10 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AA62400C6
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9AA62400C6
- for <buildroot@buildroot.org>; Mon, 27 Mar 2023 14:11:40 +0000 (UTC)
-Received: from booty.fritz.box (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id CCBD5E0005;
- Mon, 27 Mar 2023 14:11:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 27 Mar 2023 16:11:22 +0200
-Message-Id: <20230327141122.103829-2-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230327141122.103829-1-luca.ceresoli@bootlin.com>
-References: <20230327141122.103829-1-luca.ceresoli@bootlin.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C171D410C7
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C171D410C7
+ for <buildroot@buildroot.org>; Mon, 27 Mar 2023 14:52:09 +0000 (UTC)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8C2D91C0003;
+ Mon, 27 Mar 2023 14:52:07 +0000 (UTC)
+Date: Mon, 27 Mar 2023 16:52:06 +0200
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Message-ID: <20230327165206.2959b6d4@bootlin.com>
+In-Reply-To: <20230327135948.90710-1-luca.ceresoli@bootlin.com>
+References: <20230327135948.90710-1-luca.ceresoli@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1679926299;
+ d=bootlin.com; s=gm1; t=1679928727;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=IOtJ6QJltk/lG8ySVLWyDrNbOua9f4Gj/AiIShBSQHg=;
- b=i3Xn1AqUOZ2cxATsxzGJi5xEoXnlbbMvArQj8szR7M4sXVMDRw4U097VNx8bu7Nq3EuiPn
- /1wnN672zO28Ah2GIgNqjJBTNkXiJvK/b8pdlpBQPQZ70cl0yg9nZc+u9mD/WAX2+a3k7j
- RIvWK1XSpZqbdAu8N7mHXkeU0xrYwrVg9ZmVFZTC5syMFpI4QPKRJbJuTto9uPZ0dOvY/h
- qnhaKJMj23UwvWCNRyYI0PslXWykkP+QLZqMQ/jqKBPrxLQR9QW53ps5cIYh0pUKgXCmfP
- KfeIWHhfz3zl5KIrOt13SAPFpGBFiuO4bqccnNOrwZ0k/UCM3qYKmd8App894A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=loUQ4T+zb3u2A589BA2p+XvI/qj/gEgjmMngYXx30+Q=;
+ b=X+qyofjwq2yEY511ThaWubU9mOY0Tqwsdd6g0e1sEe/uQnB7Ge7KnwWhxAckM1cEeRrKhA
+ phbUS+7RmonlElopO0kDpjQK9yLHYpsoueneSl2f/OFNG4xZoff9Udazpk/aH21gA3wKhP
+ KjwQ4QD6XSgNkt3u+omiYBZv/HmSJ8fUzXvJq1SO1ADyPJT6xoLGYYGnws/uXfUXGWdKsR
+ U2ZaO/fNE8NthE7e0k5TIDwnnOmc4eOdg/Oa57n7mrcfXXP7rpPAyt2BLizvxWWdQ+IYqY
+ XoKYCrHZNzG1y860w8vcBvMhlGQ3C1yhEZkRaR9MSBfE4yGG2XQLZVZBwzHsgQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=i3Xn1AqU
-Subject: [Buildroot] [PATCH 2/2] docs/manual: ditch redundant -f 'rm' flag
+ header.s=gm1 header.b=X+qyofjw
+Subject: Re: [Buildroot] [PATCH v2] package/linux-tools: add USB tools
+ (testusb and ffs-test)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,60 +76,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Herve Codina via buildroot <buildroot@buildroot.org>
+Reply-To: Herve Codina <herve.codina@bootlin.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The value of the RM variable in make is 'rm -f', thus the additional -f is
-redundant. Avoid it on the docs to avoid developers taking it as a good
-example to follow.
-
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- docs/manual/writing-rules.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index 758965d80a0a..13b7fd5bea6a 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -78,7 +78,7 @@ Do not align the +=+ signs.
- +
- ---------------------
- define LIBFOO_REMOVE_DOC
--	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/doc \
-+	$(RM) -r $(TARGET_DIR)/usr/share/libfoo/doc \
- 		$(TARGET_DIR)/usr/share/man/man3/libfoo*
- endef
- ---------------------
-@@ -118,7 +118,7 @@ YES:
- ---------------------
- ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
- define LIBFOO_REMOVE_DATA
--	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
-+	$(RM) -r $(TARGET_DIR)/usr/share/libfoo/data
- endef
- LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
- endif
-@@ -128,7 +128,7 @@ NO:
- +
- ---------------------
- define LIBFOO_REMOVE_DATA
--	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
-+	$(RM) -r $(TARGET_DIR)/usr/share/libfoo/data
- endef
- 
- ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTHVjYSwKCk9uIE1vbiwgMjcgTWFyIDIwMjMgMTU6NTk6NDggKzAyMDAKTHVjYSBDZXJlc29s
+aSA8bHVjYS5jZXJlc29saUBib290bGluLmNvbT4gd3JvdGU6Cgo+IEV4dGVuZCB0aGUgbGludXgt
+dG9vbHMgcGFja2FnZSB0byBhbHNvIGJ1aWxkIHRoZSB1c2Vyc3BhY2UgVVNCIHRvb2xzLCB3aGlj
+aAo+IGN1cnJlbnRseSBpbmNsdWRlIHRlc3R1c2IgYW5kIGZmcy10ZXN0Lgo+IAo+IFRoZXNlIHRv
+b2xzIGFyZSBpbiB0aGUga2VybmVsIHRyZWUgc2luY2UgYSBsb25nIHRpbWUsIGJ1dCBhIE1ha2Vm
+aWxlIHdhcwo+IGFkZGVkIG9ubHkgaW4gNS45IHRvIGFsbG93IGJ1aWxkaW5nIGluIHRoZSBzYW1l
+IHdheSBhcyBvdGhlciB0b29scyBwcm92aWRlZAo+IHdpdGggdGhlIGtlcm5lbC4gSGVyZSB3ZSB1
+c2UgdGhlIE1ha2VmaWxlIGFuZCB0aHVzIHZlcnNpb24gPj0gNS45IGlzCj4gcmVxdWlyZWQuIFN1
+cHBvcnQgZm9yIG9sZGVyIGtlcm5lbHMgbWF5IGJlIGFkZGVkIGxhdGVyIGlmIG5lZWRlZC4KPiAK
+PiBTaWduZWQtb2ZmLWJ5OiBMdWNhIENlcmVzb2xpIDxsdWNhLmNlcmVzb2xpQGJvb3RsaW4uY29t
+Pgo+IAo+IC0tLQo+IAo+IENoYW5nZXMgaW4gdjI6Cj4gCj4gIC0gVXNlIEFMTF9UQVJHRVRTIHRv
+IHNlbGVjdCB0b29scyB0byBidWlsZCBhbmQgaW5zdGFsbCBpbnN0ZWFkIG9mIHRoZSB1Z2x5Cj4g
+ICAgcmVtb3ZhbCBsb2dpYwo+IC0tLQo+ICBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgMSArCj4gIHBhY2thZ2UvbGludXgtdG9vbHMvQ29uZmlnLmluICAg
+ICAgICAgICAgICAgICB8IDI2ICsrKysrKysrKysrKysrCj4gIHBhY2thZ2UvbGludXgtdG9vbHMv
+bGludXgtdG9vbC11c2J0b29scy5tay5pbiB8IDM0ICsrKysrKysrKysrKysrKysrKysKPiAgMyBm
+aWxlcyBjaGFuZ2VkLCA2MSBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNr
+YWdlL2xpbnV4LXRvb2xzL2xpbnV4LXRvb2wtdXNidG9vbHMubWsuaW4KPiAKClRoYW5rcyBmb3Ig
+dGhpcyB2Mi4KClJldmlld2VkLWJ5OiBIZXJ2ZSBDb2RpbmEgPGhlcnZlLmNvZGluYUBib290bGlu
+LmNvbT4KClJlZ2FyZHMsCkhlcnbDqQoKLS0gCkhlcnbDqSBDb2RpbmEsIEJvb3RsaW4KRW1iZWRk
+ZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
