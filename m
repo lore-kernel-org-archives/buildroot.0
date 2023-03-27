@@ -1,67 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8446C76195
-	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 18:27:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ECF6C77B61
+	for <buildroot@archiver.kernel.org>; Mon, 27 Mar 2023 19:12:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38C5A4176D;
-	Mon, 27 Mar 2023 18:27:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38C5A4176D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CE2E6109E;
+	Mon, 27 Mar 2023 19:12:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CE2E6109E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iCgh0dVe0DgI; Mon, 27 Mar 2023 18:27:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UcaJHc87MTxD; Mon, 27 Mar 2023 19:12:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B17E41763;
-	Mon, 27 Mar 2023 18:27:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B17E41763
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 684821BF2EF
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 18:27:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAE776109B;
+	Mon, 27 Mar 2023 19:12:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAE776109B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B7A91BF292
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 19:12:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 402E541763
- for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 18:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 402E541763
+ by smtp3.osuosl.org (Postfix) with ESMTP id 552CC6109B
+ for <buildroot@lists.busybox.net>; Mon, 27 Mar 2023 19:12:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 552CC6109B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2QsBC4CjHGrL for <buildroot@lists.busybox.net>;
- Mon, 27 Mar 2023 18:27:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YwMhilPID6Ar for <buildroot@lists.busybox.net>;
+ Mon, 27 Mar 2023 19:12:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87D2541756
-Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87D2541756
- for <buildroot@buildroot.org>; Mon, 27 Mar 2023 18:27:24 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.97.239])
- by Aruba Outgoing Smtp  with ESMTPSA
- id grYvpZsAlMFtdgrYvpkkVN; Mon, 27 Mar 2023 20:27:22 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Mon, 27 Mar 2023 20:27:21 +0200
-Message-Id: <20230327182721.33997-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B971060B74
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B971060B74
+ for <buildroot@buildroot.org>; Mon, 27 Mar 2023 19:12:24 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 393EA40005;
+ Mon, 27 Mar 2023 19:12:20 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pgsGR-003xLa-1P; Mon, 27 Mar 2023 21:12:19 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Zvi Vered <veredz72@gmail.com>
+References: <CABRndgw1EVFyDNDcRJ10gOPFfw-gH+7Gqx7P537EiSVr5Wq6Kw@mail.gmail.com>
+ <875yavx0ui.fsf@dell.be.48ers.dk>
+ <CABRndgyqeJXm6XqwYQ_QUaQAGB9EENSq4dc3qLaq6Y3RUhxFUg@mail.gmail.com>
+ <87edpiuehn.fsf@dell.be.48ers.dk>
+ <CABRndgwMRVDXzSAoGb5fU9PqM2b6z6we5rH40_NCs7w12LHiDA@mail.gmail.com>
+ <877cv9vr7v.fsf@dell.be.48ers.dk>
+ <CABRndgz8n37jikSwt3uBkGTM-UBObYcny6xEqhnFkDod9dae1Q@mail.gmail.com>
+ <87355wv45c.fsf@dell.be.48ers.dk>
+ <CABRndgycL0_hvf5dizJDby8VeW_z4xSnTZkXUOsVsXwy==yheA@mail.gmail.com>
+ <875yasq7l8.fsf@dell.be.48ers.dk>
+ <CABRndgzV8hKy1pyRCNm+sgi_ePoHgYrS5h_4ca2bZd3E006nPQ@mail.gmail.com>
+ <877cv6psdx.fsf@dell.be.48ers.dk>
+ <CABRndgz5EeQhEkqHG0R=T0AvQnzOLHbabO+MjkYH9UHK53pL8g@mail.gmail.com>
+ <CABRndgwHc_rpSxXqMdMmGb+3yDy5FSAjk=UDqeA0CvRS13=oiQ@mail.gmail.com>
+ <87355tp14u.fsf@dell.be.48ers.dk>
+ <CABRndgyK0f71HMi15+r8k0nu51sHQrRDx=OA7e5BWR6Oudhnbg@mail.gmail.com>
+Date: Mon, 27 Mar 2023 21:12:18 +0200
+In-Reply-To: <CABRndgyK0f71HMi15+r8k0nu51sHQrRDx=OA7e5BWR6Oudhnbg@mail.gmail.com>
+ (Zvi Vered's message of "Mon, 27 Mar 2023 20:19:17 +0300")
+Message-ID: <87o7oenh4d.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGctGQPOPMctc2OFlLiNjX+zXv/iaXBEmARpYSwt44jSstO8Ow/yOW12uybljJwfEQ60s5z7QWeUvNDt+SLH9dT7Wnse6lohkHW9BM2GYEsWGjqP+m47
- CQB1xymnoMYd7GfglidKLhbsiS2oVFnS5dRIMNl2IzGD8CUt/++tSLMv6mazcj0Suh60GIKqntLznDb8NakXMm3+L5sB4o2XfuqOGj3qxLBwSi6J34sA8XMq
- ML61N6pSvJQTHYvX+0ppq1tuFxicm99mhH8ybxNr/HYdcnqRCvZ8JGXf0PiarocsxMet1/PpsH4wBqDGd8vGVg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1679941642; bh=YPYrJHj/oeleR89ZsiqlIeylNLA9ZNNcxdJQf+sc01s=;
- h=From:To:Subject:Date:MIME-Version;
- b=fm+bIbk4hQ+ndJVxNvEMXwTuzUBMvdtpsdtP/aWhJwRbRINferHsNX483oBQqhS2B
- 4RTEEq8X+WmhZc/qysLOOcyt0ufrDfOYASrtCirgqL3QZxJTkkGZ2bSOOnZi+JCwa8
- qgyRhMHtuXKqQsXzJtV2N1XGlER1+9LZGJ93W5nT6boh7k6TO8vxPzuUgdtfngf/ZI
- 1JKI0YBEWniEXa3uWmaS6R4ZpBXqZdP4VHfJ+ucP8EAa0U4uADWpLOMj6nBimke8GA
- YpOoSVkh4LrMEy+nC/3I7VOtDoyPV5SdAkuHTjo6aK4D7ObuJmi6FVcDPiNbw0Drtw
- twPtosFJafZdg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=fm+bIbk4
-Subject: [Buildroot] [PATCH] package/rtl8189fs: bump to version 2023-03-27
- on rtl8189fs branch
+Subject: Re: [Buildroot] 2023.02 : pty_allocate: openpty: No such file or
+ directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,46 +79,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/a1c/a1c4c386e60a082d30cae686b9e1d27d01046266/
+>>>>> "Zvi" == Zvi Vered <veredz72@gmail.com> writes:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/rtl8189fs/rtl8189fs.hash | 2 +-
- package/rtl8189fs/rtl8189fs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Hi Peter,
+ > I tried the file *rootfs.cpio.uboot*  created by buildroot.
+ > *It works !  *
+ > dropbear is not killed and there are not /dev/null messages.
 
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index 018e5b8a77..95a031b6f2 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  20382dbb1ac33425e6b3198cc9be269b79cd1423ea656e0ccd16dedafa3e2a2a  rtl8189fs-ed6741b52bc998875298117b55d18b0d557c37a6.tar.gz
-+sha256  5d8aad48b8d124a313e5b8182c5dba2b94ecdbac2a9f1861a50c081b9034a543  rtl8189fs-c223a25b1000d64432eca4201a8f012414dfc7ce.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index 2dd9e6097c..dd35a166e5 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8189FS_VERSION = ed6741b52bc998875298117b55d18b0d557c37a6
-+RTL8189FS_VERSION = c223a25b1000d64432eca4201a8f012414dfc7ce
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
- 
+Ok, good!
+
+ > I want to add a few files to this rootfs and then pack it again to
+ > *rootfs.cpio.uboot*
+ > So I extracted rootfs.cpio with:
+
+ > cpio -idv < /tmp/rootfs.cpio
+ > *** Added few files to /root ****
+ > ls | cpio -ov > /tmp/rootfs.cpio
+ > gzip -f /tmp/rootfs.cpio
+ > ./u-boot/u-boot-xlnx/tools/mkimage -A arm64 -T ramdisk -C gzip -n 'zynqmp'
+ > -d /tmp/rootfs.cpio.gz /tmp/rootfs.cpio.gz.uboot
+
+ > Is this the right sequence ?
+ > I  tried the new rootfs.cpio.gz.uboot. Boot hangs.
+
+You need to do such things as root (or run under fakeroot) to ensure
+correct permissions and device nodes, but the real way to make
+modifications of the rootfs is explained in the Buildroot manual:
+
+https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+
+ > Thank you very much for your help,
+
+You are welcome.
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
