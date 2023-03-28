@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11C0EC6FD18
-	for <buildroot@archiver.kernel.org>; Tue, 28 Mar 2023 19:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E2AC6FD18
+	for <buildroot@archiver.kernel.org>; Tue, 28 Mar 2023 20:25:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC64B41C73;
-	Tue, 28 Mar 2023 19:57:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC64B41C73
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C4A940969;
+	Tue, 28 Mar 2023 20:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C4A940969
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4mpgCR_VE8DD; Tue, 28 Mar 2023 19:57:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jsRhlKfwcbyO; Tue, 28 Mar 2023 20:25:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF79441C7F;
-	Tue, 28 Mar 2023 19:57:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF79441C7F
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDA3640982;
+	Tue, 28 Mar 2023 20:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDA3640982
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 30A931BF23C
- for <buildroot@lists.busybox.net>; Tue, 28 Mar 2023 19:57:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B2AC91BF3C4
+ for <buildroot@lists.busybox.net>; Tue, 28 Mar 2023 20:25:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 168FC41C89
- for <buildroot@lists.busybox.net>; Tue, 28 Mar 2023 19:57:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 168FC41C89
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85CF840147
+ for <buildroot@lists.busybox.net>; Tue, 28 Mar 2023 20:25:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85CF840147
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fVufghSfzSmp for <buildroot@lists.busybox.net>;
- Tue, 28 Mar 2023 19:57:07 +0000 (UTC)
+ with ESMTP id Lu-UP1rhrWIo for <buildroot@lists.busybox.net>;
+ Tue, 28 Mar 2023 20:25:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C46041C7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91F5E400D9
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C46041C7F
- for <buildroot@buildroot.org>; Tue, 28 Mar 2023 19:57:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 91F5E400D9
+ for <buildroot@buildroot.org>; Tue, 28 Mar 2023 20:25:48 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 406D15FF88;
- Tue, 28 Mar 2023 21:57:00 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3228B5FF96;
+ Tue, 28 Mar 2023 22:25:33 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 28 Mar 2023 21:56:59 +0200
-Date: Tue, 28 Mar 2023 21:56:59 +0200
+ Tue, 28 Mar 2023 22:25:33 +0200
+Date: Tue, 28 Mar 2023 22:25:33 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Message-ID: <20230328195659.GC3204460@scaer>
-References: <20230327135948.90710-1-luca.ceresoli@bootlin.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <20230328202533.GD3204460@scaer>
+References: <20230326130937.56650-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230327135948.90710-1-luca.ceresoli@bootlin.com>
+In-Reply-To: <20230326130937.56650-1-f.fainelli@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1680033424;
- bh=GdD9hOVFhJXq/XnshygWW9SUMdrwFVLZnOkWJgi4kQQ=;
+ d=free.fr; s=smtp-20201208; t=1680035145;
+ bh=3dBi71hnvaD3Z9K4wXD+KYy+QMNSc/TKK7pZzXe7TUM=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=QcZlW6F956CJqev8DQyNX+URxjuCYFRWQkgFhh+mNG2I4U7TIYDZFBC/m4xqxLs+r
- 73DIqNb5972FLIkpyVZsscqpF7KoqtD8aVdwe6GL+XCct26V1FcZjNmbuVzvV47BJF
- HULrn0Shb0tKBXOiTI61DGWXscvVojCdkI34Bwzff7sU6zUYeJBa7gLCqjAZ9JjJvd
- WvQ90zGzFGccSOGsk3BW0TNsVA1tRX0CFVfaqCnLMDC/OesHGfrZPF31r/rDaGI+RT
- wylQsRa0rpEEGAx07s27m1HpUh+I+9+Bu5uYahtQL18T6duc1Rw8xbD6LjhhzH1oav
- rJXRzx8flZNmQ==
+ b=i5TvC+7qOyGBDRRCDiumodiAdCDZeQ548D1soXJCalBMTu8OxetLNd61QREaxk8ZX
+ XC+tk0sCXth2wWtY67hWlUpvRkXSGSLO/IMAPnIx0qRcLdPdr6i3rO4uScjvwsp6fu
+ 9PWmimzaP8U1eqMsHaouBnMm5ry4fSDVvhw8Ii55U63Ie0ybYU7A9x+AdEhzmcaK8A
+ eiKJTUbzws+o7zi/GbVuwEdsDgr6F0eu7P99AnHa+sDo58gLFCVcoXDdYLGpx/v/eP
+ XzV2Qqhky5thVnYPncp1dJXq79UrOf3U8OkYANA7/EnnP4f4VCshP1EkCSPncvEn8m
+ jf5IVocM4ZMJQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QcZlW6F9
-Subject: Re: [Buildroot] [PATCH v2] package/linux-tools: add USB tools
- (testusb and ffs-test)
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=i5TvC+7q
+Subject: Re: [Buildroot] [PATCH] package/bluez5_utils: Fix builds with
+ musl-libc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,144 +76,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Herve Codina <herve.codina@bootlin.com>,
+Cc: marcin@bis.org.pl, d.lang@abatec.at,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Luca, All,
+Florian, All,
 
-On 2023-03-27 15:59 +0200, Luca Ceresoli spake thusly:
-> Extend the linux-tools package to also build the userspace USB tools, which
-> currently include testusb and ffs-test.
+On 2023-03-26 06:09 -0700, Florian Fainelli spake thusly:
+> Backport upstream commit ca6546fe521360fcf905bc115b893f322e706cb2
+> ("shared: define MAX_INPUT for musl") to fix builds with musl-libc.
 > 
-> These tools are in the kernel tree since a long time, but a Makefile was
-> added only in 5.9 to allow building in the same way as other tools provided
-
-That is not entirely correct.
-
-The Makefile itself has been present since 2.6.39, but indeed only
-gained an install rule for 5.9:
-
-    4f22ce7045c1  2011-02-17  USB: tools: Add a Makefile
-    9ca325ffcac4  2020-08-19  tools: usb: move to tools buildsystem
-
-So I've tweaked the commit log accordingly.
-
-> with the kernel. Here we use the Makefile and thus version >= 5.9 is
-> required. Support for older kernels may be added later if needed.
+> Fixes:
+> - http://autobuild.buildroot.net/results/3fd24a604a29eff70e20f82690e3f058f04903f9/
+> - http://autobuild.buildroot.net/results/bd57f1813be699cd5ce2ae94f5f511a71fe10428/
+> - http://autobuild.buildroot.net/results/90d528cc18a367af2f68e1c0673d962fe399e1ac/
+> - http://autobuild.buildroot.net/results/552b700ee129e1c7f651de13f6766eae5325dcbc/
 > 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../bluez5_utils/0001-musl-max-input.patch    | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 package/bluez5_utils/0001-musl-max-input.patch
+> 
+> diff --git a/package/bluez5_utils/0001-musl-max-input.patch b/package/bluez5_utils/0001-musl-max-input.patch
+> new file mode 100644
+> index 000000000000..87fbb68f8f40
+> --- /dev/null
+> +++ b/package/bluez5_utils/0001-musl-max-input.patch
+> @@ -0,0 +1,35 @@
+> +From ca6546fe521360fcf905bc115b893f322e706cb2 Mon Sep 17 00:00:00 2001
+> +From: Sam James <sam@gentoo.org>
+> +Date: Tue, 31 Jan 2023 05:52:58 +0000
+> +Subject: shared: define MAX_INPUT for musl
+> +
+> +musl systems don't have MAX_INPUT. Just define it to _POSIX_MAX_INPUT
+> +which musl does have if it's not already defined.
+> +
+> +Note that on glibc, the values match anyway (as of glibc-2.36), and
+> +indeed POSIX_MAX_INPUT has the same value on musl too.
+> +
+> +Bug: https://bugs.gentoo.org/888467
 
-Applied to master, thanks.
+Please add your SoB to this patch, and a note that it is a blackport
+(yes, the commit log mentions it is a backport, but when we need to
+assess this patch in the future, having the notre in the patch itself is
+much easier). I usually do that with a note like:
+
+    Original commit log...
+
+    [yann.morin.1998@free.fr: backport from upstream]
+    Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Note: if the path header has the upstream commit sha1 and applies as-is
+(possibly with just a bit of fuzz), then "backport from upstream" is
+enough. But if you had to rewrite the ptch, and the header does not have
+the upstream sha1, then add it to the note:
+
+    [yann.morin.1998@free.fr: backport and adapt from upsteam 1234CDEF]
+
+The most important missing part here that I can't add is your SoB, so
+can you please respin?
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> 
-> Changes in v2:
-> 
->  - Use ALL_TARGETS to select tools to build and install instead of the ugly
->    removal logic
-> ---
->  DEVELOPERS                                    |  1 +
->  package/linux-tools/Config.in                 | 26 ++++++++++++++
->  package/linux-tools/linux-tool-usbtools.mk.in | 34 +++++++++++++++++++
->  3 files changed, 61 insertions(+)
->  create mode 100644 package/linux-tools/linux-tool-usbtools.mk.in
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index b6d288c54fa9..67c6004ddf2e 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1874,6 +1874,7 @@ F:	configs/zynqmp_zcu106_defconfig
->  F:	package/agentpp/
->  F:	package/exim/
->  F:	package/libpjsip/
-> +F:	package/linux-tools/linux-tool-usbtools.mk.in
->  F:	package/qpid-proton/
->  F:	package/rtl8188eu/
->  F:	package/snmppp/
-> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-> index 8a0b6d5802cc..451b0eeff5bb 100644
-> --- a/package/linux-tools/Config.in
-> +++ b/package/linux-tools/Config.in
-> @@ -135,6 +135,32 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dyna
->  	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || \
->  		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
->  
-> +config BR2_PACKAGE_LINUX_TOOLS_USBTOOLS
-> +	bool "USB test programs"
-> +	select BR2_PACKAGE_LINUX_TOOLS
-> +	help
-> +	  Build and install the USB test tools.
+> +---
+> + src/shared/util.c | 5 +++++
+> + 1 file changed, 5 insertions(+)
 > +
-> +	  These tools exist since Linux 2.6.35, but Buildroot can build
-> +	  them only with kernel versions 5.9 and later.
+> +diff --git a/src/shared/util.c b/src/shared/util.c
+> +index 2f0ae0e86..b466fb001 100644
+> +--- a/src/shared/util.c
+> ++++ b/src/shared/util.c
+> +@@ -28,6 +28,11 @@
+> + #include <sys/random.h>
+> + #endif
+> + 
+> ++/* define MAX_INPUT for musl */
+> ++#ifndef MAX_INPUT
+> ++#define MAX_INPUT _POSIX_MAX_INPUT
+> ++#endif
+> ++
+> + #include "src/shared/util.h"
+> + 
+> + void *util_malloc(size_t size)
+> +-- 
+> +cgit 
 > +
-> +if BR2_PACKAGE_LINUX_TOOLS_USBTOOLS
-> +
-> +config BR2_PACKAGE_LINUX_TOOLS_USBTOOLS_TESTUSB
-> +	bool "testusb"
-> +	help
-> +	  testusb issues ioctls to perform the tests implemented by the
-> +	  kernel driver.  It can generate a variety of transfer
-> +	  patterns.
-> +
-> +	  See http://www.linux-usb.org/usbtest/
-> +
-> +config BR2_PACKAGE_LINUX_TOOLS_USBTOOLS_FFSTEST
-> +	bool "ffs-test"
-> +	help
-> +	  User mode filesystem api for usb composite function
-> +endif
-> +
->  config BR2_PACKAGE_LINUX_TOOLS_TMON
->  	bool "tmon"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/linux-tools/linux-tool-usbtools.mk.in b/package/linux-tools/linux-tool-usbtools.mk.in
-> new file mode 100644
-> index 000000000000..797758adce51
-> --- /dev/null
-> +++ b/package/linux-tools/linux-tool-usbtools.mk.in
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# usbtools
-> +#
-> +################################################################################
-> +
-> +LINUX_TOOLS += usbtools
-> +
-> +USBTOOLS_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
-> +
-> +LINUX_TOOLS_USBTOOLS_LIST = \
-> +	$(if $(BR2_PACKAGE_LINUX_TOOLS_USBTOOLS_TESTUSB),testusb) \
-> +	$(if $(BR2_PACKAGE_LINUX_TOOLS_USBTOOLS_FFSTEST),ffs-test)
-> +
-> +define USBTOOLS_BUILD_CMDS
-> +	$(Q)if ! grep install $(LINUX_DIR)/tools/usb/Makefile >/dev/null 2>&1 ; then \
-> +		echo "Your kernel version is too old to build the USB tools." ; \
-> +		echo "At least kernel 5.9 must be used." ; \
-> +		exit 1 ; \
-> +	fi
-> +
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/usb \
-> +		ALL_TARGETS="$(LINUX_TOOLS_USBTOOLS_LIST)" \
-> +		$(USBTOOLS_MAKE_OPTS) \
-> +		all
-> +endef
-> +
-> +define USBTOOLS_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/usb \
-> +		ALL_TARGETS="$(LINUX_TOOLS_USBTOOLS_LIST)" \
-> +		$(USBTOOLS_MAKE_OPTS) \
-> +		DESTDIR=$(TARGET_DIR) \
-> +		install
-> +endef
 > -- 
 > 2.34.1
 > 
