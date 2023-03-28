@@ -4,68 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27532C6FD18
-	for <buildroot@archiver.kernel.org>; Tue, 28 Mar 2023 19:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A212BC76196
+	for <buildroot@archiver.kernel.org>; Tue, 28 Mar 2023 19:56:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C712941C77;
-	Tue, 28 Mar 2023 19:38:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C712941C77
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48218400D9;
+	Tue, 28 Mar 2023 19:56:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48218400D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xkkIvhuYlsMp; Tue, 28 Mar 2023 19:38:58 +0000 (UTC)
+	with ESMTP id fWBLaQFLtxVX; Tue, 28 Mar 2023 19:56:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2023B41C6E;
-	Tue, 28 Mar 2023 19:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2023B41C6E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D03601BF23C
- for <buildroot@lists.busybox.net>; Tue, 28 Mar 2023 19:38:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EDF440439;
+	Tue, 28 Mar 2023 19:56:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EDF440439
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B2CA11BF23C
+ for <buildroot@lists.busybox.net>; Tue, 28 Mar 2023 19:56:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8DB340508
- for <buildroot@lists.busybox.net>; Tue, 28 Mar 2023 19:38:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8DB340508
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C17340439
+ for <buildroot@lists.busybox.net>; Tue, 28 Mar 2023 19:56:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C17340439
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UP99__SwTSzE for <buildroot@lists.busybox.net>;
- Tue, 28 Mar 2023 19:38:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7350D4033A
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7350D4033A
- for <buildroot@buildroot.org>; Tue, 28 Mar 2023 19:38:54 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 63CE15FF9E;
- Tue, 28 Mar 2023 21:38:49 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 28 Mar 2023 21:38:49 +0200
-Date: Tue, 28 Mar 2023 21:38:49 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Message-ID: <20230328193849.GB3204460@scaer>
-References: <20230327141122.103829-1-luca.ceresoli@bootlin.com>
- <20230327141122.103829-2-luca.ceresoli@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230327141122.103829-2-luca.ceresoli@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1680032332;
- bh=Ag44FNb6lii2jgaG2h7IzfZlBZjRYUTCXaZw+B6J6bI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Dd/hM4gen/oq/j6a8T31qSXaW2pjtMBpEReC5Gywel7P7gPnQhHBhDSJM/cty0XP1
- nvCxVBARZbjC4t6qZJWDaFfwDB9GHDGAJzX7829MTNHa0G17LBBVV6VKFivEkHap2s
- lu4Iu6HJAsfPCvQUpcV8I+CAoA14qe96Pnih3GQ3N1zt0xuskBCBqerWb7PVNrnOCx
- l4SBbBA4vhrTWQ17WNJtkDFsh6GOfq1gnO+xIP3Ia8dmQojoa02aoqVI2m2/P97dRP
- AvFnzL2coN5JNdIF8D7GkTBznSi5gEV/C1+6pIuTPLESSQvQZBaKcPJp+uOr6MQztX
- nmucT1fGtgDiA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Dd/hM4ge
-Subject: Re: [Buildroot] [PATCH 2/2] docs/manual: ditch redundant -f 'rm'
- flag
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mEXQ9pt17Eo6 for <buildroot@lists.busybox.net>;
+ Tue, 28 Mar 2023 19:56:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE40B400D9
+ for <buildroot@buildroot.org>; Tue, 28 Mar 2023 19:56:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE40B400D9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 99C2E835F7; Tue, 28 Mar 2023 19:56:13 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 28 Mar 2023 21:54:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9a3d4e38183e7c7ade63588519796005f43efe78
+X-Git-Newrev: fb515a4b284228935a0afb65d73a563f2b2c902c
+X-Patchwork-Hint: ignore
+Message-Id: <20230328195613.99C2E835F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-tools: add USB tools
+ (testusb and ffs-test)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,78 +57,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Luca, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=fb515a4b284228935a0afb65d73a563f2b2c902c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-03-27 16:11 +0200, Luca Ceresoli spake thusly:
-> The value of the RM variable in make is 'rm -f', thus the additional -f is
-> redundant. Avoid it on the docs to avoid developers taking it as a good
-> example to follow.
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Extend the linux-tools package to also build the userspace USB tools,
+which currently include testusb and ffs-test.
 
-Applied to master, thanks.
+These tools are in the kernel tree since a long time, and althogh a
+Makefile had been present since kernel 2.6.39, it has been entirely
+rewritten (with an install rule) back with kernel 5.9, to allow building
+the same way as other tools provided with the kernel.
 
-Will you send a tree-wide cleanup, now? ;-)
+We make use of the Makefile install rule, thus version >= 5.9 is
+required. Support for older kernels may be added later if needed, and
+is left as an exercise for the motivated party.
 
-    $ git grep -E '\$\(RM\) -r?f' |wc -l
-    47
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Herve Codina <herve.codina@bootlin.com>
+[yann.morin.1998@free.fr: fix history of Makefile]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                                    |  1 +
+ package/linux-tools/Config.in                 | 26 ++++++++++++++++++++
+ package/linux-tools/linux-tool-usbtools.mk.in | 34 +++++++++++++++++++++++++++
+ 3 files changed, 61 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/manual/writing-rules.txt | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-> index 758965d80a0a..13b7fd5bea6a 100644
-> --- a/docs/manual/writing-rules.txt
-> +++ b/docs/manual/writing-rules.txt
-> @@ -78,7 +78,7 @@ Do not align the +=+ signs.
->  +
->  ---------------------
->  define LIBFOO_REMOVE_DOC
-> -	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/doc \
-> +	$(RM) -r $(TARGET_DIR)/usr/share/libfoo/doc \
->  		$(TARGET_DIR)/usr/share/man/man3/libfoo*
->  endef
->  ---------------------
-> @@ -118,7 +118,7 @@ YES:
->  ---------------------
->  ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
->  define LIBFOO_REMOVE_DATA
-> -	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
-> +	$(RM) -r $(TARGET_DIR)/usr/share/libfoo/data
->  endef
->  LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
->  endif
-> @@ -128,7 +128,7 @@ NO:
->  +
->  ---------------------
->  define LIBFOO_REMOVE_DATA
-> -	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
-> +	$(RM) -r $(TARGET_DIR)/usr/share/libfoo/data
->  endef
->  
->  ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
-> -- 
-> 2.34.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b6d288c54f..67c6004ddf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1874,6 +1874,7 @@ F:	configs/zynqmp_zcu106_defconfig
+ F:	package/agentpp/
+ F:	package/exim/
+ F:	package/libpjsip/
++F:	package/linux-tools/linux-tool-usbtools.mk.in
+ F:	package/qpid-proton/
+ F:	package/rtl8188eu/
+ F:	package/snmppp/
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 8a0b6d5802..451b0eeff5 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -135,6 +135,32 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dyna
+ 	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || \
+ 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 
++config BR2_PACKAGE_LINUX_TOOLS_USBTOOLS
++	bool "USB test programs"
++	select BR2_PACKAGE_LINUX_TOOLS
++	help
++	  Build and install the USB test tools.
++
++	  These tools exist since Linux 2.6.35, but Buildroot can build
++	  them only with kernel versions 5.9 and later.
++
++if BR2_PACKAGE_LINUX_TOOLS_USBTOOLS
++
++config BR2_PACKAGE_LINUX_TOOLS_USBTOOLS_TESTUSB
++	bool "testusb"
++	help
++	  testusb issues ioctls to perform the tests implemented by the
++	  kernel driver.  It can generate a variety of transfer
++	  patterns.
++
++	  See http://www.linux-usb.org/usbtest/
++
++config BR2_PACKAGE_LINUX_TOOLS_USBTOOLS_FFSTEST
++	bool "ffs-test"
++	help
++	  User mode filesystem api for usb composite function
++endif
++
+ config BR2_PACKAGE_LINUX_TOOLS_TMON
+ 	bool "tmon"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/linux-tools/linux-tool-usbtools.mk.in b/package/linux-tools/linux-tool-usbtools.mk.in
+new file mode 100644
+index 0000000000..797758adce
+--- /dev/null
++++ b/package/linux-tools/linux-tool-usbtools.mk.in
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# usbtools
++#
++################################################################################
++
++LINUX_TOOLS += usbtools
++
++USBTOOLS_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
++
++LINUX_TOOLS_USBTOOLS_LIST = \
++	$(if $(BR2_PACKAGE_LINUX_TOOLS_USBTOOLS_TESTUSB),testusb) \
++	$(if $(BR2_PACKAGE_LINUX_TOOLS_USBTOOLS_FFSTEST),ffs-test)
++
++define USBTOOLS_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/usb/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old to build the USB tools." ; \
++		echo "At least kernel 5.9 must be used." ; \
++		exit 1 ; \
++	fi
++
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/usb \
++		ALL_TARGETS="$(LINUX_TOOLS_USBTOOLS_LIST)" \
++		$(USBTOOLS_MAKE_OPTS) \
++		all
++endef
++
++define USBTOOLS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/usb \
++		ALL_TARGETS="$(LINUX_TOOLS_USBTOOLS_LIST)" \
++		$(USBTOOLS_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) \
++		install
++endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
