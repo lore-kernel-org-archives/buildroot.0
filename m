@@ -4,82 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08167C74A5B
-	for <buildroot@archiver.kernel.org>; Wed, 29 Mar 2023 20:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0891C6FD18
+	for <buildroot@archiver.kernel.org>; Wed, 29 Mar 2023 21:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 539AF84114;
-	Wed, 29 Mar 2023 20:57:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 539AF84114
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55844840D7;
+	Wed, 29 Mar 2023 21:00:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55844840D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L32UPAKsddbl; Wed, 29 Mar 2023 20:57:07 +0000 (UTC)
+	with ESMTP id zn2tEBb7u44R; Wed, 29 Mar 2023 21:00:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81824840D5;
-	Wed, 29 Mar 2023 20:57:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81824840D5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 640061BF335
- for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 20:57:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BF49840AD;
+	Wed, 29 Mar 2023 21:00:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BF49840AD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C0E051BF335
+ for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 21:00:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3DBC2840D5
- for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 20:57:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DBC2840D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AECE61422
+ for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 21:00:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AECE61422
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hfxZQWUnjgJ2 for <buildroot@lists.busybox.net>;
- Wed, 29 Mar 2023 20:57:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZIXatYC5YUtb for <buildroot@lists.busybox.net>;
+ Wed, 29 Mar 2023 21:00:06 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BFAE840AD
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6BFAE840AD
- for <buildroot@buildroot.org>; Wed, 29 Mar 2023 20:57:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49380605DB
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 49380605DB
+ for <buildroot@buildroot.org>; Wed, 29 Mar 2023 21:00:06 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.fritz.box ([62.216.208.135]) by mail.gmx.net
  (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M6Udt-1poWjV0iML-006v09 for <buildroot@buildroot.org>; Wed, 29 Mar 2023
- 22:57:00 +0200
+ 1M9Fnj-1pllMS2pkt-006MVv; Wed, 29 Mar 2023 23:00:03 +0200
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Wed, 29 Mar 2023 22:56:59 +0200
-Message-Id: <20230329205659.6801-1-ps.report@gmx.net>
+Date: Wed, 29 Mar 2023 22:59:59 +0200
+Message-Id: <20230329210000.7045-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:eOkgY0Su4baPQSr1xKJmLTQUMFAJSai0hpKz3uYtSoMu/jHo313
- 69ChP6j/Oy10/SadUAooA/VMIgbgQKHA1Q5BW2asBHpLOL/2Jda9cfxhqhrmKIp9cr7N82b
- aZ/47ZLQYfmycqV2ay5hpnVU5sz9Cog0a0xhajMjHZ0veTU+UjxCJXurD7FkjmnRF2hXR1V
- CYycPvSZPLW72Jw6xFxtg==
-UI-OutboundReport: notjunk:1;M01:P0:vWNGbVvlNoQ=;gkQigu6YjiWbOZyFv7Os8lW8eol
- 5AnAJVT1ekI55X4h8ycSgRKX+0jUoJZhD1+31nahD7eQdBGIISw1VSHPfxMmb7Ak2inTiJe9c
- WaKK7tz++dAANVaouIp53dHx8AztAY7FRZFS+NBEF25CRJAvnpzArgtdFBqx2xygYIXx27Xwl
- f0WgyiUhKzXNWdTMmeerfg+FhsSNhn82BC/oWLnp8p/yg18AOpglyoliwfA0+dvF/Xa9OEGDX
- 7wvVUgU5IoQmaJEUqjASY6TnxF/e9G6R6z8fQC1EAE/HoWSz4RTo/ygCfup/RUuVcn2kKkNef
- yUClFd7tO3t1fbgiUKVuFN4ssLpwldKAmm7B74tnTXjEP8n3MTcmcLuqth3QRcyaCd4OBOgto
- 7BIri/D9/6f0mRa6xjJrKLNNpa0jfCGBRfS89yUQ5bgFVd9qH0vchpxHHIqM+lMQd6RUqwkyc
- j/LPyirrGOKUJjZJdcbToNBxWm4TmDNg+kGqhhJBJ5qSZH3szl/Y1fexzs8aOGRpRMXz78b7B
- tFB5gLX9bzZSl0StYG7P9/4EsEtnHWeGRXcqVghsFMrn1eXxQtxH7rS4LP1GkumTfa/FF15Iy
- dybGW4Fv1ZzC/Q6t3iWP/ym9JBtgqjD31muXZez4isPUAMXObCzlhuqogoQwVcUUp3TKA4Mmt
- asUeylzi9a0OfgLuU7tLUBZ51qOI8xnmv2rKt6t9PeunEoKNPFzFQvlBxjBA3nvFRIph23Aol
- nkWi/jcjk6YnOn1BsJWpyyAA8fCK25z3rv0JIi4U47AKmXVIMJoYeOO8+IGIznMT145h5fW7L
- P/YKXbAH5ONmVkcqC4wC5tn5+OPvUdiRhzipI5+K6choZ4r285kDfitlfTFFPmx++ZS7HNGK3
- E2PdwMYZFECiPv8B4G2idTjxYKlynWQPUT4R/P2+fFs0iYH85UaA6qZZtdnkA23hY4S2IRKDD
- cUYEoMPs9FwWdWqD3PCNFXtqvpA=
+X-Provags-ID: V03:K1:xY1AXw3I/dl5npdy19Kd9aNZoh1HKdEN3VVk3moDLe8onFNPwmn
+ FDMr8A7jd0guyUas3g/2KUGMoM/8M+mY7hJEC5k/tEEv6Q9xFpa8rYiVfnCNFgKhUnBIHjy
+ aUarBFGdg2BwPB+9QN8hdhpFw5LoR5XzJRJXx9wZINKz+69fO78q2Tsrwxtp31AfRnihZDR
+ iT0mAq0EQ/bT1PU5MgmHA==
+UI-OutboundReport: notjunk:1;M01:P0:rus5Lth1Ol0=;duZ+Mjm0Jy9fhQxJjMn7+k3BFvp
+ nULXUg5BpvseLpyzUK2QXZpm+haG52ZOqnNwXheSv3xoStWQR7ImuCGHbUHmn4qH6RtxWgQss
+ 4gPGPNecqeiYYjan3tPq+Abx/hEIG1r5gxkpQaY45cmvGQxW9jpeZxqgilBVV0/zBo1vGYTAT
+ hzQJBi/Rt5lalW8TnQSaFcwwFdpN4bEdi7P3LErlttKTjtITKevQndPqGdUX3FDWajW955DKi
+ QaaFysfThnk7VbXN3TyOKyig3+22fzTLOqYDMHhTY+gswO2ab6Ll1AwwYHNTQeG3lVpsbCpmu
+ Dy7K51oygkXkejsxbdAOhjsu7YspsqLJ3OseRRXfKp7kWE7+tgNjFeba5jZIXghiY4Bo+RZGj
+ vsG6xsT+YTLQEqKBfIC5ivcm5dx7yfoEqZr+AHpGpgAm/vkubg1Smpz6QI8i1k+71+tgNY84Q
+ sSfjaGTNSRmIwA0OkwVawYHbuK15Asqg3LTjKcSIDIRnSFWVACterTK+uv4dIZ37+d8yOAT5T
+ qkL5drZzjN+FJ8xRmiI2l7LdW6vUnkhuOvmMWCW0xFAYatkl4rlPnPN5hy3GtvM2OPH3Cz2FF
+ bMSC8c0kerIVZjEgAv80DZ1Gb5MMdmVhtqrDc8U95ipxle4bwhv+KJVxtPNwpjpb8yy2/gEGY
+ vLN9o5dv052SLHEG/wLAtrvUW8euRw6KVurYcJV5KtIhiwxW3zXZIv3ckqPbBqCdGJQaPfI3L
+ fKjmLg/W28+pves88Zpj4flaEDTPZs480cHXf/4CBr4zhbPVFUaqZiJDl6v2KFlHPXI836oSW
+ 7qk9z2DwBSA+S6lqfo/yQ86Ddm4Bp+pPNQV/hGe2kzT4hHEhBBsYWmlM8kbPI7nweJoje3bc4
+ hyPYuNon3LlJWtmlmMNYxtpF8Ijk6jUuFQXJcrU2hTa+iy/NLUsWqLTN2rvaBzd1AWumxnRLv
+ yRVC+1zD1VYSII77o+klhBx/VB0=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.net; s=s31663417; 
- t=1680123420; i=ps.report@gmx.net;
- bh=VdYEXPRnwJQLys7z15LomyUTxYrsTrpoClIOzdFtvEU=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=Smn7Vb9S+pclg51TRadUBzn1SM3zvIvYcBCjV3u77Fg1rZPJTBDWcelk+ps4s40uc
- HQ+omNWDlmVXF6hfPGUytzDSVdHr9D8kF44ZLb/6G+iNcusO7L1fXIjF2PjhYGgivG
- 91Faec4dejHREFwnqp/z8VGUqXyoAZ8XmPdX+vR2HLuRlM5SytmfT2ScFxFQ8nmbCc
- zhkKJ6ZiAzni3wyRdnRqSUK54LikWFg9NeB2OQiCOdkQi9+Iv0NIjcaZHmPx4eLRJi
- EZWWstHg/etHYxoZ63KkS0d3xvhBMGE8qYjq2oLseFy/heQR/HIUgMccKAt5hCt6nw
- INTgYxQx0ctCw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1680123603; i=ps.report@gmx.net;
+ bh=bLSKRa9mil04GAHJW00qhCXzRP2NXnQ2p7/CDVSU6Pg=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=gbHzZVmugl9Tc8JshWXZAROTYoG2eJvWn+fcXuoX80MlvhkNrqKP4vsj8XSO8z7jZ
+ m6g0E8d7J7gAvNuiH4UiPyc8lu7lS9soxj3sxU7r/szQYoiYstzxCJYmKE4cmm3wql
+ S2QnKKqShyViYxR6NSI6rHgVgZqmSEUJBdNjb/zjGBgDnUytoLJ706X6B+oz5DAmNI
+ xAXqOq1kauN0XyOf7g7exrbJ/BxgXQXilIhwAxrzyYcsnE+dtdCOqWA7PTLebquncU
+ CYAOFceZ975pZMFzqnEPtIHAPI3XMLjReo3/Pg54SDxoN/LR3U988bePwtNt4xLe5L
+ oh2TuKfrMJyMw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=Smn7Vb9S
-Subject: [Buildroot] [PATCH v1] package/valgrind: bump version to 3.20.0
+ header.a=rsa-sha256 header.s=s31663417 header.b=gbHzZVmu
+Subject: [Buildroot] [PATCH v1 1/2] package/libv4l: bump version to 1.24.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,134 +90,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- remove 0003-coregrind-fix-compilation-for-uclibc.patch
-  (from upstream [1]) and drop AUTORECONF
+- disable new v4l2-tracer option (fails to compile with rpi4_64 configuration)
 
-For details see [2].
+For details see [1].
 
-[1] https://sourceware.org/git/?p=valgrind.git;a=commit;h=9c9fd9ae24b45f915f0759d32f662835c26d37c3
-[2] https://www.valgrind.org/docs/manual/dist.news.html
+[1] https://git.linuxtv.org/v4l-utils.git/tree/ChangeLog?h=stable-1.24
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...coregrind-fix-compilation-for-uclibc.patch | 65 -------------------
- package/valgrind/valgrind.hash                |  4 +-
- package/valgrind/valgrind.mk                  |  4 +-
- 3 files changed, 3 insertions(+), 70 deletions(-)
- delete mode 100644 package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch
+ package/libv4l/libv4l.hash | 2 +-
+ package/libv4l/libv4l.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch b/package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch
-deleted file mode 100644
-index ff8dc974d8..0000000000
---- a/package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From 9c9fd9ae24b45f915f0759d32f662835c26d37c3 Mon Sep 17 00:00:00 2001
--From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--Date: Fri, 8 Apr 2022 12:36:33 +0200
--Subject: [PATCH] coregrind: fix compilation for uclibc
--
--It fixes a known iusse whose details are described at [1] and more
--generally it guarantees that Valgrind is properly compiled for ulibc.
--
--[1] https://www.mail-archive.com/valgrind-users@lists.sourceforge.net/msg05295.html
--
--Suggested-by Michael Trimarchi <michael@amarulasolutions.com>
--Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- configure.ac                        | 2 ++
-- coregrind/m_debuginfo/minilzo-inl.c | 4 ++++
-- coregrind/vg_preloaded.c            | 4 ++++
-- 3 files changed, 10 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index 6f51dfd9f8fb..c627a9c17a4a 100755
----- a/configure.ac
--+++ b/configure.ac
--@@ -1204,6 +1204,8 @@ AC_SUBST(DEFAULT_SUPP)
-- AC_CHECK_HEADER([features.h])
-- 
-- if test x$ac_cv_header_features_h = xyes; then
--+  AC_DEFINE([HAVE_HEADER_FEATURES_H], 1,
--+          [Define to 1 if you have the `features.h' header.])
--   rm -f conftest.$ac_ext
--   cat <<_ACEOF >conftest.$ac_ext
-- #include <features.h>
--diff --git a/coregrind/m_debuginfo/minilzo-inl.c b/coregrind/m_debuginfo/minilzo-inl.c
--index 153d008fd44f..b45ec92eaa85 100644
----- a/coregrind/m_debuginfo/minilzo-inl.c
--+++ b/coregrind/m_debuginfo/minilzo-inl.c
--@@ -1875,6 +1875,10 @@ extern "C" {
-- 
-- #endif
-- 
--+#ifdef HAVE_HEADER_FEATURES_H
--+#include <features.h>
--+#endif
--+
-- #undef LZO_HAVE_CONFIG_H
-- #include "minilzo.h"
-- 
--diff --git a/coregrind/vg_preloaded.c b/coregrind/vg_preloaded.c
--index 5e2098390847..3809811aede7 100644
----- a/coregrind/vg_preloaded.c
--+++ b/coregrind/vg_preloaded.c
--@@ -45,6 +45,10 @@
-- #include "pub_core_debuginfo.h"  // Needed for pub_core_redir.h
-- #include "pub_core_redir.h"      // For VG_NOTIFY_ON_LOAD
-- 
--+#ifdef HAVE_HEADER_FEATURES_H
--+#include <features.h>
--+#endif
--+
-- #if defined(VGO_linux) || defined(VGO_solaris) || defined(VGO_freebsd)
-- 
-- /* ---------------------------------------------------------------------
---- 
--2.32.0
--
-diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
-index 8487c07e42..83717f26f3 100644
---- a/package/valgrind/valgrind.hash
-+++ b/package/valgrind/valgrind.hash
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index d99d5e0992..4f694de34b 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
 @@ -1,7 +1,7 @@
- # From https://valgrind.org/downloads/current.html
--md5  4687a4990585a038c52f842448ef4e63  valgrind-3.19.0.tar.bz2
-+md5  e3ca8e03c6c527e80e7da5135a1b6beb  valgrind-3.20.0.tar.bz2
- # locally computed
--sha256  dd5e34486f1a483ff7be7300cc16b4d6b24690987877c3278d797534d6738f02  valgrind-3.19.0.tar.bz2
-+sha256  8536c031dbe078d342f121fa881a9ecd205cb5a78e639005ad570011bdb9f3c6  valgrind-3.20.0.tar.bz2
+ # Locally calculated after checking signature
+ # https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.20.0.tar.bz2.asc
+ # with key 05D0169C26E41593418129DF199A64FADFB500FF
+-sha256  65c6fbe830a44ca105c443b027182c1b2c9053a91d1e72ad849dfab388b94e31  v4l-utils-1.22.1.tar.bz2
++sha256  cbb7fe8a6307f5ce533a05cded70bb93c3ba06395ab9b6d007eb53b75d805f5b  v4l-utils-1.24.1.tar.bz2
  
- # License files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 17b131c3ec..98beb7ffef 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+ sha256  391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index fd69b7ac7a..83f9dfe565 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--VALGRIND_VERSION = 3.19.0
-+VALGRIND_VERSION = 3.20.0
- VALGRIND_SITE = https://sourceware.org/pub/valgrind
- VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
-@@ -14,8 +14,6 @@ VALGRIND_CONF_OPTS = \
- 	--disable-ubsan \
- 	--without-mpicc
- VALGRIND_INSTALL_STAGING = YES
--# 0003-coregrind-fix-compilation-for-uclibc.patch
--VALGRIND_AUTORECONF=YES
- 
- # Valgrind must be compiled with no stack protection, so forcefully
- # pass -fno-stack-protector to override what Buildroot may have in
+-LIBV4L_VERSION = 1.22.1
++LIBV4L_VERSION = 1.24.1
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
+ LIBV4L_DEPENDENCIES = host-pkgconf
+-LIBV4L_CONF_OPTS = --disable-doxygen-doc --disable-qvidcap
++LIBV4L_CONF_OPTS = --disable-doxygen-doc --disable-qvidcap --disable-v4l-tracer
+ # needed to get utils/qv4l link flags right
+ LIBV4L_AUTORECONF = YES
+ # add host-gettext for AM_ICONV macro
 -- 
 2.40.0
 
