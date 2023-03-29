@@ -4,70 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55282C74A5B
-	for <buildroot@archiver.kernel.org>; Wed, 29 Mar 2023 06:44:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 105DCC761AF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Mar 2023 06:49:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7185409B7;
-	Wed, 29 Mar 2023 06:44:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7185409B7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A8C640974;
+	Wed, 29 Mar 2023 06:49:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A8C640974
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 30BfcqCu3X8P; Wed, 29 Mar 2023 06:44:13 +0000 (UTC)
+	with ESMTP id Dva6pRTvyTNP; Wed, 29 Mar 2023 06:49:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E1688405C6;
-	Wed, 29 Mar 2023 06:44:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1688405C6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E673408D5;
+	Wed, 29 Mar 2023 06:49:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E673408D5
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 740341BF364
- for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 06:44:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 660851BF364
+ for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 06:49:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59D6341C46
- for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 06:44:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59D6341C46
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D085417D3
+ for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 06:49:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D085417D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ANMqLEnZZIrv for <buildroot@lists.busybox.net>;
- Wed, 29 Mar 2023 06:44:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2BB141D5F
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F2BB141D5F
- for <buildroot@buildroot.org>; Wed, 29 Mar 2023 06:44:00 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C482D240002;
- Wed, 29 Mar 2023 06:43:58 +0000 (UTC)
-Date: Wed, 29 Mar 2023 08:43:57 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20230329084357.78d68e38@booty>
-In-Reply-To: <20230328193849.GB3204460@scaer>
-References: <20230327141122.103829-1-luca.ceresoli@bootlin.com>
- <20230327141122.103829-2-luca.ceresoli@bootlin.com>
- <20230328193849.GB3204460@scaer>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1680072239;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=1DxwEE2RHcoYDnqNvlhf09OuWkk7mjOtaNq7eGNx2zs=;
- b=f3gbm8gMXn+da8UU8g8e4HxpO8Sizpf0QpluL3f1tkYG6YzcE2KNykSJgB2mow4H3WyiZY
- P7h41rE5xxrw+4w1hkLeeHVvnM/IVV8GubR3mUOgscCLJ8Kr+9PdbuatEzauA8iAO1Mxuh
- vCr8D29t0fGksiT5uj/b8TlE10zrZoZ0cR5IjYON+1Mmwdn1pQdQp7c7AD5bGTQFTiGHrv
- GG5YXv+02CjZZXdpnzcE8dzfEkDAad9sY4FpfFmXLNM97Hvnts+wrr/XIYdkSLeuPWxh7d
- 5N2jLFWfMwAkRczBJ6V83Jp/+gUJss98CI3kgVreGM3+OAh/gdlJqQ4jU2uRfA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=f3gbm8gM
-Subject: Re: [Buildroot] [PATCH 2/2] docs/manual: ditch redundant -f 'rm'
- flag
+ with ESMTP id OA-ykDS44Q9X for <buildroot@lists.busybox.net>;
+ Wed, 29 Mar 2023 06:49:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 266914096C
+ for <buildroot@buildroot.org>; Wed, 29 Mar 2023 06:49:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 266914096C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 119508361B; Wed, 29 Mar 2023 06:49:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 29 Mar 2023 08:48:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 16cd9494ba6496d7f5f873abd307952efea7da78
+X-Git-Newrev: a45f2af7fae09e4daee9d017b02e8744b357cf48
+X-Patchwork-Hint: ignore
+Message-Id: <20230329064904.119508361B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/snmppp: fix build without SNMPV3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,43 +55,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=a45f2af7fae09e4daee9d017b02e8744b357cf48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Mar 2023 21:38:49 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Fix the following build failure without BR2_PACKAGE_SNMPPP_SNMPV3 raised
+since bump to version 3.5.0 in commit
+e011fa0415883b9d44df616cfaf6956e1a11da88:
 
-> Luca, All,
-> 
-> On 2023-03-27 16:11 +0200, Luca Ceresoli spake thusly:
-> > The value of the RM variable in make is 'rm -f', thus the additional -f is
-> > redundant. Avoid it on the docs to avoid developers taking it as a good
-> > example to follow.
-> > 
-> > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>  
-> 
-> Applied to master, thanks.
+msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
+msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
+  263 |   if (m_target->get_version() == version3) {
+      |                                  ^~~~~~~~
+      |                                  version1
 
-> 
-> Will you send a tree-wide cleanup, now? ;-)
-> 
->     $ git grep -E '\$\(RM\) -r?f' |wc -l
->     47
+Fixes:
+ - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
 
-I think I will leave it as an exercise for the motivated party. ;)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/snmppp/0001-fix-build-without-v3.patch | 43 ++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/snmppp/0001-fix-build-without-v3.patch b/package/snmppp/0001-fix-build-without-v3.patch
+new file mode 100644
+index 0000000000..4e81f7bfc1
+--- /dev/null
++++ b/package/snmppp/0001-fix-build-without-v3.patch
+@@ -0,0 +1,43 @@
++fix build without v3
++
++Fix the following build failure without version3 raised since version
++3.5.0:
++
++msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
++msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
++  263 |   if (m_target->get_version() == version3) {
++      |                                  ^~~~~~~~
++      |                                  version1
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to katz.agentpp.com@magenta.de]
++
++diff -Nura snmp++-3.5.0.orig/src/msgqueue.cpp snmp++-3.5.0/src/msgqueue.cpp
++--- snmp++-3.5.0.orig/src/msgqueue.cpp	2023-03-20 10:49:30.629000853 +0100
+++++ snmp++-3.5.0/src/msgqueue.cpp	2023-03-20 10:51:36.880664304 +0100
++@@ -260,18 +260,20 @@
++   m_target->set_retry(m_target->get_retry() - 1);
++   SetSendTime();
++   int status;
++-  if (m_target->get_version() == version3) {
++ #ifdef _SNMPv3
+++  if (m_target->get_version() == version3) {
++     // delete entry in cache
++     if (m_snmp->get_mpv3())
++ 	    m_snmp->get_mpv3()->delete_from_cache(m_pdu.get_request_id());
++-#endif
++     status = m_snmp->snmp_engine(m_pdu, m_pdu.get_error_status(), m_pdu.get_error_index(),
++ 		    *m_target, m_callBack, m_callData, m_socket, 0, this);
++   }
++   else {
+++#endif
++     status = send_snmp_request(m_socket, m_rawPdu, m_rawPduLen, *m_address);
+++#ifdef _SNMPv3
++   }
+++#endif
++   if (status != 0)
++     return SNMP_CLASS_TL_FAILED;
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
