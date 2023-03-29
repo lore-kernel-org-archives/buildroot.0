@@ -4,97 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB944C6FD18
-	for <buildroot@archiver.kernel.org>; Wed, 29 Mar 2023 12:39:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 417CDC761A6
+	for <buildroot@archiver.kernel.org>; Wed, 29 Mar 2023 13:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C30141DD3;
-	Wed, 29 Mar 2023 12:39:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C30141DD3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1727A4097C;
+	Wed, 29 Mar 2023 13:02:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1727A4097C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8FEjOiv7uNZI; Wed, 29 Mar 2023 12:39:51 +0000 (UTC)
+	with ESMTP id d0g0blrYzh6X; Wed, 29 Mar 2023 13:02:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0547141DCE;
-	Wed, 29 Mar 2023 12:39:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0547141DCE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7F9A01BF5A1
- for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 12:39:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D4C7410B8;
+	Wed, 29 Mar 2023 13:02:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D4C7410B8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 195341BF5A1
+ for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 13:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5961061474
- for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 12:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5961061474
+ by smtp2.osuosl.org (Postfix) with ESMTP id E71E2402F2
+ for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 13:02:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E71E2402F2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vP0RHvBuOJXB for <buildroot@lists.busybox.net>;
- Wed, 29 Mar 2023 12:39:47 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6793260D63
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
- [IPv6:2607:f8b0:4864:20::102a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6793260D63
- for <buildroot@buildroot.org>; Wed, 29 Mar 2023 12:39:47 +0000 (UTC)
-Received: by mail-pj1-x102a.google.com with SMTP id
- lr16-20020a17090b4b9000b0023f187954acso16013768pjb.2
- for <buildroot@buildroot.org>; Wed, 29 Mar 2023 05:39:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1680093587; x=1682685587;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=4NJjZxkk4pea7R5Hk1OHNhJBx85Yo1P1rXoX/VdYTJo=;
- b=oaKsO3Fezs64fPS0hI7amlpefqsBTPA0FTIeDix74ynETkVQdYBSd8sBVqN0o0F58d
- jf35YtfaS+AVAnph/rObDv1hOnBT978KD6V+EzAsMjLOCQ2srLm26YWnhsf1K+QNRZV2
- bp0z9JmnAzRJ3FX8GavUUIoWLquUne0nFatf+kyZpns935UIFC6zIN5V9GknnFgjZcEA
- FB3/x7InESPTuuVLJsUkTSobTNqYIF9oJld23P4gZSZZimjdVFY/pPzz2kaJ0viXjKgg
- gfQg0rde7V0odgsy0hfD7WlhKt3w8svUZR4m5hCIXFM5KHCPbjak8kPr2QGJf0Vtqj0A
- Of3Q==
-X-Gm-Message-State: AAQBX9d8qvjHHz0S7TqdU6xPu0mKvW5HUPIGFRyTPsSJ0HytVw6ZC9Ei
- tNjL+sf5u5aVgRbb8na97TA=
-X-Google-Smtp-Source: AKy350YmEzA10FPRMsrrwttAvoRhtc0WilGcIUwE9luhoIqQ2ldTPuIdP6sQdlVUr0X7zo6VylQpAQ==
-X-Received: by 2002:a17:903:120b:b0:1a0:42d4:e38a with SMTP id
- l11-20020a170903120b00b001a042d4e38amr24888058plh.11.1680093586628; 
- Wed, 29 Mar 2023 05:39:46 -0700 (PDT)
-Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
- by smtp.gmail.com with ESMTPSA id
- 12-20020a170902c10c00b0019cad2de86bsm22948941pli.156.2023.03.29.05.39.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 29 Mar 2023 05:39:46 -0700 (PDT)
-Message-ID: <f4e1e805-4ab0-e187-8001-c5cfa9c0be00@gmail.com>
-Date: Wed, 29 Mar 2023 05:39:44 -0700
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fdv5jPtEkBqB for <buildroot@lists.busybox.net>;
+ Wed, 29 Mar 2023 13:02:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D848401C2
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3D848401C2
+ for <buildroot@buildroot.org>; Wed, 29 Mar 2023 13:02:47 +0000 (UTC)
+Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
+ by mail.kmu-office.ch (Postfix) with ESMTPSA id AA6DF5C3E21;
+ Wed, 29 Mar 2023 15:02:44 +0200 (CEST)
+From: Stefan Agner <stefan@agner.ch>
+To: buildroot@buildroot.org,
+	thomas.petazzoni@bootlin.com
+Date: Wed, 29 Mar 2023 15:02:35 +0200
+Message-Id: <2120646ed4f19a45b5fab83a212413f79be91448.1680094918.git.stefan@agner.ch>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Arnout Vandecappelle <arnout@mind.be>
-References: <20230326130937.56650-1-f.fainelli@gmail.com>
- <20230328202533.GD3204460@scaer>
- <c7968ace-cfbb-1c54-bdde-083a37423686@mind.be>
- <20230329105022.6137bf1a@windsurf>
- <ffed7523-6dbe-6d61-03e7-57cdbc732097@mind.be>
- <20230329112855.6110cf8d@windsurf>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230329112855.6110cf8d@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1680093587; x=1682685587;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=4NJjZxkk4pea7R5Hk1OHNhJBx85Yo1P1rXoX/VdYTJo=;
- b=LUPeB5qspkyk0pycSDSVkvNf+W0kSYMASXiJ2+KnEOuP2kQo2i9tfAOVqmSrQxdBoB
- qjh/1ab1J/KOtVxIDvJYH59bCM3Z5PhmUzZXk1VYs8zILPDUZDkV/J0ez8GI4imTByMI
- TpReymOlg9dRb60SCttBOeuOWb61OyFWjmrX2zqArbFqbqdGR3Cp4wT8jR/gt6V6cUNx
- YeNif3z1FMkgkgQ+JWmAk1tiLQsfBlPIPVTQBrMLKDlGDi1+AfQFmtTuKPdXphygI830
- yO9AcaFyLcomeVZCB416UmidXhfx2pVzQ43P6oijvhFqWLcUkLjekSNFUg66/HxEijSa
- BxjQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=LUPeB5qs
-Subject: Re: [Buildroot] Indicating upstream status [was: [PATCH]
- package/bluez5_utils: Fix builds with musl-libc]
+ d=agner.ch; s=dkim; t=1680094964;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:
+ content-transfer-encoding:content-transfer-encoding:in-reply-to:
+ references; bh=+NZE7TJhvl1MMLTFELrR/1BQFqRlIFralDCqG7kz7MQ=;
+ b=bP+eh5ltS1RNsOKW4HZ5cG+Pa1WlHIyIhME7aPdGuDnRWlfRFbeTShJE+SWApMR4I9bfm0
+ SnFlWUTdR4TMSGzzKkE10RKqWiudw8HtilP7RleZkR1Cl/PrNn6HIQBIQyDcJ50agFWFg+
+ ygPNJJBth4Q3LFGZuiq256QivFO0k+8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
+ header.a=rsa-sha256 header.s=dkim header.b=bP+eh5lt
+Subject: [Buildroot] [PATCH v2] package/gptfdisk: fix another runtime
+ failure with popt 1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,53 +70,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: d.lang@abatec.at, marcin@bis.org.pl,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Stefan Agner <stefan@agner.ch>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following runtime failure raised since bump of popt to version
+1.19 in commit 895bfba93f6e5535f2132aeea144d2cd87ebc71b:
 
+Segmentation fault (core dumped)
 
-On 3/29/2023 2:28 AM, Thomas Petazzoni wrote:
-> On Wed, 29 Mar 2023 11:06:47 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->>    Yeah, that's why I propose "Upstream:" - it's generic enough to cover all of
->> these cases. The contents can be freeform I think, check-package should just
->> check that the Upstream tag is present. And the documentation should give
->> examples of the five cases you mention.
-> 
-> Sure.
+Fix the issue by backporting a fix found in upstream git repository [0].
 
-Yocto uses the following format [1]:
+[0] https://sourceforge.net/p/gptfdisk/code/ci/f5de3401b974ce103ffd93af8f9d43505a04aaf9/
 
-Upstream-status: 
-(Pending|Submitted|Accepted|Backport|Denied|Inappropriate [reason])
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ ...ence-when-duplicating-string-argumen.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
 
-would you want to adopt something similar? OpenWrt to some extent does 
-something like that as well although in a less unified fashion, 
-sometimes the patches are placed in a specific patch directory 
-(backport-x.y.z, upstream-x.y.z) and sometimes that information is 
-placed in the patch file itself.
-
-[1]: 
-http://wiki.yoctoproject.org/wiki/Best_Known_Methods_%28BKMs%29_for_Package_Updating#Patch_Comments
-
-> 
->>    The "patch taken from downstream" is the only one which doesn't fit in the
->> "Upstream" thing. But it's also a situation we don't really like: we basically
->> don't want local patches, and a patch taken from some other distro _is_ a local
->> patch.
-> 
-> The reality is that we have such patches (for example to fix musl build
-> issues), and we somehow have to live with them.
-> 
-> Thomas
-
+diff --git a/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
+new file mode 100644
+index 0000000000..1642343d06
+--- /dev/null
++++ b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
+@@ -0,0 +1,43 @@
++From f5de3401b974ce103ffd93af8f9d43505a04aaf9 Mon Sep 17 00:00:00 2001
++Message-Id: <f5de3401b974ce103ffd93af8f9d43505a04aaf9.1680094621.git.stefan@agner.ch>
++From: Damian Kurek <starfire24680@gmail.com>
++Date: Thu, 7 Jul 2022 03:39:16 +0000
++Subject: [PATCH] Fix NULL dereference when duplicating string argument
++
++poptGetArg can return NULL if there are no additional arguments, which
++makes strdup dereference NULL on strlen
++
++Signed-off-by: Stefan Agner <stefan@agner.ch>
++---
++ gptcl.cc | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/gptcl.cc b/gptcl.cc
++index 0d578eb..ab95239 100644
++--- a/gptcl.cc
+++++ b/gptcl.cc
++@@ -155,10 +155,11 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
++    } // while
++ 
++    // Assume first non-option argument is the device filename....
++-   device = strdup((char*) poptGetArg(poptCon));
++-   poptResetContext(poptCon);
+++   device = (char*) poptGetArg(poptCon);
++ 
++    if (device != NULL) {
+++      device = strdup(device);
+++      poptResetContext(poptCon);
++       JustLooking(); // reset as necessary
++       BeQuiet(); // Tell called functions to be less verbose & interactive
++       if (LoadPartitions((string) device)) {
++@@ -498,6 +499,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
++          cerr << "Error encountered; not saving changes.\n";
++          retval = 4;
++       } // if
+++      free(device);
++    } // if (device != NULL)
++    poptFreeContext(poptCon);
++    return retval;
++-- 
++2.40.0
++
 -- 
-Florian
+2.40.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
