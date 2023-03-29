@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFB74C74A5B
-	for <buildroot@archiver.kernel.org>; Wed, 29 Mar 2023 13:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7256DC74A5B
+	for <buildroot@archiver.kernel.org>; Wed, 29 Mar 2023 14:10:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26D3F41E7A;
-	Wed, 29 Mar 2023 13:56:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26D3F41E7A
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB11841EB2;
+	Wed, 29 Mar 2023 14:10:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB11841EB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RafOS4f7JMeT; Wed, 29 Mar 2023 13:56:38 +0000 (UTC)
+	with ESMTP id v7NGBI5qyjVo; Wed, 29 Mar 2023 14:10:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C67741E73;
-	Wed, 29 Mar 2023 13:56:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C67741E73
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 37BD01BF372
- for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 13:56:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10EFE41EAA;
+	Wed, 29 Mar 2023 14:10:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10EFE41EAA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 12D321BF3E9
+ for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 14:10:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B74260FB2
- for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 13:56:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B74260FB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC52D41EA8
+ for <buildroot@lists.busybox.net>; Wed, 29 Mar 2023 14:10:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC52D41EA8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q1-p2zh4d0U9 for <buildroot@lists.busybox.net>;
- Wed, 29 Mar 2023 13:56:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HSx7E3QeTNxZ for <buildroot@lists.busybox.net>;
+ Wed, 29 Mar 2023 14:10:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C0AF60FA3
- for <buildroot@uclibc.org>; Wed, 29 Mar 2023 13:56:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C0AF60FA3
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA8D841EAA
+ for <buildroot@uclibc.org>; Wed, 29 Mar 2023 14:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA8D841EAA
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 5792281461; Wed, 29 Mar 2023 13:56:34 +0000 (UTC)
+ id C6CB883601; Wed, 29 Mar 2023 14:10:26 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 29 Mar 2023 13:56:33 +0000
+Date: Wed, 29 Mar 2023 14:10:26 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
@@ -46,7 +46,7 @@ X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2023.02
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: minor
+X-Bugzilla-Severity: trivial
 X-Bugzilla-Who: jbittner.br.bugs@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
@@ -57,12 +57,12 @@ X-Bugzilla-Flags:
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
  target_milestone
-Message-ID: <bug-15496-163@https.bugs.busybox.net/>
+Message-ID: <bug-15501-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15496] New: auditd startup broken when coreutils
- is installed
+Subject: [Buildroot] [Bug 15501] New: audit2allow looks for ausearch in the
+ "wrong" place
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,16 +79,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15496
+https://bugs.busybox.net/show_bug.cgi?id=15501
 
-            Bug ID: 15496
-           Summary: auditd startup broken when coreutils is installed
+            Bug ID: 15501
+           Summary: audit2allow looks for ausearch in the "wrong" place
            Product: buildroot
            Version: 2023.02
           Hardware: All
                 OS: Linux
             Status: NEW
-          Severity: minor
+          Severity: trivial
           Priority: P5
          Component: Other
           Assignee: unassigned@buildroot.uclibc.org
@@ -96,18 +96,9 @@ https://bugs.busybox.net/show_bug.cgi?id=15496
                 CC: buildroot@uclibc.org
   Target Milestone: ---
 
-In the launch script /etc/init.d/S02auditd (buildroot/package/audit/S02auditd),
-line 23:                mkdir -p /var/log/audit -Z `selabel_lookup -b file -k
-/var/log/audit | cut -d ' ' -f 3`
-
-does not work when coreutils mkdir replaces the one supplied by busybox.  The
--Z context needs to be placed before the directory name with coreutils and
-BusyBox will accept it both ways.
-
-With coreutils, a folder is created with the name of the context in the current
-directory, auditd appears to start, appears in ps, but does no SELinux logging.
-Doing a restart will show an OK on stopping and a FAIL on starting.  Starting
-again shows an OK but no logging occurs.
+At least when BR2_ROOTFS_MERGED_USR is not set, package audit places ausearch
+in /usr/sbin, while audit2allow in the selinux-python package looks for it in
+/sbin.
 
 -- 
 You are receiving this mail because:
