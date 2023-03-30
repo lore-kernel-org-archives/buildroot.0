@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6597C6FD18
-	for <buildroot@archiver.kernel.org>; Thu, 30 Mar 2023 01:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A85A6C6FD1D
+	for <buildroot@archiver.kernel.org>; Thu, 30 Mar 2023 09:30:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 275D0841D7;
-	Thu, 30 Mar 2023 01:57:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 275D0841D7
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0EbBJkmjrFLt; Thu, 30 Mar 2023 01:57:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71AA78419C;
-	Thu, 30 Mar 2023 01:57:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71AA78419C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 17B0D1BF573
- for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 01:57:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE99540492
- for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 01:57:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE99540492
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0914341E1F;
+	Thu, 30 Mar 2023 09:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0914341E1F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wj49G1OmSxSb for <buildroot@lists.busybox.net>;
- Thu, 30 Mar 2023 01:57:23 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Si1rKXhCLyIA; Thu, 30 Mar 2023 09:30:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5325041E0B;
+	Thu, 30 Mar 2023 09:30:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5325041E0B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 642011BF84C
+ for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 09:30:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DA94842BE
+ for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 09:30:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DA94842BE
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eLTVC5bWFpK6 for <buildroot@lists.busybox.net>;
+ Thu, 30 Mar 2023 09:30:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E27B4011F
- for <buildroot@uclibc.org>; Thu, 30 Mar 2023 01:57:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E27B4011F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70D788428E
+ for <buildroot@uclibc.org>; Thu, 30 Mar 2023 09:30:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70D788428E
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 29EC183567; Thu, 30 Mar 2023 01:57:23 +0000 (UTC)
+ id 5DFD983463; Thu, 30 Mar 2023 09:30:16 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 30 Mar 2023 01:57:23 +0000
+Date: Thu, 30 Mar 2023 09:30:16 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -55,7 +55,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15506-163-x7SAfpHDpE@https.bugs.busybox.net/>
+Message-ID: <bug-15506-163-FAGtxILY3S@https.bugs.busybox.net/>
 In-Reply-To: <bug-15506-163@https.bugs.busybox.net/>
 References: <bug-15506-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,42 +81,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15506
 
---- Comment #1 from wangt13 <simitel@163.com> ---
-(In reply to wangt13 from comment #0)
-The busybox in buildroot is also configured as follows to support login.
+--- Comment #2 from wangt13 <simitel@163.com> ---
+With lots of testing and googling, I think I fixed the issue of cannot login to
+busybox from serial console, by disabling 'CONFIG_USE_BB_SHADOW' in
+busybox-menuconfig.
 
-#
-# Login/Password Management Utilities
-#
-CONFIG_FEATURE_SHADOWPASSWDS=y
-CONFIG_USE_BB_PWD_GRP=y
-CONFIG_USE_BB_SHADOW=y
-CONFIG_USE_BB_CRYPT=y
-CONFIG_USE_BB_CRYPT_SHA=y
-CONFIG_ADD_SHELL=y
-CONFIG_REMOVE_SHELL=y
-# CONFIG_ADDGROUP is not set
-# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
-# CONFIG_ADDUSER is not set
-# CONFIG_FEATURE_CHECK_NAMES is not set
-CONFIG_LAST_ID=0
-CONFIG_FIRST_SYSTEM_ID=0
-CONFIG_LAST_SYSTEM_ID=0
-CONFIG_CHPASSWD=y
-CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="des"
-CONFIG_CRYPTPW=y
-CONFIG_MKPASSWD=y
-# CONFIG_DELUSER is not set
-# CONFIG_DELGROUP is not set
-# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
-CONFIG_GETTY=y
-CONFIG_LOGIN=y
-# CONFIG_LOGIN_SESSION_AS_CHILD is not set
-CONFIG_LOGIN_SCRIPTS=y
-CONFIG_FEATURE_NOLOGIN=y
-CONFIG_FEATURE_SECURETTY=y
-CONFIG_PASSWD=y
-CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
+From it help text, it seemed that using internal shadow can save disk space.
+But enabling it cause me not to login to system.
+
+Is there any further infor on this option and its impact?
+
+Thanks,
 
 -- 
 You are receiving this mail because:
