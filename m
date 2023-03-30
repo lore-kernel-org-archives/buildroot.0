@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A85A6C6FD1D
-	for <buildroot@archiver.kernel.org>; Thu, 30 Mar 2023 09:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE7FEC6FD1D
+	for <buildroot@archiver.kernel.org>; Thu, 30 Mar 2023 09:31:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0914341E1F;
-	Thu, 30 Mar 2023 09:30:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0914341E1F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6850F41E0B;
+	Thu, 30 Mar 2023 09:31:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6850F41E0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Si1rKXhCLyIA; Thu, 30 Mar 2023 09:30:20 +0000 (UTC)
+	with ESMTP id FlnY_QQsOi1M; Thu, 30 Mar 2023 09:31:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5325041E0B;
-	Thu, 30 Mar 2023 09:30:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5325041E0B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 642011BF84C
- for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 09:30:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCBAD401A1;
+	Thu, 30 Mar 2023 09:31:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCBAD401A1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6697D1BF84C
+ for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 09:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3DA94842BE
- for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 09:30:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DA94842BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40044401A1
+ for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 09:31:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40044401A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eLTVC5bWFpK6 for <buildroot@lists.busybox.net>;
- Thu, 30 Mar 2023 09:30:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LuZJYA1yLUtW for <buildroot@lists.busybox.net>;
+ Thu, 30 Mar 2023 09:31:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 70D788428E
- for <buildroot@uclibc.org>; Thu, 30 Mar 2023 09:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70D788428E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F92040150
+ for <buildroot@uclibc.org>; Thu, 30 Mar 2023 09:31:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F92040150
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 5DFD983463; Thu, 30 Mar 2023 09:30:16 +0000 (UTC)
+ id 800308361B; Thu, 30 Mar 2023 09:31:55 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 30 Mar 2023 09:30:16 +0000
+Date: Thu, 30 Mar 2023 09:31:55 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -48,14 +48,14 @@ X-Bugzilla-Version: 2020.02.1
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: simitel@163.com
-X-Bugzilla-Status: NEW
+X-Bugzilla-Status: ASSIGNED
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15506-163-FAGtxILY3S@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status
+Message-ID: <bug-15506-163-UIe7jTmBR3@https.bugs.busybox.net/>
 In-Reply-To: <bug-15506-163@https.bugs.busybox.net/>
 References: <bug-15506-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,17 +81,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15506
 
---- Comment #2 from wangt13 <simitel@163.com> ---
-With lots of testing and googling, I think I fixed the issue of cannot login to
-busybox from serial console, by disabling 'CONFIG_USE_BB_SHADOW' in
-busybox-menuconfig.
+wangt13 <simitel@163.com> changed:
 
-From it help text, it seemed that using internal shadow can save disk space.
-But enabling it cause me not to login to system.
-
-Is there any further infor on this option and its impact?
-
-Thanks,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
 -- 
 You are receiving this mail because:
