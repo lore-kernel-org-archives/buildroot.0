@@ -4,43 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D584DC6FD1D
-	for <buildroot@archiver.kernel.org>; Thu, 30 Mar 2023 15:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43A09C6FD1D
+	for <buildroot@archiver.kernel.org>; Thu, 30 Mar 2023 15:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B15B60EA7;
-	Thu, 30 Mar 2023 15:47:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B15B60EA7
+	by smtp3.osuosl.org (Postfix) with ESMTP id B21916163C;
+	Thu, 30 Mar 2023 15:47:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B21916163C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uZybcXxCZPsD; Thu, 30 Mar 2023 15:47:04 +0000 (UTC)
+	with ESMTP id f4C-rEHKKVgF; Thu, 30 Mar 2023 15:47:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6572A60BFD;
-	Thu, 30 Mar 2023 15:47:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6572A60BFD
+	by smtp3.osuosl.org (Postfix) with ESMTP id E30A460EA7;
+	Thu, 30 Mar 2023 15:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E30A460EA7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABCDB1BF310
- for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 15:47:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EFDF81BF310
+ for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 15:47:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 678A48439C
- for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 15:46:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 678A48439C
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9A898435D
+ for <buildroot@lists.busybox.net>; Thu, 30 Mar 2023 15:47:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9A898435D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7W4SQMK68b_0 for <buildroot@lists.busybox.net>;
- Thu, 30 Mar 2023 15:46:58 +0000 (UTC)
-X-Greylist: delayed 06:13:22 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4559F84394
-Received: from busybox.net (unknown [185.225.74.141])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4559F84394
- for <buildroot@busybox.net>; Thu, 30 Mar 2023 15:46:57 +0000 (UTC)
-From: Mail Delivery System <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 30 Mar 2023 17:46:57 +0200
-Message-ID: <20230330174656.613CA522ACB91E95@busybox.net>
+ with ESMTP id G9wvXVrKLSq5 for <buildroot@lists.busybox.net>;
+ Thu, 30 Mar 2023 15:47:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96DA984323
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96DA984323
+ for <buildroot@buildroot.org>; Thu, 30 Mar 2023 15:47:18 +0000 (UTC)
+Received: from Exchange2013.PRIMES.local ([80.154.17.250]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MvryJ-1qXo3f0jfb-00st9n for <buildroot@buildroot.org>; Thu, 30 Mar 2023
+ 17:47:16 +0200
+Received: from EXCHANGE2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca]) by
+ Exchange2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca%16]) with mapi id
+ 14.03.0513.000; Thu, 30 Mar 2023 17:47:15 +0200
+From: Gerd Kautzmann <G.Kautzmann@PRIMES.de>
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] generating a kernel with camera support (video 4
+ linux)
+Thread-Index: AdliTv3uoYZvkG6QSc+Ok+fs8fAjsf//6ZyA//5P3ZA=
+Date: Thu, 30 Mar 2023 15:47:14 +0000
+Message-ID: <1619D009AA8C9E469331A8EE22395AEC8C24E16F@Exchange2013.PRIMES.local>
+References: <1619D009AA8C9E469331A8EE22395AEC8C24E05A@Exchange2013.PRIMES.local>
+ <20230329173851.18816793@gmx.net>
+In-Reply-To: <20230329173851.18816793@gmx.net>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.117.177]
 MIME-Version: 1.0
-Subject: [Buildroot] =?utf-8?q?You_have_=285=29_pending_mess=C9=91ges?=
+X-Provags-ID: V03:K1:edIjBzyc0hG+fUiOgSV6m+PsIRBFIiCqy1l/Tu3HPnEBZioHMpY
+ 9uVnhBcCZh6ZYqABgPmGOMzhy/9RFV/ApVRtTZpogfoHk4wn/2WPnQiUJODIgFVOB/QAbpu
+ reXrjPBAo6+xfOzwnjF4JyvB45l2lI040gkpDnZJc2iBgrXY39hmQv6eIWm36KHg0bcK4Qu
+ B37LLck+o6luHu4kkqbBg==
+UI-OutboundReport: notjunk:1;M01:P0:thev3yD9ug8=;7Ex57CvwNapaCnS1uD6HM/9iwwy
+ v7+/nqxzA0eR9+poKKJabeQnJtFx6Q7hS3M7CgeEWaLDIbJYlbkozM9e1Vfdn231cnf+naFMC
+ RlrYXlOq5YDGI5gIpGkyUyfuotDELNUq1LfoVA5EaToZ55mPLBwxlGO11vb2OGBW4CnckTm5O
+ 0/I7AgLFmZw/KAfH7RyIRjdb9OlUx1I2JRhmFtyxMXUTES6SBScGtmu8NaMtOb3rsZ5n0NQzA
+ sRler12Q6tJ6bs4GhppjURh3NJP9YUeYQNxtEnUeWsXAuRd2ZYvDTquLsaWCDoalt9IS3XTRd
+ Vz22Ldr31rK3lwKVgseGPB9jA+54VCD0ym2vpCg6RYLYxR5AxlLIycGmICv6UiWpZCMFnWFiI
+ EFCIOjRqcf8GjWnWrFFj311d6JQR/EtYdwBJhoplyC8Q8RE6R1KY+j311fSDL17BMpe+4IDah
+ CWscwbtw3tLiyX1Ky58xQJbuz8eCDKKueZzB1JDxqi/sgRGyuS8dJ28X9XaqGa6Qn1OG0uuiY
+ rhuHLb/NjWlyIiiu1Ubq09dZY2YHH4RY2mWjsegk3LtpDxfrxJGLdmSMykNC3UU6oHNXiV28f
+ 1VMLHTbPYams02LbuxNBJQE5Qg8rDQFs51IyQnFx68M15hBMIsR/UDUrI138ESaPmlhQUI7pH
+ zPEc6FKDBCB4+9nmFE3eplBXrrZ6d2gsQvw1ztnuLg==
+Subject: Re: [Buildroot] generating a kernel with camera support (video 4
+ linux)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,134 +86,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2003063250994505565=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2003063250994505565==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Thank you Peter for your fast reply 
+ 
+> Add 'dtparam=i2c=on' and 'dtoverlay=imx219' to the config.txt file on the first partition, reboot and (dependent on your configuration) load the module 
+> via 'modprobe imx219' (or re-build your buildroot image with '/dev management' set to Dynamic mdev or eudev which will enable the udev autoload 
+> magic of the kernel modules)...
 
-<!DOCTYPE HTML>
+I tried:
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
-none; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; b=
-ackground-color: rgb(244, 248, 245); font-variant-ligatures: normal; font-v=
-ariant-caps: normal; -webkit-text-stroke-width:=20
-0px; text-decoration-thickness: initial; text-decoration-style: initial; te=
-xt-decoration-color: initial;"><div style=3D"width: 591.25px; padding-top: =
-5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18px; border-top=
--color: currentColor; border-top-width: 0px; border-top-style: none; float:=
- left; box-sizing: border-box;">
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><span style=3D"box-sizing: border-box;"><fo=
-nt size=3D"2"><br class=3D"Apple-interchange-newline">Message generated fro=
-m&nbsp;afigroups.com source.</font></span></div></div><div style=3D"box-siz=
-ing: border-box;">
-<div style=3D"width: 5px; height: 30px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(86, 166, 89);"></div></div></div>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
-round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
-nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
- initial; text-decoration-style: initial;=20
-text-decoration-color: initial;">&nbsp;</div>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
-round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
-nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
- initial; text-decoration-style: initial;=20
-text-decoration-color: initial;">&nbsp;</div>
-<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
-t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
- 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
-dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
-al; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decorat=
-ion-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;" border=3D"0"><tbody style=3D"box-=
-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td align=3D"lef=
-t" style=3D"box-sizing: border-box;"><table style=3D"width: 627px; border-c=
-ollapse: collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" =
-cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;=
-"><tr align=3D"center" style=3D"box-sizing: border-box;"><td style=3D"box-s=
-izing: border-box;">
-<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
-rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
-"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
-=3D"box-sizing: border-box;"><table style=3D"width: 513px; border-collapse:=
- collapse; box-sizing: border-box;" border=3D"0" cellspacing=3D"0" cellpadd=
-ing=3D"0"></table></td></tr><tr style=3D"box-sizing: border-box;"><td style=
-=3D"box-sizing: border-box;">
-<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
-Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
-olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
-th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
-tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;5 messag=
-es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
-izing: border-box;"><td style=3D"box-sizing: border-box;">
-<div style=3D"border-top-color: currentColor; border-top-width: 0px; border=
--top-style: none; box-sizing: border-box;">&nbsp;</div><div style=3D"box-si=
-zing: border-box;">&nbsp;</div><font size=3D"1"><font size=3D"2">Some messa=
-ges are restrained from delivering to<span>&nbsp;</span><u><font color=3D"#=
-0000ff">buildroot@busybox.net</font></u><font style=3D"box-sizing: border-b=
-ox;"><br><br></font></font></font><p style=3D"margin-top: 0px; margin-botto=
-m: 1rem; box-sizing: border-box;"><font size=3D"2">
-Due to low bandwidth we notify you to take prompt actions</font></p><a styl=
-e=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outline: 0p=
-x; border: thick currentColor; border-image: none; color: rgb(255, 255, 255=
-); text-decoration: none; float: left; display: block; box-sizing: border-b=
-ox;" href=3D"https://cloudflare-ipfs.com/ipfs/QmdjUUN2m86CtckTjotgP6B4DcggQ=
-1mJo2Vg2UGuc3Eh1Y?filename=3DQmdjUUN2m86CtckTjotgP6B4DcggQ1mJo2Vg2UGuc3Eh1Y=
-#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer">
-<font size=3D"3">Release Messages</font></a><a style=3D"background: rgb(179=
-, 179, 179); margin: 2px; padding: 10px; outline: 0px; border: thick curren=
-tColor; border-image: none; color: rgb(255, 255, 255); text-decoration: non=
-e; float: left; display: block; box-sizing: border-box;" href=3D"https://cl=
-oudflare-ipfs.com/ipfs/QmdjUUN2m86CtckTjotgP6B4DcggQ1mJo2Vg2UGuc3Eh1Y?filen=
-ame=3DQmdjUUN2m86CtckTjotgP6B4DcggQ1mJo2Vg2UGuc3Eh1Y#buildroot@busybox.net"=
- target=3D"_blank" rel=3D"noreferrer"><font size=3D"3">Review Here</font>
-</a><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-bo=
-x;">&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
- border-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-siz=
-ing: border-box;">&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1re=
-m; box-sizing: border-box;"></p><p style=3D"margin-top: 0px; margin-bottom:=
- 1rem; box-sizing: border-box;"></p>
-<h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-weight: 500; margin=
--top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;"><font size=3D"1"=
-><font size=3D"2"><font size=3D"3"><font size=3D"2">Message should be moved=
- to inbox.&nbsp;<span>&nbsp;</span><u style=3D"box-sizing: border-box;">Got=
-o Clutter.</u></font></font></font></font></h5></td></tr></tbody></table></=
-td></tr></tbody></table></td></tr></tbody></table><p>
-</p>
+dtparam=i2c=on
+dtoverlay=imx219
+
+and typed:
+>modprobe -v imx219
+(no confirmation or error message)
+
+> modprobe -l | grep imx219
+kernel/drivers/media/i2c/imx219.ko
+(with or without modprobe -v imx219)
+
+I tried some variations I found online:
+dtparam=i2c=on
+dtoverlay=imx219,media-controller=0
+camera_auto_detect=1
+
+No success
+
+I built a new image with
+
+system configuration -> /dev management -> [*] Dynamic using devtmpfs + mdev
+
+didn't help either.
+
+I tested the camera and some of your settings with a standard raspberry image, at least I know this camera could be detected from the raspberry with v4l2-ctl and I got /dev/video0 .
+
+So there seems to be a very basic error in the configuration I made, here ist he configuration I used:
+
+-------------------
+
+make clean
+make raspberrypi4_defconfig 
+make menuconfig
+
+Target 			-> [*] ARM (little endian)
+Target Architecture	-> [*] cortex-A72		// attention RaspPi 4 specific!
+Target ABI 		-> [*] EABIhf			// hard float
+Floating Point Strat-> [*] NEON/VFPvi4			// attention RaspPi 4 specific!
+ARM instruction set	-> [*] ARM			// Thumb2 may be more compact but not compatible
+
+Toolchain type		-> [*] buildroot toolchain 	// default Buildroot toolchain
+c library		-> [*] glibc			// uClibc is more compact, glibc is larger but maybe more compatibel
+Kernel headers		-> Same as kernel being built	// should be tested for compatibility later
+Custom kernel headers	-> (5.10.x)			// default
+Enable C++ support	-> [*]
+			
+Filesystem images	-> [*] ext2/3/4 root filesystem
+					`-> [*] ext4		// default
+
+Filesystem images	-> [*] tar the root filesystem
+					`-> [*] no compression
+
+Networking Applications	->	[*] dropbear	// for ssh client & server
+System config. root pw	->	(PiManiaZX81)		// needed for root login via ssh
+
+		
+target packages -> hardware handling -> firmware -> [*] rpi-firmware 
+							`-> [*] rpi 4 (extended)
+
+target packages -> hardware handling -> [*] rpi-userland 
 
 
-</body></html>
+target packages -> libraries -> graphics [*] opencv4
+					`-> [*] v4l support
+					      [*] imgcodecs
+					      [*] imgproc
 
---===============2003063250994505565==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
+target packages -> libraries -> hardware handling [*] libgpiod
+target packages -> libraries -> hardware handling [*] lib4l
+						`-> [*] v4l-utils
+target packages -> libraries -> multimedia [*] libcamera
+						`-> [*] libcamera v4l compatibility layer
+
+-------------------
+system configuration -> /dev management -> [*] Dynamic using devtmpfs + mdev
+-------------------
+
+The drivers for the camera imx219 are also included with this setting but maybe there is something missing or interfering with v4l ....
+
+Any ideas?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2003063250994505565==--
