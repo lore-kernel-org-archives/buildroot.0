@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DD33C76196
-	for <buildroot@archiver.kernel.org>; Fri, 31 Mar 2023 19:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBCBDC761A6
+	for <buildroot@archiver.kernel.org>; Fri, 31 Mar 2023 19:18:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB64E84720;
-	Fri, 31 Mar 2023 19:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB64E84720
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CADA812C9;
+	Fri, 31 Mar 2023 19:18:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CADA812C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KwOQVyAKbQol; Fri, 31 Mar 2023 19:18:15 +0000 (UTC)
+	with ESMTP id ZOI0IKDIU1yl; Fri, 31 Mar 2023 19:18:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91A3A8475D;
-	Fri, 31 Mar 2023 19:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91A3A8475D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C38E1BF329
- for <buildroot@lists.busybox.net>; Fri, 31 Mar 2023 19:17:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77551812B6;
+	Fri, 31 Mar 2023 19:18:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77551812B6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 178171BF329
+ for <buildroot@lists.busybox.net>; Fri, 31 Mar 2023 19:18:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA42C8470E
- for <buildroot@lists.busybox.net>; Fri, 31 Mar 2023 19:17:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA42C8470E
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBD4C4227F
+ for <buildroot@lists.busybox.net>; Fri, 31 Mar 2023 19:18:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBD4C4227F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P0f5sQFgPyR2 for <buildroot@lists.busybox.net>;
- Fri, 31 Mar 2023 19:17:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F2s9JDOd2WOV for <buildroot@lists.busybox.net>;
+ Fri, 31 Mar 2023 19:17:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1511184711
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com
- [209.85.214.178])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1511184711
- for <buildroot@buildroot.org>; Fri, 31 Mar 2023 19:17:58 +0000 (UTC)
-Received: by mail-pl1-f178.google.com with SMTP id u10so22199098plz.7
- for <buildroot@buildroot.org>; Fri, 31 Mar 2023 12:17:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A66FF42276
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com
+ [209.85.214.171])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A66FF42276
+ for <buildroot@buildroot.org>; Fri, 31 Mar 2023 19:17:59 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id le6so22185416plb.12
+ for <buildroot@buildroot.org>; Fri, 31 Mar 2023 12:17:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1680290277;
+ d=1e100.net; s=20210112; t=1680290278;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=2QJZ6p6RmDl9XMoxlPdvpcRqCI0ANgaMvHd7BjRdmqo=;
- b=eECyBoXcEgQT64OI5yqaPiD7EY5AhI0OiE63v4cFKAILybPEOcw15CqNt50lem1Zet
- /RRjB20hJeKwY8PwGyBMcjhqkviNcFUotc4jClMz0mb2YH/s0KNzp+Cq/ipfZ32lGEd0
- IE2KtsFMPzOWkQxUWrPaFC5ouzauzxkvhGD+yH3TBRVL1irb2ALnkFx/Bk7GctZNShIZ
- kmmjYLO6lPqhPyeCudE6MuftdOZTzLfqWiorgnYlYxGa9edO1uluyZBHijpPsFrc0xAM
- f4wBg9ihtyiCX+3OjOxC3cclVLUwkbsRmXUnUXQPNRnnEyqSKJNF5EjNyBpsSGVBC1eu
- qR6A==
-X-Gm-Message-State: AAQBX9fb8qKA2+WajSARk7kWN2PfOaoS3gmWksdsTbdRb2qhzBsyyZOa
- gJaEXNBdJIYV5jVGYsmCWuymcRZPy68=
-X-Google-Smtp-Source: AKy350ZRbwxnysELtdEZOVChRNktNhN2yIxEX3TL5y2U1su9J7RPgl8hR0U4nKk6f5IJCmg08eOnIg==
-X-Received: by 2002:a17:902:d14b:b0:1a1:b440:377d with SMTP id
- t11-20020a170902d14b00b001a1b440377dmr23632250plt.2.1680290277076; 
- Fri, 31 Mar 2023 12:17:57 -0700 (PDT)
+ bh=tFkbul0shdvJj2wWxaB+b2bqD5RkPx+1fk+T/+7wfoI=;
+ b=1kNkj5iNf2je7aiZ1nhtm6RAvdXND8Mi/AmMZfLPsd/MrW5xkI8dGbwTI0MDFRaRsR
+ razbt2YNC7Bw1CEnghz4ICRvXR5NO73IYdnZPdeKJxKoZRpXZOjzjKWzlqrM+Ws709Lm
+ Tpzaz0uYe/apwm2i32Hafn6i2fqvtbaJoswgQ9y7IqneEn0otdzXRM+CtOPrYn/zanjs
+ 0ckAP9WiQK3gXlY1a2xEdhfpI9mPY6ev3h/AG/4hp0KXcYbdcza3Hc4Ngr78dIpX2NMO
+ srdNhjQ0o7DfT8gr8EhIfeP6QtL4xvEbqFrZhoZM8uSfEub5amfKNSYB6kZAdOYqLlQT
+ swgg==
+X-Gm-Message-State: AAQBX9eCc0dPRcBc9q0HDEDESkpH8+V10qVtxR7Y5e10tEXioO20RNcZ
+ aOoMOKkVDg72AYhoWktJkxZuEqU87b4=
+X-Google-Smtp-Source: AKy350ZpuIFCUacoTNSlC1SKuPDcjQumnbOCLA8tQrHctYM0rGdLLZNBAJwIWW01L7GlGWm8W07NHg==
+X-Received: by 2002:a17:902:fa0e:b0:19e:e39b:6d98 with SMTP id
+ la14-20020a170902fa0e00b0019ee39b6d98mr25206335plb.35.1680290278371; 
+ Fri, 31 Mar 2023 12:17:58 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- jd12-20020a170903260c00b0019e8915b1b5sm1928268plb.105.2023.03.31.12.17.55
+ jd12-20020a170903260c00b0019e8915b1b5sm1928268plb.105.2023.03.31.12.17.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 Mar 2023 12:17:56 -0700 (PDT)
+ Fri, 31 Mar 2023 12:17:58 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 31 Mar 2023 12:17:52 -0700
-Message-Id: <20230331191753.28826-2-christian@paral.in>
+Date: Fri, 31 Mar 2023 12:17:53 -0700
+Message-Id: <20230331191753.28826-3-christian@paral.in>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230331191753.28826-1-christian@paral.in>
 References: <20230331191753.28826-1-christian@paral.in>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 2/3] package/go: adjust comments
+Subject: [Buildroot] [PATCH v4 3/3] package/go: bump to version 1.20.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,80 +92,143 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adjust comments in the Go package to improve clarity:
+The latest Go release, version 1.20, arrives six months after Go 1.19. Most of
+its changes are in the implementation of the toolchain, runtime, and libraries.
 
-Config.in.host:
-
- - Add comment mentioning list of supported architectures.
-
-go.mk:
-
- - Improve formatting of comment about NOCCACHE
- - Reword comment re: copying src/ to host/
-   - the previously linked issue is not relevant.
-   - instead: mention that src/ is needed for stdlib.
- - Adjust comment re: adjusting file timestamps.
-   - mention this is needed to avoid rebuilding stdlib
+https://go.dev/doc/go1.20
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 
 ---
+
+v1 -> v2:
+
+ - drop unnecessary change to config.in.host
+
+v2 -> v3:
+
+ - bump to go 1.20.1
+ - add note about fixed cves
 
 v3 -> v4:
 
- - move these comments to a separate patch
- - Thanks Thomas for the review.
+ - rebase on updated go1.19.x version
+ - remove notes about cves (fixed in previous 1.19.x version)
+
+v4 -> v5:
+
+ - update to go 1.20.2
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/go/Config.in.host |  2 ++
- package/go/go.mk          | 11 +++++------
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ ...03-runtime-support-riscv64-SV57-mode.patch | 65 -------------------
+ package/go/go.hash                            |  2 +-
+ package/go/go.mk                              |  4 +-
+ 3 files changed, 3 insertions(+), 68 deletions(-)
+ delete mode 100644 package/go/0003-runtime-support-riscv64-SV57-mode.patch
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 90a54f0da6..b87b862cec 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS
-+	# See https://go.dev/doc/install/source#environment
-+	# See src/go/build/syslist.go for the list of supported architectures
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
- 		|| BR2_mips64 || BR2_mips64el || BR2_riscv || BR2_s390x
+diff --git a/package/go/0003-runtime-support-riscv64-SV57-mode.patch b/package/go/0003-runtime-support-riscv64-SV57-mode.patch
+deleted file mode 100644
+index f51c2ca093..0000000000
+--- a/package/go/0003-runtime-support-riscv64-SV57-mode.patch
++++ /dev/null
+@@ -1,65 +0,0 @@
+-From 6618c7af436488fa12018cdcd31eeedb3a698745 Mon Sep 17 00:00:00 2001
+-From: Dmitry Vyukov <dvyukov@google.com>
+-Date: Fri, 27 May 2022 18:55:35 +0200
+-Subject: [PATCH] runtime: support riscv64 SV57 mode
+-
+-Riscv64 has SV57 mode when user-space VA is 56 bits.
+-Linux kernel recently got support for this mode and Go binaries started crashing as:
+-
+-runtime: lfstack.push invalid packing: node=0xffffff5908a940 cnt=0x1
+-packed=0xffff5908a9400001 -> node=0xffff5908a940
+-
+-Adjust lfstack code to use only 8 top bits of pointers on riscv64.
+-
+-For context see:
+-https://groups.google.com/g/syzkaller-bugs/c/lU0GQTZoNQQ/m/O_c3vmE3AAAJ
+-
+-Update #54104
+-
+-Change-Id: Ib5d3d6a79c0c6eddf11618d73fcc8bc1832a9c25
+-Signed-off-by: Christian Stewart <christian@paral.in>
+----
+-
+-Upstream: https://go-review.googlesource.com/c/go/+/409055/4
+----
+- src/runtime/lfstack_64bit.go | 12 ++++++++++++
+- 1 file changed, 12 insertions(+)
+-
+-diff --git a/src/runtime/lfstack_64bit.go b/src/runtime/lfstack_64bit.go
+-index 154130cf63..39fa647b9e 100644
+---- a/src/runtime/lfstack_64bit.go
+-+++ b/src/runtime/lfstack_64bit.go
+-@@ -36,12 +36,21 @@ const (
+- 	// We use one bit to distinguish between the two ranges.
+- 	aixAddrBits = 57
+- 	aixCntBits  = 64 - aixAddrBits + 3
+-+
+-+	// Riscv64 SV57 mode gives 56 bits of userspace VA.
+-+	// lfstack code supports it, but broader support for SV57 mode is incomplete,
+-+	// and there may be other issues (see #54104).
+-+	riscv64AddrBits = 56
+-+	riscv64CntBits  = 64 - riscv64AddrBits + 3
+- )
+- 
+- func lfstackPack(node *lfnode, cnt uintptr) uint64 {
+- 	if GOARCH == "ppc64" && GOOS == "aix" {
+- 		return uint64(uintptr(unsafe.Pointer(node)))<<(64-aixAddrBits) | uint64(cnt&(1<<aixCntBits-1))
+- 	}
+-+	if GOARCH == "riscv64" {
+-+		return uint64(uintptr(unsafe.Pointer(node)))<<(64-riscv64AddrBits) | uint64(cnt&(1<<riscv64CntBits-1))
+-+	}
+- 	return uint64(uintptr(unsafe.Pointer(node)))<<(64-addrBits) | uint64(cnt&(1<<cntBits-1))
+- }
+- 
+-@@ -54,5 +63,8 @@ func lfstackUnpack(val uint64) *lfnode {
+- 	if GOARCH == "ppc64" && GOOS == "aix" {
+- 		return (*lfnode)(unsafe.Pointer(uintptr((val >> aixCntBits << 3) | 0xa<<56)))
+- 	}
+-+	if GOARCH == "riscv64" {
+-+		return (*lfnode)(unsafe.Pointer(uintptr(val >> riscv64CntBits << 3)))
+-+	}
+- 	return (*lfnode)(unsafe.Pointer(uintptr(val >> cntBits << 3)))
+- }
+--- 
+-2.35.1
+-
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 89e2fd952f..61c07d4f77 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  775bdf285ceaba940da8a2fe20122500efd7a0b65dbcee85247854a8d7402633  go1.19.7.src.tar.gz
++sha256  4d0e2850d197b4ddad3bdb0196300179d095bb3aefd4dfbc3b36702c3728f8ab  go1.20.2.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
 diff --git a/package/go/go.mk b/package/go/go.mk
-index 13fff792af..126d8ea46b 100644
+index 126d8ea46b..6ba3bd03c3 100644
 --- a/package/go/go.mk
 +++ b/package/go/go.mk
-@@ -121,8 +121,8 @@ HOST_GO_HOST_ENV = \
- 	CGO_CXXFLAGS="$(HOST_CXXFLAGS)" \
- 	CGO_LDFLAGS="$(HOST_LDFLAGS)"
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# The go build system is not compatible with ccache, so use
--# HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
-+# The go build system is not compatible with ccache, so use HOSTCC_NOCCACHE.
-+# See https://github.com/golang/go/issues/11685.
- HOST_GO_MAKE_ENV = \
- 	GO111MODULE=off \
- 	GOCACHE=$(HOST_GO_HOST_CACHE) \
-@@ -154,12 +154,11 @@ define HOST_GO_INSTALL_CMDS
- 	cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(HOST_GO_ROOT)/pkg/
+-GO_VERSION = 1.19.7
++GO_VERSION = 1.20.2
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+@@ -151,7 +151,7 @@ define HOST_GO_INSTALL_CMDS
+ 	cp -a $(@D)/lib $(HOST_GO_ROOT)/
+ 
+ 	mkdir -p $(HOST_GO_ROOT)/pkg
+-	cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(HOST_GO_ROOT)/pkg/
++	cp -a $(@D)/pkg/include $(HOST_GO_ROOT)/pkg/
  	cp -a $(@D)/pkg/tool $(HOST_GO_ROOT)/pkg/
  
--	# There is a known issue which requires the go sources to be installed
--	# https://golang.org/issue/2775
-+	# The Go sources must be installed to the host/ tree for the Go stdlib.
- 	cp -a $(@D)/src $(HOST_GO_ROOT)/
- 
--	# Set all file timestamps to prevent the go compiler from rebuilding any
--	# built in packages when programs are built.
-+	# Set file timestamps to prevent the Go compiler from rebuilding the stdlib
-+	# when compiling other programs.
- 	find $(HOST_GO_ROOT) -type f -exec touch -r $(@D)/bin/go {} \;
- endef
- 
+ 	# The Go sources must be installed to the host/ tree for the Go stdlib.
 -- 
 2.40.0
 
