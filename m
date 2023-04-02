@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5847DC7619A
-	for <buildroot@archiver.kernel.org>; Sun,  2 Apr 2023 11:42:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E787C7619A
+	for <buildroot@archiver.kernel.org>; Sun,  2 Apr 2023 12:34:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6C6E81F6E;
-	Sun,  2 Apr 2023 11:42:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6C6E81F6E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P4zSSdZHE2PB; Sun,  2 Apr 2023 11:42:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B60681E70;
-	Sun,  2 Apr 2023 11:42:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B60681E70
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 949A41BF47A
- for <buildroot@lists.busybox.net>; Sun,  2 Apr 2023 11:42:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6AC9060C2A
- for <buildroot@lists.busybox.net>; Sun,  2 Apr 2023 11:42:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AC9060C2A
+	by smtp3.osuosl.org (Postfix) with ESMTP id C774C60EB3;
+	Sun,  2 Apr 2023 12:34:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C774C60EB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dIs2YqePA_nn for <buildroot@lists.busybox.net>;
- Sun,  2 Apr 2023 11:42:45 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5jncwLeDJ14U; Sun,  2 Apr 2023 12:34:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E11A460C2A;
+	Sun,  2 Apr 2023 12:34:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11A460C2A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BD201BF8C7
+ for <buildroot@lists.busybox.net>; Sun,  2 Apr 2023 12:34:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3586D400EC
+ for <buildroot@lists.busybox.net>; Sun,  2 Apr 2023 12:34:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3586D400EC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id adwPMLI4zRFD for <buildroot@lists.busybox.net>;
+ Sun,  2 Apr 2023 12:34:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD25A60B7C
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD25A60B7C
- for <buildroot@buildroot.org>; Sun,  2 Apr 2023 11:42:44 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- bg16-20020a05600c3c9000b003eb34e21bdfso18119111wmb.0
- for <buildroot@buildroot.org>; Sun, 02 Apr 2023 04:42:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1346D400EF
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1346D400EF
+ for <buildroot@buildroot.org>; Sun,  2 Apr 2023 12:34:23 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id j24so26711774wrd.0
+ for <buildroot@buildroot.org>; Sun, 02 Apr 2023 05:34:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1680435763;
+ d=1e100.net; s=20210112; t=1680438861;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Xodr0fJLmSBq7Y7GbuniQ+/Wjh1bhVN9ABJ923yIzIY=;
- b=5RXvK/ELROzc4SJedBouq3mMxDWw9zIGZ2v1n2opRx3YDnLFKD37V+kj9SNAJlv46E
- ReSKLgcq3kT2E+rsUmKL3ElkcXKDeecRonTY/yPb2AHMK22IaPiJWEX/z4Ca2nuakg52
- /waDI9qYGeoGd8zaW56WptCOZFaOXE0VcgefsFDb4mBjrGod/E6KZHeycuGZgttmwq+R
- k1FksKJzjgjg6WLdS5K+1vkvbEss6nWmiYnk5ulyL/6TFiLwu8kNuAEbnat8Rfjyb1O2
- 7VZzZvciDcRNUJG+xepKP56GCZ7j0b6ouEmwIxcQxmq3qspmA6rETAbRTx28qnk1ZFAT
- tmow==
-X-Gm-Message-State: AO0yUKXURHdempi8RyJdV46Y9s2kGa/xSjFNwz9DN6j18fH3p12j4INj
- ehY9r8wkZ0uApsCDk0P3JVnHLs4hgkI=
-X-Google-Smtp-Source: AK7set+xyo4a+fnnPlH1xASUy4rOFH5mLynuFhK0Ry/1Omw/ApjXrrSxsz6/GiK5A0jqW014n/EQ5w==
-X-Received: by 2002:a05:600c:21c1:b0:3eb:3104:efef with SMTP id
- x1-20020a05600c21c100b003eb3104efefmr24606616wmj.31.1680435762448; 
- Sun, 02 Apr 2023 04:42:42 -0700 (PDT)
+ bh=1MMjSKnJ+BJF0QWCmxJxedYbA5DaFooV42s4KYVMQjc=;
+ b=kUHMDiSlUUtNhmcS7yZgGQqeQFeXDNcivyCHKmutE2/aaNVvO/ewi1dBcRG8SjE4Zn
+ FwNg50mGWmjkPyLJkEv36B6YgtPJ49thKfoozR79tWhIMEeZYE5P/5f5CaUPWpo8N6ow
+ 2BgP7xNeYkm4ATNhQ4cEBmOGOHO+oGf70mNJSoKiyVhe6Do4oIX25FQe7RtFhy9drWiM
+ /UoKeXQHaWj6KRcQUO7b4UZDO15JFDzKdxUQgBIbKytIDaX5vkyP2ejsVqbVa+II6C3k
+ oTQUGU0LcULRjsZk1i9rnJTxH9H18ktSrKghEy15HG1mM+i4eAwSA7Y/sftdBGezdhpa
+ cVrw==
+X-Gm-Message-State: AAQBX9fBQursTqCfUUJ58cAwan16H+EXgjqBxAWVZ3JOm1Qm5KSWUx3J
+ tVDakE6DYlLB6gQ27YFbpl3OMsleMiI=
+X-Google-Smtp-Source: AKy350YC3hFwDpdYw771hoZ28nh2B+o6LuuZOJRFaNtrv81WSBRA078X8aaZ5SR/jzlhthU7XXmoXQ==
+X-Received: by 2002:adf:f3cf:0:b0:2ce:abff:7156 with SMTP id
+ g15-20020adff3cf000000b002ceabff7156mr27857900wrp.48.1680438861462; 
+ Sun, 02 Apr 2023 05:34:21 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m26-20020a05600c3b1a00b003ede2c4701dsm16060082wms.14.2023.04.02.04.42.41
+ r5-20020adfe685000000b002e61e002943sm6438254wrm.116.2023.04.02.05.34.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Apr 2023 04:42:41 -0700 (PDT)
+ Sun, 02 Apr 2023 05:34:21 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  2 Apr 2023 13:38:46 +0200
-Message-Id: <20230402113846.938468-1-fontaine.fabrice@gmail.com>
+Date: Sun,  2 Apr 2023 14:33:48 +0200
+Message-Id: <20230402123348.1037857-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1680435763;
+ d=gmail.com; s=20210112; t=1680438861;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Xodr0fJLmSBq7Y7GbuniQ+/Wjh1bhVN9ABJ923yIzIY=;
- b=QJIRqjtXKMIz5D1E9Ak7hW8qvAPuuZ5AMXXHImPXyrqFLe8jN2RiI86xC/kg+xpW42
- ETu/Ydd7wX9Yt/j2VtfCAubI3XEF1aCq5pg58iJWc2AJVhQVjPNDztjq+axcSKSAdKeR
- q3ZWD50iPObzR7oq9RYzOZljG/Euesoyp4SfJUdyFuMsNfmye4IhUSf8bpPo0H/VeLDF
- Sh/AN6xI4kEaJYtu/omGzGvM+hg1/IKZg6txw41M8e3ERt0QuKENhuzk9bKG6P2sWJ04
- CfQNGZJIIiAJCkThzuK1UHGjxuoBqMNVPod38pwktVj5Rrlm6YmPIv2vCyEEhog3ExTa
- h4Hg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=1MMjSKnJ+BJF0QWCmxJxedYbA5DaFooV42s4KYVMQjc=;
+ b=acis4/Z5nbKfGuy/bonBy9rVQ03WN4Vid//19S/GFsmBoafWB1AFS3xg9k+zAA6Gm0
+ P7fkGvyNCFSb72t39o8h1ef2MOIa/wTHVfbRupsbIZMHV0IbslYaMufeSA615QTm14h0
+ krC0EuHxEFIgHq/AVOAWShKFKIDc1vzeWHYV+ePZrDyH3tPkKnNva3b451n7Es8s2OTE
+ gdFGyOSeFmt06NnCt96bYx82aG+zGu8ewEdWWbMQF9iRvbyXz2IfWPvtAATh/ck7at8y
+ 1eeMFVJG53FDQWfkVtDM8fPt8WvIHsjnEVqw95rmACqjN7bQqR/UDoHwHEV+Mc1ho3EA
+ JIpQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=QJIRqjtX
-Subject: [Buildroot] [PATCH 1/1] package/openpowerlink: bump to version 2.7.2
+ header.a=rsa-sha256 header.s=20210112 header.b=acis4/Z5
+Subject: [Buildroot] [PATCH 1/1] package/irrlicht: bump to version 1.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,42 +100,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/blob/V2.7.2/revision.md
+Drop second patch (not needed since
+https://sourceforge.net/p/irrlicht/code/5349/)
+
+https://irrlicht.sourceforge.io/forum/viewtopic.php?f=2&t=52775
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openpowerlink/openpowerlink.hash | 8 ++++----
- package/openpowerlink/openpowerlink.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...-LDFLAGS-and-remove-obsolete-X11R6-.patch} |  0
+ .../irrlicht/0002-remove-sys-sysctl.h.patch   | 38 -------------------
+ package/irrlicht/irrlicht.hash                |  8 ++--
+ package/irrlicht/irrlicht.mk                  |  2 +-
+ 4 files changed, 5 insertions(+), 43 deletions(-)
+ rename package/irrlicht/{0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch => 0002-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch} (100%)
+ delete mode 100644 package/irrlicht/0002-remove-sys-sysctl.h.patch
 
-diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
-index 2d8683f09c..b6ae8edcd8 100644
---- a/package/openpowerlink/openpowerlink.hash
-+++ b/package/openpowerlink/openpowerlink.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.1/
--md5  04524d1b1f9946176dce0ccb0eecf537  openPOWERLINK_V2.7.1.tar.gz
--sha1  4ee9c6e26bbc729fdbbb272155b093ffa0d9cefd  openPOWERLINK_V2.7.1.tar.gz
-+# From https://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.2/
-+md5  80a64b0a2c2dec1e7aff22a06000b3d6  openPOWERLINK_V2.7.2.tar.gz
-+sha1  09dcb5bd7cb9d59cb9e60230ae09c558996be25b  openPOWERLINK_V2.7.2.tar.gz
- # sha256 locally computed
--sha256  d0d65f4fb8f2ad209cf9575714f88f33168a1cf71e8f1801e1e1ac4df6a37ffd  openPOWERLINK_V2.7.1.tar.gz
-+sha256  2cc660e0f8a939bd65c9f46176d18882dbe1017cbb2567b414a8a7c9af41a356  openPOWERLINK_V2.7.2.tar.gz
- sha256  348e31e9e5094104463d58d33abd31049fdf209afbc12ea7abb7fd4b4a147429  license.md
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 46dc3d10cd..c8dbb66d05 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch b/package/irrlicht/0002-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+similarity index 100%
+rename from package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+rename to package/irrlicht/0002-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+diff --git a/package/irrlicht/0002-remove-sys-sysctl.h.patch b/package/irrlicht/0002-remove-sys-sysctl.h.patch
+deleted file mode 100644
+index d9142a9a22..0000000000
+--- a/package/irrlicht/0002-remove-sys-sysctl.h.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 5382142d37730f6758753b758c91e257ffd5892c Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sun, 9 Apr 2017 22:20:19 +0200
+-Subject: [PATCH] remove sys/sysctl.h
+-
+-With musl irrlicht doesn't build due to missing sys/sysctl.h
+-
+-fatal error: sys/sysctl.h: No such file or directory
+-
+-From [1]
+-"sysctl does not work, and NEVER worked. using it is bogus.
+-it was a bogus experimental syscall that was deprecated before
+-it was ever used (basically, a broken binary version of
+-/proc/sys, without any stability between kernel versions for
+-what the binary constants meant)."
+-
+-[1] https://devsonacid.wordpress.com/tag/musl/
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- source/Irrlicht/COSOperator.cpp | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/source/Irrlicht/COSOperator.cpp b/source/Irrlicht/COSOperator.cpp
+-index 0899d1d..ccf5ef5 100644
+---- a/source/Irrlicht/COSOperator.cpp
+-+++ b/source/Irrlicht/COSOperator.cpp
+-@@ -13,7 +13,6 @@
+- #include <unistd.h>
+- #ifndef _IRR_SOLARIS_PLATFORM_
+- #include <sys/types.h>
+--#include <sys/sysctl.h>
+- #endif
+- #endif
+- 
+--- 
+-2.9.3
+-
+diff --git a/package/irrlicht/irrlicht.hash b/package/irrlicht/irrlicht.hash
+index e7cd3ec918..7f9bceb0c1 100644
+--- a/package/irrlicht/irrlicht.hash
++++ b/package/irrlicht/irrlicht.hash
+@@ -1,8 +1,8 @@
+-# From https://sourceforge.net/projects/irrlicht/files/Irrlicht%20SDK/1.8/1.8.4
+-md5  9401cfff801395010b0912211f3cbb4f  irrlicht-1.8.4.zip
+-sha1  38bf0223fe868d243d6a39d0dc191c8df6e03b3b  irrlicht-1.8.4.zip
++# From https://sourceforge.net/projects/irrlicht/files/Irrlicht%20SDK/1.8/1.8.5
++md5  1fcf67c2906eb84b531af512de8481b1  irrlicht-1.8.5.zip
++sha1  96908ebc379e0172261c240dc018416ce6a3e4e3  irrlicht-1.8.5.zip
+ # Locally calculated
+-sha256  f42b280bc608e545b820206fe2a999c55f290de5c7509a02bdbeeccc1bf9e433  irrlicht-1.8.4.zip
++sha256  effb7beed3985099ce2315a959c639b4973aac8210f61e354475a84105944f3d  irrlicht-1.8.5.zip
+ sha256  cc86e0b830f9d48933feb198f2741a7d9bb7c34fe8a35302d8ce36b8e2ecb27b  doc/aesGladman.txt
+ sha256  e8a6b63336018eec09ac3a7cdfe5a80bda635641bc0397a77b8baa25bed03800  doc/bzip2-license.txt
+ sha256  ca38f1ba4ab901111f6eee50009bd46dbd866e6beb98d592d843f7c162d73409  doc/irrlicht-license.txt
+diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
+index bd82815cde..c1da50a53c 100644
+--- a/package/irrlicht/irrlicht.mk
++++ b/package/irrlicht/irrlicht.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OPENPOWERLINK_VERSION = 2.7.1
-+OPENPOWERLINK_VERSION = 2.7.2
- OPENPOWERLINK_SITE = https://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V$(OPENPOWERLINK_VERSION)
- OPENPOWERLINK_SOURCE = openPOWERLINK_V$(OPENPOWERLINK_VERSION).tar.gz
- OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
+ IRRLICHT_VERSION_MAJOR = 1.8
+-IRRLICHT_VERSION = $(IRRLICHT_VERSION_MAJOR).4
++IRRLICHT_VERSION = $(IRRLICHT_VERSION_MAJOR).5
+ IRRLICHT_SOURCE = irrlicht-$(IRRLICHT_VERSION).zip
+ IRRLICHT_SITE = https://downloads.sourceforge.net/project/irrlicht/Irrlicht%20SDK/$(IRRLICHT_VERSION_MAJOR)/$(IRRLICHT_VERSION)
+ IRRLICHT_INSTALL_STAGING = YES
 -- 
 2.39.2
 
