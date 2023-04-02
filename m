@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6527C76196
-	for <buildroot@archiver.kernel.org>; Sun,  2 Apr 2023 09:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BB3BC7619A
+	for <buildroot@archiver.kernel.org>; Sun,  2 Apr 2023 11:05:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B98D60F7F;
-	Sun,  2 Apr 2023 09:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B98D60F7F
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF38740119;
+	Sun,  2 Apr 2023 11:05:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF38740119
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IxcJsjnwhsyF; Sun,  2 Apr 2023 09:47:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m3gE3GKKUWHD; Sun,  2 Apr 2023 11:05:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A24C60F6C;
-	Sun,  2 Apr 2023 09:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A24C60F6C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98F751BF365
- for <buildroot@lists.busybox.net>; Sun,  2 Apr 2023 09:47:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D07A40127;
+	Sun,  2 Apr 2023 11:05:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D07A40127
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0DC941BF47A
+ for <buildroot@lists.busybox.net>; Sun,  2 Apr 2023 11:04:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7186960F6C
- for <buildroot@lists.busybox.net>; Sun,  2 Apr 2023 09:47:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7186960F6C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D93FD4024E
+ for <buildroot@lists.busybox.net>; Sun,  2 Apr 2023 11:04:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93FD4024E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Al3RV2Cjk4jF for <buildroot@lists.busybox.net>;
- Sun,  2 Apr 2023 09:47:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xpMsISqzrxhP for <buildroot@lists.busybox.net>;
+ Sun,  2 Apr 2023 11:04:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC9CB60F67
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EC9CB60F67
- for <buildroot@buildroot.org>; Sun,  2 Apr 2023 09:47:40 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id r29so26395015wra.13
- for <buildroot@buildroot.org>; Sun, 02 Apr 2023 02:47:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43C1E40223
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 43C1E40223
+ for <buildroot@buildroot.org>; Sun,  2 Apr 2023 11:04:57 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ d11-20020a05600c3acb00b003ef6e6754c5so12627029wms.5
+ for <buildroot@buildroot.org>; Sun, 02 Apr 2023 04:04:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1680428858;
+ d=1e100.net; s=20210112; t=1680433495;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=XtfkKSwvJsQLkx0koBfBi4I2D015WaOhiJGTIx79agA=;
- b=EKriLQQkyflG4rZ3qVVFNyInVR8LTo6F1BtpOZItvXSAYmuyrfd1nrmMMY5rTq/fes
- CUWREuTtlYKx2KWSvUMHTsDv3R/UNRKcX7fS9B5WaEe8LIUUZHzeX+VxAJkBDQemnHXM
- BMW7bBBaLLv71vDwRzsjtmCKeNHfv96lbtpG8H0uw0kviWKKIKP8dzegZmnPLPln5WLZ
- y3F0HhYkez3iLd1HLbGjO/XdpmWXAPAloS/hjtyVPjYqiyaE9ynhprgFcj69IOMcmsYt
- N/lt+5Qv8eq8FMGEhe3GxkP1p13mqKlUMbINs9v6G8U6yPe+tDt/lJv1etbgIIsUo3zR
- R0VQ==
-X-Gm-Message-State: AAQBX9fFHfjnGVNUJvZYSTg8xBkGiw7E3QCNKhMnTvkDpD474e+7o6lv
- GQfk6ZSF16xoml9ozAe2mHpGZZr8+mM=
-X-Google-Smtp-Source: AKy350bbDS6vmn3ZN+Zppm62fJgnUUtLjp02pPcMOfe8o/9YplyuLPG+Upn54NN63MBZpA/LZARojA==
-X-Received: by 2002:a5d:5550:0:b0:2c9:1a3f:d5f8 with SMTP id
- g16-20020a5d5550000000b002c91a3fd5f8mr3044693wrw.41.1680428858469; 
- Sun, 02 Apr 2023 02:47:38 -0700 (PDT)
+ bh=XeFoVBzgrkXqoJ0ooWR9NkoTA8JO0D0kbznvouXMQKE=;
+ b=ad0hZ5bXo+0trhBF0HibFBcLCFrjkGybxPt6us5q0hDvg2X5DcDIvdabz4jFWiNl+8
+ hiX7S/zKr/pSh8tldwOKOYXfKR8qxa/yJxLkizNaANhv70nZRtgCYFjuebCTcKgA1M1U
+ arPVxzJSSslIbvYW2k2UsGK4lHnE2bVndyQHEcKPKlO5cUyFZivwncBElT/WIj+4h06Y
+ FHLCHGUV/r09CjwbZLF2Bn36ld3yAi6GN/FoDhXLgbe4yvFHqwFGBNIOmbbnPWzN9jRY
+ lmIo+eDsc30EA1grCT+ckrlj6Zeu3MrV/Of5AcBgPmA+Au+1TsTSmc1lxmKLvvsnUAm2
+ LVFA==
+X-Gm-Message-State: AO0yUKXR8cvquud7Ih1V7Qwtc8HHhJBMJBHKvMBIT5ZI4d99V1HygE4z
+ jlnojZmiVr8r1AfWbPztM4g2QyDUN1g=
+X-Google-Smtp-Source: AK7set8RId34A2DjsXC4oxIV3/TxhryDaHlvrPGcb54QM6mOYRCYFHA1HsfQ9ybAErArWAUzqXZUwQ==
+X-Received: by 2002:a05:600c:220e:b0:3ee:a205:848f with SMTP id
+ z14-20020a05600c220e00b003eea205848fmr23064598wml.20.1680433494673; 
+ Sun, 02 Apr 2023 04:04:54 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- s16-20020adfea90000000b002d21379bcabsm6844565wrm.110.2023.04.02.02.47.37
+ ip21-20020a05600ca69500b003edf2ae2432sm15384662wmb.7.2023.04.02.04.04.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Apr 2023 02:47:37 -0700 (PDT)
+ Sun, 02 Apr 2023 04:04:53 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  2 Apr 2023 11:47:35 +0200
-Message-Id: <20230402094735.169044-1-fontaine.fabrice@gmail.com>
+Date: Sun,  2 Apr 2023 13:04:50 +0200
+Message-Id: <20230402110450.589218-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1680428858;
+ d=gmail.com; s=20210112; t=1680433495;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=XtfkKSwvJsQLkx0koBfBi4I2D015WaOhiJGTIx79agA=;
- b=IIXSKIIM8q3q4TzdQifMcI6eaNA8QeiZvmCXc8fhpgowAvYdmT0uEoJaj1bDK5dlBG
- 3o6LwpOE7dbLvGMvEwKVOc1UZaUWSwMvkSddY/ZAnyGJ7G3Zkr6Qt/YkiBnehIpT1JOc
- YDqBaga9y9bMtHkH71vM91JUDq0RQnPKcuPP1tCnVv7G9qMWtYKE+Gq2ntHfrrQeFkMp
- 2qXEBSVOp9AU/C6Td8C1ryND0KakSXjX37OQf4kfwqhIES0A9FCA8wZ9q6a3Xy3Y9EiM
- RKxCyIlpRj7vrftIGX6b5gK6/v+PXCJjmWWoWNQxFpHLTDqmavMUXLhvD0Yt7l3HT0UT
- hMDA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=XeFoVBzgrkXqoJ0ooWR9NkoTA8JO0D0kbznvouXMQKE=;
+ b=RJv/F9PgqsZjJP7W8jhzOV8pmhsx6SVpOMJgoRGeNvDK9V4gIWjAB0qYm2iyJBa9MA
+ 0NI+5amD52bOnADQl6ux4YBYJ4EUVm8Ai8nTktB+w+sjMT2xSfP3QM9mF5J4hdF1TMCP
+ Gndgl0nB7ZBkqGDIiGfSYHSjn6rSqI3WmA6FIqhSL3WIfJO548kA3Id9WJimmDfOcybJ
+ 1bksGRIVO+1nEVxM3ygSHZl3rVF2cYkQaom0bw9qJy8CrVt+cIrgWwzjIlVgn6/G7hv8
+ Y24UGRT1Z35TTWtwoAAHsucIZbhLnndJSzE+WBnNod8smdWjeyCAQ+fbUtAnSvVjXOV0
+ krtQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=IIXSKIIM
-Subject: [Buildroot] [PATCH 1/1] package/zeek: bump to version 5.2.0
+ header.a=rsa-sha256 header.s=20210112 header.b=RJv/F9Pg
+Subject: [Buildroot] [PATCH v2,1/1] package/zeek: bump to version 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,11 +110,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
   https://github.com/zeek/zeek/commit/72cbc7cd13b7c1bda98658104431c3b530ff68d6
   https://github.com/zeek/zeek/commit/b77f5fa14cc1b64572b70f80366e1ba56f87503c
   https://github.com/zeek/zeek/commit/4f6f46a4043b092b40c01d91a57c5ff273ab433a)
+- This bump will fix the following build failure with python >= 3.11:
+
+In file included from /home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/attr.h:13,
+                 from /home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/pybind11.h:45,
+                 from /home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/functional.h:12,
+                 from /home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/_broker.cpp:13:
+/home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/cast.h: In function 'std::string pybind11::detail::error_string()':
+/home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/cast.h:446:36: error: invalid use of incomplete type 'PyFrameObject' {aka 'struct _frame'}
+  446 |                 "  " + handle(frame->f_code->co_filename).cast<std::string>() +
+      |                                    ^~
 
 https://github.com/zeek/zeek/blob/v5.2.0/NEWS
 
+Fixes:
+ - http://autobuild.buildroot.org/results/43ca5fcc5b8618e6a7a65e77061f673a3c30bfc6
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Update commit message with information about python build failure
+
  package/zeek/zeek.hash |  6 +++---
  package/zeek/zeek.mk   | 13 +++++++++----
  2 files changed, 12 insertions(+), 7 deletions(-)
