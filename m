@@ -4,55 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62CFCC76196
-	for <buildroot@archiver.kernel.org>; Mon,  3 Apr 2023 08:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97582C76196
+	for <buildroot@archiver.kernel.org>; Mon,  3 Apr 2023 08:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B848980C89;
-	Mon,  3 Apr 2023 08:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B848980C89
+	by smtp1.osuosl.org (Postfix) with ESMTP id 447F781E30;
+	Mon,  3 Apr 2023 08:54:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 447F781E30
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D4kLHDlYfCAD; Mon,  3 Apr 2023 08:53:26 +0000 (UTC)
+	with ESMTP id cnnSeuy_3V35; Mon,  3 Apr 2023 08:54:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F347680B4C;
-	Mon,  3 Apr 2023 08:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F347680B4C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B5D281BF4;
+	Mon,  3 Apr 2023 08:53:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B5D281BF4
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E1FA61BF2E5
- for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 08:53:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 20BB91BF2E5
+ for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 08:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9CCD40327
- for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 08:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9CCD40327
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5E05408EB
+ for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 08:53:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5E05408EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VWxL75dYYLgK for <buildroot@lists.busybox.net>;
- Mon,  3 Apr 2023 08:53:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D3FD40060
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3D3FD40060
- for <buildroot@buildroot.org>; Mon,  3 Apr 2023 08:53:21 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BF755240008;
- Mon,  3 Apr 2023 08:53:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pjFwD-009ciK-42; Mon, 03 Apr 2023 10:53:17 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Christian Stewart <christian@paral.in>
-References: <20230329181722.242619-1-christian@paral.in>
-Date: Mon, 03 Apr 2023 10:53:17 +0200
-In-Reply-To: <20230329181722.242619-1-christian@paral.in> (Christian Stewart's
- message of "Wed, 29 Mar 2023 11:17:22 -0700")
-Message-ID: <87jzytmjnm.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ with ESMTP id Sd9m1PyXn6cE for <buildroot@lists.busybox.net>;
+ Mon,  3 Apr 2023 08:53:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 575E3408D6
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 575E3408D6
+ for <buildroot@buildroot.org>; Mon,  3 Apr 2023 08:53:56 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 45B15FF812;
+ Mon,  3 Apr 2023 08:53:53 +0000 (UTC)
+Date: Mon, 3 Apr 2023 10:53:52 +0200
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Message-ID: <20230403105352.03d8a9e8@windsurf>
+In-Reply-To: <c4df1e01-285e-fcfe-cbfb-bc63ebd561e5@gmail.com>
+References: <642a6e97.050a0220.1d642.3446SMTPIN_ADDED_MISSING@mx.google.com>
+ <c4df1e01-285e-fcfe-cbfb-bc63ebd561e5@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/runc: security bump to
- version v1.1.5
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1680512033;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=bIM/x8LQ6FpJ3KOyEdY1LhXXRiZD1zHx4NP2rjPF+3Y=;
+ b=AjEvzsCNnTvG2J302IpcjGuMm5VKMXn/lnwLXaOckXXxon/Tq2sxMGaJXtticTBzkpkqEY
+ VZnijGmueuD5hvXl449WXaaTqGanht2khatq9drlMWTAMOczy9LV7DZU6wadMlJD95Gfdl
+ R/BbWG1DJc16wuPnbmoK3KffznK2VK0XgZQZXw/28XfRg0DfIQJmDVCgzuI9OXRtOwKLlS
+ BgstgiRc63kD4aaHv6xSZMFNk/+rEMmHJAGf3Y0ykqrMiDa3KHxtMUjUCDoC22aHh9tAqX
+ Vr0F7dmqJCDOaKxXKYtqhTQNEfi8ehFdYk4maJgiNoGVF964Q0LEniP1lpOEig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AjEvzsCN
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2023-04-02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +77,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+Hello Bagas,
 
- > This is the fifth patch release in the 1.1.z series of runc, which fixes
- > three CVEs found in runc.
+On Mon, 3 Apr 2023 15:03:20 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
- > CVE-2023-25809 is a vulnerability involving rootless containers where
- > (under specific configurations), the container would have write access to the
- > /sys/fs/cgroup/user.slice/... cgroup hierarchy. No other hierarchies on the host
- > were affected. This vulnerability was discovered by Akihiro Suda.
- > GHSA-m8cg-xc2p-r3fc
+> >              name              |       CVE        |                             link                            
+> > -------------------------------+------------------+--------------------------------------------------------------
+> >                            git | CVE-2022-24765   | https://security-tracker.debian.org/tracker/CVE-2022-24765    
+> Should have been already fixed by upstream release v2.31.7 (which is
+> already in Buildroot).
 
- > CVE-2023-27561 was a regression which effectively re-introduced CVE-2019-19921.
- > This bug was present from v1.0.0-rc95 to v1.1.4. This regression was discovered
- > by Beuc. GHSA-vpvm-3wq2-2wvm
+The NVD information says versions up to 2.35.2 are affected:
+https://nvd.nist.gov/vuln/detail/CVE-2022-24765.
 
- > CVE-2023-28642 is a variant of CVE-2023-27561 and was fixed by the same patch.
- > This variant of the above vulnerability was reported by Lei Wang.
- > GHSA-g2j6-57v7-gm8c
+If 2.31.x a maintenance branch into which the fix has been backported?
 
- > In addition, the following other fixes are included in this release:
+> >                            git | CVE-2022-24975   | https://security-tracker.debian.org/tracker/CVE-2022-24975    
+> It is known outstanding issue (maybe docfix upstream is enough)?
 
- >  - Fix the inability to use /dev/null when inside a container
- >  - Fix changing the ownership of host's /dev/null caused by fd redirection
- >  - Fix rare runc exec/enter unshare error on older kernels, including CentOS < 7.7
- >  - nsexec: Check for errors in write_log()
+This is a pretty silly CVE :-/ Complaining about the doc not making
+things clear enough? Sounds odd. I think in the context of Buildroot,
+we could ignore it.
 
- > https://github.com/opencontainers/runc/releases/tag/v1.1.5
+> >                            git | CVE-2022-41953   | https://security-tracker.debian.org/tracker/CVE-2022-41953    
+> Windows-specific.
+> >                            git | CVE-2023-22743   | https://security-tracker.debian.org/tracker/CVE-2023-22743    
+> Again, Windows-specific.
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+For both of these, and probably CVE-2022-24975, you can send a patch
+adding those CVEs to GIT_IGNORE_CVES, and bit like this:
 
-Committed, thanks.
+# CVE only affects the documentation
+GIT_IGNORE_CVES += CVE-2022-24975
 
+# CVEs only affect Windows systems
+GIT_IGNORE_CVES += CVE-2022-41953 CVE-2023-22743
+
+Thanks a lot for following-up on this, it's nice to see that some
+Buildroot contributors are looking into the CVE details!
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
