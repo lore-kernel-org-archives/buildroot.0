@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16E78C76196
-	for <buildroot@archiver.kernel.org>; Mon,  3 Apr 2023 16:34:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2104C76196
+	for <buildroot@archiver.kernel.org>; Mon,  3 Apr 2023 22:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5140D4098B;
-	Mon,  3 Apr 2023 16:34:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5140D4098B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 258FC81815;
+	Mon,  3 Apr 2023 22:00:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 258FC81815
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D6MmizhfwXhs; Mon,  3 Apr 2023 16:34:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I6La2YqIK_x9; Mon,  3 Apr 2023 22:00:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36BB440922;
-	Mon,  3 Apr 2023 16:34:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36BB440922
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EDF671C116E
- for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 16:34:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 658C281882;
+	Mon,  3 Apr 2023 22:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 658C281882
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B71A1BF36D
+ for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 22:00:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C6FED60BD8
- for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 16:34:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6FED60BD8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2306E40955
+ for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 22:00:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2306E40955
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PzVTEHw4jrpq for <buildroot@lists.busybox.net>;
- Mon,  3 Apr 2023 16:34:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XMGEpZWRzIYI for <buildroot@lists.busybox.net>;
+ Mon,  3 Apr 2023 22:00:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A70260BD6
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A70260BD6
- for <buildroot@buildroot.org>; Mon,  3 Apr 2023 16:34:43 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id cn12so119755415edb.4
- for <buildroot@buildroot.org>; Mon, 03 Apr 2023 09:34:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 056E340952
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 056E340952
+ for <buildroot@buildroot.org>; Mon,  3 Apr 2023 22:00:17 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id bl9so13498359iob.8
+ for <buildroot@buildroot.org>; Mon, 03 Apr 2023 15:00:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1680539681;
+ d=1e100.net; s=20210112; t=1680559217; x=1683151217;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Zk8l4cMY8jrXeVHsK3FOBGZjUN7V9P0juaJgwJ6GKtA=;
- b=oiQ8XmDP3POp9cvGQhNK86+/g1VwtUtuhyL9dzkOqlBUyarajhG7g0k8b/gvwlW5nl
- wMRCA2xeBkWQK7x6G90n0Ri+0wGCQRMuSZmzjWk48p9/VMiieuiUMX+Yf6zA7WAemgX0
- OWFW7+lG//GpXg7ICVPzoSz2SV5kHuDZAZczYa5i/LxptLG0RQ3tMYlZydEMcH7KhnI2
- XPw3p4vrpREo2dTNe38E5BGcQOxpHO3yq/6AYruRcYjLqYCbYdrDdSjn5/MA2Ai7FZyN
- /LXZ14CEJMfopHjZ1XW47Pv4uk6zEMdv4r3nBcePXI9mk12cU4Dxu17SFZMSlm80Ot7C
- I2+Q==
-X-Gm-Message-State: AAQBX9ck1+GGr4d6cmqFU8yJhOB+aLDY31tBEi/8E9KktO+cR2z3J33f
- dr2nmX3gRicFPplPabypyUrPkWmUOmZSUQ==
-X-Google-Smtp-Source: AKy350b9Z+u7DCpECR8a4j4Jpivbqx/ItRU5blPSEC8UzSvtfiFs06Ipub98TLNPfDHMeelJxY4phw==
-X-Received: by 2002:a17:906:b247:b0:8f5:8da0:a482 with SMTP id
- ce7-20020a170906b24700b008f58da0a482mr20641712ejb.25.1680539681027; 
- Mon, 03 Apr 2023 09:34:41 -0700 (PDT)
-Received: from kali.home (pop.92-180-132-213.mobile.abo.orange.fr.
- [92.180.132.213]) by smtp.gmail.com with ESMTPSA id
- i12-20020a1709064ecc00b008e8e975e185sm4735980ejv.32.2023.04.03.09.34.40
+ bh=PTDx1UYTSXipSimHS+e4MHOw8GxF3OEy36fyqP96Zho=;
+ b=GENqYpg6rz056t16UTcMrIZLAhDehlzNJXvn/NOS8BhcZ+lED3bDzVvfOu3MpcoQEG
+ IZJI57NYMqZ2UjLdeAzgPRsUUVoKYxtVj1oLlhZ/vJQlBtY9NdPHGDxCQCTOhB8qCaWX
+ ufts6ihQPSbsheHIwsDZlMs2orDncSeaQEq1ZZu6DA4hFnurCngyLbzIHvs1K6U1cVdO
+ uug4d9f61lscjCipGj9IOEJq3ycuTsu1CB6InONILg5crkpFv8+fnREfCsVUVHat8pGB
+ kwVdOStg5B8xqRRVZ8thQd07QULWe40FiIg5o+aJy041GBfAd2COLkOumpdd5bnD9vP+
+ NgKA==
+X-Gm-Message-State: AAQBX9f+FleG6fdiH2nFfl4xo556Tsi6lB9NvIr2CB2reSygMIR9ZlaO
+ 75cyybvOgrq+Y2NgOKXGyuUc91K34O1WHQ==
+X-Google-Smtp-Source: AKy350ZBylOP5rWG3yUh3MumbVAjCa8i2rzVw2c4jvgm+k3qSFpPjBftsyTe2yxyNKd91N14WnIJyA==
+X-Received: by 2002:a5e:c01a:0:b0:6df:fa5a:fa05 with SMTP id
+ u26-20020a5ec01a000000b006dffa5afa05mr709638iol.0.1680559216549; 
+ Mon, 03 Apr 2023 15:00:16 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-131-106.hlrn.qwest.net.
+ [71.33.131.106]) by smtp.gmail.com with ESMTPSA id
+ x19-20020a5d9ad3000000b00704608527d1sm2951980ion.37.2023.04.03.15.00.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Apr 2023 09:34:40 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Mon, 03 Apr 2023 15:00:16 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  3 Apr 2023 18:34:33 +0200
-Message-Id: <20230403163433.368657-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.2
+Date: Mon,  3 Apr 2023 16:00:14 -0600
+Message-Id: <20230403220014.2729-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1680539681;
+ d=gmail.com; s=20210112; t=1680559217; x=1683151217;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Zk8l4cMY8jrXeVHsK3FOBGZjUN7V9P0juaJgwJ6GKtA=;
- b=ZuobOJZkJLrOaxDIXiCFkxg3thniyRmyuvoEiCc/eH6X0qcUJNeDnQcuqKTMvOI/jk
- sWVat75GRYIkLMd6fNxBtMplIGeCX1BcWt3Z3/7uJl24HZrjY+eZIuY9cPRERwZ7t8X1
- I2Yg7GzJ9Fu+ZdTvviFmmfFSx3TvWwiF21KWZOu1BTpIEI+COLrhlTfiobD4+P1zZ+ph
- /lr1SJ2pnvHpaRoN7jaJ6s5C6l4Fq6MgHCjnc1sjRtkzxFjmwBnLRwDn6MCd/7jfxGrC
- VHGxLoMLuJEoP9X6WQC397ZQdGtZR0SiVAAi9v+QwGty7q/9XG61aL8mjQi7rCMuJQM8
- 5EVw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=PTDx1UYTSXipSimHS+e4MHOw8GxF3OEy36fyqP96Zho=;
+ b=DUb+Mh+UmydILvnzKxuwZRBDvQNiCILj0EKhIxysqyWYlrUhYkgdPmrHWiG2BvP6nA
+ PFmaxwsPDdopoCwHOagkx2SNAptI4ifPkUzHUGhvlFhP+UuGRK8pOeC4gUfKmUlouC52
+ +q8hqQUT49FvxTYE8wGbv16Jr+gwuKk94xU3xgRsZndpNTM37zeJrXO3mx66NSW5L4sV
+ IVcwSWPcbP/j1aQbHG03ydMHccEUV0ymGup+9HKz0bqTFU72jXlGeco2LnBkFXHusfJp
+ KCeAg7vkh7IKDK/XX0KtS7lNZcUhOmGH6EGl7ZVy6CYjCHNvb3HhLtQWnaSA0Fmy0XM7
+ iHkA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZuobOJZk
-Subject: [Buildroot] [PATCH v3,1/1] package/zeek: bump to version 5.2.0
+ header.a=rsa-sha256 header.s=20210112 header.b=DUb+Mh+U
+Subject: [Buildroot] [PATCH 1/1] package/python-pep517: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,157 +93,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Handle build and install of gen-zam
-- Disable new spicy option (work is still needed to cross-compile it)
-- Disable unit tests (as they are now enabled by default)
-- Update hash of COPYING (year updated with
-  https://github.com/zeek/zeek/commit/273126a87b8f7134b81439ae31343c7b45d2a421)
-- Update hash of COPYING.3rdparty (path updated, filessystem added and
-  file renamed with
-  https://github.com/zeek/zeek/commit/72cbc7cd13b7c1bda98658104431c3b530ff68d6
-  https://github.com/zeek/zeek/commit/b77f5fa14cc1b64572b70f80366e1ba56f87503c
-  https://github.com/zeek/zeek/commit/4f6f46a4043b092b40c01d91a57c5ff273ab433a)
-- This bump will fix the following build failure with python >= 3.11:
+This package is no longer used as python-pypa-build now uses
+python-pyproject-hooks instead.
 
-In file included from /home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/attr.h:13,
-                 from /home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/pybind11.h:45,
-                 from /home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/functional.h:12,
-                 from /home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/_broker.cpp:13:
-/home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/cast.h: In function 'std::string pybind11::detail::error_string()':
-/home/autobuild/autobuild/instance-6/output-1/build/zeek-4.1.1/auxil/broker/bindings/python/3rdparty/pybind11/include/pybind11/cast.h:446:36: error: invalid use of incomplete type 'PyFrameObject' {aka 'struct _frame'}
-  446 |                 "  " + handle(frame->f_code->co_filename).cast<std::string>() +
-      |                                    ^~
-
-https://github.com/zeek/zeek/blob/v5.2.0/NEWS
-
-Fixes:
- - http://autobuild.buildroot.org/results/43ca5fcc5b8618e6a7a65e77061f673a3c30bfc6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v2 -> v3:
- - Add a patch to fix install
-Changes v1 -> v2:
- - Update commit message with information about python build failure
+ DEVELOPERS                               |  1 -
+ package/python-pep517/python-pep517.hash |  5 -----
+ package/python-pep517/python-pep517.mk   | 14 --------------
+ 3 files changed, 20 deletions(-)
+ delete mode 100644 package/python-pep517/python-pep517.hash
+ delete mode 100644 package/python-pep517/python-pep517.mk
 
- ...CMakeLists.txt-drop-EXCLUDE_FROM_ALL.patch | 30 +++++++++++++++++++
- package/zeek/zeek.hash                        |  6 ++--
- package/zeek/zeek.mk                          | 13 +++++---
- 3 files changed, 42 insertions(+), 7 deletions(-)
- create mode 100644 package/zeek/0001-CMakeLists.txt-drop-EXCLUDE_FROM_ALL.patch
-
-diff --git a/package/zeek/0001-CMakeLists.txt-drop-EXCLUDE_FROM_ALL.patch b/package/zeek/0001-CMakeLists.txt-drop-EXCLUDE_FROM_ALL.patch
-new file mode 100644
-index 0000000000..c6f6fe0f46
---- /dev/null
-+++ b/package/zeek/0001-CMakeLists.txt-drop-EXCLUDE_FROM_ALL.patch
-@@ -0,0 +1,30 @@
-+From 397cfad57d38bfb4dc681c9533e5ed98a342d9ae Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 3 Apr 2023 18:29:14 +0200
-+Subject: [PATCH] CMakeLists.txt: drop EXCLUDE_FROM_ALL
-+
-+Drop EXCLUDE_FROM_ALL from add_subdirectory(caf) or caf libraries such
-+as libcaf_core.so won't be installed resulting in a runtime failure
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/zeek/broker/pull/327]
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/auxil/broker/CMakeLists.txt b/auxil/broker/CMakeLists.txt
-+index cb99d290..c91dcf22 100644
-+--- a/auxil/broker/CMakeLists.txt
-++++ b/auxil/broker/CMakeLists.txt
-+@@ -217,7 +217,7 @@ else ()
-+   set(CAF_ENABLE_TESTING OFF CACHE INTERNAL "")
-+   set(CAF_ENABLE_TOOLS OFF CACHE INTERNAL "")
-+   set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")
-+-  add_subdirectory(caf EXCLUDE_FROM_ALL)
-++  add_subdirectory(caf)
-+   list(APPEND OPTIONAL_SRC $<TARGET_OBJECTS:libcaf_core_obj>)
-+   list(APPEND OPTIONAL_SRC $<TARGET_OBJECTS:libcaf_io_obj>)
-+   list(APPEND OPTIONAL_SRC $<TARGET_OBJECTS:libcaf_net_obj>)
-+-- 
-+2.39.2
-+
-diff --git a/package/zeek/zeek.hash b/package/zeek/zeek.hash
-index 05e57b5024..872ef8e14f 100644
---- a/package/zeek/zeek.hash
-+++ b/package/zeek/zeek.hash
-@@ -1,6 +1,6 @@
- # Locally computed:
--sha256  8c0afc999a8dd1c1f677a5cf818479b99c2d527e679e1ef99fb1b03f989c0373  zeek-4.1.1.tar.gz
-+sha256  511047400dd4539177542c84a5e80d7e97ad73d2a9986ffcd6cd85b4cc711fbf  zeek-5.2.0.tar.gz
- 
- # Hash for license files:
--sha256  b2817e2fb935805ec9fc0e90c6b971efd810d9aedfc646bc5fcb535221e0266a  COPYING
--sha256  1a451eca7b3826a7df62991ba90dd6d23ff03d28c2eefb7f8c4f8b1eac97a61b  COPYING.3rdparty
-+sha256  14c5057bb1f83c50db29323a9d5bb0f33db9c4d8b9806c070f5b0ca84f52694a  COPYING
-+sha256  5be6b90c7a563e6ee8238354f3487206e19d8f299689ff2adce7bdd1a6919ab1  COPYING-3rdparty
-diff --git a/package/zeek/zeek.mk b/package/zeek/zeek.mk
-index 584bfb0778..9c599fc22d 100644
---- a/package/zeek/zeek.mk
-+++ b/package/zeek/zeek.mk
-@@ -4,19 +4,19 @@
- #
- ################################################################################
- 
--ZEEK_VERSION = 4.1.1
-+ZEEK_VERSION = 5.2.0
- ZEEK_SITE = https://download.zeek.org
- ZEEK_LICENSE = \
- 	BSD-3-Clause (zeek, C++ Actor Framework, ConvertUTF.c, CardinalityCounter.cc, pybind11), \
- 	Public Domain (sqlite), \
--	MIT (doctest, libkqueue, RapidJSON, tsl-ordered-map, bro_inet_ntop.c), \
-+	MIT (doctest, filesystem, libkqueue, RapidJSON, tsl-ordered-map, bro_inet_ntop.c), \
- 	LGPL-3.0+ (Multifast Project), \
- 	BSD-2-Clause (event.h), \
- 	BSD-3-Clause (in_cksum.cc) \
- 	BSD-4-Clause (Patricia.c, strsep.c, bsd-getopt-long.c), \
- 	Apache-2.0 (highwayhash, folly), \
- 	MPL-2.0 (mozilla-ca-list.zeek)
--ZEEK_LICENSE_FILES = COPYING COPYING.3rdparty
-+ZEEK_LICENSE_FILES = COPYING COPYING-3rdparty
- ZEEK_CPE_ID_VENDOR = zeek
- ZEEK_SUPPORTS_IN_SOURCE_BUILD = NO
- ZEEK_DEPENDENCIES = \
-@@ -45,6 +45,9 @@ ZEEK_CONF_OPTS = \
- 	-DBINPAC_EXE_PATH=$(HOST_DIR)/bin/binpac \
- 	-DBROKER_DISABLE_DOCS=ON \
- 	-DBROKER_DISABLE_TESTS=ON \
-+	-DDISABLE_SPICY=ON \
-+	-DENABLE_ZEEK_UNIT_TESTS=OFF \
-+	-DGEN_ZAM_EXE_PATH=$(HOST_DIR)/bin/gen-zam \
- 	-DINSTALL_AUX_TOOLS=ON \
- 	-DZEEK_ETC_INSTALL_DIR=/etc
- 
-@@ -79,13 +82,15 @@ ZEEK_DEPENDENCIES += musl-fts
- ZEEK_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
- endif
- 
--HOST_ZEEK_MAKE_OPTS = binpac bifcl
-+HOST_ZEEK_MAKE_OPTS = binpac bifcl gen-zam
- 
- define HOST_ZEEK_INSTALL_CMDS
- 	$(INSTALL) -D -m 0755 $(HOST_ZEEK_BUILDDIR)/auxil/bifcl/bifcl \
- 		$(HOST_DIR)/bin/bifcl
- 	$(INSTALL) -D -m 0755 $(HOST_ZEEK_BUILDDIR)/auxil/binpac/src/binpac \
- 		$(HOST_DIR)/bin/binpac
-+	$(INSTALL) -D -m 0755 $(HOST_ZEEK_BUILDDIR)/auxil/gen-zam/gen-zam \
-+		$(HOST_DIR)/bin/gen-zam
- endef
- 
- $(eval $(cmake-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7c5880c8ee..9f795804cc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1410,7 +1410,6 @@ F:	package/python-multidict/
+ F:	package/python-mypy-extensions/
+ F:	package/python-outcome/
+ F:	package/python-pathspec/
+-F:	package/python-pep517/
+ F:	package/python-pycares/
+ F:	package/python-pydyf/
+ F:	package/python-pypa-build/
+diff --git a/package/python-pep517/python-pep517.hash b/package/python-pep517/python-pep517.hash
+deleted file mode 100644
+index 6535e51656..0000000000
+--- a/package/python-pep517/python-pep517.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# md5, sha256 from https://pypi.org/pypi/pep517/json
+-md5  7fd08b11215256601a8a4940c1ba3d34  pep517-0.13.0.tar.gz
+-sha256  ae69927c5c172be1add9203726d4b84cf3ebad1edcd5f71fcdc746e66e829f59  pep517-0.13.0.tar.gz
+-# Locally computed sha256 checksums
+-sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
+diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
+deleted file mode 100644
+index c43b09faaa..0000000000
+--- a/package/python-pep517/python-pep517.mk
++++ /dev/null
+@@ -1,14 +0,0 @@
+-################################################################################
+-#
+-# python-pep517
+-#
+-################################################################################
+-
+-PYTHON_PEP517_VERSION = 0.13.0
+-PYTHON_PEP517_SOURCE = pep517-$(PYTHON_PEP517_VERSION).tar.gz
+-PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/4d/19/e11fcc88288f68ae48e3aa9cf5a6fd092a88e629cb723465666c44d487a0
+-PYTHON_PEP517_LICENSE = MIT
+-PYTHON_PEP517_LICENSE_FILES = LICENSE
+-PYTHON_PEP517_SETUP_TYPE = flit-bootstrap
+-
+-$(eval $(host-python-package))
 -- 
-2.39.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
