@@ -1,75 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74A1BC7618D
-	for <buildroot@archiver.kernel.org>; Tue,  4 Apr 2023 07:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A192C6FD1D
+	for <buildroot@archiver.kernel.org>; Tue,  4 Apr 2023 12:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CCC8C409D0;
-	Tue,  4 Apr 2023 07:15:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCC8C409D0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PS4jdsTQtvgz; Tue,  4 Apr 2023 07:15:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C24CD409EA;
-	Tue,  4 Apr 2023 07:15:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C24CD409EA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 56CB01BF2F9
- for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 07:15:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FAA5819ED
- for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 07:15:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FAA5819ED
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCD1F81819;
+	Tue,  4 Apr 2023 12:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCD1F81819
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z4Zuvh13OadC for <buildroot@lists.busybox.net>;
- Tue,  4 Apr 2023 07:15:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79607819B8
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 79607819B8
- for <buildroot@buildroot.org>; Tue,  4 Apr 2023 07:15:37 +0000 (UTC)
-Received: from Exchange2013.PRIMES.local ([80.154.17.250]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N3Gok-1qQror0u02-010LRT for <buildroot@buildroot.org>; Tue, 04 Apr 2023
- 09:15:35 +0200
-Received: from EXCHANGE2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca]) by
- Exchange2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca%16]) with mapi id
- 14.03.0513.000; Tue, 4 Apr 2023 09:15:34 +0200
-From: Gerd Kautzmann <G.Kautzmann@PRIMES.de>
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: Tools(?) packages for drivers a kernels 6..x
-Thread-Index: AdlmxEgKDrp9+KaFSSC6sVhuG4kuKQ==
-Date: Tue, 4 Apr 2023 07:15:34 +0000
-Message-ID: <1619D009AA8C9E469331A8EE22395AEC8C24E6B7@Exchange2013.PRIMES.local>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.117.177]
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2jdWJUS_qO2I; Tue,  4 Apr 2023 12:48:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1391F817A5;
+	Tue,  4 Apr 2023 12:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1391F817A5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 777CB1C2870
+ for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 12:47:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DD2860B44
+ for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 12:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DD2860B44
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QjNRsYKahcHw for <buildroot@lists.busybox.net>;
+ Tue,  4 Apr 2023 12:47:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 860F060067
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
+ [IPv6:2607:f8b0:4864:20::1029])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 860F060067
+ for <buildroot@buildroot.org>; Tue,  4 Apr 2023 12:47:57 +0000 (UTC)
+Received: by mail-pj1-x1029.google.com with SMTP id
+ r7-20020a17090b050700b002404be7920aso31958814pjz.5
+ for <buildroot@buildroot.org>; Tue, 04 Apr 2023 05:47:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1680612477;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=J4zRpSoytlGNnnaBaZ9LJHmZ/CMBU5gAy+vlJjLIaU4=;
+ b=jOHicqFUQ51F1yrL4+bafaRIwIv04l1A8ydYD1muwKgWZhI50Hvxf6SLE5irbJdRrl
+ EVqPmysUoVNA9khWExEvvdcKaKw87iow+7lMuEfJrQqt7rdHP6jKcM4Ah8yHM89+tzw5
+ O8QOwbihuChlokmCZa2BMvlBkCQThem8gSkiEv1NKoo05EQCJsTwhI0SWFl2mU4UMPMM
+ vBcKcKS5VuGwkONrmmjAz0FtDu+MsTADwXWjXzoID8EGOCMvb1irxRe0IBRr1crenTEr
+ oTXqxHp2UVADRf1GdzeiRNnbW8n5sLEJZwUEdhswFI2jO//JispSDf/5nwf/dPvNlzDW
+ 9u1A==
+X-Gm-Message-State: AAQBX9cfDdFU0VDnNb+9TeonKSMWSNVDmiSWDeoQqk9drEKWaYH4i+6W
+ daCaqh3WSCSc1Tp61Q1YmL3/1TjN6KSTSQ==
+X-Google-Smtp-Source: AKy350b4ga4yGRgXVyUCgP8fkIQgFyN/cK+u/sP4S75vH0/u4tZJ3AqtjEQlkay9Y4isBFB78rT5dQ==
+X-Received: by 2002:a17:90b:1e03:b0:23f:ebf2:d3de with SMTP id
+ pg3-20020a17090b1e0300b0023febf2d3demr2920399pjb.27.1680612476776; 
+ Tue, 04 Apr 2023 05:47:56 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-24.three.co.id.
+ [180.214.233.24]) by smtp.gmail.com with ESMTPSA id
+ s37-20020a634525000000b00507249cde91sm7486676pga.91.2023.04.04.05.47.55
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 04 Apr 2023 05:47:56 -0700 (PDT)
+Message-ID: <bc1b1f34-d896-1971-4f2d-175782a8babe@gmail.com>
+Date: Tue, 4 Apr 2023 19:47:47 +0700
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:PYardX7TxpCJ83s8NG0nCOYfvwnx87dGJx1VTmkRxKtItoEQa5x
- 229t/RjO+voXJ2ngOqAlr/uLsPXHA1ug293IZ6v+xPpt2uOK0oOFZBsCWYjn6vSGU8HcLZ4
- 8NoeN2sEHKIbx8V7MjC5kFnoucyRzGdzQumeKw8RXah0Zq5HHo5hywH3Qz/wJiCk+lKjVQT
- iZoWZFWOzbkpgp5MCiCCQ==
-UI-OutboundReport: notjunk:1;M01:P0:NhRsQYkJzWE=;mjoy7W3YM8Jdx2uDdim/GcFtzl/
- q/PWgupUH6VvSogyyb/iaMnAJHnLvxlFMTyFrbdTpY4TB7cSpn9JfxeOWIGHXN/bnEyQr5+cU
- VAJCyN/EKz2vYrhAFEYRy1ocIJUXlDj+2JEjljPkIcixAer3L8d6i4SEvVuxylzh0dzIdCWem
- LSFOtk6JtiG35eXFh2IkEhh7qkqvnsnX4lf3Bx+PgPpX3+DKhMjk5Gbc5G+w/J6S60b1RSB1D
- BmRZfYRCCGjiVLtdUEhIUkQMKeA/NIQTlAZLWvwNFMhEY2F7WRUPbQuGp+eRLdupjJMOBp/iF
- sxfVpoSYxJxwHpkFT79m0a/ymT2AdDZBy7GueDcbeEEwuOc9V6ytZ1tbGPcTL2ZFwaFUH5W0Z
- B8RUymvGVK2wwDAMw+zFyfYnoB+vtDaJ6dSnanLi+CTWtziUtSGqCnUY/KzFneBHZCtGM9Frp
- JzEfh90mCYYEq23leRWGlKLxaDoc8FdNdm8Ai3s+8Uedt8341agsqhXbZqtg4+VXB3xqILzR0
- h7cDUJoF6IGUgkjhWdGhlHJcCtKxGAW7xIvAdo3wOQc0SoX1ZU2PuAwLxJU21NL2EHToGhuj9
- AB7ViAFvbJkWYHKXs9p+WYKGWS8maj6pc2CLID2RkJe/UT2koiQc1ayKal+VWzbeWw8OCK+yp
- T0teHV7gAoC7+a/w1NI6X4iYpFp7lVaYuoGov/USgg==
-Subject: [Buildroot] Tools(?) packages for drivers a kernels 6..x
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+To: Gerd Kautzmann <G.Kautzmann@PRIMES.de>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <1619D009AA8C9E469331A8EE22395AEC8C24E6B7@Exchange2013.PRIMES.local>
+Content-Language: en-US
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <1619D009AA8C9E469331A8EE22395AEC8C24E6B7@Exchange2013.PRIMES.local>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1680612477;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=J4zRpSoytlGNnnaBaZ9LJHmZ/CMBU5gAy+vlJjLIaU4=;
+ b=pjEM376viWY/qcQWuqG2ZksoulvRHnrO3hWPzKz3FSqkWcXiUX8nFhJTI8UxAhDGZk
+ BfStf4zwYDvWqFyKxQHZeHweQIMM7SRDH0eFNdBEMfII09/PmeoZ4WbDL0jFU/fc/YSj
+ 0qtCsKl8t4dsTJFJKfs4fz50vISf3Yd46O36MKt/DVccmVM/il2UkP9iU9xELeIa4YBz
+ ldNDL5ONQh/5UwQWV34yMx1HnG47SvkBaWjXsqDWgwz81x82lLBIH1mjNh3qwSiqHUCE
+ 5vcY0A3xQraPR3+CY6EnNd+k2aoZZTzVruX/y25oZBscFHMEXb56qdCQu/RZd9druNzs
+ ldCw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=pjEM376v
+Subject: Re: [Buildroot] Tools(?) packages for drivers a kernels 6..x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,213 +100,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============7253539498309303875=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7253539498309303875==
-Content-Language: de-DE
-Content-Type: multipart/alternative;
-	boundary="_000_1619D009AA8C9E469331A8EE22395AEC8C24E6B7Exchange2013PRI_"
+On 4/4/23 14:15, Gerd Kautzmann wrote:
+> Newer Linux Kernels like 6.1.4 seems to have some support fort he camera imx296, buildingthem with buildroot is leadingto an error:
+> 
+> *** Can't find default configuration "arch/arm/configs/bcm2711_defconfig"!
 
---_000_1619D009AA8C9E469331A8EE22395AEC8C24E6B7Exchange2013PRI_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Looks like you're using upstream kernel but you want downstream config.
+However, I'm not familiar with building kernel with Buildroot, so I guess
+you need to copy the downstream config [1] somewhere in your Buildroot
+tree and point Buildroot (via BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG) to use
+that kernel config.
 
-After I got a camera module imx219 working in Linux on a RasPi4 I wanted to=
- switch to another camera.
+I'm only answering the kernel building question, because it looks like
+you ask multiple, distinct questions in the same thread. Please start
+new thread for each question in that case.
 
-According to the manual I copied the needed files to
+Also, try sending plain-text email only; the auto-generated plain
+text from HTML email is rather ugly. Last but not least, when
+replying, don't top-post; reply inline with appropriate context instead.
+Some people (like me) tend to cut the whole context below your
+reply if you top-post.
 
-/lib/modules/5.10.92-v7l/kernel/drivers/media/i2c/ imx296.ko
-/boot/overlays/imx296.dtbo
+Thanks.
 
+[1]: https://raw.githubusercontent.com/raspberrypi/linux/rpi-6.1.y/arch/arm64/configs/bcm2711_defconfig
 
-and id some configurations in /boot/config .
-
-But I can't set up the modules correctly with with 'depmod -a'
-
-If 'depmod' is a part oft he tools generated by buildroot, what do I need t=
-o get it into the image?
-
----
-
-Newer Linux Kernels like 6.1.4 seems to have some support fort he camera im=
-x296, building them with buildroot is leading to an error:
-*** Can't find default configuration "arch/arm/configs/bcm2711_defconfig"!
-
-The default Kernel for Raspberry4 with Buildroot 2023.02 seems to be a V5.1=
-0.x without default support for imx296, any ideas?
-
-Thanks for your help
-
-
-
-
-
-
---_000_1619D009AA8C9E469331A8EE22395AEC8C24E6B7Exchange2013PRI_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;
-	mso-fareast-language:EN-US;}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:#0563C1;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:#954F72;
-	text-decoration:underline;}
-p.msonormal0, li.msonormal0, div.msonormal0
-	{mso-style-name:msonormal;
-	mso-margin-top-alt:auto;
-	margin-right:0cm;
-	mso-margin-bottom-alt:auto;
-	margin-left:0cm;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;}
-span.E-MailFormatvorlage18
-	{mso-style-type:personal;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-span.E-MailFormatvorlage20
-	{mso-style-type:personal-reply;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-size:10.0pt;}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:70.85pt 70.85pt 2.0cm 70.85pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"DE" link=3D"#0563C1" vlink=3D"#954F72">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">After I got a camera module imx219 working in Linux =
-on a RasPi4 I wanted to switch to another camera.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">According to the manual I copied the needed files to=
-<span style=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;ba=
-ckground:white"><o:p></o:p></span></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-family:&quot;Calibri&quot;=
-,sans-serif;background:white"><o:p>&nbsp;</o:p></span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white">/lib/modules/5.10.=
-92-v7l/kernel/drivers/media/i2c/</span></cite> imx296.ko<cite><span style=
-=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;color:black;b=
-ackground:white"><o:p></o:p></span></cite></p>
-<p class=3D"MsoNormal">/boot/overlays/imx296.dtbo <o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">and id some configurations in /boot/config .<o:p></o=
-:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">But I can&#8217;t set up the modules correctly with =
-with &#8218;<cite><span style=3D"font-size:10.0pt;font-family:&quot;Arial&q=
-uot;,sans-serif;color:black;background:white">depmod -a</span></cite><span =
-style=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;color:bl=
-ack;background:white">&#8216;<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">If &#8218;<cite><span style=3D"font-size:10.0pt;font=
--family:&quot;Arial&quot;,sans-serif;color:black;background:white">depmod&#=
-8216; is a part oft he tools generated by buildroot, what do I need to get =
-it into the
-</span></cite><cite><span style=3D"font-size:10.0pt;font-family:&quot;Arial=
-&quot;,sans-serif;background:white">image<span style=3D"color:black">?<o:p>=
-</o:p></span></span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-family:&quot;Calibri&quot;=
-,sans-serif;background:white"><o:p>&nbsp;</o:p></span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-family:&quot;Calibri&quot;=
-,sans-serif;background:white">---<o:p></o:p></span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white"><o:p>&nbsp;</o:p><=
-/span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white">Newer Linux Kernel=
-s like 6.1.4 seems to have some support fort he camera imx296</span></cite>=
-<cite><span style=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-se=
-rif;background:white">,
- building<span style=3D"color:black"> them with buildroot </span>is <span s=
-tyle=3D"color:black">
-le</span>a<span style=3D"color:black">d</span>ing<span style=3D"color:black=
-"> to an error:<o:p></o:p></span></span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white">*** Can't find def=
-ault configuration &quot;arch/arm/configs/bcm2711_defconfig&quot;!<o:p></o:=
-p></span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white"><o:p>&nbsp;</o:p><=
-/span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white">The default Kernel=
- for Raspberry4 with Buildroot 2023.02 seems to be a V5.10.x without defaul=
-t support for imx296</span></cite><cite><span style=3D"font-size:10.0pt;fon=
-t-family:&quot;Arial&quot;,sans-serif;background:white">,<span style=3D"col=
-or:black">
- any ideas?<o:p></o:p></span></span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white"><o:p>&nbsp;</o:p><=
-/span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white">Thanks for your he=
-lp<o:p></o:p></span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white"><o:p>&nbsp;</o:p><=
-/span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white"><o:p>&nbsp;</o:p><=
-/span></cite></p>
-<p class=3D"MsoNormal"><cite><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif;color:black;background:white"><o:p>&nbsp;</o:p><=
-/span></cite></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-</div>
-</body>
-</html>
-
---_000_1619D009AA8C9E469331A8EE22395AEC8C24E6B7Exchange2013PRI_--
-
---===============7253539498309303875==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-- 
+An old man doll... just what I always wanted! - Clara
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7253539498309303875==--
