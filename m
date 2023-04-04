@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1EBBC761A6
-	for <buildroot@archiver.kernel.org>; Mon,  3 Apr 2023 13:25:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 391A8C6FD1D
+	for <buildroot@archiver.kernel.org>; Tue,  4 Apr 2023 16:37:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 56816408D0;
-	Mon,  3 Apr 2023 13:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56816408D0
+	by smtp3.osuosl.org (Postfix) with ESMTP id C83AA60EA7;
+	Tue,  4 Apr 2023 16:37:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C83AA60EA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yPOqrjU2XsU9; Mon,  3 Apr 2023 13:25:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AYGks25sFYZR; Tue,  4 Apr 2023 16:37:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0E9340629;
-	Mon,  3 Apr 2023 13:25:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0E9340629
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CEC721BF97D
- for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 13:25:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31CF560E1D;
+	Tue,  4 Apr 2023 16:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31CF560E1D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 899EA1BF283
+ for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 16:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A692341609
- for <buildroot@lists.busybox.net>; Mon,  3 Apr 2023 13:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A692341609
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7058160E1D
+ for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 16:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7058160E1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0EzEyRDxOLiv for <buildroot@lists.busybox.net>;
- Mon,  3 Apr 2023 13:25:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2L22CJYYzQiB for <buildroot@lists.busybox.net>;
+ Tue,  4 Apr 2023 16:37:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BDB2C41604
- for <buildroot@uclibc.org>; Mon,  3 Apr 2023 13:25:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDB2C41604
+ by smtp3.osuosl.org (Postfix) with ESMTP id A780260B6F
+ for <buildroot@uclibc.org>; Tue,  4 Apr 2023 16:37:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A780260B6F
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id AA0F8837D1; Mon,  3 Apr 2023 13:25:39 +0000 (UTC)
+ id 9448A83771; Tue,  4 Apr 2023 16:37:18 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 03 Apr 2023 13:25:39 +0000
+Date: Tue, 04 Apr 2023 16:37:18 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -55,7 +55,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15396-163-zImWmS8TL1@https.bugs.busybox.net/>
+Message-ID: <bug-15396-163-vLwlUOJqsP@https.bugs.busybox.net/>
 In-Reply-To: <bug-15396-163@https.bugs.busybox.net/>
 References: <bug-15396-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -80,8 +80,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15396
 
---- Comment #5 from Jan-Benedict Glaw <jbglaw@lug-owl.de> ---
-The beaglebone_defconfig configuration also needs SSL.
+--- Comment #6 from Jan-Benedict Glaw <jbglaw@lug-owl.de> ---
+...and nitrogen6x_defconfig and nitrogen7_defconfig as well.
 
 -- 
 You are receiving this mail because:
