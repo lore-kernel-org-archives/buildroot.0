@@ -1,75 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E001C6FD1D
-	for <buildroot@archiver.kernel.org>; Tue,  4 Apr 2023 16:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C6CC761A6
+	for <buildroot@archiver.kernel.org>; Tue,  4 Apr 2023 17:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABB6460B0C;
-	Tue,  4 Apr 2023 16:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABB6460B0C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DB2F8133C;
+	Tue,  4 Apr 2023 17:30:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DB2F8133C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kSVdvOIR_Xo0; Tue,  4 Apr 2023 16:05:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OdNakO9_18B7; Tue,  4 Apr 2023 17:30:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8FC960AE5;
-	Tue,  4 Apr 2023 16:05:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8FC960AE5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CBB581BF283
- for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 16:05:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA83B81348;
+	Tue,  4 Apr 2023 17:30:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA83B81348
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DC2A1BF834
+ for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 17:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4BBA60AE5
- for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 16:05:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4BBA60AE5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 570EE8133E
+ for <buildroot@lists.busybox.net>; Tue,  4 Apr 2023 17:30:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 570EE8133E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9AqGpyhMIKis for <buildroot@lists.busybox.net>;
- Tue,  4 Apr 2023 16:05:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ABF460AD1
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2ABF460AD1
- for <buildroot@buildroot.org>; Tue,  4 Apr 2023 16:05:01 +0000 (UTC)
-Received: from Exchange2013.PRIMES.local ([80.154.17.250]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MfHUx-1qM5uZ0MHb-00gnMU for <buildroot@buildroot.org>; Tue, 04 Apr 2023
- 18:05:00 +0200
-Received: from EXCHANGE2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca]) by
- Exchange2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca%16]) with mapi id
- 14.03.0513.000; Tue, 4 Apr 2023 18:04:59 +0200
-From: Gerd Kautzmann <G.Kautzmann@PRIMES.de>
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] Update: Tools(?) packages for drivers a kernels 6..x
-Thread-Index: AdlnDnpPfD/uvZuPSKWzF+y+8GmNkA==
-Date: Tue, 4 Apr 2023 16:04:58 +0000
-Message-ID: <1619D009AA8C9E469331A8EE22395AEC8C24E7A0@Exchange2013.PRIMES.local>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.117.177]
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A7N8-FvmukOW for <buildroot@lists.busybox.net>;
+ Tue,  4 Apr 2023 17:30:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B3CB8133C
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com
+ [IPv6:2607:f8b0:4864:20::102e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5B3CB8133C
+ for <buildroot@buildroot.org>; Tue,  4 Apr 2023 17:30:03 +0000 (UTC)
+Received: by mail-pj1-x102e.google.com with SMTP id
+ o6-20020a17090a9f8600b0023f32869993so36894025pjp.1
+ for <buildroot@buildroot.org>; Tue, 04 Apr 2023 10:30:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1680629402; x=1683221402;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=9+FJGlNcznSNOzvDK9JA1Qm3tbohtaWwW9YYoQz0kmQ=;
+ b=nxAK4rLkA2fbIEeDC4FuiZPDSpUa7dfNUIFJEnLpnAKzQD9Re6jC3GAlOfVifXxjUq
+ w3ffX7SFiwTKAvloASpuGrUL+PkYUaxzn0IEkEUTKBw9CxGLrmKiwstZx//sCfDIY3x0
+ QBvv0ZIXti8TC5Dzwu8pNP7/YmD4n6lQ8k77yrlyMY6/UBOscpi2XId6aFPJoV8nx3y3
+ bhoYUcsCw5JfQ50XSOsGtP50X+ifdPstpw0CG31IuD2YmhOMqUfpVNBKMTNurAxQwRS3
+ e4K1qu8mDYiyv8H5k1g/KOGK+z5SiRZ2eZVT9Ud6kP3KRP1adAfL/Ne0o6gl7lNT/JVG
+ VT3w==
+X-Gm-Message-State: AAQBX9cJClrl2uB2VrMJwAItpGdgMK3s1H1NNPXjjEgP8OZfncv2tq18
+ 1UVz19wpsKCddOkOv7eNSdV1SoiIsERm4A==
+X-Google-Smtp-Source: AKy350YxmKZTX/4sOkmHfr7SkKbQEk9ha1BBXXebn2wSMmSPA+lgNzIqDVmLglqQMJ742wCZNUTDdw==
+X-Received: by 2002:a05:6a20:8c9d:b0:db:22dc:23d with SMTP id
+ k29-20020a056a208c9d00b000db22dc023dmr2959567pzh.5.1680629402137; 
+ Tue, 04 Apr 2023 10:30:02 -0700 (PDT)
+Received: from [10.69.71.131] ([192.19.223.252])
+ by smtp.gmail.com with ESMTPSA id
+ c22-20020aa78816000000b00627e55f383dsm9068343pfo.3.2023.04.04.10.30.00
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 04 Apr 2023 10:30:01 -0700 (PDT)
+Message-ID: <96efd54b-7c01-dd82-1916-87f6dd2e3b57@gmail.com>
+Date: Tue, 4 Apr 2023 10:29:55 -0700
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:rQyZRw/ai/TVryMLE9lxeu3MxoWkBolq5LrNTwqx44eHfnNmc0s
- 8QBQJpCv003Cvv3tblH0akQ+E/fpsPbRpCMq0xdjFQ0550LKPyUOobvtdtR6BQuXiLthuN6
- Hxpoep1WCa5na1vfuWlTnmBnmQBNH9xcXGIIdMYCYzeWGdqhLSm4+K1LtdpoVOuJRLedpCp
- AM8yDDaiHJTCgy8iePzCQ==
-UI-OutboundReport: notjunk:1;M01:P0:AfFtq9X4PVI=;FpFPd2LeXjeJ6DQ8Q6YYr5F8Jdn
- WmbdaFOvqwQj8DzrchtfVIfzpvcOQ2o7Juy6+sNETdXzIi54Z6VsUyMKj1C6vPCs5S1dlmTzF
- +Zn5Pi9DO4zUfHbO/XH+9SfMqRSjnARnDlYpwpmcoHlq82k8XkKnj7IEGkP+MXN1vbBVtZhjQ
- WFR+G6JlG8rRSqGN4DxpH5sVt2Pha5wm07M+S5mR7fUZSF8EGL55n2PMWoPJxrgtdL56D1h8g
- rlQHZ8XGeNhKdkVgcPhcY3dHAbmtaQoLXQ+KhAZpgSh/D3A2ymNyoQ06aXkzB0GeFr52klIdR
- uWGnKf+7EehdfSu8QwxJenwmzNpKbqChhoff5znZ2SlwBFIfGS6BSj7O5r6vYie9hmvqyNmBN
- 5fzzoAob4YxCiO6I87izPgpwvmCBNNvZ0Uykh6N+34gM3h4hL0V8tWl01IyqE0W9OMKVfZJ/H
- 7sE1isZ1EFljAB+pmMP9aLaUQsyjz6E0vo4FdFORGCDs1xgH7CuX7mSYuA+JZG4ansyjO7b/n
- MY+TtIxLRdsgpovGzFd9iI/DTv+P5Tq2ai8kRFV00K+gfmkdwNt44FSi8lQ6NNzwqNkZXzS1V
- PxTYFfc8NTYCZLbyytZSFHUIdbgo45WQTXmBEsWef45XpY7VwDMGRiu4wdb5AIjcyRpVKugqe
- cIZDUDMv/umM1lH7ipnWmhw80ebg9pYU3uqz8r/nkQ==
-Subject: [Buildroot] WG: Update: Tools(?) packages for drivers a kernels 6..x
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20230328212711.3721-1-f.fainelli@gmail.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230328212711.3721-1-f.fainelli@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1680629402; x=1683221402;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=9+FJGlNcznSNOzvDK9JA1Qm3tbohtaWwW9YYoQz0kmQ=;
+ b=DH/rliNWCy9NQ0WE8JcUHm9LMgmq1opIlh8kSsdlsqykIL8Bu7kYI4IltTZcPbuMpo
+ aAkAMVSs7WfG6Y8umpUSAYL3WoA5yGwIxghjuT8iy3XcafHJPDJlmv265ThHHlerIdEz
+ a1//ocJjFPmI1AWPLA1KJK3ac82vFs/ENQg/gXFSwyO+4DY3YwvlWWKRazr/2x1hYXkE
+ XvGtYAQEbxiNFWzFYol0BpLGXTGUkgEltArStBT5M51/yoZZ0ABYeFvQVmC8bBW4tFsT
+ ADcDOuZLQSqs+tEZFryxJqrbtCrwGBVf5q64xPH90ubqCJGM1jge0YuFaXcTe1h/h9tI
+ jMsg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=DH/rliNW
+Subject: Re: [Buildroot] [PATCH v2] package/bluez5_utils: Fix builds with
+ musl-libc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,20 +100,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: marcin@bis.org.pl, d.lang@abatec.at,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-> cd output/build/linux-6.1.14/arch/arm/configs
-> wget https://raw.githubusercontent.com/raspberrypi/linux/rpi-6.1.y/arch/arm/configs/bcm2711_defconfig
-> make
 
-> buildprocess was successful
 
-Image doesn't boot, console displays the boot process untill it is detecting an USB hub, green LED is blinking 2 times, I couldn't find a description for this error. I tried with two different sd-cards same effects. Kernel is clearly displayed as Linux 6.1.14-v7l.
+On 3/28/2023 2:27 PM, Florian Fainelli wrote:
+> Backport upstream commit ca6546fe521360fcf905bc115b893f322e706cb2
+> ("shared: define MAX_INPUT for musl") to fix builds with musl-libc.
+> 
+> Fixes:
+> - http://autobuild.buildroot.net/results/3fd24a604a29eff70e20f82690e3f058f04903f9/
+> - http://autobuild.buildroot.net/results/bd57f1813be699cd5ce2ae94f5f511a71fe10428/
+> - http://autobuild.buildroot.net/results/90d528cc18a367af2f68e1c0673d962fe399e1ac/
+> - http://autobuild.buildroot.net/results/552b700ee129e1c7f651de13f6766eae5325dcbc/
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-This seems not the right way to go.
+Ping? Builds are still broken without this patch.
+-- 
+Florian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
