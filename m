@@ -1,66 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22B7AC7619A
-	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 07:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E182DC76188
+	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 08:19:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACD344176D;
-	Wed,  5 Apr 2023 07:47:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACD344176D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76DBB60B4E;
+	Wed,  5 Apr 2023 08:19:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76DBB60B4E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D0j9DOTIFg-u; Wed,  5 Apr 2023 07:47:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JZ4UgU3QkAkW; Wed,  5 Apr 2023 08:19:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DF2C41759;
-	Wed,  5 Apr 2023 07:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DF2C41759
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B18C21C29D0
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 07:47:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7FE060B43;
+	Wed,  5 Apr 2023 08:18:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7FE060B43
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D11951BF3F6
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 08:18:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88ABE405F4
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 07:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88ABE405F4
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA6CF81761
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 08:18:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA6CF81761
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pAPExENa_pny for <buildroot@lists.busybox.net>;
- Wed,  5 Apr 2023 07:47:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC2BD405B9
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC2BD405B9
- for <buildroot@buildroot.org>; Wed,  5 Apr 2023 07:47:18 +0000 (UTC)
-Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 27C605C2483;
- Wed,  5 Apr 2023 09:47:16 +0200 (CEST)
-From: Stefan Agner <stefan@agner.ch>
-To: buildroot@buildroot.org
-Date: Wed,  5 Apr 2023 09:47:02 +0200
-Message-Id: <df73f0c29528dede1cae087caf28923a6fa7468f.1680680807.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <fbe678c521be19c519bb86f7b86528b43266f8b0.1680680807.git.stefan@agner.ch>
-References: <fbe678c521be19c519bb86f7b86528b43266f8b0.1680680807.git.stefan@agner.ch>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JKQc6poJrVHn for <buildroot@lists.busybox.net>;
+ Wed,  5 Apr 2023 08:18:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E433E81760
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E433E81760
+ for <buildroot@busybox.net>; Wed,  5 Apr 2023 08:18:56 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id ew6so138965336edb.7
+ for <buildroot@busybox.net>; Wed, 05 Apr 2023 01:18:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1680682735;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=1i7R1kTNphnPCurGIJ99McaoEm/eYy5hrD/9wY/pWWM=;
+ b=IC9PrLb9rIKPze6RSbBAYOAo9aCYcGnhR198GEAp/L0jysYl9+UQewFFzHQ/uTkiWt
+ VP9hUx6JzwY2/XATCR7T+A2zqGaOAfm87UYPRP5YVw/qIWSCpc6DLTroagjdzBIv38R/
+ 4P5bc5TaCSp8TCb+7NS6FxWRzihjl9NNFomak5HuDHfzgNbTijOGKXd5gsb2ymgS/uJC
+ nDm1PdFWWVYpshqJhjAz4LWVUO1dTudGvbz9xS7+QGlQzMhm3DdvphiNcQ6SXUc8CayM
+ eoHEm6+lkyPsiXBOk4/9nUcg4U8q9Wn+m/IphwBy8TSfGx7sqrzl9JpTAy6d1VJo0L0c
+ ehOg==
+X-Gm-Message-State: AAQBX9du/69K3lolYGkgR9dJHlKPFe9SCpB9x2J3iNq8AbjIxE3xSSwK
+ yN9+w5Sh4WnMTywPhvRYBpDRV23EuwU=
+X-Google-Smtp-Source: AKy350YUjBjfIFBG5cS6ldwvU/04xYgrZx3IYIaV1c1xeE85ZMAwIVb+5kmF5iP3WgpQr5oVOZDIfA==
+X-Received: by 2002:a17:906:74d9:b0:8dd:5710:a017 with SMTP id
+ z25-20020a17090674d900b008dd5710a017mr2195985ejl.4.1680682734972; 
+ Wed, 05 Apr 2023 01:18:54 -0700 (PDT)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ e26-20020a170906749a00b0094780d3c34fsm7005942ejl.194.2023.04.05.01.18.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 05 Apr 2023 01:18:54 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Wed,  5 Apr 2023 10:18:42 +0200
+Message-Id: <20230405081842.244610-2-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230405081842.244610-1-francois.perrad@gadz.org>
+References: <20230405081842.244610-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1680680836;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=i4mzTUxyUrj7oLsRgXy54nA10DsH6Rmsug+tKg+D08Q=;
- b=mx19/IruB5HgU82Ap/5m6EdPQoszHSDr1d7nviP6w8J+UdPAGdMwWCZsoSYeU4Lmb26H08
- 5jRuhNlJby+VDonDrLCwd5vmj99GgVbsKgLOPRtvAbmvNf7YxTbKnQgzqy4hsFVOQcmk3L
- ba9ZbADgsHTtJjg7sBrY5GhNqj6/QD0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=mx19/Iru
-Subject: [Buildroot] [PATCH] package/docker-engine: security bump version to
- v23.0.3
+ d=gmail.com; s=20210112; t=1680682735;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=1i7R1kTNphnPCurGIJ99McaoEm/eYy5hrD/9wY/pWWM=;
+ b=bbsn+SfacjAU/u1FcHgyy7z4DKrymMxnB9Xbu09XBn4ajhryHABCbMWOcXQg+pHfHS
+ Ox4/5TZWjz1CB/ysOz8YAA1Xzd+LmJsYfAupPNDhL6zF+otcDPn+jxwymx07mIMkSy9d
+ H3A/C7oG6go8d0ckX4DqumEgxS7S0tBhdEKj7EsslvvKlf1PuXREJVQQ+wLICFE3XGuF
+ Bz4D+StofHjFak3hYTpu3eMyVCBM0SP1k9Jqyx+hUc5HbNp/hwROVyjYJTqfL6rsYxBI
+ UO7Dv0rQRIPzdsz8lV5doziTFf8raEh1uMLJh4B2ewZ1VCohmyeUOshubgb3PLTK2DGh
+ DMpQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=bbsn+Sfa
+Subject: [Buildroot] [PATCH 2/2] configs/olimex_a20_olinuxino_lime*:
+ configure eth0 with DHCP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,48 +98,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stefan Agner <stefan@agner.ch>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixed a number of issues that can cause Swarm encrypted overlay networks
-to fail to uphold their guarantees, addressing CVE-2023-28841,
-CVE-2023-28840, and CVE-2023-28842.
-
-https://github.com/moby/moby/releases/tag/v23.0.3
-
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 1 +
+ configs/olimex_a20_olinuxino_lime_defconfig  | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 4b7c026eef..0dc974ce85 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4caca59c774445a5aad6114d89c97c88d9705f048704fecdd3f5712cb369dc39  docker-engine-23.0.2.tar.gz
-+sha256  2f74aef0eadf5bfe652b1822f1349fa0baf7412f83b856a9cfb9a8fbfd686880  docker-engine-23.0.3.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index a27625a38e..c0f2c73b69 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 23.0.2
-+DOCKER_ENGINE_VERSION = 23.0.3
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index a8260a7ea..a38f3a1c5 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -15,6 +15,7 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/olimex/a20_olinuxino/rootfs_overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 65a78f535..74b6a764c 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -15,6 +15,7 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/olimex/a20_olinuxino/rootfs_overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
 -- 
-2.40.0
+2.37.2
 
 _______________________________________________
 buildroot mailing list
