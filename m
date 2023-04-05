@@ -4,85 +4,161 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DFF2C77B6C
-	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 22:27:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51EE0C77B6C
+	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 22:31:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24DD84052F;
-	Wed,  5 Apr 2023 22:27:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24DD84052F
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8B584052F;
+	Wed,  5 Apr 2023 22:31:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8B584052F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0hK3TX0btBe9; Wed,  5 Apr 2023 22:27:02 +0000 (UTC)
+	with ESMTP id vJ9ydEtT_zOf; Wed,  5 Apr 2023 22:31:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1BD7D405EB;
-	Wed,  5 Apr 2023 22:27:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BD7D405EB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 58E14405EB;
+	Wed,  5 Apr 2023 22:31:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58E14405EB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 148531C2BE5
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 22:26:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3509A1BF2B0
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 22:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E91606143F
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 22:26:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E91606143F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D27A6143A
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 22:31:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D27A6143A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FNaYlpzdW4Te for <buildroot@lists.busybox.net>;
- Wed,  5 Apr 2023 22:26:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A643161438
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A643161438
- for <buildroot@buildroot.org>; Wed,  5 Apr 2023 22:26:56 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id e13so16587015ioc.0
- for <buildroot@buildroot.org>; Wed, 05 Apr 2023 15:26:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1680733615; x=1683325615;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=rcXTCcwKKRB9K7Q9PQtMsqVMl9ueaZ5Tnky/iltJnwY=;
- b=3E/U7Tt6OSUGbabTMI9rH7FqNst97nuK0SWkWm8vLYo4nBo3FQeIP2V75XhL64JUOr
- p2JZ4k8aExZK1WZMEkNHkj8N0zRbO6blcJH8LFfxOT1iOLcA9bIZSxppu7twCMhvFA82
- xBydSP1exM+8Oe/IKq+k+ocHUCIfrIOoH8n6oMOIkRC+AwtKCFmstQpcqPZsBiXwkSjs
- oPAe94ii1z9xqMDym+ckdZ+O5KRNeIUHmeobl13od9PQ/unm5PP0nvP0Rf993bCdtQp4
- /6ppNJpMYl5Hd7EWSU+HQ1eVeD5EkXG8WR+BnKXcD5lGjVqwFtnrTHP4U5Pfla2hEYLX
- xmTA==
-X-Gm-Message-State: AAQBX9efTUktupYUzdhDFpqITCB+p6938Vg1hWdy2bzwZW+9BEtm9zlE
- Qi9GVis6uuGh/1siOH1pGT8OZlQGBwpkhw==
-X-Google-Smtp-Source: AKy350ZoczwJZaY2ymB0bJnonzQZ8rTmF2mG5kQbMBu+OaEOIdHuGhNWHrupI3oQLKFvFmiJlGKl6g==
-X-Received: by 2002:a6b:7e45:0:b0:759:310c:2684 with SMTP id
- k5-20020a6b7e45000000b00759310c2684mr6211932ioq.0.1680733615035; 
- Wed, 05 Apr 2023 15:26:55 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-131-106.hlrn.qwest.net.
- [71.33.131.106]) by smtp.gmail.com with ESMTPSA id
- f18-20020a6be812000000b0075970bbe68bsm4158327ioh.45.2023.04.05.15.26.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 05 Apr 2023 15:26:54 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  5 Apr 2023 16:26:53 -0600
-Message-Id: <20230405222653.24268-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id 1AtxIKQZnVFu for <buildroot@lists.busybox.net>;
+ Wed,  5 Apr 2023 22:31:03 +0000 (UTC)
+X-Greylist: delayed 00:51:16 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0710761438
+Received: from cluster-g.mailcontrol.com (cluster-g.mailcontrol.com
+ [208.87.233.190])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0710761438
+ for <buildroot@buildroot.org>; Wed,  5 Apr 2023 22:31:01 +0000 (UTC)
+Received: (from mailcontrol@localhost)
+ by rly28g.srv.mailcontrol.com (MailControl) with ESMTP id 335Ldjix236844;
+ Wed, 5 Apr 2023 22:39:45 +0100
+Received: from rly28g.srv.mailcontrol.com (localhost [127.0.0.1])
+ by localhost (envelope-sender NDivecha@granitenet.com) (MIMEDefang) with ESMTP
+ id 335Ldids236294
+ (TLS bits=256 verify=OK); Wed, 05 Apr 2023 22:39:45 +0100 (BST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+ by rly28g.srv.mailcontrol.com (MailControl) id 335LdipY236263;
+ Wed, 5 Apr 2023 22:39:44 +0100
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+ by rly28g-eth0.srv.mailcontrol.com (envelope-sender NDivecha@granitenet.com)
+ (MIMEDefang) with ESMTP id 335LdhtN235844
+ (TLS bits=256 verify=OK); Wed, 05 Apr 2023 22:39:44 +0100 (BST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LpSDBkr32tTSndmliVMSFh+waRNDLYcLMNLeIYGXIc/uhdXrTqRaZSXlS6cXMAqi7e4JuBEmR3B1hRgcGkQF8Gca6gsSQgNroGkbWI3+CKigCx9sENLWwnXv68IimlA9Evnp75FYNQ7UYm9qTTlUUK6bJUy+ccqdlZ0LXn1rzJnVAIn1NuTwOXUHVw/R+suAAd1V7JPtlZ70C4Pi+Zg6DN1RHwtx2Uxy9g2YlRiEGZ8HTS091E6mGai2+sD83MwBGQUc3TysRNfiA1Qv4b/ldrPrfSHy+9VUzw3PbtS8EnykG4prSu3eIF6s5RmlKl2mU4ntcCOPdh2vd5IZoiCOuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pyRtiWc2ymEN98dgG/RLCAfN00p8ODy3kqPKgfU4nf8=;
+ b=GH4Mll+Olh3XCVeYHM8wdPguABz4crnBdYkjr2FtMM1l6H2A1HxmPdDffddpcte5uOltfROPA6pUTsCahYr11Ulh5OXPUUZlijL3yFEDYZWYle6JpR/+HaNZ3lng19A/07Z66fBpfBgIQEsXOcdOH7xG8KKuYmBLCnzfYGKRtiF1c6BdLMd39STgKGsvXTGkwrzzm/H6tQrY7l1PSyeexR/Ik8vdgnaP2g1z3eZQ/2vlQvI4HODtKZTExgFn+A1vOA41p6YpdM5dhGVQUQrqXsGofuwlUfKrhGTAto18Vdyky2nHkxmJ+PzETfyT/Idi+vEKPkGvC5qjyJD9e5HDQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=granitenet.com; dmarc=pass action=none
+ header.from=granitenet.com; dkim=pass header.d=granitenet.com; arc=none
+Received: from BY5PR12MB5542.namprd12.prod.outlook.com (2603:10b6:a03:1db::15)
+ by BY5PR12MB4100.namprd12.prod.outlook.com (2603:10b6:a03:200::13)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Wed, 5 Apr
+ 2023 21:39:42 +0000
+Received: from BY5PR12MB5542.namprd12.prod.outlook.com
+ ([fe80::c694:a5f6:3240:192d]) by BY5PR12MB5542.namprd12.prod.outlook.com
+ ([fe80::c694:a5f6:3240:192d%3]) with mapi id 15.20.6254.035; Wed, 5 Apr 2023
+ 21:39:41 +0000
+From: Nitesh Divecha <NDivecha@granitenet.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Thread-Topic: [Buildroot] - Python-awscrt/awsiotsdk Package
+Thread-Index: AQHZZ9AywczQyTz3U02gr+2eWswDXa8dDACAgAAtM88=
+Date: Wed, 5 Apr 2023 21:39:41 +0000
+Message-ID: <BY5PR12MB5542E2E41FEFCDCEAA26555FB2909@BY5PR12MB5542.namprd12.prod.outlook.com>
+References: <20230405053134.83F264014B@smtp2.osuosl.org>
+ <BY5PR12MB5542A39031912B609E3F87DDB2909@BY5PR12MB5542.namprd12.prod.outlook.com>
+ <CADvTj4ryv1HTaVvdP9oOD5=zUbehCvPcJQVbg=-w+N9nF5Qg4A@mail.gmail.com>
+In-Reply-To: <CADvTj4ryv1HTaVvdP9oOD5=zUbehCvPcJQVbg=-w+N9nF5Qg4A@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR12MB5542:EE_|BY5PR12MB4100:EE_
+x-ms-office365-filtering-correlation-id: ee8f9ebe-fd2b-47c4-78fc-08db361e439c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Qob26MSEXVZO6fIxOnFLWyz2GmVSFB9zKVOHxVmn3zbuTkIfJuIHxXuzCArARMTb3Mk+tzW48ToB3JOo75DOuqLLn2/PFX05yDFTuvqsXBDXEyeKE1g+1mUCoQv/oe13TGmE8MZziwGVYTMKEf2P5VO8q/tMQe2MWyT9eZ8230Bg0uuqhyFNhCUdTb9CUkkfKIHhFpnJEH/2r6vBjJguLYlmdBeMS/YvTZF9T0DJjLKt9gGW9c3YlN+Kh8vzpYea0CyiHkDmTq4y435mpUv8gBZq9ioiDXC7EK41PpglLVVV1HqwJc/KJD07+LG3g6QAXl0yJ/Wrx5sT6EzzAC7bE27eXVNTVS2g8qecPD1pwsUQcTmEZQcMjVI2u1KUgiDRxpxGFFHdplsqsPFR1CpLmIMJLCrfwoGGKqUeEjqXpsrEXzyGMbl0LS5SZugm70JmLmCJzBKDbhU6dFW7jhLLBGLxIubhHpt7c7kGJFdhM1JonPXBITJAqMGw+v0SZh1KXgMLTBzhaVH5GmHi3w06sMJFoQwMQJSDEKmJK9rhxILmdJHKrD5ZdAOKpLmOIWYC43qr+zRvLCNDbHYjTZ9Vd4tv7QWAV+zneUDnUlSxqMo=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BY5PR12MB5542.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230028)(4636009)(366004)(39850400004)(136003)(396003)(376002)(346002)(451199021)(41300700001)(8936002)(5660300002)(4326008)(2906002)(316002)(52536014)(186003)(66446008)(8676002)(91956017)(66476007)(64756008)(6916009)(66556008)(66946007)(478600001)(76116006)(45080400002)(966005)(7696005)(71200400001)(122000001)(26005)(53546011)(6506007)(9686003)(55016003)(83380400001)(86362001)(33656002)(38070700005)(166002)(38100700002);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?KzJBUzFoVXZUWFJpZEZYS3hqQVhHV3NaUytoeHNtK3BWYmFqU2g0SjZsZDI5?=
+ =?utf-8?B?OVZRdTRLSVZJUHhhY0xtUEtaUDI5MzU5NnhhbE1EYXNXQnV2TmJXcmxxeEFl?=
+ =?utf-8?B?eFE5Zk9scDdUTERNeWN2STVGWEVMdTBuNWw2UnVRRUZZUDVjbFZobk9IOEhj?=
+ =?utf-8?B?Y2kzQmMxOFExUDdTYWRtMWh1QzEwZjRMbXVyb01zRDBLY3ZmeWpUTExyNUhI?=
+ =?utf-8?B?d2oxMGdsWlgwYWIvMXEwUE43SmQ0VWY0T3pHbEpheWdmUllGZllsdVFVUzh6?=
+ =?utf-8?B?OThmcXQ0OE5HVUdLWm9QR1h6dHdoMGd3bEtpUWdvZk9GZ2VDZFdFb1VrK2pn?=
+ =?utf-8?B?eUJEQnNrL2MwdHk5WEZPMVNSVEsrVndueWd6VmRsNXluOStySW9NdFo2V0pr?=
+ =?utf-8?B?dHc0eEIyOHB0SkhQNUxueWRNYVFGN1pXcHhGcTl0aXNsUzVaSHJCWFloVjZh?=
+ =?utf-8?B?eUc3a0FhYmR0eERrYXlsZlhtWmYxUGZOK2lmMlFVeTRua1BqbVZyK0dZdjlF?=
+ =?utf-8?B?dGxmVGxQUS80ZStHY1A2eGpwejNsSGZxMEkzYWQzUmVnREFIc2hLMVpleVAr?=
+ =?utf-8?B?US9GTWZ2cHdKTFZiRlE0aFRDYlh4VllrZENiRnNTZ2lWNVRIeWdOQWhUcFhs?=
+ =?utf-8?B?QVVlaU5pNXRMd29HVVU0UjNuK0RnSW5qSll1NW9IY2dVZW4zaWw2QVYwNUQy?=
+ =?utf-8?B?b1RFSEw2UlQ3ckZiQm9ZWkdJTWlrOFptVG1FSmlyMGJIaEVsUW9vdCtkWU5U?=
+ =?utf-8?B?bGkzN0JaVlhqOFowaTNxc2REVTV0YWlXazRrNUNoNVdmVHExNVpKalcrcmlx?=
+ =?utf-8?B?YXBaYnl6bTZEUEV1Z2o1RnVraGFDT3h5NUgxUWpZcVk5TkxoRjlod3Y1NGhQ?=
+ =?utf-8?B?TzdqVWJ1WVFUaFJPclZtZFM3TlZ0K1g1bVVhMStEL08veWdnWkJRcDJ0NUlm?=
+ =?utf-8?B?SDlsOVBGQy84ZTI5cFR3RFpYWVJCN2Z4cm41ZkJxd3kraXpMUXNyY0g1Y1Y3?=
+ =?utf-8?B?NkZiSW04MThnZTBKOWJyM0NvVGNsWkFDL2NQbXh3V29FS1VLVi9xM0czWDVB?=
+ =?utf-8?B?Tlg4OVV4OFE1U0RMK01ya3E3K0lVSUhuSlZIQlNDdkVCNHIzNHJNdnFiYTFC?=
+ =?utf-8?B?TlU2Q1VtTlJJd3p1SUFSR1JnOXBBUHBrRU1rK2RHYVRGUlhIYmFod3hRazlS?=
+ =?utf-8?B?azY2anFvOUFPc3ZUMkVUUTM1akF5TWppTnl5RjU3T2lnKzV3S1ZXYktjY1ZE?=
+ =?utf-8?B?N2dMMVpBU3U3NmMwd2lXMi9ESVJTdDJVTEJyWCtQdTYzUkd1RWlCc2UwUFg4?=
+ =?utf-8?B?RFJZS2djWXhBSjgzME5CUFpwOExIZzZyWlFtM1Z4STN1QURoSjlVNDlWOHM4?=
+ =?utf-8?B?RUQrT3Y2YmZJSGFhbllWdDVUZGFZVUhIYVNUUzB3S29UeCt6a2NrM1g4bDBT?=
+ =?utf-8?B?cCtqZ3lUOVhHMFQwREhhbEZDOUw0OCtrSVlRRVNVTkUwK2dUVFd6YXJ2K0lL?=
+ =?utf-8?B?V1d3YjNiU0c2ZVoxc2lSVWMrK3NGZ1JpRzBJTSs5SGV5bWJjVElIOUhTbUQ3?=
+ =?utf-8?B?YlhVMzA2ZUdtRWdsN1d2MENWemUyanc3bDNZUlhhWkt6Yi92QXhvdFRRellZ?=
+ =?utf-8?B?azBKVEMrUnpGU05IWGFibTcxTlh5K09Wb2p0R25uTDVRVFM0QVJDQXJhTlZa?=
+ =?utf-8?B?anVUT0pxVnRuZzJpL3luaVQ1eElVa0N0QUoyT1c3WWFXYThVR1FZNzI3Ry8w?=
+ =?utf-8?B?VHVPbWZIemtQTFZrUG1UWERjUVJsV0xtUTdrRFFLUzV0NTgwU3ZVUWJjZW10?=
+ =?utf-8?B?YTROSEltQ1FvMGJ0aVpCbnVSVnY3VDFwR0VxY1JHdENadzlBbE5vSlRuMmFm?=
+ =?utf-8?B?SzdaTDJnTXpLaU80OG1tK2cxSUwzbFVMR0xLUS93VEtnSkJGQkNGWnZUdXA5?=
+ =?utf-8?B?UWdUNVhaVEw5YU5TODFjWmw3TnhKT3NnMHZpNW1VVHRMN2ZDVzNuQWREQmtt?=
+ =?utf-8?B?em9OZm1kSENBREVMMlRDUzBnTmVIRGE2ZkYweUg4Nldwc2xhSXJhR2k1T0w4?=
+ =?utf-8?B?YXFicmFvWURVN2I5SXdTV1Z3RWlQVVJ2dzBhNktqMFhUWUhwSWhtZDhibUc3?=
+ =?utf-8?B?MVMxaWhScCt1ZmN0UGpoTXBxaVFJZnVRdEFpV2l1UjFGWnIreGVyYnZUWEpu?=
+ =?utf-8?B?VHc9PQ==?=
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1680733615; x=1683325615;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=rcXTCcwKKRB9K7Q9PQtMsqVMl9ueaZ5Tnky/iltJnwY=;
- b=pg4U9gOshnoifFp/4GhB65WJj/niR0z5ZhDPkWE88Ty2W1m0w63YI66PxiWlN0MjF0
- 7hRSX1MRkG/TRI44zESXPBxkq+4PudV2r1ihMeQztrz/+CEwtCxDFF5lD+0VHt5yZgk1
- d58hwckBMS9/A6Anb+AkJlPv5xMhdnTzE/wn1cP/JRppNGzjGYS1gf8fxGsogjrIYOuC
- az2cadK7Yk2GfBvaBPDwmeQECK4m74QUQfIgED4JEDA+F/DC5y/YVZjWqTsY3LP6v00O
- D3pw6kmVBrYhz90ECd8IBekBZE8BY+ZtC8fLjiEXsYJLuxLPIivnU5ivVKWCnzKTSFB2
- kBew==
+X-OriginatorOrg: granitenet.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB5542.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee8f9ebe-fd2b-47c4-78fc-08db361e439c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Apr 2023 21:39:41.3852 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8dea12a7-9a1f-434b-8a56-8dd7fde58c4a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rhXRqcw/Jy2xojXAGmtO+3OV5qE02fom12SQsUd0OlhUeIG7fpEHr6yl+c1gYtvicCz7qRyUC+nYdbQ+wW8S0Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4100
+X-MailControl-OutInfo: MTY4MDczMDc4NDpGUEtleTEucHJpdjplIL+WlaCS4iUMSN4z5RCQ7o4fgV3BRPjVLVbHtRhPYaAoqvCB9nDNK2sUzN3xPDLFCtNyMDNP+X9qnQ9xxaV/QWmkGMKG6t8MHjxabLGY+ukGYrX0eLaO9hm7wZB+jz5AR8vXg7Ut7dlh1F8bhasRvetk46BVTEg6YEj1jTFFmF4yQqaIK7Lb5Ayr9Duhp3RHZObSmrPu9DuN3wJY4bz+WAP+8DnK+9AZ7xY2u70Lymdop2WdiIqld66dhagy3cd/D+cahattjD6vTYmok0PR9yUnGm9LmIG45LIwM3BNVsirzfy+YLRaQIwBLw1+70QazCX3SiodDPykdvjiviZk
+X-Scanned-By: MailControl 44278.2134 (www.mailcontrol.com) on 104.47.58.168
+X-Mailcontrol-Refers-To: 335Ldids236294
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed;
+ d=granitenet.com;
+ h=from:to:cc:subject:date:message-id:references:in-reply-to:content-type:mime-version;
+ s=fpkey18762-1; bh=pyRtiWc2ymEN98dgG/RLCAfN00p8ODy3kqPKgfU4nf8=;
+ b=Wq22a2KmnduzGdwGrxl4vPzT15eJ7VdFIX0AFKij+4NyntMlxKWi2lKEUlGqQmwXPQ0X7UPx7nmOpl81IU73s7/xfxbFXVq6LOZzAT37ZseFN/xu1iN+mTc2qySu/lNudDcni/1M4GAllKRmpkMi70yYvDYRoiNDoiHvr8DnikiJfMGuAdlv/wcpFw/0kDHPqUc7oAfb3hKf+pEEYvgvYru7tsBgMu7nZR1JBp7QBSq+n5dV4IV0txwkhJtIfqBLXlw5Gm4V6OO50XkEUQnwzddRORto4M3mY+WW9JkZbpkeuTiNMDvLqJLV1SmjgtHB62ux1t9wTRmE9+8sjppMbg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pg4U9gOs
-Subject: [Buildroot] [PATCH 1/1] package/{rust,
- rust-bin}: bump to version 1.68.2
+ dkim=pass (2048-bit key,
+ unprotected) header.d=granitenet.com header.i=@granitenet.com
+ header.a=rsa-sha256 header.s=fpkey18762-1 header.b=Wq22a2Km
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=granitenet.com;
+Subject: Re: [Buildroot] - Python-awscrt/awsiotsdk Package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,327 +170,445 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============2871788736437116017=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Link to Rust 1.68.2 announcement: https://blog.rust-lang.org/2023/03/28/Rust-1.68.2.html
+--===============2871788736437116017==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_BY5PR12MB5542E2E41FEFCDCEAA26555FB2909BY5PR12MB5542namp_"
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/rust-bin/rust-bin.hash | 252 ++++++++++++++++-----------------
- package/rust-bin/rust-bin.mk   |   2 +-
- package/rust/rust.hash         |   6 +-
- package/rust/rust.mk           |   2 +-
- 4 files changed, 131 insertions(+), 131 deletions(-)
+--_000_BY5PR12MB5542E2E41FEFCDCEAA26555FB2909BY5PR12MB5542namp_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index 1b7d153833..4cb1f0c1cd 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -1,129 +1,129 @@
--# From https://static.rust-lang.org/dist/rust-1.68.0-aarch64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-aarch64-unknown-linux-gnu.tar.xz.asc
--sha256  79cb5c840e44d0e3623335e59c2849dd73e0048fc6f97f2d351e88b0bd85040a  rust-1.68.0-aarch64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-i686-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-i686-unknown-linux-gnu.tar.xz.asc
--sha256  650b7cd7a13e4739de39e7e89c534600cfb33afdc6d7774b87ed64e5b7cd17a3  rust-1.68.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-mips-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-mips-unknown-linux-gnu.tar.xz.asc
--sha256  7d0aab2e137295af67b77146c2a95f90fe98ee7bd4966ad0c22d2e02681bdf99  rust-1.68.0-mips-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-mipsel-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-mipsel-unknown-linux-gnu.tar.xz.asc
--sha256  aa56fd4432f100a9af4b4376adc112555d2b29d4673602374ae04d961ba778be  rust-1.68.0-mipsel-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-powerpc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-powerpc-unknown-linux-gnu.tar.xz.asc
--sha256  ca4f14022c67caef7813e9a02875c49ab431d2b6657f83966011c6f6577a34e2  rust-1.68.0-powerpc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-powerpc64-unknown-linux-gnu.tar.xz.asc
--sha256  6730365b822d588f7132d6416a94edd61767f49d31c8777448a734f03bff9375  rust-1.68.0-powerpc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
--sha256  46e28305a69af20b7b6e8888a2b98656428d28e0906e71b4be1d0089f0f9032b  rust-1.68.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
--sha256  f66202760b26b66169f8b923dbc72bdc7eb78dabe687d78397ce73de44165edd  rust-1.68.0-riscv64gc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-s390x-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-s390x-unknown-linux-gnu.tar.xz.asc
--sha256  bdf82d1046f16188b11afc19088057f2ad096101d995ac7edbbbd632af199b84  rust-1.68.0-s390x-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.68.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.68.0-x86_64-unknown-linux-gnu.tar.xz.asc
--sha256  183d53f7488095550788fe38eff80542d68e6bd92ee48442d2ce0bd60a7eceaf  rust-1.68.0-x86_64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-aarch64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-aarch64-unknown-linux-gnu.tar.xz.asc
--sha256  caf2385d507d6ce3f3550bd41e5c2be95053564b76851fc5920b9770a1e6046f  rust-std-1.68.0-aarch64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-aarch64-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-aarch64-unknown-linux-musl.tar.xz.asc
--sha256  90e19eb15fd5b1f206f33e6f50a00ab5785aa5600ae7ccf5787ca64aec63f85f  rust-std-1.68.0-aarch64-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-arm-unknown-linux-gnueabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-arm-unknown-linux-gnueabi.tar.xz.asc
--sha256  40714404769bfa989c2da9f24e28cdfb8395ec8993bbec1544e2bba6030d0d3f  rust-std-1.68.0-arm-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-arm-unknown-linux-gnueabihf.tar.xz.asc
--sha256  f455a4c19db7a548571405a591c76b3087995f58f529010b2e6c3e4bcd6ce49b  rust-std-1.68.0-arm-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-arm-unknown-linux-musleabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-arm-unknown-linux-musleabihf.tar.xz.asc
--sha256  9eab35245a3193b8242b5ed08b896c8deeb3197c013134783d7062fa992213d0  rust-std-1.68.0-arm-unknown-linux-musleabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-arm-unknown-linux-musleabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-arm-unknown-linux-musleabi.tar.xz.asc
--sha256  c0e2c4f1ff860f6073870901cde9aee61eb39932cc59d7a320760874505da4f0  rust-std-1.68.0-arm-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-armv5te-unknown-linux-gnueabi.tar.xz.asc
--sha256  d7f562e6f3071972fc54ab1c8e35bf9c464376c43b1039d6bcfc602a3a997302  rust-std-1.68.0-armv5te-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-armv5te-unknown-linux-musleabi.tar.xz.asc
--sha256  41a6db7397757390dd53e2806c244159d3b8755957fb5c464df31fa83e982e66  rust-std-1.68.0-armv5te-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
--sha256  07a41cdf9bf8e0a42018f550c0c535afd0b0bbe967f5de13adab965170903aca  rust-std-1.68.0-armv7-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-armv7-unknown-linux-gnueabi.tar.xz.asc
--sha256  a6baaf8a3409b2601134d0a7035b5f764472954b29a978543aba97e5413920c1  rust-std-1.68.0-armv7-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-armv7-unknown-linux-musleabihf.tar.xz.asc
--sha256  f18851de6f979076b94d399a4e2d5553a9251444a7cb3d4dad59d568f177e084  rust-std-1.68.0-armv7-unknown-linux-musleabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-armv7-unknown-linux-musleabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-armv7-unknown-linux-musleabi.tar.xz.asc
--sha256  50897d7bcfbd3f30d4552fd87bed46e3886beab9963bbae90aca8cc7ef9fe2d4  rust-std-1.68.0-armv7-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-i586-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-i586-unknown-linux-gnu.tar.xz.asc
--sha256  6cf446799b6cb659da932dd7c2ffcbd028b86f28db89771d7f4485e939ec9bc2  rust-std-1.68.0-i586-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-i586-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-i586-unknown-linux-musl.tar.xz.asc
--sha256  7458325c76d82cffcde5cbecdacafe0d8f62d650ba711c0153bcca0d0d83bd0e  rust-std-1.68.0-i586-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-i686-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-i686-unknown-linux-gnu.tar.xz.asc
--sha256  a6ea604be18d30e5c41e53bb41486d3bddc0c7289056895127d93ad6fb30691c  rust-std-1.68.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-i686-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-i686-unknown-linux-musl.tar.xz.asc
--sha256  ceb9f340ec4b57e3d12885f7a35a9bbf510d3aa70311d5a656db1893650e2187  rust-std-1.68.0-i686-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-mips-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-mips-unknown-linux-gnu.tar.xz.asc
--sha256  1fdf0323e24442c990c8f59142225c3b0e1ab8c666d7aac34158dc26c6905004  rust-std-1.68.0-mips-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-mips-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-mips-unknown-linux-musl.tar.xz.asc
--sha256  03b1cb375241aab01b36261193f47737ffc05038a5dfb34de879c8300c9c722b  rust-std-1.68.0-mips-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-mips64-unknown-linux-gnuabi64.tar.xz.asc
--sha256  1e3e1382aad0582e57bef856d35c79a69a0c9141dfa26a2642f053add57aaf0b  rust-std-1.68.0-mips64-unknown-linux-gnuabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-mips64-unknown-linux-muslabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-mips64-unknown-linux-muslabi64.tar.xz.asc
--sha256  d69d196cc73ed629bc9bf7b76556463f3aca8318729b380fd4a23f1dbea2a0f5  rust-std-1.68.0-mips64-unknown-linux-muslabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-mips64el-unknown-linux-gnuabi64.tar.xz.asc
--sha256  14aa5d7813239667fc111fb378243a888b3a2b0a1960a40ab7901476bb5a7abe  rust-std-1.68.0-mips64el-unknown-linux-gnuabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-mips64el-unknown-linux-muslabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-mips64el-unknown-linux-muslabi64.tar.xz.asc
--sha256  95bf115ca743f1379b1fbf052202c1dfc8ea1eb6dbf82e0ee8eafe77a9f60cca  rust-std-1.68.0-mips64el-unknown-linux-muslabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-mipsel-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-mipsel-unknown-linux-gnu.tar.xz.asc
--sha256  c31ce8298655750e493c7065512e858cdd60457c3db855e154dc9f9d3140fe48  rust-std-1.68.0-mipsel-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-mipsel-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-mipsel-unknown-linux-musl.tar.xz.asc
--sha256  3e0bd2a95b94848c887930d27821e9de4c1963b5d4d0b2fea28e06e80cdc422e  rust-std-1.68.0-mipsel-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-powerpc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-powerpc-unknown-linux-gnu.tar.xz.asc
--sha256  1047a97e42079562ec685e19af6fd817e860eaf847cd4b3f1486a949af810a7a  rust-std-1.68.0-powerpc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-powerpc64-unknown-linux-gnu.tar.xz.asc
--sha256  a446a6445fdb536e1ca1bfe4233b7bf0f808cee00c043cc1ae6e06f3e59d3f2a  rust-std-1.68.0-powerpc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
--sha256  d9561344d71ea49491f6e9ea9913c93824fbac6b51319d1559ab2a432ca01ba3  rust-std-1.68.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
--sha256  aaf5f145be482ad21ab3af0552a5ad3e2968430e08dbf62011228532bc45237d  rust-std-1.68.0-riscv64gc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-s390x-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-s390x-unknown-linux-gnu.tar.xz.asc
--sha256  89398529b7cbeed722fcb263c45b94a46a37ce9a446036f5e5af6101acb520cf  rust-std-1.68.0-s390x-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-sparc64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-sparc64-unknown-linux-gnu.tar.xz.asc
--sha256  244f488ffbac717768cc800b25d6142409160e2ec9e899748b696d9f1845bc2d  rust-std-1.68.0-sparc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-x86_64-unknown-linux-gnu.tar.xz.asc
--sha256  566f4e83e96e8e141d3444a09a014a3a69c786b3eef122389747eaaf4c1525b5  rust-std-1.68.0-x86_64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.68.0-x86_64-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.68.0-x86_64-unknown-linux-musl.tar.xz.asc
--sha256  5109c26489ad6f316b8f5b953805b83c21f21f3a72b443704029f11ebe539b8e  rust-std-1.68.0-x86_64-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-aarch64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-aarch64-unknown-linux-gnu.tar.xz.asc
-+sha256  1731add9b04d0fcbd096b610a67e1b1ae5740ce1171dd904d944ff504a84bcc7  rust-1.68.2-aarch64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-i686-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-i686-unknown-linux-gnu.tar.xz.asc
-+sha256  cade060a15c5064763cd67ebba418989cdbdfb1dc4b6fe8dd4310f187540f66a  rust-1.68.2-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-mips-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-mips-unknown-linux-gnu.tar.xz.asc
-+sha256  a453eca326c676d6b6deda8c444dfc30288d2ccf66bcbad3fafbbad2d4dc9506  rust-1.68.2-mips-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-mipsel-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-mipsel-unknown-linux-gnu.tar.xz.asc
-+sha256  80694caccab8903456de2b09fce15458e2aaa6dac97e706051a7aaa2df069dd0  rust-1.68.2-mipsel-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-powerpc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-powerpc-unknown-linux-gnu.tar.xz.asc
-+sha256  1cda60a097c983a5da0564aac365b6edb59452ac8474dbb48575c34ddaa1f8d4  rust-1.68.2-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-powerpc64-unknown-linux-gnu.tar.xz.asc
-+sha256  8a0062a66a6deedddb47778e3092dddc32a934c3127999a1abde6ff2a39ae7f1  rust-1.68.2-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-powerpc64le-unknown-linux-gnu.tar.xz.asc
-+sha256  5e305ddc26861daa1516e1eba53ac3372506351950dbf5ada492a7f2fc65cfe5  rust-1.68.2-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-riscv64gc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-riscv64gc-unknown-linux-gnu.tar.xz.asc
-+sha256  198054527500cb57cc8cad5b24c56e8ab1df6b48ae85b7c41a6ddbf2e008eb00  rust-1.68.2-riscv64gc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-s390x-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-s390x-unknown-linux-gnu.tar.xz.asc
-+sha256  5039fde5d70691cecd21449b543967db6590ddfd2d4b3c2064924bb154866e72  rust-1.68.2-s390x-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.68.2-x86_64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.68.2-x86_64-unknown-linux-gnu.tar.xz.asc
-+sha256  7f0f19d50f32a353ca78bc5d6d7c483efeced684e2c37ff847e4fd9699c7e063  rust-1.68.2-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-aarch64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-aarch64-unknown-linux-gnu.tar.xz.asc
-+sha256  cbe60945af743804be6822704f986c812dd1fe1d167602aec5350a8f519f9861  rust-std-1.68.2-aarch64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-aarch64-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-aarch64-unknown-linux-musl.tar.xz.asc
-+sha256  718c073d24f3627750049bb74420f90d1ac29843ca16933e11aa301a806a0b10  rust-std-1.68.2-aarch64-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-arm-unknown-linux-gnueabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-arm-unknown-linux-gnueabi.tar.xz.asc
-+sha256  59da96890b0a2881799b21a3f49e51f730d67b8dc09b87602dd599e8f980e247  rust-std-1.68.2-arm-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-arm-unknown-linux-gnueabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-arm-unknown-linux-gnueabihf.tar.xz.asc
-+sha256  565730a2ba02357251f9805b5efe0423adf5411892e0d01cf441456234f81e70  rust-std-1.68.2-arm-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-arm-unknown-linux-musleabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-arm-unknown-linux-musleabihf.tar.xz.asc
-+sha256  4ea9588934eec3d83bee2789f3a15b48aaea05fc8ec1bc175951ec1d0eb6ed22  rust-std-1.68.2-arm-unknown-linux-musleabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-arm-unknown-linux-musleabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-arm-unknown-linux-musleabi.tar.xz.asc
-+sha256  fd065db4269b5131c2f52638b8f30d0159109850c74c87bdf4c623dc0b32d5c2  rust-std-1.68.2-arm-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-armv5te-unknown-linux-gnueabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-armv5te-unknown-linux-gnueabi.tar.xz.asc
-+sha256  a7e19b68c44efe52df159f89f8b37790ca613adaa3f77937eb460747552d1e59  rust-std-1.68.2-armv5te-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-armv5te-unknown-linux-musleabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-armv5te-unknown-linux-musleabi.tar.xz.asc
-+sha256  74188e1a1f4f7418d946636b4280c03dc80933f6eedda75ece82b7034f32c6db  rust-std-1.68.2-armv5te-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-armv7-unknown-linux-gnueabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-armv7-unknown-linux-gnueabihf.tar.xz.asc
-+sha256  2b9b98eaf7d18049e4c8625a4cf3c2d610d905c9478a377c6cc3d48f8b31db32  rust-std-1.68.2-armv7-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-armv7-unknown-linux-gnueabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-armv7-unknown-linux-gnueabi.tar.xz.asc
-+sha256  39009be69f01e30714c657a5f55475ce9f9c6a591cae85b5d7386944a8e87a80  rust-std-1.68.2-armv7-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-armv7-unknown-linux-musleabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-armv7-unknown-linux-musleabihf.tar.xz.asc
-+sha256  05bef3f9e66537d9f1271dd6b6bf2261ba1db52672223712a8eb9178d036ae53  rust-std-1.68.2-armv7-unknown-linux-musleabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-armv7-unknown-linux-musleabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-armv7-unknown-linux-musleabi.tar.xz.asc
-+sha256  b9992ee3b16c7b3b2fcf15339ade26084936d6088f578f8b2fab9b0c5c5b085c  rust-std-1.68.2-armv7-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-i586-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-i586-unknown-linux-gnu.tar.xz.asc
-+sha256  07fc71adf63691ae5e103c57c295e665b6dfc096fe4bedfeb5e1d33c133bb9f4  rust-std-1.68.2-i586-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-i586-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-i586-unknown-linux-musl.tar.xz.asc
-+sha256  884c3b6cbe8d38bb15943917df8bc87470566014ec50200ed70094c12abbb6bd  rust-std-1.68.2-i586-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-i686-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-i686-unknown-linux-gnu.tar.xz.asc
-+sha256  695d4469c131b9993c939db0ce73a3866ab8e69dd657ec3137f3d594857f7812  rust-std-1.68.2-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-i686-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-i686-unknown-linux-musl.tar.xz.asc
-+sha256  216a647fb15ffce5271b82c2c016f01b3d69095ab4635d6a895f9b76b6c1c528  rust-std-1.68.2-i686-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-mips-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-mips-unknown-linux-gnu.tar.xz.asc
-+sha256  4ab007f223cf723f8f7adf26a6014f4f5aa444f88c19daccc5ac81ea30275c66  rust-std-1.68.2-mips-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-mips-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-mips-unknown-linux-musl.tar.xz.asc
-+sha256  0c77f06f410091371b7f6f4952d759fcc0365025213f925afe80e04ab4b53540  rust-std-1.68.2-mips-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-mips64-unknown-linux-gnuabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-mips64-unknown-linux-gnuabi64.tar.xz.asc
-+sha256  b1b44819454c920980e66473112003212920136e4904113258566d130686de09  rust-std-1.68.2-mips64-unknown-linux-gnuabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-mips64-unknown-linux-muslabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-mips64-unknown-linux-muslabi64.tar.xz.asc
-+sha256  af586b37cac123774addc78d8c4568f22d94cec622ca9de80631f33da2700a6e  rust-std-1.68.2-mips64-unknown-linux-muslabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-mips64el-unknown-linux-gnuabi64.tar.xz.asc
-+sha256  24028147dd7733637cbfe58b7f7acc8e8131ebbb39969a6c3c61ce56203b4af3  rust-std-1.68.2-mips64el-unknown-linux-gnuabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-mips64el-unknown-linux-muslabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-mips64el-unknown-linux-muslabi64.tar.xz.asc
-+sha256  a6ae7b9b1710100f52d96dab59c6e7c46a4b057b8ea3d25b8ea2f792aee2f006  rust-std-1.68.2-mips64el-unknown-linux-muslabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-mipsel-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-mipsel-unknown-linux-gnu.tar.xz.asc
-+sha256  c299d65b3594c309d092f6a0fe15c205ab489ffa50910fb8126e944a2727cbe5  rust-std-1.68.2-mipsel-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-mipsel-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-mipsel-unknown-linux-musl.tar.xz.asc
-+sha256  a6bbd8949dc8514161de4e367c5255e8b83a3cf78c8426ffacbb6e8077d0e5e0  rust-std-1.68.2-mipsel-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-powerpc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-powerpc-unknown-linux-gnu.tar.xz.asc
-+sha256  e75bdc8a6e3f00285a37606240862cdad69a986c3e3d47d6af1376613281233a  rust-std-1.68.2-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-powerpc64-unknown-linux-gnu.tar.xz.asc
-+sha256  354322352cd8b661b84f5e97729d5d7adb7df9cb9bfd43cac378271c40214d7f  rust-std-1.68.2-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-powerpc64le-unknown-linux-gnu.tar.xz.asc
-+sha256  e69c8c1b7b0df839b271a2c12985b1c56565a34f9b357631ed99fa9263f3d326  rust-std-1.68.2-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-riscv64gc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-riscv64gc-unknown-linux-gnu.tar.xz.asc
-+sha256  8388ac7a5f924d5d6aa441ae97c33c1abf11fd9516f2b9853f7edc0c5d6c453b  rust-std-1.68.2-riscv64gc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-s390x-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-s390x-unknown-linux-gnu.tar.xz.asc
-+sha256  7f909658496692a05dd241c15f79a02f80658d353013dace127fdc69dc5026b4  rust-std-1.68.2-s390x-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-sparc64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-sparc64-unknown-linux-gnu.tar.xz.asc
-+sha256  787f5cbbcec4e75b9beba3804ea05e36b7cb9b164c291cf7ce8f775d05634d61  rust-std-1.68.2-sparc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-x86_64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-x86_64-unknown-linux-gnu.tar.xz.asc
-+sha256  c8a3eaf26b83f1926d86b4db99ca16cbbff8e746e4c63f25f4d75a02a34a3b16  rust-std-1.68.2-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.68.2-x86_64-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.68.2-x86_64-unknown-linux-musl.tar.xz.asc
-+sha256  6c2a91e60f4be6538fdb0e4ff0344038f282c23808ca018f526ec586f4ba43ab  rust-std-1.68.2-x86_64-unknown-linux-musl.tar.xz
- # Locally generated
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-index 9efca1dcbd..c5fdd9a862 100644
---- a/package/rust-bin/rust-bin.mk
-+++ b/package/rust-bin/rust-bin.mk
-@@ -6,7 +6,7 @@
- 
- # When updating this version, check whether support/download/cargo-post-process
- # still generates the same archives.
--RUST_BIN_VERSION = 1.68.0
-+RUST_BIN_VERSION = 1.68.2
- RUST_BIN_SITE = https://static.rust-lang.org/dist
- RUST_BIN_LICENSE = Apache-2.0 or MIT
- RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-index d717ccbfef..40ab7dedc6 100644
---- a/package/rust/rust.hash
-+++ b/package/rust/rust.hash
-@@ -1,6 +1,6 @@
--# From https://static.rust-lang.org/dist/rustc-1.68.0-src.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rustc-1.68.0-src.tar.xz.asc
--sha256  8651245e8708f11d0f65ba9fdb394c4b9300d603d318045664b371729da9eac4  rustc-1.68.0-src.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.68.2-src.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rustc-1.68.2-src.tar.xz.asc
-+sha256  ce1a115f6aafa912b4622906a92b626354973afa9288e2c7750df4dcf3390fc0  rustc-1.68.2-src.tar.xz
- # Locally generated
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 51574c3574..27eb11f095 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -6,7 +6,7 @@
- 
- # When updating this version, check whether support/download/cargo-post-process
- # still generates the same archives.
--RUST_VERSION = 1.68.0
-+RUST_VERSION = 1.68.2
- RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
- RUST_SITE = https://static.rust-lang.org/dist
- RUST_LICENSE = Apache-2.0 or MIT
--- 
-2.34.1
+SmFtZXMsDQoNClRoYW5rcyBmb3IgeW91ciBmZWVkYmFja+KApiBZZWEgSSB0b3RhbGx5IHVuZGVy
+c3RhbmQgdGhhdCBpbnN0YWxsaW5nIOKAnHBpcOKAnSBvbiBhIFRhcmdldCBzeXN0ZW0gaXMgYSBu
+byBub+KApiBCdXQgdGhpcyB3YXMganVzdCBmb3IgdGVzdGluZy9kZXZlbG9wbWVudCBwdXJwb3Nl
+Lg0KDQpJIHdlbnQgYmFjayBhbmQgdXBncmFkZWQgcGlwIHBhY2thZ2UgdG8gbGF0ZXN0Og0KDQp1
+dGlscy9zY2FucHlwaSBwaXAgLW8gcGFja2FnZQ0KDQoNClBZVEhPTl9QSVBfVkVSU0lPTiA9IDIz
+LjAuMSwgYmVmb3JlIGl0IHdhcyBQWVRIT05fUElQX1ZFUlNJT04gPSAyMS4yLjQNCg0KUmVjb21w
+aWxlZCBCdWlsZHJvb3QgYnV0IHJhbiBpbnRvIG5ldyBwcm9ibGVtOg0KDQojIHBpcCBsaXN0DQpU
+cmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCk6DQogIEZpbGUgIi91c3IvYmluL3BpcCIs
+IGxpbmUgMzMsIGluIDxtb2R1bGU+DQogICAgc3lzLmV4aXQobG9hZF9lbnRyeV9wb2ludCgncGlw
+PT0yMy4wLjEnLCAnY29uc29sZV9zY3JpcHRzJywgJ3BpcCcpKCkpDQogIEZpbGUgIi91c3IvYmlu
+L3BpcCIsIGxpbmUgMjUsIGluIGltcG9ydGxpYl9sb2FkX2VudHJ5X3BvaW50DQogICAgcmV0dXJu
+IG5leHQobWF0Y2hlcykubG9hZCgpDQogIEZpbGUgIi91c3IvbGliL3B5dGhvbjMuMTAvaW1wb3J0
+bGliL21ldGFkYXRhL19faW5pdF9fLnB5IiwgbGluZSAxNzEsIGluIGxvYWQNCiAgRmlsZSAiL3Vz
+ci9saWIvcHl0aG9uMy4xMC9pbXBvcnRsaWIvX19pbml0X18ucHkiLCBsaW5lIDEyNiwgaW4gaW1w
+b3J0X21vZHVsZQ0KICBGaWxlICI8ZnJvemVuIGltcG9ydGxpYi5fYm9vdHN0cmFwPiIsIGxpbmUg
+MTA1MCwgaW4gX2djZF9pbXBvcnQNCiAgRmlsZSAiPGZyb3plbiBpbXBvcnRsaWIuX2Jvb3RzdHJh
+cD4iLCBsaW5lIDEwMjcsIGluIF9maW5kX2FuZF9sb2FkDQogIEZpbGUgIjxmcm96ZW4gaW1wb3J0
+bGliLl9ib290c3RyYXA+IiwgbGluZSAxMDA2LCBpbiBfZmluZF9hbmRfbG9hZF91bmxvY2tlZA0K
+ICBGaWxlICI8ZnJvemVuIGltcG9ydGxpYi5fYm9vdHN0cmFwPiIsIGxpbmUgNjg4LCBpbiBfbG9h
+ZF91bmxvY2tlZA0KICBGaWxlICI8ZnJvemVuIGltcG9ydGxpYi5fYm9vdHN0cmFwX2V4dGVybmFs
+PiIsIGxpbmUgODQ5LCBpbiBleGVjX21vZHVsZQ0KICBGaWxlICI8ZnJvemVuIGltcG9ydGxpYi5f
+Ym9vdHN0cmFwPiIsIGxpbmUgMjQxLCBpbiBfY2FsbF93aXRoX2ZyYW1lc19yZW1vdmVkDQogIEZp
+bGUgIi91c3IvbGliL3B5dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9waXAvX2ludGVybmFsL2NsaS9t
+YWluLnB5IiwgbGluZSA5LCBpbiA8bW9kdWxlPg0KICBGaWxlICIvdXNyL2xpYi9weXRob24zLjEw
+L3NpdGUtcGFja2FnZXMvcGlwL19pbnRlcm5hbC9jbGkvYXV0b2NvbXBsZXRpb24ucHkiLCBsaW5l
+IDEwLCBpbiA8bW9kdWxlPg0KICBGaWxlICIvdXNyL2xpYi9weXRob24zLjEwL3NpdGUtcGFja2Fn
+ZXMvcGlwL19pbnRlcm5hbC9jbGkvbWFpbl9wYXJzZXIucHkiLCBsaW5lIDksIGluIDxtb2R1bGU+
+DQogIEZpbGUgIi91c3IvbGliL3B5dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9waXAvX2ludGVybmFs
+L2J1aWxkX2Vudi5weSIsIGxpbmUgMTksIGluIDxtb2R1bGU+DQogIEZpbGUgIi91c3IvbGliL3B5
+dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9waXAvX2ludGVybmFsL2NsaS9zcGlubmVycy5weSIsIGxp
+bmUgOSwgaW4gPG1vZHVsZT4NCiAgRmlsZSAiL3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2th
+Z2VzL3BpcC9faW50ZXJuYWwvdXRpbHMvbG9nZ2luZy5weSIsIGxpbmUgMTMsIGluIDxtb2R1bGU+
+DQogIEZpbGUgIi91c3IvbGliL3B5dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9waXAvX3ZlbmRvci9y
+aWNoL2NvbnNvbGUucHkiLCBsaW5lIDcsIGluIDxtb2R1bGU+DQpNb2R1bGVOb3RGb3VuZEVycm9y
+OiBObyBtb2R1bGUgbmFtZWQgJ3psaWInDQoNClZlcmlmaWVkIOKAnEJSMl9QQUNLQUdFX1BZVEhP
+TjNfWkxJQuKAnSBpcyBzZWxlY3RlZCDigJMgVGhhbmsgeW91IFRob21hcyBQLg0KDQpHb2luZyB0
+byByZWFkIGFuZCB1bmRlcnN0YW5kIHlvdXIgcHJvY2VkdXJlcyBvbiBob3cgdG8gcmVzb2x2ZSBB
+V1MgQ1JUIGlzc3Vlc+KApiBJdCBpcyBnb2luZyB0byBiZSBhIGRpcnR5IG9uZSEgSGFoYS4NCg0K
+TXVjaCBhcHByZWNpYXRlIGZvciB5b3VyIGhlbHAhDQoNCkNoZWVycywNCk5pdGVzaA0KDQoNCg0K
+DQoNCkZyb206IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPg0KRGF0
+ZTogV2VkbmVzZGF5LCBBcHJpbCA1LCAyMDIzIGF0IDI6MzggUE0NClRvOiBOaXRlc2ggRGl2ZWNo
+YSA8TkRpdmVjaGFAZ3Jhbml0ZW5ldC5jb20+DQpDYzogYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcg
+PGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPg0KU3ViamVjdDogUmU6IFtCdWlsZHJvb3RdIC0gUHl0
+aG9uLWF3c2NydC9hd3Npb3RzZGsgUGFja2FnZQ0KT24gV2VkLCBBcHIgNSwgMjAyMyBhdCA5OjA2
+4oCvQU0gTml0ZXNoIERpdmVjaGEgPE5EaXZlY2hhQGdyYW5pdGVuZXQuY29tPiB3cm90ZToNCj4N
+Cj4gSGVsbG8gQWxsLA0KPg0KPg0KPg0KPiBUaGlzIGlzIG15IGZpcnN0IHRpbWUgd2l0aCBCdWls
+ZHJvb3Qgc28gcGxlYXNlIGJlYXIgd2l0aCBtZSENCj4NCj4NCj4NCj4gSSBnb3QgdHdvIGlzc3Vl
+czoNCj4NCj4NCj4NCj4gSXNzdWUgIzE6DQo+DQo+IEnigJltIHRyeWluZyB0byBidWlsZCBhIGN1
+c3RvbSBMaW51eCBkaXN0cm8gd2l0aCBBV1MgcGFja2FnZSBmb3IgbXkgU2FtYTdnNTQtRUsgYm9h
+cmQuIEZvbGxvd2luZyB0aGUgZ3VpZGUgKGh0dHBzOi8vbmFtMTAuc2FmZWxpbmtzLnByb3RlY3Rp
+b24ub3V0bG9vay5jb20vP3VybD1odHRwcyUzQSUyRiUyRmJ1aWxkcm9vdC5vcmclMkZkb3dubG9h
+ZHMlMkZtYW51YWwlMkZtYW51YWwuaHRtbCUyM19pbmZyYXN0cnVjdHVyZV9mb3JfcHl0aG9uX3Bh
+Y2thZ2VzJmRhdGE9MDUlN0MwMSU3Q05EaXZlY2hhJTQwZ3Jhbml0ZW5ldC5jb20lN0MxYjBjNjI3
+NzA1MDE0NDhiMmQ5YjA4ZGIzNjA0ZmNhMSU3QzhkZWExMmE3OWExZjQzNGI4YTU2OGRkN2ZkZTU4
+YzRhJTdDMSU3QzAlN0M2MzgxNjMxNjcyNjY2Mzk0MjMlN0NVbmtub3duJTdDVFdGcGJHWnNiM2Q4
+ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhW
+Q0k2TW4wJTNEJTdDMzAwMCU3QyU3QyU3QyZzZGF0YT02YU1hZExCRjFPJTJGM2Rvcmg1MSUyQmhP
+RlRYZ0REak9xdzIlMkZMaVJLSGkyU0tVJTNEJnJlc2VydmVkPTA8aHR0cHM6Ly9idWlsZHJvb3Qu
+b3JnL2Rvd25sb2Fkcy9tYW51YWwvbWFudWFsLmh0bWwjX2luZnJhc3RydWN0dXJlX2Zvcl9weXRo
+b25fcGFja2FnZXM+KSAtIDE4LjkuMy4gR2VuZXJhdGluZyBhIHB5dGhvbi1wYWNrYWdlIGZyb20g
+YSBQeVBJIHJlcG9zaXRvcnksIEkgd2FzIGFibGUgdG8gYWRkIHRoZSBhd3NjcnQvYXdzaW90c2Rr
+IFBhY2thZ2UgYW5kIHNlbGVjdCBib3RoIFB5dGhvbiBwYWNrYWdlIHVuZGVyIOKAnG1ha2UgbWVu
+dWNvbmZpZ+KAnSBhbmQgSSB3YXMgYWJsZSB0byBidWlsZCBzdWNjZXNzZnVsIGltYWdlIChubyBl
+cnJvcnMpLg0KPg0KPg0KPg0KPiBCdXJuIHRoZSBzZGNhcmQuaW1nIGFuZCBib290ZWQgdGhlIFNh
+bWE3ZzU0LUVLIGJvYXJkIGFuZCB0cmllZCB0byBydW4gbXkgUHl0aG9uIHNjcmlwdCBhbmQgZ290
+IGZvbGxvd2luZyBlcnJvcjoNCj4NCj4NCj4NCj4gIyBweXRob24zIGFwcC1jb2RlL3Byb3Zpc2lv
+bmluZy5weSA3NzcwMDAxMTExDQo+DQo+IFRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0
+KToNCj4NCj4gICBGaWxlICIvaG9tZS9yb290L2FwcC1jb2RlL3Byb3Zpc2lvbmluZy5weSIsIGxp
+bmUgNCwgaW4gPG1vZHVsZT4NCj4NCj4gICAgIGZyb20gYXdzY3J0IGltcG9ydCBtcXR0DQo+DQo+
+ICAgRmlsZSAiL3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL2F3c2NydC9tcXR0LnB5
+IiwgbGluZSA5LCBpbiA8bW9kdWxlPg0KPg0KPiBJbXBvcnRFcnJvcjogL3Vzci9saWIvcHl0aG9u
+My4xMC9zaXRlLXBhY2thZ2VzL19hd3NjcnQuY3B5dGhvbi0zMTAtYXJtLWxpbnV4LWdudWVhYmlo
+Zi5zbzogdW5kZWZpbmVkIHN5bWJvbDogYWVzX2h3X2VuY3J5cHQNCj4NCj4gIw0KPg0KPg0KPg0K
+PiBJc3N1ZSAjMjoNCj4NCj4gQW5kIGp1c3QgZm9yIHRlc3RpbmcvZGV2ZWxvcG1lbnQgcHVycG9z
+ZSBJIGRpZCBpbmNsdWRlIOKAnHB5dGhvbi1waXDigJ0gcGFja2FnZSBidXQgZXZlcnkgdGltZSBJ
+IHJ1biDigJxwaXDigJ0gSSBnZXQgZm9sbG93aW5nIGVycm9yOg0KDQpUaGF0J3Mgbm90IGdvaW5n
+IHRvIHdvcmssIHdlIGRvbid0IHJlYWxseSBoYXZlIHByb3BlciBwaXAgc3VwcG9ydA0Kc2luY2Ug
+d2UgZG9uJ3Qgc3VwcG9ydCBjb21waWxlcnMgb24gdGhlIHRhcmdldC4NCg0KPg0KPiAjIHB5dGhv
+bjMgLW0gcGlwIGluc3RhbGwgLi9hd3MtaW90LWRldmljZS1zZGstcHl0aG9uLXYyDQo+DQo+IFRy
+YWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KToNCj4NCj4gICBGaWxlICIvdXNyL2xpYi9w
+eXRob24zLjEwL3J1bnB5LnB5IiwgbGluZSAxOTYsIGluIF9ydW5fbW9kdWxlX2FzX21haW4NCj4N
+Cj4gICBGaWxlICIvdXNyL2xpYi9weXRob24zLjEwL3J1bnB5LnB5IiwgbGluZSA4NiwgaW4gX3J1
+bl9jb2RlDQo+DQo+ICAgRmlsZSAiL3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3Bp
+cC9fX21haW5fXy5weSIsIGxpbmUgMjksIGluIDxtb2R1bGU+DQo+DQo+ICAgRmlsZSAiL3Vzci9s
+aWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3BpcC9faW50ZXJuYWwvY2xpL21haW4ucHkiLCBs
+aW5lIDksIGluIDxtb2R1bGU+DQo+DQo+ICAgRmlsZSAiL3Vzci9saWIvcHl0aG9uMy4xMC9zaXRl
+LXBhY2thZ2VzL3BpcC9faW50ZXJuYWwvY2xpL2F1dG9jb21wbGV0aW9uLnB5IiwgbGluZSAxMCwg
+aW4gPG1vZHVsZT4NCj4NCj4gICBGaWxlICIvdXNyL2xpYi9weXRob24zLjEwL3NpdGUtcGFja2Fn
+ZXMvcGlwL19pbnRlcm5hbC9jbGkvbWFpbl9wYXJzZXIucHkiLCBsaW5lIDgsIGluIDxtb2R1bGU+
+DQo+DQo+ICAgRmlsZSAiL3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3BpcC9faW50
+ZXJuYWwvY2xpL2NtZG9wdGlvbnMucHkiLCBsaW5lIDIzLCBpbiA8bW9kdWxlPg0KPg0KPiAgIEZp
+bGUgIi91c3IvbGliL3B5dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9waXAvX2ludGVybmFsL2NsaS9w
+YXJzZXIucHkiLCBsaW5lIDEyLCBpbiA8bW9kdWxlPg0KPg0KPiAgIEZpbGUgIi91c3IvbGliL3B5
+dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9waXAvX2ludGVybmFsL2NvbmZpZ3VyYXRpb24ucHkiLCBs
+aW5lIDIxLCBpbiA8bW9kdWxlPg0KPg0KPiAgIEZpbGUgIi91c3IvbGliL3B5dGhvbjMuMTAvc2l0
+ZS1wYWNrYWdlcy9waXAvX2ludGVybmFsL2V4Y2VwdGlvbnMucHkiLCBsaW5lIDcsIGluIDxtb2R1
+bGU+DQo+DQo+ICAgRmlsZSAiL3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3BpcC9f
+dmVuZG9yL3BrZ19yZXNvdXJjZXMvX19pbml0X18ucHkiLCBsaW5lIDM1LCBpbiA8bW9kdWxlPg0K
+Pg0KPiAgIEZpbGUgIi91c3IvbGliL3B5dGhvbjMuMTAvcGxpc3RsaWIucHkiLCBsaW5lIDYxLCBp
+biA8bW9kdWxlPg0KPg0KPiBNb2R1bGVOb3RGb3VuZEVycm9yOiBObyBtb2R1bGUgbmFtZWQgJ3ht
+bCcNCj4NCj4NCj4NCj4gVHJpZWQgdG8gbG9vayBmb3IgUHl0aG9uIFhNTCBtb2R1bGUgYnV0IGRp
+ZCBub3QgZmluZCBhbnnigKYNCg0KWW91IG5lZWQgdG8gc2VsZWN0IEJSMl9QQUNLQUdFX1BZVEhP
+TjNfUFlFWFBBVCBwcm9iYWJseS4NCg0KPg0KPg0KPg0KPiBNeSBkZXYgZW52aXJvbm1lbnQgaW5m
+bzoNCj4NCj4gVXNpbmcgTGludXg0U2FtIHRvIGJ1aWxkIHRoZSBkaXN0cm8gZm9yIFNhbWE3ZzU0
+LUVLIGJvYXJkIChBVDkxIGFuZCBVLUJvb3QpOiBodHRwczovL25hbTEwLnNhZmVsaW5rcy5wcm90
+ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkZ3d3cubGludXg0c2FtLm9yZyUy
+RmJpbiUyRnZpZXclMkZMaW51eDRTQU0lMkZCdWlsZFJvb3QmZGF0YT0wNSU3QzAxJTdDTkRpdmVj
+aGElNDBncmFuaXRlbmV0LmNvbSU3QzFiMGM2Mjc3MDUwMTQ0OGIyZDliMDhkYjM2MDRmY2ExJTdD
+OGRlYTEyYTc5YTFmNDM0YjhhNTY4ZGQ3ZmRlNThjNGElN0MxJTdDMCU3QzYzODE2MzE2NzI2NjYz
+OTQyMyU3Q1Vua25vd24lN0NUV0ZwYkdac2IzZDhleUpXSWpvaU1DNHdMakF3TURBaUxDSlFJam9p
+VjJsdU16SWlMQ0pCVGlJNklrMWhhV3dpTENKWFZDSTZNbjAlM0QlN0MzMDAwJTdDJTdDJTdDJnNk
+YXRhPTRoaFd6TnlEbjRQZnAxWVNLb2lmbncwSyUyRmlTRGd5bXQycVFZSEw4MEFtMCUzRCZyZXNl
+cnZlZD0wPGh0dHBzOi8vd3d3LmxpbnV4NHNhbS5vcmcvYmluL3ZpZXcvTGludXg0U0FNL0J1aWxk
+Um9vdD4NCj4NCj4gRGViaWFuIDExOiBMaW51eCA1LjEwLjAtMjEtYW1kNjQgIzEgU01QIERlYmlh
+biA1LjEwLjE2Mi0xICgyMDIzLTAxLTIxKSB4ODZfNjQgR05VL0xpbnV4DQo+DQo+DQo+DQo+IEFu
+eSBoZWxwIHdpbGwgYmUgaGlnaGx5IGFwcHJlY2lhdGVkLg0KDQpJIHdyb3RlIHVwIHNvbWUgaW5z
+dHJ1Y3Rpb25zIG9uIGhvdyB0byBhZGQgdGhpcyBwYWNrYWdlIHByZXZpb3VzbHk6DQpodHRwczov
+L25hbTEwLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYl
+MkZsb3JlLmtlcm5lbC5vcmclMkZidWlsZHJvb3QlMkZDQUR2VGo0cjU0cEpubmdGQkdRWHglM0R6
+QVRVUlNtaE5BdXZ0a2M3bldBX3l2UjNrRjFCdyU0MG1haWwuZ21haWwuY29tJTJGJmRhdGE9MDUl
+N0MwMSU3Q05EaXZlY2hhJTQwZ3Jhbml0ZW5ldC5jb20lN0MxYjBjNjI3NzA1MDE0NDhiMmQ5YjA4
+ZGIzNjA0ZmNhMSU3QzhkZWExMmE3OWExZjQzNGI4YTU2OGRkN2ZkZTU4YzRhJTdDMSU3QzAlN0M2
+MzgxNjMxNjcyNjY2Mzk0MjMlN0NVbmtub3duJTdDVFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpB
+d01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wJTNEJTdDMzAw
+MCU3QyU3QyU3QyZzZGF0YT1DRmw5YTUlMkJwZU5JSWM2SWc1V0l1alNJVkdRUkJvRkNyQWlTJTJC
+OSUyQjIzUTZZJTNEJnJlc2VydmVkPTA8aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290
+L0NBRHZUajRyNTRwSm5uZ0ZCR1FYeD16QVRVUlNtaE5BdXZ0a2M3bldBX3l2UjNrRjFCd0BtYWls
+LmdtYWlsLmNvbS8+DQoNCj4NCj4NCj4NCj4gQ2hlZXJzLA0KPg0KPiBOaXRlc2gNCj4NCj4NCj4N
+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4gYnVp
+bGRyb290IG1haWxpbmcgbGlzdA0KPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZw0KPiBodHRwczov
+L25hbTEwLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYl
+MkZsaXN0cy5idWlsZHJvb3Qub3JnJTJGbWFpbG1hbiUyRmxpc3RpbmZvJTJGYnVpbGRyb290JmRh
+dGE9MDUlN0MwMSU3Q05EaXZlY2hhJTQwZ3Jhbml0ZW5ldC5jb20lN0MxYjBjNjI3NzA1MDE0NDhi
+MmQ5YjA4ZGIzNjA0ZmNhMSU3QzhkZWExMmE3OWExZjQzNGI4YTU2OGRkN2ZkZTU4YzRhJTdDMSU3
+QzAlN0M2MzgxNjMxNjcyNjY2Mzk0MjMlN0NVbmtub3duJTdDVFdGcGJHWnNiM2Q4ZXlKV0lqb2lN
+QzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wJTNE
+JTdDMzAwMCU3QyU3QyU3QyZzZGF0YT1GdCUyQmlYd1R1bVN1TEFOY3lPZWdiTWNqUlhRMUZyYVB0
+YzRTJTJCNnNOMCUyRncwJTNEJnJlc2VydmVkPTA8aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Pg0K
+
+--_000_BY5PR12MB5542E2E41FEFCDCEAA26555FB2909BY5PR12MB5542namp_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+PGh0bWwgeG1sbnM6bz0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6b2ZmaWNlIiB4
+bWxuczp3PSJ1cm46c2NoZW1hcy1taWNyb3NvZnQtY29tOm9mZmljZTp3b3JkIiB4bWxuczptPSJo
+dHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL29mZmljZS8yMDA0LzEyL29tbWwiIHhtbG5zPSJo
+dHRwOi8vd3d3LnczLm9yZy9UUi9SRUMtaHRtbDQwIj4NCjxoZWFkPg0KPG1ldGEgaHR0cC1lcXVp
+dj0iQ29udGVudC1UeXBlIiBjb250ZW50PSJ0ZXh0L2h0bWw7IGNoYXJzZXQ9dXRmLTgiPg0KPG1l
+dGEgbmFtZT0iR2VuZXJhdG9yIiBjb250ZW50PSJNaWNyb3NvZnQgV29yZCAxNSAoZmlsdGVyZWQg
+bWVkaXVtKSI+DQo8c3R5bGU+PCEtLQ0KLyogRm9udCBEZWZpbml0aW9ucyAqLw0KQGZvbnQtZmFj
+ZQ0KCXtmb250LWZhbWlseToiQ2FtYnJpYSBNYXRoIjsNCglwYW5vc2UtMToyIDQgNSAzIDUgNCA2
+IDMgMiA0O30NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6Q2FsaWJyaTsNCglwYW5vc2UtMToy
+IDE1IDUgMiAyIDIgNCAzIDIgNDt9DQpAZm9udC1mYWNlDQoJe2ZvbnQtZmFtaWx5Ok1lbmxvOw0K
+CXBhbm9zZS0xOjIgMTEgNiA5IDMgOCA0IDIgMiA0O30NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1p
+bHk6Q2FtYnJpYTsNCglwYW5vc2UtMToyIDQgNSAzIDUgNCA2IDMgMiA0O30NCi8qIFN0eWxlIERl
+ZmluaXRpb25zICovDQpwLk1zb05vcm1hbCwgbGkuTXNvTm9ybWFsLCBkaXYuTXNvTm9ybWFsDQoJ
+e21hcmdpbjowaW47DQoJZm9udC1zaXplOjEwLjBwdDsNCglmb250LWZhbWlseToiQ2FsaWJyaSIs
+c2Fucy1zZXJpZjt9DQphOmxpbmssIHNwYW4uTXNvSHlwZXJsaW5rDQoJe21zby1zdHlsZS1wcmlv
+cml0eTo5OTsNCgljb2xvcjpibHVlOw0KCXRleHQtZGVjb3JhdGlvbjp1bmRlcmxpbmU7fQ0Kc3Bh
+bi5FbWFpbFN0eWxlMTkNCgl7bXNvLXN0eWxlLXR5cGU6cGVyc29uYWwtcmVwbHk7DQoJZm9udC1m
+YW1pbHk6IkNhbGlicmkiLHNhbnMtc2VyaWY7DQoJY29sb3I6d2luZG93dGV4dDt9DQpwLnAxLCBs
+aS5wMSwgZGl2LnAxDQoJe21zby1zdHlsZS1uYW1lOnAxOw0KCW1hcmdpbjowaW47DQoJZm9udC1z
+aXplOjguNXB0Ow0KCWZvbnQtZmFtaWx5Ok1lbmxvOw0KCWNvbG9yOiNGRDgwMDg7fQ0KLk1zb0No
+cERlZmF1bHQNCgl7bXNvLXN0eWxlLXR5cGU6ZXhwb3J0LW9ubHk7DQoJZm9udC1zaXplOjEwLjBw
+dDt9DQpAcGFnZSBXb3JkU2VjdGlvbjENCgl7c2l6ZTo4LjVpbiAxMS4waW47DQoJbWFyZ2luOjEu
+MGluIDEuMGluIDEuMGluIDEuMGluO30NCmRpdi5Xb3JkU2VjdGlvbjENCgl7cGFnZTpXb3JkU2Vj
+dGlvbjE7fQ0KLS0+PC9zdHlsZT4NCjwvaGVhZD4NCjxib2R5IGxhbmc9IkVOLVVTIiBsaW5rPSJi
+bHVlIiB2bGluaz0icHVycGxlIiBzdHlsZT0id29yZC13cmFwOmJyZWFrLXdvcmQiPg0KPGRpdiBj
+bGFzcz0iV29yZFNlY3Rpb24xIj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJm
+b250LXNpemU6MTEuMHB0Ij5KYW1lcywgPG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQiPjxvOnA+Jm5ic3A7PC9v
+OnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNp
+emU6MTEuMHB0Ij5UaGFua3MgZm9yIHlvdXIgZmVlZGJhY2vigKYgWWVhIEkgdG90YWxseSB1bmRl
+cnN0YW5kIHRoYXQgaW5zdGFsbGluZyDigJxwaXDigJ0gb24gYSBUYXJnZXQgc3lzdGVtIGlzIGEg
+bm8gbm/igKYgQnV0IHRoaXMgd2FzIGp1c3QgZm9yIHRlc3RpbmcvZGV2ZWxvcG1lbnQgcHVycG9z
+ZS4NCjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0
+eWxlPSJmb250LXNpemU6MTEuMHB0Ij48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBj
+bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+SSB3ZW50IGJh
+Y2sgYW5kIHVwZ3JhZGVkIHBpcCBwYWNrYWdlIHRvIGxhdGVzdDoNCjxvOnA+PC9vOnA+PC9zcGFu
+PjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0
+Ij48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3Bh
+biBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+dXRpbHMvc2NhbnB5cGkgcGlwIC1vIHBhY2thZ2U8
+bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0i
+Zm9udC1zaXplOjExLjBwdCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9
+InAxIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxp
+YnJpJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6d2luZG93dGV4dCI+UFlUSE9OX1BJUF9WRVJTSU9O
+ID0gMjMuMC4xLCBiZWZvcmUgaXQgd2FzIFBZVEhPTl9QSVBfVkVSU0lPTiA9IDIxLjIuNDxvOnA+
+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250
+LXNpemU6MTEuMHB0Ij48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNv
+Tm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+UmVjb21waWxlZCBCdWlsZHJv
+b3QgYnV0IHJhbiBpbnRvIG5ldyBwcm9ibGVtOjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0Ij48bzpwPiZuYnNw
+OzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9u
+dC1zaXplOjExLjBwdCI+IyBwaXAgbGlzdDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNz
+PSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0Ij5UcmFjZWJhY2sgKG1v
+c3QgcmVjZW50IGNhbGwgbGFzdCk6PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1z
+b05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQiPiZuYnNwOyBGaWxlICZxdW90
+Oy91c3IvYmluL3BpcCZxdW90OywgbGluZSAzMywgaW4gJmx0O21vZHVsZSZndDs8bzpwPjwvbzpw
+Pjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXpl
+OjExLjBwdCI+Jm5ic3A7ICZuYnNwOyBzeXMuZXhpdChsb2FkX2VudHJ5X3BvaW50KCdwaXA9PTIz
+LjAuMScsICdjb25zb2xlX3NjcmlwdHMnLCAncGlwJykoKSk8bzpwPjwvbzpwPjwvc3Bhbj48L3A+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+Jm5i
+c3A7IEZpbGUgJnF1b3Q7L3Vzci9iaW4vcGlwJnF1b3Q7LCBsaW5lIDI1LCBpbiBpbXBvcnRsaWJf
+bG9hZF9lbnRyeV9wb2ludDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3Jt
+YWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0Ij4mbmJzcDsgJm5ic3A7IHJldHVybiBu
+ZXh0KG1hdGNoZXMpLmxvYWQoKTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29O
+b3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0Ij4mbmJzcDsgRmlsZSAmcXVvdDsv
+dXNyL2xpYi9weXRob24zLjEwL2ltcG9ydGxpYi9tZXRhZGF0YS9fX2luaXRfXy5weSZxdW90Oywg
+bGluZSAxNzEsIGluIGxvYWQ8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9y
+bWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vz
+ci9saWIvcHl0aG9uMy4xMC9pbXBvcnRsaWIvX19pbml0X18ucHkmcXVvdDssIGxpbmUgMTI2LCBp
+biBpbXBvcnRfbW9kdWxlPG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1h
+bCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQiPiZuYnNwOyBGaWxlICZxdW90OyZsdDtm
+cm96ZW4gaW1wb3J0bGliLl9ib290c3RyYXAmZ3Q7JnF1b3Q7LCBsaW5lIDEwNTAsIGluIF9nY2Rf
+aW1wb3J0PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
+c3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQiPiZuYnNwOyBGaWxlICZxdW90OyZsdDtmcm96ZW4gaW1w
+b3J0bGliLl9ib290c3RyYXAmZ3Q7JnF1b3Q7LCBsaW5lIDEwMjcsIGluIF9maW5kX2FuZF9sb2Fk
+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
+ImZvbnQtc2l6ZToxMS4wcHQiPiZuYnNwOyBGaWxlICZxdW90OyZsdDtmcm96ZW4gaW1wb3J0bGli
+Ll9ib290c3RyYXAmZ3Q7JnF1b3Q7LCBsaW5lIDEwMDYsIGluIF9maW5kX2FuZF9sb2FkX3VubG9j
+a2VkPG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5
+bGU9ImZvbnQtc2l6ZToxMS4wcHQiPiZuYnNwOyBGaWxlICZxdW90OyZsdDtmcm96ZW4gaW1wb3J0
+bGliLl9ib290c3RyYXAmZ3Q7JnF1b3Q7LCBsaW5lIDY4OCwgaW4gX2xvYWRfdW5sb2NrZWQ8bzpw
+PjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9u
+dC1zaXplOjExLjBwdCI+Jm5ic3A7IEZpbGUgJnF1b3Q7Jmx0O2Zyb3plbiBpbXBvcnRsaWIuX2Jv
+b3RzdHJhcF9leHRlcm5hbCZndDsmcXVvdDssIGxpbmUgODQ5LCBpbiBleGVjX21vZHVsZTxvOnA+
+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250
+LXNpemU6MTEuMHB0Ij4mbmJzcDsgRmlsZSAmcXVvdDsmbHQ7ZnJvemVuIGltcG9ydGxpYi5fYm9v
+dHN0cmFwJmd0OyZxdW90OywgbGluZSAyNDEsIGluIF9jYWxsX3dpdGhfZnJhbWVzX3JlbW92ZWQ8
+bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0i
+Zm9udC1zaXplOjExLjBwdCI+Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vzci9saWIvcHl0aG9uMy4xMC9z
+aXRlLXBhY2thZ2VzL3BpcC9faW50ZXJuYWwvY2xpL21haW4ucHkmcXVvdDssIGxpbmUgOSwgaW4g
+Jmx0O21vZHVsZSZndDs8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
+Ij48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vzci9s
+aWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3BpcC9faW50ZXJuYWwvY2xpL2F1dG9jb21wbGV0
+aW9uLnB5JnF1b3Q7LCBsaW5lIDEwLCBpbiAmbHQ7bW9kdWxlJmd0OzxvOnA+PC9vOnA+PC9zcGFu
+PjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0
+Ij4mbmJzcDsgRmlsZSAmcXVvdDsvdXNyL2xpYi9weXRob24zLjEwL3NpdGUtcGFja2FnZXMvcGlw
+L19pbnRlcm5hbC9jbGkvbWFpbl9wYXJzZXIucHkmcXVvdDssIGxpbmUgOSwgaW4gJmx0O21vZHVs
+ZSZndDs8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBz
+dHlsZT0iZm9udC1zaXplOjExLjBwdCI+Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vzci9saWIvcHl0aG9u
+My4xMC9zaXRlLXBhY2thZ2VzL3BpcC9faW50ZXJuYWwvYnVpbGRfZW52LnB5JnF1b3Q7LCBsaW5l
+IDE5LCBpbiAmbHQ7bW9kdWxlJmd0OzxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0Ij4mbmJzcDsgRmlsZSAmcXVv
+dDsvdXNyL2xpYi9weXRob24zLjEwL3NpdGUtcGFja2FnZXMvcGlwL19pbnRlcm5hbC9jbGkvc3Bp
+bm5lcnMucHkmcXVvdDssIGxpbmUgOSwgaW4gJmx0O21vZHVsZSZndDs8bzpwPjwvbzpwPjwvc3Bh
+bj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBw
+dCI+Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3Bp
+cC9faW50ZXJuYWwvdXRpbHMvbG9nZ2luZy5weSZxdW90OywgbGluZSAxMywgaW4gJmx0O21vZHVs
+ZSZndDs8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBz
+dHlsZT0iZm9udC1zaXplOjExLjBwdCI+Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vzci9saWIvcHl0aG9u
+My4xMC9zaXRlLXBhY2thZ2VzL3BpcC9fdmVuZG9yL3JpY2gvY29uc29sZS5weSZxdW90OywgbGlu
+ZSA3LCBpbiAmbHQ7bW9kdWxlJmd0OzxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0Ij5Nb2R1bGVOb3RGb3VuZEVy
+cm9yOiBObyBtb2R1bGUgbmFtZWQgJ3psaWInPG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xh
+c3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQiPjxvOnA+Jm5ic3A7
+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250
+LXNpemU6MTEuMHB0Ij5WZXJpZmllZCDigJxCUjJfUEFDS0FHRV9QWVRIT04zX1pMSULigJ0gaXMg
+c2VsZWN0ZWQg4oCTIFRoYW5rIHlvdSBUaG9tYXMgUC4NCjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4N
+CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0Ij48bzpw
+PiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
+ZT0iZm9udC1zaXplOjExLjBwdCI+R29pbmcgdG8gcmVhZCBhbmQgdW5kZXJzdGFuZCB5b3VyIHBy
+b2NlZHVyZXMgb24gaG93IHRvIHJlc29sdmUgQVdTIENSVCBpc3N1ZXPigKYgSXQgaXMgZ29pbmcg
+dG8gYmUgYSBkaXJ0eSBvbmUhIEhhaGEuDQo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+PG86cD4mbmJzcDs8
+L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQt
+c2l6ZToxMS4wcHQiPk11Y2ggYXBwcmVjaWF0ZSBmb3IgeW91ciBoZWxwIQ0KPG86cD48L286cD48
+L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTox
+MS4wcHQiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwi
+PjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0Ij5DaGVlcnMsIDxvOnA+PC9vOnA+PC9zcGFu
+PjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0
+Ij5OaXRlc2g8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3Bh
+biBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0K
+PHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQiPjxvOnA+
+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxl
+PSJmb250LXNpemU6MTEuMHB0Ij48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTom
+cXVvdDtDYW1icmlhJnF1b3Q7LHNlcmlmIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8
+cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdCI+PG86cD4m
+bmJzcDs8L286cD48L3NwYW4+PC9wPg0KPGRpdiBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLXRv
+cDpzb2xpZCAjQjVDNERGIDEuMHB0O3BhZGRpbmc6My4wcHQgMGluIDBpbiAwaW4iPg0KPHAgY2xh
+c3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1hcmdpbi1ib3R0b206MTIuMHB0Ij48Yj48c3BhbiBzdHls
+ZT0iZm9udC1zaXplOjEyLjBwdDtjb2xvcjpibGFjayI+RnJvbToNCjwvc3Bhbj48L2I+PHNwYW4g
+c3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Y29sb3I6YmxhY2siPkphbWVzIEhpbGxpYXJkICZsdDtq
+YW1lcy5oaWxsaWFyZDFAZ21haWwuY29tJmd0Ozxicj4NCjxiPkRhdGU6IDwvYj5XZWRuZXNkYXks
+IEFwcmlsIDUsIDIwMjMgYXQgMjozOCBQTTxicj4NCjxiPlRvOiA8L2I+Tml0ZXNoIERpdmVjaGEg
+Jmx0O05EaXZlY2hhQGdyYW5pdGVuZXQuY29tJmd0Ozxicj4NCjxiPkNjOiA8L2I+YnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcgJmx0O2J1aWxkcm9vdEBidWlsZHJvb3Qub3JnJmd0Ozxicj4NCjxiPlN1
+YmplY3Q6IDwvYj5SZTogW0J1aWxkcm9vdF0gLSBQeXRob24tYXdzY3J0L2F3c2lvdHNkayBQYWNr
+YWdlPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQiPk9uIFdlZCwgQXByIDUsIDIwMjMg
+YXQgOTowNuKAr0FNIE5pdGVzaCBEaXZlY2hhICZsdDtORGl2ZWNoYUBncmFuaXRlbmV0LmNvbSZn
+dDsgd3JvdGU6PGJyPg0KJmd0Ozxicj4NCiZndDsgSGVsbG8gQWxsLDxicj4NCiZndDs8YnI+DQom
+Z3Q7PGJyPg0KJmd0Ozxicj4NCiZndDsgVGhpcyBpcyBteSBmaXJzdCB0aW1lIHdpdGggQnVpbGRy
+b290IHNvIHBsZWFzZSBiZWFyIHdpdGggbWUhPGJyPg0KJmd0Ozxicj4NCiZndDs8YnI+DQomZ3Q7
+PGJyPg0KJmd0OyBJIGdvdCB0d28gaXNzdWVzOjxicj4NCiZndDs8YnI+DQomZ3Q7PGJyPg0KJmd0
+Ozxicj4NCiZndDsgSXNzdWUgIzE6PGJyPg0KJmd0Ozxicj4NCiZndDsgSeKAmW0gdHJ5aW5nIHRv
+IGJ1aWxkIGEgY3VzdG9tIExpbnV4IGRpc3RybyB3aXRoIEFXUyBwYWNrYWdlIGZvciBteSBTYW1h
+N2c1NC1FSyBib2FyZC4gRm9sbG93aW5nIHRoZSBndWlkZSAoPGEgaHJlZj0iaHR0cHM6Ly9idWls
+ZHJvb3Qub3JnL2Rvd25sb2Fkcy9tYW51YWwvbWFudWFsLmh0bWwjX2luZnJhc3RydWN0dXJlX2Zv
+cl9weXRob25fcGFja2FnZXMiPmh0dHBzOi8vbmFtMTAuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0
+bG9vay5jb20vP3VybD1odHRwcyUzQSUyRiUyRmJ1aWxkcm9vdC5vcmclMkZkb3dubG9hZHMlMkZt
+YW51YWwlMkZtYW51YWwuaHRtbCUyM19pbmZyYXN0cnVjdHVyZV9mb3JfcHl0aG9uX3BhY2thZ2Vz
+JmFtcDtkYXRhPTA1JTdDMDElN0NORGl2ZWNoYSU0MGdyYW5pdGVuZXQuY29tJTdDMWIwYzYyNzcw
+NTAxNDQ4YjJkOWIwOGRiMzYwNGZjYTElN0M4ZGVhMTJhNzlhMWY0MzRiOGE1NjhkZDdmZGU1OGM0
+YSU3QzElN0MwJTdDNjM4MTYzMTY3MjY2NjM5NDIzJTdDVW5rbm93biU3Q1RXRnBiR1pzYjNkOGV5
+SldJam9pTUM0d0xqQXdNREFpTENKUUlqb2lWMmx1TXpJaUxDSkJUaUk2SWsxaGFXd2lMQ0pYVkNJ
+Nk1uMCUzRCU3QzMwMDAlN0MlN0MlN0MmYW1wO3NkYXRhPTZhTWFkTEJGMU8lMkYzZG9yaDUxJTJC
+aE9GVFhnRERqT3F3MiUyRkxpUktIaTJTS1UlM0QmYW1wO3Jlc2VydmVkPTA8L2E+KQ0KIC0gMTgu
+OS4zLiBHZW5lcmF0aW5nIGEgcHl0aG9uLXBhY2thZ2UgZnJvbSBhIFB5UEkgcmVwb3NpdG9yeSwg
+SSB3YXMgYWJsZSB0byBhZGQgdGhlIGF3c2NydC9hd3Npb3RzZGsgUGFja2FnZSBhbmQgc2VsZWN0
+IGJvdGggUHl0aG9uIHBhY2thZ2UgdW5kZXIg4oCcbWFrZSBtZW51Y29uZmln4oCdIGFuZCBJIHdh
+cyBhYmxlIHRvIGJ1aWxkIHN1Y2Nlc3NmdWwgaW1hZ2UgKG5vIGVycm9ycykuPGJyPg0KJmd0Ozxi
+cj4NCiZndDs8YnI+DQomZ3Q7PGJyPg0KJmd0OyBCdXJuIHRoZSBzZGNhcmQuaW1nIGFuZCBib290
+ZWQgdGhlIFNhbWE3ZzU0LUVLIGJvYXJkIGFuZCB0cmllZCB0byBydW4gbXkgUHl0aG9uIHNjcmlw
+dCBhbmQgZ290IGZvbGxvd2luZyBlcnJvcjo8YnI+DQomZ3Q7PGJyPg0KJmd0Ozxicj4NCiZndDs8
+YnI+DQomZ3Q7ICMgcHl0aG9uMyBhcHAtY29kZS9wcm92aXNpb25pbmcucHkgNzc3MDAwMTExMTxi
+cj4NCiZndDs8YnI+DQomZ3Q7IFRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KTo8YnI+
+DQomZ3Q7PGJyPg0KJmd0OyZuYnNwOyZuYnNwOyBGaWxlICZxdW90Oy9ob21lL3Jvb3QvYXBwLWNv
+ZGUvcHJvdmlzaW9uaW5nLnB5JnF1b3Q7LCBsaW5lIDQsIGluICZsdDttb2R1bGUmZ3Q7PGJyPg0K
+Jmd0Ozxicj4NCiZndDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsgZnJvbSBhd3NjcnQgaW1wb3J0
+IG1xdHQ8YnI+DQomZ3Q7PGJyPg0KJmd0OyZuYnNwOyZuYnNwOyBGaWxlICZxdW90Oy91c3IvbGli
+L3B5dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9hd3NjcnQvbXF0dC5weSZxdW90OywgbGluZSA5LCBp
+biAmbHQ7bW9kdWxlJmd0Ozxicj4NCiZndDs8YnI+DQomZ3Q7IEltcG9ydEVycm9yOiAvdXNyL2xp
+Yi9weXRob24zLjEwL3NpdGUtcGFja2FnZXMvX2F3c2NydC5jcHl0aG9uLTMxMC1hcm0tbGludXgt
+Z251ZWFiaWhmLnNvOiB1bmRlZmluZWQgc3ltYm9sOiBhZXNfaHdfZW5jcnlwdDxicj4NCiZndDs8
+YnI+DQomZ3Q7ICM8YnI+DQomZ3Q7PGJyPg0KJmd0Ozxicj4NCiZndDs8YnI+DQomZ3Q7IElzc3Vl
+ICMyOjxicj4NCiZndDs8YnI+DQomZ3Q7IEFuZCBqdXN0IGZvciB0ZXN0aW5nL2RldmVsb3BtZW50
+IHB1cnBvc2UgSSBkaWQgaW5jbHVkZSDigJxweXRob24tcGlw4oCdIHBhY2thZ2UgYnV0IGV2ZXJ5
+IHRpbWUgSSBydW4g4oCccGlw4oCdIEkgZ2V0IGZvbGxvd2luZyBlcnJvcjo8YnI+DQo8YnI+DQpU
+aGF0J3Mgbm90IGdvaW5nIHRvIHdvcmssIHdlIGRvbid0IHJlYWxseSBoYXZlIHByb3BlciBwaXAg
+c3VwcG9ydDxicj4NCnNpbmNlIHdlIGRvbid0IHN1cHBvcnQgY29tcGlsZXJzIG9uIHRoZSB0YXJn
+ZXQuPGJyPg0KPGJyPg0KJmd0Ozxicj4NCiZndDsgIyBweXRob24zIC1tIHBpcCBpbnN0YWxsIC4v
+YXdzLWlvdC1kZXZpY2Utc2RrLXB5dGhvbi12Mjxicj4NCiZndDs8YnI+DQomZ3Q7IFRyYWNlYmFj
+ayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KTo8YnI+DQomZ3Q7PGJyPg0KJmd0OyZuYnNwOyZuYnNw
+OyBGaWxlICZxdW90Oy91c3IvbGliL3B5dGhvbjMuMTAvcnVucHkucHkmcXVvdDssIGxpbmUgMTk2
+LCBpbiBfcnVuX21vZHVsZV9hc19tYWluPGJyPg0KJmd0Ozxicj4NCiZndDsmbmJzcDsmbmJzcDsg
+RmlsZSAmcXVvdDsvdXNyL2xpYi9weXRob24zLjEwL3J1bnB5LnB5JnF1b3Q7LCBsaW5lIDg2LCBp
+biBfcnVuX2NvZGU8YnI+DQomZ3Q7PGJyPg0KJmd0OyZuYnNwOyZuYnNwOyBGaWxlICZxdW90Oy91
+c3IvbGliL3B5dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9waXAvX19tYWluX18ucHkmcXVvdDssIGxp
+bmUgMjksIGluICZsdDttb2R1bGUmZ3Q7PGJyPg0KJmd0Ozxicj4NCiZndDsmbmJzcDsmbmJzcDsg
+RmlsZSAmcXVvdDsvdXNyL2xpYi9weXRob24zLjEwL3NpdGUtcGFja2FnZXMvcGlwL19pbnRlcm5h
+bC9jbGkvbWFpbi5weSZxdW90OywgbGluZSA5LCBpbiAmbHQ7bW9kdWxlJmd0Ozxicj4NCiZndDs8
+YnI+DQomZ3Q7Jm5ic3A7Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vzci9saWIvcHl0aG9uMy4xMC9zaXRl
+LXBhY2thZ2VzL3BpcC9faW50ZXJuYWwvY2xpL2F1dG9jb21wbGV0aW9uLnB5JnF1b3Q7LCBsaW5l
+IDEwLCBpbiAmbHQ7bW9kdWxlJmd0Ozxicj4NCiZndDs8YnI+DQomZ3Q7Jm5ic3A7Jm5ic3A7IEZp
+bGUgJnF1b3Q7L3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3BpcC9faW50ZXJuYWwv
+Y2xpL21haW5fcGFyc2VyLnB5JnF1b3Q7LCBsaW5lIDgsIGluICZsdDttb2R1bGUmZ3Q7PGJyPg0K
+Jmd0Ozxicj4NCiZndDsmbmJzcDsmbmJzcDsgRmlsZSAmcXVvdDsvdXNyL2xpYi9weXRob24zLjEw
+L3NpdGUtcGFja2FnZXMvcGlwL19pbnRlcm5hbC9jbGkvY21kb3B0aW9ucy5weSZxdW90OywgbGlu
+ZSAyMywgaW4gJmx0O21vZHVsZSZndDs8YnI+DQomZ3Q7PGJyPg0KJmd0OyZuYnNwOyZuYnNwOyBG
+aWxlICZxdW90Oy91c3IvbGliL3B5dGhvbjMuMTAvc2l0ZS1wYWNrYWdlcy9waXAvX2ludGVybmFs
+L2NsaS9wYXJzZXIucHkmcXVvdDssIGxpbmUgMTIsIGluICZsdDttb2R1bGUmZ3Q7PGJyPg0KJmd0
+Ozxicj4NCiZndDsmbmJzcDsmbmJzcDsgRmlsZSAmcXVvdDsvdXNyL2xpYi9weXRob24zLjEwL3Np
+dGUtcGFja2FnZXMvcGlwL19pbnRlcm5hbC9jb25maWd1cmF0aW9uLnB5JnF1b3Q7LCBsaW5lIDIx
+LCBpbiAmbHQ7bW9kdWxlJmd0Ozxicj4NCiZndDs8YnI+DQomZ3Q7Jm5ic3A7Jm5ic3A7IEZpbGUg
+JnF1b3Q7L3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3BpcC9faW50ZXJuYWwvZXhj
+ZXB0aW9ucy5weSZxdW90OywgbGluZSA3LCBpbiAmbHQ7bW9kdWxlJmd0Ozxicj4NCiZndDs8YnI+
+DQomZ3Q7Jm5ic3A7Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBh
+Y2thZ2VzL3BpcC9fdmVuZG9yL3BrZ19yZXNvdXJjZXMvX19pbml0X18ucHkmcXVvdDssIGxpbmUg
+MzUsIGluICZsdDttb2R1bGUmZ3Q7PGJyPg0KJmd0Ozxicj4NCiZndDsmbmJzcDsmbmJzcDsgRmls
+ZSAmcXVvdDsvdXNyL2xpYi9weXRob24zLjEwL3BsaXN0bGliLnB5JnF1b3Q7LCBsaW5lIDYxLCBp
+biAmbHQ7bW9kdWxlJmd0Ozxicj4NCiZndDs8YnI+DQomZ3Q7IE1vZHVsZU5vdEZvdW5kRXJyb3I6
+IE5vIG1vZHVsZSBuYW1lZCAneG1sJzxicj4NCiZndDs8YnI+DQomZ3Q7PGJyPg0KJmd0Ozxicj4N
+CiZndDsgVHJpZWQgdG8gbG9vayBmb3IgUHl0aG9uIFhNTCBtb2R1bGUgYnV0IGRpZCBub3QgZmlu
+ZCBhbnnigKY8YnI+DQo8YnI+DQpZb3UgbmVlZCB0byBzZWxlY3QgQlIyX1BBQ0tBR0VfUFlUSE9O
+M19QWUVYUEFUIHByb2JhYmx5Ljxicj4NCjxicj4NCiZndDs8YnI+DQomZ3Q7PGJyPg0KJmd0Ozxi
+cj4NCiZndDsgTXkgZGV2IGVudmlyb25tZW50IGluZm86PGJyPg0KJmd0Ozxicj4NCiZndDsgVXNp
+bmcgTGludXg0U2FtIHRvIGJ1aWxkIHRoZSBkaXN0cm8gZm9yIFNhbWE3ZzU0LUVLIGJvYXJkIChB
+VDkxIGFuZCBVLUJvb3QpOiA8YSBocmVmPSJodHRwczovL3d3dy5saW51eDRzYW0ub3JnL2Jpbi92
+aWV3L0xpbnV4NFNBTS9CdWlsZFJvb3QiPg0KaHR0cHM6Ly9uYW0xMC5zYWZlbGlua3MucHJvdGVj
+dGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBzJTNBJTJGJTJGd3d3LmxpbnV4NHNhbS5vcmclMkZi
+aW4lMkZ2aWV3JTJGTGludXg0U0FNJTJGQnVpbGRSb290JmFtcDtkYXRhPTA1JTdDMDElN0NORGl2
+ZWNoYSU0MGdyYW5pdGVuZXQuY29tJTdDMWIwYzYyNzcwNTAxNDQ4YjJkOWIwOGRiMzYwNGZjYTEl
+N0M4ZGVhMTJhNzlhMWY0MzRiOGE1NjhkZDdmZGU1OGM0YSU3QzElN0MwJTdDNjM4MTYzMTY3MjY2
+NjM5NDIzJTdDVW5rbm93biU3Q1RXRnBiR1pzYjNkOGV5SldJam9pTUM0d0xqQXdNREFpTENKUUlq
+b2lWMmx1TXpJaUxDSkJUaUk2SWsxaGFXd2lMQ0pYVkNJNk1uMCUzRCU3QzMwMDAlN0MlN0MlN0Mm
+YW1wO3NkYXRhPTRoaFd6TnlEbjRQZnAxWVNLb2lmbncwSyUyRmlTRGd5bXQycVFZSEw4MEFtMCUz
+RCZhbXA7cmVzZXJ2ZWQ9MDwvYT48YnI+DQomZ3Q7PGJyPg0KJmd0OyBEZWJpYW4gMTE6IExpbnV4
+IDUuMTAuMC0yMS1hbWQ2NCAjMSBTTVAgRGViaWFuIDUuMTAuMTYyLTEgKDIwMjMtMDEtMjEpIHg4
+Nl82NCBHTlUvTGludXg8YnI+DQomZ3Q7PGJyPg0KJmd0Ozxicj4NCiZndDs8YnI+DQomZ3Q7IEFu
+eSBoZWxwIHdpbGwgYmUgaGlnaGx5IGFwcHJlY2lhdGVkLjxicj4NCjxicj4NCkkgd3JvdGUgdXAg
+c29tZSBpbnN0cnVjdGlvbnMgb24gaG93IHRvIGFkZCB0aGlzIHBhY2thZ2UgcHJldmlvdXNseTo8
+YnI+DQo8YSBocmVmPSJodHRwczovL2xvcmUua2VybmVsLm9yZy9idWlsZHJvb3QvQ0FEdlRqNHI1
+NHBKbm5nRkJHUVh4PXpBVFVSU21oTkF1dnRrYzduV0FfeXZSM2tGMUJ3QG1haWwuZ21haWwuY29t
+LyI+aHR0cHM6Ly9uYW0xMC5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0
+dHBzJTNBJTJGJTJGbG9yZS5rZXJuZWwub3JnJTJGYnVpbGRyb290JTJGQ0FEdlRqNHI1NHBKbm5n
+RkJHUVh4JTNEekFUVVJTbWhOQXV2dGtjN25XQV95dlIza0YxQnclNDBtYWlsLmdtYWlsLmNvbSUy
+RiZhbXA7ZGF0YT0wNSU3QzAxJTdDTkRpdmVjaGElNDBncmFuaXRlbmV0LmNvbSU3QzFiMGM2Mjc3
+MDUwMTQ0OGIyZDliMDhkYjM2MDRmY2ExJTdDOGRlYTEyYTc5YTFmNDM0YjhhNTY4ZGQ3ZmRlNThj
+NGElN0MxJTdDMCU3QzYzODE2MzE2NzI2NjYzOTQyMyU3Q1Vua25vd24lN0NUV0ZwYkdac2IzZDhl
+eUpXSWpvaU1DNHdMakF3TURBaUxDSlFJam9pVjJsdU16SWlMQ0pCVGlJNklrMWhhV3dpTENKWFZD
+STZNbjAlM0QlN0MzMDAwJTdDJTdDJTdDJmFtcDtzZGF0YT1DRmw5YTUlMkJwZU5JSWM2SWc1V0l1
+alNJVkdRUkJvRkNyQWlTJTJCOSUyQjIzUTZZJTNEJmFtcDtyZXNlcnZlZD0wPC9hPjxicj4NCjxi
+cj4NCiZndDs8YnI+DQomZ3Q7PGJyPg0KJmd0Ozxicj4NCiZndDsgQ2hlZXJzLDxicj4NCiZndDs8
+YnI+DQomZ3Q7IE5pdGVzaDxicj4NCiZndDs8YnI+DQomZ3Q7PGJyPg0KJmd0Ozxicj4NCiZndDsg
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX188YnI+DQomZ3Q7
+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3Q8YnI+DQomZ3Q7IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+PGJyPg0KJmd0OyA8YSBocmVmPSJodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QiPmh0dHBzOi8vbmFtMTAuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0
+bG9vay5jb20vP3VybD1odHRwcyUzQSUyRiUyRmxpc3RzLmJ1aWxkcm9vdC5vcmclMkZtYWlsbWFu
+JTJGbGlzdGluZm8lMkZidWlsZHJvb3QmYW1wO2RhdGE9MDUlN0MwMSU3Q05EaXZlY2hhJTQwZ3Jh
+bml0ZW5ldC5jb20lN0MxYjBjNjI3NzA1MDE0NDhiMmQ5YjA4ZGIzNjA0ZmNhMSU3QzhkZWExMmE3
+OWExZjQzNGI4YTU2OGRkN2ZkZTU4YzRhJTdDMSU3QzAlN0M2MzgxNjMxNjcyNjY2Mzk0MjMlN0NV
+bmtub3duJTdDVFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklp
+TENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wJTNEJTdDMzAwMCU3QyU3QyU3QyZhbXA7c2RhdGE9
+RnQlMkJpWHdUdW1TdUxBTmN5T2VnYk1jalJYUTFGcmFQdGM0UyUyQjZzTjAlMkZ3MCUzRCZhbXA7
+cmVzZXJ2ZWQ9MDwvYT48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9i
+b2R5Pg0KPC9odG1sPg0K
+
+--_000_BY5PR12MB5542E2E41FEFCDCEAA26555FB2909BY5PR12MB5542namp_--
+
+
+--===============2871788736437116017==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2871788736437116017==--
+
+
