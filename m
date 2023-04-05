@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D79C76188
-	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 20:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70582C7619A
+	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 20:16:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3ACE8203B;
-	Wed,  5 Apr 2023 20:14:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3ACE8203B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1690861051;
+	Wed,  5 Apr 2023 20:16:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1690861051
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FNBD6xjmJHPI; Wed,  5 Apr 2023 20:14:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UpmsR-J1W1_Z; Wed,  5 Apr 2023 20:16:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7592682126;
-	Wed,  5 Apr 2023 20:14:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7592682126
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B26BE1BF364
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:14:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64F9660F40;
+	Wed,  5 Apr 2023 20:16:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64F9660F40
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D3BB11BF364
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9765141903
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:14:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9765141903
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA9DB60F4A
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA9DB60F4A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bfvgdcOwuXdI for <buildroot@lists.busybox.net>;
- Wed,  5 Apr 2023 20:14:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AAF94191A
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2AAF94191A
- for <buildroot@buildroot.org>; Wed,  5 Apr 2023 20:14:34 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 38F93E0002;
- Wed,  5 Apr 2023 20:14:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pk9WZ-00Bx2H-9b; Wed, 05 Apr 2023 22:14:31 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zjdYd5fGzGxz for <buildroot@lists.busybox.net>;
+ Wed,  5 Apr 2023 20:16:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0165760F3E
+ for <buildroot@buildroot.org>; Wed,  5 Apr 2023 20:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0165760F3E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DB983838DD; Wed,  5 Apr 2023 20:16:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Thompson <peter.macleod.thompson@gmail.com>
-References: <20230404230029.32385-1-peter.macleod.thompson@gmail.com>
- <20230404230029.32385-2-peter.macleod.thompson@gmail.com>
-Date: Wed, 05 Apr 2023 22:14:31 +0200
-In-Reply-To: <20230404230029.32385-2-peter.macleod.thompson@gmail.com> (Peter
- Thompson's message of "Tue, 4 Apr 2023 17:00:29 -0600")
-Message-ID: <87v8iajdco.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/sdl2_image: bump version to
- 2.6.3
+To: buildroot@buildroot.org
+Date: Wed, 5 Apr 2023 22:14:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a2f554c1bda5b1af6a54cff90af774fa16965fb6
+X-Git-Newrev: 5b5b68df6011e654393d8750d860170422426f93
+X-Patchwork-Hint: ignore
+Message-Id: <20230405201609.DB983838DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglebone: bump U-Boot version to
+ 2023.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,39 +57,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Thompson <peter.macleod.thompson@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5b5b68df6011e654393d8750d860170422426f93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
- > ---
- >  package/sdl2_image/sdl2_image.hash | 9 ++++++---
- >  package/sdl2_image/sdl2_image.mk   | 2 +-
- >  2 files changed, 7 insertions(+), 4 deletions(-)
+Bump U-Boot to version 2023.04.
 
- > diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
- > index e1efa4debe..7ec84077d2 100644
- > --- a/package/sdl2_image/sdl2_image.hash
- > +++ b/package/sdl2_image/sdl2_image.hash
- > @@ -1,3 +1,6 @@
- > -# Locally calculated after checking https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.6.2.tar.gz.sig
- > -sha256  48355fb4d8d00bac639cd1c4f4a7661c4afef2c212af60b340e06b7059814777  SDL2_image-2.6.2.tar.gz
- > -sha256  28aabfed22b3cb0b7e23ef40385e4f66297c960082f029c96d073cc1d4e008d5  LICENSE.txt
- > +# Locally calculated
- > +sha256  931c9be5bf1d7c8fae9b7dc157828b7eee874e23c7f24b44ba7eff6b4836312c  SDL2_image-2.6.3.tar.gz
- > +sha256  1852c8549e3d154687197d46abababd3e8faae035f19991b2ca850fa3a43ad57  LICENSE.txt
- > +
- > +
- > +
+Tested on beaglebone black.
 
-Same issue here. Committed with that fixed, thanks.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/beaglebone_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index d0aa5ad860..c2d444c3ce 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
