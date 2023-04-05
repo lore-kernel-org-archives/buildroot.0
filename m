@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8275C76188
-	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 20:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43327C7619A
+	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 20:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BC3C82173;
-	Wed,  5 Apr 2023 20:03:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BC3C82173
+	by smtp1.osuosl.org (Postfix) with ESMTP id E57A380F0F;
+	Wed,  5 Apr 2023 20:03:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E57A380F0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WLNp_Mg9zcPQ; Wed,  5 Apr 2023 20:03:21 +0000 (UTC)
+	with ESMTP id BeQlKFeGQE_T; Wed,  5 Apr 2023 20:03:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7279382177;
-	Wed,  5 Apr 2023 20:03:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7279382177
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C92581C2BCF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2883981396;
+	Wed,  5 Apr 2023 20:03:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2883981396
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DAF1C1C2BD0
  for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEC9560F4A
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFA2C417A8
  for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:02:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEC9560F4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFA2C417A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FJId9-0AKGb0 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6ZHVCK4f3X5k for <buildroot@lists.busybox.net>;
  Wed,  5 Apr 2023 20:02:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D305560F40
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3ABE417A1
  for <buildroot@buildroot.org>; Wed,  5 Apr 2023 20:02:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D305560F40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3ABE417A1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB5E08389A; Wed,  5 Apr 2023 20:02:50 +0000 (UTC)
+ id AC0368379D; Wed,  5 Apr 2023 20:02:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 5 Apr 2023 22:01:25 +0200
+Date: Wed, 5 Apr 2023 21:58:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8bf66c5640c0fafd63dbacadeeb6ac3a9f4f26a9
-X-Git-Newrev: 238d49468751ad761b61e691a18aaf097c020c4a
+X-Git-Oldrev: f12bf2e6a78f1b5ff203fc234be68e224ec49b0e
+X-Git-Newrev: 8bf66c5640c0fafd63dbacadeeb6ac3a9f4f26a9
 X-Patchwork-Hint: ignore
-Message-Id: <20230405200250.BB5E08389A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-engine: security bump
- version to v23.0.3
+Message-Id: <20230405200250.AC0368379D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/containerd: security bump to
+ version 1.6.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=238d49468751ad761b61e691a18aaf097c020c4a
+commit: https://git.buildroot.net/buildroot/commit/?id=8bf66c5640c0fafd63dbacadeeb6ac3a9f4f26a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixed a number of issues that can cause Swarm encrypted overlay networks
-to fail to uphold their guarantees, addressing CVE-2023-28841,
-CVE-2023-28840, and CVE-2023-28842.
+Various bugfixes and improvements. Noteable security fixes:
 
-https://github.com/moby/moby/releases/tag/v23.0.3
+- CVE-2023-25153: Fix OCI image importer memory exhaustion
+  https://github.com/containerd/containerd/security/advisories/GHSA-259w-8hf6-59c2
+
+- CVE-2023-25173: Fix supplementary groups not being set up properly
+  https://github.com/containerd/containerd/security/advisories/GHSA-hmfx-3pcx-653p
+
+https://github.com/containerd/containerd/releases/tag/v1.6.20
 
 Signed-off-by: Stefan Agner <stefan@agner.ch>
+[Peter: add CVE references]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 4b7c026eef..0dc974ce85 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 16474089d1..65a87f25fa 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4caca59c774445a5aad6114d89c97c88d9705f048704fecdd3f5712cb369dc39  docker-engine-23.0.2.tar.gz
-+sha256  2f74aef0eadf5bfe652b1822f1349fa0baf7412f83b856a9cfb9a8fbfd686880  docker-engine-23.0.3.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index a27625a38e..c0f2c73b69 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+ # Computed locally
+-sha256  e0a893cf67df9dfaecbcde2ba4e896efb3a86ffe48dcfe0d2b26f7cf19b5af3a  containerd-1.6.16.tar.gz
++sha256  819086ccdca44cfc5f108e226c7a9294d8fad3eb32031a621623da80dedbfb11  containerd-1.6.20.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 4a0d6ec38b..bc1dd58611 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 23.0.2
-+DOCKER_ENGINE_VERSION = 23.0.3
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+-CONTAINERD_VERSION = 1.6.16
++CONTAINERD_VERSION = 1.6.20
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
