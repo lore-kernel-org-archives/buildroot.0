@@ -4,61 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F9F6C7619A
-	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 06:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A23A4C76188
+	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 06:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15A9B408FB;
-	Wed,  5 Apr 2023 06:23:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15A9B408FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C5414163E;
+	Wed,  5 Apr 2023 06:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C5414163E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bpSc8QwB-eVu; Wed,  5 Apr 2023 06:23:52 +0000 (UTC)
+	with ESMTP id x7RI44F6x_qw; Wed,  5 Apr 2023 06:46:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3D174094E;
-	Wed,  5 Apr 2023 06:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3D174094E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 159A01BF3F0
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 06:23:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15D1B406E0;
+	Wed,  5 Apr 2023 06:46:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15D1B406E0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AD0201BF2FF
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 06:46:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E34B381326
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 06:23:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E34B381326
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85EEB404DB
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 06:46:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85EEB404DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KAs41p-Ngl8d for <buildroot@lists.busybox.net>;
- Wed,  5 Apr 2023 06:23:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A3C481303
-Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3A3C481303
- for <buildroot@busybox.net>; Wed,  5 Apr 2023 06:23:47 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 6FBA244028D;
- Wed,  5 Apr 2023 09:18:35 +0300 (IDT)
-To: buildroot@busybox.net
-Date: Wed,  5 Apr 2023 09:23:37 +0300
-Message-Id: <1589cdf6eb16195c9d7aec704fe5905ad8a7e55b.1680675817.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RU3cAqaU8U5d for <buildroot@lists.busybox.net>;
+ Wed,  5 Apr 2023 06:46:15 +0000 (UTC)
+X-Greylist: delayed 00:05:04 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 377524015F
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 377524015F
+ for <buildroot@buildroot.org>; Wed,  5 Apr 2023 06:46:14 +0000 (UTC)
+Received: from Exchange2013.PRIMES.local ([80.154.17.250]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MKbc2-1pyJNx0ucu-00Kyqs for <buildroot@buildroot.org>; Wed, 05 Apr 2023
+ 08:41:09 +0200
+Received: from EXCHANGE2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca]) by
+ Exchange2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca%16]) with mapi id
+ 14.03.0513.000; Wed, 5 Apr 2023 08:41:08 +0200
+From: Gerd Kautzmann <G.Kautzmann@PRIMES.de>
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: depmod / drivers
+Thread-Index: AdlniHHjN6BouwQbTDyYauhlOLwEYg==
+Date: Wed, 5 Apr 2023 06:41:07 +0000
+Message-ID: <1619D009AA8C9E469331A8EE22395AEC8C24E81A@Exchange2013.PRIMES.local>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.117.177]
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1680675515;
- bh=F89/xyVn6tqC04Wy3fh44l6lUjbJjGfC4b6MO8OZoSE=;
- h=From:To:Cc:Subject:Date:From;
- b=vsIq51/IN6+SE8LkQw+Ye5yKrDbgPKXkZI9p/aP6BbF/Ub5miJiiK1GedBYbzEYWI
- vk9KJlH+CwDDTKrQW+Ns0e8bIG6C2ghkLBFUfViYyoo78ZNP3XsTtkUnr5J/wbUawF
- F+z/Qwbi4GbhwFlAmBvwERlzyrVeE48DTTxf801zrCwDD/fTulM7Qbd0/2bk8aeT71
- ct6NtJps4UhpR8XB8Nn3D2Hs/bPoG53gWfZjHjtFhWhQEr+2e5DlB1E1FVhDqD9qcO
- xABX+h1JcKsojSGS5D+qLXgS3lGEHtGakTUeCPYnhHZDpIM+uxqBff12yjW6iOFXat
- S+bjpvt0ID0Kg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=vsIq51/I
-Subject: [Buildroot] [PATCH] package/daemon: bump to version 0.8.2
+X-Provags-ID: V03:K1:DDKo7Zhcblom63FpFZLGFbLMWQpUwc3q+xn4AxPIOPoiEz4yy7O
+ fSkeWD15BYiOVB36WnNTOPus/1/IFFz0IaLBYKhZzX+pTEykJ+Q8vokIxgAeFva4HVJF12K
+ Z6p0mVpLBWK89cyuiM1ZIyPWpI8boj2gCfM7ZCeKDjHL0MwD/2pF+ht025LPFgJGmXrUkC6
+ /e6SeXpOv4m3o1MGpCAiA==
+UI-OutboundReport: notjunk:1;M01:P0:M3wy53L4jZI=;PlSbh6Y7VJiX28l0gt9w3v9oYT2
+ CS6PwyowMRv6Gyh1ncLbuGElTR4UQ2PByShyRDkbNRMMVK1oNm+EQaf/6cid81QWuCukbJdSD
+ TR+cTWT89P+D0XQyqnM6Sg61vxirYXeKxv/Ahx0h1i+lGlkFshAszRnaLiwhPso2zEfTuderY
+ LHWBuu1JgzDQVD8ss7Aa34Lu5xDGzhm1YeaYzvS7k/y4ZMoItU7DVEoVlUtDuKDoDSZ5+lPy/
+ qf8DK0dpfrcrpEUpg+EVLw9LLcM5e9as8mQBWDnfredYW1DYCAcXq/97TX12D3x+2169QCIMP
+ Brk9pwWKfKMy1cXpxCECA622YLi3RJuDtJxmF/21DSa5y63ZU387SrqKx0M9ipB6PJ9Ndl5yh
+ y58WPMezqlQs3MoB0c7v6XS4tqSBgSMdvWmn6/8xQXFvKZa5+usJEZ01068dkTQEoaPRIzy1z
+ yK/LyaGXUvKGlvYs+vLHRBXcZZL8VTXOFocJnNreGwM6o9Ca87IgrFBjRUyOjYfY9Rfa/h3hC
+ RYnT5CNpF+8KrCQ8FaZIb+5ePlKhrqNiZyQsGAHyelhCus7YhplJsTwY/sVLvM9ak5ZERg0bL
+ 2hYnI7BhtBCR3w/2gUJzYFSReI+qOZxMOHpbbu9R9K5q7CwHPUIm2HGqJTTZHQosUt7wZ42Yr
+ PzGyD5/VHxGv/kI/CzKMLDSLjq6TUle93mtaxDqTvg==
+Subject: [Buildroot] depmod / drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,170 +81,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1733370694860214138=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop upstream patches.
+--===============1733370694860214138==
+Content-Language: de-DE
+Content-Type: multipart/alternative;
+	boundary="_000_1619D009AA8C9E469331A8EE22395AEC8C24E81AExchange2013PRI_"
 
-Update license to include mode licenses. Add license file hashes and
-update hashes of existing files for added licenses, as well as
-formatting and copyright date updates.
+--_000_1619D009AA8C9E469331A8EE22395AEC8C24E81AExchange2013PRI_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...aemon-fix-build-with-musl-libc-again.patch | 46 -------------------
- .../0002-Fix-build-with-NDEBUG-defined.patch  | 46 -------------------
- package/daemon/daemon.hash                    |  8 ++--
- package/daemon/daemon.mk                      |  6 +--
- 4 files changed, 8 insertions(+), 98 deletions(-)
- delete mode 100644 package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
- delete mode 100644 package/daemon/0002-Fix-build-with-NDEBUG-defined.patch
+Hello ML,
 
-diff --git a/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch b/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
-deleted file mode 100644
-index 48d95f122fe7..000000000000
---- a/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From b879e6886498fdd147287bffdf5867378c7f3299 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Thu, 24 Jun 2021 14:28:10 +0300
--Subject: [PATCH] daemon: fix build with musl libc (again)
--
--Commit 6b28c54dd95b3 added HAVE_SYS_TTYDEFAULTS_H to guard
--sys/ttydefaults.h include. This breaks musl libc build because
--HAVE_SYS_TTYDEFAULTS_H is not defined until config.h is included.
--
--Move sys/ttydefaults.h include below config.h
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://github.com/raforg/daemon/pull/4
--
-- daemon.c | 7 ++++---
-- 1 file changed, 4 insertions(+), 3 deletions(-)
--
--diff --git a/daemon.c b/daemon.c
--index 5c5ef2cb86df..f88a0d49bf84 100644
----- a/daemon.c
--+++ b/daemon.c
--@@ -1011,9 +1011,6 @@ I<elogind(8)>
-- #ifdef _RESTORE_POSIX_SOURCE
-- #define _POSIX_SOURCE
-- #endif
---#ifdef HAVE_SYS_TTYDEFAULTS_H /* For CEOF in musl libc (Linux only) */
---#include <sys/ttydefaults.h>
---#endif
-- #include <dirent.h>
-- #include <sys/wait.h>
-- #include <sys/stat.h>
--@@ -1037,6 +1034,10 @@ I<elogind(8)>
-- #include <systemd/sd-login.h>
-- #endif
-- 
--+#ifdef HAVE_SYS_TTYDEFAULTS_H /* For CEOF in musl libc (Linux only) */
--+#include <sys/ttydefaults.h>
--+#endif
--+
-- /* Configuration file entries */
-- 
-- typedef struct Config Config;
---- 
--2.30.2
--
-diff --git a/package/daemon/0002-Fix-build-with-NDEBUG-defined.patch b/package/daemon/0002-Fix-build-with-NDEBUG-defined.patch
-deleted file mode 100644
-index e99e9d8ed73d..000000000000
---- a/package/daemon/0002-Fix-build-with-NDEBUG-defined.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From fc84d8d572ffcecb533fd6d6d025abea12ce027e Mon Sep 17 00:00:00 2001
--Message-Id: <fc84d8d572ffcecb533fd6d6d025abea12ce027e.1622722814.git.baruch@tkos.co.il>
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Thu, 3 Jun 2021 15:01:10 +0300
--Subject: [PATCH] Fix build with NDEBUG defined
--
--Build with NDEBUG fails because the debug() macro becomes empty. This
--creates invalid syntax with the debug() call is the only statement in
--the body of a 'for' loop.
--
--This fixes build failures like:
--
--daemon.c: In function 'show':
--daemon.c:3607:2: error: expected expression before '}' token
--  }
--  ^
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://github.com/raforg/daemon/pull/3
--
-- libslack/err.h | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/libslack/err.h b/libslack/err.h
--index 106bdb01e074..7acfbe46d60a 100644
----- a/libslack/err.h
--+++ b/libslack/err.h
--@@ -40,10 +40,10 @@
-- #undef check
-- 
-- #ifdef NDEBUG
---#define debug(args)
---#define vdebug(args)
---#define debugsys(args)
---#define vdebugsys(args)
--+#define debug(args) do {} while (0);
--+#define vdebug(args) do {} while (0);
--+#define debugsys(args) do {} while (0);
--+#define vdebugsys(args) do {} while (0);
-- #define check(cond, mesg) (void_cast(0))
-- #else
-- #define debug(args) debugf args;
---- 
--2.30.2
--
-diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
-index c490f715487f..5ad7bf6ce2b5 100644
---- a/package/daemon/daemon.hash
-+++ b/package/daemon/daemon.hash
-@@ -1,5 +1,7 @@
- # From http://www.libslack.org/daemon/
--sha256  74f12e6d4b3c85632489bd08431d3d997bc17264bf57b7202384f2e809cff596  daemon-0.8.tar.gz
-+sha256  b34b37543bba43bd086e59f4b754c8102380ae5c1728b987c890d5da4b4cf3ca  daemon-0.8.2.tar.gz
- # Locally calculated
--sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
--sha256  91329bb9be4ae0b7800081fa054e9bb760c60005b26958c1fb8461bc66bcd998  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-+sha256  35e31504fc0aec878e86900dde1d90a04404833c182f50d5678d873910bb11eb  COPYING
-+sha256  5a93d5831e1297ab10fe643e1a631e83be392896da14ee2951285a79012df69d  LICENSES/BSD-3-Clause.txt
-+sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  LICENSES/GPL-2.0-or-later.txt
-diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
-index 96a163e597e6..5e7e497ff133 100644
---- a/package/daemon/daemon.mk
-+++ b/package/daemon/daemon.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--DAEMON_VERSION = 0.8
-+DAEMON_VERSION = 0.8.2
- DAEMON_SITE = http://libslack.org/daemon/download
--DAEMON_LICENSE = GPL-2.0+
--DAEMON_LICENSE_FILES = LICENSE COPYING
-+DAEMON_LICENSE = GPL-2.0+, LGPL-2.0+, BSD-3-Clause
-+DAEMON_LICENSE_FILES = LICENSE COPYING LICENSES/BSD-3-Clause.txt LICENSES/GPL-2.0-or-later.txt
- 
- define DAEMON_CONFIGURE_CMDS
- 	(cd $(@D); ./configure)
--- 
-2.39.2
+for post installation of device drivers I need a tool called 'depmod' on my=
+ Raspberry,.
+
+What packages do I need to include in buildroot?
+
+Thanks
+
+--_000_1619D009AA8C9E469331A8EE22395AEC8C24E81AExchange2013PRI_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+span.E-MailFormatvorlage17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:70.85pt 70.85pt 2.0cm 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"DE" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hello ML,<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">for post installation of device drivers I need a too=
+l called &#8218;depmod&#8216; on my Raspberry,.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">What packages do I need to include in buildroot?<o:p=
+></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Thanks<o:p></o:p></p>
+</div>
+</body>
+</html>
+
+--_000_1619D009AA8C9E469331A8EE22395AEC8C24E81AExchange2013PRI_--
+
+--===============1733370694860214138==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1733370694860214138==--
