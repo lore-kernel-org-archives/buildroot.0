@@ -4,61 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2EFBC76188
-	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 20:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CB90C76188
+	for <buildroot@archiver.kernel.org>; Wed,  5 Apr 2023 20:27:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FA5A61414;
-	Wed,  5 Apr 2023 20:22:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FA5A61414
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1C8A6135E;
+	Wed,  5 Apr 2023 20:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1C8A6135E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UhRzBz5pxfA6; Wed,  5 Apr 2023 20:22:36 +0000 (UTC)
+	with ESMTP id AsWjI6Yy1Eqm; Wed,  5 Apr 2023 20:27:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86E8461051;
-	Wed,  5 Apr 2023 20:22:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86E8461051
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BF7A01BF2E5
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:22:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12EF2613B8;
+	Wed,  5 Apr 2023 20:27:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12EF2613B8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 615C61BF2E5
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:27:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9978C8203B
- for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:22:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9978C8203B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47604401E1
+ for <buildroot@lists.busybox.net>; Wed,  5 Apr 2023 20:27:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47604401E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6kSDthXeBkcn for <buildroot@lists.busybox.net>;
- Wed,  5 Apr 2023 20:22:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 220C68200C
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 220C68200C
- for <buildroot@buildroot.org>; Wed,  5 Apr 2023 20:22:31 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.171.184.200])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7015613F87F;
- Wed,  5 Apr 2023 22:22:27 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed,  5 Apr 2023 22:22:20 +0200
-Message-Id: <20230405202220.705670-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.40.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Uidn2izVSaJa for <buildroot@lists.busybox.net>;
+ Wed,  5 Apr 2023 20:27:25 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89CD440132
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 89CD440132
+ for <buildroot@buildroot.org>; Wed,  5 Apr 2023 20:27:25 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id b20so144128564edd.1
+ for <buildroot@buildroot.org>; Wed, 05 Apr 2023 13:27:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1680726443;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=tuF9sZTllp8a5uvS7oXlA3g13uXsvm2LqMU9qYcvtM0=;
+ b=lTmbRR+goeJeUpvlQJS1pr6vG/nOXk6+y4vAsxxfDpcafIP+cvCuMr4q4IRfGpoyGJ
+ tyPO/icvgsTNWZ4vEmhs5aS8TDhVtN1Qnt8xFpbrLpq//G64xdoPDgMsQXqnlrwrgq5j
+ 0T6PuPig9w3MU5FtQFCr5C0+0xQklrDZbTpTAL0JL7yG+muPYaOKzdCu6FoINOVhq0eD
+ xwJk+Cqt205A+/Gh4K4IA5z/qtlQBhDAJAz3iAlkli45GGq9kiiYyN72VUiszMo1fDvd
+ tdS/SSzb4KQYTSdDevnOkLTwxNVv1hlDlNmkQIYYaOscI+PxCvG2y2oHvcP8O4jpSk+k
+ Ad3g==
+X-Gm-Message-State: AAQBX9eBYH30RBEVLOvuklDkoLR71hexfsID/0VNfh2PzBSshjqrvCVW
+ GQ1UnBzl9NgXNlUyihO2NTOqzGRSdRXflPsXxRE=
+X-Google-Smtp-Source: AKy350ZW0xKPBvl4sBCW7nkXSIsHwfyyeMdSZY6TRTc+D1i4vqfguWU6pl2ojNPIxYAibyn75vPAmj7oRlM6+Wv4KQs=
+X-Received: by 2002:a17:907:2446:b0:928:6456:729c with SMTP id
+ yw6-20020a170907244600b009286456729cmr2037275ejb.10.1680726443581; Wed, 05
+ Apr 2023 13:27:23 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1680726149;
- bh=Mpe1qDzZCQSvmY6pmk80NG2fk8wSfN1F6jcbYOfedE8=;
- h=From:To:Cc:Subject:Date:From;
- b=s03eNBXD/KA1uThESPtcG4la9qcpIgEaSntEPDnLh7RtLwXRseg1u6LgsU5A8ktgE
- JZsR8owSCR8i3PK/SfftrOQwzGy2zfOPftBmByHu1vFPNYHMuJMBkuLiIkyOhTugM1
- 75PKKEiLzHuSp18Ar18H5DVz/LcWq6aB4b5aS8tyZ4d/3PC+rFTPBkWL6phwzTxbnM
- N1740wG55zxoH+a1oc/+smeJhEQdZHgD4FlfnkYFh32YRQ+fWbrJBbbQ4FUD/+Wqzi
- qOUvHJ7vDikLY0N/SRuUEfeQ7YSTA2lkXZOjRHGyqpaIlmse0hTDSMkqFQ395b42A9
- U9hIC4EQhTphA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=s03eNBXD
-Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.3.2
+References: <20230405201403.1410075-1-pevik@seznam.cz>
+In-Reply-To: <20230405201403.1410075-1-pevik@seznam.cz>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 5 Apr 2023 22:27:12 +0200
+Message-ID: <CAB1t1CzwdeEjzUxNZ8KMsARJOQF642fQjDNiAPgbiq2ev5x-GA@mail.gmail.com>
+To: Petr Vorel <pevik@seznam.cz>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1680726443;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=tuF9sZTllp8a5uvS7oXlA3g13uXsvm2LqMU9qYcvtM0=;
+ b=CAVfs+gC8u/vYWSCUNtW+p58W3sVJHhg9Toj78caIj4CRT41lc/C4HBAwAJBnfNQXq
+ a4YaKvhWJrLHXKjVBSQgzEDoPeIdUK6SVCDYe2UPma03utNShjGinDhQMXOUNATQTkwx
+ jPgCBlDMCsUqkdiYErwaHKsC7h5nP/HRaVOLu6MPzLBMrY/MFLIjGUGGCetoAKUSBNwx
+ HnX6BlUGNbOFAMs96kRK3AddA9DXLNHd/5qwlCjDFcyid3ohwNfWByUp6lNk4//qg6cm
+ oGE8e2kO/FgZri1PniJ9AzdyyhaOE6AVwBJ5A2P8HtSY7AAmtnVx0VnGsL1fR842gOR/
+ 1ERA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=CAVfs+gC
+Subject: Re: [Buildroot] [PATCH 1/2] package/ltp-testsuite: bump version to
+ 20230127
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,46 +90,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v2.3.1, see:
-- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.2
+Hi,
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I'm sorry, this patchset was supposed to be v2.
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 3de41b1682..0f8f04d676 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d734e4cf488be763cf123e5976f3154f0094815093eecdf71e0e9ae148431883  fluidsynth-2.3.1.tar.gz
-+sha256  cd610810f30566e28fb98c36501f00446a06fa6bae3dc562c8cd3868fe1c0fc7  fluidsynth-2.3.2.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index ad1ed7df11..854ed00032 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUIDSYNTH_VERSION = 2.3.1
-+FLUIDSYNTH_VERSION = 2.3.2
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
--- 
-2.40.0
-
+Kind regards,
+Petr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
