@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92FE2C6FD1D
-	for <buildroot@archiver.kernel.org>; Fri,  7 Apr 2023 15:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91FA0C6FD1D
+	for <buildroot@archiver.kernel.org>; Fri,  7 Apr 2023 16:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25797616A7;
-	Fri,  7 Apr 2023 15:17:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25797616A7
+	by smtp3.osuosl.org (Postfix) with ESMTP id E842C60F2A;
+	Fri,  7 Apr 2023 16:31:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E842C60F2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JHwADb2QHGIX; Fri,  7 Apr 2023 15:16:59 +0000 (UTC)
+	with ESMTP id BIq7MNS5kybn; Fri,  7 Apr 2023 16:31:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 544E4616AC;
-	Fri,  7 Apr 2023 15:16:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 544E4616AC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9F9551BF2A3
- for <buildroot@lists.busybox.net>; Fri,  7 Apr 2023 15:16:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40DFA60D4F;
+	Fri,  7 Apr 2023 16:31:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40DFA60D4F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E6DDE1BF23B
+ for <buildroot@lists.busybox.net>; Fri,  7 Apr 2023 16:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 754D5404AB
- for <buildroot@lists.busybox.net>; Fri,  7 Apr 2023 15:16:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 754D5404AB
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD8818449B
+ for <buildroot@lists.busybox.net>; Fri,  7 Apr 2023 16:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD8818449B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SNR8iEIt1hN6 for <buildroot@lists.busybox.net>;
- Fri,  7 Apr 2023 15:16:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45DF4400D6
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 45DF4400D6
- for <buildroot@buildroot.org>; Fri,  7 Apr 2023 15:16:55 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2E1E3100003;
- Fri,  7 Apr 2023 15:16:50 +0000 (UTC)
-Date: Fri, 7 Apr 2023 17:16:48 +0200
-To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20230407171648.6fca3a4d@booty>
-In-Reply-To: <20230327170604.22854-1-neal.frager@amd.com>
-References: <20230327170604.22854-1-neal.frager@amd.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OE6ScdozRv8A for <buildroot@lists.busybox.net>;
+ Fri,  7 Apr 2023 16:31:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FEA984495
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7FEA984495
+ for <buildroot@buildroot.org>; Fri,  7 Apr 2023 16:31:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BA99A24000C;
+ Fri,  7 Apr 2023 16:31:18 +0000 (UTC)
+Date: Fri, 7 Apr 2023 18:31:13 +0200
+To: Oleg Lyovin <ovlevin@sberdevices.ru>
+Message-ID: <20230407183113.30ee6a87@windsurf>
+In-Reply-To: <20230407141930.694756-1-ovlevin@sberdevices.ru>
+References: <20230407141930.694756-1-ovlevin@sberdevices.ru>
 Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1680880611;
+ d=bootlin.com; s=gm1; t=1680885080;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=mDj+of2N3V9RzpTJ2I31282KdRIQkaikZO1QVC4U2tE=;
- b=aBwd4OacgxPy1F0uNtGodMzFOhbIKfOe7NPXqHwblaCDXCXTm9YECCcEkxlWGqpc/SiUuO
- uOZUHut5JPtq1/t+nybFV/DNv9nILCVywFaMIrSMua1c0qp/yuaPnUVi+e0ccGQnRGxEUi
- qg1bZrHCP2EWhsK0fWiwRWRrhm7QNGqDjPXz1gu4gwN5fnfTX1HGgW4WyGm/J14lM11wp3
- +XgglPYaSgH1tA+HOAcX6vHRb1reBt0wXzASooFVAn4Yod9TTxdtp2g0Jm/PZgJgwes6EG
- 1H6jNpniEhMhwUscOQslx6squgRuHcASZUWDOYGN/m2LA5PNkMrn3Y2stjPc1Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=deN0thUrG/WF8aZzmOcPHa+Rf2cEgnWUtf+KAioOYnc=;
+ b=fyoH28haom8iScLFXqB4w+ht5Bm+4vCtGD0rm0iHgwKmvGMF/DA2C+i84528u6WLa0j2/L
+ pRSvdLNlCQCa4sdTw4N2HmXMWDLdeIO6HwsanqaKtWdabrCGxdfEhmmKAm6DrA07dCSAeh
+ sJFKV87gQS6s/Bvkj0eVnR0hzL20b1yZkYyXlkITqNWecn1lbMTrYZ+8uY3/vEL3LajlIK
+ KSfdLYLEFgw8195a9OiPGuSR/gkhyCtTL57ciCugPfC7x135H/8dWGMzHaHiPnTPz5IMEx
+ SI7eZpaMm+HpfDRgYrMyrLJve2kTk0cPNj7iaTol0cEU0Ml3XUwbj+B0HphCTQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aBwd4Oac
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/zynqmp-firmware: new package
+ header.s=gm1 header.b=fyoH28ha
+Subject: Re: [Buildroot] [PATCH 1/2] package/linux-headers: use host-make
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,59 +75,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: ibai.erkiaga-elorza@amd.com, michal.simek@amd.com,
- thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: olegartys@gmail.com, sdfw_system_team@sberdevices.ru,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
+Hello Oleg,
 
-On Mon, 27 Mar 2023 18:06:03 +0100
-Neal Frager <neal.frager@amd.com> wrote:
+On Fri, 7 Apr 2023 17:19:29 +0300
+Oleg Lyovin <ovlevin@sberdevices.ru> wrote:
 
-> This patch adds a new package to buildroot for building the zynqmp pmufw
-> with the requirement that the user must provide an external microblaze
-> toolchain.
+> GNU make package from the host machine may be too old,
+> so use the one built by buildroot.
 > 
-> The below example config options can be used to build the pmufw.elf v2022.2
-> using the Xilinx toolchain.
-> 
-> BR2_PACKAGE_ZYNQMP_FIRMWARE=y
-> BR2_PACKAGE_ZYNQMP_FIRMWARE_VERSION="v2022.2"
-> BR2_PACKAGE_ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PATH="/opt/Xilinx/Vitis/2022.2/gnu/microblaze/lin"
-> BR2_PACKAGE_ZYNQMP_FIRMWARE_EXTERNAL_TOOLCHAIN_PREFIX="microblaze-xilinx-elf-"
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
+> ---
+>  package/linux-headers/linux-headers.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-These two patches look good, and I appreciate a lot your effort, however
-I'm not sure it's a good idea to support both an external and a
-generated toolchain. It makes things more complicated on the Buildroot
-side and I'm not aware of any actual benefits.
+Thanks for the patch. However, could you provide some details on what
+problem this is fixing? Is this due to something new in recent Linux
+kernel releases that require a more recent version of make? If so, we
+need to understand what is the Linux kernel change that causes that,
+and what is the minimum make version that is now needed. Could you look
+up those details?
 
-Moreover if we take these patches now we would to some extent encourage
-users to use an external Microblaze toolchain, possibly reducing usage
-of the generated one for initial users. And I guess we would stick to
-the external toolchain as a default for the future because it's what
-was there initially.
+Thanks a lot!
 
-So I would prefer waiting until we have a working
-Buildroot-generated toolchain and initially support only that. Support
-for an external toolchain can be added easily later, in case the
-generated one were not suitable for good reasons.
-
-Do you have any updates on your work to generate a minimal Microblaze
-toolchain within Buildroot? Should you be facing any issues, remember
-the Buildroot community can be very helpful!
-
-Best regards,
-Luca
-
+Thomas
 -- 
-Luca Ceresoli, Bootlin
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
