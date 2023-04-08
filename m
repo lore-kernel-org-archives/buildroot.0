@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA3C9C77B6E
-	for <buildroot@archiver.kernel.org>; Sat,  8 Apr 2023 19:44:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49680C77B6C
+	for <buildroot@archiver.kernel.org>; Sat,  8 Apr 2023 19:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D380404AF;
-	Sat,  8 Apr 2023 19:44:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D380404AF
+	by smtp2.osuosl.org (Postfix) with ESMTP id F06404038B;
+	Sat,  8 Apr 2023 19:45:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F06404038B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4muOVlWoZg7i; Sat,  8 Apr 2023 19:44:49 +0000 (UTC)
+	with ESMTP id 7uWYbHdiZ8AF; Sat,  8 Apr 2023 19:45:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2D504061C;
-	Sat,  8 Apr 2023 19:44:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2D504061C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2733B40610;
+	Sat,  8 Apr 2023 19:45:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2733B40610
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6E2B41BF82F
- for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:44:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 62C331BF82F
+ for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46112404AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C55440160
  for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:44:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46112404AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C55440160
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UW78HYA_pgcK for <buildroot@lists.busybox.net>;
+ with ESMTP id jTRNqfbEV0sx for <buildroot@lists.busybox.net>;
  Sat,  8 Apr 2023 19:44:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D67140160
+ by smtp2.osuosl.org (Postfix) with ESMTP id B49C34031E
  for <buildroot@buildroot.org>; Sat,  8 Apr 2023 19:44:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D67140160
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B49C34031E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D1DB83899; Sat,  8 Apr 2023 19:44:45 +0000 (UTC)
+ id A49C383899; Sat,  8 Apr 2023 19:44:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Apr 2023 21:43:25 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d031f1712b81b18945f88776e74698d5ab5c0c3f
-X-Git-Newrev: 4be09af0e648d9cd990f1ad7956a57026022a618
+Date: Sat, 8 Apr 2023 21:42:58 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 76b6da9d4fefee95bcaf47d94ab77d99edffa561
+X-Git-Newrev: 373b98b5a85466f60bf637eea4d2913522b97775
 X-Patchwork-Hint: ignore
-Message-Id: <20230408194445.5D1DB83899@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libmicrohttpd:
+Message-Id: <20230408194445.A49C383899@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libmicrohttpd:
  security bump to version 0.9.76
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4be09af0e648d9cd990f1ad7956a57026022a618
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=373b98b5a85466f60bf637eea4d2913522b97775
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Fix CVE-2023-27371: GNU libmicrohttpd before 0.9.76 allows remote DoS
 (Denial of Service) due to improper parsing of a multipart/form-data
