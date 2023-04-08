@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58FA2C7619A
-	for <buildroot@archiver.kernel.org>; Sat,  8 Apr 2023 19:42:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BDABC77B6C
+	for <buildroot@archiver.kernel.org>; Sat,  8 Apr 2023 19:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F22974038B;
-	Sat,  8 Apr 2023 19:42:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F22974038B
+	by smtp2.osuosl.org (Postfix) with ESMTP id B85244060E;
+	Sat,  8 Apr 2023 19:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B85244060E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sljn6vpRpR1J; Sat,  8 Apr 2023 19:42:25 +0000 (UTC)
+	with ESMTP id 8SkWkWWeY_F4; Sat,  8 Apr 2023 19:43:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E678840620;
-	Sat,  8 Apr 2023 19:42:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E678840620
+	by smtp2.osuosl.org (Postfix) with ESMTP id A536140516;
+	Sat,  8 Apr 2023 19:43:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A536140516
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 168021BF82F
- for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:42:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C34D1BF82F
+ for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E473C404AF
- for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:42:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E473C404AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22C2840516
+ for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:43:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22C2840516
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9dcXRVESclfq for <buildroot@lists.busybox.net>;
- Sat,  8 Apr 2023 19:42:15 +0000 (UTC)
+ with ESMTP id D20SHpDl4Q7Z for <buildroot@lists.busybox.net>;
+ Sat,  8 Apr 2023 19:43:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F0B044038B
- for <buildroot@buildroot.org>; Sat,  8 Apr 2023 19:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0B044038B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1146340160
+ for <buildroot@buildroot.org>; Sat,  8 Apr 2023 19:43:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1146340160
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDEE083817; Sat,  8 Apr 2023 19:42:14 +0000 (UTC)
+ id 0082D83829; Sat,  8 Apr 2023 19:43:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Apr 2023 21:36:51 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 75e04c691e580165b7f203261a3ca2a2d1e3e25c
-X-Git-Newrev: d031f1712b81b18945f88776e74698d5ab5c0c3f
+Date: Sat, 8 Apr 2023 21:35:34 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 898f7adcb12fabdbaab58d4c3148f6d5fe9f20a9
+X-Git-Newrev: 76b6da9d4fefee95bcaf47d94ab77d99edffa561
 X-Patchwork-Hint: ignore
-Message-Id: <20230408194214.DDEE083817@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ca-certificates:
+Message-Id: <20230408194322.0082D83829@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/ca-certificates:
  bump version to 20230311
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d031f1712b81b18945f88776e74698d5ab5c0c3f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=76b6da9d4fefee95bcaf47d94ab77d99edffa561
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 The impetus for this change was that wget fails to load pages signed by
 Let's Encrypt due to missing root certs. This version has the updated and
@@ -79,10 +79,11 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit 9f5c8bd4305ab7667f3a36911ba58cef358b5aa8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tdata2pem.py-make-cryptography-module-opt.patch | 27 +++++++++++-----------
- package/ca-certificates/ca-certificates.hash       |  4 +---
- package/ca-certificates/ca-certificates.mk         |  4 ++--
- 3 files changed, 17 insertions(+), 18 deletions(-)
+ ...tdata2pem.py-make-cryptography-module-opt.patch | 27 ++++++++++----------
+ ...tdata2pem.py-Fix-compat-with-cryptography.patch | 29 ----------------------
+ package/ca-certificates/ca-certificates.hash       |  4 +--
+ package/ca-certificates/ca-certificates.mk         |  4 +--
+ 4 files changed, 17 insertions(+), 47 deletions(-)
 
 diff --git a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
 index b76c1bfd7f..ed90c217ec 100644
@@ -152,6 +153,41 @@ index b76c1bfd7f..ed90c217ec 100644
 -2.33.1
 +2.30.2
  
+diff --git a/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch b/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
+deleted file mode 100644
+index 0537da9224..0000000000
+--- a/package/ca-certificates/0002-mozilla-certdata2pem.py-Fix-compat-with-cryptography.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 5e493ca307a031e81528ceddb96f3da40bc062cf Mon Sep 17 00:00:00 2001
+-From: Wataru Ashihara <wsh@iij.ad.jp>
+-Date: Wed, 2 Nov 2022 12:40:05 -0400
+-Subject: [PATCH] mozilla/certdata2pem.py: Fix compat with cryptography > 3.0
+-
+-In newer cryptography packages, load_der_x509_certificate is enforced to be 'bytes' rather than currently used 'bytearray'.  This fixes that.
+-
+-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1008244
+-Signed-off-by: Justin Wood <jwood@starry.com>
+----
+- mozilla/certdata2pem.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/mozilla/certdata2pem.py b/mozilla/certdata2pem.py
+-index a6261f8..c0fa52c 100644
+---- a/mozilla/certdata2pem.py
+-+++ b/mozilla/certdata2pem.py
+-@@ -122,7 +122,7 @@ for obj in objects:
+-         try:
+-             from cryptography import x509
+- 
+--            cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+-+            cert = x509.load_der_x509_certificate(bytes(obj['CKA_VALUE']))
+-             if cert.not_valid_after < datetime.datetime.now():
+-                 print('!'*74)
+-                 print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+--- 
+-2.38.1
+-
 diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
 index a1675b999e..8a5b48dd79 100644
 --- a/package/ca-certificates/ca-certificates.hash
