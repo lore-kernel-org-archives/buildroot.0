@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CE3DC77B6C
-	for <buildroot@archiver.kernel.org>; Sat,  8 Apr 2023 19:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA3C9C77B6E
+	for <buildroot@archiver.kernel.org>; Sat,  8 Apr 2023 19:44:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D32EC4063F;
-	Sat,  8 Apr 2023 19:43:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D32EC4063F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D380404AF;
+	Sat,  8 Apr 2023 19:44:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D380404AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uKVoI55GSxwE; Sat,  8 Apr 2023 19:43:42 +0000 (UTC)
+	with ESMTP id 4muOVlWoZg7i; Sat,  8 Apr 2023 19:44:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A94540635;
-	Sat,  8 Apr 2023 19:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A94540635
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A4DD91BF82F
- for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:43:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2D504061C;
+	Sat,  8 Apr 2023 19:44:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2D504061C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E2B41BF82F
+ for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:44:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8AA5E41B3E
- for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:43:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AA5E41B3E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46112404AF
+ for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:44:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46112404AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pEcA_cC7_69a for <buildroot@lists.busybox.net>;
- Sat,  8 Apr 2023 19:43:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B33341B39
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3B33341B39
- for <buildroot@buildroot.org>; Sat,  8 Apr 2023 19:43:38 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E8737C0005;
- Sat,  8 Apr 2023 19:43:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1plETF-000qYl-Px; Sat, 08 Apr 2023 21:43:33 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UW78HYA_pgcK for <buildroot@lists.busybox.net>;
+ Sat,  8 Apr 2023 19:44:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D67140160
+ for <buildroot@buildroot.org>; Sat,  8 Apr 2023 19:44:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D67140160
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5D1DB83899; Sat,  8 Apr 2023 19:44:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230319191212.666401-1-fontaine.fabrice@gmail.com>
-Date: Sat, 08 Apr 2023 21:43:33 +0200
-In-Reply-To: <20230319191212.666401-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 19 Mar 2023 20:12:12 +0100")
-Message-ID: <877cumxiqi.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmicrohttpd: security bump to
- version 0.9.76
+To: buildroot@buildroot.org
+Date: Sat, 8 Apr 2023 21:43:25 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: d031f1712b81b18945f88776e74698d5ab5c0c3f
+X-Git-Newrev: 4be09af0e648d9cd990f1ad7956a57026022a618
+X-Patchwork-Hint: ignore
+Message-Id: <20230408194445.5D1DB83899@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libmicrohttpd:
+ security bump to version 0.9.76
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,31 +57,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Will Newton <will.newton@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4be09af0e648d9cd990f1ad7956a57026022a618
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix CVE-2023-27371: GNU libmicrohttpd before 0.9.76 allows remote DoS
- > (Denial of Service) due to improper parsing of a multipart/form-data
- > boundary in the postprocessor.c MHD_create_post_processor() method. This
- > allows an attacker to remotely send a malicious HTTP POST packet that
- > includes one or more '\0' bytes in a multipart/form-data boundary field,
- > which - assuming a specific heap layout - will result in an
- > out-of-bounds read and a crash in the find_boundary() function.
+Fix CVE-2023-27371: GNU libmicrohttpd before 0.9.76 allows remote DoS
+(Denial of Service) due to improper parsing of a multipart/form-data
+boundary in the postprocessor.c MHD_create_post_processor() method. This
+allows an attacker to remotely send a malicious HTTP POST packet that
+includes one or more '\0' bytes in a multipart/form-data boundary field,
+which - assuming a specific heap layout - will result in an
+out-of-bounds read and a crash in the find_boundary() function.
 
- > https://lists.gnu.org/archive/html/libmicrohttpd/2023-02/msg00000.html
+https://lists.gnu.org/archive/html/libmicrohttpd/2023-02/msg00000.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3b645ffda6529278212ab93eb038da28014502cd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2023.02.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 7f95e78a6e..ce30e2ba11 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9278907a6f571b391aab9644fd646a5108ed97311ec66f6359cebbedb0a4e3bb  libmicrohttpd-0.9.75.tar.gz
++sha256  f0b1547b5a42a6c0f724e8e1c1cb5ce9c4c35fb495e7d780b9930d35011ceb4c  libmicrohttpd-0.9.76.tar.gz
+ sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index f75178bc0a..4e7b72b65c 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.75
++LIBMICROHTTPD_VERSION = 0.9.76
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_CPE_ID_VENDOR = gnu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
