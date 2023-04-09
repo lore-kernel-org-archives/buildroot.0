@@ -4,93 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BC5FC77B61
-	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 13:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D3A8C77B70
+	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 13:32:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBDE34032A;
-	Sun,  9 Apr 2023 13:31:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBDE34032A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31CFD403D6;
+	Sun,  9 Apr 2023 13:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31CFD403D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d4I7-WjZ31za; Sun,  9 Apr 2023 13:31:52 +0000 (UTC)
+	with ESMTP id MVs0U-PdZoOK; Sun,  9 Apr 2023 13:32:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E99984014E;
-	Sun,  9 Apr 2023 13:31:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E99984014E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 403FA1BF82D
- for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 13:31:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D9044014E;
+	Sun,  9 Apr 2023 13:32:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D9044014E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 283651BF82D
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 13:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26DA54014E
- for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 13:31:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26DA54014E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05B1041725
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 13:32:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05B1041725
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 539Ul5xlaDjH for <buildroot@lists.busybox.net>;
- Sun,  9 Apr 2023 13:31:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IJORPRcEqt_N for <buildroot@lists.busybox.net>;
+ Sun,  9 Apr 2023 13:32:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EC7D40022
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2EC7D40022
- for <buildroot@buildroot.org>; Sun,  9 Apr 2023 13:31:46 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-94a342f15e4so50432166b.0
- for <buildroot@buildroot.org>; Sun, 09 Apr 2023 06:31:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB8F0416A9
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CB8F0416A9
+ for <buildroot@buildroot.org>; Sun,  9 Apr 2023 13:32:25 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id ga37so7297709ejc.0
+ for <buildroot@buildroot.org>; Sun, 09 Apr 2023 06:32:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1681047104;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=1e100.net; s=20210112; t=1681047144;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=B7+q310+LKMy6GqjSuCW4qOYthgX/MSHPTKMsGD1w4g=;
- b=rOm6/d0Vic2dLR2v8MPcnWQoDhYlrgFIian1U3wE7TsBFYPx5LXWVjwp+C/MePsSAs
- XuCDl8KU9e7XsdP1QY5f7p5efupzdVO8Mup6jXINhzA0e4Mw2S8xYJ57ozv9DuCdPlnu
- khgJZxBSuVqXIlP3LmNmeqjWnNXHlC9eesDfvEFPYJ8uKIRX77PL+iTMzt72N/x2t1CI
- ShmU7Uk6LI2O17iwXM+SBZMYX30kdDsiNSLHfQkdLC1lKMGNpwzFgi/1WPLqWE2NU00F
- t4BpflYqBSxXHJDJ8g7+lDLX3TDG8nJzWv2aYsTXdLAoco9vsGz9Gm3tNyt6fv5VKmEw
- /iRA==
-X-Gm-Message-State: AAQBX9elflyduWRoV4jxXpS/F4yjDD86fTK/w+O2hJXkDtuFAxRkzmxI
- jUUv41ddHQswhDImAenlOOldJq+ubJ+4Qyx1LCI=
-X-Google-Smtp-Source: AKy350ZucupWELMRaqoRz1cS0Dq0yac/hI4GhKrT3CZlL8aMO9tzUMF4byFqWFya02fr1i6g5TO+cA==
-X-Received: by 2002:aa7:c393:0:b0:500:2cc6:36da with SMTP id
- k19-20020aa7c393000000b005002cc636damr7041816edq.19.1681047104102; 
- Sun, 09 Apr 2023 06:31:44 -0700 (PDT)
+ bh=oK5IK+BouXttFSztfkszaHbrhHHW9TNnPyVpOOVHxrg=;
+ b=OomDmfEBSjv5VSfTbI2DBznKKbjSskBSRtzPufNqnzx4RhbpeUbVW2R2nr4XPq3ThL
+ Jhhdvaqo22PJXyEB6c3FckTW8Mx3azVi4DS+R0ZKKiWPtZ4n0erlVYFFWlLXeC3+wM1+
+ 5xpGc4a/YxyQGDl4cb+0N9Tv2kdlywMcBIMEutlFqzzfGWfhwg0jTmKzbjoH60I9aFBX
+ mO+N3orYnrpSWDU5ZPE4I5WT5mzFEEiC9myymIVj0+ANknKp6N/LCMTDWNBUwd7DSPwP
+ aLwza53a5sK2uflrEh6aGX7lYH0TIWXUiVaczegPzOkzqLlj3fVEL5PAfsVyWdH1LVok
+ 9YHg==
+X-Gm-Message-State: AAQBX9eagbpA9M6MDOW+8GbRjXIYt5n6APkeFJLwi47X4QsXd1IYFla+
+ VTd96P0u20nZKdysjfVdHUzaOwyC9usF+rGL17U=
+X-Google-Smtp-Source: AKy350ZUhlIKI01lzojgwwv11HHWtWwxpc5cA8457IZ5Iko9PSb1e924FKaFwVBjJqju/Nqubf60Og==
+X-Received: by 2002:a17:906:ecf2:b0:948:b300:6e9a with SMTP id
+ qt18-20020a170906ecf200b00948b3006e9amr5044293ejb.32.1681047143954; 
+ Sun, 09 Apr 2023 06:32:23 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- z11-20020a05640235cb00b004fa380a14e7sm3819008edc.77.2023.04.09.06.31.43
+ oz15-20020a170906cd0f00b008d53ea69227sm4164733ejb.224.2023.04.09.06.32.23
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 09 Apr 2023 06:31:43 -0700 (PDT)
-Message-ID: <10144c7d-50db-b34b-edc3-5c6b32a794df@mind.be>
-Date: Sun, 9 Apr 2023 15:31:41 +0200
+ Sun, 09 Apr 2023 06:32:23 -0700 (PDT)
+Message-ID: <f1e9f2e0-84f5-f052-b260-a4f285583968@mind.be>
+Date: Sun, 9 Apr 2023 15:32:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
 Content-Language: en-GB
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  buildroot@buildroot.org
-References: <20230408135150.245980-1-dario.binacchi@amarulasolutions.com>
+References: <20230408184559.84189-1-giulio.benetti@benettiengineering.com>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230408135150.245980-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20230408184559.84189-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1681047104;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=mind.be; s=google; t=1681047144;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=B7+q310+LKMy6GqjSuCW4qOYthgX/MSHPTKMsGD1w4g=;
- b=hP7Apq3REt1sJ/E6fYJJL5KBRbt6JzbWei0zw8rUk/EkjIAFDCR46DQDE9aC5tLDt3
- DeTFTu645A5a1blY/r88yOJVJw6uc/FAt8nYFrfaQ4bFaJJy+7UKIKPaXyaYV+zCFawo
- 9stPZdzHUR0E2wf8x5RsrTv1PGpVs4NRk7RC8L2WD1eOPnXjT+geXRarzF63ylQ51MYJ
- 1otabkW7ctO/RUijNLiOQbMuKqBitN98v4KP05FjGBbIgcdzhE+y5PfEHUhQAk+2PSIx
- +VVt3wHtyhYkGGw315QbtZXw0hynbtkcOdWfrwog3RSoB/U1TB1pt1/rJVHT2C9oPw8h
- MOZQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=oK5IK+BouXttFSztfkszaHbrhHHW9TNnPyVpOOVHxrg=;
+ b=J0cztF0gOYo/xt+VKXLhRBlps67EEojo0CK8XnIZvJY8NioKk/nTJAyIlGQJRU5tCS
+ Enh8AEMo1cH44UtR1GMAyCQCnCzPPLvkBEFUdkIJUU6R941sq+craUNisx1CmT0LU9eJ
+ eAApUjpKfqvbGl0t4vZyCKrpTlrNOMagQbSkw1ceU9PSwzpqMxphrc5A6HL/ONnaxlcE
+ fKn2YBoTy3gq88rAsbSjKy40EhvdGiowdThLUxey9SaX0Qal+ZN0IrHM2YAT1iVTSjNY
+ mBVe7nRaVns4CNb4kNyN+VMHV1Tr+LxPCIP90UiHTtp9BdMjlx4csDGu3mjv1PcEdTLS
+ IG1Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hP7Apq3R
-Subject: Re: [Buildroot] [PATCH 1/1] package/openocd: bump to 0.12.0
+ header.a=rsa-sha256 header.s=google header.b=J0cztF0g
+Subject: Re: [Buildroot] [PATCH] package/matio: fix build failure due to gcc
+ bug 99410
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,6 +102,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -109,75 +110,46 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 08/04/2023 15:51, Dario Binacchi wrote:
-> As reported by [1], version 0.12.0 fixes these errors:
+On 08/04/2023 20:45, Giulio Benetti wrote:
+> The matio package exhibits gcc bug 99410 when built for the Nios2
+> architecture with optimization enabled, which causes a build failure.
 > 
-> Error executing event examine-end on target stm32f7x.cpu:
-> buildroot/output/host/bin/../share/openocd/scripts/mem_helper.tcl:37: Error: wrong # args: should be "expr expression"
-> in procedure 'mmw' called at file "buildroot/output/host/bin/../share/openocd/scripts/target/stm32f7x.cfg", line 103
-> at file "buildroot/output/host/bin/../share/openocd/scripts/mem_helper.tcl", line 37
-> Info : starting gdb server for stm32f7x.cpu on 3333
-> Info : Listening on port 3333 for gdb connections
-> Info : Unable to match requested speed 2000 kHz, using 1800 kHz
-> Info : Unable to match requested speed 2000 kHz, using 1800 kHz
-> Error executing event examine-end on target stm32f7x.cpu:
-> buildroot/output/host/bin/../share/openocd/scripts/mem_helper.tcl:37: Error: wrong # args: should be "expr expression"
-> in procedure 'ocd_process_reset'
-> in procedure 'ocd_process_reset_inner' called at file "embedded:startup.tcl", line 288
-> in procedure 'mmw' called at file "buildroot/output/host/bin/../share/openocd/scripts/target/stm32f7x.cfg", line 103
-> at file "buildroot/output/host/bin/../share/openocd/scripts/mem_helper.tcl", line 37
-> target halted due to debug-request, current mode: Thread
-> xPSR: 0x01000000 pc: 0x080003fc msp: 0x20050000
-> Error executing event reset-init on target stm32f7x.cpu:
-> buildroot/output/host/bin/../share/openocd/scripts/mem_helper.tcl:37: Error: wrong # args: should be "expr expression"
-> in procedure 'ocd_process_reset'
-> in procedure 'ocd_process_reset_inner' called at file "embedded:startup.tcl", line 288
-> in procedure 'mmw' called at file "buildroot/output/host/bin/../share/openocd/scripts/board/stm32f769i-disco.cfg", line 71
-> at file "buildroot/output/host/bin/../share/openocd/scripts/mem_helper.tcl", line 37
+> As done for other packages in Buildroot work around this gcc bug by
+> setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_99410=y.
 > 
-> Remove upstream patches.
+> Fixes:
+> http://autobuild.buildroot.net/results/971/9714160b80a0d1a01983d29af38a95049c07b4d3/
 > 
-> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1014849
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-[snip]
-
-> diff --git a/package/openocd/openocd.hash b/package/openocd/openocd.hash
-> index 91eb56d930ea..b605eb7aa463 100644
-> --- a/package/openocd/openocd.hash
-> +++ b/package/openocd/openocd.hash
-> @@ -1,3 +1,3 @@
->   # From http://sourceforge.net/projects/openocd/files/openocd/0.11.0/
-> -sha256  43a3ce734aff1d3706ad87793a9f3a5371cb0e357f0ffd0a151656b06b3d1e7d  openocd-0.11.0.tar.bz2
-> -sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> +sha256  af254788be98861f2bd9103fe6e60a774ec96a8c374744eef9197f6043075afa  openocd-0.12.0.tar.bz2
-> +sha256  1b8f7e37ee5afbbf95c2a4d62b12b25232e29538692663b434318503a9a88419  COPYING
-
-  If the license hash changes, you _have_ to explain why in the commit message. 
-In this case, it's because the license file moved from COPYING to 
-LICENSES/preferred/GPL-2.0, and another file was added to explain the licenses. 
-So we now need 3 license files: COPYING, LICENSES/preferred/GPL-2.0 and 
-LICENSES/license-rules.txt. While you're at it, check the latter file to verify 
-if maybe our GPL-2.0+ tag was not entirely correct.
-
-  Marked as Changes Requested.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
-> diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-> index 37a06ca848b7..95a7fd3c2a2c 100644
-> --- a/package/openocd/openocd.mk
-> +++ b/package/openocd/openocd.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> ---
+>   package/matio/matio.mk | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+> index 5e09f4e6ce..2ba9c8f568 100644
+> --- a/package/matio/matio.mk
+> +++ b/package/matio/matio.mk
+> @@ -15,6 +15,14 @@ MATIO_INSTALL_STAGING = YES
+>   # va_copy()
+>   MATIO_CONF_ENV = ac_cv_va_copy=yes
 >   
-> -OPENOCD_VERSION = 0.11.0
-> +OPENOCD_VERSION = 0.12.0
->   OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
->   OPENOCD_SITE = http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VERSION)
->   OPENOCD_LICENSE = GPL-2.0+
+> +MATIO_CFLAGS = $(TARGET_CFLAGS)
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99410),y)
+> +MATIO_CFLAGS += -O0
+> +endif
+> +
+> +MATIO_CONF_ENV += CFLAGS="$(MATIO_CFLAGS)"
+> +
+>   # mat73 require hdf5 (not available), extented-sparse take 2KB
+>   MATIO_CONF_OPTS = --disable-mat73 --enable-extended-sparse
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
