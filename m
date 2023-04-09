@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A61EC77B61
-	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 21:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C593C77B6E
+	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 21:00:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F76D60FAA;
-	Sun,  9 Apr 2023 21:00:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F76D60FAA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34C9960FDF;
+	Sun,  9 Apr 2023 21:00:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34C9960FDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AVYtRHr-RreH; Sun,  9 Apr 2023 21:00:01 +0000 (UTC)
+	with ESMTP id 7C90n6Kgv-hH; Sun,  9 Apr 2023 21:00:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CABA60F23;
-	Sun,  9 Apr 2023 21:00:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CABA60F23
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 130BA1BF2A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0843960FBD;
+	Sun,  9 Apr 2023 21:00:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0843960FBD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DE7271BF291
  for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 20:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E20C4404A5
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3E76410C4
  for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 20:59:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E20C4404A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3E76410C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aHsS05pBdAdg for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hwtrMc39rOQl for <buildroot@lists.busybox.net>;
  Sun,  9 Apr 2023 20:59:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 185C640151
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D3E1410C1
  for <buildroot@buildroot.org>; Sun,  9 Apr 2023 20:59:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 185C640151
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D3E1410C1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01C2183C07; Sun,  9 Apr 2023 20:59:19 +0000 (UTC)
+ id EB56583C05; Sun,  9 Apr 2023 20:59:18 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 9 Apr 2023 21:59:04 +0200
+Date: Sun, 9 Apr 2023 21:51:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 29d6f319a0aed8ebad6bb3aef18b13479886aa54
-X-Git-Newrev: 60fdaf56fed83614ecdeab5e49de8087b78219cd
+X-Git-Oldrev: d775b2ac05d473db490d2dc6babd2743b28cfbf5
+X-Git-Newrev: 29d6f319a0aed8ebad6bb3aef18b13479886aa54
 X-Patchwork-Hint: ignore
-Message-Id: <20230409205919.01C2183C07@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/check-package: check files in
- support/
+Message-Id: <20230409205918.EB56583C05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/check-package: check files in board/
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,103 +62,166 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60fdaf56fed83614ecdeab5e49de8087b78219cd
+commit: https://git.buildroot.net/buildroot/commit/?id=29d6f319a0aed8ebad6bb3aef18b13479886aa54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The .mk files inside both support/dependencies and support/misc are not
-package recipes, similar to package/pkg-*.mk. The check-package don't
-apply to them. Therefore ignore such files.
-
-In the test infra, some br2-externals are used as fixtures to provide
-(sometimes) failure cases, so ignore files in these directories.
-
-Files inside support/kconfig are files copied from linux upstream, so do
-not generate warnings for them.
-
-support/gnuconfig contains auto-generated config.{guess,sub} files,
-so do not generate shellcheck warnings for them.
+When a SysV init script is inside package/ it doesn't need to be
+executable. However, when an init script is inside a fs_overlay, it
+*does* need to be executable. Therefore, skip the NotExecutable test for
+init scripts. We detect them based on the directory /etc/init.d
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[Arnout: update .checkpackageignore]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- .checkpackageignore | 42 ++++++++++++++++++++++++++++++++++++++++++
- utils/check-package |  6 ++++++
- 2 files changed, 48 insertions(+)
+ .checkpackageignore               | 91 +++++++++++++++++++++++++++++++++++++++
+ utils/check-package               |  1 +
+ utils/checkpackagelib/lib_sysv.py |  3 ++
+ utils/checkpackagelib/tool.py     |  5 +++
+ 4 files changed, 100 insertions(+)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index ae4356f500..81ca4d8de9 100644
+index 4faa3a8b8f..ae4356f500 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -288,3 +288,45 @@ package/x11r7/xdriver_xf86-video-savage/0001-cross-compile.patch Sob
- package/x11r7/xdriver_xf86-video-tdfx/0001-cross.patch Sob
- package/x11r7/xserver_xorg-server/S40xorg Shellcheck Variables
- package/xl2tp/xl2tpd TrailingSpace
-+support/dependencies/check-host-asciidoc.sh Shellcheck
-+support/dependencies/check-host-cmake.sh Shellcheck
-+support/dependencies/check-host-gzip.sh Shellcheck
-+support/dependencies/check-host-lzip.sh Shellcheck
-+support/dependencies/check-host-make.sh Shellcheck
-+support/dependencies/check-host-python3.sh Shellcheck
-+support/dependencies/check-host-tar.sh Shellcheck
-+support/dependencies/check-host-xzcat.sh Shellcheck
-+support/dependencies/dependencies.sh Shellcheck
-+support/download/bzr ConsecutiveEmptyLines Shellcheck
-+support/download/cargo-post-process Shellcheck
-+support/download/check-hash Shellcheck
-+support/download/cvs Shellcheck
-+support/download/dl-wrapper Shellcheck
-+support/download/file Shellcheck
-+support/download/git Shellcheck
-+support/download/go-post-process Shellcheck
-+support/download/hg Shellcheck
-+support/download/scp Shellcheck
-+support/download/sftp Shellcheck
-+support/download/svn Shellcheck
-+support/download/wget Shellcheck
-+support/gnuconfig/update Shellcheck
-+support/libtool/buildroot-libtool-v1.5.patch ApplyOrder Sob
-+support/libtool/buildroot-libtool-v2.2.patch ApplyOrder Sob
-+support/libtool/buildroot-libtool-v2.4.4.patch ApplyOrder
-+support/libtool/buildroot-libtool-v2.4.patch ApplyOrder Sob
-+support/misc/relocate-sdk.sh Shellcheck
-+support/scripts/apply-patches.sh Shellcheck
-+support/scripts/br2-external Shellcheck
-+support/scripts/check-bin-arch Shellcheck
-+support/scripts/check-host-rpath Shellcheck
-+support/scripts/expunge-gconv-modules Shellcheck
-+support/scripts/fix-configure-powerpc64.sh EmptyLastLine
-+support/scripts/fix-rpath Shellcheck
-+support/scripts/generate-gitlab-ci-yml Shellcheck
-+support/scripts/mkmakefile ConsecutiveEmptyLines Shellcheck
-+support/scripts/mkusers Shellcheck
-+support/scripts/setlocalversion Shellcheck
-+support/testing/tests/core/post-build.sh Shellcheck
-+support/testing/tests/package/test_opkg/post-build.sh Shellcheck
-+support/testing/tests/utils/test_get_developers/0001-package-binutils-change-.mk.patch NumberedSubject
+@@ -1,3 +1,94 @@
++board/aarch64-efi/post-image.sh Shellcheck
++board/amarula/vyasa/post-build.sh Shellcheck
++board/andes/ae350/post-build.sh Shellcheck
++board/arcturus/aarch64-ucls1012a/post-build.sh Shellcheck
++board/arcturus/aarch64-ucls1012a/post-image.sh Shellcheck
++board/aspeed/common/post-image.sh Shellcheck
++board/asus/tinker/post-build.sh Shellcheck
++board/atmel/flasher.sh Shellcheck
++board/beaglebone/post-build.sh Shellcheck
++board/beagleboneai/post-build.sh Shellcheck
++board/beaglev/post-build.sh Shellcheck
++board/beelink/gs1/post-build.sh Shellcheck
++board/boundarydevices/common/post-build.sh Shellcheck
++board/boundarydevices/common/post-image.sh Shellcheck
++board/broadcom/northstar/post-image.sh Shellcheck
++board/bsh/imx8mn-bsh-smm-s2-pro/flash.sh EmptyLastLine Shellcheck
++board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh Shellcheck
++board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh Shellcheck
++board/bsh/imx8mn-bsh-smm-s2/flash.sh EmptyLastLine Shellcheck
++board/bsh/imx8mn-bsh-smm-s2/post-build.sh Shellcheck
++board/canaan/k210-soc/post-build.sh Shellcheck
++board/canaan/k210-soc/rootfs_overlay/sbin/init Shellcheck
++board/chromebook/elm/sign.sh Shellcheck
++board/chromebook/mksd.sh Shellcheck
++board/chromebook/snow/linux-4.15-dts-tpm.patch ApplyOrder
++board/chromebook/snow/sign.sh Shellcheck
++board/cubietech/cubieboard2/post-image.sh Shellcheck
++board/freescale/common/imx/imx8-bootloader-prepare.sh Shellcheck
++board/freescale/common/imx/post-image.sh Shellcheck
++board/freescale/common/mxs/post-image.sh Shellcheck
++board/friendlyarm/nanopi-r2s/post-build.sh Shellcheck
++board/hardkernel/odroidc2/post-image.sh Shellcheck
++board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload Shellcheck Variables
++board/hardkernel/odroidxu4/post-image.sh EmptyLastLine Shellcheck
++board/intel/galileo/post-build.sh Shellcheck
++board/intel/galileo/rootfs_overlay/etc/init.d/S09modload Shellcheck Variables
++board/kontron/bl-imx8mm/post-build.sh Shellcheck
++board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch NumberedSubject
++board/kontron/pitx-imx8m/post-build.sh Shellcheck
++board/kontron/smarc-sal28/post-build.sh Shellcheck
++board/lego/ev3/post-image.sh Shellcheck
++board/lemaker/bananapro/post-build.sh Shellcheck
++board/lemaker/bananapro/post-image.sh Shellcheck
++board/mender/x86_64/post-image-efi.sh ConsecutiveEmptyLines
++board/minnowboard/post-build.sh Shellcheck
++board/nexbox/a95x/post-build.sh Shellcheck
++board/nexbox/a95x/post-image.sh Shellcheck
++board/octavo/osd32mp1-brk/patches/uboot/0001-Add-OSD32MP1-BRK-device-tree-support.patch NumberedSubject
++board/octavo/osd32mp1-brk/patches/uboot/0002-Add-OSD32MP1-BRK-build-config.patch NumberedSubject
++board/octavo/osd32mp1-red/patches/uboot/0001-Add-OSD32MP1-RED-Device-Tree-support.patch NumberedSubject
++board/octavo/osd32mp1-red/patches/uboot/0002-configs-stm32mp15_trusted_defconfig-disable-environm.patch NumberedSubject
++board/olimex/a13_olinuxino/post-build.sh Shellcheck
++board/olimex/a20_olinuxino/post-build.sh Shellcheck
++board/olimex/a33_olinuxino/post-build.sh Shellcheck
++board/olpc/post-build.sh Shellcheck
++board/orangepi/common/post-build.sh Shellcheck
++board/orangepi/orangepi-lite2/post-build.sh Shellcheck
++board/orangepi/orangepi-one-plus/post-build.sh Shellcheck
++board/pine64/rock64/post-build.sh Shellcheck
++board/pine64/rockpro64/post-build.sh Shellcheck
++board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
++board/qemu/post-image.sh Shellcheck
++board/qemu/x86/post-build.sh Shellcheck
++board/qemu/x86_64/post-build.sh Shellcheck
++board/radxa/rockpi-n8/post-build.sh Shellcheck
++board/raspberrypi/post-build.sh Shellcheck
++board/raspberrypi/post-image.sh Shellcheck
++board/roseapplepi/post-build.sh Shellcheck
++board/sifive/hifive-unleashed/post-build.sh Shellcheck
++board/solidrun/clearfog/post-build.sh Shellcheck
++board/solidrun/macchiatobin/post-build-mainline.sh Shellcheck
++board/solidrun/macchiatobin/post-build.sh Shellcheck
++board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh Shellcheck
++board/stmicroelectronics/common/stm32mp157/post-image.sh Shellcheck
++board/stmicroelectronics/stm32f429-disco/flash.sh Shellcheck
++board/stmicroelectronics/stm32f469-disco/flash_sd.sh Shellcheck
++board/stmicroelectronics/stm32f469-disco/flash_xip.sh Shellcheck
++board/stmicroelectronics/stm32f469-disco/post-build.sh Shellcheck
++board/synopsys/axs10x/post-build.sh Shellcheck
++board/technologic/ts4900/post-image.sh Shellcheck
++board/terasic/de10nano_cyclone5/barebox-env/boot/mmc Shellcheck
++board/toradex/apalis-imx6/post-image.sh Shellcheck
++board/udoo/common/post-build.sh Shellcheck
++board/versal/post-build.sh Shellcheck
++board/versal/post-image.sh Shellcheck TrailingSpace
++board/zynq/post-build.sh Shellcheck
++board/zynq/post-image.sh Shellcheck
++board/zynqmp/kria/kv260/kv260.sh Shellcheck TrailingSpace
++board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch ApplyOrder
++board/zynqmp/post-build.sh Shellcheck
++board/zynqmp/post-image.sh Shellcheck
+ package/alsamixergui/0001-misc-fixes.patch Sob
+ package/am33x-cm3/S93-am335x-pm-firmware-load Variables
+ package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch Sob
 diff --git a/utils/check-package b/utils/check-package
-index e3b7d8515f..27070571c9 100755
+index 98a25bd0b2..e3b7d8515f 100755
 --- a/utils/check-package
 +++ b/utils/check-package
-@@ -112,6 +112,7 @@ DO_CHECK_INTREE = re.compile(r"|".join([
+@@ -107,6 +107,7 @@ CONFIG_IN_FILENAME = re.compile(r"Config\.\S*$")
+ DO_CHECK_INTREE = re.compile(r"|".join([
+     r"Config.in",
+     r"arch/",
++    r"board/",
+     r"boot/",
      r"fs/",
      r"linux/",
-     r"package/",
-+    r"support/",
-     r"system/",
-     r"toolchain/",
-     r"utils/",
-@@ -121,6 +122,11 @@ DO_NOT_CHECK_INTREE = re.compile(r"|".join([
-     r"fs/common\.mk$",
-     r"package/doc-asciidoc\.mk$",
-     r"package/pkg-\S*\.mk$",
-+    r"support/dependencies/[^/]+\.mk$",
-+    r"support/gnuconfig/config\.",
-+    r"support/kconfig/",
-+    r"support/misc/[^/]+\.mk$",
-+    r"support/testing/tests/.*br2-external/",
-     r"toolchain/helpers\.mk$",
-     r"toolchain/toolchain-external/pkg-toolchain-external\.mk$",
-     ]))
+diff --git a/utils/checkpackagelib/lib_sysv.py b/utils/checkpackagelib/lib_sysv.py
+index 386d085afc..dc4afd71b8 100644
+--- a/utils/checkpackagelib/lib_sysv.py
++++ b/utils/checkpackagelib/lib_sysv.py
+@@ -21,6 +21,9 @@ class Indent(_CheckFunction):
+ 
+ 
+ class NotExecutable(checkpackagelib.tool.NotExecutable):
++    def ignore(self):
++        return 'etc/init.d/' in self.filename
++
+     def hint(self):
+         return ", just make sure you use '$(INSTALL) -D -m 0755' in the .mk file"
+ 
+diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
+index e719fdd407..632aaa9f9e 100644
+--- a/utils/checkpackagelib/tool.py
++++ b/utils/checkpackagelib/tool.py
+@@ -4,7 +4,12 @@ from checkpackagelib.base import _Tool
+ 
+ 
+ class NotExecutable(_Tool):
++    def ignore(self):
++        return False
++
+     def run(self):
++        if self.ignore():
++            return
+         if os.access(self.filename, os.X_OK):
+             return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
