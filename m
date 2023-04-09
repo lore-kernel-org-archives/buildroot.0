@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD72BC77B6E
-	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 20:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A61EC77B61
+	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 21:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 714FA60FDD;
-	Sun,  9 Apr 2023 20:59:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 714FA60FDD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F76D60FAA;
+	Sun,  9 Apr 2023 21:00:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F76D60FAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hhHLTPQCuoPx; Sun,  9 Apr 2023 20:59:48 +0000 (UTC)
+	with ESMTP id AVYtRHr-RreH; Sun,  9 Apr 2023 21:00:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FF9260FAA;
-	Sun,  9 Apr 2023 20:59:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FF9260FAA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 997131C3AF4
- for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 20:59:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CABA60F23;
+	Sun,  9 Apr 2023 21:00:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CABA60F23
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 130BA1BF2A9
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 20:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72353410C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id E20C4404A5
  for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 20:59:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72353410C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E20C4404A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cQ3Z8iHL220s for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aHsS05pBdAdg for <buildroot@lists.busybox.net>;
  Sun,  9 Apr 2023 20:59:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E768410C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 185C640151
  for <buildroot@buildroot.org>; Sun,  9 Apr 2023 20:59:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E768410C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 185C640151
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B16183C0B; Sun,  9 Apr 2023 20:59:19 +0000 (UTC)
+ id 01C2183C07; Sun,  9 Apr 2023 20:59:19 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 9 Apr 2023 22:56:15 +0200
+Date: Sun, 9 Apr 2023 21:59:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9df6503ed047acb37dae66fab2a1208f2b5ecb5e
-X-Git-Newrev: 47910ccc361934ab4b3fbcfe05530f38de07844f
+X-Git-Oldrev: 29d6f319a0aed8ebad6bb3aef18b13479886aa54
+X-Git-Newrev: 60fdaf56fed83614ecdeab5e49de8087b78219cd
 X-Patchwork-Hint: ignore
-Message-Id: <20230409205919.1B16183C0B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/efivar: don't install in
- $(HOST_DIR)/usr
+Message-Id: <20230409205919.01C2183C07@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/check-package: check files in
+ support/
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47910ccc361934ab4b3fbcfe05530f38de07844f
+commit: https://git.buildroot.net/buildroot/commit/?id=60fdaf56fed83614ecdeab5e49de8087b78219cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For years already, $(HOST_DIR)/usr is deprecated. Install directly in
-$(HOST_DIR). This will trigger a check-package error in the following
-commit.
+The .mk files inside both support/dependencies and support/misc are not
+package recipes, similar to package/pkg-*.mk. The check-package don't
+apply to them. Therefore ignore such files.
 
+In the test infra, some br2-externals are used as fixtures to provide
+(sometimes) failure cases, so ignore files in these directories.
+
+Files inside support/kconfig are files copied from linux upstream, so do
+not generate warnings for them.
+
+support/gnuconfig contains auto-generated config.{guess,sub} files,
+so do not generate shellcheck warnings for them.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/efivar/efivar.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .checkpackageignore | 42 ++++++++++++++++++++++++++++++++++++++++++
+ utils/check-package |  6 ++++++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
-index 8b1d338bec..ee6d7302df 100644
---- a/package/efivar/efivar.mk
-+++ b/package/efivar/efivar.mk
-@@ -39,7 +39,7 @@ define EFIVAR_BUILD_CMDS
- endef
- 
- define HOST_EFIVAR_INSTALL_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/src/makeguids $(HOST_DIR)/usr/bin/makeguids
-+	$(INSTALL) -D -m 0755 $(@D)/src/makeguids $(HOST_DIR)/bin/makeguids
- endef
- 
- define EFIVAR_INSTALL_STAGING_CMDS
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ae4356f500..81ca4d8de9 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -288,3 +288,45 @@ package/x11r7/xdriver_xf86-video-savage/0001-cross-compile.patch Sob
+ package/x11r7/xdriver_xf86-video-tdfx/0001-cross.patch Sob
+ package/x11r7/xserver_xorg-server/S40xorg Shellcheck Variables
+ package/xl2tp/xl2tpd TrailingSpace
++support/dependencies/check-host-asciidoc.sh Shellcheck
++support/dependencies/check-host-cmake.sh Shellcheck
++support/dependencies/check-host-gzip.sh Shellcheck
++support/dependencies/check-host-lzip.sh Shellcheck
++support/dependencies/check-host-make.sh Shellcheck
++support/dependencies/check-host-python3.sh Shellcheck
++support/dependencies/check-host-tar.sh Shellcheck
++support/dependencies/check-host-xzcat.sh Shellcheck
++support/dependencies/dependencies.sh Shellcheck
++support/download/bzr ConsecutiveEmptyLines Shellcheck
++support/download/cargo-post-process Shellcheck
++support/download/check-hash Shellcheck
++support/download/cvs Shellcheck
++support/download/dl-wrapper Shellcheck
++support/download/file Shellcheck
++support/download/git Shellcheck
++support/download/go-post-process Shellcheck
++support/download/hg Shellcheck
++support/download/scp Shellcheck
++support/download/sftp Shellcheck
++support/download/svn Shellcheck
++support/download/wget Shellcheck
++support/gnuconfig/update Shellcheck
++support/libtool/buildroot-libtool-v1.5.patch ApplyOrder Sob
++support/libtool/buildroot-libtool-v2.2.patch ApplyOrder Sob
++support/libtool/buildroot-libtool-v2.4.4.patch ApplyOrder
++support/libtool/buildroot-libtool-v2.4.patch ApplyOrder Sob
++support/misc/relocate-sdk.sh Shellcheck
++support/scripts/apply-patches.sh Shellcheck
++support/scripts/br2-external Shellcheck
++support/scripts/check-bin-arch Shellcheck
++support/scripts/check-host-rpath Shellcheck
++support/scripts/expunge-gconv-modules Shellcheck
++support/scripts/fix-configure-powerpc64.sh EmptyLastLine
++support/scripts/fix-rpath Shellcheck
++support/scripts/generate-gitlab-ci-yml Shellcheck
++support/scripts/mkmakefile ConsecutiveEmptyLines Shellcheck
++support/scripts/mkusers Shellcheck
++support/scripts/setlocalversion Shellcheck
++support/testing/tests/core/post-build.sh Shellcheck
++support/testing/tests/package/test_opkg/post-build.sh Shellcheck
++support/testing/tests/utils/test_get_developers/0001-package-binutils-change-.mk.patch NumberedSubject
+diff --git a/utils/check-package b/utils/check-package
+index e3b7d8515f..27070571c9 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -112,6 +112,7 @@ DO_CHECK_INTREE = re.compile(r"|".join([
+     r"fs/",
+     r"linux/",
+     r"package/",
++    r"support/",
+     r"system/",
+     r"toolchain/",
+     r"utils/",
+@@ -121,6 +122,11 @@ DO_NOT_CHECK_INTREE = re.compile(r"|".join([
+     r"fs/common\.mk$",
+     r"package/doc-asciidoc\.mk$",
+     r"package/pkg-\S*\.mk$",
++    r"support/dependencies/[^/]+\.mk$",
++    r"support/gnuconfig/config\.",
++    r"support/kconfig/",
++    r"support/misc/[^/]+\.mk$",
++    r"support/testing/tests/.*br2-external/",
+     r"toolchain/helpers\.mk$",
+     r"toolchain/toolchain-external/pkg-toolchain-external\.mk$",
+     ]))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
