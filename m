@@ -1,47 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62F70C77B61
-	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 09:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DF0DC77B61
+	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 13:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDB1F60C01;
-	Sun,  9 Apr 2023 09:41:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDB1F60C01
+	by smtp2.osuosl.org (Postfix) with ESMTP id 70B7D40022;
+	Sun,  9 Apr 2023 13:26:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70B7D40022
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SGN5_jMSk_N0; Sun,  9 Apr 2023 09:41:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fLWWTzuVzygg; Sun,  9 Apr 2023 13:26:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09E7460FA4;
-	Sun,  9 Apr 2023 09:41:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09E7460FA4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D8B2C1BF82D
- for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 09:41:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F3DB40143;
+	Sun,  9 Apr 2023 13:26:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F3DB40143
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 420311C2C89
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 13:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A36AB840F3
- for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 09:41:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A36AB840F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2014240988
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 13:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2014240988
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6TC55L3GWYS8 for <buildroot@lists.busybox.net>;
- Sun,  9 Apr 2023 09:41:22 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 322D781E8A
-Received: from busybox.net (unknown [109.206.243.57])
- by smtp1.osuosl.org (Postfix) with ESMTP id 322D781E8A
- for <buildroot@busybox.net>; Sun,  9 Apr 2023 09:41:21 +0000 (UTC)
-From: Mail Delivery System <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 9 Apr 2023 11:41:21 +0200
-Message-ID: <20230409114120.2C667E29F9941897@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L5z66ck0NFOj for <buildroot@lists.busybox.net>;
+ Sun,  9 Apr 2023 13:26:10 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADB1340999
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ADB1340999
+ for <buildroot@buildroot.org>; Sun,  9 Apr 2023 13:26:09 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id sg7so18332014ejc.9
+ for <buildroot@buildroot.org>; Sun, 09 Apr 2023 06:26:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1681046767;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=YgEOq9McdJ7kn+p4N+AVYLJSSm7UFcuNJGvVIwHaGKI=;
+ b=fT68xFdfL0vX1DMnvupul46SwCZSmwFT62QXXpJktb/PilDJYbzw8H1Mh3FvMAYxRp
+ h73dvAmyjOngsEFcNovgas8P/CSyxhV/NJDLLPCU4jmRdfp1ESqm5HhecvWiOMODh5bS
+ INrTXSKLb1X3X7FPwL1e/xHaxSZtDZDD/nkXFNladPTB2m8hh8kLa/7ODHu7/CFLq4dr
+ qm4kthwPXFuTWybB1eAAqLH9Hx0fYOJO2cDWoFN2+zFeaBjqvVrLgvJxmcegozjJjXDr
+ 6QuxhE4S6Y/xLl+5xkBRA2NelXgXFg/2ZIYMMIwpI2ciRjCpltkgEVYkYJ4HY76L4hT8
+ 7ulg==
+X-Gm-Message-State: AAQBX9f8uauO+yRbKagrD4jVr0UVSZQBhSvEbPs1wpF2mDi+pOBeIV5d
+ 9IIAfzgeQTj9SNxD5G/a0wGxDA==
+X-Google-Smtp-Source: AKy350bfo7TCWzVKUe4NHUqgMNnUaXrUKsZ+dSVON+8f1tMw2owJu1bPhtZih1093xCGIfUYZbjoJA==
+X-Received: by 2002:a17:907:bb8f:b0:94a:55ce:8155 with SMTP id
+ xo15-20020a170907bb8f00b0094a55ce8155mr3264153ejc.38.1681046766761; 
+ Sun, 09 Apr 2023 06:26:06 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ re9-20020a170906d8c900b0093dbb008281sm4149240ejb.130.2023.04.09.06.26.05
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 09 Apr 2023 06:26:05 -0700 (PDT)
+Message-ID: <a0a284d2-484c-cd50-d1a7-9278c1233c7b@mind.be>
+Date: Sun, 9 Apr 2023 15:26:03 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] =?utf-8?q?Email_Notification=3A_You_have_=285=29_pen?=
- =?utf-8?q?ding_mess=C9=91ges?=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+To: Laurent Vivier <laurent@vivier.eu>, buildroot@buildroot.org
+References: <20230201204848.2099336-1-laurent@vivier.eu>
+ <20230201204848.2099336-2-laurent@vivier.eu>
+ <52ab86d4-8008-9044-47e4-628c3da5ef7b@mind.be>
+ <4c554ddf-38c1-ee71-826f-00e22f2cc180@vivier.eu>
+ <194ac639-44e4-b267-7e8e-9739a15f12a4@vivier.eu>
+Content-Language: en-GB
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <194ac639-44e4-b267-7e8e-9739a15f12a4@vivier.eu>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1681046767;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=YgEOq9McdJ7kn+p4N+AVYLJSSm7UFcuNJGvVIwHaGKI=;
+ b=DseMN1JpPVTq82Ce3dpJzOc74IQvjPPdfVmOo73s11E0uhpX4hvlva2gMH3Dy8ik43
+ Zt74VhMPKOng/hmySN+yM6WpTmitIpmyKFRqeBtTqs6RSD0nehUI1k5ux/frefQUtuvO
+ Cf+NmC4cfkA3y/wNpug4bDSg200iYuagUQW/oCUHbBxsXWk07SXPg4098s/747Oyg1Rf
+ zJlO2U8WgXipRzXiaEVlZwLGoLPQ9ofEe1IKidJ6FspeoP6XJ6E1LXJWphf7b3kMJC1O
+ SKVI3wlkPyE50yEBURC9LQypTxxz0gvNBzdz2PAtPnRZFl53k2vvs7OUq5kokpeFmatU
+ sl6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=DseMN1Jp
+Subject: Re: [Buildroot] [PATCH v10 1/3] package: add petitboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,131 +104,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5529046451025525075=="
+Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
+ =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5529046451025525075==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE HTML>
-
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
-none; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; b=
-ackground-color: rgb(244, 248, 245); font-variant-ligatures: normal; font-v=
-ariant-caps: normal; -webkit-text-stroke-width:=20
-0px; text-decoration-thickness: initial; text-decoration-style: initial; te=
-xt-decoration-color: initial;"><div style=3D"width: 591px; height: 24px; pa=
-dding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18px;=
- border-top-color: currentColor; border-top-width: 0px; border-top-style: n=
-one; float: left; box-sizing: border-box;">
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><span style=3D"box-sizing: border-box;"><fo=
-nt size=3D"2"><br class=3D"Apple-interchange-newline">Message generated fro=
-m busybox.net&nbsp;source.</font></span></div></div><div style=3D"box-sizin=
-g: border-box;">
-<div style=3D"width: 5px; height: 30px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(86, 166, 89);"></div></div></div>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
-round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
-nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
- initial; text-decoration-style: initial;=20
-text-decoration-color: initial;"><br></div>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
-round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
-nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
- initial; text-decoration-style: initial;=20
-text-decoration-color: initial;">&nbsp;</div>
-<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
-t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
- 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
-dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
-al; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decorat=
-ion-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;" border=3D"0"><tbody style=3D"box-=
-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td align=3D"lef=
-t" style=3D"box-sizing: border-box;"><table style=3D"width: 627px; border-c=
-ollapse: collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" =
-cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;=
-"><tr align=3D"center" style=3D"box-sizing: border-box;"><td style=3D"box-s=
-izing: border-box;">
-<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
-rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
-"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
-=3D"box-sizing: border-box;"><table style=3D"width: 513px; border-collapse:=
- collapse; box-sizing: border-box;" border=3D"0" cellspacing=3D"0" cellpadd=
-ing=3D"0"></table></td></tr><tr style=3D"box-sizing: border-box;"><td style=
-=3D"box-sizing: border-box;">
-<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
-Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
-olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
-th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
-tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;5 messag=
-es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
-izing: border-box;"><td style=3D"box-sizing: border-box;">
-<div style=3D"border-top-color: currentColor; border-top-width: 0px; border=
--top-style: none; box-sizing: border-box;">&nbsp;</div><div style=3D"box-si=
-zing: border-box;">&nbsp;</div><font size=3D"1"><font size=3D"2">Some messa=
-ges are restrained from delivering to<span>&nbsp;</span><u><font color=3D"#=
-0000ff">buildroot@busybox.net</font></u><font style=3D"box-sizing: border-b=
-ox;"><br><br></font></font></font><p style=3D"margin-top: 0px; margin-botto=
-m: 1rem; box-sizing: border-box;"><font size=3D"2">
-Due to low bandwidth we notify you to take prompt actions</font></p>
-<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
-ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
-55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
-order-box;" href=3D"https://bafybeiervmfpqqcruzfvs75jxmgltqz656lfjnbydwrvtb=
-2jtevhu4nafm.ipfs.dweb.link/?filename=3DQmY9H6a9ZvPBRfn9GfivLfApsLHpUY9X69D=
-qzUit7QCRMU#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><fo=
-nt size=3D"3">Release Messages</font></a>
-<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
-line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
-255, 255); text-decoration: none; float: left; display: block; box-sizing: =
-border-box;" href=3D"https://bafybeiervmfpqqcruzfvs75jxmgltqz656lfjnbydwrvt=
-b2jtevhu4nafm.ipfs.dweb.link/?filename=3DQmY9H6a9ZvPBRfn9GfivLfApsLHpUY9X69=
-DqzUit7QCRMU#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><f=
-ont size=3D"3">Review Here</font></a>
-<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
-&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
-der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
- border-box;">&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; b=
-ox-sizing: border-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1re=
-m; box-sizing: border-box;"></p>
-<h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-weight: 500; margin=
--top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;"><font size=3D"1"=
-><font size=3D"2"><font size=3D"3"><font size=3D"2">Message should be moved=
- to inbox.&nbsp;<span>&nbsp;</span><u style=3D"box-sizing: border-box;">Got=
-o Clutter.</u></font></font></font></font></h5></td></tr></tbody></table></=
-td></tr></tbody></table></td></tr></tbody></table></body></html>
-
---===============5529046451025525075==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5529046451025525075==--
+CgpPbiAwNi8wNC8yMDIzIDE4OjEwLCBMYXVyZW50IFZpdmllciB3cm90ZToKPiBMZSAwNi8wNC8y
+MDIzIMOgIDE1OjI0LCBMYXVyZW50IFZpdmllciBhIMOpY3JpdMKgOgo+PiBIaSBBcm5vdXQsCj4+
+Cj4+IHRoYW5rIHlvdSBmb3IgeW91ciB3b3JrLgo+Pgo+PiBUaGUgdXBkYXRlIHRvIGtleGVjIDIu
+MC4yNiBoYXMgYnJva2VuIHRoZSBidWlsZCB3aXRoIG02OGs6Cj4+Cj4+IGNvbW1pdCA2OTA1MzE4
+NmM5ZjE1NjE4NTUzNTdiZTU3NGM3MGMwYjNhZDBkZGNiCj4+IEF1dGhvcjogSnVsaWVuIE9saXZh
+aW4gPGp1Lm9AZnJlZS5mcj4KPj4gRGF0ZTrCoMKgIFdlZCBNYXIgMSAyMzowMTo1OCAyMDIzICsw
+MTAwCj4+Cj4+IMKgwqDCoMKgwqAgcGFja2FnZS9rZXhlYzogYnVtcCB0byB2ZXJzaW9uIDIuMC4y
+Ngo+Pgo+PiDCoMKgwqDCoMKgIFNlZSByZWxlYXNlIGFubm91bmNlOgo+PiDCoMKgwqDCoMKgIGh0
+dHBzOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9waXBlcm1haWwva2V4ZWMvMjAyMi1EZWNlbWJlci8w
+MjYzOTkuaHRtbAo+Pgo+PiDCoMKgwqDCoMKgIFNpZ25lZC1vZmYtYnk6IEp1bGllbiBPbGl2YWlu
+IDxqdS5vQGZyZWUuZnI+Cj4+IMKgwqDCoMKgwqAgU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6
+em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KPj4KPj4KPj4ga2V4ZWMvYXJjaC9t
+NjhrL2Jvb3RpbmZvLmM6IEluIGZ1bmN0aW9uICdib290aW5mb19hZGRfcm5nX3NlZWQnOgo+PiBr
+ZXhlYy9hcmNoL202OGsvYm9vdGluZm8uYzoyMzE6MTM6IHdhcm5pbmc6IGltcGxpY2l0IGRlY2xh
+cmF0aW9uIG9mIGZ1bmN0aW9uIAo+PiAnZ2V0cmFuZG9tJzsgZGlkIHlvdSBtZWFuICdzcmFuZG9t
+Jz8gWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4+IMKgwqDCoCAyMzEgfMKgwqDC
+oMKgwqDCoMKgwqAgaWYgKGdldHJhbmRvbShiaS0+cm5nX3NlZWQuZGF0YSwgUk5HX1NFRURfTEVO
+LCAKPj4gR1JORF9OT05CTE9DSykgIT0gUk5HX1NFRURfTEVOKSB7Cj4+IMKgwqDCoMKgwqDCoMKg
+IHzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXn5+fn5+fn5+Cj4+IMKgwqDCoMKgwqDCoMKgIHzC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3JhbmRvbQo+PiBrZXhlYy9hcmNoL202OGsvYm9vdGlu
+Zm8uYzoyMzE6NTY6IGVycm9yOiAnR1JORF9OT05CTE9DSycgdW5kZWNsYXJlZCAoZmlyc3QgCj4+
+IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKQo+PiDCoMKgwqAgMjMxIHzCoMKgwqDCoMKgwqDCoMKgIGlm
+IChnZXRyYW5kb20oYmktPnJuZ19zZWVkLmRhdGEsIFJOR19TRUVEX0xFTiwgCj4+IEdSTkRfTk9O
+QkxPQ0spICE9IFJOR19TRUVEX0xFTikgewo+Pgo+PiBJdCdzIHN0cmFuZ2UgYmVjYXVzZSBzeXMv
+cmFuZG9tLmggaXMgY29ycmVjdGx5IGluY2x1ZGVkLgo+Pgo+PiBUaGlzIGNvbWVzIGZyb206Cj4+
+Cj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9ob3Jtcy9rZXhlYy10b29scy9jb21taXQvYjlkZTA1MTg0
+ODE2ZjE1ZjBkNjE1ZmUxOWM0MDY3YzEzODcyNTk4Ygo+Pgo+PiDCoMKgwqAgbTY4azogcGFzcyBy
+bmcgc2VlZCB2aWEgQklfUk5HX1NFRUQKPj4gwqDCoMKgIEluIG9yZGVyIHRvIHBhc3MgZnJlc2gg
+ZW50cm9weSB0byBrZXhlYydkIGtlcm5lbHMsIHVzZSBCSV9STkdfU0VFRAo+PiDCoMKgwqAgZm9y
+IHBhc3NpbmcgYSBzZWVkLCB3aXRoIHRoZSBzYW1lIHNlbWFudGljcyB0aGF0IGtleGVjLXRvb2xz
+IGN1cnJlbnRseQo+PiDCoMKgwqAgdXNlcyBmb3IgaTM4NidzIHNldHVwX2RhdGEuCj4+Cj4+IMKg
+wqDCoCBMaW5rOiBodHRwczovL2dpdC5rZXJuZWwub3JnL3RvcnZhbGRzL2MvZGM2M2EwODZkYWVl
+OTJjNjNlMwo+PiDCoMKgwqAgU2lnbmVkLW9mZi1ieTogSmFzb24gQS4gRG9uZW5mZWxkIDxKYXNv
+bkB6eDJjNC5jb20+Cj4+IMKgwqDCoCBTaWduZWQtb2ZmLWJ5OiBTaW1vbiBIb3JtYW4gPGhvcm1z
+QGtlcm5lbC5vcmc+Cj4+Cj4+IERvIHdlIG5lZWQgc29tZXRoaW5nIHNwZWNpYWwgaW4gYnVpbGRy
+b290Pwo+IAo+IFRoZSBwcm9ibGVtIHNlZW1zIHRvIGNvbWUgZnJvbSB1Y2xpYmMtMS4wLjQzLCBp
+biBpbmNsdWRlL3N5cy9yYW5kb20uaCB0aGF0IAo+IGNvbmRpdGlvbmFsbHkgZGVmaW5lcyB0aGVt
+Ogo+IAo+ICNpZiBkZWZpbmVkIF9fVUNMSUJDX0xJTlVYX1NQRUNJRklDX18gJiYgZGVmaW5lZCBf
+X1VTRV9HTlUKPiAjIGlmIDAgLypkZWYgX19BU1NVTUVfR0VUUkFORE9NX1NZU0NBTEwgKi8KPiAj
+wqAgaW5jbHVkZSA8bGludXgvcmFuZG9tLmg+Cj4gIyBlbHNlCj4gI8KgIHVuZGVmIEdSTkRfTk9O
+QkxPQ0sKPiAjwqAgdW5kZWYgR1JORF9SQU5ET00KPiAvKgo+ICDCoCogRmxhZ3MgZm9yIGdldHJh
+bmRvbSgyKQo+ICDCoCoKPiAgwqAqIEdSTkRfTk9OQkxPQ0vCoMKgwqDCoMKgwqDCoCBEb24ndCBi
+bG9jayBhbmQgcmV0dXJuIEVBR0FJTiBpbnN0ZWFkCj4gIMKgKiBHUk5EX1JBTkRPTcKgwqDCoMKg
+wqDCoMKgwqDCoCBVc2UgdGhlIC9kZXYvcmFuZG9tIHBvb2wgaW5zdGVhZCBvZiAvZGV2L3VyYW5k
+b20KPiAgwqAqLwo+ICPCoCBkZWZpbmUgR1JORF9OT05CTE9DSyAweDAwMDEKPiAjwqAgZGVmaW5l
+IEdSTkRfUkFORE9NwqDCoCAweDAwMDIKPiAjIGVuZGlmCj4gLyogRklYTUU6IGFyZW4ndCB0aGVy
+ZSBhIGNvdXBsZSBvZiBfX3Jlc3RyaWN0IGFuZCBjb25zdCBtaXNzaW5nID8gKi8KPiBleHRlcm4g
+aW50IGdldHJhbmRvbSh2b2lkICpfX2J1Ziwgc2l6ZV90IGNvdW50LCB1bnNpZ25lZCBpbnQgZmxh
+Z3MpCj4gIMKgwqDCoMKgwqDCoMKgwqDCoMKgIF9fbm9ubnVsbCAoKDEpKSBfX3d1cjsKPiAjZW5k
+aWYKPiAKPiBUaGlzIGZpeGVzIHRoZSBwcm9ibGVtOgo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L2tleGVjL2tleGVjLm1rIGIvcGFja2FnZS9rZXhlYy9rZXhlYy5tawo+IGluZGV4IDU2MmIwOTAx
+MmI2My4uZTRlYzRlY2UxMzMyIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uva2V4ZWMva2V4ZWMubWsK
+PiArKysgYi9wYWNrYWdlL2tleGVjL2tleGVjLm1rCj4gQEAgLTEzLDYgKzEzLDkgQEAgS0VYRUNf
+Q1BFX0lEX1BST0RVQ1QgPSBrZXhlYy10b29scwo+ICDCoEtFWEVDX0NQRV9JRF9WRU5ET1IgPSBr
+ZXhlYy10b29sc19wcm9qZWN0Cj4gIMKgS0VYRUNfU0VMSU5VWF9NT0RVTEVTID0ga2R1bXAKPiAK
+PiArIyBfR05VX1NPVVJDRSBpcyBuZWVkZWQgdG8gaGF2ZSBkZWZpbml0aW9uIG9mIGdldHJhbmRv
+bSgpIHdpdGggdWNsaWJjCj4gK0tFWEVDX0NPTkZfRU5WICs9IENGTEFHUz0iJChUQVJHRVRfQ0ZM
+QUdTKSAtRF9HTlVfU09VUkNFIgoKICBBcyBzdWNoIHRoaXMgcGF0Y2ggbG9va3MgT0ssIGJ1dCBp
+dCdzIHN1cnByaXNpbmcgdGhhdCB0aGUgc2FtZSBwcm9ibGVtIGRvZXNuJ3QgCm9jY3VyIHdpdGgg
+dGhlIGRvemVucyBvZiBvdGhlciBwYWNrYWdlcyB0aGF0IHVzZSBnZXRyYW5kb20oKS4uLiBJIGNh
+bid0IGltYWdlIAp0aGF0IGFsbCBvZiB0aGUgZGVmaW5lIF9HTlVfU09VUkNFLi4uCgogIFJlZ2Fy
+ZHMsCiAgQXJub3V0Cgo+ICsKPiAgwqAjIE1ha2VmaWxlIGV4cGVjdHMgJFNUUklQIC1vIHRvIHdv
+cmssIHNvIG5lZWRlZCBmb3IgIUJSMl9TVFJJUF9zdHJpcAo+ICDCoEtFWEVDX01BS0VfT1BUUyA9
+IFNUUklQPSIkKFRBUkdFVF9DUk9TUylzdHJpcCIKPiAKPiBUaGFua3MsCj4gTGF1cmVudAo+IApf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
