@@ -1,51 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 640FEC77B6C
-	for <buildroot@archiver.kernel.org>; Sat,  8 Apr 2023 19:49:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2460CC7619A
+	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 00:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B4A54031E;
-	Sat,  8 Apr 2023 19:49:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B4A54031E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84FD584338;
+	Sun,  9 Apr 2023 00:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84FD584338
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3iIO7XX05zKZ; Sat,  8 Apr 2023 19:49:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X_HniOCzl-xA; Sun,  9 Apr 2023 00:09:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5392640549;
-	Sat,  8 Apr 2023 19:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5392640549
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 140561BF82F
- for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:49:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF02484336;
+	Sun,  9 Apr 2023 00:09:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF02484336
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 73A4A1BF2BA
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 00:09:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E284860C08
- for <buildroot@lists.busybox.net>; Sat,  8 Apr 2023 19:49:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E284860C08
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B24341D9A
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 00:09:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B24341D9A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zmlYSKk_Nuxj for <buildroot@lists.busybox.net>;
- Sat,  8 Apr 2023 19:49:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 245BE60E27
- for <buildroot@buildroot.org>; Sat,  8 Apr 2023 19:49:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 245BE60E27
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14EF58398D; Sat,  8 Apr 2023 19:49:42 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IvZA8MvmkG3S for <buildroot@lists.busybox.net>;
+ Sun,  9 Apr 2023 00:09:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01BA541D92
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com
+ [IPv6:2607:f8b0:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 01BA541D92
+ for <buildroot@buildroot.org>; Sun,  9 Apr 2023 00:09:36 +0000 (UTC)
+Received: by mail-ot1-x333.google.com with SMTP id
+ r17-20020a05683002f100b006a131458abfso20994209ote.2
+ for <buildroot@buildroot.org>; Sat, 08 Apr 2023 17:09:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1680998976;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=WkrMTYxD4v+L2rC8je2m0yNcQBFGonOB1HAHuT3Y6Wo=;
+ b=uWHG8DLEfC66yzeQE7xsjI0bw4/etPeSwg7bV6DYUIayFwR2MenUjobzYOZubdYCgy
+ yR6aIZv+/tNJRihsDmBeyv4FCxpMv9BFR9zB5rEvRfGVmFJjsojvQk/F1B6sJPIMZPIp
+ 9bEgxlgO9Y0XJC9IWT7kro6MvDreiQffQvKMJj8LXCEHNBXUtb2kiZ4fxLTtlDzzz0PU
+ KT9j6dghHwzvgZpyYJLFIpeXHnOxK44Z8ucmVxZuOSdrG+Bb3z5b8NiBSWAZ7ahLqgh5
+ bBREnuW+ebMYwujYzcBbTAoFs5VQrhPnBQzUXeqzTNYbvuWXAalyssKf3+yMHGSDz6se
+ ysQA==
+X-Gm-Message-State: AAQBX9ehPjP9tnZmwfkSzzq8DdGlAWct1sPwgmz/GOlSFETOYaY7Glzj
+ SxfSocoEojZe47xlaYRe78L9sKjoIKc=
+X-Google-Smtp-Source: AKy350Zqb08S5oZrwiDuMrDyf8ibTsqpgm7ISavZLb9bjCTXhy5Z/HrvGT2KhRlUGVKhQI8P8BUEfg==
+X-Received: by 2002:a9d:5f0a:0:b0:693:d998:f50c with SMTP id
+ f10-20020a9d5f0a000000b00693d998f50cmr2576681oti.5.1680998975685; 
+ Sat, 08 Apr 2023 17:09:35 -0700 (PDT)
+Received: from casantos.remote.csb ([177.158.136.22])
+ by smtp.gmail.com with ESMTPSA id
+ c2-20020a9d75c2000000b006a154373578sm2957079otl.39.2023.04.08.17.09.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 08 Apr 2023 17:09:35 -0700 (PDT)
+From: unixmania@gmail.com
 To: buildroot@buildroot.org
-Date: Sat, 8 Apr 2023 21:48:12 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 021eba76f03e823591f5a0ce680623522cd55529
-X-Git-Newrev: 71655041dcf5e3b6b8d84babf9515cc876c663d0
-X-Patchwork-Hint: ignore
-Message-Id: <20230408194942.14EF58398D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/vim: security
- bump to version 9.0.1414
+Date: Sat,  8 Apr 2023 21:09:29 -0300
+Message-Id: <20230409000929.391071-1-unixmania@gmail.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1680998976;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=WkrMTYxD4v+L2rC8je2m0yNcQBFGonOB1HAHuT3Y6Wo=;
+ b=MRR5DzA745E6u6OZ+g9RgNK4Qd7q+gbSGbMM9i3/MGxZ/7lfoyhGEOSv6hQEJZ7HoO
+ 5koptIWGAm09nY0A9L8oZd8b/ni3R/QaRHl7WBx//OGREEmt3GYsTKamewh5VdyMiD07
+ EIfMxruiP100pD5UA4+5k0NRjz11UUGRM52gDghn8cul/fYAMx7jwQY7xtNOCjWLvNRS
+ TcRLfqCh4lcVjtl0yhiKk7H2jUb86aKa8UdqZv15Vd6BRzbYjbpOc6keI3c5H2WboJVm
+ ecLNeBuBGP8D7znemLvTUlEOmHFpdJI98HDWSWo02TY1/V7wBOxqLceFxxrJt8mkBqqT
+ liAw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=MRR5DzA7
+Subject: [Buildroot] [PATCH] package/qemu: install keyboard maps only if
+ necessary
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +95,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Carlos Santos <unixmania@gmail.com>, Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71655041dcf5e3b6b8d84babf9515cc876c663d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+From: Carlos Santos <unixmania@gmail.com>
 
-Fix CVE-2023-1127, CVE-2023-1170, CVE-2023-1175, CVE-2023-1264 and
-CVE-2023-1355
+They are required only for system emulation, so pull a patch already
+reviewd upstream[1,2] that makes the installation conditional.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 31a0d92bf3362c3852e75191e6c8e6ac230e5dcc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+1. https://lists.gnu.org/archive/html/qemu-devel/2023-03/msg06428.html
+2. https://lists.gnu.org/archive/html/qemu-devel/2023-03/msg06438.html
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...tall-keyboard-maps-only-if-necessary.patch | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 4000beedc1..26bc913b8a 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  bcaf9b21ab00ab49de4f3bdfda1bcda82533ec16c412824226544a3fce6506ff  vim-9.0.1260.tar.gz
-+sha256  c2bddf283a19c8714d7b21716e0a6a3214f9edb60b080f233cce4143fe228ff3  vim-9.0.1414.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  d187aff219161f37138479257f82d687ea10b2cdd17d58b53a3ec9b79d6dc870  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index e3648bfab9..bb6d4a8d27 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VIM_VERSION = 9.0.1260
-+VIM_VERSION = 9.0.1414
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+diff --git a/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch b/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
+new file mode 100644
+index 0000000000..91ea1e86c9
+--- /dev/null
++++ b/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
+@@ -0,0 +1,36 @@
++From 9d9b74f806f5dbca53df6630c1a0591eaedd4500 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@redhat.com>
++Date: Sun, 1 Jan 2023 21:00:57 -0300
++Subject: [PATCH] meson: install keyboard maps only if necessary
++
++They are required only for system emulation (i.e. have_system is true).
++
++Signed-off-by: Carlos Santos <casantos@redhat.com>
++---
++ pc-bios/keymaps/meson.build | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/pc-bios/keymaps/meson.build b/pc-bios/keymaps/meson.build
++index 158a3b410c..bff3083313 100644
++--- a/pc-bios/keymaps/meson.build
+++++ b/pc-bios/keymaps/meson.build
++@@ -47,7 +47,7 @@ if native_qemu_keymap.found()
++                        build_by_default: true,
++                        output: km,
++                        command: [native_qemu_keymap, '-f', '@OUTPUT@', args.split()],
++-                       install: true,
+++                       install: have_system,
++                        install_dir: qemu_datadir / 'keymaps')
++   endforeach
++ 
++@@ -56,4 +56,6 @@ else
++   install_data(keymaps.keys(), install_dir: qemu_datadir / 'keymaps')
++ endif
++ 
++-install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
+++if have_system
+++  install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
+++endif
++-- 
++2.31.1
++
+-- 
+2.31.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
