@@ -4,47 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 096B2C77B61
-	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 14:01:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA190C77B70
+	for <buildroot@archiver.kernel.org>; Sun,  9 Apr 2023 14:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD57E403A7;
-	Sun,  9 Apr 2023 14:01:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD57E403A7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9011F4015E;
+	Sun,  9 Apr 2023 14:09:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9011F4015E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uflyEDAUJXlZ; Sun,  9 Apr 2023 14:01:06 +0000 (UTC)
+	with ESMTP id 7Lrbm_xJvodL; Sun,  9 Apr 2023 14:09:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB1844032A;
-	Sun,  9 Apr 2023 14:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB1844032A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 533941C2E2E
- for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 14:01:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1317401D2;
+	Sun,  9 Apr 2023 14:09:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1317401D2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 654A01BF41F
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 14:09:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D3FA82147
- for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 14:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D3FA82147
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44293415ED
+ for <buildroot@lists.busybox.net>; Sun,  9 Apr 2023 14:09:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44293415ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tmZ4D9UncUcX for <buildroot@lists.busybox.net>;
- Sun,  9 Apr 2023 14:01:02 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 65A1C82142
- for <buildroot@buildroot.org>; Sun,  9 Apr 2023 14:01:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65A1C82142
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5226383B3F; Sun,  9 Apr 2023 14:01:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M4uXahApx5L1 for <buildroot@lists.busybox.net>;
+ Sun,  9 Apr 2023 14:09:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5542408D1
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C5542408D1
+ for <buildroot@buildroot.org>; Sun,  9 Apr 2023 14:09:50 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id ud9so6869627ejc.7
+ for <buildroot@buildroot.org>; Sun, 09 Apr 2023 07:09:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1681049389;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=w8l0Q7DNHFSdRGE6UOVtDzn4mnbiQhXnIzqwSOvHuaE=;
+ b=HeQps1E56oo9aweRv4rKc19fyYQvFndMCVr7liYxJ4+SU9h/IwZ6tI0qkUFy+u4/Tb
+ hm9Wj1FT8abzZaLMdlZ+62WQc0fXbFw1ma4Ym2q79fpPwy8RQRWbFniq8leJmx1XNKGr
+ TNRY331/+3SDAJxhWYGiNo4eRCmTVzlhAc9e4ZKNiQaz0esdSMAAZOsyGNgzA30Bmw3i
+ OIa5LDJSZ9uD/WBWziLFrTeTyQi2yh/CucNk26J/irJ4bBpWHIeRC8h0+3SWfUenJbn5
+ bnl/A0L2ysqL4zxYX9S19yCBT8Obgo8YM8tB50Xu/QbbqrvmiV99LxESdd/TGrxSI1UB
+ gf2w==
+X-Gm-Message-State: AAQBX9d0iplxSQ8AG8AFcberJg/b3g04hXRcugx4G7v0TSxt3L4t+hiK
+ 0uepT0U71aAo4oG4Vw7hekqyduboKRprm5dmC3w=
+X-Google-Smtp-Source: AKy350ZAyKjtgCBDc4Go1p3X03tZrl3Pp4aJ1htqLYps0mRVL2h3o0sM2FNA3/8czPd1JTxA+4gMKg==
+X-Received: by 2002:a17:906:2658:b0:878:61d8:d7c2 with SMTP id
+ i24-20020a170906265800b0087861d8d7c2mr5408082ejc.39.1681049388864; 
+ Sun, 09 Apr 2023 07:09:48 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ n16-20020a170906379000b008b17de9d1f2sm4250008ejc.15.2023.04.09.07.09.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 09 Apr 2023 07:09:48 -0700 (PDT)
+Message-ID: <533915f3-c09d-dce8-c14d-19c6a13c4b37@mind.be>
+Date: Sun, 9 Apr 2023 16:09:46 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-GB
+To: Daniel Lang <dalang@gmx.at>, buildroot@buildroot.org
+References: <20230405200445.50475-1-dalang@gmx.at>
 From: Arnout Vandecappelle <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 9 Apr 2023 15:58:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 15a649fd2dc0f950f0237802223ddb3ebd752da9
-X-Git-Newrev: c3c3fe141f028d06b32945f07cec7d2ecd60438c
-X-Patchwork-Hint: ignore
-Message-Id: <20230409140102.5226383B3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ima-evm-utils: bump version to 1.5
+In-Reply-To: <20230405200445.50475-1-dalang@gmx.at>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1681049389;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=w8l0Q7DNHFSdRGE6UOVtDzn4mnbiQhXnIzqwSOvHuaE=;
+ b=FWqiE2rT3KrWBB27yPxNmGxlou1nDJsx5p+G9jJG5uw9N3p78ZvBKp+WvlEAsk/c9n
+ XOKrBXvVjvGltbBhVSKEgxmiku4fT7HKP5w1phzluDf8ZIvSmBtCLvg9gSMuemqdbLoK
+ oHBjgwNMOdgh3iZgaRy8OczIckfaXl1ZzhB9zn3bzA8saPQwDtF+ZuW/+SGaGEkdEYjh
+ AbtaKCvv5ZXIHbWryGx3jfgzDaW2wONolcIwB38fzGjVF/Shi90k12oX4G5cz1dnk6Ju
+ k3VRrUh6x/0ejNe8XU1yCgaHQBUeKlWtIifD5e3bm1Qp1cQYsyvpBqlVW9Z9SFlXXk94
+ ob0g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=FWqiE2rT
+Subject: Re: [Buildroot] [PATCH] package/libmodbus: bump to version 3.1.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,50 +100,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Julien Boibessot <julien.boibessot@armadeus.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3c3fe141f028d06b32945f07cec7d2ecd60438c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Project primary git repository moved to github.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/ima-evm-utils/ima-evm-utils.hash | 5 ++---
- package/ima-evm-utils/ima-evm-utils.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+On 05/04/2023 22:04, Daniel Lang wrote:
+> https://github.com/stephane/libmodbus/releases/tag/v3.1.10
+> 
+> Signed-off-by: Daniel Lang <dalang@gmx.at>
+> ---
+>   package/libmodbus/Config.in      | 2 +-
+>   package/libmodbus/libmodbus.hash | 2 +-
+>   package/libmodbus/libmodbus.mk   | 4 ++--
+>   3 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libmodbus/Config.in b/package/libmodbus/Config.in
+> index 642b57cd8c..2e93fa4bee 100644
+> --- a/package/libmodbus/Config.in
+> +++ b/package/libmodbus/Config.in
+> @@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBMODBUS
+>   	  according to the Modbus protocol. This library is written in C
+>   	  and supports RTU (serial) and TCP (Ethernet) communications.
+>   
+> -	  http://libmodbus.org
+> +	  https://libmodbus.org
+> diff --git a/package/libmodbus/libmodbus.hash b/package/libmodbus/libmodbus.hash
+> index 83b0c3a012..a7b7e583a8 100644
+> --- a/package/libmodbus/libmodbus.hash
+> +++ b/package/libmodbus/libmodbus.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  b122f2bc29f749702a22c0a760a7ca2182d541f5fa26bf25e3431f907b606f3c  libmodbus-3.1.8.tar.gz
+> +sha256  899be4e25ab7fe5799d43f9567510d6f063d2e8f56136dd726b6fd976f9b2253  libmodbus-3.1.10.tar.gz
+>   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+> diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+> index 2f8c1735da..2fffa1e0e9 100644
+> --- a/package/libmodbus/libmodbus.mk
+> +++ b/package/libmodbus/libmodbus.mk
+> @@ -4,12 +4,12 @@
+>   #
+>   ################################################################################
+>   
+> -LIBMODBUS_VERSION = 3.1.8
+> +LIBMODBUS_VERSION = 3.1.10
+>   LIBMODBUS_SITE = https://github.com/stephane/libmodbus/releases/download/v$(LIBMODBUS_VERSION)
+>   LIBMODBUS_LICENSE = LGPL-2.1+
+>   LIBMODBUS_LICENSE_FILES = COPYING.LESSER
+>   LIBMODBUS_CPE_ID_VENDOR = libmodbus
+>   LIBMODBUS_INSTALL_STAGING = YES
+> -LIBMODBUS_CONF_OPTS = --without-documentation --disable-tests
+> +LIBMODBUS_CONF_OPTS = --disable-tests
 
-diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
-index 56d830e54c..9777c7f213 100644
---- a/package/ima-evm-utils/ima-evm-utils.hash
-+++ b/package/ima-evm-utils/ima-evm-utils.hash
-@@ -1,4 +1,3 @@
--# sha1 from sourceforge, sha256 locally computed
--sha1  f23d8a406759a469b0223b0bfb302ada4407a1d1  ima-evm-utils-1.4.tar.gz
--sha256  fcf85b31d6292051b3679e5f17ffa7f89b6898957aad0f59aa4e9878884b27d1  ima-evm-utils-1.4.tar.gz
-+# https://github.com/mimizohar/ima-evm-utils/releases/download/v1.5/ima-evm-utils-1.5.tar.gz.sha256
-+sha256  45f1caa3ad59ec59a1d6a74ea5df38c413488cd952ab62d98cf893c15e6f246d  ima-evm-utils-1.5.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-index 01984402ce..b969b4709e 100644
---- a/package/ima-evm-utils/ima-evm-utils.mk
-+++ b/package/ima-evm-utils/ima-evm-utils.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--IMA_EVM_UTILS_VERSION = 1.4
--IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
-+IMA_EVM_UTILS_VERSION = 1.5
-+IMA_EVM_UTILS_SITE = https://github.com/mimizohar/ima-evm-utils/releases/download/v$(IMA_EVM_UTILS_VERSION)
- IMA_EVM_UTILS_LICENSE = GPL-2.0
- IMA_EVM_UTILS_LICENSE_FILES = COPYING
- IMA_EVM_UTILS_INSTALL_STAGING = YES
+  If you make changes like this, please explain why in the commit message.
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+>   
+>   $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
