@@ -4,63 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBF2CC77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FBCCC76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5831641918;
-	Mon, 10 Apr 2023 19:50:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5831641918
+	by smtp4.osuosl.org (Postfix) with ESMTP id A457540A05;
+	Mon, 10 Apr 2023 19:56:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A457540A05
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oHVo2wngt8oV; Mon, 10 Apr 2023 19:50:08 +0000 (UTC)
+	with ESMTP id cbtKKuqiDrMV; Mon, 10 Apr 2023 19:56:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 155C541969;
-	Mon, 10 Apr 2023 19:50:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 155C541969
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51789410A0;
+	Mon, 10 Apr 2023 19:56:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51789410A0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 99FCB1BF316
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:50:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 526F41BF316
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 72A4960F16
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:50:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72A4960F16
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B42460BCA
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B42460BCA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nVT7p9OUQRY2 for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 19:50:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69F8360B2F
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 69F8360B2F
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:49:59 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.106.178])
- by Aruba Outgoing Smtp  with ESMTPSA
- id lxWWpFg4s0mc7lxWWpQqYk; Mon, 10 Apr 2023 21:49:56 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 21:49:55 +0200
-Message-Id: <20230410194955.104709-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id 2GCisGmXKUKX for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 19:56:33 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E38160AB0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0E38160AB0
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:56:32 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1C2AF5FF9D;
+ Mon, 10 Apr 2023 21:56:27 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 10 Apr 2023 21:56:26 +0200
+Date: Mon, 10 Apr 2023 21:56:26 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230410195626.GN2819@scaer>
+References: <20230410194955.104709-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfKDYrxY7GRnwi3QwnZf0n0hyU+jkEPybM9DjM+3bEPasfeW2ZHLnds2WIlJvR+cNOGKoZYae4SkxlgIZsYxQkUX5rP+/Y+n3phyfVzYSnk6+kNMNmL2g
- 9FtjjyfVfhDQlUON6o9OavWtImtLOaG3xaVnp2Q3MfQdgbVGaOWjcmERE94VnzLBb9VzbehHbYVbiCptjgXel0rqCNYjNDAZAVlqk4wr7nkCp9GV0J1zgkyk
- vlA/vN9+vTXwl7gQSh3ImTNqF+6x2E/zGGfo51VBPtnCI1kCRzeGRCSrUVrYx27dYAemfpKszpDXEQAcUpe3hA==
+Content-Disposition: inline
+In-Reply-To: <20230410194955.104709-1-giulio.benetti@benettiengineering.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1681156196; bh=QaRN2/ipGA+MtODTtK91GvzKdkEcw7NMcF7Ybl1gLbc=;
- h=From:To:Subject:Date:MIME-Version;
- b=gTqizFfPt7zrwmlHJEsokfXEQCYl8dSKLg83LwncXUsORNHHuxAjSH1TiXnHmns4G
- csIoBxgXJk+K0LjA/ZjpjSb/EdykE6Mn+6hSiz3THaf3P3ieFC7pvHZLvkgdeJ0/2d
- 3EbHGjEXSYNEosOhtt0DaR3tXdcujnMytWhtROt29vJnaMAWqTCJIyKp+/Hf6LSCgk
- og+jqNHD0DfhZ66gzphyjjK5OpJbil3gGictUnPTDFmTtvVCpvHj4kUlMEGiljoxbg
- NXQIuxybohdUkZZuagKqUmWP/PqDC8O6ovayl3zSOSOd38G1NSa7nl0QRKubNDpnJb
- x/4tBos1BDdNg==
+ d=free.fr; s=smtp-20201208; t=1681156590;
+ bh=Or4UXmL9z/zgPGnZXCM8qisVZo6xGmHOAsIa14xqi+I=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=XM/gEV5F9bM5KLhLgW4RjtIwpTnmSbLzZaerwBeFPOQKvppczZO71keTvR36PVFQN
+ gEvYR2dQHvcbHqnwFCFG8cdS0bbMU6euj2gQsWexQCOkbPn0DlSvWWCgWw7OWsv/wR
+ t1IWveeCn/EFvJbyMXE2uk8kRRVuZX+gTqKp15g7Hmm3Ys2k4Z+tG/016a4Ytzkbw6
+ dYJevsl0vUUImPtBBGcpHN1wnEPFIlvQAKP5Jeru8qlUovU6+HzoM28scrMDyCFgD7
+ 7nlyOKzufm2tqA7aebWD2W6F9vuqR9Bx8pp+xHY6HZy4yxAWEJVGK59IcI2vM03Pv8
+ AuLgRC6qynNwg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=gTqizFfP
-Subject: [Buildroot] [PATCH] package/xr819-xradio: bump to version 2023-04-10
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XM/gEV5F
+Subject: Re: [Buildroot] [PATCH] package/xr819-xradio: bump to version
+ 2023-04-10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,48 +76,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This version fixes stack parameters issues:
-https://github.com/fifteenhex/xradio/commit/a835c4747be088978a055b9645e3c523d0c54fe1
+Giulio, All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2023-04-10 21:49 +0200, Giulio Benetti spake thusly:
+> This version fixes stack parameters issues:
+> https://github.com/fifteenhex/xradio/commit/a835c4747be088978a055b9645e3c523d0c54fe1
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index 60185db736..8676f065f8 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  2b297fbcc9b5ed190bcfff9f6f808c170632ac3d69dbd92156a7f4f57142dec9  xr819-xradio-005f28cfe9e20b7f2dfd9d32d38ee97060dc707f.tar.gz
-+sha256  93388424f1f136db541ce056be017f2f0f6688278ac15a88bef34da8f12ffea6  xr819-xradio-119cad7d07aef6973dd44e4dae74d4c9defd06a2.tar.gz
- # Locally computed
- sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index e5daaa6051..66c08e7921 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XR819_XRADIO_VERSION = 005f28cfe9e20b7f2dfd9d32d38ee97060dc707f
-+XR819_XRADIO_VERSION = 119cad7d07aef6973dd44e4dae74d4c9defd06a2
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+This bump is already part of:
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=350228
+
+so I marked your patch as not-applicable. Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/xr819-xradio/xr819-xradio.hash | 2 +-
+>  package/xr819-xradio/xr819-xradio.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+> index 60185db736..8676f065f8 100644
+> --- a/package/xr819-xradio/xr819-xradio.hash
+> +++ b/package/xr819-xradio/xr819-xradio.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+> -sha256  2b297fbcc9b5ed190bcfff9f6f808c170632ac3d69dbd92156a7f4f57142dec9  xr819-xradio-005f28cfe9e20b7f2dfd9d32d38ee97060dc707f.tar.gz
+> +sha256  93388424f1f136db541ce056be017f2f0f6688278ac15a88bef34da8f12ffea6  xr819-xradio-119cad7d07aef6973dd44e4dae74d4c9defd06a2.tar.gz
+>  # Locally computed
+>  sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+> diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+> index e5daaa6051..66c08e7921 100644
+> --- a/package/xr819-xradio/xr819-xradio.mk
+> +++ b/package/xr819-xradio/xr819-xradio.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -XR819_XRADIO_VERSION = 005f28cfe9e20b7f2dfd9d32d38ee97060dc707f
+> +XR819_XRADIO_VERSION = 119cad7d07aef6973dd44e4dae74d4c9defd06a2
+>  XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+>  XR819_XRADIO_LICENSE = GPL-2.0
+>  XR819_XRADIO_LICENSE_FILES = LICENSE
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
