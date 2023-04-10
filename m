@@ -4,78 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64090C77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 07:46:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CED22C77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 08:33:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC14E60DC6;
-	Mon, 10 Apr 2023 07:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC14E60DC6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11FC360FC7;
+	Mon, 10 Apr 2023 08:33:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11FC360FC7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4501E7eDTMYY; Mon, 10 Apr 2023 07:46:25 +0000 (UTC)
+	with ESMTP id 0VwVdGt9U3ft; Mon, 10 Apr 2023 08:33:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18FD660B12;
-	Mon, 10 Apr 2023 07:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18FD660B12
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B54E81BF291
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 07:46:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A9E56FE8B;
+	Mon, 10 Apr 2023 08:33:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A9E56FE8B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 742781C3AF8
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 08:33:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A95640189
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 07:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A95640189
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5B34E81F08
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 08:33:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B34E81F08
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jeEUQxRNwaVN for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 07:46:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7341440125
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7341440125
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 07:46:19 +0000 (UTC)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
- by mx.sberdevices.ru (Postfix) with ESMTP id C328A5FD19;
- Mon, 10 Apr 2023 10:46:14 +0300 (MSK)
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru
- [172.16.1.4]) by mx.sberdevices.ru (Postfix) with ESMTP;
- Mon, 10 Apr 2023 10:46:13 +0300 (MSK)
-Message-ID: <9c1b4069-3a4f-5b26-7d2a-8977d2fdc9a7@sberdevices.ru>
-Date: Mon, 10 Apr 2023 10:46:12 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3wU4RzTQdVRL for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 08:32:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C601F81EF6
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C601F81EF6
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 08:32:59 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id j28so1591543ila.0
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 01:32:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1681115578; x=1683707578;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8wZ6kCYRSeuMnbCm/82dIuVxvGf9Bba0vkj6hyfUFwk=;
+ b=dQ1kSTn1PzBfX9EX2YzDOXLDTE9pWqY/eWsJysW84t959OUVbC7J0VMvxmAIWBuGhd
+ Ql4M//i3P/tLowawbk0B9aoTeEpe9JSUzKMUWTFKzd0Qld3VllE8enOp3Lrb+A4sA/Rd
+ xP00CGnUm8EJ1wmfbQ+5Gt+9MsmX0nVT/p8LhiT/DMHe+DIlBqXvy7gzYzby6kxtUewK
+ pIuyw7IxZb3KEWSZjlPD39b4/p9QLkWNrkXhKzKDzDh+4HCc/LRZoFWfek0LQd4r+/jJ
+ WP2rwI2v/E6qslYzgtvAb0B9XDJQ2fbBDlN91PVViW8Fqu0K++2aIk8WzlancTHaTTIK
+ diOw==
+X-Gm-Message-State: AAQBX9dG6rbPTVeCjx1/NIYE5LmMsjrj8UKxeX36v5THYd4pjcBnjvg2
+ 1uA01+OCkNcp2i9+zbGnxEnQfJ5CamP2xg==
+X-Google-Smtp-Source: AKy350YBf+SLs1f1JriIxr5+b7gRIVQmoIITeCGVVkEchW6J3UvBNOuuhCahEbKFGiIn/qnKodxGnw==
+X-Received: by 2002:a92:da4e:0:b0:325:b002:89a4 with SMTP id
+ p14-20020a92da4e000000b00325b00289a4mr5699740ilq.22.1681115578476; 
+ Mon, 10 Apr 2023 01:32:58 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-131-106.hlrn.qwest.net.
+ [71.33.131.106]) by smtp.gmail.com with ESMTPSA id
+ x13-20020a0566380cad00b0040bbf478147sm1214931jad.163.2023.04.10.01.32.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 10 Apr 2023 01:32:58 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 10 Apr 2023 02:32:52 -0600
+Message-Id: <20230410083252.138426-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Content-Language: ru
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230407141930.694756-1-ovlevin@sberdevices.ru>
- <20230407183113.30ee6a87@windsurf>
-In-Reply-To: <20230407183113.30ee6a87@windsurf>
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
- bases: 2023/04/09 20:22:00 #21072633
-X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sberdevices.ru; s=mail; t=1681112774;
- bh=onZC71gNQCbGoyNZV1KqlyCYxzgICv1uYuU1EI0p6hc=;
- h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
- b=sEYdPbH3LZK2WwwQvTBJh8DFYRm54Nk9jM6pES0xPjMtKn1jIgicfwGoheaV8Dzs7
- syeloicsmcYIzbig5T5H1ZWkQ48jpx7qXKA/YXyOUhKpKjFW4o0wbe6gonniCea539
- fpAhmQuSpU+9/jDR84cp8R4rZxcs32T0mkA2qU2DdpYJwkPcsGT6Jb9tvJ6OSaaOLC
- AxMl7gI7Q3FuABOtBIIDuvMsMr6++9Nv5kHNDQW/Cmg04NH8Gz32VS5B2ldL5l/c3v
- upT2qgOrx+qQGh31bEX9tcHLEF/p4lNQbPiiYY9mc2NVYfLAKM3vROsY9NgG10DFaM
- XfCw7iPrfoJDA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
- header.a=rsa-sha256 header.s=mail header.b=sEYdPbH3
-Subject: Re: [Buildroot] [PATCH 1/2] package/linux-headers: use host-make
+ d=gmail.com; s=20210112; t=1681115578; x=1683707578;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8wZ6kCYRSeuMnbCm/82dIuVxvGf9Bba0vkj6hyfUFwk=;
+ b=idB7t30VkoMAm9C4crkjKAYcg1bIShbih+Bt051Xx3GYEQCZKa8cb2hnruWjy7C1QI
+ +Ff/GqHej8ZYn9kP4uIXY4CxunN+KVbCTcpZhpoKt23mB0sv6NA4udP0+SY5zURlEgzE
+ FEu0ww9oy8plwA+yBbvgouRowIa6hU83ECrg989EYZ+0mqNpZz9Qh4EyH8byuNvuRBjA
+ s09NvtT79C/ZMb05Y8rge1XvIoTJKjafXFYcozVvlv7GwrwbwBd80+lePZG0ATm8GVqH
+ WJyYMNUzZpfnEfwIqb/oVdS5qVsgBJ51GfHR08gq+cQLnbNE4yA1f44ntZ34uA+7IYf4
+ RHXA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=idB7t30V
+Subject: [Buildroot] [PATCH v3 1/1] package/pkg-cargo: ensure host/target
+ rustflags are properly split
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,47 +94,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Oleg Lyovin via buildroot <buildroot@buildroot.org>
-Reply-To: Oleg Lyovin <ovlevin@sberdevices.ru>
-Cc: olegartys@gmail.com, sdfw_system_team@sberdevices.ru,
- buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Set HOST_LDFLAGS RUSTFLAGS via the host-config feature, see:
+https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#host-config
 
-On 4/7/23 7:31 PM, Thomas Petazzoni wrote:
-> Hello Oleg,
-> 
-> On Fri, 7 Apr 2023 17:19:29 +0300
-> Oleg Lyovin <ovlevin@sberdevices.ru> wrote:
-> 
->> GNU make package from the host machine may be too old,
->> so use the one built by buildroot.
->>
->> Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
->> ---
->>  package/linux-headers/linux-headers.mk | 6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> Thanks for the patch. However, could you provide some details on what
-> problem this is fixing? Is this due to something new in recent Linux
-> kernel releases that require a more recent version of make? If so, we
-> need to understand what is the Linux kernel change that causes that,
-> and what is the minimum make version that is now needed. Could you look
-> up those details?
-> 
-> Thanks a lot!
-> 
-> Thomas
+We have to enable this nightly feature first using:
+CARGO_UNSTABLE_HOST_CONFIG="true"
 
-Thanks a lot for the review.
+Separately set target RUSTFLAGS for the target triple specific env
+variable.
 
-Starting from v6.2 Linux kernel checks Make version and requires it to be >= 3.82: https://elixir.bootlin.com/linux/v6.2/source/Makefile#L14
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v2 -> v3:
+  - rebase
+Changes v1 -> v2:
+  - add RUSTFLAGS to HOST_PKG_CARGO_ENV
+---
+ package/pkg-cargo.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-It is quite old version, and we have faced the issue building kernel in our Ubuntu 14.04 based environment which have Make 3.81. However, to avoid such problem in the future it seems more safe to use host-make package and not depend on host version if possible.
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+index 5600c8e97e..264bf5a1ae 100644
+--- a/package/pkg-cargo.mk
++++ b/package/pkg-cargo.mk
+@@ -34,7 +34,10 @@ PKG_COMMON_CARGO_ENV = \
+ # using nighly features on stable releases, i.e features that are not
+ # yet considered stable.
+ #
+-# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" "enables the nightly
++# CARGO_UNSTABLE_HOST_CONFIG="true" enables the host specific
++# configuration feature
++#
++# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" enables the nightly
+ # configuration option target-applies-to-host value to be set
+ #
+ # CARGO_TARGET_APPLIES_TO_HOST="false" is actually setting the value
+@@ -43,9 +46,11 @@ PKG_COMMON_CARGO_ENV = \
+ PKG_CARGO_ENV = \
+ 	$(PKG_COMMON_CARGO_ENV) \
+ 	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
++	CARGO_UNSTABLE_HOST_CONFIG="true" \
+ 	CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" \
+ 	CARGO_TARGET_APPLIES_TO_HOST="false" \
+ 	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
++	CARGO_HOST_RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))" \
+ 	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
+ 
+ #
+@@ -53,7 +58,8 @@ PKG_CARGO_ENV = \
+ # and should be removed when fixed upstream
+ #
+ ifeq ($(NORMALIZED_ARCH),arm)
+-	PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
++	PKG_CARGO_ENV += \
++		CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
+ endif
+ 
+ HOST_PKG_CARGO_ENV = \
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
