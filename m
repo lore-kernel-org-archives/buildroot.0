@@ -4,92 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A60AC76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 14:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B63AC76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 15:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C394181F0D;
-	Mon, 10 Apr 2023 14:57:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C394181F0D
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5F6481E0C;
+	Mon, 10 Apr 2023 15:25:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5F6481E0C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P_PEzN_z6mwb; Mon, 10 Apr 2023 14:57:57 +0000 (UTC)
+	with ESMTP id 5BV0riqC-jvY; Mon, 10 Apr 2023 15:25:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD05581F0E;
-	Mon, 10 Apr 2023 14:57:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD05581F0E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3EF921C3B71
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 14:57:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15DB881E0F;
+	Mon, 10 Apr 2023 15:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15DB881E0F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 43DA71BF2C4
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 15:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 258D161156
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 14:57:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 258D161156
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AA0B40950
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 15:25:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AA0B40950
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SHphbOI1Gp8v for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 14:57:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cY5w4mphg46M for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 15:25:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFFD460757
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CFFD460757
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 14:57:53 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id ud9so12883951ejc.7
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 07:57:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3F5C40939
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C3F5C40939
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 15:25:03 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id j1so8787358wrb.0
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 08:25:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1681138671;
+ d=1e100.net; s=20210112; t=1681140302;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=LEuXLETHw62pnraz7xNg+zW3A6a+kEKHR1S6uNSieo8=;
- b=7+1ddfrK4T1SS/R63xQbQFWsXi0a7P7lQJXmd4tZkd2MZ7lOWgmsCkyP0yN3BYCIk4
- i1N4Zj+j8JY3oBvmn+Xo4u2YLC+Ij0t4RTqn+WbcEJCe9awRybHUYlD0Zo+vAmKmjnPq
- BHcIOvqW/7gfW/xMjfhSIKRHdI8Dz83s6JhctUkkeNhT+lcWT3qQRK2LMSxQTeAlBJUl
- NkgTStMwy7jVQbjXexc0FP4uRL1I2M4R8ddOqYnQTUWKXIhfEgx4B1dSbPVK8wzkZJ75
- Fnm8IDAOxY1LBNsl4Wdy7rbdMNAcS8vnCWhaGFX74HiuZ9o6y4TUzlh1i4gXYhdq7p0B
- KdHg==
-X-Gm-Message-State: AAQBX9d7tiBlfeKrDXGTnwvYvN3eS/4HfIZldWwW1RcSylbqsUwCq/0J
- QqJR9awmYm45GuRS2Rowszoa6g==
-X-Google-Smtp-Source: AKy350ZcEJ27Rv2CwMMe7dswWZ56hyOU1EIaJP6ztHyLQN2hjTuu4h46xXSm1DfX6VtNE/avXojRkQ==
-X-Received: by 2002:a17:907:7b9f:b0:94a:5d8e:ddbf with SMTP id
- ne31-20020a1709077b9f00b0094a5d8eddbfmr6384673ejc.14.1681138671552; 
- Mon, 10 Apr 2023 07:57:51 -0700 (PDT)
+ bh=MAReLx6cWmWQbJkqlJx1Y4Ahyzn/FvGxk50GQTJuZVI=;
+ b=K50TgikvbzZZIWcAro37WcyUBtJVzxySysifKgpZKoenVZHaVG8ZBXAzs2bq9u76xD
+ aUPhFWBzUS3tBPwPn8OUhCfjH9nIXRHlUr+DPyzy2570VfIKPpPEz1MPm2hPo5eXNvYH
+ aqP9OADBSSTiZgZkj625f/MITvAL329DBzR7xLzJV9YXr7AHoHsNo+AMJRV2rcRp4R6n
+ t+44zTaoQKmZ90YmHDxe5MZnMv9morlEIPKS4k7+JBxF+RXWkswKAnQxbrODRbZGBN38
+ A0fXHv5mfNBSsqjDGD9T75wEmoSscH1Mf43mynKyK/bKEaM7o5fMSMKAZiV3pTP/TZd2
+ 1TXA==
+X-Gm-Message-State: AAQBX9e2YyIMjWaqIunJZUCkzlnd/znhZhB05lGakVTh5FR6jDtnPYEy
+ Nki343bVyCILabR0Sq6C/S719vekYKuHzezXVYM=
+X-Google-Smtp-Source: AKy350awOMUn86yN9+mkghDV+uqHlDSUxHQZZGHyqENRHBQcTzopZO0CPWRMy8Gh0x/lIRFSRS0oXA==
+X-Received: by 2002:a5d:6606:0:b0:2e4:c0b5:fdcb with SMTP id
+ n6-20020a5d6606000000b002e4c0b5fdcbmr5207891wru.28.1681140301738; 
+ Mon, 10 Apr 2023 08:25:01 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- lx11-20020a170906af0b00b0094d0f572571sm266941ejb.128.2023.04.10.07.57.50
+ i1-20020a5d6301000000b002efb31d3c24sm8584902wru.32.2023.04.10.08.25.00
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 10 Apr 2023 07:57:50 -0700 (PDT)
-Message-ID: <2e28cd63-1af2-cfc0-fe46-32ec6d6954df@mind.be>
-Date: Mon, 10 Apr 2023 16:57:48 +0200
+ Mon, 10 Apr 2023 08:25:00 -0700 (PDT)
+Message-ID: <3eff15aa-5790-604e-d6de-90ed5d2d3eb7@mind.be>
+Date: Mon, 10 Apr 2023 17:24:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
 Content-Language: en-GB
-To: unixmania@gmail.com, buildroot@buildroot.org
-References: <20230409000929.391071-1-unixmania@gmail.com>
+To: Oleg Lyovin <ovlevin@sberdevices.ru>, buildroot@buildroot.org
+References: <20230407141930.694756-1-ovlevin@sberdevices.ru>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230409000929.391071-1-unixmania@gmail.com>
+In-Reply-To: <20230407141930.694756-1-ovlevin@sberdevices.ru>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1681138671;
+ d=mind.be; s=google; t=1681140302;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=LEuXLETHw62pnraz7xNg+zW3A6a+kEKHR1S6uNSieo8=;
- b=Ps1AwBxmKSEblYVD2/8ENxBy1KP5PJmulBIfN9fPOjkwT3GvV+nSakbXE/SYygqW6j
- 113hO4LxharwEsP4AfooJcotZSTz3pUO8H5cDcogFVBOZkc8HC0+OAyrsZyPRpksxuZt
- NbT0qiMbcksRvbj7tP1tz5MQYK3aAIlV3LvIxT2TvyxL2bs1FUjnIg1tq63Hj08XpOah
- 6OSNUQuoJXWweRpORU8cY+HU4uaAfYezHYlchzS2rI5bGycJtUPpd88F3kgXl6xUQHbY
- x5fM4CWXEXcexWYURnje9Mopr76Z4bGiToc1aUxoJdGIcTSq3m2nM+DRWEQYOf5kn6eV
- c5aQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=MAReLx6cWmWQbJkqlJx1Y4Ahyzn/FvGxk50GQTJuZVI=;
+ b=De6zAxQDCLh66u0OBPholvGgtMoYsuhdRlQZtSX43zugkxYfRREUKrQL84rTDuO1c5
+ xahyRsB3a+9/Ysvb88mMqFtFlHC8M0Cu/h4w++bI81aRdCeDUlxGrMVXuSmk5j3g7lPE
+ Hbsge5p5hGmat1I5vWrjDbWH7nUDRCmQULQiG/p/W8wT1Q979lzzKfsA2mZyS4INa0Ih
+ afIo5SJ6YdFgSlXwgT21+h1drO/ji1hIpMcQgFeTbkRMvzNjzDpkWpT/Ncu8IKq6ff/i
+ keeqPbWKhlk9ex8xi7Km+EHX5X6c02nE1D6189aFj4X4jKIzRSQXzz/OnkBds7zAbTqC
+ 8KOw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Ps1AwBxm
-Subject: Re: [Buildroot] [PATCH] package/qemu: install keyboard maps only if
- necessary
+ header.a=rsa-sha256 header.s=google header.b=De6zAxQD
+Subject: Re: [Buildroot] [PATCH 1/2] package/linux-headers: use host-make
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,85 +100,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: olegartys@gmail.com, sdfw_system_team@sberdevices.ru
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Carlos,
 
-On 09/04/2023 02:09, unixmania@gmail.com wrote:
-> From: Carlos Santos <unixmania@gmail.com>
+
+On 07/04/2023 16:19, Oleg Lyovin wrote:
+> GNU make package from the host machine may be too old,
+> so use the one built by buildroot.
 > 
-> They are required only for system emulation, so pull a patch already
-> reviewd upstream[1,2] that makes the installation conditional.
-> 
-> 1. https://lists.gnu.org/archive/html/qemu-devel/2023-03/msg06428.html
-> 2. https://lists.gnu.org/archive/html/qemu-devel/2023-03/msg06438.html
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->   ...tall-keyboard-maps-only-if-necessary.patch | 36 +++++++++++++++++++
->   1 file changed, 36 insertions(+)
->   create mode 100644 package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
-> 
-> diff --git a/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch b/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
-> new file mode 100644
-> index 0000000000..91ea1e86c9
-> --- /dev/null
-> +++ b/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
-> @@ -0,0 +1,36 @@
-> +From 9d9b74f806f5dbca53df6630c1a0591eaedd4500 Mon Sep 17 00:00:00 2001
-> +From: Carlos Santos <casantos@redhat.com>
-> +Date: Sun, 1 Jan 2023 21:00:57 -0300
-> +Subject: [PATCH] meson: install keyboard maps only if necessary
-> +
-> +They are required only for system emulation (i.e. have_system is true).
-> +
-> +Signed-off-by: Carlos Santos <casantos@redhat.com>
+> Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
 
-  We need the SoB for unixmania@gmail.com on this. The SoB is a short way for 
-you (the private person, not the Redhat employee) to assert that you are 
-entitled to contribute the patch under qemu's license.
-
-  Also, please link to the upstream patchwork entry here, like this:
-
-Upstream: 
-https://patchwork.kernel.org/project/qemu-devel/patch/20230327172147.196607-1-casantos@redhat.com/
-
+  Applied both to master, after reworking the commit messages to reflect that 
+this was introduced in Linux 6.2.
 
   Regards,
   Arnout
 
-> +---
-> + pc-bios/keymaps/meson.build | 6 ++++--
-> + 1 file changed, 4 insertions(+), 2 deletions(-)
+> ---
+>   package/linux-headers/linux-headers.mk | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index e2a0b7a7c9..439f003530 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -125,6 +125,8 @@ LINUX_HEADERS_INSTALL_STAGING = YES
+>   # linux-headers is part of the toolchain so disable the toolchain dependency
+>   LINUX_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
+>   
+> +LINUX_HEADERS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
 > +
-> +diff --git a/pc-bios/keymaps/meson.build b/pc-bios/keymaps/meson.build
-> +index 158a3b410c..bff3083313 100644
-> +--- a/pc-bios/keymaps/meson.build
-> ++++ b/pc-bios/keymaps/meson.build
-> +@@ -47,7 +47,7 @@ if native_qemu_keymap.found()
-> +                        build_by_default: true,
-> +                        output: km,
-> +                        command: [native_qemu_keymap, '-f', '@OUTPUT@', args.split()],
-> +-                       install: true,
-> ++                       install: have_system,
-> +                        install_dir: qemu_datadir / 'keymaps')
-> +   endforeach
-> +
-> +@@ -56,4 +56,6 @@ else
-> +   install_data(keymaps.keys(), install_dir: qemu_datadir / 'keymaps')
-> + endif
-> +
-> +-install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
-> ++if have_system
-> ++  install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
-> ++endif
-> +--
-> +2.31.1
-> +
+>   # For some architectures (eg. Arc, Cris, Hexagon, ia64, parisc,
+>   # score and xtensa), the Linux buildsystem tries to call the
+>   # cross-compiler, although it is not needed at all.
+> @@ -137,7 +139,7 @@ LINUX_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
+>   # of "its" headers
+>   define LINUX_HEADERS_CONFIGURE_CMDS
+>   	(cd $(@D); \
+> -		$(TARGET_MAKE_ENV) $(MAKE) \
+> +		$(TARGET_MAKE_ENV) $(BR2_MAKE) \
+>   			ARCH=$(KERNEL_ARCH) \
+>   			HOSTCC="$(HOSTCC)" \
+>   			HOSTCFLAGS="$(HOSTCFLAGS)" \
+> @@ -148,7 +150,7 @@ endef
+>   
+>   define LINUX_HEADERS_INSTALL_STAGING_CMDS
+>   	(cd $(@D); \
+> -		$(TARGET_MAKE_ENV) $(MAKE) \
+> +		$(TARGET_MAKE_ENV) $(BR2_MAKE) \
+>   			ARCH=$(KERNEL_ARCH) \
+>   			HOSTCC="$(HOSTCC)" \
+>   			HOSTCFLAGS="$(HOSTCFLAGS)" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
