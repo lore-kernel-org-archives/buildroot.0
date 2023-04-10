@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1534AC77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BEE5C76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B92536FEFD;
-	Mon, 10 Apr 2023 19:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B92536FEFD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49B0F6FE90;
+	Mon, 10 Apr 2023 19:42:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49B0F6FE90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9baPRZXBRNre; Mon, 10 Apr 2023 19:42:35 +0000 (UTC)
+	with ESMTP id 6i0PHIm2kNOD; Mon, 10 Apr 2023 19:42:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE74F6FEFF;
-	Mon, 10 Apr 2023 19:42:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE74F6FEFF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74AB26FEE9;
+	Mon, 10 Apr 2023 19:42:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74AB26FEE9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 591591C3B6F
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1E7711C3BA4
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 916A7613FF
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6C1E61400
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 916A7613FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6C1E61400
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kr1ocpvYAl-Z for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
+ with ESMTP id RzdDT_ouR_LC for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 19:37:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 323CB61402
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5146161404
  for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 323CB61402
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5146161404
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FABB83DBE; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
+ id 419E783897; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 21:26:13 +0200
+Date: Mon, 10 Apr 2023 21:30:54 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 5380a3f3ae8dc6f48c9a0bf4a58729377f0bb8c2
-X-Git-Newrev: e660b4fe423c60b7822947e968f65b80b0b05191
+X-Git-Oldrev: 3f359328bb423742599ed7cddb1a207a85cc30d4
+X-Git-Newrev: 69d1d353d3b89d2a9fd2b6e5a108feba1a5ce09c
 X-Patchwork-Hint: ignore
-Message-Id: <20230410193723.2FABB83DBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/flann: needs
- C++11 support
+Message-Id: <20230410193723.419E783897@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/runc: security
+ bump to version v1.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e660b4fe423c60b7822947e968f65b80b0b05191
+commit: https://git.buildroot.net/buildroot/commit/?id=69d1d353d3b89d2a9fd2b6e5a108feba1a5ce09c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes:
+This is the fifth patch release in the 1.1.z series of runc, which fixes
+three CVEs found in runc.
 
-  - http://autobuild.buildroot.net/results/c92a3df1bc73e00e1e4493500bfb7277cf5064ee
+CVE-2023-25809 is a vulnerability involving rootless containers where
+(under specific configurations), the container would have write access to the
+/sys/fs/cgroup/user.slice/... cgroup hierarchy. No other hierarchies on the host
+were affected. This vulnerability was discovered by Akihiro Suda.
+GHSA-m8cg-xc2p-r3fc
 
-  .../build/flann-1.9.2/src/cpp/flann/util/lsh_table.h:367:5: error: 'random_device' is not a member of 'std'
-     std::random_device rd;
-     ^
+CVE-2023-27561 was a regression which effectively re-introduced CVE-2019-19921.
+This bug was present from v1.0.0-rc95 to v1.1.4. This regression was discovered
+by Beuc. GHSA-vpvm-3wq2-2wvm
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 16cd9494ba6496d7f5f873abd307952efea7da78)
+CVE-2023-28642 is a variant of CVE-2023-27561 and was fixed by the same patch.
+This variant of the above vulnerability was reported by Lei Wang.
+GHSA-g2j6-57v7-gm8c
+
+In addition, the following other fixes are included in this release:
+
+ - Fix the inability to use /dev/null when inside a container
+ - Fix changing the ownership of host's /dev/null caused by fd redirection
+ - Fix rare runc exec/enter unshare error on older kernels, including CentOS < 7.7
+ - nsexec: Check for errors in write_log()
+
+https://github.com/opencontainers/runc/releases/tag/v1.1.5
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 52976c54f76758aeab53f4b7777299cd5c8a3150)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flann/Config.in | 6 ++++--
- package/flann/flann.mk  | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flann/Config.in b/package/flann/Config.in
-index 180d7eae8a..8b32e9077c 100644
---- a/package/flann/Config.in
-+++ b/package/flann/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_FLANN
- 	bool "flann"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	select BR2_PACKAGE_LZ4
- 	help
- 	  FLANN is a library for performing fast approximate nearest
-@@ -22,5 +23,6 @@ config BR2_PACKAGE_FLANN_EXAMPLES
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 6c8fddd397..eee2e34cbf 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4f02077432642eebd768fc857318ae7929290b3a3511eb1be338005e360cfa34  runc-1.1.4.tar.gz
++sha256  76cbf30637cbb828794d72d32fb3fd6ff3139cd9743b8b44790fd110f43d96b2  runc-1.1.5.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index b60f1da2e7..9c6b5f9b37 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
--comment "flann needs a toolchain w/ C++, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+comment "flann needs a toolchain w/ C++, dynamic library, gcc >= 4.7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/flann/flann.mk b/package/flann/flann.mk
-index d1a622e685..dc75b977af 100644
---- a/package/flann/flann.mk
-+++ b/package/flann/flann.mk
-@@ -18,7 +18,7 @@ FLANN_CONF_OPTS = \
- 	-DUSE_OPENMP=$(if $(BR2_TOOLCHAIN_HAS_OPENMP),ON,OFF) \
- 	-DCMAKE_DISABLE_FIND_PACKAGE_HDF5=TRUE
- 
--FLANN_CXXFLAGS = $(TARGET_CXXFLAGS)
-+FLANN_CXXFLAGS = $(TARGET_CXXFLAGS) -std=c++11
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- FLANN_CXXFLAGS += -O0
+-RUNC_VERSION = 1.1.4
++RUNC_VERSION = 1.1.5
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
+ RUNC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
