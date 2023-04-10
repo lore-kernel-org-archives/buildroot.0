@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1557DC76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:41:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E70D5C76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9B946FEDC;
-	Mon, 10 Apr 2023 19:41:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9B946FEDC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95BF86FECB;
+	Mon, 10 Apr 2023 19:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95BF86FECB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wQnxmYd7Wtes; Mon, 10 Apr 2023 19:41:56 +0000 (UTC)
+	with ESMTP id 29byUp_Tb_Yq; Mon, 10 Apr 2023 19:42:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE91E6FEE9;
-	Mon, 10 Apr 2023 19:41:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE91E6FEE9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7E9931C3B6F
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD1406FEF5;
+	Mon, 10 Apr 2023 19:42:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD1406FEF5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A01D1C3B6F
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74EB9417AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3EA740376
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74EB9417AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3EA740376
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id THzqohTI22x7 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hq4mTEpU28mm for <buildroot@lists.busybox.net>;
  Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC675417C7
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:37:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC675417C7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 253D8408C0
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 253D8408C0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC54B83DD4; Mon, 10 Apr 2023 19:37:22 +0000 (UTC)
+ id 1595883DD4; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 21:07:30 +0200
+Date: Mon, 10 Apr 2023 21:19:33 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 2bc49f4cb25678c2d941807c2dbfe2384a31c2b5
-X-Git-Newrev: a23d06e96cd4eb6bd8feb03cf4cf0e1422072626
+X-Git-Oldrev: 786756e423865ebd7043bbaf0963a0b861f9d91f
+X-Git-Newrev: 9d215d42b9dad6bc73530942de1bd983fbadc7e0
 X-Patchwork-Hint: ignore
-Message-Id: <20230410193722.DC54B83DD4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/openssh: security
- bump to version 9.3p1
+Message-Id: <20230410193723.1595883DD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/zerofree: fix
+ double space in Config.in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,91 +63,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a23d06e96cd4eb6bd8feb03cf4cf0e1422072626
+commit: https://git.buildroot.net/buildroot/commit/?id=9d215d42b9dad6bc73530942de1bd983fbadc7e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-From [1]:
-
- * sshd(8): fix a pre-authentication double-free memory fault
-   introduced in OpenSSH 9.1. This is not believed to be exploitable,
-   and it occurs in the unprivileged pre-auth process that is
-   subject to chroot(2) and is further sandboxed on most major
-   platforms.
-
- * ssh(8): in OpenSSH releases after 8.7, the PermitRemoteOpen option
-   would ignore its first argument unless it was one of the special
-   keywords "any" or "none", causing the permission list to fail open
-   if only one permission was specified. bz3515
-
- * ssh(1): if the CanonicalizeHostname and CanonicalizePermittedCNAMEs
-   options were enabled, and the system/libc resolver did not check
-   that names in DNS responses were valid, then use of these options
-   could allow an attacker with control of DNS to include invalid
-   characters (possibly including wildcards) in names added to
-   known_hosts files when they were updated. These names would still
-   have to match the CanonicalizePermittedCNAMEs allow-list, so
-   practical exploitation appears unlikely.
-
-From [2]:
-
-* ssh-add(1): when adding smartcard keys to ssh-agent(1) with the
-   per-hop destination constraints (ssh-add -h ...) added in OpenSSH
-   8.9, a logic error prevented the constraints from being
-   communicated to the agent. This resulted in the keys being added
-   without constraints. The common cases of non-smartcard keys and
-   keys without destination constraints are unaffected. This problem
-   was reported by Luci Stanescu.
-
- * ssh(1): Portable OpenSSH provides an implementation of the
-   getrrsetbyname(3) function if the standard library does not
-   provide it, for use by the VerifyHostKeyDNS feature. A
-   specifically crafted DNS response could cause this function to
-   perform an out-of-bounds read of adjacent stack data, but this
-   condition does not appear to be exploitable beyond denial-of-
-   service to the ssh(1) client.
-
-   The getrrsetbyname(3) replacement is only included if the system's
-   standard library lacks this function and portable OpenSSH was not
-   compiled with the ldns library (--with-ldns). getrrsetbyname(3) is
-   only invoked if using VerifyHostKeyDNS to fetch SSHFP records. This
-   problem was found by the Coverity static analyzer.
-
-[1] https://www.openssh.com/txt/release-9.2
-[2] https://www.openssh.com/txt/release-9.3
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 68ca5f1e1f9f3f79e5a48928ad2dfac0cceee843)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 05d3fdfd1314cce610f4fd2a55599b0595fcf2fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 4 ++--
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/zerofree/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index eefb11ec15..2be54431ec 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssh.com/txt/release-9.1 (base64 encoded)
--sha256  19f85009c7e3e23787f0236fbb1578392ab4d4bf9f8ec5fe6bc1cd7e8bfdd288  openssh-9.1p1.tar.gz
-+# From https://www.openssh.com/txt/release-9.3 (base64 encoded)
-+sha256  e9baba7701a76a51f3d85a62c383a3c9dcd97fa900b859bc7db114c1868af8a8  openssh-9.3p1.tar.gz
- # Locally calculated
- sha256  05c30446ba738934b3f1efa965b454c122ca26cc4b268e5ae6843f58ccd1b16d  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index b70e327620..26d6bd504d 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/zerofree/Config.in b/package/zerofree/Config.in
+index 99466d6bae..e7007819d8 100644
+--- a/package/zerofree/Config.in
++++ b/package/zerofree/Config.in
+@@ -9,6 +9,6 @@ config BR2_PACKAGE_ZEROFREE
  
--OPENSSH_VERSION_MAJOR = 9.1
-+OPENSSH_VERSION_MAJOR = 9.3
- OPENSSH_VERSION_MINOR = p1
- OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
- OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
+ 	  https://frippery.org/uml/
+ 
+-comment "zerofree needs  a toolchain w/ dynamic library"
++comment "zerofree needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
