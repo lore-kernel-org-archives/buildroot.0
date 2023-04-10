@@ -4,91 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9556C77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 13:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8DC4C77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 13:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49893414DE;
-	Mon, 10 Apr 2023 13:47:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49893414DE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3321A40474;
+	Mon, 10 Apr 2023 13:47:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3321A40474
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W4T0vX_KFlNM; Mon, 10 Apr 2023 13:47:40 +0000 (UTC)
+	with ESMTP id ElmXUayAsgmA; Mon, 10 Apr 2023 13:47:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33003414E5;
-	Mon, 10 Apr 2023 13:47:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33003414E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD6584155B;
+	Mon, 10 Apr 2023 13:47:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD6584155B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2CC821C3B1B
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 13:47:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CBE101C3B18
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 13:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 13AD981EA2
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 13:47:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13AD981EA2
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5D5681EA2
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 13:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5D5681EA2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mriivlRCcIX6 for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 13:47:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7326C81EA0
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7326C81EA0
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 13:47:36 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id ud9so12390062ejc.7
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 06:47:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1681134454;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=IQ4rJw2X2MynHsZrIlqovqHeNtc9TMDQjM6aj7jfHzg=;
- b=AtiqsIwpdZsy6XhlfNTJwNKAXe6p8tSvuTPk636/BWbmLcJ2toXExd5RDgxUoIvm41
- vbuyNf/DeqDYUOPlCiQGuZiD407VTF/fGuNRhB/wQEQzyq7VBa8D2BkzEdELLQK3L4XT
- KALFnAhfm3rH6p66yPnGRdvkh8oQ8v0Bog6rlNzWgwRKpk1Fx/p2C4xTEFok9M81bCkG
- GOsypSgR5TolGV/XTvwbk6/R3LQL1KFGqUf5B8oDKEkPSNbIJTFr0Pmi/kUX/IxqQGpG
- G9kf2UYEdU+odoKungegt+g8WLg1VAx17Aka5ztvuk6kMe37QU4CYDVKpEzDx+AieTwu
- mwLA==
-X-Gm-Message-State: AAQBX9eNqElH5NApYQxiqif6vyQNXPcwDvT1QT3Ux2Fg+VexUIlhMEc0
- Yaz8VPeSlvP/8cNxdja9KprP0Rri6GdCRjG+hs4=
-X-Google-Smtp-Source: AKy350at1TU+M6Xbdg8RmeCHFRJs9QdMnISIRc+uOEpy2spZMXNUI7Dwtimry7qmfT3Ul0TEk9OFNg==
-X-Received: by 2002:a17:906:c34c:b0:94a:56ec:4ef3 with SMTP id
- ci12-20020a170906c34c00b0094a56ec4ef3mr4948521ejb.48.1681134454508; 
- Mon, 10 Apr 2023 06:47:34 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- w30-20020a50d79e000000b00504890a0de5sm2795765edi.34.2023.04.10.06.47.32
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 10 Apr 2023 06:47:33 -0700 (PDT)
-Message-ID: <abf54400-ddca-75f4-7164-d944a355301d@mind.be>
-Date: Mon, 10 Apr 2023 15:47:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-GB
-To: Maksim Kiselev <bigunclemax@gmail.com>, buildroot@buildroot.org
-References: <20230410084020.1812422-1-bigunclemax@gmail.com>
+ with ESMTP id 2z6f_gYqMJuN for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 13:47:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C385981EA0
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 13:47:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C385981EA0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AB94783C40; Mon, 10 Apr 2023 13:47:44 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230410084020.1812422-1-bigunclemax@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1681134454;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=IQ4rJw2X2MynHsZrIlqovqHeNtc9TMDQjM6aj7jfHzg=;
- b=JR5dlbVrAUfCbXs8YEO1wJ4DQKrG5fX7Ws4YYVvHh7mAp/3srs0M5jDoMB3Y6mKxOy
- tojyzCsQC1Hc91FELs31XZKpKKZZHw2iDU8YApQ3EtpC0lZ8FkVI+kaplvkR93w7o+LD
- /iErpZqtBnSM87QvM1IkyWQkyZMYeo+A6cmX51lg/NwDd/I0Pz2NoxBhPqA429rmcSbk
- eOeHu/BFIB0XXSmjNx//Ua8Ky4/G7RpmMTFIlk1VQa8xFiceqG6cmHRb1/qb62rtZrCI
- hwfXw34hUMmIc1vKBtx4Bu6EMJC+V62Bl+Hq4OfE665jQnF/DAFRcLitTV331i4M5dqB
- C85w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=JR5dlbVr
-Subject: Re: [Buildroot] [PATCH 1/1] sunxi-tools: bump to version
+To: buildroot@buildroot.org
+Date: Mon, 10 Apr 2023 15:45:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: abff5246a78e0adaf6c75b722a85fed891c3f8b1
+X-Git-Newrev: 2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb
+X-Patchwork-Hint: ignore
+Message-Id: <20230410134744.AB94783C40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sunxi-tools: bump to version
  1.4.2-168-ged3039c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -101,62 +57,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This patch bumps version of the sunxi-tools to latest commit on master branch.
 
-On 10/04/2023 10:40, Maksim Kiselev wrote:
-> This patch bumps version of the sunxi-tools to latest commit on master branch.
-> 
-> There are no new tags\releases since 2016 so let's use commit hash as version.
-> New version brings support for the following SOCs: A63, V5, R528/T113s, V853,
-> F1C100s, R329, H616, H6
-> 
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> ---
->   ...nfo-Access-to-io-memory-via-pointers.patch | 59 -------------------
->   package/sunxi-tools/Config.in                 |  1 +
->   package/sunxi-tools/sunxi-tools.hash          |  2 +-
->   package/sunxi-tools/sunxi-tools.mk            |  4 +-
->   4 files changed, 4 insertions(+), 62 deletions(-)
->   delete mode 100644 package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
-> 
-[snip]
-> diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-> index 59d1f3b5a0..dab68886b1 100644
-> --- a/package/sunxi-tools/sunxi-tools.mk
-> +++ b/package/sunxi-tools/sunxi-tools.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -SUNXI_TOOLS_VERSION = 1.4.2
-> +SUNXI_TOOLS_VERSION = 1.4.2-168-ged3039c
+There are no new tags\releases since 2016 so let's use commit hash as version.
+New version brings support for the following SOCs: A63, V5, R528/T113s, V853,
+F1C100s, R329, H616, H6
 
-  It's nice to use this more descriptive way of specifying a hash, but we still 
-want the full-length hash in there (cfr. how it's done for e.g. glibc).
+Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+[Arnout: use full hash in VERSION]
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ ...-meminfo-Access-to-io-memory-via-pointers.patch | 59 ----------------------
+ package/sunxi-tools/Config.in                      |  1 +
+ package/sunxi-tools/sunxi-tools.hash               |  2 +-
+ package/sunxi-tools/sunxi-tools.mk                 |  4 +-
+ 4 files changed, 4 insertions(+), 62 deletions(-)
 
-  Applied to master with that fixed, thanks.
-
-  Regards,
-  Arnout
-
->   SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,v$(SUNXI_TOOLS_VERSION))
->   SUNXI_TOOLS_LICENSE = GPL-2.0+
->   SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
-> @@ -26,7 +26,7 @@ SUNXI_TOOLS_FEXC_LINKS += fex2bin bin2fex
->   endif
->   
->   ifeq ($(BR2_PACKAGE_SUNXI_TOOLS_FEL),y)
-> -SUNXI_TOOLS_DEPENDENCIES += libusb host-pkgconf
-> +SUNXI_TOOLS_DEPENDENCIES += dtc libusb host-pkgconf
->   endif
->   
->   define HOST_SUNXI_TOOLS_BUILD_CMDS
+diff --git a/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
+deleted file mode 100644
+index 997c413f23..0000000000
+--- a/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 5c0a443ba336f10a8db6a99c769aa84ad37ed4d2 Mon Sep 17 00:00:00 2001
+-From: Vadim Kochan <vadim4j@gmail.com>
+-Date: Wed, 20 Feb 2019 02:48:43 +0200
+-Subject: [PATCH] meminfo: Access to io memory via pointers
+-
+-The main reason for this is to be able compile with musl library,
+-because there is no support of inx/outx functions for ARM platform.
+-
+-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+----
+- meminfo.c | 11 ++++++-----
+- 1 file changed, 6 insertions(+), 5 deletions(-)
+-
+-diff --git a/meminfo.c b/meminfo.c
+-index 0b0ff23..7d9f10f 100644
+---- a/meminfo.c
+-+++ b/meminfo.c
+-@@ -22,7 +22,6 @@
+- #include <sys/mman.h>
+- #include <stdint.h>
+- #include <errno.h>
+--#include <sys/io.h>
+- #include <stdbool.h>
+- 
+- #include "common.h"
+-@@ -74,24 +73,26 @@ static enum sunxi_soc_version soc_version;
+- unsigned int
+- sunxi_io_read(void *base, int offset)
+- {
+--	return inl((unsigned long) (base + offset));
+-+	unsigned long port = (unsigned long) (base + offset);
+-+	return *((volatile unsigned long *) port);
+- }
+- 
+- void
+- sunxi_io_write(void *base, int offset, unsigned int value)
+- {
+--	outl(value, (unsigned long) (base + offset));
+-+	unsigned long port = (unsigned long) (base + offset);
+-+	*((volatile unsigned long *) port) = value;
+- }
+- 
+- void
+- sunxi_io_mask(void *base, int offset, unsigned int value, unsigned int mask)
+- {
+--	unsigned int tmp = inl((unsigned long) (base + offset));
+-+	unsigned int tmp = sunxi_io_read(base, offset);
+- 
+- 	tmp &= ~mask;
+- 	tmp |= value & mask;
+- 
+--	outl(tmp, (unsigned long) (base + offset));
+-+	sunxi_io_write(base, offset, tmp);
+- }
+- 
+- 
+--- 
+-2.14.1
+-
+diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
+index 5f72667284..e748637c72 100644
+--- a/package/sunxi-tools/Config.in
++++ b/package/sunxi-tools/Config.in
+@@ -25,6 +25,7 @@ config BR2_PACKAGE_SUNXI_TOOLS_FEL
+ 	bool "sunxi-fel"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
++	select BR2_PACKAGE_DTC
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  The sunxi-fel command can interact with a sunxi device in
+diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
+index 84acc2c76c..42d81144a3 100644
+--- a/package/sunxi-tools/sunxi-tools.hash
++++ b/package/sunxi-tools/sunxi-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  81f48014a520cb83cac4e17f5ae627a637c4d6a422b60c693c5a705c92e43822  sunxi-tools-1.4.2.tar.gz
++sha256  6589f32e9c2a5991cc49928e83aceea675f0165ce6f13cdd2dd784139a8d4efd  sunxi-tools-1.4.2-168-ged3039cdbeeb28fc0011c3585d8f7dfb91038292.tar.gz
+ sha256  2b0d4dda4bf8034e1506507a67f80f982131137afe62bf144d248f9faea31da4  LICENSE.md
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index 59d1f3b5a0..a9569f2910 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_TOOLS_VERSION = 1.4.2
++SUNXI_TOOLS_VERSION = 1.4.2-168-ged3039cdbeeb28fc0011c3585d8f7dfb91038292
+ SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,v$(SUNXI_TOOLS_VERSION))
+ SUNXI_TOOLS_LICENSE = GPL-2.0+
+ SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
+@@ -26,7 +26,7 @@ SUNXI_TOOLS_FEXC_LINKS += fex2bin bin2fex
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SUNXI_TOOLS_FEL),y)
+-SUNXI_TOOLS_DEPENDENCIES += libusb host-pkgconf
++SUNXI_TOOLS_DEPENDENCIES += dtc libusb host-pkgconf
+ endif
+ 
+ define HOST_SUNXI_TOOLS_BUILD_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
