@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 942BAC77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:41:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35FEDC77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C1DA613EC;
-	Mon, 10 Apr 2023 19:41:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C1DA613EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6A5D6FEAD;
+	Mon, 10 Apr 2023 19:41:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6A5D6FEAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VYo86luGQWlY; Mon, 10 Apr 2023 19:41:06 +0000 (UTC)
+	with ESMTP id AkkAnYph-ZKM; Mon, 10 Apr 2023 19:41:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EDD96FECD;
-	Mon, 10 Apr 2023 19:41:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EDD96FECD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18FB01BF316
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2E286FED7;
+	Mon, 10 Apr 2023 19:41:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2E286FED7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 271811C3BA7
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E238441918
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA6C3613FE
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E238441918
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA6C3613FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f2dKKC-aGAXr for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 19:37:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id enBiuGrWS5br for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D1643417AE
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:37:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1643417AE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1373D613FF
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1373D613FF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C122783DBC; Mon, 10 Apr 2023 19:37:22 +0000 (UTC)
+ id 03B4183DBE; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Apr 2023 21:59:27 +0200
+Date: Mon, 10 Apr 2023 21:19:19 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 35485b3d104bdabbc56661cceb1507090daa1cba
-X-Git-Newrev: c7dee88ef04624931ae4d7919c0f6b1f1b61b8f5
+X-Git-Oldrev: 8406e06af3aaaaa2db8f71b815eb1e540796957b
+X-Git-Newrev: 737d2217530992f9cf6d0d2e575d9105485b4a9f
 X-Patchwork-Hint: ignore
-Message-Id: <20230410193722.C122783DBC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/agentpp: security
- bump to version 4.6.0
+Message-Id: <20230410193723.03B4183DBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libosmium: fix
+ double space in Config.in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7dee88ef04624931ae4d7919c0f6b1f1b61b8f5
+commit: https://git.buildroot.net/buildroot/commit/?id=737d2217530992f9cf6d0d2e575d9105485b4a9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Fixed (security) [APP-70]: Memory leak in MibLeaf::set if same OID is set
-  twice in the same PDU.
-- Fix the following build failure raised since bump of snmppp to version
-  3.5.0 in commit e011fa0415883b9d44df616cfaf6956e1a11da88:
-
-snmp_pp_ext.cpp: In member function 'int Agentpp::Snmpx::send(const Agentpp::Pdux&, Snmp_pp::SnmpTarget*)':
-snmp_pp_ext.cpp:1172:47: error: binding reference of type 'Snmp_pp::Pdu&' to 'const Snmp_pp::Pdu' discards qualifiers
- 1172 |     status = snmpmsg.loadv3(Snmp::get_mpv3(), pdu, engine_id, security_name,
-      |
-
-Fixes:
- - http://autobuild.buildroot.net/results/d7347b8b3953596b66da6ca6d85f084fb427934c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5f06ecf5e1516cac8911dbf9b05c66c0f7060379)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e81ca405164fbef1c43fc01aa2f95f67090d3bde)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/agentpp/agentpp.hash | 2 +-
- package/agentpp/agentpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libosmium/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/agentpp/agentpp.hash b/package/agentpp/agentpp.hash
-index 99aae70263..527414eed5 100644
---- a/package/agentpp/agentpp.hash
-+++ b/package/agentpp/agentpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  5f2cfe98fd1d50683e02c65fccd9423351254df427e5825e4f321c488a9234eb  agent++-4.5.4.tar.gz
-+sha256  e09dc2d40277d468c18f1539ad18f43e0c3a95b10fad8a02184e9ace8bac0d67  agent++-4.6.0.tar.gz
- sha256  1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6  LICENSE-2_0.txt
-diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
-index d020228e44..0ef549426e 100644
---- a/package/agentpp/agentpp.mk
-+++ b/package/agentpp/agentpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libosmium/Config.in b/package/libosmium/Config.in
+index 3a4c64e9d2..825e2b7e33 100644
+--- a/package/libosmium/Config.in
++++ b/package/libosmium/Config.in
+@@ -13,6 +13,6 @@ config BR2_PACKAGE_LIBOSMIUM
  
--AGENTPP_VERSION = 4.5.4
-+AGENTPP_VERSION = 4.6.0
- AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
- AGENTPP_SITE = http://www.agentpp.com/download
- AGENTPP_LICENSE = Apache-2.0
+ 	  https://osmcode.org/libosmium/
+ 
+-comment "libosmium needs a toolchain w/ C++,  wchar, threads, gcc >= 4.7"
++comment "libosmium needs a toolchain w/ C++, wchar, threads, gcc >= 4.7"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
