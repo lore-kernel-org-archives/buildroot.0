@@ -4,66 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74B54C76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 443EAC77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B94960F3F;
-	Mon, 10 Apr 2023 19:04:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B94960F3F
+	by smtp3.osuosl.org (Postfix) with ESMTP id E280D61383;
+	Mon, 10 Apr 2023 19:05:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E280D61383
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id laUhoglP_RSJ; Mon, 10 Apr 2023 19:04:13 +0000 (UTC)
+	with ESMTP id Bm_RoGEEvZey; Mon, 10 Apr 2023 19:05:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 021A960E92;
-	Mon, 10 Apr 2023 19:04:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 021A960E92
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EDDF60E92;
+	Mon, 10 Apr 2023 19:05:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EDDF60E92
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 680E81C3AE9
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:04:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D48271BF316
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:05:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E59760071
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:04:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E59760071
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD05C60E92
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:05:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD05C60E92
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wnvHzePdIKZV for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 19:04:08 +0000 (UTC)
+ with ESMTP id b4pXBDRXDS_z for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 19:05:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF66060E92
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BF66060E92
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:04:08 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id DC9695FF27;
- Mon, 10 Apr 2023 21:04:01 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 10 Apr 2023 21:04:01 +0200
-Date: Mon, 10 Apr 2023 21:04:01 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20230410190401.GI2819@scaer>
-References: <20230403013530.3502-1-vfazio@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB35060B03
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BB35060B03
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:05:44 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id l18so5258786wrb.9
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 12:05:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1681153543;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=bJr1lcFPbMd2crjVEcFrFhZVt0MMABzFdI503WXGl18=;
+ b=73vTDd+3F+EXxaC01vDzn3ih2TyK+3UM1L6b0G4Oj4vW2c+ZKzYgZwl4PPtfTKLczO
+ nHsO36VbNu14XCtl9AJVjYB9QFJDmx3Yyc0xKPIN9xfmdet1eD4gMn42xQJy6PresGq6
+ nftUphN5DjI3vn58AzQEbHGSRiBBlTxbQdjscnEuHB3cO60/9PuokOhpPMxRYDfov+a2
+ cgcfqmDYYIOgGjzwyf/El/+ZHcWqaeiyKqYeEktsOAMrDBCu2qRIPI0O8Ydp8Mxi/1p7
+ 8OzHPJEWKRrpN2ralvzd14pKtneO/0Hr6gpWGyeDTFCCaBdyHUXBrYZX5iJqd5Pa2FLB
+ I/aA==
+X-Gm-Message-State: AAQBX9frhqGRiZtJIp01JTZ4haPOZQyEbp7ml7oSQwyjOIAx/veGX8O/
+ HfdIYg2wCYlYJTC0v7cf2/WVolQBb+Zp89FaaIQ=
+X-Google-Smtp-Source: AKy350Z+H9pNBIOGEBhi9WLzQAdUZrDkubxkvbvkubCjpXxxlhg1A8ROmuOFKgMP7Xo4HtPvoOtRyg==
+X-Received: by 2002:adf:e588:0:b0:2ce:a828:b248 with SMTP id
+ l8-20020adfe588000000b002cea828b248mr4550912wrm.71.1681153542876; 
+ Mon, 10 Apr 2023 12:05:42 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ s4-20020adff804000000b002e463bd49e3sm12372127wrp.66.2023.04.10.12.05.41
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 10 Apr 2023 12:05:41 -0700 (PDT)
+Message-ID: <c1eef250-6df4-7d6c-3963-bd5ad8c6a48d@mind.be>
+Date: Mon, 10 Apr 2023 21:05:39 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230403013530.3502-1-vfazio@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1681153445;
- bh=qH3qrMakfmEeoSeyCF42VnX3+9aC+lebrvdld1EHnPk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=KF4eIA3xRtIWzSJG30d5mQh/MJKfMUHxZ316o1w7Z3bth3WgsZwP7+p0mIkqpMrru
- wPQ+UhSidv4cV6RPgl5icTSp6TUxQ3xoqWrUPeipQ7rxz8Qj8doESyGFb/n/454rD+
- QNVrzvys/lI28nE/3xltE+AuWpU97MgfiLtmzFFohGBewnGZ8S9ygN8tyQkkyOD9UZ
- KKMWiJs8hlTy4XT4ue7tVK/87V7kvPQcCTuH74z0mgiXRTBtfqUGl1ROAp4NZO7UMl
- magu6dyBp10SQKsZmhJfP72+Wa2h6B+ZwVMNyhRR2vK/gGkhoaE29aytyQDQAxLMjj
- kv3mrEux+Miow==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230409210814.496117-1-arnout@mind.be>
+ <20230410165157.GD2819@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20230410165157.GD2819@scaer>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1681153543;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=bJr1lcFPbMd2crjVEcFrFhZVt0MMABzFdI503WXGl18=;
+ b=F0PVV4o9lnoyEc2DB4ZwuLV0pwnQklmfwlGvP+CY/AOqsIc3bNrsYofk2Cr7WnHL0O
+ X+q2tBSgyI00k5SpbmYVEzAs/k8p1G6F0rqKTUOUKnVbO+7H1o/xAKho82SNDMO5vMQI
+ RrVOUZQqNmOB3T3nEuSpWq+YBibFp8W0DdpCD1F49v0AIeuk4MbWqyR/6f+KpPZ06QiQ
+ 6CTFBW5XdeGyhpJPJk4D4d1dk0cJ1lCiSpLpD9xUKwW7KK9SqxHESYWOtw3CHJPIfs2g
+ ivdg7Yu8hp6dJQeuEv7ge+Ewmm7acID7xmM2D0spsteW3DO546RFSVU3LpcX0IH0x312
+ anbA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KF4eIA3x
-Subject: Re: [Buildroot] [PATCH] utils/check-package: drop six usage
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=F0PVV4o9
+Subject: Re: [Buildroot] [PATCH] package/skeleton: drop $(HOST_DIR)/usr
+ compatibility symlink
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,88 +102,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Vincent, All,
 
-On 2023-04-02 20:35 -0500, Vincent Fazio spake thusly:
-> The shebang in check-package now defines python3. There is no longer a
-> need to maintain support with python 2.x.
+
+On 10/04/2023 18:51, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> See-also: 02b165dc71 (check-package: fix Python3 support)
+> On 2023-04-09 23:08 +0200, Arnout Vandecappelle spake thusly:
+>> It has been years that we removed $(HOST_DIR)/usr. Because of this
+>> symlink, however, there are still packages that install things in
+>> $(HOST_DIR)/usr. Remove the symlink so those packages will start to
+>> fail.
+>>
+>> Note that there's now a check-package check to detect such incorrectly
+>> instaled things, so this should only affect external packages.
+>>
+>> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+>> ---
+>>   package/skeleton/skeleton.mk | 4 ----
+>>   1 file changed, 4 deletions(-)
+>>
+>> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+>> index 634c76e437..186cb60189 100644
+>> --- a/package/skeleton/skeleton.mk
+>> +++ b/package/skeleton/skeleton.mk
+>> @@ -11,11 +11,7 @@
+>>   SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
+>>   SKELETON_ADD_SKELETON_DEPENDENCY = NO
+>>   
+>> -# We create a compatibility symlink in case a post-build script still
+>> -# uses $(HOST_DIR)/usr
+>>   define HOST_SKELETON_INSTALL_CMDS
+>> -# check-package DoNotInstallToHostdirUsr
+>> -	$(Q)ln -snf . $(HOST_DIR)/usr
 > 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+> Should we have a kind of post-isntall test that checks that a package
+> did not create that (e.g. because their makefile hard-codes something
+> like DESTDIR/usr)?
 
-Applied to master, thanks.
+  If we are going to keep dragging along stuff to support legacy forever, then 
+it's probably simpler to just keep this symlink. If something installs in 
+HOST_DIR/usr it's probably going to break somewhere down the line, right? So I 
+don't think we need to bother.
 
-> ---
->  utils/check-package | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
+  BTW, DESTDIR is empty for host builds. And PREFIX/usr would be completely crazy.
+
+  Regards,
+  Arnout
+
 > 
-> diff --git a/utils/check-package b/utils/check-package
-> index 98a25bd0b2..46f2897b51 100755
-> --- a/utils/check-package
-> +++ b/utils/check-package
-> @@ -6,7 +6,6 @@ import inspect
->  import magic
->  import os
->  import re
-> -import six
->  import sys
->  
->  import checkpackagelib.base
-> @@ -218,12 +217,9 @@ def check_file_using_lib(fname):
->          if fail > 0:
->              failed.add(name)
->          nwarnings += warn
-> -    if six.PY3:
-> -        f = open(fname, "r", errors="surrogateescape")
-> -    else:
-> -        f = open(fname, "r")
-> +
->      lastline = ""
-> -    for lineno, text in enumerate(f.readlines()):
-> +    for lineno, text in enumerate(open(fname, "r", errors="surrogateescape").readlines()):
-
-As seen on IRC: it does not leak a fileobject: it is not bound to a
-variable, so the object is garbage-collected as soon as it is no longer
-referenced, i.e. right after the function call ends.
-
-Regards,
-Yann E. MORIN.
-
->          nlines += 1
->          for name, cf in objects:
->              if cf.disable.search(lastline):
-> @@ -233,7 +229,7 @@ def check_file_using_lib(fname):
->                  failed.add(name)
->              nwarnings += warn
->          lastline = text
-> -    f.close()
-> +
->      for name, cf in objects:
->          warn, fail = print_warnings(cf.after(), name in xfail)
->          if fail > 0:
-> -- 
-> 2.25.1
+> This is probably a good candidate for GLOBAL_INSTRUMENTATION_HOOKS, no?
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Regards,
+> Yann E. MORIN.
+> 
+>>   	$(Q)mkdir -p $(HOST_DIR)/lib
+>>   	$(Q)mkdir -p $(HOST_DIR)/include
+>>   	$(Q)case $(HOSTARCH) in \
+>> -- 
+>> 2.39.2
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
