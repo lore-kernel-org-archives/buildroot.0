@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30601C76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5FCBC77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDF076FF0A;
-	Mon, 10 Apr 2023 19:43:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDF076FF0A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75DA06FF0C;
+	Mon, 10 Apr 2023 19:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75DA06FF0C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B5RzjL3ElFjb; Mon, 10 Apr 2023 19:43:00 +0000 (UTC)
+	with ESMTP id YPkN64zfxs0y; Mon, 10 Apr 2023 19:43:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F26586FEF9;
-	Mon, 10 Apr 2023 19:42:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F26586FEF9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AEFB61410;
+	Mon, 10 Apr 2023 19:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AEFB61410
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 22DEE1C3BA6
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1396D1C3BA3
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8186613E5
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB25D61402
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8186613E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB25D61402
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id baGKJqi4o1ad for <buildroot@lists.busybox.net>;
+ with ESMTP id EYxgpOyJdY70 for <buildroot@lists.busybox.net>;
  Mon, 10 Apr 2023 19:37:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57C3161406
+ by smtp3.osuosl.org (Postfix) with ESMTP id 420B961403
  for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57C3161406
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 420B961403
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53AEE83DBE; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
+ id 386A883DD8; Mon, 10 Apr 2023 19:37:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 21:33:03 +0200
+Date: Mon, 10 Apr 2023 21:28:40 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 75a10d935f81dee4b7b3ec26718b1252014d2b3b
-X-Git-Newrev: 901031eecc206c082156e625a4ba20d4e330f471
+X-Git-Oldrev: e660b4fe423c60b7822947e968f65b80b0b05191
+X-Git-Newrev: 3f359328bb423742599ed7cddb1a207a85cc30d4
 X-Patchwork-Hint: ignore
-Message-Id: <20230410193723.53AEE83DBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/docker-cli: bump
- version to v23.0.2
+Message-Id: <20230410193723.386A883DD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/snmppp: fix build
+ without SNMPV3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=901031eecc206c082156e625a4ba20d4e330f471
+commit: https://git.buildroot.net/buildroot/commit/?id=3f359328bb423742599ed7cddb1a207a85cc30d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This release contains some fixes and small improvements. For the
-full list see:
-https://github.com/moby/moby/releases/tag/v23.0.2
+Fix the following build failure without BR2_PACKAGE_SNMPPP_SNMPV3 raised
+since bump to version 3.5.0 in commit
+e011fa0415883b9d44df616cfaf6956e1a11da88:
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 413a28940b46db5d84bc7430bc49df076cee01f9)
+msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
+msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
+  263 |   if (m_target->get_version() == version3) {
+      |                                  ^~~~~~~~
+      |                                  version1
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a45f2af7fae09e4daee9d017b02e8744b357cf48)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/snmppp/0001-fix-build-without-v3.patch | 43 ++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 9b231f03b1..a8ee6c7a34 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  37bc1c71a782fc10d35aa6708c1b3c90a71f3947c33665cb0de68df25dc14d94  docker-cli-23.0.1.tar.gz
-+sha256  bef4fc68b9f81ab2ae8bb2605e16a0965a3c4a82f0c0cf9d9f5d2cee8e95415d  docker-cli-23.0.2.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 38d903150c..5473edf1ef 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = 23.0.1
-+DOCKER_CLI_VERSION = 23.0.2
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+diff --git a/package/snmppp/0001-fix-build-without-v3.patch b/package/snmppp/0001-fix-build-without-v3.patch
+new file mode 100644
+index 0000000000..4e81f7bfc1
+--- /dev/null
++++ b/package/snmppp/0001-fix-build-without-v3.patch
+@@ -0,0 +1,43 @@
++fix build without v3
++
++Fix the following build failure without version3 raised since version
++3.5.0:
++
++msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
++msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
++  263 |   if (m_target->get_version() == version3) {
++      |                                  ^~~~~~~~
++      |                                  version1
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to katz.agentpp.com@magenta.de]
++
++diff -Nura snmp++-3.5.0.orig/src/msgqueue.cpp snmp++-3.5.0/src/msgqueue.cpp
++--- snmp++-3.5.0.orig/src/msgqueue.cpp	2023-03-20 10:49:30.629000853 +0100
+++++ snmp++-3.5.0/src/msgqueue.cpp	2023-03-20 10:51:36.880664304 +0100
++@@ -260,18 +260,20 @@
++   m_target->set_retry(m_target->get_retry() - 1);
++   SetSendTime();
++   int status;
++-  if (m_target->get_version() == version3) {
++ #ifdef _SNMPv3
+++  if (m_target->get_version() == version3) {
++     // delete entry in cache
++     if (m_snmp->get_mpv3())
++ 	    m_snmp->get_mpv3()->delete_from_cache(m_pdu.get_request_id());
++-#endif
++     status = m_snmp->snmp_engine(m_pdu, m_pdu.get_error_status(), m_pdu.get_error_index(),
++ 		    *m_target, m_callBack, m_callData, m_socket, 0, this);
++   }
++   else {
+++#endif
++     status = send_snmp_request(m_socket, m_rawPdu, m_rawPduLen, *m_address);
+++#ifdef _SNMPv3
++   }
+++#endif
++   if (status != 0)
++     return SNMP_CLASS_TL_FAILED;
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
