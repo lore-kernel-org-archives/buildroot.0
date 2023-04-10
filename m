@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB5AC77B71
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F6E7C77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:38:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D81C0616AF;
-	Mon, 10 Apr 2023 19:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D81C0616AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DF776FE8B;
+	Mon, 10 Apr 2023 19:38:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DF776FE8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NxJhHpdp3wHL; Mon, 10 Apr 2023 19:38:37 +0000 (UTC)
+	with ESMTP id oLTQAcVcOQra; Mon, 10 Apr 2023 19:38:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1283D613C8;
-	Mon, 10 Apr 2023 19:38:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1283D613C8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 040941BF316
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97D02613FD;
+	Mon, 10 Apr 2023 19:38:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97D02613FD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 434B11BF316
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 987D760E61
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3C83417C7
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 987D760E61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3C83417C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hk4021L-n4V4 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sH1DahmiRHPF for <buildroot@lists.busybox.net>;
  Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8B4C613C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 843D341946
  for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8B4C613C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 843D341946
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A96F683D29; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
+ id 73CB883984; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 21:28:46 +0200
+Date: Mon, 10 Apr 2023 21:03:04 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2429e6691a15813d8b809b67a8b15ff57f1c6032
-X-Git-Newrev: 20fa9e84edf8d0acc29e84f0faa940f511d794fd
+X-Git-Oldrev: 7741edd24833889d057a7b321b536969fc15a507
+X-Git-Newrev: 638a7d41295142ca4fc3cbb6f455ef4405906928
 X-Patchwork-Hint: ignore
-Message-Id: <20230410193614.A96F683D29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/snmppp: fix build
- without SNMPV3
+Message-Id: <20230410193614.73CB883984@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/python-web2py:
+ security bump to version 2.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,81 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20fa9e84edf8d0acc29e84f0faa940f511d794fd
+commit: https://git.buildroot.net/buildroot/commit/?id=638a7d41295142ca4fc3cbb6f455ef4405906928
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure without BR2_PACKAGE_SNMPPP_SNMPV3 raised
-since bump to version 3.5.0 in commit
-e011fa0415883b9d44df616cfaf6956e1a11da88:
+Fix CVE-2023-22432: Open redirect vulnerability exists in web2py
+versions prior to 2.23.1. When using the tool, a web2py user may be
+redirected to an arbitrary website by accessing a specially crafted URL.
+As a result, the user may become a victim of a phishing attack.
 
-msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
-msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
-  263 |   if (m_target->get_version() == version3) {
-      |                                  ^~~~~~~~
-      |                                  version1
-
-Fixes:
- - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
+https://github.com/web2py/web2py/compare/v2.23.0...v2.23.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a45f2af7fae09e4daee9d017b02e8744b357cf48)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 11f8c11dfb61f1efa92d80de2d5ee915d73ff656)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snmppp/0001-fix-build-without-v3.patch | 43 ++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ package/python-web2py/python-web2py.hash | 2 +-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/snmppp/0001-fix-build-without-v3.patch b/package/snmppp/0001-fix-build-without-v3.patch
-new file mode 100644
-index 0000000000..4e81f7bfc1
---- /dev/null
-+++ b/package/snmppp/0001-fix-build-without-v3.patch
-@@ -0,0 +1,43 @@
-+fix build without v3
-+
-+Fix the following build failure without version3 raised since version
-+3.5.0:
-+
-+msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
-+msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
-+  263 |   if (m_target->get_version() == version3) {
-+      |                                  ^~~~~~~~
-+      |                                  version1
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to katz.agentpp.com@magenta.de]
-+
-+diff -Nura snmp++-3.5.0.orig/src/msgqueue.cpp snmp++-3.5.0/src/msgqueue.cpp
-+--- snmp++-3.5.0.orig/src/msgqueue.cpp	2023-03-20 10:49:30.629000853 +0100
-++++ snmp++-3.5.0/src/msgqueue.cpp	2023-03-20 10:51:36.880664304 +0100
-+@@ -260,18 +260,20 @@
-+   m_target->set_retry(m_target->get_retry() - 1);
-+   SetSendTime();
-+   int status;
-+-  if (m_target->get_version() == version3) {
-+ #ifdef _SNMPv3
-++  if (m_target->get_version() == version3) {
-+     // delete entry in cache
-+     if (m_snmp->get_mpv3())
-+ 	    m_snmp->get_mpv3()->delete_from_cache(m_pdu.get_request_id());
-+-#endif
-+     status = m_snmp->snmp_engine(m_pdu, m_pdu.get_error_status(), m_pdu.get_error_index(),
-+ 		    *m_target, m_callBack, m_callData, m_socket, 0, this);
-+   }
-+   else {
-++#endif
-+     status = send_snmp_request(m_socket, m_rawPdu, m_rawPduLen, *m_address);
-++#ifdef _SNMPv3
-+   }
-++#endif
-+   if (status != 0)
-+     return SNMP_CLASS_TL_FAILED;
-+ 
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index a853497768..c0ce0cc352 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  356f88b671e2bcdd9c89df526ee063ee9d6f4f57b60182ec2684adddcc426e99  python-web2py-2.23.0.tar.gz
++sha256  f4066d76290b333bc1bb1cf4c23b612eebde712b7112e90a72e7609a14690d2c  python-web2py-2.23.1.tar.gz
+ sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 4425b09d12..2a666cae17 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEB2PY_VERSION = 2.23.0
++PYTHON_WEB2PY_VERSION = 2.23.1
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
