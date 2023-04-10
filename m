@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BE05C76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:06:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD85C76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 243E2613B7;
-	Mon, 10 Apr 2023 19:06:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 243E2613B7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84CEA60071;
+	Mon, 10 Apr 2023 19:10:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84CEA60071
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HcbKo38Vhe3h; Mon, 10 Apr 2023 19:06:14 +0000 (UTC)
+	with ESMTP id LSFPnKgSwVFc; Mon, 10 Apr 2023 19:09:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F96F61399;
-	Mon, 10 Apr 2023 19:06:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F96F61399
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC2261BF316
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:06:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D374F60B2B;
+	Mon, 10 Apr 2023 19:09:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D374F60B2B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9982C1BF316
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0281408CF
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:06:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0281408CF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D34381DEE
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:09:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D34381DEE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CuQCjQhbVOrF for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 19:05:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y8Tf3P5QDYrR for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 19:09:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EC5C408C4
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4EC5C408C4
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:05:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97B0581DE4
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 97B0581DE4
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:09:55 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CD486240003;
- Mon, 10 Apr 2023 19:05:55 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 46B47240002;
+ Mon, 10 Apr 2023 19:09:51 +0000 (UTC)
 Received: from peko by be.duckdns.org with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1plwpu-0038Ie-Jh; Mon, 10 Apr 2023 21:05:54 +0200
+ id 1plwti-0038Zz-O3; Mon, 10 Apr 2023 21:09:50 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230320171543.1076609-1-fontaine.fabrice@gmail.com>
-Date: Mon, 10 Apr 2023 21:05:54 +0200
-In-Reply-To: <20230320171543.1076609-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 20 Mar 2023 18:15:43 +0100")
-Message-ID: <87ile3woa5.fsf@dell.be.48ers.dk>
+To: Peter Seiderer <ps.report@gmx.net>
+References: <20230321190501.19240-1-ps.report@gmx.net>
+Date: Mon, 10 Apr 2023 21:09:50 +0200
+In-Reply-To: <20230321190501.19240-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Tue, 21 Mar 2023 20:05:01 +0100")
+Message-ID: <87edorwo3l.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/sudo: security bump to version
- 1.9.13p3
+Subject: Re: [Buildroot] [PATCH v1] package/openssh: security bump to
+ version 9.3p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,21 +70,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > - Fix CVE-2023-27320: Sudo before 1.9.13p3 has a double free in the
- >   per-command chroot feature.
- > - Update patch
- > - Update hash of LICENSE.md (year and indentation updated:
- >   https://github.com/sudo-project/sudo/commit/dd934d6a218c05d2df61b5306e38c71edaa6ac59
- >   https://github.com/sudo-project/sudo/commit/e5634ae99184d50afbdcb8a69dd4018b1a14871d)
+ > From [1]:
+ >  * sshd(8): fix a pre-authentication double-free memory fault
+ >    introduced in OpenSSH 9.1. This is not believed to be exploitable,
+ >    and it occurs in the unprivileged pre-auth process that is
+ >    subject to chroot(2) and is further sandboxed on most major
+ >    platforms.
 
- > https://www.sudo.ws/security/advisories/double_free
- > https://www.sudo.ws/releases/stable/#1.9.13p3
+Committed to 2023.02.x, thanks.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2023.02.x and 2022.02.x, thanks.
+2022.02.x has 8.9p1, so I will not backport this there.
 
 -- 
 Bye, Peter Korsgaard
