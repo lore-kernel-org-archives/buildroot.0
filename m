@@ -1,99 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD1A5C76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBDDBC76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 854726FF13;
-	Mon, 10 Apr 2023 19:44:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 854726FF13
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F175410D5;
+	Mon, 10 Apr 2023 19:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F175410D5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lg17jhyl8-nE; Mon, 10 Apr 2023 19:47:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF9E9410D8;
+	Mon, 10 Apr 2023 19:47:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF9E9410D8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DD5A1BF316
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:47:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3416B60B2F
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3416B60B2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HpwFehhbcJ08; Mon, 10 Apr 2023 19:44:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1CA3613F9;
-	Mon, 10 Apr 2023 19:44:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1CA3613F9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8DFA51BF316
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:44:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 741DB40930
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:44:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 741DB40930
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o52hfx6U7gl1 for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 19:44:55 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 16qvxRpJd0qP for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 19:47:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A62D408C0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1A62D408C0
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:44:55 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-5047160a0beso2394072a12.0
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 12:44:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1681155893;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=4FfNktZ/dNhfFOwpUtVV4RKO2TtDtbFpoe84VbUMEvA=;
- b=1iaBLJ1s4mmWEWfWWosZXD0u5S1ECptUndegTVl5FgBTu9uqDsbK3tWrINoH9xUJ/c
- CcvZedeP4bw/geHhAzgBKaSdvV06zGHBgbL1+OcOUh3+XMwVU7IhOWPvyg1pGDXZGtpD
- BMQ8RH1M6vdC4LciU19NiDJlA8kJJIvJIQ6wu8UrzzPsRfrWJ3HwKRCwvO2RvM8Xle4L
- POiOY83drfI00AUfjNIi0Nk7omc5ZAhWHFL5+EgQKa1KrQRxnRBIyT2UV8dHvf9psN8g
- EXQOkewKq3K5vUaugi0DNJFmSSGb0/IoLGatVaw16l/IHex2XekCD3WZoDWk+Z/vCs7z
- VutQ==
-X-Gm-Message-State: AAQBX9f3xU9g6/Wl0aX+0YR1IpxxheCu3osZeF3Mh5fHXqksQ5QznwCx
- RfrC47w3/zgdGRIRZ9PWxtF+pA==
-X-Google-Smtp-Source: AKy350YX2OnAVE6ZcLQxzCR3dguc8udQNyvQgf5y32lqYgsqZ6sALk9rOxKWaZNYw6gqLt/SGShmNw==
-X-Received: by 2002:a05:6402:393:b0:4fa:4a27:adba with SMTP id
- o19-20020a056402039300b004fa4a27adbamr10068556edv.22.1681155893226; 
- Mon, 10 Apr 2023 12:44:53 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- b16-20020a50b410000000b004c5d1a15bd5sm5098781edh.69.2023.04.10.12.44.52
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 10 Apr 2023 12:44:52 -0700 (PDT)
-Message-ID: <e9e35f27-998e-52d4-4487-c09a5f0c84a3@mind.be>
-Date: Mon, 10 Apr 2023 21:44:50 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAD9C60B0E
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CAD9C60B0E
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:47:43 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id F26315FFA3;
+ Mon, 10 Apr 2023 21:47:37 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 10 Apr 2023 21:47:37 +0200
+Date: Mon, 10 Apr 2023 21:47:37 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20230410194737.GM2819@scaer>
+References: <20230330123509.23696-1-ps.report@gmx.net>
+ <20230330123509.23696-2-ps.report@gmx.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20221014230905.3091021-1-james.hilliard1@gmail.com>
- <20221030212629.51bf650e@windsurf>
- <CADvTj4qQ=esO-=RYZqzk3nGEYhw_1dGuOss3eN8xn-wu9WYogw@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <CADvTj4qQ=esO-=RYZqzk3nGEYhw_1dGuOss3eN8xn-wu9WYogw@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1681155893;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=4FfNktZ/dNhfFOwpUtVV4RKO2TtDtbFpoe84VbUMEvA=;
- b=OnhAZClI4kcQWAv1tIYVYB8uNUtLcSyDoJQ8xGodKMITvpJAIGl9B1PXzODjeSnVXh
- puNJleNPOWJfUnZinSf89KbHneWHjG9eZ5VZfnoXNF6tOcHDzA+iPWymLBZCLIAbLboD
- GyE3pot3HIb021B2g2/6N0qdP4pWHSGfKxVXmIUMrAoKwm+DdSoW2S4dNIOsoD6cLtno
- t7sQmG6D/kh7vQA+TDtm4O8LX4p+CQ+NYBhp5wONNjUJdPtpEm3L1Y+C2ZvMLvKeobW1
- 9gjF+0iuRcUbVH1mRbKAoagBtzuwXuEqJTY7tEjzgT98Zxl83yLICZCkVVxeVKp9KTck
- 27DQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=OnhAZClI
-Subject: Re: [Buildroot] [PATCH 1/1] Makefile: identify silent make via
- firstword findstring
+Content-Disposition: inline
+In-Reply-To: <20230330123509.23696-2-ps.report@gmx.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1681156061;
+ bh=1KXnkp/2Kqsk0GXE6mIZHrrcUZGIS+I3ltSHhM31ylY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=qVG2ATSWojwXxgJ596lFjbGpUGBV4betIvhv24k8FvsGsMFv421Vj7awwCDEx3bSx
+ jWfsk4SkKb+3fKTbqwxRgLEXLPcyUipAJM7LP16ixKvmv56ZDRWkRH8HLV0X4K+o3e
+ xnfZI6eVCpbFP+XVrxsUuLREn8CogzPje3A2ehdq7Rcwamg+L3+741s4OctaK/MBFp
+ 5x5tz3YkpnhNk3vKfQUhrGx9qAtAsRSw7HxVvgrnaadEGq/pSZ+gWwXuVSVcJysJS3
+ Yc1reKyh22tbI7yTBk7Kutm/ljaONU1G5dlzj1EiyDVSoLm+vYEu8I1q68STWfxQ06
+ 7KT0kI/6K0eug==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qVG2ATSW
+Subject: Re: [Buildroot] [RFC v2 2/2] package/libv4l: enable v4l2-tracer
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,66 +76,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Peter, All,
 
-
-On 30/10/2022 21:35, James Hilliard wrote:
-> On Sun, Oct 30, 2022 at 4:26 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello James,
->>
->> On Fri, 14 Oct 2022 17:09:05 -0600
->> James Hilliard <james.hilliard1@gmail.com> wrote:
->>
->>> +QUIET := $(if $(findstring s,$(firstword -$(MAKEFLAGS))),-q)
->>
->> I must be missing something, but why is -$(MAKEFLAGS) used and not just
->> $(MAKEFLAGS) ?
->>
->> Indeed, with "make -s --debug -k", $(MAKEFLAGS) is "ks --debug=all",
->> and therefore $(firstword $(MAKEFLAGS)) is ks, which is good enough for
->> the findstring s, no? Why is adding a - in front needed?
+On 2023-03-30 14:35 +0200, Peter Seiderer spake thusly:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - fix --disable-v4l-tracer vs. --disable-v4l2-tracer typo
+>   - enhance compile failure log/research
 > 
-> I think so that if $(MAKEFLAGS) doesn't have any short options that it won't
-> accidentally match on a long option.
+> Fails with rpi4_64 config:
+
+Obviously, we can't apply this for now, so I've marked is as "not
+applicable" in patchwork.
+
+>   .../host/bin/aarch64-buildroot-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -I../../utils/common -I.../aarch64-buildroot-linux-gnu/sysroot/usr/in
+> clude/json-c -I../../lib/include -Wall -Wpointer-arith -D_GNU_SOURCE -I../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=6
+> 4 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -D_FORTIFY_SOURCE=1 -std=gnu++11 -c libv4l2tracer.cpp  -fPIC -DPIC -o .libs/libv4l2tracer_la-libv4l2tracer.o
+>   /tmp/ccXMMihl.s: Assembler messages:
+>   /tmp/ccXMMihl.s:208: Error: symbol `open64' is already defined
+>   /tmp/ccXMMihl.s:762: Error: symbol `mmap64' is already defined
+>   make[5]: *** [Makefile:751: libv4l2tracer_la-libv4l2tracer.lo] Error 1
+
+This is going to be tricky to investigate: indeed, AIUI, libv4l2tracer
+is going to be a shared lib thatr can be LD_PRELOADed explicitly to
+trace a few system calls, like open, open64, mmap, mmap64, and a few
+others...
+
+So, the solution is not to rename those functions in libv4l2tracer.
+
+All those 64-bit flags are starting to be messing with my brain... :-(
+
+Regards,
+Yann E. MORIN.
+
+> The preprocessor output shows:
 > 
-> For example if $(MAKEFLAGS) is " --shuffle=none" the - in front ensures that
-> we don't match the s in a long option like shuffle.
-
-  Exactly right.
-
-  However, the firstword approach doesn't work with GNU make 3.81. For example, 
-the following invocation:
-
-make --no-print-directory -s
-
-will set MAKEFLAGS to " --no-print-directory -s", so the firstword approach 
-*doesn't* find the -s, but the filter-out approach does.
-
-  Therefore, I marked this patch as Rejected.
-
-  Regards,
-  Arnout
-
+>   [...]
+>   extern "C" {
+>   # 61 ".../host/aarch64-buildroot-linux-gnu/sysroot/usr/include/sys/mman.h" 3 4
+>   extern void * mmap (void *__addr, size_t __len, int __prot, int __flags, int __fd, __off64_t __offset) noexcept (true) __asm__ ("" "mmap64");
+>   [...]
+>   extern void *mmap64 (void *__addr, size_t __len, int __prot,
+>          int __flags, int __fd, __off64_t __offset) noexcept (true);
 > 
->>
->> Thanks!
->>
->> Thomas
->> --
->> Thomas Petazzoni, co-owner and CEO, Bootlin
->> Embedded Linux and Kernel engineering and training
->> https://bootlin.com
+> And host/aarch64-buildroot-linux-gnu/sysroot/usr/include/sys/mman.h:
+> 
+>   56 #ifndef __USE_FILE_OFFSET64
+>   57 extern void *mmap (void *__addr, size_t __len, int __prot,
+>   58                    int __flags, int __fd, __off_t __offset) __THROW;
+>   59 #else
+>   60 # ifdef __REDIRECT_NTH
+>   61 extern void * __REDIRECT_NTH (mmap,
+>   62                               (void *__addr, size_t __len, int __prot,
+>   63                                int __flags, int __fd, __off64_t __offset),
+>   64                               mmap64);
+>   65 # else
+>   66 #  define mmap mmap64
+>   67 # endif
+>   68 #endif
+>   69 #ifdef __USE_LARGEFILE64
+>   70 extern void *mmap64 (void *__addr, size_t __len, int __prot,
+>   71                      int __flags, int __fd, __off64_t __offset) __THROW;
+>   72 #endif
+> ---
+>  package/libv4l/Config.in | 1 +
+>  package/libv4l/libv4l.mk | 9 ++++++++-
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+> index c88f280c3b..7a86c7de15 100644
+> --- a/package/libv4l/Config.in
+> +++ b/package/libv4l/Config.in
+> @@ -33,6 +33,7 @@ config BR2_PACKAGE_LIBV4L_UTILS
+>  	  - v4l2-compliance
+>  	  - v4l2-ctl, cx18-ctl, ivtv-ctl
+>  	  - v4l2-sysfs-path
+> +	  - v4l2-tracer (if json-c is enabled)
+>  	  - rds-ctl
+>  	  - qv4l2 (if Qt is enabled)
+>  
+> diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+> index 1142a7442f..ccb4da4fb7 100644
+> --- a/package/libv4l/libv4l.mk
+> +++ b/package/libv4l/libv4l.mk
+> @@ -9,7 +9,7 @@ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+>  LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+>  LIBV4L_INSTALL_STAGING = YES
+>  LIBV4L_DEPENDENCIES = host-pkgconf
+> -LIBV4L_CONF_OPTS = --disable-doxygen-doc --disable-qvidcap --disable-v4l2-tracer
+> +LIBV4L_CONF_OPTS = --disable-doxygen-doc --disable-qvidcap
+>  # needed to get utils/qv4l link flags right
+>  LIBV4L_AUTORECONF = YES
+>  # add host-gettext for AM_ICONV macro
+> @@ -66,6 +66,13 @@ LIBV4L_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++11"
+>  # libelf and clang support
+>  LIBV4L_CONF_OPTS += --disable-bpf
+>  
+> +ifeq ($(BR2_PACKAGE_JSON_C),y)
+> +LIBV4L_CONF_OPTS += --enable-v4l2-tracer
+> +LIBV4L_DEPENDENCIES += json-c
+> +else
+> +LIBV4L_CONF_OPTS += --disable-v4l2-tracer
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+>  LIBV4L_CONF_OPTS += --enable-qv4l2
+>  LIBV4L_DEPENDENCIES += qt5base
+> -- 
+> 2.40.0
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
