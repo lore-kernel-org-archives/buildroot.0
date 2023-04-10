@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE4EC77B6F
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FE3EC77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B588160E61;
-	Mon, 10 Apr 2023 19:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B588160E61
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D2A6613CE;
+	Mon, 10 Apr 2023 19:36:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D2A6613CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gy8Fi4RKXfUJ; Mon, 10 Apr 2023 19:36:18 +0000 (UTC)
+	with ESMTP id cXh00Vk8EBIC; Mon, 10 Apr 2023 19:36:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 026BE613C8;
-	Mon, 10 Apr 2023 19:36:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 026BE613C8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F4791BF316
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8672F613D3;
+	Mon, 10 Apr 2023 19:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8672F613D3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 558D01C3BA3
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2730440BEA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F487613CE
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2730440BEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F487613CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HGYpvSfSkicl for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jNg-r2TT3Crk for <buildroot@lists.busybox.net>;
  Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E7C340376
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42F8260743
  for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E7C340376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42F8260743
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2845D83D29; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
+ id 31A1D83D2A; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 20:57:38 +0200
+Date: Mon, 10 Apr 2023 20:57:59 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6b675eaf216b332217caf2430fe6c3f6ef6298e4
-X-Git-Newrev: eba42c4bddee0d4a53391c1d2da99e66ef6a9cec
+X-Git-Oldrev: eba42c4bddee0d4a53391c1d2da99e66ef6a9cec
+X-Git-Newrev: 533477f62f91da3bcc050389d494a0f4cac1735c
 X-Patchwork-Hint: ignore
-Message-Id: <20230410193614.2845D83D29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/snmppp: fix build
- with libressl >= 3.5.0
+Message-Id: <20230410193614.31A1D83D2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/snmppp: bump to
+ version 3.4.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eba42c4bddee0d4a53391c1d2da99e66ef6a9cec
+commit: https://git.buildroot.net/buildroot/commit/?id=533477f62f91da3bcc050389d494a0f4cac1735c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure with libressl raised since bump to
-version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+Changelog:
 
-auth_priv.cpp: In member function 'virtual int Snmp_pp::AuthMD5::password_to_key(const unsigned char*, unsigned int, const unsigned char*, unsigned int, unsigned char*, unsigned int*)':
-auth_priv.cpp:1132:20: error: aggregate 'Snmp_pp::MD5HashStateType md5_hash_state' has incomplete type and cannot be defined
-   MD5HashStateType md5_hash_state;
-                    ^~~~~~~~~~~~~~
+  - Fixed: Winsock has to be included before windows header.
+  - Fixed: Added SnmpTarget::version_to_string() function
+  - Fixed: Fixed compiler warning on MSYS2 g++
 
-Fixes:
- - http://autobuild.buildroot.org/results/b50b883c03e82564198a8b7e91bd14bf007772e0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fe6dc835e0581f82c570460903054d5b7d379cd2)
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a422f407610fc9c11ccd9cf5d9fc383e084e3d38)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-fix-build-with-libressl-3-5-0.patch       | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/snmppp/snmppp.hash | 2 +-
+ package/snmppp/snmppp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/snmppp/0001-fix-build-with-libressl-3-5-0.patch b/package/snmppp/0001-fix-build-with-libressl-3-5-0.patch
-new file mode 100644
-index 0000000000..f60f84f9a2
---- /dev/null
-+++ b/package/snmppp/0001-fix-build-with-libressl-3-5-0.patch
-@@ -0,0 +1,39 @@
-+fix build with libressl >= 3.5.0
-+
-+Fix the following build failure with libressl >= 3.5.0:
-+
-+auth_priv.cpp: In member function 'virtual int Snmp_pp::AuthMD5::password_to_key(const unsigned char*, unsigned int, const unsigned char*, unsigned int, unsigned char*, unsigned int*)':
-+auth_priv.cpp:1132:20: error: aggregate 'Snmp_pp::MD5HashStateType md5_hash_state' has incomplete type and cannot be defined
-+   MD5HashStateType md5_hash_state;
-+                    ^~~~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/b50b883c03e82564198a8b7e91bd14bf007772e0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: merged (emailed to katz.agentpp.com@magenta.de)]
-+
-+diff -Naurp snmp++-3.4.9.orig/src/auth_priv.cpp snmp++-3.4.9/src/auth_priv.cpp
-+--- snmp++-3.4.9.orig/src/auth_priv.cpp	2022-05-13 11:39:14.083038544 +0200
-++++ snmp++-3.4.9/src/auth_priv.cpp	2022-05-13 15:00:42.576102348 +0200
-+@@ -79,8 +79,9 @@ static const char *loggerModuleName = "s
-+ 
-+ /* -- START: Defines for OpenSSL -- */
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+-// OpenSSL versions up to 1.0.x and LibreSSL
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
-++	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
-++// OpenSSL versions up to 1.0.x and LibreSSL versions up to 3.4.x
-+ typedef EVP_MD_CTX            EVPHashStateType;
-+ 
-+ int evpAllocAndInit(EVP_MD_CTX *ctx, const EVP_MD *md)
-+@@ -138,7 +139,7 @@ typedef EVP_MD_CTX*           MD5HashSta
-+ #define MD5_PROCESS(s, p, l)  EVP_DigestUpdate(*(s), p, l)
-+ #define MD5_DONE(s, k)        evpDigestFinalAndFree(s, k)
-+ 
-+-#endif // OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-++#endif // OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
-+ 
-+ typedef DES_key_schedule      DESCBCType;
-+ #define DES_CBC_START_ENCRYPT(c, iv, k, kl, r, s) \
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index db3a4b5f4f..6dc3d39ced 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  7c0aaf4ea21db082453f880cc2062a86dcbbf0ee6c8d47c72beb8e0c77c26b6c  snmp++-3.4.9.tar.gz
++sha256  d7a77fd05ecd99b25c51cbab08dfeef22a5edf2677875695c213631af59d5bae  snmp++-3.4.10.tar.gz
+ sha256  61337e799c8274e596e5783b22607beea8073ee296c6b27fc5c7487296e56851  src/v3.cpp
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index bc05cad583..005a5a9f35 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNMPPP_VERSION = 3.4.9
++SNMPPP_VERSION = 3.4.10
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
