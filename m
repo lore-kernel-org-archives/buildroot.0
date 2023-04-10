@@ -4,66 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 325B4C77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 17:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 334E5C76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 17:50:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94EBC4175F;
-	Mon, 10 Apr 2023 17:44:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94EBC4175F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DF5F409EF;
+	Mon, 10 Apr 2023 17:50:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DF5F409EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oEYgYYEwh1zK; Mon, 10 Apr 2023 17:44:38 +0000 (UTC)
+	with ESMTP id OzhfbGTKhEMT; Mon, 10 Apr 2023 17:50:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A9F041528;
-	Mon, 10 Apr 2023 17:44:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A9F041528
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 68FE11BF380
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 17:44:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A87C340AB9;
+	Mon, 10 Apr 2023 17:50:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A87C340AB9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CFC161BF380
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 17:50:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F8AA81CE7
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 17:44:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F8AA81CE7
+ by smtp3.osuosl.org (Postfix) with ESMTP id B5DAD60BE2
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 17:50:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5DAD60BE2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LHHdAGcsBJv3 for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 17:44:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0973B8142A
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0973B8142A
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 17:44:34 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 94ECD5FFA1;
- Mon, 10 Apr 2023 19:44:28 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 10 Apr 2023 19:44:28 +0200
-Date: Mon, 10 Apr 2023 19:44:28 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20230410174428.GH2819@scaer>
-References: <20230403013530.3502-1-vfazio@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id euIhcd5dFlo0 for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 17:50:25 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D89CF60BCD
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
+ [IPv6:2a00:1450:4864:20::12e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D89CF60BCD
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 17:50:24 +0000 (UTC)
+Received: by mail-lf1-x12e.google.com with SMTP id r27so7359013lfe.0
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 10:50:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1681149022;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=vyuU7fQ7Idg7Xu4+MEVNji6pqpN+TZmT6vtAh1t/cO0=;
+ b=I/MktK7VAEshz67kLmHs41K4fQebs/llp8mnlK/F8Qs9brgDS8ZKZ9fYYPfUTzcSL2
+ tmy6s3vDpf3kmXKpjlZwmIfMmRfXA+pCkSBlByfrI8lg4TKw9QERkxNFEElGnoA+aSWz
+ ZxedJT9PVT4biaCY0di286mVrizhqd3yx/uAX78N6u1IZGHfRz118Q5IH+sdMNQM0mzM
+ iZmkuSvtwSABnukpjUUbF0jB63LWHN1ACfCbuypQc9mHkCWS8dv0xZ1EkIH/Gyo3VE/4
+ sVxz0JNUvU+j4Svr3qOSbkHchkofo7CJj/QJUFMbuOfvTVuNjiYQ0hmAebfsG7WtPi6t
+ jw6g==
+X-Gm-Message-State: AAQBX9fk5ZozbYPmW1Qkk2yRFiv/wV3Wr+iEugeP/Q422EdmMYex9V/V
+ 0XnNlAir5/8BbAzBnY9YdiKMf7qStYxY0w==
+X-Google-Smtp-Source: AKy350b4oRP5Oa6Nz4wSgDF6/ogoKYIF9EKVajTEXGHjkaIRyOAFOPptZkWm2yKPR7nHc+dMeRBwYQ==
+X-Received: by 2002:ac2:456f:0:b0:4e2:523:4451 with SMTP id
+ k15-20020ac2456f000000b004e205234451mr3486325lfm.9.1681149022195; 
+ Mon, 10 Apr 2023 10:50:22 -0700 (PDT)
+Received: from localhost.localdomain ([5.188.167.245])
+ by smtp.googlemail.com with ESMTPSA id
+ a8-20020a2e9808000000b00295b842c2dbsm2343994ljj.133.2023.04.10.10.50.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 10 Apr 2023 10:50:21 -0700 (PDT)
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 10 Apr 2023 20:50:15 +0300
+Message-Id: <20230410175018.2283807-1-geomatsi@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230403013530.3502-1-vfazio@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1681148672;
- bh=faq3WN0orVbL7WHw6W63866BhVmkSgl9udubnqElDNs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=AgjWbGFfsQWzyRm2TY020sYsReHALrHDfGwiDr1NhVxEFuXE2+MlUQ18Idcoy/2Xk
- 4K+mW0WDXGPRXw1m6q0HIzJI3eTJY1qWTqBQ6VNXjEhxmjivL6iHgdLRMfuaD0r40F
- fkqRunUQOfFBVygx6x4N1LEj/x+4ctf7oE8xHHMgLK+1WmqSlofJpgCSXWYP2GHqeW
- a7pHjm3aGl1lMg9oecGig5Hp3JCCMYzx3TLVhGGRFiI4b2LydG8U1wrOj4Jt4GUb2L
- borPVYom0RLE3BiRKEHeEKnw9IiyeaGBuiF2YhfEke0GY3A9bbS0nBnxssF+X4GEgC
- LO9Gk4nHWhnmA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=AgjWbGFf
-Subject: Re: [Buildroot] [PATCH] utils/check-package: drop six usage
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1681149022;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=vyuU7fQ7Idg7Xu4+MEVNji6pqpN+TZmT6vtAh1t/cO0=;
+ b=PmRk39GhvMRRarWaVFiXV8ga4nCPrSYXGfZHsHMXKL/ac5K+cGd5RTxGXYyTKf3PRu
+ WvJFEnKxw+p2kLxjK6zsvxwGTBYJ7uV4w96MKxgU37XF2MMPPkr29gCf/BvNW63N8Cbe
+ vGeuScXGVk0DVH8fC9jfaE53AyZcpWv+5Mq+KgrADHpPrv7C8ON4cr7ukm0rQne2thgH
+ XIluvpmjYku8o81B5CnoHsC/XAjRw56u+Ipv310IDLYTq9siAiJI1Vph0KHlynTOb2KB
+ 6AVw2zQ6KbvIZnSVmcR42i4D0Z23J2/vPvQsTOQgk2/eMkTBQFg2AgykKkI5PlsXIcAB
+ 7WqQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=PmRk39Gh
+Subject: [Buildroot] [PATCH 0/3] allwinner: second part of misc bsp updates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,92 +93,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2023-04-02 20:35 -0500, Vincent Fazio spake thusly:
-> The shebang in check-package now defines python3. There is no longer a
-> need to maintain support with python 2.x.
-> 
-> See-also: 02b165dc71 (check-package: fix Python3 support)
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> ---
->  utils/check-package | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/utils/check-package b/utils/check-package
-> index 98a25bd0b2..46f2897b51 100755
-> --- a/utils/check-package
-> +++ b/utils/check-package
-> @@ -6,7 +6,6 @@ import inspect
->  import magic
->  import os
->  import re
-> -import six
->  import sys
->  
->  import checkpackagelib.base
-> @@ -218,12 +217,9 @@ def check_file_using_lib(fname):
->          if fail > 0:
->              failed.add(name)
->          nwarnings += warn
-> -    if six.PY3:
-> -        f = open(fname, "r", errors="surrogateescape")
-> -    else:
-> -        f = open(fname, "r")
-> +
->      lastline = ""
-> -    for lineno, text in enumerate(f.readlines()):
-> +    for lineno, text in enumerate(open(fname, "r", errors="surrogateescape").readlines()):
+Hi all,
 
-Err.. This leaks a file object, no?
-
-Even if the script is short-lived, it is better to properly close()
-files once they are unused.
-
-Here, I believe using a context manager is adequate (and relatively easy
-now that we do no longer have to deal with two ways if opening the
-file):
-
-    with open(fname, "r", errors="surrogateescape") as f:
-        for lineno, text in enumerate(f.readlines()):
-            ...
+Here is the second patch series with BSP updates for several Allwinner
+boards. This time xradio driver and boards with WiF are updated,
+including including OrangePi Zero and OrangePi Zero Plus2.
 
 Regards,
-Yann E. MORIN.
+Sergey
 
->          nlines += 1
->          for name, cf in objects:
->              if cf.disable.search(lastline):
-> @@ -233,7 +229,7 @@ def check_file_using_lib(fname):
->                  failed.add(name)
->              nwarnings += warn
->          lastline = text
-> -    f.close()
-> +
->      for name, cf in objects:
->          warn, fail = print_warnings(cf.after(), name in xfail)
->          if fail > 0:
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Sergey Matyukevich (3):
+  package/xr819-xradio: bump version
+  configs/orangepi_zero: bump BSP versions
+  configs/orangepi_zero_plus2: update BSP versions
+
+ configs/orangepi_zero_defconfig        | 6 +++---
+ configs/orangepi_zero_plus2_defconfig  | 8 ++++----
+ package/xr819-xradio/xr819-xradio.hash | 2 +-
+ package/xr819-xradio/xr819-xradio.mk   | 2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.40.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
