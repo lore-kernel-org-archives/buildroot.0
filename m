@@ -4,48 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8DC4C77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 13:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDFB6C77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 13:48:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3321A40474;
-	Mon, 10 Apr 2023 13:47:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3321A40474
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BD3F4157A;
+	Mon, 10 Apr 2023 13:48:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BD3F4157A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ElmXUayAsgmA; Mon, 10 Apr 2023 13:47:54 +0000 (UTC)
+	with ESMTP id tYBXmbNLlozD; Mon, 10 Apr 2023 13:48:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD6584155B;
-	Mon, 10 Apr 2023 13:47:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD6584155B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CBE101C3B18
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 13:47:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6012E4155B;
+	Mon, 10 Apr 2023 13:48:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6012E4155B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B147C1C3B18
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 13:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5D5681EA2
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 13:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5D5681EA2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A5DC40B82
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 13:48:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A5DC40B82
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2z6f_gYqMJuN for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 13:47:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C385981EA0
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 13:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C385981EA0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB94783C40; Mon, 10 Apr 2023 13:47:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1zWXM8OYjcOc for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 13:48:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60A33400D8
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 60A33400D8
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 13:48:39 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-94a34e3526fso124269066b.3
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 06:48:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1681134517;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=m599r8SRXAcDMEx2K03Sk5kT6yOdCBJG52hpqG1/GO8=;
+ b=5d3+5A8f85BJZDAPuSfvtKhomOv8XFQRAK0KaxYuNU8XsW+ZhtiVjrkCwt1I23tpc3
+ 0wv/jdKt4Jn6obbi/z9/gpftUibnF30CmlEWBL3qkMJcgB+VRrMJFTlABz7EDBPpZR8o
+ uodBhqCkdvzEQ/zoyscN/7etLtmz7qNNGL3X9svpeKQOQ8VZoAYrGtIlzqeSESd40BE4
+ 0Fley+xDb0bpdhdWOsrN0793oAJ2YjMjo0srKCEgOxPIM0QL9MjbGiybyw5URc9vFEC7
+ 1Es893EloB+9WaX/HxYJaWxTffe/eBZx3U++HoJMU7l93UobXCUO3xNgdRcZvScrE6i7
+ pYIQ==
+X-Gm-Message-State: AAQBX9esTlzE3/She81svZI6T06sjQ4iqidNbGin9s8wLrGeSpvmggJV
+ /Cj0SeGuWj43iM6n52216Y7cujxbZ3OuRJ0b3zY=
+X-Google-Smtp-Source: AKy350YpWfo7Gd21yyHDqCFesDH5ddoJVFyWP7/P3ljVaNVTKKcuUijLK2MaL9PEMJKBFmyWX1proQ==
+X-Received: by 2002:a05:6402:6d8:b0:504:943e:14b2 with SMTP id
+ n24-20020a05640206d800b00504943e14b2mr3806768edy.28.1681134517496; 
+ Mon, 10 Apr 2023 06:48:37 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ ec20-20020a0564020d5400b00504a1313bafsm1277275edb.95.2023.04.10.06.48.35
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 10 Apr 2023 06:48:35 -0700 (PDT)
+Message-ID: <e540fa3d-2a2f-709d-f4f4-990bdcb9d690@mind.be>
+Date: Mon, 10 Apr 2023 15:48:33 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-GB
+To: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
+References: <20230410090027.1926404-1-troglobit@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 15:45:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: abff5246a78e0adaf6c75b722a85fed891c3f8b1
-X-Git-Newrev: 2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb
-X-Patchwork-Hint: ignore
-Message-Id: <20230410134744.AB94783C40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] sunxi-tools: bump to version
- 1.4.2-168-ged3039c
+In-Reply-To: <20230410090027.1926404-1-troglobit@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1681134517;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=m599r8SRXAcDMEx2K03Sk5kT6yOdCBJG52hpqG1/GO8=;
+ b=Byv6zb4n48NgtnWqszgf5kAApawuXcX88fkrx0RN8m+nmjJmmmUd0Z4mC2rPMkPQBC
+ 0rfoQmnZMH8/DvujfFYgQLubcSCWw9mcq5eV9evGE3B+A7etmbrDFTHMoxxi69zc1ZGm
+ 8BdY29YyBpKFX0tFmXlUDikK2nBCEw4hu1x8zGRCafZ+vPHBXcJZUIk46PtSyvkDbPf2
+ FMtNwEYET2oUtZ9qaUYQ18tE77UsJj3B8SQfr8WpN1wpdEiuZ/TOa5BomhOEodS2taIZ
+ t1LdyZcU2vHi/T1he0tX3LWzSABJDAhIEdhw/i6MHVwfPk9W8Jl/Z9OO7dJUDjJ08tq8
+ 48bQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Byv6zb4n
+Subject: Re: [Buildroot] [PATCH 1/1] package/mg: bump to v3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,139 +101,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps version of the sunxi-tools to latest commit on master branch.
 
-There are no new tags\releases since 2016 so let's use commit hash as version.
-New version brings support for the following SOCs: A63, V5, R528/T113s, V853,
-F1C100s, R329, H616, H6
+On 10/04/2023 11:00, Joachim Wiberg wrote:
+> Excerpt of https://github.com/troglobit/mg/releases/tag/v3.6:
+> 
+>   - Sync with mg upstream, OpenBSD 7.2, as of April 10 2023
+>     - Drop trailing whitespace on RET (c-mode)
+>     - Add zap-to-char and zap-up-to-char, binding the former to M-z
+>     - Fix dobeep_msgs() usage, does not support format strings, this may
+>       have caused unexpected crashes for some operations, e.g. goto line
+>       that does not exist
+>     - Fix memleaks and possible crashes in ctags support
+>     - Fall back to /bin/sh if $SHELL is undefined
+>   - Fix typos and duplicate undo in *quick* help buffer
+>   - Add support for exuberant/universal Ctags tags file format
+>   - Add support for M-, to pop-tag-mark, like GNU Emacs
+> 
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-[Arnout: use full hash in VERSION]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- ...-meminfo-Access-to-io-memory-via-pointers.patch | 59 ----------------------
- package/sunxi-tools/Config.in                      |  1 +
- package/sunxi-tools/sunxi-tools.hash               |  2 +-
- package/sunxi-tools/sunxi-tools.mk                 |  4 +-
- 4 files changed, 4 insertions(+), 62 deletions(-)
+  Applied to master, thanks.
 
-diff --git a/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
-deleted file mode 100644
-index 997c413f23..0000000000
---- a/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 5c0a443ba336f10a8db6a99c769aa84ad37ed4d2 Mon Sep 17 00:00:00 2001
--From: Vadim Kochan <vadim4j@gmail.com>
--Date: Wed, 20 Feb 2019 02:48:43 +0200
--Subject: [PATCH] meminfo: Access to io memory via pointers
--
--The main reason for this is to be able compile with musl library,
--because there is no support of inx/outx functions for ARM platform.
--
--Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-----
-- meminfo.c | 11 ++++++-----
-- 1 file changed, 6 insertions(+), 5 deletions(-)
--
--diff --git a/meminfo.c b/meminfo.c
--index 0b0ff23..7d9f10f 100644
----- a/meminfo.c
--+++ b/meminfo.c
--@@ -22,7 +22,6 @@
-- #include <sys/mman.h>
-- #include <stdint.h>
-- #include <errno.h>
---#include <sys/io.h>
-- #include <stdbool.h>
-- 
-- #include "common.h"
--@@ -74,24 +73,26 @@ static enum sunxi_soc_version soc_version;
-- unsigned int
-- sunxi_io_read(void *base, int offset)
-- {
---	return inl((unsigned long) (base + offset));
--+	unsigned long port = (unsigned long) (base + offset);
--+	return *((volatile unsigned long *) port);
-- }
-- 
-- void
-- sunxi_io_write(void *base, int offset, unsigned int value)
-- {
---	outl(value, (unsigned long) (base + offset));
--+	unsigned long port = (unsigned long) (base + offset);
--+	*((volatile unsigned long *) port) = value;
-- }
-- 
-- void
-- sunxi_io_mask(void *base, int offset, unsigned int value, unsigned int mask)
-- {
---	unsigned int tmp = inl((unsigned long) (base + offset));
--+	unsigned int tmp = sunxi_io_read(base, offset);
-- 
-- 	tmp &= ~mask;
-- 	tmp |= value & mask;
-- 
---	outl(tmp, (unsigned long) (base + offset));
--+	sunxi_io_write(base, offset, tmp);
-- }
-- 
-- 
---- 
--2.14.1
--
-diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
-index 5f72667284..e748637c72 100644
---- a/package/sunxi-tools/Config.in
-+++ b/package/sunxi-tools/Config.in
-@@ -25,6 +25,7 @@ config BR2_PACKAGE_SUNXI_TOOLS_FEL
- 	bool "sunxi-fel"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
-+	select BR2_PACKAGE_DTC
- 	select BR2_PACKAGE_LIBUSB
- 	help
- 	  The sunxi-fel command can interact with a sunxi device in
-diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
-index 84acc2c76c..42d81144a3 100644
---- a/package/sunxi-tools/sunxi-tools.hash
-+++ b/package/sunxi-tools/sunxi-tools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  81f48014a520cb83cac4e17f5ae627a637c4d6a422b60c693c5a705c92e43822  sunxi-tools-1.4.2.tar.gz
-+sha256  6589f32e9c2a5991cc49928e83aceea675f0165ce6f13cdd2dd784139a8d4efd  sunxi-tools-1.4.2-168-ged3039cdbeeb28fc0011c3585d8f7dfb91038292.tar.gz
- sha256  2b0d4dda4bf8034e1506507a67f80f982131137afe62bf144d248f9faea31da4  LICENSE.md
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index 59d1f3b5a0..a9569f2910 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_TOOLS_VERSION = 1.4.2
-+SUNXI_TOOLS_VERSION = 1.4.2-168-ged3039cdbeeb28fc0011c3585d8f7dfb91038292
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,v$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPL-2.0+
- SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
-@@ -26,7 +26,7 @@ SUNXI_TOOLS_FEXC_LINKS += fex2bin bin2fex
- endif
- 
- ifeq ($(BR2_PACKAGE_SUNXI_TOOLS_FEL),y)
--SUNXI_TOOLS_DEPENDENCIES += libusb host-pkgconf
-+SUNXI_TOOLS_DEPENDENCIES += dtc libusb host-pkgconf
- endif
- 
- define HOST_SUNXI_TOOLS_BUILD_CMDS
+  Regards,
+  Arnout
+
+> ---
+>   package/mg/mg.hash | 4 ++--
+>   package/mg/mg.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/mg/mg.hash b/package/mg/mg.hash
+> index 19cf1e29d5..e8eedb8921 100644
+> --- a/package/mg/mg.hash
+> +++ b/package/mg/mg.hash
+> @@ -1,4 +1,4 @@
+> -# From https://github.com/troglobit/mg/releases/tag/v3.5
+> -sha256  a906eab9370c0f24a5fa25923561ad933b74ad339d0b2851d2067badf0d7e4ce  mg-3.5.tar.gz
+> +# From https://github.com/troglobit/mg/releases/tag/v3.6
+> +sha256  0e30f99b7606ddd92535aec0ba0118557afa4adca0961267314a4bf7791865fb  mg-3.6.tar.gz
+>   # Locally computed:
+>   sha256  7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  UNLICENSE
+> diff --git a/package/mg/mg.mk b/package/mg/mg.mk
+> index bb3f59a14d..88f8f60257 100644
+> --- a/package/mg/mg.mk
+> +++ b/package/mg/mg.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -MG_VERSION = 3.5
+> +MG_VERSION = 3.6
+>   MG_SITE = https://github.com/troglobit/mg/releases/download/v$(MG_VERSION)
+>   MG_LICENSE = Public Domain
+>   MG_LICENSE_FILES = UNLICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
