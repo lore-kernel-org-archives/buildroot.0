@@ -4,84 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00F50C76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 20:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16E13C76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 21:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 893EB409B1;
-	Mon, 10 Apr 2023 20:20:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 893EB409B1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9717E417B3;
+	Mon, 10 Apr 2023 21:11:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9717E417B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bDV24SLDfBnI; Mon, 10 Apr 2023 20:20:03 +0000 (UTC)
+	with ESMTP id IGz0Zac2d26b; Mon, 10 Apr 2023 21:11:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 396AE40901;
-	Mon, 10 Apr 2023 20:20:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 396AE40901
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 980471BF345
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 20:20:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D44541776;
+	Mon, 10 Apr 2023 21:11:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D44541776
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B0B01BF255
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7EB2381D3A
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 20:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EB2381D3A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DDB760BCF
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:11:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DDB760BCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CfdKcDSa77rC for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 20:19:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z7H6W_xUIOTM for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 21:11:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C85BC81D0B
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com
- [IPv6:2607:f8b0:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C85BC81D0B
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 20:19:58 +0000 (UTC)
-Received: by mail-ot1-x336.google.com with SMTP id
- cg19-20020a056830631300b0069f922cd5ceso2821069otb.12
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 13:19:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1681157998; x=1683749998;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=nSr5q42A04ik4Ng1Q/3XAlP0vhT1NiOZl0ybb2EXbrY=;
- b=lwaH+6Lb/06PTmumKhmXktbXKoZ8X6jMxu3KiZ4iwprdbrur9ppVxZihhKqrPcpnOl
- kWq/EgoX5k0+M2Pp1qV99kynENJXO7lveUA041CWukvD7NXVC2KimWVE9HaW0vT8ymn4
- Ke0YyEqXGW87k2pDLyHeojqBlUc2KDCuq2hHEAjCWdQ1FO7i4Awbi2u6ubGnE4lCaXGN
- DOM7wizAJRrPuMvWdSN9WWbPznLe29JBGfGEjCcKfES2Vnvbz/Fa1yDrxVRCEZiBBlhp
- BKoAjuL92NnBuLqGuBpy+BXYCGQlPmgF26FcXOkfuzR0UQnBxufPm38qhSudmfQIgZTv
- W4kQ==
-X-Gm-Message-State: AAQBX9e97dos/Cqo+3l9R4RvLe1FoUq4nlSB3+INsR65i2fKpzxgZ5hH
- DkeMS8rmNQzgXsHFvF8Kw6OnFYXyzTQat0MqndwVFMdNNy8=
-X-Google-Smtp-Source: AKy350bI5iif6g5VugHLH5T5JZGNXFbXVfZ2lMk5Mso26OTav34WxqCebsQrj2qamg3gn9EBMBovXtRahLeXsgy7VQU=
-X-Received: by 2002:a9d:4806:0:b0:69f:8cab:55b6 with SMTP id
- c6-20020a9d4806000000b0069f8cab55b6mr197805otf.5.1681157997796; Mon, 10 Apr
- 2023 13:19:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FFE560671
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0FFE560671
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 21:11:12 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1FD7C5FF3F;
+ Mon, 10 Apr 2023 23:11:07 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 10 Apr 2023 23:11:06 +0200
+Date: Mon, 10 Apr 2023 23:11:06 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Knight <james.d.knight@live.com>
+Message-ID: <20230410211106.GO2819@scaer>
+References: <SN4P221MB0682D9AC28AB53863A652575A0969@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-References: <20230410083252.138426-1-james.hilliard1@gmail.com>
- <20230410164031.GC2819@scaer> <298af741-f854-b70b-6e75-cde10a49c835@mind.be>
-In-Reply-To: <298af741-f854-b70b-6e75-cde10a49c835@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 10 Apr 2023 14:19:46 -0600
-Message-ID: <CADvTj4oiHrR+TD49btBb+ZDJVtKuwqm=2xyP=ay+R+w5ts-zow@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1681157998; x=1683749998;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=nSr5q42A04ik4Ng1Q/3XAlP0vhT1NiOZl0ybb2EXbrY=;
- b=Exivj1Kd1VHTSmn1KN50E+oDyiA5wRyIZ6/lQpjAsDuSTs5NSRx94mSZmUnAPDDK0o
- owN3fLBkjmEJbrz+GsXxL/KrnFgIkkCdlFjODd47ImMAcVH+M7/974tb5I+Kcu2mBiGR
- XIe0F2JYxq4RR5vSAnl5gJ5xe9ayJ+br7Q9RoHo/Ctq+xGZSpGf1Ctm0O+sWlOPBs4Pg
- ukKUpkjUDLR6ripgkwoTQimgeGXEJbMiOds+RNOPVuAciKRtN8nEseAqzZBDmf5EkNAn
- neZz4RS4e2FliIXbkNBVml9HyRMdBjsDXP02Gm2YMqy8W2vONZ5pdU/u9otb7kW04iTF
- mlyA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Exivj1Kd
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/pkg-cargo: ensure
- host/target rustflags are properly split
+Content-Disposition: inline
+In-Reply-To: <SN4P221MB0682D9AC28AB53863A652575A0969@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1681161070;
+ bh=U7vhcHWm5vsptMHq/bk01ysAWwFDJzj8mpNvDrsvsas=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=AiBuJBbzm6LqIznzf+ci7f6+MnnFpQyt80Jy9pK03dWR/DcBJWZlNIhN+fq+VhR3q
+ Lfa1cdhzNakJ9CbiDdPIUrhg6Wm4GQzS+qlMf5kZZhY2oOsUkZr9kqFfDTEt4YlCSA
+ 04+P7/l/scR6bcAmhco+O8CHr6K+Bimmlr2Jd/AYRtVI1PTtk8HIbCfd83mLtD5xkI
+ kQ9hsexOP2HtGeNdLH1LVOMcl92ZpSikAgeuQIlpKowAkk6wQ8FUr4soP3q5NzOgnA
+ CXCr8rymQ6ViLCJ8wt7Qlv2CcT4b+W0cTkcjl5UnS2+8Wo2DUhZd0bb+v6w6/oVJ4+
+ 5gZ+kkqMLe+aw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=AiBuJBbz
+Subject: Re: [Buildroot] [PATCH v2 1/3] board/qemu: define start qemu script
+ outside of post-image script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,73 +76,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBBcHIgMTAsIDIwMjMgYXQgMTowMuKAr1BNIEFybm91dCBWYW5kZWNhcHBlbGxlIDxh
-cm5vdXRAbWluZC5iZT4gd3JvdGU6Cj4KPgo+Cj4gT24gMTAvMDQvMjAyMyAxODo0MCwgWWFubiBF
-LiBNT1JJTiB3cm90ZToKPiA+IEphbWVzLCBhbGwsCj4gPgo+ID4gT24gMjAyMy0wNC0xMCAwMjoz
-MiAtMDYwMCwgSmFtZXMgSGlsbGlhcmQgc3Bha2UgdGh1c2x5Ogo+ID4+IFNldCBIT1NUX0xERkxB
-R1MgUlVTVEZMQUdTIHZpYSB0aGUgaG9zdC1jb25maWcgZmVhdHVyZSwgc2VlOgo+ID4+IGh0dHBz
-Oi8vZG9jLnJ1c3QtbGFuZy5vcmcvbmlnaHRseS9jYXJnby9yZWZlcmVuY2UvdW5zdGFibGUuaHRt
-bCNob3N0LWNvbmZpZwo+ID4+Cj4gPj4gV2UgaGF2ZSB0byBlbmFibGUgdGhpcyBuaWdodGx5IGZl
-YXR1cmUgZmlyc3QgdXNpbmc6Cj4gPj4gQ0FSR09fVU5TVEFCTEVfSE9TVF9DT05GSUc9InRydWUi
-Cj4gPj4KPiA+PiBTZXBhcmF0ZWx5IHNldCB0YXJnZXQgUlVTVEZMQUdTIGZvciB0aGUgdGFyZ2V0
-IHRyaXBsZSBzcGVjaWZpYyBlbnYKPiA+PiB2YXJpYWJsZS4KPiA+Pgo+ID4+IFNpZ25lZC1vZmYt
-Ynk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgo+ID4KPiA+IEZU
-UiwgQXJub3V0IGRpZCBhIHJldmlldyBvZiBhIHByZXZpb3VzIGl0ZXJhdGlvbiwgYW5kIHByb3Bv
-c2VkIGEgY29tbXQKPiA+IGxvZyB3aXRoIGEgbG90IG1vcmUgZGV0YWlscyBhbmQgZXhwbGFuYXRp
-b25zIG9uIHRoZSBhY3R1YWwgcmVhc29ucyB3aHkKPiA+IHdlIGhhdmUgdG8gZG8gdGhpcyBjaGFu
-Z2U6Cj4gPgo+ID4gICAgICBodHRwczovL2xvcmUua2VybmVsLm9yZy9idWlsZHJvb3QvMGEyZTBk
-ZDgtYjU3OS02NDRhLTlkODMtYWY4OGU0MGQ0MGRlQG1pbmQuYmUvCj4KPiAgIEFjdHVhbGx5LCB0
-aGF0IHdhcyBzdXBwb3NlZCB0byBiZSBhIHJlcGx5IHRvIHRoaXMgdjMsIG15IGJhZC4uLgo+Cj4g
-ICBAamFtZXMganVzdCBjb25maXJtYXRpb24gdGhhdCBteSBwcm9wb3NlZCBjb21taXQgbG9nIGlz
-IGVub3VnaCwgSSBhbHJlYWR5IGhhdmUKPiBpdCBsaW5lZCB1cCBmb3IgcHVzaGluZy4KClllcCwg
-bG9va3MgZ29vZCB0byBtZS4KCj4KPiAgIFJlZ2FyZHMsCj4gICBBcm5vdXQKPgo+ID4KPiA+IENv
-dWxkIHlvdSBwbGVhc2UgcmV2ZXZpZXcgd2hhdCBoZSB3cm90ZSwgYW5kIGluY29ycG9yYXRlIHRo
-YXQgaW4geW91cgo+ID4gY29tbWl0IGxvZyAoYW5kIGFtZW5kL2V4dGVuZCBmdXJ0aGVyIGlmIG5l
-ZWRlZCksIGFuZCB0aGVuIHJlc3BpbiwKPiA+IHBsZWFzZT8KPiA+Cj4gPiBSZWdhcmRzLAo+ID4g
-WWFubiBFLiBNT1JJTi4KPiA+Cj4gPj4gLS0tCj4gPj4gQ2hhbmdlcyB2MiAtPiB2MzoKPiA+PiAg
-ICAtIHJlYmFzZQo+ID4+IENoYW5nZXMgdjEgLT4gdjI6Cj4gPj4gICAgLSBhZGQgUlVTVEZMQUdT
-IHRvIEhPU1RfUEtHX0NBUkdPX0VOVgo+ID4+IC0tLQo+ID4+ICAgcGFja2FnZS9wa2ctY2FyZ28u
-bWsgfCAxMCArKysrKysrKy0tCj4gPj4gICAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCsp
-LCAyIGRlbGV0aW9ucygtKQo+ID4+Cj4gPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLWNhcmdv
-Lm1rIGIvcGFja2FnZS9wa2ctY2FyZ28ubWsKPiA+PiBpbmRleCA1NjAwYzhlOTdlLi4yNjRiZjVh
-MWFlIDEwMDY0NAo+ID4+IC0tLSBhL3BhY2thZ2UvcGtnLWNhcmdvLm1rCj4gPj4gKysrIGIvcGFj
-a2FnZS9wa2ctY2FyZ28ubWsKPiA+PiBAQCAtMzQsNyArMzQsMTAgQEAgUEtHX0NPTU1PTl9DQVJH
-T19FTlYgPSBcCj4gPj4gICAjIHVzaW5nIG5pZ2hseSBmZWF0dXJlcyBvbiBzdGFibGUgcmVsZWFz
-ZXMsIGkuZSBmZWF0dXJlcyB0aGF0IGFyZSBub3QKPiA+PiAgICMgeWV0IGNvbnNpZGVyZWQgc3Rh
-YmxlLgo+ID4+ICAgIwo+ID4+IC0jIENBUkdPX1VOU1RBQkxFX1RBUkdFVF9BUFBMSUVTX1RPX0hP
-U1Q9InRydWUiICJlbmFibGVzIHRoZSBuaWdodGx5Cj4gPj4gKyMgQ0FSR09fVU5TVEFCTEVfSE9T
-VF9DT05GSUc9InRydWUiIGVuYWJsZXMgdGhlIGhvc3Qgc3BlY2lmaWMKPiA+PiArIyBjb25maWd1
-cmF0aW9uIGZlYXR1cmUKPiA+PiArIwo+ID4+ICsjIENBUkdPX1VOU1RBQkxFX1RBUkdFVF9BUFBM
-SUVTX1RPX0hPU1Q9InRydWUiIGVuYWJsZXMgdGhlIG5pZ2h0bHkKPiA+PiAgICMgY29uZmlndXJh
-dGlvbiBvcHRpb24gdGFyZ2V0LWFwcGxpZXMtdG8taG9zdCB2YWx1ZSB0byBiZSBzZXQKPiA+PiAg
-ICMKPiA+PiAgICMgQ0FSR09fVEFSR0VUX0FQUExJRVNfVE9fSE9TVD0iZmFsc2UiIGlzIGFjdHVh
-bGx5IHNldHRpbmcgdGhlIHZhbHVlCj4gPj4gQEAgLTQzLDkgKzQ2LDExIEBAIFBLR19DT01NT05f
-Q0FSR09fRU5WID0gXAo+ID4+ICAgUEtHX0NBUkdPX0VOViA9IFwKPiA+PiAgICAgICQoUEtHX0NP
-TU1PTl9DQVJHT19FTlYpIFwKPiA+PiAgICAgIF9fQ0FSR09fVEVTVF9DSEFOTkVMX09WRVJSSURF
-X0RPX05PVF9VU0VfVEhJUz0ibmlnaHRseSIgXAo+ID4+ICsgICAgQ0FSR09fVU5TVEFCTEVfSE9T
-VF9DT05GSUc9InRydWUiIFwKPiA+PiAgICAgIENBUkdPX1VOU1RBQkxFX1RBUkdFVF9BUFBMSUVT
-X1RPX0hPU1Q9InRydWUiIFwKPiA+PiAgICAgIENBUkdPX1RBUkdFVF9BUFBMSUVTX1RPX0hPU1Q9
-ImZhbHNlIiBcCj4gPj4gICAgICBDQVJHT19CVUlMRF9UQVJHRVQ9IiQoUlVTVENfVEFSR0VUX05B
-TUUpIiBcCj4gPj4gKyAgICBDQVJHT19IT1NUX1JVU1RGTEFHUz0iJChhZGRwcmVmaXggLUMgbGlu
-ay1hcmdzPSwkKEhPU1RfTERGTEFHUykpIiBcCj4gPj4gICAgICBDQVJHT19UQVJHRVRfJChjYWxs
-IFVQUEVSQ0FTRSwkKFJVU1RDX1RBUkdFVF9OQU1FKSlfTElOS0VSPSQobm90ZGlyICQoVEFSR0VU
-X0NST1NTKSlnY2MKPiA+Pgo+ID4+ICAgIwo+ID4+IEBAIC01Myw3ICs1OCw4IEBAIFBLR19DQVJH
-T19FTlYgPSBcCj4gPj4gICAjIGFuZCBzaG91bGQgYmUgcmVtb3ZlZCB3aGVuIGZpeGVkIHVwc3Ry
-ZWFtCj4gPj4gICAjCj4gPj4gICBpZmVxICgkKE5PUk1BTElaRURfQVJDSCksYXJtKQo+ID4+IC0g
-ICAgUEtHX0NBUkdPX0VOViArPSBSVVNURkxBR1M9Ii1DbGluay1hcmc9LVdsLC0tYWxsb3ctbXVs
-dGlwbGUtZGVmaW5pdGlvbiIKPiA+PiArICAgIFBLR19DQVJHT19FTlYgKz0gXAo+ID4+ICsgICAg
-ICAgICAgICBDQVJHT19UQVJHRVRfJChjYWxsIFVQUEVSQ0FTRSwkKFJVU1RDX1RBUkdFVF9OQU1F
-KSlfUlVTVEZMQUdTPSItQ2xpbmstYXJnPS1XbCwtLWFsbG93LW11bHRpcGxlLWRlZmluaXRpb24i
-Cj4gPj4gICBlbmRpZgo+ID4+Cj4gPj4gICBIT1NUX1BLR19DQVJHT19FTlYgPSBcCj4gPj4gLS0K
-PiA+PiAyLjM0LjEKPiA+Pgo+ID4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCj4gPj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4+IGJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCj4gPj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cj4gPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+James, All,
+
+On 2023-04-07 01:21 -0400, James Knight spake thusly:
+> The following moves the definition of the QEMU board's `start-qemu.sh`
+> helper script from being inlined in the post-image script into its own
+> file. This should, in theory, make it easier to maintain the script in
+> the future.
+> 
+> Signed-off-by: James Knight <james.d.knight@live.com>
+> ---
+> Changes v1 -> v2:
+>   - Split original into three patches (suggested by Arnout).
+>   - This patch moves cat script into a new 'start-qemu.sh.in'
+>     file (suggested by Arnout).
+>   - Script template dropped escape characters; uses VAR_ prefixes.
+
+Why? The usual way to sed-n-replace is by using a placeholder for the
+variable, like:
+
+    do something @VARIABLE@
+
+which gets replaced with something like:
+
+    sed "s|@VARIABLE@|${VARIABLE}|"
+
+and since we are already doing this in numerous places in Buildroot, it
+is only logical to do it here too.
+
+> ---
+>  board/qemu/post-image.sh    | 21 ++++-----------------
+>  board/qemu/start-qemu.sh.in | 14 ++++++++++++++
+>  2 files changed, 18 insertions(+), 17 deletions(-)
+>  create mode 100644 board/qemu/start-qemu.sh.in
+> 
+> diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
+> index 88f04134961ea7a105e506045ca16a0d9b810925..c9043a1364e8e03dbfa9ff3370d4e4a34357bef5 100755
+> --- a/board/qemu/post-image.sh
+> +++ b/board/qemu/post-image.sh
+> @@ -41,21 +41,8 @@ case ${DEFCONFIG_NAME} in
+>      ;;
+>  esac
+>  
+> -cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
+> -	#!/bin/sh
+> -	(
+> -	BINARIES_DIR="\${0%/*}/"
+> -	cd \${BINARIES_DIR}
+> -
+> -	if [ "\${1}" = "serial-only" ]; then
+> -	    EXTRA_ARGS='${SERIAL_ARGS}'
+> -	else
+> -	    EXTRA_ARGS='${DEFAULT_ARGS}'
+> -	fi
+> -
+> -	export PATH="${HOST_DIR}/bin:\${PATH}"
+> -	exec ${QEMU_CMD_LINE} \${EXTRA_ARGS}
+> -	)
+> -_EOF_
+> -
+> +cp "${QEMU_BOARD_DIR}/start-qemu.sh.in" "${START_QEMU_SCRIPT}"
+> +sed -i "s|VAR_DEFAULT_ARGS|${DEFAULT_ARGS}|g" "${START_QEMU_SCRIPT}"
+> +sed -i "s|VAR_QEMU_CMD_LINE|${QEMU_CMD_LINE}|g" "${START_QEMU_SCRIPT}"
+> +sed -i "s|VAR_SERIAL_ARGS|${SERIAL_ARGS}|g" "${START_QEMU_SCRIPT}"
+
+This can all be done with a single call to sed, without cp either:
+
+    sed "s|@SERIAL_ARGS@|${SERIAL_ARGS}|g" \
+        "s|@DEFAULT_ARGS@|${DEFAULT_ARGS}|g" \
+        "s|@QEMU_CMD_LINE@|${QEMU_CMD_LINE}|g" \
+        <"${QEMU_BOARD_DIR}/start-qemu.sh.in" \
+        >"${START_QEMU_SCRIPT}"
+
+>  chmod +x "${START_QEMU_SCRIPT}"
+> diff --git a/board/qemu/start-qemu.sh.in b/board/qemu/start-qemu.sh.in
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..c2d77734c7a6b318a5f7adedfd9b0b5875e84f59
+> --- /dev/null
+> +++ b/board/qemu/start-qemu.sh.in
+> @@ -0,0 +1,14 @@
+> +#!/bin/sh
+> +(
+
+No need for a sub-shell.
+
+> +BINARIES_DIR="${0%/*}/"
+> +cd ${BINARIES_DIR}
+
+    $ shellcheck board/qemu/start-qemu.sh.in
+    In board/qemu/start-qemu.sh.in line 4:
+    cd ${BINARIES_DIR}
+    ^----------------^ SC2164: Use 'cd ... || exit' or 'cd ... || return' in case cd fails.
+       ^-------------^ SC2086: Double quote to prevent globbing and word splitting.
+
+The first is spurious (BINARIES_DIR is eaxctly where the running shell
+is), so ignoreit , but the second is valid, so:
+    # shellcheck disable=SC2164
+    cd "${BINARIES_DIR}"
+
+> +if [ "${1}" = "serial-only" ]; then
+> +    EXTRA_ARGS='VAR_SERIAL_ARGS'
+> +else
+> +    EXTRA_ARGS='VAR_DEFAULT_ARGS'
+> +fi
+> +
+> +export PATH="${HOST_DIR}/bin:${PATH}"
+
+This is the pain point: what is going to set HOST_DIR when this script
+is called? I think it should be substituted like the other variables, so
+this is what I did. The script can't be easily relocated, but that was
+not the goal for this script to be relocatable so far (it was only ever
+used in our CI), so making it relocatable can be done later (if
+possible).
+
+Applied to master with all the above fixed, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> +exec VAR_QEMU_CMD_LINE ${EXTRA_ARGS}
+> +)
+> -- 
+> 2.39.1.windows.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
