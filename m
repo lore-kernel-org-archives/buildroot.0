@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D4E1C77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:38:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB5AC77B71
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47C9F60B22;
-	Mon, 10 Apr 2023 19:38:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47C9F60B22
+	by smtp3.osuosl.org (Postfix) with ESMTP id D81C0616AF;
+	Mon, 10 Apr 2023 19:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D81C0616AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y3yEJnXBAoz6; Mon, 10 Apr 2023 19:38:24 +0000 (UTC)
+	with ESMTP id NxJhHpdp3wHL; Mon, 10 Apr 2023 19:38:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E810613DB;
-	Mon, 10 Apr 2023 19:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E810613DB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9F6161C3BA4
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1283D613C8;
+	Mon, 10 Apr 2023 19:38:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1283D613C8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 040941BF316
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CAE040930
+ by smtp3.osuosl.org (Postfix) with ESMTP id 987D760E61
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CAE040930
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 987D760E61
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IsRRtOXADVyZ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hk4021L-n4V4 for <buildroot@lists.busybox.net>;
  Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F59140949
+ by smtp3.osuosl.org (Postfix) with ESMTP id B8B4C613C9
  for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F59140949
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8B4C613C9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CCE683D27; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
+ id A96F683D29; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 21:05:25 +0200
+Date: Mon, 10 Apr 2023 21:28:46 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 638a7d41295142ca4fc3cbb6f455ef4405906928
-X-Git-Newrev: eb034871efa8d09581b00030041e0392a0735cc9
+X-Git-Oldrev: 2429e6691a15813d8b809b67a8b15ff57f1c6032
+X-Git-Newrev: 20fa9e84edf8d0acc29e84f0faa940f511d794fd
 X-Patchwork-Hint: ignore
-Message-Id: <20230410193614.7CCE683D27@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/sudo: security
- bump to version 1.9.13p3
+Message-Id: <20230410193614.A96F683D29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/snmppp: fix build
+ without SNMPV3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,122 +63,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb034871efa8d09581b00030041e0392a0735cc9
+commit: https://git.buildroot.net/buildroot/commit/?id=20fa9e84edf8d0acc29e84f0faa940f511d794fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-- Fix CVE-2023-27320: Sudo before 1.9.13p3 has a double free in the
-  per-command chroot feature.
-- Update patch
-- Update hash of LICENSE.md (year and indentation updated:
-  https://github.com/sudo-project/sudo/commit/dd934d6a218c05d2df61b5306e38c71edaa6ac59
-  https://github.com/sudo-project/sudo/commit/e5634ae99184d50afbdcb8a69dd4018b1a14871d)
+Fix the following build failure without BR2_PACKAGE_SNMPPP_SNMPV3 raised
+since bump to version 3.5.0 in commit
+e011fa0415883b9d44df616cfaf6956e1a11da88:
 
-https://www.sudo.ws/security/advisories/double_free
-https://www.sudo.ws/releases/stable/#1.9.13p3
+msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
+msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
+  263 |   if (m_target->get_version() == version3) {
+      |                                  ^~~~~~~~
+      |                                  version1
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 556c32264c98f5696b523c3028d121adaed1e386)
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a45f2af7fae09e4daee9d017b02e8744b357cf48)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...001-configure.ac-fix-openssl-static-build.patch | 42 +++++++++++-----------
- package/sudo/sudo.hash                             |  4 +--
- package/sudo/sudo.mk                               |  6 ++--
- 3 files changed, 25 insertions(+), 27 deletions(-)
+ package/snmppp/0001-fix-build-without-v3.patch | 43 ++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/sudo/0001-configure.ac-fix-openssl-static-build.patch b/package/sudo/0001-configure.ac-fix-openssl-static-build.patch
-index 32edd148a0..dc91af6119 100644
---- a/package/sudo/0001-configure.ac-fix-openssl-static-build.patch
-+++ b/package/sudo/0001-configure.ac-fix-openssl-static-build.patch
-@@ -1,6 +1,6 @@
--From 5cfc7e277d0b262a1d12e867c47a36301fb7edb7 Mon Sep 17 00:00:00 2001
-+From 1fed5adc166d5f2190a6b6ad048ec2d803316327 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 22 Feb 2023 10:01:25 +0100
-+Date: Wed, 22 Feb 2023 10:13:30 +0100
- Subject: [PATCH] configure.ac: fix openssl static build
- 
- Do not use AX_APPEND_FLAG as it will break static builds by removing
-@@ -24,26 +24,24 @@ Fixes:
-  - http://autobuild.buildroot.org/results/8be59dd94e4916f9457cb435104e36e62a28373b
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/sudo-project/sudo/pull/244]
-+[Retrieved from:
-+https://github.com/sudo-project/sudo/commit/1fed5adc166d5f2190a6b6ad048ec2d803316327]
- ---
-- configure.ac | 4 +++-
-+ m4/openssl.m4 | 4 +++-
-  1 file changed, 3 insertions(+), 1 deletion(-)
- 
--diff --git a/configure.ac b/configure.ac
--index 8eccad7e4..523d8e56b 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -3082,7 +3082,9 @@ if test "${enable_openssl-no}" != no; then
-- 		    SUDO_APPEND_LIBPATH([LIBTLS], [$f])
-- 		    ;;
-- 		*)
---		    AX_APPEND_FLAG([$f], [LIBTLS])
--+		    # Do not use AX_APPEND_FLAG as it will break static builds by removing
--+		    # duplicates such as -lz or -latomic which are needed by -lssl and -lcrypto
--+		    LIBTLS="$LIBTLS $f"
-- 		    ;;
-- 	    esac
-- 	done
---- 
--2.39.0
--
-+diff --git a/m4/openssl.m4 b/m4/openssl.m4
-+index a2e4941ae8..b4cbd821db 100644
-+--- a/m4/openssl.m4
-++++ b/m4/openssl.m4
-+@@ -44,7 +44,9 @@ AC_DEFUN([SUDO_CHECK_OPENSSL], [
-+ 			SUDO_APPEND_LIBPATH([LIBTLS], [$f])
-+ 			;;
-+ 		    *)
-+-			AX_APPEND_FLAG([$f], [LIBTLS])
-++			# Do not use AX_APPEND_FLAG as it will break static builds by removing
-++			# duplicates such as -lz or -latomic which are needed by -lssl and -lcrypto
-++		        LIBTLS="$LIBTLS $f"
-+ 			;;
-+ 		esac
-+ 	    done
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index c920b9fe74..720b21d849 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,4 +1,4 @@
- # From: https://www.sudo.ws/getting/download/
--sha256  b9a0b1ae0f1ddd9be7f3eafe70be05ee81f572f6f536632c44cd4101bb2a8539  sudo-1.9.12p2.tar.gz
-+sha256  92334a12bb93e0c056b09f53e255ccb7d6f67c6350e2813cd9593ceeca78560b  sudo-1.9.13p3.tar.gz
- # Locally calculated
--sha256  d2f93a3b17ed5586fddd07be33ad767146c1a81a22682baa68bb4360a31d020a  LICENSE.md
-+sha256  ea33b3971e8e4d9657cd6794a952aaa71b22bd16745f1645455b6ead010e0a28  LICENSE.md
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 3b5c898917..e70e8bd31f 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SUDO_VERSION_MAJOR = 1.9.12
--SUDO_VERSION_MINOR = p2
-+SUDO_VERSION_MAJOR = 1.9.13
-+SUDO_VERSION_MINOR = p3
- SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
- SUDO_SITE = https://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC, BSD-3-Clause
-@@ -13,7 +13,7 @@ SUDO_LICENSE_FILES = LICENSE.md
- SUDO_CPE_ID_VERSION = $(SUDO_VERSION_MAJOR)
- SUDO_CPE_ID_UPDATE = $(SUDO_VERSION_MINOR)
- SUDO_SELINUX_MODULES = sudo
--# We're patching configure.ac
-+# We're patching m4/openssl.m4
- SUDO_AUTORECONF = YES
- # This is to avoid sudo's make install from chown()ing files which fails
- SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
+diff --git a/package/snmppp/0001-fix-build-without-v3.patch b/package/snmppp/0001-fix-build-without-v3.patch
+new file mode 100644
+index 0000000000..4e81f7bfc1
+--- /dev/null
++++ b/package/snmppp/0001-fix-build-without-v3.patch
+@@ -0,0 +1,43 @@
++fix build without v3
++
++Fix the following build failure without version3 raised since version
++3.5.0:
++
++msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
++msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
++  263 |   if (m_target->get_version() == version3) {
++      |                                  ^~~~~~~~
++      |                                  version1
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to katz.agentpp.com@magenta.de]
++
++diff -Nura snmp++-3.5.0.orig/src/msgqueue.cpp snmp++-3.5.0/src/msgqueue.cpp
++--- snmp++-3.5.0.orig/src/msgqueue.cpp	2023-03-20 10:49:30.629000853 +0100
+++++ snmp++-3.5.0/src/msgqueue.cpp	2023-03-20 10:51:36.880664304 +0100
++@@ -260,18 +260,20 @@
++   m_target->set_retry(m_target->get_retry() - 1);
++   SetSendTime();
++   int status;
++-  if (m_target->get_version() == version3) {
++ #ifdef _SNMPv3
+++  if (m_target->get_version() == version3) {
++     // delete entry in cache
++     if (m_snmp->get_mpv3())
++ 	    m_snmp->get_mpv3()->delete_from_cache(m_pdu.get_request_id());
++-#endif
++     status = m_snmp->snmp_engine(m_pdu, m_pdu.get_error_status(), m_pdu.get_error_index(),
++ 		    *m_target, m_callBack, m_callData, m_socket, 0, this);
++   }
++   else {
+++#endif
++     status = send_snmp_request(m_socket, m_rawPdu, m_rawPduLen, *m_address);
+++#ifdef _SNMPv3
++   }
+++#endif
++   if (status != 0)
++     return SNMP_CLASS_TL_FAILED;
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
