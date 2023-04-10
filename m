@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB4BC76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 21:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E09A2C76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 21:15:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E62C7417D2;
-	Mon, 10 Apr 2023 21:14:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E62C7417D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 799A641833;
+	Mon, 10 Apr 2023 21:15:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 799A641833
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mtRdZ7PNjxhm; Mon, 10 Apr 2023 21:14:32 +0000 (UTC)
+	with ESMTP id aHtUvJgxY-xc; Mon, 10 Apr 2023 21:15:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C03BB408AE;
-	Mon, 10 Apr 2023 21:14:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C03BB408AE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 632171BF255
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:14:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 667EE41912;
+	Mon, 10 Apr 2023 21:15:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 667EE41912
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F6C51BF255
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:15:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47C06408AE
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:14:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47C06408AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 691E681BF5
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:15:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 691E681BF5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id htESwasRSxgp for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 21:14:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZnAodlEyVhR9 for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 21:15:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1DEF4028F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8704A81C26
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E1DEF4028F
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 21:14:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8704A81C26
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 21:15:29 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id D5CB45FFA9;
- Mon, 10 Apr 2023 23:14:22 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id CA5D35FFA8;
+ Mon, 10 Apr 2023 23:15:24 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 10 Apr 2023 23:14:22 +0200
-Date: Mon, 10 Apr 2023 23:14:22 +0200
+ Mon, 10 Apr 2023 23:15:24 +0200
+Date: Mon, 10 Apr 2023 23:15:24 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Knight <james.d.knight@live.com>
-Message-ID: <20230410211422.GP2819@scaer>
+Message-ID: <20230410211524.GQ2819@scaer>
 References: <20230407052108.1696-1-james.d.knight@live.com>
- <SN4P221MB0682FA7512F62AE3C071BCA8A0969@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+ <SN4P221MB06829533040263705CA5B624A0969@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <SN4P221MB0682FA7512F62AE3C071BCA8A0969@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+In-Reply-To: <SN4P221MB06829533040263705CA5B624A0969@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1681161266;
- bh=i1endO+G10Z4AGS3kynsw0ZexQFNJ3DxBdjRSsxHoXY=;
+ d=free.fr; s=smtp-20201208; t=1681161327;
+ bh=Dn2B8o575tAbHxC8JneN3Phs2911mnViL//YU6VQzKk=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Vw/ZZ4yYCGyGhlEHmC6/4/rymMZ475SNpw2dqOPdWwjlQmcnUFQLaBktiAwHUxonR
- w9oEc2PFjYqdgxBDjf7SNcKp8JWdLzoeikL+76SZsrdMJQPLovgJZIUr7KY7bT6m38
- 9YJ9vLnYaTytgcJxtFuID8lE3uUzZ1XZswYAzvNdjzlJt0kP4vcOqpvF/UZg3XpI+o
- XEC8XKeV69NNfdXFkvp5/Dr9zhZ14Q+9EsKsDqIYsHUwoa4fr++Jb6rQDifjxbrPLL
- 2QdhxE0JEqQ2jUEeKhlLBFwOy2jWuE98H4hN+fBIhOPqfPjF5SCqiCJBJApm714WHV
- HK3uaKCvrDGYg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=YyYfDB/Wrnwjd2ojBe5i7CEITliYRNAV7pIwSMiH4+tgb5Sl7jJBJLkUelBrBYx6L
+ 0PTxrfgf1ceERlTrAULx1NHeIUNtTAxHAhCKlu1dKYR8U72Q01J8wa+3nNJS5acA5C
+ Iw765qw63YgISEIkiqdEV9C8no7u/o+BH3BFq6SbQhj/2ZtHLEBus9R3s1yvAW/soK
+ SN8YKTyq9dQutyq96FPgbFqRA21ZxOXCVWFIM6Zy26BKGKxL373YaEF1XsRjrRWiDv
+ xALI1Bmi9fqj5U+Jc0/BLHAbDZYyujtf6qaNnb5HfGAK+DNsXG2PwIXf7+Xk2Z/7Nn
+ /+C5OwyvBt7mQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Vw/ZZ4yY
-Subject: Re: [Buildroot] [PATCH v2 2/3] board/qemu/start-qemu.sh.in: rework
- argument handling
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YyYfDB/W
+Subject: Re: [Buildroot] [PATCH v2 3/3] board/qemu/start-qemu.sh.in: support
+ launching with host system's qemu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,88 +86,58 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 James, All,
 
 On 2023-04-07 01:21 -0400, James Knight spake thusly:
-> Provides the ability to forward command line options directly to QEMU.
-> When invoking `start-qemu.sh`, users can forward arguments by adding a
-> double dash (`--`) into the argument set, and any trailing arguments
-> will be forwarded into QEMU. For example, `start-qemu.sh -- --help`.
-> 
-> The original implementation supported a "serial-only" command line
-> argument to help run in a non-graphical mode for some use cases. These
-> changes try to promote a newly added `--serial-only` argument to drive
-> this mode; that being said, a `serial-only` argument will still be
-> accepted for backwards compatibility.
-> 
-> Since this script is primarily for CI-related testing, a warning is
-> generated for users if any unsupported options are provided.
+> Provides the ability to use a host system's QEMU. While a Buildroot
+> generated QEMU should work for most cases, a developer may wish to use
+> the system's QEMU for options which may not have been configured in the
+> Buildroot's QEMU build (e.g. configuring a different display mode).
 > 
 > Signed-off-by: James Knight <james.d.knight@live.com>
 > ---
 > Changes v1 -> v2:
->   - From the original patch, this second patch now only contains changes
->     related to argument processing.
->   - Add unsupported warning with custom options (suggested by Romain)
->   - Ensure sh compliant in the argument parsing (while condition).
->   - Properly handle legacy `serial-only` check in argument processing by
->     not cycling just on dash-prefixed arguments.
+>   - From the original patch, this third patch now only contains changes
+>     related to permitting a system QEMU usage.
+>   - Change from `--host` to `--use-system-qemu` (suggested by Romain).
 > ---
->  board/qemu/start-qemu.sh.in | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
+>  board/qemu/start-qemu.sh.in | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
 > diff --git a/board/qemu/start-qemu.sh.in b/board/qemu/start-qemu.sh.in
-> index c2d77734c7a6b318a5f7adedfd9b0b5875e84f59..dd387507f8867778ec73f49d769679dcd0956fd4 100644
+> index dd387507f8867778ec73f49d769679dcd0956fd4..51f15b3ecdfdc8151caeae90582ad1142d122e69 100644
 > --- a/board/qemu/start-qemu.sh.in
 > +++ b/board/qemu/start-qemu.sh.in
-> @@ -3,12 +3,25 @@
->  BINARIES_DIR="${0%/*}/"
+> @@ -4,9 +4,11 @@ BINARIES_DIR="${0%/*}/"
 >  cd ${BINARIES_DIR}
 >  
-> -if [ "${1}" = "serial-only" ]; then
-> +mode_serial=0
-> +while [ "$1" ]; do
-> +    case "$1" in
-> +    --serial-only|serial-only) mode_serial=1; shift;;
+>  mode_serial=0
+> +mode_sys_qemu=0
+>  while [ "$1" ]; do
+>      case "$1" in
+>      --serial-only|serial-only) mode_serial=1; shift;;
+> +    --use-system-qemu) mode_sys_qemu=1; shift;;
 
-I like to use false/true for booleans, first because this is exactly
-what mode_serial is, and second because we can directly call them to
-test truthness...
+I also swotched to false/true here...
 
-> +    --) shift; break;;
-> +    *) echo "unknown option: $1" 1>&2; exit 1;;
-> +    esac
-> +done
-> +
-> +if [ $mode_serial -eq 1 ]; then
-
-... here, as:
-
-    if ${mode_serial}; then
-        ...
-
->      EXTRA_ARGS='VAR_SERIAL_ARGS'
->  else
->      EXTRA_ARGS='VAR_DEFAULT_ARGS'
+>      --) shift; break;;
+>      *) echo "unknown option: $1" 1>&2; exit 1;;
+>      esac
+> @@ -22,6 +24,9 @@ if [ "$*" ]; then
+>      echo "(warning) unsupported options: $*"
 >  fi
 >  
-> +if [ "$*" ]; then
-> +    echo "(warning) unsupported options: $*"
-> +fi
+> -export PATH="${HOST_DIR}/bin:${PATH}"
+> +if [ $mode_sys_qemu -ne 1 ]; then
 
-This warning is not going to be usefull, is it? If the user does pass
-extra variables for qemu, $* will not be empty, and this is expected.
-
-OTOH, if there were options the script did not recognise for itself, it
-would have already errored out becasue of 'exit 1' earlier.
-
-So, I dropped the warning.
+... and here.
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  export PATH="${HOST_DIR}/bin:${PATH}"
-> -exec VAR_QEMU_CMD_LINE ${EXTRA_ARGS}
-> +exec VAR_QEMU_CMD_LINE ${EXTRA_ARGS} "$@"
+> +    export PATH="${HOST_DIR}/bin:${PATH}"
+> +fi
+> +
+>  exec VAR_QEMU_CMD_LINE ${EXTRA_ARGS} "$@"
 >  )
 > -- 
 > 2.39.1.windows.1
