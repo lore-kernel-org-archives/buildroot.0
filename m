@@ -4,54 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B2DC76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 21:12:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1433C77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 21:12:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FAF1417C7;
-	Mon, 10 Apr 2023 21:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FAF1417C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4446641796;
+	Mon, 10 Apr 2023 21:12:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4446641796
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pi3Frz4UNnqg; Mon, 10 Apr 2023 21:12:08 +0000 (UTC)
+	with ESMTP id Ln6_j3atNZP3; Mon, 10 Apr 2023 21:12:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A8E74179E;
-	Mon, 10 Apr 2023 21:12:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A8E74179E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33A274190A;
+	Mon, 10 Apr 2023 21:12:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33A274190A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4FB441C3B6F
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:12:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D2CEA1BF255
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:12:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2717F41796
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:12:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2717F41796
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA77241796
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 21:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA77241796
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SsSP8BKXP4cw for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 21:12:04 +0000 (UTC)
+ with ESMTP id RQ0raUeGxX7d for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 21:12:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA10941742
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AA10941742
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 21:12:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65E964179E
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 65E964179E
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 21:12:15 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B5B65240002;
- Mon, 10 Apr 2023 21:12:01 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6978B1BF203;
+ Mon, 10 Apr 2023 21:12:12 +0000 (UTC)
 Received: from peko by be.duckdns.org with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1plynw-005YuR-KU; Mon, 10 Apr 2023 23:12:00 +0200
+ id 1plyo7-005Yvv-GC; Mon, 10 Apr 2023 23:12:11 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Stefan Agner <stefan@agner.ch>
 References: <fbe678c521be19c519bb86f7b86528b43266f8b0.1680680807.git.stefan@agner.ch>
- <5b01e389dc18bb36fc9a6c4e1231ca88585126f5.1680680807.git.stefan@agner.ch>
-Date: Mon, 10 Apr 2023 23:12:00 +0200
-In-Reply-To: <5b01e389dc18bb36fc9a6c4e1231ca88585126f5.1680680807.git.stefan@agner.ch>
- (Stefan Agner's message of "Wed, 5 Apr 2023 09:47:03 +0200")
-Message-ID: <87zg7fsaqn.fsf@dell.be.48ers.dk>
+ <df73f0c29528dede1cae087caf28923a6fa7468f.1680680807.git.stefan@agner.ch>
+Date: Mon, 10 Apr 2023 23:12:11 +0200
+In-Reply-To: <df73f0c29528dede1cae087caf28923a6fa7468f.1680680807.git.stefan@agner.ch>
+ (Stefan Agner's message of "Wed, 5 Apr 2023 09:47:02 +0200")
+Message-ID: <87v8i3saqc.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/docker-cli: bump version to v23.0.3
+Subject: Re: [Buildroot] [PATCH] package/docker-engine: security bump
+ version to v23.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,8 +73,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Stefan" == Stefan Agner <stefan@agner.ch> writes:
 
- > This release contains some fixes and small improvements. For the
- > full list see:
+ > Fixed a number of issues that can cause Swarm encrypted overlay networks
+ > to fail to uphold their guarantees, addressing CVE-2023-28841,
+ > CVE-2023-28840, and CVE-2023-28842.
+
  > https://github.com/moby/moby/releases/tag/v23.0.3
 
  > Signed-off-by: Stefan Agner <stefan@agner.ch>
