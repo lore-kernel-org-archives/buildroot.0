@@ -1,98 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F4158C76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 14:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A60AC76196
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 14:57:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D1BF409F1;
-	Mon, 10 Apr 2023 14:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D1BF409F1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QnEaiW1Q0Gqk; Mon, 10 Apr 2023 14:40:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E86CE4109B;
-	Mon, 10 Apr 2023 14:40:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E86CE4109B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE3DC1C3B69
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 14:40:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4A4C81EA6
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 14:40:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4A4C81EA6
+	by smtp1.osuosl.org (Postfix) with ESMTP id C394181F0D;
+	Mon, 10 Apr 2023 14:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C394181F0D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UK4ZVuzwufYM for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 14:40:49 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P_PEzN_z6mwb; Mon, 10 Apr 2023 14:57:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD05581F0E;
+	Mon, 10 Apr 2023 14:57:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD05581F0E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EF921C3B71
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 14:57:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 258D161156
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 14:57:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 258D161156
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SHphbOI1Gp8v for <buildroot@lists.busybox.net>;
+ Mon, 10 Apr 2023 14:57:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D46881E98
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0D46881E98
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 14:40:48 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-94a34e3526fso127792866b.3
- for <buildroot@buildroot.org>; Mon, 10 Apr 2023 07:40:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFFD460757
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CFFD460757
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 14:57:53 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id ud9so12883951ejc.7
+ for <buildroot@buildroot.org>; Mon, 10 Apr 2023 07:57:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1681137647;
+ d=1e100.net; s=20210112; t=1681138671;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=jfhcNAngXJU+Lwyt9Bxc1rZN/vxaieXUzfmqCyducqE=;
- b=If6XBUB7bY+BIVdvOYo/LsZO4we4DnNKYqzLS6KfFwyvKdcFiihgbgd0NHFMMlDuUE
- MgY5Oc44fm0tLtYq/TWTvrq4QK37eCcwkyLvbAGy9V9l4VedzF4RNetFPExLzr/kP25x
- vTW/9uR2HOkfhhpVS92SC5586ySW0P362g5oIk8A76K12p3dHfFh4QBeUtGHRI7s/4Dl
- v54AKWZj4dNuQqN/NK1cd+5MProPEe+42liUirCSAxIaa/5JFzu/Ged9HFfu+OTQH4b0
- 7XfQxV9pibiwIuyUKuTMuGS6Q49jX1kMv1aJUZGc5o0qlAMn6z3wb87Uc+nbTzurMh61
- Dn0w==
-X-Gm-Message-State: AAQBX9dUbOPs21G1ukl1EIiWtTwspF/a088JJ5o1Fkoq0U0JrLYh1qio
- 6w7YZJd0KRb2u+zeFhci/EvpIg==
-X-Google-Smtp-Source: AKy350YFzCz2uxFeK3uPcWdI6sPTSGJCY8/Prz2lahx5uKQP6a0G7ssESMvLdGpVovbNv1J0AKkIYg==
-X-Received: by 2002:a05:6402:1386:b0:504:7f65:dff7 with SMTP id
- b6-20020a056402138600b005047f65dff7mr7142432edv.37.1681137646885; 
- Mon, 10 Apr 2023 07:40:46 -0700 (PDT)
+ bh=LEuXLETHw62pnraz7xNg+zW3A6a+kEKHR1S6uNSieo8=;
+ b=7+1ddfrK4T1SS/R63xQbQFWsXi0a7P7lQJXmd4tZkd2MZ7lOWgmsCkyP0yN3BYCIk4
+ i1N4Zj+j8JY3oBvmn+Xo4u2YLC+Ij0t4RTqn+WbcEJCe9awRybHUYlD0Zo+vAmKmjnPq
+ BHcIOvqW/7gfW/xMjfhSIKRHdI8Dz83s6JhctUkkeNhT+lcWT3qQRK2LMSxQTeAlBJUl
+ NkgTStMwy7jVQbjXexc0FP4uRL1I2M4R8ddOqYnQTUWKXIhfEgx4B1dSbPVK8wzkZJ75
+ Fnm8IDAOxY1LBNsl4Wdy7rbdMNAcS8vnCWhaGFX74HiuZ9o6y4TUzlh1i4gXYhdq7p0B
+ KdHg==
+X-Gm-Message-State: AAQBX9d7tiBlfeKrDXGTnwvYvN3eS/4HfIZldWwW1RcSylbqsUwCq/0J
+ QqJR9awmYm45GuRS2Rowszoa6g==
+X-Google-Smtp-Source: AKy350ZcEJ27Rv2CwMMe7dswWZ56hyOU1EIaJP6ztHyLQN2hjTuu4h46xXSm1DfX6VtNE/avXojRkQ==
+X-Received: by 2002:a17:907:7b9f:b0:94a:5d8e:ddbf with SMTP id
+ ne31-20020a1709077b9f00b0094a5d8eddbfmr6384673ejc.14.1681138671552; 
+ Mon, 10 Apr 2023 07:57:51 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- m20-20020a509994000000b0050470aa444fsm4451831edb.51.2023.04.10.07.40.45
+ lx11-20020a170906af0b00b0094d0f572571sm266941ejb.128.2023.04.10.07.57.50
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 10 Apr 2023 07:40:46 -0700 (PDT)
-Message-ID: <0a2e0dd8-b579-644a-9d83-af88e40d40de@mind.be>
-Date: Mon, 10 Apr 2023 16:40:44 +0200
+ Mon, 10 Apr 2023 07:57:50 -0700 (PDT)
+Message-ID: <2e28cd63-1af2-cfc0-fe46-32ec6d6954df@mind.be>
+Date: Mon, 10 Apr 2023 16:57:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20220724214743.2324998-1-james.hilliard1@gmail.com>
- <14cb1bdd-82c2-d114-48df-e03f014d044d@mind.be>
- <CADvTj4rZmLddVDLpmLNxc7zVjimJSFRn_QkM7UDVcw=WbShk+Q@mail.gmail.com>
+To: unixmania@gmail.com, buildroot@buildroot.org
+References: <20230409000929.391071-1-unixmania@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <CADvTj4rZmLddVDLpmLNxc7zVjimJSFRn_QkM7UDVcw=WbShk+Q@mail.gmail.com>
+In-Reply-To: <20230409000929.391071-1-unixmania@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1681137647;
+ d=mind.be; s=google; t=1681138671;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=jfhcNAngXJU+Lwyt9Bxc1rZN/vxaieXUzfmqCyducqE=;
- b=Q6afsm62EwIKgm4cSotJLauwSHwoatQRvTC+fwGHQgritL0Ol1Yem1/8Cb7YkIIEta
- qqJvtIBXmtMydeS9gkgdhA5yJx7cmimZGSPGKSBup6BGidFoDkFb3lEaeB3wM+a/NOgQ
- A4tBMYs90IscGJSfrtFKPj7x6iF25CMMSgwORvjGQr8L5ZTwPAh7mCZ2iEcSQR4YRLI7
- hMxceX190pCXunZNTK5/OXjbxT1bPw7iOFjOjfLj80uzriI3Zk1i3Bw8WD+b90fQYC8H
- i/R2NA8JoCqm+MMij/+NaqtH/S5gYWx8FoOr2dZqyVgqcC9Iu3WY+WV3C3mIsB5VCkuq
- tvMQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=LEuXLETHw62pnraz7xNg+zW3A6a+kEKHR1S6uNSieo8=;
+ b=Ps1AwBxmKSEblYVD2/8ENxBy1KP5PJmulBIfN9fPOjkwT3GvV+nSakbXE/SYygqW6j
+ 113hO4LxharwEsP4AfooJcotZSTz3pUO8H5cDcogFVBOZkc8HC0+OAyrsZyPRpksxuZt
+ NbT0qiMbcksRvbj7tP1tz5MQYK3aAIlV3LvIxT2TvyxL2bs1FUjnIg1tq63Hj08XpOah
+ 6OSNUQuoJXWweRpORU8cY+HU4uaAfYezHYlchzS2rI5bGycJtUPpd88F3kgXl6xUQHbY
+ x5fM4CWXEXcexWYURnje9Mopr76Z4bGiToc1aUxoJdGIcTSq3m2nM+DRWEQYOf5kn6eV
+ c5aQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Q6afsm62
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/pkg-cargo: ensure
- host/target rustflags are properly split
+ header.a=rsa-sha256 header.s=google header.b=Ps1AwBxm
+Subject: Re: [Buildroot] [PATCH] package/qemu: install keyboard maps only if
+ necessary
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,138 +101,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Romain Naour <romain.naour@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSBKYW1lcywKCk9uIDEwLzA0LzIwMjMgMTA6NDMsIEphbWVzIEhpbGxpYXJkIHdyb3RlOgo+
-IE9uIFN1biwgQXByIDksIDIwMjMgYXQgMTozOOKAr1BNIEFybm91dCBWYW5kZWNhcHBlbGxlIDxh
-cm5vdXRAbWluZC5iZT4gd3JvdGU6Cj4+Cj4+Cj4+Cj4+IE9uIDI0LzA3LzIwMjIgMjM6NDcsIEph
-bWVzIEhpbGxpYXJkIHdyb3RlOgo+Pj4gU2V0IEhPU1RfTERGTEFHUyBSVVNURkxBR1MgdmlhIHRo
-ZSBob3N0LWNvbmZpZyBmZWF0dXJlLCBzZWU6Cj4+PiBodHRwczovL2RvYy5ydXN0LWxhbmcub3Jn
-L25pZ2h0bHkvY2FyZ28vcmVmZXJlbmNlL3Vuc3RhYmxlLmh0bWwjaG9zdC1jb25maWcKPj4KPj4g
-ICAgSXQncyBub3QgY2xlYXIgdG8gbWUgKndoeSogdGhpcyBzaG91bGQgYmUgY2hhbmdlZC4gV2hh
-dCBpc3N1ZSBpcyBmaXhlZCBieSBpdD8KPiAKPiBUaGVyZSdzIHBvdGVudGlhbGx5IGFuIGlzc3Vl
-IHdoZXJlIHRhcmdldCBydXN0ZmxhZ3MgZ2V0IHBhc3NlZCB0byB0aGUKPiBob3N0IGJ1aWxkIHNj
-cmlwdCBhcnRpZmFjdCBidWlsZCBJIHRoaW5rLgoKICBBZnRlciBhbiBob3VyIG9mIGFkZGl0aW9u
-YWwgaW52ZXN0aWdhdGlvbiBJIHRoaW5rIEkgdW5kZXJzdGFuZCB0aGUgaXNzdWUgCnlvdSdyZSB0
-cnlpbmcgdG8gc29sdmUuIFNvIEknbSBhYm91dCB0byBhcHBseSB0aGlzLCBidXQgSSByZXdyb3Rl
-IHRoZSBjb21taXQgCm1lc3NhZ2UgY29tcGxldGVseSBhbmQgSSdkIGxpa2UgeW91IHRvIHJldmll
-dyBpdCBiZWZvcmUgSSBwdXNoLgoKcGFja2FnZS9wa2ctY2FyZ286IGVuc3VyZSBob3N0L3Rhcmdl
-dCBydXN0ZmxhZ3MgYXJlIHByb3Blcmx5IHNwbGl0CgpJbiBDYXJnbywgaXQgaXMgcXVpdGUgdHlw
-aWNhbCBmb3IgImJ1aWxkIHNjcmlwdHMiIHRvIGJlIHdyaXR0ZW4gaW4gUnVzdAphbmQgdGhlcmVm
-b3JlIHRoZXkgbmVlZCB0byBiZSBjb21waWxlZCBhcyBwYXJ0IG9mIHRoZSBvdmVyYWxsIGJ1aWxk
-LiBJbgpjcm9zcy1jb21waWxhdGlvbiwgdGhhdCBtZWFucyBhIG1peGVkIGhvc3QgYW5kIHRhcmdl
-dCBidWlsZC4KClVuZm9ydHVuYXRlbHksIGJ5IGRlZmF1bHQgQ2FyZ28gbWFrZXMgbm8gZGlzdGlu
-Y3Rpb24gYmV0d2VlbiB0aGUKUlVTVEZMQUdTIHVzZWQgZm9yIHRoZSBob3N0IGFuZCB0aGUgdGFy
-Z2V0LiBUaGVyZSBpcywgaG93ZXZlciwgYW4KdW5zdGFibGUgZmVhdHVyZSB0byBtYWtlIHRoaXMg
-ZGlzdGluY3Rpb24gWzFdWzJdLgoKV2UgYWxyZWFkeSBoYXZlIENBUkdPX1RBUkdFVF9BUFBMSUVT
-X1RPX0hPU1Q9ImZhbHNlIi4gVGhpcyBtYWtlcyBzdXJlCnRoYXQgYW55IGNvbmZpZ3VyYXRpb24g
-dGhhdCB3ZSBtYWtlIGZvciB0aGUgdGFyZ2V0IGRvZXNuJ3QgYXV0b21hdGljYWxseQphcHBseSB0
-byB0aGUgaG9zdCBhcyB3ZWxsLiBIb3dldmVyLCB0aGlzIG9ubHkgYXBwbGllcyBmb3IgcGVyLXRh
-cmdldApjb25maWd1cmF0aW9uLCBmb3IgZXhhbXBsZSB0aGUgc2V0dGluZyBvZiAiY2MiIGluIHRo
-ZSBjb25maWcudG9tbApnZW5lcmF0ZWQgYnkgcGFja2FnZS9ydXN0L3J1c3QubWsuIEZsYWdzIHRo
-YXQgYXJlIHBhc3NlZCB3aXRoIFJVU1RGTEFHUwpzdGlsbCBhcHBseSB0byBib3RoIGhvc3QgYW5k
-IHRhcmdldC4gVGhlcmVmb3JlLCB3ZSBuZWVkIHRvIHVzZSB0aGUKQ0FSR09fVEFSR0VUXzx0dXBs
-ZT5fUlVTVEZMQUdTIGVudmlyb25tZW50IHZhcmlhYmxlIGluc3RlYWQgb2YgcGxhaW4KUlVTVEZM
-QUdTLgoKVGhpcywgaG93ZXZlciwgZG9lc24ndCBhbGxvdyB1cyB0byBzcGVjaWZ5IGZsYWdzIHRo
-YXQgYXBwbHkgb25seSB0byB0aGUKaG9zdC4gV2UgY291bGQgdXNlIENBUkdPX1RBUkdFVF88aG9z
-dHR1cGxlPl9SVVNURkxBR1MgZm9yIHRoYXQsIGJ1dCB0aGF0CmRvZXNuJ3Qgd29yayBpbiBjYXNl
-IHRoZSBob3N0IGFuZCB0YXJnZXQgdHVwbGUgYXJlIHRoZSBzYW1lLiBGb3IgdGhpcywKd2UgbmVl
-ZCBhbm90aGVyIHVuc3RhYmxlIGZlYXR1cmUsIGVuYWJsZWQgd2l0aApDQVJHT19VTlNUQUJMRV9I
-T1NUX0NPTkZJRz0idHJ1ZSIuIFdpdGggdGhpcyBlbmFibGVkLCB3ZSBjYW4gc3BlY2lmeQpmbGFn
-cyB0aGF0IGFwcGx5IG9ubHkgZm9yIHRoZSBob3N0IGJ1aWxkIHVzaW5nIENBUkdPX0hPU1RfUlVT
-VEZMQUdTLgoKQ3VycmVudGx5LCB3ZSBkb24ndCBoYXZlIGFueSBzdWNoIGZsYWdzLCBidXQgd2Ug
-cmVhbGx5IHNob3VsZDogd2Ugc2hvdWxkCnBhc3MgdGhlIHByb3BlciBsaW5rIGZsYWdzIHRvIHBv
-aW50IHRvICQoSE9TVF9ESVIpL2xpYi4gVGhlcmVmb3JlLCBhZGQKQ0FSR09fSE9TVF9SVVNURkxB
-R1MgZG9pbmcgZXhhY3RseSB0aGF0LgoKWzFdIGh0dHBzOi8vZG9jLnJ1c3QtbGFuZy5vcmcvbmln
-aHRseS9jYXJnby9yZWZlcmVuY2UvdW5zdGFibGUuaHRtbCNob3N0LWNvbmZpZwpbMl0gaHR0cHM6
-Ly9naXRodWIuY29tL3J1c3QtbGFuZy9jYXJnby9wdWxsLzEwMzk1CgoKICBJdCByZWFsbHkgc2hv
-dWxkIGhhdmUgYmVlbiB0d28gc2VwYXJhdGUgY29tbWl0czogb25lIHRoYXQgc2ltcGx5IHVzZXMg
-CkNBUkdPX1RBUkdFVF88dHVwbGU+X1JVU1RGTEFHUyBmb3IgdGhlIG9uZSB3ZSBhbHJlYWR5IGhh
-dmUsIGFuZCBhbm90aGVyIG9uZSB0aGF0IAppbnRyb2R1Y2VzIENBUkdPX0hPU1RfUlVTVEZMQUdT
-IGFuZCB0aGUgdW5zdGFibGUgZmxhZyB0byBlbmFibGUgaXQuIEJ1dCBPSywgbm90IAp3b3J0aCBz
-cGxpdHRpbmcgaXQgdXAgbm93LgoKCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gCj4+Cj4+PiBXZSBo
-YXZlIHRvIGVuYWJsZSB0aGlzIG5pZ2h0bHkgZmVhdHVyZSBmaXJzdCB1c2luZzoKPj4+IENBUkdP
-X1VOU1RBQkxFX0hPU1RfQ09ORklHPSJ0cnVlIgo+Pj4KPj4+IFNlcGFyYXRlbHkgc2V0IHRhcmdl
-dCBSVVNURkxBR1MgZm9yIHRoZSB0YXJnZXQgdHJpcGxlIHNwZWNpZmljIGVudgo+Pj4gdmFyaWFi
-bGUuCj4+Cj4+ICAgIFRoaXMgcGFydCBpcyBhbHNvIG5vdCBlbnRpcmVseSBjbGVhciB0byBtZS4g
-SXNuJ3QgdGhhdCB0aGUgc2FtZSB0aGluZyB3aGVuCj4+IGNyb3NzLWNvbXBpbGluZyAobGlrZSBp
-dCdzIHRoZSBjYXNlIGluIGF1dG90b29scyBvciBtZXNvbik/IE9yIGFyZSBub24tc3BlY2lmaWMK
-Pj4gUlVTVEZMQUdTIGFsc28gYXBwbGllZCB0byBob3N0IGJ1aWxkcyB3aGVuIGNyb3NzLWNvbXBp
-bGluZz8KPiAKPiBUaGVyZSdzIGNvbnNpc3RlbmN5IGlzc3VlcyBpbiBob3cgcnVzdGZsYWdzIGdl
-dCBhcHBsaWVkIHdpdGggYnVpbGQgc2NyaXB0cywgdGhpcwo+IGFwcHJvYWNoIHNob3VsZCBlbnN1
-cmUgcnVzdGZsYWdzIGFyZSBleHBsaWNpdGx5IHNldCBmb3IgdGhlIGNvcnJlY3QgaG9zdC90YXJn
-ZXQKPiBidWlsZCBhcnRpZmFjdHMuCj4gCj4gU29tZSBtb3JlIGRldGFpbHM6Cj4gaHR0cHM6Ly9n
-aXRodWIuY29tL3J1c3QtbGFuZy9jYXJnby9wdWxsLzEwMzk1Cj4gCj4+Cj4+PiBNb3ZlIFJVU1RG
-TEFHUyBmb3IgaG9zdCBidWlsZHMgdG8gSE9TVF9QS0dfQ0FSR09fRU5WIHNvIHRoYXQgdGhleQo+
-Pj4gYXJlIHNldCBmb3IgaG9zdCBjYXJnbyBidWlsZHMgd2hpY2ggdXNlIHB5dGhvbiBpbmZyYXN0
-cnVjdHVyZS4KPj4KPj4gICAgVGhpcyBtYWtlcyBzZW5zZS4gSSB0aGVyZWZvcmUgYXBwbGllZCBq
-dXN0IHRoaXMgYml0LCB0aGUgcmVzdCBvZiB0aGUgcGF0Y2gKPj4gc2hvdWxkIGdldCBhIGJpdCBt
-b3JlIGNsYXJpZmljYXRpb24uCj4+Cj4+Pgo+Pj4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlh
-cmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4+PiAtLS0KPj4+IENoYW5nZXMgdjEgLT4g
-djI6Cj4+PiAgICAgLSBhZGQgUlVTVEZMQUdTIHRvIEhPU1RfUEtHX0NBUkdPX0VOVgo+Pj4gLS0t
-Cj4+PiAgICBwYWNrYWdlL3BrZy1jYXJnby5tayB8IDE1ICsrKysrKysrKystLS0tLQo+Pj4gICAg
-MSBmaWxlIGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4+Pgo+Pj4g
-ZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLWNhcmdvLm1rIGIvcGFja2FnZS9wa2ctY2FyZ28ubWsK
-Pj4+IGluZGV4IGY3ZTNmMzk1MDMuLjFjMTA1NzYyZjggMTAwNjQ0Cj4+PiAtLS0gYS9wYWNrYWdl
-L3BrZy1jYXJnby5tawo+Pj4gKysrIGIvcGFja2FnZS9wa2ctY2FyZ28ubWsKPj4+IEBAIC0zMiw3
-ICszMiwxMCBAQCBQS0dfQ09NTU9OX0NBUkdPX0VOViA9IFwKPj4+ICAgICMgdXNpbmcgbmlnaGx5
-IGZlYXR1cmVzIG9uIHN0YWJsZSByZWxlYXNlcywgaS5lIGZlYXR1cmVzIHRoYXQgYXJlIG5vdAo+
-Pj4gICAgIyB5ZXQgY29uc2lkZXJlZCBzdGFibGUuCj4+PiAgICAjCj4+PiAtIyBDQVJHT19VTlNU
-QUJMRV9UQVJHRVRfQVBQTElFU19UT19IT1NUPSJ0cnVlIiAiZW5hYmxlcyB0aGUgbmlnaHRseQo+
-Pj4gKyMgQ0FSR09fVU5TVEFCTEVfSE9TVF9DT05GSUc9InRydWUiIGVuYWJsZXMgdGhlIGhvc3Qg
-c3BlY2lmaWMKPj4+ICsjIGNvbmZpZ3VyYXRpb24gZmVhdHVyZQo+Pgo+PiAgICBUaGlzIGlzIGFs
-c28gbm90IHJlYWxseSBjbGVhci4gSSB0aGluayBpdCBpcyBuZWVkZWQgZm9yIHRoZQo+PiBDQVJH
-T19IT1NUX1JVU1RGTEFHUyBhbmQgQ0FSR09fVEFSR0VUX3h4eF9SVVNURkxBR1MgdmFyaWFibGVz
-IHRvIHRha2UgZWZmZWN0LCBpcwo+PiB0aGF0IGNvcnJlY3Q/Cj4gCj4gTmVlZGVkIHRvIHVuZ2F0
-ZSBhbnl0aGluZyB1bmRlciBDQVJHT19IT1NUX3h4eCBsaWtlIENBUkdPX0hPU1RfUlVTVEZMQUdT
-IEFGQUlVLgo+IAo+Pgo+Pj4gKyMKPj4+ICsjIENBUkdPX1VOU1RBQkxFX1RBUkdFVF9BUFBMSUVT
-X1RPX0hPU1Q9InRydWUiIGVuYWJsZXMgdGhlIG5pZ2h0bHkKPj4+ICAgICMgY29uZmlndXJhdGlv
-biBvcHRpb24gdGFyZ2V0LWFwcGxpZXMtdG8taG9zdCB2YWx1ZSB0byBiZSBzZXQKPj4+ICAgICMK
-Pj4+ICAgICMgQ0FSR09fVEFSR0VUX0FQUExJRVNfVE9fSE9TVD0iZmFsc2UiIGlzIGFjdHVhbGx5
-IHNldHRpbmcgdGhlIHZhbHVlCj4+PiBAQCAtNDEsOSArNDQsMTEgQEAgUEtHX0NPTU1PTl9DQVJH
-T19FTlYgPSBcCj4+PiAgICBQS0dfQ0FSR09fRU5WID0gXAo+Pj4gICAgICAgICQoUEtHX0NPTU1P
-Tl9DQVJHT19FTlYpIFwKPj4+ICAgICAgICBfX0NBUkdPX1RFU1RfQ0hBTk5FTF9PVkVSUklERV9E
-T19OT1RfVVNFX1RISVM9Im5pZ2h0bHkiIFwKPj4+ICsgICAgIENBUkdPX1VOU1RBQkxFX0hPU1Rf
-Q09ORklHPSJ0cnVlIiBcCj4+PiAgICAgICAgQ0FSR09fVU5TVEFCTEVfVEFSR0VUX0FQUExJRVNf
-VE9fSE9TVD0idHJ1ZSIgXAo+Pj4gICAgICAgIENBUkdPX1RBUkdFVF9BUFBMSUVTX1RPX0hPU1Q9
-ImZhbHNlIiBcCj4+PiAgICAgICAgQ0FSR09fQlVJTERfVEFSR0VUPSIkKFJVU1RDX1RBUkdFVF9O
-QU1FKSIgXAo+Pj4gKyAgICAgQ0FSR09fSE9TVF9SVVNURkxBR1M9IiQoYWRkcHJlZml4IC1DIGxp
-bmstYXJncz0sJChIT1NUX0xERkxBR1MpKSIgXAo+Pj4gICAgICAgIENBUkdPX1RBUkdFVF8kKGNh
-bGwgVVBQRVJDQVNFLCQoUlVTVENfVEFSR0VUX05BTUUpKV9MSU5LRVI9JChub3RkaXIgJChUQVJH
-RVRfQ1JPU1MpKWdjYwo+Pj4KPj4+ICAgICMKPj4+IEBAIC01MSwxMSArNTYsMTMgQEAgUEtHX0NB
-UkdPX0VOViA9IFwKPj4+ICAgICMgYW5kIHNob3VsZCBiZSByZW1vdmVkIHdoZW4gZml4ZWQgdXBz
-dHJlYW0KPj4+ICAgICMKPj4+ICAgIGlmZXEgKCQoTk9STUFMSVpFRF9BUkNIKSxhcm0pCj4+PiAt
-ICAgICBQS0dfQ0FSR09fRU5WICs9IFJVU1RGTEFHUz0iLUNsaW5rLWFyZz0tV2wsLS1hbGxvdy1t
-dWx0aXBsZS1kZWZpbml0aW9uIgo+Pj4gKyAgICAgUEtHX0NBUkdPX0VOViArPSBcCj4+PiArICAg
-ICAgICAgICAgIENBUkdPX1RBUkdFVF8kKGNhbGwgVVBQRVJDQVNFLCQoUlVTVENfVEFSR0VUX05B
-TUUpKV9SVVNURkxBR1M9Ii1DbGluay1hcmc9LVdsLC0tYWxsb3ctbXVsdGlwbGUtZGVmaW5pdGlv
-biIKPj4KPj4gICAgS2luZCBvZiB0YW5nZW50aWFsIHRvIHRoaXMgY2hhbmdlOiB3b3VsZCBpdCBt
-YWtlIHNlbnNlIHRvIGhhdmUgYSAkKFBLRylfUlVTVEZMQUdTPwo+IAo+IEknbSBub3Qgc3VyZSwg
-SSdtIG5vdCBhd2FyZSBvZiBhbnkgc3BlY2lmaWMgaXNzdWVzIG5lZWRpbmcgcGFja2FnZSBzcGVj
-aWZpYwo+IHJ1c3RmbGFncy4KPiAKPj4KPj4KPj4gICAgUmVnYXJkcywKPj4gICAgQXJub3V0Cj4+
-Cj4+PiAgICBlbmRpZgo+Pj4KPj4+ICAgIEhPU1RfUEtHX0NBUkdPX0VOViA9IFwKPj4+IC0gICAg
-ICQoUEtHX0NPTU1PTl9DQVJHT19FTlYpCj4+PiArICAgICAkKFBLR19DT01NT05fQ0FSR09fRU5W
-KSBcCj4+PiArICAgICBSVVNURkxBR1M9IiQoYWRkcHJlZml4IC1DIGxpbmstYXJncz0sJChIT1NU
-X0xERkxBR1MpKSIKPj4+Cj4+PiAgICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+Pj4gICAgIyBp
-bm5lci1jYXJnby1wYWNrYWdlIC0tIGRlZmluZXMgaG93IHRoZSBjb25maWd1cmF0aW9uLCBjb21w
-aWxhdGlvbiBhbmQKPj4+IEBAIC0xMjgsNyArMTM1LDYgQEAgZWxzZSAjIGlmZXEgKCQoNCksdGFy
-Z2V0KQo+Pj4gICAgZGVmaW5lICQoMilfQlVJTERfQ01EUwo+Pj4gICAgICAgIGNkICQkKCQkKFBL
-RylfU1JDRElSKSAmJiBcCj4+PiAgICAgICAgJCQoSE9TVF9NQUtFX0VOVikgXAo+Pj4gLSAgICAg
-ICAgICAgICBSVVNURkxBR1M9IiQkKGFkZHByZWZpeCAtQyBsaW5rLWFyZ3M9LCQkKEhPU1RfTERG
-TEFHUykpIiBcCj4+PiAgICAgICAgICAgICAgICAkJChIT1NUX0NPTkZJR1VSRV9PUFRTKSBcCj4+
-PiAgICAgICAgICAgICAgICAkJChIT1NUX1BLR19DQVJHT19FTlYpIFwKPj4+ICAgICAgICAgICAg
-ICAgICQkKCQoMilfQ0FSR09fRU5WKSBcCj4+PiBAQCAtMTY5LDcgKzE3NSw2IEBAIGlmbmRlZiAk
-KDIpX0lOU1RBTExfQ01EUwo+Pj4gICAgZGVmaW5lICQoMilfSU5TVEFMTF9DTURTCj4+PiAgICAg
-ICAgY2QgJCQoJCQoUEtHKV9TUkNESVIpICYmIFwKPj4+ICAgICAgICAkJChIT1NUX01BS0VfRU5W
-KSBcCj4+PiAtICAgICAgICAgICAgIFJVU1RGTEFHUz0iJCQoYWRkcHJlZml4IC1DIGxpbmstYXJn
-cz0sJCQoSE9TVF9MREZMQUdTKSkiIFwKPj4+ICAgICAgICAgICAgICAgICQkKEhPU1RfQ09ORklH
-VVJFX09QVFMpIFwKPj4+ICAgICAgICAgICAgICAgICQkKEhPU1RfUEtHX0NBUkdPX0VOVikgXAo+
-Pj4gICAgICAgICAgICAgICAgJCQoJCgyKV9DQVJHT19FTlYpIFwKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+  Hi Carlos,
+
+On 09/04/2023 02:09, unixmania@gmail.com wrote:
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> They are required only for system emulation, so pull a patch already
+> reviewd upstream[1,2] that makes the installation conditional.
+> 
+> 1. https://lists.gnu.org/archive/html/qemu-devel/2023-03/msg06428.html
+> 2. https://lists.gnu.org/archive/html/qemu-devel/2023-03/msg06438.html
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+>   ...tall-keyboard-maps-only-if-necessary.patch | 36 +++++++++++++++++++
+>   1 file changed, 36 insertions(+)
+>   create mode 100644 package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
+> 
+> diff --git a/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch b/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
+> new file mode 100644
+> index 0000000000..91ea1e86c9
+> --- /dev/null
+> +++ b/package/qemu/0004-meson-install-keyboard-maps-only-if-necessary.patch
+> @@ -0,0 +1,36 @@
+> +From 9d9b74f806f5dbca53df6630c1a0591eaedd4500 Mon Sep 17 00:00:00 2001
+> +From: Carlos Santos <casantos@redhat.com>
+> +Date: Sun, 1 Jan 2023 21:00:57 -0300
+> +Subject: [PATCH] meson: install keyboard maps only if necessary
+> +
+> +They are required only for system emulation (i.e. have_system is true).
+> +
+> +Signed-off-by: Carlos Santos <casantos@redhat.com>
+
+  We need the SoB for unixmania@gmail.com on this. The SoB is a short way for 
+you (the private person, not the Redhat employee) to assert that you are 
+entitled to contribute the patch under qemu's license.
+
+  Also, please link to the upstream patchwork entry here, like this:
+
+Upstream: 
+https://patchwork.kernel.org/project/qemu-devel/patch/20230327172147.196607-1-casantos@redhat.com/
+
+
+  Regards,
+  Arnout
+
+> +---
+> + pc-bios/keymaps/meson.build | 6 ++++--
+> + 1 file changed, 4 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/pc-bios/keymaps/meson.build b/pc-bios/keymaps/meson.build
+> +index 158a3b410c..bff3083313 100644
+> +--- a/pc-bios/keymaps/meson.build
+> ++++ b/pc-bios/keymaps/meson.build
+> +@@ -47,7 +47,7 @@ if native_qemu_keymap.found()
+> +                        build_by_default: true,
+> +                        output: km,
+> +                        command: [native_qemu_keymap, '-f', '@OUTPUT@', args.split()],
+> +-                       install: true,
+> ++                       install: have_system,
+> +                        install_dir: qemu_datadir / 'keymaps')
+> +   endforeach
+> +
+> +@@ -56,4 +56,6 @@ else
+> +   install_data(keymaps.keys(), install_dir: qemu_datadir / 'keymaps')
+> + endif
+> +
+> +-install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
+> ++if have_system
+> ++  install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
+> ++endif
+> +--
+> +2.31.1
+> +
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
