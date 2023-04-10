@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB7D5C76196
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FD46C77B61
+	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:40:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70B226FEBA;
-	Mon, 10 Apr 2023 19:40:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70B226FEBA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 558926FEC0;
+	Mon, 10 Apr 2023 19:40:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 558926FEC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aQrR4OHHBnZj; Mon, 10 Apr 2023 19:40:02 +0000 (UTC)
+	with ESMTP id SlIAb2XHajNo; Mon, 10 Apr 2023 19:40:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 708726140D;
-	Mon, 10 Apr 2023 19:40:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 708726140D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 621571C3BA6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54E156FEBD;
+	Mon, 10 Apr 2023 19:40:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54E156FEBD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BED3C1C3BA4
  for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0ADF740997
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0ADF740997
+ by smtp2.osuosl.org (Postfix) with ESMTP id 849A440376
+ for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 849A440376
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E8hRNS5P2Uh1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c1HhXAT5DRQd for <buildroot@lists.busybox.net>;
  Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C69D74192C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50AB2408C0
  for <buildroot@buildroot.org>; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C69D74192C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50AB2408C0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4C3383D2C; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
+ id 3B3F283D2B; Mon, 10 Apr 2023 19:36:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Apr 2023 21:35:30 +0200
+Date: Mon, 10 Apr 2023 20:59:34 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7694bc5cb4a3b36c7c647b012251f8168766f1d7
-X-Git-Newrev: c7e1df73c26436902e1662dd37973afb6cb5b6df
+X-Git-Oldrev: 533477f62f91da3bcc050389d494a0f4cac1735c
+X-Git-Newrev: b7e3ab79d1726544bf810f38d63e2c0be9224fa1
 X-Patchwork-Hint: ignore
-Message-Id: <20230410193614.C4C3383D2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/uclibc: security
- update to 1.0.43
+Message-Id: <20230410193614.3B3F283D2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/agentpp: bump to
+ version 4.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,154 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7e1df73c26436902e1662dd37973afb6cb5b6df
+commit: https://git.buildroot.net/buildroot/commit/?id=b7e3ab79d1726544bf810f38d63e2c0be9224fa1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Security fix for CVE-2022-29503
+Drop patch (not needed anymore):
+"Fixed: Allow compilation without _SNMPv3 defined."
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f12bf2e6a78f1b5ff203fc234be68e224ec49b0e)
+https://agentpp.com/download/changes_agent++.txt
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 343d7940a4bbdd89933a29f9470cead6ff481a28)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-Fix-build-when-SNMPv3-is-disabled.patch   | 102 ---------------------
+ package/agentpp/agentpp.hash                       |   2 +-
+ package/agentpp/agentpp.mk                         |   2 +-
+ 3 files changed, 2 insertions(+), 104 deletions(-)
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 0122d08789..cdca75b113 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.42/uClibc-ng-1.0.42.tar.xz.sha256
--sha256  ec6dae44ce86558885e56bc3bef6bd4d082397114e6e1fc15795f71e804d7016  uClibc-ng-1.0.42.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.43/uClibc-ng-1.0.43.tar.xz.sha256
-+sha256  8c1f550f14728a9c06ff1fb3e85069f7f10f4d684b03e163f4d9d41727124047  uClibc-ng-1.0.43.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 99ea548ebe..373ed140d4 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
+diff --git a/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch b/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch
+deleted file mode 100644
+index f16c2b4b77..0000000000
+--- a/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch
++++ /dev/null
+@@ -1,102 +0,0 @@
+-From 2a0fe384eec254643ca2176ccfcbbd036a5aad06 Mon Sep 17 00:00:00 2001
+-From: Luca Ceresoli <luca@lucaceresoli.net>
+-Date: Tue, 14 Jul 2020 10:30:10 +0200
+-Subject: [PATCH] Fix build when SNMPv3 is disabled
+-
+-agentpp has ifdefs to disable v3 code when SNMPv3 is disabled. However it
+-is missing one and it has a few ones in excess. Fix them.
+-
+-Upstream is aware, says "will fix in later version", but thinks to make v3
+-mandatory. See discussion at
+-https://forum.snmp.app/t/agent-compile-fails-if-snmp-has-disable-snmpv3/326
+-
+-Upstream status: none, upstream is not welcoming contributions.
+-
+-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+----
+- include/agent_pp/notification_log_mib.h    | 4 ++--
+- include/agent_pp/notification_originator.h | 2 ++
+- include/agent_pp/snmp_community_mib.h      | 4 ++--
+- src/notification_originator.cpp            | 2 ++
+- 4 files changed, 8 insertions(+), 4 deletions(-)
+-
+-diff --git a/include/agent_pp/notification_log_mib.h b/include/agent_pp/notification_log_mib.h
+-index ddac05e515d9..8fd8cfec32ca 100644
+---- a/include/agent_pp/notification_log_mib.h
+-+++ b/include/agent_pp/notification_log_mib.h
+-@@ -22,7 +22,7 @@
+- 
+- //--AgentGen BEGIN=_BEGIN
+- #include <agent_pp/agent++.h>
+--#ifdef _SNMPv3
+-+// #ifdef _SNMPv3 // This file deos not look SNMPv3-specific
+- #include <agent_pp/mib_complex_entry.h>
+- //--AgentGen END
+- 
+-@@ -688,6 +688,6 @@ protected:
+-  */
+- 
+- 
+--#endif
+-+// #endif // _SNMPv3
+- 
+- 
+-diff --git a/include/agent_pp/notification_originator.h b/include/agent_pp/notification_originator.h
+-index 95e8b4e1836d..6f50cd52625b 100644
+---- a/include/agent_pp/notification_originator.h
+-+++ b/include/agent_pp/notification_originator.h
+-@@ -307,7 +307,9 @@ class AGENTPP_DECL NotificationOriginator: public NotificationSender {
+-          */
+-         virtual nlmLogEntry* get_nlm_log_entry();
+-                 
+-+#ifdef _SNMPv3
+-         virtual v3MP* get_v3mp();
+-+#endif
+- 
+-  protected:
+-      
+-diff --git a/include/agent_pp/snmp_community_mib.h b/include/agent_pp/snmp_community_mib.h
+-index 7d5c4558f36d..d9eb2b4a87ec 100644
+---- a/include/agent_pp/snmp_community_mib.h
+-+++ b/include/agent_pp/snmp_community_mib.h
+-@@ -49,7 +49,7 @@ namespace Agentpp {
+- #define oidSnmpTrapAddress               "1.3.6.1.6.3.18.1.3.0"
+- #define oidSnmpTrapCommunity             "1.3.6.1.6.3.18.1.4.0"
+- 
+--#ifdef _SNMPv3
+-+// #ifdef _SNMPv3 // This file deos not look SNMPv3-specific
+- 
+- /**
+-  *  snmpCommunityName
+-@@ -346,7 +346,7 @@ class AGENTPP_DECL snmp_community_mib: public MibGroup
+- 	static void	       	add_public();
+- 	static void	       	add_public(Mib* mib);
+- };
+--#endif
+-+// #endif // _SNMPv3
+- 
+- #ifdef AGENTPP_NAMESPACE
+- }
+-diff --git a/src/notification_originator.cpp b/src/notification_originator.cpp
+-index d7d566869998..39ddbe08cdeb 100644
+---- a/src/notification_originator.cpp
+-+++ b/src/notification_originator.cpp
+-@@ -237,6 +237,7 @@ nlmLogEntry* NotificationOriginator::get_nlm_log_entry() {
+-     return nlmLogEntry::instance;
+- }
+- 
+-+#ifdef _SNMPv3
+- v3MP* NotificationOriginator::get_v3mp() {
+-     if (mib) {
+-         return mib->get_request_list()->get_v3mp();
+-@@ -244,6 +245,7 @@ v3MP* NotificationOriginator::get_v3mp() {
+-         return v3MP::I;
+-     }
+- }
+-+#endif
+- 
+- 
+- bool NotificationOriginator::check_access(ListCursor<MibTableRow>& cur,
+--- 
+-2.27.0
+-
+diff --git a/package/agentpp/agentpp.hash b/package/agentpp/agentpp.hash
+index 11b23c8ee2..f8399963e5 100644
+--- a/package/agentpp/agentpp.hash
++++ b/package/agentpp/agentpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  9b45123df45e803198a1181540b37a4ccd0e63c68df6e826702e2ba49167edac  agent++-4.3.1.tar.gz
++sha256  bcfc014cc7ce37afdd6eefb71b59f1eabf23984525905546aa363c2a2c498c79  agent++-4.5.3.tar.gz
+ sha256  1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6  LICENSE-2_0.txt
+diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
+index 8982d9e564..f30e75ef9c 100644
+--- a/package/agentpp/agentpp.mk
++++ b/package/agentpp/agentpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UCLIBC_VERSION = 1.0.42
-+UCLIBC_VERSION = 1.0.43
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+-AGENTPP_VERSION = 4.3.1
++AGENTPP_VERSION = 4.5.3
+ AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
+ AGENTPP_SITE = http://www.agentpp.com/download
+ AGENTPP_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
