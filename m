@@ -1,58 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96672C77B61
-	for <buildroot@archiver.kernel.org>; Mon, 10 Apr 2023 19:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8064EC77B6F
+	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 16:47:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47D5B613BB;
-	Mon, 10 Apr 2023 19:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47D5B613BB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1jaEsn7xopRQ; Mon, 10 Apr 2023 19:35:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9468060E61;
-	Mon, 10 Apr 2023 19:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9468060E61
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 81BC01BF316
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:35:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B71A82099
- for <buildroot@lists.busybox.net>; Mon, 10 Apr 2023 19:35:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B71A82099
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E2B281E3F;
+	Tue, 11 Apr 2023 16:47:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E2B281E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WrVsrjiU2D1B for <buildroot@lists.busybox.net>;
- Mon, 10 Apr 2023 19:35:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8990081E6F
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8990081E6F
- for <buildroot@buildroot.net>; Mon, 10 Apr 2023 19:35:42 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 809661C0003;
- Mon, 10 Apr 2023 19:35:40 +0000 (UTC)
-Received: from peko by be.duckdns.org with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1plxIh-003AOy-J4; Mon, 10 Apr 2023 21:35:39 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <ZC0LJyYomtj0Oqq7@waldemar-brodkorb.de>
- <87pm8iksku.fsf@dell.be.48ers.dk>
-Date: Mon, 10 Apr 2023 21:35:39 +0200
-In-Reply-To: <87pm8iksku.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Wed, 05 Apr 2023 22:00:17 +0200")
-Message-ID: <87fs97ttro.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2D0jZdqpIa1V; Tue, 11 Apr 2023 16:47:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 623C781E5C;
+	Tue, 11 Apr 2023 16:47:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 623C781E5C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 035581C3BBD
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 16:47:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D006260C20
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 16:47:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D006260C20
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z7RAhnOeHzoY for <buildroot@lists.busybox.net>;
+ Tue, 11 Apr 2023 16:47:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDC3760C1F
+ for <buildroot@uclibc.org>; Tue, 11 Apr 2023 16:47:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDC3760C1F
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id BA50782578; Tue, 11 Apr 2023 16:47:05 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Tue, 11 Apr 2023 16:47:05 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2023.02
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jbittner.br.bugs@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-15531-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/uclibc: security update to 1.0.43
+Subject: [Buildroot] [Bug 15531] New: shim doesn't provide hooks for signing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,24 +73,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=15531
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
- >> Security fix for CVE-2022-29503
- >> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+            Bug ID: 15531
+           Summary: shim doesn't provide hooks for signing
+           Product: buildroot
+           Version: 2023.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: jbittner.br.bugs@gmail.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
- > Committed, thanks.
-
-Committed to 2023.02.x and 2022.02.x, thanks.
+Shim is supposed to provide a signed UEFI bootloader for secureboot.  However,
+it is intended to be supplied with a key at build time (make
+VENDOR_CERT_FILE=<path.to.cer>).  Perhaps a menu option could be added to
+Config.in allowing the user to specify a certificate location.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
