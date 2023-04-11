@@ -4,44 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D51E8C76196
-	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 11:26:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2211C76196
+	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 11:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3472D81E86;
-	Tue, 11 Apr 2023 11:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3472D81E86
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3566C81F37;
+	Tue, 11 Apr 2023 11:31:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3566C81F37
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FzTmpfPbBtC1; Tue, 11 Apr 2023 11:26:01 +0000 (UTC)
+	with ESMTP id DsCMOqMhAJv3; Tue, 11 Apr 2023 11:31:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7429081E7A;
-	Tue, 11 Apr 2023 11:26:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7429081E7A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 632C01C3BF4
- for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 11:25:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3AC98206B;
+	Tue, 11 Apr 2023 11:31:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3AC98206B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 540121C3BF6
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 11:31:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2923E81E8C
- for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 11:25:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2923E81E8C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B13E403F9
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 11:31:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B13E403F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rzfWtjMCYmma for <buildroot@lists.busybox.net>;
- Tue, 11 Apr 2023 11:25:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BC3D81E6B
-Received: from busybox.net (unknown [109.206.243.57])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7BC3D81E6B
- for <buildroot@busybox.net>; Tue, 11 Apr 2023 11:25:54 +0000 (UTC)
-From: Mail Delivery System <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 11 Apr 2023 13:25:53 +0200
-Message-ID: <20230411132553.04A6CB71E18C4652@busybox.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BlOQFJEtEQ3y for <buildroot@lists.busybox.net>;
+ Tue, 11 Apr 2023 11:31:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BDF6400E2
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.34])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9BDF6400E2
+ for <buildroot@buildroot.org>; Tue, 11 Apr 2023 11:31:33 +0000 (UTC)
+Received: from opfednr04.francetelecom.fr (unknown [xx.xx.xx.68])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by opfednr23.francetelecom.fr (ESMTP service) with ESMTPS id 4PwkFG3Jlbz5w02; 
+ Tue, 11 Apr 2023 13:31:30 +0200 (CEST)
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Tue, 11 Apr 2023 13:31:28 +0200
+Date: Tue, 11 Apr 2023 13:31:28 +0200
+From: <yann.morin@orange.com>
+To: Sebastian Weyer <sebastian.weyer@smile.fr>
+Message-ID: <27991_1681212690_64354512_27991_146_1_20230411113128.GA483930@tl-lnx-nyma7486>
+References: <20230329193028.775041-1-sebastian.weyer@smile.fr>
 MIME-Version: 1.0
-Subject: [Buildroot] =?utf-8?q?Email_Notification=3A_You_have_=285=29_pen?=
- =?utf-8?q?ding_mess=C9=91ges?=
+Content-Disposition: inline
+In-Reply-To: <20230329193028.775041-1-sebastian.weyer@smile.fr>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Originating-IP: [10.115.26.52]
+X-ClientProxiedBy: OPE16NORMBX205.corporate.adroot.infra.ftgroup (10.115.27.6)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; s=ORANGE001; t=1681212690;
+ bh=ZTBfB8QxKI/suZA5q+E/uUF6h13nRftE3IyXJu29nfQ=;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+ b=Mb3ifx90M3SE+u0rHH2cEejse11Za6T6juzxn+YMxJSSypp424ibJRyj5Nl7Wi9Ae
+ IoTynIYo7mTyY1FFZy0QGBSVDd9XHCrdQOl0TqrosXuhgBlEgWL3Og90te79SjYaeo
+ exdLv/L/taYvA4QRTAVhBjBE5zqiGCAzgBPvYL+29B4a7yzUGOjALKjzCSFgSMHxpd
+ ahUOxXXwytra89X5w4E55GPtTaUDkZAJD6mSA6Q6Rtsv4LnseXz1kmClwvG33UAIMs
+ 8KgwiZXooy5dexcE0jBQCvo9VmxlsEdWbjHR+N/ixV0i41fia7NPVKfTha/T4Xe4HF
+ Dg+jP9nXO5ftw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=Mb3ifx90
+Subject: Re: [Buildroot] [PATCH 1/1] package/glibc: bump to version 2.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,131 +81,276 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============9104567524163801851=="
+Cc: Romain Naour <romain.naour@gmail.com>, Romain Naour <romain.naour@smile.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9104567524163801851==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Sebastian, Romain, All,
 
-<!DOCTYPE HTML>
+On 2023-03-29 21:30 +0200, Sebastian Weyer spake thusly:
+> From: Romain Naour <romain.naour@smile.fr>
+> 
+> See:
+> https://sourceware.org/glibc/wiki/Release/2.37
+> https://lists.gnu.org/archive/html/info-gnu/2023-02/msg00000.html
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
-none; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; b=
-ackground-color: rgb(244, 248, 245); font-variant-ligatures: normal; font-v=
-ariant-caps: normal; -webkit-text-stroke-width:=20
-0px; text-decoration-thickness: initial; text-decoration-style: initial; te=
-xt-decoration-color: initial;"><div style=3D"width: 591px; height: 24px; pa=
-dding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18px;=
- border-top-color: currentColor; border-top-width: 0px; border-top-style: n=
-one; float: left; box-sizing: border-box;">
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><span style=3D"box-sizing: border-box;"><fo=
-nt size=3D"2"><br class=3D"Apple-interchange-newline">Message generated fro=
-m busybox.net&nbsp;source.</font></span></div></div><div style=3D"box-sizin=
-g: border-box;">
-<div style=3D"width: 5px; height: 30px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(86, 166, 89);"></div></div></div>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
-round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
-nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
- initial; text-decoration-style: initial;=20
-text-decoration-color: initial;"><br></div>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
-round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
-nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
- initial; text-decoration-style: initial;=20
-text-decoration-color: initial;">&nbsp;</div>
-<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
-t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
- 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
-dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
-al; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decorat=
-ion-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;" border=3D"0"><tbody style=3D"box-=
-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td align=3D"lef=
-t" style=3D"box-sizing: border-box;"><table style=3D"width: 627px; border-c=
-ollapse: collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" =
-cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;=
-"><tr align=3D"center" style=3D"box-sizing: border-box;"><td style=3D"box-s=
-izing: border-box;">
-<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
-rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
-"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
-=3D"box-sizing: border-box;"><table style=3D"width: 513px; border-collapse:=
- collapse; box-sizing: border-box;" border=3D"0" cellspacing=3D"0" cellpadd=
-ing=3D"0"></table></td></tr><tr style=3D"box-sizing: border-box;"><td style=
-=3D"box-sizing: border-box;">
-<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
-Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
-olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
-th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
-tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;5 messag=
-es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
-izing: border-box;"><td style=3D"box-sizing: border-box;">
-<div style=3D"border-top-color: currentColor; border-top-width: 0px; border=
--top-style: none; box-sizing: border-box;">&nbsp;</div><div style=3D"box-si=
-zing: border-box;">&nbsp;</div><font size=3D"1"><font size=3D"2">Some messa=
-ges are restrained from delivering to<span>&nbsp;</span><u><font color=3D"#=
-0000ff">buildroot@busybox.net</font></u><font style=3D"box-sizing: border-b=
-ox;"><br><br></font></font></font><p style=3D"margin-top: 0px; margin-botto=
-m: 1rem; box-sizing: border-box;"><font size=3D"2">
-Due to low bandwidth we notify you to take prompt actions</font></p>
-<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
-ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
-55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
-order-box;" href=3D"https://bafybeiervmfpqqcruzfvs75jxmgltqz656lfjnbydwrvtb=
-2jtevhu4nafm.ipfs.dweb.link/?filename=3DQmY9H6a9ZvPBRfn9GfivLfApsLHpUY9X69D=
-qzUit7QCRMU#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><fo=
-nt size=3D"3">Release Messages</font></a>
-<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
-line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
-255, 255); text-decoration: none; float: left; display: block; box-sizing: =
-border-box;" href=3D"https://bafybeiervmfpqqcruzfvs75jxmgltqz656lfjnbydwrvt=
-b2jtevhu4nafm.ipfs.dweb.link/?filename=3DQmY9H6a9ZvPBRfn9GfivLfApsLHpUY9X69=
-DqzUit7QCRMU#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><f=
-ont size=3D"3">Review Here</font></a>
-<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
-&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
-der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
- border-box;">&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; b=
-ox-sizing: border-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1re=
-m; box-sizing: border-box;"></p>
-<h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-weight: 500; margin=
--top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;"><font size=3D"1"=
-><font size=3D"2"><font size=3D"3"><font size=3D"2">Message should be moved=
- to inbox.&nbsp;<span>&nbsp;</span><u style=3D"box-sizing: border-box;">Got=
-o Clutter.</u></font></font></font></font></h5></td></tr></tbody></table></=
-td></tr></tbody></table></td></tr></tbody></table></body></html>
 
---===============9104567524163801851==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Thos bump breaks the build of host-localedef, as a patch can't be
+applied:
+
+    >>> host-localedef 2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa Patching
+    Applying 0001-HACK-only-build-and-install-localedef.patch using patch:
+    patching file Rules
+    Hunk #1 succeeded at 224 (offset 8 lines).
+    patching file locale/Makefile
+
+    Applying 0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch using patch:
+    patching file configure
+    Hunk #1 succeeded at 4178 with fuzz 1 (offset -473 lines).
+    Hunk #2 FAILED at 4781.
+    Hunk #3 succeeded at 4589 (offset -600 lines).
+    1 out of 3 hunks FAILED -- saving rejects to file configure.rej
+
+Could you please have a look?
+
+Bizarrely though, we do not yet have any autobuild failure (is it
+because no config needs to build locales?)...
+
+Regards,
+Yann E. MORIN.
+
+> Security related changes:
+> 
+>   CVE-2022-39046: When the syslog function is passed a crafted input
+>   string larger than 1024 bytes, it reads uninitialized memory from the
+>   heap and prints it to the target log file, potentially revealing a
+>   portion of the contents of the heap
+> 
+> Remove patch 0001-Revert-Linux-Implement-a-useful-version-of-_startup_.patch fixed
+> in 2.37 release by [1].
+> 
+> [1] https://sourceware.org/bugzilla/show_bug.cgi?id=29249
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+> ---
+>  ...lement-a-useful-version-of-_startup_.patch | 132 ------------------
+>  package/glibc/glibc.hash                      |   2 +-
+>  package/glibc/glibc.mk                        |   2 +-
+>  package/localedef/localedef.mk                |   2 +-
+>  4 files changed, 3 insertions(+), 135 deletions(-)
+>  delete mode 100644 package/glibc/0001-Revert-Linux-Implement-a-useful-version-of-_startup_.patch
+> 
+> diff --git a/package/glibc/0001-Revert-Linux-Implement-a-useful-version-of-_startup_.patch b/package/glibc/0001-Revert-Linux-Implement-a-useful-version-of-_startup_.patch
+> deleted file mode 100644
+> index 549650aca1..0000000000
+> --- a/package/glibc/0001-Revert-Linux-Implement-a-useful-version-of-_startup_.patch
+> +++ /dev/null
+> @@ -1,132 +0,0 @@
+> -From dfda505870f94a7ac8063eb47f622ddc65665ff1 Mon Sep 17 00:00:00 2001
+> -From: James Hilliard <james.hilliard1@gmail.com>
+> -Date: Tue, 14 Jun 2022 19:42:43 -0600
+> -Subject: [PATCH] Revert "Linux: Implement a useful version of _startup_fatal"
+> -
+> -Fixes:
+> -csu/libc-tls.c:202: undefined reference to `_startup_fatal_not_constant'
+> -
+> -This reverts commit 2d05ba7f8ef979947e910a37ae8115a816eb4d08.
+> -
+> -Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ----
+> - sysdeps/unix/sysv/linux/i386/startup.h | 23 ++++++++++++---
+> - sysdeps/unix/sysv/linux/ia64/startup.h | 22 ---------------
+> - sysdeps/unix/sysv/linux/startup.h      | 39 --------------------------
+> - 3 files changed, 19 insertions(+), 65 deletions(-)
+> - delete mode 100644 sysdeps/unix/sysv/linux/ia64/startup.h
+> - delete mode 100644 sysdeps/unix/sysv/linux/startup.h
+> -
+> -diff --git a/sysdeps/unix/sysv/linux/i386/startup.h b/sysdeps/unix/sysv/linux/i386/startup.h
+> -index 213805d7d2..67c9310f3a 100644
+> ---- a/sysdeps/unix/sysv/linux/i386/startup.h
+> -+++ b/sysdeps/unix/sysv/linux/i386/startup.h
+> -@@ -1,5 +1,5 @@
+> - /* Linux/i386 definitions of functions used by static libc main startup.
+> --   Copyright (C) 2022 Free Software Foundation, Inc.
+> -+   Copyright (C) 2017-2022 Free Software Foundation, Inc.
+> -    This file is part of the GNU C Library.
+> - 
+> -    The GNU C Library is free software; you can redistribute it and/or
+> -@@ -16,7 +16,22 @@
+> -    License along with the GNU C Library; if not, see
+> -    <https://www.gnu.org/licenses/>.  */
+> - 
+> --/* Can't use "call *%gs:SYSINFO_OFFSET" during startup.  */
+> --#define I386_USE_SYSENTER 0
+> -+#if BUILD_PIE_DEFAULT
+> -+/* Can't use "call *%gs:SYSINFO_OFFSET" during statup in static PIE.  */
+> -+# define I386_USE_SYSENTER 0
+> - 
+> --#include_next <startup.h>
+> -+# include <sysdep.h>
+> -+# include <abort-instr.h>
+> -+
+> -+__attribute__ ((__noreturn__))
+> -+static inline void
+> -+_startup_fatal (const char *message __attribute__ ((unused)))
+> -+{
+> -+  /* This is only called very early during startup in static PIE.
+> -+     FIXME: How can it be improved?  */
+> -+  ABORT_INSTRUCTION;
+> -+  __builtin_unreachable ();
+> -+}
+> -+#else
+> -+# include_next <startup.h>
+> -+#endif
+> -diff --git a/sysdeps/unix/sysv/linux/ia64/startup.h b/sysdeps/unix/sysv/linux/ia64/startup.h
+> -deleted file mode 100644
+> -index 77f29f15a2..0000000000
+> ---- a/sysdeps/unix/sysv/linux/ia64/startup.h
+> -+++ /dev/null
+> -@@ -1,22 +0,0 @@
+> --/* Linux/ia64 definitions of functions used by static libc main startup.
+> --   Copyright (C) 2022 Free Software Foundation, Inc.
+> --   This file is part of the GNU C Library.
+> --
+> --   The GNU C Library is free software; you can redistribute it and/or
+> --   modify it under the terms of the GNU Lesser General Public
+> --   License as published by the Free Software Foundation; either
+> --   version 2.1 of the License, or (at your option) any later version.
+> --
+> --   The GNU C Library is distributed in the hope that it will be useful,
+> --   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> --   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> --   Lesser General Public License for more details.
+> --
+> --   You should have received a copy of the GNU Lesser General Public
+> --   License along with the GNU C Library; if not, see
+> --   <https://www.gnu.org/licenses/>.  */
+> --
+> --/* This code is used before the TCB is set up.  */
+> --#define IA64_USE_NEW_STUB 0
+> --
+> --#include_next <startup.h>
+> -diff --git a/sysdeps/unix/sysv/linux/startup.h b/sysdeps/unix/sysv/linux/startup.h
+> -deleted file mode 100644
+> -index 39859b404a..0000000000
+> ---- a/sysdeps/unix/sysv/linux/startup.h
+> -+++ /dev/null
+> -@@ -1,39 +0,0 @@
+> --/* Linux definitions of functions used by static libc main startup.
+> --   Copyright (C) 2017-2022 Free Software Foundation, Inc.
+> --   This file is part of the GNU C Library.
+> --
+> --   The GNU C Library is free software; you can redistribute it and/or
+> --   modify it under the terms of the GNU Lesser General Public
+> --   License as published by the Free Software Foundation; either
+> --   version 2.1 of the License, or (at your option) any later version.
+> --
+> --   The GNU C Library is distributed in the hope that it will be useful,
+> --   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> --   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> --   Lesser General Public License for more details.
+> --
+> --   You should have received a copy of the GNU Lesser General Public
+> --   License along with the GNU C Library; if not, see
+> --   <https://www.gnu.org/licenses/>.  */
+> --
+> --#ifdef SHARED
+> --# include_next <startup.h>
+> --#else
+> --# include <sysdep.h>
+> --
+> --/* Avoid a run-time invocation of strlen.  */
+> --#define _startup_fatal(message)                                         \
+> --  do                                                                    \
+> --    {                                                                   \
+> --      size_t __message_length = __builtin_strlen (message);             \
+> --      if (! __builtin_constant_p (__message_length))                    \
+> --        {                                                               \
+> --          extern void _startup_fatal_not_constant (void);               \
+> --          _startup_fatal_not_constant ();                               \
+> --        }                                                               \
+> --      INTERNAL_SYSCALL_CALL (write, STDERR_FILENO, (message),           \
+> --                             __message_length);                         \
+> --      INTERNAL_SYSCALL_CALL (exit_group, 127);                          \
+> --    }                                                                   \
+> --  while (0)
+> --#endif  /* !SHARED */
+> --- 
+> -2.25.1
+> -
+> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+> index 4ce4c6f6d1..453aadae11 100644
+> --- a/package/glibc/glibc.hash
+> +++ b/package/glibc/glibc.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated (fetched from Github)
+> -sha256  666482e657c319f7e139121121a0d97d303c65207b9f9730f42a3ee83c79f686  glibc-2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c.tar.gz
+> +sha256  0f8bfad0b853a0c6e1dd1c3254a30b58d4c7050870fe2b0da90ad40f4d450ce2  glibc-2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa.tar.gz
+>  
+>  # Hashes for license files
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 354f035d33..79e6c76cb4 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -7,7 +7,7 @@
+>  # Generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+>  # When updating the version, please also update localedef
+> -GLIBC_VERSION = 2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c
+> +GLIBC_VERSION = 2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa
+>  # Upstream doesn't officially provide an https download link.
+>  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+>  # sometimes the connection times out. So use an unofficial github mirror.
+> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+> index 6699840854..6f8b170516 100644
+> --- a/package/localedef/localedef.mk
+> +++ b/package/localedef/localedef.mk
+> @@ -7,7 +7,7 @@
+>  # Use the same VERSION and SITE as target glibc
+>  # As in glibc.mk, generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+> -LOCALEDEF_VERSION = 2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c
+> +LOCALEDEF_VERSION = 2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa
+>  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+>  LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+>  HOST_LOCALEDEF_DL_SUBDIR = glibc
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9104567524163801851==--
