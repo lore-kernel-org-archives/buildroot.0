@@ -4,85 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95EB5C76196
-	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 20:31:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4B7CC7619A
+	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 20:33:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E19882279;
-	Tue, 11 Apr 2023 20:31:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E19882279
+	by smtp1.osuosl.org (Postfix) with ESMTP id 269C981401;
+	Tue, 11 Apr 2023 20:33:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 269C981401
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WAwutBg_wMx0; Tue, 11 Apr 2023 20:31:20 +0000 (UTC)
+	with ESMTP id pUlG0xdNuAzz; Tue, 11 Apr 2023 20:33:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3536D82276;
-	Tue, 11 Apr 2023 20:31:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3536D82276
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BAF381406;
+	Tue, 11 Apr 2023 20:33:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BAF381406
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2995D1C3C71
- for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 20:31:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ECC5B1C3C52
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 20:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1053A41CF0
- for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 20:31:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1053A41CF0
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3B1841CEC
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 20:33:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3B1841CEC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uSJsPqSkxrWO for <buildroot@lists.busybox.net>;
- Tue, 11 Apr 2023 20:31:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB567400C4
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB567400C4
- for <buildroot@buildroot.org>; Tue, 11 Apr 2023 20:31:16 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id o18so8819651wro.12
- for <buildroot@buildroot.org>; Tue, 11 Apr 2023 13:31:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1681245075;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=rbQFaiEScVp9Xrk20zkczzf70WAE1RwkwZ6STXFlhx0=;
- b=IedZS6+kXhjXTx8DCkJxPQ7/CUeabHwcZkIx807J2DjVnunJ3LJxLwgvyP8/BpQiSW
- tiXIp7TRJbTdvqzzYI4naIoFZovls1PSdvi/J6vW4zipGoseDcDhfUZGdox+yy3GBl46
- RMg8T9wwaSmFEzpXF2+JK1EGKAJBRIuLjwvcrjzhHI9xFbIxFWtSK7GoEvnTzHz+eUX6
- aPlEb+D9v3/6bH3pS/WSfHd5PHd77+Dv0cE4ejlngWiEF4frQCCZetcvyildmB4A7KJD
- dOZBuxl4k/IpcMfYBjGzTiut3R/+Ae4D+EDmUdNwXrK/vgFSzs42jOxF5U16mneuDe3J
- pSaw==
-X-Gm-Message-State: AAQBX9fGkhskYcKsQFGS4z495Y7gw5kL07tkebnX4SWTU5hbxD97PnIg
- 7a84Kxc0/xK7gLJ8VsQ8yS2lmi9z+CM=
-X-Google-Smtp-Source: AKy350aCrVL+WABDtU/OeT/GcnRaCqmFfvYJ998WUFKNoO9+me+NgVxXnf3YfaXHynGjVQf+4VDE1A==
-X-Received: by 2002:adf:f20b:0:b0:2d1:e517:4992 with SMTP id
- p11-20020adff20b000000b002d1e5174992mr2700192wro.69.1681245074767; 
- Tue, 11 Apr 2023 13:31:14 -0700 (PDT)
-Received: from localhost.localdomain (1-1-22-171.ftth.cust.kwaoo.net.
- [171.22.1.1]) by smtp.gmail.com with ESMTPSA id
- c5-20020a5d4cc5000000b002f2794a6ee6sm4669733wrt.112.2023.04.11.13.31.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Apr 2023 13:31:14 -0700 (PDT)
+ with ESMTP id QJB4uPoVns9J for <buildroot@lists.busybox.net>;
+ Tue, 11 Apr 2023 20:33:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6733400C4
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C6733400C4
+ for <buildroot@buildroot.org>; Tue, 11 Apr 2023 20:33:38 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id E5B595FF93;
+ Tue, 11 Apr 2023 22:33:28 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 11 Apr 2023 22:33:28 +0200
+Date: Tue, 11 Apr 2023 22:33:28 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 11 Apr 2023 22:31:13 +0200
-Message-Id: <20230411203113.1573787-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
+To: yann.morin@orange.com
+Message-ID: <20230411203328.GR2819@scaer>
+References: <20230329193028.775041-1-sebastian.weyer@smile.fr>
+ <27991_1681212690_64354512_27991_146_1_20230411113128.GA483930@tl-lnx-nyma7486>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1681245075;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=rbQFaiEScVp9Xrk20zkczzf70WAE1RwkwZ6STXFlhx0=;
- b=NyxzMz+R+u775Q04fipvLY6tJ4egOWOWKwuV0a/97EaRFRIbQL52QKercbCzchOnBH
- 6Xusm8Sm/o+wA06POlNaAOWv3fJbOiJ30S5xQvKtZXeNmBQEaKI+VOdMQv6Ku96FsZh2
- bMtOBpt1gLkd+46yg9c+MB9zf8V8cImYTcF9bHS/sWD4SW3uXOiwYr9zt6yAllGc7UgJ
- 3THYX8gkGb9BfIzV3AdC61XFci1FIMQAJOd51+hOV7uSP/W6fQsyMdnLDM5JCWYeNXU5
- fOHjxZ/zLQnsxetLJBwyZYG5fXlR6T+d4XYHB20VtQeM/C9PiFQMswWbNTuDHVNi2n24
- AUfA==
+Content-Disposition: inline
+In-Reply-To: <27991_1681212690_64354512_27991_146_1_20230411113128.GA483930@tl-lnx-nyma7486>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1681245215;
+ bh=YWmve5lrkYlvgXdwp/D7lGrl1ZkiHlMiEug1Dw2ZzwQ=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=LdhRD1+hPOhYIlfvCsWNbwqlTIobwSP+l0ZxSpANpKuUSdKj+w4DnDw4pBKtcTod1
+ Z9H23bEVSg7aFz2pDzszaoU3XucbRecwuZTgYH+iQqeFyVHuKEg6VSpJKjQcujbngm
+ cxpIIYWC+P+ZjYnmbuomjcWdaO3WwkktlkPmma88dDdCXiIwlJ68iPyAuvtkHG6xyr
+ 8a8rSz3YSFbAngCSoIvYntsq0F9bogF0ieZTzhvcmC+wCrLdmXKmVjDEIkOqBCumKO
+ JT5KoZgjhO8sIrCO/CsmUV78eAEImmYPxeb/9IvR8Yul+UGYQE9HIWtfHVlJQn3DiD
+ p8jRB9ztlbsnw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=NyxzMz+R
-Subject: [Buildroot] [PATCH] package/localedef: fix fallout after bump to
- glibc 2.37
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=LdhRD1+h
+Subject: Re: [Buildroot] [PATCH 1/1] package/glibc: bump to version 2.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,73 +76,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>,
- Romain Naour <romain.naour@smile.fr>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Sebastian Weyer <sebastian.weyer@smile.fr>,
+ Romain Naour <romain.naour@gmail.com>, Romain Naour <romain.naour@smile.fr>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit a379499f7334 (package/glibc: bump to version 2.37) forgot to
-update the pach for localedef.
+Yann, Sebastian, Romain, All,
 
-There is no version check for 'as' now, so drop the related hunk.
+On 2023-04-11 13:31 +0200, yann.morin@orange.com spake thusly:
+> On 2023-03-29 21:30 +0200, Sebastian Weyer spake thusly:
+> > From: Romain Naour <romain.naour@smile.fr>
+> > 
+> > See:
+> > https://sourceware.org/glibc/wiki/Release/2.37
+> > https://lists.gnu.org/archive/html/info-gnu/2023-02/msg00000.html
+> Thos bump breaks the build of host-localedef, as a patch can't be
+> applied:
+>     >>> host-localedef 2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa Patching
+>     Applying 0001-HACK-only-build-and-install-localedef.patch using patch:
+>     patching file Rules
+>     Hunk #1 succeeded at 224 (offset 8 lines).
+>     patching file locale/Makefile
+> 
+>     Applying 0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch using patch:
+>     patching file configure
+>     Hunk #1 succeeded at 4178 with fuzz 1 (offset -473 lines).
+>     Hunk #2 FAILED at 4781.
+>     Hunk #3 succeeded at 4589 (offset -600 lines).
+>     1 out of 3 hunks FAILED -- saving rejects to file configure.rej
 
-Fixes: a379499f7334c2a68d375b1cf9dc35cd59884181
+Thanks for the report, I've sent a patch:
+    https://patchwork.ozlabs.org/project/buildroot/patch/20230411203113.1573787-1-yann.morin.1998@free.fr/
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>
----
- ...dency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+Care to test that, please?
 
-diff --git a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-index 297c96cc5e..94fccfa856 100644
---- a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-+++ b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-@@ -24,6 +24,8 @@ GCC 6.2+
-  https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
- 
- Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+[yann.morin.1998@free.fr: update for 2.37]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- ---
-  configure | 6 +++---
-  1 file changed, 3 insertions(+), 3 deletions(-)
-@@ -32,16 +34,7 @@ diff --git a/configure b/configure
- index 9619c10991..0c481d2339 100755
- --- a/configure
- +++ b/configure
--@@ -4651,7 +4651,7 @@ $as_echo_n "checking version of $AS... " >&6; }
--   ac_prog_version=`$AS --version 2>&1 | sed -n 's/^.*GNU assembler.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
--   case $ac_prog_version in
--     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
---    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
--+    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
--        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
--     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
-- 
--@@ -4781,7 +4781,7 @@ $as_echo_n "checking version of $LD... " >&6; }
-+@@ -4178,7 +4178,7 @@ $as_echo_n "checking version of $LD... " >&6; }
-    ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
-    case $ac_prog_version in
-      '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-@@ -50,7 +43,7 @@ index 9619c10991..0c481d2339 100755
-         ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-      *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
-  
--@@ -5189,7 +5189,7 @@ int
-+@@ -4589,7 +4589,7 @@ int
-  main ()
-  {
-  
+Regards,
+Yann E. MORIN.
+
 -- 
-2.25.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
