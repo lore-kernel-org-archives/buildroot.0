@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29059C76196
-	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 19:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95EB5C76196
+	for <buildroot@archiver.kernel.org>; Tue, 11 Apr 2023 20:31:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00E2240919;
-	Tue, 11 Apr 2023 19:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00E2240919
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E19882279;
+	Tue, 11 Apr 2023 20:31:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E19882279
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4fTfumjQ-Y7f; Tue, 11 Apr 2023 19:19:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WAwutBg_wMx0; Tue, 11 Apr 2023 20:31:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E30784092C;
-	Tue, 11 Apr 2023 19:19:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E30784092C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3536D82276;
+	Tue, 11 Apr 2023 20:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3536D82276
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AF30F1BF36F
- for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 19:19:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2995D1C3C71
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 20:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 961AB40112
- for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 19:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 961AB40112
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1053A41CF0
+ for <buildroot@lists.busybox.net>; Tue, 11 Apr 2023 20:31:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1053A41CF0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6kU4858Qgt_T for <buildroot@lists.busybox.net>;
- Tue, 11 Apr 2023 19:19:34 +0000 (UTC)
+ with ESMTP id uSJsPqSkxrWO for <buildroot@lists.busybox.net>;
+ Tue, 11 Apr 2023 20:31:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6882400C6
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B6882400C6
- for <buildroot@buildroot.org>; Tue, 11 Apr 2023 19:19:33 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- v14-20020a05600c470e00b003f06520825fso10233706wmo.0
- for <buildroot@buildroot.org>; Tue, 11 Apr 2023 12:19:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB567400C4
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EB567400C4
+ for <buildroot@buildroot.org>; Tue, 11 Apr 2023 20:31:16 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id o18so8819651wro.12
+ for <buildroot@buildroot.org>; Tue, 11 Apr 2023 13:31:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1681240772;
+ d=1e100.net; s=20210112; t=1681245075;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=9yzSHlI/pQgAOMmePCwmV3g8CgijIISjakaQLET+8CY=;
- b=3zh7KFqHm1/q9Atz9m2UzUmHT2LJa4nlFUxmvWTzQBlPbo6mI+Bq8XNS6nva8rmkKI
- pXlCk/l9uBz32IYUtrtEeUTtGY0j4eRWHG1CKQJRCH3wrCl0jwnVa46O0lXbPQn0q2af
- 5E5TzIUXuYv0XpUSkWG+3cwLnkZM8jxuYOQ0CC2lTdguLtLxWVRexCl/6kNuS9bSIjYl
- kOQNJRmWVsw50FaQnrPugzhVrhXc65PlsLCFUDmitZDlcCOq9jwEeVzxYD0OrS9D0iP3
- eX0MkONcBgP6xgL02VIUGiayE7Qu8FGT2eoYQzOF2s33ucl9EqA6HGyO9bstJhPvI5h2
- 7FyA==
-X-Gm-Message-State: AAQBX9dnKrLUZ2opBz3sMXnPav5+QhkgjeJcSNOHbsh4w9exVqxjTCIP
- TLzZH2nF1/cBemLvYuNIEab9oZ42oXw=
-X-Google-Smtp-Source: AKy350aAmMirUCZ7lHcvPWpOcXCGT0nejGa76MyPRUGu+2f9wLJe4UsqhjPqqNxL8Me7ma26byU+Kg==
-X-Received: by 2002:a05:600c:2284:b0:3ee:4ee:bf73 with SMTP id
- 4-20020a05600c228400b003ee04eebf73mr7754117wmf.24.1681240771689; 
- Tue, 11 Apr 2023 12:19:31 -0700 (PDT)
+ bh=rbQFaiEScVp9Xrk20zkczzf70WAE1RwkwZ6STXFlhx0=;
+ b=IedZS6+kXhjXTx8DCkJxPQ7/CUeabHwcZkIx807J2DjVnunJ3LJxLwgvyP8/BpQiSW
+ tiXIp7TRJbTdvqzzYI4naIoFZovls1PSdvi/J6vW4zipGoseDcDhfUZGdox+yy3GBl46
+ RMg8T9wwaSmFEzpXF2+JK1EGKAJBRIuLjwvcrjzhHI9xFbIxFWtSK7GoEvnTzHz+eUX6
+ aPlEb+D9v3/6bH3pS/WSfHd5PHd77+Dv0cE4ejlngWiEF4frQCCZetcvyildmB4A7KJD
+ dOZBuxl4k/IpcMfYBjGzTiut3R/+Ae4D+EDmUdNwXrK/vgFSzs42jOxF5U16mneuDe3J
+ pSaw==
+X-Gm-Message-State: AAQBX9fGkhskYcKsQFGS4z495Y7gw5kL07tkebnX4SWTU5hbxD97PnIg
+ 7a84Kxc0/xK7gLJ8VsQ8yS2lmi9z+CM=
+X-Google-Smtp-Source: AKy350aCrVL+WABDtU/OeT/GcnRaCqmFfvYJ998WUFKNoO9+me+NgVxXnf3YfaXHynGjVQf+4VDE1A==
+X-Received: by 2002:adf:f20b:0:b0:2d1:e517:4992 with SMTP id
+ p11-20020adff20b000000b002d1e5174992mr2700192wro.69.1681245074767; 
+ Tue, 11 Apr 2023 13:31:14 -0700 (PDT)
 Received: from localhost.localdomain (1-1-22-171.ftth.cust.kwaoo.net.
  [171.22.1.1]) by smtp.gmail.com with ESMTPSA id
- f19-20020a05600c4e9300b003f09cda253esm47139wmq.34.2023.04.11.12.19.30
+ c5-20020a5d4cc5000000b002f2794a6ee6sm4669733wrt.112.2023.04.11.13.31.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Apr 2023 12:19:31 -0700 (PDT)
+ Tue, 11 Apr 2023 13:31:14 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 11 Apr 2023 21:19:30 +0200
-Message-Id: <20230411191930.1550516-1-yann.morin.1998@free.fr>
+Date: Tue, 11 Apr 2023 22:31:13 +0200
+Message-Id: <20230411203113.1573787-1-yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112; t=1681240772;
+ d=gmail.com; s=20221208; t=1681245075;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=9yzSHlI/pQgAOMmePCwmV3g8CgijIISjakaQLET+8CY=;
- b=YENpPSSOP82NSgqmkBiFCg1F9z/yCv++hDD2H5rSsAyyPVq7L//CBAOIvv//9hRWjN
- MH7fNhgn0rgjiHPAm3MFKvS7SW22r+FftIAr6JlBhpkeXBqrRUJCctwNvbJu8CgPXGlN
- G3r0i2BOocOIjnex5G9E+/MJ7UPZBW0pnYaagdT7yeA1lPEllRx/8ezlrKhqzmdQtO63
- 0MUo+PAhrug+WBZdkWA387gFR6rt8Q7Fagt2rdNBr7G1ApiGYGrwTgqUQQMQDRFY0Azb
- 5YfSfgshFJDi9wSW+OjsO373IkUU6+wjwcdcR6E7b1ZElQk/x0RhceRVy7MEZo6Rj0Ev
- VPyQ==
+ bh=rbQFaiEScVp9Xrk20zkczzf70WAE1RwkwZ6STXFlhx0=;
+ b=NyxzMz+R+u775Q04fipvLY6tJ4egOWOWKwuV0a/97EaRFRIbQL52QKercbCzchOnBH
+ 6Xusm8Sm/o+wA06POlNaAOWv3fJbOiJ30S5xQvKtZXeNmBQEaKI+VOdMQv6Ku96FsZh2
+ bMtOBpt1gLkd+46yg9c+MB9zf8V8cImYTcF9bHS/sWD4SW3uXOiwYr9zt6yAllGc7UgJ
+ 3THYX8gkGb9BfIzV3AdC61XFci1FIMQAJOd51+hOV7uSP/W6fQsyMdnLDM5JCWYeNXU5
+ fOHjxZ/zLQnsxetLJBwyZYG5fXlR6T+d4XYHB20VtQeM/C9PiFQMswWbNTuDHVNi2n24
+ AUfA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=YENpPSSO
-Subject: [Buildroot] [PATCH] Revert "package/skeleton: drop $(HOST_DIR)/usr
- compatibility symlink"
+ header.a=rsa-sha256 header.s=20221208 header.b=NyxzMz+R
+Subject: [Buildroot] [PATCH] package/localedef: fix fallout after bump to
+ glibc 2.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,60 +94,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Sebastian Weyer <sebastian.weyer@smile.fr>,
+ Romain Naour <romain.naour@smile.fr>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Bagas Sanjaya <bagasdotme@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In 38b798da73ba (package/skeleton: drop $(HOST_DIR)/usr compatibility
-symlink), we considered that $(HOST_DIR)/usr is a legacy symlink, and so
-we dropped it. During review, it was pointed out that:
+Commit a379499f7334 (package/glibc: bump to version 2.37) forgot to
+update the pach for localedef.
 
- 1. [if] something installs in HOST_DIR/usr it's probably going to
-    break somewhere down the line,
+There is no version check for 'as' now, so drop the related hunk.
 
- 2. DESTDIR is empty for host builds. And PREFIX/usr would be completely
-    crazy.
-
-However, we do have a package where DESTDIR is not empty for host
-packages. Indeed, for host-systemd, we do have a convoluted sequence
-where we configure it for the traditional /usr prefix, rather than
-$(HOST_DIR) for all other host packages, and we install it with
-DESTDIR=$(HOST_DIR). This is because systemd has to interpret path on
-the target, not on the host, and confusion ensues if host systemd is not
-configured with the same prefix as the target systemd. See commit
-35c11a027c88 (package/systemd: add host variant) for the full, in-depth
-explanations.
-
-This reverts commit 38b798da73ba69c9e1d8279805b621f80b98bc64.
-
-This also changes the comment to note that, although legacy, the usr
-symlink is still required for some weird host packages.
+Fixes: a379499f7334c2a68d375b1cf9dc35cd59884181
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- package/skeleton/skeleton.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ ...dency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 186cb60189..4eaaf32ead 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -11,7 +11,12 @@
- SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_ADD_SKELETON_DEPENDENCY = NO
+diff --git a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+index 297c96cc5e..94fccfa856 100644
+--- a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
++++ b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+@@ -24,6 +24,8 @@ GCC 6.2+
+  https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
  
-+# Although the $(HOST_DIR)/usr symlink is mostly for backward compatibility,
-+# there are weird packages that still require it (see host-systemd, and
-+# commit 35c11a027c88).
- define HOST_SKELETON_INSTALL_CMDS
-+# check-package DoNotInstallToHostdirUsr
-+	$(Q)ln -snf . $(HOST_DIR)/usr
- 	$(Q)mkdir -p $(HOST_DIR)/lib
- 	$(Q)mkdir -p $(HOST_DIR)/include
- 	$(Q)case $(HOSTARCH) in \
+ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++[yann.morin.1998@free.fr: update for 2.37]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ ---
+  configure | 6 +++---
+  1 file changed, 3 insertions(+), 3 deletions(-)
+@@ -32,16 +34,7 @@ diff --git a/configure b/configure
+ index 9619c10991..0c481d2339 100755
+ --- a/configure
+ +++ b/configure
+-@@ -4651,7 +4651,7 @@ $as_echo_n "checking version of $AS... " >&6; }
+-   ac_prog_version=`$AS --version 2>&1 | sed -n 's/^.*GNU assembler.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
+-   case $ac_prog_version in
+-     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+--    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+-+    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+-        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+-     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+- 
+-@@ -4781,7 +4781,7 @@ $as_echo_n "checking version of $LD... " >&6; }
++@@ -4178,7 +4178,7 @@ $as_echo_n "checking version of $LD... " >&6; }
+    ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
+    case $ac_prog_version in
+      '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+@@ -50,7 +43,7 @@ index 9619c10991..0c481d2339 100755
+         ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+      *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+  
+-@@ -5189,7 +5189,7 @@ int
++@@ -4589,7 +4589,7 @@ int
+  main ()
+  {
+  
 -- 
 2.25.1
 
