@@ -4,74 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 331A3C77B6E
-	for <buildroot@archiver.kernel.org>; Thu, 13 Apr 2023 21:14:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88949C77B61
+	for <buildroot@archiver.kernel.org>; Thu, 13 Apr 2023 21:54:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97129616EF;
-	Thu, 13 Apr 2023 21:14:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97129616EF
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD0966FE9B;
+	Thu, 13 Apr 2023 21:54:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD0966FE9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LxFcqNg330gp; Thu, 13 Apr 2023 21:14:42 +0000 (UTC)
+	with ESMTP id FDHPEZjILFBG; Thu, 13 Apr 2023 21:54:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C64AA60C22;
-	Thu, 13 Apr 2023 21:14:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C64AA60C22
+	by smtp3.osuosl.org (Postfix) with ESMTP id 122166FE95;
+	Thu, 13 Apr 2023 21:54:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 122166FE95
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 99D7D1BF389
- for <buildroot@lists.busybox.net>; Thu, 13 Apr 2023 21:14:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D287D1C3AFB
+ for <buildroot@lists.busybox.net>; Thu, 13 Apr 2023 21:54:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B77441EC2
- for <buildroot@lists.busybox.net>; Thu, 13 Apr 2023 21:14:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B77441EC2
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6BBF42732
+ for <buildroot@lists.busybox.net>; Thu, 13 Apr 2023 21:54:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6BBF42732
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tWUhaY_j8zJB for <buildroot@lists.busybox.net>;
- Thu, 13 Apr 2023 21:14:38 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E929241FE5
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com
- [209.85.167.53])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E929241FE5
- for <buildroot@buildroot.org>; Thu, 13 Apr 2023 21:14:37 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id i26so21242283lfc.6
- for <buildroot@buildroot.org>; Thu, 13 Apr 2023 14:14:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1681420476; x=1684012476;
- h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=nOSm3Gw3xnup4+/kgPfl7wW0I2j6/RuUQWKjZrqFphA=;
- b=SoPBiZZ/zpKnOP2w9+Jo+pdKfmrnri5eSmz0tqJ6GTvsZFZaswXCxX9PU6XNBwWSao
- rV48mWfqb67MWJS5P5l1A+akW5eLrdc5YqqNQPGhQF5n7itR8n/MO5fUCxvyQczlDoI6
- Sbwc0usyZU9jJVK3I/8vvIVbiBuVUJ4W9Ap4uOoSJFfbvdkGnaTceC0SglcSfk0fN+N4
- N93skUQSwlc4Q6KsSXU3WyV0qtZjdpMIUwPtevB9qhUkMI3CzMvUrBCz0o5j1g/Xmnv+
- Eeq8xcU0T65GhCDmRfpvCaDp6rEdZhcSDsIzYrmw4UPj5Z61xljy0/AKGtiTncmZCFEL
- tQXg==
-X-Gm-Message-State: AAQBX9d607/cpR/HMLxjwQg2V44mqz0ph7kHGHv2pZub7hleb0hOsVV1
- kzPSvoG9N4jRyh4IQ/jhDLxatiWAiZ8IkA==
-X-Google-Smtp-Source: AKy350bOke7/Vwuf1Ol7xhZEMkTnZrgQBO1YsgdTqt/QogHVd4dvt4DghpOeUnrzwEqQQjUOMMbWFw==
-X-Received: by 2002:ac2:4895:0:b0:4d5:a689:7580 with SMTP id
- x21-20020ac24895000000b004d5a6897580mr1399061lfc.47.1681420475491; 
- Thu, 13 Apr 2023 14:14:35 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com.
- [209.85.167.44]) by smtp.gmail.com with ESMTPSA id
- h14-20020ac2596e000000b004eaf6181a32sm464776lfp.75.2023.04.13.14.14.35
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 13 Apr 2023 14:14:35 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id b40so422201lfv.4
- for <buildroot@buildroot.org>; Thu, 13 Apr 2023 14:14:35 -0700 (PDT)
-X-Received: by 2002:a05:6512:7c:b0:4ea:2dce:fa0a with SMTP id
- i28-20020a056512007c00b004ea2dcefa0amr1210322lfo.10.1681420474861; Thu, 13
- Apr 2023 14:14:34 -0700 (PDT)
+ with ESMTP id KRu17g0aJKgj for <buildroot@lists.busybox.net>;
+ Thu, 13 Apr 2023 21:54:50 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 458A542710
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 458A542710
+ for <buildroot@buildroot.org>; Thu, 13 Apr 2023 21:54:50 +0000 (UTC)
+Received: from 91-152-140-132.elisa-laajakaista.fi ([91.152.140.132]
+ helo=momiji.home) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1pn4ty-000FdA-CP; Thu, 13 Apr 2023 23:54:46 +0200
+Received: from localhost (momiji.home [local])
+ by momiji.home (OpenSMTPD) with ESMTPA id 92f1f4d1;
+ Thu, 13 Apr 2023 21:54:38 +0000 (UTC)
+Date: Fri, 14 Apr 2023 00:54:34 +0300
+Message-ID: <20230414005434.GB370828@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+In-Reply-To: <CACXRmJjkgX6iek7DyuqDbc29QF+N0ALjS5w7qfPEaU=O-fmw+A@mail.gmail.com>
+References: <CACXRmJjkgX6iek7DyuqDbc29QF+N0ALjS5w7qfPEaU=O-fmw+A@mail.gmail.com>
 MIME-Version: 1.0
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Thu, 13 Apr 2023 23:14:23 +0200
-X-Gmail-Original-Message-ID: <CACXRmJjkgX6iek7DyuqDbc29QF+N0ALjS5w7qfPEaU=O-fmw+A@mail.gmail.com>
-Message-ID: <CACXRmJjkgX6iek7DyuqDbc29QF+N0ALjS5w7qfPEaU=O-fmw+A@mail.gmail.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=PemgqaXG9mOPPVaHdcqetcsIZsmD8/YQcAHRZDHiZHY=; b=r/DGsPHafr20euBtU0RyBMpZlU
+ lHbz7D7CH424hQRK6ggsFC28zw6ZkEIggf5Z7kpuqhmTAGYqNk0LXOGgTgst3603VseLF4zq4jB4s
+ d+CW2aYYiD8xfAEkL0Dvyu4SHKAwkU0djmvAXAjqGzLR/04W7wAJZYGW0++EXl30/GsNMfpg3ARGn
+ 0HcFcrnIJHi/fcnq/lFccpH9UFzKw9wqssXBfqQdUFIi4SRw9sS7KPvzv4yE+iGXazKWBpvjenjJG
+ VLb+oZ+M1eCjiYEbLPYknKsxqnKxhpKiFBd74wx8lMXlLggcNak2GqcA+oErALQA81gCxAcWT+Ppc
+ 5fdJkmyA==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=r/DGsPHa
 Subject: Re: [Buildroot] [PATCH] package/webkitgtk: allow both X11 and
  Wayland
 X-BeenThere: buildroot@buildroot.org
@@ -86,51 +79,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0670034020328133435=="
+Content-Type: multipart/mixed; boundary="===============4075054552165188058=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0670034020328133435==
-Content-Type: multipart/alternative; boundary="0000000000001f4fca05f93e3629"
 
---0000000000001f4fca05f93e3629
-Content-Type: text/plain; charset="UTF-8"
+--===============4075054552165188058==
+Content-Type: multipart/signed; boundary="NWNJp2XjSaA0zbn0"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
 
-Hi,
 
-I have a serie of patches which are still open, related to that atk bridge.
+--NWNJp2XjSaA0zbn0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-https://patchwork.ozlabs.org/project/buildroot/list/?series=343801
+SGkgVGhvbWFzLAoKT24gVGh1LCAxMyBBcHIgMjAyMyAyMzoxNDoyMyArMDIwMCBUaG9tYXMgRGV2
+b29nZHQgPHRob21hc0BkZXZvb2dkdC5jb20+IHdyb3RlOgoKPiBJIGhhdmUgYSBzZXJpZSBvZiBw
+YXRjaGVzIHdoaWNoIGFyZSBzdGlsbCBvcGVuLCByZWxhdGVkIHRvIHRoYXQgYXRrIGJyaWRnZS4K
+PiAKPiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L2xpc3Qv
+P3Nlcmllcz0zNDM4MDEKCkFoLCBpbnRlcmVzdGluZywgSSB3aWxsIHRha2UgYSBsb29rIHRvbW9y
+cm93LgogCj4gSSB3YXMgYWxzbyBwbGFubmluZyB0byBtYWtlIGEgcGF0Y2ggd2l0aCB3ZWJraXRn
+dGsgMi40MCwgYnV0IGRpZG4ndCBkbyB0aGF0Cj4gc2luY2UgbXkgb3RoZXIgcGF0Y2hlcyBhcmVu
+J3QgbWVyZ2VkIHlldC4gSWYgeW91IGRvIGl0LCBrbm93IHRoYXQgSSBhbHJlYWR5Cj4gdXBzdHJl
+YW1lZCB0aGUgaG9zdC11bmlmZGVmIHBhY2thZ2UgYW5kIHRoYXQgdGhlIG1pbmltdW0gcmVxdWly
+ZWQgR0NDCj4gdmVyc2lvbiBuZWVkIHRvIGJlIGJ1bXBlZCBhcyB3ZWxsLgoKTmljZSwgeW91IHNh
+dmVkIG1lIGZyb20gaGF2aW5nIHRvIGRvIGhvc3QtdW5pZmRlZiBteXNlbGYuIEkgaGF2ZSBhbHJl
+YWR5IGEKcGF0Y2ggWzFdIGZvciB0aGUgMi40MC4wIHVwZGF0ZSwgd2hpY2ggaXMgbm93IHJlY2Vp
+dmluZyBhIHJvdW5kIG9mIHRlc3RpbmcKYmVmb3JlIEkgc3VibWl0IGl0IDopCgpDaGVlcnMsCuKA
+lEFkcmnDoW4KCi0tLQpbMV0gaHR0cHM6Ly9naXQuc3IuaHQvfmFwZXJlemRjL2J1aWxkcm9vdC9j
+b21taXQvMTVlM2ZmZWFiZWM1MTVmMDcxMDgwNzk2NjBhMjZhYmEwMjVhMzlmNgo=
 
-I was also planning to make a patch with webkitgtk 2.40, but didn't do that
-since my other patches aren't merged yet. If you do it, know that I already
-upstreamed the host-unifdef package and that the minimum required GCC
-version need to be bumped as well.
+--NWNJp2XjSaA0zbn0
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Kr
+-----BEGIN PGP SIGNATURE-----
 
-Thomas
+iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZDh6GgAKCRCRxVnb5MkS
+Ox23AJ47zGc2Zvf7Asf5+0wCaskeKO0kSgCfWecw+wqNidyM1/GnqsQeIUk0j90=
+=qNor
+-----END PGP SIGNATURE-----
 
---0000000000001f4fca05f93e3629
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--NWNJp2XjSaA0zbn0--
 
-<div dir=3D"auto">Hi,<div dir=3D"auto"><br></div><div dir=3D"auto">I have a=
- serie of patches which are still open, related to that atk bridge.</div><d=
-iv dir=3D"auto"><br></div><div dir=3D"auto"><a href=3D"https://patchwork.oz=
-labs.org/project/buildroot/list/?series=3D343801" target=3D"_blank" rel=3D"=
-noreferrer">https://patchwork.ozlabs.org/project/buildroot/list/?series=3D3=
-43801</a>=C2=A0<br></div><div dir=3D"auto"><br></div><div dir=3D"auto">I wa=
-s also planning to make a patch with webkitgtk 2.40, but didn&#39;t do that=
- since my other patches aren&#39;t merged yet. If you do it, know that I al=
-ready upstreamed the host-unifdef package and that the minimum required GCC=
- version need to be bumped as well.</div><div dir=3D"auto"><br></div><div d=
-ir=3D"auto">Kr</div><div dir=3D"auto"><br></div><div dir=3D"auto">Thomas=C2=
-=A0</div></div>
-
---0000000000001f4fca05f93e3629--
-
---===============0670034020328133435==
+--===============4075054552165188058==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -141,4 +132,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0670034020328133435==--
+--===============4075054552165188058==--
