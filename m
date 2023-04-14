@@ -4,80 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EEE3C77B6E
-	for <buildroot@archiver.kernel.org>; Fri, 14 Apr 2023 08:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 630F3C77B70
+	for <buildroot@archiver.kernel.org>; Fri, 14 Apr 2023 08:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5482427AD;
-	Fri, 14 Apr 2023 08:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5482427AD
+	by smtp4.osuosl.org (Postfix) with ESMTP id E321B42002;
+	Fri, 14 Apr 2023 08:27:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E321B42002
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lcthmM5V7113; Fri, 14 Apr 2023 08:12:50 +0000 (UTC)
+	with ESMTP id EE5OGyIaUM6V; Fri, 14 Apr 2023 08:27:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBD07427B3;
-	Fri, 14 Apr 2023 08:12:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBD07427B3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BE9D61BF390
- for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 08:12:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBABE427C6;
+	Fri, 14 Apr 2023 08:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBABE427C6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C26A1BF356
+ for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 08:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A51AD405A0
- for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 08:12:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A51AD405A0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E9BD84299
+ for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 08:27:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E9BD84299
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cjPZwe306E-Z for <buildroot@lists.busybox.net>;
- Fri, 14 Apr 2023 08:12:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A35BE400F8
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com
- [209.85.208.180])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A35BE400F8
- for <buildroot@buildroot.org>; Fri, 14 Apr 2023 08:12:45 +0000 (UTC)
-Received: by mail-lj1-f180.google.com with SMTP id bx15so16142054ljb.7
- for <buildroot@buildroot.org>; Fri, 14 Apr 2023 01:12:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1681459963; x=1684051963;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=3Edxi29py0Y0aazo59d6a4WCy/2jYtEUwY7p1futWVg=;
- b=dazXoFnxYKuaFgTZdTu8RJjuV2VHTrqbpIawmV9sFXoUQx+8nnt7VCtqF7WhUUoTJk
- i0s85vz0q424nTzhCKbPhzUmDdLoJNTAMS9DI6O8KgWqWooQ79Ri+s+u2BL2Mca/90sf
- CKbneCl3S8LSKQXaUq3AHPEdyJkLyvy5jr5VgO2yJn/yJA32XOQkQq8HncJRSB1wdGs0
- Pq3UGHboTmtswWBsJFR7M31fCS3B3UeRv3Xmv1sjMdlbh9PFSZYAQX9+cYg10kraWu8Q
- LX7t5eJnQK/WsJXb4aeHmQOZs9TkfvEOvAACNjMG2/R6HK6k65n/nES0C0kNpOdJoYSh
- V3Bw==
-X-Gm-Message-State: AAQBX9fnkbHbXSIpYVaFb+PJkDjtds6xXJ+fHQ+oDBuJwRGK0gTDtvFA
- nEy5TVN2w3rcYUd84fF9kLnSVxCAPAq6Bw==
-X-Google-Smtp-Source: AKy350Y+NJ79k1oqS4ccti3AnzKMykmyAY/HQoch8VcqXTdQf3eqW2izQcUNrd6VYNgJ0Ok6sS9lSg==
-X-Received: by 2002:a2e:8450:0:b0:2a8:a89c:bee0 with SMTP id
- u16-20020a2e8450000000b002a8a89cbee0mr772404ljh.11.1681459963200; 
- Fri, 14 Apr 2023 01:12:43 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com.
- [209.85.167.49]) by smtp.gmail.com with ESMTPSA id
- y14-20020a2e95ce000000b002a8ac166e55sm230894ljh.44.2023.04.14.01.12.42
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 14 Apr 2023 01:12:43 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id m4so22213587lfj.13
- for <buildroot@buildroot.org>; Fri, 14 Apr 2023 01:12:42 -0700 (PDT)
-X-Received: by 2002:ac2:551b:0:b0:4ea:e5e3:7eb0 with SMTP id
- j27-20020ac2551b000000b004eae5e37eb0mr1598280lfk.10.1681459962436; Fri, 14
- Apr 2023 01:12:42 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rBfv6wimqohl for <buildroot@lists.busybox.net>;
+ Fri, 14 Apr 2023 08:27:25 +0000 (UTC)
+X-Greylist: delayed 00:08:32 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F53884297
+Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2F53884297
+ for <buildroot@buildroot.org>; Fri, 14 Apr 2023 08:27:25 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (11)
+Received: from [192.168.65.245] (95.143.241.142.ultranet.net.pl
+ [95.143.241.142])
+ by server220076.nazwa.pl (Postfix) with ESMTP id 702861BC98F;
+ Fri, 14 Apr 2023 10:18:50 +0200 (CEST)
+Message-ID: <54b688cd-5b7f-767f-6fd8-d55393075e21@grinn-global.com>
+Date: Fri, 14 Apr 2023 10:18:50 +0200
 MIME-Version: 1.0
-References: <CACXRmJjkgX6iek7DyuqDbc29QF+N0ALjS5w7qfPEaU=O-fmw+A@mail.gmail.com>
- <20230414005434.GB370828@igalia.com>
-In-Reply-To: <20230414005434.GB370828@igalia.com>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Fri, 14 Apr 2023 10:12:31 +0200
-X-Gmail-Original-Message-ID: <CACXRmJj3mK2ZSokb-LCZ9+=Jh5=4ssnt_EXVyW_1DeqEXBe0CQ@mail.gmail.com>
-Message-ID: <CACXRmJj3mK2ZSokb-LCZ9+=Jh5=4ssnt_EXVyW_1DeqEXBe0CQ@mail.gmail.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-Subject: Re: [Buildroot] [PATCH] package/webkitgtk: allow both X11 and
- Wayland
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To: Witold Lipieta <witold.lipieta@thaumatec.com>, buildroot@buildroot.org
+References: <20230413113416.3445526-1-witold.lipieta@thaumatec.com>
+From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
+In-Reply-To: <20230413113416.3445526-1-witold.lipieta@thaumatec.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package: python-esptool: Bump version
+ to 4.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,32 +63,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpJIHNhdyB5b3VyIGNvbW1pdCwgZG9uJ3QgZm9yZ2V0IHRvIHVwZGF0ZSB0aGUgY29tbWVu
-dCAiY29tbWVudAoid2Via2l0Z3RrIG5lZWRzIC4uLiIsCnRoZXJlIGlzIGFsc28gYSBtZW50aW9u
-IG9mIHRoZSBHQ0MgdmVyc2lvbiB0aGVyZS4KCktyLAoKVGhvbWFzCgpPcCBkbyAxMyBhcHIgMjAy
-MyBvbSAyMzo1NCBzY2hyZWVmIEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEu
-Y29tPjoKPgo+IEhpIFRob21hcywKPgo+IE9uIFRodSwgMTMgQXByIDIwMjMgMjM6MTQ6MjMgKzAy
-MDAgVGhvbWFzIERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPiB3cm90ZToKPgo+ID4gSSBo
-YXZlIGEgc2VyaWUgb2YgcGF0Y2hlcyB3aGljaCBhcmUgc3RpbGwgb3BlbiwgcmVsYXRlZCB0byB0
-aGF0IGF0ayBicmlkZ2UuCj4gPgo+ID4gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9q
-ZWN0L2J1aWxkcm9vdC9saXN0Lz9zZXJpZXM9MzQzODAxCj4KPiBBaCwgaW50ZXJlc3RpbmcsIEkg
-d2lsbCB0YWtlIGEgbG9vayB0b21vcnJvdy4KPgo+ID4gSSB3YXMgYWxzbyBwbGFubmluZyB0byBt
-YWtlIGEgcGF0Y2ggd2l0aCB3ZWJraXRndGsgMi40MCwgYnV0IGRpZG4ndCBkbyB0aGF0Cj4gPiBz
-aW5jZSBteSBvdGhlciBwYXRjaGVzIGFyZW4ndCBtZXJnZWQgeWV0LiBJZiB5b3UgZG8gaXQsIGtu
-b3cgdGhhdCBJIGFscmVhZHkKPiA+IHVwc3RyZWFtZWQgdGhlIGhvc3QtdW5pZmRlZiBwYWNrYWdl
-IGFuZCB0aGF0IHRoZSBtaW5pbXVtIHJlcXVpcmVkIEdDQwo+ID4gdmVyc2lvbiBuZWVkIHRvIGJl
-IGJ1bXBlZCBhcyB3ZWxsLgo+Cj4gTmljZSwgeW91IHNhdmVkIG1lIGZyb20gaGF2aW5nIHRvIGRv
-IGhvc3QtdW5pZmRlZiBteXNlbGYuIEkgaGF2ZSBhbHJlYWR5IGEKPiBwYXRjaCBbMV0gZm9yIHRo
-ZSAyLjQwLjAgdXBkYXRlLCB3aGljaCBpcyBub3cgcmVjZWl2aW5nIGEgcm91bmQgb2YgdGVzdGlu
-Zwo+IGJlZm9yZSBJIHN1Ym1pdCBpdCA6KQo+Cj4gQ2hlZXJzLAo+IOKAlEFkcmnDoW4KPgo+IC0t
-LQo+IFsxXSBodHRwczovL2dpdC5zci5odC9+YXBlcmV6ZGMvYnVpbGRyb290L2NvbW1pdC8xNWUz
-ZmZlYWJlYzUxNWYwNzEwODA3OTY2MGEyNmFiYTAyNWEzOWY2Cl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+Acked-by: Bartosz Bilas <b.bilas@grinn-global.com>
+
+On 4/13/23 13:34, Witold Lipieta wrote:
+> Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
+> ---
+>   package/python-esptool/python-esptool.hash | 4 ++--
+>   package/python-esptool/python-esptool.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
+> index b7246f9788..e1d3188658 100644
+> --- a/package/python-esptool/python-esptool.hash
+> +++ b/package/python-esptool/python-esptool.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/esptool/json
+> -md5  92c38551bc33bd5271bdea033aa51610  esptool-4.4.tar.gz
+> -sha256  8acd4dfe70819b1302861ae92894380fb4700b377f5a4739479a4ec276e0b256  esptool-4.4.tar.gz
+> +md5  fbad6fb6024580fd2645331f92a74555  esptool-4.5.1.tar.gz
+> +sha256  e3eb59836123e5ebf793ef639311f7d85645526487d8b1c2b51159b455106b9a  esptool-4.5.1.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+> diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
+> index 0a71e1a78b..34bdf6cc96 100644
+> --- a/package/python-esptool/python-esptool.mk
+> +++ b/package/python-esptool/python-esptool.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_ESPTOOL_VERSION = 4.4
+> +PYTHON_ESPTOOL_VERSION = 4.5.1
+>   PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
+> -PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/8b/4c/82d7fe5fa0643415bbb90bebff1f861816903c481ee5156fabd6d76dc684
+> +PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/04/80/8eb97d1793cfaf830a4c0a7ea1d8f0674ccba8c23b7d02dcce074b5f44ea
+>   PYTHON_ESPTOOL_SETUP_TYPE = setuptools
+>   PYTHON_ESPTOOL_LICENSE = GPL-2.0+
+>   PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
+-- 
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
