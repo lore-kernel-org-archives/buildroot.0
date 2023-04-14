@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 466A1C77B71
-	for <buildroot@archiver.kernel.org>; Fri, 14 Apr 2023 18:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7996FC77B72
+	for <buildroot@archiver.kernel.org>; Fri, 14 Apr 2023 18:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FCA684311;
-	Fri, 14 Apr 2023 18:28:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FCA684311
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12A17843C2;
+	Fri, 14 Apr 2023 18:29:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12A17843C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Dak-LGikfz3; Fri, 14 Apr 2023 18:28:49 +0000 (UTC)
+	with ESMTP id 9wEj5XVbewXK; Fri, 14 Apr 2023 18:29:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3C3084312;
-	Fri, 14 Apr 2023 18:28:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3C3084312
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BADF11C3F70
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4875B84408;
+	Fri, 14 Apr 2023 18:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4875B84408
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D02771C3F71
  for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 18:28:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A184460BD4
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7DE942925
  for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 18:28:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A184460BD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7DE942925
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5RX_2rWzgjWT for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b6sjifguCmLx for <buildroot@lists.busybox.net>;
  Fri, 14 Apr 2023 18:28:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7683560BBF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 734D242923
  for <buildroot@buildroot.org>; Fri, 14 Apr 2023 18:28:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7683560BBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 734D242923
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65B6484104; Fri, 14 Apr 2023 18:28:45 +0000 (UTC)
+ id 5EA73840F4; Fri, 14 Apr 2023 18:28:45 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 14 Apr 2023 20:28:26 +0200
+Date: Fri, 14 Apr 2023 19:57:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d45538f2e7acc1b330b191d559a81e8c1a961648
-X-Git-Newrev: 7a4e8355e3751f620ef91239a1c61a9c1c41d5ca
+X-Git-Oldrev: 7c01d5a1bb3f863a14636a516cadc78ecb71a907
+X-Git-Newrev: d45538f2e7acc1b330b191d559a81e8c1a961648
 X-Patchwork-Hint: ignore
-Message-Id: <20230414182845.65B6484104@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/pc/linux.config: Add framebuffer and
- pci support
+Message-Id: <20230414182845.5EA73840F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/pc_x86_64_{bios,
+ efi}_defconfig: Switch to kernel 6.1.24 LTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a4e8355e3751f620ef91239a1c61a9c1c41d5ca
+commit: https://git.buildroot.net/buildroot/commit/?id=d45538f2e7acc1b330b191d559a81e8c1a961648
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Virtually all PCs nowadays have a PCI bridge and PCI devices.
+Let's use a more modern kernel with a broader range of hardware support
+for PCs.
 
-All framnebuffer options depend on CONFIG_FB, which default is not 'y',
-so also enable that.
-
-The overwhelming majority of PCs nowadays also come with an UEFI
-bootloader, that configures a framebuffer usable in early boot, which
-the kernel can reuse without needing any hardware-specific driver.
-
-EDID allows retrieving the capabilities of the connected display,
-especially the frequencies and so on, to properly drive the display.
+We stick to 6.1, rather than 6.2, as the former is an LTS, whicle the
+latter is not.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
-[yann.morin.1998@free.fr:
-  - drop cosmetic CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER=y
-  - rewrite commit log to explain all new options
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/pc/linux.config | 4 ++++
- 1 file changed, 4 insertions(+)
+ configs/pc_x86_64_bios_defconfig | 6 +++---
+ configs/pc_x86_64_efi_defconfig  | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/pc/linux.config b/board/pc/linux.config
-index f86352e1ea..43b15c94be 100644
---- a/board/pc/linux.config
-+++ b/board/pc/linux.config
-@@ -15,6 +15,7 @@ CONFIG_IP_NF_FILTER=y
- CONFIG_CFG80211=m
- CONFIG_CFG80211_WEXT=y
- CONFIG_MAC80211=m
-+CONFIG_PCI=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_VIRTIO_BLK=y
-@@ -63,7 +64,10 @@ CONFIG_DRM_I915=y
- CONFIG_DRM_QXL=y
- CONFIG_DRM_BOCHS=y
- CONFIG_DRM_VIRTIO_GPU=y
-+CONFIG_FB=y
-+CONFIG_FIRMWARE_EDID=y
- CONFIG_FB_VESA=y
-+CONFIG_FB_EFI=y
- CONFIG_SOUND=y
- CONFIG_SND=y
- CONFIG_SND_HDA_INTEL=y
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index ec34a41667..a057ddd259 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -21,13 +21,13 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
+ 
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 6.1 LTS series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.24"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index da05471e28..efa603f0c0 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
+ 
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 6.1 LTS series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.24"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
