@@ -4,82 +4,117 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF990C77B72
-	for <buildroot@archiver.kernel.org>; Fri, 14 Apr 2023 21:35:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 900B2C77B72
+	for <buildroot@archiver.kernel.org>; Fri, 14 Apr 2023 21:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63DA04294C;
-	Fri, 14 Apr 2023 21:35:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63DA04294C
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB1E6429BA;
+	Fri, 14 Apr 2023 21:54:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB1E6429BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZVL_0VIiazZw; Fri, 14 Apr 2023 21:35:40 +0000 (UTC)
+	with ESMTP id nrmnmrk72k6T; Fri, 14 Apr 2023 21:54:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFED142989;
-	Fri, 14 Apr 2023 21:35:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFED142989
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 404341C3D32
- for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 21:35:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DFB2E429B8;
+	Fri, 14 Apr 2023 21:54:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFB2E429B8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AFB581BF2FB
+ for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 21:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 26C4A60BC4
- for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 21:35:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26C4A60BC4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DDF0404A5
+ for <buildroot@lists.busybox.net>; Fri, 14 Apr 2023 21:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DDF0404A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8WWCJ1Dofo_G for <buildroot@lists.busybox.net>;
- Fri, 14 Apr 2023 21:35:09 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50A2960BDB
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 50A2960BDB
- for <buildroot@buildroot.org>; Fri, 14 Apr 2023 21:35:08 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.208.232]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MDywo-1pflZk3i6O-009urr; Fri, 14 Apr 2023 23:35:04 +0200
-From: Peter Seiderer <ps.report@gmx.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g47a4LprBg-L for <buildroot@lists.busybox.net>;
+ Fri, 14 Apr 2023 21:54:47 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25CFE4046B
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com
+ (mail-bn1nam02olkn2080e.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eb2::80e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 25CFE4046B
+ for <buildroot@buildroot.org>; Fri, 14 Apr 2023 21:54:47 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ex8nzd2XedWLMKYhtrEQ+b+fOUPt46sQfsjlu4WpcBS4vMNmlEGxA012n4p8aLN5xlZNyqgm7fRd3A7Ky7XOM2go8y3jDhMCVFQW+Z5TqRhJXBAVqrkWWs+wmRThy6A9/+BEz5dmBTeLvFs/qEykeH+Oa4/SbTURuXHyLuHpepT3z6VXGMuV3lE5p4Yb8KsG9lqOfJfRMEDk2/aIVDC0Qo3afLaSq52CrIOwBOrMMja61pFBR0UScRmYDjp1HmS8VKhA8UEhIz6Cqy+ZGXac0D0YVKwo/XEV/CKkrqp/z1KUjVT0g/smwEgGCXUb05/J6k7ZPDSUdVxPpwga7nLbvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gZVarAQZHEhp3Duw3NVpyz0u4Vrbe/uGSxR/YHg+OK0=;
+ b=fTWjVtAl0VmKSI52sOXSlschDtGm6PrnbiDwwe46ffbFwWwvxGs39Yc0uWw10WD24IoMimf0J36geVqyieNVDTPGAfqgL2uNrbM/EnM1wOm7AyNeTZ8afCSVNsoVNscbub2IU8P7tTHK+MmGtkeAlOzCgkRKBXhB+3c5ua6He42FZesQjJ+wz4afT7tKKM0vmBwNMdEyx7Jhwx9E3zoJGGTH86UYY6b94sieas9gJAa8QF/w728rZgr9NXWNo429KEeaIosW4hXkuWBXnkwl3Xzjpq/uLQEGUgX8RT3bEEMKmeT4cZIdaRkhtl52JwJH4scFq94XQs1dIFrYZEuKew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:1e9::12)
+ by SJ0P221MB0953.NAMP221.PROD.OUTLOOK.COM (2603:10b6:a03:47e::17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Fri, 14 Apr
+ 2023 21:54:44 +0000
+Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+ ([fe80::e6be:cc11:976e:e2b8]) by SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+ ([fe80::e6be:cc11:976e:e2b8%5]) with mapi id 15.20.6298.030; Fri, 14 Apr 2023
+ 21:54:43 +0000
+From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Apr 2023 23:35:02 +0200
-Message-Id: <20230414213504.14634-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.40.0
+Date: Fri, 14 Apr 2023 17:53:54 -0400
+Message-ID: <SN4P221MB0682F9ABB79DF3B57BF6C4D8A0999@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.39.1.windows.1
+X-TMN: [Er/Qm9OmdLM16BrtIiCH/KhJGWH+HuuXttTCZb3BRL8=]
+X-ClientProxiedBy: YQBPR0101CA0124.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:5::27) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:806:1e9::12)
+X-Microsoft-Original-Message-ID: <20230414215354.824-1-james.d.knight@live.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:JDkd2gXXtFd1/08dvrbExsqvJB+oSm1i1wJYcnF0m1dtiRA4gqf
- Su2MnHGREeT8Ts8wE5dUzWTmpv4Nqj307/phdXC/lv9JTOhrj3I0VKNiykNt/Btl6Io/GUx
- aPGswnAp8P14krVbF0Cx/v1rzeThieGnxxuAdwDudV6800GmynKaBmW0JJYOWjPkJAyfObd
- SvlsWKBvqIy4hfnYV7+BQ==
-UI-OutboundReport: notjunk:1;M01:P0:S7P1/n7rmLc=;ZXB7nTeM3S1kE1kUHIsZEKJLN8b
- 8EEunOMTL/qN9eT3zsRB2Mipf8RiKyzRNK/qDjdCJm+dJtg8fP1By3kOxPTGcN3QYfsbYU8/H
- cOsIOjZ0eUfZS1bmnZ5SKAiszmKL7sJpfeZ4txexmXFi7mMywklnXjR5nOUQszig+nK71eyTe
- RtgFrWK5fI9C3TR46zvk1Ea5pjlOahDiMYQVB0CT6m3ZVoAJkA7H3EyrWjDXegnNB1dKVXxnc
- 9s47r7pLC6SZtl2hrdSVh6LTMjERtlZhZizI/PZPOC0GCWXlpEo+YR5LxpxW2PyaiHsil3c9D
- MyyZCOQdGCQsq7Rl4mgWI1mscdRqiHzMi7K/6+Kpzd1bh3SdDP6RZzUaOHjq6MOD2psaf9M4L
- nBJ4rJ3M1YRGnf9NA5XGAu5oiNKAcvGIDEXgLUC+CpG3xgVOLCogWt5G4cI3lGCIa7rU85tJA
- OOJkqxeCE4RJvXuzzGa6D2hdzwlWC6h1VDEl3dmint9lAAd+tyu4rq5/CbWKtTZQpDtccEOB9
- +lzwZJgh6fw56UjtCnNxGrU/mY0AxliNFPYMYeOfRQtZcaRh/Lb3YQnyP+azhbA0EcN5uRbn8
- wbHp8VJ1RYSzM0qLD4kKMxFYricRyaxdW6a2z7VxGy19CVl4kZxuC0ILVheCFmRIzBgBUPN87
- SjBDWmV8xmo+DbCTceFRBg+i4dTSM9nVCifbFIHwT7BjZm2PaBeQq1JKu7viJhWr4s5OXYYT1
- bXDrlWjlVj+9S/9LTrdIuJm1z+uqVV77wzfzrrQG2uET0zTs7ShcS7jHiEB8D40DJkEpKIeky
- 2X+oJJwo2DIIe56LGTz9XCLrrwZCVdL7iKpSwBuG9gc8z4WAyEG3ZNy0cIywSTTkS3akg8mu8
- ZSD0M2VWX4MG4ACjTwu3mM4/o8U0e8xkY55ZwwSGaO8WMQgl6zsuF1pD36Vj+kIzbqQKvFRCD
- 5VDW9XmKe1yDxB1Bvl0MB/TojP4=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1681508105; i=ps.report@gmx.net;
- bh=PZaYv77AErQK+iTJlLQJKNno4U0d1gZ3B5r/b7kvDE8=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=sQWc3xrKDmNYAFPdpbbJD9H5R9b6akl2WorYR2ErscCAMBPhrTEEY3o8m2MD2SMg3
- ++wfi/pmI5edvUKJ2U5O1s1EYsVRoVNmBgGgQp72J/3cCcn0utxe63/WnCeDFmH9nt
- XfDMPNQM+8RN6BBAu7rkRmz2IILp4FC02M/ZbaPhrUzBAWpQpsCSGS/j7qqCF4tSL+
- TyH3bqAACaYq73vb2TV/hPk0H312q0y/FtS4f+8ik5o+xRyeuEDA8LWWQA8GeTeq7j
- FVJuhSkIpDKnLmegbp/NjKkSZ1KN+eGAU5nzDHtS1uMG7GsxN78jqSedymJf+51aCL
- eXETrF9PsO3hQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=sQWc3xrK
-Subject: [Buildroot] [PATCH v1 1/3] package/nginx: change project and
- download URL to https
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|SJ0P221MB0953:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2332ffde-1dc4-4774-9495-08db3d32dafe
+X-MS-Exchange-SLBlob-MailProps: EgT5Wr3QDKx/5wRYKwbtF7hqq2E99L18Ec+FHjToswJLYVLBsS3bjWvjQYwdc0Tt2m50u4DYKM5m470ASH5u7ijA1cf4XIJGPHbVehhncTsOVSnTEb4cpIz+UNsF+vIIq9CEl8zoeRovLMlr3x1/73QT+OUI8CrGdtxyEKABO7ZRhSx1paDQaq/j16QgfQS7Ew/FvZbK+lyDTKirIahWbAM9Oro8aOozBe4EtFG+uSe45GYoBg5WrbFZQ7CahLYAUeyuCXUe+YHBBtJLdEM6VSlyPSgw2KonwlTnQ+sXn13w+KWkU533wzjB98G2D9Gq/QXsGCeKpn+QQPcUD8pPwdWPucQZMRpU1a8PA9uQoWIqZRMwa4Wa+Q2vsa6gVw9QvstbkW91Uzsz6E9761rDnW7U3PSl0Sh4Rp8IclD3DQe8A1qTn0e+B7TRKFC/aJpYXEBV9LSgIYWf8+UnTjHtp29V5UcK1mEeCh0sEHsrOJOYGsij6YaFIXMDbsqLut0TBY6dO5HbEg/MY3JoI36LTjrQkotzz45AjTrK+IKb2/H42K7FmNv7VmLOEaAhFGA+AGSYibeJlHFE3z4WzhYDDpwJclidDWQ+6OWmE0Ho2CwiMHoclSHu3b4WrBWYtV5LgIFTIzWFMcs9dh/E4If/zwscT3E2dXk3Pjjd3YQgj67M1phNRaxe6yXlr0vo8MLQlbd2EAJ7+17+mIbI0OXCZKOs6OWgRIKh91ptNceI7Bg=
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: djALyrMmISIxYTaIfEYS4RHdFout/o7eTChaXlU8pwASpH58VoDoHprENPyyCjQhglluYWAB8FbEX436iHVk90A5xssdQuAcuDJtNvgBlfeeMnnJC8SBziqJvF8WuVBgORxjbm14PtNGN4f6e5NaLSWq2RvJex3kLZxn7tGiBrcopYKS+d3oqS7V+6z+4YO4tnIyiFIsQ4y4vVsDl0PI/cJitmqLWkI6lWLBZRTs01qUCGTUD2PV3OCoksPes89okIYmlHP1qIzxYDsaiaXJtckuqT1g5IsGKnjE+tPCqcggUH3y8eAJ30KgnYJT8oKWvTFNR8pTxqNAIOkA4Bq247kByxDOwkepAf8i/PY+jtq0+OGSRyOWrtfaZmlpfJ+vnQr1pGm9MA/nPeDFjbeqhWdIehtkLsYh0nF+tBGfDsUnDex3YPwGlpJcm4snX5nKcWkFvSz6rFhSXCBXDyqJx3Ge/PxOV47EuOsos2hO86pqJjtz02Kk/g6r7oVlkDL9Hu+wfBrleVVUGMEU3zAhRVdQLJfxT0VeobK5gCXbIvU0AkrQkSfyaJ/mz5sopYimxHPZ5t17A9doZyZsBte91BbWWwH561fmahAHUwBu+EzaHlaFuIY2+a0glFWsO7sG
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8Fqy7UU3pG9n/aBkjXaKrfl4TJPmEFvtIu1jKvw2EZ0iSYp5ScWuytTRUMvs?=
+ =?us-ascii?Q?4B6AX3QmjonZnZV5BtTOt2UUJA/Wo8hkYg0RYu3Tpf4L5D5KBu5Dy25bE/z0?=
+ =?us-ascii?Q?YoB424WU2/JCe96rLvu8fxy10rWdwQVLyoae4W3IC0ncnJm0muEpcTOY2zMr?=
+ =?us-ascii?Q?Ejg+YqAi/QVLXFZ4K8TQb4tAyAZd98+0hR/Qe8ru+54ch5cKgnPAisM91evM?=
+ =?us-ascii?Q?J/8n1P6gZaHxpA5HUhRMzUhZ9Un/jw0PGR2iKYBtEpSrhaGkCCdUo7jC58ZE?=
+ =?us-ascii?Q?VsqaVsb7nOA+qcgW0qySQ598Si2UK30HebR8TbrIWqeD1mX+MEoHMCWYK+lI?=
+ =?us-ascii?Q?bY/dAyyoU3xQK5Jc5Nvnp7DNCb8xrWa/EOtnX9IklJEkOfMKnLBgRAXvXz5Z?=
+ =?us-ascii?Q?Svg/Ooye6Q8QFh0lKNoZZehKFGSZ/dRm4BJi387G1bxpuP98pi+ZAWRhFDGJ?=
+ =?us-ascii?Q?uYsvRKf+mrN2okE8pMKjLkxMpDVreWVhDD5sGAsYUDk5plBFR0U2/cwW+5Pc?=
+ =?us-ascii?Q?xfRZOKQlbRA8mpyGIG8FbtJt/eqAbTt8N6aoW0LluC9jreJK/C9RZT3T300m?=
+ =?us-ascii?Q?7BMJ7qYAQ5ILQ6WUwsSUJ1zXJKe0bfNFttjVa6ekZabD51C5eYPxknQp9DZn?=
+ =?us-ascii?Q?rGv/Wa2VkZK0sdjmU+/9jCufEH7LAn1UJbeG8nAWULDMdk9pQFY1AIfLNEmY?=
+ =?us-ascii?Q?YEgoae1H/PluyXMiV8AMNK2KUT0QpQ2HjwO8wjqLPHP6sOKjbYwkIqPjnaTq?=
+ =?us-ascii?Q?sKpSa1dSXY2TDpS1DV5ygwzlc008zQXuFAwZT59hMjrdWLSn5c5irbXIncNA?=
+ =?us-ascii?Q?vH6khX1JKkVc4G56XGrf3Hs40lcEo6tLlgXdDzFzXaUXnBlHgFAVJR6k7K/6?=
+ =?us-ascii?Q?R4PA9iDdZkr/VtJiGMSi4whB4kT257vepA50z/MqVpx5Zqt9o4ck9XUrEpVX?=
+ =?us-ascii?Q?ZqIYRFqCaN4/4tOGIxeBXDXWzOXw2JyZ9QU5WBxIi8vj6SwWc0ct3ocokgXX?=
+ =?us-ascii?Q?n08iKTecex1OMllPfC1VrgTWFi7PuvRUFgR8ZDhTM+eHf3lA/8pIkqL65KAg?=
+ =?us-ascii?Q?UQIXzAWC85o4mmcfOzD8Qtjb8OoKhyDbnChYr6v/9vgw81oe1aTMMztih2QA?=
+ =?us-ascii?Q?kkKiByQejsPg0GhppME/GZ5xcntkUm3dmgyAHyN29E4ktFVf7PYEPtGF/zBa?=
+ =?us-ascii?Q?+vo116u4YbyR0wCNDPj3Omy3Pk8iTVgRuhoyibFpOrkh4hlqMDycalky51s?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-f5d03.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2332ffde-1dc4-4774-9495-08db3d32dafe
+X-MS-Exchange-CrossTenant-AuthSource: SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 21:54:43.9527 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0P221MB0953
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=live.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gZVarAQZHEhp3Duw3NVpyz0u4Vrbe/uGSxR/YHg+OK0=;
+ b=oR5Z0ytgZeAwM+/AqsIU8GwXI0lZQDo/oMcbDAt0X1fQL8x8iXrEugDk849GD3vn1MZTzxkJUClXo6gT5znyNOuBiRkP5mGpUoBjgWatLkeJe+d/QwSYQabpnd3mVcmVNa1tcA34vyymsDGrIFYF1MoSbHJ9FANNJ+wFvwfzstsT/mrrnwG5S/xJrIMuhZqXeF2vkAa9k9mLbgWBRNPBDmXaw8v5naA70yWMNadFHRthUds2Aw0b69WtwlyuFSN5HxpbKrsWiCerE2eR5ekL3X/ix8X7O1uj1TzsSNfGvqjUI7GT0tASPHB2E6Qeoq35u5k07P7hYMi06vgp6cquHg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
+ header.s=selector1 header.b=oR5Z0ytg
+Subject: [Buildroot] [PATCH] board/qemu: restore readme globbing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,46 +126,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: James Knight <james.d.knight@live.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/nginx/Config.in | 2 +-
- package/nginx/nginx.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The QEMU board's post-image script will glob through various
+`readme.txt` files for an appropriate command line to use. Recent linter
+changes [1] prevents this from happening, and results in the following
+build error:
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 406a1c861a..8e888baa1c 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -6,7 +6,7 @@ menuconfig BR2_PACKAGE_NGINX
- 	  nginx is an HTTP and reverse proxy server, as well as a mail
- 	  proxy server.
+    >>>   Executing post-image script board/qemu/post-image.sh
+    sed: can't read board/qemu/*/readme.txt: No such file or directory
+
+Reverting part of the shellcheck fixes for the README file arguments and
+marking a linter exception.
+
+[1]: b32d7c99c64d6dcb7a68036a7abfa86b8b558627
+
+Signed-off-by: James Knight <james.d.knight@live.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/qemu/post-image.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
+index 763287ca391e970aba016fe278fa0d37c8a618ad..e344d1e6bce4e91bfb0f38bc992bb535e4c9971d 100755
+--- a/board/qemu/post-image.sh
++++ b/board/qemu/post-image.sh
+@@ -12,7 +12,8 @@ fi
  
--	  http://nginx.org/
-+	  https://nginx.org/
+ # Search for "# qemu_*_defconfig" tag in all readme.txt files.
+ # Qemu command line on multilines using back slash are accepted.
+-QEMU_CMD_LINE="$(sed -r ':a; /\\$/N; s/\\\n//; s/\t/ /; ta; /# '"${DEFCONFIG_NAME}"'$/!d; s/#.*//' \ "${README_FILE}")"
++# shellcheck disable=SC2086 # glob over each readme file
++QEMU_CMD_LINE="$(sed -r ':a; /\\$/N; s/\\\n//; s/\t/ /; ta; /# '"${DEFCONFIG_NAME}"'$/!d; s/#.*//' ${README_FILE})"
  
- if BR2_PACKAGE_NGINX
- 
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 10cc95d90e..185bcd576f 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NGINX_VERSION = 1.22.1
--NGINX_SITE = http://nginx.org/download
-+NGINX_SITE = https://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
- NGINX_CPE_ID_VENDOR = f5
+ if [ -z "${QEMU_CMD_LINE}" ]; then
+     # No Qemu cmd line found, can't test.
 -- 
-2.40.0
+2.39.1.windows.1
 
 _______________________________________________
 buildroot mailing list
