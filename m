@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD25C77B70
-	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 17:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0C16C77B73
+	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 17:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E925384205;
-	Sat, 15 Apr 2023 17:54:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E925384205
+	by smtp1.osuosl.org (Postfix) with ESMTP id 907FA84271;
+	Sat, 15 Apr 2023 17:57:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 907FA84271
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I7BPpSWoRv-F; Sat, 15 Apr 2023 17:54:43 +0000 (UTC)
+	with ESMTP id 4VP75paaVuWN; Sat, 15 Apr 2023 17:56:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CED4841C0;
-	Sat, 15 Apr 2023 17:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CED4841C0
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB0D18407A;
+	Sat, 15 Apr 2023 17:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB0D18407A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6C3AD1C40B4
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:54:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15C001C3F78
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:56:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 505844284F
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:54:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 505844284F
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB23042A44
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:56:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB23042A44
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JX9_CUzk7vPN for <buildroot@lists.busybox.net>;
- Sat, 15 Apr 2023 17:54:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F088242846
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F088242846
- for <buildroot@buildroot.org>; Sat, 15 Apr 2023 17:54:38 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3F2E25FF9E;
- Sat, 15 Apr 2023 19:54:31 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 15 Apr 2023 19:54:30 +0200
-Date: Sat, 15 Apr 2023 19:54:30 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20230415175430.GR2819@scaer>
-References: <20230403144105.419341-1-vfazio@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230403144105.419341-1-vfazio@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1681581276;
- bh=iil+zcRKX/1U2hPq/BrJ7d71W+DYprZeofpQpqNPOOI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=KMqsRLwJ9RC1aUZ3vcxBbBba77Q6j+lIgy4ph/p64B5sI9kKa92GBEIOrslSEOD51
- EBNuIuAeEZb0wOTtMRcUcnQgrPDIy4AwwQ8C+L+EDfLHGn9doUTJRjJGZDu1gO5GN0
- dUDBm5kbe2y6yk9YVWoJSFu9Vkax9E9ULEmwwXlCRyjAPtsewjBfuJcJ/W+oY/yO18
- esLGyfldlXW/wkz2KSXdkvWq/g/VkdfevNfC5Zmkv08826hTcCXpABPD81CDRWbAUi
- ILChdm8hD2mxU4G0wBBym+ex4OeG7XvKl0dOUmK9eBdutba61InBr295jZsYqhiEJf
- d7O5PDi5q4nVQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KMqsRLwJ
-Subject: Re: [Buildroot] [PATCH v2 1/3] docs/manual: rewrite section for
- upstream documentation
+ with ESMTP id Enn71y9gDMgt for <buildroot@lists.busybox.net>;
+ Sat, 15 Apr 2023 17:56:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 155FE4288C
+ for <buildroot@buildroot.org>; Sat, 15 Apr 2023 17:56:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 155FE4288C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 03A1C841E6; Sat, 15 Apr 2023 17:56:55 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 15 Apr 2023 19:56:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ae1fc4350473bbcc21b09268a253e7cdea6d25ba
+X-Git-Newrev: 8f5dc080e55f650657bcd8bec536a17376c9b1c0
+X-Patchwork-Hint: ignore
+Message-Id: <20230415175655.03A1C841E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/orangepi_one_defconfig: bump BSP
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,123 +57,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Vincent, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=8f5dc080e55f650657bcd8bec536a17376c9b1c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-04-03 09:41 -0500, Vincent Fazio spake thusly:
-> Previously, the documentation only requested links to upstream commits
-> when backporting patches.
-> 
-> Based on a mailing list discussion [0], patches should, when possible
-> and when approriate, provide a link as evidence that the patch has been
-> submitted upstream.
-> 
-> The motivation is that hopefully the patch gets applied to upstream at
-> some point reducing the long term maintenance burden within Buildroot.
-> This also makes future patch review on subsequent package version bumps
-> more streamlined.
-> 
-> For patches that are unique to BR and do not apply to the upstream
-> repository, patches should have a comment explaining why they do not
-> apply upstream.
-> 
-> [0] https://lists.buildroot.org/pipermail/buildroot/2023-March/666000.html
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Bump Linux to 6.1.14 and U-Boot to 2023.01.
 
-Whole series applied to master, thanks.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/orangepi_one_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I just had to regenerate .checkpackageignore on the last patch, but that
-was expected, as new stuff had been comitted to master since your patch.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->   - Minor updates commit message body
-> ---
->  docs/manual/patch-policy.txt | 35 ++++++++++++++++++++++++-----------
->  1 file changed, 24 insertions(+), 11 deletions(-)
-> 
-> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-> index 063ef984d8..dc35132ecf 100644
-> --- a/docs/manual/patch-policy.txt
-> +++ b/docs/manual/patch-policy.txt
-> @@ -144,24 +144,37 @@ AC_PROG_MAKE_SET
->  +AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
->  ---------------
->  
-> -=== Integrating patches found on the Web
-> +=== Additional patch documentation
->  
-> -When integrating a patch of which you are not the author, you have to
-> -add a few things in the header of the patch itself.
-> +Ideally, all patches should document an upstream patch or patch submission, when
-> +applicable, via the +Upstream+ trailer.
->  
-> -Depending on whether the patch has been obtained from the project
-> -repository itself, or from somewhere on the web, add one of the
-> -following tags:
-> +When backporting an upstream patch that has been accepted into mainline, it is
-> +preferred that the URL to the commit is referenced:
->  
->  ---------------
-> -Backported from: <some commit id>
-> +Upstream: <URL to upstream commit>
->  ---------------
->  
-> -or
-> +If a new issue is identified in Buildroot and upstream is generally affected by 
-> +the issue (it's not a Buildroot specific issue), users should submit the patch
-> +upstream and provide a link to that submission when possible:
->  
->  ---------------
-> -Fetch from: <some url>
-> +Upstream: <URL to upstream mailing list submission or merge request>
->  ---------------
->  
-> -It is also sensible to add a few words about any changes to the patch
-> -that may have been necessary.
-> +Patches that have been submitted but were denied upstream should note that and
-> +include comments about why the patch is being used despite the upstream status.
-> +
-> +Note: in any of the above scenarios, it is also sensible to add a few words
-> +about any changes to the patch that may have been necessary.
-> +
-> +If a patch does not apply upstream then this should be noted with a comment:
-> +
-> +---------------
-> +Upstream: N/A <additional information about why patch is Buildroot specific>
-> +---------------
-> +
-> +Adding this documentation helps streamline the patch review process during
-> +package version updates.
-> \ No newline at end of file
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
+index ba128424a0..3f383e337e 100644
+--- a/configs/orangepi_one_defconfig
++++ b/configs/orangepi_one_defconfig
+@@ -1,13 +1,13 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_One"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi One"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-one"
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
