@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDAF0C7619A
-	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 17:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C929CC77B70
+	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 17:10:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26E05842D8;
-	Sat, 15 Apr 2023 17:07:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26E05842D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 578CD84333;
+	Sat, 15 Apr 2023 17:10:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 578CD84333
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qpuucj4Ffj0x; Sat, 15 Apr 2023 17:07:57 +0000 (UTC)
+	with ESMTP id OgQFvRtUnpwi; Sat, 15 Apr 2023 17:10:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FAEC842D6;
-	Sat, 15 Apr 2023 17:07:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FAEC842D6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 290881BF301
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:07:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BDA4842E2;
+	Sat, 15 Apr 2023 17:10:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BDA4842E2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A81071C40A7
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 074AB428A4
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:07:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 074AB428A4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E4C3405CF
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:10:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E4C3405CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5b4ZuHM65Cw3 for <buildroot@lists.busybox.net>;
- Sat, 15 Apr 2023 17:07:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WICUewKtl91r for <buildroot@lists.busybox.net>;
+ Sat, 15 Apr 2023 17:10:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB3A44212E
- for <buildroot@buildroot.org>; Sat, 15 Apr 2023 17:07:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB3A44212E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CD9F40184
+ for <buildroot@buildroot.org>; Sat, 15 Apr 2023 17:10:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CD9F40184
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6E5E84180; Sat, 15 Apr 2023 17:07:50 +0000 (UTC)
+ id 89A21841A0; Sat, 15 Apr 2023 17:10:07 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Apr 2023 18:34:03 +0200
+Date: Sat, 15 Apr 2023 19:08:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 53bad8f502687c5430cd7a4dc852314a3d75be2c
-X-Git-Newrev: dcf91582637044e9137424752b1ea52e51b99358
+X-Git-Oldrev: dcf91582637044e9137424752b1ea52e51b99358
+X-Git-Newrev: 53baedf9126cf14f8ef80d4170ad9e9f1667fd65
 X-Patchwork-Hint: ignore
-Message-Id: <20230415170750.D6E5E84180@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bubblewrap: bump to version 0.8.0
+Message-Id: <20230415171007.89A21841A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xr819-xradio: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,46 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcf91582637044e9137424752b1ea52e51b99358
+commit: https://git.buildroot.net/buildroot/commit/?id=53baedf9126cf14f8ef80d4170ad9e9f1667fd65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version allows disabling usage of nested user namespaces and
-improves error messages. Release notes:
+With introduction of vmap'ed stacks to ARM in Linux v5.18, stack
+parameters can no longer be used for DMA. So pull the latest xradio
+changes that fix the driver and make it work with vmap'ed stacks
+in new kernels.
 
-  https://github.com/containers/bubblewrap/releases/tag/v0.8.0
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bubblewrap/bubblewrap.hash | 4 ++--
- package/bubblewrap/bubblewrap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xr819-xradio/xr819-xradio.hash | 2 +-
+ package/xr819-xradio/xr819-xradio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
-index 0475f8882a..abc69d96be 100644
---- a/package/bubblewrap/bubblewrap.hash
-+++ b/package/bubblewrap/bubblewrap.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/containers/bubblewrap/releases/tag/v0.7.0
--sha256  764ab7100bd037ea53d440d362e099d7a425966bc62d1f00ab26b8fbb882a9dc  bubblewrap-0.7.0.tar.xz
-+# From https://github.com/containers/bubblewrap/releases/tag/v0.8.0
-+sha256  957ad1149db9033db88e988b12bcebe349a445e1efc8a9b59ad2939a113d333a  bubblewrap-0.8.0.tar.xz
- 
- # Hash for license files:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
-index 658e6e113c..1081db697d 100644
---- a/package/bubblewrap/bubblewrap.mk
-+++ b/package/bubblewrap/bubblewrap.mk
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index 60185db736..8676f065f8 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2b297fbcc9b5ed190bcfff9f6f808c170632ac3d69dbd92156a7f4f57142dec9  xr819-xradio-005f28cfe9e20b7f2dfd9d32d38ee97060dc707f.tar.gz
++sha256  93388424f1f136db541ce056be017f2f0f6688278ac15a88bef34da8f12ffea6  xr819-xradio-119cad7d07aef6973dd44e4dae74d4c9defd06a2.tar.gz
+ # Locally computed
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+index e5daaa6051..66c08e7921 100644
+--- a/package/xr819-xradio/xr819-xradio.mk
++++ b/package/xr819-xradio/xr819-xradio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BUBBLEWRAP_VERSION = 0.7.0
-+BUBBLEWRAP_VERSION = 0.8.0
- BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
- BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
- BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
+-XR819_XRADIO_VERSION = 005f28cfe9e20b7f2dfd9d32d38ee97060dc707f
++XR819_XRADIO_VERSION = 119cad7d07aef6973dd44e4dae74d4c9defd06a2
+ XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+ XR819_XRADIO_LICENSE = GPL-2.0
+ XR819_XRADIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
