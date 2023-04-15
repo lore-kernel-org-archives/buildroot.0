@@ -1,88 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BB50C77B70
-	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 19:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AF6FC77B73
+	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 21:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED6EA841FD;
-	Sat, 15 Apr 2023 19:43:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED6EA841FD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wt--n_dtkvQV; Sat, 15 Apr 2023 19:43:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C60D841CA;
-	Sat, 15 Apr 2023 19:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C60D841CA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 07A431C40D3
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 19:43:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E093141D8D
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 19:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E093141D8D
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3BC041FC0;
+	Sat, 15 Apr 2023 21:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3BC041FC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ezHRTY-7EYaw for <buildroot@lists.busybox.net>;
- Sat, 15 Apr 2023 19:43:47 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9XGi8i92Ambc; Sat, 15 Apr 2023 21:29:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F01C42043;
+	Sat, 15 Apr 2023 21:29:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F01C42043
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CFE801BF3C3
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 21:29:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A33A48416E
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 21:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A33A48416E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cyT7ge2kW3Of for <buildroot@lists.busybox.net>;
+ Sat, 15 Apr 2023 21:29:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E369941D7A
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E369941D7A
- for <buildroot@buildroot.org>; Sat, 15 Apr 2023 19:43:46 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-2efbab2dfbeso517370f8f.1
- for <buildroot@buildroot.org>; Sat, 15 Apr 2023 12:43:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1681587825; x=1684179825;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=4ij0Uh6SEp/l5a8VNXmBbju6+ZwwJw96QQuJ39s4s5k=;
- b=X2L6zjIdZz8jlEQ5gkbY2RHQvegPldHAb1yxIDrdnhN3fqENRcIImwt0Y8x3BlaqOg
- 9LYyvwGqMEhWFyZA6QOiNuCABnq6k8OSokobPdbrBY9APWjAUrgLUnP9HDxMjPm6r5jz
- HoVx6C6T1CTkdnAMs1IgwgoLj4qnLskaeYlIHSIhxNZxqt8IDJbb9LuecxKqXfdiuGue
- LoPIgUm11Y5C+Nqf424f41R/ZFLQ098ppDL6UVh8Bru54+8DlH0jtsxDKU0jYNCE2x6S
- TJWuILtcWu/kuESe5qlXM114uDYLrpfKZWSh4KuYhsERELY1CVIS9AgJlZKXnIeA43mm
- UIPQ==
-X-Gm-Message-State: AAQBX9fnz2EiSsKQ6PdNQxBj+Le2nzwPJwnE4zvnUIFce9SoD2QQQcc2
- rVCzD7EwoO/XQc7LkTy1N0dTYOunr4o=
-X-Google-Smtp-Source: AKy350YZqrLUCJSIzb4Mx9O7gJpnnuJQt94ud28vLfZpDOKThGfX9sT6D5XFvbk2G8/xnoiQi6RnDg==
-X-Received: by 2002:a5d:534d:0:b0:2f5:5538:2589 with SMTP id
- t13-20020a5d534d000000b002f555382589mr2314109wrv.31.1681587824682; 
- Sat, 15 Apr 2023 12:43:44 -0700 (PDT)
-Received: from localhost.localdomain (1-1-22-171.ftth.cust.kwaoo.net.
- [171.22.1.1]) by smtp.gmail.com with ESMTPSA id
- c10-20020a7bc2aa000000b003f0ad8d1c69sm6277858wmk.25.2023.04.15.12.43.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 15 Apr 2023 12:43:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46FB98416D
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 46FB98416D
+ for <buildroot@buildroot.org>; Sat, 15 Apr 2023 21:29:41 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id B83035FFA7;
+ Sat, 15 Apr 2023 23:29:33 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 15 Apr 2023 23:29:33 +0200
+Date: Sat, 15 Apr 2023 23:29:33 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 15 Apr 2023 21:43:41 +0200
-Message-Id: <20230415194341.2346986-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Adam Duskett <aduskett@gmail.com>
+Message-ID: <20230415212933.GU2819@scaer>
+References: <20220812101718.47491-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1681587825; x=1684179825;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=4ij0Uh6SEp/l5a8VNXmBbju6+ZwwJw96QQuJ39s4s5k=;
- b=s0SdsniUldd7PSkq8+9pZTJnOWT+PEFp3esrvxVgg1BvPEbc0tmwzAEfB8DX/yPB/h
- /BJ2NlHWWaseuOA5eISQRHlfqvIHWB9LTjgpUDDdHHD6P0fCFPxQrHKBXoemqh/G4wAt
- KOYWwBm6yUg5Acwh8ii63914PlU/VkJ9Lguu6jvT+WkD1zDtpOoTgtcXirO54MKcMKFg
- Hd19l8xHQEFV727nj2kap8vjFwP4GV08FRZogj60qU0UrINtD+mMv9XPk12iLm7LuJ0c
- iOwb/V03vD5o3oYxrguPfAANO1bKpE/APILI+/RHX/C4/ZXeBUGn5KcGEcCuGwh/85e4
- Bf5g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=s0SdsniU
-Subject: [Buildroot] [PATCH] utils/docker-run: allow running without a tty
+Content-Disposition: inline
+In-Reply-To: <20220812101718.47491-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1681594178;
+ bh=GxnesccG6VGVM2jJw07PGTWSoWTfVSPunTGcEQNTgnI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=XP7nYe+5Kz1g1KlA+cYnXm2Jii8yn3ogWhQGeVVgPpAX0N1OoWCJiVW6yAumXh6bv
+ S2fV+mDM3AdUnxqnMzwaMrS3I9VTstmnsP408POf0W4JNlUJLingbrgFc8nXiDawEG
+ oSV4MPzer/7pS4W91+etydpYLbyx90lH0lZ6eZKMBegXbYsnuiJibBCaBXY3dU40OG
+ EdtaxXLddBc2IekJRup9EtgW+W/56GUzhly+LTlv+yrw4g5Xs7UW1VKJnDhM6e7ljo
+ cERrqukqZ0XvjBZmHHiGBOdGwxdYAA44adh9NcJu8nLWMSdivWDYXE5Sbs29zG6rck
+ jUahkGSbU4orA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XP7nYe+5
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/poppler: fix introspection build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,57 +77,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Olivier Schonken <olivier.schonken@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, utils/docker-run spawns a container with a tty, so that he
-user can interact properly in the container.
+Fabrice, All,
 
-However, that requires a tty when calling docker-run, which is not
-always guaranteed, e.g. if called from a git hook.
++Adam for your insight in GOI
 
-Since the script is a bash script already, we can use an array to store
-options passed to docker, and only add the -t option when there is
-actually a tty available.
+On 2022-08-12 12:17 +0200, Fabrice Fontaine spake thusly:
+> Fix the following build failure raised since commit
+> 9d1d4818c39d97ad7a1cdf6e075b9acae6dfff71:
+> 
+> [ 98%] Generating Poppler-0.18.typelib
+> Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+> error parsing file /home/giuliobenetti/autobuild/run/instance-1/output-1/build/poppler-21.12.0/glib/Poppler-0.18.gir: Failed to parse included gir GObject-2.0
+> If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
+> Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d2f50aa56410c2fff8a0538c57038104906e747e
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
- utils/docker-run | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+Sorry for the long delay, I had a look tonight...
 
-diff --git a/utils/docker-run b/utils/docker-run
-index 164e11c0e6..135a1451b6 100755
---- a/utils/docker-run
-+++ b/utils/docker-run
-@@ -6,8 +6,15 @@ MAIN_DIR=$(readlink -f "${DIR}/..")
- IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
-         sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
- 
--exec docker run -it --rm \
--    --user "$(id -u):$(id -g)" \
--    --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}" \
--    --workdir "${MAIN_DIR}" \
--    "${IMAGE}" "${@}"
-+declare -a docker_opts=(
-+    -i
-+    --rm
-+    --user "$(id -u):$(id -g)"
-+    --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}"
-+    --workdir "${MAIN_DIR}"
-+)
-+if tty -s; then
-+    docker_opts+=( -t )
-+fi
-+
-+exec docker run "${docker_opts[@]}" "${IMAGE}" "${@}"
+I could not find the underlying reason why g-ir-compiler (through our
+wrapper) could not find the directory with all the gir files.
+
+Given that poppler is so far the only affect package, and since your
+patch was accepted upstream, I think it is only reasonable that we do
+indeed use this change. So..
+
+Applied to master, thanks.
+
+However, I would really like to understand why we don't have more
+packages that are broken. Is it because poppler is the only one with
+include directives in his gir file, which means it needs access to the
+installed gir files from other packages (those from goi)?
+
+Or is it because it is the only one that already passes an explicit
+--includedir option to g-ir-compiler, and that disables searching the
+standard directory?
+
+As Thomas also suggested, should we be doing that systematically in our
+g-ir-compiler wrapper?
+
+I know Adam said your change was "the simplest solution to the problem".
+Still, this is not very satisfying...
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2:
+>  - Rebase on top of master
+>  - Use upstream commit
+> 
+>  ...txt-allow-the-user-to-configure-INTR.patch | 43 +++++++++++++++++++
+>  package/poppler/poppler.mk                    |  3 +-
+>  2 files changed, 45 insertions(+), 1 deletion(-)
+>  create mode 100644 package/poppler/0002-glib-CMakeLists.txt-allow-the-user-to-configure-INTR.patch
+> 
+> diff --git a/package/poppler/0002-glib-CMakeLists.txt-allow-the-user-to-configure-INTR.patch b/package/poppler/0002-glib-CMakeLists.txt-allow-the-user-to-configure-INTR.patch
+> new file mode 100644
+> index 0000000000..079cf7234d
+> --- /dev/null
+> +++ b/package/poppler/0002-glib-CMakeLists.txt-allow-the-user-to-configure-INTR.patch
+> @@ -0,0 +1,43 @@
+> +From e9d5731ba254f35e2d94b628c51e48c50a945271 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Mon, 24 Jan 2022 09:28:20 +0100
+> +Subject: [PATCH] glib/CMakeLists.txt: allow the user to configure
+> + INTROSPECTION_COMPILER_ARGS
+> +
+> +Allow the user to add its own parameters such as
+> +--includedir=$(STAGING_DIR)/usr/share/gir-1.0 to
+> +INTROSPECTION_COMPILER_ARGS to avoid the following build failure when
+> +cross-compiling with buildroot:
+> +
+> +[ 98%] Generating Poppler-0.18.typelib
+> +Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+> +error parsing file /home/giuliobenetti/autobuild/run/instance-1/output-1/build/poppler-21.12.0/glib/Poppler-0.18.gir: Failed to parse included gir GObject-2.0
+> +If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
+> +Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/d2f50aa56410c2fff8a0538c57038104906e747e
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://gitlab.freedesktop.org/poppler/poppler/-/commit/e9d5731ba254f35e2d94b628c51e48c50a945271]
+> +---
+> + glib/CMakeLists.txt | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/glib/CMakeLists.txt b/glib/CMakeLists.txt
+> +index 7510e69ee..f5130e3c9 100644
+> +--- a/glib/CMakeLists.txt
+> ++++ b/glib/CMakeLists.txt
+> +@@ -119,7 +119,7 @@ if (HAVE_INTROSPECTION AND BUILD_SHARED_LIBS)
+> +   # General gir: Reset object-list for introspection & load tool args
+> +   set(INTROSPECTION_GIRS)
+> +   set(INTROSPECTION_SCANNER_ARGS "--add-include-path=${CMAKE_CURRENT_SOURCE_DIR}" "--warn-all")
+> +-  set(INTROSPECTION_COMPILER_ARGS "--includedir=${CMAKE_CURRENT_SOURCE_DIR}")
+> ++  set(INTROSPECTION_COMPILER_ARGS ${INTROSPECTION_COMPILER_ARGS} "--includedir=${CMAKE_CURRENT_SOURCE_DIR}")
+> + 
+> +   # Poppler: Assign package to gir & export keys
+> +   set(Poppler_0_18_gir "poppler-glib")
+> +-- 
+> +GitLab
+> +
+> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+> index b54262e7c4..db6da25d39 100644
+> --- a/package/poppler/poppler.mk
+> +++ b/package/poppler/poppler.mk
+> @@ -47,7 +47,8 @@ POPPLER_DEPENDENCIES += gobject-introspection
+>  POPPLER_CONF_OPTS += \
+>  	-DENABLE_GOBJECT_INTROSPECTION=ON \
+>  	-DINTROSPECTION_SCANNER=$(STAGING_DIR)/usr/bin/g-ir-scanner \
+> -	-DINTROSPECTION_COMPILER=$(STAGING_DIR)/usr/bin/g-ir-compiler
+> +	-DINTROSPECTION_COMPILER=$(STAGING_DIR)/usr/bin/g-ir-compiler \
+> +	-DINTROSPECTION_COMPILER_ARGS="--includedir=$(STAGING_DIR)/usr/share/gir-1.0"
+>  else
+>  POPPLER_CONF_OPTS += -DENABLE_GOBJECT_INTROSPECTION=OFF
+>  endif
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.25.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
