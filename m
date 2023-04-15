@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9769AC77B70
-	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 18:02:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF564C77B70
+	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 19:20:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0145284353;
-	Sat, 15 Apr 2023 18:02:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0145284353
+	by smtp1.osuosl.org (Postfix) with ESMTP id 364C6845D3;
+	Sat, 15 Apr 2023 19:20:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 364C6845D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m06WxdDutnsN; Sat, 15 Apr 2023 18:02:23 +0000 (UTC)
+	with ESMTP id 4DEeoKq2y9uB; Sat, 15 Apr 2023 19:20:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D2D984271;
-	Sat, 15 Apr 2023 18:02:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D2D984271
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6FDA41C3F78
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 18:02:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63992845D0;
+	Sat, 15 Apr 2023 19:20:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63992845D0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D06761BF5A1
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 19:20:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4412A42898
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 18:02:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4412A42898
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA02D845D2
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 19:20:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA02D845D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J2yTYnbhq9Nr for <buildroot@lists.busybox.net>;
- Sat, 15 Apr 2023 18:02:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KTu-dS7WDZKk for <buildroot@lists.busybox.net>;
+ Sat, 15 Apr 2023 19:20:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2169742893
- for <buildroot@buildroot.org>; Sat, 15 Apr 2023 18:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2169742893
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6583845CF
+ for <buildroot@buildroot.org>; Sat, 15 Apr 2023 19:20:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6583845CF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0DC24841E9; Sat, 15 Apr 2023 18:02:19 +0000 (UTC)
+ id BE326841F7; Sat, 15 Apr 2023 19:20:30 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Apr 2023 20:00:08 +0200
+Date: Sat, 15 Apr 2023 21:09:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d8a1bb2f639c5fcfa0e455c001c44799abbd407e
-X-Git-Newrev: fdd9772739f3e8263fe711cf14aa4d01e37b9aac
+X-Git-Oldrev: fdd9772739f3e8263fe711cf14aa4d01e37b9aac
+X-Git-Newrev: b713a230c54559637baea065b731748201e19c1a
 X-Patchwork-Hint: ignore
-Message-Id: <20230415180219.0DC24841E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] checkpacakge: regenerate ignore list in
- reference build envirnment
+Message-Id: <20230415192030.BE326841F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mali-driver: bump to version
+ 2023-04-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,59 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdd9772739f3e8263fe711cf14aa4d01e37b9aac
+commit: https://git.buildroot.net/buildroot/commit/?id=b713a230c54559637baea065b731748201e19c1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 1ed07521322d (.checkpackageignore: add entries missing Upstream
-trailer) regenerated the list in a local environment, which differs from
-our reference build image, causing spurious issues [0].
+This versions fixed build failure on Linux 6.1
 
-Regenerate the list in the regerence image, now.
-
-[0] https://gitlab.com/buildroot.org/buildroot/-/jobs/4119717539
-
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/mali-driver/mali-driver.hash | 2 +-
+ package/mali-driver/mali-driver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 4847cd82bc..02c892c1b3 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1106,7 +1106,7 @@ package/netatalk/0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch Upstre
- package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch Upstream
- package/netatalk/S50netatalk EmptyLastLine Indent Variables
- package/netcat/0001-signed-bit-counting.patch Sob Upstream
--package/netopeer2/S52netopeer2 Variables
-+package/netopeer2/S52netopeer2 Shellcheck Variables
- package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch Upstream
- package/netplug/0001-makefile-flags.patch Sob Upstream
- package/netplug/0002-add-missing-time-include.patch Upstream
-@@ -1570,7 +1570,7 @@ package/swupdate/swupdate.sh Shellcheck
- package/sylpheed/0001-harden-link-checker-before-accepting-click.patch Upstream
- package/syslog-ng/0001-fix-build-on-uclibc.patch Upstream
- package/sysprof/0001-define-NT_GNU_BUILD_ID.patch Upstream
--package/sysrepo/S51sysrepo-plugind Indent
-+package/sysrepo/S51sysrepo-plugind Indent Shellcheck
- package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch Upstream
- package/system-config-printer/0002-configure-accept-non-system-cups-config.patch Upstream
- package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch Upstream
-@@ -1636,6 +1636,7 @@ package/uhd/0001-host-CMakeLists-add-boost-unit_test_framework-requir.patch Upst
- package/uhttpd/0001-Remove-Werror.patch Upstream
- package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch Upstream
- package/umtprd/0001-Fix-output_dir-make-dependency.patch Upstream
-+package/unbound/S70unbound Shellcheck
- package/unifdef/0001-Makefile-fix-error-on-install.patch Upstream
- package/unixodbc/0001-DriverManager-drivermanager.h-fix-build-without-thre.patch Upstream
- package/unscd/S46unscd Indent Shellcheck Variables
-@@ -1854,6 +1855,4 @@ support/scripts/setlocalversion Shellcheck
- support/testing/tests/core/post-build.sh Shellcheck
- support/testing/tests/package/test_opkg/post-build.sh Shellcheck
- support/testing/tests/utils/test_get_developers/0001-package-binutils-change-.mk.patch NumberedSubject Upstream
--utils/brmake Shellcheck
- utils/checkpackagelib/lib_patch.py Flake8
--utils/test-pkg Shellcheck
+diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
+index 5d32c1af8a..de3b6e69f0 100644
+--- a/package/mali-driver/mali-driver.hash
++++ b/package/mali-driver/mali-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  761e3f000b4c546cbd35baf34f5a0d1090f048dd44ee543773674192fd95f6b3  mali-driver-87c13e6994b20b5068e3a5e4f4c1b64db666a4c8.tar.gz
++sha256  763d3cf76eb03584df6a13986a2877dc0ae5f310fc3d91e8a498fc5f89271dcc  mali-driver-c90627f78d58567a2acb7cbf77d565e03a131294.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
+index bdc9fedeb4..8e059fe8bd 100644
+--- a/package/mali-driver/mali-driver.mk
++++ b/package/mali-driver/mali-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MALI_DRIVER_VERSION = 87c13e6994b20b5068e3a5e4f4c1b64db666a4c8
++MALI_DRIVER_VERSION = c90627f78d58567a2acb7cbf77d565e03a131294
+ MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
+ MALI_DRIVER_DEPENDENCIES = linux
+ MALI_DRIVER_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
