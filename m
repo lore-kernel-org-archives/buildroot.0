@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C55D5C77B73
-	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 17:57:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3134FC77B70
+	for <buildroot@archiver.kernel.org>; Sat, 15 Apr 2023 17:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67BF2845B5;
-	Sat, 15 Apr 2023 17:57:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67BF2845B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC5B8845A0;
+	Sat, 15 Apr 2023 17:57:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC5B8845A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BDdauaPTBPme; Sat, 15 Apr 2023 17:57:24 +0000 (UTC)
+	with ESMTP id 3NuLR1mbE1nG; Sat, 15 Apr 2023 17:57:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EDAE842BD;
-	Sat, 15 Apr 2023 17:57:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EDAE842BD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E24F1C40BC
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:56:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D735845C2;
+	Sat, 15 Apr 2023 17:57:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D735845C2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 33B131C3F78
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:57:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAFC542893
- for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:56:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAFC542893
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C7766115C
+ for <buildroot@lists.busybox.net>; Sat, 15 Apr 2023 17:57:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C7766115C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DeoCY_TxuCHg for <buildroot@lists.busybox.net>;
- Sat, 15 Apr 2023 17:56:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E8EB4288E
- for <buildroot@buildroot.org>; Sat, 15 Apr 2023 17:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E8EB4288E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D109841E8; Sat, 15 Apr 2023 17:56:55 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 15 Apr 2023 19:56:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8f5dc080e55f650657bcd8bec536a17376c9b1c0
-X-Git-Newrev: d8a1bb2f639c5fcfa0e455c001c44799abbd407e
-X-Patchwork-Hint: ignore
-Message-Id: <20230415175655.0D109841E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/orangepi_pc_plus: bump BSP versions
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0O-GYi4FYOEk for <buildroot@lists.busybox.net>;
+ Sat, 15 Apr 2023 17:57:22 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3113461142
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3113461142
+ for <buildroot@buildroot.org>; Sat, 15 Apr 2023 17:57:22 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8082F5FFAC;
+ Sat, 15 Apr 2023 19:57:18 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 15 Apr 2023 19:57:18 +0200
+Date: Sat, 15 Apr 2023 19:57:18 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Message-ID: <20230415175718.GS2819@scaer>
+References: <20230401173700.3341224-1-geomatsi@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230401173700.3341224-1-geomatsi@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1681581440;
+ bh=u95KmIf1zsK86tso/VBDk8TWz+Sko3fI1mavdCQQg48=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Zn9HT95t3qbXSNSDYn5/h7T0ZhnGDIhhC0iJrYw5ugOh4ejrlQ1DU6kXpK1ft/j7C
+ L06rQ4162qavnOSW0/avRH1l1Uyo+FTTQzrSzAycgOqiwNPtv4HIvi0grupwrENkas
+ WOt80PIXIy7CifaS945iOAg0xfLbft0Qqa+dHT5+vg8bxHhWoU6D/tU51m5jpBQNm+
+ wWXc/YwfJe8Pz7ArzbCZiRgdkbVzLxU1IkhmfcOew0grNNvrVu4SOTpc6P51wX2X46
+ bs1TmevuOjAZhodxiCXRmVj+ek4iJx/seeWLYnHSQVecpac9pTcqNug6b98aGUqpnQ
+ 2FPokmDre+/SA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Zn9HT95t
+Subject: Re: [Buildroot] [PATCH 0/3] allwinner: arm: misc BSP updates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,52 +75,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8a1bb2f639c5fcfa0e455c001c44799abbd407e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Sergey, All,
 
-Bump Linux to 6.1.14 and U-Boot to 2023.01.
+On 2023-04-01 20:36 +0300, Sergey Matyukevich spake thusly:
+> Hi all,
+> 
+> Here is a patch series with BSP updates for several boards with Allwinner
+> arm CPUs. U-Boot version updated to 2023.01 and Linux version updated
+> to 6.1.14.
+> 
+> Note that orangepi-zero and orangepi-zero-plus2 are not updated in this
+> patch series. I observe WiFi issues on those boards with Linux v6.1.
+> So those issues need to be investigated before updating BSP.
+> 
+> Regards,
+> Sergey
+> 
+> Sergey Matyukevich (3):
+>   configs/linksprite_pcduino_defconfig: bump BSP versions
+>   configs/orangepi_one_defconfig: bump BSP versions
+>   configs/orangepi_pc_plus: bump BSP versions
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- configs/orangepi_pc_plus_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Whole series applied to master, thanks!
 
-diff --git a/configs/orangepi_pc_plus_defconfig b/configs/orangepi_pc_plus_defconfig
-index ba946e5285..73ba934b69 100644
---- a/configs/orangepi_pc_plus_defconfig
-+++ b/configs/orangepi_pc_plus_defconfig
-@@ -2,13 +2,13 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC_Plus"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC Plus"
- BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.14"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc-plus"
-@@ -21,7 +21,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc_plus"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+Regards,
+Yann E. MORIN.
+
+>  configs/linksprite_pcduino_defconfig | 6 +++---
+>  configs/orangepi_one_defconfig       | 6 +++---
+>  configs/orangepi_pc_plus_defconfig   | 6 +++---
+>  3 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> -- 
+> 2.40.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
