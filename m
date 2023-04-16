@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFEF8C77B73
-	for <buildroot@archiver.kernel.org>; Sun, 16 Apr 2023 20:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9B50C77B73
+	for <buildroot@archiver.kernel.org>; Sun, 16 Apr 2023 20:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C00F4190B;
-	Sun, 16 Apr 2023 20:44:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C00F4190B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4764341BB0;
+	Sun, 16 Apr 2023 20:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4764341BB0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YwMIHl9HPGeK; Sun, 16 Apr 2023 20:44:30 +0000 (UTC)
+	with ESMTP id 91TyNeW6Ylf5; Sun, 16 Apr 2023 20:45:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7759F4190C;
-	Sun, 16 Apr 2023 20:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7759F4190C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B46B71C4175
- for <buildroot@lists.busybox.net>; Sun, 16 Apr 2023 20:44:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9794141C24;
+	Sun, 16 Apr 2023 20:45:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9794141C24
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B25FE1C3EB5
+ for <buildroot@lists.busybox.net>; Sun, 16 Apr 2023 20:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A5B84190C
- for <buildroot@lists.busybox.net>; Sun, 16 Apr 2023 20:44:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A5B84190C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C6DB40112
+ for <buildroot@lists.busybox.net>; Sun, 16 Apr 2023 20:45:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C6DB40112
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Udbe1KjJb42a for <buildroot@lists.busybox.net>;
- Sun, 16 Apr 2023 20:44:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12146418B7
- for <buildroot@buildroot.org>; Sun, 16 Apr 2023 20:44:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12146418B7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1E928189F; Sun, 16 Apr 2023 20:44:12 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 16 Apr 2023 22:33:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c6bb759e2cb14ebaf2603e69652c44d337a39c72
-X-Git-Newrev: 5e1c238b7202c3b04d9eab94e429c5580c77444b
-X-Patchwork-Hint: ignore
-Message-Id: <20230416204412.F1E928189F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ltp-testsuite: require 5.11
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TVNiTpHHKVtI for <buildroot@lists.busybox.net>;
+ Sun, 16 Apr 2023 20:45:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9C67400C6
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C9C67400C6
+ for <buildroot@buildroot.org>; Sun, 16 Apr 2023 20:45:12 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id B86455FF67;
+ Sun, 16 Apr 2023 22:45:03 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 16 Apr 2023 22:45:03 +0200
+Date: Sun, 16 Apr 2023 22:45:03 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Petr Vorel <pevik@seznam.cz>
+Message-ID: <20230416204503.GI2819@scaer>
+References: <20230416201705.2294430-1-pevik@seznam.cz>
+ <20230416201705.2294430-2-pevik@seznam.cz>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230416201705.2294430-2-pevik@seznam.cz>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1681677910;
+ bh=KLcgidGCuCO5N/5bFDcBfu8z5d9I+sTlBKbWrCL8Ics=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=YqWOtXu0NPUNjlkF/IjWP1IKMMxpV3WlWUYPBG4UNQ7hAm5KUjXRoXhXvkQp8mN1A
+ Ly0YfPk9SWjIk56lw7s7o27NyjUw2BfNVtDlnCWXOMBtLXN+NxURGPkpuZyQrxt8QV
+ SBFlk87bEnknGJaEcwEnxkquCYxK3/gNBa5TTsLmy2t5N7+W7xP8jFootWlCg3av6I
+ NbkHfHQH6X907b3j1N86HHewjb2CBFkAmO97BGpDGuGCp6ZTd7iDxwcdC6kHfd/sCm
+ SNWq7xaTZKPxCr803Gv56arIM9LR9Ld5IdvvI65ysL0A7zNn4q00I52GBFmE8pg6t+
+ 7CSV98i2NX/Mw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YqWOtXu0
+Subject: Re: [Buildroot] [PATCH v3 1/2] package/ltp-testsuite: require 5.11
  headers for musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,277 +77,194 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0940208525733120470=="
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+ Anders Roxell <anders.roxell@linaro.org>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0940208525733120470==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5e1c238b7202c3b04d9eab94e429c5580c77444b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-There was a conflict between musl and kernel headers prior to 5.11, due
-to a bug in kernel headers, which was fixed in a85cbe6159ff ("uapi: move
-constants from <linux/kernel.h> to <linux/const.h>") in v5.11, and
-backported to stable/LTS kernels.
-
-Upsteam ltp-testsuite has been unreceptive to accepting the workaround,
-as they argue that the kernel headers have been fixed, and people should
-update their toolchains.
-
-However, it is not always practical, or even possible, to update the
-toolchain, so lets require kernel headers at least 5.11 for musl-based
-toolchains.
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-[yann.morin.1998@free.fr: reword commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch | 211 ---------------------
- package/ltp-testsuite/Config.in                    |   1 +
- 2 files changed, 1 insertion(+), 211 deletions(-)
-
-diff --git a/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch b/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-deleted file mode 100644
-index 1553908cf8..0000000000
---- a/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-+++ /dev/null
-@@ -1,211 +0,0 @@
--From f34c6ca3d543968e900d6327d8b5900db63f08ad Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Thu, 1 Oct 2020 23:28:39 +0200
--Subject: [PATCH] lapi: Add sysinfo.h to fix build with MUSL libc
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The reason is to avoid indirect <linux/sysinfo.h> include when using
--some network headers: <linux/netlink.h> or others -> <linux/kernel.h>
---> <linux/sysinfo.h>
--
--This indirect include causes on MUSL redefinition of struct sysinfo when
--included both <sys/sysinfo.h> and some of UAPI headers:
--
--In file included from x86_64-buildroot-linux-musl/sysroot/usr/include/linux/kernel.h:5,
--                 from x86_64-buildroot-linux-musl/sysroot/usr/include/linux/netlink.h:5,
--                 from ../include/tst_netlink.h:14,
--                 from tst_crypto.c:13:
--x86_64-buildroot-linux-musl/sysroot/usr/include/linux/sysinfo.h:8:8: error: redefinition of ‘struct sysinfo’
-- struct sysinfo {
--        ^~~~~~~
--In file included from ../include/tst_safe_macros.h:15,
--                 from ../include/tst_test.h:93,
--                 from tst_crypto.c:11:
--x86_64-buildroot-linux-musl/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
--
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--
--[ upstream status:
--https://patchwork.ozlabs.org/project/ltp/patch/20201001231256.6930-1-petr.vorel@gmail.com/,
--rebased for 20220527 ]
--
--But this patch is not going to get upstreamed because it got fixed in Linux kernel:
--a85cbe6159ff "uapi: move constants from <linux/kernel.h> to <linux/const.h>"
--
--This patch was also backported to stable and LTS versions,
--which we use since buildroot 54584d233b "{linux, linux-headers}: bump
--5.{4, 10}.x 4.{4, 9, 14, 19} series".
--We just wait for all musl based toolchains to be rebuilt. ]
--
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-----
-- include/lapi/sysinfo.h                        | 22 +++++++++++++++++++
-- include/tst_safe_macros.h                     |  2 +-
-- lib/safe_macros.c                             |  2 +-
-- lib/tst_memutils.c                            |  2 +-
-- testcases/kernel/mem/mtest01/mtest01.c        |  2 +-
-- testcases/kernel/syscalls/madvise/madvise06.c |  2 +-
-- testcases/kernel/syscalls/sysinfo/sysinfo01.c |  2 +-
-- testcases/kernel/syscalls/sysinfo/sysinfo02.c |  2 +-
-- testcases/kernel/syscalls/sysinfo/sysinfo03.c |  2 +-
-- .../interfaces/pthread_cond_broadcast/1-2.c   |  2 +-
-- 10 files changed, 31 insertions(+), 9 deletions(-)
-- create mode 100644 include/lapi/sysinfo.h
--
--diff --git a/include/lapi/sysinfo.h b/include/lapi/sysinfo.h
--new file mode 100644
--index 000000000..d0e0e93d7
----- /dev/null
--+++ b/include/lapi/sysinfo.h
--@@ -0,0 +1,22 @@
--+// SPDX-License-Identifier: GPL-2.0-or-later
--+/*
--+ * Copyright (c) 2020 Petr Vorel <petr.vorel@gmail.com>
--+ */
--+
--+#ifndef SYSINFO_H__
--+
--+/*
--+ * Don't use <sys/sysinfo.h> as it breaks build MUSL toolchain.
--+ * Use <linux/sysinfo.h> instead.
--+ *
--+ * Some kernel UAPI headers do indirect <linux/sysinfo.h> include:
--+ * <linux/netlink.h> or others -> <linux/kernel.h> -> <linux/sysinfo.h>
--+ *
--+ * This indirect include causes on MUSL redefinition of struct sysinfo when
--+ * included both <sys/sysinfo.h> and some of UAPI headers:
--+ */
--+#include <linux/sysinfo.h>
--+
--+#define SYSINFO_H__
--+
--+#endif /* SYSINFO_H__ */
--diff --git a/include/tst_safe_macros.h b/include/tst_safe_macros.h
--index 81c4b0844..a8c02d7df 100644
----- a/include/tst_safe_macros.h
--+++ b/include/tst_safe_macros.h
--@@ -12,7 +12,7 @@
-- #include <sys/resource.h>
-- #include <sys/stat.h>
-- #include <sys/vfs.h>
---#include <sys/sysinfo.h>
--+#include <linux/sysinfo.h>
-- #include <fcntl.h>
-- #include <libgen.h>
-- #include <signal.h>
--diff --git a/lib/safe_macros.c b/lib/safe_macros.c
--index a5b6bc504..87d922a92 100644
----- a/lib/safe_macros.c
--+++ b/lib/safe_macros.c
--@@ -11,7 +11,7 @@
-- #include <sys/wait.h>
-- #include <sys/mount.h>
-- #include <sys/xattr.h>
---#include <sys/sysinfo.h>
--+#include "lapi/sysinfo.h"
-- #include <errno.h>
-- #include <fcntl.h>
-- #include <libgen.h>
--diff --git a/lib/tst_memutils.c b/lib/tst_memutils.c
--index 0d20bb17c..21a3a5ba0 100644
----- a/lib/tst_memutils.c
--+++ b/lib/tst_memutils.c
--@@ -6,7 +6,7 @@
-- #include <stdio.h>
-- #include <unistd.h>
-- #include <limits.h>
---#include <sys/sysinfo.h>
--+#include "lapi/sysinfo.h"
-- #include <stdlib.h>
--
-- #define TST_NO_DEFAULT_MAIN
--diff --git a/testcases/kernel/mem/mtest01/mtest01.c b/testcases/kernel/mem/mtest01/mtest01.c
--index fb991ce8b..0fccd5405 100644
----- a/testcases/kernel/mem/mtest01/mtest01.c
--+++ b/testcases/kernel/mem/mtest01/mtest01.c
--@@ -20,7 +20,6 @@
--  */
--
-- #include <sys/types.h>
---#include <sys/sysinfo.h>
-- #include <sys/wait.h>
-- #include <limits.h>
-- #include <signal.h>
--@@ -29,6 +28,7 @@
-- #include <unistd.h>
--
-- #include "lapi/abisize.h"
--+#include "lapi/sysinfo.h"
-- #include "tst_test.h"
--
-- #define FIVE_HUNDRED_MB         (500ULL*1024*1024)
--diff --git a/testcases/kernel/syscalls/madvise/madvise06.c b/testcases/kernel/syscalls/madvise/madvise06.c
--index 6d218801c..8af11a030 100644
----- a/testcases/kernel/syscalls/madvise/madvise06.c
--+++ b/testcases/kernel/syscalls/madvise/madvise06.c
--@@ -46,7 +46,7 @@
-- #include <errno.h>
-- #include <stdio.h>
-- #include <sys/mount.h>
---#include <sys/sysinfo.h>
--+#include "lapi/sysinfo.h"
-- #include "tst_test.h"
--
-- #define CHUNK_SZ (400*1024*1024L)
--diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo01.c b/testcases/kernel/syscalls/sysinfo/sysinfo01.c
--index 2ea44a2be..a237345ef 100644
----- a/testcases/kernel/syscalls/sysinfo/sysinfo01.c
--+++ b/testcases/kernel/syscalls/sysinfo/sysinfo01.c
--@@ -69,7 +69,7 @@
-- #include <sys/types.h>
-- #include <sys/stat.h>
-- #include <sys/signal.h>
---#include <sys/sysinfo.h>
--+#include "lapi/sysinfo.h"
--
-- #include "test.h"
--
--diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo02.c b/testcases/kernel/syscalls/sysinfo/sysinfo02.c
--index 7ad0e8bdc..61fa1ab75 100644
----- a/testcases/kernel/syscalls/sysinfo/sysinfo02.c
--+++ b/testcases/kernel/syscalls/sysinfo/sysinfo02.c
--@@ -65,7 +65,7 @@
-- #include <sys/types.h>
-- #include <sys/stat.h>
-- #include <sys/signal.h>
---#include <sys/sysinfo.h>
--+#include "lapi/sysinfo.h"
-- #include <stdint.h>
--
-- #include "test.h"
--diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo03.c b/testcases/kernel/syscalls/sysinfo/sysinfo03.c
--index af7cb6421..dc5ae65e3 100644
----- a/testcases/kernel/syscalls/sysinfo/sysinfo03.c
--+++ b/testcases/kernel/syscalls/sysinfo/sysinfo03.c
--@@ -13,7 +13,7 @@
--
--  */
--
---#include <sys/sysinfo.h>
--+#include "lapi/sysinfo.h"
-- #include "lapi/namespaces_constants.h"
-- #include "lapi/posix_clocks.h"
-- #include "tst_test.h"
--diff --git a/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c b/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
--index 22e7c3638..572701f9f 100644
----- a/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
--+++ b/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
--@@ -43,7 +43,7 @@
-- #include <sys/wait.h>
-- #include <semaphore.h>
-- #ifdef	__linux__
---#include <sys/sysinfo.h>
--+#include "lapi/sysinfo.h"
-- #endif
--
-- #include "../testfrmw/testfrmw.h"
----
--2.36.1
--
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 272c2ede37..b42082e2cc 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	bool "ltp-testsuite"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_TOOLCHAIN_USES_MUSL || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
- 	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-
---===============0940208525733120470==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0940208525733120470==--
+UGV0ciwgQWxsLAoKT24gMjAyMy0wNC0xNiAyMjoxNyArMDIwMCwgUGV0ciBWb3JlbCBzcGFrZSB0
+aHVzbHk6Cj4gRnJvbTogUGV0ciBWb3JlbCA8cGV0ci52b3JlbEBnbWFpbC5jb20+Cj4gCj4gUmVt
+b3ZlIHN5c2luZm8uaCBvdXQgb2YgdHJlZSB3b3JrYXJvdW5kIGZvciBtdXNsLiBLZXJuZWwgaGVh
+ZGVycyB3ZXJlCj4gZml4ZWQgaW4gYTg1Y2JlNjE1OWZmICgidWFwaTogbW92ZSBjb25zdGFudHMg
+ZnJvbSA8bGludXgva2VybmVsLmg+IHRvCj4gPGxpbnV4L2NvbnN0Lmg+IikgaW4gdjUuMTEsIGFu
+ZCBnb3QgYmFja3BvcnRlZCB0byBzdGFibGUvTFRTIGtlcm5lbHMuCj4gCj4gVGhlcmUgbWlnaHQg
+dW5maXhlZCB0b29sY2hhaW5zIGJlaW5nIHVzZWQsIGlmIHVzZXJzIGNvbXBsYWluLCB3ZSBjYW4K
+PiBjYXJyeSBvbiByZWJhc2luZyB0aGUgcGF0Y2ggb3IgdHJ5IHRvIGFzayB1cHN0cmVhbSB0byBp
+bmNsdWRlIGl0LgoKSSd2ZSByZXdvcmRlZCB0aGUgY29tbWl0IGxvZyBpbiBhIG1vcmUgbG9naWNh
+bCBmYXNoaW9uIChJIGJlbGlldmUpLCBhbmQKYXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClJl
+Z2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IFNpZ25lZC1vZmYtYnk6IFBldHIgVm9yZWwgPHBldHIu
+dm9yZWxAZ21haWwuY29tPgo+IC0tLQo+IE5ldyBpbiB2Mwo+IENoYW5nZSBpcyBpbiBzZXBhcmF0
+ZSBjb21taXQgdG8gYmUgbW9yZSB2aXNpYmxlLgo+IAo+IEtpbmQgcmVnYXJkcywKPiBQZXRyCj4g
+Cj4gIC4uLnlzaW5mby5oLXRvLWZpeC1idWlsZC13aXRoLU1VU0wtbGliYy5wYXRjaCB8IDIxMSAt
+LS0tLS0tLS0tLS0tLS0tLS0KPiAgcGFja2FnZS9sdHAtdGVzdHN1aXRlL0NvbmZpZy5pbiAgICAg
+ICAgICAgICAgIHwgICAxICsKPiAgMiBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMjEx
+IGRlbGV0aW9ucygtKQo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9sdHAtdGVzdHN1aXRl
+LzAwMDEtbGFwaS1BZGQtc3lzaW5mby5oLXRvLWZpeC1idWlsZC13aXRoLU1VU0wtbGliYy5wYXRj
+aAo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x0cC10ZXN0c3VpdGUvMDAwMS1sYXBpLUFkZC1z
+eXNpbmZvLmgtdG8tZml4LWJ1aWxkLXdpdGgtTVVTTC1saWJjLnBhdGNoIGIvcGFja2FnZS9sdHAt
+dGVzdHN1aXRlLzAwMDEtbGFwaS1BZGQtc3lzaW5mby5oLXRvLWZpeC1idWlsZC13aXRoLU1VU0wt
+bGliYy5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDE1NTM5MDhjZjgu
+LjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2x0cC10ZXN0c3VpdGUvMDAwMS1sYXBpLUFkZC1z
+eXNpbmZvLmgtdG8tZml4LWJ1aWxkLXdpdGgtTVVTTC1saWJjLnBhdGNoCj4gKysrIC9kZXYvbnVs
+bAo+IEBAIC0xLDIxMSArMCwwIEBACj4gLUZyb20gZjM0YzZjYTNkNTQzOTY4ZTkwMGQ2MzI3ZDhi
+NTkwMGRiNjNmMDhhZCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAtRnJvbTogUGV0ciBWb3Jl
+bCA8cGV0ci52b3JlbEBnbWFpbC5jb20+Cj4gLURhdGU6IFRodSwgMSBPY3QgMjAyMCAyMzoyODoz
+OSArMDIwMAo+IC1TdWJqZWN0OiBbUEFUQ0hdIGxhcGk6IEFkZCBzeXNpbmZvLmggdG8gZml4IGJ1
+aWxkIHdpdGggTVVTTCBsaWJjCj4gLU1JTUUtVmVyc2lvbjogMS4wCj4gLUNvbnRlbnQtVHlwZTog
+dGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+IC1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4
+Yml0Cj4gLQo+IC1UaGUgcmVhc29uIGlzIHRvIGF2b2lkIGluZGlyZWN0IDxsaW51eC9zeXNpbmZv
+Lmg+IGluY2x1ZGUgd2hlbiB1c2luZwo+IC1zb21lIG5ldHdvcmsgaGVhZGVyczogPGxpbnV4L25l
+dGxpbmsuaD4gb3Igb3RoZXJzIC0+IDxsaW51eC9rZXJuZWwuaD4KPiAtLT4gPGxpbnV4L3N5c2lu
+Zm8uaD4KPiAtCj4gLVRoaXMgaW5kaXJlY3QgaW5jbHVkZSBjYXVzZXMgb24gTVVTTCByZWRlZmlu
+aXRpb24gb2Ygc3RydWN0IHN5c2luZm8gd2hlbgo+IC1pbmNsdWRlZCBib3RoIDxzeXMvc3lzaW5m
+by5oPiBhbmQgc29tZSBvZiBVQVBJIGhlYWRlcnM6Cj4gLQo+IC1JbiBmaWxlIGluY2x1ZGVkIGZy
+b20geDg2XzY0LWJ1aWxkcm9vdC1saW51eC1tdXNsL3N5c3Jvb3QvdXNyL2luY2x1ZGUvbGludXgv
+a2VybmVsLmg6NSwKPiAtICAgICAgICAgICAgICAgICBmcm9tIHg4Nl82NC1idWlsZHJvb3QtbGlu
+dXgtbXVzbC9zeXNyb290L3Vzci9pbmNsdWRlL2xpbnV4L25ldGxpbmsuaDo1LAo+IC0gICAgICAg
+ICAgICAgICAgIGZyb20gLi4vaW5jbHVkZS90c3RfbmV0bGluay5oOjE0LAo+IC0gICAgICAgICAg
+ICAgICAgIGZyb20gdHN0X2NyeXB0by5jOjEzOgo+IC14ODZfNjQtYnVpbGRyb290LWxpbnV4LW11
+c2wvc3lzcm9vdC91c3IvaW5jbHVkZS9saW51eC9zeXNpbmZvLmg6ODo4OiBlcnJvcjogcmVkZWZp
+bml0aW9uIG9mIOKAmHN0cnVjdCBzeXNpbmZv4oCZCj4gLSBzdHJ1Y3Qgc3lzaW5mbyB7Cj4gLSAg
+ICAgICAgXn5+fn5+fgo+IC1JbiBmaWxlIGluY2x1ZGVkIGZyb20gLi4vaW5jbHVkZS90c3Rfc2Fm
+ZV9tYWNyb3MuaDoxNSwKPiAtICAgICAgICAgICAgICAgICBmcm9tIC4uL2luY2x1ZGUvdHN0X3Rl
+c3QuaDo5MywKPiAtICAgICAgICAgICAgICAgICBmcm9tIHRzdF9jcnlwdG8uYzoxMToKPiAteDg2
+XzY0LWJ1aWxkcm9vdC1saW51eC1tdXNsL3N5c3Jvb3QvdXNyL2luY2x1ZGUvc3lzL3N5c2luZm8u
+aDoxMDo4OiBub3RlOiBvcmlnaW5hbGx5IGRlZmluZWQgaGVyZQo+IC0KPiAtU2lnbmVkLW9mZi1i
+eTogUGV0ciBWb3JlbCA8cGV0ci52b3JlbEBnbWFpbC5jb20+Cj4gLQo+IC1bIHVwc3RyZWFtIHN0
+YXR1czoKPiAtaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2x0cC9wYXRjaC8y
+MDIwMTAwMTIzMTI1Ni42OTMwLTEtcGV0ci52b3JlbEBnbWFpbC5jb20vLAo+IC1yZWJhc2VkIGZv
+ciAyMDIyMDUyNyBdCj4gLQo+IC1CdXQgdGhpcyBwYXRjaCBpcyBub3QgZ29pbmcgdG8gZ2V0IHVw
+c3RyZWFtZWQgYmVjYXVzZSBpdCBnb3QgZml4ZWQgaW4gTGludXgga2VybmVsOgo+IC1hODVjYmU2
+MTU5ZmYgInVhcGk6IG1vdmUgY29uc3RhbnRzIGZyb20gPGxpbnV4L2tlcm5lbC5oPiB0byA8bGlu
+dXgvY29uc3QuaD4iCj4gLQo+IC1UaGlzIHBhdGNoIHdhcyBhbHNvIGJhY2twb3J0ZWQgdG8gc3Rh
+YmxlIGFuZCBMVFMgdmVyc2lvbnMsCj4gLXdoaWNoIHdlIHVzZSBzaW5jZSBidWlsZHJvb3QgNTQ1
+ODRkMjMzYiAie2xpbnV4LCBsaW51eC1oZWFkZXJzfTogYnVtcAo+IC01Lns0LCAxMH0ueCA0Lns0
+LCA5LCAxNCwgMTl9IHNlcmllcyIuCj4gLVdlIGp1c3Qgd2FpdCBmb3IgYWxsIG11c2wgYmFzZWQg
+dG9vbGNoYWlucyB0byBiZSByZWJ1aWx0LiBdCj4gLQo+IC1TaWduZWQtb2ZmLWJ5OiBQZXRyIFZv
+cmVsIDxwZXRyLnZvcmVsQGdtYWlsLmNvbT4KPiAtLS0tCj4gLSBpbmNsdWRlL2xhcGkvc3lzaW5m
+by5oICAgICAgICAgICAgICAgICAgICAgICAgfCAyMiArKysrKysrKysrKysrKysrKysrCj4gLSBp
+bmNsdWRlL3RzdF9zYWZlX21hY3Jvcy5oICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQo+IC0g
+bGliL3NhZmVfbWFjcm9zLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KPiAt
+IGxpYi90c3RfbWVtdXRpbHMuYyAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCj4g
+LSB0ZXN0Y2FzZXMva2VybmVsL21lbS9tdGVzdDAxL210ZXN0MDEuYyAgICAgICAgfCAgMiArLQo+
+IC0gdGVzdGNhc2VzL2tlcm5lbC9zeXNjYWxscy9tYWR2aXNlL21hZHZpc2UwNi5jIHwgIDIgKy0K
+PiAtIHRlc3RjYXNlcy9rZXJuZWwvc3lzY2FsbHMvc3lzaW5mby9zeXNpbmZvMDEuYyB8ICAyICst
+Cj4gLSB0ZXN0Y2FzZXMva2VybmVsL3N5c2NhbGxzL3N5c2luZm8vc3lzaW5mbzAyLmMgfCAgMiAr
+LQo+IC0gdGVzdGNhc2VzL2tlcm5lbC9zeXNjYWxscy9zeXNpbmZvL3N5c2luZm8wMy5jIHwgIDIg
+Ky0KPiAtIC4uLi9pbnRlcmZhY2VzL3B0aHJlYWRfY29uZF9icm9hZGNhc3QvMS0yLmMgICB8ICAy
+ICstCj4gLSAxMCBmaWxlcyBjaGFuZ2VkLCAzMSBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygt
+KQo+IC0gY3JlYXRlIG1vZGUgMTAwNjQ0IGluY2x1ZGUvbGFwaS9zeXNpbmZvLmgKPiAtCj4gLWRp
+ZmYgLS1naXQgYS9pbmNsdWRlL2xhcGkvc3lzaW5mby5oIGIvaW5jbHVkZS9sYXBpL3N5c2luZm8u
+aAo+IC1uZXcgZmlsZSBtb2RlIDEwMDY0NAo+IC1pbmRleCAwMDAwMDAwMDAuLmQwZTBlOTNkNwo+
+IC0tLS0gL2Rldi9udWxsCj4gLSsrKyBiL2luY2x1ZGUvbGFwaS9zeXNpbmZvLmgKPiAtQEAgLTAs
+MCArMSwyMiBAQAo+IC0rLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb3ItbGF0
+ZXIKPiAtKy8qCj4gLSsgKiBDb3B5cmlnaHQgKGMpIDIwMjAgUGV0ciBWb3JlbCA8cGV0ci52b3Jl
+bEBnbWFpbC5jb20+Cj4gLSsgKi8KPiAtKwo+IC0rI2lmbmRlZiBTWVNJTkZPX0hfXwo+IC0rCj4g
+LSsvKgo+IC0rICogRG9uJ3QgdXNlIDxzeXMvc3lzaW5mby5oPiBhcyBpdCBicmVha3MgYnVpbGQg
+TVVTTCB0b29sY2hhaW4uCj4gLSsgKiBVc2UgPGxpbnV4L3N5c2luZm8uaD4gaW5zdGVhZC4KPiAt
+KyAqCj4gLSsgKiBTb21lIGtlcm5lbCBVQVBJIGhlYWRlcnMgZG8gaW5kaXJlY3QgPGxpbnV4L3N5
+c2luZm8uaD4gaW5jbHVkZToKPiAtKyAqIDxsaW51eC9uZXRsaW5rLmg+IG9yIG90aGVycyAtPiA8
+bGludXgva2VybmVsLmg+IC0+IDxsaW51eC9zeXNpbmZvLmg+Cj4gLSsgKgo+IC0rICogVGhpcyBp
+bmRpcmVjdCBpbmNsdWRlIGNhdXNlcyBvbiBNVVNMIHJlZGVmaW5pdGlvbiBvZiBzdHJ1Y3Qgc3lz
+aW5mbyB3aGVuCj4gLSsgKiBpbmNsdWRlZCBib3RoIDxzeXMvc3lzaW5mby5oPiBhbmQgc29tZSBv
+ZiBVQVBJIGhlYWRlcnM6Cj4gLSsgKi8KPiAtKyNpbmNsdWRlIDxsaW51eC9zeXNpbmZvLmg+Cj4g
+LSsKPiAtKyNkZWZpbmUgU1lTSU5GT19IX18KPiAtKwo+IC0rI2VuZGlmIC8qIFNZU0lORk9fSF9f
+ICovCj4gLWRpZmYgLS1naXQgYS9pbmNsdWRlL3RzdF9zYWZlX21hY3Jvcy5oIGIvaW5jbHVkZS90
+c3Rfc2FmZV9tYWNyb3MuaAo+IC1pbmRleCA4MWM0YjA4NDQuLmE4YzAyZDdkZiAxMDA2NDQKPiAt
+LS0tIGEvaW5jbHVkZS90c3Rfc2FmZV9tYWNyb3MuaAo+IC0rKysgYi9pbmNsdWRlL3RzdF9zYWZl
+X21hY3Jvcy5oCj4gLUBAIC0xMiw3ICsxMiw3IEBACj4gLSAjaW5jbHVkZSA8c3lzL3Jlc291cmNl
+Lmg+Cj4gLSAjaW5jbHVkZSA8c3lzL3N0YXQuaD4KPiAtICNpbmNsdWRlIDxzeXMvdmZzLmg+Cj4g
+LS0jaW5jbHVkZSA8c3lzL3N5c2luZm8uaD4KPiAtKyNpbmNsdWRlIDxsaW51eC9zeXNpbmZvLmg+
+Cj4gLSAjaW5jbHVkZSA8ZmNudGwuaD4KPiAtICNpbmNsdWRlIDxsaWJnZW4uaD4KPiAtICNpbmNs
+dWRlIDxzaWduYWwuaD4KPiAtZGlmZiAtLWdpdCBhL2xpYi9zYWZlX21hY3Jvcy5jIGIvbGliL3Nh
+ZmVfbWFjcm9zLmMKPiAtaW5kZXggYTViNmJjNTA0Li44N2Q5MjJhOTIgMTAwNjQ0Cj4gLS0tLSBh
+L2xpYi9zYWZlX21hY3Jvcy5jCj4gLSsrKyBiL2xpYi9zYWZlX21hY3Jvcy5jCj4gLUBAIC0xMSw3
+ICsxMSw3IEBACj4gLSAjaW5jbHVkZSA8c3lzL3dhaXQuaD4KPiAtICNpbmNsdWRlIDxzeXMvbW91
+bnQuaD4KPiAtICNpbmNsdWRlIDxzeXMveGF0dHIuaD4KPiAtLSNpbmNsdWRlIDxzeXMvc3lzaW5m
+by5oPgo+IC0rI2luY2x1ZGUgImxhcGkvc3lzaW5mby5oIgo+IC0gI2luY2x1ZGUgPGVycm5vLmg+
+Cj4gLSAjaW5jbHVkZSA8ZmNudGwuaD4KPiAtICNpbmNsdWRlIDxsaWJnZW4uaD4KPiAtZGlmZiAt
+LWdpdCBhL2xpYi90c3RfbWVtdXRpbHMuYyBiL2xpYi90c3RfbWVtdXRpbHMuYwo+IC1pbmRleCAw
+ZDIwYmIxN2MuLjIxYTNhNWJhMCAxMDA2NDQKPiAtLS0tIGEvbGliL3RzdF9tZW11dGlscy5jCj4g
+LSsrKyBiL2xpYi90c3RfbWVtdXRpbHMuYwo+IC1AQCAtNiw3ICs2LDcgQEAKPiAtICNpbmNsdWRl
+IDxzdGRpby5oPgo+IC0gI2luY2x1ZGUgPHVuaXN0ZC5oPgo+IC0gI2luY2x1ZGUgPGxpbWl0cy5o
+Pgo+IC0tI2luY2x1ZGUgPHN5cy9zeXNpbmZvLmg+Cj4gLSsjaW5jbHVkZSAibGFwaS9zeXNpbmZv
+LmgiCj4gLSAjaW5jbHVkZSA8c3RkbGliLmg+Cj4gLQo+IC0gI2RlZmluZSBUU1RfTk9fREVGQVVM
+VF9NQUlOCj4gLWRpZmYgLS1naXQgYS90ZXN0Y2FzZXMva2VybmVsL21lbS9tdGVzdDAxL210ZXN0
+MDEuYyBiL3Rlc3RjYXNlcy9rZXJuZWwvbWVtL210ZXN0MDEvbXRlc3QwMS5jCj4gLWluZGV4IGZi
+OTkxY2U4Yi4uMGZjY2Q1NDA1IDEwMDY0NAo+IC0tLS0gYS90ZXN0Y2FzZXMva2VybmVsL21lbS9t
+dGVzdDAxL210ZXN0MDEuYwo+IC0rKysgYi90ZXN0Y2FzZXMva2VybmVsL21lbS9tdGVzdDAxL210
+ZXN0MDEuYwo+IC1AQCAtMjAsNyArMjAsNiBAQAo+IC0gICovCj4gLQo+IC0gI2luY2x1ZGUgPHN5
+cy90eXBlcy5oPgo+IC0tI2luY2x1ZGUgPHN5cy9zeXNpbmZvLmg+Cj4gLSAjaW5jbHVkZSA8c3lz
+L3dhaXQuaD4KPiAtICNpbmNsdWRlIDxsaW1pdHMuaD4KPiAtICNpbmNsdWRlIDxzaWduYWwuaD4K
+PiAtQEAgLTI5LDYgKzI4LDcgQEAKPiAtICNpbmNsdWRlIDx1bmlzdGQuaD4KPiAtCj4gLSAjaW5j
+bHVkZSAibGFwaS9hYmlzaXplLmgiCj4gLSsjaW5jbHVkZSAibGFwaS9zeXNpbmZvLmgiCj4gLSAj
+aW5jbHVkZSAidHN0X3Rlc3QuaCIKPiAtCj4gLSAjZGVmaW5lIEZJVkVfSFVORFJFRF9NQiAgICAg
+ICAgICg1MDBVTEwqMTAyNCoxMDI0KQo+IC1kaWZmIC0tZ2l0IGEvdGVzdGNhc2VzL2tlcm5lbC9z
+eXNjYWxscy9tYWR2aXNlL21hZHZpc2UwNi5jIGIvdGVzdGNhc2VzL2tlcm5lbC9zeXNjYWxscy9t
+YWR2aXNlL21hZHZpc2UwNi5jCj4gLWluZGV4IDZkMjE4ODAxYy4uOGFmMTFhMDMwIDEwMDY0NAo+
+IC0tLS0gYS90ZXN0Y2FzZXMva2VybmVsL3N5c2NhbGxzL21hZHZpc2UvbWFkdmlzZTA2LmMKPiAt
+KysrIGIvdGVzdGNhc2VzL2tlcm5lbC9zeXNjYWxscy9tYWR2aXNlL21hZHZpc2UwNi5jCj4gLUBA
+IC00Niw3ICs0Niw3IEBACj4gLSAjaW5jbHVkZSA8ZXJybm8uaD4KPiAtICNpbmNsdWRlIDxzdGRp
+by5oPgo+IC0gI2luY2x1ZGUgPHN5cy9tb3VudC5oPgo+IC0tI2luY2x1ZGUgPHN5cy9zeXNpbmZv
+Lmg+Cj4gLSsjaW5jbHVkZSAibGFwaS9zeXNpbmZvLmgiCj4gLSAjaW5jbHVkZSAidHN0X3Rlc3Qu
+aCIKPiAtCj4gLSAjZGVmaW5lIENIVU5LX1NaICg0MDAqMTAyNCoxMDI0TCkKPiAtZGlmZiAtLWdp
+dCBhL3Rlc3RjYXNlcy9rZXJuZWwvc3lzY2FsbHMvc3lzaW5mby9zeXNpbmZvMDEuYyBiL3Rlc3Rj
+YXNlcy9rZXJuZWwvc3lzY2FsbHMvc3lzaW5mby9zeXNpbmZvMDEuYwo+IC1pbmRleCAyZWE0NGEy
+YmUuLmEyMzczNDVlZiAxMDA2NDQKPiAtLS0tIGEvdGVzdGNhc2VzL2tlcm5lbC9zeXNjYWxscy9z
+eXNpbmZvL3N5c2luZm8wMS5jCj4gLSsrKyBiL3Rlc3RjYXNlcy9rZXJuZWwvc3lzY2FsbHMvc3lz
+aW5mby9zeXNpbmZvMDEuYwo+IC1AQCAtNjksNyArNjksNyBAQAo+IC0gI2luY2x1ZGUgPHN5cy90
+eXBlcy5oPgo+IC0gI2luY2x1ZGUgPHN5cy9zdGF0Lmg+Cj4gLSAjaW5jbHVkZSA8c3lzL3NpZ25h
+bC5oPgo+IC0tI2luY2x1ZGUgPHN5cy9zeXNpbmZvLmg+Cj4gLSsjaW5jbHVkZSAibGFwaS9zeXNp
+bmZvLmgiCj4gLQo+IC0gI2luY2x1ZGUgInRlc3QuaCIKPiAtCj4gLWRpZmYgLS1naXQgYS90ZXN0
+Y2FzZXMva2VybmVsL3N5c2NhbGxzL3N5c2luZm8vc3lzaW5mbzAyLmMgYi90ZXN0Y2FzZXMva2Vy
+bmVsL3N5c2NhbGxzL3N5c2luZm8vc3lzaW5mbzAyLmMKPiAtaW5kZXggN2FkMGU4YmRjLi42MWZh
+MWFiNzUgMTAwNjQ0Cj4gLS0tLSBhL3Rlc3RjYXNlcy9rZXJuZWwvc3lzY2FsbHMvc3lzaW5mby9z
+eXNpbmZvMDIuYwo+IC0rKysgYi90ZXN0Y2FzZXMva2VybmVsL3N5c2NhbGxzL3N5c2luZm8vc3lz
+aW5mbzAyLmMKPiAtQEAgLTY1LDcgKzY1LDcgQEAKPiAtICNpbmNsdWRlIDxzeXMvdHlwZXMuaD4K
+PiAtICNpbmNsdWRlIDxzeXMvc3RhdC5oPgo+IC0gI2luY2x1ZGUgPHN5cy9zaWduYWwuaD4KPiAt
+LSNpbmNsdWRlIDxzeXMvc3lzaW5mby5oPgo+IC0rI2luY2x1ZGUgImxhcGkvc3lzaW5mby5oIgo+
+IC0gI2luY2x1ZGUgPHN0ZGludC5oPgo+IC0KPiAtICNpbmNsdWRlICJ0ZXN0LmgiCj4gLWRpZmYg
+LS1naXQgYS90ZXN0Y2FzZXMva2VybmVsL3N5c2NhbGxzL3N5c2luZm8vc3lzaW5mbzAzLmMgYi90
+ZXN0Y2FzZXMva2VybmVsL3N5c2NhbGxzL3N5c2luZm8vc3lzaW5mbzAzLmMKPiAtaW5kZXggYWY3
+Y2I2NDIxLi5kYzVhZTY1ZTMgMTAwNjQ0Cj4gLS0tLSBhL3Rlc3RjYXNlcy9rZXJuZWwvc3lzY2Fs
+bHMvc3lzaW5mby9zeXNpbmZvMDMuYwo+IC0rKysgYi90ZXN0Y2FzZXMva2VybmVsL3N5c2NhbGxz
+L3N5c2luZm8vc3lzaW5mbzAzLmMKPiAtQEAgLTEzLDcgKzEzLDcgQEAKPiAtCj4gLSAgKi8KPiAt
+Cj4gLS0jaW5jbHVkZSA8c3lzL3N5c2luZm8uaD4KPiAtKyNpbmNsdWRlICJsYXBpL3N5c2luZm8u
+aCIKPiAtICNpbmNsdWRlICJsYXBpL25hbWVzcGFjZXNfY29uc3RhbnRzLmgiCj4gLSAjaW5jbHVk
+ZSAibGFwaS9wb3NpeF9jbG9ja3MuaCIKPiAtICNpbmNsdWRlICJ0c3RfdGVzdC5oIgo+IC1kaWZm
+IC0tZ2l0IGEvdGVzdGNhc2VzL29wZW5fcG9zaXhfdGVzdHN1aXRlL2NvbmZvcm1hbmNlL2ludGVy
+ZmFjZXMvcHRocmVhZF9jb25kX2Jyb2FkY2FzdC8xLTIuYyBiL3Rlc3RjYXNlcy9vcGVuX3Bvc2l4
+X3Rlc3RzdWl0ZS9jb25mb3JtYW5jZS9pbnRlcmZhY2VzL3B0aHJlYWRfY29uZF9icm9hZGNhc3Qv
+MS0yLmMKPiAtaW5kZXggMjJlN2MzNjM4Li41NzI3MDFmOWYgMTAwNjQ0Cj4gLS0tLSBhL3Rlc3Rj
+YXNlcy9vcGVuX3Bvc2l4X3Rlc3RzdWl0ZS9jb25mb3JtYW5jZS9pbnRlcmZhY2VzL3B0aHJlYWRf
+Y29uZF9icm9hZGNhc3QvMS0yLmMKPiAtKysrIGIvdGVzdGNhc2VzL29wZW5fcG9zaXhfdGVzdHN1
+aXRlL2NvbmZvcm1hbmNlL2ludGVyZmFjZXMvcHRocmVhZF9jb25kX2Jyb2FkY2FzdC8xLTIuYwo+
+IC1AQCAtNDMsNyArNDMsNyBAQAo+IC0gI2luY2x1ZGUgPHN5cy93YWl0Lmg+Cj4gLSAjaW5jbHVk
+ZSA8c2VtYXBob3JlLmg+Cj4gLSAjaWZkZWYJX19saW51eF9fCj4gLS0jaW5jbHVkZSA8c3lzL3N5
+c2luZm8uaD4KPiAtKyNpbmNsdWRlICJsYXBpL3N5c2luZm8uaCIKPiAtICNlbmRpZgo+IC0KPiAt
+ICNpbmNsdWRlICIuLi90ZXN0ZnJtdy90ZXN0ZnJtdy5oIgo+IC0tLQo+IC0yLjM2LjEKPiAtCj4g
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvbHRwLXRlc3RzdWl0ZS9Db25maWcuaW4gYi9wYWNrYWdlL2x0
+cC10ZXN0c3VpdGUvQ29uZmlnLmluCj4gaW5kZXggMjcyYzJlZGUzNy4uYjQyMDgyZTJjYyAxMDA2
+NDQKPiAtLS0gYS9wYWNrYWdlL2x0cC10ZXN0c3VpdGUvQ29uZmlnLmluCj4gKysrIGIvcGFja2Fn
+ZS9sdHAtdGVzdHN1aXRlL0NvbmZpZy5pbgo+IEBAIC0xMiw2ICsxMiw3IEBAIGNvbmZpZyBCUjJf
+UEFDS0FHRV9MVFBfVEVTVFNVSVRFCj4gIAlib29sICJsdHAtdGVzdHN1aXRlIgo+ICAJZGVwZW5k
+cyBvbiBCUjJfVVNFX01NVSAjIGZvcmsoKQo+ICAJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hB
+U19USFJFQURTX05QVEwKPiArCWRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fVVNFU19NVVNMIHx8
+IEJSMl9UT09MQ0hBSU5fSEVBREVSU19BVF9MRUFTVF81XzExCj4gIAlkZXBlbmRzIG9uIEJSMl9Q
+QUNLQUdFX0xUUF9URVNUU1VJVEVfQVJDSF9TVVBQT1JUUwo+ICAJc2VsZWN0IEJSMl9QQUNLQUdF
+X0xJQlRJUlBDIGlmICFCUjJfVE9PTENIQUlOX0hBU19OQVRJVkVfUlBDCj4gIAlzZWxlY3QgQlIy
+X1BBQ0tBR0VfTVVTTF9GVFMgaWYgIUJSMl9UT09MQ0hBSU5fVVNFU19HTElCQwo+IC0tIAo+IDIu
+NDAuMAo+IAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
+LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwg
+UmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5
+OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdO
+ICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0t
+LS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0
+cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAg
+diAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0t
+LV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
