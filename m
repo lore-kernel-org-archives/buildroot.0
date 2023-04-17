@@ -4,80 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE754C77B76
-	for <buildroot@archiver.kernel.org>; Mon, 17 Apr 2023 20:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE816C77B76
+	for <buildroot@archiver.kernel.org>; Mon, 17 Apr 2023 20:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F77B81A1C;
-	Mon, 17 Apr 2023 20:43:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F77B81A1C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33007821DF;
+	Mon, 17 Apr 2023 20:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33007821DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NgCViqAR7N9R; Mon, 17 Apr 2023 20:43:52 +0000 (UTC)
+	with ESMTP id 6zyeUiU08fOU; Mon, 17 Apr 2023 20:52:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 66F1E8193E;
-	Mon, 17 Apr 2023 20:43:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66F1E8193E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AE4CF1C420D
- for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 20:43:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E4FE821CE;
+	Mon, 17 Apr 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E4FE821CE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6025D1C4224
+ for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 20:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 716218193E
- for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 20:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 716218193E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45F9760DF6
+ for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45F9760DF6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tqdmDLAgvIEd for <buildroot@lists.busybox.net>;
- Mon, 17 Apr 2023 20:43:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48AA8818CA
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com
- [IPv6:2607:f8b0:4864:20::1129])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 48AA8818CA
- for <buildroot@busybox.net>; Mon, 17 Apr 2023 20:43:48 +0000 (UTC)
-Received: by mail-yw1-x1129.google.com with SMTP id
- 00721157ae682-54f21cdfadbso380947647b3.7
- for <buildroot@busybox.net>; Mon, 17 Apr 2023 13:43:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1681764227; x=1684356227;
- h=to:subject:message-id:date:from:in-reply-to:references:mime-version
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=1Hgc+eeQY5sTPJD7jYsxcrWHvBNTMASFc87kNmPi7oY=;
- b=G2d9jto23WHsoCyL72HRV3z88pE3iq2sqYKke31ZTu6utUftOth66GVP2BbocmI5Fb
- RlPyeUR4lv5lADIJFio4oOlP8pGvuUT++umO7pfm6MSwuZUH58ERinO61HlPIRQv8xqu
- AAEh6N9EOgRMTS4u0wsKNBoJUt2rxkmm4e7Hl8HYZjw1ZmVCcO6wkWPMFMARynElz/RH
- g46QPnJM15xhphUqjE7EVNXDfq0gqTFIVK9LSiFzYW98s9vw7lSO8aTbn/bnwIrZKRBB
- Z21zr4hIC7u+xtIJyIXGUJUU28Ntjw/MAxH+MGozOIWYoGVlE8DsgMm7aTPZGEAl7pmp
- /pcA==
-X-Gm-Message-State: AAQBX9f8h/z5+AYqk5PJNx8brCIXmoIA4lIo/n/FG9EIRWdz6qXGLLzX
- +9wjI9afca/PKffts1/ZjoOrLdQoBBr340X3EAkm41X8XX5CNnKuvfg=
-X-Google-Smtp-Source: AKy350aXhjZseuqcVqA131ZG/ruJlasbKHVSD3iHt2NM/GizMxsJFEk5eDoMKRR6ZD7jDpN/cyuwQ2NG4g28lWyCCZ8=
-X-Received: by 2002:a81:c649:0:b0:54f:2b65:a865 with SMTP id
- q9-20020a81c649000000b0054f2b65a865mr10126483ywj.8.1681764227088; Mon, 17 Apr
- 2023 13:43:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230417203722.49416-1-francois.perrad@gadz.org>
-In-Reply-To: <20230417203722.49416-1-francois.perrad@gadz.org>
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 17 Apr 2023 22:43:36 +0200
-Message-ID: <CAAE6iEXdCxD27Wgx7V6sfj+zo6aReVoSqu+q5U5Z2t_+y6mHUw@mail.gmail.com>
-To: buildroot@busybox.net
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1681764227; x=1684356227;
- h=to:subject:message-id:date:from:in-reply-to:references:mime-version
- :from:to:cc:subject:date:message-id:reply-to;
- bh=1Hgc+eeQY5sTPJD7jYsxcrWHvBNTMASFc87kNmPi7oY=;
- b=FtDDbuGA25+UD+cTUh8V7BZHOHLB4Uit2zPOcX4KjQiaU3ink16HuTxTGDAp60b+qK
- dniqLF3IEAhxmJXflO3c2CSXw8U0TevTcaUqQ0JwpnBbmAVvY3/g32OYoDjUmXpWJFmR
- TwRiBZ5mx0RGxBtk8a5jDSgUutyzCHNjRy+/gWS9vD6vQhnuvnR0ZkaG2BvZlpaFwvnt
- XEew9yZo0SJlsoED3S7Co9l3/ZCC7D9HyAuYuhHlRqADyFazV4hD/cG33jlBeOOjIdQj
- LVIgHaor7wDbkqLiXGGUv/ubZOuU4Tun4T1QzhKOdbWwj+WKIy3TfAIp2Guya8eBn1Qe
- FrtQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=FtDDbuGA
-Subject: Re: [Buildroot] [PATCH] package/tcpdump: bump to version 4.99.4
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QQ259IoAO9c3 for <buildroot@lists.busybox.net>;
+ Mon, 17 Apr 2023 20:52:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4143460D8E
+ for <buildroot@buildroot.org>; Mon, 17 Apr 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4143460D8E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2E0198424C; Mon, 17 Apr 2023 20:52:33 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 17 Apr 2023 22:50:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a7ad7816262dd1b0db6c51a08f3013e2c473c0b3
+X-Git-Newrev: b100440bffea3e47e72a9ccce0bee618658f6a47
+X-Patchwork-Hint: ignore
+Message-Id: <20230417205233.2E0198424C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-evdev: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,144 +56,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5041216827065412776=="
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5041216827065412776==
-Content-Type: multipart/alternative; boundary="0000000000005a13b705f98e3ffd"
+commit: https://git.buildroot.net/buildroot/commit/?id=b100440bffea3e47e72a9ccce0bee618658f6a47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---0000000000005a13b705f98e3ffd
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+evdev 1.6.1 https://pypi.org/project/evdev/
 
-sorry, duplicated.
-see
-https://patchwork.ozlabs.org/project/buildroot/patch/20230417192046.601662-=
-1-dalang@gmx.at/
+Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
+[yann.morin.1998@free.fr:
+  - add missing comment on kernel headers
+  - fix flake8 in test
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/Config.in                                    |  1 +
+ package/python-evdev/Config.in                       | 10 ++++++++++
+ package/python-evdev/python-evdev.hash               |  5 +++++
+ package/python-evdev/python-evdev.mk                 | 18 ++++++++++++++++++
+ support/testing/tests/package/sample_python_evdev.py | 11 +++++++++++
+ support/testing/tests/package/test_python_evdev.py   | 11 +++++++++++
+ 6 files changed, 56 insertions(+)
 
-Fran=C3=A7ois
-
-Le lun. 17 avr. 2023 =C3=A0 22:39, Francois Perrad <fperrad@gmail.com> a =
-=C3=A9crit :
-
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/tcpdump/tcpdump.hash | 4 ++--
->  package/tcpdump/tcpdump.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-> index e548e3262..58190356a 100644
-> --- a/package/tcpdump/tcpdump.hash
-> +++ b/package/tcpdump/tcpdump.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature at
-> -# https://www.tcpdump.org/release/tcpdump-4.99.3.tar.gz.sig
-> +# https://www.tcpdump.org/release/tcpdump-4.99.4.tar.gz.sig
->  # using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
-> -sha256  ad75a6ed3dc0d9732945b2e5483cb41dc8b4b528a169315e499c6861952e73b3
-> tcpdump-4.99.3.tar.gz
-> +sha256  0232231bb2f29d6bf2426e70a08a7e0c63a0d59a9b44863b7f5e2357a6e49fea
-> tcpdump-4.99.4.tar.gz
->  sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd
-> LICENSE
-> diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-> index 7a679ce4b..91643e7be 100644
-> --- a/package/tcpdump/tcpdump.mk
-> +++ b/package/tcpdump/tcpdump.mk
-> @@ -4,7 +4,7 @@
->  #
->
->  ########################################################################=
-########
->
-> -TCPDUMP_VERSION =3D 4.99.3
-> +TCPDUMP_VERSION =3D 4.99.4
->  TCPDUMP_SITE =3D https://www.tcpdump.org/release
->  TCPDUMP_LICENSE =3D BSD-3-Clause
->  TCPDUMP_LICENSE_FILES =3D LICENSE
-> --
-> 2.37.2
->
->
-
---0000000000005a13b705f98e3ffd
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>sorry, duplicated.</div><div>see <a href=3D"https://p=
-atchwork.ozlabs.org/project/buildroot/patch/20230417192046.601662-1-dalang@=
-gmx.at/">https://patchwork.ozlabs.org/project/buildroot/patch/2023041719204=
-6.601662-1-dalang@gmx.at/</a></div><div><br></div><div>Fran=C3=A7ois<br></d=
-iv></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_att=
-r">Le=C2=A0lun. 17 avr. 2023 =C3=A0=C2=A022:39, Francois Perrad &lt;<a href=
-=3D"mailto:fperrad@gmail.com">fperrad@gmail.com</a>&gt; a =C3=A9crit=C2=A0:=
-<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8=
-ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Signed-off-by: =
-Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org" target=3D"_=
-blank">francois.perrad@gadz.org</a>&gt;<br>
----<br>
-=C2=A0package/tcpdump/tcpdump.hash | 4 ++--<br>
-=C2=A0package/tcpdump/<a href=3D"http://tcpdump.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">tcpdump.mk</a>=C2=A0 =C2=A0| 2 +-<br>
-=C2=A02 files changed, 3 insertions(+), 3 deletions(-)<br>
-<br>
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash<br=
->
-index e548e3262..58190356a 100644<br>
---- a/package/tcpdump/tcpdump.hash<br>
-+++ b/package/tcpdump/tcpdump.hash<br>
-@@ -1,5 +1,5 @@<br>
-=C2=A0# Locally calculated after checking pgp signature at<br>
--# <a href=3D"https://www.tcpdump.org/release/tcpdump-4.99.3.tar.gz.sig" re=
-l=3D"noreferrer" target=3D"_blank">https://www.tcpdump.org/release/tcpdump-=
-4.99.3.tar.gz.sig</a><br>
-+# <a href=3D"https://www.tcpdump.org/release/tcpdump-4.99.4.tar.gz.sig" re=
-l=3D"noreferrer" target=3D"_blank">https://www.tcpdump.org/release/tcpdump-=
-4.99.4.tar.gz.sig</a><br>
-=C2=A0# using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D<br>
--sha256=C2=A0 ad75a6ed3dc0d9732945b2e5483cb41dc8b4b528a169315e499c6861952e7=
-3b3=C2=A0 tcpdump-4.99.3.tar.gz<br>
-+sha256=C2=A0 0232231bb2f29d6bf2426e70a08a7e0c63a0d59a9b44863b7f5e2357a6e49=
-fea=C2=A0 tcpdump-4.99.4.tar.gz<br>
-=C2=A0sha256=C2=A0 8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce269701=
-4eda7afd=C2=A0 LICENSE<br>
-diff --git a/package/tcpdump/<a href=3D"http://tcpdump.mk" rel=3D"noreferre=
-r" target=3D"_blank">tcpdump.mk</a> b/package/tcpdump/<a href=3D"http://tcp=
-dump.mk" rel=3D"noreferrer" target=3D"_blank">tcpdump.mk</a><br>
-index 7a679ce4b..91643e7be 100644<br>
---- a/package/tcpdump/<a href=3D"http://tcpdump.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">tcpdump.mk</a><br>
-+++ b/package/tcpdump/<a href=3D"http://tcpdump.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">tcpdump.mk</a><br>
-@@ -4,7 +4,7 @@<br>
-=C2=A0#<br>
-=C2=A0#####################################################################=
-###########<br>
-<br>
--TCPDUMP_VERSION =3D 4.99.3<br>
-+TCPDUMP_VERSION =3D 4.99.4<br>
-=C2=A0TCPDUMP_SITE =3D <a href=3D"https://www.tcpdump.org/release" rel=3D"n=
-oreferrer" target=3D"_blank">https://www.tcpdump.org/release</a><br>
-=C2=A0TCPDUMP_LICENSE =3D BSD-3-Clause<br>
-=C2=A0TCPDUMP_LICENSE_FILES =3D LICENSE<br>
--- <br>
-2.37.2<br>
-<br>
-</blockquote></div>
-
---0000000000005a13b705f98e3ffd--
-
---===============5041216827065412776==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/Config.in b/package/Config.in
+index 760dda6ac1..eaac32a01a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1049,6 +1049,7 @@ menu "External python modules"
+ 	source "package/python-engineio/Config.in"
+ 	source "package/python-entrypoints/Config.in"
+ 	source "package/python-esptool/Config.in"
++	source "package/python-evdev/Config.in"
+ 	source "package/python-falcon/Config.in"
+ 	source "package/python-filelock/Config.in"
+ 	source "package/python-fire/Config.in"
+diff --git a/package/python-evdev/Config.in b/package/python-evdev/Config.in
+new file mode 100644
+index 0000000000..33e43c1f77
+--- /dev/null
++++ b/package/python-evdev/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_EVDEV
++	bool "python-evdev"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
++	help
++	  Bindings to the Linux input handling subsystem.
++
++	  https://github.com/gvalkov/python-evdev
++
++comment "python-evdev needs a toolchain w/ headers >= 4.4"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+diff --git a/package/python-evdev/python-evdev.hash b/package/python-evdev/python-evdev.hash
+new file mode 100644
+index 0000000000..9a6d0d07be
+--- /dev/null
++++ b/package/python-evdev/python-evdev.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/evdev/json
++md5  905b12ef6136b518ddf418d8d5b053e4  evdev-1.6.1.tar.gz
++sha256  299db8628cc73b237fc1cc57d3c2948faa0756e2a58b6194b5bf81dc2081f1e3  evdev-1.6.1.tar.gz
++# Locally computed sha256 checksums
++sha256  55fd76d7b3f90d312f161d318631b93c58a0e69d662d07c4f5aca2c6c9ecc85e  LICENSE
+diff --git a/package/python-evdev/python-evdev.mk b/package/python-evdev/python-evdev.mk
+new file mode 100644
+index 0000000000..5cf62b5160
+--- /dev/null
++++ b/package/python-evdev/python-evdev.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# python-evdev
++#
++################################################################################
++
++PYTHON_EVDEV_VERSION = 1.6.1
++PYTHON_EVDEV_SOURCE = evdev-$(PYTHON_EVDEV_VERSION).tar.gz
++PYTHON_EVDEV_SITE = https://files.pythonhosted.org/packages/05/50/629b011a7f61cb2fca754ea8631575784bf8605a1ec4d6970a010bc54e2b
++PYTHON_EVDEV_SETUP_TYPE = setuptools
++PYTHON_EVDEV_LICENSE = Revised BSD License
++PYTHON_EVDEV_LICENSE_FILES = LICENSE
++
++PYTHON_EVDEV_BUILD_OPTS = \
++	build_ecodes \
++	--evdev-headers $(STAGING_DIR)/usr/include/linux/input.h:$(STAGING_DIR)/usr/include/linux/input-event-codes.h:$(STAGING_DIR)/usr/include/linux/uinput.h
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_evdev.py b/support/testing/tests/package/sample_python_evdev.py
+new file mode 100644
+index 0000000000..0c00fa6e2f
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_evdev.py
+@@ -0,0 +1,11 @@
++import evdev
++
++devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
++e = evdev.events.InputEvent(1036996631, 984417, evdev.ecodes.EV_KEY, evdev.ecodes.KEY_A, 2)
++k = evdev.events.KeyEvent(e)
++
++assert(k.keystate == evdev.events.KeyEvent.key_hold)
++assert(k.event == e)
++assert(k.scancode == evdev.ecodes.KEY_A)
++assert(k.keycode == 'KEY_A')
++assert(len(devices) > 0)
+diff --git a/support/testing/tests/package/test_python_evdev.py b/support/testing/tests/package/test_python_evdev.py
+new file mode 100644
+index 0000000000..162e53072e
+--- /dev/null
++++ b/support/testing/tests/package/test_python_evdev.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Evdev(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_EVDEV=y
++        """
++    sample_scripts = ["tests/package/sample_python_evdev.py"]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5041216827065412776==--
