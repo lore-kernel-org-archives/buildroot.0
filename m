@@ -4,67 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50065C77B76
-	for <buildroot@archiver.kernel.org>; Mon, 17 Apr 2023 19:58:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1141EC77B72
+	for <buildroot@archiver.kernel.org>; Mon, 17 Apr 2023 20:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8C7D81212;
-	Mon, 17 Apr 2023 19:58:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8C7D81212
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9417D81FB8;
+	Mon, 17 Apr 2023 20:37:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9417D81FB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pdWng4IrosWA; Mon, 17 Apr 2023 19:58:26 +0000 (UTC)
+	with ESMTP id MPOwhQzJt3UA; Mon, 17 Apr 2023 20:37:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0293B8214B;
-	Mon, 17 Apr 2023 19:58:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0293B8214B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 267941C420D
- for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 19:58:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD69281EF8;
+	Mon, 17 Apr 2023 20:37:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD69281EF8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 77B461C4210
+ for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 20:37:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06BE061112
- for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 19:58:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06BE061112
+ by smtp1.osuosl.org (Postfix) with ESMTP id 519EE81EF8
+ for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 20:37:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 519EE81EF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d8SJ4bHUGScd for <buildroot@lists.busybox.net>;
- Mon, 17 Apr 2023 19:58:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RhLtUkPwGjG4 for <buildroot@lists.busybox.net>;
+ Mon, 17 Apr 2023 20:37:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C74DC60B32
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C74DC60B32
- for <buildroot@buildroot.org>; Mon, 17 Apr 2023 19:58:21 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 987F25FF96;
- Mon, 17 Apr 2023 21:58:16 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 17 Apr 2023 21:58:16 +0200
-Date: Mon, 17 Apr 2023 21:58:16 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <20230417195816.GN2819@scaer>
-References: <20220927221133.594071-1-f.fainelli@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D61B8196E
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D61B8196E
+ for <buildroot@busybox.net>; Mon, 17 Apr 2023 20:37:31 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id
+ a640c23a62f3a-94f0dd117dcso149772366b.3
+ for <buildroot@busybox.net>; Mon, 17 Apr 2023 13:37:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1681763849; x=1684355849;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Hru5AG6VwJ6Is7DzE/H5bCpER0gNwUqXiLtL9Suiolg=;
+ b=NT6X3d5AysuAN94lmuGxKkfIEuK6qQEHNRqeYa11YhlZWYpBzh3C2/xMQC1I3mpcFH
+ ujZoKlR3hHAOqFk5xB7PQ65F5Ckm8BpAsEImLl59q9owBRCeQHCmHJsldTTj8qQF+pqr
+ G7KHxPq4jJP+sFzHxiL5fU5UWq5OnMkmAZGMOWI+ucC99GroDFpPTqpMA08EcqzBDRqT
+ Z0syeGHdzcwijRWNTKfZ8rz+MCYNgQ81hSDtcGAbFFIad0UC0tNzDfadXCgQ0QvdPvU8
+ gDZCiBKR5UJ2kwad8CIzLtRigW4yg9+i5mgpNL9f8HqG3BuYIEofaJqSuK4w6KpdsBW7
+ hEWw==
+X-Gm-Message-State: AAQBX9cZqw4fT3nNIwy0/KdVVxDM+maGZLY3Z/bGHVYSJCL/INq77h4D
+ C1VQ6GyWdKk22eMMW1lkFpIhtV0Eldw=
+X-Google-Smtp-Source: AKy350ZMLE/rfH6KHBBD2bdIQW/YYLuFB/f7sQFw+Se2f7X49Fwd+8dZikMEWV349vssgMAUp056Nw==
+X-Received: by 2002:aa7:d995:0:b0:506:74d6:45aa with SMTP id
+ u21-20020aa7d995000000b0050674d645aamr206951eds.24.1681763849156; 
+ Mon, 17 Apr 2023 13:37:29 -0700 (PDT)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ f2-20020a056402068200b005069175dcb7sm3670633edy.58.2023.04.17.13.37.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 17 Apr 2023 13:37:28 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon, 17 Apr 2023 22:37:21 +0200
+Message-Id: <20230417203722.49416-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220927221133.594071-1-f.fainelli@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1681761498;
- bh=qIC32y6pmqb1ad4KYVzhrWmAdozksq4OYFrvMkn2Y8M=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nCe5jUIvYWQqByPh4xXzzrDk77hqTSvDk/UxHbwJAKLShetd1+0Ag43s3jzrGnJEO
- MfT2+15gLmp3Q50LGa3SvHIgznOUFC30oQWQWlQvDS4ad2+hatnGaYNUsSaFkMza8n
- soUiQ154qPl6mfgMbwcOxGmn7FBVddlNI58z7zvs/w3YKzC9fegLsfDNSdItZE5A4M
- F5T0kOjJKBDUT6mffjVAfJceUOyBmIZ7kUgYsC/up3BuV4DAao180p/dlecqQ3cXaZ
- HrkDpLeiCDzsYMvzzW3JUDnVeoEAt44P57IM4gMEpVkuRYKWzM3oE60U7UvsA6dFZm
- vppK1fq9xjh/g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nCe5jUIv
-Subject: Re: [Buildroot] [PATCH] package/linux-tools: Exclude checking PE
- binaries from perf test
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1681763849; x=1684355849;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Hru5AG6VwJ6Is7DzE/H5bCpER0gNwUqXiLtL9Suiolg=;
+ b=YKQRMeOnCOnFhuIFjWtER8v0Jgfhv+rokjHmDV5bNdWqKoXFiHjCb7AB4dNvq+78QG
+ qLTaqtCV/9EJshcvU+8PKQqtEWH77noQMEG2lGBTMTQQthMQEV0McnR3cu+8rEh19CrB
+ yFEI764wvmkXvtzAjKsTA9s6abrril5lHKiKdrcTCPsUvFz7VGorQpWPycz6lSwx3NBp
+ 3LvbTKGaBUM8Q2YNkuQm7u3lin3qpa1uz2UFXp5f07V+X/dh+zKBmY+oo1omHkK7Xa76
+ /aOwnYLG9s5c3I0YX+demKLttUxlpzWjnesHVaUbS7HNojez9JHdyB1itGKzSnB22Aan
+ tu7g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=YKQRMeOn
+Subject: [Buildroot] [PATCH] package/tcpdump: bump to version 4.99.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,110 +95,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Florian, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/tcpdump/tcpdump.hash | 4 ++--
+ package/tcpdump/tcpdump.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2022-09-27 15:11 -0700, Florian Fainelli spake thusly:
-> Since upstream Linux commit ed21d6d7c48e6e96c2d617e304a7ebfbd17b1807
-> ("perf tests: Add test for PE binary format support") present in >=
-> v5.10 there is an unconditional installation of PE binaries which will
-> be rejected by the check-bin-arch script.
-> 
-> Make sure that these binaries are excluded from being checked to allow
-> the installation of the perf tests.
-> 
-> Fixes: 6fcdaa4c5096 ("package/linux-tools: Allow installation of perf scripts")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-I've finally applied to master, thanks.
-
-However, I wonder if we could not be a bit more robust in check-bin-arch
-itself, something like:
-
-    diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-    index 27cc59bca0..2920a95ae3 100755
-    --- a/support/scripts/check-bin-arch
-    +++ b/support/scripts/check-bin-arch
-    @@ -58,6 +58,9 @@ exitcode=0
-     IFS="
-     "
-     
-    +# ELF magic
-    +ELF_MAGIC="$(printf "\x7f\x45\x4c\x46")"
-    +
-     while read f; do
-     	for ignore in "${IGNORES[@]}"; do
-     		if [[ "${f}" =~ ^"${ignore}" ]]; then
-    @@ -71,13 +74,19 @@ while read f; do
-     		continue
-     	fi
-     
-    +	# Check if it looks like it is an ELF file
-    +	read -N 4 magic <"${TARGET_DIR}/${f}"
-    +	if [ "${magic}" != "${ELF_MAGIC}" ]; then
-    +		continue
-    +	fi
-    +
-     	# Get architecture using readelf. We pipe through 'head -1' so
-     	# that when the file is a static library (.a), we only take
-     	# into account the architecture of the first object file.
-     	arch=$(LC_ALL=C ${readelf} -h "${TARGET_DIR}/${f}" 2>&1 | \
-     		       sed -r -e '/^  Machine: +(.+)/!d; s//\1/;' | head -1)
-     
-    -# If no architecture found, assume it was not an ELF file
-    +# If no architecture found, assume it was in fact not an ELF file
-     	if test "${arch}" = "" ; then
-     		continue
-     	fi
-
-(with the read -N 4 trick as discussed in [0])
-
-Thoughts?
-
-[0] https://lore.kernel.org/buildroot/10267_1663749711_632ACE4F_10267_83_8_20220921084149.GB2398274@tl-lnx-nyma7486/
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/linux-tools/linux-tool-perf.mk.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-> index dda63cccecb4..c22097316264 100644
-> --- a/package/linux-tools/linux-tool-perf.mk.in
-> +++ b/package/linux-tools/linux-tool-perf.mk.in
-> @@ -169,6 +169,10 @@ define PERF_INSTALL_REMOVE_SCRIPTS
->  	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
->  	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
->  endef
-> +
-> +LINUX_TOOLS_BIN_ARCH_EXCLUDE += \
-> +	/usr/libexec/perf-core/tests/pe-file.exe \
-> +	/usr/libexec/perf-core/tests/pe-file.exe.debug
->  endif
->  
->  define PERF_INSTALL_TARGET_CMDS
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
+index e548e3262..58190356a 100644
+--- a/package/tcpdump/tcpdump.hash
++++ b/package/tcpdump/tcpdump.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature at
+-# https://www.tcpdump.org/release/tcpdump-4.99.3.tar.gz.sig
++# https://www.tcpdump.org/release/tcpdump-4.99.4.tar.gz.sig
+ # using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
+-sha256  ad75a6ed3dc0d9732945b2e5483cb41dc8b4b528a169315e499c6861952e73b3  tcpdump-4.99.3.tar.gz
++sha256  0232231bb2f29d6bf2426e70a08a7e0c63a0d59a9b44863b7f5e2357a6e49fea  tcpdump-4.99.4.tar.gz
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 7a679ce4b..91643e7be 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TCPDUMP_VERSION = 4.99.3
++TCPDUMP_VERSION = 4.99.4
+ TCPDUMP_SITE = https://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3-Clause
+ TCPDUMP_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.37.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
