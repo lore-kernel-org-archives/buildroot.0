@@ -4,66 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64862C77B76
-	for <buildroot@archiver.kernel.org>; Mon, 17 Apr 2023 19:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C33DC77B72
+	for <buildroot@archiver.kernel.org>; Mon, 17 Apr 2023 19:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B5514098D;
-	Mon, 17 Apr 2023 19:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B5514098D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1222D4148F;
+	Mon, 17 Apr 2023 19:23:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1222D4148F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HfLI27QIBlro; Mon, 17 Apr 2023 19:15:17 +0000 (UTC)
+	with ESMTP id jTFDY3a2rp_a; Mon, 17 Apr 2023 19:23:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76FE7409F0;
-	Mon, 17 Apr 2023 19:15:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76FE7409F0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8AD231BF20D
- for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 19:15:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E10CF4141D;
+	Mon, 17 Apr 2023 19:23:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E10CF4141D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E2C51C4223
+ for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 19:23:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 64D56401C9
- for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 19:15:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64D56401C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 478558191E
+ for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 19:23:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 478558191E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vao3QbAnw5t6 for <buildroot@lists.busybox.net>;
- Mon, 17 Apr 2023 19:15:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l0RxIKuQ26s6 for <buildroot@lists.busybox.net>;
+ Mon, 17 Apr 2023 19:23:37 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B75D34018A
-Received: from mxd.seznam.cz (mxd.seznam.cz [77.75.78.210])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B75D34018A
- for <buildroot@buildroot.org>; Mon, 17 Apr 2023 19:15:11 +0000 (UTC)
-Received: from email.seznam.cz by smtpc-mxd-6d4fd494cf-btbzl
- (smtpc-mxd-6d4fd494cf-btbzl [2a02:598:128:8a00::1000:483])
- id 23148e329534316923133045; Mon, 17 Apr 2023 21:14:57 +0200 (CEST)
-Received: from localhost.localdomain (mail.ms-free.net [185.147.46.46])
- by smtpd-relay-6f4cd59c79-r2mvj (smtpd/2.0.10) with ESMTPA
- id afa64c0c-a6dc-4477-b043-cc86d66f93c8;
- Mon, 17 Apr 2023 21:14:50 +0200
-From: Petr Vorel <pevik@seznam.cz>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C81218190B
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C81218190B
+ for <buildroot@buildroot.org>; Mon, 17 Apr 2023 19:23:36 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.localdomain ([89.144.223.192]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MgNct-1qG6AC3m87-00hsGB; Mon, 17 Apr 2023 21:23:28 +0200
+From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Mon, 17 Apr 2023 21:14:47 +0200
-Message-Id: <20230417191447.2439214-1-pevik@seznam.cz>
+Date: Mon, 17 Apr 2023 21:20:47 +0200
+Message-Id: <20230417192046.601662-1-dalang@gmx.at>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=seznam.cz; s=szn20221014; t=1681758897;
- bh=E7ziftOBadHOigR66+/0VDMI7csNEtkSLQL8TORXIUc=;
- h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
- Content-Transfer-Encoding;
- b=FHRxIFTTGrq8TwB0fdT2eozGASgwWD415w6LPNjy+2jFiqVwQjE/Hh39i53CHQTns
- +ZdJpZstRJaX2dPu6sJAVSazGgUSn+JbKk2n9I4IN2trji2X7p1SBzkhvbAawP7Z0K
- 7Aby82BRPu/0/x3yxdkcy+SGcGLJvLCpdDxsgzjD+J0I1kW27iHp6UTHeo+c58slQ9
- GLz++9bkZxT3ZDq2IleOcw+WdKnFkcM/BFnaE1RSJOWt3XNCkmc+Yw12jMgikqYD3U
- PdV4++5RSRLdGZAKOiIBQC3ngHSdH5ATmr3UVfEp1qnbK7gX5KVewvHRiEvM0eSEIj
- drmaXJajKZ10g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=seznam.cz header.i=@seznam.cz
- header.a=rsa-sha256 header.s=szn20221014 header.b=FHRxIFTT
-Subject: [Buildroot] [PATCH] package/ltp-testsuite: remove 5.11 headers
- requirement for musl
+X-Provags-ID: V03:K1:AuAplwfVrM3qCN4z77I6sS1sGU8wCtDEgM8EAB/WKH0Xu7LIsDW
+ FlRLel67oUdYrIHrsEWKa2Utfor7QBLZ72t1WMA8F8C4PalbzbYr0O+eS0queihhgvTK9/F
+ LEgbi91djzi0bTh7XWNads7PQA+cmHKOv+jIKdqMJe7uH+q2kSXB8KDvKMJwyzB9BgnElzX
+ pV0AmpS8zm2zKrFj72I1g==
+UI-OutboundReport: notjunk:1;M01:P0:qyZNh1l4c2E=;gdV5rp6SQFX72pGb9ELa8PitjNc
+ KCeDZxtaRDz/2auq3Eyn0HInsaUdRTYvXys2cDBCLecJplmxwzS3efodKCUJJf7P8hucflbfS
+ jaKBkY7GNokSG+ueuR34sv2F0fEl9BER+I90P45FmaNUF45TlXwqpa4Buy13pkoDy/gj0cq5B
+ uEW+ewEv9miF2Y5FwAr3AIDNCcry4Ys9Xqo4XTls8EwLU0JovUnDHr4D16uKGJfeIv//S+Dvo
+ IttSSeOD3ouXuzaBmPy79I80GKtOqEPDiP5daAe0Ca/gXp7Q4onZL1+A9YLJXXbzE4C79CgfR
+ 6bD8kkXg7EK1544q32yD9GfMA/cRPaO385WcS286uV+4WtEolU+Wgzkoe0HSKnEvpiEFgNJq9
+ XXFSI948BfbeJRAhi9mOEXn4OaGXlm9UvhL4MPYS5Fbd/UHHszrnc0aXnXqyRbdO6whFIUthI
+ TBNdJHE1+9xzIZi1YWgvkIt0jtFwHos4Y71TMTfEytF9QjU9ErIoCp/m4HkLW4rxpWINdqiMT
+ Xqt5v2jnHMxBtJ4HWDd3ecQm2cI+/85+yN1XGwqvcFBRLE6OXG4Q0T358Ps67gLmt00GrNAQk
+ QPpYA8RdWaUhHbwuylnYbCjUCehRQSOeytVCRNSja/Qmb6qA/co8lJE39gxTN8DYkKuaF80en
+ H7E1eWHouV1xdzBVHr1iaRVRBf+f+xTsN9NZRuv/bmEDYVOjAFQQUAdchjFiRcktbpLyfzrJe
+ lZ4CJMIUODOboOFyb4Px9qdsxygJ5uhg6z/SllckSdlhkVPpUeMPumYcvdTP77OFE/SAtV3na
+ HzMh5tKpDh7tSI1XQP4yOw7BByPi3GYQjGrAizd077BFIkDrYbQ3mTf+iZpPvVoQLN5WB/URI
+ cVz+VdHAcmsrpn+62F3BZkIx0LFJTNCOGYdT0O15xslboG/bCGb3KsBSfV7aRNhXQsmFG8ohy
+ rOt2wwanStIlhjmUkGxi3iNmXgM=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.at; s=s31663417; 
+ t=1681759408; i=dalang@gmx.at;
+ bh=RG7pL4368dQuBR6QgjFO3WgXlYtyL2r/594u3Wn0g3o=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=emQHDhrjCNVVh7APsXDym3d5NpLfie7gsKFMRMJqj/u09++TkhhB1DbxrL4ZWFBcw
+ u6C2+JzL+3NYlijzdhNPe3RBG49qBTcHFAM/din+Oj3zxWXvfLo8q73pRbFfnQnY0P
+ W2mHicEtAuApOyZ5/j4YMc/LO5TZUXD8xH0kZSlk9ehk8LxVgqNSwCqVxWg7hCjYlx
+ yyvg9cEy1sj0RVXseLuQYct+G7OHHzt7gL8jIwlcXvLeYWq3QW6Ko4bVFoVi0lYdio
+ /mNpIcafjNtxlYdKjU1ATQ3EQ7bypKjUUUWfzCIPBWKf/05LVe+brvvJXyOElEhWg0
+ 2qW0jMVv047vg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
+ header.a=rsa-sha256 header.s=s31663417 header.b=emQHDhrj
+Subject: [Buildroot] [PATCH] package/tcpdump: security bump to version 4.99.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,62 +90,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- Anders Roxell <anders.roxell@linaro.org>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Petr Vorel <petr.vorel@gmail.com>
+Fixes CVE-2023-1801
 
-5e1c238b72 ("package/ltp-testsuite: require 5.11 headers for musl")
-added a 5.11 headers requirement for musl, which contains fix
-a85cbe6159ff ("uapi: move constants from <linux/kernel.h> to <linux/const.h>").
-
-This effectively disables LTP on all musl based toolchains from
-toolchain-configs.csv:
-
-      bootlin-armv7-musl [ 7/45]: SKIPPED
-    bootlin-riscv64-musl [19/45]: SKIPPED
-     bootlin-x86-64-musl [26/45]: SKIPPED
-br-i386-pentium-mmx-musl [31/45]: SKIPPED
-
-But these toolchains are based on 4.9.255 kernel headers, which have
-backported fix as 834d8b96cd85 in 4.9.250 and LTP can be compiled with
-them. Because there is currently no way to specify also older stable
-releases with fix, it's better to remove this requirement. If people are
-really using unfixed kernels we can reintroduce the workaround which was
-removed in 5e1c238b72 or even ask upstream to carry it.
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 ---
-Hi,
+ package/tcpdump/tcpdump.hash | 2 +-
+ package/tcpdump/tcpdump.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I'm sorry for not checking the build properly. v1 and v2 of LTP update
-were without this because I did check them properly and saw that 5.11
-version requirement for musl was not needed (thanks to Thomas, who in
-the past after my asking for that had found a time and updated toolchains).
-
-Kind regards,
-Petr
-
- package/ltp-testsuite/Config.in | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index b42082e2cc..272c2ede37 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -12,7 +12,6 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	bool "ltp-testsuite"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on !BR2_TOOLCHAIN_USES_MUSL || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
- 	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
+index e548e32626..1a22889851 100644
+--- a/package/tcpdump/tcpdump.hash
++++ b/package/tcpdump/tcpdump.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature at
+ # https://www.tcpdump.org/release/tcpdump-4.99.3.tar.gz.sig
+ # using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
+-sha256  ad75a6ed3dc0d9732945b2e5483cb41dc8b4b528a169315e499c6861952e73b3  tcpdump-4.99.3.tar.gz
++sha256  0232231bb2f29d6bf2426e70a08a7e0c63a0d59a9b44863b7f5e2357a6e49fea  tcpdump-4.99.4.tar.gz
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 7a679ce4bf..91643e7bea 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TCPDUMP_VERSION = 4.99.3
++TCPDUMP_VERSION = 4.99.4
+ TCPDUMP_SITE = https://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3-Clause
+ TCPDUMP_LICENSE_FILES = LICENSE
 -- 
 2.40.0
 
