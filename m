@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA289C77B75
-	for <buildroot@archiver.kernel.org>; Tue, 18 Apr 2023 10:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BB9AC77B75
+	for <buildroot@archiver.kernel.org>; Tue, 18 Apr 2023 11:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B773417CB;
-	Tue, 18 Apr 2023 10:58:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B773417CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF1AB6140F;
+	Tue, 18 Apr 2023 11:42:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF1AB6140F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A3p3VHTV-B3c; Tue, 18 Apr 2023 10:58:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OGVyvrvD85Mh; Tue, 18 Apr 2023 11:42:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E33F41594;
-	Tue, 18 Apr 2023 10:58:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E33F41594
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3EFD61C42A1
- for <buildroot@lists.busybox.net>; Tue, 18 Apr 2023 10:58:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16F1861381;
+	Tue, 18 Apr 2023 11:42:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16F1861381
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2097A1C42AD
+ for <buildroot@lists.busybox.net>; Tue, 18 Apr 2023 11:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1518F41594
- for <buildroot@lists.busybox.net>; Tue, 18 Apr 2023 10:58:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1518F41594
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE39083C38
+ for <buildroot@lists.busybox.net>; Tue, 18 Apr 2023 11:42:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE39083C38
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3hSKLHwhcGSy for <buildroot@lists.busybox.net>;
- Tue, 18 Apr 2023 10:58:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ctOH12elfJ3B for <buildroot@lists.busybox.net>;
+ Tue, 18 Apr 2023 11:42:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C69E8400B9
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C69E8400B9
- for <buildroot@buildroot.org>; Tue, 18 Apr 2023 10:58:37 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id
- 4fb4d7f45d1cf-5066ce4f490so3382651a12.2
- for <buildroot@buildroot.org>; Tue, 18 Apr 2023 03:58:37 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AB4083C32
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9AB4083C32
+ for <buildroot@buildroot.org>; Tue, 18 Apr 2023 11:42:13 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id q23so62886474ejz.3
+ for <buildroot@buildroot.org>; Tue, 18 Apr 2023 04:42:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1681815516; x=1684407516;
+ d=1e100.net; s=20221208; t=1681818131; x=1684410131;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Ijf86ISrzPWIUkSRGUkHtNPC9ZMbUTv84BnB3KlDCmA=;
- b=H8egEbLA0o7Y2jd89xRQstr42B80bQbsgDRAC/4JkSxNZw82H/jyIfOLDns/ve5ZXw
- p4qOZt7ykeprMyv1OEa/IxIFSZwY+jbnORoeYjYqcBvgxpSULzfGtEn4P4CPO7hoV4oV
- yiWl1TH8gLLtDYNU5wuyBA+9jVXyiSX9e2ltydTjlpWPkQ9U0g3jKgvGrXIKmcS1GZ1g
- ougZ5kUxeaO/9cHGGQguoO4LkNr+bhO2JMDnbBy+iXudstDwbYld0iAuNRizcpYu/gcG
- JnhLvBFdxV7ylTK7Xf2mTQ0LkYyEFkBm1lDIEfpJlWfMusZg9rZgJ8GcnNTqMOK0ZOqz
- 8MFg==
-X-Gm-Message-State: AAQBX9dbZuOZG6RtCay9W1PJukrn22fGxJJ8JfyRx/Sg+c5dS6X73UPH
- lRSgP6V1WuVMMYw0VaycuA1ijsm1qZV6Br6wd8lzxg==
-X-Google-Smtp-Source: AKy350bZE4XAA/sOiwdq7biTwRfGCa6TH9WDr1X8BHnx+yn+2pwlTCnr3llrEH0wm2IaVu6auNcJDw==
-X-Received: by 2002:a05:6402:1b1b:b0:4fa:b05e:ced5 with SMTP id
- by27-20020a0564021b1b00b004fab05eced5mr1526686edb.36.1681815515670; 
- Tue, 18 Apr 2023 03:58:35 -0700 (PDT)
-Received: from debian-hp-1.fritz.box (94.105.100.233.dyn.edpnet.net.
- [94.105.100.233]) by smtp.gmail.com with ESMTPSA id
- b17-20020a1709063f9100b00953331b086csm139036ejj.91.2023.04.18.03.58.34
+ bh=8yHW5wPi54FtNU1OwKn+T1ZZu5RA1EzVMS0MFs4CGdo=;
+ b=ExE3zbAMY+nI2cVx7KZgEeuhFDXBrtgdfatvPutElsVwLewqy3eLFzuNTeB642EfL6
+ HPBFt/dnxX3TTl9Cj+F3F7PKRLDU+yP+6mu7/tIjDAjthJqf0e0LzRYMk8RfFEth5Rb6
+ vfcYt/c9vKYGuNrgeOUBQqdIL4UArKahEydno/tUjbgkkVPj1F0smpc+MJsQ/xT/9Fst
+ +w4j29ViXIOtOVHVnoFraOVIxr7NwIZpXWw+NEFbuE34z0K8ozqCWBXmmJv3x+fMGRB4
+ poMqYjzGM/PwJCD5WaQbs5xdh50wUa7kTeB/V+S0OqUO9M9F/XXEAAmkFyvJ8jOZYTs0
+ EAGA==
+X-Gm-Message-State: AAQBX9fPzYmcU4zUw+10FMp9/2Q+nZ7OSRRbkAiI1O6MVphxoWWqMYwA
+ PwMFTn/0lqp1A1NGyv2etUYF64AlKrO6Nsn0RLY=
+X-Google-Smtp-Source: AKy350bK0KuUI4nMqUxxzPXcLDv8BvszY4TM5L4LUHU5+N9M3KidmK1mgaZDAMgQtZlzLE4bh2b5Jg==
+X-Received: by 2002:a17:907:77cc:b0:94e:e30e:7245 with SMTP id
+ kz12-20020a17090777cc00b0094ee30e7245mr8588629ejc.8.1681818131388; 
+ Tue, 18 Apr 2023 04:42:11 -0700 (PDT)
+Received: from localhost.localdomain ([91.90.166.178])
+ by smtp.gmail.com with ESMTPSA id
+ b1-20020a170906038100b0094f5f6ba306sm3484055eja.41.2023.04.18.04.42.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 18 Apr 2023 03:58:35 -0700 (PDT)
-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+ Tue, 18 Apr 2023 04:42:10 -0700 (PDT)
+From: Witold Lipieta <witold.lipieta@thaumatec.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Apr 2023 12:58:13 +0200
-Message-Id: <20230418105814.2982312-1-raphael.melotte@mind.be>
-X-Mailer: git-send-email 2.39.1
+Date: Tue, 18 Apr 2023 13:42:04 +0200
+Message-Id: <20230418114204.1773697-1-witold.lipieta@thaumatec.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1681815516; x=1684407516;
+ d=thaumatec-com.20221208.gappssmtp.com; s=20221208; t=1681818131; x=1684410131;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Ijf86ISrzPWIUkSRGUkHtNPC9ZMbUTv84BnB3KlDCmA=;
- b=S4mHoZrJxxdeU45P0NH6h4xjYbgv2mwKuDKvhVLx6+IF0FMNX3+T1x5BUjoLJ5GrmT
- 5F7LJPsgUiP6+xs9Or0vOJK6HUC4P2lmoE/7nmxN8jnhAKw88K238o1lw6VRlN9Rzwi9
- fE6cwae2Vk+9CbOmIzIH/MTLIcQlrn/ZIKi3/Hl+WTUyUa7khjZcDRlv5+7TRrGtZo5D
- FasQbMaAdWBRmLR3Mzi52yB/LnU5U/3z/Qa7gO6b4sSN6AFqFMypACfYT44gVZK+1tKr
- JTlMBSapMzR0mtYSqtuwB74H9ylBAH6flkMqx0htsD2RgzauNc1HL00qXRZUgSURuEW1
- m70A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=S4mHoZrJ
-Subject: [Buildroot] [PATCH 1/1] package: {, python-py}mupdf: bump to 1.22.0
+ bh=8yHW5wPi54FtNU1OwKn+T1ZZu5RA1EzVMS0MFs4CGdo=;
+ b=S7mzljZVYHyYJGu0Oot8RUGSlpusOudQEcy6DLtgTdfMPe7qOMF3tkyp9VwTJW6vXj
+ eIKVTWcHSbraRlVQRqX0AIoifm1HTkF9i3l1ho+EU3sZ/x5d10vsS4PCdMOzQg1cIIyS
+ kG/FqbrowJItgJmmNIYiai5KQrW/dENfS2dkFKWRgOx01Zc4FJtQ112pPwQCzRxjNN6I
+ GsGS0zmsHMt8U+K9i1KGP5BCG9FRqyLMGZbUOOjqIRqU6jfpCSzTxo6hvEJmcz/7r/eW
+ WUxayG+bIlnt6l3qj1bftjxEVtwxSBkHkX0fzIwNnjEM6JI2CNpBdD32nZ+JXakJK3fG
+ AASg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=thaumatec-com.20221208.gappssmtp.com
+ header.i=@thaumatec-com.20221208.gappssmtp.com header.a=rsa-sha256
+ header.s=20221208 header.b=S7mzljZV
+Subject: [Buildroot] [PATCH v2 1/1] package/python-segno: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,79 +94,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+Cc: Witold Lipieta <witold.lipieta@thaumatec.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxzbyByZW1vdmUgdGhlIGxhc3QgdHdvICcqX0lHTk9SRV9DVkVTJywgc2luY2UgdGhlIGNvcnJl
-c3BvbmRpbmcKcGF0Y2hlcyBoYXZlIGJlZW4gcmVtb3ZlZCAodGhleSBhcmUgbm93IHBhcnQgb2Yg
-dXBzdHJlYW0pIGluCjFmYjY0NjgwYmZmYmRhMWU1ZmI5NTIxNTA2NTJmNzMyMDUzMjI3MDcuCgpT
-aWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+
-Ci0tLQogcGFja2FnZS9tdXBkZi9tdXBkZi5oYXNoICAgICAgICAgICAgICAgICAgIHwgNCArKy0t
-CiBwYWNrYWdlL211cGRmL211cGRmLm1rICAgICAgICAgICAgICAgICAgICAgfCA4ICstLS0tLS0t
-CiBwYWNrYWdlL3B5dGhvbi1weW11cGRmL3B5dGhvbi1weW11cGRmLmhhc2ggfCA0ICsrLS0KIHBh
-Y2thZ2UvcHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVwZGYubWsgICB8IDQgKystLQogNCBmaWxl
-cyBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDEzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvbXVwZGYvbXVwZGYuaGFzaCBiL3BhY2thZ2UvbXVwZGYvbXVwZGYuaGFzaAppbmRl
-eCBlZjkxYWJlZTE4Li4xZjYzNjA5N2VkIDEwMDY0NAotLS0gYS9wYWNrYWdlL211cGRmL211cGRm
-Lmhhc2gKKysrIGIvcGFja2FnZS9tdXBkZi9tdXBkZi5oYXNoCkBAIC0xLDggKzEsOCBAQAogIyBG
-cm9tIGh0dHBzOi8vbXVwZGYuY29tL2Rvd25sb2Fkcy9pbmRleC5odG1sOgotc2hhMSAgZjc1OWQ5
-MTRlYzZhZDZhM2I5NmY5OTQ2MzBmZjcwYjc1ODIzODMxYiAgbXVwZGYtMS4yMS4xLXNvdXJjZS50
-YXIubHoKK3NoYTEgIGI5OTA3NzI5ZDYwNGYwYmYzODQ2YjQ1Y2Q1ODkxZTEwZDdhNjZlMjQgIG11
-cGRmLTEuMjIuMC1zb3VyY2UudGFyLmx6CiAKICMgTG9jYWxseSBjb21wdXRlZDoKLXNoYTI1NiAg
-NjZhNDM0OTA2NzZjN2Y3YzJmZjc0MDY3MzI4ZWYxMzI4NTUwNmZjYzc1OGQzNjVhZTI3ZWEzNjY4
-YmQ1ZTYyMCAgbXVwZGYtMS4yMS4xLXNvdXJjZS50YXIubHoKK3NoYTI1NiAgYmVkNzhhMGFiZjg0
-OTZiMzBjNTIzNDk3MjkyZGU5NzlkYjYzM2VjYTU3ZTAyZjZjZDBmM2M3YzA0MjU1MWMzZSAgbXVw
-ZGYtMS4yMi4wLXNvdXJjZS50YXIubHoKIAogIyBIYXNoIGZvciBsaWNlbnNlIGZpbGVzOgogc2hh
-MjU2ICA1N2M4ZmYzM2M5YzBjZmMzZWYwMGU2NTBhMWNjOTEwZDdlZTQ3OWE4YmM1MDlmNmM5MjA5
-YTdjMmExMTM5OWQ2ICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL211cGRmL211cGRmLm1r
-IGIvcGFja2FnZS9tdXBkZi9tdXBkZi5tawppbmRleCBkNmNjNDA3YzQ5Li4wODg5NGQ3OTgwIDEw
-MDY0NAotLS0gYS9wYWNrYWdlL211cGRmL211cGRmLm1rCisrKyBiL3BhY2thZ2UvbXVwZGYvbXVw
-ZGYubWsKQEAgLTUsNyArNSw3IEBACiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCiAjIHB5dGhv
-bi1weW11cGRmJ3MgdmVyc2lvbiBtdXN0IG1hdGNoIG11cGRmJ3MgdmVyc2lvbgotTVVQREZfVkVS
-U0lPTiA9IDEuMjEuMQorTVVQREZfVkVSU0lPTiA9IDEuMjIuMAogTVVQREZfU09VUkNFID0gbXVw
-ZGYtJChNVVBERl9WRVJTSU9OKS1zb3VyY2UudGFyLmx6CiBNVVBERl9TSVRFID0gaHR0cHM6Ly9t
-dXBkZi5jb20vZG93bmxvYWRzL2FyY2hpdmUKIE1VUERGX0xJQ0VOU0UgPSBBR1BMLTMuMCsKQEAg
-LTIyLDEyICsyMiw2IEBAIE1VUERGX0RFUEVOREVOQ0lFUyA9IFwKIAl4bGliX2xpYlgxMSBcCiAJ
-emxpYgogCi0jIDAwMDItQnVnLTcwMzM2Ni1GaXgtZG91YmxlLWZyZWUtb2Ytb2JqZWN0LWR1cmlu
-Zy1saW5lYXJpemF0aW9uLnBhdGNoCi1NVVBERl9JR05PUkVfQ1ZFUyArPSBDVkUtMjAyMS0zNDA3
-Ci0KLSMgMDAwMy1CdWctNzAzNzkxLVN0YXktd2l0aGluLWhhc2gtdGFibGUtbWF4LWtleS1zaXpl
-LWluLWNhY2hlZC1jb2xvci1jb252ZXJ0ZXIucGF0Y2gKLU1VUERGX0lHTk9SRV9DVkVTICs9IENW
-RS0yMDIxLTM3MjIwCi0KICMgVGhlIHBrZy1jb25maWcgbmFtZSBmb3IgZ3VtYm8tcGFyc2VyIGlz
-IGBndW1ib2AuCiBNVVBERl9QS0dfQ09ORklHX1BBQ0tBR0VTID0gXAogCWZyZWV0eXBlMiBcCmRp
-ZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1weW11cGRmL3B5dGhvbi1weW11cGRmLmhhc2ggYi9w
-YWNrYWdlL3B5dGhvbi1weW11cGRmL3B5dGhvbi1weW11cGRmLmhhc2gKaW5kZXggYmRhMzU2ZDkw
-NS4uOWZkODE1MDA4OCAxMDA2NDQKLS0tIGEvcGFja2FnZS9weXRob24tcHltdXBkZi9weXRob24t
-cHltdXBkZi5oYXNoCisrKyBiL3BhY2thZ2UvcHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVwZGYu
-aGFzaApAQCAtMSw1ICsxLDUgQEAKICMgbWQ1LCBzaGEyNTYgZnJvbSBodHRwczovL3B5cGkub3Jn
-L3B5cGkvcHltdXBkZi9qc29uCi1tZDUgIGJlMTA5NjM2NzlhYzZkNTJiN2FlZDIzMTFjYTdlM2M1
-ICBQeU11UERGLTEuMjEuMS50YXIuZ3oKLXNoYTI1NiAgZjgxNTc0MWE0MzVjNjJhMDAzNmJiY2Jm
-NWZhNmM1MzM1NjdiZDY5YzUzMzhkNDEzNzE0ZmM1N2IyMmRiOTNlMCAgUHlNdVBERi0xLjIxLjEu
-dGFyLmd6CittZDUgIDQ2OGZlNTYzNzVhMWZjYTk5ZTgzZmUwYWEwYjlmOGJkICBQeU11UERGLTEu
-MjIuMC50YXIuZ3oKK3NoYTI1NiAgNmUxNjk0ZTVjMGNkOGI5MmQ1MDNhNTA2ZWU4ZTRiYTFiZWQ3
-Njg1MjhkZTU4Njg4OWQzZWM5MGU5ZGM0YTdkMyAgUHlNdVBERi0xLjIyLjAudGFyLmd6CiAjIExv
-Y2FsbHkgY29tcHV0ZWQgc2hhMjU2IGNoZWNrc3Vtcwogc2hhMjU2ICA1N2M4ZmYzM2M5YzBjZmMz
-ZWYwMGU2NTBhMWNjOTEwZDdlZTQ3OWE4YmM1MDlmNmM5MjA5YTdjMmExMTM5OWQ2ICBDT1BZSU5H
-CmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1weW11cGRmL3B5dGhvbi1weW11cGRmLm1rIGIv
-cGFja2FnZS9weXRob24tcHltdXBkZi9weXRob24tcHltdXBkZi5tawppbmRleCA3MDQ0OGU4ZDkw
-Li41MWQ5NTVkODM1IDEwMDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbi1weW11cGRmL3B5dGhvbi1w
-eW11cGRmLm1rCisrKyBiL3BhY2thZ2UvcHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVwZGYubWsK
-QEAgLTUsOSArNSw5IEBACiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCiAjIHB5dGhvbi1weW11
-cGRmJ3MgdmVyc2lvbiBtdXN0IG1hdGNoIG11cGRmJ3MgdmVyc2lvbgotUFlUSE9OX1BZTVVQREZf
-VkVSU0lPTiA9IDEuMjEuMQorUFlUSE9OX1BZTVVQREZfVkVSU0lPTiA9IDEuMjIuMAogUFlUSE9O
-X1BZTVVQREZfU09VUkNFID0gUHlNdVBERi0kKFBZVEhPTl9QWU1VUERGX1ZFUlNJT04pLnRhci5n
-egotUFlUSE9OX1BZTVVQREZfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9w
-YWNrYWdlcy8zMC80NC85ZmNlNzk2ODllNWRmN2RlZWJlMmQxN2NiMmI5YjJhNmI4ODg0MzljMjQx
-ZTcxMjk2ZTczMmFlZmE2NDkKK1BZVEhPTl9QWU1VUERGX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5
-dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvMjgvYmEvZDZiYjZmZDY3OGU4Mzk2ZDdiOTQ0ODcwMjg2
-ZmIyNWZkNmY0OTliOGNiNTk5YjU0MzZjOGY3MjVhZGJmCiBQWVRIT05fUFlNVVBERl9TRVRVUF9U
-WVBFID0gc2V0dXB0b29scwogUFlUSE9OX1BZTVVQREZfTElDRU5TRSA9IEFHUEwtMy4wKwogUFlU
-SE9OX1BZTVVQREZfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKLS0gCjIuMzkuMQoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+segno 1.5.2 https://pypi.org/project/segno/
+
+Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
+---
+Changes v1 -> v2:
+ - resolve runtime dependency
+ - add basic runtime check
+---
+ package/Config.in                                  |  1 +
+ package/python-segno/Config.in                     |  7 +++++++
+ package/python-segno/python-segno.hash             |  5 +++++
+ package/python-segno/python-segno.mk               | 14 ++++++++++++++
+ .../testing/tests/package/sample_python_segno.py   | 13 +++++++++++++
+ support/testing/tests/package/test_python_segno.py | 11 +++++++++++
+ 6 files changed, 51 insertions(+)
+ create mode 100644 package/python-segno/Config.in
+ create mode 100644 package/python-segno/python-segno.hash
+ create mode 100644 package/python-segno/python-segno.mk
+ create mode 100644 support/testing/tests/package/sample_python_segno.py
+ create mode 100644 support/testing/tests/package/test_python_segno.py
+
+diff --git a/package/Config.in b/package/Config.in
+index eaac32a01a..a4ad4c6ee8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1274,6 +1274,7 @@ menu "External python modules"
+ 	source "package/python-sdnotify/Config.in"
+ 	source "package/python-secretstorage/Config.in"
+ 	source "package/python-see/Config.in"
++	source "package/python-segno/Config.in"
+ 	source "package/python-selenium/Config.in"
+ 	source "package/python-semver/Config.in"
+ 	source "package/python-sentry-sdk/Config.in"
+diff --git a/package/python-segno/Config.in b/package/python-segno/Config.in
+new file mode 100644
+index 0000000000..3957cd79bf
+--- /dev/null
++++ b/package/python-segno/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SEGNO
++	bool "python-segno"
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	help
++	  QR Code and Micro QR Code generator for Python 2 and Python 3
++
++	  https://github.com/heuer/segno/
+diff --git a/package/python-segno/python-segno.hash b/package/python-segno/python-segno.hash
+new file mode 100644
+index 0000000000..286bdf3615
+--- /dev/null
++++ b/package/python-segno/python-segno.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/segno/json
++md5  6d7c852f951501cd3af85ef061d6bee4  segno-1.5.2.tar.gz
++sha256  983424b296e62189d70fc73460cd946cf56dcbe82b9bda18c066fc1b24371cdc  segno-1.5.2.tar.gz
++# Locally computed sha256 checksums
++sha256  98b0a86ca0cbf68c95051741bc983425a43fdece775fe0e2712e66be459cc9d1  LICENSE
+diff --git a/package/python-segno/python-segno.mk b/package/python-segno/python-segno.mk
+new file mode 100644
+index 0000000000..c832f38f4b
+--- /dev/null
++++ b/package/python-segno/python-segno.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-segno
++#
++################################################################################
++
++PYTHON_SEGNO_VERSION = 1.5.2
++PYTHON_SEGNO_SOURCE = segno-$(PYTHON_SEGNO_VERSION).tar.gz
++PYTHON_SEGNO_SITE = https://files.pythonhosted.org/packages/90/2a/2fedf1023f9273d8326362df7936748ebadef92ba53ab7970d9b8df1a6c2
++PYTHON_SEGNO_SETUP_TYPE = setuptools
++PYTHON_SEGNO_LICENSE = BSD-3-Clause
++PYTHON_SEGNO_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_segno.py b/support/testing/tests/package/sample_python_segno.py
+new file mode 100644
+index 0000000000..c96d6087ce
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_segno.py
+@@ -0,0 +1,13 @@
++import segno
++import os
++import tempfile
++
++qr = segno.make_qr('http:/www.example.org/')
++with tempfile.NamedTemporaryFile('wb', suffix='.png', delete=False) as f:
++    fn = f.name
++qr.save(fn)
++expected = b'\211PNG\r\n\032\n'  # PNG magic number
++with open(fn, mode='rb') as f:
++    val = f.read(len(expected))
++os.unlink(fn)
++assert expected == val
+diff --git a/support/testing/tests/package/test_python_segno.py b/support/testing/tests/package/test_python_segno.py
+new file mode 100644
+index 0000000000..75e7124399
+--- /dev/null
++++ b/support/testing/tests/package/test_python_segno.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Segno(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_SEGNO=y
++        """
++    sample_scripts = ["tests/package/sample_python_segno.py"]
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
