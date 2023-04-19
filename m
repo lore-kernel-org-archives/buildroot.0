@@ -1,91 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FDD1C77B75
-	for <buildroot@archiver.kernel.org>; Tue, 18 Apr 2023 21:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1943C6FD18
+	for <buildroot@archiver.kernel.org>; Wed, 19 Apr 2023 00:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73A6540060;
-	Tue, 18 Apr 2023 21:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73A6540060
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IEjRjzmVFhuO; Tue, 18 Apr 2023 21:58:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52655414CA;
-	Tue, 18 Apr 2023 21:58:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52655414CA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 400E21BF2FC
- for <buildroot@lists.busybox.net>; Tue, 18 Apr 2023 21:58:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 194EC40160
- for <buildroot@lists.busybox.net>; Tue, 18 Apr 2023 21:58:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 194EC40160
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7AC7241783;
+	Wed, 19 Apr 2023 00:27:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7AC7241783
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vuKh0ZNyHkEs for <buildroot@lists.busybox.net>;
- Tue, 18 Apr 2023 21:58:26 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vPStEvDOHwUp; Wed, 19 Apr 2023 00:27:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B9F5941771;
+	Wed, 19 Apr 2023 00:27:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9F5941771
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ED5211C4316
+ for <buildroot@lists.busybox.net>; Wed, 19 Apr 2023 00:27:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFDC783D1C
+ for <buildroot@lists.busybox.net>; Wed, 19 Apr 2023 00:27:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFDC783D1C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gjoyby2lHqul for <buildroot@lists.busybox.net>;
+ Wed, 19 Apr 2023 00:27:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC3F1400E2
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com
- [IPv6:2607:f8b0:4864:20::232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC3F1400E2
- for <buildroot@buildroot.org>; Tue, 18 Apr 2023 21:58:25 +0000 (UTC)
-Received: by mail-oi1-x232.google.com with SMTP id
- 5614622812f47-38e465291bbso310726b6e.2
- for <buildroot@buildroot.org>; Tue, 18 Apr 2023 14:58:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2E1081EAD
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com
+ [IPv6:2607:f8b0:4864:20::f2c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A2E1081EAD
+ for <buildroot@buildroot.org>; Wed, 19 Apr 2023 00:27:10 +0000 (UTC)
+Received: by mail-qv1-xf2c.google.com with SMTP id op30so19527242qvb.3
+ for <buildroot@buildroot.org>; Tue, 18 Apr 2023 17:27:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1681855105; x=1684447105;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=xpJbvPTnkz3EZLQiV/+bzEWarLTQQ4Fh3VkgH3JUd7E=;
- b=MVhXopLXZpvmlQBCHwlEyMXflRbkwGCXt2jWWxg5oUMlytXkzigIW0oGOBljlEw5J+
- cciIPmyEOp1XZ6RiMSgu1MeF2aNGGXy5gi+ssuh+I/v9ZuhioRXsDPQU1ybbV19i45Y6
- B4d6c2mgglj4qFDc9ylndlKaorvfqrYaMqR2jk4Vv5DqRQJi4Chj1mya8rZNi3hvVl+7
- yRYuLy2+c5EuOFMrYJKaZAi0yg40Jw49QyFcygz6X1wJIQi/9DFGNvbJGJa6JFI/irfW
- ltqZM90JwC6H/COXV/WW3xjdDuAmSc05HDKl6Ye4T1P24il+RzaTVBiWwvkk2Y4c5Or0
- yMSg==
-X-Gm-Message-State: AAQBX9f+PJw11laGo434Ga58YvC7T1HqQmLYZif+ZftMUwOhwXqXeTIM
- 1f7Qs/0yo5d+JO+umDcXMBiN4d57gyjnznQcCpT5RY+FolGhkw==
-X-Google-Smtp-Source: AKy350Zgr9REcCA17SRyP5A2nj219uidqh323apU14pvqSAmhQfX3sBBaXvN/seRgTH6pIHPdPWEXLhTqfTgNMYXpqc=
-X-Received: by 2002:aca:bc0b:0:b0:38b:c1ae:cb0b with SMTP id
- m11-20020acabc0b000000b0038bc1aecb0bmr1068715oif.4.1681855104700; Tue, 18 Apr
- 2023 14:58:24 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1681864029; x=1684456029;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=gdmNOuC25RbBRl8H/Zyl2nRZuUmMfRvhbx60siajg90=;
+ b=ecap6AwIY45dvRu5JMEe0xQxvkh7oDIXkimatWNmv9uGkTlzgGIidhNog20Sg8YRkW
+ fJKebn8UYv9K+W1yHjd5hQHpmi6The1qHRHlu6jIBhEtyMkAzom2rOzsHAJbGdvgya2S
+ i3DeROldOWEDazS6eL3Q/0oxO6m/fzxCuKVd4UjvPPJ0QVoNHnSUCqIO95WjEZ7SOy2q
+ SgakU46kiO3+36bGu8WPy6EHOMXnAsfIhH7IVC++1Ql55L8TRAIA2/UPUGDARTY9zTR/
+ Th3wpUk0IvNmQpgv55OVMbrYqsj/jdAbcGZOQW4QLnorz9NSnlL8VWIfkNjA0kcLcWec
+ kWgA==
+X-Gm-Message-State: AAQBX9ff3kASMr2l/4A25Sm31FWY4uTc8LxmiLUSnLyoaZKQQum3T3Hp
+ os7/CDOl84lOYGAfi78UdY8=
+X-Google-Smtp-Source: AKy350bl31SPcx8R/mtvWjav601qFrXDRQxeKiqXUtrty/C7QMy16dA0TOGUg4oYpbWtRHGVsvk6Xg==
+X-Received: by 2002:a05:6214:5008:b0:5a6:24f6:724d with SMTP id
+ jo8-20020a056214500800b005a624f6724dmr31630088qvb.13.1681864029323; 
+ Tue, 18 Apr 2023 17:27:09 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+ by smtp.gmail.com with ESMTPSA id
+ f3-20020a05621400c300b005dd8b9345d3sm4034208qvs.107.2023.04.18.17.27.06
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 18 Apr 2023 17:27:07 -0700 (PDT)
+Message-ID: <b6a35fbd-7ece-31e5-d7d8-9adbd4002972@gmail.com>
+Date: Tue, 18 Apr 2023 17:27:05 -0700
 MIME-Version: 1.0
-References: <20220812101718.47491-1-fontaine.fabrice@gmail.com>
- <20230415212933.GU2819@scaer>
- <CADvTj4o4dPhWnKiQ0dvm6cJSqwY+ZtbyE0Gwhh8A5Nc5dKPYOQ@mail.gmail.com>
- <20230416082556.GW2819@scaer> <20230416111659.GY2819@scaer>
- <CADvTj4q-qJ6EiYxOcNfgQRL1q7UPNp9SC7s_CwBVeCk=6PrMqw@mail.gmail.com>
- <20230418174452.GP2819@scaer>
-In-Reply-To: <20230418174452.GP2819@scaer>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 18 Apr 2023 15:58:13 -0600
-Message-ID: <CADvTj4o9KPC3_knDp4KjKwyyFQZ4HPsbSj4n21dqT6bhtWM9pw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220927221133.594071-1-f.fainelli@gmail.com>
+ <20230417195816.GN2819@scaer>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230417195816.GN2819@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1681855105; x=1684447105;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xpJbvPTnkz3EZLQiV/+bzEWarLTQQ4Fh3VkgH3JUd7E=;
- b=E+sgPz08bQf7HIl4qB5XgvbSuYDWdjujUMdBLAlU64CQmpFW5pTX4fiRBatjCAzHR7
- /Ef/IywI9KVkcagV7T8z0kTvyciOGFXmLW7q5IGzL9Q/X/zOV1IF6OwGnqAf7aL0jbpU
- 7z+reqgZTYZx1U0NsBEaqA6FQvx1/fdvyyhyvlwAKWnUZ3/xV8WEqxdMOk6owfellRHb
- JpZDoNgIFGkNoz8JzsaHM+xQNH/KT0UTDd++CdMV9knWfsJ1UXTstgW+KjIGmGo8Zock
- LZ5eVWXIlaTSuNdPrM4N6+gEbxvSBFRxRUBlRI6y4qHvwutgbLAn4EVR7MGR70bDQCyh
- fXag==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20221208; t=1681864029; x=1684456029;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=gdmNOuC25RbBRl8H/Zyl2nRZuUmMfRvhbx60siajg90=;
+ b=VTt956UogClia3ppF9/2fZ+k+vHSwu/cYSmW88aks6p7lSWEdna5OA8OTvFWf3C/PP
+ AtSTN7vGuo72Fwx4BKEKGOyCjfHhflUejQfvccb3UQV2NvGHwJHoMYkZfm1VgzDbX/dz
+ 9NJ8SX+hMryBjlIHS6fqxWaaZhuplJXAcPQC1R0aWhEunJ1W+LpXGZZSMstLIoF+ab9E
+ l83lhddcL0eaWibX6jhwZddCFSF2gWOhFVRfFuWXeJUGLTblZa6jlr/ZaiReltVfzCmp
+ X1BuUi7jb2tsZJ0+Uj2nanWFuHs8CZAfVggPY1Qb8fle8KUda+wV1fODhg+1RLO98L5m
+ KBRg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=E+sgPz08
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/poppler: fix introspection build
+ header.a=rsa-sha256 header.s=20221208 header.b=VTt956Uo
+Subject: Re: [Buildroot] [PATCH] package/linux-tools: Exclude checking PE
+ binaries from perf test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,60 +100,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCBBcHIgMTgsIDIwMjMgYXQgMTE6NDTigK9BTSBZYW5uIEUuIE1PUklOIDx5YW5uLm1v
-cmluLjE5OThAZnJlZS5mcj4gd3JvdGU6Cj4KPiBKYW1lcywgQWxsLAo+Cj4gT24gMjAyMy0wNC0x
-OCAwMjowMyAtMDYwMCwgSmFtZXMgSGlsbGlhcmQgc3Bha2UgdGh1c2x5Ogo+ID4gT24gU3VuLCBB
-cHIgMTYsIDIwMjMgYXQgNToxN+KAr0FNIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBm
-cmVlLmZyPiB3cm90ZToKPiA+ID4gT24gMjAyMy0wNC0xNiAxMDoyNSArMDIwMCwgWWFubiBFLiBN
-T1JJTiBzcGFrZSB0aHVzbHk6Cj4gPiA+ID4gT24gMjAyMy0wNC0xNSAyMDo0NCAtMDYwMCwgSmFt
-ZXMgSGlsbGlhcmQgc3Bha2UgdGh1c2x5Ogo+ID4gPiA+ID4gT24gU2F0LCBBcHIgMTUsIDIwMjMg
-YXQgMzozMOKAr1BNIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90
-ZToKPiA+ID4gPiBbLS1TTklQLS1dCj4gPiA+ID4gPiA+IEhvd2V2ZXIsIEkgd291bGQgcmVhbGx5
-IGxpa2UgdG8gdW5kZXJzdGFuZCB3aHkgd2UgZG9uJ3QgaGF2ZSBtb3JlCj4gPiA+ID4gPiA+IHBh
-Y2thZ2VzIHRoYXQgYXJlIGJyb2tlbi4gSXMgaXQgYmVjYXVzZSBwb3BwbGVyIGlzIHRoZSBvbmx5
-IG9uZSB3aXRoCj4gPiA+ID4gPiA+IGluY2x1ZGUgZGlyZWN0aXZlcyBpbiBoaXMgZ2lyIGZpbGUs
-IHdoaWNoIG1lYW5zIGl0IG5lZWRzIGFjY2VzcyB0byB0aGUKPiA+ID4gPiA+ID4gaW5zdGFsbGVk
-IGdpciBmaWxlcyBmcm9tIG90aGVyIHBhY2thZ2VzICh0aG9zZSBmcm9tIGdvaSk/Cj4gPiA+ID4g
-PiA+Cj4gPiA+ID4gPiA+IE9yIGlzIGl0IGJlY2F1c2UgaXQgaXMgdGhlIG9ubHkgb25lIHRoYXQg
-YWxyZWFkeSBwYXNzZXMgYW4gZXhwbGljaXQKPiA+ID4gPiA+ID4gLS1pbmNsdWRlZGlyIG9wdGlv
-biB0byBnLWlyLWNvbXBpbGVyLCBhbmQgdGhhdCBkaXNhYmxlcyBzZWFyY2hpbmcgdGhlCj4gPiA+
-ID4gPiA+IHN0YW5kYXJkIGRpcmVjdG9yeT8KPiA+ID4gPiA+IEZyb20gdGhlIGxvb2tzIG9mIGl0
-IG1vc3Qgb2Ygb3VyIHBhY2thZ2VzIHdpdGggYSBnb2JqZWN0LWludHJvc3BlY3Rpb24KPiA+ID4g
-PiA+IGRlcGVuZGVuY3kgYXJlIG1lc29uIGJhc2VkIHdoaWNoIHVzZSB0aGUgbmF0aXZlIG1lc29u
-IGludGVncmF0aW9uLgo+ID4gPiA+IEFoLCBnb29kIHBvaW50LCB0aGF0IHdvdWxkIGV4cGxhaW4u
-Cj4gPiA+IFVuZm9ydHVhbnRlbHksIHRoYXQgYXNzdW1wdGlvbiBpcyB3cm9uZzogZ3Jhbml0ZSB1
-c2VzIG1lc29uLCBidXQgZmFpbHMKPiA+ID4gaW4gdGhlIHNhbWUgd2F5Ogo+ID4gV2hpbGUgaXQn
-cyB0cnVlIGl0IGRvZXMgdXNlIG1lc29uLi4uaXQgZG9lcyBub3QgaW4gZmFjdCB1c2UgdGhlIG5h
-dGl2ZSBtZXNvbgo+ID4gaW50ZWdyYXRpb24gYnV0IHJhdGhlciB1c2VzIGEgcHJvamVjdCBzcGVj
-aWZpYyBnb2JqZWN0LWludHJvc3BlY3Rpb24gZ2VuZXJhdG9yOgo+ID4gaHR0cHM6Ly9naXRodWIu
-Y29tL2VsZW1lbnRhcnkvZ3Jhbml0ZS9ibG9iLzYuMC4wL2xpYi9tZXNvbi5idWlsZCNMMTAyLUwx
-MjEKPgo+IFN1cmUsIGJ1dCB0aGVuIG1heWJlIGl0IGJlZ3MgZm9yIGEgZ2VuZXJpYyBzb2x1dGlv
-biwgdGhhdCB3b3JrcyBmb3IgYWxsCj4gcGFja2FnZXM/CgpJIHJlcG9ydGVkIHRoaXMgaXNzdWUg
-dXBzdHJlYW0gdG8gZ3Jhbml0ZToKaHR0cHM6Ly9naXRodWIuY29tL2VsZW1lbnRhcnkvZ3Jhbml0
-ZS9pc3N1ZXMvNjQ1Cgo+Cj4gTWF5YmUgc29tZXRoaW5nIGxpa2Ugd2UgdXNlZCBHSVJfRVhUUkFf
-TElCU19QQVRIIGZyb20gdGhlIGVudmlyb25tZW50LAo+IHdlIGNvdWxkIGFsbG93IHBhY2xhZ2Vz
-IHRvIHNwZWNpZnkgYWRkaXRpb25hbCBpbmNsdWRlIGRpcmVjdG9yaWVzIHdpdGgKPiBHSVJfRVhU
-UkFfSU5DTFVERV9QQVRIID8KCkknbSBub3QgcmVhbGx5IHN1cmUgaWYgdGhpcyBtYWtlcyBzZW5z
-ZSB0byBkbyBmb3IgYWxsIHBhY2thZ2VzIGFzIGl0CmNvdWxkIGhhdmUgc2lkZQplZmZlY3RzIHdo
-aWNoIG1heSBpbnRlcmZlcmUgd2l0aCBtZXNvbidzIG5hdGl2ZSBnb2JqZWN0LWludHJvc3BlY3Rp
-b24KaW50ZWdyYXRpb24uCgo+Cj4gUmVnYXJkcywKPiBZYW5uIEUuIE1PUklOLgo+Cj4gLS0KPiAu
-LS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0t
-Li0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+IHwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVt
-YmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cj4gfCArMzMg
-NjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9f
-XyAgICAgICAgICAgICAgIHwKPiB8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0t
-LS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAo+IHwgaHR0cDovL3lt
-b3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNv
-bnNwaXJhY3kuICB8Cj4gJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0t
-LS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+
+
+On 4/17/2023 12:58 PM, Yann E. MORIN wrote:
+> Florian, All,
+> 
+> On 2022-09-27 15:11 -0700, Florian Fainelli spake thusly:
+>> Since upstream Linux commit ed21d6d7c48e6e96c2d617e304a7ebfbd17b1807
+>> ("perf tests: Add test for PE binary format support") present in >=
+>> v5.10 there is an unconditional installation of PE binaries which will
+>> be rejected by the check-bin-arch script.
+>>
+>> Make sure that these binaries are excluded from being checked to allow
+>> the installation of the perf tests.
+>>
+>> Fixes: 6fcdaa4c5096 ("package/linux-tools: Allow installation of perf scripts")
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> I've finally applied to master, thanks.
+> 
+> However, I wonder if we could not be a bit more robust in check-bin-arch
+> itself, something like:
+> 
+>      diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+>      index 27cc59bca0..2920a95ae3 100755
+>      --- a/support/scripts/check-bin-arch
+>      +++ b/support/scripts/check-bin-arch
+>      @@ -58,6 +58,9 @@ exitcode=0
+>       IFS="
+>       "
+>       
+>      +# ELF magic
+>      +ELF_MAGIC="$(printf "\x7f\x45\x4c\x46")"
+>      +
+>       while read f; do
+>       	for ignore in "${IGNORES[@]}"; do
+>       		if [[ "${f}" =~ ^"${ignore}" ]]; then
+>      @@ -71,13 +74,19 @@ while read f; do
+>       		continue
+>       	fi
+>       
+>      +	# Check if it looks like it is an ELF file
+>      +	read -N 4 magic <"${TARGET_DIR}/${f}"
+>      +	if [ "${magic}" != "${ELF_MAGIC}" ]; then
+>      +		continue
+>      +	fi
+>      +
+>       	# Get architecture using readelf. We pipe through 'head -1' so
+>       	# that when the file is a static library (.a), we only take
+>       	# into account the architecture of the first object file.
+>       	arch=$(LC_ALL=C ${readelf} -h "${TARGET_DIR}/${f}" 2>&1 | \
+>       		       sed -r -e '/^  Machine: +(.+)/!d; s//\1/;' | head -1)
+>       
+>      -# If no architecture found, assume it was not an ELF file
+>      +# If no architecture found, assume it was in fact not an ELF file
+>       	if test "${arch}" = "" ; then
+>       		continue
+>       	fi
+> 
+> (with the read -N 4 trick as discussed in [0])
+> 
+> Thoughts?
+
+That would work for me!
+-- 
+Florian
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
