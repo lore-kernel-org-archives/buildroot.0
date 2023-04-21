@@ -4,120 +4,120 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2554C77B71
-	for <buildroot@archiver.kernel.org>; Fri, 21 Apr 2023 14:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD80C7618E
+	for <buildroot@archiver.kernel.org>; Fri, 21 Apr 2023 14:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC1EA6FF70;
-	Fri, 21 Apr 2023 14:12:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC1EA6FF70
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95D5D6FF8A;
+	Fri, 21 Apr 2023 14:13:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95D5D6FF8A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mjBVMK_nookg; Fri, 21 Apr 2023 14:12:51 +0000 (UTC)
+	with ESMTP id AS23Pp2JfmEb; Fri, 21 Apr 2023 14:13:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35B2D6FF6C;
-	Fri, 21 Apr 2023 14:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35B2D6FF6C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BBCCB1C279D
- for <buildroot@lists.busybox.net>; Fri, 21 Apr 2023 14:12:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B30296FF6C;
+	Fri, 21 Apr 2023 14:13:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B30296FF6C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EFBA1C279D
+ for <buildroot@lists.busybox.net>; Fri, 21 Apr 2023 14:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0D2C428E9
- for <buildroot@lists.busybox.net>; Fri, 21 Apr 2023 14:12:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0D2C428E9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B4E381DFF
+ for <buildroot@lists.busybox.net>; Fri, 21 Apr 2023 14:12:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B4E381DFF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 29T9jaubHwng for <buildroot@lists.busybox.net>;
- Fri, 21 Apr 2023 14:12:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JEStiYBCD3Ra for <buildroot@lists.busybox.net>;
+ Fri, 21 Apr 2023 14:12:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31B4B428E7
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-sn1nam02olkn20827.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7ea9::827])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 31B4B428E7
- for <buildroot@buildroot.org>; Fri, 21 Apr 2023 14:12:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9E4B81DF4
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam11olkn20800.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eae::800])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A9E4B81DF4
+ for <buildroot@buildroot.org>; Fri, 21 Apr 2023 14:12:48 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a7dhEeVcp3BwD+IpqrmQDENggXkuIPDq8ac0otBiPy4lXs2f1HK4xh1ACTQYpi+JYR1DF+6L+8fgnmIxqyE92flTI2rcpl9otX0dr1KjrcujYeqFfZilkRWuUgYGbteGPePOW40lYKLy4dGSsDsyNSytfZyo+77QPliWNTpZ01uQCpqTZTwXp9T59D+TFPEaeCdDWsZjsnxfzFb25JiYmzXk3sFKLmqh9EbNvt6y+aXbRbU64T97HOg6+qbc9ehGSo4DRc0uLZo76XzWbwKmwHYCDVYZpCQfD2vMUGAuh6eJ9dGUIdJiKcxJLRoJa3WGomviQfVsIlnmp1C8v74DMg==
+ b=LSiiXLYPm90ZnxnIPHNSO75HqbF85LB6cb8wqfItRbiYTyNILsG0qPHct6Us8i3TmJecp2KpihZhNZ7wveg2WeByWXfW10yV+jR836UYtRMGT1PtcGmef1Jbt2i8tqsNweKl8VV4wmAflmMuDeVBquZzk4ThGWel8kqV9y7+IRU3OJ1X0N8EDzDSaXy9jWNjy1nowPQTZC3WySlotMht2mLE4LlTv9At6wfJTIoaEp6/DFfh5eU7mWQGNP2iq/otTpWpZhZLs4Uz6R9o9qNkQ8W6+dVcIiMYatwgAtZ1gaPWjRm4Tfwh4xuZ3MqN3TVUbve+WIWjz129/SjiOSWixg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NYPfk1sybbPO+ZNr7+Lfn87pUKZ1QCxoIfCltSQoCC8=;
- b=YHelDg2XAzoEPH/dq0qkhpxwFXdqbHnd6i5HTYOaPBTWQUkmh7cLgnl8/GLfWzSPUZs6ZVw/TEXm/iN/j6tT8sGE410rPWW+g42Rz0g2L66jywRQePbEDYDzb/RfrQQy8BZ1bJU1b1hGgJZWkIJdNUTUkPVPjLBlukNp+F+LoHaJwiqCys130VeAygvPPQUbgd13v83iqzv6g+uIs6VISt+iP/KyQNdjYidM4fb+qy+6FBMQetDM4zB4TkO+H7FXxxU2/7ZTgF1S3AExLJHcmlH5+jTpR/+3JfwQsoIU1lzHzNWDipeniP5lQEKXZvr0bhblEzPWlm6Q7RCafYeMWw==
+ bh=xYf7NHCMJjFbppkFj/C6dv4RcZmhNLGXR9mSaaiHvuw=;
+ b=Cj+00iC3Zjc3xAbHz5cbrZkO4Pks+ZaG9V5+1J2rAnudCKKlweLUWMmh+IJ2WaWhh4B6/Uaoh8qzp0gSVnAcY6L9pQaCj1L/9EmOKcs/FP+6319PssCEZUqrXRwa1Ix5WwVwHL/p0hGwmKNsWyRw15/DM9uP0PeOImASAd4AQ4tLYOaNx/BWpk2UrfkccorDAtVjA0YlmApnx2g5xMwVwgI3Givowmrnl2UgkDrc8Ozo77T+y4LFDtumq6M2ZRIzpbhNdzJXt55ebxClH0vfqvNrwdzv1MjnF2adez4wwZmSWz7vW98MBQSwp2kH5gKGFz6j0GyJES8nDmZAdZ2KbA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:1e9::12)
- by SJ2P221MB1114.NAMP221.PROD.OUTLOOK.COM (2603:10b6:a03:544::7) with
- Microsoft SMTP Server (version=TLS1_2,
+ by SA1P221MB1127.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:38b::16)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
- 2023 14:12:44 +0000
+ 2023 14:12:46 +0000
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8]) by SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8%5]) with mapi id 15.20.6298.030; Fri, 21 Apr 2023
- 14:12:44 +0000
+ 14:12:46 +0000
 From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Fri, 21 Apr 2023 10:12:07 -0400
-Message-ID: <SN4P221MB068210A82360743E14AC9FD6A0609@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+Date: Fri, 21 Apr 2023 10:12:09 -0400
+Message-ID: <SN4P221MB0682F66DD9BCC6100721CB41A0609@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.39.1.windows.1
 In-Reply-To: <20230421141209.2826-1-james.d.knight@live.com>
 References: <20230421141209.2826-1-james.d.knight@live.com>
-X-TMN: [yeSfQh7jLovy7IYEDHEXXQO0rJy3ZL/S]
+X-TMN: [NT9E+N3d1Fssilu8VrWbp39+VVMYKNl2]
 X-ClientProxiedBy: YQBPR0101CA0138.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:c01:e::11) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  (2603:10b6:806:1e9::12)
-X-Microsoft-Original-Message-ID: <20230421141209.2826-2-james.d.knight@live.com>
+X-Microsoft-Original-Message-ID: <20230421141209.2826-4-james.d.knight@live.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|SJ2P221MB1114:EE_
-X-MS-Office365-Filtering-Correlation-Id: 785dbfa6-36af-4f19-0e4a-08db427279c3
-X-MS-Exchange-SLBlob-MailProps: a+H6FLLcF3rWTlhCsx8GEXtgjWNkNESfwzucT8Zr3tTEo9ovEJAmPRiBE9mP412mRngSNF1tPOLHxoH4K2FRW7NGLoDs6XRoENwK8mms8mfFLes4TqiNy96Urcy9ygzfOPWf8tQFOHsWv5l/1dux8bGjgjhQ4qMgkaDATdxRlcWbglDEqIsfXasa7AjvilQAwWDi2CarCyYHnDvgNu7nE8OwmIKDfi2HwBOC30DOoP0JmctIYXBg+JC2QGtdcJi3F4+5hhGmjBFeCysVhA4+jhw+ZaBM6OGMKbzzOqHTKgxpvdQzdTQN7VE/VTmYYGTPpLAEUvuSvGyH/GBuHtMvt88al05fB7PW7Gd36TVsSskKub1vchjJhxgVqk2hkIWOOQJm1cj/8QQadbkusuJVNN9pRsJs8f8rdgSEcLDGjmnJyhiqgmYVOZ1a136tkLPHLuiUxQWDtl5jvX8PgjacnVq4WV45JyDhELxdKO/Uv/epV+rrXJQlUUGfP/Q6KXT11Gv3glcWecyc9b7xYt2+lJPVG9uZthtY7262C8+bJ7dwSw4bCJCyxFYo++Wl0snzKSmWaOSbQYcRwkbbs7HDX+op0mDOYO2pxmMrSOjs0hZusREQp37pcvAk2TlbxFrkKc3V0i94ZXaGMBJXEnD13NQ87/lu79EdCIadmfBIyI7DZ+V/so5MsFIvSh2BdWJR9Zi4sObU0TnI8/9L97J4TMx0xp+cdjjlXxKYlauoGu2aUhFSWqFUR9z2BNSxo3gewJ4nB7YIBsmdYoq81N6DwjZ/6DSgu7gEvw/FjHnhWCURCruOluyaCsUthIgimWpw
+X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|SA1P221MB1127:EE_
+X-MS-Office365-Filtering-Correlation-Id: da421919-d05d-4ddd-a6ed-08db42727acb
+X-MS-Exchange-SLBlob-MailProps: feAVlmA1hHUwXCO2pwNFzptQVUyTW3cJLWB+0a4Wv8rRMJw1tS/yswoxuPt6EbsQf6KNOip4zQG3jykZ66/weLqyWNN/Fwc7HfxGLsl9dZAv8Ryv6n5Rdrz05OwHQNyM3n/C0MzgsG7vVp6cqZDjYlU8gVyinzlcOkfsnX1oS+j+qUuPY2JjcV27c72GF2kMhTh+jnGo6qrE5N04itBApUwiqTXanhTz8wPF4h8DZbTTlqJRQw+Eey7e8RdDtngVoWLq1jYmpp5uEi3YjojFCJ6YXQ5R7Grs9iHk5yE8r4uSGqzrB2dGh8AH9C2EHypl8MrhGiBQS0th0/HtsQr0uXkrVDKIfshmx/ev3oZCwRmpI/bA2jaTnQr9GCkmZWgEkCgIM0zBXT4Y9PGyymibOyq8WcPX3wuZ5exoDJ5bjwdutjwLSDGYAzd4JIF7d0VEJWpJhO8QDOYXEVRqZsIxMImVY5NrhJCQaAxBNzoXHqBz7kO3Deb6l9UucQuWD6KRRmknhjIXJQBUBMwdeNX+u7q0LjzuLU0fg/hdjbIKSRMe948CrSD3Jg2R8+qQexvX/XucM/nfIlYhi+GTPQUPyguZzsTiM7wJF+kjHt/zMWVWfx0A3X99g4hgHNOQRKR4LyrS+rpD8+1Ind90gdCvkgvERvdsbI4+6ytQx3ZxM7L65vDb3cD2Vq/IeFdds2FheeEJQ5DdleBdLMEab4QomA==
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ikKMZ71e6ghbhxLDbowwjkoX8Nnz+CVKE4F95jR6AFbLIDYmQm41CB6sLyqx1WS3puFQC8Fi6kwf56njvRlOEnFn0L4aCtNZuiJJmakpM8asfTABaPbnbQMY2V9VuF3mZV7GjBr1Jwk3ud2Phbu393g40NFoAZgeL0PGNzbOwhmBDUuQ2vHfNuh0IPpg7a9br3TSTdUk9LheTVNxHxQPOr4thdSENU9wxYNqCJ+oAAhW45WT7qSKF1TnbIWS6H44SNmIXvQeNbniSVzRmB+smUy0Qz/dgiRqB9kinSjE+HORXA/zz4QdB8ajJHvj6HJjRX93qTtFaT7nrPVNzoovi5jc4B4ZZC15olNg4x+cZicG5UK9wrcm+llw97TFjAQktLBgphse0TY3UXcWiRnmR9kMzRadLhgDiEpIywkUUjj/sL+OlNuy1BKGBzC8z6v6mfW64wZB/rMRvzLpqlhhm/JCCaw+GUPN7psHi20y8AQR8Fnmu8gJef+9lHn8YwBrnf5yJvK9eyme6S7Oiwb/U4H9ltXZ6kNtXaHoBRGnzm01A3PCXd/oy6gexOIjkCByLJfUN2nA5RDE22C4TfSre7oueoFvCFmUX8wFYx2ejEQ=
+X-Microsoft-Antispam-Message-Info: TA53vDvr27261nHUNGdC63VVGSkGeY4iNV8uMy2kaUnHIYo7Tu/KylsEmCim4YXkU8vSJhM1gmTERBxrheZTmBfjqBDRdJm1wOrpwV/P981e4ktOX8O9TrLannOZNZooRqfOi93EHn5HSoVs+nr/SUr9lk2druXqTAUAzZPb0l+fQcB0CAVqOyPJnPl5x5J5TnRaps89I9Cmm2bOEbhSSfYsdq4PFl62XuEtE4Lt6Xcjuj8Cy+oWjAGJ0CaOwZdGATEGRX6YTQWJBLocjAHy2D6YqmcvWisl9m/obyiZ4zIijSJoRanVbTcm5fVDwP1+ji/lWqUnUF8L25+ww7W2YDJzjwuD6Xt6hQ1FbGmQFFxJuHJQ0W2K4j+STGq4gm3Z0XqGbxSZODNXPeE/zhttoU5WjR/IsK+b5AB9CEhezyvMEj94UOiCCIoCCxdzPcsicjIl4HuCyy4MOtS7dvSdXOsZRGZLnF40AnkEI58PFpUeHJV+g0h9gJbZy3efGmJx0oFIDCNTNyUYRfr/fGmnJALR6V7U89AloQJLBnQsxmRebROrKX/UZFhVaS9W2m1+tBm46VC2UwAe8HWn2z+G2MJq2ZhmU+lJl5Q2aBZhRNY=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OiASqwApSed/YXmfyRelWzlDggsD/ZvW2goEo3rT5oTNwgId5kmplk9YULQX?=
- =?us-ascii?Q?BkCBDWiDjfEj9/YNonaKbRkLfke/MkyJKrPAfzpe5PsM6Z+hnmVpQpOQ/4mD?=
- =?us-ascii?Q?BRCKQUmhz3WMR86g10002AmxCXDZ9EDfaAruL3JRgpS9n5Amr3KCJt+GYvgb?=
- =?us-ascii?Q?TMMsLEfDmn2nYlbrJYCoKnRICFF+S9UMtYeWwMh5ZWuzt1P+M8JmKTiA2QZR?=
- =?us-ascii?Q?f3C94VfKtChfdt/ZCpTPnBn1kenFedXLy0bhA17Xcz/9NwJJ6cerszZGXymu?=
- =?us-ascii?Q?DbRLjbOcmzHTCpOykCMZpl9JfazWA1eGREMLXYD63Zpy3Hq8IDEfjQf0d+tg?=
- =?us-ascii?Q?Z6r/4sHyQSaViG/vuoFnr2KOaPKV2xhUc5EeXSqOceru2uDuqxROThjM71S5?=
- =?us-ascii?Q?TCnS6CCsKJvLurS1w83tZMCj7DqQwZoZYAbSW7IQMr1//ZJtlX85Lp0ugmFo?=
- =?us-ascii?Q?dpj+l5ryqWmxssdjfe0GfR3y6pVqvzzwcImH8mHK3UIQU7XdToZkfVToecVf?=
- =?us-ascii?Q?kpFgICWwnr6mLjHBMnMvE/9XxpMFjXXHpY4QGqHiSzJAa7jzQs2ItxcOeTTJ?=
- =?us-ascii?Q?c8eQUNljXEE6Mkg6yl2EWBZkbiZ/K2DD76M/FwE0jI7lCWMpwDZG3l+6sGSK?=
- =?us-ascii?Q?5E5aP8L3aoBxdbhkQE5uZfaeog8ALO9U7yhu5K/guBCM45RzcTgAlp2RuzGT?=
- =?us-ascii?Q?eRzd+GwdiXfT2pLV62oeYGfOIk0XJShknJZ6NY/vyed11OAb34okvlbYzYDN?=
- =?us-ascii?Q?RCh5y35a+KMlLFF9k49ejNeZPIC9HbBaMxDlLT1MuOoordRHcOn5Vxs1NQ/u?=
- =?us-ascii?Q?qq8VegWq1BY2bHzatYsFaIGwwBpA3oOBETO/Bhpp21TMUufVUVaAyk49+/ML?=
- =?us-ascii?Q?ltci4dBUkJj14+pNJ3iSOcfXF61zF88D2XwiUpKHxJfFwS3XSlhwkgCp0oNJ?=
- =?us-ascii?Q?DCtI4k1AGtAn2e0w2u7uHLrMOnEabl2JyIYTmKRIO0VkROeVfxY7EDMIfuow?=
- =?us-ascii?Q?WZA/DMqkD6e617LmrY1ZWac/ebQofDWu3/oIa4HK9UJyWrYVkA1hY8DplQl3?=
- =?us-ascii?Q?uTtv/kmdFK5JY9SHI4w+3W2z2cv9DqVByE+4xADwEUovTBlo8Sg0SRDYbD2G?=
- =?us-ascii?Q?6M4A5vjTt32hEzaM+Xe432PEZY1yv9+gRoBDBbhnEIpWmKrNd4QKPUJ4euVg?=
- =?us-ascii?Q?D0n1ayUw/h4RbJEJgfqx2tuLFRBTXYOeqIMynebNvxPJJxsIRqDiKVOpkok?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GL8NhPlI/10VgzmRMc4byVQqVNwdXFCPIFZ0XgWeRuzsi9Jin1Gv/x285O1v?=
+ =?us-ascii?Q?RNh7yS1xR3xoCOQUsO1tQZNqMMxfltmdfCSJ1DV8a4ln6ItFpOsHwW5LeC/P?=
+ =?us-ascii?Q?RHGEnt0k7oMgaA7bYbQ0fpufnIa+OfR059XRwKC1o0+ygvRp044iFymNbV+f?=
+ =?us-ascii?Q?ExIP/thiIJgyWhZMr4subarZ3Rvv0y4ZaKN1Gz2E1O3OUOMcgvsWyBAuKZSl?=
+ =?us-ascii?Q?UpKSZ0H+evcmx845gqlvflS0MWe1LiCKUWnZCmLaVI8SmcVBenYTm/WN2tjU?=
+ =?us-ascii?Q?CB31mCDe+yTSsKlIIMhigf26Lh9uf7IiUzjh5Ro3rVPArgdrwoMf9aNSK1hz?=
+ =?us-ascii?Q?ItOgGKOky+FZF5z2yL7xoUvxv185P6RcNmOBy1S1ENXHWweF4jpij05NNaRT?=
+ =?us-ascii?Q?ylqiklY7YsmfO/AsEy5eKqE94OdZx9l7JlnIT/LJiWzAyK8N6+mvU6GJaH39?=
+ =?us-ascii?Q?JVUB57+kEgk8aOn8Qh+/z6TdSsmOvOUCvi6FQmOM/MA6VkBe4wcathU9+Zr4?=
+ =?us-ascii?Q?FanibD9SB/AwBisOWK8FTELHN9V3bFnvuJkf+vber15jBAvblta8wDp224WW?=
+ =?us-ascii?Q?WxiaEyRTdWnnpPhLO4H7ZAnmvTkBoPl2d6w1irVPjPiSkcL4/7LwN3gKgEtd?=
+ =?us-ascii?Q?derhdkV5lU9ZQ6lQVOZ3p9HHnMjsTsONFkAFsaeYgHavmA26nCB7zu6Bzuez?=
+ =?us-ascii?Q?xpibK31JRUSkHvbTGAJUeVYad+G2uG1KJa3HKC8wTx9/tojXVkBvbdfgUEG7?=
+ =?us-ascii?Q?KM9CU/v38Obt1emjsC3I/t9RF7GLfBAgr4Gf9IXbwCdaSWteovWxzpRnGK7I?=
+ =?us-ascii?Q?lnBh9Xg4gT0+dIqfJFhglvTtHsgwLRATfPTgvmqM1SSeHEyOB3fJUsuIGYQH?=
+ =?us-ascii?Q?VDROSuRORFTda3/aKurQ0mGDIoIoVSz5Td5u+BBrip0G2zmerZPa83BYWvt0?=
+ =?us-ascii?Q?cWuiVrk1KJtR5JzBiKZZrI/hmfFqhPeanIDLWfqeSOyFi0pen1bJLCDzdyQQ?=
+ =?us-ascii?Q?NLHgiTo1rMNdRyCUrKsOARc7PS3pXUaMaCMTZNJUAZ4WnVFUfSWpbyD0peQq?=
+ =?us-ascii?Q?dB2FNUtFfPn85bjpcLzq37eVLG6vuLS4NkZdrzHWvZ4au2oUiEbAfrFQhS0Q?=
+ =?us-ascii?Q?6QCZYw+XclPx+XWbekvNII5ww3v1iNjN3o/xQ8+c2VzFKleVDLL5LgiL6D8R?=
+ =?us-ascii?Q?X2F194Hitcw+ZRlfDHaR47mYLku/QkMEMGJ6xqQcZsW5AHx+4zEP4n7f2gc?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-f5d03.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 785dbfa6-36af-4f19-0e4a-08db427279c3
+X-MS-Exchange-CrossTenant-Network-Message-Id: da421919-d05d-4ddd-a6ed-08db42727acb
 X-MS-Exchange-CrossTenant-AuthSource: SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 14:12:44.2528 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 14:12:46.0857 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2P221MB1114
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P221MB1127
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=live.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NYPfk1sybbPO+ZNr7+Lfn87pUKZ1QCxoIfCltSQoCC8=;
- b=YiR3cZe/9BYQ2yD/1TDnuwac6qTdLQNa+q43eXy0Us4rxNC5/xj5YV/nTeRMkBTpYV5gJ66b7AQMUsz3s3dcph4DrjpeppMWEpN+nMhwATDFnjWee6HoXCJO16/I1XzEvbn73ma5V1+F7tJ3SZJAmQGIYtIRnhrToMXuWCzksdQypL/SOMVZbmrcoigNoAg+4khklbxmqW311L52QIKzttvHH/LmRtrCkdnb/kIH5p5J0gR/Nm/VGkdm662syHbzqhgU4Ky4Iv8QyywjxrZXRMGKDG2/2GiXZteK/79aWc2S3nUZLsevCprF8IDpXue4Hpa8iT2FbhNBBOn7cZKsQw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=xYf7NHCMJjFbppkFj/C6dv4RcZmhNLGXR9mSaaiHvuw=;
+ b=X1PPrP6uj1JvXDVWd7nDsZEBWej4SVH4ykO99rLSsF0foXORwdP175sWchVOF+tbGw18g+VE2NQUw47+W0Rya/F9VhpicMeFKAZuea/pDBvyvPci+nby/9VgriEE9Phc+RFSx982AE86aUd7uNRIpKGQH4lsNlFfIX3064CBdBN/0DOn2kjF0HttMsSbsHgD2+c5j9Zxl5pGqFaK42Keo24FwCn8K2HQ6hXZHTdX5Dh24FLHmkSavrp6jT9C4nA1Uw1EyC7Kyg2eLRp7rmoeasuxbdUi67hmcb1Zdo7iqzkldHG737WXntQGdwmyfn2OSvoDxXPs60nbwgjbdMwQkA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
- header.s=selector1 header.b=YiR3cZe/
-Subject: [Buildroot] [PATCH 2/4] package/libglib2: apply upstream status on
- girdir patch
+ header.s=selector1 header.b=X1PPrP6u
+Subject: [Buildroot] [PATCH 4/4] .checkpackageignore: drop legacy ignores
+ (glib2)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -136,31 +136,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Providing an upstream status for the remaining libglib2 patch from a
-recent version bump. This patch was introduced in Buildroot around
-November 2021 to help deal with build errors where `GObject-2.0.gir`
-could not be found (tied to Buildroot changes made in
-`gobject-introspection.mk`). The discussion thread mentions this could
-be submitted upstream, but looks like it never was. Reflecting that this
-package has not been submitted upstream.
+Dropping old patch ignores for the `libglib2` and `glib-networking`
+packages, as they have been dropped/updated.
 
 Signed-off-by: James Knight <james.d.knight@live.com>
 ---
- ...01-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch | 1 +
- 1 file changed, 1 insertion(+)
+ .checkpackageignore | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-index db77a73203faf38aaa832dde8bbd9526cf39eecc..fb9905724278fb2c0a9be8384cb90108292668e8 100644
---- a/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-+++ b/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-@@ -14,6 +14,7 @@ Fixes:
-  - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: Never submitted
- ---
-  gio/meson.build  | 1 +
-  glib/meson.build | 1 +
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 02c892c1b3144a14abbc2a0f3d0b3cbfbf7efca7..a072afe70989e36b1c5d033a7621820c36c71663 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -606,7 +606,6 @@ package/giblib/0001-fix-imlib2-detection.patch Upstream
+ package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch Upstream
+ package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch Upstream
+ package/gli/0001-Optional-building-tests.patch Upstream
+-package/glib-networking/0001-meson-change-std-to-gnu99.patch Upstream
+ package/glmark2/0001-wscript-use-find_program-to-find-wayland-scanner.patch Upstream
+ package/glmark2/0002-libmatrix-Add-missing-utility-include.patch Upstream
+ package/glog/0001-added-emscripten-support.patch Upstream
+@@ -801,10 +800,6 @@ package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.pat
+ package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch Upstream
+ package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch Upstream
+ package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch Upstream
+-package/libglib2/0001-fix-compile-time-atomic-detection.patch Upstream
+-package/libglib2/0002-remove-cpp-requirement.patch Upstream
+-package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch Upstream
+-package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch Upstream
+ package/libgpgme/0001-Fix-build-without-threads.patch Upstream
+ package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch Upstream
+ package/libgsm/0001-misc-fixes-from-archlinux.patch Upstream
 -- 
 2.39.1.windows.1
 
