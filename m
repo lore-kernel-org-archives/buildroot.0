@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0992AC6FD18
-	for <buildroot@archiver.kernel.org>; Sat, 22 Apr 2023 20:16:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62C6CC7618E
+	for <buildroot@archiver.kernel.org>; Sat, 22 Apr 2023 20:16:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACD7B83B74;
-	Sat, 22 Apr 2023 20:16:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACD7B83B74
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09BAD83B1C;
+	Sat, 22 Apr 2023 20:16:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09BAD83B1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A-RlH5DZBgdJ; Sat, 22 Apr 2023 20:16:22 +0000 (UTC)
+	with ESMTP id 3Ip1rXa9Q6L4; Sat, 22 Apr 2023 20:16:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E09BC83B29;
-	Sat, 22 Apr 2023 20:16:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E09BC83B29
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8B7FF1BF30E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EEEC83B29;
+	Sat, 22 Apr 2023 20:16:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EEEC83B29
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A54531C2B8D
  for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 20:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 715D440145
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7ECE983B29
  for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 20:16:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 715D440145
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7ECE983B29
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uqsUQWAhAEr2 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JmK1rYjOGXAU for <buildroot@lists.busybox.net>;
  Sat, 22 Apr 2023 20:16:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B94ED400BF
+ by smtp1.osuosl.org (Postfix) with ESMTP id C04B083B28
  for <buildroot@buildroot.org>; Sat, 22 Apr 2023 20:16:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B94ED400BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C04B083B28
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A663F83F98; Sat, 22 Apr 2023 20:16:19 +0000 (UTC)
+ id AF21A83FA0; Sat, 22 Apr 2023 20:16:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 22 Apr 2023 22:06:54 +0200
+Date: Sat, 22 Apr 2023 22:14:54 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 8716d5065136efad14831cbcb258591ec9943057
-X-Git-Newrev: 6ce7cd546b0d9f5315c9840423b6c54f5cc0b9e9
+X-Git-Oldrev: 6ce7cd546b0d9f5315c9840423b6c54f5cc0b9e9
+X-Git-Newrev: 2554f30194d79d2cddce8656487571b5a2a095bd
 X-Patchwork-Hint: ignore
-Message-Id: <20230422201619.A663F83F98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-cargo: set
- RUSTFLAGS for host in HOST_PKG_CARGO_ENV
+Message-Id: <20230422201619.AF21A83FA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/efivar: don't
+ install in $(HOST_DIR)/usr
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ce7cd546b0d9f5315c9840423b6c54f5cc0b9e9
+commit: https://git.buildroot.net/buildroot/commit/?id=2554f30194d79d2cddce8656487571b5a2a095bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Move RUSTFLAGS for host builds to HOST_PKG_CARGO_ENV so that they
-are set for host cargo builds which don't use the cargo infrastructure,
-e.g. python packages that include rust code.
+For years already, $(HOST_DIR)/usr is deprecated. Install directly in
+$(HOST_DIR). This will trigger a check-package error in the following
+commit.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit d775b2ac05d473db490d2dc6babd2743b28cfbf5)
+(cherry picked from commit 47910ccc361934ab4b3fbcfe05530f38de07844f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cargo.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/efivar/efivar.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-index 666c5ac971..5600c8e97e 100644
---- a/package/pkg-cargo.mk
-+++ b/package/pkg-cargo.mk
-@@ -57,7 +57,8 @@ ifeq ($(NORMALIZED_ARCH),arm)
- endif
+diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
+index 8b1d338bec..ee6d7302df 100644
+--- a/package/efivar/efivar.mk
++++ b/package/efivar/efivar.mk
+@@ -39,7 +39,7 @@ define EFIVAR_BUILD_CMDS
+ endef
  
- HOST_PKG_CARGO_ENV = \
--	$(PKG_COMMON_CARGO_ENV)
-+	$(PKG_COMMON_CARGO_ENV) \
-+	RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))"
+ define HOST_EFIVAR_INSTALL_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/src/makeguids $(HOST_DIR)/usr/bin/makeguids
++	$(INSTALL) -D -m 0755 $(@D)/src/makeguids $(HOST_DIR)/bin/makeguids
+ endef
  
- ################################################################################
- # inner-cargo-package -- defines how the configuration, compilation and
-@@ -130,7 +131,6 @@ else # ifeq ($(4),target)
- define $(2)_BUILD_CMDS
- 	cd $$($$(PKG)_SRCDIR) && \
- 	$$(HOST_MAKE_ENV) \
--		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
- 		$$(HOST_CONFIGURE_OPTS) \
- 		$$(HOST_PKG_CARGO_ENV) \
- 		$$($(2)_CARGO_ENV) \
-@@ -171,7 +171,6 @@ ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
- 	cd $$($$(PKG)_SRCDIR) && \
- 	$$(HOST_MAKE_ENV) \
--		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
- 		$$(HOST_CONFIGURE_OPTS) \
- 		$$(HOST_PKG_CARGO_ENV) \
- 		$$($(2)_CARGO_ENV) \
+ define EFIVAR_INSTALL_STAGING_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
