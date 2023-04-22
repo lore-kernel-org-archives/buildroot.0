@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0298FC6FD18
-	for <buildroot@archiver.kernel.org>; Sat, 22 Apr 2023 20:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E9C0C6FD18
+	for <buildroot@archiver.kernel.org>; Sat, 22 Apr 2023 20:12:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A73C183B28;
-	Sat, 22 Apr 2023 20:07:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A73C183B28
+	by smtp1.osuosl.org (Postfix) with ESMTP id EAFBF83B20;
+	Sat, 22 Apr 2023 20:12:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAFBF83B20
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B6xnYx1KexL3; Sat, 22 Apr 2023 20:07:01 +0000 (UTC)
+	with ESMTP id nWXM-5oc3MdK; Sat, 22 Apr 2023 20:12:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F046283B42;
-	Sat, 22 Apr 2023 20:06:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F046283B42
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D6C2E1C2B8D
- for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 20:06:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 393D983B0B;
+	Sat, 22 Apr 2023 20:12:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 393D983B0B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EF9A1BF30E
+ for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 20:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFFA561035
- for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 20:06:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFFA561035
+ by smtp2.osuosl.org (Postfix) with ESMTP id E248640145
+ for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 20:12:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E248640145
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fTvr0fVle369 for <buildroot@lists.busybox.net>;
- Sat, 22 Apr 2023 20:06:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5E1861008
- for <buildroot@buildroot.org>; Sat, 22 Apr 2023 20:06:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5E1861008
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9206A83DBB; Sat, 22 Apr 2023 20:06:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G5IpKrxSyiPj for <buildroot@lists.busybox.net>;
+ Sat, 22 Apr 2023 20:12:42 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0D0F400BF
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0D0F400BF
+ for <buildroot@buildroot.org>; Sat, 22 Apr 2023 20:12:41 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 88F3A1C0005;
+ Sat, 22 Apr 2023 20:12:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pqJb3-002KcW-MR; Sat, 22 Apr 2023 22:12:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 22 Apr 2023 21:59:35 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d9c4e693a13f1d349e4a6c66dd39fa1f59f63b74
-X-Git-Newrev: b649f233eafc8c7e610f51ee817c605aaaf4cb20
-X-Patchwork-Hint: ignore
-Message-Id: <20230422200643.9206A83DBB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/mdadm: install
- udev rules
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20230409194420.987BA83B78@busybox.osuosl.org>
+Date: Sat, 22 Apr 2023 22:12:37 +0200
+In-Reply-To: <20230409194420.987BA83B78@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Sun, 9 Apr 2023 21:28:07 +0200")
+Message-ID: <87ildn8ymi.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] package/pkg-cargo: set RUSTFLAGS for
+ host in HOST_PKG_CARGO_ENV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,56 +64,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b649f233eafc8c7e610f51ee817c605aaaf4cb20
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-mdadm contains various udev rules to manage RAID assembly and create
-symlinks, install them if udev (or equivalent) is enabled.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=d775b2ac05d473db490d2dc6babd2743b28cfbf5
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Rowe <simon.rowe@nutanix.com>
-[Arnout: use MDADM_INSTALL_TARGET_OPTS for install-bin as well]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 0385719706433fa9aa560c775d46179b42c9080c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mdadm/mdadm.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ > Move RUSTFLAGS for host builds to HOST_PKG_CARGO_ENV so that they
+ > are set for host cargo builds which don't use the cargo infrastructure,
+ > e.g. python packages that include rust code.
 
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index 0a2eb4e5bd..c61937306a 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
-@@ -21,12 +21,15 @@ MDADM_BUILD_OPTS = \
- 	CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
- 	CHECK_RUN_DIR=0
- 
-+MDADM_INSTALL_TARGET_OPTS = install-bin
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
- MDADM_BUILD_OPTS += USE_PTHREADS=
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- MDADM_DEPENDENCIES += udev
-+MDADM_INSTALL_TARGET_OPTS += install-udev
- else
- MDADM_CXFLAGS += -DNO_LIBUDEV
- endif
-@@ -36,7 +39,7 @@ define MDADM_BUILD_CMDS
- endef
- 
- define MDADM_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-bin
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(MDADM_INSTALL_TARGET_OPTS)
- endef
- 
- $(eval $(generic-package))
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+
+Committed to 2023.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
