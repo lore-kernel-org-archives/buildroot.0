@@ -1,70 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16DBAC7618E
-	for <buildroot@archiver.kernel.org>; Sat, 22 Apr 2023 14:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80F64C6FD18
+	for <buildroot@archiver.kernel.org>; Sat, 22 Apr 2023 16:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AC9860F2D;
-	Sat, 22 Apr 2023 14:57:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AC9860F2D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OhpFtMyGbjKR; Sat, 22 Apr 2023 14:57:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D9A260E79;
-	Sat, 22 Apr 2023 14:57:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D9A260E79
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C29491BF2F5
- for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 14:57:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96E4B41898
- for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 14:57:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96E4B41898
+	by smtp4.osuosl.org (Postfix) with ESMTP id A40BE419D3;
+	Sat, 22 Apr 2023 16:56:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A40BE419D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aEx2mXvK67fs for <buildroot@lists.busybox.net>;
- Sat, 22 Apr 2023 14:57:02 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i0dpMjzy-5cH; Sat, 22 Apr 2023 16:56:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0299141C24;
+	Sat, 22 Apr 2023 16:56:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0299141C24
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A245E1BF9C2
+ for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 16:56:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B62240639
+ for <buildroot@lists.busybox.net>; Sat, 22 Apr 2023 16:56:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B62240639
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cqVqBmhD1xYj for <buildroot@lists.busybox.net>;
+ Sat, 22 Apr 2023 16:56:14 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 095E441888
-Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 095E441888
- for <buildroot@buildroot.org>; Sat, 22 Apr 2023 14:57:01 +0000 (UTC)
-Received: from [192.168.50.162] ([146.241.104.90])
- by Aruba Outgoing Smtp  with ESMTPSA
- id qEfap1A8OYUwjqEfap0Ajs; Sat, 22 Apr 2023 16:56:59 +0200
-Message-ID: <c26cc589-8662-30f2-f4c6-5fe698b55206@benettiengineering.com>
-Date: Sat, 22 Apr 2023 16:56:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, it
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20230422140018.616018-1-dario.binacchi@amarulasolutions.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B43C400C1
+Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1B43C400C1
+ for <buildroot@buildroot.org>; Sat, 22 Apr 2023 16:56:13 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.104.90])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id qGWvpKcpw9zseqGWwpA8Th; Sat, 22 Apr 2023 18:56:10 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230422140018.616018-1-dario.binacchi@amarulasolutions.com>
-X-CMAE-Envelope: MS4xfIqQ8kc2m9ac74+/9/xTjuEgNjYPlsNJ5DfYMHtUpD3fRM19XiRLrAVBDB9tnDxEcZrSmnRwFfjQdZdUPQXO3EdE1YAEpTJQq2vXiWFZq+drP3ibXHKD
- obOfx6Tk/uhbxa2B69dArPZOk/PtHso2dtjW9hX5yhoa8sRyMBFuJexjUsrB12mt08llYQungycf2X/29IhsJvMG+MrkNI68m/ZEF4ebW++LWPh8LjFqWpp/
- kX3SmUKWMCu/GTN6WnaMsYnxaofOWOl0ykJKoqiCvJU=
+Mime-Version: 1.0 (1.0)
+Date: Sat, 22 Apr 2023 18:56:09 +0200
+Message-Id: <80825E70-9D48-471F-AFF1-F43E71FBB045@benettiengineering.com>
+References: <CABGWkvoH-sy4LhPtWgY422FXm6pQ9UR5eM63nV-LAmEf1FRFng@mail.gmail.com>
+In-Reply-To: <CABGWkvoH-sy4LhPtWgY422FXm6pQ9UR5eM63nV-LAmEf1FRFng@mail.gmail.com>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+X-Mailer: iPhone Mail (20E252)
+X-CMAE-Envelope: MS4xfD0bflxo1TK6kYAumn84KXJsJ/Hf1OyLs4ouoXTuTqB6sYvKg1w32y3UCbFKd1phu9QC3Mnl0XGPZU4WDa4F9bRiaKUKJ1QLG4E9nbgGYwBFf6zuEe2F
+ ma+JUVC9Mz4tqCtmrR2fvxla/8VktLxfodPbDRXsXOCBYEtfXtVIDGXOUFDGXSlJKATjniU2fCvoG83oykfPS5r3S5YnP7i5M/AEWcAfqrcyUgT4KIsLg8Zz
+ J0aRrd6Me1lgCXZrZlMgDnLlIhtOL9vcgPk4R53UzCc=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1682175419; bh=wI7oMhIb/2+OIy2rJXa/PipTj9YIDUVC1V+HfMbLpCg=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=HR1/lY9FurD92dvmrXMqBeEZ3/7jv5KbSL6V2SWdb6GyUDY4ZjCQoYTNkgxJ8UMkT
- XGunH9NrUSIHbLdXZzFGLbrOWJGK1vfnhy+1XMlNhiLTlGfcG3cpgu9naLxQrKW8wC
- 0a1Y1yaxs6XY7uBX69OHNeQ76rDETl1SxD7VNe7yzyuZ1PSpcNOTUGdglkWAidwYLr
- V+w4MqKxisMucpO4xb0Bm6oGZMy1wvJG7cgPfuhjLqXDqgEiWTMi9y7d6mIT3XrGK7
- 08CpMomPcv5pvBeevBmrPb+PEW0V7g432rnYJnkmbWoZ3yuJ0UHubhBX541nhyidfe
- v+ECLngpFRtRQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1682182570; bh=N6dQVXKK2ZlezRIXGUqveH+ayd9p7aCbdE3kqINqjh8=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=fQnz+e+epA4DaZNYwlyNACpJI+MlZNQFddtm7ZiviCCP/6KLpXO5RWM6ywm+BMN+6
+ h32aWE5qtX17xEci9+hOuFgeBKrpagAhKUKBHoD67gtGV+ZbizqlfNiZ4fqQKTLDV2
+ 5kRpu7+w1ZQJjOoHofKyMMDOshVZr1VEX0+XEo/t3nzWr8iaLX8pCt89KKilhKYZ+O
+ drQJkG6pwLNPZlrQLndfhxdGUu5nWDVbfeOuE3pL9qFfA2s5dR4apY5X3SS+K5061E
+ 0jmr3YS91FgsaenDbb6ff1oGi1e4FLSjggQUkgvRvERlIImiammzI0Ut5iK9OrhHv4
+ ZllWURpOZ30Tw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=HR1/lY9F
+ header.a=rsa-sha256 header.s=a1 header.b=fQnz+e+e
 Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f769_disco_sd_defconfig:
  new defconfig
 X-BeenThere: buildroot@buildroot.org
@@ -78,246 +75,200 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
-
-On 22/04/23 16:00, Dario Binacchi wrote:
-> Board support package includes the following components:
-> - mainline Linux kernel 5.14.21
-> - mainline U-Boot 2023.04
-> - default packages from buildroot
-> 
-> Note: There is a problem in u-boot display management. It should display
-> the ST microelectronics logo but "noise" is displayed (like when running
-> the command dd if=/dev/urandom of=/dev/fb0 in Linux). I also tried to
-> change version (even the first version in which this feature was
-> introduced), but without success. Despite this I decided not to disable
-> the video management configuration to remind us that it needs to be
-> fixed :).
-> 
-> Link: https://www.st.com/en/evaluation-tools/32f769idiscovery.html
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->   DEVELOPERS                                    |  2 ++
->   .../stm32f769-disco/extlinux.conf             |  4 +++
->   .../stm32f769-disco/flash_sd.sh               | 18 +++++++++++
->   .../stm32f769-disco/genimage.cfg              | 27 ++++++++++++++++
->   .../stm32f769-disco/linux-sd.fragment         |  1 +
->   .../stm32f769-disco/post-build.sh             |  7 ++++
->   .../stm32f769-disco/readme.txt                | 32 +++++++++++++++++++
->   configs/stm32f769_disco_sd_defconfig          | 30 +++++++++++++++++
->   8 files changed, 121 insertions(+)
->   create mode 100644 board/stmicroelectronics/stm32f769-disco/extlinux.conf
->   create mode 100755 board/stmicroelectronics/stm32f769-disco/flash_sd.sh
->   create mode 100644 board/stmicroelectronics/stm32f769-disco/genimage.cfg
->   create mode 100644 board/stmicroelectronics/stm32f769-disco/linux-sd.fragment
->   create mode 100755 board/stmicroelectronics/stm32f769-disco/post-build.sh
->   create mode 100644 board/stmicroelectronics/stm32f769-disco/readme.txt
->   create mode 100644 configs/stm32f769_disco_sd_defconfig
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 5cd882b5791c..88ed40412ae8 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -702,8 +702,10 @@ F:	package/xinetd/
->   
->   N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
->   F:	board/bsh/
-> +F:	board/stmicroelectronics/stm32f769-disco/
->   F:	configs/imx8mn_bsh_smm_s2_defconfig
->   F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
-> +F:	configs/stm32f769_disco_sd_defconfig
->   F:	package/sscep/
->   F:	package/uuu/
->   
-> diff --git a/board/stmicroelectronics/stm32f769-disco/extlinux.conf b/board/stmicroelectronics/stm32f769-disco/extlinux.conf
-> new file mode 100644
-> index 000000000000..48483a01fc4e
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f769-disco/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label stm32f769-disco-buildroot
-> +  kernel /zImage
-> +  devicetree /stm32f769-disco.dtb
-> +  append console=ttySTM0,115200 root=/dev/mmcblk0p2 rw rootfstype=ext2 rootwait earlyprintk consoleblank=0 ignore_loglevel
-> diff --git a/board/stmicroelectronics/stm32f769-disco/flash_sd.sh b/board/stmicroelectronics/stm32f769-disco/flash_sd.sh
-> new file mode 100755
-> index 000000000000..0ff3ae7dbfb3
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f769-disco/flash_sd.sh
-> @@ -0,0 +1,18 @@
-> +#!/bin/bash
-> +
-> +OUTPUT_DIR=$1
-> +
-> +if ! test -d "${OUTPUT_DIR}" ; then
-> +    echo "ERROR: no output directory specified."
-> +    echo "Usage: $0 OUTPUT_DIR"
-> +    exit 1
-> +fi
-> +
-> +"${OUTPUT_DIR}"/host/bin/openocd -f board/stm32f769i-disco.cfg \
-> +  -c "init" \
-> +  -c "reset init" \
-> +  -c "flash probe 0" \
-> +  -c "flash info 0" \
-> +  -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
-> +  -c "reset run" \
-> +  -c "shutdown"
-> diff --git a/board/stmicroelectronics/stm32f769-disco/genimage.cfg b/board/stmicroelectronics/stm32f769-disco/genimage.cfg
-> new file mode 100644
-> index 000000000000..41f9da512489
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f769-disco/genimage.cfg
-> @@ -0,0 +1,27 @@
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"zImage",
-> +			"stm32f769-disco.dtb",
-> +			"extlinux"
-> +		}
-> +	}
-> +
-> +	size = 16M
-> +}
-> +
-> +image sdcard.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition u-boot {
-> +		partition-type = 0xC
-> +		image = "boot.vfat"
-> +	}
-> +
-> +	partition rootfs {
-> +		partition-type = 0x83
-> +		image = "rootfs.ext2"
-> +		size = 32M
-> +	}
-> +}
-> diff --git a/board/stmicroelectronics/stm32f769-disco/linux-sd.fragment b/board/stmicroelectronics/stm32f769-disco/linux-sd.fragment
-> new file mode 100644
-> index 000000000000..846229d0d468
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f769-disco/linux-sd.fragment
-> @@ -0,0 +1 @@
-> +# CONFIG_XIP_KERNEL is not set
-> diff --git a/board/stmicroelectronics/stm32f769-disco/post-build.sh b/board/stmicroelectronics/stm32f769-disco/post-build.sh
-> new file mode 100755
-> index 000000000000..c8cca3de8c9b
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f769-disco/post-build.sh
-> @@ -0,0 +1,7 @@
-> +#!/bin/sh
-> +BOARD_DIR="$(dirname "$0")"
-> +
-> +# Kernel is built without devpts support
-> +sed -i '/^devpts/d' "${TARGET_DIR}"/etc/fstab
-> +
-> +install -m 0644 -D "${BOARD_DIR}"/extlinux.conf "${BINARIES_DIR}"/extlinux/extlinux.conf
-> diff --git a/board/stmicroelectronics/stm32f769-disco/readme.txt b/board/stmicroelectronics/stm32f769-disco/readme.txt
-> new file mode 100644
-> index 000000000000..8f4f79a86138
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f769-disco/readme.txt
-> @@ -0,0 +1,32 @@
-> +STM32F769 Discovery
-> +===================
-> +
-> +This tutorial describes how to use the predefined Buildroot
-> +configuration for the STM32F769 Discovery evaluation platform.
-> +
-> +Building
-> +--------
-> +
-> +  make stm32f769_disco_sd_defconfig
-> +  make
-> +
-> +Flashing
-> +--------
-> +
-> +  ./board/stmicroelectronics/stm32f769-disco/flash_sd.sh output/
-> +
-> +It will flash the U-boot bootloader.
-> +
-> +Creating SD card
-> +----------------
-> +
-> +Buildroot prepares an"sdcard.img" image in the output/images/ directory,
-> +ready to be dumped on a SD card. Launch the following command as root:
-> +
-> +  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-> +
-> +*** WARNING! This will destroy all the card content. Use with care! ***
-> +
-> +For details about the medium image layout and its content, see the
-> +definition in board/stmicroelectronics/stm32f769-disco/genimage.cfg.
-> +
-> diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
-> new file mode 100644
-> index 000000000000..4d43658403ca
-> --- /dev/null
-> +++ b/configs/stm32f769_disco_sd_defconfig
-> @@ -0,0 +1,30 @@
-> +BR2_arm=y
-> +BR2_cortex_m4=y
-
-Here ^^^ it is a BR2_cortex_m7
-
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32f769-disco/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f769-disco/genimage.cfg"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.21"
-
-It would be great if you could use Linux latest stable 5.15.108 that has
-patch for MMU-less fix committed[0]. I've found and fixed the bug on
-i.MXRT but it should affect every MMU-less system.
-Or you could bump Linux to latest version 6.2 that has the patch
-committed too.
-
-This could be done also for the stm32f4xx boards you're bumping for
-uboot.
-
-[0]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.15.y&id=7ae0262748e5d8ff1e42b77bb19bba474733f280
-
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> +BR2_LINUX_KERNEL_DEFCONFIG="stm32"
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xc0000000.config board/stmicroelectronics/stm32f769-disco/linux-sd.fragment"
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f769-disco"
-> +BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-> +# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f769-disco"
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> +BR2_PACKAGE_HOST_OPENOCD=y
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgRGFyaW8sCgpJIHJlYWRkIHRoZSBtYWlsaW5nIGxpc3QgaW4gQ2MsCgo+IElsIGdpb3JubyAy
+MiBhcHIgMjAyMywgYWxsZSBvcmUgMTg6MzMsIERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2No
+aUBhbWFydWxhc29sdXRpb25zLmNvbT4gaGEgc2NyaXR0bzoKPiAKPiDvu79IaSBHaXVsaW8sCj4g
+Cj4+IE9uIFNhdCwgQXByIDIyLCAyMDIzIGF0IDQ6NTbigK9QTSBHaXVsaW8gQmVuZXR0aQo+PiA8
+Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4gd3JvdGU6Cj4+IAo+PiBIaSBE
+YXJpbywKPj4gCj4+PiBPbiAyMi8wNC8yMyAxNjowMCwgRGFyaW8gQmluYWNjaGkgd3JvdGU6Cj4+
+PiBCb2FyZCBzdXBwb3J0IHBhY2thZ2UgaW5jbHVkZXMgdGhlIGZvbGxvd2luZyBjb21wb25lbnRz
+Ogo+Pj4gLSBtYWlubGluZSBMaW51eCBrZXJuZWwgNS4xNC4yMQo+Pj4gLSBtYWlubGluZSBVLUJv
+b3QgMjAyMy4wNAo+Pj4gLSBkZWZhdWx0IHBhY2thZ2VzIGZyb20gYnVpbGRyb290Cj4+PiAKPj4+
+IE5vdGU6IFRoZXJlIGlzIGEgcHJvYmxlbSBpbiB1LWJvb3QgZGlzcGxheSBtYW5hZ2VtZW50LiBJ
+dCBzaG91bGQgZGlzcGxheQo+Pj4gdGhlIFNUIG1pY3JvZWxlY3Ryb25pY3MgbG9nbyBidXQgIm5v
+aXNlIiBpcyBkaXNwbGF5ZWQgKGxpa2Ugd2hlbiBydW5uaW5nCj4+PiB0aGUgY29tbWFuZCBkZCBp
+Zj0vZGV2L3VyYW5kb20gb2Y9L2Rldi9mYjAgaW4gTGludXgpLiBJIGFsc28gdHJpZWQgdG8KPj4+
+IGNoYW5nZSB2ZXJzaW9uIChldmVuIHRoZSBmaXJzdCB2ZXJzaW9uIGluIHdoaWNoIHRoaXMgZmVh
+dHVyZSB3YXMKPj4+IGludHJvZHVjZWQpLCBidXQgd2l0aG91dCBzdWNjZXNzLiBEZXNwaXRlIHRo
+aXMgSSBkZWNpZGVkIG5vdCB0byBkaXNhYmxlCj4+PiB0aGUgdmlkZW8gbWFuYWdlbWVudCBjb25m
+aWd1cmF0aW9uIHRvIHJlbWluZCB1cyB0aGF0IGl0IG5lZWRzIHRvIGJlCj4+PiBmaXhlZCA6KS4K
+Pj4+IAo+Pj4gTGluazogaHR0cHM6Ly93d3cuc3QuY29tL2VuL2V2YWx1YXRpb24tdG9vbHMvMzJm
+NzY5aWRpc2NvdmVyeS5odG1sCj4+PiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFy
+aW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4+PiAtLS0KPj4+ICBERVZFTE9QRVJT
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArKwo+Pj4gIC4uLi9zdG0z
+MmY3NjktZGlzY28vZXh0bGludXguY29uZiAgICAgICAgICAgICB8ICA0ICsrKwo+Pj4gIC4uLi9z
+dG0zMmY3NjktZGlzY28vZmxhc2hfc2Quc2ggICAgICAgICAgICAgICB8IDE4ICsrKysrKysrKysr
+Cj4+PiAgLi4uL3N0bTMyZjc2OS1kaXNjby9nZW5pbWFnZS5jZmcgICAgICAgICAgICAgIHwgMjcg
+KysrKysrKysrKysrKysrKwo+Pj4gIC4uLi9zdG0zMmY3NjktZGlzY28vbGludXgtc2QuZnJhZ21l
+bnQgICAgICAgICB8ICAxICsKPj4+ICAuLi4vc3RtMzJmNzY5LWRpc2NvL3Bvc3QtYnVpbGQuc2gg
+ICAgICAgICAgICAgfCAgNyArKysrCj4+PiAgLi4uL3N0bTMyZjc2OS1kaXNjby9yZWFkbWUudHh0
+ICAgICAgICAgICAgICAgIHwgMzIgKysrKysrKysrKysrKysrKysrKwo+Pj4gIGNvbmZpZ3Mvc3Rt
+MzJmNzY5X2Rpc2NvX3NkX2RlZmNvbmZpZyAgICAgICAgICB8IDMwICsrKysrKysrKysrKysrKysr
+Cj4+PiAgOCBmaWxlcyBjaGFuZ2VkLCAxMjEgaW5zZXJ0aW9ucygrKQo+Pj4gIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNzY5LWRpc2NvL2V4dGxpbnV4
+LmNvbmYKPj4+ICBjcmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0
+bTMyZjc2OS1kaXNjby9mbGFzaF9zZC5zaAo+Pj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9z
+dG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNzY5LWRpc2NvL2dlbmltYWdlLmNmZwo+Pj4gIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNzY5LWRpc2NvL2xp
+bnV4LXNkLmZyYWdtZW50Cj4+PiAgY3JlYXRlIG1vZGUgMTAwNzU1IGJvYXJkL3N0bWljcm9lbGVj
+dHJvbmljcy9zdG0zMmY3NjktZGlzY28vcG9zdC1idWlsZC5zaAo+Pj4gIGNyZWF0ZSBtb2RlIDEw
+MDY0NCBib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNzY5LWRpc2NvL3JlYWRtZS50eHQK
+Pj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgY29uZmlncy9zdG0zMmY3NjlfZGlzY29fc2RfZGVmY29u
+ZmlnCj4+PiAKPj4+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+Pj4gaW5k
+ZXggNWNkODgyYjU3OTFjLi44OGVkNDA0MTJhZTggMTAwNjQ0Cj4+PiAtLS0gYS9ERVZFTE9QRVJT
+Cj4+PiArKysgYi9ERVZFTE9QRVJTCj4+PiBAQCAtNzAyLDggKzcwMiwxMCBAQCBGOiAgICAgICBw
+YWNrYWdlL3hpbmV0ZC8KPj4+IAo+Pj4gIE46ICBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNj
+aGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4+PiAgRjogIGJvYXJkL2JzaC8KPj4+ICtGOiAgIGJv
+YXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vCj4+PiAgRjogIGNvbmZpZ3Mv
+aW14OG1uX2JzaF9zbW1fczJfZGVmY29uZmlnCj4+PiAgRjogIGNvbmZpZ3MvaW14OG1uX2JzaF9z
+bW1fczJfcHJvX2RlZmNvbmZpZwo+Pj4gK0Y6ICAgY29uZmlncy9zdG0zMmY3NjlfZGlzY29fc2Rf
+ZGVmY29uZmlnCj4+PiAgRjogIHBhY2thZ2Uvc3NjZXAvCj4+PiAgRjogIHBhY2thZ2UvdXV1Lwo+
+Pj4gCj4+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMyZjc2OS1k
+aXNjby9leHRsaW51eC5jb25mIGIvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMyZjc2OS1k
+aXNjby9leHRsaW51eC5jb25mCj4+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+Pj4gaW5kZXggMDAw
+MDAwMDAwMDAwLi40ODQ4M2EwMWZjNGUKPj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL2JvYXJk
+L3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vZXh0bGludXguY29uZgo+Pj4gQEAg
+LTAsMCArMSw0IEBACj4+PiArbGFiZWwgc3RtMzJmNzY5LWRpc2NvLWJ1aWxkcm9vdAo+Pj4gKyAg
+a2VybmVsIC96SW1hZ2UKPj4+ICsgIGRldmljZXRyZWUgL3N0bTMyZjc2OS1kaXNjby5kdGIKPj4+
+ICsgIGFwcGVuZCBjb25zb2xlPXR0eVNUTTAsMTE1MjAwIHJvb3Q9L2Rldi9tbWNibGswcDIgcncg
+cm9vdGZzdHlwZT1leHQyIHJvb3R3YWl0IGVhcmx5cHJpbnRrIGNvbnNvbGVibGFuaz0wIGlnbm9y
+ZV9sb2dsZXZlbAo+Pj4gZGlmZiAtLWdpdCBhL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0z
+MmY3NjktZGlzY28vZmxhc2hfc2Quc2ggYi9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJm
+NzY5LWRpc2NvL2ZsYXNoX3NkLnNoCj4+PiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+Pj4gaW5kZXgg
+MDAwMDAwMDAwMDAwLi4wZmYzYWU3ZGJmYjMKPj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL2Jv
+YXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vZmxhc2hfc2Quc2gKPj4+IEBA
+IC0wLDAgKzEsMTggQEAKPj4+ICsjIS9iaW4vYmFzaAo+Pj4gKwo+Pj4gK09VVFBVVF9ESVI9JDEK
+Pj4+ICsKPj4+ICtpZiAhIHRlc3QgLWQgIiR7T1VUUFVUX0RJUn0iIDsgdGhlbgo+Pj4gKyAgICBl
+Y2hvICJFUlJPUjogbm8gb3V0cHV0IGRpcmVjdG9yeSBzcGVjaWZpZWQuIgo+Pj4gKyAgICBlY2hv
+ICJVc2FnZTogJDAgT1VUUFVUX0RJUiIKPj4+ICsgICAgZXhpdCAxCj4+PiArZmkKPj4+ICsKPj4+
+ICsiJHtPVVRQVVRfRElSfSIvaG9zdC9iaW4vb3Blbm9jZCAtZiBib2FyZC9zdG0zMmY3NjlpLWRp
+c2NvLmNmZyBcCj4+PiArICAtYyAiaW5pdCIgXAo+Pj4gKyAgLWMgInJlc2V0IGluaXQiIFwKPj4+
+ICsgIC1jICJmbGFzaCBwcm9iZSAwIiBcCj4+PiArICAtYyAiZmxhc2ggaW5mbyAwIiBcCj4+PiAr
+ICAtYyAiZmxhc2ggd3JpdGVfaW1hZ2UgZXJhc2UgJHtPVVRQVVRfRElSfS9pbWFnZXMvdS1ib290
+LmJpbiAweDA4MDAwMDAwIiBcCj4+PiArICAtYyAicmVzZXQgcnVuIiBcCj4+PiArICAtYyAic2h1
+dGRvd24iCj4+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMyZjc2
+OS1kaXNjby9nZW5pbWFnZS5jZmcgYi9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNzY5
+LWRpc2NvL2dlbmltYWdlLmNmZwo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDAw
+MDAwMDAwMDAwMC4uNDFmOWRhNTEyNDg5Cj4+PiAtLS0gL2Rldi9udWxsCj4+PiArKysgYi9ib2Fy
+ZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNzY5LWRpc2NvL2dlbmltYWdlLmNmZwo+Pj4gQEAg
+LTAsMCArMSwyNyBAQAo+Pj4gK2ltYWdlIGJvb3QudmZhdCB7Cj4+PiArICAgICB2ZmF0IHsKPj4+
+ICsgICAgICAgICAgICAgZmlsZXMgPSB7Cj4+PiArICAgICAgICAgICAgICAgICAgICAgInpJbWFn
+ZSIsCj4+PiArICAgICAgICAgICAgICAgICAgICAgInN0bTMyZjc2OS1kaXNjby5kdGIiLAo+Pj4g
+KyAgICAgICAgICAgICAgICAgICAgICJleHRsaW51eCIKPj4+ICsgICAgICAgICAgICAgfQo+Pj4g
+KyAgICAgfQo+Pj4gKwo+Pj4gKyAgICAgc2l6ZSA9IDE2TQo+Pj4gK30KPj4+ICsKPj4+ICtpbWFn
+ZSBzZGNhcmQuaW1nIHsKPj4+ICsgICAgIGhkaW1hZ2Ugewo+Pj4gKyAgICAgfQo+Pj4gKwo+Pj4g
+KyAgICAgcGFydGl0aW9uIHUtYm9vdCB7Cj4+PiArICAgICAgICAgICAgIHBhcnRpdGlvbi10eXBl
+ID0gMHhDCj4+PiArICAgICAgICAgICAgIGltYWdlID0gImJvb3QudmZhdCIKPj4+ICsgICAgIH0K
+Pj4+ICsKPj4+ICsgICAgIHBhcnRpdGlvbiByb290ZnMgewo+Pj4gKyAgICAgICAgICAgICBwYXJ0
+aXRpb24tdHlwZSA9IDB4ODMKPj4+ICsgICAgICAgICAgICAgaW1hZ2UgPSAicm9vdGZzLmV4dDIi
+Cj4+PiArICAgICAgICAgICAgIHNpemUgPSAzMk0KPj4+ICsgICAgIH0KPj4+ICt9Cj4+PiBkaWZm
+IC0tZ2l0IGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMyZjc2OS1kaXNjby9saW51eC1z
+ZC5mcmFnbWVudCBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vbGlu
+dXgtc2QuZnJhZ21lbnQKPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+PiBpbmRleCAwMDAwMDAw
+MDAwMDAuLjg0NjIyOWQwZDQ2OAo+Pj4gLS0tIC9kZXYvbnVsbAo+Pj4gKysrIGIvYm9hcmQvc3Rt
+aWNyb2VsZWN0cm9uaWNzL3N0bTMyZjc2OS1kaXNjby9saW51eC1zZC5mcmFnbWVudAo+Pj4gQEAg
+LTAsMCArMSBAQAo+Pj4gKyMgQ09ORklHX1hJUF9LRVJORUwgaXMgbm90IHNldAo+Pj4gZGlmZiAt
+LWdpdCBhL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vcG9zdC1idWls
+ZC5zaCBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vcG9zdC1idWls
+ZC5zaAo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA3NTUKPj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uYzhj
+Y2EzZGU4YzliCj4+PiAtLS0gL2Rldi9udWxsCj4+PiArKysgYi9ib2FyZC9zdG1pY3JvZWxlY3Ry
+b25pY3Mvc3RtMzJmNzY5LWRpc2NvL3Bvc3QtYnVpbGQuc2gKPj4+IEBAIC0wLDAgKzEsNyBAQAo+
+Pj4gKyMhL2Jpbi9zaAo+Pj4gK0JPQVJEX0RJUj0iJChkaXJuYW1lICIkMCIpIgo+Pj4gKwo+Pj4g
+KyMgS2VybmVsIGlzIGJ1aWx0IHdpdGhvdXQgZGV2cHRzIHN1cHBvcnQKPj4+ICtzZWQgLWkgJy9e
+ZGV2cHRzL2QnICIke1RBUkdFVF9ESVJ9Ii9ldGMvZnN0YWIKPj4+ICsKPj4+ICtpbnN0YWxsIC1t
+IDA2NDQgLUQgIiR7Qk9BUkRfRElSfSIvZXh0bGludXguY29uZiAiJHtCSU5BUklFU19ESVJ9Ii9l
+eHRsaW51eC9leHRsaW51eC5jb25mCj4+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvc3RtaWNyb2VsZWN0
+cm9uaWNzL3N0bTMyZjc2OS1kaXNjby9yZWFkbWUudHh0IGIvYm9hcmQvc3RtaWNyb2VsZWN0cm9u
+aWNzL3N0bTMyZjc2OS1kaXNjby9yZWFkbWUudHh0Cj4+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
+Pj4gaW5kZXggMDAwMDAwMDAwMDAwLi44ZjRmNzlhODYxMzgKPj4+IC0tLSAvZGV2L251bGwKPj4+
+ICsrKyBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vcmVhZG1lLnR4
+dAo+Pj4gQEAgLTAsMCArMSwzMiBAQAo+Pj4gK1NUTTMyRjc2OSBEaXNjb3ZlcnkKPj4+ICs9PT09
+PT09PT09PT09PT09PT09Cj4+PiArCj4+PiArVGhpcyB0dXRvcmlhbCBkZXNjcmliZXMgaG93IHRv
+IHVzZSB0aGUgcHJlZGVmaW5lZCBCdWlsZHJvb3QKPj4+ICtjb25maWd1cmF0aW9uIGZvciB0aGUg
+U1RNMzJGNzY5IERpc2NvdmVyeSBldmFsdWF0aW9uIHBsYXRmb3JtLgo+Pj4gKwo+Pj4gK0J1aWxk
+aW5nCj4+PiArLS0tLS0tLS0KPj4+ICsKPj4+ICsgIG1ha2Ugc3RtMzJmNzY5X2Rpc2NvX3NkX2Rl
+ZmNvbmZpZwo+Pj4gKyAgbWFrZQo+Pj4gKwo+Pj4gK0ZsYXNoaW5nCj4+PiArLS0tLS0tLS0KPj4+
+ICsKPj4+ICsgIC4vYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMyZjc2OS1kaXNjby9mbGFz
+aF9zZC5zaCBvdXRwdXQvCj4+PiArCj4+PiArSXQgd2lsbCBmbGFzaCB0aGUgVS1ib290IGJvb3Rs
+b2FkZXIuCj4+PiArCj4+PiArQ3JlYXRpbmcgU0QgY2FyZAo+Pj4gKy0tLS0tLS0tLS0tLS0tLS0K
+Pj4+ICsKPj4+ICtCdWlsZHJvb3QgcHJlcGFyZXMgYW4ic2RjYXJkLmltZyIgaW1hZ2UgaW4gdGhl
+IG91dHB1dC9pbWFnZXMvIGRpcmVjdG9yeSwKPj4+ICtyZWFkeSB0byBiZSBkdW1wZWQgb24gYSBT
+RCBjYXJkLiBMYXVuY2ggdGhlIGZvbGxvd2luZyBjb21tYW5kIGFzIHJvb3Q6Cj4+PiArCj4+PiAr
+ICBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9L2Rldi88eW91ci1zZC1kZXZpY2U+
+Cj4+PiArCj4+PiArKioqIFdBUk5JTkchIFRoaXMgd2lsbCBkZXN0cm95IGFsbCB0aGUgY2FyZCBj
+b250ZW50LiBVc2Ugd2l0aCBjYXJlISAqKioKPj4+ICsKPj4+ICtGb3IgZGV0YWlscyBhYm91dCB0
+aGUgbWVkaXVtIGltYWdlIGxheW91dCBhbmQgaXRzIGNvbnRlbnQsIHNlZSB0aGUKPj4+ICtkZWZp
+bml0aW9uIGluIGJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vZ2VuaW1h
+Z2UuY2ZnLgo+Pj4gKwo+Pj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvc3RtMzJmNzY5X2Rpc2NvX3Nk
+X2RlZmNvbmZpZyBiL2NvbmZpZ3Mvc3RtMzJmNzY5X2Rpc2NvX3NkX2RlZmNvbmZpZwo+Pj4gbmV3
+IGZpbGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uNGQ0MzY1ODQwM2NhCj4+
+PiAtLS0gL2Rldi9udWxsCj4+PiArKysgYi9jb25maWdzL3N0bTMyZjc2OV9kaXNjb19zZF9kZWZj
+b25maWcKPj4+IEBAIC0wLDAgKzEsMzAgQEAKPj4+ICtCUjJfYXJtPXkKPj4+ICtCUjJfY29ydGV4
+X200PXkKPj4gCj4+IEhlcmUgXl5eIGl0IGlzIGEgQlIyX2NvcnRleF9tNwo+IAo+IFllcywgIHlv
+dSBhcmUgcmlnaHQKPiAKPj4gCj4+PiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NV
+U1RPTV81XzE0PXkKPj4+ICtCUjJfUk9PVEZTX1BPU1RfQlVJTERfU0NSSVBUPSJib2FyZC9zdG1p
+Y3JvZWxlY3Ryb25pY3Mvc3RtMzJmNzY5LWRpc2NvL3Bvc3QtYnVpbGQuc2giCj4+PiArQlIyX1JP
+T1RGU19QT1NUX0lNQUdFX1NDUklQVD0ic3VwcG9ydC9zY3JpcHRzL2dlbmltYWdlLnNoIgo+Pj4g
+K0JSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iLWMgYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNz
+L3N0bTMyZjc2OS1kaXNjby9nZW5pbWFnZS5jZmciCj4+PiArQlIyX0xJTlVYX0tFUk5FTD15Cj4+
+PiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4+PiArQlIyX0xJTlVYX0tFUk5F
+TF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4xNC4yMSIKPj4gCj4+IEl0IHdvdWxkIGJlIGdyZWF0
+IGlmIHlvdSBjb3VsZCB1c2UgTGludXggbGF0ZXN0IHN0YWJsZSA1LjE1LjEwOCB0aGF0IGhhcwo+
+PiBwYXRjaCBmb3IgTU1VLWxlc3MgZml4IGNvbW1pdHRlZFswXS4gSSd2ZSBmb3VuZCBhbmQgZml4
+ZWQgdGhlIGJ1ZyBvbgo+PiBpLk1YUlQgYnV0IGl0IHNob3VsZCBhZmZlY3QgZXZlcnkgTU1VLWxl
+c3Mgc3lzdGVtLgo+IAo+IHRoYW5rcyBmb3IgdGhlIGluZm8KPiAKPj4gT3IgeW91IGNvdWxkIGJ1
+bXAgTGludXggdG8gbGF0ZXN0IHZlcnNpb24gNi4yIHRoYXQgaGFzIHRoZSBwYXRjaAo+PiBjb21t
+aXR0ZWQgdG9vLgo+IAo+IEkgd2lsbCB0cnkgd2l0aCA1LjE1LjEwOC4gRWFjaCBuZXcga2VybmVs
+IHZlcnNpb24gZ2VuZXJhbGx5IGxlYWRzIHRvCj4gb2NjdXB5aW5nIG1vcmUgbWVtb3J5IGFuZCB0
+aGlzIGlzIHRoZW4gcmVmbGVjdGVkIGluIHNvbWUgY2FzZXMKPiBvbiBhcHBsaWNhdGlvbnMgdG8g
+YmUgbGF1bmNoZWQgaW4gdXNlciBzcGFjZSB0aGF0IGJlY29tZSB1bnN0YWJsZQo+IChvciBhdCBs
+ZWFzdCBpdCBzZWVtcyB0byBtZSB0byBiZSBzbykuCgpZb3XigJlyZSByaWdodCBhYm91dCB0aGUg
+c2l6ZSwgYnV0IHlvdXIgZXhwZXJpZW5jZSBhcyB1c2VyIHNwYWNlIGluc3RhYmlsaXR5IGlzIG5v
+cm1hbGx5IGR1ZSB0byBidWcgb24KbW11LWxlc3MgYXJtIHN1cHBvcnQgdGhhdCBpcyBmZXcgdGVz
+dGVkIGNvbXBhcmVkIHRvIG1tdSBhcm0uClRoZSBidWcgSeKAmXZlIGZvdW5kIHNob3dlZCB1cCBk
+dXJpbmcgcm9vdGZzIGV4dDQgbW91bnQgc28gaXQgd2FzIGVhc3kgdG8gcmVwcm9kdWNlLgpJdCBk
+ZWFsdCBleGFjdGx5IHdpdGggbWVtb3J5IHBhZ2UgdHJhbnNsYXRpb24gdG8gbW11LWxlc3MuClNv
+IG1heWJlIHdoYXQgeW91IHNlZSBhcyBpbnN0YWJpbGl0eSBjb3VsZCBiZSBmaXhlZCBieSBteSBw
+YXRjaC4KCj4gU28sIGZvciBub3cgSSBwcmVmZXIgdG8gYnVtcCB0bwo+IDUuMTUuMTA4LgoKU3Vy
+ZS4gQ291bGQgeW91IGFsc28gdHJ5IHRvIGZpbGwgdGhlIG1lbW9yeSBhbmQgc2VlIGlmIGV2ZXJ5
+dGhpbmcgd29ya3MgY29ycmVjdGx5PwpZb3UgY291bGQgdHJ5IHRvIHN0YXJ0IG1hbnkgaW5zdGFu
+Y2VzIG9mIGEgcHJvZ3JhbSB1bnRpbCB5b3UgZmlsbCB0aGUgbWVtb3J5IGFuZCBzZWUgdGhhdCBl
+dmVyeXRoaW5nIGlzIHdvcmtpbmcgb2soSSBob3BlKS4KClRoYW5rIHlvdQpCZXN0IHJlZ2FyZHMK
+R2l1bGlvCgo+IAo+IFRoYW5rcyBhbmQgcmVnYXJkcywKPiBEYXJpbwo+IAo+PiAKPj4gVGhpcyBj
+b3VsZCBiZSBkb25lIGFsc28gZm9yIHRoZSBzdG0zMmY0eHggYm9hcmRzIHlvdSdyZSBidW1waW5n
+IGZvcgo+PiB1Ym9vdC4KPj4gCj4+IFswXToKPj4gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
+c2NtL2xpbnV4L2tlcm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdC9jb21taXQvP2g9bGludXgtNS4x
+NS55JmlkPTdhZTAyNjI3NDhlNWQ4ZmYxZTQyYjc3YmIxOWJiYTQ3NDczM2YyODAKPj4gCj4+IEJl
+c3QgcmVnYXJkcwo+PiAtLQo+PiBHaXVsaW8gQmVuZXR0aQo+PiBCZW5ldHRpIEVuZ2luZWVyaW5n
+IHNhcwo+PiAKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0ic3RtMzIiCj4+PiArQlIy
+X0xJTlVYX0tFUk5FTF9DT05GSUdfRlJBR01FTlRfRklMRVM9IiQoTElOVVhfRElSKS9hcmNoL2Fy
+bS9jb25maWdzL2RyYW1fMHhjMDAwMDAwMC5jb25maWcgYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNz
+L3N0bTMyZjc2OS1kaXNjby9saW51eC1zZC5mcmFnbWVudCIKPj4+ICtCUjJfTElOVVhfS0VSTkVM
+X0lNQUdFX1RBUkdFVF9DVVNUT009eQo+Pj4gK0JSMl9MSU5VWF9LRVJORUxfSU1BR0VfVEFSR0VU
+X05BTUU9InpJbWFnZSIKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPj4+ICtC
+UjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0ic3RtMzJmNzY5LWRpc2NvIgo+Pj4gK0JS
+Ml9QQUNLQUdFX0JVU1lCT1hfQ09ORklHPSJwYWNrYWdlL2J1c3lib3gvYnVzeWJveC1taW5pbWFs
+LmNvbmZpZyIKPj4+ICsjIEJSMl9QQUNLQUdFX0lGVVBET1dOX1NDUklQVFMgaXMgbm90IHNldAo+
+Pj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+Pj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJf
+U0laRT0iMzJNIgo+Pj4gKyMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQKPj4+ICtC
+UjJfVEFSR0VUX1VCT09UPXkKPj4+ICtCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09O
+RklHPXkKPj4+ICtCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OPXkKPj4+ICtCUjJfVEFS
+R0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDIzLjA0Igo+Pj4gK0JSMl9UQVJHRVRf
+VUJPT1RfQk9BUkRfREVGQ09ORklHPSJzdG0zMmY3NjktZGlzY28iCj4+PiArQlIyX1RBUkdFVF9V
+Qk9PVF9ORUVEU19PUEVOU1NMPXkKPj4+ICtCUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQo+
+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfR0VOSU1BR0U9eQo+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfTVRP
+T0xTPXkKPj4+ICtCUjJfUEFDS0FHRV9IT1NUX09QRU5PQ0Q9eQo+PiAKPiAKPiAKPiAtLSAKPiAK
+PiBEYXJpbyBCaW5hY2NoaQo+IAo+IFNlbmlvciBFbWJlZGRlZCBMaW51eCBEZXZlbG9wZXIKPiAK
+PiBkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbQo+IAo+IF9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KPiAKPiAKPiBBbWFydWxhIFNvbHV0aW9ucyBTUkwKPiAKPiBW
+aWEgTGUgQ2FuZXZhcmUgMzAsIDMxMTAwIFRyZXZpc28sIFZlbmV0bywgSVQKPiAKPiBULiArMzkg
+MDQyIDI0MyA1MzEwCj4gaW5mb0BhbWFydWxhc29sdXRpb25zLmNvbQo+IAo+IHd3dy5hbWFydWxh
+c29sdXRpb25zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
