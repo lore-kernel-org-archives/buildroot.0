@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BECAC77B76
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 10:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E5DBC77B76
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 10:34:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33F7840B6F;
-	Sun, 23 Apr 2023 10:33:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33F7840B6F
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA84040B23;
+	Sun, 23 Apr 2023 10:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA84040B23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MW2koa9ckyg4; Sun, 23 Apr 2023 10:33:51 +0000 (UTC)
+	with ESMTP id xZUI6uMcKtZT; Sun, 23 Apr 2023 10:34:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D80140BCB;
-	Sun, 23 Apr 2023 10:33:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D80140BCB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8A8121C2B5C
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:33:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E37CB40BCB;
+	Sun, 23 Apr 2023 10:34:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E37CB40BCB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 404B91C2B8E
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:33:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E64440B23
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:33:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E64440B23
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AAD860067
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:33:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AAD860067
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mtjzYfTuzIpL for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A26VH1COorKW for <buildroot@lists.busybox.net>;
  Sun, 23 Apr 2023 10:33:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 302A040AB1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AEFC605A4
  for <buildroot@buildroot.org>; Sun, 23 Apr 2023 10:33:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 302A040AB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AEFC605A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 19E36843EA; Sun, 23 Apr 2023 10:33:22 +0000 (UTC)
+ id EAE1B843AF; Sun, 23 Apr 2023 10:33:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 12:32:10 +0200
+Date: Sun, 23 Apr 2023 12:28:12 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 6cee24af5316dd1104cc2a8198fdbddafeaa60d1
-X-Git-Newrev: 95741c08f1d635a68c5f555f97e2c751fde629b5
+X-Git-Oldrev: 7e86856d69666ae506bde293942ae335dd35fb4e
+X-Git-Newrev: 5c7130f970a756df854373afce50b8a9b7aef1df
 X-Patchwork-Hint: ignore
-Message-Id: <20230423103322.19E36843EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-golang.mk:
- add osusergo and netgo tags in static builds
+Message-Id: <20230423103321.EAE1B843AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] doc/manual: fix
+ formatting slightly
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,63 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95741c08f1d635a68c5f555f97e2c751fde629b5
+commit: https://git.buildroot.net/buildroot/commit/?id=5c7130f970a756df854373afce50b8a9b7aef1df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-CGO (the Go language C bindings) normally links dynamically with the C
-libraries. It seems that passing -extldflags=-static is not sufficient
-to make sure they link statically. As a result, a build using CGO will
-fail with
-
-runtime.gcdata: missing Go type information for global symbol .dynsym: size 72
-
-There are two modules in the standard Go library that can use CGO:
-os/user and net. Both of these have pure Go versions, however, which can
-be selected with the osusergo and netgo tags. Since these two are
-standard library modules that get used in almost all Go programs, pass
-those flags in the common infrastructure.
-
-It's not entirely clear if this is always the case or only depending on
-the specific way CGO is used. In the former case, we could instead
-disable CGO globally if static libs are enabled. However, it turns out
-that this doesn't solve the problem completely anyway (delve still fails
-to link, with different errors). Also, it is possible that other cgo
-modules do still work. Therefore, just stick to adding the osusergo and
-netgo tags.
-
-Cf. Statically compiling Go programs [0]
-
-Fixes:
- - crucible:
-   http://autobuild.buildroot.net/results/c2f/c2f29f55b461899e8e15c0494578304e6f74bf51/
- - containerd:
-   http://autobuild.buildroot.net/results/699/69910fc6b9f474a7eb0ca7ffa27ac5512cc1bb37/
- - delve:
-   http://autobuild.buildroot.net/results/552/55225d5da17e85271943f7adce6f07d014d9717d/
- - probably others...
-
-[0] https://www.arp242.net/static-go.html
-
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+[yann.morin.1998@free.fr: split off the previous patch by Thierry]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c6bb759e2cb14ebaf2603e69652c44d337a39c72)
+(cherry picked from commit 4468f828859de1f4be82655d63e96d59e760db7d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-golang.mk | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/adding-board-support.txt | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index da9c9a21ac..7ba82284f3 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -102,6 +102,7 @@ ifeq ($(4),target)
+diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
+index b3a8802452..ef6dbd3c2b 100644
+--- a/docs/manual/adding-board-support.txt
++++ b/docs/manual/adding-board-support.txt
+@@ -49,9 +49,10 @@ Buildroot configuration. Refer to xref:customize[] for more details.
  
- ifeq ($(BR2_STATIC_LIBS),y)
- $(2)_LDFLAGS += -extldflags '-static'
-+$(2)_TAGS += osusergo netgo
- endif
+ Before submitting patches for new boards it is recommended to test it by
+ building it using latest gitlab-CI docker container. To do this use
+-utils/docker-run script and inside it issue these commands:
+++utils/docker-run+ script and inside it issue these commands:
++
+ --------------------
+- $ make +<boardname>_defconfig+
++ $ make <boardname>_defconfig
+  $ make
+ --------------------
  
- # Build package for target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
