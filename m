@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42A89C77B73
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 09:51:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72A6AC77B73
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 09:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7A7941816;
-	Sun, 23 Apr 2023 09:51:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7A7941816
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11425417FE;
+	Sun, 23 Apr 2023 09:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11425417FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vPK4J1fFKc58; Sun, 23 Apr 2023 09:51:37 +0000 (UTC)
+	with ESMTP id btXSokOw8wce; Sun, 23 Apr 2023 09:51:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85C0441811;
-	Sun, 23 Apr 2023 09:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C0441811
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4B25A1BF369
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CF4A41811;
+	Sun, 23 Apr 2023 09:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CF4A41811
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5730D1C2B8E
  for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2940B60B58
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2940B60B58
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30451417FE
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30451417FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NfkHej2IHkCO for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cQc22OIxowCr for <buildroot@lists.busybox.net>;
  Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 166F160BA6
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 166F160BA6
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD717417F7
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD717417F7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 012AF843A2; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
+ id C618F843A2; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 11:42:19 +0200
+Date: Sun, 23 Apr 2023 11:02:31 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: f87fe6d4198a8595606646ebf15c0a9746403bb1
-X-Git-Newrev: d2b0ce01ba55cb32c01867aa93110cf5f72a07e1
+X-Git-Oldrev: aa658bec37677fa6b7259e186a80a75231ab5b92
+X-Git-Newrev: f29a5497f52eaa01d84d59951b0d70f90f0a272c
 X-Patchwork-Hint: ignore
-Message-Id: <20230423095041.012AF843A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] docs/manual: rewrite
- section for upstream documentation
+Message-Id: <20230423095040.C618F843A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-cargo: ensure
+ host/target rustflags are properly split
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,89 +63,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2b0ce01ba55cb32c01867aa93110cf5f72a07e1
+commit: https://git.buildroot.net/buildroot/commit/?id=f29a5497f52eaa01d84d59951b0d70f90f0a272c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Previously, the documentation only requested links to upstream commits
-when backporting patches.
+In Cargo, it is quite typical for "build scripts" to be written in Rust
+and therefore they need to be compiled as part of the overall build. In
+cross-compilation, that means a mixed host and target build.
 
-Based on a mailing list discussion [0], patches should, when possible
-and when approriate, provide a link as evidence that the patch has been
-submitted upstream.
+Unfortunately, by default Cargo makes no distinction between the
+RUSTFLAGS used for the host and the target. There is, however, an
+unstable feature to make this distinction [1][2].
 
-The motivation is that hopefully the patch gets applied to upstream at
-some point reducing the long term maintenance burden within Buildroot.
-This also makes future patch review on subsequent package version bumps
-more streamlined.
+We already have CARGO_TARGET_APPLIES_TO_HOST="false". This makes sure
+that any configuration that we make for the target doesn't automatically
+apply to the host as well. However, this only applies for per-target
+configuration, for example the setting of "cc" in the config.toml
+generated by package/rust/rust.mk. Flags that are passed with RUSTFLAGS
+still apply to both host and target. Therefore, we need to use the
+CARGO_TARGET_<tuple>_RUSTFLAGS environment variable instead of plain
+RUSTFLAGS.
 
-For patches that are unique to BR and do not apply to the upstream
-repository, patches should have a comment explaining why they do not
-apply upstream.
+This, however, doesn't allow us to specify flags that apply only to the
+host. We could use CARGO_TARGET_<hosttuple>_RUSTFLAGS for that, but that
+doesn't work in case the host and target tuple are the same. For this,
+we need another unstable feature, enabled with
+CARGO_UNSTABLE_HOST_CONFIG="true". With this enabled, we can specify
+flags that apply only for the host build using CARGO_HOST_RUSTFLAGS.
 
-[0] https://lists.buildroot.org/pipermail/buildroot/2023-March/666000.html
+Currently, we don't have any such flags, but we really should: we should
+pass the proper link flags to point to $(HOST_DIR)/lib. Therefore, add
+CARGO_HOST_RUSTFLAGS doing exactly that.
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5b00b40a05437e1042b25c097b977d5a26bdee1d)
+[1] https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#host-config
+[2] https://github.com/rust-lang/cargo/pull/10395
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit b40a2cc3912a039d29231241daca477790e366cd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/patch-policy.txt | 35 ++++++++++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 11 deletions(-)
+ package/pkg-cargo.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index 063ef984d8..dc35132ecf 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -144,24 +144,37 @@ AC_PROG_MAKE_SET
- +AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
- ---------------
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+index 5600c8e97e..264bf5a1ae 100644
+--- a/package/pkg-cargo.mk
++++ b/package/pkg-cargo.mk
+@@ -34,7 +34,10 @@ PKG_COMMON_CARGO_ENV = \
+ # using nighly features on stable releases, i.e features that are not
+ # yet considered stable.
+ #
+-# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" "enables the nightly
++# CARGO_UNSTABLE_HOST_CONFIG="true" enables the host specific
++# configuration feature
++#
++# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" enables the nightly
+ # configuration option target-applies-to-host value to be set
+ #
+ # CARGO_TARGET_APPLIES_TO_HOST="false" is actually setting the value
+@@ -43,9 +46,11 @@ PKG_COMMON_CARGO_ENV = \
+ PKG_CARGO_ENV = \
+ 	$(PKG_COMMON_CARGO_ENV) \
+ 	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
++	CARGO_UNSTABLE_HOST_CONFIG="true" \
+ 	CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" \
+ 	CARGO_TARGET_APPLIES_TO_HOST="false" \
+ 	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
++	CARGO_HOST_RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))" \
+ 	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
  
--=== Integrating patches found on the Web
-+=== Additional patch documentation
+ #
+@@ -53,7 +58,8 @@ PKG_CARGO_ENV = \
+ # and should be removed when fixed upstream
+ #
+ ifeq ($(NORMALIZED_ARCH),arm)
+-	PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
++	PKG_CARGO_ENV += \
++		CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
+ endif
  
--When integrating a patch of which you are not the author, you have to
--add a few things in the header of the patch itself.
-+Ideally, all patches should document an upstream patch or patch submission, when
-+applicable, via the +Upstream+ trailer.
- 
--Depending on whether the patch has been obtained from the project
--repository itself, or from somewhere on the web, add one of the
--following tags:
-+When backporting an upstream patch that has been accepted into mainline, it is
-+preferred that the URL to the commit is referenced:
- 
- ---------------
--Backported from: <some commit id>
-+Upstream: <URL to upstream commit>
- ---------------
- 
--or
-+If a new issue is identified in Buildroot and upstream is generally affected by 
-+the issue (it's not a Buildroot specific issue), users should submit the patch
-+upstream and provide a link to that submission when possible:
- 
- ---------------
--Fetch from: <some url>
-+Upstream: <URL to upstream mailing list submission or merge request>
- ---------------
- 
--It is also sensible to add a few words about any changes to the patch
--that may have been necessary.
-+Patches that have been submitted but were denied upstream should note that and
-+include comments about why the patch is being used despite the upstream status.
-+
-+Note: in any of the above scenarios, it is also sensible to add a few words
-+about any changes to the patch that may have been necessary.
-+
-+If a patch does not apply upstream then this should be noted with a comment:
-+
-+---------------
-+Upstream: N/A <additional information about why patch is Buildroot specific>
-+---------------
-+
-+Adding this documentation helps streamline the patch review process during
-+package version updates.
-\ No newline at end of file
+ HOST_PKG_CARGO_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
