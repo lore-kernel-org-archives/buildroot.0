@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D7A8C77B60
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 16:40:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84307C6FD18
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 17:08:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAD39410DC;
-	Sun, 23 Apr 2023 16:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAD39410DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA505405A1;
+	Sun, 23 Apr 2023 17:08:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA505405A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HicIPcW-5XLq; Sun, 23 Apr 2023 16:40:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TFwma0pngUHC; Sun, 23 Apr 2023 17:08:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79A094148D;
-	Sun, 23 Apr 2023 16:40:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79A094148D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9D8D21BF48D
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 16:40:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEEF74057C;
+	Sun, 23 Apr 2023 17:08:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEEF74057C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C43C1C2B1F
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 17:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76E5C60AD5
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 16:40:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76E5C60AD5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64EDF4057C
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 17:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64EDF4057C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HlsL8c8kTVZf for <buildroot@lists.busybox.net>;
- Sun, 23 Apr 2023 16:40:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ykQP1MvjX_Q5 for <buildroot@lists.busybox.net>;
+ Sun, 23 Apr 2023 17:08:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DE2F60A6D
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0DE2F60A6D
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 16:40:34 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:f69d:4ee8:8d2a:132a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id C6E7AB00593;
- Sun, 23 Apr 2023 18:40:25 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 23 Apr 2023 18:40:25 +0200
-Date: Sun, 23 Apr 2023 18:40:25 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: MidCheck <mc.xin@foxmail.com>
-Message-ID: <20230423164025.GL2696@scaer>
-References: <tencent_E605AD09EB02769EC2D19F376A1239F80406@qq.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD8A340577
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DD8A340577
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 17:08:37 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-3010889c6ebso2074508f8f.2
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 10:08:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1682269715; x=1684861715;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=qWara3EJiw24y2YphGzoX3p67Oks5JCIA/Ka51UMl80=;
+ b=ZlLSd8rko1F3iqayCbnv1E8kcFah/rxzJJFad0/qJf+G7+CuAxsGY4li0W8VE9Zm4I
+ drm1SF2I/OLi67NrtylzktoCvxs9VWqowyVxyqZs82xSY06chkWHGSMSMeNKKhUMn2zD
+ ijqr8z7ExLr2/l1O91qBjDDbN3THz6TRXW5Ggnn9OMHIJrjZktwPUaE9xoqQbJX4sCZa
+ 6nW/tCWYX2mQtNYLGk9N2e/M5Qp0j9wKnGjPV4W+PNSLcaJ0HJO/hWibLwv7P3iUinNh
+ 0smHtSTR8Ky7GYmXO2+ZA/h6PsGjdKtwSAQgsZexoHT95ygNlrorAJgB+IxgvXulzcPN
+ tohw==
+X-Gm-Message-State: AAQBX9eXeGIINW4G/M1rnYK1bsX5fvWk/ep6EMYhkCporW4pJtMHPFI+
+ /9KXvjFJjIsynj1rF5Xqw5CCB2cpicW0k6MwYTV2rA==
+X-Google-Smtp-Source: AKy350bNdKdF2t4YICC1q8CTEFeeivU3KxXE/W5R/GkvKOcxiNxdGq7C91bC3ZkywWxfWlFXlKPHzA==
+X-Received: by 2002:a5d:5492:0:b0:2f8:e652:dc04 with SMTP id
+ h18-20020a5d5492000000b002f8e652dc04mr7031540wrv.45.1682269715564; 
+ Sun, 23 Apr 2023 10:08:35 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([37.159.119.249])
+ by smtp.gmail.com with ESMTPSA id
+ p14-20020a05600c358e00b003f188f608b9sm10557649wmq.8.2023.04.23.10.08.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 23 Apr 2023 10:08:34 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Sun, 23 Apr 2023 19:08:20 +0200
+Message-Id: <20230423170820.1395767-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <tencent_E605AD09EB02769EC2D19F376A1239F80406@qq.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1682268032;
- bh=GHWOVnrG5D7Em2fNhykmIAluha0OswqlrJ9nzfOhMR4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=EyTiF9LMqLAs1GAWAx4Bn97PpwXKwFVs/9G6mN/dRYwjyY3tC4MZCIvWLPDztHaqN
- r75izqDrfyeuQJW9I3FAfoBCKYBuLQ9wme/jzhgktKSwQ6YJm/iZqe8BPRxgaUXl5J
- Wpl3Zhcq0kyAlndahlqIZx0/CJ7TLlpfWgu8pdUTC/acvs+bze0NB5MPYVfYNX9Q7o
- VkRlB7WOgisJSvL6vxLYDSIic3SqfC7a9kRBMo35V9MHZ447UXHrreMHFoHaRfxgZs
- /gL6C/JaYC+NZzZAjhx3lexB3eB26OtjJFpdCg+hH3+ID220vueCC6X0cHPLeF05E/
- zHT6m5WZAVJfQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EyTiF9LM
-Subject: Re: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: add the
- processing when LIBPATH is a directory
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1682269715; x=1684861715;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=qWara3EJiw24y2YphGzoX3p67Oks5JCIA/Ka51UMl80=;
+ b=YaODJ+5aM5zF+cvxnZN7+hg3gSHe1A6K821qK0gg1rwdE11hsv6kZ3+2m7nDzNxtYr
+ pL1geaB/Dhaa1QWt6ui9A38by80Q4OI+lXELWK6VXZFvyw3F2sevVj0iMjEtMy3xLD7R
+ NrdtlkNemy9dGiYlIKrS08T4p/q/f8jpYvQQo=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=YaODJ+5a
+Subject: [Buildroot] [PATCH v2 1/1] configs/stm32f769_disco_sd_defconfig:
+ new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,92 +93,232 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-MidCheck, All,
+Board support package includes the following components:
+- mainline Linux kernel 5.15.108
+- mainline U-Boot 2023.04
+- default packages from buildroot
 
-On 2023-04-23 23:54 +0800, MidCheck spake thusly:
-> When built with the system's toolchain, the output is as follows:
-> >>> toolchain-external-custom  Installing to target
-> >>> toolchain-external-custom  Copying external toolchain libraries to target...
-> make: *** [package/pkg-generic.mk:384: /root/buildroot-2022.02.11/output/build/toolchain-external-custom/.stamp_target_installed] Error 255
-> 
-> After echo the value of LIBPATH, I found it is a directory:
-> /root/buildroot-2022.02.11/output/host/x86_64-buildroot-linux-gnu/sysroot/etc/ld.so.conf.d
+Note: There is a problem in u-boot display management. It should display
+the ST microelectronics logo but "noise" is displayed (like when running
+the command dd if=/dev/urandom of=/dev/fb0 in Linux). I also tried to
+change version (even the first version in which this feature was
+introduced), but without success. Despite this I decided not to disable
+the video management configuration to remind us that it needs to be
+fixed :).
 
-This is weird that you get an ld.so.conf.d in your toolchain. Is it a
-toolchain we can have access to? How did it get built?
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Link: https://www.st.com/en/evaluation-tools/32f769idiscovery.html
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-> So it caused the script to execute the "exit -1". When I added the processing of the directory, it was successfully built.
-> 
-> Signed-off-by: MidCheck <mc.xin@foxmail.com>
+---
 
-Please, use your real name, not a nickname. Note that it must also match
-the authorship. Non-latin-script characters are perfectly OK.
+Changes in v2:
+- Replace BR2_cortex_m4 with BR2_cortex_m7
+- Use Linux kernel version 5.15.108
 
-> ---
->  toolchain/helpers.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 24c482923a..e0ab991bec 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -28,6 +28,10 @@ copy_toolchain_lib_root = \
->  			elif test -f $${LIBPATH}; then \
->  				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
->  				break ; \
-> +			elif test -d $${LIBPATH}; then \
-> +				mkdir -p $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
-> +				cp -r $${LIBPATH}/* $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
-> +				break ; \
+ DEVELOPERS                                    |  2 ++
+ .../stm32f769-disco/extlinux.conf             |  4 +++
+ .../stm32f769-disco/flash_sd.sh               | 18 +++++++++++
+ .../stm32f769-disco/genimage.cfg              | 27 ++++++++++++++++
+ .../stm32f769-disco/linux-sd.fragment         |  1 +
+ .../stm32f769-disco/post-build.sh             |  7 ++++
+ .../stm32f769-disco/readme.txt                | 32 +++++++++++++++++++
+ configs/stm32f769_disco_sd_defconfig          | 30 +++++++++++++++++
+ 8 files changed, 121 insertions(+)
+ create mode 100644 board/stmicroelectronics/stm32f769-disco/extlinux.conf
+ create mode 100755 board/stmicroelectronics/stm32f769-disco/flash_sd.sh
+ create mode 100644 board/stmicroelectronics/stm32f769-disco/genimage.cfg
+ create mode 100644 board/stmicroelectronics/stm32f769-disco/linux-sd.fragment
+ create mode 100755 board/stmicroelectronics/stm32f769-disco/post-build.sh
+ create mode 100644 board/stmicroelectronics/stm32f769-disco/readme.txt
+ create mode 100644 configs/stm32f769_disco_sd_defconfig
 
-The proper fix would be to exclude directories in the find on line 13.
-
-Indeed, LIBPATTERN is the argument to copy_toolchain_lib_root, and in
-the case of external toolchains, is each item in TOOLCHAIN_EXTERNAL_LIBS,
-the first of which is ld*.so.*, which we expect to only match files, but
-in your case matches a directory.
-
-As I understand it, ld.so.conf is not used at build time to find
-libraries, so having it in the staging is useless.
-
-Also note that having /etc/ld.so.conf.d in the target is not supported,
-and that Buildroot will explicitly fail at the end of the build if it
-sees such a directory, as it is not possible to have proper ldconfig
-setup in cross-compilation; see the top-level Makefile, lines 753-756,
-and commit 9c4072348960 (Makefile: drop ldconfig handling). And so it is
-even weirder that your change makes the build succeed...
-
-Regards,
-Yann E. MORIN.
-
->  			else \
->  				exit -1; \
->  			fi; \
-> -- 
-> 2.40.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d9e95a3d0531..438d4738b307 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -702,8 +702,10 @@ F:	package/xinetd/
+ 
+ N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ F:	board/bsh/
++F:	board/stmicroelectronics/stm32f769-disco/
+ F:	configs/imx8mn_bsh_smm_s2_defconfig
+ F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
++F:	configs/stm32f769_disco_sd_defconfig
+ F:	package/sscep/
+ F:	package/uuu/
+ 
+diff --git a/board/stmicroelectronics/stm32f769-disco/extlinux.conf b/board/stmicroelectronics/stm32f769-disco/extlinux.conf
+new file mode 100644
+index 000000000000..48483a01fc4e
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f769-disco/extlinux.conf
+@@ -0,0 +1,4 @@
++label stm32f769-disco-buildroot
++  kernel /zImage
++  devicetree /stm32f769-disco.dtb
++  append console=ttySTM0,115200 root=/dev/mmcblk0p2 rw rootfstype=ext2 rootwait earlyprintk consoleblank=0 ignore_loglevel
+diff --git a/board/stmicroelectronics/stm32f769-disco/flash_sd.sh b/board/stmicroelectronics/stm32f769-disco/flash_sd.sh
+new file mode 100755
+index 000000000000..0ff3ae7dbfb3
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f769-disco/flash_sd.sh
+@@ -0,0 +1,18 @@
++#!/bin/bash
++
++OUTPUT_DIR=$1
++
++if ! test -d "${OUTPUT_DIR}" ; then
++    echo "ERROR: no output directory specified."
++    echo "Usage: $0 OUTPUT_DIR"
++    exit 1
++fi
++
++"${OUTPUT_DIR}"/host/bin/openocd -f board/stm32f769i-disco.cfg \
++  -c "init" \
++  -c "reset init" \
++  -c "flash probe 0" \
++  -c "flash info 0" \
++  -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
++  -c "reset run" \
++  -c "shutdown"
+diff --git a/board/stmicroelectronics/stm32f769-disco/genimage.cfg b/board/stmicroelectronics/stm32f769-disco/genimage.cfg
+new file mode 100644
+index 000000000000..41f9da512489
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f769-disco/genimage.cfg
+@@ -0,0 +1,27 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"stm32f769-disco.dtb",
++			"extlinux"
++		}
++	}
++
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		partition-type = 0xC
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		size = 32M
++	}
++}
+diff --git a/board/stmicroelectronics/stm32f769-disco/linux-sd.fragment b/board/stmicroelectronics/stm32f769-disco/linux-sd.fragment
+new file mode 100644
+index 000000000000..846229d0d468
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f769-disco/linux-sd.fragment
+@@ -0,0 +1 @@
++# CONFIG_XIP_KERNEL is not set
+diff --git a/board/stmicroelectronics/stm32f769-disco/post-build.sh b/board/stmicroelectronics/stm32f769-disco/post-build.sh
+new file mode 100755
+index 000000000000..c8cca3de8c9b
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f769-disco/post-build.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
++BOARD_DIR="$(dirname "$0")"
++
++# Kernel is built without devpts support
++sed -i '/^devpts/d' "${TARGET_DIR}"/etc/fstab
++
++install -m 0644 -D "${BOARD_DIR}"/extlinux.conf "${BINARIES_DIR}"/extlinux/extlinux.conf
+diff --git a/board/stmicroelectronics/stm32f769-disco/readme.txt b/board/stmicroelectronics/stm32f769-disco/readme.txt
+new file mode 100644
+index 000000000000..8f4f79a86138
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f769-disco/readme.txt
+@@ -0,0 +1,32 @@
++STM32F769 Discovery
++===================
++
++This tutorial describes how to use the predefined Buildroot
++configuration for the STM32F769 Discovery evaluation platform.
++
++Building
++--------
++
++  make stm32f769_disco_sd_defconfig
++  make
++
++Flashing
++--------
++
++  ./board/stmicroelectronics/stm32f769-disco/flash_sd.sh output/
++
++It will flash the U-boot bootloader.
++
++Creating SD card
++----------------
++
++Buildroot prepares an"sdcard.img" image in the output/images/ directory,
++ready to be dumped on a SD card. Launch the following command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout and its content, see the
++definition in board/stmicroelectronics/stm32f769-disco/genimage.cfg.
++
+diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
+new file mode 100644
+index 000000000000..2ae27fb2d852
+--- /dev/null
++++ b/configs/stm32f769_disco_sd_defconfig
+@@ -0,0 +1,30 @@
++BR2_arm=y
++BR2_cortex_m7=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32f769-disco/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f769-disco/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.108"
++BR2_LINUX_KERNEL_DEFCONFIG="stm32"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xc0000000.config board/stmicroelectronics/stm32f769-disco/linux-sd.fragment"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f769-disco"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
++# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f769-disco"
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_OPENOCD=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.32.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
