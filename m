@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72A6AC77B73
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 09:51:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A5C5C77B73
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 09:52:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11425417FE;
-	Sun, 23 Apr 2023 09:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11425417FE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34DF741828;
+	Sun, 23 Apr 2023 09:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34DF741828
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id btXSokOw8wce; Sun, 23 Apr 2023 09:51:51 +0000 (UTC)
+	with ESMTP id LAs-kx7iVMOF; Sun, 23 Apr 2023 09:52:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CF4A41811;
-	Sun, 23 Apr 2023 09:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CF4A41811
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5730D1C2B8E
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E0BA4181F;
+	Sun, 23 Apr 2023 09:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E0BA4181F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DD051BF369
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30451417FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2568960BA6
  for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30451417FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2568960BA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cQc22OIxowCr for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2XFWs1BfhROr for <buildroot@lists.busybox.net>;
  Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD717417F7
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6E3860AD0
  for <buildroot@buildroot.org>; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD717417F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6E3860AD0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C618F843A2; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
+ id D3662843A5; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 11:02:31 +0200
+Date: Sun, 23 Apr 2023 11:08:57 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: aa658bec37677fa6b7259e186a80a75231ab5b92
-X-Git-Newrev: f29a5497f52eaa01d84d59951b0d70f90f0a272c
+X-Git-Oldrev: f29a5497f52eaa01d84d59951b0d70f90f0a272c
+X-Git-Newrev: 02b2c66ffcd48efa87c0503449d3ed18e32f3860
 X-Patchwork-Hint: ignore
-Message-Id: <20230423095040.C618F843A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-cargo: ensure
- host/target rustflags are properly split
+Message-Id: <20230423095040.D3662843A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/nginx: change
+ project and download URL to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,86 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f29a5497f52eaa01d84d59951b0d70f90f0a272c
+commit: https://git.buildroot.net/buildroot/commit/?id=02b2c66ffcd48efa87c0503449d3ed18e32f3860
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-In Cargo, it is quite typical for "build scripts" to be written in Rust
-and therefore they need to be compiled as part of the overall build. In
-cross-compilation, that means a mixed host and target build.
-
-Unfortunately, by default Cargo makes no distinction between the
-RUSTFLAGS used for the host and the target. There is, however, an
-unstable feature to make this distinction [1][2].
-
-We already have CARGO_TARGET_APPLIES_TO_HOST="false". This makes sure
-that any configuration that we make for the target doesn't automatically
-apply to the host as well. However, this only applies for per-target
-configuration, for example the setting of "cc" in the config.toml
-generated by package/rust/rust.mk. Flags that are passed with RUSTFLAGS
-still apply to both host and target. Therefore, we need to use the
-CARGO_TARGET_<tuple>_RUSTFLAGS environment variable instead of plain
-RUSTFLAGS.
-
-This, however, doesn't allow us to specify flags that apply only to the
-host. We could use CARGO_TARGET_<hosttuple>_RUSTFLAGS for that, but that
-doesn't work in case the host and target tuple are the same. For this,
-we need another unstable feature, enabled with
-CARGO_UNSTABLE_HOST_CONFIG="true". With this enabled, we can specify
-flags that apply only for the host build using CARGO_HOST_RUSTFLAGS.
-
-Currently, we don't have any such flags, but we really should: we should
-pass the proper link flags to point to $(HOST_DIR)/lib. Therefore, add
-CARGO_HOST_RUSTFLAGS doing exactly that.
-
-[1] https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#host-config
-[2] https://github.com/rust-lang/cargo/pull/10395
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit b40a2cc3912a039d29231241daca477790e366cd)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5b4eaa635f32ae6b2f1e1090372844c8c9001bde)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cargo.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/nginx/Config.in | 2 +-
+ package/nginx/nginx.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-index 5600c8e97e..264bf5a1ae 100644
---- a/package/pkg-cargo.mk
-+++ b/package/pkg-cargo.mk
-@@ -34,7 +34,10 @@ PKG_COMMON_CARGO_ENV = \
- # using nighly features on stable releases, i.e features that are not
- # yet considered stable.
- #
--# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" "enables the nightly
-+# CARGO_UNSTABLE_HOST_CONFIG="true" enables the host specific
-+# configuration feature
-+#
-+# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" enables the nightly
- # configuration option target-applies-to-host value to be set
- #
- # CARGO_TARGET_APPLIES_TO_HOST="false" is actually setting the value
-@@ -43,9 +46,11 @@ PKG_COMMON_CARGO_ENV = \
- PKG_CARGO_ENV = \
- 	$(PKG_COMMON_CARGO_ENV) \
- 	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
-+	CARGO_UNSTABLE_HOST_CONFIG="true" \
- 	CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" \
- 	CARGO_TARGET_APPLIES_TO_HOST="false" \
- 	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
-+	CARGO_HOST_RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))" \
- 	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 406a1c861a..8e888baa1c 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -6,7 +6,7 @@ menuconfig BR2_PACKAGE_NGINX
+ 	  nginx is an HTTP and reverse proxy server, as well as a mail
+ 	  proxy server.
  
- #
-@@ -53,7 +58,8 @@ PKG_CARGO_ENV = \
- # and should be removed when fixed upstream
- #
- ifeq ($(NORMALIZED_ARCH),arm)
--	PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
-+	PKG_CARGO_ENV += \
-+		CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
- endif
+-	  http://nginx.org/
++	  https://nginx.org/
  
- HOST_PKG_CARGO_ENV = \
+ if BR2_PACKAGE_NGINX
+ 
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 10cc95d90e..185bcd576f 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NGINX_VERSION = 1.22.1
+-NGINX_SITE = http://nginx.org/download
++NGINX_SITE = https://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
+ NGINX_CPE_ID_VENDOR = f5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
