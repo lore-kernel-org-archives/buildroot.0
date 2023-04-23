@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C13C6FD18
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 15:25:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA08FC77B60
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 15:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B31160F40;
-	Sun, 23 Apr 2023 15:25:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B31160F40
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F46C60D52;
+	Sun, 23 Apr 2023 15:26:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F46C60D52
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5gSbtMJOgWPQ; Sun, 23 Apr 2023 15:25:04 +0000 (UTC)
+	with ESMTP id KaOY5-sZuAbt; Sun, 23 Apr 2023 15:26:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C91A60B38;
-	Sun, 23 Apr 2023 15:25:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C91A60B38
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C80211BF855
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 15:25:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A47F460B38;
+	Sun, 23 Apr 2023 15:26:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A47F460B38
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2FBFC1BF855
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 15:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF3AC81EF7
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 15:25:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF3AC81EF7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 08E6A60B38
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 15:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08E6A60B38
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rK7w4iN2HYWN for <buildroot@lists.busybox.net>;
- Sun, 23 Apr 2023 15:25:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C65F981EC0
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 15:25:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C65F981EC0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD94A8449E; Sun, 23 Apr 2023 15:25:01 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 17:21:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e538824692822cab06c44e6b70e9ae3b92d4c920
-X-Git-Newrev: 6104b62d95e87e5cb4f4815b78841541de4301e8
-X-Patchwork-Hint: ignore
-Message-Id: <20230423152501.AD94A8449E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/postgresql: ignore CVE-2017-8806
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pjJQjkwOlgGA for <buildroot@lists.busybox.net>;
+ Sun, 23 Apr 2023 15:26:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F18360745
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F18360745
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 15:26:18 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:f69d:4ee8:8d2a:132a])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4BBC9B00576;
+ Sun, 23 Apr 2023 17:26:14 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 23 Apr 2023 17:26:13 +0200
+Date: Sun, 23 Apr 2023 17:26:13 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Maxim Kochetkov <fido_max@inbox.ru>
+Message-ID: <20230423152613.GK2696@scaer>
+References: <20230313061323.173744-1-fido_max@inbox.ru>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230313061323.173744-1-fido_max@inbox.ru>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1682263576;
+ bh=AHmJoBLNS8KqFBliH21KIA759iOV05rKgdzGxEW1Xyk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=NdQclraTfsII+BUuZkYe8dNZ9S9c8tQ3q4NgJzzNEhjEzTBAWxI1EvWybhP/zjW+M
+ dTBCWcpjdszIQueM1S4lkYU805l+1SwkwdSvxTy/Vc8azYqSMVR2TKimnqq3jpCVrT
+ xpYO78Ogbj64dv4YVU0qJarS43I5cdDKRudblLwN/VfIa+bMdbsnWWsa/Qw/hiAQLl
+ ESIQH277OQPmbTfkVBVv4Wb0FDnXVxW5sO6ScgyMebuuSnXFAeVzKKog+N/DTxbQif
+ vyoRifaGEQzjVmq69Faf7DWK7hnBBLR44V498jrS+nxAAk3MEH6LYdBsq0nH3eR6zQ
+ e7NP6G6sMFQ8A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NdQclraT
+Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: ignore CVE-2017-8806
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +76,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6104b62d95e87e5cb4f4815b78841541de4301e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Maxim, All,
 
-CVE-2017-8806 is related to postgresql-common package, as present in
-Debian and its derivatives; Buildroot does not have that package.
-It is false positive for postgresql, so ignore it.
+On 2023-03-13 09:13 +0300, Maxim Kochetkov via buildroot spake thusly:
+> CVE-2017-8806 is related to postgresql-common package.
 
-To be noted, is that a similar CVE [0] applied to postgresql itself, as
-stated in [1], but that was fixed a while ago [2], and we need not
-ignore it.
+I've reworded that sentence to explain that postgresql-common is a
+package in Debian-like distros, not available in Buildroot.
 
-[0] https://nvd.nist.gov/vuln/detail/CVE-2017-12172
-[1] https://ubuntu.com/security/CVE-2017-8806
-[2] https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=dfc015dcf46c1996bd7ed5866e9e045d258604b3
+> It is false positive for postgresql, so ignore it.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/postgresql/postgresql.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+I also added a blurb that the similar CVE that did apply to postgresql
+was fixed a while ago, to avoid vonfusion.
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index a2aed9a2eb..e46622c0e7 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -19,6 +19,10 @@ POSTGRESQL_CONF_ENV = \
- POSTGRESQL_CONF_OPTS = --disable-rpath
- POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- 
-+# CVE-2017-8806 is related to postgresql-common package
-+# It is false positive for postgresql
-+POSTGRESQL_IGNORE_CVES += CVE-2017-8806
-+
- # https://www.postgresql.org/docs/11/static/install-procedure.html:
- # "If you want to invoke the build from another makefile rather than
- # manually, you must unset MAKELEVEL or set it to zero"
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> ---
+>  package/postgresql/postgresql.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index a2aed9a2eb..e46622c0e7 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -19,6 +19,10 @@ POSTGRESQL_CONF_ENV = \
+>  POSTGRESQL_CONF_OPTS = --disable-rpath
+>  POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+>  
+> +# CVE-2017-8806 is related to postgresql-common package
+> +# It is false positive for postgresql
+> +POSTGRESQL_IGNORE_CVES += CVE-2017-8806
+> +
+>  # https://www.postgresql.org/docs/11/static/install-procedure.html:
+>  # "If you want to invoke the build from another makefile rather than
+>  # manually, you must unset MAKELEVEL or set it to zero"
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
