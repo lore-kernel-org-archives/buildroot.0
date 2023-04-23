@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA83C77B73
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 09:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98967C77B76
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 09:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD196417F7;
-	Sun, 23 Apr 2023 09:51:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD196417F7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29C8741827;
+	Sun, 23 Apr 2023 09:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29C8741827
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W01cV5ScP52v; Sun, 23 Apr 2023 09:51:09 +0000 (UTC)
+	with ESMTP id JPYMxO5MlOye; Sun, 23 Apr 2023 09:51:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 722584182C;
-	Sun, 23 Apr 2023 09:51:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 722584182C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 16E0E1C2B8E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0225841857;
+	Sun, 23 Apr 2023 09:51:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0225841857
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E5741C2B91
  for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5125402F6
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5125402F6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 135F7417FF
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 135F7417FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iaQEDzbsUVIo for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nuZX0TKzDpOh for <buildroot@lists.busybox.net>;
  Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C128400D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08E17417FE
  for <buildroot@buildroot.org>; Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C128400D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08E17417FE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C602843A5; Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
+ id EB796843A7; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 11:45:41 +0200
+Date: Sun, 23 Apr 2023 11:39:32 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d2b0ce01ba55cb32c01867aa93110cf5f72a07e1
-X-Git-Newrev: cec14f3328bd7ea2d5c6762eb186d5161255084f
+X-Git-Oldrev: 6b82c00c5d7f2a7c1b8d91b4e16efbd45ee27745
+X-Git-Newrev: f87fe6d4198a8595606646ebf15c0a9746403bb1
 X-Patchwork-Hint: ignore
-Message-Id: <20230423095041.0C602843A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/mali-driver: bump
- to version 2023-04-04
+Message-Id: <20230423095040.EB796843A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/xr819-xradio:
+ bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cec14f3328bd7ea2d5c6762eb186d5161255084f
+commit: https://git.buildroot.net/buildroot/commit/?id=f87fe6d4198a8595606646ebf15c0a9746403bb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This versions fixed build failure on Linux 6.1
+With introduction of vmap'ed stacks to ARM in Linux v5.18, stack
+parameters can no longer be used for DMA. So pull the latest xradio
+changes that fix the driver and make it work with vmap'ed stacks
+in new kernels.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b713a230c54559637baea065b731748201e19c1a)
+(cherry picked from commit 53baedf9126cf14f8ef80d4170ad9e9f1667fd65)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mali-driver/mali-driver.hash | 2 +-
- package/mali-driver/mali-driver.mk   | 2 +-
+ package/xr819-xradio/xr819-xradio.hash | 2 +-
+ package/xr819-xradio/xr819-xradio.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
-index 5d32c1af8a..de3b6e69f0 100644
---- a/package/mali-driver/mali-driver.hash
-+++ b/package/mali-driver/mali-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  761e3f000b4c546cbd35baf34f5a0d1090f048dd44ee543773674192fd95f6b3  mali-driver-87c13e6994b20b5068e3a5e4f4c1b64db666a4c8.tar.gz
-+sha256  763d3cf76eb03584df6a13986a2877dc0ae5f310fc3d91e8a498fc5f89271dcc  mali-driver-c90627f78d58567a2acb7cbf77d565e03a131294.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
-index bdc9fedeb4..8e059fe8bd 100644
---- a/package/mali-driver/mali-driver.mk
-+++ b/package/mali-driver/mali-driver.mk
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index 60185db736..8676f065f8 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2b297fbcc9b5ed190bcfff9f6f808c170632ac3d69dbd92156a7f4f57142dec9  xr819-xradio-005f28cfe9e20b7f2dfd9d32d38ee97060dc707f.tar.gz
++sha256  93388424f1f136db541ce056be017f2f0f6688278ac15a88bef34da8f12ffea6  xr819-xradio-119cad7d07aef6973dd44e4dae74d4c9defd06a2.tar.gz
+ # Locally computed
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+index e5daaa6051..66c08e7921 100644
+--- a/package/xr819-xradio/xr819-xradio.mk
++++ b/package/xr819-xradio/xr819-xradio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MALI_DRIVER_VERSION = 87c13e6994b20b5068e3a5e4f4c1b64db666a4c8
-+MALI_DRIVER_VERSION = c90627f78d58567a2acb7cbf77d565e03a131294
- MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
- MALI_DRIVER_DEPENDENCIES = linux
- MALI_DRIVER_LICENSE = GPL-2.0
+-XR819_XRADIO_VERSION = 005f28cfe9e20b7f2dfd9d32d38ee97060dc707f
++XR819_XRADIO_VERSION = 119cad7d07aef6973dd44e4dae74d4c9defd06a2
+ XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+ XR819_XRADIO_LICENSE = GPL-2.0
+ XR819_XRADIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
