@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CD89C77B76
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 10:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F41DEC77B76
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 10:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 400B640AB1;
-	Sun, 23 Apr 2023 10:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 400B640AB1
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3EBC40B5B;
+	Sun, 23 Apr 2023 10:41:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3EBC40B5B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HwV-LYVySTVU; Sun, 23 Apr 2023 10:40:41 +0000 (UTC)
+	with ESMTP id 1OC5GEz0AHIN; Sun, 23 Apr 2023 10:41:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 72AB24059F;
-	Sun, 23 Apr 2023 10:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72AB24059F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D475F1C2B5C
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:40:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C259E400A4;
+	Sun, 23 Apr 2023 10:41:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C259E400A4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CC4191C2B5C
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A827B4059F
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:40:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A827B4059F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6C0082070
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:41:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6C0082070
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qB2BF1zDNdZa for <buildroot@lists.busybox.net>;
- Sun, 23 Apr 2023 10:40:36 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94B14400A4
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 94B14400A4
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 10:40:36 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 998B9240005;
- Sun, 23 Apr 2023 10:40:33 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pqX8y-002bBP-MX; Sun, 23 Apr 2023 12:40:32 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tccHFRF6fr3p for <buildroot@lists.busybox.net>;
+ Sun, 23 Apr 2023 10:41:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D119C8200F
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 10:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D119C8200F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BF7AB843FE; Sun, 23 Apr 2023 10:41:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
-References: <20220927221133.594071-1-f.fainelli@gmail.com>
-Date: Sun, 23 Apr 2023 12:40:32 +0200
-In-Reply-To: <20220927221133.594071-1-f.fainelli@gmail.com> (Florian
- Fainelli's message of "Tue, 27 Sep 2022 15:11:33 -0700")
-Message-ID: <878rei6fvj.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/linux-tools: Exclude checking PE
- binaries from perf test
+To: buildroot@buildroot.org
+Date: Sun, 23 Apr 2023 12:38:21 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 69d9cdfcc723849c7c7b81378af430dea3bf483e
+X-Git-Newrev: af738be309376fec8f888c8f4f831a7855ebea03
+X-Patchwork-Hint: ignore
+Message-Id: <20230423104109.BF7AB843FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/linux-tools:
+ Exclude checking PE binaries from perf test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,29 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Florian" == Florian Fainelli <f.fainelli@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=af738be309376fec8f888c8f4f831a7855ebea03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Since upstream Linux commit ed21d6d7c48e6e96c2d617e304a7ebfbd17b1807
- > ("perf tests: Add test for PE binary format support") present in >=
- > v5.10 there is an unconditional installation of PE binaries which will
- > be rejected by the check-bin-arch script.
+Since upstream Linux commit ed21d6d7c48e6e96c2d617e304a7ebfbd17b1807
+("perf tests: Add test for PE binary format support") present in >=
+v5.10 there is an unconditional installation of PE binaries.
 
- > Make sure that these binaries are excluded from being checked to allow
- > the installation of the perf tests.
+Some toolchains have a readelf tool that correctly interpret the PE
+files, and reports ELF-alike fields. This causes check-bin-arch to
+reject those files.
 
- > Fixes: 6fcdaa4c5096 ("package/linux-tools: Allow installation of perf scripts")
- > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Make sure that these binaries are excluded from being checked to allow
+the installation of the perf tests.
 
-Committed to 2023.02.x, thanks.
+Fixes: 6fcdaa4c5096 ("package/linux-tools: Allow installation of perf scripts")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a7ad7816262dd1b0db6c51a08f3013e2c473c0b3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-tools/linux-tool-perf.mk.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index 5431c78152..122c7cbbc4 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -169,6 +169,10 @@ define PERF_INSTALL_REMOVE_SCRIPTS
+ 	$(RM) -r $(TARGET_DIR)/usr/libexec/perf-core/scripts/
+ 	$(RM) -r $(TARGET_DIR)/usr/libexec/perf-core/tests/
+ endef
++
++LINUX_TOOLS_BIN_ARCH_EXCLUDE += \
++	/usr/libexec/perf-core/tests/pe-file.exe \
++	/usr/libexec/perf-core/tests/pe-file.exe.debug
+ endif
+ 
+ define PERF_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
