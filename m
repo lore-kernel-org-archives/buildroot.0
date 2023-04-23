@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98967C77B76
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 09:51:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42A89C77B73
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 09:51:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29C8741827;
-	Sun, 23 Apr 2023 09:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29C8741827
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7A7941816;
+	Sun, 23 Apr 2023 09:51:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7A7941816
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JPYMxO5MlOye; Sun, 23 Apr 2023 09:51:24 +0000 (UTC)
+	with ESMTP id vPK4J1fFKc58; Sun, 23 Apr 2023 09:51:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0225841857;
-	Sun, 23 Apr 2023 09:51:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0225841857
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E5741C2B91
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85C0441811;
+	Sun, 23 Apr 2023 09:51:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C0441811
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B25A1BF369
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 135F7417FF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2940B60B58
  for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 09:50:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 135F7417FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2940B60B58
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nuZX0TKzDpOh for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NfkHej2IHkCO for <buildroot@lists.busybox.net>;
  Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08E17417FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 166F160BA6
  for <buildroot@buildroot.org>; Sun, 23 Apr 2023 09:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08E17417FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 166F160BA6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB796843A7; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
+ id 012AF843A2; Sun, 23 Apr 2023 09:50:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 11:39:32 +0200
+Date: Sun, 23 Apr 2023 11:42:19 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 6b82c00c5d7f2a7c1b8d91b4e16efbd45ee27745
-X-Git-Newrev: f87fe6d4198a8595606646ebf15c0a9746403bb1
+X-Git-Oldrev: f87fe6d4198a8595606646ebf15c0a9746403bb1
+X-Git-Newrev: d2b0ce01ba55cb32c01867aa93110cf5f72a07e1
 X-Patchwork-Hint: ignore
-Message-Id: <20230423095040.EB796843A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/xr819-xradio:
- bump version
+Message-Id: <20230423095041.012AF843A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] docs/manual: rewrite
+ section for upstream documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f87fe6d4198a8595606646ebf15c0a9746403bb1
+commit: https://git.buildroot.net/buildroot/commit/?id=d2b0ce01ba55cb32c01867aa93110cf5f72a07e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-With introduction of vmap'ed stacks to ARM in Linux v5.18, stack
-parameters can no longer be used for DMA. So pull the latest xradio
-changes that fix the driver and make it work with vmap'ed stacks
-in new kernels.
+Previously, the documentation only requested links to upstream commits
+when backporting patches.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Based on a mailing list discussion [0], patches should, when possible
+and when approriate, provide a link as evidence that the patch has been
+submitted upstream.
+
+The motivation is that hopefully the patch gets applied to upstream at
+some point reducing the long term maintenance burden within Buildroot.
+This also makes future patch review on subsequent package version bumps
+more streamlined.
+
+For patches that are unique to BR and do not apply to the upstream
+repository, patches should have a comment explaining why they do not
+apply upstream.
+
+[0] https://lists.buildroot.org/pipermail/buildroot/2023-March/666000.html
+
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 53baedf9126cf14f8ef80d4170ad9e9f1667fd65)
+(cherry picked from commit 5b00b40a05437e1042b25c097b977d5a26bdee1d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/patch-policy.txt | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index 60185db736..8676f065f8 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  2b297fbcc9b5ed190bcfff9f6f808c170632ac3d69dbd92156a7f4f57142dec9  xr819-xradio-005f28cfe9e20b7f2dfd9d32d38ee97060dc707f.tar.gz
-+sha256  93388424f1f136db541ce056be017f2f0f6688278ac15a88bef34da8f12ffea6  xr819-xradio-119cad7d07aef6973dd44e4dae74d4c9defd06a2.tar.gz
- # Locally computed
- sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index e5daaa6051..66c08e7921 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 063ef984d8..dc35132ecf 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -144,24 +144,37 @@ AC_PROG_MAKE_SET
+ +AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
+ ---------------
  
--XR819_XRADIO_VERSION = 005f28cfe9e20b7f2dfd9d32d38ee97060dc707f
-+XR819_XRADIO_VERSION = 119cad7d07aef6973dd44e4dae74d4c9defd06a2
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+-=== Integrating patches found on the Web
++=== Additional patch documentation
+ 
+-When integrating a patch of which you are not the author, you have to
+-add a few things in the header of the patch itself.
++Ideally, all patches should document an upstream patch or patch submission, when
++applicable, via the +Upstream+ trailer.
+ 
+-Depending on whether the patch has been obtained from the project
+-repository itself, or from somewhere on the web, add one of the
+-following tags:
++When backporting an upstream patch that has been accepted into mainline, it is
++preferred that the URL to the commit is referenced:
+ 
+ ---------------
+-Backported from: <some commit id>
++Upstream: <URL to upstream commit>
+ ---------------
+ 
+-or
++If a new issue is identified in Buildroot and upstream is generally affected by 
++the issue (it's not a Buildroot specific issue), users should submit the patch
++upstream and provide a link to that submission when possible:
+ 
+ ---------------
+-Fetch from: <some url>
++Upstream: <URL to upstream mailing list submission or merge request>
+ ---------------
+ 
+-It is also sensible to add a few words about any changes to the patch
+-that may have been necessary.
++Patches that have been submitted but were denied upstream should note that and
++include comments about why the patch is being used despite the upstream status.
++
++Note: in any of the above scenarios, it is also sensible to add a few words
++about any changes to the patch that may have been necessary.
++
++If a patch does not apply upstream then this should be noted with a comment:
++
++---------------
++Upstream: N/A <additional information about why patch is Buildroot specific>
++---------------
++
++Adding this documentation helps streamline the patch review process during
++package version updates.
+\ No newline at end of file
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
