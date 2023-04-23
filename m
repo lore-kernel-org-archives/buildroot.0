@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE76FC77B73
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 11:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90FB3C77B73
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 11:03:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71E2982128;
-	Sun, 23 Apr 2023 11:03:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71E2982128
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38A6D82128;
+	Sun, 23 Apr 2023 11:03:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38A6D82128
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RROTglEkR_Sz; Sun, 23 Apr 2023 11:03:04 +0000 (UTC)
+	with ESMTP id honrfCu1SH9F; Sun, 23 Apr 2023 11:03:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 506FA8212F;
-	Sun, 23 Apr 2023 11:03:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 506FA8212F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 70DDB1C2B8E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3751982154;
+	Sun, 23 Apr 2023 11:03:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3751982154
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B7B31C2B5C
  for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 11:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5242160F5C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 658DE817A4
  for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 11:02:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5242160F5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 658DE817A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CdLpQCH9Cd2c for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dGX-zZ1BMqkO for <buildroot@lists.busybox.net>;
  Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74CFC60BA6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 87A178176D
  for <buildroot@buildroot.org>; Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74CFC60BA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87A178176D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B9B18448A; Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
+ id 74C028448C; Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 13:01:17 +0200
+Date: Sun, 23 Apr 2023 13:01:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1f9332229e52f1792c1296dfacc910a330b3d850
-X-Git-Newrev: d2758794a453aa1eacdcb048070e6434ec601ca5
+X-Git-Oldrev: 3f9622fe3d85b4d9f734b879abc1d485afea19b2
+X-Git-Newrev: b5b1d830b8713393d63227caa09064aa594e15cb
 X-Patchwork-Hint: ignore
-Message-Id: <20230423110248.5B9B18448A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libglib2: add upstream status to
- girdir patch
+Message-Id: <20230423110248.74C028448C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glib-networking: bump version to
+ 2.76.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2758794a453aa1eacdcb048070e6434ec601ca5
+commit: https://git.buildroot.net/buildroot/commit/?id=b5b1d830b8713393d63227caa09064aa594e15cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Providing an upstream status for the remaining libglib2 patch from a
-recent version bump. This patch was introduced in Buildroot around
-November 2021 to help deal with build errors where `GObject-2.0.gir`
-could not be found (tied to Buildroot changes made in
-`gobject-introspection.mk`). The discussion thread mentions this could
-be submitted upstream, but looks like it never was. Reflecting that this
-package has not been submitted upstream.
+- Drop "0001-meson-change-std-to-gnu99.patch" since change is available
+   in this version.
 
 Signed-off-by: James Knight <james.d.knight@live.com>
-[yann.morin.1998@free.fr: update .checkpackageignore]
+[yann.morin.1998@free.fr: regenerate .checkpackageignore]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                                      | 1 -
- .../0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch      | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ .checkpackageignore                                |  1 -
+ .../0001-meson-change-std-to-gnu99.patch           | 30 ----------------------
+ package/glib-networking/glib-networking.hash       |  4 +--
+ package/glib-networking/glib-networking.mk         |  4 +--
+ 4 files changed, 4 insertions(+), 35 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index e11b5b6bb8..f0ad3e88bd 100644
+index 2758ad9377..5f6538ea74 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -804,7 +804,6 @@ package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
- package/libglib2/0001-fix-compile-time-atomic-detection.patch Upstream
- package/libglib2/0002-remove-cpp-requirement.patch Upstream
- package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch Upstream
--package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch Upstream
- package/libgpgme/0001-Fix-build-without-threads.patch Upstream
- package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch Upstream
- package/libgsm/0001-misc-fixes-from-archlinux.patch Upstream
-diff --git a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-index db77a73203..fb99057242 100644
---- a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-+++ b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-@@ -14,6 +14,7 @@ Fixes:
-  - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
+@@ -606,7 +606,6 @@ package/giblib/0001-fix-imlib2-detection.patch Upstream
+ package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch Upstream
+ package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch Upstream
+ package/gli/0001-Optional-building-tests.patch Upstream
+-package/glib-networking/0001-meson-change-std-to-gnu99.patch Upstream
+ package/glmark2/0001-wscript-use-find_program-to-find-wayland-scanner.patch Upstream
+ package/glmark2/0002-libmatrix-Add-missing-utility-include.patch Upstream
+ package/glog/0001-added-emscripten-support.patch Upstream
+diff --git a/package/glib-networking/0001-meson-change-std-to-gnu99.patch b/package/glib-networking/0001-meson-change-std-to-gnu99.patch
+deleted file mode 100644
+index 9f266bc2c8..0000000000
+--- a/package/glib-networking/0001-meson-change-std-to-gnu99.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From cdfa726bae1d82b7bd3735475fc2b2c6a31c1d2f Mon Sep 17 00:00:00 2001
+-From: Ignacio Casal Quinteiro <qignacio@amazon.com>
+-Date: Fri, 12 Nov 2021 11:51:33 +0100
+-Subject: [PATCH] meson: change std to gnu99
+-
+-This is the same as glib and should fix issues with old
+-compilers
+-
+-(cherry picked from commit b192086b9936602a40a14d00a6883b339b9d7955)
+-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+----
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index b018ca7b..130a2bf0 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -3,7 +3,7 @@ project(
+-   version: '2.70.0',
+-   license: 'LGPL2.1+',
+-   meson_version: '>= 0.50.0',
+--  default_options: ['c_std=c99']
+-+  default_options: ['c_std=gnu99']
+- )
+- 
+- prefix = get_option('prefix')
+--- 
+-2.17.1
+-
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index 766efd0ced..72e70ff0ed 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
+@@ -1,3 +1,3 @@
+-# From https://download.gnome.org/sources/glib-networking/2.70/glib-networking-2.70.1.sha256sum
+-sha256  2a16bfc2d271ccd3266e3fb462bc8a4103c02e81bbb339aa92d6fb060592d7bc  glib-networking-2.70.1.tar.xz
++# From https://download.gnome.org/sources/glib-networking/2.76/glib-networking-2.76.0.sha256sum
++sha256  149a05a179e629a538be25662aa324b499d7c4549c5151db5373e780a1bf1b9a  glib-networking-2.76.0.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index b6d29110ed..2481171658 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: Never submitted
- ---
-  gio/meson.build  | 1 +
-  glib/meson.build | 1 +
+-GLIB_NETWORKING_VERSION_MAJOR = 2.70
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
++GLIB_NETWORKING_VERSION_MAJOR = 2.76
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
+ GLIB_NETWORKING_SITE = https://download.gnome.org/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
