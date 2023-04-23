@@ -4,47 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB953C77B76
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 11:03:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D00DC77B76
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 11:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61B7C812A4;
-	Sun, 23 Apr 2023 11:03:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61B7C812A4
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3E1B80EAE;
+	Sun, 23 Apr 2023 11:03:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3E1B80EAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NjcdrMgxTywB; Sun, 23 Apr 2023 11:03:30 +0000 (UTC)
+	with ESMTP id 4LCEOA7gftJq; Sun, 23 Apr 2023 11:03:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9830080E62;
-	Sun, 23 Apr 2023 11:03:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9830080E62
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B5F491C2B5C
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 11:02:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6D1D80D0F;
+	Sun, 23 Apr 2023 11:03:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6D1D80D0F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A7A851C2B5C
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 11:03:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB05D60BA6
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 11:02:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB05D60BA6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8117B80D0F
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 11:03:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8117B80D0F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KxNhb5DQ_Jkw for <buildroot@lists.busybox.net>;
- Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7BBAF60F2A
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BBAF60F2A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 667D184053; Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 13:01:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2758794a453aa1eacdcb048070e6434ec601ca5
-X-Git-Newrev: 3f9622fe3d85b4d9f734b879abc1d485afea19b2
-X-Patchwork-Hint: ignore
-Message-Id: <20230423110248.667D184053@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libglib2: bump version to 2.76.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ie6eMRMMjH5x for <buildroot@lists.busybox.net>;
+ Sun, 23 Apr 2023 11:03:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BCF380CF2
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1BCF380CF2
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 11:03:52 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:f69d:4ee8:8d2a:132a])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 083F1B00539;
+ Sun, 23 Apr 2023 13:03:45 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 23 Apr 2023 13:03:45 +0200
+Date: Sun, 23 Apr 2023 13:03:45 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Knight <james.d.knight@live.com>
+Message-ID: <20230423110345.GD2696@scaer>
+References: <SN4P221MB06822B245A5155FE545F0362A0609@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+ <SN4P221MB068210A82360743E14AC9FD6A0609@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <SN4P221MB068210A82360743E14AC9FD6A0609@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1682247829;
+ bh=nsO39ZZJd8HucPtDWuWsZpaSJuuhUhdFhIV7Gs/1vnU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Vw92umoQAXSe7/1xvKdW0KeZFSIUlMiM384Z/pPq+Uk//4ACrX54pCa90s0bubqR9
+ GlVTZUxmx9ZMJrkc0MgjC+L8dvtvUS94jN/t3+1sN+n72XaSkto547pj9xiuUqIjnd
+ B4L4XdpgzFSWmqpiMBOq9PCDtuksD9hNkdq0RcDO3P/+GB9izPsUuS31k1dSDm9LKj
+ dMDVm2cmrsRwoz8pABAVlm/yVtFfBCH9cHCxUwxIrCVzeEyt1y9/EYxF9E3cAcXW76
+ GoARMBPajNaLPbgu9eET4O4uVZEhKdqCJHFhv95kl3Urb0vtPdAaIjLFsUzjPNTHuO
+ Dpm0PhaQ1FAMA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Vw92umoQ
+Subject: Re: [Buildroot] [PATCH 2/4] package/libglib2: apply upstream status
+ on girdir patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,423 +78,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8199527535538686813=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8199527535538686813==
-Content-Type: text/plain
+James, All,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f9622fe3d85b4d9f734b879abc1d485afea19b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2023-04-21 10:12 -0400, James Knight spake thusly:
+> Providing an upstream status for the remaining libglib2 patch from a
+> recent version bump. This patch was introduced in Buildroot around
+> November 2021 to help deal with build errors where `GObject-2.0.gir`
+> could not be found (tied to Buildroot changes made in
+> `gobject-introspection.mk`). The discussion thread mentions this could
+> be submitted upstream, but looks like it never was. Reflecting that this
+> package has not been submitted upstream.
+> 
+> Signed-off-by: James Knight <james.d.knight@live.com>
 
-- glib2 has moved from PCRE to PCRE2 [1].
-- Drop `fam` option since it no longer available [2].
-- Drop "0001-fix-compile-time-atomic-detection.patch" since upstream
-   patch was dropped and new atomic detection implementation has been
-   applied in this version.
-- Drop "0002-remove-cpp-requirement.patch" since upstream has modified
-   its Meson scripts to have any C++ usage as optional.
-- Drop "0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch"
-   since change is available in this version.
-- Add new patch to address new Werror compilation errors [3].
-- Renamed "0004-*.patch" -> "0001-*.patch" since it should still be
-   applicable for its mentioned build case.
+Applied to master, thanks.
 
-[1]: https://bugzilla.redhat.com/show_bug.cgi?id=1938974
-[2]: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2570
-[3]: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3390
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: James Knight <james.d.knight@live.com>
-[yann.morin.1998@free.fr:
-  - update upstream status on new patch
-  - regenerate .checkpackageignore
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .checkpackageignore                                |  3 -
- .../0001-fix-compile-time-atomic-detection.patch   | 34 --------
- ...add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch} |  0
- ...or-format-in-gio-gunixconnection.c-part-2.patch | 93 ++++++++++++++++++++++
- package/libglib2/0002-remove-cpp-requirement.patch | 87 --------------------
- ...o-format-nonliteral-to-compiler-arguments.patch | 29 -------
- package/libglib2/Config.in                         |  3 +-
- package/libglib2/libglib2.hash                     |  6 +-
- package/libglib2/libglib2.mk                       | 14 ++--
- 9 files changed, 106 insertions(+), 163 deletions(-)
+> ---
+>  ...01-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+> index db77a73203faf38aaa832dde8bbd9526cf39eecc..fb9905724278fb2c0a9be8384cb90108292668e8 100644
+> --- a/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+> +++ b/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+> @@ -14,6 +14,7 @@ Fixes:
+>   - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
+>  
+>  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Upstream: Never submitted
+>  ---
+>   gio/meson.build  | 1 +
+>   glib/meson.build | 1 +
+> -- 
+> 2.39.1.windows.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index f0ad3e88bd..2758ad9377 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -801,9 +801,6 @@ package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.pat
- package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch Upstream
- package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch Upstream
- package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch Upstream
--package/libglib2/0001-fix-compile-time-atomic-detection.patch Upstream
--package/libglib2/0002-remove-cpp-requirement.patch Upstream
--package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch Upstream
- package/libgpgme/0001-Fix-build-without-threads.patch Upstream
- package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch Upstream
- package/libgsm/0001-misc-fixes-from-archlinux.patch Upstream
-diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-deleted file mode 100644
-index aae505f8e5..0000000000
---- a/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From d5c628a6179b99705fa05ab87437321b132c81bc Mon Sep 17 00:00:00 2001
--From: Brendan Heading <brendanheading@gmail.com>
--Date: Wed, 21 Jun 2017 16:36:15 -0400
--Subject: [PATCH] Fix compile time atomic detection
--
--Improved compile-time detection of atomic support in the compiler.
--
--Upstream-Status: 'Needs information'
--See : https://gitlab.gnome.org/GNOME/glib/issues/1063
--
--Signed-off-by: Brendan Heading <brendanheading@gmail.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
--Refresh for 2.68.1
-----
-- glib/gthread-posix.c | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/glib/gthread-posix.c b/glib/gthread-posix.c
--index 71a6b7b..d09d029 100644
----- a/glib/gthread-posix.c
--+++ b/glib/gthread-posix.c
--@@ -72,8 +72,7 @@
-- #include <sys/syscall.h>
-- #endif
-- 
---#if defined(HAVE_FUTEX) && \
---    (defined(HAVE_STDATOMIC_H) || defined(__ATOMIC_SEQ_CST))
--+#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) && !defined(__clang__)
-- #define USE_NATIVE_MUTEX
-- #endif
-- 
---- 
--2.9.4
--
-diff --git a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-similarity index 100%
-rename from package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-rename to package/libglib2/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-diff --git a/package/libglib2/0002-Fix-error-format-in-gio-gunixconnection.c-part-2.patch b/package/libglib2/0002-Fix-error-format-in-gio-gunixconnection.c-part-2.patch
-new file mode 100644
-index 0000000000..6075bacb06
---- /dev/null
-+++ b/package/libglib2/0002-Fix-error-format-in-gio-gunixconnection.c-part-2.patch
-@@ -0,0 +1,93 @@
-+From 4ae8606b6f80f9764e1f0a82cea7e23c8af487ae Mon Sep 17 00:00:00 2001
-+From: James Knight <james.d.knight@live.com>
-+Date: Thu, 20 Apr 2023 23:41:32 -0400
-+Subject: [PATCH] Fix error format in gio/gunixconnection.c (part 2)
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Update a series of error messages to use `g_set_error_literal` instead
-+of `g_set_error`. This should prevent `format-nonliteral` compiler
-+issues when `-Werror` is configured:
-+
-+    ../gio/gunixconnection.c: In function ‘g_unix_connection_receive_fd’:
-+    ../gio/gunixconnection.c:183:9: error: format not a string literal, argument types not checked [-Werror=format-nonliteral]
-+      183 |         nscm);
-+          |         ^~~~
-+    ../gio/gunixconnection.c:217:20: error: format not a string literal, argument types not checked [-Werror=format-nonliteral]
-+      217 |                    nfd);
-+          |                    ^~~
-+    ../gio/gunixconnection.c: In function ‘g_unix_connection_receive_credentials’:
-+    ../gio/gunixconnection.c:601:24: error: format not a string literal, argument types not checked [-Werror=format-nonliteral]
-+      601 |                        nscm);
-+          |                        ^~~~
-+
-+This is similar to a previous change [1] made to `gunixconnection.c`.
-+
-+[1]: 44b3d5d80445234041f6c59feb89645f7102c3a4
-+
-+Signed-off-by: James Knight <james.d.knight@live.com>
-+Upstream: backport from upstream https://gitlab.gnome.org/GNOME/glib/-/commit/4ae8606b6f80f9764e1f0a82cea7e23c8af487ae
-+---
-+ gio/gunixconnection.c | 31 ++++++++++++++-----------------
-+ 1 file changed, 14 insertions(+), 17 deletions(-)
-+
-+diff --git a/gio/gunixconnection.c b/gio/gunixconnection.c
-+index b3f2b1c04b0abdf7136918585ae4cea8970a88bb..c012fcbfe00b69e9da609c7b626229db98e931ac 100644
-+--- a/gio/gunixconnection.c
-++++ b/gio/gunixconnection.c
-+@@ -176,11 +176,10 @@ g_unix_connection_receive_fd (GUnixConnection  *connection,
-+     {
-+       gint i;
-+ 
-+-      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-+-        ngettext("Expecting 1 control message, got %d",
-+-                 "Expecting 1 control message, got %d",
-+-                 nscm),
-+-        nscm);
-++      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-++                           ngettext ("Expecting 1 control message, got %d",
-++                                     "Expecting 1 control message, got %d",
-++                                     nscm));
-+ 
-+       for (i = 0; i < nscm; i++)
-+         g_object_unref (scms[i]);
-+@@ -210,11 +209,10 @@ g_unix_connection_receive_fd (GUnixConnection  *connection,
-+     {
-+       gint i;
-+ 
-+-      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-+-                   ngettext("Expecting one fd, but got %d\n",
-+-                            "Expecting one fd, but got %d\n",
-+-                            nfd),
-+-                   nfd);
-++      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-++                           ngettext ("Expecting one fd, but got %d\n",
-++                                     "Expecting one fd, but got %d\n",
-++                                     nfd));
-+ 
-+       for (i = 0; i < nfd; i++)
-+         close (fds[i]);
-+@@ -592,13 +590,12 @@ g_unix_connection_receive_credentials (GUnixConnection      *connection,
-+     {
-+       if (nscm != 1)
-+         {
-+-          g_set_error (error,
-+-                       G_IO_ERROR,
-+-                       G_IO_ERROR_FAILED,
-+-                       ngettext("Expecting 1 control message, got %d",
-+-                                "Expecting 1 control message, got %d",
-+-                                nscm),
-+-                       nscm);
-++          g_set_error_literal (error,
-++                               G_IO_ERROR,
-++                               G_IO_ERROR_FAILED,
-++                               ngettext ("Expecting 1 control message, got %d",
-++                                         "Expecting 1 control message, got %d",
-++                                         nscm));
-+           goto out;
-+         }
-+ 
-+-- 
-+2.39.1.windows.1
-+
-diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
-deleted file mode 100644
-index 84511dea32..0000000000
---- a/package/libglib2/0002-remove-cpp-requirement.patch
-+++ /dev/null
-@@ -1,87 +0,0 @@
--From dd65a8cfdeafeb18b72d8d1eb676c7ca43ae505f Mon Sep 17 00:00:00 2001
--From: Adam Duskett <Aduskett@gmail.com>
--Date: Mon, 16 Sep 2019 10:12:38 -0700
--Subject: [PATCH] remove cpp requirement
--
--The c++ test is necessary to ensure libglib doesn't accidentally use C++
--reserved keywords in public headers. Because this is just a test, it isn't
--necessary to have a C++ compiler to build libglib2.
--
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
--Upstream status: Denied (Buildroot specific)
--https://gitlab.gnome.org/GNOME/glib/issues/1748
-----
-- glib/glibconfig.h.in |  1 -
-- meson.build          | 19 +------------------
-- 2 files changed, 1 insertion(+), 19 deletions(-)
--
--diff --git a/glib/glibconfig.h.in b/glib/glibconfig.h.in
--index e66748d95..2173d8be6 100644
----- a/glib/glibconfig.h.in
--+++ b/glib/glibconfig.h.in
--@@ -119,7 +119,6 @@ typedef unsigned @glib_intptr_type_define@ guintptr;
-- @glib_vacopy@
-- 
-- @g_have_iso_c_varargs@
---@g_have_iso_cxx_varargs@
-- 
-- /* gcc-2.95.x supports both gnu style and ISO varargs, but if -ansi
--  * is passed ISO vararg support is turned off, and there is no work
--diff --git a/meson.build b/meson.build
--index 48fdfe864..5df242e39 100644
----- a/meson.build
--+++ b/meson.build
--@@ -1,4 +1,4 @@
---project('glib', 'c', 'cpp',
--+project('glib', 'c',
--   version : '2.72.3',
--   # NOTE: We keep this pinned at 0.52 because that's what Debian Stable ships
--   meson_version : '>= 0.52.0',
--@@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
-- )
-- 
-- cc = meson.get_compiler('c')
---cxx = meson.get_compiler('cpp')
-- 
-- cc_can_run = not meson.is_cross_build() or meson.has_exe_wrapper()
-- 
--@@ -495,7 +494,6 @@ else
-- endif
-- 
-- add_project_arguments(cc.get_supported_arguments(warning_c_args), language: 'c')
---add_project_arguments(cxx.get_supported_arguments(warning_cxx_args), language: 'cpp')
-- 
-- # FIXME: We cannot build some of the GResource tests with -z nodelete, which
-- # means we cannot use that flag in add_project_link_arguments(), and must add
--@@ -1734,20 +1732,6 @@ if g_have_iso_c_varargs
-- #endif''')
-- endif
-- 
---g_have_iso_cxx_varargs = cxx.compiles('''
---  void some_func (void) {
---    int a(int p1, int p2, int p3);
---    #define call_a(...) a(1,__VA_ARGS__)
---    call_a(2,3);
---  }''', name : 'ISO C99 varargs macros in C++')
---
---if g_have_iso_cxx_varargs
---  glibconfig_conf.set('g_have_iso_cxx_varargs', '''
---#ifdef __cplusplus
---# define G_HAVE_ISO_VARARGS 1
---#endif''')
---endif
---
-- g_have_gnuc_varargs = cc.compiles('''
--   void some_func (void) {
--     int a(int p1, int p2, int p3);
--@@ -2381,7 +2365,6 @@ subdir('gobject')
-- subdir('gthread')
-- subdir('gmodule')
-- subdir('gio')
---subdir('fuzzing')
-- if build_tests
--   subdir('tests')
-- endif
---- 
--2.34.1
--
-diff --git a/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch b/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
-deleted file mode 100644
-index e212393011..0000000000
---- a/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 9e0f11a4981737f98bac93a22b6f2ff1a3887b63 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <Aduskett@gmail.com>
--Date: Tue, 9 Apr 2019 13:03:51 -0400
--Subject: [PATCH] Add '-Wno-format-nonliteral' to compiler arguments.
--
--This warning is a false positive on older versions of gcc.
--See https://gitlab.gnome.org/GNOME/glib/issues/1744 for more details.
--
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
--Refresh for 2.68.1
-----
-- meson.build | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/meson.build b/meson.build
--index 3c615b7..7cae4e8 100644
----- a/meson.build
--+++ b/meson.build
--@@ -435,6 +435,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
--     # building with -Wbad-function-cast.
--     '-Wno-bad-function-cast',
--     '-Wno-cast-function-type',
--+    '-Wno-format-nonliteral',
--     # Due to function casts through (void*) we cannot support -Wpedantic:
--     # https://wiki.gnome.org/Projects/GLib/CompilerRequirements#Function_pointer_conversions.
--     '-Wno-pedantic',
---- 
--2.20.1
--
-diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
-index 31f3649c75..077d7d66e8 100644
---- a/package/libglib2/Config.in
-+++ b/package/libglib2/Config.in
-@@ -5,8 +5,7 @@ config BR2_PACKAGE_LIBGLIB2
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBFFI
--	select BR2_PACKAGE_PCRE
--	select BR2_PACKAGE_PCRE_UCP
-+	select BR2_PACKAGE_PCRE2
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Low-level core library that forms the basis of GTK+ and GNOME.
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 0395ff234a..07ed7635a6 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.72/glib-2.72.3.sha256sum
--sha256  4a39a2f624b8512d500d5840173eda7fa85f51c109052eae806acece85d345f0  glib-2.72.3.tar.xz
-+# https://download.gnome.org/sources/glib/2.76/glib-2.76.1.sha256sum
-+sha256  43dc0f6a126958f5b454136c4398eab420249c16171a769784486e25f2fda19f  glib-2.76.1.tar.xz
- # License files, locally calculated
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 3084aa6cb8..ecd7d5dbfe 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBGLIB2_VERSION_MAJOR = 2.72
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
-+LIBGLIB2_VERSION_MAJOR = 2.76
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
-@@ -24,7 +24,6 @@ endif
- 
- HOST_LIBGLIB2_CONF_OPTS = \
- 	-Ddtrace=false \
--	-Dfam=false \
- 	-Dglib_debug=disabled \
- 	-Dlibelf=disabled \
- 	-Dselinux=disabled \
-@@ -35,12 +34,12 @@ HOST_LIBGLIB2_CONF_OPTS = \
- 
- LIBGLIB2_DEPENDENCIES = \
- 	host-pkgconf host-libglib2 \
--	libffi pcre zlib $(TARGET_NLS_DEPENDENCIES)
-+	libffi pcre2 zlib $(TARGET_NLS_DEPENDENCIES)
- 
- HOST_LIBGLIB2_DEPENDENCIES = \
- 	host-gettext \
- 	host-libffi \
--	host-pcre \
-+	host-pcre2 \
- 	host-pkgconf \
- 	host-util-linux \
- 	host-zlib
-@@ -69,6 +68,11 @@ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- LIBGLIB2_DEPENDENCIES += elfutils
- endif
- 
-+# Uses __atomic_compare_exchange_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBGLIB2_LDFLAGS += -latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- LIBGLIB2_CONF_OPTS += -Diconv=external
- LIBGLIB2_DEPENDENCIES += libiconv
-
---===============8199527535538686813==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8199527535538686813==--
