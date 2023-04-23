@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2024C77B76
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 10:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D96DC77B76
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 10:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8375040B8A;
-	Sun, 23 Apr 2023 10:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8375040B8A
+	by smtp2.osuosl.org (Postfix) with ESMTP id BAD0C40AB1;
+	Sun, 23 Apr 2023 10:01:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAD0C40AB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I54HO-tZJLJb; Sun, 23 Apr 2023 10:00:17 +0000 (UTC)
+	with ESMTP id Oms_24ZAemkI; Sun, 23 Apr 2023 10:01:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 944E740AB1;
-	Sun, 23 Apr 2023 10:00:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 944E740AB1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 43C5B1BF369
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:00:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB6FC404BB;
+	Sun, 23 Apr 2023 10:01:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB6FC404BB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C23D1BF369
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90F1F417FF
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:00:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90F1F417FF
+ by smtp3.osuosl.org (Postfix) with ESMTP id E984060BA6
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:01:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E984060BA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uaLgjWK12ivd for <buildroot@lists.busybox.net>;
- Sun, 23 Apr 2023 10:00:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gf_l6RU40Ljw for <buildroot@lists.busybox.net>;
+ Sun, 23 Apr 2023 10:01:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D7F8417E3
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 10:00:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D7F8417E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2237360AD0
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 10:01:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2237360AD0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 698FE843AB; Sun, 23 Apr 2023 10:00:01 +0000 (UTC)
+ id 0D678843B2; Sun, 23 Apr 2023 10:01:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 11:28:29 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0f4884a44d682fd43809575bcfdc3fb707edd08e
-X-Git-Newrev: 967e9096107a80797496a77688a625ab9031f3d2
+Date: Sun, 23 Apr 2023 11:57:59 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: cec14f3328bd7ea2d5c6762eb186d5161255084f
+X-Git-Newrev: 8e4bf44aad24a56f68cafec59446f7c0565c5524
 X-Patchwork-Hint: ignore
-Message-Id: <20230423100001.698FE843AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/eudev: fix
- compile-time issue with very old kernel headers
+Message-Id: <20230423100119.0D678843B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/poppler: fix
+ introspection build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=967e9096107a80797496a77688a625ab9031f3d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8e4bf44aad24a56f68cafec59446f7c0565c5524
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Kernel versions prior to 3.4 did not have V4L2_CAP_DEVICE_CAPS and
-compiling against such a kernel will fail.
+Fix the following build failure raised since commit
+9d1d4818c39d97ad7a1cdf6e075b9acae6dfff71:
 
-This patch introduces a version check and makes eudev fall back to
-v2cap.capabilities on these kernels.
+[ 98%] Generating Poppler-0.18.typelib
+Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+error parsing file /home/giuliobenetti/autobuild/run/instance-1/output-1/build/poppler-21.12.0/glib/Poppler-0.18.gir: Failed to parse included gir GObject-2.0
+If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
+Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
 
-Signed-off-by: Stefan Ott <stefan@ott.net>
+Fixes:
+ - http://autobuild.buildroot.org/results/d2f50aa56410c2fff8a0538c57038104906e747e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr:
+  - drop patch adding INTROSPECTION_COMPILER_ARGS as it's now upstream
+    as of 22.02.0, and we use 22.10.0
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8f646eb2a124098bc7c34373a4921a19d436f26e)
+(cherry picked from commit 4466c206212226da3d68374299989cada8d4542d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ix-compile-time-issue-on-very-old-kernels.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/poppler/poppler.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/eudev/0002-Fix-compile-time-issue-on-very-old-kernels.patch b/package/eudev/0002-Fix-compile-time-issue-on-very-old-kernels.patch
-new file mode 100644
-index 0000000000..46961cc9d1
---- /dev/null
-+++ b/package/eudev/0002-Fix-compile-time-issue-on-very-old-kernels.patch
-@@ -0,0 +1,44 @@
-+From 09b536e0b9d0964674936901ab9d2954f935c8b4 Mon Sep 17 00:00:00 2001
-+From: Stefan Ott <stefan@ott.net>
-+Date: Wed, 5 Apr 2023 18:20:37 +0200
-+Subject: [PATCH] Fix compile-time issue on very old kernels
-+
-+Kernel versions prior to 3.4 did not have V4L2_CAP_DEVICE_CAPS and
-+compiling against such a kernel will fail.
-+
-+This patch introduces a version check and makes eudev fall back to
-+v2cap.capabilities on these kernels.
-+
-+Upstream: https://github.com/eudev-project/eudev/commit/09b536e0b9d0964674936901ab9d2954f935c8b4
-+Signed-off-by: Stefan Ott <stefan@ott.net>
-+---
-+ src/v4l_id/v4l_id.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/src/v4l_id/v4l_id.c b/src/v4l_id/v4l_id.c
-+index 6bf45effe..702d5b687 100644
-+--- a/src/v4l_id/v4l_id.c
-++++ b/src/v4l_id/v4l_id.c
-+@@ -28,6 +28,7 @@
-+ #include <sys/types.h>
-+ #include <sys/time.h>
-+ #include <sys/ioctl.h>
-++#include <linux/version.h>
-+ #include <linux/videodev2.h>
-+ 
-+ #include "util.h"
-+@@ -71,9 +72,11 @@ int main(int argc, char *argv[]) {
-+                 printf("ID_V4L_VERSION=2\n");
-+                 printf("ID_V4L_PRODUCT=%s\n", v2cap.card);
-+                 printf("ID_V4L_CAPABILITIES=:");
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0)
-+                 if (v2cap.capabilities & V4L2_CAP_DEVICE_CAPS)
-+                         capabilities = v2cap.device_caps;
-+                 else
-++#endif
-+                         capabilities = v2cap.capabilities;
-+                 if ((capabilities & V4L2_CAP_VIDEO_CAPTURE) > 0 ||
-+                     (capabilities & V4L2_CAP_VIDEO_CAPTURE_MPLANE) > 0)
-+-- 
-+2.40.0
-+
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 02ccf742ac..5524bfc420 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -47,7 +47,8 @@ POPPLER_DEPENDENCIES += gobject-introspection
+ POPPLER_CONF_OPTS += \
+ 	-DENABLE_GOBJECT_INTROSPECTION=ON \
+ 	-DINTROSPECTION_SCANNER=$(STAGING_DIR)/usr/bin/g-ir-scanner \
+-	-DINTROSPECTION_COMPILER=$(STAGING_DIR)/usr/bin/g-ir-compiler
++	-DINTROSPECTION_COMPILER=$(STAGING_DIR)/usr/bin/g-ir-compiler \
++	-DINTROSPECTION_COMPILER_ARGS="--includedir=$(STAGING_DIR)/usr/share/gir-1.0"
+ else
+ POPPLER_CONF_OPTS += -DENABLE_GOBJECT_INTROSPECTION=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
