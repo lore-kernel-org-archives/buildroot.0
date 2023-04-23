@@ -4,67 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53DB1C6FD18
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 21:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE86EC6FD18
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 22:01:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA88360E33;
-	Sun, 23 Apr 2023 21:46:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA88360E33
+	by smtp3.osuosl.org (Postfix) with ESMTP id 326CE60E33;
+	Sun, 23 Apr 2023 22:01:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 326CE60E33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pJ3W3BWLQBnj; Sun, 23 Apr 2023 21:46:51 +0000 (UTC)
+	with ESMTP id j67Vass_ZByh; Sun, 23 Apr 2023 22:01:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD36460A6D;
-	Sun, 23 Apr 2023 21:46:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD36460A6D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A17E61C2B11
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 21:46:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F29660BB9;
+	Sun, 23 Apr 2023 22:01:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F29660BB9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 073FC1C2B11
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 22:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7ACDE60A6D
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 21:46:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ACDE60A6D
+ by smtp2.osuosl.org (Postfix) with ESMTP id D41CC4031D
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 22:01:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D41CC4031D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HoRj121wFTtk for <buildroot@lists.busybox.net>;
- Sun, 23 Apr 2023 21:46:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54FFA60736
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 54FFA60736
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 21:46:47 +0000 (UTC)
-Received: from 91-152-140-132.elisa-laajakaista.fi ([91.152.140.132]
- helo=momiji.home) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1pqhXf-00AYqf-LD; Sun, 23 Apr 2023 23:46:43 +0200
-Received: from localhost (momiji.home [local])
- by momiji.home (OpenSMTPD) with ESMTPA id 4c553b4b;
- Sun, 23 Apr 2023 21:46:42 +0000 (UTC)
-Date: Mon, 24 Apr 2023 00:46:42 +0300
-Message-ID: <20230424004642.GB1857231@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-In-Reply-To: <20230423214014.2963361-1-aperez@igalia.com>
-References: <20230423214014.2963361-1-aperez@igalia.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gIr9LByjSRJz for <buildroot@lists.busybox.net>;
+ Sun, 23 Apr 2023 22:01:17 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4089E4012E
+Received: from smtpdh20-2.aruba.it (smtpdh20-2.aruba.it [62.149.155.165])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4089E4012E
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 22:01:16 +0000 (UTC)
+Received: from [192.168.50.18] ([146.241.104.90])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id qhlgpGZwcxNVBqhlgpKIqz; Mon, 24 Apr 2023 00:01:13 +0200
+Message-ID: <c0f9b364-d483-d8b7-981b-51d31b52c21e@benettiengineering.com>
+Date: Mon, 24 Apr 2023 00:01:13 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=JajMRw6AUTLuKoMV17MQZPELpcgYJUPSCGqkCvjsV7A=; b=pnq5i9jTzv+1xvSvSOY4VPjlGX
- ChsU0UANmu6tNz5fa9cq5S/9VxZcZ3tCDpQtheGw5eMcL3F7YVeF6apyCGLrnnMzh59KPIC9W43C3
- 5xJ7J2XUMWj9JxcshicMIkIBvSKXFHFj1gsQ5PON6mocHX9Yhsq0Wra7w897ngqszblbKYnLCT6Sl
- 1KqY5fE4r0Qbd5EFQmWh5RlJ0DKTobPMR3fdbhmpoH2c+eKVhMLGbE9Kn5GwqO/pQ+uIhJ0ShR+ys
- v7EQzP6g/Pa0GoOApYFLAESrVkNNay4Q3jyBHT/9JQjGtb3cSVSkG6l88rFk2HGcGobftoyVl7XAD
- Mv6RK7Xw==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=pnq5i9jT
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+References: <20230423214014.2963361-1-aperez@igalia.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230423214014.2963361-1-aperez@igalia.com>
+X-CMAE-Envelope: MS4xfMA+dWLkfvZLMGE+gx1OJHPMzGLd6xp4YQ2Z1eQ8xcauLoMs4ABsvK1k5TjuOEU6OMA+HqqtXUM87i2B8xCsm5NM07afxAGcs6V/jMop/tbrdS5LGS7l
+ qVhZOFIvtgrlKWl76rp7F3CIOYQfnBCLYB5sSm30INXlPicDUWgR+whhWOklGKaMVP3UQVtNfoq4zVnNsi+NbR6T9wAMlEFeTYwv/yHZX7oZ2gOmSWyYl2vA
+ 8kQcyIjg/AMoka81Ch80sQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1682287273; bh=b+uZGJg73JInYS/OfcVoSAN0/VPfuzjQTFLBS4vJFX8=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=CRCSDHunHRy9FS8BAjvr/hl79uEKb/ZafmFujFFlwVhvqblsKbb3nnokpl28a1JU0
+ edMXUGvVe0v6Wtycof2NLLc7bJrd++z96BBbHieIJ1Fyvb41oviDb/YHtt3Ffsabnl
+ WoecC0my7wMUZcFLrTS+Q9YIgsJqPRuXkiJmz108MoOWUlOHBe3ht9CQJo41RdCboq
+ GdlpXoPzn2l8Oi0SB0E6hh9SPxA4y2uG5yySG4vLgsUzVXFUGRAzBX6U1/9sL9UsOW
+ cVLz1gvRekNyS7t0/gT3xJPf66VGRSrr+yMXtZiwR39hjY4BQRDOOgz/q+YpNlq5f9
+ 4WOTfD2jXJ4Zg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=CRCSDHun
 Subject: Re: [Buildroot] [PATCH] package/sunxi-mali-utgard: support the
  wayland driver
 X-BeenThere: buildroot@buildroot.org
@@ -78,120 +76,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: multipart/mixed; boundary="===============0233647481564202406=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Adrian,
 
---===============0233647481564202406==
-Content-Type: multipart/signed; boundary="Xt115vatud5xQlbu"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
+Il 23/04/2023 23:40, Adrian Perez de Castro ha scritto:
+> Add a choice to allow using the Wayland variant of the Mali driver. When
+> selected, the package is marked as provider for libgbm as libMali.so
+> includes the symbols and a libgbm.so symlink is installed; and both
+> BR2_PACKAGE_HAS_{LIBGBM,LIBEGL_WAYLAND} are selected accordingly.
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>   package/sunxi-mali-utgard/Config.in           | 23 +++++++++++++++++++
+>   .../sunxi-mali-utgard/sunxi-mali-utgard.mk    | 18 ++++++++++++---
+>   2 files changed, 38 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/sunxi-mali-utgard/Config.in b/package/sunxi-mali-utgard/Config.in
+> index 59ac21f5ab..0856f220fd 100644
+> --- a/package/sunxi-mali-utgard/Config.in
+> +++ b/package/sunxi-mali-utgard/Config.in
+> @@ -18,6 +18,9 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
+>   config BR2_PACKAGE_PROVIDES_LIBGLES
+>   	default "sunxi-mali-utgard"
+>   
+> +config BR2_PACKAGE_PROVIDES_LIBGBM
+> +	default "sunxi-mali-utgard" if BR2_PACKAGE_SUNXI_MALI_UTGARD_WAYLAND
+> +
+>   choice
+>   	prompt "Version"
+>   	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 # legacy
+> @@ -38,6 +41,26 @@ config BR2_PACKAGE_SUNXI_MALI_UTGARD_REVISION
+>   	default "r6p2"	if BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
+>   	default "r8p1"	if BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1
+>   
+> +choice
+> +	prompt "Platform"
+> +	default BR2_PACKAGE_SUNXI_MALI_UTGARD_FBDEV
+> +	help
+> +	  Select the target EGL platform.
+> +
+> +config BR2_PACKAGE_SUNXI_MALI_UTGARD_FBDEV
+> +	bool "fbdev"
+> +config BR2_PACKAGE_SUNXI_MALI_UTGARD_WAYLAND
+> +	bool "wayland"
+> +	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+> +	select BR2_PACKAGE_HAS_LIBGBM
 
+There is a wayland blob only for r6p2 version :-/ so here you need
+to depend on BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2 and add a comment
+for Wayland not available when r8p1 is selected.
 
---Xt115vatud5xQlbu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+Thank you
 
-SGksCgpPbiBNb24sIDI0IEFwciAyMDIzIDAwOjQwOjE0ICswMzAwIEFkcmlhbiBQZXJleiBkZSBD
-YXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPiB3cm90ZToKPiBBZGQgYSBjaG9pY2UgdG8gYWxsb3cg
-dXNpbmcgdGhlIFdheWxhbmQgdmFyaWFudCBvZiB0aGUgTWFsaSBkcml2ZXIuIFdoZW4KPiBzZWxl
-Y3RlZCwgdGhlIHBhY2thZ2UgaXMgbWFya2VkIGFzIHByb3ZpZGVyIGZvciBsaWJnYm0gYXMgbGli
-TWFsaS5zbwo+IGluY2x1ZGVzIHRoZSBzeW1ib2xzIGFuZCBhIGxpYmdibS5zbyBzeW1saW5rIGlz
-IGluc3RhbGxlZDsgYW5kIGJvdGgKPiBCUjJfUEFDS0FHRV9IQVNfe0xJQkdCTSxMSUJFR0xfV0FZ
-TEFORH0gYXJlIHNlbGVjdGVkIGFjY29yZGluZ2x5Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IEFkcmlh
-biBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPgoKV2l0aCB0aGlzIEkgaGF2ZSBi
-ZWVuIGFibGUgdG8gYnVpbGQgV2ViS2l0R1RLLCBXUEVXZWJLaXQsIGFuZCB0aGUgQ2FnZQpjb21w
-b3NpdG9yIHdpdGhvdXQgdHJvdWJsZSwgYnV0IHVuZm9ydHVuYXRlbHkgSSBkbyBub3QgaGF2ZSB0
-aGUgaGFyZHdhcmUKdG8gdGVzdCBpdC4uLiBzbyBJIGNhbm5vdCByZWFsbHkgdGVsbCB3aGV0aGVy
-IHRoaW5ncyB3b3JrIGFzIGV4cGVjdGVkLgoKPiAtLS0KPiAgcGFja2FnZS9zdW54aS1tYWxpLXV0
-Z2FyZC9Db25maWcuaW4gICAgICAgICAgIHwgMjMgKysrKysrKysrKysrKysrKysrKwo+ICAuLi4v
-c3VueGktbWFsaS11dGdhcmQvc3VueGktbWFsaS11dGdhcmQubWsgICAgfCAxOCArKysrKysrKysr
-KystLS0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygt
-KQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3N1bnhpLW1hbGktdXRnYXJkL0NvbmZpZy5pbiBi
-L3BhY2thZ2Uvc3VueGktbWFsaS11dGdhcmQvQ29uZmlnLmluCj4gaW5kZXggNTlhYzIxZjVhYi4u
-MDg1NmYyMjBmZCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3N1bnhpLW1hbGktdXRnYXJkL0NvbmZp
-Zy5pbgo+ICsrKyBiL3BhY2thZ2Uvc3VueGktbWFsaS11dGdhcmQvQ29uZmlnLmluCj4gQEAgLTE4
-LDYgKzE4LDkgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1BST1ZJREVTX0xJQkVHTAo+ICBjb25maWcg
-QlIyX1BBQ0tBR0VfUFJPVklERVNfTElCR0xFUwo+ICAJZGVmYXVsdCAic3VueGktbWFsaS11dGdh
-cmQiCj4gIAo+ICtjb25maWcgQlIyX1BBQ0tBR0VfUFJPVklERVNfTElCR0JNCj4gKwlkZWZhdWx0
-ICJzdW54aS1tYWxpLXV0Z2FyZCIgaWYgQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfV0FZ
-TEFORAo+ICsKPiAgY2hvaWNlCj4gIAlwcm9tcHQgIlZlcnNpb24iCj4gIAlkZWZhdWx0IEJSMl9Q
-QUNLQUdFX1NVTlhJX01BTElfVVRHQVJEX1I2UDIgaWYgQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9N
-QUlOTElORV9SNlAyICMgbGVnYWN5Cj4gQEAgLTM4LDYgKzQxLDI2IEBAIGNvbmZpZyBCUjJfUEFD
-S0FHRV9TVU5YSV9NQUxJX1VUR0FSRF9SRVZJU0lPTgo+ICAJZGVmYXVsdCAicjZwMiIJaWYgQlIy
-X1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfUjZQMgo+ICAJZGVmYXVsdCAicjhwMSIJaWYgQlIy
-X1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfUjhQMQo+ICAKPiArY2hvaWNlCj4gKwlwcm9tcHQg
-IlBsYXRmb3JtIgo+ICsJZGVmYXVsdCBCUjJfUEFDS0FHRV9TVU5YSV9NQUxJX1VUR0FSRF9GQkRF
-Vgo+ICsJaGVscAo+ICsJICBTZWxlY3QgdGhlIHRhcmdldCBFR0wgcGxhdGZvcm0uCj4gKwo+ICtj
-b25maWcgQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfRkJERVYKPiArCWJvb2wgImZiZGV2
-Igo+ICtjb25maWcgQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfV0FZTEFORAo+ICsJYm9v
-bCAid2F5bGFuZCIKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9IQVNfTElCRUdMX1dBWUxBTkQKPiAr
-CXNlbGVjdCBCUjJfUEFDS0FHRV9IQVNfTElCR0JNCj4gKwo+ICtlbmRjaG9pY2UKPiArCj4gK2Nv
-bmZpZyBCUjJfUEFDS0FHRV9TVU5YSV9NQUxJX1VUR0FSRF9QTEFURk9STQo+ICsJc3RyaW5nCj4g
-KwlkZWZhdWx0ICJmYmRldiIgaWYgQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfRkJERVYK
-PiArCWRlZmF1bHQgIndheWxhbmQiIGlmIEJSMl9QQUNLQUdFX1NVTlhJX01BTElfVVRHQVJEX1dB
-WUxBTkQKPiArCj4gIGVuZGlmCj4gIAo+ICBjb21tZW50ICJzdW54aS1tYWxpLXV0Z2FyZCBuZWVk
-cyBhbiBFQUJJaGYgZ2xpYmMgdG9vbGNoYWluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3N1bnhp
-LW1hbGktdXRnYXJkL3N1bnhpLW1hbGktdXRnYXJkLm1rIGIvcGFja2FnZS9zdW54aS1tYWxpLXV0
-Z2FyZC9zdW54aS1tYWxpLXV0Z2FyZC5tawo+IGluZGV4IGY2OTM2Njc5NTUuLjIzYzZlOGVjNmUg
-MTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9zdW54aS1tYWxpLXV0Z2FyZC9zdW54aS1tYWxpLXV0Z2Fy
-ZC5tawo+ICsrKyBiL3BhY2thZ2Uvc3VueGktbWFsaS11dGdhcmQvc3VueGktbWFsaS11dGdhcmQu
-bWsKPiBAQCAtMjQsOSArMjQsOSBAQCBlbmRpZgo+ICBkZWZpbmUgU1VOWElfTUFMSV9VVEdBUkRf
-SU5TVEFMTF9TVEFHSU5HX0NNRFMKPiAgCW1rZGlyIC1wICQoU1RBR0lOR19ESVIpL3Vzci9saWIg
-JChTVEFHSU5HX0RJUikvdXNyL2luY2x1ZGUKPiAgCj4gLQljcCAtcmYgJChARCkvJChTVU5YSV9N
-QUxJX1VUR0FSRF9SRVYpLyQoU1VOWElfTUFMSV9VVEdBUkRfQVJDSCkvZmJkZXYvKi5zbyogXAo+
-ICsJY3AgLXJmICQoQEQpLyQoU1VOWElfTUFMSV9VVEdBUkRfUkVWKS8kKFNVTlhJX01BTElfVVRH
-QVJEX0FSQ0gpLyQoQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfUExBVEZPUk0pLyouc28q
-IFwKPiAgCQkkKFNUQUdJTkdfRElSKS91c3IvbGliLwo+IC0JY3AgLXJmICQoQEQpL2luY2x1ZGUv
-ZmJkZXYvKiAkKFNUQUdJTkdfRElSKS91c3IvaW5jbHVkZS8KPiArCWNwIC1yZiAkKEBEKS9pbmNs
-dWRlLyQoQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfUExBVEZPUk0pLyogJChTVEFHSU5H
-X0RJUikvdXNyL2luY2x1ZGUvCj4gIAo+ICAJJChJTlNUQUxMKSAtRCAtbSAwNjQ0IHBhY2thZ2Uv
-c3VueGktbWFsaS11dGdhcmQvZWdsLnBjIFwKPiAgCQkkKFNUQUdJTkdfRElSKS91c3IvbGliL3Br
-Z2NvbmZpZy9lZ2wucGMKPiBAQCAtMzQsOSArMzQsMjEgQEAgZGVmaW5lIFNVTlhJX01BTElfVVRH
-QVJEX0lOU1RBTExfU1RBR0lOR19DTURTCj4gIAkJJChTVEFHSU5HX0RJUikvdXNyL2xpYi9wa2dj
-b25maWcvZ2xlc3YyLnBjCj4gIGVuZGVmCj4gIAo+ICtpZmVxICgkKEJSMl9QQUNLQUdFX1NVTlhJ
-X01BTElfVVRHQVJEX1dBWUxBTkQpLHkpCj4gK2RlZmluZSBTVU5YSV9NQUxJX1VUR0FSRF9JTlNU
-QUxMX0ZJWFVQX1NUQUdJTkdfUENfRklMRVMKPiArCXNlZCAtZSAnL15DZmxhZ3M6L3MvJCQvIC1E
-V0xfRUdMX1BMQVRGT1JNLycgXAo+ICsJCS1lICcvXlJlcXVpcmVzOi9zLyQkLyB3YXlsYW5kLWNs
-aWVudCB3YXlsYW5kLXNlcnZlci8nIFwKPiArCQktaSAkKFNUQUdJTkdfRElSKS91c3IvbGliL3Br
-Z2NvbmZpZy9lZ2wucGMKPiArCXNlZCAtZSAnL15SZXF1aXJlczovcy8kJC8gd2F5bGFuZC1jbGll
-bnQgd2F5bGFuZC1zZXJ2ZXIvJyBcCj4gKwkJLWkgJChTVEFHSU5HX0RJUikvdXNyL2xpYi9wa2dj
-b25maWcvZ2xlc3YyLnBjCj4gK2VuZGVmCj4gK1NVTlhJX01BTElfVVRHQVJEX1BPU1RfSU5TVEFM
-TF9UQVJHRVRfSE9PS1MgKz0gU1VOWElfTUFMSV9VVEdBUkRfSU5TVEFMTF9GSVhVUF9TVEFHSU5H
-X1BDX0ZJTEVTCj4gK1NVTlhJX01BTElfVVRHQVJEX0RFUEVOREVOQ0lFUyArPSB3YXlsYW5kCj4g
-K2VuZGlmCj4gKwo+ICBkZWZpbmUgU1VOWElfTUFMSV9VVEdBUkRfSU5TVEFMTF9UQVJHRVRfQ01E
-Uwo+ICAJbWtkaXIgLXAgJChUQVJHRVRfRElSKS91c3IvbGliCj4gLQljcCAtcmYgJChARCkvJChT
-VU5YSV9NQUxJX1VUR0FSRF9SRVYpLyQoU1VOWElfTUFMSV9VVEdBUkRfQVJDSCkvZmJkZXYvKi5z
-byogXAo+ICsJY3AgLXJmICQoQEQpLyQoU1VOWElfTUFMSV9VVEdBUkRfUkVWKS8kKFNVTlhJX01B
-TElfVVRHQVJEX0FSQ0gpLyQoQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkRfUExBVEZPUk0p
-Lyouc28qIFwKPiAgCQkkKFRBUkdFVF9ESVIpL3Vzci9saWIvCj4gIGVuZGVmCj4gIAo+IC0tIAo+
-IDIuNDAuMAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4g
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4g
-CgpDaGVlcnMsCuKAlEFkcmnDoW4K
+Best regards
+-- 
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
 
---Xt115vatud5xQlbu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZEWnQgAKCRCRxVnb5MkS
-OyWPAJsHeLp70Za4nWpkvDVZldpeaw8ppgCfYc0xUhXvSxrHWAGFsyN61lGItlQ=
-=Mm0k
------END PGP SIGNATURE-----
-
---Xt115vatud5xQlbu--
-
---===============0233647481564202406==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> +
+> +endchoice
+> +
+> +config BR2_PACKAGE_SUNXI_MALI_UTGARD_PLATFORM
+> +	string
+> +	default "fbdev" if BR2_PACKAGE_SUNXI_MALI_UTGARD_FBDEV
+> +	default "wayland" if BR2_PACKAGE_SUNXI_MALI_UTGARD_WAYLAND
+> +
+>   endif
+>   
+>   comment "sunxi-mali-utgard needs an EABIhf glibc toolchain"
+> diff --git a/package/sunxi-mali-utgard/sunxi-mali-utgard.mk b/package/sunxi-mali-utgard/sunxi-mali-utgard.mk
+> index f693667955..23c6e8ec6e 100644
+> --- a/package/sunxi-mali-utgard/sunxi-mali-utgard.mk
+> +++ b/package/sunxi-mali-utgard/sunxi-mali-utgard.mk
+> @@ -24,9 +24,9 @@ endif
+>   define SUNXI_MALI_UTGARD_INSTALL_STAGING_CMDS
+>   	mkdir -p $(STAGING_DIR)/usr/lib $(STAGING_DIR)/usr/include
+>   
+> -	cp -rf $(@D)/$(SUNXI_MALI_UTGARD_REV)/$(SUNXI_MALI_UTGARD_ARCH)/fbdev/*.so* \
+> +	cp -rf $(@D)/$(SUNXI_MALI_UTGARD_REV)/$(SUNXI_MALI_UTGARD_ARCH)/$(BR2_PACKAGE_SUNXI_MALI_UTGARD_PLATFORM)/*.so* \
+>   		$(STAGING_DIR)/usr/lib/
+> -	cp -rf $(@D)/include/fbdev/* $(STAGING_DIR)/usr/include/
+> +	cp -rf $(@D)/include/$(BR2_PACKAGE_SUNXI_MALI_UTGARD_PLATFORM)/* $(STAGING_DIR)/usr/include/
+>   
+>   	$(INSTALL) -D -m 0644 package/sunxi-mali-utgard/egl.pc \
+>   		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
+> @@ -34,9 +34,21 @@ define SUNXI_MALI_UTGARD_INSTALL_STAGING_CMDS
+>   		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
+>   endef
+>   
+> +ifeq ($(BR2_PACKAGE_SUNXI_MALI_UTGARD_WAYLAND),y)
+> +define SUNXI_MALI_UTGARD_INSTALL_FIXUP_STAGING_PC_FILES
+> +	sed -e '/^Cflags:/s/$$/ -DWL_EGL_PLATFORM/' \
+> +		-e '/^Requires:/s/$$/ wayland-client wayland-server/' \
+> +		-i $(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
+> +	sed -e '/^Requires:/s/$$/ wayland-client wayland-server/' \
+> +		-i $(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
+> +endef
+> +SUNXI_MALI_UTGARD_POST_INSTALL_TARGET_HOOKS += SUNXI_MALI_UTGARD_INSTALL_FIXUP_STAGING_PC_FILES
+> +SUNXI_MALI_UTGARD_DEPENDENCIES += wayland
+> +endif
+> +
+>   define SUNXI_MALI_UTGARD_INSTALL_TARGET_CMDS
+>   	mkdir -p $(TARGET_DIR)/usr/lib
+> -	cp -rf $(@D)/$(SUNXI_MALI_UTGARD_REV)/$(SUNXI_MALI_UTGARD_ARCH)/fbdev/*.so* \
+> +	cp -rf $(@D)/$(SUNXI_MALI_UTGARD_REV)/$(SUNXI_MALI_UTGARD_ARCH)/$(BR2_PACKAGE_SUNXI_MALI_UTGARD_PLATFORM)/*.so* \
+>   		$(TARGET_DIR)/usr/lib/
+>   endef
+>   
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0233647481564202406==--
