@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1848FC77B76
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 11:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE76FC77B73
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 11:03:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 925E682073;
-	Sun, 23 Apr 2023 11:02:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 925E682073
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71E2982128;
+	Sun, 23 Apr 2023 11:03:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71E2982128
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1akX3UjO7u_v; Sun, 23 Apr 2023 11:02:51 +0000 (UTC)
+	with ESMTP id RROTglEkR_Sz; Sun, 23 Apr 2023 11:03:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB8B8817A4;
-	Sun, 23 Apr 2023 11:02:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB8B8817A4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5CFB01C2B5C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 506FA8212F;
+	Sun, 23 Apr 2023 11:03:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 506FA8212F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 70DDB1C2B8E
  for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 11:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3333A40B5B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5242160F5C
  for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 11:02:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3333A40B5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5242160F5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gSIFWihpb9mq for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CdLpQCH9Cd2c for <buildroot@lists.busybox.net>;
  Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65A214059F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 74CFC60BA6
  for <buildroot@buildroot.org>; Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65A214059F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74CFC60BA6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DC0C84488; Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
+ id 5B9B18448A; Sun, 23 Apr 2023 11:02:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 Apr 2023 13:01:14 +0200
+Date: Sun, 23 Apr 2023 13:01:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 548e30d140066d5464eef1c3be57284a1a3dcf5e
-X-Git-Newrev: 1f9332229e52f1792c1296dfacc910a330b3d850
+X-Git-Oldrev: 1f9332229e52f1792c1296dfacc910a330b3d850
+X-Git-Newrev: d2758794a453aa1eacdcb048070e6434ec601ca5
 X-Patchwork-Hint: ignore
-Message-Id: <20230423110248.4DC0C84488@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] checkpackageignore: regenerate
+Message-Id: <20230423110248.5B9B18448A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libglib2: add upstream status to
+ girdir patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,32 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f9332229e52f1792c1296dfacc910a330b3d850
+commit: https://git.buildroot.net/buildroot/commit/?id=d2758794a453aa1eacdcb048070e6434ec601ca5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 5e1c238b7202 (package/ltp-testsuite: require 5.11 headers for
-musl) dropped a patch, which had no "upstream" status, and thus had an
-ignore entry, which itself was ignored when the patch got removed.
+Providing an upstream status for the remaining libglib2 patch from a
+recent version bump. This patch was introduced in Buildroot around
+November 2021 to help deal with build errors where `GObject-2.0.gir`
+could not be found (tied to Buildroot changes made in
+`gobject-introspection.mk`). The discussion thread mentions this could
+be submitted upstream, but looks like it never was. Reflecting that this
+package has not been submitted upstream.
 
-Regenerate .checkpackage ignore now.
-
+Signed-off-by: James Knight <james.d.knight@live.com>
+[yann.morin.1998@free.fr: update .checkpackageignore]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore | 1 -
- 1 file changed, 1 deletion(-)
+ .checkpackageignore                                                      | 1 -
+ .../0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch      | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 02c892c1b3..e11b5b6bb8 100644
+index e11b5b6bb8..f0ad3e88bd 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -979,7 +979,6 @@ package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
- package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch Upstream
- package/lockfile-progs/0001-sus3v-legacy.patch Sob Upstream
- package/lshw/0001-solve-Compile-error-when-g-version-is-less-than-5.patch Upstream
--package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch Upstream
- package/ltrace/0001-arm-plt.patch Upstream
- package/ltrace/0002-sparc-add-missing-library.h-include.patch Upstream
- package/ltrace/0003-configure.ac-fix-autoreconf-with-autoconf-2.70.patch Upstream
+@@ -804,7 +804,6 @@ package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
+ package/libglib2/0001-fix-compile-time-atomic-detection.patch Upstream
+ package/libglib2/0002-remove-cpp-requirement.patch Upstream
+ package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch Upstream
+-package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch Upstream
+ package/libgpgme/0001-Fix-build-without-threads.patch Upstream
+ package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch Upstream
+ package/libgsm/0001-misc-fixes-from-archlinux.patch Upstream
+diff --git a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+index db77a73203..fb99057242 100644
+--- a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
++++ b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+@@ -14,6 +14,7 @@ Fixes:
+  - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: Never submitted
+ ---
+  gio/meson.build  | 1 +
+  glib/meson.build | 1 +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
