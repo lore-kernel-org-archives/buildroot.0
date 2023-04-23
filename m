@@ -1,73 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09711C77B60
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 20:32:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F716C6FD18
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 21:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7549E81EC8;
-	Sun, 23 Apr 2023 20:32:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7549E81EC8
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1A7D607E3;
+	Sun, 23 Apr 2023 21:30:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1A7D607E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qSWrtznzKWBT; Sun, 23 Apr 2023 20:32:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id frwPkNnQFesk; Sun, 23 Apr 2023 21:30:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7ABDB81EC5;
-	Sun, 23 Apr 2023 20:32:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7ABDB81EC5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29CF9607F5;
+	Sun, 23 Apr 2023 21:30:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29CF9607F5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D23AF1C2B12
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 20:31:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B4B671C2B11
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 21:30:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA8E860BB9
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 20:31:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA8E860BB9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B4DD607F5
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 21:30:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B4DD607F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Q4zw7ck-LFP for <buildroot@lists.busybox.net>;
- Sun, 23 Apr 2023 20:31:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 273E760AD5
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 273E760AD5
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 20:31:56 +0000 (UTC)
-Received: from [192.168.50.162] ([146.241.104.90])
- by Aruba Outgoing Smtp  with ESMTPSA
- id qgNFpwCyGPQ3fqgNFpwdoW; Sun, 23 Apr 2023 22:31:53 +0200
-Message-ID: <e0b77340-42d5-0783-3000-0cd4c08c2022@benettiengineering.com>
-Date: Sun, 23 Apr 2023 22:31:53 +0200
+ with ESMTP id LbHN0Jj1UPYL for <buildroot@lists.busybox.net>;
+ Sun, 23 Apr 2023 21:30:07 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8109E607E3
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8109E607E3
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 21:30:06 +0000 (UTC)
+Received: from 91-153-34-68.elisa-laajakaista.fi ([91.153.34.68] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1pqhHW-00AYYB-HZ; Sun, 23 Apr 2023 23:30:02 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 59073c25;
+ Sun, 23 Apr 2023 21:30:01 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Mon, 24 Apr 2023 00:30:01 +0300
+Message-Id: <20230423213001.2961215-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, it
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-References: <CABGWkvoH-sy4LhPtWgY422FXm6pQ9UR5eM63nV-LAmEf1FRFng@mail.gmail.com>
- <80825E70-9D48-471F-AFF1-F43E71FBB045@benettiengineering.com>
- <CABGWkvpm3iydDjbkVbaw3dTe4kogD-SfyMt6sAz9UDGXSQe2eg@mail.gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CABGWkvpm3iydDjbkVbaw3dTe4kogD-SfyMt6sAz9UDGXSQe2eg@mail.gmail.com>
-X-CMAE-Envelope: MS4xfKfqyJqwYHjo9HwXtl4ydCHNA/FUpt3bjdPs/dm9qbHk/Z0qgvFsEmCPBRbrs0jFRZdWDR9+oeGUXTlX4abesUp8fbYZYdRitaLz/v4kgy7qy7745wVD
- kS7EH9FARU0c/07vR6RcJJ6QH9FO1l0dWdex7wtdBURRS1C7fmG2dGU4Rgt45hfaqzG03sbcLtF8hUuNVmtHJ6wq7BJCiSNNsyl6w+g+V+ZTqv9gNi2JQmZb
- Ig18oN4uUpKhYaG1jIwy2LHy6QlANfMShmYy0X8Bs6I=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1682281913; bh=w8/zycf0iajvN0NbYDZRCfY8qKYUiK0H1YVllh+SmP4=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Vgu0LrYrKMA2DpGnvb4YxdkpCj8c+k7r6Uw274MxQKliLIctChuKw8CWW0L55SrC3
- x0dLh0y2RdMpk1kxbiyCqRC6JtV7F80REcWfY+l8r1BUARSD8ezWHWLOAvfvZiwP2v
- HCGvPknHAo0UXSDNeR9Ts+Ux3kTjPLKIc/6dc4iNj3bKc6e1F1w5p4s6qQ5FE14aMj
- a77SCGaRqjdLPkhm0htYP4y90Y67KiPa+32y5dah9QmdUtl539EQdoNf3VYsmjWBoP
- IluKsU43OahYSBvZJmWojJmkDGO44BbBlq1EgrCpDoE8aRvPDlKlZ4yqH+Zkabg78B
- 3m5j2UsyDX2Lg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=kGN6n8IIhL2Nbbi6PcZ1FGPtZiNv11Svq3HUahjKBcs=; b=EU9AiEF3D4LX8iqL9eqtFIwtdA
+ 8FzwsoZuVTyjLOQ7jXub6kU2JCcwr1txMoQuCSRCNFk4WKwpSQAecNTsIEDJ5ZXYuUn3oUqO7DxMW
+ aXT+hnIKIOvWkjuhqFZctueRA1hmnDzG6InUwPtybb78DtAd6rfeIE0SuRv/EG/Gl+KGYO0ZMHRN2
+ QsfrPkeIQKwkZVgOYMSTOV9Pi0oYFHHJctMeCUKfGKXHg3BpAelhbCowydPPrHe2u2p1IgEW9M/wi
+ WHEgiwMW69rvEiwxI6KxhwxNs7LMzs2syeJA+53D4zp13J5ePduDUVRGOfT2j8vP9oMuh56Cy8T6o
+ OyE+Emtg==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Vgu0LrYr
-Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f769_disco_sd_defconfig:
- new defconfig
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=EU9AiEF3
+Subject: [Buildroot] [PATCH] package/webkitgtk: import ARM NEON and build
+ fix patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,131 +77,477 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+Import the same patch already in use by wpewebkit to fix the build on
+ARM NEON targets, and also a new one proposed upstream to fix the build
+with OpenGL ES header from some GPU drivers.
 
-On 23/04/23 19:20, Dario Binacchi wrote:
-[ SNIP ]
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...cpp-fails-to-build-NEON-fast-path-se.patch | 328 ++++++++++++++++++
+ ...nsGLOpenGLES.cpp-uses-GLES3-symbols-.patch | 110 ++++++
+ 2 files changed, 438 insertions(+)
+ create mode 100644 package/webkitgtk/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
+ create mode 100644 package/webkitgtk/0002-WPE-GTK-ExtensionsGLOpenGLES.cpp-uses-GLES3-symbols-.patch
 
->>
->> Sure. Could you also try to fill the memory and see if everything works correctly?
->> You could try to start many instances of a program until you fill the memory and see that everything is working ok(I hope).
-> 
-> 
-> I just uploaded version 2 with your suggested changes. I did some
-> tests with can applications (candump, cansend, ...) and had
-> no problems.
-> But for example, running the ifconfig application, the second time I
-> got this error:
-> 
-> ~ # candump can2 -L &
-> [18] 81 candump can2 -L
-> ~ # ifconfig
-> Segmentation fault
-> ~ # [  193.040912] warn_alloc: 1 callbacks suppressed
-> [  193.040970] ifconfig: page allocation failure: order:7,
-> mode:0xcc0(GFP_KERNEL), nodemask=(null)
-> [  193.041056] CPU: 0 PID: 82 Comm: ifconfig Not tainted 5.19.0-rc2 #8
-> [  193.041110] Hardware name: STM32 (Device Tree Support)
-> [  193.041147]  unwind_backtrace from show_stack+0xb/0xc
-> [  193.041252]  show_stack from dump_stack_lvl+0x19/0x1e
-> [  193.041347]  dump_stack_lvl from warn_alloc+0x61/0xe8
-> [  193.041434]  warn_alloc from __alloc_pages+0x36f/0x57e
-> [  193.041511]  __alloc_pages from __get_free_pages+0xf/0x24
-> [  193.041583]  __get_free_pages from alloc_pages_exact+0x45/0x5c
-> [  193.041656]  alloc_pages_exact from do_mmap+0x491/0x556
-> [  193.041752]  do_mmap from vm_mmap_pgoff+0x53/0x84
-> [  193.041858]  vm_mmap_pgoff from load_flat_binary+0x501/0x690
-> [  193.041960]  load_flat_binary from bprm_execve+0x1f5/0x2f4
-> [  193.042044]  bprm_execve from do_execveat_common+0x10f/0x12c
-> [  193.042119]  do_execveat_common from sys_execve+0x1d/0x20
-> [  193.042195]  sys_execve from ret_fast_syscall+0x1/0x4c
-> [  193.042262] Exception stack(0xc0ddbfa8 to 0xc0ddbff0)
-> [  193.042324] bfa0:                   c0e6eff0 c0e68fa7 c0e6eff0
-> c0c6e420 c0c6e028 0000000b
-> [  193.042389] bfc0: c0e6eff0 c0e68fa7 c0e68b88 0000000b c0e6eff6
-> 00000ff6 c0e626f4 00000000
-> [  193.042438] bfe0: 6962732f c0e68b88 c0e0f7df c0e15db4
-> [  193.042873] Mem-Info:
-> [  193.042910] active_anon:0 inactive_anon:0 isolated_anon:0
-> [  193.042910]  active_file:0 inactive_file:18 isolated_file:0
-> [  193.042910]  unevictable:5 dirty:0 writeback:4
-> [  193.042910]  slab_reclaimable:281 slab_unreclaimable:511
-> [  193.042910]  mapped:0 shmem:0 pagetables:0 bounce:0
-> [  193.042910]  kernel_misc_reclaimable:0
-> [  193.042910]  free:1426 free_pcp:0 free_cma:0
-> [  193.043049] Node 0 active_anon:0kB inactive_anon:0kB
-> active_file:0kB inactive_file:72kB unevictable:20kB isolated(anon):0kB
-> isolated(file):0kB mapped:0kB dirty:0kB writeback:16kB shmem:0kB
-> writeback_tmp:0kB kernel_stack:400kB pagetables:0kB all_unreclaimable?
-> no
-> [  193.043162] Normal free:5704kB boost:0kB min:444kB low:552kB
-> high:660kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
-> active_file:0kB inactive_file:72kB unevictable:20kB writepending:16kB
-> present:16384kB managed:12544kB mlocked:0kB bounce:0kB free_pcp:0kB
-> local_pcp:0kB free_cma:0kB
-> [  193.043295] lowmem_reserve[]: 0 0
-> [  193.043352] Normal: 22*4kB (UM) 32*8kB (UM) 23*16kB (UM) 20*32kB
-> (UM) 20*64kB (UM) 0*128kB 12*256kB (UM) 0*512kB 0*1024kB 0*2048kB
-> 0*4096kB = 5704kB
-> [  193.043729] 23 total pagecache pages
-> [  193.043748] 4096 pages RAM
-> [  193.043765] 0 pages HighMem/MovableOnly
-> [  193.043783] 960 pages reserved
-> [  193.043805] nommu: Allocation of length 430080 from process 82
-> (ifconfig) failed
-> [  193.043843] active_anon:0 inactive_anon:0 isolated_anon:0
-> [  193.043843]  active_file:0 inactive_file:18 isolated_file:0
-> [  193.043843]  unevictable:5 dirty:0 writeback:4
-> [  193.043843]  slab_reclaimable:281 slab_unreclaimable:511
-> [  193.043843]  mapped:0 shmem:0 pagetables:0 bounce:0
-> [  193.043843]  kernel_misc_reclaimable:0
-> [  193.043843]  free:1426 free_pcp:0 free_cma:0
-> [  193.043965] Node 0 active_anon:0kB inactive_anon:0kB
-> active_file:0kB inactive_file:72kB unevictable:20kB isolated(anon):0kB
-> isolated(file):0kB mapped:0kB dirty:0kB writeback:16kB shmem:0kB
-> writeback_tmp:0kB kernel_stack:400kB pagetables:0kB all_unreclaimable?
-> no
-> [  193.044073] Normal free:5704kB boost:0kB min:444kB low:552kB
-> high:660kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
-> active_file:0kB inactive_file:72kB unevictable:20kB writepending:16kB
-> present:16384kB managed:12544kB mlocked:0kB bounce:0kB free_pcp:0kB
-> local_pcp:0kB free_cma:0kB
-> [  193.044206] lowmem_reserve[]: 0 0
-> [  193.044260] Normal: 22*4kB (UM) 32*8kB (UM) 23*16kB (UM) 20*32kB
-> (UM) 20*64kB (UM) 0*128kB 12*256kB (UM) 0*512kB 0*1024kB 0*2048kB
-> 0*4096kB = 5704kB
-> [  193.044638] 23 total pagecache pages
-> [  193.044670] binfmt_flat: Unable to allocate RAM for process
-> text/data, errno -12
-> 
-> Was it similar to your problem?
-
-Yes, this error could be caused by the bug I've fixed and I've seen
-you've used Linux 5.19-rc2. In this version there is not my bugfix
-and in general it should be avoided to use rc versions.
-
-This is the patch that fixes ZERO_PAGE(0) that is dedicated to
-massive "memset()" in the kernel, so it's used pretty often.
-In my case it failed to allocate it, so since in your backtrace
-there is try to allocate it could be fixed by my patch, also because
-you have 5MB free and they look enough for ifconfig.
-
-Can you give a try with 5.15.108 and repeat the same test please?
-Otherwise I'd need to enter debug with this board but I don't have it
-and this kind of bugs are subtle to catch and fix.
-
-Thank you!
-
-Best regards
+diff --git a/package/webkitgtk/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch b/package/webkitgtk/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
+new file mode 100644
+index 0000000000..a851a2d3d5
+--- /dev/null
++++ b/package/webkitgtk/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
+@@ -0,0 +1,328 @@
++From da159b0150cba0e5e5251e4cc6a090440f73cb7c Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Thu, 2 Jun 2022 11:19:06 +0300
++Subject: [PATCH] FELightningNEON.cpp fails to build, NEON fast path seems
++ unused https://bugs.webkit.org/show_bug.cgi?id=241182
++
++Reviewed by NOBODY (OOPS!).
++
++Move the NEON fast path for the SVG lighting filter effects into
++FELightingSoftwareApplier, and arrange to actually use them by
++forwarding calls to applyPlatformGeneric() into applyPlatformNeon().
++
++Some changes were needed to adapt platformApplyNeon() to the current
++state of filters after r286140. This was not detected because the code
++bitrotted due to it being guarded with CPU(ARM_TRADITIONAL), which does
++not get used much these days: CPU(ARM_THUMB2) is more common. It should
++be possible to use the NEON fast paths also in Thumb mode, but that is
++left for a follow-up fix.
++
++* Source/WebCore/Sources.txt:
++* Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp:
++(WebCore::FELightingSoftwareApplier::platformApplyNeonWorker):
++(WebCore::FELightingSoftwareApplier::getPowerCoefficients):
++(WebCore::FELighting::platformApplyNeonWorker): Deleted.
++(WebCore::FELighting::getPowerCoefficients): Deleted.
++* Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h:
++(WebCore::FELightingSoftwareApplier::applyPlatformNeon):
++(WebCore::FELighting::platformApplyNeon): Deleted.
++* Source/WebCore/platform/graphics/filters/DistantLightSource.h:
++* Source/WebCore/platform/graphics/filters/FELighting.h:
++* Source/WebCore/platform/graphics/filters/PointLightSource.h:
++* Source/WebCore/platform/graphics/filters/SpotLightSource.h:
++* Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h:
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream: https://bugs.webkit.org/show_bug.cgi?id=241182
++---
++ Source/WebCore/Sources.txt                    |  1 +
++ .../cpu/arm/filters/FELightingNEON.cpp        |  4 +-
++ .../graphics/cpu/arm/filters/FELightingNEON.h | 54 +++++++++----------
++ .../graphics/filters/DistantLightSource.h     |  4 ++
++ .../platform/graphics/filters/FELighting.h    |  7 ---
++ .../graphics/filters/PointLightSource.h       |  4 ++
++ .../graphics/filters/SpotLightSource.h        |  4 ++
++ .../software/FELightingSoftwareApplier.h      | 16 ++++++
++ 8 files changed, 58 insertions(+), 36 deletions(-)
++
++diff --git a/Source/WebCore/Sources.txt b/Source/WebCore/Sources.txt
++index 8ce3510fe1a8..efd56bcb8746 100644
++--- a/Source/WebCore/Sources.txt
+++++ b/Source/WebCore/Sources.txt
++@@ -2136,6 +2136,7 @@ platform/graphics/WebMResourceClient.cpp
++ platform/graphics/WOFFFileFormat.cpp
++ platform/graphics/WidthIterator.cpp
++ platform/graphics/cpu/arm/filters/FEBlendNeonApplier.cpp
+++platform/graphics/cpu/arm/filters/FELightingNEON.cpp
++ platform/graphics/displaylists/DisplayList.cpp
++ platform/graphics/displaylists/DisplayListDrawingContext.cpp
++ platform/graphics/displaylists/DisplayListItems.cpp
++diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
++index f6ff8c20a5a8..42a97ffc5372 100644
++--- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
+++++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
++@@ -49,7 +49,7 @@ short* feLightingConstantsForNeon()
++     return s_FELightingConstantsForNeon;
++ }
++ 
++-void FELighting::platformApplyNeonWorker(FELightingPaintingDataForNeon* parameters)
+++void FELightingSoftwareApplier::platformApplyNeonWorker(FELightingPaintingDataForNeon* parameters)
++ {
++     neonDrawLighting(parameters);
++ }
++@@ -464,7 +464,7 @@ TOSTRING(neonDrawLighting) ":" NL
++     "b .lightStrengthCalculated" NL
++ ); // NOLINT
++ 
++-int FELighting::getPowerCoefficients(float exponent)
+++int FELightingSoftwareApplier::getPowerCoefficients(float exponent)
++ {
++     // Calling a powf function from the assembly code would require to save
++     // and reload a lot of NEON registers. Since the base is in range [0..1]
++diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
++index b17c603d40d3..c6d17f573eca 100644
++--- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+++++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
++@@ -24,14 +24,15 @@
++  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++  */
++ 
++-#ifndef FELightingNEON_h
++-#define FELightingNEON_h
+++#pragma once
++ 
++ #if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
++ 
++-#include "FELighting.h"
+++#include "FELightingSoftwareApplier.h"
+++#include "ImageBuffer.h"
++ #include "PointLightSource.h"
++ #include "SpotLightSource.h"
+++#include <wtf/ObjectIdentifier.h>
++ #include <wtf/ParallelJobs.h>
++ 
++ namespace WebCore {
++@@ -93,14 +94,14 @@ extern "C" {
++ void neonDrawLighting(FELightingPaintingDataForNeon*);
++ }
++ 
++-inline void FELighting::platformApplyNeon(const LightingData& data, const LightSource::PaintingData& paintingData)
+++inline void FELightingSoftwareApplier::applyPlatformNeon(const FELightingSoftwareApplier::LightingData& data, const LightSource::PaintingData& paintingData)
++ {
++-    alignas(16) FELightingFloatArgumentsForNeon floatArguments;
++-    FELightingPaintingDataForNeon neonData = {
++-        data.pixels->data(),
+++    WebCore::FELightingFloatArgumentsForNeon alignas(16) floatArguments;
+++    WebCore::FELightingPaintingDataForNeon neonData = {
+++        data.pixels->bytes(),
++         1,
++-        data.widthDecreasedByOne - 1,
++-        data.heightDecreasedByOne - 1,
+++        data.width - 2,
+++        data.height - 2,
++         0,
++         0,
++         0,
++@@ -111,23 +112,23 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
++     // Set light source arguments.
++     floatArguments.constOne = 1;
++ 
++-    auto color = m_lightingColor.toColorTypeLossy<SRGBA<uint8_t>>().resolved();
+++    auto color = data.lightingColor.toColorTypeLossy<SRGBA<uint8_t>>().resolved();
++ 
++     floatArguments.colorRed = color.red;
++     floatArguments.colorGreen = color.green;
++     floatArguments.colorBlue = color.blue;
++     floatArguments.padding4 = 0;
++ 
++-    if (m_lightSource->type() == LS_POINT) {
+++    if (data.lightSource->type() == LS_POINT) {
++         neonData.flags |= FLAG_POINT_LIGHT;
++-        PointLightSource& pointLightSource = static_cast<PointLightSource&>(m_lightSource.get());
+++        const auto& pointLightSource = *static_cast<const PointLightSource*>(data.lightSource);
++         floatArguments.lightX = pointLightSource.position().x();
++         floatArguments.lightY = pointLightSource.position().y();
++         floatArguments.lightZ = pointLightSource.position().z();
++         floatArguments.padding2 = 0;
++-    } else if (m_lightSource->type() == LS_SPOT) {
+++    } else if (data.lightSource->type() == LS_SPOT) {
++         neonData.flags |= FLAG_SPOT_LIGHT;
++-        SpotLightSource& spotLightSource = static_cast<SpotLightSource&>(m_lightSource.get());
+++        const auto& spotLightSource = *static_cast<const SpotLightSource*>(data.lightSource);
++         floatArguments.lightX = spotLightSource.position().x();
++         floatArguments.lightY = spotLightSource.position().y();
++         floatArguments.lightZ = spotLightSource.position().z();
++@@ -145,7 +146,7 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
++         if (spotLightSource.specularExponent() == 1)
++             neonData.flags |= FLAG_CONE_EXPONENT_IS_1;
++     } else {
++-        ASSERT(m_lightSource->type() == LS_DISTANT);
+++        ASSERT(data.lightSource->type() == LS_DISTANT);
++         floatArguments.lightX = paintingData.initialLightingData.lightVector.x();
++         floatArguments.lightY = paintingData.initialLightingData.lightVector.y();
++         floatArguments.lightZ = paintingData.initialLightingData.lightVector.z();
++@@ -155,38 +156,39 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
++     // Set lighting arguments.
++     floatArguments.surfaceScale = data.surfaceScale;
++     floatArguments.minusSurfaceScaleDividedByFour = -data.surfaceScale / 4;
++-    if (m_lightingType == FELighting::DiffuseLighting)
++-        floatArguments.diffuseConstant = m_diffuseConstant;
+++    if (data.filterType == FilterEffect::Type::FEDiffuseLighting)
+++        floatArguments.diffuseConstant = data.diffuseConstant;
++     else {
++         neonData.flags |= FLAG_SPECULAR_LIGHT;
++-        floatArguments.diffuseConstant = m_specularConstant;
++-        neonData.specularExponent = getPowerCoefficients(m_specularExponent);
++-        if (m_specularExponent == 1)
+++        floatArguments.diffuseConstant = data.specularConstant;
+++        neonData.specularExponent = getPowerCoefficients(data.specularExponent);
+++        if (data.specularExponent == 1)
++             neonData.flags |= FLAG_SPECULAR_EXPONENT_IS_1;
++     }
++     if (floatArguments.diffuseConstant == 1)
++         neonData.flags |= FLAG_DIFFUSE_CONST_IS_1;
++ 
++-    int optimalThreadNumber = ((data.widthDecreasedByOne - 1) * (data.heightDecreasedByOne - 1)) / s_minimalRectDimension;
+++    static constexpr int minimalRectDimension = 100 * 100; // Empirical data limit for parallel jobs
+++    int optimalThreadNumber = ((data.width - 2) * (data.height - 2)) / minimalRectDimension;
++     if (optimalThreadNumber > 1) {
++         // Initialize parallel jobs
++-        ParallelJobs<FELightingPaintingDataForNeon> parallelJobs(&WebCore::FELighting::platformApplyNeonWorker, optimalThreadNumber);
+++        ParallelJobs<FELightingPaintingDataForNeon> parallelJobs(&FELightingSoftwareApplier::platformApplyNeonWorker, optimalThreadNumber);
++ 
++         // Fill the parameter array
++         int job = parallelJobs.numberOfJobs();
++         if (job > 1) {
++             int yStart = 1;
++-            int yStep = (data.heightDecreasedByOne - 1) / job;
+++            int yStep = (data.height - 2) / job;
++             for (--job; job >= 0; --job) {
++                 FELightingPaintingDataForNeon& params = parallelJobs.parameter(job);
++                 params = neonData;
++                 params.yStart = yStart;
++-                params.pixels += (yStart - 1) * (data.widthDecreasedByOne + 1) * 4;
+++                params.pixels += (yStart - 1) * data.width * 4;
++                 if (job > 0) {
++                     params.absoluteHeight = yStep;
++                     yStart += yStep;
++                 } else
++-                    params.absoluteHeight = data.heightDecreasedByOne - yStart;
+++                    params.absoluteHeight = (data.height - 1) - yStart;
++             }
++             parallelJobs.execute();
++             return;
++@@ -199,5 +201,3 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
++ } // namespace WebCore
++ 
++ #endif // CPU(ARM_NEON) && COMPILER(GCC_COMPATIBLE)
++-
++-#endif // FELightingNEON_h
++diff --git a/Source/WebCore/platform/graphics/filters/DistantLightSource.h b/Source/WebCore/platform/graphics/filters/DistantLightSource.h
++index 0660143fc1cf..2b1e86d99fa4 100644
++--- a/Source/WebCore/platform/graphics/filters/DistantLightSource.h
+++++ b/Source/WebCore/platform/graphics/filters/DistantLightSource.h
++@@ -25,6 +25,10 @@
++ #include "LightSource.h"
++ #include <wtf/Ref.h>
++ 
+++namespace WTF {
+++class TextStream;
+++} // namespace WTF
+++
++ namespace WebCore {
++ 
++ class DistantLightSource : public LightSource {
++diff --git a/Source/WebCore/platform/graphics/filters/FELighting.h b/Source/WebCore/platform/graphics/filters/FELighting.h
++index 0c073bc13f8c..e0db00545c17 100644
++--- a/Source/WebCore/platform/graphics/filters/FELighting.h
+++++ b/Source/WebCore/platform/graphics/filters/FELighting.h
++@@ -35,8 +35,6 @@
++ 
++ namespace WebCore {
++ 
++-struct FELightingPaintingDataForNeon;
++-
++ class FELighting : public FilterEffect {
++ public:
++     const Color& lightingColor() const { return m_lightingColor; }
++@@ -67,11 +65,6 @@ protected:
++ 
++     std::unique_ptr<FilterEffectApplier> createSoftwareApplier() const override;
++ 
++-#if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
++-    static int getPowerCoefficients(float exponent);
++-    inline void platformApplyNeon(const LightingData&, const LightSource::PaintingData&);
++-#endif
++-
++     Color m_lightingColor;
++     float m_surfaceScale;
++     float m_diffuseConstant;
++diff --git a/Source/WebCore/platform/graphics/filters/PointLightSource.h b/Source/WebCore/platform/graphics/filters/PointLightSource.h
++index 126b3b2350f6..d906db21aa9c 100644
++--- a/Source/WebCore/platform/graphics/filters/PointLightSource.h
+++++ b/Source/WebCore/platform/graphics/filters/PointLightSource.h
++@@ -26,6 +26,10 @@
++ #include "LightSource.h"
++ #include <wtf/Ref.h>
++ 
+++namespace WTF {
+++class TextStream;
+++} // namespace WTF
+++
++ namespace WebCore {
++ 
++ class PointLightSource : public LightSource {
++diff --git a/Source/WebCore/platform/graphics/filters/SpotLightSource.h b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
++index 641b205f986d..64380d9b6eb8 100644
++--- a/Source/WebCore/platform/graphics/filters/SpotLightSource.h
+++++ b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
++@@ -26,6 +26,10 @@
++ #include "LightSource.h"
++ #include <wtf/Ref.h>
++ 
+++namespace WTF {
+++class TextStream;
+++} // namespace WTF
+++
++ namespace WebCore {
++ 
++ class SpotLightSource : public LightSource {
++diff --git a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
++index c974d92115ff..e2896660cfbd 100644
++--- a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
+++++ b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
++@@ -36,6 +36,7 @@
++ namespace WebCore {
++ 
++ class FELighting;
+++struct FELightingPaintingDataForNeon;
++ 
++ class FELightingSoftwareApplier final : public FilterEffectConcreteApplier<FELighting> {
++     WTF_MAKE_FAST_ALLOCATED;
++@@ -132,8 +133,23 @@ private:
++ 
++     static void applyPlatformGenericPaint(const LightingData&, const LightSource::PaintingData&, int startY, int endY);
++     static void applyPlatformGenericWorker(ApplyParameters*);
+++
+++#if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
+++    static int getPowerCoefficients(float exponent);
+++    static void platformApplyNeonWorker(FELightingPaintingDataForNeon*);
+++    inline static void applyPlatformNeon(const LightingData&, const LightSource::PaintingData&);
+++
+++    inline static void applyPlatformGeneric(const LightingData& data, const LightSource::PaintingData& paintingData)
+++    {
+++        applyPlatformNeon(data, paintingData);
+++    }
+++#else
++     static void applyPlatformGeneric(const LightingData&, const LightSource::PaintingData&);
+++#endif
+++
++     static void applyPlatform(const LightingData&);
++ };
++ 
++ } // namespace WebCore
+++
+++#include "FELightingNEON.h"
++-- 
++2.37.3
++
+diff --git a/package/webkitgtk/0002-WPE-GTK-ExtensionsGLOpenGLES.cpp-uses-GLES3-symbols-.patch b/package/webkitgtk/0002-WPE-GTK-ExtensionsGLOpenGLES.cpp-uses-GLES3-symbols-.patch
+new file mode 100644
+index 0000000000..5ec595bbaf
+--- /dev/null
++++ b/package/webkitgtk/0002-WPE-GTK-ExtensionsGLOpenGLES.cpp-uses-GLES3-symbols-.patch
+@@ -0,0 +1,110 @@
++From 5a2536dee79f6bdb6a75b40f9a33f7c1ba6dda85 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Sun, 23 Apr 2023 23:44:51 +0300
++Subject: [PATCH] [WPE][GTK] ExtensionsGLOpenGLES.cpp uses GLES3 symbols
++ unconditionally in 2.38.x https://bugs.webkit.org/show_bug.cgi?id=255847
++
++Reviewed by NOBODY (OOPS!).
++
++EGLNativeWindowType can be aliased to a different type depending on the
++EGL implementation headers, and static_cast (or reinterpret_cast) may
++not always work. This is similar to 194561@main, but with the conversion
++being done in the opposite direction, therefore we apply the same
++solution using a C style cast expression, which works in all cases.
++
++For the build failures related to the usage of OpenGL ES 3 symbols, add
++the needed HAVE(OPENGL_3_ES) guards and avoid using GL_MAJOR_VERSION
++and instead parse the GL_VERSION string in a way similar as in the
++GLContext::version() function.
++
++* Source/WebCore/platform/graphics/egl/GLContextEGL.cpp:
++(WebCore::GLContextEGL::createWindowContext): Use a plain C cast expression.
++* Source/WebCore/platform/graphics/opengl/ExtensionsGLOpenGLES.cpp:
++(WebCore::ExtensionsGLOpenGLES::platformSupportsExtension): Apply
++HAVE(OPENGL_3_ES) guards, avoid using GL_MAJOR_VERSION.
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream: https://github.com/WebKit/WebKit/pull/13084
++---
++ .../platform/graphics/egl/GLContextEGL.cpp    |  5 +++-
++ .../graphics/opengl/ExtensionsGLOpenGLES.cpp  | 28 ++++++++++++++++---
++ 2 files changed, 28 insertions(+), 5 deletions(-)
++
++diff --git a/Source/WebCore/platform/graphics/egl/GLContextEGL.cpp b/Source/WebCore/platform/graphics/egl/GLContextEGL.cpp
++index 262b2fb90237..2b76c2974394 100644
++--- a/Source/WebCore/platform/graphics/egl/GLContextEGL.cpp
+++++ b/Source/WebCore/platform/graphics/egl/GLContextEGL.cpp
++@@ -195,7 +195,10 @@ std::unique_ptr<GLContextEGL> GLContextEGL::createWindowContext(GLNativeWindowTy
++ 
++     if (surface == EGL_NO_SURFACE) {
++         RELEASE_LOG_INFO(Compositing, "Cannot create EGL window surface: %s. Retrying with fallback.", lastErrorString());
++-        surface = eglCreateWindowSurface(display, config, static_cast<EGLNativeWindowType>(window), nullptr);
+++        // EGLNativeWindowType changes depending on the EGL implementation, reinterpret_cast
+++        // would work for pointers, and static_cast for numeric types only; so use a plain
+++        // C cast expression which works in all possible cases.
+++        surface = eglCreateWindowSurface(display, config, (EGLNativeWindowType) window, nullptr);
++     }
++ 
++     if (surface == EGL_NO_SURFACE) {
++diff --git a/Source/WebCore/platform/graphics/opengl/ExtensionsGLOpenGLES.cpp b/Source/WebCore/platform/graphics/opengl/ExtensionsGLOpenGLES.cpp
++index 027da1081f5f..813a6f9be33a 100644
++--- a/Source/WebCore/platform/graphics/opengl/ExtensionsGLOpenGLES.cpp
+++++ b/Source/WebCore/platform/graphics/opengl/ExtensionsGLOpenGLES.cpp
++@@ -40,6 +40,8 @@
++ #include <EGL/egl.h>
++ #endif
++ 
+++#include <wtf/text/StringToIntegerConversion.h>
+++
++ namespace WebCore {
++ 
++ ExtensionsGLOpenGLES::ExtensionsGLOpenGLES(GraphicsContextGLOpenGL* context, bool useIndexedGetString)
++@@ -253,23 +255,41 @@ void ExtensionsGLOpenGLES::vertexAttribDivisorANGLE(GCGLuint index, GCGLuint div
++ bool ExtensionsGLOpenGLES::platformSupportsExtension(const String& name)
++ {
++     if (name == "GL_ANGLE_instanced_arrays"_s) {
+++#if HAVE(OPENGL_ES_3)
++         auto majorVersion = []() {
+++            // Loosely inspired by GLContext::version()
++             GLint version = 0;
++-            ::glGetIntegerv(GL_MAJOR_VERSION, &version);
++-            return version;
++-        };
+++            auto versionString = String::fromLatin1(reinterpret_cast<const char*>(::glGetString(GL_VERSION)));
+++            Vector<String> versionStringComponents = versionString.split(' ');
++ 
+++            Vector<String> versionDigits;
+++            if (versionStringComponents[0] == "OpenGL"_s) {
+++                // If the version string starts with "OpenGL" it can be GLES 1 or 2. In GLES1 version string starts
+++                // with "OpenGL ES-<profile> major.minor" and in GLES2 with "OpenGL ES major.minor". Version is the
+++                // third component in both cases.
+++                versionDigits = versionStringComponents[2].split('.');
+++            } else {
+++                // Version is the first component. The version number is always "major.minor" or
+++                // "major.minor.release". Ignore the release number.
+++                versionDigits = versionStringComponents[0].split('.');
+++            }
+++            return parseIntegerAllowingTrailingJunk<GLint>(versionDigits[0]).value_or(0);
+++        };
+++#endif
++         if (m_availableExtensions.contains(name)) {
++             m_glVertexAttribDivisorANGLE = reinterpret_cast<PFNGLVERTEXATTRIBDIVISORANGLEPROC>(eglGetProcAddress("glVertexAttribDivisorANGLE"));
++             m_glDrawArraysInstancedANGLE = reinterpret_cast<PFNGLDRAWARRAYSINSTANCEDANGLEPROC >(eglGetProcAddress("glDrawArraysInstancedANGLE"));
++             m_glDrawElementsInstancedANGLE = reinterpret_cast<PFNGLDRAWELEMENTSINSTANCEDANGLEPROC >(eglGetProcAddress("glDrawElementsInstancedANGLE"));
++             m_supportsANGLEinstancedArrays = true;
++-        } else if (majorVersion() >= 3 || (m_availableExtensions.contains("GL_EXT_instanced_arrays"_s) && m_availableExtensions.contains("GL_EXT_draw_instanced"_s))) {
+++        }
+++#if HAVE(OPENGL_ES_3)
+++        else if (majorVersion() >= 3 || (m_availableExtensions.contains("GL_EXT_instanced_arrays"_s) && m_availableExtensions.contains("GL_EXT_draw_instanced"_s))) {
++             m_glVertexAttribDivisorANGLE = ::glVertexAttribDivisor;
++             m_glDrawArraysInstancedANGLE = ::glDrawArraysInstanced;
++             m_glDrawElementsInstancedANGLE = ::glDrawElementsInstanced;
++             m_supportsANGLEinstancedArrays = true;
++         }
+++#endif
++         return m_supportsANGLEinstancedArrays;
++     }
++     
++-- 
++2.40.0
++
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.40.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
