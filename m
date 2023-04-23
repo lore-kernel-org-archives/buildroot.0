@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8542AC77B73
-	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 10:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34897C77B76
+	for <buildroot@archiver.kernel.org>; Sun, 23 Apr 2023 10:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0AF7540AB1;
-	Sun, 23 Apr 2023 10:32:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AF7540AB1
+	by smtp2.osuosl.org (Postfix) with ESMTP id D079540AA1;
+	Sun, 23 Apr 2023 10:33:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D079540AA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ocD9p5KoI6dh; Sun, 23 Apr 2023 10:32:58 +0000 (UTC)
+	with ESMTP id eqYgWJNwlDVB; Sun, 23 Apr 2023 10:33:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 316AF4059F;
-	Sun, 23 Apr 2023 10:32:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 316AF4059F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 077E540B53;
+	Sun, 23 Apr 2023 10:33:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 077E540B53
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F2C5A1C2B5C
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:32:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0153E1C2B5C
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:33:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCA7160B65
- for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:32:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCA7160B65
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF43260777
+ for <buildroot@lists.busybox.net>; Sun, 23 Apr 2023 10:33:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF43260777
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W4Mh3hiRsMZs for <buildroot@lists.busybox.net>;
- Sun, 23 Apr 2023 10:32:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9184F60B58
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9184F60B58
- for <buildroot@buildroot.org>; Sun, 23 Apr 2023 10:32:50 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 850871BF204;
- Sun, 23 Apr 2023 10:32:47 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pqX1S-002ar0-Lq; Sun, 23 Apr 2023 12:32:46 +0200
+ with ESMTP id Bf1ch5DEfX5R for <buildroot@lists.busybox.net>;
+ Sun, 23 Apr 2023 10:33:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A13F60067
+ for <buildroot@buildroot.org>; Sun, 23 Apr 2023 10:33:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A13F60067
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CC1A782578; Sun, 23 Apr 2023 10:33:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20220918122239.189147-1-arnout@mind.be>
-Date: Sun, 23 Apr 2023 12:32:46 +0200
-In-Reply-To: <20220918122239.189147-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Sun, 18 Sep 2022 14:22:39 +0200")
-Message-ID: <87h6t66g8h.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/pkg-golang.mk: add osusergo and
- netgo tags in static builds
+To: buildroot@buildroot.org
+Date: Sun, 23 Apr 2023 12:28:06 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 8e4bf44aad24a56f68cafec59446f7c0565c5524
+X-Git-Newrev: 7e86856d69666ae506bde293942ae335dd35fb4e
+X-Patchwork-Hint: ignore
+Message-Id: <20230423103321.CC1A782578@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] doc/manual: add
+ documentation about docker registry on gitlab.com
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,50 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7e86856d69666ae506bde293942ae335dd35fb4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > CGO (the Go language C bindings) normally links dynamically with the C
- > libraries. It seems that passing -extldflags=-static is not sufficient
- > to make sure they link statically. As a result, a build using CGO will
- > fail with
+Add a paragraph and an example about using the Buildroot image registry
+hosted on gtilab.com, for people who want to build their own image based
+on the offical one.
 
- > runtime.gcdata: missing Go type information for global symbol .dynsym: size 72
+Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit d9228faa4dbda084168e3c83273e651c05b6b08b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/adding-board-support.txt | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
- > There are two modules in the standard Go library that can use CGO:
- > os/user and net. Both of these have pure Go versions, however, which can
- > be selected with the osusergo and netgo tags. Since these two are
- > standard library modules that get used in almost all Go programs, pass
- > those flags in the common infrastructure.
-
- > It's not entirely clear if this is always the case or only depending on
- > the specific way CGO is used. In the former case, we could instead
- > disable CGO globally if static libs are enabled. However, it turns out
- > that this doesn't solve the problem completely anyway (delve still fails
- > to link, with different errors). Also, it is possible that other cgo
- > modules do still work. Therefore, just stick to adding the osusergo and
- > netgo tags.
-
- > Fixes:
- >  - crucible:
- >    http://autobuild.buildroot.net/results/c2f/c2f29f55b461899e8e15c0494578304e6f74bf51/
- >  - containerd:
- >    http://autobuild.buildroot.net/results/699/69910fc6b9f474a7eb0ca7ffa27ac5512cc1bb37/
- >  - delve:
- >    http://autobuild.buildroot.net/results/552/55225d5da17e85271943f7adce6f07d014d9717d/
- >  - probably others...
-
- > Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-
-Committed to 2023.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
+index cd90a5871f..b3a8802452 100644
+--- a/docs/manual/adding-board-support.txt
++++ b/docs/manual/adding-board-support.txt
+@@ -54,3 +54,19 @@ utils/docker-run script and inside it issue these commands:
+  $ make +<boardname>_defconfig+
+  $ make
+ --------------------
++
++By default, Buildroot developers use the official image hosted on the
++https://gitlab.com/buildroot.org/buildroot/container_registry/2395076[gitlab.com
++registry] and it should be convenient for most usage. If you still want
++to build your own docker image, you can base it off the official image
++as the +FROM+ directive of your own _Dockerfile_:
++
++----
++FROM registry.gitlab.com/buildroot.org/buildroot/base:YYYYMMDD.HHMM
++RUN ...
++COPY ...
++----
++
++The current version _YYYYMMDD.HHMM_ can be found in the +.gitlab-ci.yml+
++file at the top of the Buildroot source tree; all past versions are
++listed in the aforementioned registry as well.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
