@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 930D5C7618E
-	for <buildroot@archiver.kernel.org>; Mon, 24 Apr 2023 20:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C67EEC77B61
+	for <buildroot@archiver.kernel.org>; Mon, 24 Apr 2023 21:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F102860C17;
-	Mon, 24 Apr 2023 20:50:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F102860C17
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38D74613DA;
+	Mon, 24 Apr 2023 21:51:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38D74613DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 02fTusry5lYn; Mon, 24 Apr 2023 20:50:12 +0000 (UTC)
+	with ESMTP id x_h38ypUieAG; Mon, 24 Apr 2023 21:51:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EE1160C0F;
-	Mon, 24 Apr 2023 20:50:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EE1160C0F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E8EC1BF476
- for <buildroot@lists.busybox.net>; Mon, 24 Apr 2023 20:50:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E72961087;
+	Mon, 24 Apr 2023 21:51:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E72961087
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6811C1BF46A
+ for <buildroot@lists.busybox.net>; Mon, 24 Apr 2023 21:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 279FF81FB2
- for <buildroot@lists.busybox.net>; Mon, 24 Apr 2023 20:50:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 279FF81FB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CDC041746
+ for <buildroot@lists.busybox.net>; Mon, 24 Apr 2023 21:51:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CDC041746
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EI0fZz7B8UBp for <buildroot@lists.busybox.net>;
- Mon, 24 Apr 2023 20:50:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C37CD81E2E
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C37CD81E2E
- for <buildroot@buildroot.org>; Mon, 24 Apr 2023 20:50:07 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.29]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2V0B-1qI1bE3ikp-013yKA; Mon, 24
- Apr 2023 22:49:59 +0200
-Date: Mon, 24 Apr 2023 22:49:58 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20230424224958.43da8112@gmx.net>
-In-Reply-To: <20230424202514.1546092-2-aduskett@gmail.com>
-References: <20230424202514.1546092-1-aduskett@gmail.com>
- <20230424202514.1546092-2-aduskett@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kzR_G-WVttvD for <buildroot@lists.busybox.net>;
+ Mon, 24 Apr 2023 21:51:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B1F541741
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3B1F541741
+ for <buildroot@buildroot.org>; Mon, 24 Apr 2023 21:51:09 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-3f195b164c4so22535175e9.1
+ for <buildroot@buildroot.org>; Mon, 24 Apr 2023 14:51:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1682373067; x=1684965067;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=1RUlvKVoKRgm5xJbim162kIJ5BbLxcZkaMqDPPWDjhE=;
+ b=jniQ3NVoFnxzTWnoyFve4yzdyF81K/uXccbMwdwQn8gvkfWGJJoGyxw+XxAckh5e1+
+ DcB+nmAm1zpeNHTbrJUJH6N9XyM/lVN0TmMLF81GggEgQJgEhbrCphD8KJEW8O4+lMPS
+ cvG8An9PmCRGH4Ud4tvIXrYazufBS13g+LhDK4M5Vy7TRlisOzaZrTi08D1tWkftnUjr
+ WZD+0GM5VAxVAzHSrPE1Ky43ZPiUu4cUXaeMZVKSNtzBhjf4mzWJ70Ocs9IfR7Dycsx/
+ CSsNoLOIKvIznFrbnTBxHzl1EeUaFmcgy8Vtg6t2Au3dCLwH+YkH0rRAvbmdBJIex5/1
+ 9nag==
+X-Gm-Message-State: AAQBX9exxBQ0XOwUmZJlXzuUmyV8pqBI9JycI1D2X1nGP2LnB0rlqQiU
+ R8jpPvoJoHmQLUuAI/OYi52JyZWNEIc=
+X-Google-Smtp-Source: AKy350aKaLQsOWoBEldbQBgQXEWueUV0FtZF9TvFnRZW+soyrgsp9MqzNXRZNFSLTnT7zuvdQTDNEw==
+X-Received: by 2002:a1c:7c12:0:b0:3ed:b048:73f4 with SMTP id
+ x18-20020a1c7c12000000b003edb04873f4mr9095810wmc.5.1682373067100; 
+ Mon, 24 Apr 2023 14:51:07 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b44:b00:f3de:bddc:c766:c327])
+ by smtp.gmail.com with ESMTPSA id
+ e5-20020a5d5005000000b0030469635629sm6589618wrt.62.2023.04.24.14.51.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 24 Apr 2023 14:51:06 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 24 Apr 2023 23:51:06 +0200
+Message-Id: <20230424215106.1202752-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:VrZpA/3i3CjvQmrvZAQJ71Ms2nMaN5KfZcZe9jxrB5tw6CIbFdG
- fp3F0zwk7TXGCIjSsANRFYVHB0LsbCw8UeHQrYBCd4jAUqaZ/TaASpcwNwsNeoHUF53RN08
- rFRGQsEs+N7VLXfUWSkpUH91nkd3LNQ1BTUAgV9RhoLT0vRqygfDpSLBYNDNOPPbCFtwZJp
- QGFehIjthLkMhpO5fSEkA==
-UI-OutboundReport: notjunk:1;M01:P0:PF+/8eZtTjg=;XO3OwC/BucaQ5JFAzUn+4a5W3u9
- dOGlzUz24QwZdnBUhFj5iqX9fP0qsq/NGDhnsihmhrCydODIbdP35tT1hH2EA5COXUvnZz8MA
- lAIHOErOK6/QTXYQI2trgRnQoB+oOugknh3scm6wuucZoEdIu3tKF4J9qRMgL6TfaxilSEef0
- BHmI0ikP/RGpXh/gg038KPfVFobm51NQCZ94k4bn+Jl/oh/Y2+73KWsdERnJziTD6uJq9FiYR
- I44u1gpwHz1SmMGVtCjxVe8f04hB5QhAWtzj0PizBCBkUUzNXVXa5/hk3kvZli6fHaYnNbT2m
- 7TPOnTGz9R8QZkK6RWICEd6Rop18kA1b2mdnnZopq/4fGrSMiwDJgNgkxDgqMJvoVDSUZOsGH
- q7oCdD9UPm9ZsXQbJ8/63KomBirvTIuclmED12EZzKyybN7CAsJ/y9DnIc/To8kFjHOsMRO1V
- Ib7+P1sTRxGD67K7IqyONzjUcuzOd9ESnPOvjRs4W9E6rb76gsi0PrZODBvYb8mbPjt0AwfFI
- x3cHnDM5VZUYPfDz0f6pu5Uhx7n3qRDFi5uC43jDXqrhQEhRePlJrTTOLv1hKtw6xzW7wRtvh
- mQDsDLoy3l0Lw34nuGvTyfL+j6I2rdc9E4a0csxyBF8/YyojKql0Gnnqwh6cuO/GXUeBusYH4
- GhC/wuQSxd0Xa14jYPmRPLsSzJ6CuC9HwW+2FWXWT9IPR4oGna+VukwbJ//JHukkBY44dN/jf
- fm4d7pSBqvMBI444TM91npYQLPC2aBSJNNJWcSiJd2+rrRh4mVvXG4L9KdZpmT1u9PFmATPxz
- xIk1f3wwhXXl0D7sxV+nHhFxlnv/OdXHIgHT2/tegJwQ0DY7Ogipaq/qIshRQDozPCyLr2fhn
- cf5ENYJ/5jBYFggc0vuZHad2vGd1CEmkOI7CoOTatR6WRnyzShAfnxJ1EBpe9kngTCtxugzMV
- RnUKkQoeDRSWWdVvrT75xU7CYXM=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1682369400; i=ps.report@gmx.net;
- bh=JDXSUPYomV/kh0HjV0H7xFh/i+nsfEqDQkAyx5Ex99A=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=lAMbX+L8daCXCkvgSWrJhOaBs2L+2x3JZxsbIhJSAaX4YuuqvlCP8WHLVFLOpuN+A
- 3ymctrI+v9Wgbtx1RYK5FbkjTo8vLxJ04AIOwc+z1doewUGAVF3oNUlozsjkNsU0Es
- 3rrm79TsN4dS2t2V/ZUzkVMj8OfkJdCIwfY1ecsGK5Gyio6/9LNRz4wlvFLHKq2cnS
- io+GuXPZTGEkirTxxJj45q+bUWvgdiE2vQ3urCef5o0c4gOTM35h7Icr+WyqTERnOR
- g3D44KUi3KYGnZ4d1C+H2VQpD17rYawPG//uf7A3YoQb0nW1VbLG+YfCT7Nsfo17Id
- cNXR3X+MUoT1g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=lAMbX+L8
-Subject: Re: [Buildroot] [PATCH 01/13]
- package/libglib2/0003-disable-building-docs.patch
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1682373067; x=1684965067;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=1RUlvKVoKRgm5xJbim162kIJ5BbLxcZkaMqDPPWDjhE=;
+ b=hbeYV5n76iW5cK1HpUdoahGIPzVA1xAcW3cKmRUdJWExIJGuGHSyKN+RvQpjwafRiX
+ q5mgupHnNbfgsQmB55MS5XfDVU+OmHUlrGHbGASPzmAXvLvEV/0jzLmyNzr0DHMu5r9i
+ q2g/pDfFPFLbvGfpDYjZ4k3qiaG30gw3fXsLkEi58YOC6U6DcdacT+rRtNLT8ox7zg/a
+ /E9u0aHMbCzcte6ta84gW4epLESkkDLuKR/FBCPcWTZZD4pUa36N4KE/UhYmInTCGde9
+ jqQjgQCEZuuCMrVnnIMjwF8j9Yx0KNhzWCscrUhkI7mzz8Yi0YGP1GJt10PGskM+15ou
+ 4aCg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=hbeYV5n7
+Subject: [Buildroot] [PATCH] support/testing: new runtime test for bash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,90 +94,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Antoine Tenart <atenart@kernel.org>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
+Commit 2dff6e93ca2a (package/readline: add upstream patch to fix crash
+with invalid locale specification) fixed a regression in readline 8.2
+[0], that could have been caught with a runtime test. readline is a
+library, so we need an executable that exercises readline.
 
-On Mon, 24 Apr 2023 13:25:02 -0700, Adam Duskett <aduskett@gmail.com> wrote:
+Since readline and bash are developped in tandem [1], it is only logical
+to use bash to test readline.
 
-> If rst2html5 is installed on a host system, meson will attempt to build
-> html5 documentation from the docs directory, resulting in the following
-> error:
->
-> /usr/local/bin/rst2html5.py
-> Traceback (most recent call last):
->   File "/usr/local/bin/rst2html5.py", line 27, in <module>
->     from docutils.core import publish_cmdline, default_description
-> ModuleNotFoundError: No module named 'docutils'
->
-> Since we don't need, nor want to build the documentation, remove the docs
-> subdirectory from being built entirely.
->
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  .../libglib2/0003-disable-building-docs.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/libglib2/0003-disable-building-docs.patch
->
-> diff --git a/package/libglib2/0003-disable-building-docs.patch b/package/libglib2/0003-disable-building-docs.patch
-> new file mode 100644
-> index 0000000000..27a540bf61
-> --- /dev/null
-> +++ b/package/libglib2/0003-disable-building-docs.patch
-> @@ -0,0 +1,38 @@
-> +From f3b8515471aaa452f06d84da68372fcead8637d2 Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <aduskett@gmail.com>
-> +Date: Mon, 24 Apr 2023 11:52:24 -0700
-> +Subject: [PATCH 1/1] disable building docs
-> +
-> +If rst2html5 is installed on a host system, meson will attempt to build
-> +html5 documentation from the docs directory, resulting in the following
-> +error:
-> +
-> +/usr/local/bin/rst2html5.py
-> +Traceback (most recent call last):
-> +  File "/usr/local/bin/rst2html5.py", line 27, in <module>
-> +    from docutils.core import publish_cmdline, default_description
-> +ModuleNotFoundError: No module named 'docutils'
-> +
-> +Since we don't need, nor want to build the documentation, remove the docs
-> +subdirectory from being built entirely.
-> +
-> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +---
-> + meson.build | 1 -
-> + 1 file changed, 1 deletion(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 0cbc968..28e1147 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -2442,7 +2442,6 @@ if get_option('man')
-> + endif
-> +
-> + gnome = import('gnome')
-> +-subdir('docs/reference')
+Add a new runtime test for bash, that checks that we can indeed run an
+interactive shell, and that an non-existing locale does not cause the
+dreaded segfault. We do not use the default configuration, because it
+uses a uclibc toolchain, and we want to reproduce against a glibc one.
 
-As far as I read the meson.build files all actions in docs/reference
-are protected by the options 'gtk_doc' or 'man', is disabling this
-ones not enough?
+[0] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1021109
+[1] https://tiswww.case.edu/php/chet/readline/rltop.html#Bugs
 
-Regards,
-Peter
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/testing/tests/package/test_bash.py | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 support/testing/tests/package/test_bash.py
 
-> +
-> + summary({
-> +   'host cpu' : host_machine.cpu_family(),
-> +--
-> +2.40.0
-> +
+diff --git a/support/testing/tests/package/test_bash.py b/support/testing/tests/package/test_bash.py
+new file mode 100644
+index 0000000000..f0ee8cadc1
+--- /dev/null
++++ b/support/testing/tests/package/test_bash.py
+@@ -0,0 +1,47 @@
++import os
++
++import infra.basetest
++
++
++class TestBash(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_ENABLE_LOCALE_WHITELIST=""
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_BASH=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check that we are indeed not (yet) running bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "", "Already running bash instead of busybox' sh")
++
++        self.assertRunOk("bash -il")
++        # Twist! The above command is still runing, it's just that
++        # bash did display the prompt we expect. Check we are indeed
++        # actually bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "/bin/bash", "Not running bash")
++        # Exit bash, back to busybox' shell
++        self.emulator.run("exit 0")
++
++        # Check that we are indeed no longer running bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "", "Still running bash instead of busybox' sh")
++
++        # Try to run with a non-available locale
++        self.assertRunOk("LC_ALL=en_US bash -il")
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "/bin/bash", "Not running bash")
++        self.emulator.run("exit 0")
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
