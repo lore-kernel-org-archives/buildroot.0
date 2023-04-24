@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B87EFC7618E
-	for <buildroot@archiver.kernel.org>; Mon, 24 Apr 2023 20:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA403C7618E
+	for <buildroot@archiver.kernel.org>; Mon, 24 Apr 2023 20:26:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 540244173C;
-	Mon, 24 Apr 2023 20:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 540244173C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58DCD414E0;
+	Mon, 24 Apr 2023 20:26:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58DCD414E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PMZqbB6wkFV9; Mon, 24 Apr 2023 20:26:04 +0000 (UTC)
+	with ESMTP id Y4jKbWmbbvjC; Mon, 24 Apr 2023 20:26:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 318104174A;
-	Mon, 24 Apr 2023 20:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 318104174A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18E1B4148D;
+	Mon, 24 Apr 2023 20:26:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18E1B4148D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BDC9A1BF476
- for <buildroot@lists.busybox.net>; Mon, 24 Apr 2023 20:25:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C40811BF476
+ for <buildroot@lists.busybox.net>; Mon, 24 Apr 2023 20:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4A1F60C0F
- for <buildroot@lists.busybox.net>; Mon, 24 Apr 2023 20:25:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4A1F60C0F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D5D960C0F
+ for <buildroot@lists.busybox.net>; Mon, 24 Apr 2023 20:25:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D5D960C0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pG0weq9XmGz5 for <buildroot@lists.busybox.net>;
- Mon, 24 Apr 2023 20:25:21 +0000 (UTC)
+ with ESMTP id 6rQt5KmrpPzi for <buildroot@lists.busybox.net>;
+ Mon, 24 Apr 2023 20:25:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEAEC60AA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB33E60AA5
 Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com
  [IPv6:2607:f8b0:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BEAEC60AA5
- for <buildroot@buildroot.org>; Mon, 24 Apr 2023 20:25:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CB33E60AA5
+ for <buildroot@buildroot.org>; Mon, 24 Apr 2023 20:25:22 +0000 (UTC)
 Received: by mail-pf1-x42a.google.com with SMTP id
- d2e1a72fcca58-63b620188aeso6094291b3a.0
- for <buildroot@buildroot.org>; Mon, 24 Apr 2023 13:25:21 -0700 (PDT)
+ d2e1a72fcca58-63b5465fc13so4071659b3a.3
+ for <buildroot@buildroot.org>; Mon, 24 Apr 2023 13:25:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682367921; x=1684959921;
+ d=1e100.net; s=20221208; t=1682367922; x=1684959922;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=/z+S7ItTS/AB7N6sF+38kNep6zgCg4vMMjr56SMrtKU=;
- b=XJpgTPQ0OyDy/1ceoQHSD1Kb6crl/u1X7O4ezI9+vEwSTV//cPaEQr10UefiSv/j1X
- 5zrEeUjSTAQIVN5MpaMRfoEPAbodsXy/yADo+hBos222GmBTyIrT39c9lPVrWbambFtF
- yBujQSaUf9ZnlOdN3Dj7wEm2W1743rr2TEG5HpIQAZEv3OeX+OqpQ7/rzpacD0R1EYff
- XN/5OG6AwgVmqzVauZHWXXZ4VPR/QKdMmlV5zG780ibUromZSsC61DISFf1b3j9bXRv+
- 0MRkA8SmWjSjMC1wQ4VefgERxUR4DVVfpYAee1HSwXUWvuShxmsT1JvX6mj9Xdg1MvoR
- K4jA==
-X-Gm-Message-State: AAQBX9fHwvGcS1CCtmATDzNjtN74iYVGY31mpBtlwS1b0u4QcHGEkaHK
- wuWlI9pmO8QPhE7CmeOpWLzA3HPuCO5FSw==
-X-Google-Smtp-Source: AKy350ZKBtWRxB10BWMr22BVDtLJEjepHh/+uxC+NjaLVr3ugmZhnOl29jGqp0hots3Vo/xQ3wTNLg==
-X-Received: by 2002:a05:6a21:3389:b0:ef:a31b:af8b with SMTP id
- yy9-20020a056a21338900b000efa31baf8bmr19291986pzb.24.1682367920564; 
- Mon, 24 Apr 2023 13:25:20 -0700 (PDT)
+ bh=gSQzr3X8N9/KFqHqNn/Tms//MgX92Y0z+zWYj+4M66Q=;
+ b=Cq4DupIkC5mWvNAbuGKqYMN5OudcTLmBiD47WGI9YRJ1KlaHAXuSkepDRgEhT+2Gdt
+ 75GY43HVCzTdCoxfpdPNio9Ce/y6bDgvWqnMUvznT8jlmozT3Ni8p9RW0GQmxzhJ57yN
+ LVPzlkalEcDbTlaA9JFfiMH+2+rTHny7CwGkFhE/LNR8GEotZ2j7nXPQafdOkixpatUU
+ B6Nb8mhY7X7QopoLy8MCph9usoK5IuqhhbnI51T15cd8bbQ3EnB+M6RlAH2aZoCF12Lk
+ vemvvMM774Exd9a/K+0hU89VjesK790ebISj6KU2/W5d5IsdfbNGjF0ke3jr+MBsNwPD
+ PZ/A==
+X-Gm-Message-State: AAQBX9ehD/sD846nH0r0V5IExfWRtoXDVJKhbrR6643+VxGe98Yj0dlq
+ Kyl7qbRWfrHzh4bWHZwwatOvVixy52tcyQ==
+X-Google-Smtp-Source: AKy350b6y1VVoKuIWJTPB3XDWnX0QFaF1cmVhgSELSPd0qSuE0G77nHck9if4YyBYKOshmVH8FrfDw==
+X-Received: by 2002:a05:6a21:33a7:b0:f2:1577:2ea0 with SMTP id
+ yy39-20020a056a2133a700b000f215772ea0mr17166633pzb.44.1682367921681; 
+ Mon, 24 Apr 2023 13:25:21 -0700 (PDT)
 Received: from fedora.hsd1.wa.comcast.net ([2601:603:2180:ebe0::e18])
  by smtp.gmail.com with ESMTPSA id
- l6-20020a656806000000b0051b71e8f633sm6819592pgt.92.2023.04.24.13.25.19
+ l6-20020a656806000000b0051b71e8f633sm6819592pgt.92.2023.04.24.13.25.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Apr 2023 13:25:20 -0700 (PDT)
+ Mon, 24 Apr 2023 13:25:21 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Apr 2023 13:25:04 -0700
-Message-Id: <20230424202514.1546092-4-aduskett@gmail.com>
+Date: Mon, 24 Apr 2023 13:25:05 -0700
+Message-Id: <20230424202514.1546092-5-aduskett@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230424202514.1546092-1-aduskett@gmail.com>
 References: <20230424202514.1546092-1-aduskett@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1682367921; x=1684959921;
+ d=gmail.com; s=20221208; t=1682367922; x=1684959922;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=/z+S7ItTS/AB7N6sF+38kNep6zgCg4vMMjr56SMrtKU=;
- b=ZJavsSGc5JhQrbZpQyeNEvODtVdybsfNKPjaHSvFWJSQxKRfHg+UOxG9Dh2xkildP0
- QTU0yCicWFOHvMLv93jHsTY/hzcgYiEchXKAUSVbmBqtLBJgMHtc7vn8UBCVy6SdUasS
- ODWYTKQgjKWM/X8bI8NvWyHTLOlMRwm3Xt0FGM9ANle/JYBCILgnJJrYBLRuSjD/W1BR
- tVULjv3Qsxuyp0QQ75Wi3hrCHnaeoH97Y6OnjthMhkazsB0j0bTEHQjcAOB5AbphfzRA
- VYGgBIXkMCpJmiculKNQZadRL90U2HpD1MD48bv6qIZ6MtSgkFO1kigMIH5+GxC4XMsU
- +m+g==
+ bh=gSQzr3X8N9/KFqHqNn/Tms//MgX92Y0z+zWYj+4M66Q=;
+ b=iBVm1c9s4KB2edoRndcElSjmZYeAKY+FK/HeiLIM+rHMaYVpjW/0f22/k+y4+XZlgn
+ VkCtujhL9HfyWbRnPS9zH1bgEfqOVClsVgGbifzwkYtXnfQzwLSVmr/G7Vz9W/4WT+8G
+ eWyOCYMMsCEtc+c8R1SfXIEti0lU5WIIEXtdofnPxykf74Saqan4SOx/u7/UsSZPRjen
+ G5QhJgP9pk1aT1qSO822czBGuas0fYYOiKcsfe53fx9mtYpHt0cL0JIVJedSujDiFq11
+ rpNVi65gYbaW4gaNGlf/XPLF7VHyDPLu2A2eSG//6SfpfVQYAniw3OP4kgjUATR0E3ql
+ 2iMQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=ZJavsSGc
-Subject: [Buildroot] [PATCH 03/13] package/libsepol: bump to version 3.5
+ header.a=rsa-sha256 header.s=20221208 header.b=iBVm1c9s
+Subject: [Buildroot] [PATCH 04/13] package/libsemanage: bump to version 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,39 +111,39 @@ Change the license file to LICENSE. The hash remains the same.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/libsepol/libsepol.hash | 4 ++--
- package/libsepol/libsepol.mk   | 4 ++--
+ package/libsemanage/libsemanage.hash | 4 ++--
+ package/libsemanage/libsemanage.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
-index 039e4e3c7e..c243aaae2b 100644
---- a/package/libsepol/libsepol.hash
-+++ b/package/libsepol/libsepol.hash
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 1f333aac30..73df34bde9 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
 @@ -1,5 +1,5 @@
  # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  2d97df3eb8466169b389c3660acbb90c54200ac96e452eca9f41a9639f4f238b  libsepol-3.3.tar.gz
-+sha256  78fdaf69924db780bac78546e43d9c44074bad798c2c415d0b9bb96d065ee8a2  libsepol-3.5.tar.gz
+-sha256  84d0ec5afa34bbbb471f602d8c1bf317d12443d07852a34b60741d428d597ce8  libsemanage-3.3.tar.gz
++sha256  f53534e50247538280ed0d76c6ce81d8fb3939bd64cadb89da10dba42e40dd9c  libsemanage-3.5.tar.gz
  
  # Hash for license file
 -sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
 +sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 8551a5de79..f7782542ec 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index db9f16bb6a..0fbdc5ae8d 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LIBSEPOL_VERSION = 3.3
-+LIBSEPOL_VERSION = 3.5
- LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
- LIBSEPOL_LICENSE = LGPL-2.1+
--LIBSEPOL_LICENSE_FILES = COPYING
-+LIBSEPOL_LICENSE_FILES = LICENSE
- LIBSEPOL_CPE_ID_VENDOR = selinuxproject
- 
- LIBSEPOL_INSTALL_STAGING = YES
+-LIBSEMANAGE_VERSION = 3.3
++LIBSEMANAGE_VERSION = 3.5
+ LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEMANAGE_VERSION)
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+-LIBSEMANAGE_LICENSE_FILES = COPYING
++LIBSEMANAGE_LICENSE_FILES = LICENSE
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
+ LIBSEMANAGE_CPE_ID_VENDOR = selinuxproject
+ LIBSEMANAGE_INSTALL_STAGING = YES
 -- 
 2.40.0
 
