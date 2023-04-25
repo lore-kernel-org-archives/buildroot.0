@@ -4,89 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7C2AC77B61
-	for <buildroot@archiver.kernel.org>; Tue, 25 Apr 2023 17:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52516C77B61
+	for <buildroot@archiver.kernel.org>; Tue, 25 Apr 2023 19:48:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92DD561121;
-	Tue, 25 Apr 2023 17:17:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92DD561121
+	by smtp3.osuosl.org (Postfix) with ESMTP id A555A60C23;
+	Tue, 25 Apr 2023 19:48:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A555A60C23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CHjgj6fAgHCR; Tue, 25 Apr 2023 17:17:49 +0000 (UTC)
+	with ESMTP id rpNPbai9_Y5T; Tue, 25 Apr 2023 19:48:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 991A7614A5;
-	Tue, 25 Apr 2023 17:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 991A7614A5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 709141BF82D
- for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:15:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA35960BF0;
+	Tue, 25 Apr 2023 19:48:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA35960BF0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A031C1BF83B
+ for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 19:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B71B61121
- for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:15:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B71B61121
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4976481E56
+ for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 19:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4976481E56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gs4p9hnMLP7U for <buildroot@lists.busybox.net>;
- Tue, 25 Apr 2023 17:15:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tVtsa0PFLxN4 for <buildroot@lists.busybox.net>;
+ Tue, 25 Apr 2023 19:48:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 595C36145E
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com
- [IPv6:2607:f8b0:4864:20::42c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 595C36145E
- for <buildroot@buildroot.org>; Tue, 25 Apr 2023 17:15:14 +0000 (UTC)
-Received: by mail-pf1-x42c.google.com with SMTP id
- d2e1a72fcca58-63b67a26069so7930360b3a.0
- for <buildroot@buildroot.org>; Tue, 25 Apr 2023 10:15:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682442913; x=1685034913;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=qVnx8uhUMBtkiUNj44OVEuTghkrIamLKjdK+q1Ok+nI=;
- b=bW0VwJGG5L/iYh68qd1CAlS3O8RO5tezyxZICrcXm4sztinNBnZ4NC1nzJAlOmqdgO
- RjuppuiFIFH7x3woIIhhl/nnc3YltcO4l3NttK3Als1pwVl4QsR60uPDu72TebBD2jzd
- ZHj2qrce+A1gaG3TIBdIG3tiYT5JNhpBkX5sK3tLnNWoQBOqSgqBTK4eO7iXh1LRZJjW
- JMgwRgPiJQFzFAB9dBktNnwBg/DeuntUAObq0VGlzrvXIgrXWW672x9cObUsBzZFOjRb
- PatByP3cRbmJwKvkKKu7Zei3/RREFZLXnhLlqLcx2XNISBXoNFG9eZMX3lBw89FOD0T7
- agrw==
-X-Gm-Message-State: AAQBX9cQWVFhZQGcWmmtFkDIJ7Bk/iIGNp+Jm9lGZIoK9oo8BPzeJ/u8
- XwegUpvtCOAH2dSey74jk4XtNfcwqTBtXg==
-X-Google-Smtp-Source: AKy350YaFXfItQTQUeQd629cdfuiLbC+DOthdXfJ33uO33f3aBoCVG2aNz8j2CA2zGR1vQ5kz+iY0Q==
-X-Received: by 2002:a05:6a00:1911:b0:63b:599b:a2e6 with SMTP id
- y17-20020a056a00191100b0063b599ba2e6mr25495927pfi.27.1682442913170; 
- Tue, 25 Apr 2023 10:15:13 -0700 (PDT)
-Received: from fedora.hsd1.wa.comcast.net ([2601:603:2180:ebe0::51c9])
- by smtp.gmail.com with ESMTPSA id
- h11-20020a056a00218b00b0063b8ada8777sm9582454pfi.112.2023.04.25.10.15.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Apr 2023 10:15:12 -0700 (PDT)
-From: Adam Duskett <aduskett@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FBFA81E50
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10olkn2082b.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e89::82b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8FBFA81E50
+ for <buildroot@buildroot.org>; Tue, 25 Apr 2023 19:48:00 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jL9iMAmELspTctZVPtYhsDCux058obn2GfJquKpKDXsk2Y7g+RlvBQQz/HhoHMnJiyq5CDTUcPYI012gwD2TJyrqFN5pQUHxHeMXzoc0AiEgICIm0HT2OZGyTgsVeLvE1G8imMGx4+JwjzitoPcNvIa5uXLBcH48F1CuUEya/M6fHgSt8t1PRq5xH1s4tMcu0EN7m3ceUUJ2ZZoQcRCQN7UUrmym1LcNyjho7zmEGk0wUODKZogpa5d1e5i/6RxjHNAaF4e4pJjGwq/M9j9gqsEO8uL1nJYwV389V/TlF4sduDyYIrWR254Ce4scNxkT+hDv1Y1b9awyF6mcE1HaUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BC0JcSpgBqS8lmpa8FWjzT2mNNY4SwT0HA9V7hDIHrQ=;
+ b=RDzm1Vr3eeG0OFRbE9DFeMXivjI7UjIAwrtqfecesN6ZiyKWx9aHcKpaiWmYsvipyKjInz7WYWvNCiCbl84HRDwvcUHAOthP0FTMOJMBjJA690nUZqXrxWBVu9DroZAc6gS6gk8WSADkfk2zMIZXd12fi6RUVanNs2KHspxmBxl0SV1q02+iWsM83IPEP9YcgWKHWNFtc21JxL/amtRsz9kM/zQF+kEmi+W3TxuR8YKpEUi5uicjnyfeGALw2OnP9nBGphsXG661zpWEJUExkK0QYuFU8CqsFzjbZdtI5qOTL71dYQUq2nhhuXI6EhqJcfFKPNhEJ4N5DAHD+2j0Lg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:1e9::12)
+ by PH0P221MB0720.NAMP221.PROD.OUTLOOK.COM (2603:10b6:510:f3::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Tue, 25 Apr
+ 2023 19:47:57 +0000
+Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+ ([fe80::e6be:cc11:976e:e2b8]) by SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+ ([fe80::e6be:cc11:976e:e2b8%5]) with mapi id 15.20.6319.032; Tue, 25 Apr 2023
+ 19:47:57 +0000
+From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Apr 2023 10:14:54 -0700
-Message-Id: <20230425171454.48802-14-aduskett@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230425171454.48802-1-aduskett@gmail.com>
-References: <20230425171454.48802-1-aduskett@gmail.com>
+Date: Tue, 25 Apr 2023 15:47:37 -0400
+Message-ID: <SN4P221MB0682FB7AA70635712FC71C57A0649@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.39.1.windows.1
+X-TMN: [d1mqRh64Yk4n9GUAigEDrrxE16iuggD8]
+X-ClientProxiedBy: YQZPR01CA0041.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:86::13) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:806:1e9::12)
+X-Microsoft-Original-Message-ID: <20230425194737.4573-1-james.d.knight@live.com>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|PH0P221MB0720:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9492c7eb-e71d-4295-d299-08db45c5f7ee
+X-MS-Exchange-SLBlob-MailProps: 0wLWl8rLpvs+Zhh6OL35slIseIeUQLKVowitT+a+WY0qZRaNZAtTmnJXlhc2v+oazfxBVWFi64bmKyHB0UgNIjI/c0QHl9tl4pOwHiKsJsMxwQ9VLLZMY8m6v6ldTeNfovrAgOvAt+Noek7mqryjbVRaLpVtqMtTfuSA9AjPlIUdNwZ/Rp2uRABb9z38NfVcNbkp9JUxBci39k4Bh988+3ff2zVNHV3DISFmoV3Uk/heFWDk7FksxDS1HlPeOZmmNkoUXvEzdo0AaBQxeJrlDuA7m0oF9u7FG3pczAjjj8J6FCYW7Sk6tYm9ZVBQnv0y9WunJvOGEzUxgADBxNFTXWPZqS8ws0sQnNUeueos0+Zoi03nVhE5adSk9itGkhPQbmQhI3kRjYZ19ezOiAQD+qNVckYcXcx9Pj7b5AWsgUoxN0x0Gplqmh6Qt/5Ia2PbcGargcOyVTOai/EML3dPSy5CnNmGA7kUQcbKUbypB/31cewTbbDT8RnBKKUFvU/dWza6Mtwp4IR+4s9kfV1ncikHE3N1Xzj6BEvNbK/1jADD98eIJDDrt19kQlK3SBJGGuB88jpfbeqqGIwjzbop9wVdjCE/GOcWienfg7DrBSX6cbOJ+nl7ygHvpqkaVD77LGrQ1Mamp0Wa6L01uzVb9n5a8W+J4ggrU+XW2WzpY4orjcNr556dOSs6w9EwEZs61XER4H3RMbHkfio9QnMc/MRCulxePzjGH17+q7eppMdk4l+doZ2Xssdhy0kRwM8ZxXZuJ/0k5AI=
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mgynX2qvvzmNy/25PwTb107xaTz5YbPN4ftNbn8B/rlBHs9w40yEPpWsilIiR4Wbf3l+edDxVXBuKazZy7cG5ULO4QE2KP2bwrgnhDoDhnY62VqVPJmN9XidlUf1gzEq+l2qY/u1GRVLstYGEZKNiK92tq0JWQFI7ogeuZ7VMtA9Rdix2qyzMDUn0j4UCVPRvy4/eLomPOnbghk2HBwqNNAlq5GIiMN7cGNQBLv/bo/zCN8hz2+tvyT3+ps5QQ1XQUeq9E6L8IKTDuDZAVQ4t9PEg2oAvpxD66fmGWNy6Qw6CuHO9jq0gyt3alzX0CA1UoF+x/rpYv8RsVR6gScdY6/MMB8lGZuphbX5BFEjoUfi0LHeuHPyexrYUtP8ftkuIkQffCDsPKmb0oeE5ZCQGRHZGhRjmQJF7VWYsopuf1uVGU024h4WV1aF7B8B0RUCmNm6Xjw2mmJu79wq1QwS5ZT7yoCbxEUkbZ3nJGwb35zXT8nRq86RhPXGbF1M6BR/WjGjueBZFHryrXKJqe3iiOHNbhYtcxAKVGjE58QFifZKeWNfU84hinoLbYKiSC7GgjN4lLhVXf620adzjFJtj9hmF38gnPNWBJ8DobWGRCfk3tJ3CuHhbuEc1KgygY2V
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jw+g5zJMmSe9mqmgjtZNyanmh2rUmwbz2tnLjzanXRXR/RYwqoH7oEIFhKak?=
+ =?us-ascii?Q?MSl3PoDHjF6pHHgKC4DnH+8iXo2UyVGGEug090V4uGWQjldpmHV0Q59r6piE?=
+ =?us-ascii?Q?RB8xupXAG5tDJyQJmLvGDO+AYLU9AwwXPmqnFIBD5XeTFuB7KwclQHrKILoT?=
+ =?us-ascii?Q?NrHSkMbpJQJaiMAYkgzyMtJOUTewwBxeeaRtoUODvPHLyfnML/R846bQ50Fo?=
+ =?us-ascii?Q?qxZgbhpB4XeK3O81zMaqRC0+3niKdV0WvtdDBhBb6qL8OJJ5vJgMJfPBAlRV?=
+ =?us-ascii?Q?m9L4ls6HRCuEWytVZHz4L3go7TdEeiRSERbJKw6KpSzMuu9zH9ie8zkht68c?=
+ =?us-ascii?Q?u+2Q0uiGvusSrr6nmAx5c8Y27Z40CzhSWVO1DvFcI97o8t+WnnKPR7ZBRZ0x?=
+ =?us-ascii?Q?LJDChBbXwnHNlAMYhH7k841wQLZbV0xI1NYqQ3JDodTo+Cavfh9AZITSQmW+?=
+ =?us-ascii?Q?g/Mpjn1gN1mZELRSTOjeUBgvBjkNAWg9RnBj22kU3Cv5uWxf3Y1x1buPhtCB?=
+ =?us-ascii?Q?J63U7KW1pFDbtXhcc8bz1plBSTfxapj37Z9b9q97fiPljws49gSE3Ma32EVq?=
+ =?us-ascii?Q?t11MLQh3nDv63SpL2Bab5+l5Xem6pSQAZ0PCV7UhQkIvzoQLEdBBsThneh2s?=
+ =?us-ascii?Q?DSAfe95XlRqS9ZEnbIjqnHkgCaTOJbumZHTX2nlFRpBDgeuJsiIYeUZ3MYux?=
+ =?us-ascii?Q?IfJbgUbcJJpPDpScOoP9dHyjN6y30n0GoujAFq/UDvbzxDzt47b2c3wfnhMv?=
+ =?us-ascii?Q?KnszmivTi3r+4OcqpfgmGMuTni6jNEQ7kEwpjvzvxtQSV8BNltVMNW/s3OOh?=
+ =?us-ascii?Q?GB1lDzGTcr7HkxSQH04QAxO8noe0gPR+8USZ1acZMvLI8T8Lu7xyc/9aDkGq?=
+ =?us-ascii?Q?7WkAJISiY6bCDaSLc6zlT9YK1Gm6Vbb2gZFeiCa0Muiajf7gy1kRTSgU0bF3?=
+ =?us-ascii?Q?qWx7q5rvDAi6/zodVncglK8DamcGaloeH+IHNoRWE10tVv/7vrfkoLjtZKzl?=
+ =?us-ascii?Q?Iy6NpK3iDhH8hCeszyLRpBTV6N1/D8xv23fYyN627F0iXmGZ9GyxXftnL6ke?=
+ =?us-ascii?Q?svTTxoA4d5uGjDbIZu8smzFqtZLuceOhNTTIu9xOMZ1Kizsep9if3eA/7CSh?=
+ =?us-ascii?Q?f66oRyfzeKo0OtyD3rwnEd1X3+B+jBm/lSs3ftcXHnBMXW6aqmYtTi/RIGrJ?=
+ =?us-ascii?Q?k6p9BoDn4C1/Iy/fzN+4UOytx2CQHYVITHjf+psvhLJYw5Zfbjbyxn2SBiY?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-f5d03.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9492c7eb-e71d-4295-d299-08db45c5f7ee
+X-MS-Exchange-CrossTenant-AuthSource: SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 19:47:57.8129 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0P221MB0720
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1682442913; x=1685034913;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=qVnx8uhUMBtkiUNj44OVEuTghkrIamLKjdK+q1Ok+nI=;
- b=n/+JdNE8COVXBtbSEyMfIPDOqep/ki2a6slLqzJuzgKudnaBzkk51VRwifGVlaUudw
- v1BCQvPZovz/b8aemIJaHsi86Gv8btZ635zH+2eWrRyYhLHGlbjx9iuu8sbpohEcC8NW
- u+xoXLUfTOnlp0uVrD0rbq2MX6wyRu/5lYdjBzGTjWJxQNGW/JU7mqKPuiLURZMyBStq
- lcCvt5PxaubdaWbf67dUo7x7gAO2gfyk14uapFfQ9Pvb7H3csq1VaTBgedRHtz59vjwa
- jOY9EWv9EN9PuNMi0ErnZQJZnmKyWYQ7uVS1OsEjPT6J2eProM4IuRCiEeX6iKNMF5rT
- Ommw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=n/+JdNE8
-Subject: [Buildroot] [PATCH v2 13/13] package/refpolicy: bump to version
- 2.20221101
+ d=live.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BC0JcSpgBqS8lmpa8FWjzT2mNNY4SwT0HA9V7hDIHrQ=;
+ b=lUHV5960O3VP744b4VJrU+FOJLayLs2Jh+bfNINes2tJAM7PNNideU6eGtDJZq0ljb4dKHHFC5uslijlFWAo/1QIfo9UElO1jATQgtlyNp8DHrpSaKL2iMSz49x5MnVgtngmmF6qBD5tK+R90xOPIii2DPWowAZxrcOPu8wMaTv8tfvzmW5X2MsLOo3ZD+0v15/rTBptXHsvHn3yQJ+SQTzCluuQyJB38BMvju/UKpjVzELEvvO8Gimi39q2nFFUsQHjDJ8yo4MJrfQZ5cyaO/2GiPCToKFB7jUEfmUxx1vI/KQqII8EGGm+070TZn4RNoYeY9Lyp918OHae13kN5w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
+ header.s=selector1 header.b=lUHV5960
+Subject: [Buildroot] [PATCH] package/sway: add runtime dependency on
+ xkeyboard-data
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,97 +127,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Antoine Tenart <atenart@kernel.org>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Adam Duskett <aduskett@gmail.com>
+Cc: James Knight <james.d.knight@live.com>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add an upstream patch in package/refpolicy/2.20221101 that makes dbus optional
-for the mount interface. The patch must go in the 2.20221101 directory or else
-the build system will automatically attempt to apply the patch to a custom git
-version of refpolicy if chosen.
+The following change automatically selected the xkeyboard-data package
+when sway package is activated. Sway relies on libxkbcommon package to
+provide support for keyboard keymaps. The libxkbcommon package does not
+provide any default keymap data to use. In an environment where no
+keymap data is provided, Sway will fail to run (at this time, the
+program will SEGFLT; but even if Sway is updated to handle this error,
+the runtime state would not have any keyboard support):
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+    $ sway
+    xkbcommon: ERROR: failed to add default include path /usr/share/X11/xkb
+    Segmentation fault (core dumped)
+
+To help prevent this from happening, the xkeyboard-data package should
+be installed as well to ensure a common dataset of keymap data exists.
+This is the same approach used for the weston package at this time.
+
+Signed-off-by: James Knight <james.d.knight@live.com>
 ---
-Changes v1 -> v2:
-  - Added 2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+ package/sway/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- ...ount-dbus-interface-must-be-optional.patch | 33 +++++++++++++++++++
- package/refpolicy/refpolicy.hash              |  2 +-
- package/refpolicy/refpolicy.mk                |  2 +-
- 3 files changed, 35 insertions(+), 2 deletions(-)
- create mode 100644 package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
-
-diff --git a/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
-new file mode 100644
-index 0000000000..dec0af828f
---- /dev/null
-+++ b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
-@@ -0,0 +1,33 @@
-+From 6c6be65ccf0891391681d4662cc11f508c0f4aeb Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Mon, 24 Apr 2023 14:24:49 -0700
-+Subject: [PATCH] mount: dbus interface must be optional
-+
-+If DBus isn't built, the build process fails due to mount.te always using a
-+dbus interface even if the dbus module. Fix this by setting the dbus interface
-+as optional.
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+Upstream-status: accepted. 207b09a656c2c3ac5c286d3f7eef085325e35408
-+---
-+ policy/modules/system/mount.te | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/policy/modules/system/mount.te b/policy/modules/system/mount.te
-+index d028723..af84af0 100644
-+--- a/policy/modules/system/mount.te
-++++ b/policy/modules/system/mount.te
-+@@ -145,7 +145,9 @@ selinux_getattr_fs(mount_t)
-+ 
-+ userdom_use_all_users_fds(mount_t)
-+ 
-+-dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
-++optional_policy(`
-++	dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
-++')
-+ 
-+ ifdef(`distro_redhat',`
-+ 	optional_policy(`
-+-- 
-+2.40.0
-+
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-index b08c22ed4e..a09e59c270 100644
---- a/package/refpolicy/refpolicy.hash
-+++ b/package/refpolicy/refpolicy.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/SELinuxProject/refpolicy/releases
--sha256  965f98f0b68a24fd0b8e8d973d319332aea88973e1d6c455ef9c2a31aefaeaa6  refpolicy-2.20220106.tar.bz2
-+sha256  44f88e62c8efcef54d019b9ca077520d5993de580926bd7575788cfa78515396  refpolicy-2.20221101.tar.bz2
+diff --git a/package/sway/Config.in b/package/sway/Config.in
+index f8d073520f10c6bf8e00507e70cde99726da1837..802d3d0aa93ed68fb64a3bbc3f5c50086054d2f4 100644
+--- a/package/sway/Config.in
++++ b/package/sway/Config.in
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_SWAY
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_PANGO
++	select BR2_PACKAGE_XKEYBOARD_CONFIG # runtime dependency
+ 	help
+ 	  i3-compatible Wayland compositor
  
- # Locally computed
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index f11b72755a..8fea7cc254 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -23,7 +23,7 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
- REFPOLICY_SITE_METHOD = git
- BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
- else
--REFPOLICY_VERSION = 2.20220106
-+REFPOLICY_VERSION = 2.20221101
- REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
- REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_$(subst .,_,$(REFPOLICY_VERSION))
- endif
 -- 
-2.40.0
+2.39.1.windows.1
 
 _______________________________________________
 buildroot mailing list
