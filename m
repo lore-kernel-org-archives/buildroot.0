@@ -4,88 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF34AC6FD18
-	for <buildroot@archiver.kernel.org>; Tue, 25 Apr 2023 17:17:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7C2AC77B61
+	for <buildroot@archiver.kernel.org>; Tue, 25 Apr 2023 17:17:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91E866147F;
-	Tue, 25 Apr 2023 17:17:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91E866147F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92DD561121;
+	Tue, 25 Apr 2023 17:17:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92DD561121
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m3Jm4jcsYtnt; Tue, 25 Apr 2023 17:17:36 +0000 (UTC)
+	with ESMTP id CHjgj6fAgHCR; Tue, 25 Apr 2023 17:17:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B9B36147B;
-	Tue, 25 Apr 2023 17:17:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B9B36147B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13A7E1BF82D
- for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:15:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 991A7614A5;
+	Tue, 25 Apr 2023 17:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 991A7614A5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 709141BF82D
+ for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:15:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BBCA740CAA
- for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:15:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBCA740CAA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B71B61121
+ for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:15:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B71B61121
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SRl-OerukD7K for <buildroot@lists.busybox.net>;
- Tue, 25 Apr 2023 17:15:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gs4p9hnMLP7U for <buildroot@lists.busybox.net>;
+ Tue, 25 Apr 2023 17:15:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8A0841175
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
- [IPv6:2607:f8b0:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E8A0841175
- for <buildroot@buildroot.org>; Tue, 25 Apr 2023 17:15:12 +0000 (UTC)
-Received: by mail-pf1-x42e.google.com with SMTP id
- d2e1a72fcca58-63d4595d60fso37142982b3a.0
- for <buildroot@buildroot.org>; Tue, 25 Apr 2023 10:15:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 595C36145E
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com
+ [IPv6:2607:f8b0:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 595C36145E
+ for <buildroot@buildroot.org>; Tue, 25 Apr 2023 17:15:14 +0000 (UTC)
+Received: by mail-pf1-x42c.google.com with SMTP id
+ d2e1a72fcca58-63b67a26069so7930360b3a.0
+ for <buildroot@buildroot.org>; Tue, 25 Apr 2023 10:15:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682442912; x=1685034912;
+ d=1e100.net; s=20221208; t=1682442913; x=1685034913;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=MeswaoV4lPaq5w9/OK+53nGdIbiuOisA/N3t+/5Tv3s=;
- b=L+RZ1gWCHh+gKdAkA9EK4MoBbnzDQQpDtrMSobv0lFM52udIUh+yL9mT6cP+eTqP8K
- yOh5t0UmDHV9cn/9liCzrkbzwJ85J8za9BwOjp9RMseoV5MKrNMnIsr9Qi3D+6AiDILB
- wGckhsRhTab6IwXdBwEGGbR/bkxVMduJBfmHbog32iKZdrhZPKxBt7g7aKw5VRtlY5Ft
- APcr9KicZgjaTKCqM1zZOuNSiW4IcegqGMVRSdaG5V5DR0VPeY1BYmZoX+5RvbyKhmYt
- Z/JkyqJ+qw8+o5qXTD4enPcJDt/zbV5NeEIC2YyJ6CQHFV69mghIyS/3w+N8ahIQL1Ui
- ymmw==
-X-Gm-Message-State: AAQBX9dI1UpZJrwS/5SzTg7jwrV/rz2Tq7HchE+2CVRZoCnN+zckURp5
- 3zx8IXWbx59E3sVU42ZC7ge6cTCRPd0fJw==
-X-Google-Smtp-Source: AKy350YHQFMjwDar4t0OWnMpZ6h62i8XP05sXHZKbuwAwm1zETYI+80UQb+GCWdryoz4JCv7XIeP1Q==
-X-Received: by 2002:a05:6a00:124d:b0:63d:39a5:5bb9 with SMTP id
- u13-20020a056a00124d00b0063d39a55bb9mr18890833pfi.7.1682442912063; 
- Tue, 25 Apr 2023 10:15:12 -0700 (PDT)
+ bh=qVnx8uhUMBtkiUNj44OVEuTghkrIamLKjdK+q1Ok+nI=;
+ b=bW0VwJGG5L/iYh68qd1CAlS3O8RO5tezyxZICrcXm4sztinNBnZ4NC1nzJAlOmqdgO
+ RjuppuiFIFH7x3woIIhhl/nnc3YltcO4l3NttK3Als1pwVl4QsR60uPDu72TebBD2jzd
+ ZHj2qrce+A1gaG3TIBdIG3tiYT5JNhpBkX5sK3tLnNWoQBOqSgqBTK4eO7iXh1LRZJjW
+ JMgwRgPiJQFzFAB9dBktNnwBg/DeuntUAObq0VGlzrvXIgrXWW672x9cObUsBzZFOjRb
+ PatByP3cRbmJwKvkKKu7Zei3/RREFZLXnhLlqLcx2XNISBXoNFG9eZMX3lBw89FOD0T7
+ agrw==
+X-Gm-Message-State: AAQBX9cQWVFhZQGcWmmtFkDIJ7Bk/iIGNp+Jm9lGZIoK9oo8BPzeJ/u8
+ XwegUpvtCOAH2dSey74jk4XtNfcwqTBtXg==
+X-Google-Smtp-Source: AKy350YaFXfItQTQUeQd629cdfuiLbC+DOthdXfJ33uO33f3aBoCVG2aNz8j2CA2zGR1vQ5kz+iY0Q==
+X-Received: by 2002:a05:6a00:1911:b0:63b:599b:a2e6 with SMTP id
+ y17-20020a056a00191100b0063b599ba2e6mr25495927pfi.27.1682442913170; 
+ Tue, 25 Apr 2023 10:15:13 -0700 (PDT)
 Received: from fedora.hsd1.wa.comcast.net ([2601:603:2180:ebe0::51c9])
  by smtp.gmail.com with ESMTPSA id
- h11-20020a056a00218b00b0063b8ada8777sm9582454pfi.112.2023.04.25.10.15.11
+ h11-20020a056a00218b00b0063b8ada8777sm9582454pfi.112.2023.04.25.10.15.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Apr 2023 10:15:11 -0700 (PDT)
+ Tue, 25 Apr 2023 10:15:12 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Apr 2023 10:14:53 -0700
-Message-Id: <20230425171454.48802-13-aduskett@gmail.com>
+Date: Tue, 25 Apr 2023 10:14:54 -0700
+Message-Id: <20230425171454.48802-14-aduskett@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230425171454.48802-1-aduskett@gmail.com>
 References: <20230425171454.48802-1-aduskett@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1682442912; x=1685034912;
+ d=gmail.com; s=20221208; t=1682442913; x=1685034913;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=MeswaoV4lPaq5w9/OK+53nGdIbiuOisA/N3t+/5Tv3s=;
- b=HVCiCuR2h+VzX7SX3lIiXEpPb6GEexD968TkP1x+DNvN+RAIC471sY1BHngwReLEtk
- 7BX9vjzJQ/uV40GAAg+RyloRb5cfRGgLzxQmQET5zc3BIiRwjcnWCS/CDMnbgV+mQZ1f
- dgnm1h0F2hskkGYcXXFRAWJdUs9BAYnPfOpPTcTSnW4od4RI+OOIPw5M6Skerl+5Cfq2
- oDqtGCl5GEMrUv/FfOtTqIy46PAx5X9VOJ8JuWEVx4ewcLwxf3CO6iJXlBAo5Yz0QA4m
- 23cWMS8Z5qZxdpGgVRzHOqHJn3sa5QWWlvt2Mtr3IsmlI9ZbMRYKx3d0v86aGI7q+Hnl
- z1sQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=qVnx8uhUMBtkiUNj44OVEuTghkrIamLKjdK+q1Ok+nI=;
+ b=n/+JdNE8COVXBtbSEyMfIPDOqep/ki2a6slLqzJuzgKudnaBzkk51VRwifGVlaUudw
+ v1BCQvPZovz/b8aemIJaHsi86Gv8btZ635zH+2eWrRyYhLHGlbjx9iuu8sbpohEcC8NW
+ u+xoXLUfTOnlp0uVrD0rbq2MX6wyRu/5lYdjBzGTjWJxQNGW/JU7mqKPuiLURZMyBStq
+ lcCvt5PxaubdaWbf67dUo7x7gAO2gfyk14uapFfQ9Pvb7H3csq1VaTBgedRHtz59vjwa
+ jOY9EWv9EN9PuNMi0ErnZQJZnmKyWYQ7uVS1OsEjPT6J2eProM4IuRCiEeX6iKNMF5rT
+ Ommw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=HVCiCuR2
-Subject: [Buildroot] [PATCH v2 12/13] package/setools: bump to version 4.4.2
+ header.a=rsa-sha256 header.s=20221208 header.b=n/+JdNE8
+Subject: [Buildroot] [PATCH v2 13/13] package/refpolicy: bump to version
+ 2.20221101
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,180 +108,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In addition:
-  - Refresh 0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-
-  - Update COPYING hash as the license file has been rewritten for clarity.
-    However, the licenses have not been changed.
+Add an upstream patch in package/refpolicy/2.20221101 that makes dbus optional
+for the mount interface. The patch must go in the 2.20221101 directory or else
+the build system will automatically attempt to apply the patch to a custom git
+version of refpolicy if chosen.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- ...e-setools.InfoFlowAnalysis-and-setoo.patch | 50 +++++++++----------
- package/setools/setools.hash                  |  4 +-
- package/setools/setools.mk                    |  2 +-
- 3 files changed, 28 insertions(+), 28 deletions(-)
+Changes v1 -> v2:
+  - Added 2.20221101/0001-mount-dbus-interface-must-be-optional.patch
 
-diff --git a/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch b/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-index 3c3ae97dff..36063a4e13 100644
---- a/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-+++ b/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-@@ -15,22 +15,22 @@ sedta and seinfoflow to require python3-networkx
- Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
- [Refreshed for 4.3.0]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
--[Refreshed for 4.4.0]
-+[Refreshed for 4.4.2]
- ---
-  sedta                       | 3 ++-
-  seinfoflow                  | 5 +++--
-  setools/__init__.py         | 4 ++--
-  setoolsgui/apol/dta.py      | 2 +-
-  setoolsgui/apol/infoflow.py | 2 +-
-- tests/dta.py                | 2 +-
-- tests/infoflow.py           | 2 +-
-+ tests/test_dta.py           | 2 +-
-+ tests/test_infoflow.py      | 2 +-
-  7 files changed, 11 insertions(+), 9 deletions(-)
- 
- diff --git a/sedta b/sedta
--index 60861ca630a5..0056172a55e5 100755
-+index ffd9ede..4c53825 100755
- --- a/sedta
- +++ b/sedta
--@@ -23,6 +23,7 @@ import logging
-+@@ -10,6 +10,7 @@ import logging
-  import signal
-  
-  import setools
-@@ -38,7 +38,7 @@ index 60861ca630a5..0056172a55e5 100755
-  
-  
-  def print_transition(trans: setools.DomainTransition) -> None:
--@@ -114,7 +115,7 @@ else:
-+@@ -104,7 +105,7 @@ else:
-  
-  try:
-      p = setools.SELinuxPolicy(args.policy)
-@@ -48,10 +48,10 @@ index 60861ca630a5..0056172a55e5 100755
-      if args.shortest_path or args.all_paths:
-          if args.shortest_path:
- diff --git a/seinfoflow b/seinfoflow
--index f10c39de4d8e..fe733bbd0787 100755
-+index 5f4e764..a27b781 100755
- --- a/seinfoflow
- +++ b/seinfoflow
--@@ -18,6 +18,7 @@
-+@@ -5,6 +5,7 @@
-  #
-  
-  import setools
-@@ -59,7 +59,7 @@ index f10c39de4d8e..fe733bbd0787 100755
-  import argparse
-  import sys
-  import logging
--@@ -102,8 +103,8 @@ elif args.booleans is not None:
-+@@ -91,8 +92,8 @@ elif args.booleans is not None:
-  try:
-      p = setools.SELinuxPolicy(args.policy)
-      m = setools.PermissionMap(args.map)
-@@ -71,10 +71,10 @@ index f10c39de4d8e..fe733bbd0787 100755
-      if args.shortest_path or args.all_paths:
-          if args.shortest_path:
- diff --git a/setools/__init__.py b/setools/__init__.py
--index d72d343..4d5aaaa 100644
-+index ad9b36a..2bde01b 100644
- --- a/setools/__init__.py
- +++ b/setools/__init__.py
--@@ -91,11 +91,11 @@ from .pcideviceconquery import PcideviceconQuery
-+@@ -77,11 +77,11 @@ from .pcideviceconquery import PcideviceconQuery
-  from .devicetreeconquery import DevicetreeconQuery
-  
-  # Information Flow Analysis
-@@ -89,10 +89,10 @@ index d72d343..4d5aaaa 100644
-  # Policy difference
-  from .diff import PolicyDifference
- diff --git a/setoolsgui/apol/dta.py b/setoolsgui/apol/dta.py
--index 4608b9dbf34e..2cde44c142e9 100644
-+index a78d960..e71c70a 100644
- --- a/setoolsgui/apol/dta.py
- +++ b/setoolsgui/apol/dta.py
--@@ -24,7 +24,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-+@@ -11,7 +11,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-  from PyQt5.QtGui import QPalette, QTextCursor
-  from PyQt5.QtWidgets import QCompleter, QHeaderView, QMessageBox, QProgressDialog, \
-      QTreeWidgetItem
-@@ -102,10 +102,10 @@ index 4608b9dbf34e..2cde44c142e9 100644
-  from ..logtosignal import LogHandlerToSignal
-  from .analysistab import AnalysisSection, AnalysisTab
- diff --git a/setoolsgui/apol/infoflow.py b/setoolsgui/apol/infoflow.py
--index 7bca299d23fc..7fee2778f35f 100644
-+index fb9b409..738f1b8 100644
- --- a/setoolsgui/apol/infoflow.py
- +++ b/setoolsgui/apol/infoflow.py
--@@ -26,7 +26,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-+@@ -13,7 +13,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-  from PyQt5.QtGui import QPalette, QTextCursor
-  from PyQt5.QtWidgets import QCompleter, QHeaderView, QMessageBox, QProgressDialog, \
-      QTreeWidgetItem
-@@ -114,11 +114,11 @@ index 7bca299d23fc..7fee2778f35f 100644
-  from setools.exception import UnmappedClass, UnmappedPermission
-  
-  from ..logtosignal import LogHandlerToSignal
--diff --git a/tests/dta.py b/tests/dta.py
--index a0cc9381469c..177e6fb0b961 100644
----- a/tests/dta.py
--+++ b/tests/dta.py
--@@ -18,7 +18,7 @@
-+diff --git a/tests/test_dta.py b/tests/test_dta.py
-+index 7f9bbc9..48338c5 100644
-+--- a/tests/test_dta.py
-++++ b/tests/test_dta.py
-+@@ -5,7 +5,7 @@
-  import os
-  import unittest
-  
-@@ -127,11 +127,11 @@ index a0cc9381469c..177e6fb0b961 100644
-  from setools import TERuletype as TERT
-  from setools.exception import InvalidType
-  from setools.policyrep import Type
--diff --git a/tests/infoflow.py b/tests/infoflow.py
--index aa0e44a7e4f8..fca2848aeca5 100644
----- a/tests/infoflow.py
--+++ b/tests/infoflow.py
--@@ -18,7 +18,7 @@
-+diff --git a/tests/test_infoflow.py b/tests/test_infoflow.py
-+index 5a8f745..e25993b 100644
-+--- a/tests/test_infoflow.py
-++++ b/tests/test_infoflow.py
-+@@ -5,7 +5,7 @@
-  import os
-  import unittest
-  
-diff --git a/package/setools/setools.hash b/package/setools/setools.hash
-index fdb0919f11..c353e1f609 100644
---- a/package/setools/setools.hash
-+++ b/package/setools/setools.hash
+ ...ount-dbus-interface-must-be-optional.patch | 33 +++++++++++++++++++
+ package/refpolicy/refpolicy.hash              |  2 +-
+ package/refpolicy/refpolicy.mk                |  2 +-
+ 3 files changed, 35 insertions(+), 2 deletions(-)
+ create mode 100644 package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+
+diff --git a/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+new file mode 100644
+index 0000000000..dec0af828f
+--- /dev/null
++++ b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+@@ -0,0 +1,33 @@
++From 6c6be65ccf0891391681d4662cc11f508c0f4aeb Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Mon, 24 Apr 2023 14:24:49 -0700
++Subject: [PATCH] mount: dbus interface must be optional
++
++If DBus isn't built, the build process fails due to mount.te always using a
++dbus interface even if the dbus module. Fix this by setting the dbus interface
++as optional.
++
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++Upstream-status: accepted. 207b09a656c2c3ac5c286d3f7eef085325e35408
++---
++ policy/modules/system/mount.te | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/policy/modules/system/mount.te b/policy/modules/system/mount.te
++index d028723..af84af0 100644
++--- a/policy/modules/system/mount.te
+++++ b/policy/modules/system/mount.te
++@@ -145,7 +145,9 @@ selinux_getattr_fs(mount_t)
++ 
++ userdom_use_all_users_fds(mount_t)
++ 
++-dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
+++optional_policy(`
+++	dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
+++')
++ 
++ ifdef(`distro_redhat',`
++ 	optional_policy(`
++-- 
++2.40.0
++
+diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+index b08c22ed4e..a09e59c270 100644
+--- a/package/refpolicy/refpolicy.hash
++++ b/package/refpolicy/refpolicy.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  202eac5f857475937bee8136cff278aa2b4a4b94a0dec63fbbbe18c9eb644a4e  setools-4.4.0.tar.gz
--sha256  2f7547e10f76a382c24c053595f38a5cc6dda9347f508f254ca490e0046a9624  COPYING
-+sha256  998d12d01852feed1889110a4ca81090a47a2d9b47368e4dfe2b94d68696c813  setools-4.4.2.tar.gz
-+sha256  0e58d74751e394f39748c7b7b4039d6a883b5def9711160668ba962b52e69e01  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index ea355f10c8..b80d25a6b9 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # From https://github.com/SELinuxProject/refpolicy/releases
+-sha256  965f98f0b68a24fd0b8e8d973d319332aea88973e1d6c455ef9c2a31aefaeaa6  refpolicy-2.20220106.tar.bz2
++sha256  44f88e62c8efcef54d019b9ca077520d5993de580926bd7575788cfa78515396  refpolicy-2.20221101.tar.bz2
  
--SETOOLS_VERSION = 4.4.0
-+SETOOLS_VERSION = 4.4.2
- SETOOLS_SITE = $(call github,SELinuxProject,setools,$(SETOOLS_VERSION))
- SETOOLS_DEPENDENCIES = libselinux libsepol python-setuptools host-bison host-flex host-python-cython host-swig
- SETOOLS_INSTALL_STAGING = YES
+ # Locally computed
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index f11b72755a..8fea7cc254 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -23,7 +23,7 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
+ REFPOLICY_SITE_METHOD = git
+ BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
+ else
+-REFPOLICY_VERSION = 2.20220106
++REFPOLICY_VERSION = 2.20221101
+ REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+ REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_$(subst .,_,$(REFPOLICY_VERSION))
+ endif
 -- 
 2.40.0
 
