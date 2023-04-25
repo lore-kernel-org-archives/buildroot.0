@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD879C6FD18
-	for <buildroot@archiver.kernel.org>; Tue, 25 Apr 2023 17:12:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 213ADC77B73
+	for <buildroot@archiver.kernel.org>; Tue, 25 Apr 2023 17:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34BA560AAC;
-	Tue, 25 Apr 2023 17:12:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34BA560AAC
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB24861477;
+	Tue, 25 Apr 2023 17:15:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB24861477
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4boyKNe4YOzE; Tue, 25 Apr 2023 17:12:43 +0000 (UTC)
+	with ESMTP id pCbHDK6XeB7M; Tue, 25 Apr 2023 17:15:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72E2B61458;
-	Tue, 25 Apr 2023 17:12:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72E2B61458
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AF8FD1BF82D
- for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:12:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C16BB6145E;
+	Tue, 25 Apr 2023 17:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C16BB6145E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A4261BF82D
+ for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:15:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8228041175
- for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:12:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8228041175
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62CF161458
+ for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 17:15:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62CF161458
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p4m3s0HQ62Qh for <buildroot@lists.busybox.net>;
- Tue, 25 Apr 2023 17:12:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7BD5400D8
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E7BD5400D8
- for <buildroot@buildroot.org>; Tue, 25 Apr 2023 17:12:35 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.8.36] ([213.147.164.136]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Ma20q-1poBK720pg-00VwVI; Tue, 25
- Apr 2023 19:12:31 +0200
-Message-ID: <45d342b8-d098-11ad-07ee-5702205c10b7@gmx.at>
-Date: Tue, 25 Apr 2023 19:12:33 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5FBjcEK6rAxb for <buildroot@lists.busybox.net>;
+ Tue, 25 Apr 2023 17:14:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A6E861121
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8A6E861121
+ for <buildroot@buildroot.org>; Tue, 25 Apr 2023 17:14:59 +0000 (UTC)
+Received: by mail-pf1-x42e.google.com with SMTP id
+ d2e1a72fcca58-63b87d23729so4883501b3a.0
+ for <buildroot@buildroot.org>; Tue, 25 Apr 2023 10:14:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1682442898; x=1685034898;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=SBWgY81lI0bw+wHRbCiT+g5HM+ktNqlTwSL7ChLY8JU=;
+ b=CnHsQ9ktR2qvZoOe5rKBW+9ItdkYQQxqc8o/ZXRed/7SZ/5lVMWHSPm75nd0TbRXCu
+ OgwQ7PpDHvcecydI1waEI2ogp3hpMVfiEacf4BpdkIpbEXseMcyMPvYbkVIAR3Zl0Jl+
+ SMwHZRM9WpWhp5yiOibn2w2ahnlc2MMEsw/RzYHwQyo9yHxrC5gm8rDE6xpD5SS8i6mw
+ QRwgsUeD7Hx+bozuZ/05i3pLNoex9dUgYxdPc9D7o7oUYZbS4RrdbD/RYwinMz567f6t
+ VtHIuKeFp6A9Xl55Kgsvvi4hgqsWrHvgPpMVORsHpBl+8oCSoiMmApsEa1S0tN0q2JzO
+ V0/w==
+X-Gm-Message-State: AAQBX9czsLbdnMpAZUMnLuLhZJAPWhpcZf2GWOFKJY3g1OvRY6ueY+xx
+ 6jeyuTFTK/PESgvFpzT7wXyGCsI3uWKlKw==
+X-Google-Smtp-Source: AKy350aA8WXSISnLUr09VgxlQyBKFsDHdfiprokymEvT2jLNBMHx5yj1CMtyaVjxnxIQo0CmH6ZFcQ==
+X-Received: by 2002:a05:6a00:148e:b0:63b:6911:8928 with SMTP id
+ v14-20020a056a00148e00b0063b69118928mr24638490pfu.3.1682442898281; 
+ Tue, 25 Apr 2023 10:14:58 -0700 (PDT)
+Received: from fedora.hsd1.wa.comcast.net ([2601:603:2180:ebe0::51c9])
+ by smtp.gmail.com with ESMTPSA id
+ h11-20020a056a00218b00b0063b8ada8777sm9582454pfi.112.2023.04.25.10.14.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 25 Apr 2023 10:14:57 -0700 (PDT)
+From: Adam Duskett <aduskett@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 25 Apr 2023 10:14:41 -0700
+Message-Id: <20230425171454.48802-1-aduskett@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To: Peter Korsgaard <peter@korsgaard.com>
-References: <20230405200445.50475-1-dalang@gmx.at>
- <87mt2z8yyf.fsf@dell.be.48ers.dk>
-From: Daniel Lang <dalang@gmx.at>
-In-Reply-To: <87mt2z8yyf.fsf@dell.be.48ers.dk>
-X-Provags-ID: V03:K1:OV+F20yRE4gg4z/j48okz48D/obgWmu9YvZr0D3554wAuIBW5d9
- 7ESl2UwGCFX22Q3FyUL1vhgr77yYp/Qk5KRKNq7Em6c0BPv2GsR8CN+5xiQVrjMv3MipIXg
- 4JQ7lFrVMkrhPdGdLsYZO5sd76P4yszY0lgzuQk+LaqecZDBaWq+yxfN7XUeMXywVwHV4hM
- tkl3bZLKNrqIMXi5i3afw==
-UI-OutboundReport: notjunk:1;M01:P0:kvheOEZlbSw=;9A52BFsucs+aEKTVhsrxwipLccQ
- Ixzj2VXvUP1Vm2Si/xfBxQgfKBLiT5fN+7NXLdkp1aEoSQDVSg1eKSm+pNH3TXzrBwytCed7k
- HLDKS7UhI733euLr/afwX8iwzEwqocYTU7y5SZup5SzD//7wSYkZrQ1RaiMwuhom1/eQQXVPm
- I5BeQunIo6laNMZa4wDYerNNUjmZ74uIm2H+bUSOHrHfKpLmS9+ll79qMnQLl43vl7+YWVdbc
- DN5vYxyttaRIC0BwW0N3E0d+M1Q9HMpna8EsCRo22mowbdpzOpbME4tLFuhykHAb2F7pyQSdc
- 3TlEDxkfZL0DIDtI8dIAyD6H004OcVgL/MnWp/iMy9M+YO5Z96JhSHCmYGnyVrRDlETaePpZr
- Q5wZxuU5iCMmaLYQKPi/kj8J5qZAYV1lij1qRe+r4vTBOUOL9udldj0cL34IiFjNozgk+o8yH
- asvqmPBKfMDOYSLnx8H0yjQWbPSUgKMettN50QD1IFFXl2082OetWoQO3odsdVDoatX8zWfe2
- gc9TCAkzEqnSatkEZDPbImjALVEXD/HX/q6RnZW5ddwQLrko05JReYUryB0xlxOqoYndO7zNB
- n+L3G69/jE74HeEWCanuyqhvCEvKk01RN9pCBv2fwN6OZxE6Ciav9M3TDjBZdBsAaaTIccMoW
- vjTtvT9jBafkGm+YjSbrvVUAO/1KIngU6mP3/Ng7XP+u65bWdAL6pIoi3CSY6B0s1/SEWivql
- 0cBOQ3WBz59RDqSo0WtDRBrkO7a78Pd1ZV7PEn9gQEQdu/NTHZU/0cLtlA17ztpcoR8b1SyYu
- 9osmLKJW2vlrT4NDe+2EQMGbeWEzGAtBNnoPD9wK4SAnVwlSPj1I4qar3m8y9GxzUlJzdAPnY
- hFnmTWKeIIq7bs6ax9Gkxdr/5Rg8QLlu1O7W3Cid8dfYuWTjkobHdlnX+1bHzms20A2wgPlK6
- B5ev36/kv+5jKW1pqvv/wWqOzQ8=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; s=s31663417; 
- t=1682442751; i=dalang@gmx.at;
- bh=iijNdDoSrEh/HniLHs8f9NcoDq4mfoFNrnVIj4Un+bw=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=q+ELEkBGQqOIzoWo4dg4PxAG+PuSykO82fvABK3OUn5WjN8k6c6wOHjN8NwCNXwg4
- U4IvfzkQ7c4MH11e6A0BcRlPeUvV3blC3e3x4eaeFzlYIlnZmLPYb03Xh8dcNJnj6a
- uyw7i1nB/DanlOsFAeNghder8fQUmhzWaWXFBYvQvX6FHUBPOphorY+AHDvDu0jNMM
- rIaEY9AbH0nu4s6PJUz9Zt5QzzeciXAG2Dc8PYvfAVtkA9b1COXfxBO6RhHxHNFm2c
- DjyRyGXa9V6qbuDQUl1LGDcKbyVhCoMqT+6YJqgw7w0fXcPRMBCIUx9v2oaVq1tArL
- qhFeZ+g8JS+xQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=q+ELEkBG
-Subject: Re: [Buildroot] [PATCH] package/libmodbus: bump to version 3.1.10
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1682442898; x=1685034898;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=SBWgY81lI0bw+wHRbCiT+g5HM+ktNqlTwSL7ChLY8JU=;
+ b=BvYtBUTcriuy6WWBTFqje8+dmIYG55fjbTMDfAMIIQmP8VvEdiXzA2CYvOitHilA59
+ ZBrDqVdBZ81ksS6Ywq1ue0QyhJVct+DFnLMthpO+waPCm1PWnati+XwsNcsVCanxyyIq
+ NvvdImq6IzwkU079JBCPvIxUj40Y/R/yAzpm8H0V3DlpnQo3D/Lacfdz+HSL8KTCC894
+ ktJPlwa08byQZ03CbWjuyMAqAyoX638UYQtnKTdjpA9XDOb7DN7Wg2iaCFfEnG+0ETXU
+ t7kv0/jRGNFgAUkWfFeK/uSluliWwcOj35hicLgd/jAk35QB353rAO1lDT9fx5h+K0XN
+ 59BA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=BvYtBUTc
+Subject: [Buildroot] [PATCH v2 00/13] Selinux: bump to 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,23 +94,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Boibessot <julien.boibessot@armadeus.com>, buildroot@buildroot.org
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Antoine Tenart <atenart@kernel.org>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22.04.23 22:05, Peter Korsgaard wrote:
->>>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
->
->  > https://github.com/stephane/libmodbus/releases/tag/v3.1.10
->
-> The regression fix this talks about is presumably about a regression
-> introduced in 3.1.9, so not in Buildroot, correct?
->
+It's been quite some time since anyone updated the SELinux packages (mainly me!)
 
-Correct, regression was introduced in 3.1.9, which was never featured
-in Buildroot.
+Most of the changes are straight forward:
+  - Update the package to 3.5
+  - Change the license file from COPYING to LICENSE.
+    (The COPYING file has been renamed to LICENSE.)
+
+Some notes for specific packages:
+  - Audit now installs ausearch to /usr/sbin (or we do?) As such, a small patch
+    for selinux-python is necessary to change the patch for ausearch from /sbin
+    to /usr/sbin
+
+  - libselinux now requires host-pip to install the python modules.
+    Surprisingly, host-pip3 cross-compiles the modules without issue and just
+    worked. I should buy a lottery ticket!
+
+  - I found out that if you have rst2html5 on the host, the glib meson package
+    tries to use it to generate documents, which causes a failure on installing
+    to the target. Luckily we don't want the documents so the fix is to simply
+    remove the docs/ subdirectroy from meson.build. This patch is tiny and won't
+    be a headache to maintain.
+    
+  - A small upstream patch needs to be added to refpolicy to ensure refpolicy
+    builds without dbus selected.
+
+Tested on Fedora 38. Both with pc_efi and aarch-virt configs.
+
+Other tests ran and passed:
+
+tests.init.test_systemd_selinux.TestSELinuxSystemdExt4
+tests.init.test_systemd_selinux.TestSELinuxSystemdSquashfs
+tests.core.test_selinux.TestSELinuxCustomGit
+tests.core.test_selinux.TestSELinuxExtraModules
+tests.core.test_selinux.TestSELinuxExtraModulesDirs
+tests.core.test_selinux.TestSELinuxPackage
+
+Changes v1 -> v2:
+  - Added refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+  
+Adam Duskett (13):
+  package/libglib2/0003-disable-building-docs.patch: new patch
+  package/python-pip: add host variant
+  package/libsepol: bump to version 3.5
+  package/libsemanage: bump to version 3.5
+  package/libselinux: bump to version 3.5
+  package/policycoreutils: bump to version 3.5
+  package/checkpolicy: bump to version 3.5
+  package/restorecond: bump to version 3.5
+  package/semodule-utils: bump to version 3.5
+  package/audit: bump to version 3.1
+  package/selinux-python: bump to version 3.5
+  package/setools: bump to version 4.4.2
+  package/refpolicy: bump to version 2.20221101
+
+ package/audit/audit.hash                      |  2 +-
+ package/audit/audit.mk                        |  2 +-
+ package/checkpolicy/checkpolicy.hash          |  4 +-
+ package/checkpolicy/checkpolicy.mk            |  4 +-
+ .../libglib2/0003-disable-building-docs.patch | 38 ++++++++++++++
+ package/libselinux/0001-fix-musl-build.patch  |  4 +-
+ ...T-and-rely-on-the-installed-file-nam.patch |  8 +--
+ package/libselinux/Config.in                  |  1 +
+ package/libselinux/libselinux.hash            |  2 +-
+ package/libselinux/libselinux.mk              | 16 ++++--
+ package/libsemanage/libsemanage.hash          |  4 +-
+ package/libsemanage/libsemanage.mk            |  4 +-
+ package/libsepol/libsepol.hash                |  4 +-
+ package/libsepol/libsepol.mk                  |  4 +-
+ ...-all-paths-that-use-an-absolute-path.patch |  2 +-
+ package/policycoreutils/policycoreutils.hash  |  4 +-
+ package/policycoreutils/policycoreutils.mk    |  4 +-
+ package/python-pip/python-pip.mk              |  1 +
+ ...ount-dbus-interface-must-be-optional.patch | 33 ++++++++++++
+ package/refpolicy/refpolicy.hash              |  2 +-
+ package/refpolicy/refpolicy.mk                |  2 +-
+ package/restorecond/restorecond.hash          |  4 +-
+ package/restorecond/restorecond.mk            |  4 +-
+ .../0001-fix-ausearch-path.patch              | 37 ++++++++++++++
+ package/selinux-python/selinux-python.hash    |  4 +-
+ package/selinux-python/selinux-python.mk      |  4 +-
+ package/semodule-utils/semodule-utils.hash    |  4 +-
+ package/semodule-utils/semodule-utils.mk      |  4 +-
+ ...e-setools.InfoFlowAnalysis-and-setoo.patch | 50 +++++++++----------
+ package/setools/setools.hash                  |  4 +-
+ package/setools/setools.mk                    |  2 +-
+ 31 files changed, 191 insertions(+), 71 deletions(-)
+ create mode 100644 package/libglib2/0003-disable-building-docs.patch
+ create mode 100644 package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+ create mode 100644 package/selinux-python/0001-fix-ausearch-path.patch
+
+-- 
+2.40.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
