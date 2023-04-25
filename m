@@ -4,92 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 792F3C6FD18
-	for <buildroot@archiver.kernel.org>; Tue, 25 Apr 2023 20:25:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1391C6FD18
+	for <buildroot@archiver.kernel.org>; Tue, 25 Apr 2023 21:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0961741883;
-	Tue, 25 Apr 2023 20:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0961741883
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55604400A6;
+	Tue, 25 Apr 2023 21:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55604400A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TlhCuLziRQ6G; Tue, 25 Apr 2023 20:25:43 +0000 (UTC)
+	with ESMTP id G0SLA_vxfs3B; Tue, 25 Apr 2023 21:04:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B184404CB;
-	Tue, 25 Apr 2023 20:25:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B184404CB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CF2601BF5F8
- for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 20:25:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B19A400F2;
+	Tue, 25 Apr 2023 21:04:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B19A400F2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 25BC11BF5F8
+ for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 21:04:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A84BD81F9B
- for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 20:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A84BD81F9B
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB10160F3F
+ for <buildroot@lists.busybox.net>; Tue, 25 Apr 2023 21:04:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB10160F3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hlZjBVS2IUH0 for <buildroot@lists.busybox.net>;
- Tue, 25 Apr 2023 20:25:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0E5A81B14
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D0E5A81B14
- for <buildroot@buildroot.org>; Tue, 25 Apr 2023 20:25:36 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-94a342f7c4cso1149255166b.0
- for <buildroot@buildroot.org>; Tue, 25 Apr 2023 13:25:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682454335; x=1685046335;
- h=content-transfer-encoding:in-reply-to:cc:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=cyDUGaIFP9TsmTfE6Y1ANE/Ka1HKyEg60drWHfeE+1w=;
- b=he+PbktNO+jObVJegakB0Nh+ZYo1DwWDYHSzFF1RB6bQFxqd/N0lRuCIungbszVzdK
- YBP1s8jMUDrphI86qFYMdEqdHJzAJ736Ph3nfS6w2u5JArqe5SGMsravXemEH2LKvond
- cXRg2rCNsiQ8IqJZ14MrntADsWkBuc2XWLZXCqzzFmE75ts9a4iz9xsBM9xdMM2fEQY6
- HAF9UjYF6hnaL5mGWF6tSSuOilJV+bskZpfe5ZkOGC0wDziGWU9JNgFKUXXXw084rLZR
- JPy50OrQnvCbeiwaSCKCnlaobfEBRIl7BnGiNNchQkQ437PvScua2sWWVil+e7HlZiaI
- l37A==
-X-Gm-Message-State: AAQBX9e+mB1GxqD2qq50Zdtoz2zdbVJZqFZLmlOB1bZ5/Ref+az2jPEN
- kpe21cK2oGuqKwvjZ6s0IBbTocC7UDr/7yr6izqTGA==
-X-Google-Smtp-Source: AKy350a0JPRbpLcRQQtG/rhAk38bUM8dBALpRzkAvp3q7lUQULYAJzgZItTuLp4BwDLl6BuVPy1S+g==
-X-Received: by 2002:a17:906:a3da:b0:94f:3482:e607 with SMTP id
- ca26-20020a170906a3da00b0094f3482e607mr14648509ejb.11.1682454334784; 
- Tue, 25 Apr 2023 13:25:34 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- d21-20020a17090694d500b0094efe88a037sm7163532ejy.9.2023.04.25.13.25.33
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 25 Apr 2023 13:25:34 -0700 (PDT)
-Message-ID: <ca66b08b-e69f-2cc0-102e-241f0a03fa93@mind.be>
-Date: Tue, 25 Apr 2023 22:25:32 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DXfQmO28vfsD for <buildroot@lists.busybox.net>;
+ Tue, 25 Apr 2023 21:04:06 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90FFE6006A
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 90FFE6006A
+ for <buildroot@buildroot.org>; Tue, 25 Apr 2023 21:04:05 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([62.216.209.191]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MC30P-1pzREP3bVl-00CTLt; Tue, 25
+ Apr 2023 23:03:56 +0200
+Date: Tue, 25 Apr 2023 23:03:55 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: Adam Duskett <aduskett@gmail.com>
+Message-ID: <20230425230355.1c7b2cf5@gmx.net>
+In-Reply-To: <20230425171454.48802-2-aduskett@gmail.com>
+References: <20230425171454.48802-1-aduskett@gmail.com>
+ <20230425171454.48802-2-aduskett@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-GB
-To: =?UTF-8?Q?Niclas_G=c3=b6tting?= <niclas.goetting@t-online.de>,
- buildroot@buildroot.org
-References: <00604ac1-606d-ab11-8302-619aab02bcfe@t-online.de>
-In-Reply-To: <00604ac1-606d-ab11-8302-619aab02bcfe@t-online.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1682454335; x=1685046335;
- h=content-transfer-encoding:in-reply-to:cc:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=cyDUGaIFP9TsmTfE6Y1ANE/Ka1HKyEg60drWHfeE+1w=;
- b=eT0d2FfXkDV0H6HC8xG/piaRI7bat1NN0hhPpy7hibcFownqxZUBNYA04jok3ZT0Kr
- 6xNJBuqMxFgneHfvxLuPKcrrEq2jT99oRUCc1kR5lbkgf7QkTnzFi1gpqCDA11e03Wrh
- aTOJGX/oC0UVo6VkfhIvmg7n4eTQeN3P7OZq0zsvOaLkLAcz4eIrZ/CFNEBvq6uI8db2
- nhTlATRRCu80AkuTYIKFUP5tFib3014VomTvAPZTN6xZHn5mdxJpvgpfrn3J6YfKev7x
- SukFY/8ineXjzFaUpNZQ4wcB4GPndzvNVBHQbvlMaW/gdn93/+Rc1JiPTQi9/rBfUqaq
- hMKg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eT0d2FfX
-Subject: Re: [Buildroot] SWUpdate default services
+X-Provags-ID: V03:K1:PDY23GyyLplTf6H6AkpxljuV5rMggQtISPZzov5DFjcLz4+fJEe
+ aLnPQL1qFrrKRVTKA0ESlJ5dDgzjBEBe0BuuSPPNs8g11GI22DOgrPtP24SnFuKqn3supuM
+ VPxvHmMhTvNvCxrY1eG6b06idu8H5wiAVYtxS5tmlXcRVnxNXatWEh6WvUyFCt86whnStbu
+ /Oby36VXvKRzHJLFGj7GQ==
+UI-OutboundReport: notjunk:1;M01:P0:330wU+wdK+E=;BPgT0nWjS1f7soLa9Rep6WgqrXu
+ 1ge8e2KY60kg4Y98YIMPSG5Pf3ocSIv5KP2P/utZHoQVWQ/en14qCpg31x0W/gSQnPwyEAwYD
+ XM/UE10BS1Kmblq2zR1YkVhHf7VV/CzCNzql1YIucYYahSmqYeLIbOJ+KBU2KDjuxF552J5ei
+ UZl4nV2h0GE8xkht66gXwFx5kJwCcM8XBGMMUMCgtxU4HYhHHfpeDEco7LaxYRsPsfC6eWj6H
+ atfBtuOK5eR7bOpHKgChEQHjptBuC2wmRmZNpmwTncldfErcoewARBYKWlVTdqqmyumZh1qQS
+ Yg2pAFqnBEVk+cGioNgVpJhB0NOjU0Hb2NAbUbZxDlI2i5Y221l67tN6HY2MGiEPETnBeavD7
+ Cg/ceOZCHmBmopywy4mffwONpRvho5v5wYXJM2K8wuV4Qg9adjPeB2vnUyxSKMdfiec73AnF3
+ GLxMpoUEWYUSz1qrZCj3cubB+QhiTv2tJc2IiDzRUTks1J+Q8DiKNEo/Bu3xvH2S/Yo8c/OJQ
+ RyAgP9g1NFjnG8n1d4+hR/DatKoJ5wopBeQT1fdNDWbi5xoypu90PBnPhmrULPKsJ3xs+sckl
+ MmtY7jKKHb9aTgN+duGThtwOXGvVX276M1ZM/Ezi8W1CZpfCeSxHDuxv4BQwreloMt66ReT39
+ NXL++0KXxBB0zUsrOInJ/82H26ucbK4kr12BEiY7JnopXUWjirsGzp+8937LMdmdOFKlBKN1N
+ 0+rj/RrrvdMCQgd8fXNLnnH01WGZPX4i3qsbhZ8bGHV9tqeKo9rXqa3GAofYj9HIqVQRGMqQ/
+ C6noy/eodP8KkMx5B7LfkkwwHiabYXKklYljv0bdDg6P+Tc3+s4bJgrkUWjd2xcE9ZowQGKGc
+ rFRm6rXQRZjNb4CgJpBcNLJrefwLD7x+FQP2qUmHW7lieKSnmnKJgLyU0OCEQ1yDwF2ADJ88+
+ AmCy03RCtIbhr7rUrp6Rm3L05Vc=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; s=s31663417; 
+ t=1682456637; i=ps.report@gmx.net;
+ bh=rvqn08ZbnisZJIGQfeBVcjSmFmrZQJ4LFJJVagNN87k=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=GaG9pNOrpC68IDbDxab7vjLJbE3OtZKahiaXJtj80gFbxvLgjBBMYPn1lx46spg0o
+ PHoe0rKv+zOp17HGO67Np6+TJEmFezWXHLLbTzXOqlP8K42kknvcLN89HwC+EdQmk2
+ Jh7eOzHR7LiR38VBA+q+drvUVELEcnOllZ5TwYd49U0LSkf/AyhSfOLSxVTPxJTJQi
+ GPGVPk06RXBuK1bXuezesiTINcMILDmFCyDwO5q/HIOJNWK6R1In3PHPaPRVk6OpJN
+ bK1P7txiUB/scchpuUZhKyvouJDf5n4/N1ZOsrDDx7zTQqtb8H+Y3TJMhT/JjbIyxt
+ Rc6z1oyRV8iRg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=GaG9pNOr
+Subject: Re: [Buildroot] [PATCH v2 01/13]
+ package/libglib2/0003-disable-building-docs.patch: new patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,44 +94,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Antoine Tenart <atenart@kernel.org>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBBZGRpbmcgSmFtZXMgaW4gQ2MsIGhlIGFkZGVkIHRoaXMuCgpPbiAyNC8wNC8yMDIzIDEyOjA2
-LCBOaWNsYXMgR8O2dHRpbmcgd3JvdGU6Cj4gSGkgYWxsLAo+IAo+IGN1cnJlbnRseSwgdGhlIGBz
-d3VwZGF0ZWAtcGFja2FnZSAoZm9yIGluaXQtc3lzdGVtcyBvdGhlciB0aGFuIHN5c3RlbWQpIAo+
-IGF1dG9tYXRpY2FsbHkgaW5zdGFsbHMgYSBmaWxlIGNhbGxlZCAKPiBgL3Vzci9saWIvc3d1cGRh
-dGUvY29uZi5kLzkwLXN0YXJ0LXByb2dyZXNzYCwgd2l0aCB0aGUgb25seSBjb250ZW50IGJlaW5n
-Cj4gCj4gZXhlYyAvdXNyL2Jpbi9zd3VwZGF0ZS1wcm9ncmVzcyAtdyAtciAmCgogIFRoaXMgd2Fz
-IGRvbmUgaW4gY29tbWl0IDBlOTQ0NTlhZDUyZTg3MDMzYzE3MDUyMjYxMGU4MzIxNWE0NDQyNDIg
-dG8gYWxpZ24gCkJ1aWxkcm9vdCB3aXRoIHRoZSB1cHN0cmVhbS1tYWludGFpbmVkIG1ldGEtc3d1
-cGRhdGUuIEkuZS4sIGluIG1ldGEtc3d1cGRhdGUgCnRoaXMgaXMgZG9uZSBieSBkZWZhdWx0LgoK
-ICBJIGd1ZXNzIHRoZSBpZGVhIGlzIHRoYXQgbW9zdCBwZW9wbGUgd2FudCB0aGlzIHByb2dyZXNz
-IGZlYXR1cmUuCgo+IEZvciBtZSwgdGhpcyBpcyBwcm9ibGVtYXRpYyBiZWNhdXNlIG9mIHR3byBy
-ZWFzb25zOgo+IAo+ICAxLiBIYXZpbmcgYHN3dXBkYXRlLXByb2dyZXNzYCBydW5uaW5nIGluIHRo
-ZSBiYWNrZ3JvdW5kIGlzIG9wdGlvbmFsIGFuZCBzaG91bGQKPiAgICAgdGhlcmVmb3JlIG5vdCBi
-ZSB0aGUgZGVmYXVsdC4KCiAgSWYgeW91IGRvbid0IHdhbnQgaXQsIHlvdSBjYW4gYWx3YXlzIHJl
-bW92ZSBpdCBpbiBhIHBvc3QtYnVpbGQgc2NyaXB0LgoKPiAgMi4gVGhlIHByb2Nlc3MgaXMgbm90
-IGhhbmRsZWQgdmlhIGEgc2VydmljZSwgYnV0IGlzIHN0YXJ0ZWQgZXZlcnkgdGltZSB0aGUKPiAg
-ICAgYHN3dXBkYXRlYCBzZXJ2aWNlIGlzIHN0YXJ0ZWQuIElmIHlvdSByZXN0YXJ0IFNXVXBkYXRl
-IGZpdmUgdGltZXMsIHRoZXJlCj4gICAgIHdpbGwgYmUgZml2ZSBgc3d1cGRhdGUtcHJvZ3Jlc3Ng
-IHByb2Nlc3Nlcy4KCiAgVGhhdCBpcyBpbmRlZWQgYW5ub3lpbmcuIEknbSBub3QgcmVhbGx5IHN1
-cmUgaG93IHRoaXMgY29uZi5kIHdvcmtzLiBXb3VsZCAKdGhlcmUgYmUgYSB3YXkgdG8gdXNlIHN0
-YXJ0LXN0b3AgZGFlbW9uIGluc3RlYWQgKGFuZCBjcmVhdGUgYSBwaWQgZmlsZSksIGFuZCAKc3Rv
-cCBpdCBpbiB0aGUgaW5pdCBzY3JpcHQ/CgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+IE1heWJlIEkg
-aGF2ZSBvdmVyc2VlbiBzb21ldGhpbmcsIGJ1dCBJIGJlbGlldmUgdGhlIGZpbGUgc2hvdWxkIG5v
-dCBoYXZlIGJlZW4gCj4gdGhlcmUgaW4gdGhlIGZpcnN0IHBsYWNlIGFuZCBJIHdvdWxkIHByZWZl
-ciB0byBhZGQgbXkgb3duIHNjcmlwdHMgaWYgSSBuZWVkZWQgCj4gdGhlbS4gSW4gYW55IGNhc2Us
-IEkgd291bGQgcHJvcG9zZSBhbiBvcHRpb24gdG8gZGlzYWJsZSBpbnN0YWxsaW5nIHRoaXMgZmls
-ZS4KPiAKPiBCZXN0IHJlZ2FyZHMKPiBOaWNsYXMKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+Hello Adam,
+
+On Tue, 25 Apr 2023 10:14:42 -0700, Adam Duskett <aduskett@gmail.com> wrote:
+
+> If rst2html5 is installed on a host system, meson will attempt to build
+> html5 documentation from the docs directory, resulting in the following
+> error:
+>
+> /usr/local/bin/rst2html5.py
+> Traceback (most recent call last):
+>   File "/usr/local/bin/rst2html5.py", line 27, in <module>
+>     from docutils.core import publish_cmdline, default_description
+> ModuleNotFoundError: No module named 'docutils'
+>
+> Since we don't need, nor want to build the documentation, remove the docs
+> subdirectory from being built entirely.
+>
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  .../libglib2/0003-disable-building-docs.patch | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/libglib2/0003-disable-building-docs.patch
+>
+> diff --git a/package/libglib2/0003-disable-building-docs.patch b/package/libglib2/0003-disable-building-docs.patch
+> new file mode 100644
+> index 0000000000..27a540bf61
+> --- /dev/null
+> +++ b/package/libglib2/0003-disable-building-docs.patch
+> @@ -0,0 +1,38 @@
+> +From f3b8515471aaa452f06d84da68372fcead8637d2 Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <aduskett@gmail.com>
+> +Date: Mon, 24 Apr 2023 11:52:24 -0700
+> +Subject: [PATCH 1/1] disable building docs
+> +
+> +If rst2html5 is installed on a host system, meson will attempt to build
+> +html5 documentation from the docs directory, resulting in the following
+> +error:
+> +
+> +/usr/local/bin/rst2html5.py
+> +Traceback (most recent call last):
+> +  File "/usr/local/bin/rst2html5.py", line 27, in <module>
+> +    from docutils.core import publish_cmdline, default_description
+> +ModuleNotFoundError: No module named 'docutils'
+> +
+> +Since we don't need, nor want to build the documentation, remove the docs
+> +subdirectory from being built entirely.
+> +
+> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> +---
+> + meson.build | 1 -
+> + 1 file changed, 1 deletion(-)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index 0cbc968..28e1147 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -2442,7 +2442,6 @@ if get_option('man')
+> + endif
+> +
+> + gnome = import('gnome')
+> +-subdir('docs/reference')
+
+As far as I read the meson.build files all actions in docs/reference
+are protected by the options 'gtk_doc' or 'man', is disabling this
+ones not enough?
+
+Regards,
+Peter
+
+> +
+> + summary({
+> +   'host cpu' : host_machine.cpu_family(),
+> +--
+> +2.40.0
+> +
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
