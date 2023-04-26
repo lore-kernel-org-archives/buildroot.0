@@ -1,87 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4A1FC77B60
-	for <buildroot@archiver.kernel.org>; Wed, 26 Apr 2023 08:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5737C7618E
+	for <buildroot@archiver.kernel.org>; Wed, 26 Apr 2023 10:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F5044032B;
-	Wed, 26 Apr 2023 08:09:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F5044032B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5083E81951;
+	Wed, 26 Apr 2023 10:48:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5083E81951
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DUey_XHOlTvz; Wed, 26 Apr 2023 08:09:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NYf_rovvQSVC; Wed, 26 Apr 2023 10:48:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC5B641CB5;
-	Wed, 26 Apr 2023 08:09:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC5B641CB5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 51E251BF5DA
- for <buildroot@lists.busybox.net>; Wed, 26 Apr 2023 08:09:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C3C2817C3;
+	Wed, 26 Apr 2023 10:48:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C3C2817C3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CC7C1BF5DE
+ for <buildroot@lists.busybox.net>; Wed, 26 Apr 2023 10:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B1F960E02
- for <buildroot@lists.busybox.net>; Wed, 26 Apr 2023 08:09:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B1F960E02
+ by smtp1.osuosl.org (Postfix) with ESMTP id E7DDE815CF
+ for <buildroot@lists.busybox.net>; Wed, 26 Apr 2023 10:48:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7DDE815CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HlzdjsCAtO2q for <buildroot@lists.busybox.net>;
- Wed, 26 Apr 2023 08:09:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EFE261390
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1EFE261390
- for <buildroot@buildroot.org>; Wed, 26 Apr 2023 08:09:02 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-94f109b1808so1282520766b.1
- for <buildroot@buildroot.org>; Wed, 26 Apr 2023 01:09:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682496541; x=1685088541;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ZWKrvGWB5luk3vzGRRKK2aitdNS5qbohzsHXzg8jds0=;
- b=MaCZRQnnapOcd21TfMwHgZ5koVV17LLZhfJD8JTtzQHwpZR81noyNeUpWy3ch8NmIX
- wqu/pX4ey/9yevEIydbKZJVfwmOtca1durHv/TMAtU8Ug4ZvEb8RMpwINpOoXX8Cq6fI
- LG6GuCObwYe5bbfyIqZDMhS98BWcrKPoN2LU5jg5DtZrD4fYP5RE4+ylQsKetLSSrqpN
- 9HUQRRW4sJwVwhsQ0xlXL5DS2UwfkCmhmprDx1Bc7i/csu4QxsumW3Rm/bQmrTS69Bbj
- 42KyRDdEGrnuU6k9DMFE4uas9FNpjH4Ou/kXT88t9PmA4E5gsQoX1GcauR0rTe12FIeQ
- R7PA==
-X-Gm-Message-State: AAQBX9fIEKnfkqVUAclGeoCQS+ZtoHxyUzUgjvsgguwDXWSS47xMYsEr
- p9Y9Dqg7fG/elYuU317ygt+tQGHn+R4=
-X-Google-Smtp-Source: AKy350Yocfv6D6CPQlKea7YEA8JuGFnWemltbzJOOmO/+pMQye0S7KvL7fFZJotRCwN161tcXGddRg==
-X-Received: by 2002:a17:906:2457:b0:94f:5d1b:d33a with SMTP id
- a23-20020a170906245700b0094f5d1bd33amr14744359ejb.40.1682496540739; 
- Wed, 26 Apr 2023 01:09:00 -0700 (PDT)
-Received: from development2.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- l13-20020a170906230d00b0094f2f1c5ea1sm7983235eja.174.2023.04.26.01.08.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Apr 2023 01:09:00 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TKpSBSN5FTVV for <buildroot@lists.busybox.net>;
+ Wed, 26 Apr 2023 10:48:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88EB2819B8
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 88EB2819B8
+ for <buildroot@buildroot.org>; Wed, 26 Apr 2023 10:48:47 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 07242CB1A1
+ for <buildroot@buildroot.org>; Wed, 26 Apr 2023 10:41:29 +0000 (UTC)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+ (Authenticated sender: luca.ceresoli@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 95B0BFF80A;
+ Wed, 26 Apr 2023 10:41:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Apr 2023 10:08:24 +0200
-Message-Id: <20230426080824.2094413-1-yegorslists@googlemail.com>
+Date: Wed, 26 Apr 2023 12:41:02 +0200
+Message-Id: <20230426104102.1211757-1-luca.ceresoli@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20221208; t=1682496541; x=1685088541;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ZWKrvGWB5luk3vzGRRKK2aitdNS5qbohzsHXzg8jds0=;
- b=J1h8MgUiKSBCSRZcObWi7WsIYXPF2A8fCvXRiX7++V5C+C9o7ssowmfXIt9qv0RXf8
- cRulWA9ropfA0dT+epZJfnn4fOd9vFTw+nTiOCHyAs3GoM+uhLFxqHAUVzk2L/qS4ppP
- lmAYRDL4BZ4ubhglCr3X30Ve7E4MzXjJuT4Crx+ZIPNGzeDv0QI0V4LuM6vp71KxXr8O
- pM5cxbBXLD3t5G8/S5sfS+4TSW6HF+EzViX3IGT0XMQ2Wp9PdwFXa2tOq/jqVXhwoY4z
- h5JB1O6Gh7RaID5ddX5QAz1I7sU13Q5bPCyQKxdIczqjMNh1jVpOpaxMlIIdz/UVyjM/
- i9FQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20221208 header.b=J1h8MgUi
-Subject: [Buildroot] [PATCH] package/mdio-tools: fix Config.in
+ d=bootlin.com; s=gm1; t=1682505685;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=mM5EHtB8aQ7CsQBQl8CvG2GbWlvrSvUc3U+lyGLg44E=;
+ b=TfEzQdx07DdlSGTkkRDUfwL4nNgKu7wuy/+TFGQ1iAj9kYjYwpr+vdBHR/+vvHmfs41kqr
+ tMVCXlmJOXNZnZGKfz+OeriIW41Hck01FtgkXC4D3Wz3QW4SiNLXqIIEmF3XD/i+3tTMOC
+ 3B2a1xWF0FpNesCJMRthNmKL2N3aETMyQmGXFKoNkM7WGBV04s3OH+y60HyBgbuvGTvWIv
+ t2fvzF/XwZ9NUxLOJsVR/LmPcBKLeQACCBU1J6MdWgvhcTM7kVBH80LyuSrmhnHo+9vGuI
+ LGWWJg0tKVXDtzZ0akqxjVQZS2AHfb196ikevE+fgaR8b8QPUJVSIp3w3EEPlQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TfEzQdx0
+Subject: [Buildroot] [PATCH] boot/uboot: document that the zynqmp pmufw can
+ be in ELF format
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,35 +75,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Robert Marko <robimarko@gmail.com>
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Neal Frager <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+This feature was added in commit d07e6b7071cf ("boot/uboot/uboot.mk: add
+pmufw.elf support"), document it in kconfig.
 
-Add project's site and add a full stop at the end of the description.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- package/mdio-tools/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ boot/uboot/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
-index 237f4454cc..790c9c534a 100644
---- a/package/mdio-tools/Config.in
-+++ b/package/mdio-tools/Config.in
-@@ -14,4 +14,6 @@ config BR2_PACKAGE_MDIO_TOOLS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
- 	select BR2_PACKAGE_LIBMNL
- 	help
--	  Low-level debug tools for MDIO devices
-+	  Low-level debug tools for MDIO devices.
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index f5c20f51688e..085397d03d0c 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -492,6 +492,8 @@ config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
+ 	  (e.g. http://...), and it will be downloaded and used from
+ 	  the download directory.
+ 
++	  The PMU firmware binary can be either in ELF or BIN format.
 +
-+	  https://github.com/wkz/mdio-tools
+ 	  If empty, the generated boot.bin will not contain a PMU
+ 	  firmware.
+ 
 -- 
 2.34.1
 
