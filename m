@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E83EEC7618E
-	for <buildroot@archiver.kernel.org>; Wed, 26 Apr 2023 16:14:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F30AC77B78
+	for <buildroot@archiver.kernel.org>; Wed, 26 Apr 2023 16:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 630676155B;
-	Wed, 26 Apr 2023 16:14:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 630676155B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25C5F83C13;
+	Wed, 26 Apr 2023 16:39:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25C5F83C13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b2NRCmxLGrmP; Wed, 26 Apr 2023 16:14:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EpbZOwazyAI9; Wed, 26 Apr 2023 16:39:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 873A361557;
-	Wed, 26 Apr 2023 16:14:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 873A361557
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56C8883BE2;
+	Wed, 26 Apr 2023 16:39:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56C8883BE2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 83F771BF30D
- for <buildroot@lists.busybox.net>; Wed, 26 Apr 2023 16:14:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ED7F11BF30D
+ for <buildroot@lists.busybox.net>; Wed, 26 Apr 2023 16:39:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C00740180
- for <buildroot@lists.busybox.net>; Wed, 26 Apr 2023 16:14:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C00740180
+ by smtp4.osuosl.org (Postfix) with ESMTP id C56B841D8C
+ for <buildroot@lists.busybox.net>; Wed, 26 Apr 2023 16:39:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C56B841D8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xAmr65gqpZym for <buildroot@lists.busybox.net>;
- Wed, 26 Apr 2023 16:14:24 +0000 (UTC)
+ with ESMTP id FUrAMHF4c8gv for <buildroot@lists.busybox.net>;
+ Wed, 26 Apr 2023 16:39:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6494400F2
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C6494400F2
- for <buildroot@buildroot.org>; Wed, 26 Apr 2023 16:14:23 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-3f19ab99540so49817445e9.2
- for <buildroot@buildroot.org>; Wed, 26 Apr 2023 09:14:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B051041E28
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com
+ [IPv6:2607:f8b0:4864:20::f2c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B051041E28
+ for <buildroot@buildroot.org>; Wed, 26 Apr 2023 16:39:20 +0000 (UTC)
+Received: by mail-qv1-xf2c.google.com with SMTP id
+ 6a1803df08f44-5ef673a49e2so70573956d6.3
+ for <buildroot@buildroot.org>; Wed, 26 Apr 2023 09:39:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682525661; x=1685117661;
+ d=1e100.net; s=20221208; t=1682527159; x=1685119159;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=c703MHL+xSb8/uuZDEzk8/4E0FGGLUYbRi4dAn69nFY=;
- b=eC9OV+FOO/skg+G0z3aggkUX3UkekFp3D/t+eQZ+z9XabnEq9zriCOr/GL9TQPvZPA
- 5m768Yat1utjz0zkSMuZzIu1oGcj5OIzmtS+1fuzurlc7cCWYglOnffCQtqHvB+o9tnW
- U0ze2UpUrLCvMjEMB4u/SmjxpqiDUyntk7VXizGY1YC9c4vXjmEthmq28F2F3wD9pZoc
- VFWM9/bylV9b5j4Sj9XA5NideGoVFmxVOceNpxQThYYi7TEQ9Qexfiu0bXZJJh2iz+0I
- TWxDzKQWuoTwfJoTIv+QPZ1iAKAL8lCHsDYpAWtgvy5X2CaeCPB5XumdIA5Yapm+beCm
- s48g==
-X-Gm-Message-State: AAQBX9cdsyQRa1dbq9mohm/Aa7n2zYJJO2v9DW+kYmN77uije74RSey4
- +URGmLKYT3N3jd+GLqdPWID7xyuBVn0=
-X-Google-Smtp-Source: AKy350amr23lT9wXtSA5IMh5ngteM5KJbZKYz5dBqtqVdvxewp6tnNLxQqDl4UzrE+5j5PojoYaSWA==
-X-Received: by 2002:a7b:c3d5:0:b0:3ee:b3bf:5f7c with SMTP id
- t21-20020a7bc3d5000000b003eeb3bf5f7cmr13016434wmj.23.1682525660716; 
- Wed, 26 Apr 2023 09:14:20 -0700 (PDT)
-Received: from localhost.localdomain ([176.221.215.212])
- by smtp.gmail.com with ESMTPSA id
- s2-20020a1cf202000000b003f190dfc404sm15538307wmc.18.2023.04.26.09.14.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Apr 2023 09:14:20 -0700 (PDT)
-From: Maksim Kiselev <bigunclemax@gmail.com>
+ bh=FWTfJmpJmdzUKIs095b8JOqe7XErqmkrr0GtEqdQ9r4=;
+ b=LkweFEDWEacbs3HwWNGpG8wlDrbbYY7Qy90h2K077zTTKrNpjQ+ikSsFHkMs7yuoaU
+ 6NR927SJWNxrUH76DTDG9+/7YAF9TcPSTy7jsuiJow2SX2uInUWBtM1j46lJ691tmr8L
+ GsZ/r20rY6ozrMlrLBZ+7LMPTC2+D9Y/dJ5O53HcfYSov+WHaZXJtDBZTVZC9CjHg9Cn
+ tV5wmsbgfgFBevqMXNNCgNpTZBijtmj/33E/63TUz+QttZiepuVj6/81ET+lbAqdqAqs
+ SW+RMH9gVii3+OixIbhyRTFrMfGMzD30CYC0wQMNSmzCccRlqkPjX9sX74oYq5Nn51M3
+ v9qw==
+X-Gm-Message-State: AAQBX9fnt+5p64Qo9jnOeREXxcG8Hc36gJLfRC4+gV/CFCir+gYyJpTQ
+ bEZ7tVVUBfQ5WIfyJH7kwTaBZGAO/FU=
+X-Google-Smtp-Source: AKy350YSwRuQXUWWxEkfc7r3MMm/KRnx9/VojsaQ5U/DhipdoYs70NcbBDqqGDg/n7UXfKn7RzgsGQ==
+X-Received: by 2002:ad4:5b85:0:b0:60e:98be:8694 with SMTP id
+ 5-20020ad45b85000000b0060e98be8694mr23598030qvp.46.1682527158410; 
+ Wed, 26 Apr 2023 09:39:18 -0700 (PDT)
+Received: from localhost ([2601:4c:0:dd::d04d])
+ by smtp.gmail.com with UTF8SMTPSA id
+ r7-20020a0ce287000000b00606750abaf9sm4159482qvl.136.2023.04.26.09.39.16
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 26 Apr 2023 09:39:17 -0700 (PDT)
+From: Tom Wambold <tom5760@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 26 Apr 2023 19:14:02 +0300
-Message-Id: <20230426161402.3251010-1-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
+Date: Wed, 26 Apr 2023 12:39:10 -0400
+Message-Id: <20230426163910.28943-1-tom5760@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1682525661; x=1685117661;
+ d=gmail.com; s=20221208; t=1682527159; x=1685119159;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=c703MHL+xSb8/uuZDEzk8/4E0FGGLUYbRi4dAn69nFY=;
- b=MoV4BXdJBJnPYN0BDvxD5jM3xMNhIT6AkqNCLKRoNcVdiif/VfvVtZ92oLcJ5ccGM2
- wCeZK8cCxY9yNUJJzaPHaSpAIRc6GcreBQlK90EmCDZMdH323//5w6rSrkQJ+0N9teuT
- LNYud4jCc/ITkpbkHJHNStXOZ23EO8Nig4RQQ1dywvWJsqyqensjUM821ZXQCRc0dLsO
- H4Kv4MEEctDxYjd24P+uV92A/41mK30uN7Mzy5Dw7FJVNOWvldulo4OITtTRqrsWe7+3
- 4NJPcLtaZPJxTErLqhJ0vQ72oGQvAeJYccC3q0OCYJ+vX2AbZ5NErZoesrqLELr0xXiq
- mzcA==
+ bh=FWTfJmpJmdzUKIs095b8JOqe7XErqmkrr0GtEqdQ9r4=;
+ b=Rl9ubgvyfwcOnjreo/M6a43FUx/QS99vrrEXMWXErSPYM30X/twMpqh45IFBzYAo9k
+ WRSvSVTkrjIcdGvUXq8hZKCQpPPfT8visPV7wjKqBz6RmAVOI20XvLiSfiAor9GlTdhk
+ xC/hGxmj0xMGe+pEFgN7pDx5J3XPmNwMLICqyND0Jah6i+z4JzZW+c1HwN1hTGLt1TXx
+ EnlVsB3BoWJioLDUCa0DzxhS08wJHlw+LXzRXhM3SrTQkeMIHquem/hMsctZYIfyhxck
+ UK+rP5vPFNY6Jz/rbAq46ii8Kc4LvlgJmN1e8JtvBTn7TZ/CqMDInoS90SFb+BXc411N
+ Pmhg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=MoV4BXdJ
-Subject: [Buildroot] [PATCH] package/libdatachannel: new package
+ header.a=rsa-sha256 header.s=20221208 header.b=Rl9ubgvy
+Subject: [Buildroot] [PATCH] package/libcurl: remove OpenSSL LD_LIBRARY_PATH
+ override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,104 +95,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maksim Kiselev <bigunclemax@gmail.com>,
- Samuel Martin <s.martin49@gmail.com>
+Cc: Tom Wambold <tom5760@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a new package for libdatachannel.
+I believe this is no longer necessary since commit 2d4c215 [0] in curl
+(released in curl 7.60.0). This appears to cause problems when building
+on Arch Linux at least, as noted in bug 15181 [1].  Just removing this
+entirely resolves this.
 
-libdatachannel is an open-source software library implementing WebRTC Data
-Channels, WebRTC Media Transport, and WebSockets. It is written in C++17
-and offers C bindings.
+This effectively reverts a51ce319492 and 71b1d397266.
 
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+[0]: https://github.com/curl/curl/commit/2d4c2152c9eb3dbdf943de46ed8fc11285f1b90b
+[1]: https://bugs.buildroot.org/show_bug.cgi?id=15181
+
+Signed-off-by: Tom Wambold <tom5760@gmail.com>
 ---
- package/Config.in                          |  1 +
- package/libdatachannel/Config.in           |  7 +++++
- package/libdatachannel/libdatachannel.hash |  3 ++
- package/libdatachannel/libdatachannel.mk   | 32 ++++++++++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 package/libdatachannel/Config.in
- create mode 100644 package/libdatachannel/libdatachannel.hash
- create mode 100644 package/libdatachannel/libdatachannel.mk
+ package/libcurl/libcurl.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index eaac32a01a..c323409e37 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1408,6 +1408,7 @@ menu "Audio/Sound"
- 	source "package/libcodec2/Config.in"
- 	source "package/libcue/Config.in"
- 	source "package/libcuefile/Config.in"
-+	source "package/libdatachannel/Config.in"
- 	source "package/libebur128/Config.in"
- 	source "package/libg7221/Config.in"
- 	source "package/libgsm/Config.in"
-diff --git a/package/libdatachannel/Config.in b/package/libdatachannel/Config.in
-new file mode 100644
-index 0000000000..84ade9a879
---- /dev/null
-+++ b/package/libdatachannel/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBDATACHANNEL
-+	bool "libdatachannel"
-+	help
-+	  C/C++ WebRTC network library featuring Data Channels,
-+	  Media Transport, and WebSockets.
-+
-+	  https://github.com/paullouisageneau/libdatachannel
-diff --git a/package/libdatachannel/libdatachannel.hash b/package/libdatachannel/libdatachannel.hash
-new file mode 100644
-index 0000000000..fd1112acf7
---- /dev/null
-+++ b/package/libdatachannel/libdatachannel.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  cecd359c6c261676bde42ab8b912c851d13d73759b16eb03496903833fdf4306  libdatachannel-v0.18.3-br1.tar.gz
-+sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/libdatachannel/libdatachannel.mk b/package/libdatachannel/libdatachannel.mk
-new file mode 100644
-index 0000000000..d86eed9bef
---- /dev/null
-+++ b/package/libdatachannel/libdatachannel.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# libdatachannel
-+#
-+################################################################################
-+
-+LIBDATACHANNEL_VERSION = v0.18.3
-+LIBDATACHANNEL_SITE_METHOD = git
-+LIBDATACHANNEL_SITE = https://github.com/paullouisageneau/libdatachannel
-+LIBDATACHANNEL_GIT_SUBMODULES = YES
-+LIBDATACHANNEL_INSTALL_STAGING = YES
-+LIBDATACHANNEL_LICENSE = MPL-2.0
-+LIBDATACHANNEL_LICENSE_FILES = LICENSE
-+
-+LIBDATACHANNEL_CONF_OPTS = -DPREFER_SYSTEM_LIB=1
-+
-+ifeq ($(BR2_PACKAGE_JSON_FOR_MODERN_CPP),y)
-+LIBDATACHANNEL_CONF_OPTS += -DUSE_SYSTEM_JSON=1
-+LIBDATACHANNEL_DEPENDENCIES += json-for-modern-cpp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNICE),y)
-+LIBDATACHANNEL_CONF_OPTS += -DUSE_NICE=1
-+LIBDATACHANNEL_DEPENDENCIES += libnice
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSRTP),y)
-+LIBDATACHANNEL_CONF_OPTS += -DUSE_SYSTEM_SRTP=1
-+LIBDATACHANNEL_DEPENDENCIES += libsrtp
-+endif
-+
-+$(eval $(cmake-package))
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 1a1594a45e..dd715c1bb6 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -56,11 +56,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
+ LIBCURL_DEPENDENCIES += openssl
+-# configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
+-# native stuff during the rest of configure when target == host.
+-# Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
+-# are found first.
+-LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
+ LIBCURL_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr \
+ 	--with-ca-path=/etc/ssl/certs
+ else
 -- 
-2.39.2
+2.40.1
 
 _______________________________________________
 buildroot mailing list
