@@ -4,85 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0BFDC77B73
-	for <buildroot@archiver.kernel.org>; Thu, 27 Apr 2023 20:28:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34A4FC77B73
+	for <buildroot@archiver.kernel.org>; Thu, 27 Apr 2023 20:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 04F75408D0;
-	Thu, 27 Apr 2023 20:28:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04F75408D0
+	by smtp2.osuosl.org (Postfix) with ESMTP id AACAB400BF;
+	Thu, 27 Apr 2023 20:46:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AACAB400BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K-GPVjpBJyVw; Thu, 27 Apr 2023 20:28:31 +0000 (UTC)
+	with ESMTP id Y3YzihDHFdsS; Thu, 27 Apr 2023 20:46:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A1FB400C1;
-	Thu, 27 Apr 2023 20:28:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A1FB400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id D29F740184;
+	Thu, 27 Apr 2023 20:46:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D29F740184
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6792C1BF291
- for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 20:28:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 74BCD1BF291
+ for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 20:46:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E0E6400C1
- for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 20:28:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E0E6400C1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5AB8D40184
+ for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 20:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AB8D40184
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gcwV13OrmNcm for <buildroot@lists.busybox.net>;
- Thu, 27 Apr 2023 20:28:28 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B4EB400BF
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2B4EB400BF
- for <buildroot@buildroot.org>; Thu, 27 Apr 2023 20:28:28 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-3f19ab994ccso67532675e9.2
- for <buildroot@buildroot.org>; Thu, 27 Apr 2023 13:28:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682627306; x=1685219306;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=cGC3rsJq9AOVOBo21UpQ/EBOuUwf/eVt6KqouEtKXwE=;
- b=h9yzsb/3nwgIOQdsk4ITmOydTHGR0TLm6bZV+Uxv40uMST/zwjxo6F7Dq91TcoB2VL
- A29ztrnh7zi+6/CH0VYCJ5cULNr3lH1T0ZImnYyXrg+Vzg1X6uybIAm68ivdquprlCwC
- E3lUCx0QACG2S7Bz7RMY5Dtf5en+mraphwd9pVGd6NYTW2uHMtIrCwa5GJeZtCVi7faw
- mOa+BNERkb3GJ1h+y8TZ8nnzg2XEwR+j6+rxgyUXy4OewjiGvcJqjZEZMevMyddix+Pn
- Rav7rqNCj9SqDR52teYZ3rfnjNePdfuzX17DPhWjnJcyDdm1UtzCG0loDcYo8HWfecEl
- /HpA==
-X-Gm-Message-State: AC+VfDwTFbFKFvOf9+BT4w3aFtei+dyuU7amHkE4UpxGouLN+1IXErqy
- MB5QDdCykErPZar/5eX29QdubdfoY7A=
-X-Google-Smtp-Source: ACHHUZ5J22XEm5/8m9vUUxulsLLG82uUEp2ssUOqeOYWzFwSIPG4kFL5L1UOOffd2FSJfACHZfcW/Q==
-X-Received: by 2002:a5d:51c9:0:b0:2f4:2ad5:15ef with SMTP id
- n9-20020a5d51c9000000b002f42ad515efmr2088857wrv.16.1682627305595; 
- Thu, 27 Apr 2023 13:28:25 -0700 (PDT)
-Received: from localhost.localdomain ([176.221.215.212])
- by smtp.gmail.com with ESMTPSA id
- o2-20020a05600c4fc200b003f1738e64c0sm25787988wmq.20.2023.04.27.13.28.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Apr 2023 13:28:25 -0700 (PDT)
-From: Maksim Kiselev <bigunclemax@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 27 Apr 2023 23:28:02 +0300
-Message-Id: <20230427202802.69965-1-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id RHf-HI2GAs27 for <buildroot@lists.busybox.net>;
+ Thu, 27 Apr 2023 20:46:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E715A400BF
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E715A400BF
+ for <buildroot@buildroot.org>; Thu, 27 Apr 2023 20:46:23 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([62.216.209.88]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8QS8-1pwWDa29Oi-004QCy; Thu, 27
+ Apr 2023 22:46:18 +0200
+Date: Thu, 27 Apr 2023 22:46:17 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: James Knight <james.d.knight@live.com>
+Message-ID: <20230427224617.623ce0bb@gmx.net>
+In-Reply-To: <SN4P221MB068281FE13C893DCE2F2ACCAA06A9@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+References: <SN4P221MB068281FE13C893DCE2F2ACCAA06A9@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1682627306; x=1685219306;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=cGC3rsJq9AOVOBo21UpQ/EBOuUwf/eVt6KqouEtKXwE=;
- b=kfhH2brE2J5n5ThjssNI2axsIuF9SHP1QixVZs4FfsPye9/bJCyn3Atg2G1FkkZoBv
- KEkN1ydwrGQzZxKOPVEJsiAx8qTtbvfujQ6/TucZX0xlVfrzU/T1xqZZTM3jX6OzJKIP
- 38BTPlv/+p35A6I1R53+mxjT2zmtkCKRUSJyJ1Cx2YjA8zIOX001BVSSXEfzy1LxGlwJ
- KiYPwrKI2Y9c9wiVN5kj3ZQeiWMX2R1OwBwqy+dJ6/Uf3SQ+ZeJ198H4CQnJb69BziF5
- QDA+5vgLB0BobOrhqZX9Pfsy12pVw70TY5m8MdDOe4eyFkEP8NKluG7O9t/f0XhvjIFi
- 4/Tw==
+X-Provags-ID: V03:K1:ic/qrL+bV5QpPPXrbdHd2mq5/qjMPJxgtmSBQZjVLdczpjWBi3y
+ UNSHfz3PF8Ue+/i75efNaAW2nO279YK8w6W/bMx6YZhroYURTNa95exCcUGFqX9hDHWt96M
+ VZu3qsGVKAzRt04QJ/vgdt9d/DGhG0DoFdAFWCRAZs8REGCaKKqJyhMBoPhFDyx/tG5yVch
+ wB8i9XYimhEqvw6Ua9Sdg==
+UI-OutboundReport: notjunk:1;M01:P0:5MtApy+DsMM=;PiVin0JLw2CM/tXYSI9uPE1xb4v
+ /gReJ71XC3Vc4GIFNrEWHWggPh2phGWlwQcS/zVwVZxAWcY/7orBvnNaKJJwoSt18nTZUQjS7
+ m+JpUuOL7oBoKAdkdWE6xRKSGgnCsj5gX6+pJTC7MFvLWGIrTHyF9MBzoKxonqxla/cGhiuPS
+ xPWe6RxJbLl0UYBX5b8RlW2RxUoLArYR46eguwFlQbfiGUmznSrq3lVChj64msZ84NgQyqk44
+ gEtLTgOYA5wzuPoYrnF85HqIPnJLiheYKJ+hJDrYJFguS8Ym9VFv3F86Zl6FGhUxVH8SJcgaH
+ jZwh0b+zNqsYtcqLEjJdSxXpLiWPu51VCowhXOniGoiTQIQH+FrCf/ebEfe0ahLIo0hLjocj8
+ 9kn/adnZJ8BxdYmbmcVdANRhKwAsJM38IxXjvYPA13BQc0kFATG62Ttu/wUpqUjp1Is+zpxKF
+ 0NltFhLKZ+ZuTUze6vJNvcPGwOUNFIlhqNHNLluNYlE0Iyt764vL1ORR2rdstfSv65AKvGwAR
+ 6mxf5GhFByyNSs9fhYo5FXqIgV3J8u6o7PgNa6mUlMMi/TylqsllP6d4JPVyu1JQZKAcQNN+M
+ cgZAUGcPueZZNZG7D9InPTZg3EPrYr22Oyq6zefVnAOyyFh/49NCBbeXFREQabv+Uo7VMngDT
+ U6P2TUf3P/DWpwfv5meAVUxef7xDkmvAj9lLtSyGzIdJqBN4ncg4K6nj8gY5AehCaZls6hvmv
+ uP88YmLZo4emxIZd/s37uVjQnu2pW9u1Htub1Zkf5ZX93WlPWc2bEAfvbpmZd0ZxSFA6CvLif
+ Zs+FKT8AIjSPdBAFqAug/xDM+h/jGaif0eUOL8SCHvY0gwYj9DGO8teXjUALx8orvYEPXHrpp
+ QvNuj4VelFrizyD2DFdA/kTk2aAyTstjWGQJl7B1qNIvbJYToAnK3u8wt9lBbabH0VLK/yM92
+ kGxwMUX9zhvXfyw1WJaY+lHcx/o=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; s=s31663417; 
+ t=1682628378; i=ps.report@gmx.net;
+ bh=DbkuBSNxxsKjqUhN/e681oRQh6kYEWJTFmAD4ba3g5c=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=QZH/AjN4Q9GpRtosUB2NZwJ/P71a+svU/OjJcl8YbJLhttmzi0U/ttsunTYOFOJAd
+ XGikaLtxh4Gzd1F2uP0ipcSkZw7tPDWToPv2sG5gtOpVDtNWuMfjaLlMxIe+VCF/06
+ UfJVrAdscGucUCz2ZVLdsjpGh/P29Kqn5p/GfHQMmdi2mYP5/LvCzQltP8J7zFKeHR
+ rH4Lrk7rd6y5LeimaSoG/petLwcySh2GYEk+v5X6rIi4BzoMitDDoqtouINfr2oP6b
+ G2TxFjNehHLVzgRmyCTLjTS0mZJvquMCvdXFXGs278GDUF3KY+usLzRYyaJ6CpMPBg
+ O3+c9ibcSi4Ag==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=kfhH2brE
-Subject: [Buildroot] [PATCH] package/sunxi-tools: fix build dependencies
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=QZH/AjN4
+Subject: Re: [Buildroot] [PATCH] package/libxkbcommon: enable wayland support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,89 +92,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maksim Kiselev <bigunclemax@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch fixes the dependency on libfdt for host-sunxi-tools.
-Also it fixes the dependency on zlib for sunxi-tools.
+Hello James,
 
-Fix the following host build failure raised since commit
-2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb
+On Wed, 26 Apr 2023 21:50:14 -0400, James Knight <james.d.knight@live.com> wrote:
 
-fit_image.c:19:10: fatal error: libfdt.h: No such file or directory
-   19 | #include <libfdt.h>
-      |          ^~~~~~~~~~
-compilation terminated.
+> Tweak the applied configuration options to flag support for Wayland if
+> the wayland package is detected. This will allow the generation of the
+> `interactive-wayland` utility (when `BR2_PACKAGE_LIBXKBCOMMON_TOOLS` is
+> also configured).
+>
+> Signed-off-by: James Knight <james.d.knight@live.com>
+> ---
+>  package/libxkbcommon/Config.in       | 1 +
+>  package/libxkbcommon/libxkbcommon.mk | 8 +++++++-
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
+> index e9f61227a02b55a0123318f27b296ce2c8b4ad36..c344eb78b6d0cbc72ff382ccf0682811f9a2ecfb 100644
+> --- a/package/libxkbcommon/Config.in
+> +++ b/package/libxkbcommon/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_LIBXKBCOMMON
+>  	bool "libxkbcommon"
+>  	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+>  	help
+>  	  xkbcommon is a keymap compiler and support library which
+>  	  processes a reduced subset of keymaps as defined by the XKB
 
-Fixes: http://autobuild.buildroot.net/results/2677c69ac34642a7a501230e1dd22b193db0899d/
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
----
- package/sunxi-tools/Config.in      | 1 +
- package/sunxi-tools/Config.in.host | 1 +
- package/sunxi-tools/sunxi-tools.mk | 7 ++++---
- 3 files changed, 6 insertions(+), 3 deletions(-)
+As stated above (and as used in meson.build) the 'enable-wayland' is only used for
+the tools, so I would have expected something like the following:
 
-diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
-index e748637c72..14f7da5bf2 100644
---- a/package/sunxi-tools/Config.in
-+++ b/package/sunxi-tools/Config.in
-@@ -27,6 +27,7 @@ config BR2_PACKAGE_SUNXI_TOOLS_FEL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
- 	select BR2_PACKAGE_DTC
- 	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  The sunxi-fel command can interact with a sunxi device in
- 	  fel mode. This allows do download code to memory and execute
-diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
-index 51f13cf623..f7c60b37a9 100644
---- a/package/sunxi-tools/Config.in.host
-+++ b/package/sunxi-tools/Config.in.host
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_HOST_SUNXI_TOOLS
- 	bool "host sunxi-tools"
- 	depends on BR2_arm
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libusb
-+	select BR2_PACKAGE_HOST_DTC
- 	help
- 	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i)
- 	  based devices. This includes fex2bin which can be used to
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index a9569f2910..97863efc13 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -8,7 +8,7 @@ SUNXI_TOOLS_VERSION = 1.4.2-168-ged3039cdbeeb28fc0011c3585d8f7dfb91038292
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,v$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPL-2.0+
- SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
--HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb host-pkgconf
-+HOST_SUNXI_TOOLS_DEPENDENCIES = host-dtc host-libzlib host-libusb host-pkgconf
- FEX2BIN = $(HOST_DIR)/bin/fex2bin
- 
- SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_FEXC) += sunxi-fexc
-@@ -26,13 +26,14 @@ SUNXI_TOOLS_FEXC_LINKS += fex2bin bin2fex
+diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
+index e9f61227a0..c7fe188a0e 100644
+--- a/package/libxkbcommon/Config.in
++++ b/package/libxkbcommon/Config.in
+@@ -12,6 +12,7 @@ if BR2_PACKAGE_LIBXKBCOMMON
+
+ config BR2_PACKAGE_LIBXKBCOMMON_TOOLS
+        bool "tools"
++       select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+        help
+          Tools: xkbcli, xkbcli-compile-keymap, xkbcli-how-to-type,
+          xkbcli-interactive-evdev, xkbcli-interactive-x11,
+
+> diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+> index 236bf4c5d94d163809056691339ed7660e545195..2bbe349771360d34c0ff73bf871ed5621120b312 100644
+> --- a/package/libxkbcommon/libxkbcommon.mk
+> +++ b/package/libxkbcommon/libxkbcommon.mk
+> @@ -14,7 +14,6 @@ LIBXKBCOMMON_INSTALL_STAGING = YES
+>  LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
+>  LIBXKBCOMMON_CONF_OPTS = \
+>  	-Denable-docs=false \
+> -	-Denable-wayland=false \
+>  	-Denable-xkbregistry=false
+>
+>  ifeq ($(BR2_PACKAGE_XORG7),y)
+> @@ -24,6 +23,13 @@ else
+>  LIBXKBCOMMON_CONF_OPTS += -Denable-x11=false
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_WAYLAND),y)
+> +LIBXKBCOMMON_CONF_OPTS += -Denable-wayland=true
+> +LIBXKBCOMMON_DEPENDENCIES += wayland wayland-protocols
+> +else
+> +LIBXKBCOMMON_CONF_OPTS += -Denable-wayland=false
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBXKBCOMMON_TOOLS),y)
+>  LIBXKBCOMMON_CONF_OPTS += -Denable-tools=true
+>  else
+
+And here:
+
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 236bf4c5d9..d89ba47425 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -14,7 +14,6 @@ LIBXKBCOMMON_INSTALL_STAGING = YES
+ LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
+ LIBXKBCOMMON_CONF_OPTS = \
+        -Denable-docs=false \
+-       -Denable-wayland=false \
+        -Denable-xkbregistry=false
+
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+@@ -26,8 +25,15 @@ endif
+
+ ifeq ($(BR2_PACKAGE_LIBXKBCOMMON_TOOLS),y)
+ LIBXKBCOMMON_CONF_OPTS += -Denable-tools=true
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBXKBCOMMON_CONF_OPTS += -Denable-wayland=true
++LIBXKBCOMMON_DEPENDENCIES += wayland wayland-protocols
++else
++LIBXKBCOMMON_CONF_OPTS += -Denable-wayland=false
++endif
+ else
+ LIBXKBCOMMON_CONF_OPTS += -Denable-tools=false
++LIBXKBCOMMON_CONF_OPTS += -Denable-wayland=false
  endif
- 
- ifeq ($(BR2_PACKAGE_SUNXI_TOOLS_FEL),y)
--SUNXI_TOOLS_DEPENDENCIES += dtc libusb host-pkgconf
-+SUNXI_TOOLS_DEPENDENCIES += dtc libusb zlib host-pkgconf
- endif
- 
- define HOST_SUNXI_TOOLS_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) CROSS_COMPILE="" CC="$(HOSTCC)" \
- 		PREFIX=$(HOST_DIR) EXTRA_CFLAGS="$(HOST_CFLAGS)" \
--		LDFLAGS="$(HOST_LDFLAGS)" -C $(@D) tools misc
-+		LDFLAGS="$(HOST_LDFLAGS) -I$(HOST_DIR)/include/libfdt" \
-+		-C $(@D) tools misc
- endef
- 
- define HOST_SUNXI_TOOLS_INSTALL_CMDS
--- 
-2.39.2
 
+ $(eval $(meson-package))
+
+Or (matter of taste) using:
+
+  ifeq ($(BR2_PACKAGE_LIBXKBCOMMON_TOOLS)$(BR2_PACKAGE_WAYLAND),yy)
+  [...]
+  endif
+
+Regards,
+Peter
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
