@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3A00C77B76
-	for <buildroot@archiver.kernel.org>; Mon, 17 Apr 2023 15:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D0E8C77B61
+	for <buildroot@archiver.kernel.org>; Thu, 27 Apr 2023 09:38:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0821A401AD;
-	Mon, 17 Apr 2023 15:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0821A401AD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92A5760BD6;
+	Thu, 27 Apr 2023 09:38:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92A5760BD6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uBIZEnGLLcF3; Mon, 17 Apr 2023 15:52:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EAoGd5g1Jqm3; Thu, 27 Apr 2023 09:38:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3FE7E40179;
-	Mon, 17 Apr 2023 15:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FE7E40179
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B92711C3C85
- for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 15:52:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5C9F605B1;
+	Thu, 27 Apr 2023 09:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5C9F605B1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D28C1BF5B3
+ for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 09:38:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 923CF40179
- for <buildroot@lists.busybox.net>; Mon, 17 Apr 2023 15:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 923CF40179
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6530741E0B
+ for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 09:38:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6530741E0B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s9-a9DpFzW8n for <buildroot@lists.busybox.net>;
- Mon, 17 Apr 2023 15:52:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lQZsBU1CXOY1 for <buildroot@lists.busybox.net>;
+ Thu, 27 Apr 2023 09:38:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8C0040121
- for <buildroot@uclibc.org>; Mon, 17 Apr 2023 15:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8C0040121
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2144A41DEF
+ for <buildroot@uclibc.org>; Thu, 27 Apr 2023 09:38:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2144A41DEF
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id AF2EE84115; Mon, 17 Apr 2023 15:52:41 +0000 (UTC)
+ id 0CA298449E; Thu, 27 Apr 2023 09:38:24 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 17 Apr 2023 15:52:41 +0000
+Date: Thu, 27 Apr 2023 09:38:23 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
+X-Bugzilla-Version: 2023.02
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: minor
-X-Bugzilla-Who: glscene2010@gmail.com
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bradley.gamble@ncipher.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -56,12 +56,13 @@ X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15546-163@https.bugs.busybox.net/>
+ target_milestone attachments.created
+Message-ID: <bug-15551-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15546] New: raspberry pi zero 2 w no Wi-Fi device
+Subject: [Buildroot] [Bug 15551] New: Linux extensions are not applied to
+ linux-headers package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,41 +79,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15546
+https://bugs.busybox.net/show_bug.cgi?id=15551
 
-            Bug ID: 15546
-           Summary: raspberry pi zero 2 w no Wi-Fi device
+            Bug ID: 15551
+           Summary: Linux extensions are not applied to linux-headers
+                    package
            Product: buildroot
-           Version: unspecified
+           Version: 2023.02
           Hardware: All
                 OS: Linux
             Status: NEW
-          Severity: minor
+          Severity: normal
           Priority: P5
          Component: Other
           Assignee: unassigned@buildroot.uclibc.org
-          Reporter: glscene2010@gmail.com
+          Reporter: bradley.gamble@ncipher.com
                 CC: buildroot@uclibc.org
   Target Milestone: ---
 
-I use raspberry pi zero 2 w. I use master branch Buildroot.
-Full steps here https://forums.raspberrypi.com/viewtopic.php?p=2100121#p2100121 
-Summary my steps:
-I add this tree lines in raspberrypizero2w_defconfig
-BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI=y
-BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT=y
-BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI=y
-And build: 
-make clean -C buildroot
-make  -C buildroot raspberrypizero2w_defconfig
-make -C buildroot
+Created attachment 9586
+  --> https://bugs.busybox.net/attachment.cgi?id=9586&action=edit
+Example of the difference between the linux and linux-headers trees following
+an extension being applied.
 
-But there is no Wi-Fi device. 
-I know how manually enable Wi-Fi in Buildroot for raspberry pi zero 2 w, do:
-modprobe brcmfmac
-/etc/init.d/S40Network restart
+Linux extensions are a mechanism for providing new features through
+modification to the Linux kernel tree. This is usually in the form of patches
+or new files from an out-of-tree source. (See Buildroot manual section 18.22.2.
+linux-kernel-extensions).
 
-Why Buildroot don't do it by himself?
+Currently during a build the Linux extensions are applied to the linux source
+tree, but not the linux-headers source tree. In comparison, the global and
+Linux patch directories are applied to both the linux and linux-headers source
+trees. This can lead issues where the source of the linux-headers does not
+represent the kernel running on the target - For example, linux-headers is
+consumed by most C libraries.
+
+I have encountered this when attempting to write a patch that modifies an
+applied kernel extension. The patch fails to apply to linux-headers as the
+source files added by the extension do not exist.
+
+This can be reproduced this by enabling a Linux extension (I've tested with
+fbtft and ev3dev-linux-drivers) and performing a build, then comparing the
+linux and linux-headers build directories - I have attached a diff example
+showing the additions in one source tree but not the other.
 
 -- 
 You are receiving this mail because:
