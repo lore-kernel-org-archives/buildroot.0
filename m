@@ -1,120 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F2EAC77B60
-	for <buildroot@archiver.kernel.org>; Thu, 27 Apr 2023 01:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C3CEC77B73
+	for <buildroot@archiver.kernel.org>; Thu, 27 Apr 2023 05:45:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A64E141EBF;
-	Thu, 27 Apr 2023 01:50:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A64E141EBF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BED060BB2;
+	Thu, 27 Apr 2023 05:45:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BED060BB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C3UPDdzLZr0Z; Thu, 27 Apr 2023 01:50:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SwIdgk3HNjCM; Thu, 27 Apr 2023 05:45:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8877841EC1;
-	Thu, 27 Apr 2023 01:50:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8877841EC1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90E7360BC8;
+	Thu, 27 Apr 2023 05:45:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90E7360BC8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6CCB31BF39E
- for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 01:50:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2A8011BF5A6
+ for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 05:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BC8760B97
- for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 01:50:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BC8760B97
+ by smtp3.osuosl.org (Postfix) with ESMTP id E06D960BC8
+ for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 05:45:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E06D960BC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fA0F8V4DyQ87 for <buildroot@lists.busybox.net>;
- Thu, 27 Apr 2023 01:50:47 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 108E060B79
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam11olkn20800.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7eae::800])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 108E060B79
- for <buildroot@buildroot.org>; Thu, 27 Apr 2023 01:50:46 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MmooiTH/vuXWzOR/Q+bc8dvC97tOvvM+cF1NzjxzRO6JJjKOSitX9BKH3K7K1IjhALqdw0hrM8eZLA2KPv53+IX70PyV801Lsenk6LELeqa+tsikQkJxGSvxSZNHeyn0BeiUBADGZV9dRTbh31+sHP1/bXDcyvmFuStnaYAb3+7GwYwReR3jMDT9dFCa5MN3rywwH9A9vhyylu5xdKm9v0WrhFy9BEKoY53Pg+NCO2fPBI9IRAVLGewGSkwpJ+B5Rl9dq91E9oRwRC+9T9oswefx5HkgheNLeiPYTsclWKZyc8O9Lhs4Dh+kDNDgKArGix15G1FSXrM2dpcRZ6lg6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NuCLF2PyPjH+I/fGRSvfcW15BeEp3aBrFi77I8jBzAs=;
- b=N0RXSLtOPmVOtgAhfaRAXFszC6d/ZtTA4xlUiDAcIcsR4qRhrUQcxoc/Bt4nEJOffuBRMZT37/unpRnE/yylq9suzKXQiWWW6X9mi8Stl4PDR45Bs2PpDWgkX87Rn354i5Z5sMu3q1MvrRWlAqVOrEWVEbm0mKUuyWw5BVee9U6xahWCwLciu1iJEma5BHB3pTFdF5ousOwPgfnHQ6y/dAnFMUIJ260FS5Z/HCDSG760b8UnCIz0TpmK7KcRyqbuFn8Inj7808ew43/SA+j6I8BwqttBysuWy5IVJUX/cyA/LsCkveLj22iGdtv2D80IhK3NSNkMVN7kLib/vYYueA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:1e9::12)
- by SA1P221MB0994.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:255::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 27 Apr
- 2023 01:50:43 +0000
-Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
- ([fe80::e6be:cc11:976e:e2b8]) by SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
- ([fe80::e6be:cc11:976e:e2b8%5]) with mapi id 15.20.6319.032; Thu, 27 Apr 2023
- 01:50:43 +0000
-From: James Knight <james.d.knight@live.com>
-To: buildroot@buildroot.org
-Date: Wed, 26 Apr 2023 21:50:14 -0400
-Message-ID: <SN4P221MB068281FE13C893DCE2F2ACCAA06A9@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.39.1.windows.1
-X-TMN: [2NiUGwbSDG1udisbC+dUow50WXrAv+t9]
-X-ClientProxiedBy: YQXPR0101CA0059.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:14::36) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:806:1e9::12)
-X-Microsoft-Original-Message-ID: <20230427015014.5228-1-james.d.knight@live.com>
+ with ESMTP id 8mio5q07gaeX for <buildroot@lists.busybox.net>;
+ Thu, 27 Apr 2023 05:45:45 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 313E360BB2
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 313E360BB2
+ for <buildroot@buildroot.org>; Thu, 27 Apr 2023 05:45:44 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 470C82000B
+ for <buildroot@buildroot.org>; Thu, 27 Apr 2023 05:45:42 +0000 (UTC)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|SA1P221MB0994:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9d94f9d-2f06-48d9-8c3d-08db46c1cf71
-X-MS-Exchange-SLBlob-MailProps: 70qbaZjg4mut0ZTEc/+RhwzsFjQD3otI9r4SVVMsQn0oo6rmHc5ejEE2FY+/jhk0jecZcOwIOmtVp+NmdpBkmZXUmphsXkCWG18GYN9Ma7jkV9AIlsisguwEpsnNQ6QFnmDFIsRB2Z6nS2egbmoCeahgqtzJnsny6jxLJhxh2ar21+B/on1Lflnvy65LaH2rQnL6hD+hsFIDdA1aYbD+d0tRpEST5kA/PVxLqETY+DN+6Ebpzv1x59MFUY5Ta0D01d4iLUAFRPVZtIq1Y7EaH0qWkpSd9J97uzpCozHFiDjdHBekFcPLIaJHDT2WDNXah8KvrtmprtGC/sUtgLqej2n64vlXTmXQNEe5xLzye0JaIsHuzOy8cTmMlHAlisGjsFraDJv29RqymK9UIaZILVFHkKGQGNoWxatnSRZAJP7tINZf+Rmy5lX7Hjf8XMRNAGoHV/kHntYFvA9XAK9+/lEzMUyOd0u3j92fZZdTqkfkKNKjXjncE6AjOBbBNHAivHVjUKuuNWbAmh7Y2xeqrVXs/7rv3fdjGvYEgAZ2iX1BsupnQ55/tHMxadsfEQrtLPdUJSMMXJdnHFTaVN0Ae9GxOwVaQOA6tCTv6/F0QULynx/JdDuR0UazlAyi2GN2aAZfB5+pqzNXKKOPr8ooeSWHA637+pT0v4MVkipXxxnKAq1Nr1E50Gt247sCTqvhKfBPoYWqRhD4gm+7NYsTKOMJXJFFQjHF6lQwOySQxVeWFIyNfj1a1w==
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Xsa4Fuc85aIBJzc+F/wiJ6rXqUIgxjFPP/k6WMMnvWD3UCek9S1iYRlfxnFK5OK5qyiWZ0Em57bujcoECG07trOjifvLKPkRoxvHYYZqNVw3q1huKCv6iJezASmRFVBr6C9Off28VdRtywYL8rqDJU6T5Bg67MzZZOzGdcFKpK18KUI441tWfMaZRAwwUuh0PADYlvZwIHiWoU6LjwtKJ0VWgJkpgc8E+f6iRs28C8bg6YlzEwzFRA+Hs1Okd0hz9IQv4f1PW+BfQvuEuPec6xB7NyjaKL8cdTJqmWSTtbP34X4BNc69j1K618kFcWUhEH0Qs0gRx9UnEGpvi8dRVdhjm842cnoRZla18LhfVXjpbAo57ytCm0mN8zckv/1B9l9Z1uN/c0+F6fxwd3nXypYq3Hnjgl3E1lCZ0B87wFpDb3R6NrbdvWtSfzj+ulloEsjhm7EuJWP0VDjPtzIwVmZ03QtKPqdFDaa1sAqybnsqgF9TtXFXra7fzHhhUVW5TIF5go0ms0ikAT+CJRN1BuvgxWKiaz6M4UzORmqO+3Q2CgIszyKhl7K0jGyQP7e10tbecN2dQ6rxFTEf8n8V9DykQoG9cnoR1lGpq5kxtZdiOw19oQN0sAh6Y/b6F6pJ
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LqES8FQ0kHbfPnxs1yB5+CHHan6aahnjVWZsrHy341kZA32096MY0NYnsHzJ?=
- =?us-ascii?Q?cKcyJGh/wuAsnFxhy8mgmraoDbAxqLbnI1DrHATYvdjFutr8uDJWcNAZbGES?=
- =?us-ascii?Q?UdjELbz2oTVsu+twOm6xn0E55wn7Tnm0BcU4u5aYnNK3fWoCbsw3wVLxJfU6?=
- =?us-ascii?Q?NjXOT0FX1tupbEnTGyZ8hq8ITJoVks4pMnki3kPqrwS+2XUAfUIwvrQt+pEq?=
- =?us-ascii?Q?Z+tYIsolURVNI9wkps+rwQ7zDfdCMAE8GmRjEPQL0KX/olm8q9RNM626/FoS?=
- =?us-ascii?Q?NHK47S9bxg0AgCNVLGv1zgBjYLnlYC+3PvRsU+5MnAPwl5CQ5IUxvvlb2ddY?=
- =?us-ascii?Q?c101gPYCz4dd/xRimGHl6jEHaAGDI8yHvgire+1s4cce9WtrR63MdFDDCSA9?=
- =?us-ascii?Q?X1uclQz9RgpHINzIoPjVVKFXQp3jU6GPpZarhaM27sCjaf7/fvsGyu1qlXRk?=
- =?us-ascii?Q?SX3KXJpTA6juCjDA/JIK4ViBPP3OXav1UHJML/2ExOj5TZ4mUtt0LFxuYQB5?=
- =?us-ascii?Q?yIPux+sJX4u0fEFTgpuN/iFKA6hCGOEaNGZkpHPDtjSMMce1fACbPkH9SjC8?=
- =?us-ascii?Q?VnW7N16mc4EzcDRp8kLPHi2232KpK/jZ3BS9udn0bFQArMqBfCbg+L+FGDZl?=
- =?us-ascii?Q?b8aC/nOr1OZCo0Hva1KegtTqLoQBjX5BPWy55BFYX/ob0vfcTcg73Rx6Y5On?=
- =?us-ascii?Q?/tuGjLMvFkvoa6TYo28fE19NBthHsiNv7D3BmODVjGKkIdGDl2IaIN75L5Rx?=
- =?us-ascii?Q?6jskUr0gOh4bfAXkCrJmcxYTaVLUG9GM+VsGbiQm8tw7DgUSYCqysD9GKGwR?=
- =?us-ascii?Q?vWsUuxDZVVfPPgeWQqQYFS+8texeqSPTAHakFbhttgRWY8Ily29z3UYT/Y1i?=
- =?us-ascii?Q?onoGMxUtko5156OEE0urltEoQvi815uTrQu7NvhcciISgTzRC1yFQ0szpP2o?=
- =?us-ascii?Q?4IwbahB1qrkqyBZ5KqgUUPeOZ3hz0Z1ajYZnFSHxxdpI8NOwbDkzNgyPrZSN?=
- =?us-ascii?Q?S91AfEvNhjVqwTw6ktnzozUxV6ZOMBEk4u3JIGME2Od5+349hIu1+/PT/5/9?=
- =?us-ascii?Q?mPyd88F71173AkVVaFbTmuoT1XLg24wyo8QqHDpwWzyX/5J+/HmCRTSmqiwN?=
- =?us-ascii?Q?y/rNa75YnMSTq7uhqMgfpbXYKcPHKlntcMk5U8nSXC1vYppCjLZ5K9WXQkYv?=
- =?us-ascii?Q?6CbCnAHZ/RCWf6gbuLhXFBQ26zZ1zpdpI0AEutYov9VE1gmT4nbc/5+gdgE?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-f5d03.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9d94f9d-2f06-48d9-8c3d-08db46c1cf71
-X-MS-Exchange-CrossTenant-AuthSource: SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 01:50:43.1136 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P221MB0994
+To: buildroot@buildroot.org
+Date: Thu, 27 Apr 2023 05:45:42 -0000
+Message-Id: <20230427054546.E06D960BC8@smtp3.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=live.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NuCLF2PyPjH+I/fGRSvfcW15BeEp3aBrFi77I8jBzAs=;
- b=AWFwxY14V6+F61F6GX6irvaKMLHsizoIbaYmHw4owpHVr8dlaLIAxBmySPzxsaPdkZ3dc2jEe/btowLIQHxS0eG32BlG1xSMaeAzJlW4qeaLKcWdP8ASDKLlK81HJULvteb08bJaHZLUAel1pSdnILtrHQg03cqdzBr+jG5IkiRqD98At9kds7rjIA3B9Lto0u+M/+MnnKMBYPKu+fy9JGlIV5Egf0H7SLD+PUUXFog9BMXbfBBaapEP4yenKtaPal9eHqfJFUs4nN3Dh4wJi/YvuNVj1cxdigtduMsKAquZAQ9Wq4NB/qWC4QAATlGiZOwFOdP4Q4mITiH+/hRJLg==
+ d=bootlin.com; s=gm1; 
+ t=1682574342; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=KqeDv2jMxfNj63tVvHraJmgD4rxhniA+/PYjJ8iJAmo=;
+ b=EPwu9XgpGCHG2FEjkjhVR72XAC8ORLP9lg+mEjPmjmzg+2sI7CbbAclQ9h9hpD86GToRBp
+ Jv0uHnQsASEFMMXVahzur0EBWRRes60pxWuXNfFyX29Bn6ZrkxNyAd8px3klaV8bYzy+Bw
+ drOcZu7jDPubETgRVmPzcdHEKwbeFGmJS0Jl4O+PkNqG8Aaj91nO/hYohQu5vn2boi80yM
+ rxFv6o/KHvtLHsp0hUuzk65FKy4DIvBYa52sjqOtAd757LfesoJAqfmNLWIpGfMMHLmCz6
+ v/ffPjMIgwoY1/Kp8Rk2I0Gi8yRcsk7YnE4ty3VLM/mpkHqVEU+Bh+C41uquyQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
- header.s=selector1 header.b=AWFwxY14
-Subject: [Buildroot] [PATCH] package/libxkbcommon: enable wayland support
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EPwu9Xgp
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-04-26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -126,65 +70,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Knight <james.d.knight@live.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tweak the applied configuration options to flag support for Wayland if
-the wayland package is detected. This will allow the generation of the
-`interactive-wayland` utility (when `BR2_PACKAGE_LIBXKBCOMMON_TOOLS` is
-also configured).
+Hello,
 
-Signed-off-by: James Knight <james.d.knight@live.com>
----
- package/libxkbcommon/Config.in       | 1 +
- package/libxkbcommon/libxkbcommon.mk | 8 +++++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+Autobuild statistics for 2023-04-26
+===================================
 
-diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
-index e9f61227a02b55a0123318f27b296ce2c8b4ad36..c344eb78b6d0cbc72ff382ccf0682811f9a2ecfb 100644
---- a/package/libxkbcommon/Config.in
-+++ b/package/libxkbcommon/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBXKBCOMMON
- 	bool "libxkbcommon"
- 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
- 	help
- 	  xkbcommon is a keymap compiler and support library which
- 	  processes a reduced subset of keymaps as defined by the XKB
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 236bf4c5d94d163809056691339ed7660e545195..2bbe349771360d34c0ff73bf871ed5621120b312 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -14,7 +14,6 @@ LIBXKBCOMMON_INSTALL_STAGING = YES
- LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
- LIBXKBCOMMON_CONF_OPTS = \
- 	-Denable-docs=false \
--	-Denable-wayland=false \
- 	-Denable-xkbregistry=false
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
-@@ -24,6 +23,13 @@ else
- LIBXKBCOMMON_CONF_OPTS += -Denable-x11=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+LIBXKBCOMMON_CONF_OPTS += -Denable-wayland=true
-+LIBXKBCOMMON_DEPENDENCIES += wayland wayland-protocols
-+else
-+LIBXKBCOMMON_CONF_OPTS += -Denable-wayland=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBXKBCOMMON_TOOLS),y)
- LIBXKBCOMMON_CONF_OPTS += -Denable-tools=true
- else
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  5  |  4  |  0  |  9  |
+    master   | 63  | 37  |  1  | 101 |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+               host-qemu-7.2.0 | 4 
+                       unknown | 3 
+                 agentpp-4.6.0 | 2 
+        ltp-testsuite-20230127 | 2 
+                bpftool-v7.1.0 | 1 
+                elfutils-0.186 | 1 
+             fontconfig-2.13.1 | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+         gobject-introspection | 1 
+  gobject-introspection-1.72.0 | 1 
+                haveged-1.9.18 | 1 
+            host-binutils-2.37 | 1 
+            host-binutils-2.38 | 1 
+            host-binutils-2.39 | 1 
+         host-gcc-final-10.4.0 | 1 
+                 host-gdb-12.1 | 1 
+                host-go-1.19.8 | 1 
+              host-rust-1.68.2 | 1 
+host-sunxi-tools-1.4.2-168-... | 1 
+              libgcrypt-1.10.1 | 1 
+                libglvnd-1.4.0 | 1 
+                  linux-6.1.14 | 1 
+                   perl-5.36.0 | 1 
+                    qemu-7.2.0 | 1 
+rtl8189fs-ed6741b52bc998875... | 1 
+             stress-ng-0.15.04 | 1 
+              strongswan-5.9.8 | 1 
+                 uclibc-1.0.43 | 1 
+                    volk-2.5.2 | 1 
+                xenomai-3.0.10 | 1 
+                     znc-1.8.2 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    sh4      |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/7373d3bb9928dff2a16f165a238854fb8561c53f |     
+  aarch64    |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/f6e97a6467588ebb8577ad34d3938abb1eacb036 |     
+   s390x     |         bpftool-v7.1.0         | NOK | http://autobuild.buildroot.net/results/4477d4e0e2f84f769b2442534a9aafc2b82e90e0 |     
+ microblaze  |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/cd8675c044846ad2e83bfb2522ce5f797b1a09bb | ORPH
+  riscv64    |       fontconfig-2.13.1        | NOK | http://autobuild.buildroot.net/results/f43044c0cb06a99c531d27290fa6613555db2891 | ORPH
+   mips64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/eef956ffb1c17f2133326bb369f71d76cb7f037d |     
+   armeb     |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/5dbefa8a613bab8ebd5cd49b2cd6bec82aaae9d6 |     
+   mipsel    |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/807cfb7995be2412dd5ec1ccb11337bea9d98c92 | ORPH
+    arc      |         haveged-1.9.18         | NOK | http://autobuild.buildroot.net/results/5e3eb061f377ac2f46e8dba6ea6720a97bfb7f75 |     
+   s390x     |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/9dc5627f97ad2dbe45be38ea658bb2c9c848c88b |     
+   s390x     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/493a59d1f52b950dcc8523d8bfe5b1be3f0c180b |     
+   mips64    |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/e2311a4d676a9d11b760fe0e548d0ddd89ba8a38 |     
+   sparc     |     host-gcc-final-10.4.0      | NOK | http://autobuild.buildroot.net/results/57fcf1be7e46f2cf2c213b770c4568348ccb2575 |     
+   sparc     |         host-gdb-12.1          | NOK | http://autobuild.buildroot.net/results/f3ec7d6c7929163c52304a7a6e29213506195f9d | ORPH
+   nios2     |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/bfea3219934d2a18e7259959c7a1ced037ca1287 |     
+  sparc64    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/1ad91bda85eede7e2f1372606b56829cbcc6d956 |     
+    sh4a     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/a8951c3e22f9b858915b24c0d974b82435fd5cc2 |     
+   xtensa    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/6717123d1b793261b1c2bf39b4cfff5f30f82216 |     
+   mipsel    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/9e9f1ff130d58c4bf81e61959866cfb56b40a3ce |     
+    mips     |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/64580a3eb3c194fb5a489d09c4c0d8cc0a172238 |     
+    arm      | host-sunxi-tools-1.4.2-168-... | NOK | http://autobuild.buildroot.net/results/2677c69ac34642a7a501230e1dd22b193db0899d |     
+    i586     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/d8b370b2ead085818250e6c01fd43b0ef907cbf0 | ORPH
+   arceb     |         libglvnd-1.4.0         | NOK | http://autobuild.buildroot.net/results/14644a80cd0157a86147935ef006a5345179334a | ORPH
+   mips64    |          linux-6.1.14          | NOK | http://autobuild.buildroot.net/results/918d8a25e14f86a9d10271c71acd0de357e0b69d | ORPH
+  aarch64    |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/afd6372f2a65e22212cf0067a2b2f308d3d20727 |     
+ aarch64_be  |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/f642e8152b1cec956a2cc3d0d78e77e25e3dabaa |     
+   armeb     |          perl-5.36.0           | NOK | http://autobuild.buildroot.net/results/b22fef47389a8f6350795c3d29d500e9022e7ff4 |     
+  riscv32    |           qemu-7.2.0           | NOK | http://autobuild.buildroot.net/results/4e837809bbdcbaaf1913035eeadee9f0a7ec2f33 |     
+  sparc64    | rtl8189fs-ed6741b52bc998875... | NOK | http://autobuild.buildroot.net/results/3c73ddd33f4be84629e11a7044eb51970d0db4b7 |     
+microblazeel |       stress-ng-0.15.04        | NOK | http://autobuild.buildroot.net/results/6e50df78d869ef50abd6a04f28e6d39dd375a373 |     
+   xtensa    |        strongswan-5.9.8        | NOK | http://autobuild.buildroot.net/results/13631f069200cd8d4d7d3ba8f7f73ffbe4482865 |     
+    m68k     |         uclibc-1.0.43          | NOK | http://autobuild.buildroot.net/results/f4897829e727d28a441aa15efff1d1b76652bb61 |     
+    or1k     |            unknown             | NOK | http://autobuild.buildroot.net/results/0f09ecad590ed1e70b971da00b01c0b52d349519 |     
+  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/1a963a3f27822b8864a850668c1be54df7cd6730 |     
+powerpc64le  |            unknown             | NOK | http://autobuild.buildroot.net/results/ae0ffcd9d1989f40771eeac6d37d91781e3fb34d |     
+  powerpc    |           volk-2.5.2           | NOK | http://autobuild.buildroot.net/results/f04c055ca404e8dd0fbcd88eea39a65931c6844e |     
+powerpc64le  |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/220627a3d1eb14262d67489e3218f4e349fff052 |     
+    i686     |           znc-1.8.2            | NOK | http://autobuild.buildroot.net/results/34917ac15a885e9afc89962b3908a040413429a3 |     
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+                host-go-1.19.8 | 1 
+               host-qemu-7.2.0 | 1 
+                  ntpsec-1.2.2 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/ec5a017b18c44972bea7aae6a0d4efa532b3b713 |     
+  riscv32    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/5325db1e9b8b50729bd4929e6dcadc35805962e4 |     
+    m68k     |          ntpsec-1.2.2          | NOK | http://autobuild.buildroot.net/results/b481aae6e52e5a2563a369d33074735ed6632af9 | ORPH
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/b373fe7e1309b8a614d9ea63b484a25b118a5f75 |     
+
+
+
 -- 
-2.39.1.windows.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
