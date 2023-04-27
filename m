@@ -1,64 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C3CEC77B73
-	for <buildroot@archiver.kernel.org>; Thu, 27 Apr 2023 05:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68A81C77B61
+	for <buildroot@archiver.kernel.org>; Thu, 27 Apr 2023 14:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BED060BB2;
-	Thu, 27 Apr 2023 05:45:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BED060BB2
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD90041604;
+	Thu, 27 Apr 2023 14:41:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD90041604
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SwIdgk3HNjCM; Thu, 27 Apr 2023 05:45:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lKuPhV6321HH; Thu, 27 Apr 2023 14:41:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90E7360BC8;
-	Thu, 27 Apr 2023 05:45:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90E7360BC8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E2A141685;
+	Thu, 27 Apr 2023 14:41:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E2A141685
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2A8011BF5A6
- for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 05:45:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DAF2E1BF5A2
+ for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 14:41:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E06D960BC8
- for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 05:45:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E06D960BC8
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3A0B60E42
+ for <buildroot@lists.busybox.net>; Thu, 27 Apr 2023 14:41:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3A0B60E42
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8mio5q07gaeX for <buildroot@lists.busybox.net>;
- Thu, 27 Apr 2023 05:45:45 +0000 (UTC)
+ with ESMTP id nhWnESzoHqce for <buildroot@lists.busybox.net>;
+ Thu, 27 Apr 2023 14:41:16 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 313E360BB2
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 313E360BB2
- for <buildroot@buildroot.org>; Thu, 27 Apr 2023 05:45:44 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 470C82000B
- for <buildroot@buildroot.org>; Thu, 27 Apr 2023 05:45:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EC0060ACC
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3EC0060ACC
+ for <buildroot@buildroot.org>; Thu, 27 Apr 2023 14:41:16 +0000 (UTC)
+Received: from 91-153-34-68.elisa-laajakaista.fi ([91.153.34.68] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1ps2nz-00EJ2g-0B; Thu, 27 Apr 2023 16:41:07 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 0caadd10;
+ Thu, 27 Apr 2023 14:41:04 +0000 (UTC)
+Date: Thu, 27 Apr 2023 17:41:00 +0300
+Message-ID: <20230427174100.GB3095221@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+In-Reply-To: <20230425173033.GB998279@igalia.com>
+References: <20230227105838.358916-1-thomas.devoogdt@barco.com>
+ <20230424151152.GB3960430@igalia.com> <20230425173033.GB998279@igalia.com>
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Thu, 27 Apr 2023 05:45:42 -0000
-Message-Id: <20230427054546.E06D960BC8@smtp3.osuosl.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1682574342; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=KqeDv2jMxfNj63tVvHraJmgD4rxhniA+/PYjJ8iJAmo=;
- b=EPwu9XgpGCHG2FEjkjhVR72XAC8ORLP9lg+mEjPmjmzg+2sI7CbbAclQ9h9hpD86GToRBp
- Jv0uHnQsASEFMMXVahzur0EBWRRes60pxWuXNfFyX29Bn6ZrkxNyAd8px3klaV8bYzy+Bw
- drOcZu7jDPubETgRVmPzcdHEKwbeFGmJS0Jl4O+PkNqG8Aaj91nO/hYohQu5vn2boi80yM
- rxFv6o/KHvtLHsp0hUuzk65FKy4DIvBYa52sjqOtAd757LfesoJAqfmNLWIpGfMMHLmCz6
- v/ffPjMIgwoY1/Kp8Rk2I0Gi8yRcsk7YnE4ty3VLM/mpkHqVEU+Bh+C41uquyQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=EJXQOnkCaW4eCg57obQJQ7ffRiS+MeFO0VBuvlG6GW8=; b=GhYnckvRCLt4y/vYSGchgfxU90
+ XO6nyTrfWMxdqeoeGxak0gptckOLKiGz/iJBPeSLilt5muA8jQyTANrNirX3YGTdMgpmbuLJVXofx
+ dORSZSxoXSXlaOSF8CWV1oCT3rYgc6lGcb+0TK3Y6+VYe/xQSs4q8hnyu96x7Z9szTlxoQ8PzcOAJ
+ bsK6w9Gy8OnM7CPnOXXRDQDChmkztyqE4TAc/YjL9qBHP7+2LtbX4DgFfEc4YaRcSHCh+rYSiw8dc
+ tlv6s0F3JcAVqRYGzDXObfI1f/H5WBlAxz+hAmkQGBvumqw8Nb39UIYcbHgiUKtRUHlhagjH/Vrs8
+ Cp20U9Hw==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EPwu9Xgp
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-04-26
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=GhYnckvR
+Subject: Re: [Buildroot] [PATCH v5 1/5] package/at-spi2-core: bump to
+ version 2.47.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,127 +79,169 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Daniel Lang <d.lang@abatec.at>, Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============7074487206405793153=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
 
-Autobuild statistics for 2023-04-26
-===================================
-
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  5  |  4  |  0  |  9  |
-    master   | 63  | 37  |  1  | 101 |
-
-Classification of failures by reason for master
------------------------------------------------
-
-               host-qemu-7.2.0 | 4 
-                       unknown | 3 
-                 agentpp-4.6.0 | 2 
-        ltp-testsuite-20230127 | 2 
-                bpftool-v7.1.0 | 1 
-                elfutils-0.186 | 1 
-             fontconfig-2.13.1 | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-         gobject-introspection | 1 
-  gobject-introspection-1.72.0 | 1 
-                haveged-1.9.18 | 1 
-            host-binutils-2.37 | 1 
-            host-binutils-2.38 | 1 
-            host-binutils-2.39 | 1 
-         host-gcc-final-10.4.0 | 1 
-                 host-gdb-12.1 | 1 
-                host-go-1.19.8 | 1 
-              host-rust-1.68.2 | 1 
-host-sunxi-tools-1.4.2-168-... | 1 
-              libgcrypt-1.10.1 | 1 
-                libglvnd-1.4.0 | 1 
-                  linux-6.1.14 | 1 
-                   perl-5.36.0 | 1 
-                    qemu-7.2.0 | 1 
-rtl8189fs-ed6741b52bc998875... | 1 
-             stress-ng-0.15.04 | 1 
-              strongswan-5.9.8 | 1 
-                 uclibc-1.0.43 | 1 
-                    volk-2.5.2 | 1 
-                xenomai-3.0.10 | 1 
-                     znc-1.8.2 | 1 
+--===============7074487206405793153==
+Content-Type: multipart/signed; boundary="81bMrsbFSl5tIzB3"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
 
 
-Detail of failures for master
------------------------------
+--81bMrsbFSl5tIzB3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    sh4      |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/7373d3bb9928dff2a16f165a238854fb8561c53f |     
-  aarch64    |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/f6e97a6467588ebb8577ad34d3938abb1eacb036 |     
-   s390x     |         bpftool-v7.1.0         | NOK | http://autobuild.buildroot.net/results/4477d4e0e2f84f769b2442534a9aafc2b82e90e0 |     
- microblaze  |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/cd8675c044846ad2e83bfb2522ce5f797b1a09bb | ORPH
-  riscv64    |       fontconfig-2.13.1        | NOK | http://autobuild.buildroot.net/results/f43044c0cb06a99c531d27290fa6613555db2891 | ORPH
-   mips64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/eef956ffb1c17f2133326bb369f71d76cb7f037d |     
-   armeb     |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/5dbefa8a613bab8ebd5cd49b2cd6bec82aaae9d6 |     
-   mipsel    |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/807cfb7995be2412dd5ec1ccb11337bea9d98c92 | ORPH
-    arc      |         haveged-1.9.18         | NOK | http://autobuild.buildroot.net/results/5e3eb061f377ac2f46e8dba6ea6720a97bfb7f75 |     
-   s390x     |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/9dc5627f97ad2dbe45be38ea658bb2c9c848c88b |     
-   s390x     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/493a59d1f52b950dcc8523d8bfe5b1be3f0c180b |     
-   mips64    |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/e2311a4d676a9d11b760fe0e548d0ddd89ba8a38 |     
-   sparc     |     host-gcc-final-10.4.0      | NOK | http://autobuild.buildroot.net/results/57fcf1be7e46f2cf2c213b770c4568348ccb2575 |     
-   sparc     |         host-gdb-12.1          | NOK | http://autobuild.buildroot.net/results/f3ec7d6c7929163c52304a7a6e29213506195f9d | ORPH
-   nios2     |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/bfea3219934d2a18e7259959c7a1ced037ca1287 |     
-  sparc64    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/1ad91bda85eede7e2f1372606b56829cbcc6d956 |     
-    sh4a     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/a8951c3e22f9b858915b24c0d974b82435fd5cc2 |     
-   xtensa    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/6717123d1b793261b1c2bf39b4cfff5f30f82216 |     
-   mipsel    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/9e9f1ff130d58c4bf81e61959866cfb56b40a3ce |     
-    mips     |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/64580a3eb3c194fb5a489d09c4c0d8cc0a172238 |     
-    arm      | host-sunxi-tools-1.4.2-168-... | NOK | http://autobuild.buildroot.net/results/2677c69ac34642a7a501230e1dd22b193db0899d |     
-    i586     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/d8b370b2ead085818250e6c01fd43b0ef907cbf0 | ORPH
-   arceb     |         libglvnd-1.4.0         | NOK | http://autobuild.buildroot.net/results/14644a80cd0157a86147935ef006a5345179334a | ORPH
-   mips64    |          linux-6.1.14          | NOK | http://autobuild.buildroot.net/results/918d8a25e14f86a9d10271c71acd0de357e0b69d | ORPH
-  aarch64    |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/afd6372f2a65e22212cf0067a2b2f308d3d20727 |     
- aarch64_be  |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/f642e8152b1cec956a2cc3d0d78e77e25e3dabaa |     
-   armeb     |          perl-5.36.0           | NOK | http://autobuild.buildroot.net/results/b22fef47389a8f6350795c3d29d500e9022e7ff4 |     
-  riscv32    |           qemu-7.2.0           | NOK | http://autobuild.buildroot.net/results/4e837809bbdcbaaf1913035eeadee9f0a7ec2f33 |     
-  sparc64    | rtl8189fs-ed6741b52bc998875... | NOK | http://autobuild.buildroot.net/results/3c73ddd33f4be84629e11a7044eb51970d0db4b7 |     
-microblazeel |       stress-ng-0.15.04        | NOK | http://autobuild.buildroot.net/results/6e50df78d869ef50abd6a04f28e6d39dd375a373 |     
-   xtensa    |        strongswan-5.9.8        | NOK | http://autobuild.buildroot.net/results/13631f069200cd8d4d7d3ba8f7f73ffbe4482865 |     
-    m68k     |         uclibc-1.0.43          | NOK | http://autobuild.buildroot.net/results/f4897829e727d28a441aa15efff1d1b76652bb61 |     
-    or1k     |            unknown             | NOK | http://autobuild.buildroot.net/results/0f09ecad590ed1e70b971da00b01c0b52d349519 |     
-  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/1a963a3f27822b8864a850668c1be54df7cd6730 |     
-powerpc64le  |            unknown             | NOK | http://autobuild.buildroot.net/results/ae0ffcd9d1989f40771eeac6d37d91781e3fb34d |     
-  powerpc    |           volk-2.5.2           | NOK | http://autobuild.buildroot.net/results/f04c055ca404e8dd0fbcd88eea39a65931c6844e |     
-powerpc64le  |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/220627a3d1eb14262d67489e3218f4e349fff052 |     
-    i686     |           znc-1.8.2            | NOK | http://autobuild.buildroot.net/results/34917ac15a885e9afc89962b3908a040413429a3 |     
+SGkgVGhvbWFzLAoKT25lIG1vcmUgbm90ZSBhYm91dCB0aGlzLi4uCgpPbiBUdWUsIDI1IEFwciAy
+MDIzIDE3OjMwOjMzICswMzAwIEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEu
+Y29tPiB3cm90ZToKCj4gT24gTW9uLCAyNCBBcHIgMjAyMyAxNToxMTo1MiArMDMwMCBBZHJpYW4g
+UGVyZXogZGUgQ2FzdHJvIDxhcGVyZXpAaWdhbGlhLmNvbT4gd3JvdGU6Cj4gPiBIaSBhbGwsCj4g
+PiAKPiA+IE9uIE1vbiwgMjcgRmViIDIwMjMgMTE6NTg6MzQgKzAxMDAgVGhvbWFzIERldm9vZ2R0
+IDx0aG9tYXNAZGV2b29nZHQuY29tPiB3cm90ZToKPiA+ID4gRnJvbTogRGFuaWVsIExhbmcgPGQu
+bGFuZ0BhYmF0ZWMuYXQ+Cj4gPiA+IAo+ID4gPiBodHRwczovL2dpdGxhYi5nbm9tZS5vcmcvR05P
+TUUvYXQtc3BpMi1jb3JlLy0vYmxvYi9BVF9TUEkyX0NPUkVfMl80N18xL05FV1MKCkluIHR5cGlj
+YWwgR05PTUUgZmFzaGlvbiwgdGhlIHNlY29uZCB2ZXJzaW9uIG51bWJlciBiZWluZyBvZGQgbWVh
+bnMgdGhhdCB0aGlzCndhcyBhIGRldmVsb3BtZW50IHJlbGVhc2UuIEV2ZW4gc2Vjb25kIG51bWJl
+cnMgYXJlIHRoZSBzdGFibGUgb25lcywgc28gaXQKd291bGQgYmUgYmV0dGVyIHRvIGRvIHRoZSB2
+ZXJzaW9uIGJ1bXAgdG8gMi40OC4wIGluc3RlYWQsIHdoaWNoIGhhcyBiZWVuCmF2YWlsYWJsZSBm
+b3IgYSBtb250aDoKCiAgaHR0cHM6Ly9naXRsYWIuZ25vbWUub3JnL0dOT01FL2F0LXNwaTItY29y
+ZS8tL2Jsb2IvQVRfU1BJMl9DT1JFXzJfNDhfMC9ORVdTCgpDaGVlcnMsIGFuZCB0aGFua3MgYWdh
+aW4gZm9yIHlvdXIgZWZmb3J0IG9uIHRoaXMgcGF0Y2ggc2V0ID0pCgo+ID4gPiAtIFgxMSBpcyBu
+b3cgb3B0aW9uYWwuCj4gPiA+IC0gbGlieG1sMiBpcyBubyBsb25nZXIgb3B0aW9uYWwuCj4gPiA+
+IC0gYXRrIGFuZCBhdC1zcGkyLWF0ayBoYXZlIGJlZW4gbWVyZ2VkIGludG8gYXQtc3BpMi1jb3Jl
+Lgo+ID4gPiAtIGF0ayBpbnRyb3NwZWN0aW9uIG9wdGlvbiBhZGRlZC4KPiA+ID4gCj4gPiA+IFNp
+Z25lZC1vZmYtYnk6IERhbmllbCBMYW5nIDxkLmxhbmdAYWJhdGVjLmF0Pgo+ID4gPiBTaWduZWQt
+b2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hcy5kZXZvb2dkdEBiYXJjby5jb20+Cj4gPiAK
+PiA+IEkgdGVzdGVkIHRoaXMgcGF0Y2ggc2VyaWVzIGFuZCBpbmRlZWQgaXQgYWxzbyBzb2x2ZXMg
+dGhlIFdlYktpdEdUSyBidWlsZAo+ID4gaXNzdWVzIGNhdXNlcyBieSBhdGstYnJpZGdlIGJlaW5n
+IG1pc3NpbmcuIE92ZXJhbGwgSSBwcmVmZXIgdGhpcyBhcHByb2FjaAo+ID4gYmV0dGVyIHRoYW4g
+cGF0Y2hpbmcgbGliZ3RrMydzIE1lc29uIGJ1aWxkIHN5c3RlbSBhcyBzdWdnZXN0ZWQgaW4gYW5v
+dGhlcgo+ID4gcGF0Y2guCj4gPiAKPiA+IFRoZXJlIGlzIG9uZSBodXJkbGUsIHRob3VnaDogSSBo
+YXZlIHRvIG1ha2Ugb25lIHBhdGNoIGZvciBhdC1zcGkyLWNvcmUKPiA+IGJlY2F1c2UgSSBoYXZl
+IGRidXMtYnJva2VyIGluc3RhbGxlZCBpbiBvbmUgb2YgbXkgY29tcHV0ZXJzIGFuZCB0cnlpbmcg
+dG8KPiA+IGJ1aWxkIHRoZXJlIHJlc3VsdCBpbiB0aGUgYnVpbGQgY29uZmlndXJhdGlvbiB0aGlu
+a2luZyB0aGF0IGl0IG5lZWRzIHRvCj4gPiB1c2UgbGlic3lzdGVtZCB3aGVuIHRoZSBCdWlsZHJv
+b3QgY29uZmlndXJhdGlvbiBoYXMgaXQgZGlzYWJsZWQuIEkgbWFkZQo+ID4gdGhpcyBwYXRjaCB3
+aGljaCBzb2x2ZWQgdGhlIGlzc3VlIGZvciBtZSwgYWx0aG91Z2ggSSBhbSBub3QgMTAwJSBzdXJl
+IGl0Cj4gPiBpcyB0aGUgYmVzdCB3YXkgdG8gZ286Cj4gPiAKPiA+ICAgaHR0cHM6Ly9naXRsYWIu
+Z25vbWUub3JnL0dOT01FL2F0LXNwaTItY29yZS8tL21lcmdlX3JlcXVlc3RzLzEzNAo+ID4gCj4g
+PiBXZSBtYXkgd2FudCB0byBpbmNsdWRlIHRoaXMgcGF0Y2ggKG9yIGEgc2ltaWxhciBvbmUpIHdo
+aWxlIHVwc3RyZWFtIGRvZXMKPiA+IG5vdCBoYXZlIGEgc29sdXRpb24gZm9yIHRoaXMgaXNzdWUu
+Cj4gCj4gTXkgcGF0Y2ggZm9yIGF0LXNwaTItY29yZSB3YXMgbWVyZ2VkLCBpZiB5b3Ugd291bGQg
+cmVzdWJtaXQgdGhlIHZlcnNpb24KPiBidW1wIHdpdGggaXQgaW5jbHVkZWQsIEkgd2lsbCBoYXBw
+aWx5IGFkZCBteSBUZXN0ZWQtQnkgLyBSZXZpZXdlZC1CeSB0bwo+IHRoZSB3aG9sZSBzZXJpZXMg
+Oy0pCj4gIAo+ID4gPiAtLS0KPiA+ID4gdjM6Cj4gPiA+ICAtIHJlYmFzZWQgb24gaHR0cHM6Ly9w
+YXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9saXN0Lz9zZXJpZXM9MzM2MjU0
+Cj4gPiA+ICAtIG5lZWRlZCB0byBmaXggdGhlIHdlYmtpdGd0ayAyLjM4LjUgY29tcGlsYXRpb24K
+PiA+ID4gICAgKGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3Qv
+cGF0Y2gvMjAyMzAyMjAwOTA5MjMuMjE1NTYzNS0yLXRob21hcy5kZXZvb2dkdEBiYXJjby5jb20v
+KQo+ID4gPiB2NTogcmViYXNlZCArIGdyb3VwZWQgcGF0Y2hlcwo+ID4gPiAtLS0KPiA+ID4gIHBh
+Y2thZ2UvYXQtc3BpMi1jb3JlL0NvbmZpZy5pbiAgICAgICAgIHwgIDggKystLS0tLS0KPiA+ID4g
+IHBhY2thZ2UvYXQtc3BpMi1jb3JlL2F0LXNwaTItY29yZS5oYXNoIHwgIDQgKystLQo+ID4gPiAg
+cGFja2FnZS9hdC1zcGkyLWNvcmUvYXQtc3BpMi1jb3JlLm1rICAgfCAyMCArKysrKysrKysrKysr
+KysrKy0tLQo+ID4gPiAgMyBmaWxlcyBjaGFuZ2VkLCAyMSBpbnNlcnRpb25zKCspLCAxMSBkZWxl
+dGlvbnMoLSkKPiA+ID4gCj4gPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2F0LXNwaTItY29yZS9D
+b25maWcuaW4gYi9wYWNrYWdlL2F0LXNwaTItY29yZS9Db25maWcuaW4KPiA+ID4gaW5kZXggZjU2
+YzViOTNjNC4uMWY2YzQyMTc3NyAxMDA2NDQKPiA+ID4gLS0tIGEvcGFja2FnZS9hdC1zcGkyLWNv
+cmUvQ29uZmlnLmluCj4gPiA+ICsrKyBiL3BhY2thZ2UvYXQtc3BpMi1jb3JlL0NvbmZpZy5pbgo+
+ID4gPiBAQCAtMSwxMiArMSwxMiBAQAo+ID4gPiAgY29uZmlnIEJSMl9QQUNLQUdFX0FUX1NQSTJf
+Q09SRQo+ID4gPiAgCWJvb2wgImF0LXNwaTItY29yZSIKPiA+ID4gLQlkZXBlbmRzIG9uIEJSMl9Q
+QUNLQUdFX1hPUkc3ICMgeGxpYi1saWJ4dHN0Cj4gPiA+ICAJZGVwZW5kcyBvbiBCUjJfVE9PTENI
+QUlOX0hBU19USFJFQURTICMgZGJ1cywgZ2xpYjIKPiA+ID4gIAlkZXBlbmRzIG9uIEJSMl9VU0Vf
+TU1VICMgZ2xpYjIKPiA+ID4gIAlkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBnbGliMgo+ID4g
+PiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9EQlVTCj4gPiA+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJ
+QkdMSUIyCj4gPiA+IC0Jc2VsZWN0IEJSMl9QQUNLQUdFX1hMSUJfTElCWFRTVAo+ID4gPiArCXNl
+bGVjdCBCUjJfUEFDS0FHRV9MSUJYTUwyCj4gPiA+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1hMSUJf
+TElCWFRTVCBpZiBCUjJfUEFDS0FHRV9YT1JHNyAjIG9wdGlvbmFsbHkgZm9yIFgxMQo+ID4gPiAg
+CWhlbHAKPiA+ID4gIAkgIFRoZSBBdC1TcGkyIENvcmUgcGFja2FnZSBpcyBhIHBhcnQgb2YgdGhl
+IEdOT01FCj4gPiA+ICAJICBBY2Nlc3NpYmlsaXR5IFByb2plY3QuIEl0IHByb3ZpZGVzIGEgU2Vy
+dmljZSBQcm92aWRlcgo+ID4gPiBAQCAtMTksNyArMTksMyBAQCBjb25maWcgQlIyX1BBQ0tBR0Vf
+QVRfU1BJMl9DT1JFCj4gPiA+ICBjb21tZW50ICJhdC1zcGkyLWNvcmUgbmVlZHMgYSB0b29sY2hh
+aW4gdy8gd2NoYXIsIHRocmVhZHMiCj4gPiA+ICAJZGVwZW5kcyBvbiBCUjJfVVNFX01NVQo+ID4g
+PiAgCWRlcGVuZHMgb24gIUJSMl9VU0VfV0NIQVIgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVB
+RFMKPiA+ID4gLQo+ID4gPiAtY29tbWVudCAiYXQtc3BpMi1jb3JlIGRlcGVuZHMgb24gWC5vcmci
+Cj4gPiA+IC0JZGVwZW5kcyBvbiBCUjJfVVNFX01NVQo+ID4gPiAtCWRlcGVuZHMgb24gIUJSMl9Q
+QUNLQUdFX1hPUkc3Cj4gPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2F0LXNwaTItY29yZS9hdC1z
+cGkyLWNvcmUuaGFzaCBiL3BhY2thZ2UvYXQtc3BpMi1jb3JlL2F0LXNwaTItY29yZS5oYXNoCj4g
+PiA+IGluZGV4IDc2NGU0YzM2NjEuLjQ1MzFiZjM5NmMgMTAwNjQ0Cj4gPiA+IC0tLSBhL3BhY2th
+Z2UvYXQtc3BpMi1jb3JlL2F0LXNwaTItY29yZS5oYXNoCj4gPiA+ICsrKyBiL3BhY2thZ2UvYXQt
+c3BpMi1jb3JlL2F0LXNwaTItY29yZS5oYXNoCj4gPiA+IEBAIC0xLDUgKzEsNSBAQAo+ID4gPiAt
+IyBGcm9tIGh0dHBzOi8vZG93bmxvYWQuZ25vbWUub3JnL3NvdXJjZXMvYXQtc3BpMi1jb3JlLzIu
+MzYvYXQtc3BpMi1jb3JlLTIuMzYuMC5zaGEyNTZzdW0KPiA+ID4gLXNoYTI1NiAgODhkYTU3ZGUw
+YTdlM2M2MGJjMzQxYTk3NGE4MGZkYmEwOTE2MTJkYjM1NDdjNDEwZDZkZWFiMDM5Y2E1YzA1YSAg
+YXQtc3BpMi1jb3JlLTIuMzYuMC50YXIueHoKPiA+ID4gKyMgRnJvbSBodHRwczovL2Rvd25sb2Fk
+Lmdub21lLm9yZy9zb3VyY2VzL2F0LXNwaTItY29yZS8yLjQ3L2F0LXNwaTItY29yZS0yLjQ3LjEu
+c2hhMjU2c3VtCj4gPiA+ICtzaGEyNTYgIGM2YmE3YzE2MDQzNGVkZWJmMDlkMjkzNjkzMzU2OWM5
+MzZmNmVjOTcyMzAxNzY2ZjJiZGFjNWE0ZDQxODE1M2MgIGF0LXNwaTItY29yZS0yLjQ3LjEudGFy
+Lnh6Cj4gPiA+ICAKPiA+ID4gICMgbG9jYWxseSBjYWxjdWxhdGVkCj4gPiA+ICBzaGEyNTYgIGRj
+NjI2NTIwZGNkNTNhMjJmNzI3YWYzZWU0MmM3NzBlNTZjOTdhNjRmZTNhZGIwNjM3OTlkOGFiMDMy
+ZmU1NTEgIENPUFlJTkcKPiA+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXQtc3BpMi1jb3JlL2F0
+LXNwaTItY29yZS5tayBiL3BhY2thZ2UvYXQtc3BpMi1jb3JlL2F0LXNwaTItY29yZS5tawo+ID4g
+PiBpbmRleCBmMGIwMTljMGVkLi5lOThlNzc5ODg0IDEwMDY0NAo+ID4gPiAtLS0gYS9wYWNrYWdl
+L2F0LXNwaTItY29yZS9hdC1zcGkyLWNvcmUubWsKPiA+ID4gKysrIGIvcGFja2FnZS9hdC1zcGky
+LWNvcmUvYXQtc3BpMi1jb3JlLm1rCj4gPiA+IEBAIC00LDE3ICs0LDMxIEBACj4gPiA+ICAjCj4g
+PiA+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ID4gPiAgCj4gPiA+IC1BVF9TUEkyX0NPUkVf
+VkVSU0lPTl9NQUpPUiA9IDIuMzYKPiA+ID4gLUFUX1NQSTJfQ09SRV9WRVJTSU9OID0gJChBVF9T
+UEkyX0NPUkVfVkVSU0lPTl9NQUpPUikuMAo+ID4gPiArQVRfU1BJMl9DT1JFX1ZFUlNJT05fTUFK
+T1IgPSAyLjQ3Cj4gPiA+ICtBVF9TUEkyX0NPUkVfVkVSU0lPTiA9ICQoQVRfU1BJMl9DT1JFX1ZF
+UlNJT05fTUFKT1IpLjEKPiA+ID4gIEFUX1NQSTJfQ09SRV9TT1VSQ0UgPSBhdC1zcGkyLWNvcmUt
+JChBVF9TUEkyX0NPUkVfVkVSU0lPTikudGFyLnh6Cj4gPiA+ICBBVF9TUEkyX0NPUkVfU0lURSA9
+IGh0dHBzOi8vZG93bmxvYWQuZ25vbWUub3JnL3NvdXJjZXMvYXQtc3BpMi1jb3JlLyQoQVRfU1BJ
+Ml9DT1JFX1ZFUlNJT05fTUFKT1IpCj4gPiA+ICBBVF9TUEkyX0NPUkVfTElDRU5TRSA9IExHUEwt
+Mi4xKwo+ID4gPiAgQVRfU1BJMl9DT1JFX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCj4gPiA+ICBB
+VF9TUEkyX0NPUkVfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4gPiA+IC1BVF9TUEkyX0NPUkVfREVQ
+RU5ERU5DSUVTID0gaG9zdC1wa2djb25mIGRidXMgbGliZ2xpYjIgeGxpYl9saWJYdHN0IFwKPiA+
+ID4gK0FUX1NQSTJfQ09SRV9ERVBFTkRFTkNJRVMgPSBob3N0LXBrZ2NvbmYgZGJ1cyBsaWJnbGli
+MiBsaWJ4bWwyIFwKPiA+ID4gIAkkKFRBUkdFVF9OTFNfREVQRU5ERU5DSUVTKQo+ID4gPiAgQVRf
+U1BJMl9DT1JFX0NPTkZfT1BUUyA9IC1EZGJ1c19kYWVtb249L3Vzci9iaW4vZGJ1cy1kYWVtb24K
+PiA+ID4gIAo+ID4gPiAraWZlcSAoJChCUjJfUEFDS0FHRV9YT1JHNykseSkKPiA+ID4gK0FUX1NQ
+STJfQ09SRV9DT05GX09QVFMgKz0gLUR4MTE9ZW5hYmxlZAo+ID4gPiArQVRfU1BJMl9DT1JFX0RF
+UEVOREVOQ0lFUyArPSB4bGliX2xpYlh0c3QKPiA+ID4gK2Vsc2UKPiA+ID4gK0FUX1NQSTJfQ09S
+RV9DT05GX09QVFMgKz0gLUR4MTE9ZGlzYWJsZWQKPiA+ID4gK2VuZGlmCj4gPiA+ICsKPiA+ID4g
+K2lmZXEgKCQoQlIyX1BBQ0tBR0VfR09CSkVDVF9JTlRST1NQRUNUSU9OKSx5KQo+ID4gPiArQVRf
+U1BJMl9DT1JFX0NPTkZfT1BUUyArPSAtRGludHJvc3BlY3Rpb249ZW5hYmxlZAo+ID4gPiArQVRf
+U1BJMl9DT1JFX0RFUEVOREVOQ0lFUyArPSBnb2JqZWN0LWludHJvc3BlY3Rpb24KPiA+ID4gK2Vs
+c2UKPiA+ID4gK0FUX1NQSTJfQ09SRV9DT05GX09QVFMgKz0gLURpbnRyb3NwZWN0aW9uPWRpc2Fi
+bGVkCj4gPiA+ICtlbmRpZgo+ID4gPiArCj4gPiA+ICBBVF9TUEkyX0NPUkVfTERGTEFHUyA9ICQo
+VEFSR0VUX0xERkxBR1MpICQoVEFSR0VUX05MU19MSUJTKQo+ID4gPiAgCj4gPiA+ICAkKGV2YWwg
+JChtZXNvbi1wYWNrYWdlKSkKPiA+ID4gLS0gCj4gPiA+IDIuMzkuMgo+ID4gPiAKPiA+ID4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+ID4gYnVpbGRy
+b290IG1haWxpbmcgbGlzdAo+ID4gPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4gPiBodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiA+ID4g
+Cj4gPiAKPiA+IENoZWVycywKPiA+IOKAlEFkcmnDoW4KPiA+IF9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4g
+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4gCj4gQ2hlZXJzLAo+IOKAlEFkcmnDoW4KPiBf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKQ2hlZXJzLArigJRBZHJp
+w6FuCg==
 
+--81bMrsbFSl5tIzB3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
+-----BEGIN PGP SIGNATURE-----
 
-                host-go-1.19.8 | 1 
-               host-qemu-7.2.0 | 1 
-                  ntpsec-1.2.2 | 1 
-                       unknown | 1 
+iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZEqJfAAKCRCRxVnb5MkS
+O038AJ9BdK/NPHCHxb8yCUpygqStggLCigCfQf+QXFF8XBPIdNaFUyGfvgys4/I=
+=dlsg
+-----END PGP SIGNATURE-----
 
+--81bMrsbFSl5tIzB3--
 
-Detail of failures for 2023.02.x
---------------------------------
+--===============7074487206405793153==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-powerpc64le  |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/ec5a017b18c44972bea7aae6a0d4efa532b3b713 |     
-  riscv32    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/5325db1e9b8b50729bd4929e6dcadc35805962e4 |     
-    m68k     |          ntpsec-1.2.2          | NOK | http://autobuild.buildroot.net/results/b481aae6e52e5a2563a369d33074735ed6632af9 | ORPH
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/b373fe7e1309b8a614d9ea63b484a25b118a5f75 |     
-
-
-
--- 
-http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7074487206405793153==--
