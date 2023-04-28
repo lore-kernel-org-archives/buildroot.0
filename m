@@ -4,56 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FC4DC77B61
-	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 12:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B225EC77B61
+	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 13:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D881427B5;
-	Fri, 28 Apr 2023 12:57:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D881427B5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 465CB427BE;
+	Fri, 28 Apr 2023 13:02:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 465CB427BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6rddL9PxTGOF; Fri, 28 Apr 2023 12:57:23 +0000 (UTC)
+	with ESMTP id CzioHhZ2Yha3; Fri, 28 Apr 2023 13:02:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19F3D427A2;
-	Fri, 28 Apr 2023 12:57:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19F3D427A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C4FD427B5;
+	Fri, 28 Apr 2023 13:01:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C4FD427B5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 66F261BF5B3
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 12:57:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 97BB81BF5B3
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 13:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 406DE841E0
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 12:57:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 406DE841E0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E371841DA
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 13:01:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E371841DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lO6TzL1dmb6i for <buildroot@lists.busybox.net>;
- Fri, 28 Apr 2023 12:57:19 +0000 (UTC)
+ with ESMTP id dqRBikCk8zdS for <buildroot@lists.busybox.net>;
+ Fri, 28 Apr 2023 13:01:56 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3946A841DA
-Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3946A841DA
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 12:57:19 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout07.t-online.de (Postfix) with SMTP id 440AB5634A
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 14:57:17 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.3.195]) by fwd80.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82131841C9
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 82131841C9
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 13:01:56 +0000 (UTC)
+Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
+ by mailout12.t-online.de (Postfix) with SMTP id 36445C758;
+ Fri, 28 Apr 2023 15:01:54 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.3.195]) by fwd73.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1psNf2-2PnntZ0; Fri, 28 Apr 2023 14:57:16 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56998)
+ esmtp id 1psNjV-4c7wA50; Fri, 28 Apr 2023 15:01:53 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37788)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1psNf1-0007Kx-2n
- for buildroot@buildroot.org; Fri, 28 Apr 2023 14:57:15 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1psNjU-00087a-2y;
+ Fri, 28 Apr 2023 15:01:52 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 28 Apr 2023 14:57:15 +0200
-Message-Id: <20230428125715.375540-1-bernd.kuhls@t-online.de>
+Date: Fri, 28 Apr 2023 15:01:52 +0200
+Message-Id: <20230428130152.416334-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1682686636-ADEBDCC3-ABFAF196/0/0 CLEAN NORMAL
-X-TOI-MSGID: 8fb4b3de-0062-42d1-9e1d-ad43cb72530f
-Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 8.2.5
+X-TOI-EXPURGATEID: 150726::1682686913-14891CF2-359153C1/0/0 CLEAN NORMAL
+X-TOI-MSGID: 3e2bd70d-e7f6-4ade-9e26-adcd9861f170
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 23.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +66,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://www.php.net/ChangeLog-8.php#8.2.4
-https://www.php.net/ChangeLog-8.php#8.2.5
-
 Release notes:
-https://news-web.php.net/php.announce/351
-https://news-web.php.net/php.announce/352
+https://lists.freedesktop.org/archives/mesa-announce/2023-March/000713.html
+https://lists.freedesktop.org/archives/mesa-announce/2023-April/000714.html
+https://lists.freedesktop.org/archives/mesa-announce/2023-April/000717.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 41aa326156..6b1549958f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  b9b566686e351125d67568a33291650eb8dfa26614d205d70d82e6e92613d457  php-8.2.3.tar.xz
-+sha256  800738c359b7f1e67e40c22713d2d90276bc85ba1c21b43d99edd43c254c5f76  php-8.2.5.tar.xz
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index a9ab1de8ea..4685ad6695 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 49f02d7f20..7cebc178fe 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 23.0.0
++MESA3D_HEADERS_VERSION = 23.0.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 17dc2e7c00..0de11663f4 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2023-February/000706.html
+-sha256  01f3cff3763f09e0adabcb8011e4aebc6ad48f6a4dd4bae904fe918707d253e4  mesa-23.0.0.tar.xz
+-sha512  127e2759a2a31cacd65a0891719ab7bb4a9188844022b4bccaebbedce9c550b9ccb160ad519178ea0d851c4bcb8f0f56febda248ed2ba82b5ddf804855e4694b  mesa-23.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-April/000717.html
++sha256  386362a5d80df3b096636b67f340e1ce67b705b44767d5bdd11d2ed1037192d5  mesa-23.0.3.tar.xz
++sha512  52c778de61daa406c6a1e96a657e9b6fdcc71c8cfda80b7f53acc6470556c7d502c057b9481bb0c3d57ef0263263413fd0d25d53ebf5aa0246fbcc3309de64ae  mesa-23.0.3.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index a09c157b33..09a12b4b7e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PHP_VERSION = 8.2.3
-+PHP_VERSION = 8.2.5
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 23.0.0
++MESA3D_VERSION = 23.0.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.39.2
 
