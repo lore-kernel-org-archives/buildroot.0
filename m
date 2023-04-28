@@ -1,62 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2621CC77B61
-	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 18:09:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71E41C77B61
+	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 19:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2833842FB;
-	Fri, 28 Apr 2023 18:09:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2833842FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id C049C404A5;
+	Fri, 28 Apr 2023 19:03:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C049C404A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aLRPoflEAti7; Fri, 28 Apr 2023 18:09:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rAQ_MvTjbTpk; Fri, 28 Apr 2023 19:03:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF9BD842F2;
-	Fri, 28 Apr 2023 18:09:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF9BD842F2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DBFB404B9;
+	Fri, 28 Apr 2023 19:03:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DBFB404B9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 594B41BF578
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 18:09:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EA0B61BF84C
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 19:03:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FAB1842F2
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 18:09:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FAB1842F2
+ by smtp1.osuosl.org (Postfix) with ESMTP id C1307840BA
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 19:03:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1307840BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u40KK0hoXyRA for <buildroot@lists.busybox.net>;
- Fri, 28 Apr 2023 18:09:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1259F81E37
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1259F81E37
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 18:09:05 +0000 (UTC)
-Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
- by mailout10.t-online.de (Postfix) with SMTP id 67E9C43D66;
- Fri, 28 Apr 2023 20:07:56 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.3.195]) by fwd88.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1psSVY-1p6bEf0; Fri, 28 Apr 2023 20:07:48 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:32816)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1psSVY-0002Lr-0v;
- Fri, 28 Apr 2023 20:07:48 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id BBBYHRN3Dpvs for <buildroot@lists.busybox.net>;
+ Fri, 28 Apr 2023 19:03:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 067A6840B8
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 067A6840B8
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 19:03:12 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.localdomain ([89.144.221.218]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MXGvM-1plPGq19l0-00YegP; Fri, 28 Apr 2023 21:03:10 +0200
+From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Fri, 28 Apr 2023 20:07:47 +0200
-Message-Id: <20230428180748.518827-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230428180748.518827-1-bernd.kuhls@t-online.de>
-References: <20230428180748.518827-1-bernd.kuhls@t-online.de>
+Date: Fri, 28 Apr 2023 21:02:00 +0200
+Message-Id: <20230428190201.12489-1-dalang@gmx.at>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1682705268-0AFFAC01-8914A4B7/0/0 CLEAN NORMAL
-X-TOI-MSGID: a73d5be8-fcb9-4585-a44e-4ad2bb0bd6f4
-Subject: [Buildroot] [PATCH 2/3] {toolchain,
- linux-headers}: add support for 6.2 headers
+X-Provags-ID: V03:K1:ig3/+OZ9K1DMLwLyjeFZDNvg2S1Mizx73mQWySVLawHEwSTgRNv
+ kE0zV+MhN9YeoCuixi9fabMQxHZD6ABQfPy0lwHHcABKhsgDNCkPsgzmzSa5XNCz38dYKuC
+ kH4a4aypsCBSIr7sEhjSzZqi2kT37otNAEb2PGbG4dr+LeplYDhiJUSunCaOzGKVkX9xdYS
+ olY9Qk5qwwuQAz1pF8wZA==
+UI-OutboundReport: notjunk:1;M01:P0:huuYEgqfZas=;h/iCILxkqsOugBERudmXjEu+BUh
+ 1rUZjepETpA4B86FjoNk9ZeyZidiIi0jJQcIsQSjZYj54CUhY9Z7JLgry8eoJg5UG7sicm/VL
+ aBjECXFsARJKdV/aTrAIUnpt7VGDIgiYcOiwkGEi7FUNuLHq1nr1i0nbg2nSq7kvsNLL1rjXD
+ DqPc0pyd62ZrDIRPu9lWchc5Ny3bEKED9T+/wF5gdBvfr4aTZvahUmjia3vXqtk2+WvQKOqEZ
+ cC+Xn/bmD7JmU0XLZeix+/i+wNWkEV/MnV7Fc2rziY2IxL0g+sja92s2z49vI7k+D40cbUcqN
+ BxEK/3mWOZI303uL8wi2rFXM0d0hzK+MN/+wbrVCM7ighFWOZsWdSDka5+UIUMOjnJZeIBU4q
+ DJzu4doxmu54xJzilM0s+QS82qABur31vVMsEstJa3DRx65JXUE1TYDHCk8m2inlE3c9WwIVb
+ t+D8ALTylGQJMJWHXkcu7cum3unmlrkvkqfmQLtLTBmxqYPWZ0sT/7FaUu/MhffrkAafKc/Ux
+ DsTut9uJIyGt+jEznhD0bnb0wc9b6nzFHahGI1WQejEjBXzN7exE+I6eY5pyD2P2ADqfq08ZJ
+ 4Q1seNYY/vnTliqzoyKrUxs/o19hobZhYrWt3Tdh4P0g+WQZ1Vhg3OYNOnaqMTxTst8V6+29k
+ EW/AEpg9OdFrDUjA6wy8nNDAvpzDdmaRwv9oKLea3mA465sMz6Zj7Zo9Yacwh00gvyuXfKdaq
+ vwpHGfPKoIlz6WsnyHlC+zwTQk5bxs2u6OTxuFWgnvxDDDHknJkj7FrveWDn6s2k6rq565Jly
+ wib3qZ0HIFdWHOVba/02Zs4BJg9zyg0nEzYDCkromAw0ctp1Jh5xGFeF7JAggJ9794v4PgCNv
+ bsDaQNEQAkYIVSDGiddGZfN2cN8MVFFSHLSU8rbFcBRtppSTeT0BUFGJa4N3Bxt8IYUihkrP7
+ 4gDoyO3zxqh/giyh8qPWS8ZSemU=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.at; s=s31663417; 
+ t=1682708590; i=dalang@gmx.at;
+ bh=psR5//GtUJwUdbr9mJTMr2EWUpFkIHzZfdxkJwAI2bI=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=adxjpSmaU+EfC5aE7B2eJDuhBJlt7uZvf1L+23LWqsc/2sHuRMhAXyV9sdZnKQsNb
+ hbN8gKqkULyyqO31Piaf+ocuSjhpz78+OyhVlRc9X1OEwMdAm4OSH1iEZBUWqbEYLC
+ aYjz459awQ6wIDm017w5X6YgJphOCS2KvF0wD8dfsVQ3wPvMOZJvdhdkoMFQNBTJGv
+ 8XnDnigTeVY8vlAhylgFLfim/GcCB6gKzRP6NCFKQIgEHENDOUymE3RKmuyMK4WZrO
+ jIvnW7KBR9FjD4Am6UnuODkER0o0s5T6XfRaPJfP0ID1rG1uSUtZCftcjSUYbfYQKH
+ 7EPZZOC6rzHYA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
+ header.a=rsa-sha256 header.s=s31663417 header.b=adxjpSma
+Subject: [Buildroot] [PATCH] package/libgtk3: fix cups backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,122 +90,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/linux.hash                                    |  1 +
- package/linux-headers/Config.in.host                | 13 +++++++++++--
- toolchain/Config.in                                 |  5 +++++
- .../toolchain-external-custom/Config.in.options     |  6 +++++-
- 4 files changed, 22 insertions(+), 3 deletions(-)
+When explicitly specifying printing backends libgtk3 requires file
+to be one of them on linux.
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 43c9314a23..cab7b30385 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577  linux-6.2.13.tar.xz
- sha256  dfdcc143a879d64a5ee99213b2b4b05b5dccd566c144df93bca1e204df64c110  linux-6.1.26.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  066c4bbcbe3c480068a2e302f52b1708f340ecaaf633ec43d7f791bbeac5771a  linux-5.15.109.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e102369395..cb614d0eef 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -3,7 +3,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_6_1
-+	default BR2_KERNEL_HEADERS_6_2
- 	help
- 	  Select the kernel version to get headers from.
+Fixes:
+- output/build/libgtk3-3.24.37/modules/printbackends/meson.build:39:4: ERROR: Problem encountered: 'file' print backed needs to be enabled
+
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+---
+ package/libgtk3/libgtk3.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 18a8a9fa42..b41049b0ee 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -68,7 +68,7 @@ LIBGTK3_DEPENDENCIES += xlib_libXdamage
+ endif
  
-@@ -48,6 +48,10 @@ config BR2_KERNEL_HEADERS_5_15
- config BR2_KERNEL_HEADERS_6_1
- 	bool "Linux 6.1.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
-+
-+config BR2_KERNEL_HEADERS_6_2
-+	bool "Linux 6.2.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -125,8 +129,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_2
-+	bool "6.2.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1
--	bool "6.1.x or later"
-+	bool "6.1.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0
-@@ -390,6 +398,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.179"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.109"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.26"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.2.13"	if BR2_KERNEL_HEADERS_6_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 08e4ccad9e..80b2dbde4d 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -600,6 +600,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -613,6 +617,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "6.2"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
- 	default "6.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 	default "6.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 	default "5.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 1c39334ddd..8f3905b8d7 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -127,8 +127,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_2
-+	bool "6.2.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_1
--	bool "6.1.x or later"
-+	bool "6.1.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_0
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+-LIBGTK3_CONF_OPTS += -Dprint_backends=cups
++LIBGTK3_CONF_OPTS += -Dprint_backends=file,cups
+ LIBGTK3_DEPENDENCIES += cups
+ else
+ LIBGTK3_CONF_OPTS += -Dprint_backends=auto
 -- 
-2.39.2
+2.40.1
 
 _______________________________________________
 buildroot mailing list
