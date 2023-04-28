@@ -1,77 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 966ECC77B61
-	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 15:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C04C77B61
+	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 18:07:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E07A420E6;
-	Fri, 28 Apr 2023 15:25:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E07A420E6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DB528433D;
+	Fri, 28 Apr 2023 18:07:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DB528433D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BptxsB2ueVTu; Fri, 28 Apr 2023 15:25:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FAg3JSewdzYp; Fri, 28 Apr 2023 18:07:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0022F42128;
-	Fri, 28 Apr 2023 15:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0022F42128
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38C5D8433E;
+	Fri, 28 Apr 2023 18:07:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38C5D8433E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 468A01BF57B
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 15:25:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4FDBA1BF578
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 18:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C96442A03
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 15:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C96442A03
+ by smtp2.osuosl.org (Postfix) with ESMTP id 368FD400FD
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 18:07:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 368FD400FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aYpW1sCBvLS3 for <buildroot@lists.busybox.net>;
- Fri, 28 Apr 2023 15:25:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F54C400B9
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com
- [IPv6:2607:f8b0:4864:20::1133])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7F54C400B9
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 15:25:35 +0000 (UTC)
-Received: by mail-yw1-x1133.google.com with SMTP id
- 00721157ae682-54fb9384c2dso119450527b3.2
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 08:25:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682695534; x=1685287534;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Ws0YQaivcEpSxzq5STeehhNHZTPpIp2RGGJZCyaaIsI=;
- b=US26c9v6WwVciFkM4POQUwMcaCYPgmXOhd+aLzde2GK9CkFUe+FvG4j6wOe8m6Sq+q
- mc5mpyt2sMHfCOWoeTz4K+25R92I/LESFjRax8RpFABSZ8XR4w0qMY+T9a5aPNRu07rU
- EWQU29bYdn0IZSZI2wH6EZpllLf7eV/1Qn+o74aTSuSLczS8y3zNYpCCGRKIKethlYM1
- 5SNyhf192irAq4KQgvi+zF3q9l+6s68GBWrnC+67stBnSgO6x8k64kojV7fB9tqa/iu/
- Ogt7rA7Xbs2cbR5dyHTuzk8TfwdZgJTEeXkLatJYNyyhQomkkQ8KmItsCBbHMj1Cx1rg
- F8zg==
-X-Gm-Message-State: AC+VfDyxGup2ZpSnEk06yax2yaoGlkGLMAcIfmW1N9fHf0V3kVug3E2n
- tA68kyAqYLbHwZVX1I/r9HcHxqCWrOmbR/JdBifjy1T8gz0WnPlQqBwV
-X-Google-Smtp-Source: ACHHUZ7GXnl7hCBx3e5LCNkJ2qKg/l5EP5/PE2N2q2s3ZWs1GPy9RrLFrXeZnkH1jTn4pFFnmq2W5xvpB7osDYm7xfQ=
-X-Received: by 2002:a81:530a:0:b0:552:a0fc:6827 with SMTP id
- h10-20020a81530a000000b00552a0fc6827mr3749279ywb.52.1682695534292; Fri, 28
- Apr 2023 08:25:34 -0700 (PDT)
-MIME-Version: 1.0
-Date: Fri, 28 Apr 2023 11:25:23 -0400
-Message-ID: <CAOSAz36QEnWSGBW__+GanpD4C==z+uQ+4LW7VCKXTpaO-9XBmg@mail.gmail.com>
+ with ESMTP id vnz2sRb36H1Z for <buildroot@lists.busybox.net>;
+ Fri, 28 Apr 2023 18:07:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 187054000B
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 187054000B
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 18:07:51 +0000 (UTC)
+Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
+ by mailout07.t-online.de (Postfix) with SMTP id 06A81469C4;
+ Fri, 28 Apr 2023 20:07:49 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.3.195]) by fwd83.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1psSVY-21lOoj0; Fri, 28 Apr 2023 20:07:48 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:32816)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1psSVY-0002Lr-1H;
+ Fri, 28 Apr 2023 20:07:48 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sense.com; s=google; t=1682695534; x=1685287534;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=Ws0YQaivcEpSxzq5STeehhNHZTPpIp2RGGJZCyaaIsI=;
- b=X/wCCdBG8xdFOUBuwba5/iTpeJKY1PNlcfvMOidca9VP91LwNUpaa2womoToxX2ACI
- Bc2I43VcflFqg52f6KvST80Ut3070nOw76/2VolgpsjWUiGZuFmL5Cponvx6pYmsaohX
- KTBDkbfLbvHbiz6GCMaFMDBOhWc7ILP+4vb2M=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=sense.com header.i=@sense.com
- header.a=rsa-sha256 header.s=google header.b=X/wCCdBG
-Subject: [Buildroot] libopenssl CVEs
+Date: Fri, 28 Apr 2023 20:07:48 +0200
+Message-Id: <20230428180748.518827-3-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230428180748.518827-1-bernd.kuhls@t-online.de>
+References: <20230428180748.518827-1-bernd.kuhls@t-online.de>
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1682705268-193BBC11-95E75766/0/0 CLEAN NORMAL
+X-TOI-MSGID: 66b70dc1-d585-4d43-b281-9ccb4a7f1061
+Subject: [Buildroot] [PATCH 3/3] {toolchain,
+ linux-headers}: add support for 6.3 headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,126 +68,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Matt Casperson via buildroot <buildroot@buildroot.org>
-Reply-To: Matt Casperson <matt.casperson@sense.com>
-Content-Type: multipart/mixed; boundary="===============4643302545943012298=="
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4643302545943012298==
-Content-Type: multipart/alternative; boundary="000000000000964be905fa6715a4"
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ linux/linux.hash                                    |  1 +
+ package/linux-headers/Config.in.host                | 13 +++++++++++--
+ toolchain/Config.in                                 |  5 +++++
+ .../toolchain-external-custom/Config.in.options     |  6 +++++-
+ 4 files changed, 22 insertions(+), 3 deletions(-)
 
---000000000000964be905fa6715a4
-Content-Type: text/plain; charset="UTF-8"
-
-Based on
-https://lore.kernel.org/buildroot/20230424053608.ADC944058F@smtp2.osuosl.org/
-I see a few libopenssl vulnerabilities and I was curious if there were any
-plans to provide a patch in an upcoming release. I did review Chapter 24 in
-the User Manual and other sections on patches but wasn't able to find
-anything specific on patching timelines. Or if you have a general approach
-to libopenssl that would also be good to know for future reference. I'm new
-to buildroot so apologies if I'm stumbling around here.
-
-Matt
+diff --git a/linux/linux.hash b/linux/linux.hash
+index cab7b30385..e3047886c5 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,4 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  ba3491f5ed6bd270a370c440434e3d69085fcdd528922fa01e73d7657db73b1e  linux-6.3.tar.xz
+ sha256  c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577  linux-6.2.13.tar.xz
+ sha256  dfdcc143a879d64a5ee99213b2b4b05b5dccd566c144df93bca1e204df64c110  linux-6.1.26.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index cb614d0eef..4a4f1308cb 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -3,7 +3,7 @@ comment "Kernel Header Options"
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_6_2
++	default BR2_KERNEL_HEADERS_6_3
+ 	help
+ 	  Select the kernel version to get headers from.
+ 
+@@ -52,6 +52,10 @@ config BR2_KERNEL_HEADERS_6_1
+ config BR2_KERNEL_HEADERS_6_2
+ 	bool "Linux 6.2.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
++
++config BR2_KERNEL_HEADERS_6_3
++	bool "Linux 6.3.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_3
+ 	select BR2_KERNEL_HEADERS_LATEST
+ 
+ config BR2_KERNEL_HEADERS_VERSION
+@@ -129,8 +133,12 @@ choice
+ 	  If your kernel headers are more recent than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_3
++	bool "6.3.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_3
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_2
+-	bool "6.2.x or later"
++	bool "6.2.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
+ 
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1
+@@ -399,6 +407,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.15.109"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.26"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.2.13"	if BR2_KERNEL_HEADERS_6_2
++	default "6.3"		if BR2_KERNEL_HEADERS_6_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 80b2dbde4d..ff0eb93017 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -604,6 +604,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
++
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_3
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
+ 	select BR2_TOOLCHAIN_HEADERS_LATEST
+ 
+ # This should be selected by the latest version, above, to indicate that
+@@ -617,6 +621,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "6.3"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_3
+ 	default "6.2"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
+ 	default "6.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
+ 	default "6.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 8f3905b8d7..0fd8841e5b 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -127,8 +127,12 @@ choice
+ 	  If your toolchain uses headers newer than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_3
++	bool "6.3.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_3
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_2
+-	bool "6.2.x or later"
++	bool "6.2.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_1
 -- 
-
-*Matt Casperson*
-
-Security Architect
-
-603.781.3733
-
-<https://sense.com/>
-<http://facebook.com/sense> <https://twitter.com/sense>
-<https://www.linkedin.com/company/sense>
---
-This email, and any attachments are strictly confidential and intended for
-the addressee(s) only. The content may also contain legal, professional or
-other privileged information. If you are not the intended recipient, please
-notify the sender immediately and then delete the e-mail and any
-attachments. You should not disclose, copy or take any action in reliance
-on this transmission.
-
---000000000000964be905fa6715a4
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Based on=C2=A0<a href=3D"https://lore.kernel.org/buildroot=
-/20230424053608.ADC944058F@smtp2.osuosl.org/">https://lore.kernel.org/build=
-root/20230424053608.ADC944058F@smtp2.osuosl.org/</a> I see a few libopenssl=
- vulnerabilities and I was curious if there were any plans to provide a pat=
-ch in an upcoming release. I did review Chapter 24 in the User Manual and o=
-ther sections on patches but wasn&#39;t able to find anything specific on p=
-atching timelines. Or if you have a general approach to libopenssl that wou=
-ld also be good to know for future reference. I&#39;m new to buildroot so a=
-pologies if I&#39;m stumbling around here.=C2=A0<div><br></div><div>Matt<br=
-><span class=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" clas=
-s=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><=
-p style=3D"color:rgb(34,34,34);line-height:1.38;margin-top:0pt;margin-botto=
-m:0pt"><span style=3D"color:rgb(153,153,153);font-family:Arial;font-size:10=
-pt;white-space:pre-wrap"><b>Matt Casperson</b></span></p><p style=3D"color:=
-rgb(34,34,34);line-height:1.38;margin-top:0pt;margin-bottom:0pt"><span styl=
-e=3D"color:rgb(153,153,153);font-family:Arial;font-size:10pt;white-space:pr=
-e-wrap">Security Architect</span><br></p><p dir=3D"ltr" style=3D"color:rgb(=
-34,34,34);line-height:1.38;margin-top:0pt;margin-bottom:0pt"><span style=3D=
-"font-size:10pt;font-family:Arial;color:rgb(153,153,153);vertical-align:bas=
-eline;white-space:pre-wrap">603.781.3733</span></p><p dir=3D"ltr" style=3D"=
-color:rgb(34,34,34);line-height:1.38;margin-top:0pt;margin-bottom:0pt"><a h=
-ref=3D"https://sense.com/" target=3D"_blank"><span style=3D"font-size:10pt;=
-font-family:Arial;color:rgb(17,85,204);vertical-align:baseline;white-space:=
-pre-wrap"><span style=3D"border:none;display:inline-block;overflow:hidden;w=
-idth:96px;height:19px"><img src=3D"https://lh3.googleusercontent.com/Hx_q55=
-k6wNnVztYgBWGGPYfDtQVRn8ZfFNhenLqzrmFKwPHbeq8tEZMxtAiQgoPcr6S8wz51NuNaBqTvI=
-B673RBdUTfOqfCi0Y5hN0s6ZMyEmD5y6ZZk4b_sgzwhK3Tl2dmg5eAz6Y3dHn5ncbP2_zAfOPHY=
-PLdFhT_NoSoqzrWU2NiT9wkKzM0" width=3D"96" height=3D"19" style=3D"margin-lef=
-t:0px;margin-top:0px"></span></span></a></p><a href=3D"http://facebook.com/=
-sense" target=3D"_blank"><span style=3D"font-size:10pt;font-family:Arial;co=
-lor:rgb(17,85,204);vertical-align:baseline;white-space:pre-wrap"><span styl=
-e=3D"border:none;display:inline-block;overflow:hidden;width:16px;height:16p=
-x"><img src=3D"https://lh3.googleusercontent.com/p1uRJv0fvnN6IZJuaAeBRM8kkQ=
-NTizJ5CsTEe0kch4GewALIBBoPvdEyeQ_SQLGPlBwvAtbRmqCqe1izc_Wc28mimUQ7WWVRC_UVz=
-vLxKkGOSPDphOxqgIThj97fFLE8hTSzhxgjQplY2J7OXIdDbUTTz0hUFcEKGvcxFK3lW6fKVxC8=
-Qa2uvQQ" width=3D"16" height=3D"16" style=3D"margin-left:0px;margin-top:0px=
-"></span></span></a><span style=3D"font-size:10pt;font-family:Roboto,sans-s=
-erif;color:rgb(0,0,0);vertical-align:baseline;white-space:pre-wrap"> </span=
-><a href=3D"https://twitter.com/sense" target=3D"_blank"><span style=3D"fon=
-t-size:10pt;font-family:Roboto,sans-serif;color:rgb(17,85,204);vertical-ali=
-gn:baseline;white-space:pre-wrap"><span style=3D"border:none;display:inline=
--block;overflow:hidden;width:16px;height:16px"><img src=3D"https://lh5.goog=
-leusercontent.com/kBdPSHz8Bmipxvji8OwBDtJ6YPNIXJ2dzqmrRdV3oawxoz17jCso8jDGc=
-XtoX20kiJzOSAvMCwvnNGcQe1chm7N5JwX9w5mWuaC-68iQg6KYet-sUiPqe7fG0rtR7ypIDqEc=
-5QnQ-0_i8S-WWH38koEV7DAGd0z6-AyHfp1Jc1m6N_C4FYcMgFk" width=3D"16" height=3D=
-"16" style=3D"margin-left:0px;margin-top:0px"></span></span></a><span style=
-=3D"font-size:10pt;font-family:Roboto,sans-serif;color:rgb(0,0,0);vertical-=
-align:baseline;white-space:pre-wrap">=C2=A0</span><a href=3D"https://www.li=
-nkedin.com/company/sense" target=3D"_blank"><span style=3D"font-size:10pt;f=
-ont-family:Roboto,sans-serif;color:rgb(17,85,204);vertical-align:baseline;w=
-hite-space:pre-wrap"><span style=3D"border:none;display:inline-block;overfl=
-ow:hidden;width:16px;height:17px"><img src=3D"https://lh4.googleusercontent=
-.com/akAeQa7GyjT47QwiireASwIoyFgqUsss7eHccksl73bQ_7VOZCrUrHDQc5PG3iFrw1MdZC=
-b6uoD53lrOKglPqx-v8CTa3Ag3O-9oyzZ7Jhho3iNzK8m2b0m4umAjJoEQl_vBfJA9xMdogKQme=
-SZBLRBqaE_Ea7QEHlbPt83zpdPCB8CTRyMth48" width=3D"16" height=3D"17" style=3D=
-"margin-left:0px;margin-top:0px"></span></span></a><br><div>--</div><div><s=
-pan style=3D"color:rgb(34,34,34)">This email, and any attachments are stric=
-tly confidential and intended for the addressee(s) only. The content may al=
-so contain legal, professional or other privileged information. If you are =
-not the intended recipient, please notify the sender immediately and then d=
-elete the e-mail and any attachments. You should not disclose, copy or take=
- any action in reliance on this transmission.</span><br></div></div></div><=
-/div></div>
-
---000000000000964be905fa6715a4--
-
---===============4643302545943012298==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4643302545943012298==--
