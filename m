@@ -1,64 +1,139 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72223C7EE21
-	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 05:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09D13C77B61
+	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 07:16:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD1C584056;
-	Fri, 28 Apr 2023 05:46:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD1C584056
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70E9F611BA;
+	Fri, 28 Apr 2023 07:16:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70E9F611BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O6IXVMawg900; Fri, 28 Apr 2023 05:46:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WI1wsorTrTbQ; Fri, 28 Apr 2023 07:16:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC14484050;
-	Fri, 28 Apr 2023 05:46:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC14484050
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D9E8C1BF592
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 05:46:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94E5560F49;
+	Fri, 28 Apr 2023 07:16:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94E5560F49
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A9FF91BF589
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 07:16:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B678B4205E
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 05:46:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B678B4205E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 901EB40125
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 07:16:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 901EB40125
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jwn0ZYHT8gs1 for <buildroot@lists.busybox.net>;
- Fri, 28 Apr 2023 05:46:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U2xg4fTd0jkX for <buildroot@lists.busybox.net>;
+ Fri, 28 Apr 2023 07:16:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AE1B42059
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7AE1B42059
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 05:46:47 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 855451C0004
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 05:46:44 +0000 (UTC)
-MIME-Version: 1.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43409400FE
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com
+ [205.220.166.238])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 43409400FE
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 07:16:50 +0000 (UTC)
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+ by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 33S6h7H1025824; Fri, 28 Apr 2023 00:16:48 -0700
+Received: from nam11-co1-obe.outbound.protection.outlook.com
+ (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+ by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3q4f3mp071-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Fri, 28 Apr 2023 00:16:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bVVfhmZ3+FcEUnhhgVu3ZeBjR9ldD7yHveumXVLSD/468kXBZCMftqrT+LNAzD25F6lOJVQb2VyvdiwXbo/dqSrOiYBuqWu64KkmPZZxhx7jWQRGeZHZ35k8VI+WhBw9kIRh7oRHXht83MfMdehUu5Pqwlhdz/6230oK4QdmG6ZQnIKegr+PyFpChW4ImH/7pkI3lhEdrd77jKPJLiA5Uqs25RqC0KbyA+2Qjfls0W8/fEeZxgiTR94+SK8DbxZd0CBRz3gDB6kMQt4anpVjwh2ug1mDCp6AZ6V0+qh7N7sXxDUj6unfTZpeWA6Ib5T757kjbZuTWE9/EtjVx/yFVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YVV0hTr02l5MU+BJBk4YJuO7P9wiOt4KTTstXR9F3ok=;
+ b=mooJZxYSxF10m/xLrRKJRgD9i0I5ImOYJsi2VYv4kdhVY9EvGi3QLm8VnKqlu1CsKqCjyhbQfMuIOvY1wZbLLG64N4Y4b6VHeHH8q5WmlS0fU6pv5RNqtWcoF9a4BfCsFpHu1Kb+cI0q8xoUicc2R2Sm8AvrdjJCO3hgTqF/TiAL6exK/ljzMkc2B8Wet8L8Uct6ScFg2RZ2aKCwzI6flwvUpqWTVJfqPsXgCcQ2ReH9MyE+iSMXYKI+g/jty5nE/7NaHPSalx2U97BAWhhjy9VMMkh/M3+RmdAWIf6VJC5LDW4IsUqfJpkWvkTv2v+PcxT3B3YGubm6SSLeZhlk+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=eng.windriver.com; dkim=pass header.d=eng.windriver.com; arc=none
+Received: from MW4PR11MB5824.namprd11.prod.outlook.com (2603:10b6:303:187::19)
+ by PH0PR11MB4950.namprd11.prod.outlook.com (2603:10b6:510:33::20)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Fri, 28 Apr
+ 2023 07:16:44 +0000
+Received: from MW4PR11MB5824.namprd11.prod.outlook.com
+ ([fe80::631b:404:cc4e:8008]) by MW4PR11MB5824.namprd11.prod.outlook.com
+ ([fe80::631b:404:cc4e:8008%8]) with mapi id 15.20.6340.021; Fri, 28 Apr 2023
+ 07:16:37 +0000
+From: Xiangyu Chen <xiangyu.chen@eng.windriver.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Apr 2023 05:46:44 -0000
-Message-Id: <20230428054649.B678B4205E@smtp4.osuosl.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1682660804; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=nrljfwU9/E99Upo/NaPSl83uGnvCpdHQVf++Dkh//uI=;
- b=eZ3Ikxiv5MprfOrQ5s6ZTz+VrkVCquFNQmXi7w0GT0DyhfOS3klQQBStOuXy68tKazmc2A
- JVyV0HqCPkrmNsc9PLfAlc6kcdPHEsXRU0E03S/Imq0/WuSqAb5TkZ2VD85aCVy+cZK/H/
- aXtoLWRCMUceOMBoxgoNdj6Qfi0jtAkjNwgo0YX6sSOJssHe/e3bruvrriVmVEz4NDGtXD
- urmmYanp3eHaZAgR+kjfCT7Zx3uI8fof1H415HC4uOLeY3JlrVQ6YSpVYJKbnloO1RkDCN
- p6u4+HU1JUxu/F1j6Ig6BnvWyksM1HOAPzpaOF2U3/Iu26DHJI0bSIfcBQq8sg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=eZ3Ikxiv
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-04-27
+Date: Fri, 28 Apr 2023 15:16:18 +0800
+Message-Id: <20230428071618.805982-1-xiangyu.chen@eng.windriver.com>
+X-Mailer: git-send-email 2.34.1
+X-ClientProxiedBy: SI2P153CA0023.APCP153.PROD.OUTLOOK.COM (2603:1096:4:190::6)
+ To MW4PR11MB5824.namprd11.prod.outlook.com
+ (2603:10b6:303:187::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW4PR11MB5824:EE_|PH0PR11MB4950:EE_
+X-MS-Office365-Filtering-Correlation-Id: b2829c0b-628f-4677-9714-08db47b88147
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NzrGryeNf4OY8Pbcr1X1wnVN1Z4ADyPhoVNwVgZVwoV3n+uQER6sDPEVEFyKBUYPkaWN+VKbhh0gmEEBQMZ47x2EPfZE1KGC1x8bejTeduYHYjkZdyshaxoWBDOeizHw714+Kqb/Eq36OyKxj/UwIbOdEY+/GsZgB3CfEPlfVgmB3CZAF9p1PssY+UaDphDFwyjP+0kZJmuB3CZ0862d3fLWty9Fgo0wtV9ahb1sfohMygV8qAZIRvvhK5gcz375RRzAkfgNN2d6ayHlWuWAXrGOlEzI79HI+mgi1a+0XtRziQz2AjAi0vN45IiFsL5HeImc4hKJOnHXspAyLNw+QS66m7ou6YRIWpOhvuN/x75o6JEu5Ept0i81vKrxDSLczNV0GkhpaFVO7YOUtozTqBestLO469ffshtC+Yr69dDv6cEsivkkEbDa+M+htcLbkJNhZCpkeVvCao5qD222XbeWgUvNtnvtplRKROge8XELfLZpSlJTvQhE9479y4uc9P6YXK4mKkHP1G3/0NVEdIwgxVAQLkO88Mg3JhAxv/5JkdPtuphGpD9iKOwYpmw1ivBSwmYAKgpRjkXLUwbCJbc1yh7XipP5SndqGGgvLdysPEkPPG5M+fWoVlzwsw5SJu6RZWRpDKan/1QS7ov6uw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:MW4PR11MB5824.namprd11.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230028)(4636009)(396003)(366004)(346002)(376002)(136003)(39850400004)(451199021)(38100700002)(5660300002)(38350700002)(44832011)(2906002)(8936002)(8676002)(316002)(66556008)(66946007)(83170400001)(4326008)(66476007)(6916009)(41300700001)(966005)(83380400001)(186003)(6512007)(6506007)(1076003)(26005)(478600001)(6666004)(52116002)(6486002)(2616005);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NWL8P14/q7/H46sHSg3v9y7vtZ41mAlRKOD5T5h0RZZGKXVCFBtGGGaxpw7Y?=
+ =?us-ascii?Q?Bnb22H4GOj+rcYgfuFANRzi0AGLJzEHpipT0cdvO1K7PTL+WZfXMzqyNwHOH?=
+ =?us-ascii?Q?T1saTfObX4URfe0lCqBq8WSkqueAdsr4y7fflKE7PUsV79QSUFDiC45vjBYy?=
+ =?us-ascii?Q?qcb1oQ77O37E0aR60HOgIsGxFZ2x1gRWYYT3fNaWZdBXyoVPPDtkLKCr5Dwy?=
+ =?us-ascii?Q?xFRRA+JRq4mzxRjqeDjjHKqxCoLvWf/CRYgkKIcrihmZxshNYh/mNurivfB2?=
+ =?us-ascii?Q?uSM+/XxC5gX7mr+AxZ61jrvH8hZTHoYwztaZFj3IndyQfJoKAqi1fiH1cxxE?=
+ =?us-ascii?Q?4Ed99pPiDwoo8ra6PA40sxIK4NDwncynnBYXMOPyStSMOiEvN6epwm3YONgv?=
+ =?us-ascii?Q?OM2W2oQjJ0KvpofBRWPFN8o68Ql64S8m9rf6BV44HsE+n4Rimqqkza+BIcv8?=
+ =?us-ascii?Q?iWdjmHa+TafCJhmi4hE51ST4AGd8/8TsAXOODZeZESlnz7JW3nqRq3C3FyQg?=
+ =?us-ascii?Q?V5Gt1S6vLRFNdNoyVp5qQXbcdz+QdsnzzfZicE2bZ3omJc/OVy6Xi/I4J7e5?=
+ =?us-ascii?Q?S63NVYLecko6R5soDpUeOSDJ84P65LZO6EYLSm8j6JDG9X7cfTuIiv9dV+TZ?=
+ =?us-ascii?Q?l0Y+0if/HRIiEpFV1Vq74E8Y5WaxMraWXYurJt+njX5HNid1/47ZoFodtQup?=
+ =?us-ascii?Q?aIHY9sqMgh6DgK8OG9/tKVZpo+wBP9FfOmn70+10x1V0WD7uOmR27DEeJMkv?=
+ =?us-ascii?Q?P9SdzKzv4QM6ibEx5J4dWWRMB95lCk1bcp/4pSFugEZ25a3nhBMxCgmoPdxe?=
+ =?us-ascii?Q?AFS1Z+UuacQ7WIAtIIORdDb2lQR3XxBBIQs8wuhtlAplcVMHFerEFhwWidxa?=
+ =?us-ascii?Q?knRucxU6MwgjpJ1v9ItFsa0AmFZvp43cCMxrTKMr4Qhz8IgBUVlvZselIG/X?=
+ =?us-ascii?Q?rh6CweKGYZpHuH/SoxIvUxFoWrrgue2JhygcIDX5nvQTKunREIqAjx6wnPgV?=
+ =?us-ascii?Q?6/s/PxQN9malm/XFP73fR7DCwbhkrQOO8eFVqYnJm3sm+DNlGPoznjhJ+Puz?=
+ =?us-ascii?Q?sUeCEn5yAs1XlY0dje9f6qt/tN+QuxgJX0K/s0JVTG+NbjHgU9bXFJHctmBC?=
+ =?us-ascii?Q?OAGHiR6wkJL/ISeqg7Q5nHUZ7944KgsbtTdI3PRYNOUbsgNKlIfyCfCzjUO9?=
+ =?us-ascii?Q?lacj2VyLbRTv09RlksyHsnXNqA7WBsMZ43pywtn2njQeEWVpV6bWzO4H9TG+?=
+ =?us-ascii?Q?MCRvW9Z/YEKEDwKKcVot7lLaF60egPcA1stA58oUdPvyQXK0wV6vbU3QCOd1?=
+ =?us-ascii?Q?ts3AFwfCn45XZj0qMua/GxmGrlxKhU9ixEC0YbENrJv2sbSc/ifGEUnCo9eR?=
+ =?us-ascii?Q?vS+tWIKyy3nKkdQs6Xzwi1ox2t0Wwv1QVkimgTDpb6tf7gFYsXsdgdjiOfVB?=
+ =?us-ascii?Q?EANCD9asIEO8/W/AW6JUfM+lefkcHAjEuHailWgQEmrCX7yvbQdl5Cq/3dTz?=
+ =?us-ascii?Q?aTxyuPcI0lPZMenIDaIgiyV+9381mLWsaXQq+b1xiZULRK6iDg8pu7PzuK7R?=
+ =?us-ascii?Q?7TClGNshNNgJkocWhHJEpRA7oqa9rl9paDzkidCGi+Oed9/DjoZis+EuoT0m?=
+ =?us-ascii?Q?PQ=3D=3D?=
+X-OriginatorOrg: eng.windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2829c0b-628f-4677-9714-08db47b88147
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5824.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 07:16:37.3459 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zp2vlGAahHQWbrH6i/EJXllfBLhCDc9LT/pjP24j+xCLrppAM6IlFqoob9Pac0zyJ2EtNmYS4z4tyqHFxWM+Oeerel1vvYBHDtLORaEYDwk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4950
+X-Proofpoint-ORIG-GUID: S-rbfrcU9mZAXbZ1HloPcqNwgSOkbZBK
+X-Proofpoint-GUID: S-rbfrcU9mZAXbZ1HloPcqNwgSOkbZBK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-28_02,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 phishscore=0
+ mlxscore=0 priorityscore=1501 adultscore=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 impostorscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304280058
+Subject: [Buildroot] [PATCH] package/crun: bump to version 1.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,140 +145,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+From: Xiangyu Chen <xiangyu.chen@windriver.com>
 
-Autobuild statistics for 2023-04-27
-===================================
+Changes:
+https://github.com/containers/crun/releases/tag/1.8.4
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  7  |  5  |  0  | 12  |
-    master   | 65  | 48  |  0  | 113 |
+Also emoved 0001-src-crun.c-fix-build-without-dlfcn.h.patch, this
+commit has already existed in the latest version release.
 
-Classification of failures by reason for master
------------------------------------------------
+Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
+---
+ ...src-crun.c-fix-build-without-dlfcn.h.patch | 39 -------------------
+ package/crun/crun.hash                        |  2 +-
+ package/crun/crun.mk                          |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
+ delete mode 100644 package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
 
-               host-qemu-7.2.0 | 5 
-                 agentpp-4.6.0 | 2 
-glibc-2.37-2-g9f8513dc64119... | 2 
-  gobject-introspection-1.72.0 | 2 
-            host-binutils-2.37 | 2 
-            host-binutils-2.38 | 2 
-         host-gcc-final-10.4.0 | 2 
-               libglib2-2.76.1 | 2 
-                 uclibc-1.0.43 | 2 
-                       unknown | 2 
-            altera-stapl-0.3.3 | 1 
-             dahdi-linux-3.2.0 | 1 
-                 dhcp-4.4.3-P1 | 1 
-        edk2-edk2-stable202208 | 1 
-                  faad2-2.10.1 | 1 
-             fontconfig-2.13.1 | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-                     gmp-6.2.1 | 1 
-                haveged-1.9.18 | 1 
-         host-gcc-final-11.3.0 | 1 
-host-gdb-arc-2020.09-releas... | 1 
-                host-go-1.19.8 | 1 
-              libgcrypt-1.10.1 | 1 
-                  linux-6.1.14 | 1 
-                   linux-tools | 1 
-            mesa3d-demos-8.5.0 | 1 
-                     mtd-2.1.5 | 1 
-                python3-3.11.2 | 1 
-                    qemu-7.2.0 | 1 
-             stress-ng-0.15.04 | 1 
-           uboot-tools-2021.07 | 1 
-               util-linux-2.38 | 1 
-           v4l2loopback-0.12.7 | 1 
-               xfsprogs-5.14.2 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   x86_64    |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/0f40b5148f32bfbf35c4e8868df926feeb6cad02 |     
- aarch64_be  |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/becea5e4dfcbc11a2f7930ac06dd500f32a6ebb3 |     
-  mips64el   |       altera-stapl-0.3.3       | NOK | http://autobuild.buildroot.net/results/dd989dd4a64791be8a46f8ec25f3cac976bda344 |     
-   x86_64    |       dahdi-linux-3.2.0        | NOK | http://autobuild.buildroot.net/results/bb760e3cc591907aa91dcd7bd72ee49edf435dbf |     
-   sh4eb     |         dhcp-4.4.3-P1          | NOK | http://autobuild.buildroot.net/results/835d51c4300b79dfbb1436fdb1ea2c0c9724e249 | ORPH
-   x86_64    |     edk2-edk2-stable202208     | NOK | http://autobuild.buildroot.net/results/7115e799605b65da97941e11c3e137e921586028 |     
-    sh4a     |          faad2-2.10.1          | NOK | http://autobuild.buildroot.net/results/a78f8d3d9f60ddd055e171519ac930f2db99b139 |     
-  riscv64    |       fontconfig-2.13.1        | NOK | http://autobuild.buildroot.net/results/722e3f24770cb51ecc357685340172a47747b462 | ORPH
-    arm      | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/34b4cdb762bf0ec44334721e8b735d7c9d2c4575 |     
-  aarch64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/217ae264f4d71e5e9915c2c8cbc608b6b04b2a3d |     
-  powerpc    | glibc-2.37-2-g9f8513dc64119... | NOK | http://autobuild.buildroot.net/results/384787a535ca39c1a3995821c8922925150e0baa |     
-  powerpc    | glibc-2.37-2-g9f8513dc64119... | NOK | http://autobuild.buildroot.net/results/11dd7c322baf0e02ab11f91478f83b2d9f071348 |     
-  riscv64    |           gmp-6.2.1            | NOK | http://autobuild.buildroot.net/results/093cceb87a3fb7f586e457710b9c2a6378429e28 | ORPH
-   nios2     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/aa22d0d1bbf31cef7ac94ca79a65c1866b5eba29 | ORPH
-   nios2     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/bc7376b89be37ba2a8efdfbd46d9d1188fccb7bc | ORPH
-   arceb     |         haveged-1.9.18         | NOK | http://autobuild.buildroot.net/results/08b224a90a0e608af5f8680f3d6cd5c6c344dc53 |     
-  aarch64    |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/11920b6c2e2ec5d93cdf44af8f30ab857e08d597 |     
- aarch64_be  |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/1a5cb7282218cb944622677dff9030616dbf3a9f |     
-  aarch64    |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/0e7138919e0ffa61a05aa54326b138ee1360a722 |     
- powerpc64   |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/9f1f2f5f414114a74cca2ab2dd2240a678552e24 |     
-microblazeel |     host-gcc-final-10.4.0      | NOK | http://autobuild.buildroot.net/results/2b0f9a6d393fe57b61a19c9273e393c1bb11aede |     
-    arm      |     host-gcc-final-10.4.0      | NOK | http://autobuild.buildroot.net/results/be59d66968d844802cfa5331456418983c48ff99 |     
-    m68k     |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/d1c9b8fd1c1c126192b227fb4d4d890cd9c16b8e |     
-   arceb     | host-gdb-arc-2020.09-releas... | NOK | http://autobuild.buildroot.net/results/14e0eee2e2950a27a9286715148fa2a9b46238f5 | ORPH
-  mips64el   |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/dc24d5b4146bf48380796870b4b15776dc699902 |     
-   nios2     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/5be9348cfef377ec1d66ff93472dfadba6bf88ff |     
-powerpc64le  |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/74a4605c537e87270a7bf22fdc6005ec9b3c9ea0 |     
-  aarch64    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/1ba3cb3a7972a6c0ce54b7d3cf62c10e49f46a98 |     
-   armeb     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/71cc4c5a59dd3b62728c9c079f579fb576daccaf |     
-    mips     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/279b3c164300acdac57d5adad426f56d0d6c349b |     
-    i686     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/e63a71e57e262b68c02faf71d6905966d1d0751d | ORPH
-   mips64    |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/886a0da34657d5e2c1764d1f0c80aaeb58ffdf8e |     
-   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/2ddec17b228bb4a02d30cf3557c9e6f36cb6ede2 |     
-   mips64    |          linux-6.1.14          | NOK | http://autobuild.buildroot.net/results/49ec4d7df617b2d7d5e7e365350e43522cb7ff09 | ORPH
- aarch64_be  |          linux-tools           | NOK | http://autobuild.buildroot.net/results/7b118a7f2e7c30ce321e05110248d0efb357d3be | ORPH
-    arm      |       mesa3d-demos-8.5.0       | NOK | http://autobuild.buildroot.net/results/196efdd01b592d0d7c9346d399018db1a268980a |     
-    or1k     |           mtd-2.1.5            | NOK | http://autobuild.buildroot.net/results/4752dcc68e2020aba2aaf03fa5e7887140f2be60 | ORPH
-   x86_64    |         python3-3.11.2         | NOK | http://autobuild.buildroot.net/results/5d9caef0ddcfe48fcc2726cf3df99bebc999f7dc |     
-    i686     |           qemu-7.2.0           | NOK | http://autobuild.buildroot.net/results/c712fcb5ef666079f678c441793482d35bda0936 |     
- microblaze  |       stress-ng-0.15.04        | NOK | http://autobuild.buildroot.net/results/dfc092d3f60d1e761aca515e25a8ee1ab3120c8e |     
-  riscv64    |      uboot-tools-2021.07       | NOK | http://autobuild.buildroot.net/results/459c1a6661e73e3cec5fa5e19a5b73ec38b8f33d | ORPH
-  riscv64    |         uclibc-1.0.43          | NOK | http://autobuild.buildroot.net/results/24408dacdecaa157e5402e0aefadec02727cdc85 |     
-  mips64el   |         uclibc-1.0.43          | NOK | http://autobuild.buildroot.net/results/f478f92bfda4f7077df11368d24a91b6227fd119 |     
-    mips     |            unknown             | NOK | http://autobuild.buildroot.net/results/3e0c52895620ca09f3c3933c3f402be930561c50 |     
-  sparc64    |            unknown             | NOK | http://autobuild.buildroot.net/results/38492271344140a8377ee50a81d7b7d914cb00cb |     
-   mipsel    |        util-linux-2.38         | NOK | http://autobuild.buildroot.net/results/9d2d6cac83a6384a2f7f4326b9a5136327dc163f | ORPH
- powerpc64   |      v4l2loopback-0.12.7       | NOK | http://autobuild.buildroot.net/results/211135b9864792c16bd7c23dff1b4744051c2f3e |     
-    arm      |        xfsprogs-5.14.2         | NOK | http://autobuild.buildroot.net/results/703236cd49e9d898900b5420571e7d52cf31a1fb | ORPH
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-               host-qemu-7.2.0 | 3 
-             fontconfig-2.13.1 | 1 
-              host-rust-1.67.1 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  riscv64    |       fontconfig-2.13.1        | NOK | http://autobuild.buildroot.net/results/f6587d6536dcb94b654cd3fa336c7d754ad9553a | ORPH
-   mipsel    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/49d233cf0977ef8cfbd88a64cf8b1eb06c9f7e64 |     
-   armeb     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/191324ff1e143799e20e968321e1dabc606ad269 |     
-   s390x     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/efb2d713324534dad6486ca759d1e65a76be18ed |     
-  aarch64    |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/aea7882eab04320bb8b21e274dd38a77e287297a |     
-
-
-
+diff --git a/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch b/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
+deleted file mode 100644
+index 104c19a40f..0000000000
+--- a/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 278b9b447bec3fb81bf252eb2fe2c856892ec802 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 30 Dec 2022 18:40:15 +0100
+-Subject: [PATCH] src/crun.c: fix build without dlfcn.h
+-
+-Fix the following build failure without dlfcn.h raised since version 1.7
+-and
+-https://github.com/containers/crun/commit/5837234e9840cd067edd9f6cd2ed9cae9a0e6570:
+-
+-src/crun.c:26:10: fatal error: dlfcn.h: No such file or directory
+-   26 | #include <dlfcn.h>
+-      |          ^~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/a5f52a7ee757c92c9571261c0ed884d05caeaf2f
+-
+-[fontaine.fabrice@gmail.com: backport upstream commit]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/crun.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/crun.c b/src/crun.c
+-index cbfe900..af0cc97 100644
+---- a/src/crun.c
+-+++ b/src/crun.c
+-@@ -23,7 +23,9 @@
+- #include <string.h>
+- #include <libgen.h>
+- 
+-+#ifdef HAVE_DLOPEN
+- #include <dlfcn.h>
+-+#endif
+- 
+- #include "crun.h"
+- #include "libcrun/utils.h"
+--- 
+-2.25.1
+-
+diff --git a/package/crun/crun.hash b/package/crun/crun.hash
+index 2b21800f02..bdffb0c6aa 100644
+--- a/package/crun/crun.hash
++++ b/package/crun/crun.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  f669ecd3d1895dcaa8425eabb707c06eb3bdb5ae5201a50a423c3cace36c4a05  crun-1.7.2.tar.gz
++sha256  5b8b5adb1dff7af768b69d2b0b4f2cd785ec931e7aa10138aa29812c46ee09ff  crun-1.8.4.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.libcrun
+diff --git a/package/crun/crun.mk b/package/crun/crun.mk
+index ddb96a0b33..15438a44b3 100644
+--- a/package/crun/crun.mk
++++ b/package/crun/crun.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRUN_VERSION = 1.7.2
++CRUN_VERSION = 1.8.4
+ CRUN_SITE = https://github.com/containers/crun/releases/download/$(CRUN_VERSION)
+ CRUN_DEPENDENCIES = host-pkgconf yajl
+ 
 -- 
-http://autobuild.buildroot.net
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
