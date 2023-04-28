@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DBF8C77B7E
-	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 15:22:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ACC3C77B61
+	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 15:23:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB7C6427A0;
-	Fri, 28 Apr 2023 15:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB7C6427A0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 187D440340;
+	Fri, 28 Apr 2023 15:23:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 187D440340
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0EqdP8DLK75n; Fri, 28 Apr 2023 15:22:55 +0000 (UTC)
+	with ESMTP id bJrGEjoygu6O; Fri, 28 Apr 2023 15:23:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8744142824;
-	Fri, 28 Apr 2023 15:22:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8744142824
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4D7CD1BF57B
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 15:22:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C70D4011B;
+	Fri, 28 Apr 2023 15:23:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C70D4011B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0783E1BF57B
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 15:22:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3447C84247
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 15:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3447C84247
+ by smtp4.osuosl.org (Postfix) with ESMTP id D409E42824
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 15:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D409E42824
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kBW7Qx5LtNTx for <buildroot@lists.busybox.net>;
- Fri, 28 Apr 2023 15:22:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gUQo5OzX0Ygz for <buildroot@lists.busybox.net>;
+ Fri, 28 Apr 2023 15:22:41 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F1B784240
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D249D427F2
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F1B784240
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 15:22:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D249D427F2
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 15:22:41 +0000 (UTC)
 Received: from pwmachine.numericable.fr
  (166.red-83-59-184.dynamicip.rima-tde.net [83.59.184.166])
- by linux.microsoft.com (Postfix) with ESMTPSA id CBF3B21C33F7;
- Fri, 28 Apr 2023 08:22:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CBF3B21C33F7
+ by linux.microsoft.com (Postfix) with ESMTPSA id 92C2321C33F5;
+ Fri, 28 Apr 2023 08:22:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 92C2321C33F5
 From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Apr 2023 16:22:10 +0100
-Message-Id: <20230428152211.20394-2-flaniel@linux.microsoft.com>
+Date: Fri, 28 Apr 2023 16:22:11 +0100
+Message-Id: <20230428152211.20394-3-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230428152211.20394-1-flaniel@linux.microsoft.com>
 References: <20230428152211.20394-1-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=linux.microsoft.com; 
- s=default; t=1682695358;
- bh=zGBwoLos2Qg5AdfA6VF8hE60QA+x2xX6wgAYKu78tK0=;
+ s=default; t=1682695361;
+ bh=ANJWna6pbwYgtQ3gSVrYhC64Pszl37p7wBLp+S/yfr0=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=W3fB3LaMVhvZ9NzO072/lJ3UjmcGY34s5bec+Q1zTWiIthMeJUuxPg8zOli87QG3J
- 5ASpFEJX8jG4YLZnOSN/wt+rgfN/vt4BTytLf3oovLJ6/5eS3vlnfMovkJCSzAzHUc
- jnDAoIZuHl6lNp4lsoy7EJ37K99RSW5ckZNWstXE=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=idJEWKeDy6nvKihfMoi5g1v/b9imfGEUiJE3BNQoeFT1PacpndooKV4aCWCI8YhpO
+ Luu7d9K9l0YJsHQKm6FGzbN+2CZANihP2JMsUSszaeBbCZ51mtrkJ/3xIteTLsL0Lg
+ u8yIvZEfVjpLXkZuONRolbYKbSErM6+3/xfiyV30=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=linux.microsoft.com
  header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
- header.b=W3fB3LaM
-Subject: [Buildroot] [RFC PATCH v1 1/2] package/sysdig: bump to version
- 0.31.4
+ header.b=idJEWKeD
+Subject: [Buildroot] [RFC PATCH v1 2/2] package/falcosecurity-libs: bump to
+ version 0.10.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,114 +80,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Remove upstream patch as it is no more needed.
-
 Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 ---
- ...BUNDLED_DEPS-before-getting-nlohmann.patch | 52 -------------------
- package/sysdig/sysdig.hash                    |  2 +-
- package/sysdig/sysdig.mk                      |  8 ++-
- 3 files changed, 8 insertions(+), 54 deletions(-)
- delete mode 100644 package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+ .../0002-cmake-Install-shared-libraries.patch | 61 +++++++++++++++++++
+ .../falcosecurity-libs.hash                   |  2 +-
+ .../falcosecurity-libs/falcosecurity-libs.mk  | 12 ++--
+ 3 files changed, 69 insertions(+), 6 deletions(-)
+ create mode 100644 package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
 
-diff --git a/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch b/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
-deleted file mode 100644
-index 3521bd3f8d..0000000000
---- a/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 0dbebd008c04d266dc41c4bec8280a0744fd5130 Mon Sep 17 00:00:00 2001
--From: Francis Laniel <flaniel@linux.microsoft.com>
--Date: Wed, 13 Apr 2022 18:01:11 +0100
--Subject: [PATCH] cmake: Check USE_BUNDLED_DEPS before getting
-- nlohmann-json.
--
--Upstream: https://github.com/draios/sysdig/pull/1869
--Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-----
-- cmake/modules/nlohmann-json.cmake | 29 +++++++++++++++++++----------
-- 1 file changed, 19 insertions(+), 10 deletions(-)
--
--diff --git a/cmake/modules/nlohmann-json.cmake b/cmake/modules/nlohmann-json.cmake
--index bb1279d7..feb0f071 100644
----- a/cmake/modules/nlohmann-json.cmake
--+++ b/cmake/modules/nlohmann-json.cmake
--@@ -16,13 +16,22 @@
-- # limitations under the License.
-- #
-- 
---set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
---message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
---set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
---ExternalProject_Add(
---  njson
---  URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
---  URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
---  CONFIGURE_COMMAND ""
---  BUILD_COMMAND ""
---  INSTALL_COMMAND "")
--+if(NOT USE_BUNDLED_DEPS)
--+  find_path(NJSON_INCLUDE_DIR NAMES nlohmann/json.hpp)
--+  if(NJSON_INCLUDE_DIR)
--+    message(STATUS "Found njson: include: ${NJSON_INCLUDE_DIR}")
--+  else()
--+    message(FATAL_ERROR "Couldn't find system njson")
--+  endif()
--+else()
--+  set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
--+  message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
--+  set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
--+  ExternalProject_Add(
--+    njson
--+    URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
--+    URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
--+    CONFIGURE_COMMAND ""
--+    BUILD_COMMAND ""
--+    INSTALL_COMMAND "")
--+endif()
---- 
--2.25.1
--
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index cda3de5e7c..902f6f2b82 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch b/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
+new file mode 100644
+index 0000000000..38a8bdd4f4
+--- /dev/null
++++ b/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
+@@ -0,0 +1,61 @@
++From b6d847fe8aa0513c6d19bd8187133699b9c4efd3 Mon Sep 17 00:00:00 2001
++From: Francis Laniel <flaniel@linux.microsoft.com>
++Date: Fri, 28 Apr 2023 15:14:27 +0100
++Subject: [PATCH] cmake: Install shared libraries.
++
++This is needed as sysdig is compiled as a non static binary which relies on
++these libraries.
++
++Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
++---
++ cmake/modules/libelf.cmake       |  2 +-
++ userspace/libscap/CMakeLists.txt | 16 +++++++++++++++-
++ 2 files changed, 16 insertions(+), 2 deletions(-)
++
++diff --git a/cmake/modules/libelf.cmake b/cmake/modules/libelf.cmake
++index 8ca2f4f7..73d13d26 100644
++--- a/cmake/modules/libelf.cmake
+++++ b/cmake/modules/libelf.cmake
++@@ -10,7 +10,7 @@ if(LIBELF_INCLUDE)
++     add_custom_target(libelf)
++ elseif(NOT USE_BUNDLED_LIBELF)
++     find_path(LIBELF_INCLUDE elf.h PATH_SUFFIXES elf)
++-    find_library(LIBELF_LIB NAMES libelf.a libelf.so)
+++    find_library(LIBELF_LIB NAMES libelf.so)
++     if(LIBELF_LIB)
++         message(STATUS "Found LIBELF: include: ${LIBELF_INCLUDE}, lib: ${LIBELF_LIB}")
++     else()
++diff --git a/userspace/libscap/CMakeLists.txt b/userspace/libscap/CMakeLists.txt
++index ae4760df..59378fea 100644
++--- a/userspace/libscap/CMakeLists.txt
+++++ b/userspace/libscap/CMakeLists.txt
++@@ -70,7 +70,7 @@ endif()
++ 
++ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
++ 
++-add_library(scap STATIC
+++add_library(scap SHARED
++ 	${targetfiles})
++ 
++ if (CMAKE_SYSTEM_NAME MATCHES "SunOS")
++@@ -212,3 +212,17 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" AND CMAKE_SYSTEM_NAME MATCHES "Linux
++ 		target_link_libraries(scap scap_engine_gvisor)
++ 	endif()
++ endif()
+++
+++install(TARGETS scap)
+++install(TARGETS scap_engine_udig)
+++install(TARGETS scap_engine_savefile)
+++install(TARGETS scap_engine_bpf)
+++install(TARGETS scap_engine_noop)
+++install(TARGETS scap_engine_source_plugin)
+++install(TARGETS scap_engine_kmod)
+++install(TARGETS scap_engine_nodriver)
+++install(TARGETS scap_event_schema)
+++install(TARGETS scap_platform)
+++install(TARGETS scap_engine_util)
+++install(TARGETS scap_error)
+++install(TARGETS driver_event_schema)
++-- 
++2.34.1
++
+diff --git a/package/falcosecurity-libs/falcosecurity-libs.hash b/package/falcosecurity-libs/falcosecurity-libs.hash
+index 2e239ca2fe..ef805cbcf6 100644
+--- a/package/falcosecurity-libs/falcosecurity-libs.hash
++++ b/package/falcosecurity-libs/falcosecurity-libs.hash
+@@ -1,5 +1,5 @@
  # sha256 locally computed
--sha256  6b96797859002ab69a2bed4fdba1c7fe8064ecf8661621ae7d8fbf8599ffa636  sysdig-0.29.3.tar.gz
-+sha256  b8f43326506f85e99a3455f51b75ee79bf4db9dc12908ef43af672166274a795  sysdig-0.31.4.tar.gz
- sha256  a88fbf820b38b1c7fabc6efe291b8259e02ae21326f56fe31c6c9adf374b2702  COPYING
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index bafe534a16..aabd274557 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
+-sha256  80903bc57b7f9c5f24298ecf1531cf66ef571681b4bd1e05f6e4db704ffb380b  falcosecurity-libs-e5c53d648f3c4694385bbe488e7d47eaa36c229a.tar.gz
++sha256  2a4b37c08bec4ba81326314831f341385aff267062e8d4483437958689662936  falcosecurity-libs-0.10.5.tar.gz
+ sha256  21ec9433a87459b3477faf542bacec419dc03af841309eac35edeffe481cf10b  COPYING
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  driver/GPL2.txt
+ sha256  f17d3f2c2d565a74a7d5bf96f880c43701e141897e8dff0c8aa13e5d07aaf226  driver/MIT.txt
+diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk b/package/falcosecurity-libs/falcosecurity-libs.mk
+index 92d5c61832..acd46cf7a5 100644
+--- a/package/falcosecurity-libs/falcosecurity-libs.mk
++++ b/package/falcosecurity-libs/falcosecurity-libs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSDIG_VERSION = 0.29.3
-+SYSDIG_VERSION = 0.31.4
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = Apache-2.0
- SYSDIG_LICENSE_FILES = COPYING
-@@ -26,11 +26,17 @@ SYSDIG_DEPENDENCIES = \
- # grpc_cpp_plugin is needed to build falcosecurity libs, so we give the host
- # one there.
- SYSDIG_CONF_OPTS += -DFALCOSECURITY_LIBS_SOURCE_DIR=$(FALCOSECURITY_LIBS_SRCDIR) \
-+	-DDRIVER_SOURCE_DIR=$(FALCOSECURITY_LIBS_SRCDIR)/driver \
- 	-DBUILD_DRIVER=OFF \
- 	-DGRPC_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin \
- 	-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME) \
- 	-DENABLE_DKMS=OFF \
- 	-DUSE_BUNDLED_DEPS=OFF \
-+	-DUSE_BUNDLED_TBB=OFF \
-+	-DUSE_BUNDLED_B64=OFF \
-+	-DUSE_BUNDLED_JSONCPP=OFF \
-+	-DUSE_BUNDLED_VALIJSON=OFF \
-+	-DUSE_BUNDLED_RE2=OFF \
- 	-DWITH_CHISEL=ON \
- 	-DVALIJSON_INCLUDE=$(BUILD_DIR)/valijson-0.6/include/valijson \
- 	-DSYSDIG_VERSION=$(SYSDIG_VERSION)
+-FALCOSECURITY_LIBS_VERSION = e5c53d648f3c4694385bbe488e7d47eaa36c229a
++FALCOSECURITY_LIBS_VERSION = 0.10.5
+ FALCOSECURITY_LIBS_SITE = $(call github,falcosecurity,libs,$(FALCOSECURITY_LIBS_VERSION))
+ FALCOSECURITY_LIBS_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
+ FALCOSECURITY_LIBS_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
+@@ -57,17 +57,19 @@ endef
+ # For the others, it was taken by inspecting
+ # falcosecurity-libs/*/CMakeLists.txt, which normally creates these
+ # files, but doesn't work well with the kernel-module infrastructure.
++# The magical number for API_VERSION and SCHEMA_VERSION are taken from
++# corresponding files.
+ define FALCOSECURITY_LIBS_MODULE_GEN_MAKEFILE
+ 	$(INSTALL) -m 0644 $(@D)/driver/Makefile.in $(@D)/driver/Makefile
+ 	$(SED) 's/@KBUILD_FLAGS@//;' $(@D)/driver/Makefile
+ 	$(SED) 's/@DRIVER_NAME@/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/Makefile
+ 
+ 	$(INSTALL) -m 0644 $(@D)/driver/driver_config.h.in $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MAJOR}/1/;' $(@D)/driver/driver_config.h
++	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MAJOR}/3/;' $(@D)/driver/driver_config.h
+ 	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MINOR}/0/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_API_CURRENT_VERSION_PATCH}/0/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MAJOR}/1/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MINOR}/0/;' $(@D)/driver/driver_config.h
++	$(SED) 's/\$${PPM_API_CURRENT_VERSION_PATCH}/1/;' $(@D)/driver/driver_config.h
++	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MAJOR}/2/;' $(@D)/driver/driver_config.h
++	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MINOR}/2/;' $(@D)/driver/driver_config.h
+ 	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_PATCH}/0/;' $(@D)/driver/driver_config.h
+ 	$(SED) 's/\$${DRIVER_VERSION}//;' $(@D)/driver/driver_config.h
+ 	$(SED) 's/\$${DRIVER_NAME}/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/driver_config.h
 -- 
 2.34.1
 
