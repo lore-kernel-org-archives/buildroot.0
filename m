@@ -1,88 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 607E2C77B61
-	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 19:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB3EC77B60
+	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 19:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0ABE428C4;
-	Fri, 28 Apr 2023 19:14:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0ABE428C4
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD57A4017A;
+	Fri, 28 Apr 2023 19:24:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD57A4017A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jy-n8068vDlu; Fri, 28 Apr 2023 19:14:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FnJwMpLvs59k; Fri, 28 Apr 2023 19:24:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B4A5428C7;
-	Fri, 28 Apr 2023 19:14:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B4A5428C7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4EAD61BF577
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 19:14:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C148F404B4;
+	Fri, 28 Apr 2023 19:24:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C148F404B4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 62A321BF577
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 19:24:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 259116FF29
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 19:14:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 259116FF29
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B2204044D
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 19:24:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B2204044D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3x_DvnVfT3oC for <buildroot@lists.busybox.net>;
- Fri, 28 Apr 2023 19:14:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k076GPKeGx0e for <buildroot@lists.busybox.net>;
+ Fri, 28 Apr 2023 19:24:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 695836167D
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 695836167D
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 19:14:45 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-94f109b1808so28538366b.1
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 12:14:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5CD4017A
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1A5CD4017A
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 19:24:21 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-94a342f7c4cso32253766b.0
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 12:24:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682709283; x=1685301283;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
+ d=1e100.net; s=20221208; t=1682709859; x=1685301859;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
  bh=s5kv33ofr5VkLIM+aNq2qDkRRtIR1zBFArGRW4anz48=;
- b=X1DjY4XefqTI0vuHQpoJg4mI7i+l04HaKeSf2+flVNYc3xsOcTTTxxZ/5bSPTR3cR+
- dSsPaepplSDG7qgFAy8vcXWai+H9nqhR8OsL4EuFSduvGlnWWXUml6tPdQPnxKtZjatl
- 8n3I75sreNISI1ChhG8PS6PSe4radi6uRK7begmZoaH760+zi/p/ncR5i8vBb+XWFPFC
- 0g1n9LYgauOMwnNZHEJE7x08LbdIc9F0LtS4SyOttfnVRMMo+CgtIsstJIrpeb2obmUl
- 6GmFyIrFJOFiLZHuBOAi6ysgS3Duyr8sWUf0ielluCHBwO5/4sBL8X6KnuXhNRAcdoKn
- lh8A==
-X-Gm-Message-State: AC+VfDwtlOw9FttsVeMwRABozfWAemhTca08IuJetgf+szGw7pYQ9OeJ
- aprSmdbzK3dalyxceUwYBHRmd0eL6vP7Ywe2aoEekA==
-X-Google-Smtp-Source: ACHHUZ6hnilNw13Mfxh6Z3ovdGwNuiesw/kRWFxzvx2NlNfkhqjj48fBrNkg9LC9wT68vZKB8ffsjA==
-X-Received: by 2002:a17:907:2681:b0:94a:682f:7744 with SMTP id
- bn1-20020a170907268100b0094a682f7744mr6318801ejc.16.1682709282798; 
- Fri, 28 Apr 2023 12:14:42 -0700 (PDT)
+ b=N7daFscKWVj9kEM8ppvA5ctcEKQSvSg3qe/YucGtzpqtuo2+t/2YPbPUkmjqCjfK/7
+ 1cXH3SuxSZHCAByFyLE9dy5OWLz5l2mFaPXniaCd/Qkz7YI78uOSiI1WRSgCEtYn/130
+ bxy1VJ51Z0nNUR9na2EUffOHtzeS2UzQHxTxlYrYHydzfpiUIzuIj0go6HDkdetFV6QE
+ RbAz+bI2XxDnfpv9dUDio3RajUyXs8ugB7NqlQYaJHPWk5OArJ4BC3WNzgLVAgZTdxrK
+ JANRu3Gy0+V5hwAb/zH1QnztL6jtvAb8uz89b9S7mNwn/AVbzkvME7Mu2C/aqGk+lwrx
+ yqlg==
+X-Gm-Message-State: AC+VfDzFVIgUKeZ83CgpgZJWnagVl6kKvFCcBjshYSZKSREijENANXIp
+ Xgh/0o3qRE7obmHpr/hqbxiu3s/C+PiBHYqm4+iNIA==
+X-Google-Smtp-Source: ACHHUZ4+AYbvQHMbvGCgD5sOyiC9bmpqR6oQ5ols91zdFAqp+zxW1NL6fEX3YZDwg2ZUT7WadrkdUw==
+X-Received: by 2002:a17:907:2d07:b0:950:e44:47ae with SMTP id
+ gs7-20020a1709072d0700b009500e4447aemr6764666ejc.40.1682709858965; 
+ Fri, 28 Apr 2023 12:24:18 -0700 (PDT)
 Received: from wintermute.. (77.109.114.132.adsl.dyn.edpnet.net.
  [77.109.114.132]) by smtp.gmail.com with ESMTPSA id
- q26-20020a170906941a00b0094f01aa9567sm11510307ejx.20.2023.04.28.12.14.42
+ jl8-20020a17090775c800b009602b85c5fesm2632635ejc.17.2023.04.28.12.24.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Apr 2023 12:14:42 -0700 (PDT)
+ Fri, 28 Apr 2023 12:24:18 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 28 Apr 2023 21:14:12 +0200
-Message-Id: <20230428191412.1350780-1-frank.vanbever@mind.be>
+Date: Fri, 28 Apr 2023 21:23:51 +0200
+Message-Id: <20230428192352.1353513-1-frank.vanbever@mind.be>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230428191412.1350780-1-frank.vanbever@mind.be>
+References: <20230428191412.1350780-1-frank.vanbever@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1682709283; x=1685301283;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
+ d=mind.be; s=google; t=1682709859; x=1685301859;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
  bh=s5kv33ofr5VkLIM+aNq2qDkRRtIR1zBFArGRW4anz48=;
- b=FcDxHhGHSlOGzyfqodNBB2QoOXcFeZVyFr0FkAhfjPLrSpYVHuUWQK70TRJImPW1Xj
- bGi5eGC8IwxNyc6L6nuoDcYTumUtMxT+AfO1aGLcGimP7G2FuSNSUouiu5/SkRov6IzJ
- wJeZmD6X4p+l/Xyo5yR0ZhANxWuMrrC2ph4YFiaX8kG+RikTvcCTGLcjbvWgrfoogn+k
- t1TvVs9XOFgoa9oZcnLqCO91SAvmdsNabAtgtuAZh1nAMyFFi0ZO1M0ME2863kNFYphu
- O9DN3S0mND34KNXvUIeFX1ekMgkzcspI/SY/QrUk+BL4xc9Hhr7Y2sCu/KOgdZcBqakh
- bD3g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=fqLkHcCK3R02PNxL6nLulsfVxH/aDx4Pq/rRQtTrXcR6EOJNQTnqPekO34+e8aJYOG
+ dALc9/ssWsXKWztsXMai0tPiyz2jPrP+fWKOrIvOd5NBoXZodVsa81MNC4seDdCDHyeN
+ LEgFrDvDKhDy03WGZS0QFw54GkGxbJBQIXtQ7cb/vq8zL5E1DdETgG+pqN/PHcOt8Qxo
+ ff2TidAW6qvQ03wZtDuLFf+3LL5Qx2iFcyXZOeYxUY1/6gJSqFIQb0OFcdSASOfY4YaP
+ RgWKTFX57VF0Mx9eQutcD9e7MEPjxXSYKTj95HrsMfhKBSho3yIWtm23PhSNhDQr1m5U
+ RZiA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=FcDxHhGH
-Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity - bump version to
- 3.0.9
+ header.a=rsa-sha256 header.s=google header.b=fqLkHcCK
+Subject: [Buildroot] [PATCH v2] package/libmodsecurity: bump to version 3.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
