@@ -4,73 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5EDEC77B61
-	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 07:59:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB14FC77B60
+	for <buildroot@archiver.kernel.org>; Fri, 28 Apr 2023 07:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 450CD60AE1;
-	Fri, 28 Apr 2023 07:59:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 450CD60AE1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6324C60E48;
+	Fri, 28 Apr 2023 07:59:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6324C60E48
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gjVqSmNIhvca; Fri, 28 Apr 2023 07:59:33 +0000 (UTC)
+	with ESMTP id ych5Gjzpp5ij; Fri, 28 Apr 2023 07:59:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DD3660E48;
-	Fri, 28 Apr 2023 07:59:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DD3660E48
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2CCF51BF215
- for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 07:59:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B1106166C;
+	Fri, 28 Apr 2023 07:59:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B1106166C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 118E81BF215
+ for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 07:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12E6983BBE
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF4AB60E48
  for <buildroot@lists.busybox.net>; Fri, 28 Apr 2023 07:59:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12E6983BBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF4AB60E48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xMOZFOkt7Y6Q for <buildroot@lists.busybox.net>;
- Fri, 28 Apr 2023 07:59:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GkQId0WcqnZM for <buildroot@lists.busybox.net>;
+ Fri, 28 Apr 2023 07:59:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7B0B83BAE
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com
- [209.85.208.46])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E7B0B83BAE
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 07:59:27 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id
- 4fb4d7f45d1cf-5058181d58dso16807947a12.1
- for <buildroot@buildroot.org>; Fri, 28 Apr 2023 00:59:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CFD560AE1
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com
+ [209.85.218.45])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9CFD560AE1
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 07:59:29 +0000 (UTC)
+Received: by mail-ej1-f45.google.com with SMTP id
+ a640c23a62f3a-94f1d0d2e03so1432682566b.0
+ for <buildroot@buildroot.org>; Fri, 28 Apr 2023 00:59:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682668765; x=1685260765;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=XV7witE1wqBWjSCGUzkOJug/3gIOt8GdGhp6NHrNGyE=;
- b=TdVtvXq3oYAu8DW38vRCMEoLBqRzYrU4NS/Gfr8/fEcWWCJWdizXlVMDoUy52wg7le
- BxrauNxVcPZkRHQgiRyaffv0nD/CqjTyycdQYYD8iaOw6m2jq0uUdYxCrlY4NLBmqiCY
- iLKKuWIaeN9xK+Ab2Zsd8SeXqiKXfKae5rWuJd5a1wKFyq5VTqA3Qdovibtk7k6tso2T
- ikB8I40XgLZI2y/PN85jU9GNojR4tn45yWDIV/mjZjTitasihlMpi6HaJ1qCyVnskje7
- ImedLbmtUjObnDI2jjyHR/+s3b2Cq8PsdYdGbFD4bhr9gCL8CxX5w63vtlIPTUO4Jq0z
- Ibsw==
-X-Gm-Message-State: AC+VfDxv7uDYkGq/IfufSaHhkkUMc8tsKYMtWf6CAZHQ1PRRv2STSuyb
- JWKgQA0TmuJFrUPKiQAsKav51M4envdj4Q==
-X-Google-Smtp-Source: ACHHUZ6m6ERUqShO0Vqw9mUYNgmttuzQQFUSH64grWaasJDn8XqK6tkcwsOpSQ/TVXlhnmhzI1dDaQ==
-X-Received: by 2002:a17:906:ee84:b0:94d:56f7:4fc3 with SMTP id
- wt4-20020a170906ee8400b0094d56f74fc3mr3970954ejb.44.1682668765309; 
- Fri, 28 Apr 2023 00:59:25 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1682668767; x=1685260767;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=8r8nGzgnydbraK2po29Vs8RzC3pOtTcf8pBCOVDHdiw=;
+ b=lIzMR6lxvGZTVpIqlP1aqVhvDNJgELOjORV8bhhTTcATSKyMq/7lsyvZA0Z/72P+DP
+ udpqNNKYNGK/btGeZdIuhhv/TfFWKBzl/W9BMz7j239H3MOvotKGXA58jDdKqSnvF5DF
+ 66HLdPvSVAZW8TzFgfGQBpLl4iapvI4kdWMl5U1pAyDGPmKucU4FbPNnF4wZOhB35AHf
+ a/Geu+9/MFOCEP8b8qbN/D3Ld5nSDkauY7CkalLahiogHvLzvFEGxIxCawsDRhtYUw6Q
+ q1dW8jse1BNI97V3a9RzQJX3yKSfLmHAuxOlJ0KjC/ky2f5EzTmgs0gf5WM/r2CHDbi8
+ 8zRQ==
+X-Gm-Message-State: AC+VfDyWD7cwEQTQzZ+IKqWKcXuscfe5vMqNg8uHD2Lw8+3nTMuDqbEE
+ gENywwD2dVzvdVdyvH42wOXtSzu5ELkW3g==
+X-Google-Smtp-Source: ACHHUZ49xJl0X9nU4esHfHiSDInuEpwmavlki9BmOFsTsmYwi0whZdU3ZmilbkttmK7VlUodn2FuFQ==
+X-Received: by 2002:a17:907:268e:b0:94e:d75b:5998 with SMTP id
+ bn14-20020a170907268e00b0094ed75b5998mr3897450ejc.5.1682668767319; 
+ Fri, 28 Apr 2023 00:59:27 -0700 (PDT)
 Received: from localhost.localdomain
  ([2a02:a03f:eb68:2f00:627a:ae86:20c8:b204])
  by smtp.gmail.com with ESMTPSA id
- sd22-20020a1709076e1600b009572bd99281sm9324798ejc.224.2023.04.28.00.59.24
+ sd22-20020a1709076e1600b009572bd99281sm9324798ejc.224.2023.04.28.00.59.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Apr 2023 00:59:24 -0700 (PDT)
+ Fri, 28 Apr 2023 00:59:27 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Apr 2023 09:59:16 +0200
-Message-Id: <20230428075920.3750005-1-thomas@devoogdt.com>
+Date: Fri, 28 Apr 2023 09:59:17 +0200
+Message-Id: <20230428075920.3750005-2-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230428075920.3750005-1-thomas@devoogdt.com>
+References: <20230428075920.3750005-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v7 1/5] package/at-spi2-core: bump to version
- 2.48.0
+Subject: [Buildroot] [PATCH v7 2/5] package/at-spi2-atk: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,215 +95,191 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Daniel Lang <d.lang@abatec.at>
 
-https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_48_0/NEWS
+at-spi2-atk has been merged into at-spi2-core with version 2.45.1.
 
-- X11 is now optional.
-- libxml2 is no longer optional.
-- atk and at-spi2-atk have been merged into at-spi2-core.
-- atk introspection option added.
-- Added patch to which avoids requiring libsystemd when configured to use dbus-daemon.
-- Added check on dlopen.
+https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_45_1/NEWS
+https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/78
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Tested-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
 v3:
  - rebased on https://patchwork.ozlabs.org/project/buildroot/list/?series=336254
  - needed to fix the webkitgtk 2.38.5 compilation
    (https://patchwork.ozlabs.org/project/buildroot/patch/20230220090923.2155635-2-thomas.devoogdt@barco.com/)
 v5: rebased + grouped patches
-v6: rebased + added Adrians patch
- - note: 2.48.0 is out, but will first merge this one
-v7: bumped to 2.48.0 + added dlopen check
+v6: no change
+v7: no change
 ---
- ...iring-libsystemd-when-configured-to-.patch | 92 +++++++++++++++++++
- package/at-spi2-core/Config.in                | 13 +--
- package/at-spi2-core/at-spi2-core.hash        |  4 +-
- package/at-spi2-core/at-spi2-core.mk          | 18 +++-
- 4 files changed, 115 insertions(+), 12 deletions(-)
- create mode 100644 package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
+ Config.in.legacy                              |  7 +++
+ DEVELOPERS                                    |  1 -
+ package/Config.in                             |  1 -
+ .../0001-meson-add-tests-option.patch         | 43 -------------------
+ package/at-spi2-atk/Config.in                 | 22 ----------
+ package/at-spi2-atk/at-spi2-atk.hash          |  5 ---
+ package/at-spi2-atk/at-spi2-atk.mk            | 19 --------
+ 7 files changed, 7 insertions(+), 91 deletions(-)
+ delete mode 100644 package/at-spi2-atk/0001-meson-add-tests-option.patch
+ delete mode 100644 package/at-spi2-atk/Config.in
+ delete mode 100644 package/at-spi2-atk/at-spi2-atk.hash
+ delete mode 100644 package/at-spi2-atk/at-spi2-atk.mk
 
-diff --git a/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch b/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
-new file mode 100644
-index 0000000000..29c3de8d2d
---- /dev/null
-+++ b/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
-@@ -0,0 +1,92 @@
-+From aeb14ffccaabe65a64e976576d71f30eb2165f43 Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Mon, 24 Apr 2023 12:09:50 +0300
-+Subject: [PATCH] meson: Avoid requiring libsystemd when configured to use
-+ dbus-daemon
-+
-+Checks for dbus-daemon and dbus-broker only when they are chosen
-+with default_bus. This avoids requiring the systemd libraries if
-+one wants the built at-spi2-core to use dbus-daemon, but dbus-worker
-+is somehow available in the $PATH. A typical scenario is cross
-+compilation, where the build host may have a dbus-broker program
-+available, but the target system may not have it (or may not have
-+nor want to use the systemd libraries).
-+
-+upstream: https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/134
-+---
-+ bus/meson.build | 53 ++++++++++++++++++++++++-------------------------
-+ 1 file changed, 26 insertions(+), 27 deletions(-)
-+
-+diff --git a/bus/meson.build b/bus/meson.build
-+index 22a1bce6..2f3c5621 100644
-+--- a/bus/meson.build
-++++ b/bus/meson.build
-+@@ -46,39 +46,38 @@ launcher_args = [
-+              '-DDATADIR="@0@"'.format(atspi_datadir),
-+            ]
-+ 
-+-if get_option('dbus_daemon') != 'default'
-+-  launcher_args += '-DDBUS_DAEMON="@0@"'.format(get_option('dbus_daemon'))
-+-else
-+-  dbus_daemon = find_program('dbus-daemon',
-+-                             '/sbin/dbus-daemon',
-+-                             '/usr/sbin/dbus-daemon',
-+-                             '/libexec/dbus-daemon',
-+-                             '/usr/libexec/dbus-daemon',
-+-                             '/usr/lib/dbus-daemon',
-+-                             '/usr/pkg/bin/dbus-daemon',
-+-                             required: false)
-+-  if dbus_daemon.found()
-+-    launcher_args += '-DDBUS_DAEMON="@0@"'.format(dbus_daemon.full_path())
-+-  endif
-+-endif
-+-
-+ needs_systemd = false
-+-if get_option('dbus_broker') != 'default'
-+-  launcher_args += '-DDBUS_BROKER="@0@"'.format(get_option('dbus_broker'))
-+-  needs_systemd = true
-++if get_option('default_bus') == 'dbus-daemon'
-++  if get_option('dbus_daemon') != 'default'
-++    launcher_args += '-DDBUS_DAEMON="@0@"'.format(get_option('dbus_daemon'))
-++  else
-++    dbus_daemon = find_program('dbus-daemon',
-++                               '/sbin/dbus-daemon',
-++                               '/usr/sbin/dbus-daemon',
-++                               '/libexec/dbus-daemon',
-++                               '/usr/libexec/dbus-daemon',
-++                               '/usr/lib/dbus-daemon',
-++                               '/usr/pkg/bin/dbus-daemon',
-++                               required: false)
-++    if dbus_daemon.found()
-++      launcher_args += '-DDBUS_DAEMON="@0@"'.format(dbus_daemon.full_path())
-++    endif
-++  endif
-+ else
-+-  dbus_broker = find_program('dbus-broker-launch',
-+-                             required: false)
-+-  if dbus_broker.found()
-+-    launcher_args += '-DDBUS_BROKER="@0@"'.format(dbus_broker.full_path())
-++  launcher_args += '-DWANT_DBUS_BROKER'
-++  if get_option('dbus_broker') != 'default'
-++    launcher_args += '-DDBUS_BROKER="@0@"'.format(get_option('dbus_broker'))
-+     needs_systemd = true
-++  else
-++    dbus_broker = find_program('dbus-broker-launch',
-++                               required: false)
-++    if dbus_broker.found()
-++      launcher_args += '-DDBUS_BROKER="@0@"'.format(dbus_broker.full_path())
-++      needs_systemd = true
-++    endif
-+   endif
-+ endif
-+ 
-+-if get_option('default_bus') == 'dbus-broker'
-+-  launcher_args += '-DWANT_DBUS_BROKER'
-+-endif
-+-
-+ if needs_systemd
-+   systemd_dep = dependency('libsystemd')
-+ else
-+-- 
-+2.34.1
-+
-diff --git a/package/at-spi2-core/Config.in b/package/at-spi2-core/Config.in
-index f56c5b93c4..2a1b21d375 100644
---- a/package/at-spi2-core/Config.in
-+++ b/package/at-spi2-core/Config.in
-@@ -1,12 +1,13 @@
- config BR2_PACKAGE_AT_SPI2_CORE
- 	bool "at-spi2-core"
--	depends on BR2_PACKAGE_XORG7 # xlib-libxtst
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on !BR2_STATIC_LIBS # dlopen()
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_XLIB_LIBXTST if BR2_PACKAGE_XORG7 # optionally for X11
- 	help
- 	  The At-Spi2 Core package is a part of the GNOME
- 	  Accessibility Project. It provides a Service Provider
-@@ -16,10 +17,6 @@ config BR2_PACKAGE_AT_SPI2_CORE
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 366b9d6949..db75899a9b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
- 	  https://wiki.gnome.org/Accessibility
+ comment "Legacy options removed in 2023.05"
  
--comment "at-spi2-core needs a toolchain w/ wchar, threads"
-+comment "at-spi2-core needs a toolchain w/ dynamic library, wchar, threads"
- 	depends on BR2_USE_MMU
++config BR2_PACKAGE_AT_SPI2_ATK
++	bool "at-spi2-atk removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_AT_SPI2_CORE
++	help
++	  at-spi2-atk is now part of at-spi2-core.
++
+ config BR2_PACAKGE_OPENFPGALOADER_CMSIS
+ 	bool "openfpgaloader cmsis option name fixed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d9e95a3d05..9206659428 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1632,7 +1632,6 @@ F:	support/testing/tests/package/test_avocado.py
+ F:	support/testing/tests/package/test_python_aexpect.py
+ 
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
+-F:	package/at-spi2-atk/
+ F:	package/at-spi2-core/
+ F:	package/clang/
+ F:	package/earlyoom/
+diff --git a/package/Config.in b/package/Config.in
+index eaac32a01a..70c5c2eea8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1554,7 +1554,6 @@ endmenu
+ 
+ menu "Graphics"
+ 	source "package/assimp/Config.in"
+-	source "package/at-spi2-atk/Config.in"
+ 	source "package/at-spi2-core/Config.in"
+ 	source "package/atk/Config.in"
+ 	source "package/atkmm/Config.in"
+diff --git a/package/at-spi2-atk/0001-meson-add-tests-option.patch b/package/at-spi2-atk/0001-meson-add-tests-option.patch
+deleted file mode 100644
+index 3a2aefa090..0000000000
+--- a/package/at-spi2-atk/0001-meson-add-tests-option.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 466d04a57b32417dbf2d5e818af1b7593af5f802 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 3 May 2020 10:29:36 +0200
+-Subject: [PATCH] meson: add tests option
+-
+-Add tests option to allow the user to build at-spi2-atk without tests,
+-it is especially useful as one of the test requires libxml-2.0
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.gnome.org/GNOME/at-spi2-atk/-/merge_requests/22]
+----
+- meson.build       | 4 +++-
+- meson_options.txt | 4 ++++
+- 2 files changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 9fce5d6..61bc93d 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -61,4 +61,6 @@ install_data('at-spi2-atk.desktop',
+- 
+- subdir('droute')
+- subdir('atk-adaptor')
+--subdir('tests')
+-+if get_option('tests')
+-+  subdir('tests')
+-+endif
+-diff --git a/meson_options.txt b/meson_options.txt
+-index 24c9228..a4abdc2 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -2,3 +2,7 @@ option('disable_p2p',
+-        description: 'Disable peer-to-peer DBus connections',
+-        type: 'boolean',
+-        value: false)
+-+option('tests',
+-+       description: 'Whether to build tests',
+-+       type: 'boolean',
+-+       value: true)
+--- 
+-2.26.2
+-
+diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
+deleted file mode 100644
+index 9a7cfde0af..0000000000
+--- a/package/at-spi2-atk/Config.in
++++ /dev/null
+@@ -1,22 +0,0 @@
+-config BR2_PACKAGE_AT_SPI2_ATK
+-	bool "at-spi2-atk"
+-	depends on BR2_PACKAGE_XORG7 # at-spi2-core
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+-	depends on BR2_USE_MMU # glib2
+-	depends on BR2_USE_WCHAR # glib2
+-	select BR2_PACKAGE_ATK
+-	select BR2_PACKAGE_AT_SPI2_CORE
+-	select BR2_PACKAGE_LIBGLIB2
+-	help
+-	  The At-Spi2 Atk package contains a library that bridges
+-	  ATK to At-Spi2 D-Bus service.
+-
+-	  https://www.freedesktop.org/wiki/Accessibility/AT-SPI2/
+-
+-comment "at-spi2-atk needs a toolchain w/ wchar, threads"
+-	depends on BR2_USE_MMU
 -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 -
--comment "at-spi2-core depends on X.org"
+-comment "at-spi2-atk depends on X.org"
 -	depends on BR2_USE_MMU
 -	depends on !BR2_PACKAGE_XORG7
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
-index 764e4c3661..9cf80d1cc0 100644
---- a/package/at-spi2-core/at-spi2-core.hash
-+++ b/package/at-spi2-core/at-spi2-core.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/at-spi2-core/2.36/at-spi2-core-2.36.0.sha256sum
--sha256  88da57de0a7e3c60bc341a974a80fdba091612db3547c410d6deab039ca5c05a  at-spi2-core-2.36.0.tar.xz
-+# From https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.0.sha256sum
-+sha256  905a5b6f1790b68ee803bffa9f5fab4ceb591fb4fae0b2f8c612c54f1d4e8a30  at-spi2-core-2.48.0.tar.xz
- 
- # locally calculated
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
-index f0b019c0ed..e4489f6f88 100644
---- a/package/at-spi2-core/at-spi2-core.mk
-+++ b/package/at-spi2-core/at-spi2-core.mk
-@@ -4,17 +4,31 @@
- #
- ################################################################################
- 
--AT_SPI2_CORE_VERSION_MAJOR = 2.36
-+AT_SPI2_CORE_VERSION_MAJOR = 2.48
- AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
- AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
- AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
- AT_SPI2_CORE_LICENSE = LGPL-2.1+
- AT_SPI2_CORE_LICENSE_FILES = COPYING
- AT_SPI2_CORE_INSTALL_STAGING = YES
--AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst \
-+AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 libxml2 \
- 	$(TARGET_NLS_DEPENDENCIES)
- AT_SPI2_CORE_CONF_OPTS = -Ddbus_daemon=/usr/bin/dbus-daemon
- 
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+AT_SPI2_CORE_CONF_OPTS += -Dx11=enabled
-+AT_SPI2_CORE_DEPENDENCIES += xlib_libXtst
-+else
-+AT_SPI2_CORE_CONF_OPTS += -Dx11=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+AT_SPI2_CORE_CONF_OPTS += -Dintrospection=enabled
-+AT_SPI2_CORE_DEPENDENCIES += gobject-introspection
-+else
-+AT_SPI2_CORE_CONF_OPTS += -Dintrospection=disabled
-+endif
-+
- AT_SPI2_CORE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
- $(eval $(meson-package))
+diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
+deleted file mode 100644
+index 9c564c32af..0000000000
+--- a/package/at-spi2-atk/at-spi2-atk.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/at-spi2-atk/2.34/at-spi2-atk-2.34.2.sha256sum
+-sha256  901323cee0eef05c01ec4dee06c701aeeca81a314a7d60216fa363005e27f4f0  at-spi2-atk-2.34.2.tar.xz
+-
+-# locally calculated
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
+deleted file mode 100644
+index 232b577230..0000000000
+--- a/package/at-spi2-atk/at-spi2-atk.mk
++++ /dev/null
+@@ -1,19 +0,0 @@
+-################################################################################
+-#
+-# at-spi2-atk
+-#
+-################################################################################
+-
+-AT_SPI2_ATK_VERSION_MAJOR = 2.34
+-AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
+-AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
+-AT_SPI2_ATK_SITE = \
+-	http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
+-AT_SPI2_ATK_LICENSE = LGPL-2.1+
+-AT_SPI2_ATK_LICENSE_FILES = COPYING
+-AT_SPI2_ATK_CPE_ID_VENDOR = gnome
+-AT_SPI2_ATK_INSTALL_STAGING = YES
+-AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
+-AT_SPI2_ATK_CONF_OPTS = -Dtests=false
+-
+-$(eval $(meson-package))
 -- 
 2.34.1
 
