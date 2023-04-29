@@ -4,117 +4,117 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69DB4C77B60
-	for <buildroot@archiver.kernel.org>; Sat, 29 Apr 2023 18:51:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D34E4C77B60
+	for <buildroot@archiver.kernel.org>; Sat, 29 Apr 2023 19:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3CF484234;
-	Sat, 29 Apr 2023 18:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3CF484234
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6382383B42;
+	Sat, 29 Apr 2023 19:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6382383B42
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PRd6lbC9ESpk; Sat, 29 Apr 2023 18:51:42 +0000 (UTC)
+	with ESMTP id im5O2FcLyUEZ; Sat, 29 Apr 2023 19:06:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9E2B8422B;
-	Sat, 29 Apr 2023 18:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9E2B8422B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5704D83B48;
+	Sat, 29 Apr 2023 19:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5704D83B48
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F9431BF4DA
- for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:51:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A65FC1BF2B6
+ for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 19:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 13CAF426FE
- for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13CAF426FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 724EF41BE3
+ for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 19:06:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 724EF41BE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TKXSQwbbMwpI for <buildroot@lists.busybox.net>;
- Sat, 29 Apr 2023 18:51:37 +0000 (UTC)
+ with ESMTP id dNbK0xLZRY_F for <buildroot@lists.busybox.net>;
+ Sat, 29 Apr 2023 19:06:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD3EB42707
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam12acsn20807.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe5b::807])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD3EB42707
- for <buildroot@buildroot.org>; Sat, 29 Apr 2023 18:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B03D441B55
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11olkn20823.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eaa::823])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B03D441B55
+ for <buildroot@buildroot.org>; Sat, 29 Apr 2023 19:06:13 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cnb1NwQ97Rn10Z5BaEXKvaGDP9EEZ8bdvaX62U6JfPvxvF/qrprbjMkw8xWh+eOHq6RYuGpSrh3mg8tRfC+16vNAlREmow4gflPCG4jR6MxyNKDBoBqcBrus0Uafftieks6Br63Oxjw5AxHZBV1rf/cdiU16wmYl/NiWnVw1W6jiFwIdZGB19sViEBwitGNgb+O8rZorrzCEEjLHA16y5WOMMEXgCzbJO37g3ADH3bW5vL9WfZatZqNHwipyFS8GW5HQxcYpSvuLNulJnaNINsai2MSTRWD5d81LDr6prmmo9VlqwyRJUx3PN4dRoMAIdyMkWkVLBlzoTjj+UFZ70w==
+ b=UNM0M9SNyVWSl2pt5CUTjagWhrrEgCE8nyNz3tvc5o4LxY9LdD+0InNgEA6AiVEc6OmTfNzZK00nd+VdAp2M4OkMzfcqpHOf+44dIvMJLCeYuK/+nJ2rOazb/wi7d74581pAm3CT0bY7upqA1XtyB9iwuTy1Xk4A7oFBhm8Szww+6Wiccw00x4inXK5vvaYo3oIRzFcVeGx8NAI8agshnC2/gdy2BykGFVGAlKavkBNwHx0GiZfrz9BmT02+M0Nm9vLKjon/WOsfoPsahCsE7AYCISufsVUdVzsCQPqMy3D7NEfe02tBVNNzgdCARsJBuPz5H5kk94lb1hhpshBn7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xyCdrg81useVBqy1gQgSmbfIVdz8F/NSGm+WGGhoYtw=;
- b=Vr/XPRANKKkQNMC6nOKrxjZVvbL4hx7rviKRchGODe+tTabI1Hhqzw4cAhQGoiaJBpk+J0DPvf4sV2ODvMPKYpYkWHXBRFmApux+SZfb2qf/LMANpScaUetEnTn9gdBwhE3UuicDX64CrI+0LyCuDo1Dv/IGnW7bXLIcefhMDSulwZCnY1TKeYrJjq5gSRRgKoXYUgWfqWzWMcdrbHElVLSrqbU8mJnLxYv+eg5j41wpyO+sbHy9Uvrq1IM3h6J2sfHA79xXjQVEFKxEqdUAK8aBsE7q3uOUBnB4WfU1yVXpqzfmqqsJ3dkEg7jMfVSQXeCMD41I0vLqO+tmtAPs5Q==
+ bh=9qI/bv8qq6uqXkbYmAklWJxfUc2aIyi2+nP6ZnGV7FU=;
+ b=nzNZIPrdZw83Vi3p7hnTynJbMk8HlgyKJ84sU5sZTsLh29DNEPjWPbJslg1Z3ajmpa+Iy2F2WQkjkAxuZLCT867XleZTdi5p5AHkHrnlHFtZHgCIacQQjzqegSdE1BqpkMTgss2IfaDh75QargQKxqVf/4O0V+HA1XfFYGCFIlpS5zS7JoVEbtrNuuIlMKm3+/gTjCU8xexYLGm5e1+qaFr/PpFaALDux0FZZuK2egshwaVv8DJdEU/ZHT07mt74hhYSKjPj51XLISVUvfgDRaG69XwppUIbcSBr+1LgA3+dq3VchSFtmDRES6XQ3+Kcnon/UFLOcpP90JyBFew2vQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:1e9::12)
- by SA1P221MB1067.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:25e::15)
+ by CH0P221MB0283.NAMP221.PROD.OUTLOOK.COM (2603:10b6:610:110::10)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Sat, 29 Apr
- 2023 18:51:34 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.27; Sat, 29 Apr
+ 2023 19:06:10 +0000
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8]) by SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8%5]) with mapi id 15.20.6319.032; Sat, 29 Apr 2023
- 18:51:34 +0000
+ 19:06:10 +0000
 From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Apr 2023 14:51:04 -0400
-Message-ID: <SN4P221MB068289AD66243971AC49547BA0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+Date: Sat, 29 Apr 2023 15:05:50 -0400
+Message-ID: <SN4P221MB0682DC54AEEF8491EF1BBDF5A0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.40.1.windows.1
-X-TMN: [Mr6xE3EO1UXp+MS8Xtupfc41Hx+Kikft]
-X-ClientProxiedBy: QB1P288CA0029.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c00:2d::42) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+X-TMN: [Mgr4BxMguYd9+OjB5CP/J+INYmez1q8j]
+X-ClientProxiedBy: YQBPR0101CA0260.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:68::34) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  (2603:10b6:806:1e9::12)
-X-Microsoft-Original-Message-ID: <20230429185104.3666-1-james.d.knight@live.com>
+X-Microsoft-Original-Message-ID: <20230429190550.3779-1-james.d.knight@live.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|SA1P221MB1067:EE_
-X-MS-Office365-Filtering-Correlation-Id: 778908c5-e077-4535-d709-08db48e2c0e7
-X-MS-Exchange-SLBlob-MailProps: ZILSnhm0P3kAFe1sr4bV8w/wrs4asbv9nBFsKaKdlYlDKAgpBDN+JS5JItOBdewMwYpF8J88W6q3+0P4o+r4IUONGGCmHdHgdqstGa4IoaDEcoUTaqrlDILz4UunCU1WLjMy6X/2spUG5xNtyeNYzZ/T/NLsxvyQWL/CreGu3BMvtQfRGHb3jwDGTYbpNY3zYHXyvvrBmEdeHHgQ9k5psBxwYpoUv3fIcLxbBhMAnxAfK0omv2+YRTXkZudSO3E0MQ2z/RpZAfvnO8cCWqNYTbe3SNiKLNor4GrEoi/UipG1ZU0dIAC3jlmpwH/Z/qNUjVIxzM5j9eegTBexyoavJwN3v4Tg3R0LkxFjFILGtJlQH7alIvq84xZj2fBS5x0lkQQAUVRSe/cFruiLqtwvv8xrt0WLSaPshIzV0O3wmDtkDPq0OfWo6BBTA+lUjeUE1GKnmWRwxVfLYC866BTdUHXFkD1edjwMfwrjHQg+b7lblXfjk6iGKG+5nTTwFANtuMQ2Cjjzq5jyyt2FwMw1hyeLYzB8Mgj28ITOXa7eu72xIP8qrtSuYlbFDmDqsf6RUZtVEpJs3B7jyv0Tull4qaOMYSwAszIqjzYVMKetWyizVht2uZpg4yVd+/0HkT5QEFP3tPR/g0F10Nx5kTqyCcyWwbz2jbOcE46y5y95ON4FPjqGATLgxdKJwqb6KuXDzPCHjQdW7eBlTabZ5LoucGGK0AAtHNGtB2whv+rhHxCgzz4n9OBurWsnZoMJoauNHobsxdOzzwlu/xNYxkXC5RJLdpg7LVl2
+X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|CH0P221MB0283:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28121aeb-3616-488c-4ae2-08db48e4cadf
+X-MS-Exchange-SLBlob-MailProps: ymJijV9pwJnbooLdNKzNJirj8Ooh0Fe6qRtc5PSJv/6vR9gZLrrniCPqNXzb3U2EBNAstSx47XMBGxslQXaQ/zlIOpSD63abXY78a5Z7Zbv81c0GjFxNjCjD++XxQ0k5hjBgu1kD7cx0T264SYJEkBIp4tKlHIqyg3fptwdyiKQRm8IfJc3KzVcjdAblR5WZQ03hSnbtupx47sqsdfMWK1DNBaU+qryPWvGzb+wyaR2pWMGIWY+FLtysuTHwWj/I0JKwqIEKJyS0rtZXwGGCtcBY+K5SBqkHx0N1QDNiI4xbIjMUYHYmBTX5lEo3PduKYt5wy1WcImWtBijHyatsvXJRkju4ilEt+WyMwRCrTbTZQwrHNBMy5/ifW+SgYr7G7gQdeo1Lf1HLI9rJn7hx4HwSHxH5g3ItBYpcfPm+FFsSsQGmfHHAPoE1zQPe991WdCc2Dt6D0ad57ZcbdUsSYAN6FvcXD2/5UkI3XPkeiLhUIjD/lrKXdSL/90+DUNDGO/aEwQC0o2Wvxc3eNbeBzyWM79HqUfrNVzN0kMqFPIDDW58Y8ac9SZBEEmENMY5e1OPBbkdRXZsyW4uSF9vWX2SJEA0UaUd+bkTHR0O2Z44Hqs3VS/d9KSWczZQ2+8XLJB5F42s6C42bfou1Mm5nbXj7Xy7CYuO1Q4liN8nC1p6aSfWw60X6AZA2jaGWPjruzGVDapH9DTHjEVqnG91kZQbR8SHSlrNHgZhWVgCGgOP9ZMmMPB//uCsOa1RpXN8pj+qQ4Jumifq8VJEAGw9/3Zvg/5Ogm5Fxigtx8fam2UdhFJvlkoXDNsbErNERcdio
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0UBv4nxCe2cnI/L2oCHoSoiBzd3D0pkHo5B766K00DFSmv0qdvdJiOGeBcS+RGY1Zp6YGQvuAe46wlM99AcnCj5OeQa7bkx/qm5ICpJD/95sUDkkFqDLMh3n7bW4+lZU3+VvuNiGjxbXTupFVpGiSN3zo5ePcbKRhE3W+KpkLoC59SQCnak5NEcZ10ZU9rBtsrxOD6m9cJW/w5kDQzAZ3aoMQPG0pUJAIU/0Vvl3PrnWsfg9g5V1Mh80fr7+pLZAgv2WdFJOp1R1SfGQnpy1ETwJgF06eR+cit92HACEzxK0Rv6sf+ou8urdObbjHg8d8+OXqEzUZiVp6GyVwrEba6U+mXWeeDbWQKb6xUwl1fYzo2OT7aYTqJr6a+P7Xm1t1nuVPBbMVI3S4YQAWssN0TuF6+GyPtVyS/ET1LUdcCXwoD+/Y8fhZtgn4qpOUSv65E0q4DOwNBF9WeZ9i14fXF7EcTjf7qgWwNU264ne1xrpnWXFCrCG6b7YC2FnLL48OypX+/ihvHbSec7CYtUh8fckqJ9mWhHLFU5D/rkCvSupQ8hYa0qG+b79XIZWTCDEwZIJ2ltsijRLwkhaEwOB6MpxJHoiO5NZLe1LdTVS9fw=
+X-Microsoft-Antispam-Message-Info: Pcvfejea0YfUtW66wtqCNe44tK+2LtnNc+Tb7BnG9Pe5+/nU4JIfBUgmWCM4mzMb7mmuCRWneJebDUmJ/shD4bPZ9QPGrDcG8rm5l+HF6jncBPP36LOzDAH/IDzSuV4NoNueY7aEDzPg2EOH6gV6Cg3xUEAWzbFqdrzTrQDg7yzyq8Fo6YywN2eOimbLzGtWrWIftbXZWb7iKqkC+wBPMqEmcOvNKW6JbiSo5teGyj3OEIiyrnWd6QlRnEcSt/XnFUpU9bFkare/XSpQ+ImEQ4a/ePsk5EIe43z7dgg/ZhcWNX1a0kHiIT92WOpf8+LbuhsUq3FE5VAoTEXtZQjA346gZbkm40E4UbRMPjR4Bn4R6y+mzv3z+cUba6TqqACcX6ZHLq1EH4JJCSuxOVJzROdMENKU4Wwy0lmnzoT2m8LmyRgh3JFZA8QDJDDD9zwtlX3fTis5/8SQh9wD8xttAl4DZ/3Mq71EQmZkjKmQE0+UrZqW0LwchEJ4Y3FWiVDq0p18HeDwWB4MIUZNKxIjkyC59U41+JZFOZOsDqAeuH0N8C4VPEdadsxjS9Z7Xhb3XU/CoL4Vbxyi2jfwvHf2BE8hOmiGH21uIiSBRfgvENA=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KqF+KZkkejLBGoxUKSsJZ5KcnQU42l2xt5RErv9NH2IsLWM49M29vCFvPrsx?=
- =?us-ascii?Q?JNSbxtzoWhO+fPjqxVI/qNnjo1V+4GgtjT9E2nvqxu8Tpbzh8Qpx3Db8CXjJ?=
- =?us-ascii?Q?/ToIsMMbZMD3VY2G9I1cHQriH0y3pbo05xsmHLdaiPaJ649hPhq7S/tltZFb?=
- =?us-ascii?Q?SdYNMonya37g2dIIRXAnMvaus53/LiDCb2cqYPdAgCjNdpkSQcOlHiCJgd+p?=
- =?us-ascii?Q?2iACAD8QJ0EyPo2I1P9XNeLcmrvpBPIGbOyPnWr7Vln+SgktzMW64/MU1aDU?=
- =?us-ascii?Q?z5lxVRqg3RQsagXChReyBJ6PMhYCuKF3pXl7mmEwXTz6XJZqan5dja7LL29X?=
- =?us-ascii?Q?WkIZ28mOKdAflB99kUV4KjHDhehWH1n8FqOvt8tfXCJSfV8zG24ArOTgKaPc?=
- =?us-ascii?Q?hoRDTG8psXcQzm9Gs+urD57a7fvqz67bjjbCRE5Eyl0bcPU1A0/XRSU8vIBE?=
- =?us-ascii?Q?3/9KEu1Uy7UEsgdQ3oF6FmRG640qNkGMT++qmu5EI2krkdyFQltPJ8KdZIQ/?=
- =?us-ascii?Q?XFmv+9UZ5k8n/phfIKB9sKP6HeyknbnX4qslUCDBW8ZRLmD+AYN4wV6sdBqu?=
- =?us-ascii?Q?6xswlCFXrh6OzIcG9KV8jDdviKRzuCqIvMWKMcAl8fR+t0XT4697sLzXdgaB?=
- =?us-ascii?Q?zfCH8PYCHtfo/nBSm6l3THbGWksc9TEIrdP9jzcA8HS+HmM/k84dBWq+5GOX?=
- =?us-ascii?Q?v/YLdrs7QqZpm/06TGZw4LfQTbQbp4a/aWVV/IZeHxxKtMByXAY8AtEtUKxV?=
- =?us-ascii?Q?aezHraaa1Dj9cM+XRIBKlCEKJSCOpanX58scb5xob5GHEUxrkx2ri8ci+e/S?=
- =?us-ascii?Q?V9ROw7j2dczAVT+9y4Kc3luzVPV35s5aZT5epKumx9sfSyT4UQFdbws/SKOT?=
- =?us-ascii?Q?7rCEbmDgAvwAO16lSQRnqQ1DfqAjY9XElW/g6EqbyWt3A4xnVrb/F/Fc4ybP?=
- =?us-ascii?Q?y7ATUZ6bAHKwftw+NHTDRKHRADdvU534E4hyNTPxOY57rZkU+bZ9vc0TCtsW?=
- =?us-ascii?Q?5xw/4r4tJ9jx3XnmT8vCw+tFrrPVIr0/9OKf5O+TgBxs3TvVyOxsegGCQP8H?=
- =?us-ascii?Q?AlUBdlFHKpm+qZtBMLYr98j6YXHieXjUWMLZ5gDM1Mo54qq801O4dtkpmdUb?=
- =?us-ascii?Q?k0qcHvQRE0dHmi1JhaXjn8YDpcfUgcb7uDtpVQZYQwHU2Nc6JB7Kdtetj18W?=
- =?us-ascii?Q?iJQCJCCwQjjvfagXyO/mztcVPuCmspLWkLw2O7Yx4abTp+7ugw6WaUZQnDU?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HKBQGm6f2pkVzdnHyxa2kwFtFeBBcIEYAi5sG+XQe6pFy/LiDNmZxBl5pWMO?=
+ =?us-ascii?Q?9/vgX7713Ml6l+DeGxtGlmMwsj/4hbFjlf26EIEmR9IfLxnlaO2Ceas/cuqx?=
+ =?us-ascii?Q?oGzHj/QVjmpCbr6FYAEFYG53eCv3uUeqaarU7JAWS4BJULc3gEAo+MHUJInR?=
+ =?us-ascii?Q?NHKp0p9CNi0KH6YdjzkZGxkZNm51VGvujL9brAs5/uB/4+bHjkJpKo3f/dEq?=
+ =?us-ascii?Q?bBaHLJ6rEMCNAnAkMAXvBo8m4kr2FTzYTCYtsNZAaAAf9Bh2kUbFRiMPOiuH?=
+ =?us-ascii?Q?24qfw+RU+fOedC6Kd42Fjqpk7RSLfLuQle6/LAqZ2ojYZQGasLk35dMTgM+h?=
+ =?us-ascii?Q?xKxsl6tWmROFS4syuvqjO4/vm448hkvRKcsL+XLepvtA3VbVQveyLE7DvPlq?=
+ =?us-ascii?Q?G6bWNNyx0PNDC790UVUs54MODwHhLxqsz1Ug7VKGQgqdbqq9TtKdodQjeR0K?=
+ =?us-ascii?Q?KnbGleKXQBwz5IucA+X0hTI/y9hjCrgr8dF7+EMdWMmgxafo+EXOICFyfXLC?=
+ =?us-ascii?Q?7Qi46hITjZJ9WHE7TkKuT9j4DOm6cUfHgm959TkGaSSY32PdQh/kgCelgvzI?=
+ =?us-ascii?Q?dUdyGXRW6r8pjOS/2NoiySftVFB8U4RJzGUkBGQWWgoMzDKu1jZJN5V9jW93?=
+ =?us-ascii?Q?ygruiVrNaLnnF5/uHy174uHumx/uTnX+obS3aqoKBG5N1l5BRJOmjl1MHx8f?=
+ =?us-ascii?Q?lAlkD7FKCqe6lLehf+M7QTKjYpBEpdYfcPlztUooHTTpIbJL/IzFfXQ36XI0?=
+ =?us-ascii?Q?6bV8kdWk/l+sM2k/AQC7cAWv2K7nvOBDUsZ65smEtn3juQ+J0+SQNk/fQMmn?=
+ =?us-ascii?Q?KZ1WsQC8mQ8fxhhVeXoaG/BBSqzmAJoeRtscrL0xtqYmz2ddKMP+G+7/bTWD?=
+ =?us-ascii?Q?NykK/enfVZ3z3Asu3ld9I7dvPGiiuEvTdU++SLB+spxw3Pbxv0hDWdBkDEy7?=
+ =?us-ascii?Q?wtWIWRK4vX2N5wRjSXPBZuKNJoFS8V0VDT7us5kzxZAnZjAAAgruk+zRqGgB?=
+ =?us-ascii?Q?ZgBbhyBD09IE58U2BIB5Li1CqTYezlNVmD6ADc0Xfib7/n0RtNJtWyTPiVMi?=
+ =?us-ascii?Q?uOMqkNu549XEsDzuzKTVREkAyIKMjVFmNz+1cpSyp8t0Ah3JPeAZlNWy1TaS?=
+ =?us-ascii?Q?0BfXOz2uz5syyTaXFWuhcYRS4y+AI1fBhITZffKrnclcEQhye2xiWNnCgcmf?=
+ =?us-ascii?Q?H/d1vJtt7w1AUca9GD19/Sa19J/MKkH5YqUEAuSr4aeZ4M2BlCJrxXqwrgs?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-f5d03.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 778908c5-e077-4535-d709-08db48e2c0e7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28121aeb-3616-488c-4ae2-08db48e4cadf
 X-MS-Exchange-CrossTenant-AuthSource: SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2023 18:51:34.7912 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2023 19:06:10.1466 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P221MB1067
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0P221MB0283
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=live.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xyCdrg81useVBqy1gQgSmbfIVdz8F/NSGm+WGGhoYtw=;
- b=pZ0w5ZBrXDVBlK85/P0ItdLHXJt0+p32qWX4eQokvvrS20a5++XKGneiIsTlrEq7KydZBFZoYXfbveenH2/k1w32li1KBXK/Ipm88BesurHMX6kVdZCu+bZV+z+skBBSiCvpawt+yzv/s07SgSX1t8btDgqZGIyb2mV26exQh0KLHN2AgCHbC4YmkHdInkYxAQ7VMvefmqtuOiblV5xIsNrwTy/qHM/AsnCr7hntZVLavYukWZC62yEEFYhSoUe8g8RcrXIJAdxDEa4a0s3X33BoumGCAeKcvpO6K9nHKTyHjqtdLT/xOx8qNvGtPWzSULye+nkXb3iNjCpTo2ntYw==
+ bh=9qI/bv8qq6uqXkbYmAklWJxfUc2aIyi2+nP6ZnGV7FU=;
+ b=TsoQxULlWXVWkWnGVFBYtzifD9JGXO2iY1m94ujGSWgreyaEGaM//yVtmafMr9lRSC2KjPowRTxabXDMTYeJejRTdavOxqGFRFTVhPjBmMR/+xE+PPuC7CXlbxSKC7eyS+0RnZm/JCArcRC5eI49j1L82t7ghTdCyZiaeBXhWYBJRBE06A3TjdCur7YewFB34aeehb9ip3Dms1b/tProv9PwAjQrDHhGdV1qoky4kPQ9SGRY66mqogvhsTsWXiLh5lpg9rjdp/ltmZ2uA8A/lpxK8taeP8G+tbs9vxyT00tGl9EnmiJ1zaYaBfVWTbH+8X8NfLalkmzjWJtTqhQ0mg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
- header.s=selector1 header.b=pZ0w5ZBr
-Subject: [Buildroot] [PATCH] utils/check-package: improve windows support
+ header.s=selector1 header.b=TsoQxULl
+Subject: [Buildroot] [PATCH] package/systemd: update help links
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -126,94 +126,214 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Knight <james.d.knight@live.com>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Cc: James Knight <james.d.knight@live.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The following includes a series of tweaks to the check-package script to
-provide flexibility when sanity checking files when sources are checked
-out in a Windows environment. This includes:
-
-- When populating a list of files to check, ensure POSIX paths are used;
-   otherwise, the internal list of files to check will be improperly
-   formed and no checks will occur.
-- When interpreting an ignore list (which provides POSIX paths of files
-   to ignore), resolve the absolute file path for these entries to
-   ensure files can be ignored when cycling through a provided file
-   list.
-- Ignore execute bit checks on Windows since X_OK is only an existence
-   check on Windows.
-- When running ShellCheck, always ignore SC1017 [1] to avoid line
-   ending warnings since Windows environments will typically utilize
-   `git config core.autocrlf`.
-
-[1]: https://www.shellcheck.net/wiki/SC1017
+When browsing the help references for various systemd features, it was
+observed that the `systemd-rfkill` link was dead (originally pointing to
+`systemd-rfkill@.service.html`; now `systemd-rfkill.service.html`). This
+commit corrects this link, as well as updates all other links to https
+(since freedesktop.org now force redirects to https).
 
 Signed-off-by: James Knight <james.d.knight@live.com>
 ---
- utils/check-package           | 9 +++++++--
- utils/checkpackagelib/tool.py | 4 +++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ package/systemd/Config.in | 42 +++++++++++++++++++--------------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 83b9750f5a9c181dc96dcba508682776a600aac5..817dcb0b7203d28b7d2133ac1d8c27ac8093b3c4 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -5,6 +5,7 @@ import argparse
- import inspect
- import magic
- import os
-+import posixpath
- import re
- import sys
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 9f4d933779e8550040aad6a2225fea82029fada8..bea717a4560f573fafbde53efb846f8be0b663c0 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -100,7 +100,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	  the apropriate ones (e.g. e2fsck, from the e2fsprogs
+ 	  package) according to the system configuration.
  
-@@ -50,7 +51,8 @@ def get_ignored_parsers_per_file(intree_only, ignore_filename):
-         for line in f.readlines():
-             filename, warnings_str = line.split(' ', 1)
-             warnings = warnings_str.split()
--            ignored[os.path.join(entry_base_dir, filename)] = warnings
-+            entry = os.path.abspath(os.path.join(entry_base_dir, filename))
-+            ignored[entry] = warnings
-     return ignored
+-	  http://freedesktop.org/wiki/Software/systemd
++	  https://freedesktop.org/wiki/Software/systemd/
  
+ if BR2_PACKAGE_SYSTEMD
  
-@@ -275,7 +277,10 @@ def __main__():
-     if flags.intree_only:
-         # change all paths received to be relative to the base dir
-         base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
--        files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in flags.files]
-+        files_to_check = []
-+        for f in flags.files:
-+            relpath = os.path.relpath(os.path.abspath(f), base_dir)
-+            files_to_check.append(relpath.replace(os.sep, posixpath.sep))
-         # move current dir so the script find the files
-         os.chdir(base_dir)
-     else:
-diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
-index 907ada704fe4beaa57b1c18e7ce2f17977272257..8b2af64d3899a2e7958f79d61722b1b359351747 100644
---- a/utils/checkpackagelib/tool.py
-+++ b/utils/checkpackagelib/tool.py
-@@ -12,7 +12,7 @@ class NotExecutable(_Tool):
-     def run(self):
-         if self.ignore():
-             return
--        if os.access(self.filename, os.X_OK):
-+        if os.access(self.filename, os.X_OK) and os.name != "nt":
-             return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
+@@ -185,7 +185,7 @@ config BR2_PACKAGE_SYSTEMD_BACKLIGHT
+ 	  systemd-backlight is a service that restores the display
+ 	  backlight brightness at early boot and saves it at shutdown.
  
+-	  http://www.freedesktop.org/software/systemd/man/systemd-backlight@.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-backlight@.service.html
  
-@@ -32,6 +32,8 @@ class Flake8(_Tool):
- class Shellcheck(_Tool):
-     def run(self):
-         cmd = ['shellcheck', self.filename]
-+        if os.name == "nt":
-+            cmd.append("--exclude=SC1017")
-         try:
-             p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-             stdout = p.communicate()[0]
+ config BR2_PACKAGE_SYSTEMD_BINFMT
+ 	bool "enable binfmt tool"
+@@ -202,7 +202,7 @@ config BR2_PACKAGE_SYSTEMD_COREDUMP
+ 	  kernel when a user space program receives a fatal signal and
+ 	  dumps core.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-coredump.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-coredump.html
+ 
+ config BR2_PACKAGE_SYSTEMD_PSTORE
+ 	bool "enable pstore support"
+@@ -220,7 +220,7 @@ config BR2_PACKAGE_SYSTEMD_FIRSTBOOT
+ 	  systemd-firstboot initializes the most basic system settings
+ 	  interactively on the first boot.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-firstboot.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-firstboot.html
+ 
+ config BR2_PACKAGE_SYSTEMD_HIBERNATE
+ 	bool "enable hibernation support"
+@@ -229,7 +229,7 @@ config BR2_PACKAGE_SYSTEMD_HIBERNATE
+ 	  When this features is enabled, additional tools and services
+ 	  are built to support suspending and resuming the system.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-sleep.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-sleep.html
+ 
+ config BR2_PACKAGE_SYSTEMD_HOMED
+ 	bool "enable home daemon"
+@@ -261,7 +261,7 @@ config BR2_PACKAGE_SYSTEMD_HOSTNAMED
+ 	  systemd-hostnamed is a system service that may be used as a
+ 	  mechanism to change the system's hostname.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-hostnamed.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-hostnamed.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_HWDB
+ 	bool "enable hwdb installation"
+@@ -286,7 +286,7 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
+ 	  machine and container images for systemd-machined and
+ 	  machinectl.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
++	  https://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
+ 
+ config BR2_PACKAGE_SYSTEMD_CATALOGDB
+ 	bool "enable journal catalog database installation"
+@@ -309,14 +309,14 @@ config BR2_PACKAGE_SYSTEMD_LOCALED
+ 	  mechanism to change the system locale settings, as well as
+ 	  the console key mapping and default X11 key mapping.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-localed.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-localed.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_LOGIND
+ 	bool "enable login daemon"
+ 	help
+ 	  systemd-logind is a system service that manages user logins.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-logind.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-logind.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_MACHINED
+ 	bool "enable machine daemon"
+@@ -325,7 +325,7 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
+ 	  virtual machines and containers, and processes belonging to
+ 	  them.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-machined.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-machined.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+ 	bool "enable myhostname NSS plugin"
+@@ -336,7 +336,7 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+ 	  primarily providing hostname resolution for the locally
+ 	  configured system hostname as returned by gethostname(2).
+ 
+-	  http://www.freedesktop.org/software/systemd/man/nss-myhostname.html
++	  https://www.freedesktop.org/software/systemd/man/nss-myhostname.html
+ 
+ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	bool "enable network manager"
+@@ -349,7 +349,7 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	  This simple network configuration solution is an alternative
+ 	  to dhcpcd or ISC dhcp.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-networkd.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
+ 
+ config BR2_PACKAGE_SYSTEMD_OOMD
+ 	bool "enable out-of-memory killer"
+@@ -373,7 +373,7 @@ config BR2_PACKAGE_SYSTEMD_POLKIT
+ 	  useful for allowing unprivileged processes to speak to
+ 	  systemd's many privileged processes.
+ 
+-	  http://wiki.freedesktop.org/www/Software/polkit/
++	  https://wiki.freedesktop.org/www/Software/polkit/
+ 
+ comment "polkit support needs a toolchain with threads, wchar, gcc >= 7"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+@@ -408,7 +408,7 @@ config BR2_PACKAGE_SYSTEMD_QUOTACHECK
+ 	  file systems are mounted. It is pulled in only if at least
+ 	  one file system has quotas enabled.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-quotacheck.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-quotacheck.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
+ 	bool "enable random-seed support"
+@@ -418,7 +418,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
+ 	  shutdown. Saving/restoring the random seed across boots
+ 	  increases the amount of available entropy early at boot.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_REPART
+ 	bool "enable repart support"
+@@ -440,7 +440,7 @@ config BR2_PACKAGE_SYSTEMD_RESOLVED
+ 	  caching and validating DNS/DNSSEC stub resolver, as well as
+ 	  an LLMNR resolver and responder.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-resolved.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-resolved.html
+ 
+ config BR2_PACKAGE_SYSTEMD_RFKILL
+ 	bool "enable rfkill tools"
+@@ -448,7 +448,7 @@ config BR2_PACKAGE_SYSTEMD_RFKILL
+ 	  systemd-rfkill is a service that restores the RF kill switch
+ 	  state at early boot and saves it at shutdown.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-rfkill@.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-rfkill.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+ 	bool "enable SMACK support"
+@@ -503,7 +503,7 @@ config BR2_PACKAGE_SYSTEMD_SYSUSERS
+ 	  systemd-sysusers creates system users and groups, based on
+ 	  the file format and location specified in sysusers.d(5).
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-sysusers.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-sysusers.html
+ 
+ config BR2_PACKAGE_SYSTEMD_TIMEDATED
+ 	bool "enable timedate daemon"
+@@ -513,7 +513,7 @@ config BR2_PACKAGE_SYSTEMD_TIMEDATED
+ 	  mechanism to change the system clock and timezone, as well
+ 	  as to enable/disable NTP time synchronization.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-timedated.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-timedated.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
+ 	bool "enable timesync daemon"
+@@ -526,7 +526,7 @@ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
+ 	  This simple NTP solution is an alternative to sntp/ntpd from
+ 	  the ntp package.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
+ 
+ config BR2_PACKAGE_SYSTEMD_USERDB
+ 	bool "enable userdb daemon"
+@@ -567,6 +567,6 @@ config BR2_PACKAGE_SYSTEMD_VCONSOLE
+ 	  systemd-vconsole-setup is an early boot service that
+ 	  configures the virtual console font and console keymap.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
+ 
+ endif
 -- 
 2.40.1.windows.1
 
