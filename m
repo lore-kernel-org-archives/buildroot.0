@@ -4,118 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8FB1C77B7C
-	for <buildroot@archiver.kernel.org>; Sat, 29 Apr 2023 18:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70BF9C77B60
+	for <buildroot@archiver.kernel.org>; Sat, 29 Apr 2023 18:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5682A60B94;
-	Sat, 29 Apr 2023 18:13:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5682A60B94
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8E4560F9F;
+	Sat, 29 Apr 2023 18:13:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8E4560F9F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VecfqRv1jG3T; Sat, 29 Apr 2023 18:12:59 +0000 (UTC)
+	with ESMTP id MK_EWA8ygulF; Sat, 29 Apr 2023 18:13:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F392608A5;
-	Sat, 29 Apr 2023 18:12:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F392608A5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 22E981BF4DA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1390660F8B;
+	Sat, 29 Apr 2023 18:13:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1390660F8B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A54621BF4DA
  for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:12:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DEC534032A
- for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEC534032A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E0D4841C1
+ for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:12:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E0D4841C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tmHUkEGjKoXH for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v7Atz1zmFwqn for <buildroot@lists.busybox.net>;
  Sat, 29 Apr 2023 18:12:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02703400FB
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam11olkn20800.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7eae::800])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 02703400FB
- for <buildroot@buildroot.org>; Sat, 29 Apr 2023 18:12:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C05C7841C0
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com
+ (mail-bn7nam10olkn20827.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e8a::827])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C05C7841C0
+ for <buildroot@buildroot.org>; Sat, 29 Apr 2023 18:12:55 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BNyC7+Nh2JGAeBBFAJTZAskIrvbQEYZluF00qnDob5l5q1r8CoMg5isDD3WexzenU8zzvzhU30Uh+DdVyR3VMfhP8Gz+IIvkiV/lw98t37Q4UEV0lBh+Zy3E5HGsDltdNMwNTYINERI/qYcuqyhoZOI82n2AV/fpKWKZmLwLT5bbrE0htlPTBYIO3fkDW9w+TZo13g250ys0yA2SdSxeH+JofVWO5Sd0csoIv7uiJVg5n4qLk/d1EU7jjB0hAVsxdOsU+zsL/fFp7uNwsgDTfiKsNsNQg1HCTdRyaL4ufAkxZjrSURuj3zYpRhPh9vENJcNM5UiruuAQNdsKg4YvKQ==
+ b=GKnmkG9qSRgWA04wsyiaYcxnHNZVBGK6O7Kz1ayiyoCRs30N225x/p5VOwqv/yn695vctqgfJ9/NF7lxoswM+4RKecVcq4ROmX5VC9JHUHUJOrrmMg3tvE3nIwPxhLAcSaifrAH09bNSqv4WlWRDDq7lHNdoeKWxKkDOPmsdvp+ptAokk8CpcZtK255fdgTSScgRe5BQNVtUMQ08hT6hHoBK0ZiouOfRgp8fd8WE9zSQU4+22iH4V5PRUxK6VK/GGL54uq2m9MXPcapNvE9IZ/rpRaLs++uAvvs2UfmXgofItN7QYUa1KI2ZJVUzuvC1KGcvZjmCeS1iKEsiV8NEnw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eEs/WB3O4JTPJhqYefgEIiv2nZC6JDWoHCDVV/opz+s=;
- b=FgOTpoqp4tjJAGogl2nVpjcjzYNzOYS0wLgMKs0FGrr5lC2Fi13alMrb3PZVnFqZDR9z/+PHFZdLVR/4LvragvSQvmFCsnA41+7nPbRQjJBJauZeLqK8GB4d33K2UGQc0Yb49O1BE6qlX44lqIhWEZDE7JoBdWQhE9qNOQphe8HtWitDresp/puFNCEXIkgaEMwDGCT1KdADoU/4TGD8GZRNkGvXkrSQhMA+TAx5SNTRwJxdfrxILatuJKvDKlWiETjBDlgieifeqhnKbCgjcvuKfXKMeVuolfwD/kJ0C8peYjkF9E3QegqOqt0isSHRX93JqP2WuIMCHuszYP21jQ==
+ bh=M50KTPqsGcznCQbq7FHMUIr6g9ykgnuEq56Ut05REdY=;
+ b=Z38mZkMGDKxXN6oir6JyZFM2h7pktgV5UKuedNeKXgc7LUIonT0SCBbePEQg81vMpeD6vUCuFXOKAXO2ZAcbN9ABG4f8JMexN9VSt6eNGy4FH1JugTWsbXWeRlOu6vxd6owtvajaQgdniyc254eh8Kpy4dvbbF+ZOwxKRe7+SS5JZg8PH3L6+XBNXcoZ/xe8c5UJzDGh8Aq+DN6daj9ZQXHml+cdOZpB85h19D7qFsj5S/iWxHM5QCFs0exI/O7VpZ9kmFixA8tTrdO5+NLETtvb1o7D2tYGLhA45o82A64BrOw51gxKtrLiHizQEuc9HxqOLQAG/DfHncVAmbSriA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:1e9::12)
- by CY5P221MB0854.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:2e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Sat, 29 Apr
- 2023 18:12:52 +0000
+ by MN0P221MB0897.NAMP221.PROD.OUTLOOK.COM (2603:10b6:208:3cb::19)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.25; Sat, 29 Apr
+ 2023 18:12:53 +0000
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8]) by SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8%5]) with mapi id 15.20.6319.032; Sat, 29 Apr 2023
- 18:12:52 +0000
+ 18:12:53 +0000
 From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Apr 2023 14:12:01 -0400
-Message-ID: <SN4P221MB068213B5F9C9C24C43CBB99AA0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+Date: Sat, 29 Apr 2023 14:12:02 -0400
+Message-ID: <SN4P221MB0682A6E723BF55D3807B1BBBA0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.40.1.windows.1
-X-TMN: [NJjRWgeJJ0TPPf5/b958JfdmZ1AIGQph]
+In-Reply-To: <20230429181205.3620-1-james.d.knight@live.com>
+References: <20230429181205.3620-1-james.d.knight@live.com>
+X-TMN: [Hy7R0CgvN6K2sjj4LdyNTPXKLMt4mxSc]
 X-ClientProxiedBy: YQBPR01CA0055.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:c01:2::27) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  (2603:10b6:806:1e9::12)
-X-Microsoft-Original-Message-ID: <20230429181205.3620-1-james.d.knight@live.com>
+X-Microsoft-Original-Message-ID: <20230429181205.3620-2-james.d.knight@live.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|CY5P221MB0854:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d7513db-d981-406b-00e6-08db48dd5873
-X-MS-Exchange-SLBlob-MailProps: 0wLWl8rLpvs2LcEE47sqC+gyshUAxDzMJD0Wj5flQiXh44+/G9XYwBQhK8YPkYT+/QvMUpyA9UCOpk2jUjOOIC9barelsewaKPoiVzmiYGC0SW/Vo5WFwCrP1Rwf/ypfq1i9HsdMbf/dQa+bfm/+544NgSZopI27AIQKvOiPgclnudr09VfKjV0/osNrwWnBNyOM9NSgIW+KN98IhI+MiJvJ4KxgN3N5Ee+xV7puwFAnWBRLHHT0NzjFTNPYBkJkZMt3Lm0FRfPee++M1Y1or45ImqhglV9GZ9zuxPlepKlV/eParic5VGGB7wMAGoAAC7moysa+sd/221sEHfNawBDetKkBG+9VBJqnejTfuESzI+x21WXgLWN/LZuJZ5CXKNg2pfH4GgeLayLNsyfzsCKRjE3E0D/IlnU9fAZjIpn4C+6uk+U+zAYd1GtGIVWwCt/nwv3Ss+uLGYnjB0chc4g5NSpuzjlxQz7JkqAx8cwkj+yMYXBwJkxWGB+l+CUivzLYDcypDVJhTaHf8Ss7cey1R5b6eL1yDmHbkjUMHFh5THVIREbze3xGZJajOsuW+d4PRydvENfJWoUwzUiLJK6Tl7mnLmY+0xx3PzfK2Ih/6rf9Re6v74YG5Wwfq84somRs8V1FS9TTUyAJ3qI4expAVuOakuG6a64bMwV4YM5D2sVRV+fP4Qj2auNI0Yzou2EllYZgmSZlfMWUyxaReTnhJtyq/AHwolyzhKjqeIpTa5kxPWsgk2DTL+hA8bcEJLe3XJCOwQw=
+X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|MN0P221MB0897:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4d67a104-c54f-4058-4eed-08db48dd594e
+X-MS-Exchange-SLBlob-MailProps: EgT5Wr3QDKz9LT6L8JnCnTKowlUv9J5joKn+bCSW/meCBAH4c2R1ED3HGOHvSrwOwadlK70Dp2eg5YNo3Pdc4v16PamDqlzy1yjmJxShRgqed7n5gropgmj/GiJta/mVIJ8PvGqkRroqVc2Pq7AuK7yxRmUecyrdsCLLUq0rR6/xyjFhMTan4kAkbiOvtQe9vsJT+4wNLVVWQ2qUVyUozqM5aBQkQYHNWeaRdCefnWI/H14NmboEVL/RJqlDUdLza9Pe2wOZ4w86PilkNHn8cJa2Yvf6zYCIbxMqBc2UWecgvphEETWMeMfLt5iasoIRPslZdDfVUPfnxXU4VKRM+TEJ5dH1G1e5YKc++G2KwHlIk4UnBfaZy37+MOlJAOZcRZH9Jt5V8zx5QjjLMXNswXBxgpVferQ2yHNqZQxz7+qjSeGqLNH+Z3hmNwAJJzYrWSREERi8gJf759kp9L+b5/xJ4+zIrQ6WoiBJ4lLQXRL7FbUXv5V2uUBZ5w5tvFwDM0VH4NvS+WdM1lcv3puaIPc7dnz4mOyPR5Eo/ZfR9BU9tdiD5T0kqhHtN0/HotJzSP0KqDLqOYUVmiuw5im64GVHt+ExXD98SEH74lELeR10uk3T5/SGpg4iCcjm4+H9FmWRkxsW1Uv/cJg1lVu4Yuy9f+Sxz1I/dbQTDdpMWSaq3/M7W9/K1zXvzaI+m73D+dMFz5WBtq4j51NKBpXBfpMLsSxP3dKv8w0CVEGII0g=
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9FfMpPMN2Ac9C1DSRElN4GhS+Pe8NAnQDmldoaRaHq1t972D94QhKrd32aesJQQ8ejRzb0NLl86gM7+q8Y7MU3qNKEU3Aof927RySNS+jeHgODEC3gf0B+phrZJv+U2Vd+JSdZV6rxDWYIW82jB3NDci99rqEiFlQG2SzIMQsp17/LgkConbZq0Z7qAVdmjzQEna3/61g4JJlVp7cOGQ77bQjdM8+Cs/P22HMMhbtuYYE1rCFS9IK5kzXCQuBbzkcnp6SMcIXrIFMgC2pRcV7UpLJejWNyYRU8lurvDhCYCSu3+wo3jel2g5qiyWgdgiG9ac4D7UWmoFMKBB0NF/fTxOVk/Ct0F9udT6rTYoJeb57tM7W7iUJjU8lU6HqXa1WrN/ODkTjHiktXBZPtaAaeZ6cUaSSl7pljITgteKxLkf0VZ4F9fay3ZH9U6MB1mn6H42GcLSdLsWN9V46Jq/CI8LMmDofEsL8bUF3pHi8k5qex5d7r1awcxSzqS9Xo/hKxke6fVAcZQgBNblc04gT38Kiv+BwfpxodNmEnxY/5CumwKY60Q6xZ9nc2WDCpYnhEHH6zp7VyAIM1Cgo4162kJhA5p4x2tQ0RVxVU6/KGom37wa94X2MP5DqAgjq4On
+X-Microsoft-Antispam-Message-Info: 2OhSN5sH1vnE0dfcINWicxsMwB5CFhielQLzVEZn2g68OjMzciESkYqCiOvNfW2ck2A8h0H4YFon441S1ajZoWT3zKuhCPeWIBdB4RYIOerVtbl5UKFpbkgfjLj8XQ8BqIE+wDwK79szuMix/dVFhpejYtsGq0BJ+ztJsZCd11U6uhO+537eLjR/pWrT/Pbh0ZlLl3Zs3GtZ4eckYanmLewY5+qJA1SjZCvoSPiars4WsX/kkMxm4sPEEGNealPJ70UOLSr15m0dnYZh+7QMA6vdkbInEBH6s1fhHzQRR6mxzzUJmvdoBDxU7FGO/M0WX+liHmRXKIj+iO3F1mcdGq8bX47NARIN2sh8E/SN5uy3Ium1UT3N1EkHqdSrQR+nlwFIddE4LRjkLLx0mYut3Fa5UZhac6J5a7nZwQOswnzmz937aVqg9ogTUKxpQ/OWAQdxxVZ9SPTX6RDwjQXFa96Z2k0wNhNGFH2BzbnNllTOpn5Zqv0xJqeP7GTsOgv7E4ebQHHEBJ4DLXdGbFp2S0x8caRNe6a4YlFQrKBerB7uw67oYQC8KQqiTrdUVBEe72Trbyj8jmDA+DwdaVq+FNI7ry0NZ2awOHC4aVxPtIui0SO8sZHDJOWqvVqRK2BV
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?H+eDMxj6rK+LSouc1sxsaly9gtnMNm79wfVzW3phI8Zo9xwIc0kXFNG5Jilh?=
- =?us-ascii?Q?9ut5deTu8/3w4ny2YRdwyHF5Lha/leLl0aYJL/JDT+wE07cAKVwBVsAvnNs0?=
- =?us-ascii?Q?ScsobVCtdFjCvqvsYoU5xH5lrZC+2huiPsVPRuQlZAPOkIHdVDiy5Hg5xcqq?=
- =?us-ascii?Q?+gwqq2HGojTn6KqFII+Yv4Os6Rqm1XTdg87MXcVGGHA3WLq8QLel0MWW2o+W?=
- =?us-ascii?Q?5DUYSbXPKinVFZrEqHOcDA4PNafg/Otf/BXxIml3kGWbBDWyjGccBbllxsJ1?=
- =?us-ascii?Q?vBsoAybtK1Jbo2JZpDqrbrJMxdPigpiHCVcqo5TfHKJp2K17RTdBPHYyAC0n?=
- =?us-ascii?Q?lzg9SHBsFEXYlZQA+UNUn74OZ/0agPDkjIWkcH4Rdx7lT1QA+33hR5zWDf41?=
- =?us-ascii?Q?BaJuQ060mdWFByEgaJT52nnIe0YSCveQgQyhTQWpIh/tO7mZ9C5N7vJuFYhn?=
- =?us-ascii?Q?hIHXwZoW4t59hHMrRTsqITKm/qPLIZn6CbaoLOZqBTZEfMTy40zVFiNTCqn1?=
- =?us-ascii?Q?1Iy6q+L3OLVoHJXo/Dd+WKtqPRwvJfptMMIDpna6HoDC6yfNZJO2rDh897+u?=
- =?us-ascii?Q?PqXBukvvgMLzXTGIfG3yXFFMyzPZpaQ9fRSuHKSVxJfk/3v1m2+qKM71WL5w?=
- =?us-ascii?Q?1IvvXySwpJXg9Wm5iTwb6aWy/0XdgcMp0a6eRwKSEKJinUePrtWV3otDl3Td?=
- =?us-ascii?Q?yFYksT2zKlLWqGCNa1NxG8G/824V3Rmqn+T/FLUhO4Xy55y2AyntEs67IYw4?=
- =?us-ascii?Q?jIetKYCDkRiYFUcmmfJxb5DGOhAe0ldU3+dv548vI1gJTaZcJoMUDY7lzhDj?=
- =?us-ascii?Q?bwqg0X5sMmJ1uuPYKgZtQSZVkL1aN3DX3yX2/GrGnEOS7V3e46FymFSiE7jG?=
- =?us-ascii?Q?MFSGD/77y2ErCucaUgOJvgvcmfxKWkYmKg71r48bhw4WP3up2Ot5u6tSdj/7?=
- =?us-ascii?Q?LkylcA6RIAIWhhsv+MH8VmtO13igaAlWdOLR2Og3um5PQtMOaOa8ajT0zM5R?=
- =?us-ascii?Q?qKooei8LoblWGd/Xj3IocqKElxcSJX0kB/S5ByB3vQX95QFL+ouRGWZEUJDJ?=
- =?us-ascii?Q?C0Wn+lx2H1OWXlxcSe+lmusTvIUfOTfgc4+bmP5ElabrJn9MOR1OAI7RWTR0?=
- =?us-ascii?Q?oCS4CimiKNoOXHsdH0n3fjyHhBN3fvApbYhGQ8qMNycIzrI8pIM/zwhwJwow?=
- =?us-ascii?Q?kHyXZmtbudPDV04Gj+x2ruVz3MbDjHbhVaGI/5ChlxQ0gF/8r482ykyq4os?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AqH/DbtdTfAunVCcVAZXoA4atob5RYsM015Xw3I/bpORyifV1CPmdrXf7DgJ?=
+ =?us-ascii?Q?0+pBjL0RZmLSsNHIOv1NxEvaeIWZMwV10jzJQoYcktlyBmPRJGUb5LXNPg6C?=
+ =?us-ascii?Q?kwBBWVCAyEvw/hBPIpKIa2ypInYPPorK3hjFval8h94RqAQFyn2LbPFNBcL3?=
+ =?us-ascii?Q?twdnwdaenX1teG/lvhHXxi7g9qEiIN4fXLHyGj4VnoBfbxvFUfkoFRxrehE7?=
+ =?us-ascii?Q?QsZbsQPgr3SAX/P3tBw9uyHGjrD0wqpBI/+4HvJKJrvtAKeylkGKXCVFLn/v?=
+ =?us-ascii?Q?0dPq3Vx8/cg3cVBvav0sx4eFM/92m+oVYSR7xWaNjpah+K0yNqk73V3AN7i5?=
+ =?us-ascii?Q?Hri/kaHAkUPSVCcTUqVk0g1Pslru7LZ6BwMWCrKUGj/nbBpYpM5TCmfmzYmq?=
+ =?us-ascii?Q?T91U08Rve5McAtmR9e1QSZCByBEg1/M4nbtBEO5PF+gWO9agE6o1mxO9oEW9?=
+ =?us-ascii?Q?gJ+I29ABh64LottFvo7guprZ/1CXCOuvEP6zMaxjuVROIYWQ2MN+5lQpScGi?=
+ =?us-ascii?Q?fhxbfO1vLMxJPlTcWKwZNyeqSZZ0ZVelpXz9emqDO5Bhj5FR940VhYPAlHei?=
+ =?us-ascii?Q?zH/yQAa3YQw3Sm0vTnoquQe9llhMNx/RXwAmdiVzRgr8LcmBVJWJumRbTe+l?=
+ =?us-ascii?Q?DHOVKBu5ZatH764RU1555gWd818rVsdu872Bo/3zpLMUgWD/bqmY+vAX0sNO?=
+ =?us-ascii?Q?V9+enYE4dNe8Cz+gu6f9sKryASw0HYPJhQhkgGYOVlnFDXKSXMgkuTv9E/Lb?=
+ =?us-ascii?Q?fSIvQHLKxdmLhsTP2DaCP/pEHz1C0qW7YAhR1K/UhCDr/TqLHyVVuqmelGM/?=
+ =?us-ascii?Q?pMmgSz3BxxL/XHA0YbtzZaJ+xbPchzzDCXAveURA/c2AFAHeLzbN44Ah8Q5u?=
+ =?us-ascii?Q?lPfEokwMz3PQajbupcT4HW/wTxykzTCZcr37khxmUQaDc9t0YySFZI9DKS1w?=
+ =?us-ascii?Q?5J4varTEA+dRFzzdZDwSeeCmq1L+StwztIQdVzxQvLtEGoiG9q+y9jhI0rMY?=
+ =?us-ascii?Q?hx19vNkMtbTWbUyqfnKcQKeULhocBjdynpH5ykzyEWHaKRtuv51aNdZ4Yapi?=
+ =?us-ascii?Q?P1BTLoZbDr3wI1QZbbzy9xSugTVxaDEy7LobUCAAdLAuBNXmnBONg2074uFz?=
+ =?us-ascii?Q?ea3PFnIPq9FlQhREpbQ+1CXxTKW7DR7FPKnVSrhoKHVXGhCRziPrCvhHipIR?=
+ =?us-ascii?Q?7b+n8tODrHRre5rMR9XVT5KNvOA/cMK5nYZKp9vGU/4TVb3LZvYF9SPjyF4?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-f5d03.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d7513db-d981-406b-00e6-08db48dd5873
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d67a104-c54f-4058-4eed-08db48dd594e
 X-MS-Exchange-CrossTenant-AuthSource: SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2023 18:12:52.1003 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2023 18:12:53.0990 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5P221MB0854
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0P221MB0897
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=live.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eEs/WB3O4JTPJhqYefgEIiv2nZC6JDWoHCDVV/opz+s=;
- b=rhPGLi5NE3nrGYBRV59oy/Zw6Xthj8Pvgj4sxetRVSSyXSHeE1ijOqLaJQb/3fb0gQKylz5aKaLjBZpvE6q/SjrYDwRNpOd2fsq1rbL+5z3GvnIm4L86MKPErdc2urJcjsbo+mVaEPgKlmkcyF0BMPKwC8N++20+REz9YxAZolWr1IBZbk3vaXvT8mc3vkDo4smLI83DNoOYVTADrqmKb+fhNCSdARIjulaGO8lPzX345Fjm+3laiE3sW3aSLGb/cp/5OWF60m80jX0WjmUagV7tH6EGTnP/Jo/V2A7Z8lwsfJ5Qid3jqQuT5rWAIRPV1BwTAXSGow6/+WYi7eaFOg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=M50KTPqsGcznCQbq7FHMUIr6g9ykgnuEq56Ut05REdY=;
+ b=DKuUmzajnmOoi/YkNbLheybQlUgNzjFiD5LWBQA+Riff606GwaluzAE9oqqe34eAWfWXKi1Q+vqae/hJQ5XIbNNvp0nujof4e293WrnHZeZX+Ph9B5yhM9qR9DFSuVeosCVlGqTkG08D8hx6WcfvEtmRS7y2y8hc12WMbSNWGA60RjCnT/vXyJhUrA39GXYfiy+f2DTP08GTEysmwN9uhAh6V2q0c+IeR91wO/rNxtpQwI+XeQx0TXv5gfImzGJ+bls5hMQbuPOfuuHF/oFPWDjH1xj1bWkPPbNx4+HdQfwfKNbKT/Qi0NK95rnel1rfFHtCmkLUi2vUHyeo5/ZYLA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
- header.s=selector1 header.b=rhPGLi5N
-Subject: [Buildroot] [PATCH 0/4] support ignore-indent for check-package
- configs
+ header.s=selector1 header.b=DKuUmzaj
+Subject: [Buildroot] [PATCH 1/4] utils/check-package: cleanup line reading
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -134,72 +135,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The following series brings support for having a linter hint in
-configuration files to avoid having `check-package` warn about bad
-indentations for container-like configurations.
+Cleanup the implementation for reading lines by having files processed
+in context managers and utilizing the iterable file object for line
+reading (instead of needing to call `readlines()`).
 
-Buildroot ignores indentations for the root package configurations as
-well as kodi/x11r7 packages. These configurations reference other
-configurations, which makes it somewhat preferred to indent packages
-under a menu option. For example:
+Signed-off-by: James Knight <james.d.knight@live.com>
+---
+ utils/check-package | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-    menu "<category>"
-        source "package/<ref>/Config.in"
-        ...
-    endmenu
-
-To prevent `check-package` from triggering a warning, an internal list
-inside `lib_config.py` is maintained. This is less than ideal since (1)
-it requires adjusting the library script if future "category"
-configurations are added/removed, and (2) does not provide a way for
-br2-external trees to utilize the same exceptions. For example, if a
-br2-external tree manages a `Config.in` with pending upstream packages:
-
-    menu "Target packages (Queued upstream)"
-        source "$BR2_EXTERNAL_BAR_42_PATH/newpkg1/Config.in"
-        source "$BR2_EXTERNAL_BAR_42_PATH/newpkg2/Config.in"
-    endmenu
-
-Utilizing Buildroot's `check-package` call on this file will generate an
-indentation warning.
-
-What this series brings is the ability to add a `ignore-indent` flag
-into configuration scripts to avoid `check-package` from generating
-errors for select files. Continuing with the above example, adding the
-flag as follows will no longer generate an indentation error:
-
-    # noqa: ignore-indent
-    menu "Target packages (Queued upstream)"
-        source "$BR2_EXTERNAL_BAR_42_PATH/newpkg1/Config.in"
-        source "$BR2_EXTERNAL_BAR_42_PATH/newpkg2/Config.in"
-    endmenu
-
-This change allows dropping the internal list of configuration
-exceptions (for package/Config.in, package/Config.in.host, kodi and
-x11r7), to instead use the `ignore-indent` flag in the respective files.
-
-James Knight (4):
-  utils/check-package: cleanup line reading
-  utils/check-package: support a file-state instance for library types
-  utils/check-package: support ignore-indent flag for configurations
-  utils/check-package: utilize ignore-indent flag for special configs
-
- package/Config.in                   |  2 ++
- package/Config.in.host              |  2 ++
- package/kodi/Config.in              |  2 ++
- package/x11r7/Config.in             |  2 ++
- utils/check-package                 | 30 ++++++++++++++++++---------
- utils/checkpackagelib/base.py       |  2 +-
- utils/checkpackagelib/lib.py        | 10 ++++-----
- utils/checkpackagelib/lib_config.py | 32 ++++++++++++++++++++---------
- utils/checkpackagelib/lib_hash.py   |  6 +++---
- utils/checkpackagelib/lib_mk.py     | 22 ++++++++++----------
- utils/checkpackagelib/lib_patch.py  |  6 +++---
- utils/checkpackagelib/lib_sysv.py   |  4 ++--
- utils/checkpackagelib/test_util.py  |  4 ++--
- 13 files changed, 77 insertions(+), 47 deletions(-)
-
---
+diff --git a/utils/check-package b/utils/check-package
+index 83b9750f5a9c181dc96dcba508682776a600aac5..db3a00b524bc2c2aa663d3621c94fb11a6db7cb3 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -229,16 +229,18 @@ def check_file_using_lib(fname):
+         nwarnings += warn
+ 
+     lastline = ""
+-    for lineno, text in enumerate(open(fname, "r", errors="surrogateescape").readlines()):
+-        nlines += 1
+-        for name, cf in objects:
+-            if cf.disable.search(lastline):
+-                continue
+-            warn, fail = print_warnings(cf.check_line(lineno + 1, text), name in xfail)
+-            if fail > 0:
+-                failed.add(name)
+-            nwarnings += warn
+-        lastline = text
++    with open(fname, "r", errors="surrogateescape") as f:
++        for lineno, text in enumerate(f):
++            nlines += 1
++            for name, cf in objects:
++                if cf.disable.search(lastline):
++                    continue
++                line_sts = cf.check_line(fstate, lineno + 1, text)
++                warn, fail = print_warnings(line_sts, name in xfail)
++                if fail > 0:
++                    failed.add(name)
++                nwarnings += warn
++            lastline = text
+ 
+     for name, cf in objects:
+         warn, fail = print_warnings(cf.after(), name in xfail)
+-- 
 2.40.1.windows.1
 
 _______________________________________________
