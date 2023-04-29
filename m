@@ -1,123 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FEC6C77B7C
-	for <buildroot@archiver.kernel.org>; Sat, 29 Apr 2023 18:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69DB4C77B60
+	for <buildroot@archiver.kernel.org>; Sat, 29 Apr 2023 18:51:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE1A161140;
-	Sat, 29 Apr 2023 18:13:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE1A161140
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3CF484234;
+	Sat, 29 Apr 2023 18:51:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3CF484234
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eWBgP9eR2M-o; Sat, 29 Apr 2023 18:13:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PRd6lbC9ESpk; Sat, 29 Apr 2023 18:51:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B792D60FDE;
-	Sat, 29 Apr 2023 18:13:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B792D60FDE
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9E2B8422B;
+	Sat, 29 Apr 2023 18:51:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9E2B8422B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 313161BF4DA
- for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:13:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4F9431BF4DA
+ for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:51:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0653E415F0
- for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:13:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0653E415F0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13CAF426FE
+ for <buildroot@lists.busybox.net>; Sat, 29 Apr 2023 18:51:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13CAF426FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gCM1gMPJfQbm for <buildroot@lists.busybox.net>;
- Sat, 29 Apr 2023 18:12:58 +0000 (UTC)
+ with ESMTP id TKXSQwbbMwpI for <buildroot@lists.busybox.net>;
+ Sat, 29 Apr 2023 18:51:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2FA841620
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com
- (mail-bn1nam02olkn20803.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7eb2::803])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D2FA841620
- for <buildroot@buildroot.org>; Sat, 29 Apr 2023 18:12:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD3EB42707
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam12acsn20807.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe5b::807])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AD3EB42707
+ for <buildroot@buildroot.org>; Sat, 29 Apr 2023 18:51:37 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oY09ZHYxoFrGSlHBL/jg5mXCeEbWGWiSTNMlwmgLDsjwTzRMxPfjETmANZvvNrVRbK/DTJaOnt03XBkRjRMZNT2wl/eZkNcwLiERInbRhFpAuOsbNKyhUtI1sIayevOzSTQE2BjmzZuUYhWUPnKVjcS9DnP8usqZ09dgTTxjQ1FkrwQ8nGhveccADEoLeuN11CyZRkEpDlEGEUE65T15eaACfY04k9dX4kkTF47KweYszjp+ni5IAQ7B90JweavmMyFEx4HTAHb4k2ipVfag7ukdGVslX+yzxiot75JLCBmuFiGNkmJAeeR79yDvRuuZn5XIlqwz6OgQucWjsSYbtw==
+ b=cnb1NwQ97Rn10Z5BaEXKvaGDP9EEZ8bdvaX62U6JfPvxvF/qrprbjMkw8xWh+eOHq6RYuGpSrh3mg8tRfC+16vNAlREmow4gflPCG4jR6MxyNKDBoBqcBrus0Uafftieks6Br63Oxjw5AxHZBV1rf/cdiU16wmYl/NiWnVw1W6jiFwIdZGB19sViEBwitGNgb+O8rZorrzCEEjLHA16y5WOMMEXgCzbJO37g3ADH3bW5vL9WfZatZqNHwipyFS8GW5HQxcYpSvuLNulJnaNINsai2MSTRWD5d81LDr6prmmo9VlqwyRJUx3PN4dRoMAIdyMkWkVLBlzoTjj+UFZ70w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3hOJ9QW+V4gvY8WvkZHrAQghMxhPUZI+4Jui3Dw2SNg=;
- b=Ks7XnvvIUdUQvps/Dr9GGAcI0aBGeldmH5oRCWMIq9ey2RyUTkKD4AH6F58VJVB1lxTXuzMpOy2G0MXPVuyeVk32+pn5y6VWDJ0Xjq8zWxV2XuYB9fMuKPkuTmWoHX6iLBjWyqEu02iYuZn4u4fhe1RbGH0A6oss6liMAgqEBjLMa5zWkgT4vhkTudX6VVs1VBy1Ums4fgIJNDR3vjq4Z83wVwRIHOeipwlFhHubwW6Y5aI8WvQqByFXsewovYYarS5PlmCkh8eT421c/nRGIPW+hJN9ASjd2c4Hw0wbHaIZsCk6pyj8ozp3ehja8cQ1cLRlgyAiuJ7U6wuExeaVxQ==
+ bh=xyCdrg81useVBqy1gQgSmbfIVdz8F/NSGm+WGGhoYtw=;
+ b=Vr/XPRANKKkQNMC6nOKrxjZVvbL4hx7rviKRchGODe+tTabI1Hhqzw4cAhQGoiaJBpk+J0DPvf4sV2ODvMPKYpYkWHXBRFmApux+SZfb2qf/LMANpScaUetEnTn9gdBwhE3UuicDX64CrI+0LyCuDo1Dv/IGnW7bXLIcefhMDSulwZCnY1TKeYrJjq5gSRRgKoXYUgWfqWzWMcdrbHElVLSrqbU8mJnLxYv+eg5j41wpyO+sbHy9Uvrq1IM3h6J2sfHA79xXjQVEFKxEqdUAK8aBsE7q3uOUBnB4WfU1yVXpqzfmqqsJ3dkEg7jMfVSQXeCMD41I0vLqO+tmtAPs5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:1e9::12)
- by CYYP221MB1094.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:ca::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.23; Sat, 29 Apr
- 2023 18:12:56 +0000
+ by SA1P221MB1067.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:25e::15)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Sat, 29 Apr
+ 2023 18:51:34 +0000
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8]) by SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8%5]) with mapi id 15.20.6319.032; Sat, 29 Apr 2023
- 18:12:56 +0000
+ 18:51:34 +0000
 From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Apr 2023 14:12:05 -0400
-Message-ID: <SN4P221MB06824359D91BC284DDF6F0A2A0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+Date: Sat, 29 Apr 2023 14:51:04 -0400
+Message-ID: <SN4P221MB068289AD66243971AC49547BA0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.40.1.windows.1
-In-Reply-To: <20230429181205.3620-1-james.d.knight@live.com>
-References: <20230429181205.3620-1-james.d.knight@live.com>
-X-TMN: [k6u9545YdEAXhmm+Ou2XKRZUlRF9NDvU]
-X-ClientProxiedBy: YQBPR01CA0055.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:2::27) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
+X-TMN: [Mr6xE3EO1UXp+MS8Xtupfc41Hx+Kikft]
+X-ClientProxiedBy: QB1P288CA0029.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:c00:2d::42) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  (2603:10b6:806:1e9::12)
-X-Microsoft-Original-Message-ID: <20230429181205.3620-5-james.d.knight@live.com>
+X-Microsoft-Original-Message-ID: <20230429185104.3666-1-james.d.knight@live.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|CYYP221MB1094:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a10aac6-95dc-459c-e83d-08db48dd5b23
-X-MS-Exchange-SLBlob-MailProps: AZnQBsB9XmreLwtPaBeZFZid+sA2W5GkWArvMT050OqGq6itiBOCQESDc/v61Fvjg5TzZdCk2s1wdUoYqZxWWj09V86k4csxN5B7A6oVtG3DOklfVW63d1pRjuEvql1rTSiMUCwULGNM9AZOak/neuOacslbqMQ1sSEgIKFRkRwMxFLO7TLNoUIurRvpYLbjeIhd3Hh4UlFUEBUyftswXJ9IvvycSwbxaV3lbJf1MxXttXJoGqSy3K48A5pI9QmjpjRb2Z6AwlaSnQ19jyrh9XRcVuYqX58bvbSNbtALdh2MI+IPh8NeQgdGhkUBzMFfMz0IVqIYZ2U65UJvhaZE89aqdXHSpKB4MPpLkbVCY55mYji68dQxn/vq8CxIpO1jBZ9ft5BAPBzyYTYjxf4j7Kt6mJkXjPnGer5QSt0yTRFDeir8WXZNy2Gc+y7qT3AC07OuRUZksx3SmXlWJdyg3IIh+yPOXOMUgRtCJ/cZUjMUZJG89BeIih5IHs5n+PDKX5v6hBl01rUoT5dcnhIJkqicz0qrYKZEzQA2lBcses3nQAeRMiz3k2PeRxlBahWcTV8f8NXLS1jAOFyUKRO3UuQy7sDikIbDOQTakzrnbNl0la1LaHilRPbafny7Ue0o8ulJ/5JDUTu23IBMCiP/CeJSMc4WIbnp7wcRJuOg5n96uzhjIXqB36Dloa6A63xLaXGnGBeJ+9jxWl90SIzOT1ECiy5uUATI2xFhxtjJ0XQVQAuhqni8Z4XbL+f57F5Zex6wyA8DoCg=
+X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|SA1P221MB1067:EE_
+X-MS-Office365-Filtering-Correlation-Id: 778908c5-e077-4535-d709-08db48e2c0e7
+X-MS-Exchange-SLBlob-MailProps: ZILSnhm0P3kAFe1sr4bV8w/wrs4asbv9nBFsKaKdlYlDKAgpBDN+JS5JItOBdewMwYpF8J88W6q3+0P4o+r4IUONGGCmHdHgdqstGa4IoaDEcoUTaqrlDILz4UunCU1WLjMy6X/2spUG5xNtyeNYzZ/T/NLsxvyQWL/CreGu3BMvtQfRGHb3jwDGTYbpNY3zYHXyvvrBmEdeHHgQ9k5psBxwYpoUv3fIcLxbBhMAnxAfK0omv2+YRTXkZudSO3E0MQ2z/RpZAfvnO8cCWqNYTbe3SNiKLNor4GrEoi/UipG1ZU0dIAC3jlmpwH/Z/qNUjVIxzM5j9eegTBexyoavJwN3v4Tg3R0LkxFjFILGtJlQH7alIvq84xZj2fBS5x0lkQQAUVRSe/cFruiLqtwvv8xrt0WLSaPshIzV0O3wmDtkDPq0OfWo6BBTA+lUjeUE1GKnmWRwxVfLYC866BTdUHXFkD1edjwMfwrjHQg+b7lblXfjk6iGKG+5nTTwFANtuMQ2Cjjzq5jyyt2FwMw1hyeLYzB8Mgj28ITOXa7eu72xIP8qrtSuYlbFDmDqsf6RUZtVEpJs3B7jyv0Tull4qaOMYSwAszIqjzYVMKetWyizVht2uZpg4yVd+/0HkT5QEFP3tPR/g0F10Nx5kTqyCcyWwbz2jbOcE46y5y95ON4FPjqGATLgxdKJwqb6KuXDzPCHjQdW7eBlTabZ5LoucGGK0AAtHNGtB2whv+rhHxCgzz4n9OBurWsnZoMJoauNHobsxdOzzwlu/xNYxkXC5RJLdpg7LVl2
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LPAe5edVszTUIgyqQsQRRWJQVl5y/9EIEC9372CHm0ZsCU7/shP7et1e3cXTvhNVsZO0U7qHHXpgNkuML2yLtGwnbwDq5g4a453RXb1yzNWSgOOiHcKHYp/N4f9yklxwQlsV0CFEZqGvMaoVu71fsB1eflJaNLtzOkFy/d6ni/HZ9iBsRjRNiP77FLxsqFouBi5JIMaAVQzJm5YMLlIiNQ+rBzvzc80GtHR3KMc1kLL/sk+pbT88plP+yIUBOsyAqekoSuwSxuRML/BtxRmo6uhTQ1SBbfX9rc1XA7lSKBwz7/wwYW/kIPXS7bTKHCO2fiQs7Vk+89z3Cp0LGnirSUYl2ZitXpIWbsbCavB2SXuTCGew2LrkG+xcLJT6SA45YXS/GGu8jTyDH/uGvV2+EacHwe/juPukedlx8M8CfM+vqzk589jOC4cymidJQfHkVVSgtBSROco/CfSVW752cf4nrP+kAlAypaEXZa66L7kTdSTwFcWEVGvgHMHLn4LHLF7odC8L0gu4Eh4nDUN8N99zHpBjnFZ+KMj9lDYrpVsbkOpI4+GHDKNPMMUQu2JDk2t3y/szOPW0yH2fHUdqWzEj7dn89zIamrzBZ3cOuyC/mcuRO/FXqG8YRxPm0/BL
+X-Microsoft-Antispam-Message-Info: 0UBv4nxCe2cnI/L2oCHoSoiBzd3D0pkHo5B766K00DFSmv0qdvdJiOGeBcS+RGY1Zp6YGQvuAe46wlM99AcnCj5OeQa7bkx/qm5ICpJD/95sUDkkFqDLMh3n7bW4+lZU3+VvuNiGjxbXTupFVpGiSN3zo5ePcbKRhE3W+KpkLoC59SQCnak5NEcZ10ZU9rBtsrxOD6m9cJW/w5kDQzAZ3aoMQPG0pUJAIU/0Vvl3PrnWsfg9g5V1Mh80fr7+pLZAgv2WdFJOp1R1SfGQnpy1ETwJgF06eR+cit92HACEzxK0Rv6sf+ou8urdObbjHg8d8+OXqEzUZiVp6GyVwrEba6U+mXWeeDbWQKb6xUwl1fYzo2OT7aYTqJr6a+P7Xm1t1nuVPBbMVI3S4YQAWssN0TuF6+GyPtVyS/ET1LUdcCXwoD+/Y8fhZtgn4qpOUSv65E0q4DOwNBF9WeZ9i14fXF7EcTjf7qgWwNU264ne1xrpnWXFCrCG6b7YC2FnLL48OypX+/ihvHbSec7CYtUh8fckqJ9mWhHLFU5D/rkCvSupQ8hYa0qG+b79XIZWTCDEwZIJ2ltsijRLwkhaEwOB6MpxJHoiO5NZLe1LdTVS9fw=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3Ht8PFE0RBjm74v4YpdLU38hwushLGVR8OOpvhdXtWmdDeyI03z9gm5SW66I?=
- =?us-ascii?Q?w3d/Ypw9CcwKxrtQDaP7JUurv5mZJfYsht1wK9xpPsCe+AEWoBp7UqzJb1vu?=
- =?us-ascii?Q?eFqyOfk2bg+NjFVjPsZ9HKzdca++0sHoG0gdJ+TQeqEXG83yH+AGEmBoes8L?=
- =?us-ascii?Q?L+PS/K6cVo4/jDbIx5dsPUeyK4J+/dNxvUSBZnndWnqeLteu7Po4g1JZPon1?=
- =?us-ascii?Q?jUZ1esKogkxfs0QDSlq217w08jfzqH6SU8O8/fCzj/ff9zQe8lQqbDJnb8aR?=
- =?us-ascii?Q?4cL6QA5q3A8p0cVfXEiVMu7T2v1nL+2aplRtVNMuF8uWgp5YN91raKJOI2TH?=
- =?us-ascii?Q?YfGVjzuE7u84XkY5XnW/Dvbih4DBd4i/Ni2Y8CxWrwSCwBvx87GPj1DoiXw8?=
- =?us-ascii?Q?Q+T+ard/Qt6PXDtmOhq+d1L0AEnsG44bHXKXrrxdyUeaFR6DCvMQRqPYVe+E?=
- =?us-ascii?Q?Qfx3xLqSkNTn8RsyhC3NTghK8gkHMBmg4r1tyY+blsm6PE+TBeDecY5HjvKR?=
- =?us-ascii?Q?fvvulJNQYPLFpf0yNoXa95ClybD1ALfZQ7VBjvj4GdLkUYkS1W8OKesleQnR?=
- =?us-ascii?Q?c4+50W3sZlrmT47FWV3mmcF9+mIvRcxOMpuM4MZ4XWMJcO718iKfk4inEULi?=
- =?us-ascii?Q?k6rEdPtyQ0u4v6xmIb/PBtAywoqkMpvByUxG76feOSrUpGrd0fON3T+hEhgY?=
- =?us-ascii?Q?rJl0zxgfGUJKTunHJgsFAyzScUcu7ASPY8RJV4JdXDt1z2ep6T7I3aeCY7wA?=
- =?us-ascii?Q?RO4rZUqi+W3DbZ9fFe1fu9aoLLRIyG2JjTzSP2AY3Jq0VzMDd9dGwyoHJCAe?=
- =?us-ascii?Q?6DurnI64MUqi/PYe+t8rMeF0CZMlMsmJK1K20dfjIRwRWLnxGnB2beEx4oQ+?=
- =?us-ascii?Q?8TMpUo5yo13GT5VV2iPO5/aUt/dZujNrhyeJPC6BS+EuKnXM0rxQYBzUmjrY?=
- =?us-ascii?Q?+l/hsfyDJZRCKkfqbFhJbXElqkSJm7g9wqX4cs+yYSxDkWs7fIdltoSPxUIQ?=
- =?us-ascii?Q?9p1X5OmWVmQhreKazv4WyRewSMbgYzjBIVMSRTfQNoVTdUWX77yMeOhKLvbh?=
- =?us-ascii?Q?Mp45qDV3LdiBHSz0OLreioprarTvDrDUe+Hah+ZESSSTEI2nbpHxivdFrwEW?=
- =?us-ascii?Q?cAN649A0Fxa/MdIWYbPnbchhgYNwBlnRVbkwRXPJ90GM31kFPCBQSn55dHBs?=
- =?us-ascii?Q?QD/X67LNIfGy/KnsFs5T3A410RPJkOH0e/hrvOeWfIOP2Isp0noxkonJbGc?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KqF+KZkkejLBGoxUKSsJZ5KcnQU42l2xt5RErv9NH2IsLWM49M29vCFvPrsx?=
+ =?us-ascii?Q?JNSbxtzoWhO+fPjqxVI/qNnjo1V+4GgtjT9E2nvqxu8Tpbzh8Qpx3Db8CXjJ?=
+ =?us-ascii?Q?/ToIsMMbZMD3VY2G9I1cHQriH0y3pbo05xsmHLdaiPaJ649hPhq7S/tltZFb?=
+ =?us-ascii?Q?SdYNMonya37g2dIIRXAnMvaus53/LiDCb2cqYPdAgCjNdpkSQcOlHiCJgd+p?=
+ =?us-ascii?Q?2iACAD8QJ0EyPo2I1P9XNeLcmrvpBPIGbOyPnWr7Vln+SgktzMW64/MU1aDU?=
+ =?us-ascii?Q?z5lxVRqg3RQsagXChReyBJ6PMhYCuKF3pXl7mmEwXTz6XJZqan5dja7LL29X?=
+ =?us-ascii?Q?WkIZ28mOKdAflB99kUV4KjHDhehWH1n8FqOvt8tfXCJSfV8zG24ArOTgKaPc?=
+ =?us-ascii?Q?hoRDTG8psXcQzm9Gs+urD57a7fvqz67bjjbCRE5Eyl0bcPU1A0/XRSU8vIBE?=
+ =?us-ascii?Q?3/9KEu1Uy7UEsgdQ3oF6FmRG640qNkGMT++qmu5EI2krkdyFQltPJ8KdZIQ/?=
+ =?us-ascii?Q?XFmv+9UZ5k8n/phfIKB9sKP6HeyknbnX4qslUCDBW8ZRLmD+AYN4wV6sdBqu?=
+ =?us-ascii?Q?6xswlCFXrh6OzIcG9KV8jDdviKRzuCqIvMWKMcAl8fR+t0XT4697sLzXdgaB?=
+ =?us-ascii?Q?zfCH8PYCHtfo/nBSm6l3THbGWksc9TEIrdP9jzcA8HS+HmM/k84dBWq+5GOX?=
+ =?us-ascii?Q?v/YLdrs7QqZpm/06TGZw4LfQTbQbp4a/aWVV/IZeHxxKtMByXAY8AtEtUKxV?=
+ =?us-ascii?Q?aezHraaa1Dj9cM+XRIBKlCEKJSCOpanX58scb5xob5GHEUxrkx2ri8ci+e/S?=
+ =?us-ascii?Q?V9ROw7j2dczAVT+9y4Kc3luzVPV35s5aZT5epKumx9sfSyT4UQFdbws/SKOT?=
+ =?us-ascii?Q?7rCEbmDgAvwAO16lSQRnqQ1DfqAjY9XElW/g6EqbyWt3A4xnVrb/F/Fc4ybP?=
+ =?us-ascii?Q?y7ATUZ6bAHKwftw+NHTDRKHRADdvU534E4hyNTPxOY57rZkU+bZ9vc0TCtsW?=
+ =?us-ascii?Q?5xw/4r4tJ9jx3XnmT8vCw+tFrrPVIr0/9OKf5O+TgBxs3TvVyOxsegGCQP8H?=
+ =?us-ascii?Q?AlUBdlFHKpm+qZtBMLYr98j6YXHieXjUWMLZ5gDM1Mo54qq801O4dtkpmdUb?=
+ =?us-ascii?Q?k0qcHvQRE0dHmi1JhaXjn8YDpcfUgcb7uDtpVQZYQwHU2Nc6JB7Kdtetj18W?=
+ =?us-ascii?Q?iJQCJCCwQjjvfagXyO/mztcVPuCmspLWkLw2O7Yx4abTp+7ugw6WaUZQnDU?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-f5d03.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a10aac6-95dc-459c-e83d-08db48dd5b23
+X-MS-Exchange-CrossTenant-Network-Message-Id: 778908c5-e077-4535-d709-08db48e2c0e7
 X-MS-Exchange-CrossTenant-AuthSource: SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2023 18:12:56.1929 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2023 18:51:34.7912 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYP221MB1094
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P221MB1067
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=live.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3hOJ9QW+V4gvY8WvkZHrAQghMxhPUZI+4Jui3Dw2SNg=;
- b=PEF2BAxWU4cJIsSYjgnk69O9f4New3kmAm9CsF/uY1r2TZXDa4O0ncNCuqiCx3fZ5w848Sm9TKApg4ZOSrf68coTQjIwb2GmTgHc71s7o9/9dCX6xTox2h2XSY4+tQbwCFwQx5lBtSp5h4W/H+AJ7pWB82HO0EqmDFkYVkY2jUZlRAc/Ibx5mCL2+Z4w5nBxt/ckHMxM1r553O+Ksz7eiQi/TslaX+xUIAFLmzh5rfnVQbeEpE/KvsRpyyy6UOy7mD2ywRy4VRMWTPvlIhTN80ggVZUu+CMWoS5hDYZABuWWIr4Dwl0DIIsyCznLrLiDRsmvSf6qjk12la6vLGYx5A==
+ bh=xyCdrg81useVBqy1gQgSmbfIVdz8F/NSGm+WGGhoYtw=;
+ b=pZ0w5ZBrXDVBlK85/P0ItdLHXJt0+p32qWX4eQokvvrS20a5++XKGneiIsTlrEq7KydZBFZoYXfbveenH2/k1w32li1KBXK/Ipm88BesurHMX6kVdZCu+bZV+z+skBBSiCvpawt+yzv/s07SgSX1t8btDgqZGIyb2mV26exQh0KLHN2AgCHbC4YmkHdInkYxAQ7VMvefmqtuOiblV5xIsNrwTy/qHM/AsnCr7hntZVLavYukWZC62yEEFYhSoUe8g8RcrXIJAdxDEa4a0s3X33BoumGCAeKcvpO6K9nHKTyHjqtdLT/xOx8qNvGtPWzSULye+nkXb3iNjCpTo2ntYw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
- header.s=selector1 header.b=PEF2BAxW
-Subject: [Buildroot] [PATCH 4/4] utils/check-package: utilize ignore-indent
- flag for special configs
+ header.s=selector1 header.b=pZ0w5ZBr
+Subject: [Buildroot] [PATCH] utils/check-package: improve windows support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -136,76 +133,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Applies the `ignore-indent` flag to multiple configuration files,
-allowing these special files to removed from an internal list managed
-inside `checkpackagelib/lib_config.py`.
+The following includes a series of tweaks to the check-package script to
+provide flexibility when sanity checking files when sources are checked
+out in a Windows environment. This includes:
+
+- When populating a list of files to check, ensure POSIX paths are used;
+   otherwise, the internal list of files to check will be improperly
+   formed and no checks will occur.
+- When interpreting an ignore list (which provides POSIX paths of files
+   to ignore), resolve the absolute file path for these entries to
+   ensure files can be ignored when cycling through a provided file
+   list.
+- Ignore execute bit checks on Windows since X_OK is only an existence
+   check on Windows.
+- When running ShellCheck, always ignore SC1017 [1] to avoid line
+   ending warnings since Windows environments will typically utilize
+   `git config core.autocrlf`.
+
+[1]: https://www.shellcheck.net/wiki/SC1017
 
 Signed-off-by: James Knight <james.d.knight@live.com>
 ---
- package/Config.in                   | 2 ++
- package/Config.in.host              | 2 ++
- package/kodi/Config.in              | 2 ++
- package/x11r7/Config.in             | 2 ++
- utils/checkpackagelib/lib_config.py | 6 ------
- 5 files changed, 8 insertions(+), 6 deletions(-)
+ utils/check-package           | 9 +++++++--
+ utils/checkpackagelib/tool.py | 4 +++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index eaac32a01af363936edc8a0a8dd2450c458a38ae..9b7899c8da6e98353fba8a360f56df8a4a191b95 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1,3 +1,5 @@
-+# noqa: ignore-indent
-+
- menu "Target packages"
+diff --git a/utils/check-package b/utils/check-package
+index 83b9750f5a9c181dc96dcba508682776a600aac5..817dcb0b7203d28b7d2133ac1d8c27ac8093b3c4 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -5,6 +5,7 @@ import argparse
+ import inspect
+ import magic
+ import os
++import posixpath
+ import re
+ import sys
  
- 	source "package/busybox/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index dcadbfdfc1b0f2799c37dcc70b9e6c1203c4cccd..ab76d2aebc05abd18448336777f8d1b5b439edb8 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,3 +1,5 @@
-+# noqa: ignore-indent
-+
- menu "Host utilities"
+@@ -50,7 +51,8 @@ def get_ignored_parsers_per_file(intree_only, ignore_filename):
+         for line in f.readlines():
+             filename, warnings_str = line.split(' ', 1)
+             warnings = warnings_str.split()
+-            ignored[os.path.join(entry_base_dir, filename)] = warnings
++            entry = os.path.abspath(os.path.join(entry_base_dir, filename))
++            ignored[entry] = warnings
+     return ignored
  
- 	source "package/abootimg/Config.in.host"
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 7bd8bc2943d4719b1af4f634d729ae0ae5c50e92..8befa9b6cdcebcf71c06c9e153fabfc776cdb2cf 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -1,3 +1,5 @@
-+# noqa: ignore-indent
-+
- config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 4de8922e0d505431181d1df4473c54660311552e..80f25fa94b106f41563727c5fe2de18f110ededc 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -1,3 +1,5 @@
-+# noqa: ignore-indent
-+
- menuconfig BR2_PACKAGE_XORG7
- 	bool "X.org X Window System"
- 	depends on BR2_USE_WCHAR
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 52539d97ab60664d0466b42e28b3aac5577db5fb..7aa4c535a6814fd479b3cfdc44c6cb10e53aa70f 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -226,12 +226,6 @@ class Indent(_CheckFunction):
-             if not text.startswith(entry):
-                 if state and 'ignore-indent' in state.noqa_flags:
-                     return
--                # four Config.in files have a special but legitimate indentation rule
--                if self.filename in ["package/Config.in",
--                                     "package/Config.in.host",
--                                     "package/kodi/Config.in",
--                                     "package/x11r7/Config.in"]:
--                    return
-                 return ["{}:{}: should not be indented"
-                         .format(self.filename, lineno),
-                         text]
+ 
+@@ -275,7 +277,10 @@ def __main__():
+     if flags.intree_only:
+         # change all paths received to be relative to the base dir
+         base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+-        files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in flags.files]
++        files_to_check = []
++        for f in flags.files:
++            relpath = os.path.relpath(os.path.abspath(f), base_dir)
++            files_to_check.append(relpath.replace(os.sep, posixpath.sep))
+         # move current dir so the script find the files
+         os.chdir(base_dir)
+     else:
+diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
+index 907ada704fe4beaa57b1c18e7ce2f17977272257..8b2af64d3899a2e7958f79d61722b1b359351747 100644
+--- a/utils/checkpackagelib/tool.py
++++ b/utils/checkpackagelib/tool.py
+@@ -12,7 +12,7 @@ class NotExecutable(_Tool):
+     def run(self):
+         if self.ignore():
+             return
+-        if os.access(self.filename, os.X_OK):
++        if os.access(self.filename, os.X_OK) and os.name != "nt":
+             return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
+ 
+ 
+@@ -32,6 +32,8 @@ class Flake8(_Tool):
+ class Shellcheck(_Tool):
+     def run(self):
+         cmd = ['shellcheck', self.filename]
++        if os.name == "nt":
++            cmd.append("--exclude=SC1017")
+         try:
+             p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+             stdout = p.communicate()[0]
 -- 
 2.40.1.windows.1
 
