@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A187C77B73
-	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 07:18:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C1E1C77B61
+	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 07:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7DEC61131;
-	Mon,  1 May 2023 07:18:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7DEC61131
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55A716115B;
+	Mon,  1 May 2023 07:18:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55A716115B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id frMc_kcTIBja; Mon,  1 May 2023 07:18:06 +0000 (UTC)
+	with ESMTP id T64OnpH57wfE; Mon,  1 May 2023 07:18:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1173161121;
-	Mon,  1 May 2023 07:18:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1173161121
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 01F231BF2EF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9298761121;
+	Mon,  1 May 2023 07:18:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9298761121
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 396101BF852
  for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD2F082047
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:18:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD2F082047
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FE0D61121
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:18:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FE0D61121
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2qErV6isCyQ6 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NDayqAEIGm-0 for <buildroot@lists.busybox.net>;
  Mon,  1 May 2023 07:18:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 303E682041
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5BA116110D
  for <buildroot@buildroot.org>; Mon,  1 May 2023 07:18:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 303E682041
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BA116110D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C5108465B; Mon,  1 May 2023 07:18:02 +0000 (UTC)
+ id 4AAC88465E; Mon,  1 May 2023 07:18:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 1 May 2023 09:13:59 +0200
+Date: Mon, 1 May 2023 09:14:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eadff4efe9d4c4209b328d7da9dc1b2e6849ca80
-X-Git-Newrev: 1fb66e2852cb004ed31b54d28b5e12181d6d2df5
+X-Git-Oldrev: 162053090f891036106a5c70f423eb7fbdb8ca4a
+X-Git-Newrev: cbeca8c04297b03b64b482a6d687a5ec4009d9e8
 X-Patchwork-Hint: ignore
-Message-Id: <20230501071802.1C5108465B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: bump version to 8.2.5
+Message-Id: <20230501071802.4AAC88465E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libva: bump version to 2.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,48 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fb66e2852cb004ed31b54d28b5e12181d6d2df5
+commit: https://git.buildroot.net/buildroot/commit/?id=cbeca8c04297b03b64b482a6d687a5ec4009d9e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://www.php.net/ChangeLog-8.php#8.2.4
-https://www.php.net/ChangeLog-8.php#8.2.5
-
-Release notes:
-https://news-web.php.net/php.announce/351
-https://news-web.php.net/php.announce/352
+Release notes: https://github.com/intel/libva/blob/v2.18-branch/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/libva/libva.hash | 2 +-
+ package/libva/libva.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 41aa326156..6b1549958f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  b9b566686e351125d67568a33291650eb8dfa26614d205d70d82e6e92613d457  php-8.2.3.tar.xz
-+sha256  800738c359b7f1e67e40c22713d2d90276bc85ba1c21b43d99edd43c254c5f76  php-8.2.5.tar.xz
- 
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 49f02d7f20..7cebc178fe 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 780c186069..8173876bbd 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8940541980ef998a36cd8f6ad905e81838ea4ddf56dc479ed2bebd12711e6001  libva-2.17.0.tar.gz
++sha256  9d666c70c12dfefcdd27ae7dea771557f75e24961d0ed4cb050d96fb6136f438  libva-2.18.0.tar.gz
+ sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index f50010d9fc..dbb0b8f6e4 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.2.3
-+PHP_VERSION = 8.2.5
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-LIBVA_VERSION = 2.17.0
++LIBVA_VERSION = 2.18.0
+ LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
+ LIBVA_LICENSE = MIT
+ LIBVA_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
