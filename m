@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A79AC77B61
-	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 07:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A224C77B61
+	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 07:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8D9961101;
-	Mon,  1 May 2023 07:24:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8D9961101
+	by smtp3.osuosl.org (Postfix) with ESMTP id 352446114A;
+	Mon,  1 May 2023 07:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 352446114A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Eu3_r0-juNCN; Mon,  1 May 2023 07:24:13 +0000 (UTC)
+	with ESMTP id Fvb4Sq-Y5MWL; Mon,  1 May 2023 07:25:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1968610EE;
-	Mon,  1 May 2023 07:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1968610EE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 720506112C;
+	Mon,  1 May 2023 07:25:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 720506112C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9CE4E1BF2EF
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:24:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 966501BF2EF
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74CE641796
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:24:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74CE641796
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E22941799
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:25:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E22941799
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tp4cuw33lqS6 for <buildroot@lists.busybox.net>;
- Mon,  1 May 2023 07:24:09 +0000 (UTC)
+ with ESMTP id SsCcb9jsyl1C for <buildroot@lists.busybox.net>;
+ Mon,  1 May 2023 07:25:02 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 330FC4177B
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 330FC4177B
- for <buildroot@buildroot.org>; Mon,  1 May 2023 07:24:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B4AD41796
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2B4AD41796
+ for <buildroot@buildroot.org>; Mon,  1 May 2023 07:25:01 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0F931E0003;
- Mon,  1 May 2023 07:24:05 +0000 (UTC)
-Message-ID: <031dbdf8-0fcf-3516-7aea-edef37a5498d@korsgaard.com>
-Date: Mon, 1 May 2023 09:24:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US
-To: Bagas Sanjaya <bagasdotme@gmail.com>,
- Buildroot Development <buildroot@buildroot.org>
-References: <20230428090116.288124-1-bagasdotme@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 29FBA1BF203;
+ Mon,  1 May 2023 07:25:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ptNu7-006XIv-9v; Mon, 01 May 2023 09:24:59 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20230428090116.288124-1-bagasdotme@gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/git: security bump to version 2.40.1
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20230428122420.211802-1-bernd.kuhls@t-online.de>
+Date: Mon, 01 May 2023 09:24:59 +0200
+In-Reply-To: <20230428122420.211802-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 28 Apr 2023 14:24:20 +0200")
+Message-ID: <87r0s0jyyc.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,26 +63,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/04/2023 11.01, Bagas Sanjaya wrote:
-> Fix three CVEs (CVE-2023-25652, CVE-2023-25815, and CVE-2023-29007).
-> For details on these, see release announcement at [1].
-> 
-> [1]: https://lore.kernel.org/git/xmqqa5yv3n93.fsf@gitster.g/
-> 
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+
+ > Changelog:
+ > https://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;hb=refs/heads/release/4.4
+
+ > Rebased all patches, switched _SITE to https.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
