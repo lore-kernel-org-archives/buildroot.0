@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01806C77B73
-	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 07:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7932FC77B61
+	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 07:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A10B982158;
-	Mon,  1 May 2023 07:37:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A10B982158
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A47882120;
+	Mon,  1 May 2023 07:37:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A47882120
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tyXK9S4l1ix5; Mon,  1 May 2023 07:37:39 +0000 (UTC)
+	with ESMTP id STlfmQwscctJ; Mon,  1 May 2023 07:37:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F5D38210E;
-	Mon,  1 May 2023 07:37:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F5D38210E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 953C91BF2EF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B74382123;
+	Mon,  1 May 2023 07:37:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B74382123
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C76571BF852
  for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A29341675
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:36:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A29341675
+ by smtp1.osuosl.org (Postfix) with ESMTP id A100182115
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:36:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A100182115
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xHpdOdVecaW4 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6LwkmznhdQg7 for <buildroot@lists.busybox.net>;
  Mon,  1 May 2023 07:36:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 599E741762
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E4D98210A
  for <buildroot@buildroot.org>; Mon,  1 May 2023 07:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 599E741762
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E4D98210A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4797F84706; Mon,  1 May 2023 07:36:35 +0000 (UTC)
+ id 3C7DD84705; Mon,  1 May 2023 07:36:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 1 May 2023 09:32:37 +0200
+Date: Mon, 1 May 2023 09:29:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60d8e5257608098bd1d66c44282b04d02c733f75
-X-Git-Newrev: b9c6684fa37f20d48645868a1e15bb831ca1ba85
+X-Git-Oldrev: 272bfb4cabe70e4251650f9fa27124c189eb835e
+X-Git-Newrev: 60d8e5257608098bd1d66c44282b04d02c733f75
 X-Patchwork-Hint: ignore
-Message-Id: <20230501073635.4797F84706@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.38.6
+Message-Id: <20230501073635.3C7DD84705@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua: bump to version 5.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +62,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9c6684fa37f20d48645868a1e15bb831ca1ba85
+commit: https://git.buildroot.net/buildroot/commit/?id=60d8e5257608098bd1d66c44282b04d02c733f75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfix release with many security fixes, including (but not limited to)
-patches for CVE-2023-25358, CVE-2022-0108, CVE-2022-32885,
-CVE-2023-27932, CVE-2023-27954, and CVE-2023-28205.
-
-Release notes:
-
-  https://wpewebkit.org/release/wpewebkit-2.38.6.html
-
-Accompanying security advisory:
-
-  https://wpewebkit.org/security/WSA-2023-0003.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/lua/5.4.4/lua.hash                                  | 6 ------
+ package/lua/{5.4.4 => 5.4.5}/0001-root-path.patch           | 2 +-
+ package/lua/{5.4.4 => 5.4.5}/0002-shared-libs-for-lua.patch | 2 +-
+ package/lua/{5.4.4 => 5.4.5}/0011-linenoise.patch           | 2 +-
+ package/lua/5.4.5/lua.hash                                  | 5 +++++
+ package/lua/lua.mk                                          | 2 +-
+ 6 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 0fa1018721..d5f628e1ee 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.38.5.tar.xz.sums
--md5  73f7abd0c1cc808032869f72602166e3  wpewebkit-2.38.5.tar.xz
--sha1  3f10a04758eeb349f63f841aff765dae25bcde1b  wpewebkit-2.38.5.tar.xz
--sha256  ff00fd3d0a4c6d551850a78a7dfe4883b6b7ebd93c5549e1121b2f43d3ac1661  wpewebkit-2.38.5.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.38.6.tar.xz.sums
-+md5  eb44d3132208218f3752170cae3220b8  wpewebkit-2.38.6.tar.xz
-+sha1  5c541a10e216d8d9ca48572b3dc0f82bfb2236c5  wpewebkit-2.38.6.tar.xz
-+sha256  dcb6591456393c5366ad9abc62a808137d4fea039cbc7ef4c8d64ead506d035b  wpewebkit-2.38.6.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 48e5c2f8cd..7b8ac67d92 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/lua/5.4.4/lua.hash b/package/lua/5.4.4/lua.hash
+deleted file mode 100644
+index b55b17f258..0000000000
+--- a/package/lua/5.4.4/lua.hash
++++ /dev/null
+@@ -1,6 +0,0 @@
+-# Hashes from: https://www.lua.org/ftp/
+-md5  bd8ce7069ff99a400efd14cf339a727b  lua-5.4.4.tar.gz
+-sha1  03c27684b9d5d9783fb79a7c836ba1cdc5f309cd  lua-5.4.4.tar.gz
+-
+-# Locally computed
+-sha256  2556ac7198243f9f83130b9c81016e1904f7b30351481f1c28e02475dbd237fb  doc/readme.html
+diff --git a/package/lua/5.4.4/0001-root-path.patch b/package/lua/5.4.5/0001-root-path.patch
+similarity index 95%
+rename from package/lua/5.4.4/0001-root-path.patch
+rename to package/lua/5.4.5/0001-root-path.patch
+index c4f6e312eb..5e3037b786 100644
+--- a/package/lua/5.4.4/0001-root-path.patch
++++ b/package/lua/5.4.5/0001-root-path.patch
+@@ -6,7 +6,7 @@ Index: b/src/luaconf.h
+ ===================================================================
+ --- a/src/luaconf.h
+ +++ b/src/luaconf.h
+-@@ -217,7 +217,7 @@
++@@ -223,7 +223,7 @@
+  
+  #else			/* }{ */
+  
+diff --git a/package/lua/5.4.4/0002-shared-libs-for-lua.patch b/package/lua/5.4.5/0002-shared-libs-for-lua.patch
+similarity index 96%
+rename from package/lua/5.4.4/0002-shared-libs-for-lua.patch
+rename to package/lua/5.4.5/0002-shared-libs-for-lua.patch
+index 4ff2044298..388aa9966a 100644
+--- a/package/lua/5.4.4/0002-shared-libs-for-lua.patch
++++ b/package/lua/5.4.5/0002-shared-libs-for-lua.patch
+@@ -31,7 +31,7 @@ Index: b/src/Makefile
+ --- a/src/Makefile
+ +++ b/src/Makefile
+ @@ -33,6 +33,7 @@
+- PLATS= guess aix bsd c89 freebsd generic linux linux-readline macosx mingw posix solaris
++ PLATS= guess aix bsd c89 freebsd generic ios linux linux-readline macosx mingw posix solaris
+  
+  LUA_A=	liblua.a
+ +LUA_SO=	liblua.so
+diff --git a/package/lua/5.4.4/0011-linenoise.patch b/package/lua/5.4.5/0011-linenoise.patch
+similarity index 97%
+rename from package/lua/5.4.4/0011-linenoise.patch
+rename to package/lua/5.4.5/0011-linenoise.patch
+index 68316e108f..5054ae19e2 100644
+--- a/package/lua/5.4.4/0011-linenoise.patch
++++ b/package/lua/5.4.5/0011-linenoise.patch
+@@ -8,7 +8,7 @@ Index: b/src/lua.c
+ ===================================================================
+ --- a/src/lua.c
+ +++ b/src/lua.c
+-@@ -428,6 +428,14 @@
++@@ -438,6 +438,14 @@
+  #define lua_saveline(L,line)	((void)L, add_history(line))
+  #define lua_freeline(L,b)	((void)L, free(b))
+  
+diff --git a/package/lua/5.4.5/lua.hash b/package/lua/5.4.5/lua.hash
+new file mode 100644
+index 0000000000..5526cd5125
+--- /dev/null
++++ b/package/lua/5.4.5/lua.hash
+@@ -0,0 +1,5 @@
++# Hashes from: https://www.lua.org/ftp/
++sha256  59df426a3d50ea535a460a452315c4c0d4e1121ba72ff0bdde58c2ef31d6f444  lua-5.4.5.tar.gz
++
++# Locally computed
++sha256  0d4ee721cf740f9cd878ef82ef75f4f2724dcf0403e56cd0b5643ad88f9de337  doc/readme.html
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 16086e7bf4..ecb86c11ed 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.38.5
-+WPEWEBKIT_VERSION = 2.38.6
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_LUA_5_4),y)
+-LUA_VERSION = 5.4.4
++LUA_VERSION = 5.4.5
+ else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUA_VERSION = 5.3.6
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
