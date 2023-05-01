@@ -4,47 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B2FAC77B73
-	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 07:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A630EC77B73
+	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 07:28:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD30E60648;
-	Mon,  1 May 2023 07:28:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD30E60648
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51987607B4;
+	Mon,  1 May 2023 07:28:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51987607B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c-94DaoatsW6; Mon,  1 May 2023 07:28:01 +0000 (UTC)
+	with ESMTP id AYXSGdZC3M5d; Mon,  1 May 2023 07:28:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC0D86118C;
-	Mon,  1 May 2023 07:28:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC0D86118C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7BB8D1BF852
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:26:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B27660648;
+	Mon,  1 May 2023 07:28:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B27660648
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C8A21BF2EF
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 618794018E
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:26:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 618794018E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 833A760648
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 07:28:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 833A760648
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MQ3Kj_FIp7Dw for <buildroot@lists.busybox.net>;
- Mon,  1 May 2023 07:26:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56C22400B8
- for <buildroot@buildroot.org>; Mon,  1 May 2023 07:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56C22400B8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3DAE9846C5; Mon,  1 May 2023 07:26:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kYG00nd0yO4P for <buildroot@lists.busybox.net>;
+ Mon,  1 May 2023 07:28:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0A426059A
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C0A426059A
+ for <buildroot@buildroot.org>; Mon,  1 May 2023 07:28:24 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E047C20005;
+ Mon,  1 May 2023 07:28:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ptNxO-006XQf-1Z; Mon, 01 May 2023 09:28:22 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 1 May 2023 09:22:56 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2fd83bac7dfaacf49a7c2452211ca5b968ba2c9
-X-Git-Newrev: 492c803117c1348a6ead83ae0e02e57f95318711
-X-Patchwork-Hint: ignore
-Message-Id: <20230501072655.3DAE9846C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tbb: bump to version 2021.8.0.
+To: Frank Vanbever via buildroot <buildroot@buildroot.org>
+References: <20230428191412.1350780-1-frank.vanbever@mind.be>
+ <20230428192352.1353513-1-frank.vanbever@mind.be>
+Date: Mon, 01 May 2023 09:28:22 +0200
+In-Reply-To: <20230428192352.1353513-1-frank.vanbever@mind.be> (Frank Vanbever
+ via buildroot's message of "Fri, 28 Apr 2023 21:23:51 +0200")
+Message-ID: <875y9cjysp.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2] package/libmodsecurity: bump to version
+ 3.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,169 +65,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Frank Vanbever <frank.vanbever@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=492c803117c1348a6ead83ae0e02e57f95318711
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Frank" == Frank Vanbever via buildroot <buildroot@buildroot.org> writes:
 
-- Remove upstream patches as they are no more needed.
+ > - Drop 0003-Revert-Fix-maxminddb-link-on-FreeBSD.patch, handling of libmaxminddb
+ >   was fixed upstream in d2b700d
+ > - Drop 0004-build-pcre.m4-fix-build-without-pcre.patch, handling of PCRE was
+ >   fixed upstream in 791964a
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch | 33 -----------------
- ...info-is-only-defined-on-glibc-and-android.patch | 42 ----------------------
- .../0003-Define-ITT_ARCH_IA64-when-undefiend.patch | 27 --------------
- package/tbb/tbb.hash                               |  2 +-
- package/tbb/tbb.mk                                 |  2 +-
- 5 files changed, 2 insertions(+), 104 deletions(-)
+ > Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
 
-diff --git a/package/tbb/0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch b/package/tbb/0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch
-deleted file mode 100644
-index 82182ce109..0000000000
---- a/package/tbb/0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 883c2e5245c39624b3b5d6d56d5b203cf09eac38 Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Wed, 15 Dec 2021 08:08:07 -0800
--Subject: [PATCH] Musl/linux can not use RTLD_DEEPBIND (#684)
--
--Exclude non-glibc linux systems along with android
--Fixes
--src/tbb/dynamic_link.cpp:417:29: error: use
-- of undeclared identifier 'RTLD_DEEPBIND'                                                                                    |             flags = flags | RTLD_DEEPBIND;
--|                             ^
--
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--
--[Retrieved from:
--https://github.com/oneapi-src/oneTBB/commit/883c2e5245c39624b3b5d6d56d5b203cf09eac38]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/tbb/dynamic_link.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/tbb/dynamic_link.cpp b/src/tbb/dynamic_link.cpp
--index 3f1342503..5330d7107 100644
----- a/src/tbb/dynamic_link.cpp
--+++ b/src/tbb/dynamic_link.cpp
--@@ -413,7 +413,7 @@ namespace r1 {
--         int flags = RTLD_NOW;
--         if (local_binding) {
--             flags = flags | RTLD_LOCAL;
---#if __linux__ && !__ANDROID__ && !__TBB_USE_SANITIZERS
--+#if (__linux__ && __GLIBC__) && !__TBB_USE_SANITIZERS
--             flags = flags | RTLD_DEEPBIND;
-- #endif
--         } else {
-diff --git a/package/tbb/0002-mallinfo-is-only-defined-on-glibc-and-android.patch b/package/tbb/0002-mallinfo-is-only-defined-on-glibc-and-android.patch
-deleted file mode 100644
-index 9b397cac41..0000000000
---- a/package/tbb/0002-mallinfo-is-only-defined-on-glibc-and-android.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 3a7f96db56cc9821055cbc769d3065db86b8b4c9 Mon Sep 17 00:00:00 2001
--From: Julien Voisin <jvoisin@users.noreply.github.com>
--Date: Mon, 7 Feb 2022 07:56:15 +0100
--Subject: [PATCH] mallinfo is only defined on glibc and android (#764)
--
--It currently prevents compilation under musl:
--
--```
--[ 90%] Building CXX object src/tbbmalloc_proxy/CMakeFiles/tbbmalloc_proxy.dir/proxy.cpp.o
--/__w/mimalloc-bench/mimalloc-bench/extern/tbb/src/tbbmalloc_proxy/proxy.cpp:263:26: error: return type 'struct mallinfo' is incomplete
--  263 | struct mallinfo mallinfo() __THROW
--      |                          ^
--compilation terminated due to -Wfatal-errors.
--``
--
--[Retrieved from:
--https://github.com/oneapi-src/oneTBB/commit/3a7f96db56cc9821055cbc769d3065db86b8b4c9]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/tbbmalloc_proxy/proxy.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/tbbmalloc_proxy/proxy.cpp b/src/tbbmalloc_proxy/proxy.cpp
--index e58e55e0b..23b9c19c1 100644
----- a/src/tbbmalloc_proxy/proxy.cpp
--+++ b/src/tbbmalloc_proxy/proxy.cpp
--@@ -260,6 +260,7 @@ int mallopt(int /*param*/, int /*value*/) __THROW
--     return 1;
-- }
-- 
--+#if defined(__GLIBC__) || defined(__ANDROID__)
-- struct mallinfo mallinfo() __THROW
-- {
--     struct mallinfo m;
--@@ -267,6 +268,7 @@ struct mallinfo mallinfo() __THROW
-- 
--     return m;
-- }
--+#endif
-- 
-- #if __ANDROID__
-- // Android doesn't have malloc_usable_size, provide it to be compatible
-diff --git a/package/tbb/0003-Define-ITT_ARCH_IA64-when-undefiend.patch b/package/tbb/0003-Define-ITT_ARCH_IA64-when-undefiend.patch
-deleted file mode 100644
-index 5b7f002499..0000000000
---- a/package/tbb/0003-Define-ITT_ARCH_IA64-when-undefiend.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 6fad69889da67bc4d4baff4afa94f77da45e006d Mon Sep 17 00:00:00 2001
--From: Felix Yan <felixonmars@archlinux.org>
--Date: Thu, 7 Oct 2021 14:16:16 +0800
--Subject: [PATCH] Define ITT_ARCH_IA64 when undefiend (#550)
--
--[Retrieved from:
--https://github.com/oneapi-src/oneTBB/commit/6fad69889da67bc4d4baff4afa94f77da45e006d]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/tbb/tools_api/ittnotify_config.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/tbb/tools_api/ittnotify_config.h b/src/tbb/tools_api/ittnotify_config.h
--index 8ecc23781..f904a8e9d 100644
----- a/src/tbb/tools_api/ittnotify_config.h
--+++ b/src/tbb/tools_api/ittnotify_config.h
--@@ -147,6 +147,10 @@
-- #  define ITT_ARCH_IA32E 2
-- #endif /* ITT_ARCH_IA32E */
-- 
--+#ifndef ITT_ARCH_IA64
--+#  define ITT_ARCH_IA64 3
--+#endif /* ITT_ARCH_IA64 */
--+
-- #ifndef ITT_ARCH_ARM
-- #  define ITT_ARCH_ARM  4
-- #endif /* ITT_ARCH_ARM */
-diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
-index 9992fb3c4f..579581cfe4 100644
---- a/package/tbb/tbb.hash
-+++ b/package/tbb/tbb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e5b57537c741400cf6134b428fc1689a649d7d38d9bb9c1b6d64f092ea28178a  tbb-2021.5.0.tar.gz
-+sha256  eee380323bb7ce864355ed9431f85c43955faaae9e9bce35c62b372d7ffd9f8b  tbb-2021.8.0.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
-diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
-index fc720fd2f5..c3e06a4e6d 100644
---- a/package/tbb/tbb.mk
-+++ b/package/tbb/tbb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TBB_VERSION = 2021.5.0
-+TBB_VERSION = 2021.8.0
- TBB_SITE = $(call github,01org,tbb,v$(TBB_VERSION))
- TBB_INSTALL_STAGING = YES
- TBB_LICENSE = Apache-2.0
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
