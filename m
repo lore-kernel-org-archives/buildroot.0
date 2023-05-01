@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7A0EC77B61
-	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 11:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C70BC77B73
+	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 11:41:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CEF4400CC;
-	Mon,  1 May 2023 11:41:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CEF4400CC
+	by smtp2.osuosl.org (Postfix) with ESMTP id C4C8040A55;
+	Mon,  1 May 2023 11:41:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4C8040A55
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wt5RQVlfD2U4; Mon,  1 May 2023 11:41:45 +0000 (UTC)
+	with ESMTP id iIxTT1ooxq2R; Mon,  1 May 2023 11:41:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 474E9409F1;
-	Mon,  1 May 2023 11:41:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 474E9409F1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 347BC1BF336
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0182B408C9;
+	Mon,  1 May 2023 11:41:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0182B408C9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 973FB1BF336
  for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C05C40965
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C05C40965
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61B9E400CC
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:40:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61B9E400CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tDHYBjW_RwWk for <buildroot@lists.busybox.net>;
- Mon,  1 May 2023 11:40:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z0eeoMF51MP2 for <buildroot@lists.busybox.net>;
+ Mon,  1 May 2023 11:40:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F01F04152D
+ by smtp2.osuosl.org (Postfix) with ESMTP id D31F4408C9
  for <buildroot@buildroot.org>; Mon,  1 May 2023 11:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F01F04152D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D31F4408C9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE00284F4A; Mon,  1 May 2023 11:40:25 +0000 (UTC)
+ id C16AB84F2D; Mon,  1 May 2023 11:40:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 1 May 2023 13:39:21 +0200
+Date: Mon, 1 May 2023 13:32:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6e863bdef45c3f4ffabcc8d007f658ea04cb9908
-X-Git-Newrev: 0f1d33b6c8666d765f25d81b777aa666a9b492a8
+X-Git-Oldrev: 7c30ba90ce581b3cb8ac9b0ba304fddab20d4ba6
+X-Git-Newrev: 0bd9dabec58eb0d1208333eea7412a6703524fee
 X-Patchwork-Hint: ignore
-Message-Id: <20230501114025.DE00284F4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/crun: bump to version 1.8.4
+Message-Id: <20230501114025.C16AB84F2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8189fs: bump to version
+ 2023-03-27 on rtl8189fs branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,90 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f1d33b6c8666d765f25d81b777aa666a9b492a8
+commit: https://git.buildroot.net/buildroot/commit/?id=0bd9dabec58eb0d1208333eea7412a6703524fee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
-https://github.com/containers/crun/releases/tag/1.8.4
+Fixes:
+http://autobuild.buildroot.net/results/a1c/a1c4c386e60a082d30cae686b9e1d27d01046266/
 
-Also emoved 0001-src-crun.c-fix-build-without-dlfcn.h.patch, this
-commit has already existed in the latest version release.
-
-Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-src-crun.c-fix-build-without-dlfcn.h.patch | 39 ----------------------
- package/crun/crun.hash                             |  2 +-
- package/crun/crun.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
+ package/rtl8189fs/rtl8189fs.hash | 2 +-
+ package/rtl8189fs/rtl8189fs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch b/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
-deleted file mode 100644
-index 104c19a40f..0000000000
---- a/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 278b9b447bec3fb81bf252eb2fe2c856892ec802 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 30 Dec 2022 18:40:15 +0100
--Subject: [PATCH] src/crun.c: fix build without dlfcn.h
--
--Fix the following build failure without dlfcn.h raised since version 1.7
--and
--https://github.com/containers/crun/commit/5837234e9840cd067edd9f6cd2ed9cae9a0e6570:
--
--src/crun.c:26:10: fatal error: dlfcn.h: No such file or directory
--   26 | #include <dlfcn.h>
--      |          ^~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/a5f52a7ee757c92c9571261c0ed884d05caeaf2f
--
--[fontaine.fabrice@gmail.com: backport upstream commit]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/crun.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/crun.c b/src/crun.c
--index cbfe900..af0cc97 100644
----- a/src/crun.c
--+++ b/src/crun.c
--@@ -23,7 +23,9 @@
-- #include <string.h>
-- #include <libgen.h>
-- 
--+#ifdef HAVE_DLOPEN
-- #include <dlfcn.h>
--+#endif
-- 
-- #include "crun.h"
-- #include "libcrun/utils.h"
---- 
--2.25.1
--
-diff --git a/package/crun/crun.hash b/package/crun/crun.hash
-index 2b21800f02..bdffb0c6aa 100644
---- a/package/crun/crun.hash
-+++ b/package/crun/crun.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  f669ecd3d1895dcaa8425eabb707c06eb3bdb5ae5201a50a423c3cace36c4a05  crun-1.7.2.tar.gz
-+sha256  5b8b5adb1dff7af768b69d2b0b4f2cd785ec931e7aa10138aa29812c46ee09ff  crun-1.8.4.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.libcrun
-diff --git a/package/crun/crun.mk b/package/crun/crun.mk
-index ddb96a0b33..15438a44b3 100644
---- a/package/crun/crun.mk
-+++ b/package/crun/crun.mk
+diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
+index 018e5b8a77..95a031b6f2 100644
+--- a/package/rtl8189fs/rtl8189fs.hash
++++ b/package/rtl8189fs/rtl8189fs.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  20382dbb1ac33425e6b3198cc9be269b79cd1423ea656e0ccd16dedafa3e2a2a  rtl8189fs-ed6741b52bc998875298117b55d18b0d557c37a6.tar.gz
++sha256  5d8aad48b8d124a313e5b8182c5dba2b94ecdbac2a9f1861a50c081b9034a543  rtl8189fs-c223a25b1000d64432eca4201a8f012414dfc7ce.tar.gz
+diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
+index 2dd9e6097c..dd35a166e5 100644
+--- a/package/rtl8189fs/rtl8189fs.mk
++++ b/package/rtl8189fs/rtl8189fs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CRUN_VERSION = 1.7.2
-+CRUN_VERSION = 1.8.4
- CRUN_SITE = https://github.com/containers/crun/releases/download/$(CRUN_VERSION)
- CRUN_DEPENDENCIES = host-pkgconf yajl
+-RTL8189FS_VERSION = ed6741b52bc998875298117b55d18b0d557c37a6
++RTL8189FS_VERSION = c223a25b1000d64432eca4201a8f012414dfc7ce
+ RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
+ RTL8189FS_LICENSE = GPL-2.0
  
 _______________________________________________
 buildroot mailing list
