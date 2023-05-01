@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67309C7EE29
-	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 19:56:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FA40C77B73
+	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 19:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFCF741808;
-	Mon,  1 May 2023 19:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFCF741808
+	by smtp4.osuosl.org (Postfix) with ESMTP id E33D5401DD;
+	Mon,  1 May 2023 19:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E33D5401DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IdnCfcVsDYSd; Mon,  1 May 2023 19:56:54 +0000 (UTC)
+	with ESMTP id 3kkjwqhDIXNX; Mon,  1 May 2023 19:58:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B33C04180B;
-	Mon,  1 May 2023 19:56:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B33C04180B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 834CB40164;
+	Mon,  1 May 2023 19:58:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 834CB40164
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 74A311BF4E7
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 19:56:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EC3A51BF4E7
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 19:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5BBD581FAF
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 19:56:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BBD581FAF
+ by smtp1.osuosl.org (Postfix) with ESMTP id C552281FB2
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 19:58:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C552281FB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NbHDfV-tuTA7 for <buildroot@lists.busybox.net>;
- Mon,  1 May 2023 19:56:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8627681FAD
- for <buildroot@buildroot.org>; Mon,  1 May 2023 19:56:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8627681FAD
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73072852A6; Mon,  1 May 2023 19:56:51 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 1 May 2023 21:51:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6b6814f149cccfb4ae7f34fbfd317560b6cd98ca
-X-Git-Newrev: 66d3e74d94f8ac2f8f20302275ee944d24cbc074
-X-Patchwork-Hint: ignore
-Message-Id: <20230501195651.73072852A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] .checkpackageignore: regenerate list
+ with ESMTP id Y--e-eaJsW_x for <buildroot@lists.busybox.net>;
+ Mon,  1 May 2023 19:58:11 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9150881FAF
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9150881FAF
+ for <buildroot@busybox.net>; Mon,  1 May 2023 19:58:11 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:8906:ae70:691:1fda])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 195D719F57B;
+ Mon,  1 May 2023 21:58:06 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 01 May 2023 21:58:05 +0200
+Date: Mon, 1 May 2023 21:58:05 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230501195805.GD2696@scaer>
+References: <20230429200133.152499-1-francois.perrad@gadz.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230429200133.152499-1-francois.perrad@gadz.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1682971088;
+ bh=XkErPzw0tKI72Nq09u3mLl5uY4871xgV9o5IDpIV2wo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Z04+KolhC5Geuf6lcNdeA2jzxv1AIXjOrWmcvIbaGoajyt5BCppvZv7jk6ySlVrv9
+ FV5B8lZMnIdgcl66FQ5bErjnvFGTWEyZiTOtk4xXt1dY1W17uanQ11VBslaInSw+1V
+ sT5vSp917LXnEwpfksdPHIzIFT4rQAzocRqmeKTQ9iqHMVEtBDxRHu6NUfcU4mhMo7
+ brAfbfTH92vkucHX54uvqzEGS8xe6HN1pz5XPgBUJO9kNs5oKj82exJlQ1BiadNC6F
+ apNFtjCxRY2ZpIh4vShE/Qm7DYAGuRCW/ZYxYLAnBVo6Q86a/7RSlNxEKwouU/oqxr
+ tWkD/x7Q3xAVw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Z04+Kolh
+Subject: Re: [Buildroot] [PATCH] package/lua: bump to version 5.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,102 +76,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66d3e74d94f8ac2f8f20302275ee944d24cbc074
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Some patches were removed in recent version bumps:
-  - 492c803117c1  package/tbb: bump to version 2021.8.0.
-  - a1e0e7276ca2  package/libmodsecurity: bump to version 3.0.9
-  - e4fb09f95f8d  package/gstreamer1-editing-services: bump version to 1.22.2
-  - 460c9fa33880  package/pciutils: bump to version 3.9.0
-  - 0f1d33b6c866  package/crun: bump to version 1.8.4
-
-And some were renamed with a version bump:
-  - 60d8e5257608  package/lua: bump to version 5.4.5
-
-But the ignore list was not updated in any of those commits, the latter
-causing issues because the patches are no longer ignored;
-
-    package/lua/5.4.5/0001-root-path.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    package/lua/5.4.5/0002-shared-libs-for-lua.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    package/lua/5.4.5/0011-linenoise.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    384140 lines processed
-    3 warnings generated
-
-Update the ignore list accordingly.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .checkpackageignore | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5f6538ea74..d1626326a8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -328,7 +328,6 @@ package/cpulimit/0004-Remove-procfs.h-inclusion.patch Upstream
- package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch Upstream
- package/crda/0002-drop-ldconfig-call.patch Upstream
- package/crda/0003-drop-werror.patch Upstream
--package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch Upstream
- package/ctorrent/0001-fix-musl-build.patch Upstream
- package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch Upstream
- package/cups/0002-Do-not-use-genstrings.patch Upstream
-@@ -640,7 +639,6 @@ package/grpc/0003-host-grpc-only-cpp-plugin.patch Upstream
- package/grpc/0004-disable-unconditionally-downloading-api-repos.patch Upstream
- package/gsl/0001-configure.ac-fix-build-on-powerpc.patch Upstream
- package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch Upstream
--package/gstreamer1/gstreamer1-editing-services/0001-Fix-gstreamer-validate-1.0-dependency-name.patch Upstream
- package/guile/0001-calculate-csqrt_manually.patch Upstream
- package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch Upstream
- package/gumbo-parser/0001-configure.ac-fix-build-without-C.patch Upstream
-@@ -842,8 +840,6 @@ package/libmemcached/0005-fix-pointer-comparaison.patch Upstream
- package/libmng/0001-jpeg-9a.patch Upstream
- package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch Upstream
- package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch Upstream
--package/libmodsecurity/0003-Revert-Fix-maxminddb-link-on-FreeBSD.patch Upstream
--package/libmodsecurity/0004-build-pcre.m4-fix-build-without-pcre.patch Upstream
- package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch Upstream
- package/libmpeg2/0001-altivec.patch Upstream
- package/libmpeg2/0002-armv4l.patch Upstream
-@@ -993,9 +989,9 @@ package/lua/5.1.5/0012-fix-reader-at-eoz.patch Upstream
- package/lua/5.3.6/0001-root-path.patch Upstream
- package/lua/5.3.6/0002-shared-libs-for-lua.patch Upstream
- package/lua/5.3.6/0003-linenoise.patch Upstream
--package/lua/5.4.4/0001-root-path.patch Upstream
--package/lua/5.4.4/0002-shared-libs-for-lua.patch Upstream
--package/lua/5.4.4/0011-linenoise.patch Upstream
-+package/lua/5.4.5/0001-root-path.patch Upstream
-+package/lua/5.4.5/0002-shared-libs-for-lua.patch Upstream
-+package/lua/5.4.5/0011-linenoise.patch Upstream
- package/luajit/0001-no-bin-symlink.patch Upstream
- package/luajit/0002-install-inc.patch Upstream
- package/luasyslog/0001-remove-AX_LUA_LIBS.patch Upstream
-@@ -1249,7 +1245,6 @@ package/patch/0005-Don-t-follow-symlinks-unless--follow-symlinks-is-given.patch
- package/patchelf/0001-Add-option-to-make-the-rpath-relative-under-a-specif.patch Upstream
- package/paxtest/0001-genpaxtest-move-log-location.patch Upstream
- package/paxtest/0002-paxtest-page-alignment-ARM-and-NIOS2-arch.patch Upstream
--package/pciutils/0001-Workaround-build-failure-with-older-binutils.patch Upstream
- package/pcm-tools/0001-pmu-query.py-fix-python3-errors-add-linux-platform-s.patch Upstream
- package/pcmanfm/0001-po-de-po-fix-build-with-gettext-tiny.patch Upstream
- package/pcre/0001-Kill-compatibility-bits.patch Upstream
-@@ -1573,9 +1568,6 @@ package/targetcli-fb/S50target Shellcheck Variables
- package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch Upstream
- package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch Upstream
- package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch Upstream
--package/tbb/0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch Upstream
--package/tbb/0002-mallinfo-is-only-defined-on-glibc-and-android.patch Upstream
--package/tbb/0003-Define-ITT_ARCH_IA64-when-undefiend.patch Upstream
- package/tcf-agent/S55tcf-agent Shellcheck Variables
- package/tcl/0001-dont-build-compat.patch Upstream
- package/tesseract-ocr/0001-Check-if-platform-supports-feenableexcept.patch Upstream
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJhbsOnb2lzLCBBbGwsCgpPbiAyMDIzLTA0LTI5IDIyOjAxICswMjAwLCBGcmFuY29pcyBQZXJy
+YWQgc3Bha2UgdGh1c2x5Ogo+IFNpZ25lZC1vZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNv
+aXMucGVycmFkQGdhZHoub3JnPgo+IC0tLQo+ICBwYWNrYWdlL2x1YS81LjQuNC9sdWEuaGFzaCAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDYgLS0tLS0tCj4gIHBhY2thZ2UvbHVh
+L3s1LjQuNCA9PiA1LjQuNX0vMDAwMS1yb290LXBhdGgucGF0Y2ggICAgICAgICAgIHwgMiArLQo+
+ICBwYWNrYWdlL2x1YS97NS40LjQgPT4gNS40LjV9LzAwMDItc2hhcmVkLWxpYnMtZm9yLWx1YS5w
+YXRjaCB8IDIgKy0KPiAgcGFja2FnZS9sdWEvezUuNC40ID0+IDUuNC41fS8wMDExLWxpbmVub2lz
+ZS5wYXRjaCAgICAgICAgICAgfCAyICstCgpUaGlzIGNhdXNlcyBjaGVjay1wYWNrYWdlIGZhaWx1
+cmVzOgoKICAgICQgbWFrZSBjaGVjay1wYWNrYWdlCiAgICBwYWNrYWdlL2x1YS81LjQuNS8wMDAx
+LXJvb3QtcGF0aC5wYXRjaDowOiBtaXNzaW5nIFVwc3RyZWFtIGluIHRoZSBoZWFkZXIgKGh0dHA6
+Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcvI19hZGRpdGlvbmFsX3BhdGNoX2RvY3VtZW50YXRpb24p
+CiAgICBwYWNrYWdlL2x1YS81LjQuNS8wMDAyLXNoYXJlZC1saWJzLWZvci1sdWEucGF0Y2g6MDog
+bWlzc2luZyBVcHN0cmVhbSBpbiB0aGUgaGVhZGVyIChodHRwOi8vbmlnaHRseS5idWlsZHJvb3Qu
+b3JnLyNfYWRkaXRpb25hbF9wYXRjaF9kb2N1bWVudGF0aW9uKQogICAgcGFja2FnZS9sdWEvNS40
+LjUvMDAxMS1saW5lbm9pc2UucGF0Y2g6MDogbWlzc2luZyBVcHN0cmVhbSBpbiB0aGUgaGVhZGVy
+IChodHRwOi8vbmlnaHRseS5idWlsZHJvb3Qub3JnLyNfYWRkaXRpb25hbF9wYXRjaF9kb2N1bWVu
+dGF0aW9uKQogICAgMzg0MTQwIGxpbmVzIHByb2Nlc3NlZAogICAgMyB3YXJuaW5ncyBnZW5lcmF0
+ZWQKCkkndmUgcHVzaGVkIGEgZml4LXVwIGNvbW1pdCwgNjZkM2U3NGQ5NGY4ICguY2hlY2twYWNr
+YWdlaWdub3JlOgpyZWdlbmVyYXRlIGxpc3QpCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAg
+cGFja2FnZS9sdWEvNS40LjUvbHVhLmhhc2ggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCA1ICsrKysrCj4gIHBhY2thZ2UvbHVhL2x1YS5tayAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgMiArLQo+ICA2IGZpbGVzIGNoYW5nZWQsIDkgaW5zZXJ0aW9u
+cygrKSwgMTAgZGVsZXRpb25zKC0pCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2x1YS81
+LjQuNC9sdWEuaGFzaAo+ICByZW5hbWUgcGFja2FnZS9sdWEvezUuNC40ID0+IDUuNC41fS8wMDAx
+LXJvb3QtcGF0aC5wYXRjaCAoOTUlKQo+ICByZW5hbWUgcGFja2FnZS9sdWEvezUuNC40ID0+IDUu
+NC41fS8wMDAyLXNoYXJlZC1saWJzLWZvci1sdWEucGF0Y2ggKDk2JSkKPiAgcmVuYW1lIHBhY2th
+Z2UvbHVhL3s1LjQuNCA9PiA1LjQuNX0vMDAxMS1saW5lbm9pc2UucGF0Y2ggKDk3JSkKPiAgY3Jl
+YXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbHVhLzUuNC41L2x1YS5oYXNoCj4gCj4gZGlmZiAtLWdp
+dCBhL3BhY2thZ2UvbHVhLzUuNC40L2x1YS5oYXNoIGIvcGFja2FnZS9sdWEvNS40LjQvbHVhLmhh
+c2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCBiNTViMTdmMjUuLjAwMDAwMDAw
+MAo+IC0tLSBhL3BhY2thZ2UvbHVhLzUuNC40L2x1YS5oYXNoCj4gKysrIC9kZXYvbnVsbAo+IEBA
+IC0xLDYgKzAsMCBAQAo+IC0jIEhhc2hlcyBmcm9tOiBodHRwczovL3d3dy5sdWEub3JnL2Z0cC8K
+PiAtbWQ1ICBiZDhjZTcwNjlmZjk5YTQwMGVmZDE0Y2YzMzlhNzI3YiAgbHVhLTUuNC40LnRhci5n
+ego+IC1zaGExICAwM2MyNzY4NGI5ZDVkOTc4M2ZiNzlhN2M4MzZiYTFjZGM1ZjMwOWNkICBsdWEt
+NS40LjQudGFyLmd6Cj4gLQo+IC0jIExvY2FsbHkgY29tcHV0ZWQKPiAtc2hhMjU2ICAyNTU2YWM3
+MTk4MjQzZjlmODMxMzBiOWM4MTAxNmUxOTA0ZjdiMzAzNTE0ODFmMWMyOGUwMjQ3NWRiZDIzN2Zi
+ICBkb2MvcmVhZG1lLmh0bWwKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9sdWEvNS40LjQvMDAwMS1y
+b290LXBhdGgucGF0Y2ggYi9wYWNrYWdlL2x1YS81LjQuNS8wMDAxLXJvb3QtcGF0aC5wYXRjaAo+
+IHNpbWlsYXJpdHkgaW5kZXggOTUlCj4gcmVuYW1lIGZyb20gcGFja2FnZS9sdWEvNS40LjQvMDAw
+MS1yb290LXBhdGgucGF0Y2gKPiByZW5hbWUgdG8gcGFja2FnZS9sdWEvNS40LjUvMDAwMS1yb290
+LXBhdGgucGF0Y2gKPiBpbmRleCBjNGY2ZTMxMmUuLjVlMzAzN2I3OCAxMDA2NDQKPiAtLS0gYS9w
+YWNrYWdlL2x1YS81LjQuNC8wMDAxLXJvb3QtcGF0aC5wYXRjaAo+ICsrKyBiL3BhY2thZ2UvbHVh
+LzUuNC41LzAwMDEtcm9vdC1wYXRoLnBhdGNoCj4gQEAgLTYsNyArNiw3IEBAIEluZGV4OiBiL3Ny
+Yy9sdWFjb25mLmgKPiAgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PQo+ICAtLS0gYS9zcmMvbHVhY29uZi5oCj4gICsrKyBi
+L3NyYy9sdWFjb25mLmgKPiAtQEAgLTIxNyw3ICsyMTcsNyBAQAo+ICtAQCAtMjIzLDcgKzIyMyw3
+IEBACj4gICAKPiAgICNlbHNlCQkJLyogfXsgKi8KPiAgIAo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L2x1YS81LjQuNC8wMDAyLXNoYXJlZC1saWJzLWZvci1sdWEucGF0Y2ggYi9wYWNrYWdlL2x1YS81
+LjQuNS8wMDAyLXNoYXJlZC1saWJzLWZvci1sdWEucGF0Y2gKPiBzaW1pbGFyaXR5IGluZGV4IDk2
+JQo+IHJlbmFtZSBmcm9tIHBhY2thZ2UvbHVhLzUuNC40LzAwMDItc2hhcmVkLWxpYnMtZm9yLWx1
+YS5wYXRjaAo+IHJlbmFtZSB0byBwYWNrYWdlL2x1YS81LjQuNS8wMDAyLXNoYXJlZC1saWJzLWZv
+ci1sdWEucGF0Y2gKPiBpbmRleCA0ZmYyMDQ0MjkuLjM4OGFhOTk2NiAxMDA2NDQKPiAtLS0gYS9w
+YWNrYWdlL2x1YS81LjQuNC8wMDAyLXNoYXJlZC1saWJzLWZvci1sdWEucGF0Y2gKPiArKysgYi9w
+YWNrYWdlL2x1YS81LjQuNS8wMDAyLXNoYXJlZC1saWJzLWZvci1sdWEucGF0Y2gKPiBAQCAtMzEs
+NyArMzEsNyBAQCBJbmRleDogYi9zcmMvTWFrZWZpbGUKPiAgLS0tIGEvc3JjL01ha2VmaWxlCj4g
+ICsrKyBiL3NyYy9NYWtlZmlsZQo+ICBAQCAtMzMsNiArMzMsNyBAQAo+IC0gUExBVFM9IGd1ZXNz
+IGFpeCBic2QgYzg5IGZyZWVic2QgZ2VuZXJpYyBsaW51eCBsaW51eC1yZWFkbGluZSBtYWNvc3gg
+bWluZ3cgcG9zaXggc29sYXJpcwo+ICsgUExBVFM9IGd1ZXNzIGFpeCBic2QgYzg5IGZyZWVic2Qg
+Z2VuZXJpYyBpb3MgbGludXggbGludXgtcmVhZGxpbmUgbWFjb3N4IG1pbmd3IHBvc2l4IHNvbGFy
+aXMKPiAgIAo+ICAgTFVBX0E9CWxpYmx1YS5hCj4gICtMVUFfU089CWxpYmx1YS5zbwo+IGRpZmYg
+LS1naXQgYS9wYWNrYWdlL2x1YS81LjQuNC8wMDExLWxpbmVub2lzZS5wYXRjaCBiL3BhY2thZ2Uv
+bHVhLzUuNC41LzAwMTEtbGluZW5vaXNlLnBhdGNoCj4gc2ltaWxhcml0eSBpbmRleCA5NyUKPiBy
+ZW5hbWUgZnJvbSBwYWNrYWdlL2x1YS81LjQuNC8wMDExLWxpbmVub2lzZS5wYXRjaAo+IHJlbmFt
+ZSB0byBwYWNrYWdlL2x1YS81LjQuNS8wMDExLWxpbmVub2lzZS5wYXRjaAo+IGluZGV4IDY4MzE2
+ZTEwOC4uNTA1NGFlMTllIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbHVhLzUuNC40LzAwMTEtbGlu
+ZW5vaXNlLnBhdGNoCj4gKysrIGIvcGFja2FnZS9sdWEvNS40LjUvMDAxMS1saW5lbm9pc2UucGF0
+Y2gKPiBAQCAtOCw3ICs4LDcgQEAgSW5kZXg6IGIvc3JjL2x1YS5jCj4gID09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KPiAg
+LS0tIGEvc3JjL2x1YS5jCj4gICsrKyBiL3NyYy9sdWEuYwo+IC1AQCAtNDI4LDYgKzQyOCwxNCBA
+QAo+ICtAQCAtNDM4LDYgKzQzOCwxNCBAQAo+ICAgI2RlZmluZSBsdWFfc2F2ZWxpbmUoTCxsaW5l
+KQkoKHZvaWQpTCwgYWRkX2hpc3RvcnkobGluZSkpCj4gICAjZGVmaW5lIGx1YV9mcmVlbGluZShM
+LGIpCSgodm9pZClMLCBmcmVlKGIpKQo+ICAgCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbHVhLzUu
+NC41L2x1YS5oYXNoIGIvcGFja2FnZS9sdWEvNS40LjUvbHVhLmhhc2gKPiBuZXcgZmlsZSBtb2Rl
+IDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMC4uNTUyNmNkNTEyCj4gLS0tIC9kZXYvbnVsbAo+ICsr
+KyBiL3BhY2thZ2UvbHVhLzUuNC41L2x1YS5oYXNoCj4gQEAgLTAsMCArMSw1IEBACj4gKyMgSGFz
+aGVzIGZyb206IGh0dHBzOi8vd3d3Lmx1YS5vcmcvZnRwLwo+ICtzaGEyNTYgIDU5ZGY0MjZhM2Q1
+MGVhNTM1YTQ2MGE0NTIzMTVjNGMwZDRlMTEyMWJhNzJmZjBiZGRlNThjMmVmMzFkNmY0NDQgIGx1
+YS01LjQuNS50YXIuZ3oKPiArCj4gKyMgTG9jYWxseSBjb21wdXRlZAo+ICtzaGEyNTYgIDBkNGVl
+NzIxY2Y3NDBmOWNkODc4ZWY4MmVmNzVmNGYyNzI0ZGNmMDQwM2U1NmNkMGI1NjQzYWQ4OGY5ZGUz
+MzcgIGRvYy9yZWFkbWUuaHRtbAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x1YS9sdWEubWsgYi9w
+YWNrYWdlL2x1YS9sdWEubWsKPiBpbmRleCAxNjA4NmU3YmYuLmVjYjg2YzExZSAxMDA2NDQKPiAt
+LS0gYS9wYWNrYWdlL2x1YS9sdWEubWsKPiArKysgYi9wYWNrYWdlL2x1YS9sdWEubWsKPiBAQCAt
+NSw3ICs1LDcgQEAKPiAgIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgCj4gIGlmZXEgKCQoQlIy
+X1BBQ0tBR0VfTFVBXzVfNCkseSkKPiAtTFVBX1ZFUlNJT04gPSA1LjQuNAo+ICtMVUFfVkVSU0lP
+TiA9IDUuNC41Cj4gIGVsc2UgaWZlcSAoJChCUjJfUEFDS0FHRV9MVUFfNV8zKSx5KQo+ICBMVUFf
+VkVSU0lPTiA9IDUuMy42Cj4gIGVsc2UKPiAtLSAKPiAyLjM3LjIKPiAKPiBfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
+LS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0u
+CnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJP
+TiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERl
+c2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2
+MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8g
+IFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwg
+LyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0t
+LS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
