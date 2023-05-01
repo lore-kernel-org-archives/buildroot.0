@@ -4,52 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9491C77B73
-	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 11:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F8C7C77B73
+	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 11:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6063D61312;
-	Mon,  1 May 2023 11:08:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6063D61312
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE09061374;
+	Mon,  1 May 2023 11:11:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE09061374
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bD84QP21FYTx; Mon,  1 May 2023 11:08:58 +0000 (UTC)
+	with ESMTP id 7wxu3afFwoMe; Mon,  1 May 2023 11:11:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A355A6115B;
-	Mon,  1 May 2023 11:08:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A355A6115B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38CCF61352;
+	Mon,  1 May 2023 11:11:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38CCF61352
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B28071BF423
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:08:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 660FA1BF423
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:11:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8CAF4811F5
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CAF4811F5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3145582068
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3145582068
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1v_Y_wQ7jXvy for <buildroot@lists.busybox.net>;
- Mon,  1 May 2023 11:08:53 +0000 (UTC)
+ with ESMTP id 3P80e0-YD0ae for <buildroot@lists.busybox.net>;
+ Mon,  1 May 2023 11:11:07 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 353D881185
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 353D881185
- for <buildroot@buildroot.org>; Mon,  1 May 2023 11:08:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD723820B1
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD723820B1
+ for <buildroot@busybox.net>; Mon,  1 May 2023 11:11:06 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8EF0040008;
- Mon,  1 May 2023 11:08:49 +0000 (UTC)
-Message-ID: <2a75e709-3f30-f326-5351-44db9ca0516a@korsgaard.com>
-Date: Mon, 1 May 2023 13:08:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US
-To: Petr Vorel <pevik@seznam.cz>, buildroot@buildroot.org
-References: <20230417194130.2442781-1-pevik@seznam.cz>
+ by mail.gandi.net (Postfix) with ESMTPSA id C128220008;
+ Mon,  1 May 2023 11:11:03 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ptRQs-006jNd-Lr; Mon, 01 May 2023 13:11:02 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20230417194130.2442781-1-pevik@seznam.cz>
-Subject: Re: [Buildroot] [PATCH] package/iproute2: bump version to 6.2.0
+To: Francois Perrad <fperrad@gmail.com>
+References: <20230411212354.258843-1-francois.perrad@gadz.org>
+Date: Mon, 01 May 2023 13:11:02 +0200
+In-Reply-To: <20230411212354.258843-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Tue, 11 Apr 2023 23:23:54 +0200")
+Message-ID: <87jzxsfgs9.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/libressl: bump to version 3.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,34 +63,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 17/04/2023 21.41, Petr Vorel wrote:
-> From: Petr Vorel <petr.vorel@gmail.com>
-> 
-> Backport 2 fixes from upcoming release (memory leak and incorrect JSON
-> output).
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Tested:
->                      bootlin-armv5-uclibc [1/6]: OK
->                       bootlin-armv7-glibc [2/6]: OK
->                     bootlin-armv7m-uclibc [3/6]: SKIPPED
->                       bootlin-x86-64-musl [4/6]: OK
->                        br-arm-full-static [5/6]: OK
-> (will run the rest)
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
