@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F34E4C77B61
-	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 11:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7A0EC77B61
+	for <buildroot@archiver.kernel.org>; Mon,  1 May 2023 11:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A28FA40A04;
-	Mon,  1 May 2023 11:41:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A28FA40A04
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5CEF4400CC;
+	Mon,  1 May 2023 11:41:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CEF4400CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ur0Jp9SOyN5X; Mon,  1 May 2023 11:41:32 +0000 (UTC)
+	with ESMTP id wt5RQVlfD2U4; Mon,  1 May 2023 11:41:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A000F400CC;
-	Mon,  1 May 2023 11:41:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A000F400CC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DC70B1BF336
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:40:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 474E9409F1;
+	Mon,  1 May 2023 11:41:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 474E9409F1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 347BC1BF336
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B721C81FE5
- for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:40:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B721C81FE5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C05C40965
+ for <buildroot@lists.busybox.net>; Mon,  1 May 2023 11:40:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C05C40965
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5JNe-cf1QgRT for <buildroot@lists.busybox.net>;
- Mon,  1 May 2023 11:40:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tDHYBjW_RwWk for <buildroot@lists.busybox.net>;
+ Mon,  1 May 2023 11:40:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B206081FE6
+ by smtp4.osuosl.org (Postfix) with ESMTP id F01F04152D
  for <buildroot@buildroot.org>; Mon,  1 May 2023 11:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B206081FE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F01F04152D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A09DD84F2F; Mon,  1 May 2023 11:40:25 +0000 (UTC)
+ id DE00284F4A; Mon,  1 May 2023 11:40:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 1 May 2023 13:12:05 +0200
+Date: Mon, 1 May 2023 13:39:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1740a066e9e6c29c9e91d9206195f5ce5360c07c
-X-Git-Newrev: 460c9fa33880397a9a7c16393ac26552a9adc5c3
+X-Git-Oldrev: 6e863bdef45c3f4ffabcc8d007f658ea04cb9908
+X-Git-Newrev: 0f1d33b6c8666d765f25d81b777aa666a9b492a8
 X-Patchwork-Hint: ignore
-Message-Id: <20230501114025.A09DD84F2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pciutils: bump to version 3.9.0
+Message-Id: <20230501114025.DE00284F4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/crun: bump to version 1.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,118 +62,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=460c9fa33880397a9a7c16393ac26552a9adc5c3
+commit: https://git.buildroot.net/buildroot/commit/?id=0f1d33b6c8666d765f25d81b777aa666a9b492a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-remove patch, see commit 0478e1f3928bf "Avoid adding multiple version tags
-to the same symbol":
+Changes:
+https://github.com/containers/crun/releases/tag/1.8.4
 
-https://github.com/pciutils/pciutils/commit/0478e1f3928bf
+Also emoved 0001-src-crun.c-fix-build-without-dlfcn.h.patch, this
+commit has already existed in the latest version release.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...karound-build-failure-with-older-binutils.patch | 57 ----------------------
- package/pciutils/Config.in                         |  2 +-
- package/pciutils/pciutils.hash                     |  2 +-
- package/pciutils/pciutils.mk                       |  2 +-
- 4 files changed, 3 insertions(+), 60 deletions(-)
+ ...0001-src-crun.c-fix-build-without-dlfcn.h.patch | 39 ----------------------
+ package/crun/crun.hash                             |  2 +-
+ package/crun/crun.mk                               |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
 
-diff --git a/package/pciutils/0001-Workaround-build-failure-with-older-binutils.patch b/package/pciutils/0001-Workaround-build-failure-with-older-binutils.patch
+diff --git a/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch b/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
 deleted file mode 100644
-index 1590bc19c5..0000000000
---- a/package/pciutils/0001-Workaround-build-failure-with-older-binutils.patch
+index 104c19a40f..0000000000
+--- a/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
 +++ /dev/null
-@@ -1,57 +0,0 @@
--From fda20d4bcb91f0f9d0db294b4813264de2d88866 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Thu, 12 May 2022 16:16:21 +0300
--Subject: [PATCH] Workaround build failure with older binutils
+@@ -1,39 +0,0 @@
+-From 278b9b447bec3fb81bf252eb2fe2c856892ec802 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 30 Dec 2022 18:40:15 +0100
+-Subject: [PATCH] src/crun.c: fix build without dlfcn.h
 -
--binutils releases older than 2.35 are affected by bug gas/23840[1] that
--breaks the link of shared library:
+-Fix the following build failure without dlfcn.h raised since version 1.7
+-and
+-https://github.com/containers/crun/commit/5837234e9840cd067edd9f6cd2ed9cae9a0e6570:
 -
--cc -O2 -Wall -W -Wno-parentheses -Wstrict-prototypes -Wmissing-prototypes -fPIC -fvisibility=hidden   -c -o filter.o filter.c
--/tmp/ccLtucRG.s: Assembler messages:
--/tmp/ccLtucRG.s:6: Error: multiple versions [`pci_filter_init@@LIBPCI_3.8'|`pci_filter_init@LIBPCI_3.3'] for symbol `pci_filter_init_v38'
--/tmp/ccLtucRG.s:8: Error: multiple versions [`pci_filter_parse_slot@@LIBPCI_3.8'|`pci_filter_parse_slot@LIBPCI_3.3'] for symbol `pci_filter_parse_slot_v38'
--/tmp/ccLtucRG.s:10: Error: multiple versions [`pci_filter_parse_id@@LIBPCI_3.8'|`pci_filter_parse_id@LIBPCI_3.3'] for symbol `pci_filter_parse_id_v38'
--/tmp/ccLtucRG.s:12: Error: multiple versions [`pci_filter_match@@LIBPCI_3.8'|`pci_filter_match@LIBPCI_3.3'] for symbol `pci_filter_match_v38'
+-src/crun.c:26:10: fatal error: dlfcn.h: No such file or directory
+-   26 | #include <dlfcn.h>
+-      |          ^~~~~~~~~
 -
--The symbol versioning feature has little value in the context of
--Buildroot. As a workaround remove one of each duplicated symbol.
+-Fixes:
+- - http://autobuild.buildroot.org/results/a5f52a7ee757c92c9571261c0ed884d05caeaf2f
 -
--[1] https://sourceware.org/bugzilla/show_bug.cgi?id=23840
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-[fontaine.fabrice@gmail.com: backport upstream commit]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
--Upstream status: not upstreamable
+- src/crun.c | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--Upstream bug report: https://lore.kernel.org/linux-pci/87mtfm7v58.fsf@tarshish/
-----
-- lib/filter.c | 4 ----
-- 1 file changed, 4 deletions(-)
--
--diff --git a/lib/filter.c b/lib/filter.c
--index b881b6bc9083..bc34e8c2bab9 100644
----- a/lib/filter.c
--+++ b/lib/filter.c
--@@ -304,20 +304,16 @@ pci_filter_match_v30(struct pci_filter_v30 *f, struct pci_dev *d)
+-diff --git a/src/crun.c b/src/crun.c
+-index cbfe900..af0cc97 100644
+---- a/src/crun.c
+-+++ b/src/crun.c
+-@@ -23,7 +23,9 @@
+- #include <string.h>
+- #include <libgen.h>
 - 
-- STATIC_ALIAS(void pci_filter_init(struct pci_access *a, struct pci_filter *f), pci_filter_init_v38(a, f));
-- SYMBOL_VERSION(pci_filter_init_v30, pci_filter_init@LIBPCI_3.0);
---SYMBOL_VERSION(pci_filter_init_v38, pci_filter_init@LIBPCI_3.3);
-- SYMBOL_VERSION(pci_filter_init_v38, pci_filter_init@@LIBPCI_3.8);
+-+#ifdef HAVE_DLOPEN
+- #include <dlfcn.h>
+-+#endif
 - 
-- STATIC_ALIAS(char *pci_filter_parse_slot(struct pci_filter *f, char *str), pci_filter_parse_slot_v38(f, str));
-- SYMBOL_VERSION(pci_filter_parse_slot_v30, pci_filter_parse_slot@LIBPCI_3.0);
---SYMBOL_VERSION(pci_filter_parse_slot_v38, pci_filter_parse_slot@LIBPCI_3.3);
-- SYMBOL_VERSION(pci_filter_parse_slot_v38, pci_filter_parse_slot@@LIBPCI_3.8);
-- 
-- STATIC_ALIAS(char *pci_filter_parse_id(struct pci_filter *f, char *str), pci_filter_parse_id_v38(f, str));
-- SYMBOL_VERSION(pci_filter_parse_id_v30, pci_filter_parse_id@LIBPCI_3.0);
---SYMBOL_VERSION(pci_filter_parse_id_v38, pci_filter_parse_id@LIBPCI_3.3);
-- SYMBOL_VERSION(pci_filter_parse_id_v38, pci_filter_parse_id@@LIBPCI_3.8);
-- 
-- STATIC_ALIAS(int pci_filter_match(struct pci_filter *f, struct pci_dev *d), pci_filter_match_v38(f, d));
-- SYMBOL_VERSION(pci_filter_match_v30, pci_filter_match@LIBPCI_3.0);
---SYMBOL_VERSION(pci_filter_match_v38, pci_filter_match@LIBPCI_3.3);
-- SYMBOL_VERSION(pci_filter_match_v38, pci_filter_match@@LIBPCI_3.8);
+- #include "crun.h"
+- #include "libcrun/utils.h"
 --- 
--2.35.1
+-2.25.1
 -
-diff --git a/package/pciutils/Config.in b/package/pciutils/Config.in
-index a082f23997..d16c36340f 100644
---- a/package/pciutils/Config.in
-+++ b/package/pciutils/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_PCIUTILS
- 	  Various utilities dealing with the PCI bus.
- 	  Provides things like setpci and lspci.
- 
--	  http://atrey.karlin.mff.cuni.cz/~mj/pciutils.html
-+	  https://mj.ucw.cz/sw/pciutils/
-diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
-index 0b66b82589..93df1558ff 100644
---- a/package/pciutils/pciutils.hash
-+++ b/package/pciutils/pciutils.hash
-@@ -1,3 +1,3 @@
- # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
--sha256  91edbd0429a84705c9ad156d4ff38ccc724d41ea54c4c5b88e38e996f8a34f05  pciutils-3.8.0.tar.xz
-+sha256  cdea7ae97239dee23249a09c68a19a287a3f109fbeb2c232ebb616cb38599012  pciutils-3.9.0.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 140276dbc4..95b377d844 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
+diff --git a/package/crun/crun.hash b/package/crun/crun.hash
+index 2b21800f02..bdffb0c6aa 100644
+--- a/package/crun/crun.hash
++++ b/package/crun/crun.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  f669ecd3d1895dcaa8425eabb707c06eb3bdb5ae5201a50a423c3cace36c4a05  crun-1.7.2.tar.gz
++sha256  5b8b5adb1dff7af768b69d2b0b4f2cd785ec931e7aa10138aa29812c46ee09ff  crun-1.8.4.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.libcrun
+diff --git a/package/crun/crun.mk b/package/crun/crun.mk
+index ddb96a0b33..15438a44b3 100644
+--- a/package/crun/crun.mk
++++ b/package/crun/crun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PCIUTILS_VERSION = 3.8.0
-+PCIUTILS_VERSION = 3.9.0
- PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
- PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
- PCIUTILS_INSTALL_STAGING = YES
+-CRUN_VERSION = 1.7.2
++CRUN_VERSION = 1.8.4
+ CRUN_SITE = https://github.com/containers/crun/releases/download/$(CRUN_VERSION)
+ CRUN_DEPENDENCIES = host-pkgconf yajl
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
