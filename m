@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FC9EC77B7E
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 06:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71A9AC77B7E
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 06:31:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 917B481FD8;
-	Tue,  2 May 2023 06:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 917B481FD8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20F5D8204A;
+	Tue,  2 May 2023 06:31:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20F5D8204A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wkGp4uvtIQpB; Tue,  2 May 2023 06:30:41 +0000 (UTC)
+	with ESMTP id vbz9jLKx351z; Tue,  2 May 2023 06:31:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB8B181FB2;
-	Tue,  2 May 2023 06:30:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB8B181FB2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60DAE82046;
+	Tue,  2 May 2023 06:31:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60DAE82046
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D08CB1BF3C6
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 06:30:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3BCEE1BF3C6
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 06:31:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA34940147
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 06:30:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA34940147
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1546C40147
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 06:31:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1546C40147
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dsf_CN6bYfpa for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 06:30:38 +0000 (UTC)
+ with ESMTP id 5h6hlyTWH7io for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 06:31:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C638E400E7
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C638E400E7
- for <buildroot@buildroot.org>; Tue,  2 May 2023 06:30:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E41B0400E7
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E41B0400E7
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 06:31:24 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 841A32000E;
- Tue,  2 May 2023 06:30:34 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1F11660009;
+ Tue,  2 May 2023 06:31:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ptjWz-0072Yk-I0; Tue, 02 May 2023 08:30:33 +0200
+ id 1ptjXm-0072bu-B0; Tue, 02 May 2023 08:31:22 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20230415194341.2346986-1-yann.morin.1998@free.fr>
-Date: Tue, 02 May 2023 08:30:33 +0200
-In-Reply-To: <20230415194341.2346986-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 15 Apr 2023 21:43:41 +0200")
-Message-ID: <875y9bckja.fsf@dell.be.48ers.dk>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20230423195218.7B5BD844B9@busybox.osuosl.org>
+Date: Tue, 02 May 2023 08:31:22 +0200
+In-Reply-To: <20230423195218.7B5BD844B9@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 23 Apr 2023 21:49:46 +0200")
+Message-ID: <871qjzckhx.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] utils/docker-run: allow running without a
- tty
+Subject: Re: [Buildroot] [git commit] utils/check-package: fix grammar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,8 +63,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -73,18 +71,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Currently, utils/docker-run spawns a container with a tty, so that he
- > user can interact properly in the container.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=a3e796b74e98171518cdf72920875264eb685988
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > However, that requires a tty when calling docker-run, which is not
- > always guaranteed, e.g. if called from a git hook.
-
- > Since the script is a bash script already, we can use an array to store
- > options passed to docker, and only add the -t option when there is
- > actually a tty available.
+ > The past participle for "to fix" is "fix". The "did you forget" got
+ > eluded into "forget", so again a past participle.
 
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Committed to 2023.02.x, thanks.
 
