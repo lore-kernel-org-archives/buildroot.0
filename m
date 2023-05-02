@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64FA3C77B7E
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 07:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F03EFC77B73
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 07:27:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A76A40A17;
-	Tue,  2 May 2023 07:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A76A40A17
+	by smtp2.osuosl.org (Postfix) with ESMTP id 962E140644;
+	Tue,  2 May 2023 07:27:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 962E140644
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l6tsVuarAkkJ; Tue,  2 May 2023 07:26:12 +0000 (UTC)
+	with ESMTP id ceUF15gugc7S; Tue,  2 May 2023 07:27:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64A2F40602;
-	Tue,  2 May 2023 07:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64A2F40602
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E87131BF400
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:26:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC5ED405EE;
+	Tue,  2 May 2023 07:27:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC5ED405EE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 00C6E1BF400
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C233740602
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C233740602
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE01F60BCA
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:27:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE01F60BCA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jI00qi5qL_qo for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 07:26:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IyqCFGPwStz8 for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 07:27:27 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 933D940448
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 933D940448
- for <buildroot@buildroot.org>; Tue,  2 May 2023 07:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B920D60BA8
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B920D60BA8
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 07:27:26 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 334D560009;
- Tue,  2 May 2023 07:26:03 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 25609FF808;
+ Tue,  2 May 2023 07:27:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ptkOg-0074GU-CB; Tue, 02 May 2023 09:26:02 +0200
+ id 1ptkPy-0074PL-6b; Tue, 02 May 2023 09:27:22 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20230428131331.456475-1-bernd.kuhls@t-online.de>
-Date: Tue, 02 May 2023 09:26:02 +0200
-In-Reply-To: <20230428131331.456475-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 28 Apr 2023 15:13:31 +0200")
-Message-ID: <877ctrb3ed.fsf@dell.be.48ers.dk>
+References: <20230428133617.1504054-1-bernd.kuhls@t-online.de>
+Date: Tue, 02 May 2023 09:27:22 +0200
+In-Reply-To: <20230428133617.1504054-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 28 Apr 2023 15:36:17 +0200")
+Message-ID: <87354fb3c5.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
- security bump version to 21.1.8
+Subject: Re: [Buildroot] [PATCH 1/1] package/libxml2: security bump to
+ version 2.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -72,11 +72,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Release notes:
- > https://lists.x.org/archives/xorg-announce/2023-March/003377.html
+ > - [CVE-2023-29469] Hashing of empty dict strings isn't deterministic
+ > - [CVE-2023-28484] Fix null deref in xmlSchemaFixupComplexType
+ > - schemas: Fix null-pointer-deref in xmlSchemaCheckCOSSTDerivedOK
 
- > Fixes CVE-2023-1393:
- > https://lists.x.org/archives/xorg-announce/2023-March/003374.html
+ > https://gitlab.gnome.org/GNOME/libxml2/-/tags/v2.10.4
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
