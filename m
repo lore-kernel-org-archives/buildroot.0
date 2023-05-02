@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DE9AC7EE2A
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 20:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FB05C77B73
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 20:06:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CE48405C4;
-	Tue,  2 May 2023 20:06:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CE48405C4
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE73A401D2;
+	Tue,  2 May 2023 20:06:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE73A401D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wJsDXg0uXSUM; Tue,  2 May 2023 20:06:43 +0000 (UTC)
+	with ESMTP id ZHKEvXjZduCw; Tue,  2 May 2023 20:06:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE2E0401D2;
-	Tue,  2 May 2023 20:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE2E0401D2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F3CF21BF3FF
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 20:06:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CD3241C4E;
+	Tue,  2 May 2023 20:06:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CD3241C4E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D3DE1BF3FF
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 20:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA1AF401D2
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 20:06:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA1AF401D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 623E241DC6
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 20:06:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 623E241DC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8YyqIX97GJMe for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 20:06:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ju2hAfm0-aho for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 20:06:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 923E04013B
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 923E04013B
- for <buildroot@buildroot.org>; Tue,  2 May 2023 20:06:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0212541DC1
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0212541DC1
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 20:06:46 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A0AC220002;
- Tue,  2 May 2023 20:06:36 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1FC94100004;
+ Tue,  2 May 2023 20:06:43 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ptwGh-007Jzr-Mc; Tue, 02 May 2023 22:06:35 +0200
+ id 1ptwGp-007Jzx-8Z; Tue, 02 May 2023 22:06:43 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Adrian Perez de Castro <aperez@igalia.com>
-References: <20230424124915.76058-1-aperez@igalia.com>
-Date: Tue, 02 May 2023 22:06:35 +0200
-In-Reply-To: <20230424124915.76058-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Mon, 24 Apr 2023 15:49:15 +0300")
-Message-ID: <87fs8ea46s.fsf@dell.be.48ers.dk>
+References: <20230424125033.93540-1-aperez@igalia.com>
+Date: Tue, 02 May 2023 22:06:43 +0200
+In-Reply-To: <20230424125033.93540-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Mon, 24 Apr 2023 15:50:33 +0300")
+Message-ID: <87bkj2a46k.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/wpewebkit: security bump to version
- 2.38.6
+Subject: Re: [Buildroot] [PATCH v2] package/webkitgtk: security bump to
+ version 2.38.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,13 +77,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
  > Release notes:
 
- >   https://wpewebkit.org/release/wpewebkit-2.38.6.html
+ >   https://webkitgtk.org/2023/04/20/webkitgtk2.38.6-released.html
 
  > Accompanying security advisory:
 
- >   https://wpewebkit.org/security/WSA-2023-0003.html
+ >   https://webkitgtk.org/security/WSA-2023-0003.html
 
  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - Corrected URLs to release notes and security advisory.
 
 Committed to 2023.02.x and 2022.02.x, thanks.
 
