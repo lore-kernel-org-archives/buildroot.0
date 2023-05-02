@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD39CC7EE21
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 09:59:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49E61C77B7E
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 09:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6522381865;
-	Tue,  2 May 2023 09:59:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6522381865
+	by smtp1.osuosl.org (Postfix) with ESMTP id C75DC81F68;
+	Tue,  2 May 2023 09:59:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C75DC81F68
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uDNL2tdwH1Ma; Tue,  2 May 2023 09:59:34 +0000 (UTC)
+	with ESMTP id T4tzn7Bf990k; Tue,  2 May 2023 09:59:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EF6981A50;
-	Tue,  2 May 2023 09:59:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EF6981A50
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4B2F81EBA;
+	Tue,  2 May 2023 09:59:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4B2F81EBA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 38A3E1BF292
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:59:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D41B01BF292
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B85460F63
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:59:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B85460F63
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA7FB60F63
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:59:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA7FB60F63
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a0S54ykAiQKQ for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 09:59:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74A1960B15
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 74A1960B15
- for <buildroot@buildroot.org>; Tue,  2 May 2023 09:59:30 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AFB2CC000D;
- Tue,  2 May 2023 09:59:26 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1ptmn7-0078Po-NZ; Tue, 02 May 2023 11:59:25 +0200
+ with ESMTP id Foc-FEB9ZGMR for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 09:59:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3BEC60B15
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 09:59:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3BEC60B15
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8C8DD856CA; Tue,  2 May 2023 09:59:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20230428122420.211802-1-bernd.kuhls@t-online.de>
-Date: Tue, 02 May 2023 11:59:25 +0200
-In-Reply-To: <20230428122420.211802-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 28 Apr 2023 14:24:20 +0200")
-Message-ID: <87ttwv9hqa.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.4.4
+To: buildroot@buildroot.org
+Date: Tue, 2 May 2023 11:50:34 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 13cf1ba623a3e709754aeeb4299e39be50ff22f3
+X-Git-Newrev: 1c15acd6bce3c528b3918f255dd75a07c4de9a2f
+X-Patchwork-Hint: ignore
+Message-Id: <20230502095937.8C8DD856CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/ffmpeg: bump
+ version to 4.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,25 +57,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1c15acd6bce3c528b3918f255dd75a07c4de9a2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Changelog:
- > https://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;hb=refs/heads/release/4.4
+Changelog:
+https://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;hb=refs/heads/release/4.4
 
- > Rebased all patches, switched _SITE to https.
+Rebased all patches, switched _SITE to https.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 72edd5633ef65a7b26844770345e57918b278573)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch | 4 ++--
+ package/ffmpeg/0003-libavutil-Fix-mips-build.patch                    | 4 ++--
+ package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch    | 2 +-
+ package/ffmpeg/Config.in                                              | 2 +-
+ package/ffmpeg/ffmpeg.hash                                            | 2 +-
+ package/ffmpeg/ffmpeg.mk                                              | 4 ++--
+ 6 files changed, 9 insertions(+), 9 deletions(-)
 
-Committed to 2023.02.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch b/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
+index 951ce4186d..9c1baaa651 100644
+--- a/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
++++ b/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
+@@ -22,7 +22,7 @@ diff --git a/libswscale/x86/yuv2rgb.c b/libswscale/x86/yuv2rgb.c
+ index c12e88cbb5..4791e5b93a 100644
+ --- a/libswscale/x86/yuv2rgb.c
+ +++ b/libswscale/x86/yuv2rgb.c
+-@@ -83,6 +83,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
++@@ -71,6 +71,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
+  #if HAVE_X86ASM
+      int cpu_flags = av_get_cpu_flags();
+  
+@@ -30,7 +30,7 @@ index c12e88cbb5..4791e5b93a 100644
+      if (EXTERNAL_SSSE3(cpu_flags)) {
+          switch (c->dstFormat) {
+          case AV_PIX_FMT_RGB32:
+-@@ -111,6 +112,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
++@@ -99,6 +100,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
+              return yuv420_rgb15_ssse3;
+          }
+      }
+diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+index 8b81e66981..8dd689f5d0 100644
+--- a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
++++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+@@ -20,7 +20,7 @@ diff --git a/configure b/configure
+ index 6bfd98b384..773a7d516c 100755
+ --- a/configure
+ +++ b/configure
+-@@ -2161,6 +2161,7 @@ HEADERS_LIST="
++@@ -2135,6 +2135,7 @@ HEADERS_LIST="
+      opencv2_core_core_c_h
+      OpenGL_gl3_h
+      poll_h
+@@ -28,7 +28,7 @@ index 6bfd98b384..773a7d516c 100755
+      sys_param_h
+      sys_resource_h
+      sys_select_h
+-@@ -6218,6 +6219,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
++@@ -6182,6 +6183,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
+  check_headers windows.h
+  check_headers X11/extensions/XvMClib.h
+  check_headers asm/types.h
+diff --git a/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
+index dbc19c1cec..3247ab08fe 100644
+--- a/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
++++ b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
+@@ -17,7 +17,7 @@ diff --git a/configure b/configure
+ index 0bb3a7cf2b..3bda99e415 100755
+ --- a/configure
+ +++ b/configure
+-@@ -7602,15 +7602,15 @@ rpath=$(enabled rpath && echo "-Wl,-rpath,\${libdir}")
++@@ -7715,15 +7715,15 @@ rpath=$(enabled rpath && echo "-Wl,-rpath,\${libdir}")
+  source_path=${source_path}
+  LIBPREF=${LIBPREF}
+  LIBSUF=${LIBSUF}
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 2efef7dd86..52029c2ade 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -22,7 +22,7 @@ menuconfig BR2_PACKAGE_FFMPEG
+ 	  FFmpeg is a complete, cross-platform solution to record,
+ 	  convert and stream audio and video.
+ 
+-	  http://www.ffmpeg.org
++	  https://www.ffmpeg.org
+ 
+ if BR2_PACKAGE_FFMPEG
+ 
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index c9d7ea7c41..b18218cb48 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  6c5b6c195e61534766a0b5fe16acc919170c883362612816d0a1c7f4f947006e  ffmpeg-4.4.3.tar.xz
++sha256  e80b380d595c809060f66f96a5d849511ef4a76a26b76eacf5778b94c3570309  ffmpeg-4.4.4.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 136e3e24ca..59e13b503e 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 4.4.3
++FFMPEG_VERSION = 4.4.4
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+-FFMPEG_SITE = http://ffmpeg.org/releases
++FFMPEG_SITE = https://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+ 
+ FFMPEG_LICENSE = LGPL-2.1+, libjpeg license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
