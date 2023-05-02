@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11B66C77B7E
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 07:31:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57B8FC77B73
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 07:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E16C417D4;
-	Tue,  2 May 2023 07:31:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E16C417D4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 104F9417BB;
+	Tue,  2 May 2023 07:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 104F9417BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sDVLcs593q1p; Tue,  2 May 2023 07:31:09 +0000 (UTC)
+	with ESMTP id kz0q5G_e6DMr; Tue,  2 May 2023 07:31:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F8B1417B4;
-	Tue,  2 May 2023 07:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F8B1417B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E087417B4;
+	Tue,  2 May 2023 07:31:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E087417B4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3BF191BF400
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:28:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3EA0B1BF400
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:28:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7DADE80EB5
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFA3780ECB
  for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:28:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DADE80EB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFA3780ECB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q9ufIW_4pVwo for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 07:28:50 +0000 (UTC)
+ with ESMTP id 80TY0gE2luEZ for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 07:28:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6C2280ECE
+ by smtp1.osuosl.org (Postfix) with ESMTP id C05B68119E
  for <buildroot@buildroot.org>; Tue,  2 May 2023 07:28:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6C2280ECE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C05B68119E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4D11856A7; Tue,  2 May 2023 07:28:50 +0000 (UTC)
+ id ADC0185697; Tue,  2 May 2023 07:28:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 2 May 2023 09:25:56 +0200
+Date: Tue, 2 May 2023 09:26:19 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 8117ff67d0550ca34dc6a43d97510d11f0609add
-X-Git-Newrev: 65a935c50c23c908467e815050647860583a0dff
+X-Git-Oldrev: 65a935c50c23c908467e815050647860583a0dff
+X-Git-Newrev: ba339be0f7a485b102ea30f37838d7d6fcad3dab
 X-Patchwork-Hint: ignore
-Message-Id: <20230502072850.A4D11856A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- package/x11r7/xserver_xorg-server: security bump version to 21.1.8
+Message-Id: <20230502072850.ADC0185697@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libxml2: security
+ bump to version 2.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65a935c50c23c908467e815050647860583a0dff
+commit: https://git.buildroot.net/buildroot/commit/?id=ba339be0f7a485b102ea30f37838d7d6fcad3dab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-March/003377.html
+- [CVE-2023-29469] Hashing of empty dict strings isn't deterministic
+- [CVE-2023-28484] Fix null deref in xmlSchemaFixupComplexType
+- schemas: Fix null-pointer-deref in xmlSchemaCheckCOSSTDerivedOK
 
-Fixes CVE-2023-1393:
-https://lists.x.org/archives/xorg-announce/2023-March/003374.html
+https://gitlab.gnome.org/GNOME/libxml2/-/tags/v2.10.4
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 83f6a498718dbb00684e3f954d96695557c3885f)
+(cherry picked from commit 162053090f891036106a5c70f423eb7fbdb8ca4a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index e2a2a251c3..092a640f04 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-February/003321.html
--sha256  d9c60b2dd0ec52326ca6ab20db0e490b1ff4f566f59ca742d6532e92795877bb  xorg-server-21.1.7.tar.xz
--sha512  e2a093381e28da9b2aa700c6609349fa851f4ca8df23c776f30e4e2733e7a6c1b257576b93f4c4e87fb09df901385bf52528982f6e7a6ad469597aeae8640bb5  xorg-server-21.1.7.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-March/003377.html
-+sha256  38aadb735650c8024ee25211c190bf8aad844c5f59632761ab1ef4c4d5aeb152  xorg-server-21.1.8.tar.xz
-+sha512  6104b3620ed2e1e27d9a8e963388bbe8785a764585b1bc03dbf5d719a92894773dda580d377ca18ceeab353e65a5d23cc947bab84a4012f9dd1eca31cac36937  xorg-server-21.1.8.tar.xz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 33b35b7979..593bbd4276 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 6957e2ed87..37030bdfaa 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.3.sha256sum
+-sha256  5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c  libxml2-2.10.3.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.4.sha256sum
++sha256  ed0c91c5845008f1936739e4eee2035531c1c94742c6541f44ee66d885948d45  libxml2-2.10.4.tar.xz
+ # License files, locally calculated
+ sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 7a01dc4259..cf26a36cc4 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 21.1.7
-+XSERVER_XORG_SERVER_VERSION = 21.1.8
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+ LIBXML2_VERSION_MAJOR = 2.10
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).3
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
