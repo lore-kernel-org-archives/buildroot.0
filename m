@@ -1,75 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64E9CC77B73
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 03:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 647DFC77B73
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 05:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC89060BA8;
-	Tue,  2 May 2023 03:42:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC89060BA8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A30140183;
+	Tue,  2 May 2023 05:38:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A30140183
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LEQAUS4J89-0; Tue,  2 May 2023 03:42:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d1gJ2F7dWncF; Tue,  2 May 2023 05:38:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEB7660BCF;
-	Tue,  2 May 2023 03:42:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEB7660BCF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9C6AE1BF37A
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 03:42:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C23BD40264;
+	Tue,  2 May 2023 05:38:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C23BD40264
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A22FD1BF40B
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 05:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CDEA81FB1
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 03:42:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CDEA81FB1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FD484021C
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 05:38:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FD484021C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d2JnMxyr9_OG for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 03:42:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8856681FAF
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com
- [209.85.214.180])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8856681FAF
- for <buildroot@buildroot.org>; Tue,  2 May 2023 03:42:15 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id
- d9443c01a7336-1aad5245632so19733965ad.3
- for <buildroot@buildroot.org>; Mon, 01 May 2023 20:42:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1682998934; x=1685590934;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wpxnd73IR12+qRH+/5lwmc9QUr00iHdoyeuUwc40Jw4=;
- b=IpLLp71ZlSC7HHoA/HLoXPg7l4YaCGUVvUUJJYdoA6ZJodGlA6TfgLcS4eZty6AwLE
- YgZUi+Iv8R1WuFPxfk/BOGKHY1nZjYD2rj8zocgqp5SA9DlyxDXCxCGFzZJ2Ar4jFCwA
- R++KRzk8lp0Ylf0gGB1/MPTygW6Mrg/k5Zg8ysLdAvuT8r6Ehk9IMztJouEhViDAPg8l
- U5211iJz+BZmz5bV+1JDEK5buPyfm+SMjqxnyTLdiXLZF0nV54+tcNGVB9nIUm0RU2M4
- 6JCyucjZ1uRCetpj4At+a6j6xCUIJhy4f4JKIpcKSeGC/7hP+nrtAlN84BJWhLtMSgt/
- dg0g==
-X-Gm-Message-State: AC+VfDytjdwaEWusXEvwJH0Rgk/CAX2c5HxGGSzre1+46fxXdiWroo+9
- W2D6go/AS8dqK72M6oqoV3m3AJgsJZJ8Hg==
-X-Google-Smtp-Source: ACHHUZ4W6WBHvGOKVR+rTvaIjMVYy9P9BeUKhwz+8N0GukkuyvDPQfxF8c6rvRPDSG8af3GnOY7/aw==
-X-Received: by 2002:a17:903:1250:b0:19e:6e00:4676 with SMTP id
- u16-20020a170903125000b0019e6e004676mr18978788plh.61.1682998934108; 
- Mon, 01 May 2023 20:42:14 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- bf9-20020a170902b90900b001a19438336esm18624882plb.67.2023.05.01.20.42.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 May 2023 20:42:13 -0700 (PDT)
-From: Christian Stewart <christian@aperture.us>
-To: buildroot@buildroot.org
-Date: Mon,  1 May 2023 20:42:10 -0700
-Message-Id: <20230502034210.974840-1-christian@aperture.us>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eJMADtujz3eO for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 05:38:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86385400E7
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 86385400E7
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 05:38:07 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E2B911C0005
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 05:38:05 +0000 (UTC)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/rtl8812-aircrack-ng: bump to
- 2023-05-01 version to fix build failure with Linux 6.3
+To: buildroot@buildroot.org
+Date: Tue, 02 May 2023 05:38:05 -0000
+Message-Id: <20230502053809.6FD484021C@smtp2.osuosl.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; 
+ t=1683005886; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=aVcbEFA26VOdFFvIfKl7MzJvbk73Mb/RgYToAkMjbmg=;
+ b=Y+OmZ4bXj9KvjJBfefJj1iKxG/Bfjt1wNk6gaxDalLQNYF6iC43r/4u+l7MAi8rAdBDU5H
+ hRn5zF5kgNTxX8xhCLDcIhK2t+6/xK16ct9xb+qRfw5M0HTT/0+TP6z1ZBjQuMNU7Zvdzb
+ KxXeMzMVvyz9EA7rP+cOZfD+F7PoX2hoWbqQDzQL3WxkySCqhupvpM6kShyiDzGpHN61p1
+ Gz4n5684wXYzKVBwg0Krub6q231eRGC0XfndP0XxD9k64gq/EDyjkGTq8DOKAKK2meNk54
+ 2X7ITbFcBNIRGJHUn+j/DWc+uXnVZCs1iyVpH9waQDOu6ght6J2UH50YXw31Lg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Y+OmZ4bX
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-05-01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,167 +70,174 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@aperture.us>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
----
- .../0001-Fix-build-failure-on-PowerPC64.patch | 114 ------------------
- .../rtl8812au-aircrack-ng.hash                |   2 +-
- .../rtl8812au-aircrack-ng.mk                  |   2 +-
- 3 files changed, 2 insertions(+), 116 deletions(-)
- delete mode 100644 package/rtl8812au-aircrack-ng/0001-Fix-build-failure-on-PowerPC64.patch
+Hello,
 
-diff --git a/package/rtl8812au-aircrack-ng/0001-Fix-build-failure-on-PowerPC64.patch b/package/rtl8812au-aircrack-ng/0001-Fix-build-failure-on-PowerPC64.patch
-deleted file mode 100644
-index 488c21a4fc..0000000000
---- a/package/rtl8812au-aircrack-ng/0001-Fix-build-failure-on-PowerPC64.patch
-+++ /dev/null
-@@ -1,114 +0,0 @@
--From d78bda8e60ad6382c1e5832d83d8e40c923628fa Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Tue, 14 Mar 2023 13:21:11 +0100
--Subject: [PATCH] Fix build failure on PowerPC64
--
--get_ra() is defined in Linux kernel for PowerPC64 architecture and it
--conflicts with local get_ra() definition so let's rename local definition
--as rtl_get_ra().
--
--[Upstream status: https://github.com/aircrack-ng/rtl8812au/pull/1054]
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- core/rtw_odm.c                | 6 +++---
-- core/rtw_recv.c               | 4 ++--
-- hal/hal_com.c                 | 2 +-
-- include/wifi.h                | 2 +-
-- os_dep/linux/ioctl_cfg80211.c | 2 +-
-- 5 files changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/core/rtw_odm.c b/core/rtw_odm.c
--index 7204181..a9a7604 100644
----- a/core/rtw_odm.c
--+++ b/core/rtw_odm.c
--@@ -273,7 +273,7 @@ void rtw_odm_parse_rx_phy_status_chinfo(union recv_frame *rframe, u8 *phys)
-- 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u)\n"
-- 					, *phys & 0xf
-- 					, MAC_ARG(get_ta(wlanhdr))
---					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
--+					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
-- 					, HDATA_RATE(attrib->data_rate)
-- 					, phys_t0->band, phys_t0->channel, phys_t0->rxsc
-- 				);
--@@ -389,7 +389,7 @@ type1_end:
-- 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, rf_mode:%u, l_rxsc:%u, ht_rxsc:%u) => %u,%u\n"
-- 					, *phys & 0xf
-- 					, MAC_ARG(get_ta(wlanhdr))
---					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
--+					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
-- 					, HDATA_RATE(attrib->data_rate)
-- 					, phys_t1->band, phys_t1->channel, phys_t1->rf_mode, phys_t1->l_rxsc, phys_t1->ht_rxsc
-- 					, pkt_cch, pkt_bw
--@@ -407,7 +407,7 @@ type1_end:
-- 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u, ht_rxsc:%u)\n"
-- 					, *phys & 0xf
-- 					, MAC_ARG(get_ta(wlanhdr))
---					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
--+					, is_broadcast_mac_addr(rtl_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(rtl_get_ra(wlanhdr)) ? "MC" : "UC"
-- 					, HDATA_RATE(attrib->data_rate)
-- 					, phys_t2->band, phys_t2->channel, phys_t2->l_rxsc, phys_t2->ht_rxsc
-- 				);
--diff --git a/core/rtw_recv.c b/core/rtw_recv.c
--index ffd1ff9..05bede9 100644
----- a/core/rtw_recv.c
--+++ b/core/rtw_recv.c
--@@ -4851,7 +4851,7 @@ void rx_query_phy_status(
-- 	wlanhdr = get_recvframe_data(precvframe);
-- 
-- 	ta = get_ta(wlanhdr);
---	ra = get_ra(wlanhdr);
--+	ra = rtl_get_ra(wlanhdr);
-- 	is_ra_bmc = IS_MCAST(ra);
-- 
-- 	if (_rtw_memcmp(adapter_mac_addr(padapter), ta, ETH_ALEN) == _TRUE) {
--@@ -4991,7 +4991,7 @@ s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
-- {
-- 	s32 ret = _SUCCESS;
-- 	u8 *pbuf = precvframe->u.hdr.rx_data;
---	u8 *pda = get_ra(pbuf);
--+	u8 *pda = rtl_get_ra(pbuf);
-- 	u8 ra_is_bmc = IS_MCAST(pda);
-- 	_adapter *primary_padapter = precvframe->u.hdr.adapter;
-- #ifdef CONFIG_CONCURRENT_MODE
--diff --git a/hal/hal_com.c b/hal/hal_com.c
--index dcf8edf..07b8a5e 100644
----- a/hal/hal_com.c
--+++ b/hal/hal_com.c
--@@ -12569,7 +12569,7 @@ void rtw_store_phy_info(_adapter *padapter, union recv_frame *prframe)
-- 
-- 			/*RTW_INFO("=>%s WIFI_DATA_TYPE or WIFI_QOS_DATA_TYPE\n", __FUNCTION__);*/
-- 			if (psta) {
---				if (IS_MCAST(get_ra(get_recvframe_data(prframe))))
--+				if (IS_MCAST(rtl_get_ra(get_recvframe_data(prframe))))
-- 					psta_dframe_info = &psta->sta_dframe_info_bmc;
-- 				else
-- 					psta_dframe_info = &psta->sta_dframe_info;
--diff --git a/include/wifi.h b/include/wifi.h
--index f071dd0..b349bb9 100644
----- a/include/wifi.h
--+++ b/include/wifi.h
--@@ -454,7 +454,7 @@ __inline static int IS_MCAST(const u8 *da)
-- 		return _FALSE;
-- }
-- 
---__inline static unsigned char *get_ra(unsigned char *pframe)
--+__inline static unsigned char *rtl_get_ra(unsigned char *pframe)
-- {
-- 	unsigned char	*ra;
-- 	ra = GetAddr1Ptr(pframe);
--diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
--index 03f6240..a54125a 100644
----- a/os_dep/linux/ioctl_cfg80211.c
--+++ b/os_dep/linux/ioctl_cfg80211.c
--@@ -6468,7 +6468,7 @@ void rtw_cfg80211_rx_p2p_action_public(_adapter *adapter, union recv_frame *rfra
-- 
-- indicate:
-- 	#if defined(RTW_DEDICATED_P2P_DEVICE)
---	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), get_ra(frame), &wdev))
--+	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), rtl_get_ra(frame), &wdev))
-- 		if (0)
-- 			RTW_INFO("redirect to pd_wdev:%p\n", wdev);
-- 	#endif
---- 
--2.34.1
--
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-index cdf5f3b4e2..ed75b09816 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  69891a35724a6c30fcb29d9eba783879e0bee3f5f7847341fce06101a7542f5f  rtl8812au-aircrack-ng-d98018d038a5db96066e79f26ed4a72f2fe1774e.tar.gz
-+sha256  3545efb56ecba757e1e27a5479653835e3f5be4f5b49eb9e1e4ff87cbeb6e783  rtl8812au-aircrack-ng-35308f4dd73e77fa572c48867cce737449dd8548.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-index ab3ebe2077..a666757449 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8812AU_AIRCRACK_NG_VERSION = d98018d038a5db96066e79f26ed4a72f2fe1774e
-+RTL8812AU_AIRCRACK_NG_VERSION = 35308f4dd73e77fa572c48867cce737449dd8548
- RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
- RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
- RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
+Autobuild statistics for 2023-05-01
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  4  |  8  |  0  | 12  |
+    master   | 32  | 34  |  0  | 66  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+               host-qemu-7.2.0 | 5 
+                host-go-1.19.8 | 4 
+         host-gcc-final-11.3.0 | 2 
+          linux-5.10.162-cip24 | 2 
+                 uclibc-1.0.43 | 2 
+                     efivar-38 | 1 
+              erlang-22.3.4.22 | 1 
+                   flann-1.9.2 | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+                     gmp-6.2.1 | 1 
+  gobject-introspection-1.72.0 | 1 
+            host-binutils-2.37 | 1 
+             host-delve-1.20.0 | 1 
+         host-gcc-final-10.4.0 | 1 
+host-gdb-arc-2020.09-releas... | 1 
+              host-rust-1.68.2 | 1 
+               libdeflate-1.15 | 1 
+                  linux-6.1.14 | 1 
+         multipath-tools-0.9.4 | 1 
+           python-pyicu-2.10.2 | 1 
+                  readline-8.2 | 1 
+sconeserver-8d1935919a20133... | 1 
+                    sdl-1.2.15 | 1 
+x264-baee400fa9ced6f5481a72... | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mipsel    |           efivar-38            | NOK | http://autobuild.buildroot.net/results/c19b37da2f0755a03f7946756548b49966eefdbb |     
+  aarch64    |        erlang-22.3.4.22        | NOK | http://autobuild.buildroot.net/results/0d599c5b4911aaec7065efbb7aa238888e606101 |     
+   nios2     |          flann-1.9.2           | NOK | http://autobuild.buildroot.net/results/aaa6ad4f02b9bbc5b7a958acee18b500ab23b40d |     
+  sparc64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/ec139c84523b41d83dab77fad49d81038484d95e |     
+  riscv64    |           gmp-6.2.1            | NOK | http://autobuild.buildroot.net/results/23d35951834734c84da83c47a0a166d46a572afa | ORPH
+   nios2     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/88a1337b345f60a3daba0670ed2dd78453ec7036 | ORPH
+   armeb     |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/8be0394a46564db7175667027931abfd189a1b53 |     
+  riscv64    |       host-delve-1.20.0        | NOK | http://autobuild.buildroot.net/results/84245ffca231dd777d3233c74f0f7bb065229dc3 |     
+   sparc     |     host-gcc-final-10.4.0      | NOK | http://autobuild.buildroot.net/results/dccecb7e80bd418c6adc5f9b4564e94674d4da2d |     
+    m68k     |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/6d665ed8ff49f7a34d49a47caf5565e99bf7c22d |     
+    m68k     |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/209821805c11e7b7541827b90b75eaeef1f58893 |     
+   arceb     | host-gdb-arc-2020.09-releas... | NOK | http://autobuild.buildroot.net/results/79ecd4be16b8236492f2b78b78bdb7644599b585 | ORPH
+    i586     |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/91b43f86ebddb6b5dbb2eddf0de6b17f4d029854 |     
+   mips64    |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/98f968ab27370ccd1adaa09f7086b3c70e09181b |     
+  mips64el   |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/369109f87e350b7c7030fa4f339654c8114d2a87 |     
+    i686     |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/e79cba89d50404d26f29c450acb9e5cafa3f2f37 |     
+microblazeel |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/2c9a2fe123be69c7c5847111f13e8a03b9b026e7 |     
+microblazeel |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/dbd1a9ac6b0bf1473fa7be394bf51734c597d93f |     
+   s390x     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/062a0026cfacd3ec25fa349cc53c00144411414b |     
+   nios2     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/4701a5b39f2af27794f43e74baf61a40423d56ce |     
+  sparc64    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/35e70d7b60706defc9c441f2506592c499c048d3 |     
+  sparc64    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/fd4b06546660abb20bb74754748959883b665efa |     
+   armeb     |        libdeflate-1.15         | NOK | http://autobuild.buildroot.net/results/d7dce21c4e49b8b5837d4c0733200b3256900703 |     
+   x86_64    |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/b92ee5f79cdec179bea474dcf2738c974c8b036e | ORPH
+  powerpc    |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/5baece8809fd869d6f8833cee80f8273b2df4b81 | ORPH
+   mips64    |          linux-6.1.14          | NOK | http://autobuild.buildroot.net/results/73a055f0485102add0dcd6e6ae9574e093c5d7bf | ORPH
+   armeb     |     multipath-tools-0.9.4      | NOK | http://autobuild.buildroot.net/results/555bd8be19ee51ef4d18b505411f93cc62ef5177 |     
+microblazeel |      python-pyicu-2.10.2       | NOK | http://autobuild.buildroot.net/results/b8ea98102540eef87f273066010ae7c2b70be33b |     
+  mips64el   |          readline-8.2          | NOK | http://autobuild.buildroot.net/results/80c6ef3191a7e6fed5c1b2badb14a729bbea2225 | ORPH
+microblazeel | sconeserver-8d1935919a20133... | NOK | http://autobuild.buildroot.net/results/96d08c80c0452af46ff25e6455aea64bd32c4cd8 |     
+    sh4a     |           sdl-1.2.15           | NOK | http://autobuild.buildroot.net/results/c5de459f4dd26d7ac8b1171ff6b28e190255ecb8 | ORPH
+    m68k     |         uclibc-1.0.43          | NOK | http://autobuild.buildroot.net/results/150c74d9ac6acc6ad2e43a0566da9c7264e7d97e |     
+   mips64    |         uclibc-1.0.43          | NOK | http://autobuild.buildroot.net/results/5a91bc3b2a842a87f683401b412c1afc071743d7 |     
+    i686     | x264-baee400fa9ced6f5481a72... | NOK | http://autobuild.buildroot.net/results/60be15723d41c05eeccaebb6c64c9d52b452c860 |     
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+                host-go-1.19.8 | 2 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+         host-gcc-final-11.3.0 | 1 
+host-gdb-arc-2020.09-releas... | 1 
+               host-qemu-7.2.0 | 1 
+               libglib2-2.72.3 | 1 
+                  linux-6.1.14 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+microblazeel | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/15f508cad41a70f4155679edc07c306d45f2c335 |     
+    m68k     |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/ed19f4463035749a304cb1d6ba3bf562a5cbd4ab |     
+   arceb     | host-gdb-arc-2020.09-releas... | NOK | http://autobuild.buildroot.net/results/ff3545e7255eb98ef0d994609d1ecfa339f08f7b | ORPH
+    i686     |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/b82d9b099f2bc66702a28779a6db359857cc2a52 |     
+  mips64el   |         host-go-1.19.8         | NOK | http://autobuild.buildroot.net/results/e47857272b3befa81827b3235e4813365877fbdf |     
+   armeb     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/00df852922a1fd65a511ba44bffbec1f18f1ce81 |     
+    arc      |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/50424bfcd4176f93f2b1340b9266668de0807e0b |     
+   mips64    |          linux-6.1.14          | NOK | http://autobuild.buildroot.net/results/2445f5fb4c087fe73eb621fa914848dd7e068134 | ORPH
+
+
+Gitlab CI results for 2023-05-01
+================================
+
+Detail of runtime-test failures for master
+------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+      TestClangCompilerRT | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691032  | ORPH 
+           TestCrudiniPy3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691033  | ORPH 
+...linArmv5eabiMuslStable | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691488  | ORPH 
+...zeelUclibcBleedingEdge | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691547  | ORPH 
+...2r6elGlibcBleedingEdge | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691575  | ORPH 
+...ToolchainBuildrootMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691424  | ORPH 
+...olchainBuildrootuClibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691426  | ORPH 
+...xternalToolchainCCache | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691428  | ORPH 
+...ernalToolchainCtngMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691431  | ORPH 
+...ToolchainSourceryArmv4 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691436  | ORPH 
+...ToolchainSourceryArmv5 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691438  | ORPH 
+...ToolchainSourceryArmv7 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691440  | ORPH 
+     TestFileCapabilities | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690927  | ORPH 
+     TestGlibcAllTimezone | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690969  | ORPH 
+...DefaultLimitedTimezone | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690970  | ORPH 
+           TestIPythonPy3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691122  | ORPH 
+      TestIso9660Grub2EFI | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690992  | ORPH 
+ TestIso9660Grub2External | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690993  | ORPH 
+...0Grub2ExternalCompress | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690994  | ORPH 
+   TestIso9660Grub2Hybrid | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690995  | ORPH 
+ TestIso9660Grub2Internal | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690996  | ORPH 
+...so9660SyslinuxExternal | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690997  | ORPH 
+...slinuxExternalCompress | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690998  | ORPH 
+...so9660SyslinuxInternal | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204690999  | ORPH 
+                TestKexec | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691123  | ORPH 
+               TestLibJXL | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691125  | ORPH 
+     TestLuajitLuaCqueues | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691145  | ORPH 
+ TestPerlLWPProtocolhttps | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691224  | ORPH 
+       TestPerllibwwwperl | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691223  | ORPH 
+              TestPhpApcu | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691231  | ORPH 
+            TestPhpLuaLua | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691232  | ORPH 
+         TestPhpLuaLuajit | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691234  | ORPH 
+               TestPhpPam | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691236  | ORPH 
+          TestPhpPeclDbus | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691237  | ORPH 
+         TestPythonPy3Can | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691270  | ORPH 
+      TestPythonPy3Django | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691293  | ORPH 
+    TestPythonPy3Gpiozero | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691306  | ORPH 
+                   TestS6 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691378  | ORPH 
+             TestSyslogNg | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691397  | ORPH 
+             TestZfsGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691411  | ORPH 
+              TestZfsMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691413  | ORPH 
+            TestZfsUclibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/4204691418  | ORPH 
+
+
+
 -- 
-2.40.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
