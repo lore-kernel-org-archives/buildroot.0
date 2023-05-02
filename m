@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F03EFC77B73
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 07:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 715C9C77B7E
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 07:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 962E140644;
-	Tue,  2 May 2023 07:27:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 962E140644
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B5D040BCB;
+	Tue,  2 May 2023 07:27:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B5D040BCB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ceUF15gugc7S; Tue,  2 May 2023 07:27:29 +0000 (UTC)
+	with ESMTP id Ws2CD8mbHRSH; Tue,  2 May 2023 07:27:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC5ED405EE;
-	Tue,  2 May 2023 07:27:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC5ED405EE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 00C6E1BF400
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:27:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 51F2F405EE;
+	Tue,  2 May 2023 07:27:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51F2F405EE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1ADE21BF400
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE01F60BCA
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE01F60BCA
+ by smtp1.osuosl.org (Postfix) with ESMTP id E87A481F47
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E87A481F47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IyqCFGPwStz8 for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 07:27:27 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B920D60BA8
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B920D60BA8
- for <buildroot@buildroot.org>; Tue,  2 May 2023 07:27:26 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 25609FF808;
- Tue,  2 May 2023 07:27:22 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1ptkPy-0074PL-6b; Tue, 02 May 2023 09:27:22 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QKVfZ_7NtbBv for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 07:27:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16E4F81EC2
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 07:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16E4F81EC2
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 047CE854A9; Tue,  2 May 2023 07:27:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20230428133617.1504054-1-bernd.kuhls@t-online.de>
-Date: Tue, 02 May 2023 09:27:22 +0200
-In-Reply-To: <20230428133617.1504054-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 28 Apr 2023 15:36:17 +0200")
-Message-ID: <87354fb3c5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libxml2: security bump to
- version 2.10.4
+To: buildroot@buildroot.org
+Date: Tue, 2 May 2023 09:25:21 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 16ed3610754864464b26fb7a8015013bafd13d62
+X-Git-Newrev: a4237b8459d372c5a6cc1fde78090dd5c32680db
+X-Patchwork-Hint: ignore
+Message-Id: <20230502072743.047CE854A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/apache: security
+ bump version to 2.4.57
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,26 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a4237b8459d372c5a6cc1fde78090dd5c32680db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > - [CVE-2023-29469] Hashing of empty dict strings isn't deterministic
- > - [CVE-2023-28484] Fix null deref in xmlSchemaFixupComplexType
- > - schemas: Fix null-pointer-deref in xmlSchemaCheckCOSSTDerivedOK
+Release notes:
+https://lists.apache.org/thread/lp9t6w2t0qsbbo14lylk2yvfj8hgfoh9
 
- > https://gitlab.gnome.org/GNOME/libxml2/-/tags/v2.10.4
+Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.57
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 839c0c7d7ce5d197dce1bb281a401e843fcb1a3a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/apache/apache.hash | 6 +++---
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2023.02.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 36144917fb..1f0020f65a 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.apache.org/httpd/httpd-2.4.56.tar.bz2.{sha256,sha512}
+-sha256  d8d45f1398ba84edd05bb33ca7593ac2989b17cb9c7a0cafe5442d41afdb2d7c  httpd-2.4.56.tar.bz2
+-sha512  5f12cd9878d822384b1bb163fea4d8edee5e7a0dd8b2389264387971268145cccc6a5a27ddf0436c5f1f631acc5fdc4874da2a47911483e421ca40bf783e0e12  httpd-2.4.56.tar.bz2
++# From https://archive.apache.org/dist/httpd/httpd-2.4.57.tar.bz2.{sha256,sha512}
++sha256  dbccb84aee95e095edfbb81e5eb926ccd24e6ada55dcd83caecb262e5cf94d2a  httpd-2.4.57.tar.bz2
++sha512  4d1e0a274ee90bdfb5f38d4a7d73a7367ed1c6388e26280e640014e49abc0df03683705b88dcfe2ec2da313dda4c7b4a3b86daffa1911f58e224eba89d82d155  httpd-2.4.57.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 80205a6362..320a6ad20e 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.56
++APACHE_VERSION = 2.4.57
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = https://downloads.apache.org/httpd
+ APACHE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
