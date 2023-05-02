@@ -4,62 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8827FC77B73
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 09:18:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C322CC77B73
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 09:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CED8A80BBC;
-	Tue,  2 May 2023 09:18:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CED8A80BBC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52C1382150;
+	Tue,  2 May 2023 09:32:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52C1382150
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sPqOFjylk7UV; Tue,  2 May 2023 09:18:26 +0000 (UTC)
+	with ESMTP id f2iS-uVSRI5J; Tue,  2 May 2023 09:32:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 911E48207B;
-	Tue,  2 May 2023 09:18:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 911E48207B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 193101BF36B
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:18:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 968CA82117;
+	Tue,  2 May 2023 09:32:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 968CA82117
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B8C911BF36B
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:32:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6B564026F
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:18:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6B564026F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 91E1C82117
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:32:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91E1C82117
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fraC3T-vfRX9 for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 09:18:23 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E525401A4
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E525401A4
- for <buildroot@buildroot.org>; Tue,  2 May 2023 09:18:23 +0000 (UTC)
-Received: from pwmachine.localnet (unknown [213.94.16.214])
- by linux.microsoft.com (Postfix) with ESMTPSA id BD94321C3F1D;
- Tue,  2 May 2023 02:18:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BD94321C3F1D
-From: Francis Laniel <flaniel@linux.microsoft.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 May 2023 10:18:18 +0100
-Message-ID: <2680134.mvXUDI8C0e@pwmachine>
-In-Reply-To: <87edo0jyxt.fsf@dell.be.48ers.dk>
-References: <20230428104403.10889-1-flaniel@linux.microsoft.com>
- <87edo0jyxt.fsf@dell.be.48ers.dk>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0SLRalh4vgEO for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 09:32:21 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF10E82100
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EF10E82100
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 09:32:20 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BF4DF1C0005;
+ Tue,  2 May 2023 09:32:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ptmMq-0077a2-QS; Tue, 02 May 2023 11:32:16 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20230428105511.157103-1-bernd.kuhls@t-online.de>
+Date: Tue, 02 May 2023 11:32:16 +0200
+In-Reply-To: <20230428105511.157103-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 28 Apr 2023 12:55:11 +0200")
+Message-ID: <87y1m79izj.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=linux.microsoft.com; 
- s=default; t=1683019101;
- bh=D7iYFclahpFV4jxbKAGEq8gsS1QNw9DUI8iajhhL4Ug=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=sEsXDTXvf+WYRpUBvf1/bMuFqz8oV1/e3iIKfZqvqdj7YuW4I74N2GNDMPhS/+lNr
- FkuNb4I6dy2vnR7zsxQ3Myes8nhlTJn6uQ9xERJR74q16AZXkGvoCPJoDZdaOKKY+Y
- BbBlAVAHZ32aai8X8A0bxZo6ZgtX6zbRNg2a975E=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=linux.microsoft.com
- header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
- header.b=sEsXDTXv
-Subject: Re: [Buildroot] [PATCH 1/1] package/tbb: bump to version 2021.8.0.
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-microcode: security bump
+ version to 20230214
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,24 +65,31 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Le lundi 1 mai 2023, 08:25:18 WEST Peter Korsgaard a =E9crit :
-> >>>>> "Francis" =3D=3D Francis Laniel <flaniel@linux.microsoft.com> write=
-s:
->  > - Remove upstream patches as they are no more needed.
->  > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> =
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> Committed, thanks.
+ > Release notes:
+ > https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/releasenote.md
 
-Thank you for the merge!
+ > CVE-2022-21216
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00700.html
 
+ > CVE-2022-33196
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00738.html
 
+ > CVE-2022-38090
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00767.html
 
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2023.02.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
