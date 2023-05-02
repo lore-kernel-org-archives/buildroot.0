@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93232C7EE21
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 11:24:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63265C77B7E
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 12:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4090D82206;
-	Tue,  2 May 2023 11:24:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4090D82206
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7DB961416;
+	Tue,  2 May 2023 12:07:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7DB961416
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hg_vUWdOIDDC; Tue,  2 May 2023 11:24:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yYly76Q-cgHP; Tue,  2 May 2023 12:07:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BB2F821FD;
-	Tue,  2 May 2023 11:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BB2F821FD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 035DF60D79;
+	Tue,  2 May 2023 12:07:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 035DF60D79
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D84881BF40A
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 11:24:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D9C851BF3C4
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 12:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF17081F28
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 11:24:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF17081F28
+ by smtp1.osuosl.org (Postfix) with ESMTP id B3D1F81A1C
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 12:07:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3D1F81A1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cJnZeFVZuQ3D for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 11:24:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08CE8821FD
- for <buildroot@buildroot.org>; Tue,  2 May 2023 11:24:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08CE8821FD
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E842785735; Tue,  2 May 2023 11:24:28 +0000 (UTC)
+ with ESMTP id g7r8u0hgWZsg for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 12:07:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4C0D81403
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C4C0D81403
+ for <buildroot@busybox.net>; Tue,  2 May 2023 12:07:21 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B4F0CC0014;
+ Tue,  2 May 2023 12:07:18 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ptomr-007AsD-UA; Tue, 02 May 2023 14:07:17 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 2 May 2023 13:20:44 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1c15acd6bce3c528b3918f255dd75a07c4de9a2f
-X-Git-Newrev: 754dc7b1b4a454b104f04eb6c29272ea3c69ea1f
-X-Patchwork-Hint: ignore
-Message-Id: <20230502112428.E842785735@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] Config.in.legacy: add
- missing binutils 2.36.x entry
+To: Francois Perrad <fperrad@gmail.com>
+References: <20230429200133.152499-1-francois.perrad@gadz.org>
+Date: Tue, 02 May 2023 14:07:17 +0200
+In-Reply-To: <20230429200133.152499-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Sat, 29 Apr 2023 22:01:33 +0200")
+Message-ID: <87lei79bt6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/lua: bump to version 5.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +63,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=754dc7b1b4a454b104f04eb6c29272ea3c69ea1f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Commit [1] removed binutils 2.36.1 but forgot to add the legacy
-entry.
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-[1] d08639e6b9e5b687c21c35041bb60a941fc7edb4
+Committed to 2023.02.x, thanks.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 272bfb4cabe70e4251650f9fa27124c189eb835e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a31543d5fa..64419a2615 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -325,6 +325,12 @@ config BR2_PACKAGE_USBREDIR_SERVER
- 
- comment "Legacy options removed in 2022.11"
- 
-+config BR2_BINUTILS_VERSION_2_36_X
-+	bool "binutils 2.36.x has been removed"
-+	select BR2_LEGACY
-+	help
-+	  binutils 2.36 has been removed, use a newer version.
-+
- config BR2_PACKAGE_RABBITMQ_SERVER
- 	bool "rabbitmq-server removed"
- 	select BR2_LEGACY
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
