@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C995C77B7E
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 09:32:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D3E9C77B7E
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 09:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E24048216B;
-	Tue,  2 May 2023 09:32:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E24048216B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8F4280C3C;
+	Tue,  2 May 2023 09:33:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8F4280C3C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1ApLPWYGRp7r; Tue,  2 May 2023 09:32:39 +0000 (UTC)
+	with ESMTP id Sri1ueiSCAqJ; Tue,  2 May 2023 09:33:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 013FA8218F;
-	Tue,  2 May 2023 09:32:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 013FA8218F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C480B1BF36B
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:32:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DAB580C60;
+	Tue,  2 May 2023 09:33:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DAB580C60
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DCB3C1BF36B
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E2D98211C
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:32:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E2D98211C
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3BDE404FE
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 09:33:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3BDE404FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z7gd7GUr8vcN for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 09:32:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h504CkftCuCa for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 09:33:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCD1E82117
- for <buildroot@buildroot.org>; Tue,  2 May 2023 09:32:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCD1E82117
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6B3A4168A
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 09:33:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6B3A4168A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A951C856C5; Tue,  2 May 2023 09:32:27 +0000 (UTC)
+ id C6B3185482; Tue,  2 May 2023 09:33:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 2 May 2023 11:31:56 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ba339be0f7a485b102ea30f37838d7d6fcad3dab
-X-Git-Newrev: 13cf1ba623a3e709754aeeb4299e39be50ff22f3
+Date: Tue, 2 May 2023 11:31:49 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 1bd059e7075c2cf1a34da510675a1a9a9c14b522
+X-Git-Newrev: d028c97177fcd58d5a692501b9f58e3e0a962be4
 X-Patchwork-Hint: ignore
-Message-Id: <20230502093227.A951C856C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/intel-microcode:
+Message-Id: <20230502093330.C6B3185482@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/intel-microcode:
  security bump version to 20230214
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13cf1ba623a3e709754aeeb4299e39be50ff22f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d028c97177fcd58d5a692501b9f58e3e0a962be4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Release notes:
 https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/releasenote.md
