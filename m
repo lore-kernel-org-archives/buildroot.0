@@ -4,48 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09394C7EE21
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 20:08:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B413C77B78
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 21:12:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD0C0405AA;
-	Tue,  2 May 2023 20:08:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD0C0405AA
+	by smtp2.osuosl.org (Postfix) with ESMTP id A80EF40A16;
+	Tue,  2 May 2023 21:12:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A80EF40A16
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5rMkVojlC_BZ; Tue,  2 May 2023 20:08:24 +0000 (UTC)
+	with ESMTP id ehsYJ8E4o5tF; Tue,  2 May 2023 21:12:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D63524062A;
-	Tue,  2 May 2023 20:08:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D63524062A
+	by smtp2.osuosl.org (Postfix) with ESMTP id CD025408D7;
+	Tue,  2 May 2023 21:12:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD025408D7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 670601BF3FF
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 20:08:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D5F6E1BF35D
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 21:12:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 40BAC60F64
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 20:08:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40BAC60F64
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF27360F0F
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 21:12:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF27360F0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8wyXcTIffs4w for <buildroot@lists.busybox.net>;
- Tue,  2 May 2023 20:08:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6979160F47
- for <buildroot@buildroot.org>; Tue,  2 May 2023 20:08:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6979160F47
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58BA785A49; Tue,  2 May 2023 20:08:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id 33qSEWTc_GzU for <buildroot@lists.busybox.net>;
+ Tue,  2 May 2023 21:12:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6664D60F0C
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6664D60F0C
+ for <buildroot@buildroot.org>; Tue,  2 May 2023 21:12:04 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-3f315712406so1566705e9.0
+ for <buildroot@buildroot.org>; Tue, 02 May 2023 14:12:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1683061922; x=1685653922;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=nugFwXGQfcLSLvDUT3Tt47ZFhrCUUcAf2vwxeHxOI84=;
+ b=lduVhPADhd1B1mGnhJuQmbtawuBRZYzx1R/6kKL5E1xyJUboQogN0SgyolAiE5DoeJ
+ kGZRmqZINsA3y0fVdiIog6EZLJ3U37TqMUR2zo6JwLZgvV570kKy9y1lSj1uuChBssEz
+ 8Ub+/L9tBsg708QteKGETNyrVfSaSoACIkJPqrPvxxM/B34wZftTo9fMpgn58MjFB+zh
+ Q1sGhNP/hJys/lUScrq0xsq/0Cp9jlw1wRYQEkxittrQPOcyiNpMsdHqC4g9fyWINh+8
+ yPp+hatiOfApLP+Zkp9iA4t2hymfkW3LTucR40tTr11XmPLSAMQa3G7XVTnxxfl5yekZ
+ upew==
+X-Gm-Message-State: AC+VfDz9p5ozNYkDi7hjmrI/8H0uVB2DiEfiORUbG667MzNY6ECSb4yT
+ 13cX8HYr5fkxsGQ46mJcXC6IILDKjNE=
+X-Google-Smtp-Source: ACHHUZ77JkRXjuhRPaXmstkOXk0tO7GnMYjWOuewV5Dq3/RcpXVD07ii8V2IjFPQ1ygEuM4EsH8Eag==
+X-Received: by 2002:a05:6000:1247:b0:306:3688:e5dc with SMTP id
+ j7-20020a056000124700b003063688e5dcmr3472462wrx.10.1683061922545; 
+ Tue, 02 May 2023 14:12:02 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ e18-20020adffc52000000b002efacde3fc7sm31767609wrs.35.2023.05.02.14.12.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 02 May 2023 14:12:01 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 2 May 2023 22:02:03 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 242cc8c7de068550ff6e0f128bff656c8d854ff9
-X-Git-Newrev: 802dba0f97e3231d0d3d0eee53ec172f380ca68a
-X-Patchwork-Hint: ignore
-Message-Id: <20230502200809.58BA785A49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/wpewebkit:
- security bump to version 2.38.6
+Date: Tue,  2 May 2023 23:11:58 +0200
+Message-Id: <20230502211158.2832484-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.34.3
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1683061922; x=1685653922;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=nugFwXGQfcLSLvDUT3Tt47ZFhrCUUcAf2vwxeHxOI84=;
+ b=bptEtQjGovmn00PLme5aTrExYWFITzHLEUL8bRiT9v/NdRf2AKL5yjOWes/xuYaUW5
+ XBpOIORdlEK96pEP95C9I5q37239A3R5o/lX4nX1Oyzedko6YN+4wfZbsokybihEWcpD
+ 21qe6pUANtiUareJUixQny383t6zw2K73OxvQ4erAIL8ToIu7Hduq+W1FcxGX3+4vVjO
+ dCiQSdA5DPVS/YvuXRQ0Lo6JaIrMhR3nccm3bPxMR3Az4EBMCVfGg10Op1CDxquhRk8X
+ EwgIIv0HQdhnYYWveCcezgxVEk5wPcDeDxEj6ISjq63vddEzv3Ty0h8XsmUlyG6twkBZ
+ RATA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=bptEtQjG
+Subject: [Buildroot] [PATCH] package/gdb: disable gdb for or1k builds with
+ musl libc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,65 +97,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>, Stafford Horne <shorne@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=802dba0f97e3231d0d3d0eee53ec172f380ca68a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+The or1k musl port is incomplete, elf_gregset_t definition is missing
+(user.h is empty) [1]. It fail to build gdbserver and the full gdb.
 
-Bugfix release with many security fixes, including (but not limited to)
-patches for CVE-2023-25358, CVE-2022-0108, CVE-2022-32885,
-CVE-2023-27932, CVE-2023-27954, and CVE-2023-28205.
+[1] https://git.musl-libc.org/cgit/musl/tree/arch/or1k/bits/user.h?h=v1.2.3
 
-Release notes:
+Fixes:
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/4202276569
 
-  https://wpewebkit.org/release/wpewebkit-2.38.6.html
-
-Accompanying security advisory:
-
-  https://wpewebkit.org/security/WSA-2023-0003.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b9c6684fa37f20d48645868a1e15bb831ca1ba85)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Stafford Horne <shorne@gmail.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+host-gdb build fine but it's useless without a gdbserver on the target.
+Keep it enabled for now to avoid dependency handling for or1k with musl...
+---
+ package/gdb/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 0fa1018721..d5f628e1ee 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.38.5.tar.xz.sums
--md5  73f7abd0c1cc808032869f72602166e3  wpewebkit-2.38.5.tar.xz
--sha1  3f10a04758eeb349f63f841aff765dae25bcde1b  wpewebkit-2.38.5.tar.xz
--sha256  ff00fd3d0a4c6d551850a78a7dfe4883b6b7ebd93c5549e1121b2f43d3ac1661  wpewebkit-2.38.5.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.38.6.tar.xz.sums
-+md5  eb44d3132208218f3752170cae3220b8  wpewebkit-2.38.6.tar.xz
-+sha1  5c541a10e216d8d9ca48572b3dc0f82bfb2236c5  wpewebkit-2.38.6.tar.xz
-+sha256  dcb6591456393c5366ad9abc62a808137d4fea039cbc7ef4c8d64ead506d035b  wpewebkit-2.38.6.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 48e5c2f8cd..7b8ac67d92 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.38.5
-+WPEWEBKIT_VERSION = 2.38.6
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 80b1185b5e..0800d39ced 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -17,6 +17,9 @@ config BR2_PACKAGE_GDB
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# The or1k musl port is incomplete, elf_gregset_t definition is missing:
++	# https://git.musl-libc.org/cgit/musl/tree/arch/or1k/bits/user.h?h=v1.2.3
++	depends on !BR2_or1k || (BR2_or1k && !BR2_TOOLCHAIN_USES_MUSL)
+ 	select BR2_PACKAGE_ZLIB
+ 	# When the external toolchain gdbserver is copied to the
+ 	# target, we don't allow building a separate gdbserver. The
+-- 
+2.34.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
