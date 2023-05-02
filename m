@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB22AC77B73
-	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 07:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FCCFC77B73
+	for <buildroot@archiver.kernel.org>; Tue,  2 May 2023 07:30:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5681141744;
-	Tue,  2 May 2023 07:29:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5681141744
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00EEA4158B;
+	Tue,  2 May 2023 07:30:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00EEA4158B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 57h-WThOl-aw; Tue,  2 May 2023 07:29:52 +0000 (UTC)
+	with ESMTP id WD-Cqwt58D5F; Tue,  2 May 2023 07:30:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CFD841696;
-	Tue,  2 May 2023 07:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CFD841696
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 931261BF400
- for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:28:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 393E54144E;
+	Tue,  2 May 2023 07:30:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 393E54144E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CE111BF400
+ for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:28:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6BE4B40920
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67A6760BC6
  for <buildroot@lists.busybox.net>; Tue,  2 May 2023 07:28:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BE4B40920
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67A6760BC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BKpzqo7tBEth for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1RWFhAROubU7 for <buildroot@lists.busybox.net>;
  Tue,  2 May 2023 07:28:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 642C9408BA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D8F760BA8
  for <buildroot@buildroot.org>; Tue,  2 May 2023 07:28:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 642C9408BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D8F760BA8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5467A856A9; Tue,  2 May 2023 07:28:50 +0000 (UTC)
+ id 6D9E6856A7; Tue,  2 May 2023 07:28:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 2 May 2023 08:30:51 +0200
+Date: Tue, 2 May 2023 08:47:42 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 904966909dbdeb835d22b41166eebfcbaa5b46cf
-X-Git-Newrev: f1b72dd33d8c20657fac557c2d3179e58ec26d92
+X-Git-Oldrev: e5e171093f195227012e76821933d5052ae04e2c
+X-Git-Newrev: 5c3c5a6bbdf7f71f2632f2aeb02e6da79e5641f1
 X-Patchwork-Hint: ignore
-Message-Id: <20230502072850.5467A856A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] utils/check-package: fix
- grammar
+Message-Id: <20230502072850.6D9E6856A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/readline: fix
+ "Upstream:" tag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1b72dd33d8c20657fac557c2d3179e58ec26d92
+commit: https://git.buildroot.net/buildroot/commit/?id=5c3c5a6bbdf7f71f2632f2aeb02e6da79e5641f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The past participle for "to fix" is "fix". The "did you forget" got
-eluded into "forget", so again a past participle.
+The test chckes that the "Upstream:" tag be on the first column, without
+any leading character (no space, no bracket of any kind).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a3e796b74e98171518cdf72920875264eb685988)
+(cherry picked from commit d89fdaea2b795ea0e06c3b7ed092d50950559fa8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/utils/test_check_package.py | 4 ++--
- utils/check-package                               | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch   | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
-index d2c1556845..77f8208043 100644
---- a/support/testing/tests/utils/test_check_package.py
-+++ b/support/testing/tests/utils/test_check_package.py
-@@ -228,9 +228,9 @@ class TestCheckPackage(unittest.TestCase):
-                            self.WITH_UTILS_IN_PATH, subdir_path)
-         self.assert_file_was_processed(m)
-         self.assert_warnings_generated_for_file(m)
--        self.assertIn("{}:0: Indent was expected to fail, did you fixed the file and forgot to update .checkpackageignore_outdated?"
-+        self.assertIn("{}:0: Indent was expected to fail, did you fix the file and forgot to update .checkpackageignore_outdated?"
-                       .format(subdir_file), w)
--        self.assertIn("{}:0: NewlineAtEof was expected to fail, did you fixed the file and forgot to update "
-+        self.assertIn("{}:0: NewlineAtEof was expected to fail, did you fix the file and forgot to update "
-                       ".checkpackageignore_outdated?"
-                       .format(subdir_file), w)
+diff --git a/package/readline/0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch b/package/readline/0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch
+index b0f784b8ba..c2c2d81260 100644
+--- a/package/readline/0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch
++++ b/package/readline/0002-Readline-8.2-patch-1-fix-crash-when-readline-is-star.patch
+@@ -4,8 +4,8 @@ Date: Wed, 5 Oct 2022 10:41:16 -0400
+ Subject: [PATCH] Readline-8.2 patch 1: fix crash when readline is started with
+  an invalid locale specification
  
-diff --git a/utils/check-package b/utils/check-package
-index 46f2897b51..5974781104 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -246,7 +246,7 @@ def check_file_using_lib(fname):
- 
-     for should_fail in xfail:
-         if should_fail not in failed:
--            print("{}:0: {} was expected to fail, did you fixed the file and forgot to update {}?"
-+            print("{}:0: {} was expected to fail, did you fix the file and forget to update {}?"
-                   .format(fname, should_fail, flags.ignore_filename))
-             nwarnings += 1
- 
+-[Upstream: https://git.savannah.gnu.org/cgit/readline.git/patch/?id=7274faabe97ce53d6b464272d7e6ab6c1392837b
+- Stripped unrelated ._.gitignore change]
++Upstream: https://git.savannah.gnu.org/cgit/readline.git/patch/?id=7274faabe97ce53d6b464272d7e6ab6c1392837b
++[peter: stripped unrelated ._.gitignore change]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+  nls.c      | 4 ++++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
