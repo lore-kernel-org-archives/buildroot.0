@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 447B9C77B75
-	for <buildroot@archiver.kernel.org>; Wed,  3 May 2023 19:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E41AEC77B7F
+	for <buildroot@archiver.kernel.org>; Wed,  3 May 2023 19:41:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AEDBE41D47;
-	Wed,  3 May 2023 19:28:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEDBE41D47
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84EA061561;
+	Wed,  3 May 2023 19:41:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84EA061561
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S2wcRyZwfGNk; Wed,  3 May 2023 19:28:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EeKLS3PlaB7k; Wed,  3 May 2023 19:41:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 776A5405D3;
-	Wed,  3 May 2023 19:28:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 776A5405D3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 06FF61BF31F
- for <buildroot@lists.busybox.net>; Wed,  3 May 2023 19:28:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5A3561550;
+	Wed,  3 May 2023 19:41:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5A3561550
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ED871BF31F
+ for <buildroot@lists.busybox.net>; Wed,  3 May 2023 19:41:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1CB040577
- for <buildroot@lists.busybox.net>; Wed,  3 May 2023 19:28:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1CB040577
+ by smtp4.osuosl.org (Postfix) with ESMTP id 706424099B
+ for <buildroot@lists.busybox.net>; Wed,  3 May 2023 19:41:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 706424099B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KN-ay5qMASX9 for <buildroot@lists.busybox.net>;
- Wed,  3 May 2023 19:28:02 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BCBB400FD
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6BCBB400FD
- for <buildroot@buildroot.org>; Wed,  3 May 2023 19:28:02 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:7044:c88:9a1c:351c])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id EEF176012C;
- Wed,  3 May 2023 21:27:54 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 03 May 2023 21:27:54 +0200
-Date: Wed, 3 May 2023 21:27:54 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Knight <james.d.knight@live.com>
-Message-ID: <20230503192754.GG2696@scaer>
-References: <SJ0P221MB06893C8381DEF3CD9E251020A06C9@SJ0P221MB0689.NAMP221.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <SJ0P221MB06893C8381DEF3CD9E251020A06C9@SJ0P221MB0689.NAMP221.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683142079;
- bh=d7q1gRjADxNAn1hsAyBofwMtiHwrD/ffirCRTYl9MKA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=FKhvod4pbDoswhy4+AcZ6J98cKFLgz51aRx0V06mRrIm81tNpJ7jJQocX3vEo8lnK
- +A0/5K7FE1grosnrx3SL6vkkbXLtbf2Z3dp7OcicnMS9PqxSGZCaoKIJIoNoSvYSX1
- B7iFhXpGov8d6HgkQLb9TFoXqgCRPZU7XudycUy6ofOim5uPB5ANcqoeDBmLDjz7sg
- sEm32su0ILVC9a4x+ejMTxrciJ9pDCfBm2UVzApUdOdsnrxs/DzLKN7zCJtbH5DEu3
- 32G7j8dPLo2ZBh0EIdNUl5GGsUE4JXIkr/MHiYFxsCeCVoZ+/uNJ3HZMb2TWztfClm
- 2aoCqGT+S20hQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FKhvod4p
-Subject: Re: [Buildroot] [PATCH] package/systemd: do not enable
- networking/time components by default
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d_DhvFP3NS7x for <buildroot@lists.busybox.net>;
+ Wed,  3 May 2023 19:40:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6885C40998
+ for <buildroot@buildroot.org>; Wed,  3 May 2023 19:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6885C40998
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4B06285AB3; Wed,  3 May 2023 19:40:59 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 3 May 2023 21:40:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9a0857d734c5fca74915b1cd85b92555fe15fb93
+X-Git-Newrev: 2c5ee71c4897eecf0d01b9fa6749640838eadb7e
+X-Patchwork-Hint: ignore
+Message-Id: <20230503194059.4B06285AB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpqxx: bump version to 7.7.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,119 +56,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2c5ee71c4897eecf0d01b9fa6749640838eadb7e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-05-03 10:52 -0400, James Knight spake thusly:
-> Tweaking the configuration of systemd to not enable networking and time
-> related service capabilities. The use of the system services are not
-> required, especially if other packages provide a respective capability
-> to a target (e.g. a target configured for chronyd will most likely not
-> want to use systemd's timedate/timesync services).
+Signed-off-by: James Knight <james.d.knight@live.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libpqxx/libpqxx.hash | 4 ++--
+ package/libpqxx/libpqxx.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Those are only default settings, they can be disabled; people using
-alternate solutions can still easily disable them.
-
-However, systemd is a critical package: we want it to work "correctly"
-by default, and we anyway expect people that want to configure it to
-know what they are doing.
-
-So, yes, basically, that's why those options default to 'y': unless the
-user takes explicit action to use an alternative, they provide a
-sane-by-default system: network is functional, hostname is set and there
-is a proper resolver, and (for machines lacking an RTC) time and date
-are set on boot (with NTP is available, otherwise the systemd release
-date used as a sane default).
-
-Also, if one were to argue that those features should be disabled by
-default, then all such optional features should be disabled. But then,
-that means vcosole would have to default to 'n', and this would by
-default generate a system where everything started on a virtual console
-(e.g. tty1 on HDMI...) be killed; see fc0787e76ea2 (package/systemd: set
-vconsole support option to default y).
-
-Finally, removing the defaults means that existing defconfig files will
-suddenly fail to work as previously. We want to avoid that unless there
-is a very compelling reason that a breakage is acceptable, and there is
-no such reason IMHO.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: James Knight <james.d.knight@live.com>
-> ---
->  package/systemd/Config.in | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index bea717a4560f573fafbde53efb846f8be0b663c0..be1c29c2ec3772923a1164f25ce2d3fad78fd195 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -256,7 +256,6 @@ comment "homed support needs a toolchain w/ threads, dynamic library, kernel hea
->  
->  config BR2_PACKAGE_SYSTEMD_HOSTNAMED
->  	bool "enable hostname daemon"
-> -	default y
->  	help
->  	  systemd-hostnamed is a system service that may be used as a
->  	  mechanism to change the system's hostname.
-> @@ -329,7 +328,6 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
->  
->  config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
->  	bool "enable myhostname NSS plugin"
-> -	default y
->  	help
->  	  nss-myhostname is a plug-in module for the GNU Name Service
->  	  Switch (NSS) functionality of the GNU C Library (glibc),
-> @@ -340,7 +338,6 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
->  
->  config BR2_PACKAGE_SYSTEMD_NETWORKD
->  	bool "enable network manager"
-> -	default y
->  	help
->  	  systemd-networkd is a system service that manages networks.
->  	  It detects and configures network devices as they appear, as
-> @@ -433,7 +430,6 @@ config BR2_PACKAGE_SYSTEMD_REPART
->  
->  config BR2_PACKAGE_SYSTEMD_RESOLVED
->  	bool "enable resolve daemon"
-> -	default y
->  	help
->  	  systemd-resolved is a system service that provides network
->  	  name resolution to local applications. It implements a
-> @@ -507,7 +503,6 @@ config BR2_PACKAGE_SYSTEMD_SYSUSERS
->  
->  config BR2_PACKAGE_SYSTEMD_TIMEDATED
->  	bool "enable timedate daemon"
-> -	default y
->  	help
->  	  systemd-timedated is a system service that may be used as a
->  	  mechanism to change the system clock and timezone, as well
-> @@ -517,7 +512,6 @@ config BR2_PACKAGE_SYSTEMD_TIMEDATED
->  
->  config BR2_PACKAGE_SYSTEMD_TIMESYNCD
->  	bool "enable timesync daemon"
-> -	default y
->  	help
->  	  systemd-timesyncd is a service that may be used to
->  	  synchronize the local system clock with a Network Time
-> -- 
-> 2.40.1.windows.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
+index 167b5edc9d..1c0e4c185d 100644
+--- a/package/libpqxx/libpqxx.hash
++++ b/package/libpqxx/libpqxx.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  86921fdb0fe54495a79d5af2c96f2c771098c31e9b352d0834230fd2799ad362  libpqxx-6.4.5.tar.gz
+-sha256  36c48c1ca1b0a68639d919196b5d92c971858ad8e24da24385ba1c65cc5eac38  COPYING
++sha256  c7dc3e8fa2eee656f2b6a8179d72f15db10e97a80dc4f173f806e615ea990973  libpqxx-7.7.5.tar.gz
++sha256  91718581edafc9f722915133d75f74c82d7c2e41a1831c1e042206423e5a63b0  COPYING
+diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
+index 9de7df3ed2..b280f5a52a 100644
+--- a/package/libpqxx/libpqxx.mk
++++ b/package/libpqxx/libpqxx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPQXX_VERSION = 6.4.5
++LIBPQXX_VERSION = 7.7.5
+ LIBPQXX_SITE = $(call github,jtv,libpqxx,$(LIBPQXX_VERSION))
+ LIBPQXX_INSTALL_STAGING = YES
+ LIBPQXX_DEPENDENCIES = postgresql
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
