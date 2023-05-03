@@ -4,88 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 354C2C77B78
-	for <buildroot@archiver.kernel.org>; Wed,  3 May 2023 02:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EC58C77B78
+	for <buildroot@archiver.kernel.org>; Wed,  3 May 2023 02:37:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEE46822E7;
-	Wed,  3 May 2023 02:37:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEE46822E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D7AE822CA;
+	Wed,  3 May 2023 02:37:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D7AE822CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T_014K_v3dd6; Wed,  3 May 2023 02:37:28 +0000 (UTC)
+	with ESMTP id mE7nVU6nuALJ; Wed,  3 May 2023 02:37:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC27B822CA;
-	Wed,  3 May 2023 02:37:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC27B822CA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 644DE1BF860
- for <buildroot@lists.busybox.net>; Wed,  3 May 2023 02:37:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5DCD583B49;
+	Wed,  3 May 2023 02:37:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DCD583B49
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E380A1BF860
+ for <buildroot@lists.busybox.net>; Wed,  3 May 2023 02:37:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D8C1401F3
- for <buildroot@lists.busybox.net>; Wed,  3 May 2023 02:37:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D8C1401F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA70541D96
+ for <buildroot@lists.busybox.net>; Wed,  3 May 2023 02:37:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA70541D96
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E43PgRYDbpIm for <buildroot@lists.busybox.net>;
- Wed,  3 May 2023 02:37:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4K4vMj05l7xs for <buildroot@lists.busybox.net>;
+ Wed,  3 May 2023 02:37:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41D5A40120
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
- [IPv6:2607:f8b0:4864:20::536])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 41D5A40120
- for <buildroot@buildroot.org>; Wed,  3 May 2023 02:37:25 +0000 (UTC)
-Received: by mail-pg1-x536.google.com with SMTP id
- 41be03b00d2f7-52863157da6so3090853a12.0
- for <buildroot@buildroot.org>; Tue, 02 May 2023 19:37:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC00841D95
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
+ [IPv6:2607:f8b0:4864:20::1029])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DC00841D95
+ for <buildroot@buildroot.org>; Wed,  3 May 2023 02:37:30 +0000 (UTC)
+Received: by mail-pj1-x1029.google.com with SMTP id
+ 98e67ed59e1d1-24dfc3c662eso2175298a91.3
+ for <buildroot@buildroot.org>; Tue, 02 May 2023 19:37:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683081444; x=1685673444;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Q4KIkYuMYThej1eZu7FsEV/p0XeuJAeutV+U3RLzawQ=;
- b=a26vrJL3pASn1byN7szhvtnwRjtT2gO+QCa3Pl7M/pqHOFRWrud3/e5gHb7SQ13P1Y
- LvUG8akJRwvvw9T8YDfCRkaI4OeQs1cUn4t8lwtGznjlvLeRi8E7EEpy9BmvlCEVK0RV
- 7lXPr3h+QteawJwhAV4pLWCZA1SrWYftCU6uewDOC5FEObsE47MEVmHr4AL2Dbv9WZUm
- ghqXEZ6q8l04giE71K7BlvGEBHs67CYMtdjapbuCFMMfy/6mOIJmz0G+pifLSRl4tsct
- vS+1PxFIjfCKgT2m4TSKyWh1CaHhVoBFhCsRj+C9d53Nuhsbv3iVt8sv2b4POw15ykbK
- JN8w==
-X-Gm-Message-State: AC+VfDz1UulWddsUeThxPqEUBgRElrMSsVAurgwxD3xO4ELWvGdmqzvC
- fzBCm0b6KWpanjbQF+WKfoleSTGAb2LQew==
-X-Google-Smtp-Source: ACHHUZ4By+NzrXLCPHcbSbQ9NeazrJIIYZGrr16SNfzAfUPZEYx1bJPbi7YAUIahtTVDaY7DjNgcrw==
-X-Received: by 2002:a05:6a20:841a:b0:fa:e7cf:f72a with SMTP id
- c26-20020a056a20841a00b000fae7cff72amr10301260pzd.2.1683081444151; 
- Tue, 02 May 2023 19:37:24 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1683081450; x=1685673450;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=dPZz5iA89ShkH30muukCmMWjDrcI/zVhBpmSoduEDrM=;
+ b=ijI+n1+CEhwKWOuN4eOsuYSF3KrN2NpkOV6ZDdvrgjLVnniNdI5ZbEojAntvs/YL3D
+ F7MfkGKV3OMWzz7OxNfgwA4mZN/rX/LmINkVh8AWaKy6b8bmi6cpuIIuWbirM1KJ5shf
+ q1OFoAzLnwnBtit+pe2SzUQsRhttUW52EL2NmvN7fAma/Pt9wU5qWDW3LQnP/B2nBzSB
+ ebsgU2p7FDnC/rdmwWdxU1l0Xu6OKcbWPzyAvZK3qx0Mt2IBsFK3r2H3iz09ldqW8uZt
+ 2n0x5yHyp0dk+W9oXLcLBTUwedGf2K5JZ9sKPn8Oqfs+N8unQ05+lpLeGTmrWS4i8ARA
+ 8hFg==
+X-Gm-Message-State: AC+VfDw/bd7A+z5FNE/6SIT//Fzz3czemp68ixNGVDQ+S/aQFI4zxokP
+ p1WKcnjo7ckw23KmmlyQ2D2UrXyVNWD/6Q==
+X-Google-Smtp-Source: ACHHUZ4u1tYTMkTZDC5VFLS0Y2DbIYyUhB+HJgG0powO22D/VHAcHVV8s0ZmGZfJKq76xPef0I9YqQ==
+X-Received: by 2002:a17:90b:4a0b:b0:247:3895:e416 with SMTP id
+ kk11-20020a17090b4a0b00b002473895e416mr19740209pjb.16.1683081449936; 
+ Tue, 02 May 2023 19:37:29 -0700 (PDT)
 Received: from toolbox.alistair23.me
  (2403-580b-97e8-0-321-6fb2-58f1-a1b1.ip6.aussiebb.net.
  [2403:580b:97e8:0:321:6fb2:58f1:a1b1])
  by smtp.gmail.com with ESMTPSA id
- o15-20020a17090ac08f00b0024b79a69361sm184877pjs.32.2023.05.02.19.37.21
+ o15-20020a17090ac08f00b0024b79a69361sm184877pjs.32.2023.05.02.19.37.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 May 2023 19:37:23 -0700 (PDT)
+ Tue, 02 May 2023 19:37:29 -0700 (PDT)
 From: Alistair Francis <alistair23@gmail.com>
 X-Google-Original-From: Alistair Francis <alistair.francis@wdc.com>
 To: buildroot@buildroot.org
-Date: Wed,  3 May 2023 12:37:10 +1000
-Message-Id: <20230503023711.586439-1-alistair.francis@wdc.com>
+Date: Wed,  3 May 2023 12:37:11 +1000
+Message-Id: <20230503023711.586439-2-alistair.francis@wdc.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230503023711.586439-1-alistair.francis@wdc.com>
+References: <20230503023711.586439-1-alistair.francis@wdc.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1683081444; x=1685673444;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Q4KIkYuMYThej1eZu7FsEV/p0XeuJAeutV+U3RLzawQ=;
- b=fBT5zjfDNLiSXhy/0VL9cVsx3CUTjUO/EBLDXpIIX2Y2n6016wIopHAQyTJ6/0q3gS
- Y5VK0TnuuDMOm+hFU2ZY4tYDYBQhanTXf6kE37/h+KeYzOWPFP861YMnVNgvS85c/XkJ
- rixsFMvlIILvy+Y71hidODy5PHyNoAV+Yr9AFpM7szpYqvNoWr06AuVgvkOsdvQvsB1B
- hmkX7JCw0+v68Exizod6zoeGrG2r7brHAwUGnirxPJKYRlvRmtCdpFqp8cXPumJS9uWX
- W2cqKWne09VzcFVAtv/QhAptq9ueeoKGVkoBDoVTT4U3XOnMBvNgpuh1GiK7455sHWe3
- OfNA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20221208; t=1683081450; x=1685673450;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=dPZz5iA89ShkH30muukCmMWjDrcI/zVhBpmSoduEDrM=;
+ b=lmvpko9N0kmIn8TSLOMXeeYDMor1lQU0qSA+hJFAW7sp1aQZpA5dp+TtCBpc80A9Hy
+ xHFtnWfCF1xPhYKdyhfj25ay1Dlf/7PILfYtX9nsaUd6qbsT1+MMwdzYUw8ub5QgTffA
+ hvph+/gO8XcKVcZMygYacJX5Lwq4GLzkHFyVFiJOxIXnGRkQ1s1l9jeqBEtl1rZVgGIi
+ RIe8+EE6bbS5wpls4c/GfhA1sURg6QFs1h3gfyFxKk2fVlioIsOXAs0WO/AngEFN4P0q
+ 4VZUIQHJtGUS2XXNo4rtxjhW+Xr6cXKFEqsFfc+Ug66gMgEH9AgKIqzz0lPQRXb8N39W
+ rsjw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=fBT5zjfD
-Subject: [Buildroot] [PATCH 1/2] boot/opensbi: Bump to version 1.2
+ header.a=rsa-sha256 header.s=20221208 header.b=lmvpko9N
+Subject: [Buildroot] [PATCH 2/2] boot/opensbi: Allow a custom device tree
+ path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,149 +108,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Instead of hardcoding the u-boot device tree, allow the user to use a
+custom device tree.
+
 Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 ---
- ...Makefile-Don-t-specify-mabi-or-march.patch | 37 -------------
- ...Makefile-unconditionally-disable-SSP.patch | 53 -------------------
- boot/opensbi/Config.in                        |  4 +-
- boot/opensbi/opensbi.hash                     |  2 +-
- 4 files changed, 3 insertions(+), 93 deletions(-)
- delete mode 100644 boot/opensbi/0.9/0001-Makefile-Don-t-specify-mabi-or-march.patch
- delete mode 100644 boot/opensbi/0.9/0002-Makefile-unconditionally-disable-SSP.patch
+ boot/opensbi/Config.in  | 16 ++++++++++------
+ boot/opensbi/opensbi.mk |  5 +++--
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/boot/opensbi/0.9/0001-Makefile-Don-t-specify-mabi-or-march.patch b/boot/opensbi/0.9/0001-Makefile-Don-t-specify-mabi-or-march.patch
-deleted file mode 100644
-index 5f554a6c24..0000000000
---- a/boot/opensbi/0.9/0001-Makefile-Don-t-specify-mabi-or-march.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From f5871e1f3650d6c8a032928cb5d8ca00c275c377 Mon Sep 17 00:00:00 2001
--From: Alistair Francis <alistair.francis@wdc.com>
--Date: Fri, 15 Feb 2019 14:57:41 -0800
--Subject: [PATCH] Makefile: Don't specify mabi or march
--
--To avoid
--    can't link double-float modules with soft-float modules
--errors when building 32-bit openSBI don't specify mabi or march.
--
--Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-----
-- Makefile | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index ae68f55..10851fc 100644
----- a/Makefile
--+++ b/Makefile
--@@ -145,7 +145,6 @@ GENFLAGS	+=	$(firmware-genflags-y)
-- CFLAGS		=	-g -Wall -Werror -nostdlib -fno-strict-aliasing -O2
-- CFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
-- CFLAGS		+=	-mno-save-restore -mstrict-align
---CFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
-- CFLAGS		+=	-mcmodel=$(PLATFORM_RISCV_CODE_MODEL)
-- CFLAGS		+=	$(GENFLAGS)
-- CFLAGS		+=	$(platform-cflags-y)
--@@ -158,7 +157,6 @@ CPPFLAGS	+=	$(firmware-cppflags-y)
-- ASFLAGS		=	-g -Wall -nostdlib -D__ASSEMBLY__
-- ASFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
-- ASFLAGS		+=	-mno-save-restore -mstrict-align
---ASFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
-- ASFLAGS		+=	-mcmodel=$(PLATFORM_RISCV_CODE_MODEL)
-- ASFLAGS		+=	$(GENFLAGS)
-- ASFLAGS		+=	$(platform-asflags-y)
---- 
--2.20.1
--
-diff --git a/boot/opensbi/0.9/0002-Makefile-unconditionally-disable-SSP.patch b/boot/opensbi/0.9/0002-Makefile-unconditionally-disable-SSP.patch
-deleted file mode 100644
-index c4edd37f1a..0000000000
---- a/boot/opensbi/0.9/0002-Makefile-unconditionally-disable-SSP.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From e389d5fbc296e496db15368b2b621e0f178f7f34 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 8 May 2021 21:28:10 +0200
--Subject: [PATCH] Makefile: unconditionally disable SSP
--
--Though -nostdlib is passed in {C,+AS,DTSCPP}FLAGS, -fno-stack-protector
--must also be passed to avoid linking errors related to undefined
--references to '__stack_chk_guard' and '__stack_chk_fail' if toolchain
--enforces -fstack-protector.
--
--Fixes:
-- - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/riscv/opensbi/pull/211]
-----
-- Makefile | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index eeffe6b..1419360 100644
----- a/Makefile
--+++ b/Makefile
--@@ -203,7 +203,7 @@ GENFLAGS	+=	$(libsbiutils-genflags-y)
-- GENFLAGS	+=	$(platform-genflags-y)
-- GENFLAGS	+=	$(firmware-genflags-y)
-- 
---CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-strict-aliasing -O2
--+CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-stack-protector -fno-strict-aliasing -O2
-- CFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
-- CFLAGS		+=	-mno-save-restore -mstrict-align
-- CFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
--@@ -217,7 +217,7 @@ CPPFLAGS	+=	$(GENFLAGS)
-- CPPFLAGS	+=	$(platform-cppflags-y)
-- CPPFLAGS	+=	$(firmware-cppflags-y)
-- 
---ASFLAGS		=	-g -Wall -nostdlib -D__ASSEMBLY__
--+ASFLAGS		=	-g -Wall -nostdlib -fno-stack-protector -D__ASSEMBLY__
-- ASFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
-- ASFLAGS		+=	-mno-save-restore -mstrict-align
-- ASFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
--@@ -236,7 +236,7 @@ MERGEFLAGS	+=	-r
-- MERGEFLAGS	+=	-b elf$(PLATFORM_RISCV_XLEN)-littleriscv
-- MERGEFLAGS	+=	-m elf$(PLATFORM_RISCV_XLEN)lriscv
-- 
---DTSCPPFLAGS	=	$(CPPFLAGS) -nostdinc -nostdlib -fno-builtin -D__DTS__ -x assembler-with-cpp
--+DTSCPPFLAGS	=	$(CPPFLAGS) -nostdinc -nostdlib -fno-stack-protector -fno-builtin -D__DTS__ -x assembler-with-cpp
-- 
-- # Setup functions for compilation
-- define dynamic_flags
---- 
--2.30.2
--
 diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 86f848f177..5e6b8d158e 100644
+index 5e6b8d158e..62d0c5a56b 100644
 --- a/boot/opensbi/Config.in
 +++ b/boot/opensbi/Config.in
-@@ -19,7 +19,7 @@ choice
- 	  Select the specific OpenSBI version you want to use
+@@ -109,15 +109,19 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
+ 	help
+ 	  Build OpenSBI with the U-Boot as a Payload.
  
- config BR2_TARGET_OPENSBI_LATEST_VERSION
--	bool "0.9"
-+	bool "1.2"
++config BR2_TARGET_OPENSBI_FW_FDT_PAYLOAD
++	bool "Install fw_fdt binary"
++	help
++	  This option enables the installation of the fw_fdt
++	  binary.
++
+ config BR2_TARGET_OPENSBI_FW_FDT_PATH
+-	bool "Include U-Boot DTB in OpenSBI Payload"
+-	depends on BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
+-	select BR2_TARGET_UBOOT_FORMAT_DTB
++	string "Include DTB in OpenSBI Payload"
++	default "$(BINARIES_DIR)/u-boot.dtb"
++	depends on BR2_TARGET_OPENSBI_FW_FDT_PAYLOAD
+ 	help
+ 	  Build OpenSBI with FW_FDT_PATH set to
+-	  $(BINARIES_DIR)/u-boot.dtb. Note that CONFIG_OF_SEPARATE
+-	  must be set in the U-Boot configuration for this file to be
+-	  produced.
++	  $(BR2_TARGET_OPENSBI_FW_FDT_PATH).
  
- config BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -57,7 +57,7 @@ endif
+ config BR2_TARGET_OPENSBI_ADDITIONAL_VARIABLES
+ 	string "Additional build variables"
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index dd113a0bf8..919270aec7 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
+@@ -47,9 +47,10 @@ endif
+ ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
+ OPENSBI_DEPENDENCIES += uboot
+ OPENSBI_MAKE_ENV += FW_PAYLOAD_PATH="$(BINARIES_DIR)/u-boot.bin"
+-ifeq ($(BR2_TARGET_OPENSBI_FW_FDT_PATH),y)
+-OPENSBI_MAKE_ENV += FW_FDT_PATH="$(BINARIES_DIR)/u-boot.dtb"
+ endif
++
++ifeq ($(BR2_TARGET_OPENSBI_FW_FDT_PAYLOAD),y)
++OPENSBI_MAKE_ENV += FW_FDT_PATH="$(BR2_TARGET_OPENSBI_FW_FDT_PATH)"
+ endif
  
- config BR2_TARGET_OPENSBI_VERSION
- 	string
--	default "0.9"	if BR2_TARGET_OPENSBI_LATEST_VERSION
-+	default "1.2"	if BR2_TARGET_OPENSBI_LATEST_VERSION
- 	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-index 3b6d97c42d..dbc77e856f 100644
---- a/boot/opensbi/opensbi.hash
-+++ b/boot/opensbi/opensbi.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  60f995cb3cd03e3cf5e649194d3395d0fe67499fd960a36cf7058a4efde686f0  opensbi-0.9.tar.gz
-+sha256  8fcbce598a73acc2c7f7d5607d46b9d5107d3ecbede8f68f42631dcfc25ef2b2  opensbi-1.2.tar.gz
- sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
+ define OPENSBI_BUILD_CMDS
 -- 
 2.39.2
 
