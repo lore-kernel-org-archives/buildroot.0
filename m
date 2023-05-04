@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DA0AC77B7C
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 07:30:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 283C9C77B7C
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 07:33:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25AE941DDD;
-	Thu,  4 May 2023 07:30:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25AE941DDD
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE8CD41DDE;
+	Thu,  4 May 2023 07:33:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE8CD41DDE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ngJa3L4Q3bPN; Thu,  4 May 2023 07:30:30 +0000 (UTC)
+	with ESMTP id 1adhY-gUz7Eo; Thu,  4 May 2023 07:33:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CD2841DD1;
-	Thu,  4 May 2023 07:30:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CD2841DD1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E9FDB1BF3C8
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 07:30:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59B7441DD8;
+	Thu,  4 May 2023 07:33:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59B7441DD8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A66FF1BF3C8
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 07:33:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFE3460E77
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 07:30:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFE3460E77
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F0F583F19
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 07:33:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F0F583F19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FkjUpvqRGObE for <buildroot@lists.busybox.net>;
- Thu,  4 May 2023 07:30:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7WtxXlbSYIPX for <buildroot@lists.busybox.net>;
+ Thu,  4 May 2023 07:33:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0B8760C1C
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
- [IPv6:2607:f8b0:4864:20::62a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E0B8760C1C
- for <buildroot@buildroot.org>; Thu,  4 May 2023 07:30:26 +0000 (UTC)
-Received: by mail-pl1-x62a.google.com with SMTP id
- d9443c01a7336-1a50cb65c92so738765ad.0
- for <buildroot@buildroot.org>; Thu, 04 May 2023 00:30:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C0F783F16
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C0F783F16
+ for <buildroot@buildroot.org>; Thu,  4 May 2023 07:33:12 +0000 (UTC)
+Received: by mail-pf1-x42e.google.com with SMTP id
+ d2e1a72fcca58-64115e652eeso10507057b3a.0
+ for <buildroot@buildroot.org>; Thu, 04 May 2023 00:33:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683185426; x=1685777426;
+ d=1e100.net; s=20221208; t=1683185591; x=1685777591;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=4WJqKombhh9S3BEJ63UfSkIioerj76rSGKiPMij/TVc=;
- b=da2mbaXTQSjJnDFHsu8pBbJ7wCTWQD7eNNW54QNgcFpbOkSJgBBmMYMmkbIF3RAIAP
- 5l852hUAx/ljR1mu/GuKFfDGogN1k/ZZxnB9uShQkCEvVPSQh6epYwqdLtiEYULSD4lH
- wz/XKYEDuGDL14tEV9m26RiHKLGyZSM+79PeWFDS7N4YSXlz4m4lFBcgkrKFO0Kcchmv
- zgGQRt28LWEdYuNME2kcbQVJqp0gz+un0vJxsiIWF6xv9ELig+gxiEoqdQJkRKdT21G+
- 7LXW9Y9H9np7U62hd7Dn8irDj8zXTHP4HMxFA/Hcbn/Om4NJFymnHXW1s17e0/0A7PgS
- IPyg==
-X-Gm-Message-State: AC+VfDxF59y68yphw17JGOblOxvqnCa9EmIk/7nAFai13IsIol68HPz7
- 2HbLjqoZd0AQOAu8GI5KPrRlbyMikKtWEU21uLk7M8XiCn0=
-X-Google-Smtp-Source: ACHHUZ5e5TIIW3vlwQotwjX8C/vJuUQbUazprF3dtdSMQ32ia3RXGIlmJwXi/W45c7cHxYPi5byrsw==
-X-Received: by 2002:a17:902:e547:b0:1ac:2cb0:4334 with SMTP id
- n7-20020a170902e54700b001ac2cb04334mr1255513plf.33.1683185426156; 
- Thu, 04 May 2023 00:30:26 -0700 (PDT)
+ bh=AfJjNOxdbN/oL6U1yBohX85T4GO0gP6/MVMEiOUk1ko=;
+ b=DPjaSzJ4cwXgsAd4deDpam6XcDCUYpgnftgPUyTp+zHXv+hScahVZVIw3sr97Gn3yd
+ RfdrqQhtK1PJVdGKc/B4hQDPVyd3IXC2mEi38h/pj8NgAofC+SodhBA5co/4pZou2jaE
+ 8pcAhTxPSQi5QuoGcnvpqa4rkRStwKq5OWrg0Nu0kA/QOA7G9tUZ512VlRi+Ofg3n7VV
+ WtT6ZsiAbBWhdrhvQ8J7kwVi8Eul1sr3alHcvPR+BOpNR+WFOHWwUEvCpUBy18Jk4ert
+ fDRRoIiRffWuj6bj789oMu5MEt7So4hJDujO5LKX2sL6OntdQoCBMP0dxaBLqC3pYIP4
+ ssxw==
+X-Gm-Message-State: AC+VfDxRetT8CY4jnWD7tQqHQrcihsH6QL7lxfEKo3CPQWvwaxjYg2lX
+ 8hRBWRp9dAqLWd8tRNcBVT7BW4Qq/4iYdm/ybIy9cIJCHVY=
+X-Google-Smtp-Source: ACHHUZ5Mag4OeIgi1TzMhL5lh0L3aw2WhyhB2BD/pnS3SZ5vvHVPchGLUwCUFeTQYOpZNatA3vKI1w==
+X-Received: by 2002:a17:903:22cf:b0:1a9:a032:3844 with SMTP id
+ y15-20020a17090322cf00b001a9a0323844mr3058959plg.16.1683185591631; 
+ Thu, 04 May 2023 00:33:11 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- bg12-20020a1709028e8c00b001a9567dc731sm20156683plb.24.2023.05.04.00.30.25
+ c2-20020a170903234200b001a9a3b3f931sm4178993plh.99.2023.05.04.00.33.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 04 May 2023 00:30:25 -0700 (PDT)
+ Thu, 04 May 2023 00:33:11 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu,  4 May 2023 00:30:21 -0700
-Message-Id: <20230504073021.3450679-1-christian@aperture.us>
+Date: Thu,  4 May 2023 00:33:10 -0700
+Message-Id: <20230504073310.3456839-1-christian@aperture.us>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1683185426; x=1685777426;
+ d=aperture.us; s=google; t=1683185591; x=1685777591;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4WJqKombhh9S3BEJ63UfSkIioerj76rSGKiPMij/TVc=;
- b=HnfIKYPL/PG6djNGJOiC5zB39zu8hwifFddVyuGhwN30wmcaufz98po4gwebPnAAR/
- D8hMg6W5DLm7G1x+S3ZP2pZ1n/DEhavnNtM4JNO1jYdKhh4DXwRsWEzV7KH90+iZF91I
- g2ncjmWLkRa+EgEXU//oPYjUoYH2duYhjUoPFqW/5dEvRmgLlxrgt4zQX3GXXow7iIdK
- CHXttwz41ZNhJgpz+QvNKQcrZeYTr0L3dYDDT0SxVjf47odUGtUo4J6zEs4A7TdecT1H
- g5+L4dmB0qT76Wx9dEdWoM9WaMdvcL6zoIDUJU3FIgzIuwpy3x/fi0t5Ehwwi7lwUwmw
- c3lA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=AfJjNOxdbN/oL6U1yBohX85T4GO0gP6/MVMEiOUk1ko=;
+ b=hXk/LI956NwsMH+i3CU/k/BrbOo6NFd+VP4Vdoex+XlOS1fUR7tZsce0pZP4EnML2z
+ 1v/sIfnGrJ1zyTSHWgAD6Z/I/mr3DL/wDo+m8Y+pPNs5Ao1owpeW92YpTodwg9QeRmEV
+ GSHlL/l0kcnhYPqlmE/m1jB2DuyXXYF1fkaiNc/Yp4YxkDj6BP8Nk3enX5waSjko0BV3
+ ZL2I2Bu6VoJD2QhZLJkB/ugF5F3g1HVha+lT7W58cAbIT/BEh7qpY3rhWamHQqJfPBq9
+ jWQUfLM/ts9Ryi2lunoeHmhD5fE2Eg+/gi84OC1w0qP+JKbPk6k6eVpDVUYaewL9hFkq
+ z6zw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=HnfIKYPL
-Subject: [Buildroot] [PATCH v1 1/1] package/mbpfan: bump version to v2.4.0
+ header.a=rsa-sha256 header.s=google header.b=hXk/LI95
+Subject: [Buildroot] [PATCH v1 1/1] package/moby-buildkit: bump version to
+ 0.11.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,40 +104,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
- - Add support for alternate SMC path used with newer MacBooks
- - Improved systemd integration
- - Removed developer tests which confused users
+Bugfixes.
 
-https://github.com/linux-on-mac/mbpfan/releases/tag/v2.4.0
+https://github.com/moby/buildkit/releases/tag/v0.11.6
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/mbpfan/mbpfan.hash | 2 +-
- package/mbpfan/mbpfan.mk   | 2 +-
+ package/moby-buildkit/moby-buildkit.hash | 2 +-
+ package/moby-buildkit/moby-buildkit.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbpfan/mbpfan.hash b/package/mbpfan/mbpfan.hash
-index 9195692d52..5b67744a00 100644
---- a/package/mbpfan/mbpfan.hash
-+++ b/package/mbpfan/mbpfan.hash
+diff --git a/package/moby-buildkit/moby-buildkit.hash b/package/moby-buildkit/moby-buildkit.hash
+index ef927636d9..f7922d7e8f 100644
+--- a/package/moby-buildkit/moby-buildkit.hash
++++ b/package/moby-buildkit/moby-buildkit.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  f690e9302da4cf97e582606614d91e1ee4ac495a4939aec7c0b3468c8988eb67  mbpfan-2.3.0.tar.gz
-+sha256  e1cdcffaba52be215ae40a8568949190866d500d6ae2a1e96b71ab5372f3580b  mbpfan-2.4.0.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  COPYING
-diff --git a/package/mbpfan/mbpfan.mk b/package/mbpfan/mbpfan.mk
-index 52d823cbdc..0ac161b327 100644
---- a/package/mbpfan/mbpfan.mk
-+++ b/package/mbpfan/mbpfan.mk
+ # Locally calculated
+-sha256  b1746575f37715a8a2f2df5bab77ea081ba8436854e241792702109fc9e3653d  moby-buildkit-0.11.2.tar.gz
++sha256  1efa1c54b299c463c1b039d3df8ba1c68e70fe4de608fd14653fcebf9f27837b  moby-buildkit-0.11.6.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
+index a25f676710..91560c1ed1 100644
+--- a/package/moby-buildkit/moby-buildkit.mk
++++ b/package/moby-buildkit/moby-buildkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBPFAN_VERSION = 2.3.0
-+MBPFAN_VERSION = 2.4.0
- MBPFAN_SITE = $(call github,linux-on-mac,mbpfan,v$(MBPFAN_VERSION))
- MBPFAN_LICENSE = GPL-3.0+
- MBPFAN_LICENSE_FILES = COPYING
+-MOBY_BUILDKIT_VERSION = 0.11.2
++MOBY_BUILDKIT_VERSION = 0.11.6
+ MOBY_BUILDKIT_SITE = $(call github,moby,buildkit,v$(MOBY_BUILDKIT_VERSION))
+ MOBY_BUILDKIT_LICENSE = Apache-2.0
+ MOBY_BUILDKIT_LICENSE_FILES = LICENSE
 -- 
 2.40.1
 
