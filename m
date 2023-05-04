@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDDCCC77B7C
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 19:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53AD5C7EE21
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 19:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76F5E61687;
-	Thu,  4 May 2023 19:21:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76F5E61687
+	by smtp3.osuosl.org (Postfix) with ESMTP id E20AC61698;
+	Thu,  4 May 2023 19:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E20AC61698
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wrwqOBNOMB4I; Thu,  4 May 2023 19:21:00 +0000 (UTC)
+	with ESMTP id iCA--bjRaFnD; Thu,  4 May 2023 19:21:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93FBC60F42;
-	Thu,  4 May 2023 19:20:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93FBC60F42
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D1C161BF3BA
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 19:20:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E3D560F42;
+	Thu,  4 May 2023 19:21:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E3D560F42
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FB2F1BF863
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 19:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B89D261519
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC2F942782
  for <buildroot@lists.busybox.net>; Thu,  4 May 2023 19:20:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B89D261519
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC2F942782
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rPVIgeIJS5Pf for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ByZK-LTTRzot for <buildroot@lists.busybox.net>;
  Thu,  4 May 2023 19:20:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E038B60E58
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB02042783
  for <buildroot@buildroot.org>; Thu,  4 May 2023 19:20:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E038B60E58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB02042783
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEF8A85D59; Thu,  4 May 2023 19:20:56 +0000 (UTC)
+ id D915485D5A; Thu,  4 May 2023 19:20:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 4 May 2023 21:08:55 +0200
+Date: Thu, 4 May 2023 21:09:25 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 93d44d957143b0a0776962e6a2a633c81cb65d3a
-X-Git-Newrev: aa6e00367fecbcc8fda9eeee3c9a288c9cb133e0
+X-Git-Oldrev: aa6e00367fecbcc8fda9eeee3c9a288c9cb133e0
+X-Git-Newrev: 3232298f1ebc8402b36256a15e37458ec85bff82
 X-Patchwork-Hint: ignore
-Message-Id: <20230504192056.CEF8A85D59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libgtk3: bump to
- version 3.24.37
+Message-Id: <20230504192056.D915485D5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libgtk3: fix cups
+ backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa6e00367fecbcc8fda9eeee3c9a288c9cb133e0
+commit: https://git.buildroot.net/buildroot/commit/?id=3232298f1ebc8402b36256a15e37458ec85bff82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c4a2c66f6c9b479cedfde8774ac0ac386345334d)
+When explicitly specifying printing backends libgtk3 requires file
+to be one of them on linux.
+
+Fixes:
+- output/build/libgtk3-3.24.37/modules/printbackends/meson.build:39:4: ERROR: Problem encountered: 'file' print backed needs to be enabled
+
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 9a0857d734c5fca74915b1cd85b92555fe15fb93)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libgtk3/libgtk3.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 9fed2c9df2..22c37bf605 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.36.sha256sum
--sha256  27a6ef157743350c807ffea59baa1d70226dbede82a5e953ffd58ea6059fe691  gtk+-3.24.36.tar.xz
-+# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.37.sha256sum
-+sha256  6745f0b4c053794151fd0f0e2474b077cccff5f83e9dd1bf3d39fe9fe5fb7f57  gtk+-3.24.37.tar.xz
- 
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
 diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 283c129cef..18a8a9fa42 100644
+index 18a8a9fa42..b41049b0ee 100644
 --- a/package/libgtk3/libgtk3.mk
 +++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -68,7 +68,7 @@ LIBGTK3_DEPENDENCIES += xlib_libXdamage
+ endif
  
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).36
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).37
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+-LIBGTK3_CONF_OPTS += -Dprint_backends=cups
++LIBGTK3_CONF_OPTS += -Dprint_backends=file,cups
+ LIBGTK3_DEPENDENCIES += cups
+ else
+ LIBGTK3_CONF_OPTS += -Dprint_backends=auto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
