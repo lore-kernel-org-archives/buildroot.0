@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1855AC7EE29
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 17:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E68C77B7C
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 17:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B5DB542A02;
-	Thu,  4 May 2023 17:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5DB542A02
+	by smtp2.osuosl.org (Postfix) with ESMTP id 76ABC40C01;
+	Thu,  4 May 2023 17:40:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76ABC40C01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qfTfJ6-C2_yL; Thu,  4 May 2023 17:39:55 +0000 (UTC)
+	with ESMTP id 5DSXJQZpsxKY; Thu,  4 May 2023 17:40:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E6EBF42A01;
-	Thu,  4 May 2023 17:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6EBF42A01
+	by smtp2.osuosl.org (Postfix) with ESMTP id 899B1429B5;
+	Thu,  4 May 2023 17:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 899B1429B5
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 042E41BF3BC
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 17:36:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C34C1BF3BC
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 17:36:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABE6A40C6F
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9F16429E9
  for <buildroot@lists.busybox.net>; Thu,  4 May 2023 17:36:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABE6A40C6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9F16429E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ELT2yAH1nid9 for <buildroot@lists.busybox.net>;
+ with ESMTP id ZLQoLKrvJyAc for <buildroot@lists.busybox.net>;
  Thu,  4 May 2023 17:36:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 953BE429EE
+ by smtp2.osuosl.org (Postfix) with ESMTP id A80E9429EC
  for <buildroot@buildroot.org>; Thu,  4 May 2023 17:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 953BE429EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A80E9429EC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E7B085D31; Thu,  4 May 2023 17:36:37 +0000 (UTC)
+ id 966AA85D32; Thu,  4 May 2023 17:36:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 4 May 2023 19:33:47 +0200
+Date: Thu, 4 May 2023 19:35:06 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: cfaf4ec64f4c2d239418659ef072a571f38d88c3
-X-Git-Newrev: 93b506f33793209c9bf0757e5a7ca6e3fa06a28c
+X-Git-Oldrev: 93b506f33793209c9bf0757e5a7ca6e3fa06a28c
+X-Git-Newrev: fbdad6a5ff6605b0877f2a2f580518c9918f818f
 X-Patchwork-Hint: ignore
-Message-Id: <20230504173637.8E7B085D31@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/zeek: disable
- with libressl
+Message-Id: <20230504173637.966AA85D32@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/samba4: security
+ bump version to 4.15.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93b506f33793209c9bf0757e5a7ca6e3fa06a28c
+commit: https://git.buildroot.net/buildroot/commit/?id=fbdad6a5ff6605b0877f2a2f580518c9918f818f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Disable building with libressl to avoid the following build failure
-raised since the addition of the package in commit
-ea36681572255ec906167308c07adc42ed2ac9f9:
+Release notes:
+https://www.samba.org/samba/history/samba-4.15.13.html
 
-In file included from /home/thomas/autobuild/instance-2/output-1/build/zeek-4.1.1/src/analyzer/protocol/mime/MIME.cc:7:
-/home/thomas/autobuild/instance-2/output-1/build/zeek-4.1.1/src/zeek/digest.h: In function 'void* EVP_MD_CTX_md_data(const EVP_MD_CTX*)':
-/home/thomas/autobuild/instance-2/output-1/build/zeek-4.1.1/src/zeek/digest.h:22:12: error: invalid use of incomplete type 'const EVP_MD_CTX' {aka 'const struct env_md_ctx_st'}
-   22 |  return ctx->md_data;
-      |            ^~
+Fixes CVE-2022-37966, CVE-2022-37967, CVE-2022-38023 & CVE-2022-45141.
 
-Fixes:
- - http://autobuild.buildroot.org/results/2db2988d495f9d06d058fb532a2dcfa9ef6e207c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5b63325e86a034b63075f01a2ddbb7c5b1f67dc1)
+(cherry picked from commit 734cc8e951e899a88867feb83b0bf087a7d6b542)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zeek/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/zeek/Config.in b/package/zeek/Config.in
-index 114ec4235d..730388ded7 100644
---- a/package/zeek/Config.in
-+++ b/package/zeek/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_ZEEK
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  The Zeek Network Security Monitor
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 81cbab4552..18ec63e07a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.15.12.tar.asc
+-sha256  5889493d69dc7723be6c3154387fbed38c1cddf93a16da8670d99b7cca33b15e  samba-4.15.12.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.15.13.tar.asc
++sha256  c412e3536a5265d04e52983e643bae9e047bcc3eac08683a945b1057ecdf4968  samba-4.15.13.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 31f692e03d..b979aaf09f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.15.12
++SAMBA4_VERSION = 4.15.13
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
