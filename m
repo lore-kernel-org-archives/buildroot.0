@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0317C7EE21
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 11:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BA99C77B7C
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 11:27:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8767661589;
-	Thu,  4 May 2023 11:27:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8767661589
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB61B615D3;
+	Thu,  4 May 2023 11:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB61B615D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jdgWZwxHxedl; Thu,  4 May 2023 11:27:04 +0000 (UTC)
+	with ESMTP id hU0zlA_hGab2; Thu,  4 May 2023 11:27:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 470F7615CA;
-	Thu,  4 May 2023 11:27:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 470F7615CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B823615CC;
+	Thu,  4 May 2023 11:27:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B823615CC
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4DDA71BF3CA
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 11:26:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9CCDD1BF3CA
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 11:27:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 27F9481EB6
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 11:26:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27F9481EB6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7696083FBC
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 11:27:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7696083FBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mWO5JQPYUkWV for <buildroot@lists.busybox.net>;
- Thu,  4 May 2023 11:26:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE9CE83FC4
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AE9CE83FC4
- for <buildroot@busybox.net>; Thu,  4 May 2023 11:26:52 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7400920002;
- Thu,  4 May 2023 11:26:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1puX6n-008bWN-Iu; Thu, 04 May 2023 13:26:49 +0200
+ with ESMTP id M3ubrqjSqdJe for <buildroot@lists.busybox.net>;
+ Thu,  4 May 2023 11:27:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F14D81EB6
+ for <buildroot@buildroot.org>; Thu,  4 May 2023 11:27:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F14D81EB6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8ACEC85C7F; Thu,  4 May 2023 11:27:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Michael Fischer <mf@go-sys.de>
-References: <20230425073341.18738-1-mf@go-sys.de>
-Date: Thu, 04 May 2023 13:26:49 +0200
-In-Reply-To: <20230425073341.18738-1-mf@go-sys.de> (Michael Fischer's message
- of "Tue, 25 Apr 2023 09:33:41 +0200")
-Message-ID: <87sfcc8hhi.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/sdl2: bump version to 2.26.5
+To: buildroot@buildroot.org
+Date: Thu, 4 May 2023 13:24:37 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: c1fab37709e5f8fedd783365bfd758c92623b531
+X-Git-Newrev: 81a2daef27abe434b59fd21aa77b8a83d2506490
+X-Patchwork-Hint: ignore
+Message-Id: <20230504112725.8ACEC85C7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/sdl2: bump
+ version to 2.26.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,20 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Michael" == Michael Fischer <mf@go-sys.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=81a2daef27abe434b59fd21aa77b8a83d2506490
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Signed-off-by: Michael Fischer <mf@go-sys.de>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4ed0608c8882a33f031d90b1278118be7d9d76d2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sdl2/sdl2.hash | 4 ++--
+ package/sdl2/sdl2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2023.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index e26dcee301..0c7bdf7fa1 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.3.tar.gz.sig
+-sha256  c661205a553b7d252425f4b751ff13209e5e020b876bbfa1598494af61790057  SDL2-2.26.3.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.5.tar.gz.sig
++sha256  ad8fea3da1be64c83c45b1d363a6b4ba8fd60f5bde3b23ec73855709ec5eabf7  SDL2-2.26.5.tar.gz
+ # Locally calculated
+ sha256  9928507f684c1965d07f2b6ef4b4723d5efc2f6b4ab731f743a413c51c319927  LICENSE.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index c01f12d12c..5f2e1e0ed1 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_VERSION = 2.26.3
++SDL2_VERSION = 2.26.5
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
