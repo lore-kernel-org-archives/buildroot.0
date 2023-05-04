@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DD36C77B7C
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 20:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF51AC77B7C
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 20:12:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E7E36167A;
-	Thu,  4 May 2023 20:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E7E36167A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62039616A8;
+	Thu,  4 May 2023 20:12:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62039616A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OKLuTVgWipEi; Thu,  4 May 2023 20:12:19 +0000 (UTC)
+	with ESMTP id g3aiR1n3VEMB; Thu,  4 May 2023 20:12:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D30F860C13;
-	Thu,  4 May 2023 20:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D30F860C13
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3E3681BF3B8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 854F16167A;
+	Thu,  4 May 2023 20:12:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 854F16167A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C4EB1BF863
  for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 175A360C13
+ by smtp4.osuosl.org (Postfix) with ESMTP id 34F6D41C6A
  for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 175A360C13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34F6D41C6A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C9OL3FxXfXjs for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g-yRIzBG26lW for <buildroot@lists.busybox.net>;
  Thu,  4 May 2023 20:12:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4965060AF4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45F84410B7
  for <buildroot@buildroot.org>; Thu,  4 May 2023 20:12:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4965060AF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45F84410B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3781885C6B; Thu,  4 May 2023 20:12:17 +0000 (UTC)
+ id 2D7DF85D69; Thu,  4 May 2023 20:12:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 4 May 2023 22:06:31 +0200
+Date: Thu, 4 May 2023 22:05:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4233a59494b5af4b4cca41f11a14ed64fc7cf43
-X-Git-Newrev: 773a6fb1b21caa01b209a81abe531d23e53e7b58
+X-Git-Oldrev: 3816471496036661b2032d5424d0496231b04ca7
+X-Git-Newrev: a4233a59494b5af4b4cca41f11a14ed64fc7cf43
 X-Patchwork-Hint: ignore
-Message-Id: <20230504201217.3781885C6B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: 5.15.x / 6.{1, 2,
- 3}.x series
+Message-Id: <20230504201217.2D7DF85D69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: bump latest version to 6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=773a6fb1b21caa01b209a81abe531d23e53e7b58
+commit: https://git.buildroot.net/buildroot/commit/?id=a4233a59494b5af4b4cca41f11a14ed64fc7cf43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+We do not need to add a hash for 6.3, as it was already added in
+eadff4efe9d4 ({toolchain, linux-headers}: add support for 6.3 headers).
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998@free.fr: explain why no hash update]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ linux/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index f6b50a4b58..65d3dc53c6 100644
+index 690ee9c339..f6b50a4b58 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
+@@ -28,8 +28,8 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (6.1)"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
++	bool "Latest version (6.3)"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_3 if BR2_KERNEL_HEADERS_AS_KERNEL
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (5.10.162-cip24)"
 @@ -128,7 +128,7 @@ endif
  
  config BR2_LINUX_KERNEL_VERSION
  	string
--	default "6.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.3.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "6.1.26" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.3" if BR2_LINUX_KERNEL_LATEST_VERSION
  	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e3047886c5..75158437c7 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  ba3491f5ed6bd270a370c440434e3d69085fcdd528922fa01e73d7657db73b1e  linux-6.3.tar.xz
--sha256  c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577  linux-6.2.13.tar.xz
--sha256  dfdcc143a879d64a5ee99213b2b4b05b5dccd566c144df93bca1e204df64c110  linux-6.1.26.tar.xz
-+sha256  78620fb4a7d5e0db1d4eb8d5b1c6e207ba5d19564efa63967a59b6daf89b3f2a  linux-6.3.1.tar.xz
-+sha256  0ebc9fa309d496d474b06682578c5f7b42f0cf330365102b2feaab65ba296729  linux-6.2.14.tar.xz
-+sha256  c2b74b96dd3d0cc9f300914ef7c4eef76d5fac9de6047961f49e69447ce9f905  linux-6.1.27.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  066c4bbcbe3c480068a2e302f52b1708f340ecaaf633ec43d7f791bbeac5771a  linux-5.15.109.tar.xz
-+sha256  9829fcc77b9978dce97a26980dec445caf2410024696625dbb2314ead4830b5b  linux-5.15.110.tar.xz
- sha256  1bbd445c154b053eea46acc883be548a98179988a9ed3a0b81bddfbf30a37e29  linux-5.10.179.tar.xz
- sha256  142f9aed1c9f2e409dd72c5c490ad824dddf31f955ed2097d5989c4b5074fc28  linux-5.4.242.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4a4f1308cb..e2934b0f64 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -404,10 +404,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.282"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.242"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.179"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.109"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.26"	if BR2_KERNEL_HEADERS_6_1
--	default "6.2.13"	if BR2_KERNEL_HEADERS_6_2
--	default "6.3"		if BR2_KERNEL_HEADERS_6_3
-+	default "5.15.110"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.27"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.2.14"	if BR2_KERNEL_HEADERS_6_2
-+	default "6.3.1"		if BR2_KERNEL_HEADERS_6_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
