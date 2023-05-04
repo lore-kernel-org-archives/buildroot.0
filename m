@@ -4,82 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CD7CC77B7C
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 20:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4070C7EE21
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 20:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B178842735;
-	Thu,  4 May 2023 20:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B178842735
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7369542735;
+	Thu,  4 May 2023 20:45:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7369542735
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i5xOv30NJ8tR; Thu,  4 May 2023 20:45:29 +0000 (UTC)
+	with ESMTP id pMB-1q0XY1FY; Thu,  4 May 2023 20:45:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A003D42731;
-	Thu,  4 May 2023 20:45:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A003D42731
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FDBB42731;
+	Thu,  4 May 2023 20:45:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FDBB42731
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A3D331BF3B8
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:45:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EBC8B1BF3B8
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:45:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7DACC84026
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:45:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DACC84026
+ by smtp1.osuosl.org (Postfix) with ESMTP id C55AA8404D
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:45:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C55AA8404D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 00qCIvmYT1Sv for <buildroot@lists.busybox.net>;
- Thu,  4 May 2023 20:45:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA23684023
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA23684023
- for <buildroot@buildroot.org>; Thu,  4 May 2023 20:45:24 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.209.47]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MHoRK-1pyXyO37Ti-00ErA1
- for <buildroot@buildroot.org>; Thu, 04 May 2023 22:45:22 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Thu,  4 May 2023 22:45:22 +0200
-Message-Id: <20230504204522.6352-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.40.1
+ with ESMTP id vvfWOYl7YlhY for <buildroot@lists.busybox.net>;
+ Thu,  4 May 2023 20:45:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70A2E84049
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 70A2E84049
+ for <buildroot@buildroot.org>; Thu,  4 May 2023 20:45:54 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:3f23:63cb:29e9:f8d4])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 2E2901A8143;
+ Thu,  4 May 2023 22:20:04 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 04 May 2023 22:20:03 +0200
+Date: Thu, 4 May 2023 22:20:03 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20230504202003.GL2696@scaer>
+References: <20230503185144.13679-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:W2kgDKFAx6d0HVOutwmnoNVQijoVqSABsZOd0nbOPalHAiXODxQ
- IUq7SPuGgzGnYJ//OB/5RykdwylOh70HINpHDtrd8k9hHQZ7eSY/KBWwsCBoo0uB6KtqjjJ
- JJRClqdpGbIGTNed1vV69p/Wku32+e8R7eb+yJAOKb0Frd1hwaILDMfDG4zfrybBB7r39kh
- vBI4Hg4V8Ht0VVG5IhA7g==
-UI-OutboundReport: notjunk:1;M01:P0:o8wqDpAcK3M=;vMSlFSV+4HJKojnaZ2Xg/iYivhO
- VxHfBgg6Avg9aazZtWHAEHy7G4T17oKwbcj66LMMyLQvwdSFn54RGJusfn3cprr1w8ADqMCCp
- CedHqHvMLbGwD+CpyXZHIR20AYpjMQhcxiGwODXYtSjddDHdAIYYx5qEQgXRGPGejdPAfjy0w
- JZsGyq0JVaDaHFb+44eNjpCyQIY0NiJ3fKJSo8bZ1tferLKKeePP8QmQSFCut7z6mzDmY0S9m
- 1+NPutwD5Jw0HPHaE7RW1IXxMuizEtdww4DsOJfxOWub+W2OVtTXj7LKIjv05a98JNLBH3xvQ
- aW4/JHLBwDJiKgDjFIsr5TlvniG0YrdZBpUqcbMmbSDhHBTrBpir35gTz/T/chnXVgrTs1zzU
- 2iey0x5vK3hXlwiKI/9dvkh4dKqR8pgVw/VDkWxQszUinRV4yK63jEsitHqjAYSbto2FFFbv0
- Ff6D9+Qd9MkrePtBmgLr7EAmnlD34XzSflqiewhjHrjFe1OaWxjFhEBjw4+iEDb8rn12Q1+qL
- JqLb4II1tpKD3aMdS/4rXgxGmUHAmLmeEgzZYzULPFrtM9HCO074wH5/cEV2PzuJgan0sTcq0
- hPttFIdSz3agPAJS0diCbSxFVLxQnqaeVXFVj25nGm1Wcu7ktCDs+2gkJ0y7bUtK90DcbapZb
- 1FhEl90GLO4FjsvQHZXv64t9IosKgBWKdmUpCeTWWTjpw1DTAC53+3JG3W3vF0cGxmPfn2s8z
- u4vqL96ZDSscGP9vQ1CbhRMZlSoAau3q2ORCOE6lpSO6r8PWc3kdLUTDUcoXFIQ/noCBxkHJV
- 1ZeCXdl+1r3gENevaidxTUqx99ce+zwFDK2eLDqq26yAfZt1DCLe66ntQUzl0VkvJxPACjN0X
- kGDsx+Dh3z+FbO5HcbhatvBy80OdorI2Dp2FEpndFSpgU6ckmL3H/8hxx/XeWHUFNmvdJ7ia8
- v5rZNualBtY8wl141DZxgXIBhh4=
+Content-Disposition: inline
+In-Reply-To: <20230503185144.13679-1-ps.report@gmx.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1683233122; i=ps.report@gmx.net;
- bh=Ji11zudGgHsSq0+rQm9qvriHghASTj2A2WVTMbwHSc0=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=rTxs6kS2Ec75DDIGeCpdjph6BVvopqRrlSiOpatmZn0cHFDzUQZ9TdAL0LcjSbYs2
- ndOHSGCuOiAyyNba6Y7L5cDQH2UNjwEGC5gsEh4GYZ45JrHXp6hTzcdpS3kxCxE0BS
- 6J1AEak5oZSfegDybj7wsPLu6FHsehSRUwQcjxtkt6RlUMphplmedmgiz656ENLIGg
- 9AzRw+7S2FMxocv31P9XEGwUPscgDscdfXz40IJ7/4ZWczxd2egahMW2T35Z0of++r
- AhWDQe0DizfH1uNUDpFVYN1xGkrZT1TQxfM24YPvDdYP6ThEQnFKM9HJiH20wfQDYn
- 8SEil9a+0fxeQ==
+ d=free.fr; s=smtp-20201208; t=1683231607;
+ bh=39915kZvTck1kk49FxslKGLF4EY6gOd6ZvCM46jcXXI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=JF+NTtz8J/T3KBb97mgobtZmWYhi8Y8L5BTsaREhKeWTkd9KKqXcE/YceVGpyJ242
+ q//lWJjo1tdAkmFYr6UY7xnzjgBAozAWUQSjp/yZzudy1tBHh59UZbKj9v0Wv3qqiY
+ QMFi4zqV2YBTN62Gws7nlpIdGwlmUg+6K1bLSe8uQmY3ti8s/Wtm07VZG+YyduNVro
+ fC3wyHWvsqQD5qp40Fh9pUbz95+2P/hnFpicoz+Wk4hxUaX7ILLDZUvRO5m07Ba3/j
+ GsOHLodwSeMNasfLPkbSNk+dHZKSSzM9bfj7v6+pqCCIsQsQu9exIJmAQKYcbNVEgq
+ l3P1NCFCRB1vw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=rTxs6kS2
-Subject: [Buildroot] [PATCH v1] package/edid-decode: change download from
- git URL to https
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JF+NTtz8
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/coreutils: fix cross-compile
+ (add gl_cv_macro_MB_CUR_MAX_good=yes)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,35 +77,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- change download from git URL to https (and SITE_METHOD git)
+Peter, All,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/edid-decode/edid-decode.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 2023-05-03 20:51 +0200, Peter Seiderer spake thusly:
+> - add 'gl_cv_macro_MB_CUR_MAX_good=yes' to COREUTILS_CONF_ENV to fix
+>   cross-compile failure since bump to 9.3
+> 
+> Fixes:
+> 
+>   checking whether MB_CUR_MAX is correct... configure: error: in '.../build/coreutils-9.3':
+>   configure: error: cannot run test program while cross compiling
+>   See 'config.log' for more details
+> 
+> Reported-by: Christian Stewart <christian@aperture.us>
+> Link: https://lore.kernel.org/buildroot/CA+h8R2qSe6OepJMJr+KOUOAOqCRD9EX690Y+Yq4kx-M6x4uQBw@mail.gmail.com/
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index cd0bdfa0f0..247ed207d3 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -5,7 +5,8 @@
- ################################################################################
- 
- EDID_DECODE_VERSION = 2d44e1b01c7ed7d65b20ecdce62d354841832201
--EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
-+EDID_DECODE_SITE = https://git.linuxtv.org/edid-decode.git
-+EDID_DECODE_SITE_METHOD = git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = LICENSE
- 
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/coreutils/coreutils.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+> index 2c12e8ef2f..cf42a8aff8 100644
+> --- a/package/coreutils/coreutils.mk
+> +++ b/package/coreutils/coreutils.mk
+> @@ -51,6 +51,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+>  	gl_cv_func_tzset_clobber=no \
+>  	gl_cv_func_working_mkstemp=yes \
+>  	gl_cv_func_working_utimes=yes \
+> +	gl_cv_macro_MB_CUR_MAX_good=yes \
+>  	gl_getline_needs_run_time_check=no \
+>  	gl_cv_have_proc_uptime=yes \
+>  	utils_cv_localtime_cache=no \
+> -- 
+> 2.40.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.40.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
