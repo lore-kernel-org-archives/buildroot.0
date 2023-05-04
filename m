@@ -1,57 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B7A8C7EE21
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 19:06:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96D81C77B7C
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 19:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87E06426F8;
-	Thu,  4 May 2023 19:06:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87E06426F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEFA46166B;
+	Thu,  4 May 2023 19:15:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEFA46166B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o9kUycQhAyEU; Thu,  4 May 2023 19:06:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FWDCzMxMnPtB; Thu,  4 May 2023 19:15:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8795642058;
-	Thu,  4 May 2023 19:06:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8795642058
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 695A11BF3BA
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 19:06:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 211BF60F42;
+	Thu,  4 May 2023 19:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 211BF60F42
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 866461BF3BA
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 19:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4ED6942058
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 19:06:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4ED6942058
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FA344038E
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 19:15:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FA344038E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SdxVfSj7ViUE for <buildroot@lists.busybox.net>;
- Thu,  4 May 2023 19:06:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FhQ7BVG37NDb for <buildroot@lists.busybox.net>;
+ Thu,  4 May 2023 19:15:41 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC53141FE0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DC53141FE0
- for <buildroot@buildroot.org>; Thu,  4 May 2023 19:06:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B64140135
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4B64140135
+ for <buildroot@buildroot.org>; Thu,  4 May 2023 19:15:40 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EB9C8240003;
- Thu,  4 May 2023 19:06:47 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 88637E0002;
+ Thu,  4 May 2023 19:15:37 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pueHu-008vOk-Tb; Thu, 04 May 2023 21:06:46 +0200
+ id 1pueQS-008w5N-I0; Thu, 04 May 2023 21:15:36 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Knight <james.d.knight@live.com>
-References: <SN4P221MB068217338F33CAE73749100FA0649@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-Date: Thu, 04 May 2023 21:06:46 +0200
-In-Reply-To: <SN4P221MB068217338F33CAE73749100FA0649@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
- (James Knight's message of "Tue, 25 Apr 2023 00:33:52 -0400")
-Message-ID: <87y1m37w6x.fsf@dell.be.48ers.dk>
+To: Daniel Lang <dalang@gmx.at>
+References: <20230428190201.12489-1-dalang@gmx.at>
+Date: Thu, 04 May 2023 21:15:36 +0200
+In-Reply-To: <20230428190201.12489-1-dalang@gmx.at> (Daniel Lang's message of
+ "Fri, 28 Apr 2023 21:02:00 +0200")
+Message-ID: <87ttwr7vs7.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libcurl: drop override of
- LD_LIBRARY_PATH
+Subject: Re: [Buildroot] [PATCH] package/libgtk3: fix cups backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,27 +63,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Knight <james.d.knight@live.com> writes:
+>>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
 
- > A previous commit [1] (libcurl 7.19.2) configured `LD_LIBRARY_PATH` to
- > prevent cross-compiling errors when target == host; however, such an
- > override is no longer needed [2][3] (libcurl 7.37, 7.74) and causes
- > build errors in some environments. Dropping the override.
+ > When explicitly specifying printing backends libgtk3 requires file
+ > to be one of them on linux.
 
  > Fixes:
- > - https://bugs.busybox.net/show_bug.cgi?id=15181
+ > - output/build/libgtk3-3.24.37/modules/printbackends/meson.build:39:4:
+ > ERROR: Problem encountered: 'file' print backed needs to be enabled
 
- > [1]: a51ce3194923430fc229fc2ad98b12795b5a1876
- > [2]: https://github.com/curl/curl/commit/e48a821ed580cd2897b3e1b0bc88ca9245ac234c
- > [3]: https://github.com/curl/curl/commit/6f3369bbcf9d0ebdaa5d141f8ca446448c24494c
-
- > Signed-off-by: James Knight <james.d.knight@live.com>
+ > Signed-off-by: Daniel Lang <dalang@gmx.at>
 
 Committed to 2023.02.x, thanks.
 
