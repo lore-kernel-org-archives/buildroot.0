@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68249C77B78
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 17:39:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D8DBC77B7C
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 17:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1376F40C13;
-	Thu,  4 May 2023 17:39:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1376F40C13
+	by smtp2.osuosl.org (Postfix) with ESMTP id 01121429E8;
+	Thu,  4 May 2023 17:39:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01121429E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UJJl_B9RjXJe; Thu,  4 May 2023 17:39:16 +0000 (UTC)
+	with ESMTP id GonGO1kusbvY; Thu,  4 May 2023 17:39:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0FCA2429FA;
-	Thu,  4 May 2023 17:39:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FCA2429FA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1ADF11BF3BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACB7540C0E;
+	Thu,  4 May 2023 17:39:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACB7540C0E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 270631BF863
  for <buildroot@lists.busybox.net>; Thu,  4 May 2023 17:36:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B0CC429D1
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3BB4616A1
  for <buildroot@lists.busybox.net>; Thu,  4 May 2023 17:36:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B0CC429D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3BB4616A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TbbYeVvoW0Cu for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YOHvBnc9XqUv for <buildroot@lists.busybox.net>;
  Thu,  4 May 2023 17:36:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DC4F429E6
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA854616A3
  for <buildroot@buildroot.org>; Thu,  4 May 2023 17:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DC4F429E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA854616A3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D65885D34; Thu,  4 May 2023 17:36:37 +0000 (UTC)
+ id 9EDAD85D33; Thu,  4 May 2023 17:36:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 4 May 2023 19:30:02 +0200
+Date: Thu, 4 May 2023 19:35:54 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 7f0dac02345547724f1d1a84bd9d220add826ffc
-X-Git-Newrev: cb7d10bcbe6f5d7723ef8611c5eff613b5c34d7c
+X-Git-Oldrev: fbdad6a5ff6605b0877f2a2f580518c9918f818f
+X-Git-Newrev: 02dd429870d48192c83ca0bd4a2c610749377fec
 X-Patchwork-Hint: ignore
-Message-Id: <20230504173637.5D65885D34@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- package/gstreamer1-editing-services: bump version to 1.22.2
+Message-Id: <20230504173637.9EDAD85D33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/systemd: update
+ help links
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,87 +63,214 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb7d10bcbe6f5d7723ef8611c5eff613b5c34d7c
+commit: https://git.buildroot.net/buildroot/commit/?id=02dd429870d48192c83ca0bd4a2c610749377fec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Drop patch which is now upstream.
+When browsing the help references for various systemd features, it was
+observed that the `systemd-rfkill` link was dead (originally pointing to
+`systemd-rfkill@.service.html`; now `systemd-rfkill.service.html`). This
+commit corrects this link, as well as updates all other links to https
+(since freedesktop.org now force redirects to https).
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: James Knight <james.d.knight@live.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e4fb09f95f8dbac5c21026392ae0bcc91f17585f)
+(cherry picked from commit 8520da532b5ce366c10eb22dbbe65bf2f85ff072)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ix-gstreamer-validate-1.0-dependency-name.patch | 35 ----------------------
- .../gstreamer1-editing-services.hash               |  4 +--
- .../gstreamer1-editing-services.mk                 |  2 +-
- 3 files changed, 3 insertions(+), 38 deletions(-)
+ package/systemd/Config.in | 42 +++++++++++++++++++++---------------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/0001-Fix-gstreamer-validate-1.0-dependency-name.patch b/package/gstreamer1/gstreamer1-editing-services/0001-Fix-gstreamer-validate-1.0-dependency-name.patch
-deleted file mode 100644
-index 6c190d3727..0000000000
---- a/package/gstreamer1/gstreamer1-editing-services/0001-Fix-gstreamer-validate-1.0-dependency-name.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From c3edd999195445319ea619b6d719d7743f5b560d Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Tue, 31 Jan 2023 21:38:09 -0700
--Subject: [PATCH] Fix gstreamer-validate-1.0 dependency name
--
--The gst-devtools project generates gstreamer-validate-1.0.pc, this
--must match the dependency in gst-editing-services for detection
--to work properly.
--
--Fixes:
--Run-time dependency gst-validate-1.0 found: NO (tried pkgconfig and cmake)
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/3859]
-----
-- meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index bdc47f5d8b..b949f55317 100644
----- a/meson.build
--+++ b/meson.build
--@@ -110,7 +110,7 @@ if host_machine.system() != 'windows'
-- endif
-- gstcontroller_dep = dependency('gstreamer-controller-1.0', version : gst_req,
--   fallback : ['gstreamer', 'gst_controller_dep'])
---gstvalidate_dep = dependency('gst-validate-1.0', version : gst_req, required : get_option('validate'),
--+gstvalidate_dep = dependency('gstreamer-validate-1.0', version : gst_req, required : get_option('validate'),
--   fallback : ['gst-devtools', 'validate_dep'])
-- 
-- gio_dep = dependency('gio-2.0', version: glib_req)
---- 
--2.34.1
--
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index bd5dcfdbaf..0cdb18ea5d 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.0.tar.xz.sha256sum
--sha256  2a23856379af03586b66c193910fa8bb963024580bc2337c7405578dc077aa79  gst-editing-services-1.22.0.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.2.tar.xz.sha256sum
-+sha256  453b1464fc3857de269a7cb0ebd966afe02171d97bef672a0b8a0a6d43e0cebf  gst-editing-services-1.22.2.tar.xz
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 9f4d933779..bea717a456 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -100,7 +100,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	  the apropriate ones (e.g. e2fsck, from the e2fsprogs
+ 	  package) according to the system configuration.
  
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 0ae9205c3b..9fdc877db0 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-	  http://freedesktop.org/wiki/Software/systemd
++	  https://freedesktop.org/wiki/Software/systemd/
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.0
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.2
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+ if BR2_PACKAGE_SYSTEMD
+ 
+@@ -185,7 +185,7 @@ config BR2_PACKAGE_SYSTEMD_BACKLIGHT
+ 	  systemd-backlight is a service that restores the display
+ 	  backlight brightness at early boot and saves it at shutdown.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-backlight@.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-backlight@.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_BINFMT
+ 	bool "enable binfmt tool"
+@@ -202,7 +202,7 @@ config BR2_PACKAGE_SYSTEMD_COREDUMP
+ 	  kernel when a user space program receives a fatal signal and
+ 	  dumps core.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-coredump.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-coredump.html
+ 
+ config BR2_PACKAGE_SYSTEMD_PSTORE
+ 	bool "enable pstore support"
+@@ -220,7 +220,7 @@ config BR2_PACKAGE_SYSTEMD_FIRSTBOOT
+ 	  systemd-firstboot initializes the most basic system settings
+ 	  interactively on the first boot.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-firstboot.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-firstboot.html
+ 
+ config BR2_PACKAGE_SYSTEMD_HIBERNATE
+ 	bool "enable hibernation support"
+@@ -229,7 +229,7 @@ config BR2_PACKAGE_SYSTEMD_HIBERNATE
+ 	  When this features is enabled, additional tools and services
+ 	  are built to support suspending and resuming the system.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-sleep.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-sleep.html
+ 
+ config BR2_PACKAGE_SYSTEMD_HOMED
+ 	bool "enable home daemon"
+@@ -261,7 +261,7 @@ config BR2_PACKAGE_SYSTEMD_HOSTNAMED
+ 	  systemd-hostnamed is a system service that may be used as a
+ 	  mechanism to change the system's hostname.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-hostnamed.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-hostnamed.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_HWDB
+ 	bool "enable hwdb installation"
+@@ -286,7 +286,7 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
+ 	  machine and container images for systemd-machined and
+ 	  machinectl.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
++	  https://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
+ 
+ config BR2_PACKAGE_SYSTEMD_CATALOGDB
+ 	bool "enable journal catalog database installation"
+@@ -309,14 +309,14 @@ config BR2_PACKAGE_SYSTEMD_LOCALED
+ 	  mechanism to change the system locale settings, as well as
+ 	  the console key mapping and default X11 key mapping.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-localed.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-localed.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_LOGIND
+ 	bool "enable login daemon"
+ 	help
+ 	  systemd-logind is a system service that manages user logins.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-logind.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-logind.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_MACHINED
+ 	bool "enable machine daemon"
+@@ -325,7 +325,7 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
+ 	  virtual machines and containers, and processes belonging to
+ 	  them.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-machined.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-machined.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+ 	bool "enable myhostname NSS plugin"
+@@ -336,7 +336,7 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+ 	  primarily providing hostname resolution for the locally
+ 	  configured system hostname as returned by gethostname(2).
+ 
+-	  http://www.freedesktop.org/software/systemd/man/nss-myhostname.html
++	  https://www.freedesktop.org/software/systemd/man/nss-myhostname.html
+ 
+ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	bool "enable network manager"
+@@ -349,7 +349,7 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	  This simple network configuration solution is an alternative
+ 	  to dhcpcd or ISC dhcp.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-networkd.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
+ 
+ config BR2_PACKAGE_SYSTEMD_OOMD
+ 	bool "enable out-of-memory killer"
+@@ -373,7 +373,7 @@ config BR2_PACKAGE_SYSTEMD_POLKIT
+ 	  useful for allowing unprivileged processes to speak to
+ 	  systemd's many privileged processes.
+ 
+-	  http://wiki.freedesktop.org/www/Software/polkit/
++	  https://wiki.freedesktop.org/www/Software/polkit/
+ 
+ comment "polkit support needs a toolchain with threads, wchar, gcc >= 7"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+@@ -408,7 +408,7 @@ config BR2_PACKAGE_SYSTEMD_QUOTACHECK
+ 	  file systems are mounted. It is pulled in only if at least
+ 	  one file system has quotas enabled.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-quotacheck.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-quotacheck.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
+ 	bool "enable random-seed support"
+@@ -418,7 +418,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
+ 	  shutdown. Saving/restoring the random seed across boots
+ 	  increases the amount of available entropy early at boot.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_REPART
+ 	bool "enable repart support"
+@@ -440,7 +440,7 @@ config BR2_PACKAGE_SYSTEMD_RESOLVED
+ 	  caching and validating DNS/DNSSEC stub resolver, as well as
+ 	  an LLMNR resolver and responder.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-resolved.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-resolved.html
+ 
+ config BR2_PACKAGE_SYSTEMD_RFKILL
+ 	bool "enable rfkill tools"
+@@ -448,7 +448,7 @@ config BR2_PACKAGE_SYSTEMD_RFKILL
+ 	  systemd-rfkill is a service that restores the RF kill switch
+ 	  state at early boot and saves it at shutdown.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-rfkill@.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-rfkill.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+ 	bool "enable SMACK support"
+@@ -503,7 +503,7 @@ config BR2_PACKAGE_SYSTEMD_SYSUSERS
+ 	  systemd-sysusers creates system users and groups, based on
+ 	  the file format and location specified in sysusers.d(5).
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-sysusers.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-sysusers.html
+ 
+ config BR2_PACKAGE_SYSTEMD_TIMEDATED
+ 	bool "enable timedate daemon"
+@@ -513,7 +513,7 @@ config BR2_PACKAGE_SYSTEMD_TIMEDATED
+ 	  mechanism to change the system clock and timezone, as well
+ 	  as to enable/disable NTP time synchronization.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-timedated.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-timedated.service.html
+ 
+ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
+ 	bool "enable timesync daemon"
+@@ -526,7 +526,7 @@ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
+ 	  This simple NTP solution is an alternative to sntp/ntpd from
+ 	  the ntp package.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
+ 
+ config BR2_PACKAGE_SYSTEMD_USERDB
+ 	bool "enable userdb daemon"
+@@ -567,6 +567,6 @@ config BR2_PACKAGE_SYSTEMD_VCONSOLE
+ 	  systemd-vconsole-setup is an early boot service that
+ 	  configures the virtual console font and console keymap.
+ 
+-	  http://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
+ 
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
