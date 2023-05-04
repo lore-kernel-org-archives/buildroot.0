@@ -4,69 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8EE6C77B73
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 21:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F701C7EE21
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 21:02:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2237F427C2;
-	Thu,  4 May 2023 21:02:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2237F427C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF0A0427D2;
+	Thu,  4 May 2023 21:02:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF0A0427D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vjhhBfBvpwoG; Thu,  4 May 2023 21:02:05 +0000 (UTC)
+	with ESMTP id criE5UL2CoKp; Thu,  4 May 2023 21:02:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7C494279F;
-	Thu,  4 May 2023 21:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7C494279F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 484BE1BF3B8
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 21:02:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96882427AA;
+	Thu,  4 May 2023 21:02:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96882427AA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 40D901BF3B8
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 21:02:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FF314279F
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 21:02:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FF314279F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1918983F1A
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 21:02:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1918983F1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2kjneEuUUC3Z for <buildroot@lists.busybox.net>;
- Thu,  4 May 2023 21:01:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jne2pwzaurfF for <buildroot@lists.busybox.net>;
+ Thu,  4 May 2023 21:02:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8F1C42796
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D8F1C42796
- for <buildroot@buildroot.org>; Thu,  4 May 2023 21:01:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07E6E83EB8
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 07E6E83EB8
+ for <buildroot@buildroot.org>; Thu,  4 May 2023 21:02:35 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:2a0:f7b8:e40f:da5c])
+ [IPv6:2a01:cb19:8b44:b00:3f23:63cb:29e9:f8d4])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 88B8F14A6CF;
- Thu,  4 May 2023 22:41:38 +0200 (CEST)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 3213B1A9571;
+ Thu,  4 May 2023 22:05:01 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 04 May 2023 22:41:37 +0200
-Date: Thu, 4 May 2023 22:41:37 +0200
+ Thu, 04 May 2023 22:05:00 +0200
+Date: Thu, 4 May 2023 22:05:00 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230504204137.GA2661@scaer>
-References: <20230504202137.18145-1-ps.report@gmx.net>
- <20230504202137.18145-2-ps.report@gmx.net>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230504200500.GK2696@scaer>
+References: <20230501064734.16030-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230504202137.18145-2-ps.report@gmx.net>
+In-Reply-To: <20230501064734.16030-1-bernd.kuhls@t-online.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683232906;
- bh=6ctfzj/YC04r3HK9hYFQn0geslIDa2AfWH1YdH6zPc0=;
+ d=free.fr; s=smtp-20201208; t=1683230708;
+ bh=fQ8BDoIz2ZH5LbTaGrOS8WkAUATxl31i1qpQN04iBgM=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=PEnOZqkjC5xxSNeKq1yIO7Yb/zLQcuSjMzV9YM8pXNCz/cgtYb/e7pbxkfv/qZOHM
- mylzdftXznMG+agOxFOfeyqUc0hKHn63TXaEJFOK7Y4y5ilDZWnt2trTXiTML9V7tI
- hw6igKCMxoKZ/5886/0clAVgazfp2AYUEn86Yvsa0fr6/CsmLhoaBIgMzVNxBlZsiu
- iwe3UULyQwo4C29KMWsn4YX83hY/mUeEsqnX8yFjz7zmpq8ctEiCu8GqIqPwkM5Hz9
- lnr0E0n/8I9a/P62Yx6LUqDku7ZNQz8qjn/jOMtDhSZpjdaDK0E0ERW/QYEaX358XQ
- C9CMloo5yd8Fw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=bFqFlvtQZKHjt2Y8GSlNbiBUUfdLzoDmHyBCzCH8KzbGSXNHfK4e6UAMnxfHFphg+
+ 2Cxbb825b3j0RKe6JzqlEnzAtZTtAd1cgH+4JV9rO7dxr38tXW+icAKvGNofaTAOcw
+ jy//ZrJuyRwfVh9WKdFS4EL0+5KPUJulAPrnMFsgsgvl+i/qu78ozBeHZ8+AdTtsGz
+ WuWkHgnWtFY4eXgRuX4b7KBpUXmNj63hH4ULYkDmChcGJA+X/lh7N43Coq+oNz/TRI
+ pmWkQB3+pp09uDGIaN15WdWMt6lZUz+Sl1VNHP154EMMD9AWVrBByY6HUdlu1NdbJS
+ cQ30hbc0QXn+w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=PEnOZqkj
-Subject: Re: [Buildroot] [PATCH v1 2/2] package/edid-decode: bump version to
- 2d44e1b
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=bFqFlvtQ
+Subject: Re: [Buildroot] [PATCH 1/1] linux: bump _KERNEL_LATEST_VERSION to
+ 6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,45 +83,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Bernd, All,
 
-On 2023-05-04 22:21 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On 2023-05-01 08:47 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Both patches applied to master, thanks.
+I got a bit puzzled why the hash for 6.3 was not added. That;s because
+it was added earlier, when support for header 6.3 was added.
+
+So I've tweaked the commit log accordingly.
+
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/edid-decode/edid-decode.hash | 2 +-
->  package/edid-decode/edid-decode.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  linux/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
-> index 65d6c71079..8bece94911 100644
-> --- a/package/edid-decode/edid-decode.hash
-> +++ b/package/edid-decode/edid-decode.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  c1a6222083c59f0499b3e43c159aee7e4c6c07d33b790d490a13fd62942fa9b5  edid-decode-188950472c19492547e298b27f9da0d72cf826df-br1.tar.gz
-> +sha256  a8774f1d3eb031ffa4ecb85135b47ad28afeeaa7cf9e8410c5b51a29b83bbfdd  edid-decode-2d44e1b01c7ed7d65b20ecdce62d354841832201-br1.tar.gz
->  sha256  9bc7ab961e9a07dc84eaa0210af388def56d024357e79671fb89fe27d073eed7  LICENSE
-> diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-> index 7e463c02b1..cd0bdfa0f0 100644
-> --- a/package/edid-decode/edid-decode.mk
-> +++ b/package/edid-decode/edid-decode.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 690ee9c339..f6b50a4b58 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -28,8 +28,8 @@ choice
+>  	prompt "Kernel version"
 >  
-> -EDID_DECODE_VERSION = 188950472c19492547e298b27f9da0d72cf826df
-> +EDID_DECODE_VERSION = 2d44e1b01c7ed7d65b20ecdce62d354841832201
->  EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
->  EDID_DECODE_LICENSE = MIT
->  EDID_DECODE_LICENSE_FILES = LICENSE
+>  config BR2_LINUX_KERNEL_LATEST_VERSION
+> -	bool "Latest version (6.1)"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
+> +	bool "Latest version (6.3)"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_3 if BR2_KERNEL_HEADERS_AS_KERNEL
+>  
+>  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+>  	bool "Latest CIP SLTS version (5.10.162-cip24)"
+> @@ -128,7 +128,7 @@ endif
+>  
+>  config BR2_LINUX_KERNEL_VERSION
+>  	string
+> -	default "6.1.26" if BR2_LINUX_KERNEL_LATEST_VERSION
+> +	default "6.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+>  	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+>  	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+>  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 > -- 
-> 2.40.0
+> 2.39.2
 > 
 > _______________________________________________
 > buildroot mailing list
