@@ -4,69 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F11FC77B73
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 21:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15F0AC77B73
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 21:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFC17427AE;
-	Thu,  4 May 2023 21:05:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFC17427AE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C1DE427A5;
+	Thu,  4 May 2023 21:08:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C1DE427A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cHZTSNJNuY3j; Thu,  4 May 2023 21:05:30 +0000 (UTC)
+	with ESMTP id gI97ijEfnz57; Thu,  4 May 2023 21:08:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DA4B4204F;
-	Thu,  4 May 2023 21:05:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DA4B4204F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8929F1BF3AF
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 21:05:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A7B84279B;
+	Thu,  4 May 2023 21:07:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A7B84279B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 454291BF3AF
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 21:07:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 614E54204F
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 21:05:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 614E54204F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2AFDB60A67
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 21:07:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AFDB60A67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yc-zzGTvZYDo for <buildroot@lists.busybox.net>;
- Thu,  4 May 2023 21:05:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WsJrpLdcUXiW for <buildroot@lists.busybox.net>;
+ Thu,  4 May 2023 21:07:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1948842039
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1948842039
- for <buildroot@buildroot.org>; Thu,  4 May 2023 21:05:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABC55608A5
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ABC55608A5
+ for <buildroot@buildroot.org>; Thu,  4 May 2023 21:07:56 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:3f23:63cb:29e9:f8d4])
+ [IPv6:2a01:cb19:8b44:b00:2a0:f7b8:e40f:da5c])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 6765A1A62F9;
- Thu,  4 May 2023 22:24:13 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1006E140FAC;
+ Thu,  4 May 2023 22:55:58 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 04 May 2023 22:24:13 +0200
-Date: Thu, 4 May 2023 22:24:13 +0200
+ Thu, 04 May 2023 22:55:57 +0200
+Date: Thu, 4 May 2023 22:55:57 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230504202413.GM2696@scaer>
-References: <20230503185144.13679-1-ps.report@gmx.net>
- <20230503185144.13679-2-ps.report@gmx.net>
+Message-ID: <20230504205557.GB2661@scaer>
+References: <20230504204522.6352-1-ps.report@gmx.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230503185144.13679-2-ps.report@gmx.net>
+In-Reply-To: <20230504204522.6352-1-ps.report@gmx.net>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683231861;
- bh=K+LrFG4jiB1ZWkBQB7KtgQEkVyKQmZ3vnY0rUeEShVU=;
+ d=free.fr; s=smtp-20201208; t=1683233760;
+ bh=WxgCDbTrQFyryQegOW3oXQqE5L8nzq2bVmiQiVuwtWc=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uvL2fpjWSXD0F8ON3xjB1IGteDEmPj4iQCifHBIBLy4SMAfYibwjpmi07RcmrLR5V
- Tp5mHrveJbiiG5g9o5/g5V4oMGVL6JkpCtGC6DPy/kvUYduM76n/Vw8VIJodYQMuCV
- 701HnzyI2S/BVOL7qVE52M9SJMgCCuQnij6bxcf8f5Td1JgV36M5YdzKdSFmpmVMtM
- v2OHoBa2Pn++YaHX/in0C2scH06u6xI4STFWiK2Rb1ZK50cXSITaUe9plFUx5111Aj
- q6wFl5Dw2a3I5LGWq1Joi6oadWmeoYudVPJoffsAYIJrbmj6qTXNze5woVjRHgYfJM
- /RUGp8ffl1Jzg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Xylak3sXG4r5gWPf5co6I1PnNFzoAcELh0fEyq/1N8jdLUqia+Qd+gHuuAjOhAzGf
+ h0J16aEz6uBPMgtzL8j/nMsRwy/Vd4iU1ZDtTxni3CJyAougkXGVgdqU7KjCTFSKp2
+ nJjP5T9osYbGNTeEoTa6Dxytq9RxvozdSycNQegRS5GGFM0jkkDURu5KBTIU2pLG8h
+ hd+zeQ7raOt7uuC40OWwOwnTCBh64+fgi3gUpUsxiHNuB61HoChWuNEW7BtL3huz5z
+ +6HWKVFec+nIkzhEKccOWfZFc9KSf7BPRAc9ZxIGNTcDF258Gkwo7mU+DVBNeWCP2c
+ GwZKDZH3rId9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uvL2fpjW
-Subject: Re: [Buildroot] [PATCH v1 2/2] package/coreutils: change/remove
- some of the configure environmental variables
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Xylak3sX
+Subject: Re: [Buildroot] [PATCH v1] package/edid-decode: change download
+ from git URL to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,7 +77,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -86,75 +85,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Peter, All,
 
-On 2023-05-03 20:51 +0200, Peter Seiderer spake thusly:
-> - remove ac_cv_func_euidaccess=no (no longer used)
-> - rename ac_cv_func_lstat_dereferences_slashed_symlink=yes to
->   gl_cv_func_lstat_dereferences_slashed_symlink=yes
+On 2023-05-04 22:45 +0200, Peter Seiderer spake thusly:
+> - change download from git URL to https (and SITE_METHOD git)
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-I did not find this rename in your commit...
-
-> - remove ac_cv_func_lstat_empty_string_bug=no (no longer used)
-> - remove ac_cv_func_strtod=yes (no longer used)
-> - remove ac_cv_func_working_mktime=yes (no longer used)
-> - remove gl_cv_func_gettimeofday_clobber=no (no longer used)
-> - remove gl_cv_func_tzset_clobber=no (no longer used)
-> - remove gl_getline_needs_run_time_check=no (no longer used)
-
-It is a bit sad that core autotools packages like gnulib and coreustils
-can't natively cross-comple because of AC_TRY_RUN, and needs so much
-feeding of results...
-
-Care to check the rename, and respin, please?
+Quickly applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/coreutils/coreutils.mk | 8 --------
->  1 file changed, 8 deletions(-)
+>  package/edid-decode/edid-decode.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-> index cf42a8aff8..7ee729ef48 100644
-> --- a/package/coreutils/coreutils.mk
-> +++ b/package/coreutils/coreutils.mk
-> @@ -22,18 +22,13 @@ endif
+> diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+> index cd0bdfa0f0..247ed207d3 100644
+> --- a/package/edid-decode/edid-decode.mk
+> +++ b/package/edid-decode/edid-decode.mk
+> @@ -5,7 +5,8 @@
+>  ################################################################################
 >  
->  COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
->  	ac_cv_func_chown_works=yes \
-> -	ac_cv_func_euidaccess=no \
->  	ac_cv_func_fstatat=yes \
->  	ac_cv_func_getdelim=yes \
->  	ac_cv_func_getgroups=yes \
->  	ac_cv_func_getgroups_works=yes \
->  	ac_cv_func_getloadavg=no \
-> -	ac_cv_func_lstat_dereferences_slashed_symlink=yes \
-> -	ac_cv_func_lstat_empty_string_bug=no \
->  	ac_cv_func_strerror_r_char_p=no \
->  	ac_cv_func_strnlen_working=yes \
-> -	ac_cv_func_strtod=yes \
-> -	ac_cv_func_working_mktime=yes \
->  	ac_cv_have_decl_strerror_r=yes \
->  	ac_cv_have_decl_strnlen=yes \
->  	ac_cv_lib_getloadavg_getloadavg=no \
-> @@ -44,15 +39,12 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
->  	fu_cv_sys_stat_statfs2_bsize=yes \
->  	gl_cv_func_getcwd_null=yes \
->  	gl_cv_func_getcwd_path_max=yes \
-> -	gl_cv_func_gettimeofday_clobber=no \
->  	gl_cv_func_link_follows_symlink=no \
->  	gl_cv_func_re_compile_pattern_working=yes \
->  	gl_cv_func_svid_putenv=yes \
-> -	gl_cv_func_tzset_clobber=no \
->  	gl_cv_func_working_mkstemp=yes \
->  	gl_cv_func_working_utimes=yes \
->  	gl_cv_macro_MB_CUR_MAX_good=yes \
-> -	gl_getline_needs_run_time_check=no \
->  	gl_cv_have_proc_uptime=yes \
->  	utils_cv_localtime_cache=no \
->  	PERL=missing \
+>  EDID_DECODE_VERSION = 2d44e1b01c7ed7d65b20ecdce62d354841832201
+> -EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
+> +EDID_DECODE_SITE = https://git.linuxtv.org/edid-decode.git
+> +EDID_DECODE_SITE_METHOD = git
+>  EDID_DECODE_LICENSE = MIT
+>  EDID_DECODE_LICENSE_FILES = LICENSE
+>  
 > -- 
-> 2.40.0
+> 2.40.1
 > 
 > _______________________________________________
 > buildroot mailing list
