@@ -4,70 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FE28C77B7F
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 00:04:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C881C77B75
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 00:24:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DD0741E08;
-	Thu,  4 May 2023 00:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DD0741E08
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71205418D1;
+	Thu,  4 May 2023 00:24:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71205418D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DuJkZSHJRGUV; Thu,  4 May 2023 00:04:25 +0000 (UTC)
+	with ESMTP id c89e9-WtSZjJ; Thu,  4 May 2023 00:24:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4E6B41E14;
-	Thu,  4 May 2023 00:04:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4E6B41E14
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DC87E1BF3DB
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 00:04:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67FD9415DA;
+	Thu,  4 May 2023 00:24:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67FD9415DA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FA551BF3DB
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 00:24:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2D0961499
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 00:04:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2D0961499
+ by smtp4.osuosl.org (Postfix) with ESMTP id 60DF141889
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 00:24:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60DF141889
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eNWRqKcejI2X for <buildroot@lists.busybox.net>;
- Thu,  4 May 2023 00:04:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ulJDfHMv-L3E for <buildroot@lists.busybox.net>;
+ Thu,  4 May 2023 00:24:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF559605A0
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com
- [209.85.215.182])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF559605A0
- for <buildroot@buildroot.org>; Thu,  4 May 2023 00:04:21 +0000 (UTC)
-Received: by mail-pg1-f182.google.com with SMTP id
- 41be03b00d2f7-5144043d9d1so4073177a12.3
- for <buildroot@buildroot.org>; Wed, 03 May 2023 17:04:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22EE341583
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com
+ [IPv6:2607:f8b0:4864:20::102e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 22EE341583
+ for <buildroot@buildroot.org>; Thu,  4 May 2023 00:24:08 +0000 (UTC)
+Received: by mail-pj1-x102e.google.com with SMTP id
+ 98e67ed59e1d1-24df4ecdb87so3200881a91.0
+ for <buildroot@buildroot.org>; Wed, 03 May 2023 17:24:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683158660; x=1685750660;
+ d=1e100.net; s=20221208; t=1683159847; x=1685751847;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=GSxqUmcYrYvJr0Nse+dmJD2iuTN68rJHhyR/7AHMdiE=;
- b=F0CqBDiiZqjM/wOcMCtKWlXom/5x+ZlCygxMCcfyoQaxmNXqcpyOM5Dze2v01Yag7A
- h37fUxpypkekHGXc941BCTrp1d0pwgUowJa+acWNvaMQUtvO3tkzuiRilu50waCU+KTk
- jiJQTnBaByIA742SMHDHtU0AEm9+tsa9ZGeNzj753PfwpOUut/eBrR40E81G3PxZtlOr
- 0vSVC7anayPbD+wm1Cdnd6BVr4hdR9VtZ7jiKYURqOq19ilC2EBOQ0hSopxTGlccTK6p
- TftE0Mi+D8KINjakowUxzs3QbEJPGbI8zYrLG+3NcUlg8YjpAvzT8kgWow3eaw2dIA4u
- WbWw==
-X-Gm-Message-State: AC+VfDxv8PQm1/kHNKRdrZIengf9GDhrsGpui/WSVkfLCXcMI5n23MIK
- i/Nmc4QCe7eDuPFWv7zNr258srvj5sx2xg==
-X-Google-Smtp-Source: ACHHUZ5kyIwHhvxDlR1SVumTx3biToupRi5/X5xc0yULdkfv10BNc2JVhruEPTpwcc/oGNuIad5gzg==
-X-Received: by 2002:a17:902:efcc:b0:1a9:7c6d:abb with SMTP id
- ja12-20020a170902efcc00b001a97c6d0abbmr1825844plb.29.1683158659975; 
- Wed, 03 May 2023 17:04:19 -0700 (PDT)
+ bh=4UkUIWFL6Rm4YRue/1UpOOozc1rFvpUFGuP9jjvSovc=;
+ b=d9cuYYNnlD2EljMpHLrbcy6CaxGTE1+MPgTYEsrq9g7P5GpVTOWA4jG2VzhK1m8Ukp
+ /b3FqJUQ/OJPB+aJuCIEWW4+iye/Wq2UkFwI7ISlRcZVORd3Ry7tvXkNcwidLVgol+b1
+ D4uXHg0kK4zkvdWR8tltrqOb8SizJddJ158QdFnswb/J1KjlGOqVJBCGcMniN2HrawCp
+ YfIDz3s+Tf0e8pY2cgAJjDOiiAz9ni9jNm0o/cktv/g2NbPdH96eAh0Ir8up5yl77Cku
+ RRJdLrscXtsAFm759ypqIsZiM0kroaOR3qpsWIh2fr7WstPDRj6b/UQbHPdViKmF2Ng6
+ gxCA==
+X-Gm-Message-State: AC+VfDzWGn/b/cV7YYmHnuxoSN8k7MVcse+BbZx4WyJR35LyJ5MmPySd
+ x5l+OnX+sVWkDoK00s2XJUJ6hn6XvbdJ0CiKcxvNVDMhEsE=
+X-Google-Smtp-Source: ACHHUZ4qKvC6tyg3s6KE1heu+idTclzrBiswBbACBWPD7nMSejrvRy5J/PYjavqLruunqGi0rEX/HQ==
+X-Received: by 2002:a17:90a:5d09:b0:24d:faff:74f6 with SMTP id
+ s9-20020a17090a5d0900b0024dfaff74f6mr428216pji.9.1683159847269; 
+ Wed, 03 May 2023 17:24:07 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- 4-20020a170902c14400b001a64011899asm22215049plj.25.2023.05.03.17.04.18
+ pf8-20020a17090b1d8800b00247abbb157fsm1934440pjb.31.2023.05.03.17.24.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 May 2023 17:04:19 -0700 (PDT)
+ Wed, 03 May 2023 17:24:06 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed,  3 May 2023 17:04:03 -0700
-Message-Id: <20230504000403.1443221-1-christian@aperture.us>
+Date: Wed,  3 May 2023 17:24:04 -0700
+Message-Id: <20230504002404.1463540-1-christian@aperture.us>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/runc: bump version to 1.1.7
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1683159847; x=1685751847;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=4UkUIWFL6Rm4YRue/1UpOOozc1rFvpUFGuP9jjvSovc=;
+ b=nxcJHbx/AJPtTj6BQJ4oaer6O7qC73XV7mxbnIdvEn2lmkagcGl0TlmJZDdcHjNEv6
+ 88BB0XzPaIocVJoKf1vk1FE1MAHyu28rsysgpRALEK1lgRwH9lii6ZzDHInI5seKFSQX
+ YkNA5/jTjfsweE2//e9DpGgX2eHgjY9XqjTFuSbAz+VxJ/kSVv/swDNF99sqHT1iCJUD
+ b3b71R0gQ3rG2za1aWBXVprWvX/bcTystawsNK4LgQMO+oXrQNIHICjTkdS4VYpGmioh
+ 4V6pac+t1ZjmoK9Hf69jIxJM8XxOh7MyyXK5dDA/PnNR3icUxSgDmqyRGy6kyleylijX
+ u+/w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
+ header.a=rsa-sha256 header.s=google header.b=nxcJHbx/
+Subject: [Buildroot] [PATCH v1 1/1] package/delve: bump to version 1.20.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,38 +103,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is the last planned release of the 1.1.x series.
-
-https://github.com/opencontainers/runc/releases/tag/v1.1.7
+https://github.com/go-delve/delve/releases/tag/v1.20.2
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
+ package/delve/delve.hash | 2 +-
+ package/delve/delve.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index eee2e34cbf..1a68b74ccb 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/delve/delve.hash b/package/delve/delve.hash
+index bf730b9047..105249f7f9 100644
+--- a/package/delve/delve.hash
++++ b/package/delve/delve.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  76cbf30637cbb828794d72d32fb3fd6ff3139cd9743b8b44790fd110f43d96b2  runc-1.1.5.tar.gz
-+sha256  f1885d6dfa188f8112328ac2355e5d67346174a2e2e795ec514a972bcbfcc2fa  runc-1.1.7.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 9c6b5f9b37..805ff23964 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+ # Locally calculated
+-sha256  39d2e3ae965abf5e71f3d8efbef368b1ee1d7154ea6604ec71d508350d419d03  delve-1.20.0.tar.gz
++sha256  58ad7a7fb42ae2ddd33e7d52dad688b249ca8a358eb73b9e48f91eda79e862a8  delve-1.20.2.tar.gz
+ sha256  778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
+diff --git a/package/delve/delve.mk b/package/delve/delve.mk
+index b43d0f03c8..f261d240b2 100644
+--- a/package/delve/delve.mk
++++ b/package/delve/delve.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.1.5
-+RUNC_VERSION = 1.1.7
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+-DELVE_VERSION = 1.20.0
++DELVE_VERSION = 1.20.2
+ DELVE_SITE = $(call github,go-delve,delve,v$(DELVE_VERSION))
+ DELVE_LICENSE = MIT
+ DELVE_LICENSE_FILES = LICENSE
 -- 
 2.40.1
 
