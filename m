@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F3F0C7EE21
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 20:53:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A825C77B73
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 20:53:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFA4041E89;
-	Thu,  4 May 2023 20:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFA4041E89
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB5AE4279E;
+	Thu,  4 May 2023 20:53:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB5AE4279E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r5iX3AltBAGa; Thu,  4 May 2023 20:53:29 +0000 (UTC)
+	with ESMTP id vk1iNnMLTNbm; Thu,  4 May 2023 20:53:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE73441B4F;
-	Thu,  4 May 2023 20:53:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE73441B4F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C9CF71BF3B8
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:53:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 821EA42748;
+	Thu,  4 May 2023 20:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 821EA42748
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CBCD1BF863
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD0D3607F6
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9FEC41828
  for <buildroot@lists.busybox.net>; Thu,  4 May 2023 20:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD0D3607F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9FEC41828
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mIxHJcFXJwHU for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mLAxJeoORidp for <buildroot@lists.busybox.net>;
  Thu,  4 May 2023 20:53:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B23F60797
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4438B4155B
  for <buildroot@buildroot.org>; Thu,  4 May 2023 20:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B23F60797
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4438B4155B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A01485DB6; Thu,  4 May 2023 20:53:24 +0000 (UTC)
+ id 2E59485DB5; Thu,  4 May 2023 20:53:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 4 May 2023 22:53:11 +0200
+Date: Thu, 4 May 2023 22:53:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9a2015b65c555290710c61492f9896980879060
-X-Git-Newrev: e320dd681c6b517c83060c173169defd18345e6f
+X-Git-Oldrev: 689ce0eb80842135c7834434784b89935d93ed8d
+X-Git-Newrev: c9a2015b65c555290710c61492f9896980879060
 X-Patchwork-Hint: ignore
-Message-Id: <20230504205324.3A01485DB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: update for 2022.02.12
+Message-Id: <20230504205324.2E59485DB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2022.02.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e320dd681c6b517c83060c173169defd18345e6f
+commit: https://git.buildroot.net/buildroot/commit/?id=c9a2015b65c555290710c61492f9896980879060
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8e117464920f2aa2ab7bfc288934c6af4e3504bb)
+[Peter: drop Makefile / Vagrantfile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ CHANGES | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 257678465a..4e8a708014 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index e184f3f3be..c4bf9d0ad9 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -775,6 +775,18 @@
+ 	#14731: BR2_PACKAGE_IOSTAT
+ 	#14751: LVM2 Outdated Link
  
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2022.02.12 released, 2022.02.x series EOL</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 May 2023</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2022.02.12 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2022.02.11 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.02.12">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87h6sr7rhm.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2022.02.12.tar.xz">2022.02.12 release</a>.</p>
++2022.02.12, released May 5th, 2023
 +
-+	  <p>Notice that the 2022.02.x series is now end of life. Please migrate to
-+	  the 2023.02 series instead which will be supported until April 2024.</p>
-+      </div>
-+    </div>
-+  </li>
++	Important / security related fixes.
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Updated/fixed packages: agentpp, apache, ca-certificates,
++	containerd, coremark, dcron, eudev, ffmpeg, git,
++	intel-microcode, kexec, lcdproc, libmicrohttpd, libosmium,
++	libxml2, linux-tools, matio, osm2pgsql, poppler, postgresql,
++	protozero, python-web2py, runc, s390-tools, samba4, snmppp,
++	sudo, tcpdump, uclibc, vim, webkitgtk, wpewebkit,
++	xserver_xorg-server
++
+ 2022.02.11, released March 19th, 2023
+ 
+ 	Important / security related fixes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
