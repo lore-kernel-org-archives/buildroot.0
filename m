@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC964C7EE21
-	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 10:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A5CC77B7C
+	for <buildroot@archiver.kernel.org>; Thu,  4 May 2023 10:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A312614D3;
-	Thu,  4 May 2023 10:02:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A312614D3
+	by smtp3.osuosl.org (Postfix) with ESMTP id C83DD614D1;
+	Thu,  4 May 2023 10:02:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C83DD614D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xYOwnPrhaYUa; Thu,  4 May 2023 10:02:05 +0000 (UTC)
+	with ESMTP id rUGaoUUAGprs; Thu,  4 May 2023 10:02:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59AB760E65;
-	Thu,  4 May 2023 10:02:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59AB760E65
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F33991BF3CD
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 10:02:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D55C2614DF;
+	Thu,  4 May 2023 10:02:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D55C2614DF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E49C1BF3CD
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 10:02:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8A0060E65
- for <buildroot@lists.busybox.net>; Thu,  4 May 2023 10:02:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8A0060E65
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46DE141F9F
+ for <buildroot@lists.busybox.net>; Thu,  4 May 2023 10:02:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46DE141F9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UK7mC0ln09T2 for <buildroot@lists.busybox.net>;
- Thu,  4 May 2023 10:01:59 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 862AA60D88
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 862AA60D88
- for <buildroot@buildroot.org>; Thu,  4 May 2023 10:01:59 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7950560008;
- Thu,  4 May 2023 10:01:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1puVmd-008XjT-Ga; Thu, 04 May 2023 12:01:55 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UCZvXwvn9Ajc for <buildroot@lists.busybox.net>;
+ Thu,  4 May 2023 10:02:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67B4241F9E
+ for <buildroot@buildroot.org>; Thu,  4 May 2023 10:02:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67B4241F9E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5360A85B5E; Thu,  4 May 2023 10:02:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-References: <20230503051327.558449-1-fido_max@inbox.ru>
-Date: Thu, 04 May 2023 12:01:55 +0200
-In-Reply-To: <20230503051327.558449-1-fido_max@inbox.ru> (Maxim Kochetkov via
- buildroot's message of "Wed, 3 May 2023 08:13:27 +0300")
-Message-ID: <875y989zzg.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2022.02.x 1/1] package/postgresql: bump
- version to 14.7
+To: buildroot@buildroot.org
+Date: Thu, 4 May 2023 12:01:21 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 0ed29418ea59c28fe6f3cd4f8db9aa23a63b7241
+X-Git-Newrev: 7d8b699c292dce2ea1f73b12adf8fa62ed8e5a44
+X-Patchwork-Hint: ignore
+Message-Id: <20230504100208.5360A85B5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/postgresql:
+ security bump to version 14.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,22 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Maxim" == Maxim Kochetkov via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7d8b699c292dce2ea1f73b12adf8fa62ed8e5a44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Release notes: https://www.postgresql.org/docs/release/14.7/
- > Fixes: https://security-tracker.debian.org/tracker/CVE-2022-41862
- > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Release notes: https://www.postgresql.org/docs/release/14.7/
 
-Committed to 2022.02.x after marking it a security bump, thanks.
+Fixes: https://security-tracker.debian.org/tracker/CVE-2022-41862
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 26bb626943..83b27a5fc0 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-14.6.tar.bz2.sha256
+-sha256  508840fc1809d39ab72274d5f137dabb9fd7fb4f933da4168aeebb20069edf22  postgresql-14.6.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v14.7/postgresql-14.7.tar.bz2.sha256
++sha256  cef60f0098fa8101c1546f4254e45b722af5431337945b37af207007630db331  postgresql-14.7.tar.bz2
+ # License file, Locally calculated
+ sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 30a4d45737..a43c6bb953 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 14.6
++POSTGRESQL_VERSION = 14.7
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
