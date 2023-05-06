@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1ABCC77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A760CC77B75
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EA1F611FD;
-	Sat,  6 May 2023 14:41:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EA1F611FD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C63661169;
+	Sat,  6 May 2023 14:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C63661169
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mi31u-z8DLYT; Sat,  6 May 2023 14:41:56 +0000 (UTC)
+	with ESMTP id ysRRQvCtHeBE; Sat,  6 May 2023 14:42:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE6B861110;
-	Sat,  6 May 2023 14:41:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE6B861110
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 062761BF859
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E1906110B;
+	Sat,  6 May 2023 14:42:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E1906110B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 09A381BF85D
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:41:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF68783F66
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCFEF61108
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:41:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF68783F66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCFEF61108
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kn5snkdTUlOL for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kpq5t5TDYnRc for <buildroot@lists.busybox.net>;
  Sat,  6 May 2023 14:41:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC2E68233B
+ by smtp3.osuosl.org (Postfix) with ESMTP id F055F610C9
  for <buildroot@buildroot.org>; Sat,  6 May 2023 14:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC2E68233B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F055F610C9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C848B85DBB; Sat,  6 May 2023 14:41:02 +0000 (UTC)
+ id DF62585DD1; Sat,  6 May 2023 14:41:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 6 May 2023 16:28:38 +0200
+Date: Sat, 6 May 2023 16:29:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d8da5965b9b9474e4bdbe1d41204e3a88c48e18
-X-Git-Newrev: 1e735c48372a40c0c838baf4946022545ed531f1
+X-Git-Oldrev: 341c6a58cef152dd1a6ab7e3e6153eaf3186e811
+X-Git-Newrev: fde7eeea4c0049afbfe167ddb358f57e68e38a23
 X-Patchwork-Hint: ignore
-Message-Id: <20230506144102.C848B85DBB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: bump version to 8.0.1
+Message-Id: <20230506144102.DF62585DD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mtools: bump version to 4.0.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,46 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e735c48372a40c0c838baf4946022545ed531f1
+commit: https://git.buildroot.net/buildroot/commit/?id=fde7eeea4c0049afbfe167ddb358f57e68e38a23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1] and [2].
+For details see [1].
 
-[1] https://curl.se/changes.html#8_0_0
-[1] https://curl.se/changes.html#8_0_1
+[1] https://lists.gnu.org/archive/html/info-gnu/2023-03/msg00006.html
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mtools/mtools.hash | 2 +-
+ package/mtools/mtools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 32b3d0b5e2..8a29e7b977 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
+index b81830a7d2..412d67a328 100644
+--- a/package/mtools/mtools.hash
++++ b/package/mtools/mtools.hash
 @@ -1,5 +1,5 @@
  # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-7.88.1.tar.xz.asc
-+# https://curl.se/download/curl-8.0.1.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f  curl-7.88.1.tar.xz
-+sha256  0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0  curl-8.0.1.tar.xz
- sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index dd715c1bb6..a5313e686f 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+-sha256  40a98fd9bcc865997866015013c3c64a304d98c2892fe4ab892ffd6ac3dd9bae  mtools-4.0.42.tar.lz
++sha256  997ffe4125a19de1fd433ed63f128f7d54bc1a5915f3cdb36da6491ef917f217  mtools-4.0.43.tar.lz
+ 
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 407ac1a2c6..96d8e43ea2 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.88.1
-+LIBCURL_VERSION = 8.0.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-MTOOLS_VERSION = 4.0.42
++MTOOLS_VERSION = 4.0.43
+ MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
+ MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
+ MTOOLS_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
