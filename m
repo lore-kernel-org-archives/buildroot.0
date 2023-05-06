@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 494C3C7EE24
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0231FC77B75
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6338426FE;
-	Sat,  6 May 2023 16:14:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6338426FE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96AED42833;
+	Sat,  6 May 2023 16:15:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96AED42833
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ztPYxpSv9i4D; Sat,  6 May 2023 16:14:51 +0000 (UTC)
+	with ESMTP id 3JLTywJZp3an; Sat,  6 May 2023 16:15:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67FE14283D;
-	Sat,  6 May 2023 16:14:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67FE14283D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5C3571BF36A
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:12:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81AB042047;
+	Sat,  6 May 2023 16:15:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81AB042047
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E0C0D1BF36A
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:12:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35E7383B7E
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35E7383B7E
+ by smtp3.osuosl.org (Postfix) with ESMTP id B984660F3B
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B984660F3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KR2Tn6Pdv2jM for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 16:12:26 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49A4983B63
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 49A4983B63
- for <buildroot@buildroot.org>; Sat,  6 May 2023 16:12:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k7FmP0jmBXqk for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 16:12:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCEBC60A9A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BCEBC60A9A
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 16:12:40 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:ae89:1f5e:7283:231f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 8CB5FB00565;
- Sat,  6 May 2023 18:12:21 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0EE2AB0056A;
+ Sat,  6 May 2023 18:12:36 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 May 2023 18:12:21 +0200
-Date: Sat, 6 May 2023 18:12:21 +0200
+ Sat, 06 May 2023 18:12:35 +0200
+Date: Sat, 6 May 2023 18:12:35 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Christian Stewart <christian@aperture.us>
-Message-ID: <20230506161221.GV252090@scaer>
-References: <20230504073021.3450679-1-christian@aperture.us>
+Message-ID: <20230506161235.GW252090@scaer>
+References: <20230504073310.3456839-1-christian@aperture.us>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230504073021.3450679-1-christian@aperture.us>
+In-Reply-To: <20230504073310.3456839-1-christian@aperture.us>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683389544;
- bh=lLZqGEQh0o0oIE6rMF5d69O5iptQucwduVnQg+Ejrm8=;
+ d=free.fr; s=smtp-20201208; t=1683389559;
+ bh=hO6oLubUdi5CdJDzKaIYZprmCMUFQdFto08yliI2nXs=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=b3yy2wksT2gmZLfqOly7wFfU/L3CGzYSY+UilT/sITP3LAiMH+QcCKQlpIcYeAfF5
- Q4JXrBbvM2TpveZyiZfe1Zv1wqA5kybDIe9AM4sv6MwoAlUM9Tc63BWjcCn92wpnSS
- TKRBKyLGkETIT5xmPLiVJOPpzjuyDZcJEgRceTMXn/EaWo4K1GBf3+drC6bv/9YQ2f
- cwfTd4txvZNov1tmWEKaPfx5J+LD8+5sCCsUrZ7BAyxm1HXcr6YhQwAhf+ey8b6GJY
- J7ao3ojjgsTdNbVgulx7mVPWADUK5aYcJicFzDt3AtMtXw+jNzuKpAiBG9bzXSiPUh
- J7Lg6gdbKM0+Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=TKP2yqkbIQ1gjI5XEC4dbJzPI7rdadN13Ss0GBeVTk2z2QEevZE4lB3Sk9jIeq1wJ
+ +fbi8K8iHYTmq6rB+sgVj3gNmws4RyvFnE/7fu6RkApFTmNX9Lql+IwsN5sGQwFzPa
+ AtwLJNgVbVEOvzVv2GqfoxBYYzoH8tdtSfS+1DLYvcjuolUo4+QzET/PyYTTJBG4Jx
+ MrV2gqcxOZbbiDMJZbZlwyd3o4cD1Y8EmC4/lptRPIo0EJhHbfLahBYs33hCETVaYK
+ PV0WhroDHZksX2mZTSBGKiB3aqZVCexe5f2+SThFx1LAB169RzPXdzbwcvQSX+Mdw9
+ /uJAO6dL9sVuA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=b3yy2wks
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/mbpfan: bump version to
- v2.4.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=TKP2yqkb
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/moby-buildkit: bump version
+ to 0.11.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,12 +85,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Christian, All,
 
-On 2023-05-04 00:30 -0700, Christian Stewart via buildroot spake thusly:
->  - Add support for alternate SMC path used with newer MacBooks
->  - Improved systemd integration
->  - Removed developer tests which confused users
+On 2023-05-04 00:33 -0700, Christian Stewart via buildroot spake thusly:
+> Bugfixes.
 > 
-> https://github.com/linux-on-mac/mbpfan/releases/tag/v2.4.0
+> https://github.com/moby/buildkit/releases/tag/v0.11.6
 > 
 > Signed-off-by: Christian Stewart <christian@aperture.us>
 
@@ -100,32 +98,32 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/mbpfan/mbpfan.hash | 2 +-
->  package/mbpfan/mbpfan.mk   | 2 +-
+>  package/moby-buildkit/moby-buildkit.hash | 2 +-
+>  package/moby-buildkit/moby-buildkit.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/mbpfan/mbpfan.hash b/package/mbpfan/mbpfan.hash
-> index 9195692d52..5b67744a00 100644
-> --- a/package/mbpfan/mbpfan.hash
-> +++ b/package/mbpfan/mbpfan.hash
+> diff --git a/package/moby-buildkit/moby-buildkit.hash b/package/moby-buildkit/moby-buildkit.hash
+> index ef927636d9..f7922d7e8f 100644
+> --- a/package/moby-buildkit/moby-buildkit.hash
+> +++ b/package/moby-buildkit/moby-buildkit.hash
 > @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  f690e9302da4cf97e582606614d91e1ee4ac495a4939aec7c0b3468c8988eb67  mbpfan-2.3.0.tar.gz
-> +sha256  e1cdcffaba52be215ae40a8568949190866d500d6ae2a1e96b71ab5372f3580b  mbpfan-2.4.0.tar.gz
->  sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  COPYING
-> diff --git a/package/mbpfan/mbpfan.mk b/package/mbpfan/mbpfan.mk
-> index 52d823cbdc..0ac161b327 100644
-> --- a/package/mbpfan/mbpfan.mk
-> +++ b/package/mbpfan/mbpfan.mk
+>  # Locally calculated
+> -sha256  b1746575f37715a8a2f2df5bab77ea081ba8436854e241792702109fc9e3653d  moby-buildkit-0.11.2.tar.gz
+> +sha256  1efa1c54b299c463c1b039d3df8ba1c68e70fe4de608fd14653fcebf9f27837b  moby-buildkit-0.11.6.tar.gz
+>  sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+> diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
+> index a25f676710..91560c1ed1 100644
+> --- a/package/moby-buildkit/moby-buildkit.mk
+> +++ b/package/moby-buildkit/moby-buildkit.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -MBPFAN_VERSION = 2.3.0
-> +MBPFAN_VERSION = 2.4.0
->  MBPFAN_SITE = $(call github,linux-on-mac,mbpfan,v$(MBPFAN_VERSION))
->  MBPFAN_LICENSE = GPL-3.0+
->  MBPFAN_LICENSE_FILES = COPYING
+> -MOBY_BUILDKIT_VERSION = 0.11.2
+> +MOBY_BUILDKIT_VERSION = 0.11.6
+>  MOBY_BUILDKIT_SITE = $(call github,moby,buildkit,v$(MOBY_BUILDKIT_VERSION))
+>  MOBY_BUILDKIT_LICENSE = Apache-2.0
+>  MOBY_BUILDKIT_LICENSE_FILES = LICENSE
 > -- 
 > 2.40.1
 > 
