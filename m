@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63561C77B7F
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 15:17:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79E77C77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 15:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB0784001;
-	Sat,  6 May 2023 15:17:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AB0784001
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18E5684001;
+	Sat,  6 May 2023 15:18:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18E5684001
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XGkmeZshhjTC; Sat,  6 May 2023 15:17:53 +0000 (UTC)
+	with ESMTP id XW-rYNl3c0YO; Sat,  6 May 2023 15:18:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 159F583FBF;
-	Sat,  6 May 2023 15:17:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 159F583FBF
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE39884007;
+	Sat,  6 May 2023 15:18:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE39884007
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 689991BF36C
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:17:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B752D1BF36C
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41CF883FBF
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:17:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41CF883FBF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 913A98224A
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:18:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 913A98224A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L9FpEKzTl4CW for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 15:17:49 +0000 (UTC)
+ with ESMTP id 0LUqjsxDOJP3 for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 15:18:10 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BDB48224A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BBA08400F
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2BDB48224A
- for <buildroot@buildroot.org>; Sat,  6 May 2023 15:17:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9BBA08400F
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 15:18:10 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:ae89:1f5e:7283:231f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6C6F6B00565;
- Sat,  6 May 2023 17:17:43 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id D001CB00585;
+ Sat,  6 May 2023 17:18:04 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 May 2023 17:17:43 +0200
-Date: Sat, 6 May 2023 17:17:43 +0200
+ Sat, 06 May 2023 17:18:04 +0200
+Date: Sat, 6 May 2023 17:18:04 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Stefan Agner <stefan@agner.ch>
-Message-ID: <20230506151743.GB252090@scaer>
-References: <2120646ed4f19a45b5fab83a212413f79be91448.1680094918.git.stefan@agner.ch>
+To: Daniel Lang <dalang@gmx.at>
+Message-ID: <20230506151804.GC252090@scaer>
+References: <20230321060120.175812-1-dalang@gmx.at>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <2120646ed4f19a45b5fab83a212413f79be91448.1680094918.git.stefan@agner.ch>
+In-Reply-To: <20230321060120.175812-1-dalang@gmx.at>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683386267;
- bh=E4yY59gC7zoO83w/DXU4vt59z9VOQyn/NwQUPP42RqI=;
+ d=free.fr; s=smtp-20201208; t=1683386289;
+ bh=iDoL4l5Rq09ietGhbWugu+aDkiZhI4//RAe1FhBkblw=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=FVzpNP9yiSCm7ilXJ7VdeHA7jpKgulSovujoCCvqOD4t1DVhsJX8bZigGKPRRBDFh
- bnI+vE7PXHrKsZEVC/t8slzJc1nNmJG/SQKYBDGSB/8tquuubX+ihE1U06ShbSaGvz
- ytLwX8+d6MnVu+8A2nVWRXMqwRaesEqR2FznMxbsozqeXvN/VEey8BA5yEJ13ioC6a
- RYrGodl68wFHGfprS4V0VA75tnfd9vpjJnwMuwumRXa9iTHkv0vxt1SiX3uFAhYEiR
- o/1pgEGnQEnAH3vNTy++0RWlDp+brL+KiaMxtsoQI7HhWDhfbdw8zOlr3zZtO1kHSp
- 2bqO2gsIkKrkw==
+ b=EJM9m/mMtwO6YnAbIxYa3nju85IJQZSTYrlC21CrW0ZpmXCbmBR54DaWsFGacwI84
+ 8Ge8CuKG1lxbg96criZZ8EsElaFYc8btkYhVi6FRVbTAJgeJNicbSeWSfnCELtHu4n
+ 6OlZFTVqgRyKeVwIQOtWG8enJzWkZXtuaFS3kTMe7uJ2kUdzEp3m2Fgn0/HyMYJwux
+ jTCquj7fEF3Jte0Gb4ythWqqhcJ7sFiHojtwLShmok9C+Y63IQy+vLdcu193UPE9Ih
+ urVGS//XskMmmYjorSvRJUfcWs4/qkdAjXijO7qlhNzusT26hiOm22OtGLMiAW0DR7
+ WSbEGSTj/kh6A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FVzpNP9y
-Subject: Re: [Buildroot] [PATCH v2] package/gptfdisk: fix another runtime
- failure with popt 1.19
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=EJM9m/mM
+Subject: Re: [Buildroot] [PATCH] package/atkmm: bump to version 2.36.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,95 +76,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, thomas.petazzoni@bootlin.com,
+Cc: Daniel Lang <d.lang@abatec.at>, James Knight <james.knight@collins.com>,
  buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Stefan, All,
+Daniel, All,
 
-On 2023-03-29 15:02 +0200, Stefan Agner spake thusly:
-> Fix the following runtime failure raised since bump of popt to version
-> 1.19 in commit 895bfba93f6e5535f2132aeea144d2cd87ebc71b:
-> 
-> Segmentation fault (core dumped)
-> 
-> Fix the issue by backporting a fix found in upstream git repository [0].
-> 
-> [0] https://sourceforge.net/p/gptfdisk/code/ci/f5de3401b974ce103ffd93af8f9d43505a04aaf9/
-> 
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
-> ---
->  ...ence-when-duplicating-string-argumen.patch | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
-> 
-> diff --git a/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
-> new file mode 100644
-> index 0000000000..1642343d06
-> --- /dev/null
-> +++ b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
-> @@ -0,0 +1,43 @@
-> +From f5de3401b974ce103ffd93af8f9d43505a04aaf9 Mon Sep 17 00:00:00 2001
-> +Message-Id: <f5de3401b974ce103ffd93af8f9d43505a04aaf9.1680094621.git.stefan@agner.ch>
-> +From: Damian Kurek <starfire24680@gmail.com>
-> +Date: Thu, 7 Jul 2022 03:39:16 +0000
-> +Subject: [PATCH] Fix NULL dereference when duplicating string argument
-> +
-> +poptGetArg can return NULL if there are no additional arguments, which
-> +makes strdup dereference NULL on strlen
-> +
-> +Signed-off-by: Stefan Agner <stefan@agner.ch>
-
-    $ make check-pacakge
-    package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-
-That's a check that was added after you send your patch, so I added one:
-    Upstream: https://sourceforge.net/p/gptfdisk/code/ci/f5de3401b974ce103ffd93af8f9d43505a04aaf9
-
-And of course, I borked it and pushed before I did ammend the commit...
-Anyway...
+On 2023-03-21 07:01 +0100, Daniel Lang spake thusly:
+> Signed-off-by: Daniel Lang <dalang@gmx.at>
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> +---
-> + gptcl.cc | 6 ++++--
-> + 1 file changed, 4 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/gptcl.cc b/gptcl.cc
-> +index 0d578eb..ab95239 100644
-> +--- a/gptcl.cc
-> ++++ b/gptcl.cc
-> +@@ -155,10 +155,11 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
-> +    } // while
-> + 
-> +    // Assume first non-option argument is the device filename....
-> +-   device = strdup((char*) poptGetArg(poptCon));
-> +-   poptResetContext(poptCon);
-> ++   device = (char*) poptGetArg(poptCon);
-> + 
-> +    if (device != NULL) {
-> ++      device = strdup(device);
-> ++      poptResetContext(poptCon);
-> +       JustLooking(); // reset as necessary
-> +       BeQuiet(); // Tell called functions to be less verbose & interactive
-> +       if (LoadPartitions((string) device)) {
-> +@@ -498,6 +499,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
-> +          cerr << "Error encountered; not saving changes.\n";
-> +          retval = 4;
-> +       } // if
-> ++      free(device);
-> +    } // if (device != NULL)
-> +    poptFreeContext(poptCon);
-> +    return retval;
-> +-- 
-> +2.40.0
-> +
+> ---
+>  package/atkmm/atkmm.hash | 4 ++--
+>  package/atkmm/atkmm.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/atkmm/atkmm.hash b/package/atkmm/atkmm.hash
+> index 9e2bb2830c..08cf86b3df 100644
+> --- a/package/atkmm/atkmm.hash
+> +++ b/package/atkmm/atkmm.hash
+> @@ -1,5 +1,5 @@
+> -# From https://download.gnome.org/sources/atkmm/2.36/atkmm-2.36.1.sha256sum
+> -sha256  e11324bfed1b6e330a02db25cecc145dca03fb0dff47f0710c85e317687da458  atkmm-2.36.1.tar.xz
+> +# From https://download.gnome.org/sources/atkmm/2.36/atkmm-2.36.2.sha256sum
+> +sha256  6f62dd99f746985e573605937577ccfc944368f606a71ca46342d70e1cdae079  atkmm-2.36.2.tar.xz
+>  # locally computed
+>  sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+>  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
+> diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
+> index 7ceb87b047..8afd058643 100644
+> --- a/package/atkmm/atkmm.mk
+> +++ b/package/atkmm/atkmm.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  ATKMM_VERSION_MAJOR = 2.36
+> -ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).1
+> +ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).2
+>  ATKMM_SOURCE = atkmm-$(ATKMM_VERSION).tar.xz
+>  ATKMM_SITE = https://download.gnome.org/sources/atkmm/$(ATKMM_VERSION_MAJOR)
+>  ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
 > -- 
 > 2.40.0
 > 
