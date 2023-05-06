@@ -1,50 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C1AC77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C21CC77B7F
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 17:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F54241F4C;
-	Sat,  6 May 2023 16:17:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F54241F4C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 569CD40BFE;
+	Sat,  6 May 2023 17:39:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 569CD40BFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uxS6ZXaDSs3e; Sat,  6 May 2023 16:17:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zRjMP275iFwG; Sat,  6 May 2023 17:39:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35B504177A;
-	Sat,  6 May 2023 16:17:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35B504177A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 49C281BF36A
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:17:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5643240C12;
+	Sat,  6 May 2023 17:39:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5643240C12
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D0F81BF369
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30A6C83EF3
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:17:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30A6C83EF3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2358C40BFE
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2358C40BFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vjHZmq30QYjC for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 16:17:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 710F183EDC
- for <buildroot@buildroot.org>; Sat,  6 May 2023 16:17:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 710F183EDC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E86485EC8; Sat,  6 May 2023 16:17:27 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MHXfRaBWnit4 for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 17:39:21 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 476D740B80
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 476D740B80
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 17:39:21 +0000 (UTC)
+Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
+ by mailout03.t-online.de (Postfix) with SMTP id 792D35836
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 19:39:18 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd85.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pvLsM-3RK6La0; Sat, 6 May 2023 19:39:18 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:36596)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pvLsM-0004jT-0L
+ for buildroot@buildroot.org; Sat, 06 May 2023 19:39:18 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 6 May 2023 18:15:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5d65570fac4d577bd3661ad892df80bc9601f4ae
-X-Git-Newrev: e0ef6ddcf9231d367b3f4a0fb1c4cca40b3e6f2e
-X-Patchwork-Hint: ignore
-Message-Id: <20230506161727.5E86485EC8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] .checkpackageignore: regenerate list
+Date: Sat,  6 May 2023 19:39:00 +0200
+Message-Id: <20230506173917.1112500-5-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
+References: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1683394758-A57C7C52-6D3F320D/0/0 CLEAN NORMAL
+X-TOI-MSGID: 63dcb80c-c42b-4bd4-bd6c-c70d88e6978a
+Subject: [Buildroot] [PATCH 05/22] package/x11r7/xapp_xinput: bump version
+ to 1.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,66 +68,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0ef6ddcf9231d367b3f4a0fb1c4cca40b3e6f2e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+https://lists.x.org/archives/xorg-announce/2023-April/003389.html
 
-Some patches were removed in recent version bumps:
-  - 2d7cfd49ba  package/valgrind: bump version to 3.20.0
-  - 4aef53575b  package/libgit2: bump version to 1.6.4
-  - b0306d94b2  package/cpio: bump version to 2.14
-  - f292d9b736  package/gocryptfs: bump version to 2.3.2
-
-Update the ignore list accordingly.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .checkpackageignore | 6 ------
- 1 file changed, 6 deletions(-)
+ package/x11r7/xapp_xinput/xapp_xinput.hash | 8 +++-----
+ package/x11r7/xapp_xinput/xapp_xinput.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index d1626326a8..9363e7f3bb 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -317,9 +317,6 @@ package/connman/0003-wispr-Update-portal-context-references.patch Upstream
- package/connman/S45connman Variables
- package/copas/0001-Do-not-load-coxpcall-for-LuaJIT.patch Upstream
- package/coremark-pro/coremark-pro.sh.in Shellcheck
--package/cpio/0001-Minor-fix.patch Upstream
--package/cpio/0002-Rewrite-dynamic-string-support.patch Upstream
--package/cpio/0003-Fix-previous-commit.patch Upstream
- package/cppdb/0001-mysql-library-suffix.patch Upstream
- package/cpulimit/0001-Fix-crash-and-compiler-warnings.patch Upstream
- package/cpulimit/0002-Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch Upstream
-@@ -622,7 +619,6 @@ package/gob2/0001-dont-include-from-prefix.patch Upstream
- package/gobject-introspection/0001-disable-tests.patch Upstream
- package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch Upstream
- package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch Upstream
--package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch Upstream
- package/google-breakpad/gen-syms.sh Shellcheck
- package/gpm/0001-Added-musl-support-to-libgpm-and-the-daemon.patch Upstream
- package/gpm/0002-Install-unversioned-solibrary.patch Upstream
-@@ -795,7 +791,6 @@ package/libfuse/0002-util-ulockmgr_server-c-conditionally-define-closefrom-fix-g
- package/libfuse3/0001-Fix-MS_LAZYTIME-not-defined-on-uclibc.patch Upstream
- package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch Upstream
- package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.patch Upstream
--package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch Upstream
- package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch Upstream
- package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch Upstream
- package/libgpgme/0001-Fix-build-without-threads.patch Upstream
-@@ -1644,7 +1639,6 @@ package/vala/0001-dont-add-dirty-to-valac-version.patch Upstream
- package/vala/vala-wrapper Shellcheck
- package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch Upstream
- package/valgrind/0002-Define-PTRACE_GETSIGINFO-on-PowerPC-when-not-availab.patch Upstream
--package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch Upstream
- package/vboot-utils/0001-Add-missing-definition-of-MTD_CHAR_MAJOR.patch Upstream
- package/vboot-utils/0002-Add-missing-header-include-for-ssize_t.patch Upstream
- package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch Upstream
+diff --git a/package/x11r7/xapp_xinput/xapp_xinput.hash b/package/x11r7/xapp_xinput/xapp_xinput.hash
+index 0961879637..d3a6a66902 100644
+--- a/package/x11r7/xapp_xinput/xapp_xinput.hash
++++ b/package/x11r7/xapp_xinput/xapp_xinput.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003013.html
+-md5  ac6b7432726008b2f50eba82b0e2dbe4  xinput-1.6.3.tar.bz2
+-sha1  92ea7dfb3d8465921b0dca85da7d5b01cedae6c8  xinput-1.6.3.tar.bz2
+-sha256  35a281dd3b9b22ea85e39869bb7670ba78955d5fec17c6ef7165d61e5aeb66ed  xinput-1.6.3.tar.bz2
+-sha512  cb2fef866ac5a71dbca3e23b4ecadaca38e65dc1b30f8bb024bad92486554fafc472706619a1af04c746a4f53ce6aea827d694b9f4f0c7d0d46bb1da81984076  xinput-1.6.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-April/003389.html
++sha256  ad04d00d656884d133110eeddc34e9c69e626ebebbbab04dc95791c2907057c8  xinput-1.6.4.tar.xz
++sha512  6734860852715e5cb9d26259a173e42413fc037546ed7fa4173ffa802c2619ee0322bed228a28cd1911be759d860070867d9b89b115f37323cca1c9ef75354b9  xinput-1.6.4.tar.xz
+ # Locally computed
+ sha256  bbd35c7a8e8c5cb073935e84b29b0c53f7131a4ef1ce737dc2be5616941e07e1  COPYING
+diff --git a/package/x11r7/xapp_xinput/xapp_xinput.mk b/package/x11r7/xapp_xinput/xapp_xinput.mk
+index 0d6c0deffe..614b62fe77 100644
+--- a/package/x11r7/xapp_xinput/xapp_xinput.mk
++++ b/package/x11r7/xapp_xinput/xapp_xinput.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-XAPP_XINPUT_VERSION = 1.6.3
+-XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
++XAPP_XINPUT_VERSION = 1.6.4
++XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.xz
+ XAPP_XINPUT_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XINPUT_LICENSE = MIT
+ XAPP_XINPUT_LICENSE_FILES = COPYING
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
