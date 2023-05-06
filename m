@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43EAEC77B75
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03AD6C77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E84786122E;
-	Sat,  6 May 2023 14:44:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E84786122E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98E8161375;
+	Sat,  6 May 2023 14:44:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98E8161375
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CXSzxEOcSeyE; Sat,  6 May 2023 14:44:42 +0000 (UTC)
+	with ESMTP id 7vAjuY_k9OGJ; Sat,  6 May 2023 14:44:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FA8D6112C;
-	Sat,  6 May 2023 14:44:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FA8D6112C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F8371BF36E
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:43:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0D7361162;
+	Sat,  6 May 2023 14:44:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0D7361162
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 040371BF36E
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33E4C404C4
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:43:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33E4C404C4
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1C56817A4
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:43:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1C56817A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jVm15NSBuh3v for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 14:43:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E356400E5
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2E356400E5
- for <buildroot@buildroot.org>; Sat,  6 May 2023 14:43:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4EbhvAwMLliD for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 14:43:43 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B989B815CF
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B989B815CF
+ for <buildroot@busybox.net>; Sat,  6 May 2023 14:43:42 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:ae89:1f5e:7283:231f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 707BBB0056A;
- Sat,  6 May 2023 16:43:18 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id ED3AFB00576;
+ Sat,  6 May 2023 16:43:38 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 May 2023 16:43:18 +0200
-Date: Sat, 6 May 2023 16:43:18 +0200
+ Sat, 06 May 2023 16:43:38 +0200
+Date: Sat, 6 May 2023 16:43:38 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230506144318.GG2661@scaer>
-References: <20230323214901.3489-1-ps.report@gmx.net>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230506144338.GH2661@scaer>
+References: <20230315090742.399240-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230323214901.3489-1-ps.report@gmx.net>
+In-Reply-To: <20230315090742.399240-1-francois.perrad@gadz.org>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683384201;
- bh=IGuv1XjCKSZfNgfR/LazCCz6CH4nrnzyBoBfc5S48DI=;
+ d=free.fr; s=smtp-20201208; t=1683384221;
+ bh=tvm6sbswkVEISeP/HayxCqI+Nfv8X1Hxw8sFaG38S6c=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=sBLEvqdPwm4yoIdETRA2z/zc9mObSnlpBggDBO3/+4i8X/HZsuMCuvdH0vWJyG3Gq
- 4d0p3Bnqm9K1U9/MMSWTlu0DsS23Clw0ChJI3is30fUzaulyzXmeWS9PmkFFBpCocx
- 9Qovq9/4iBFDxXqHntVBUleoQ5lJtey/ksKrywbUU/CL38qSAfy538XOeAy+e90gUa
- lx0LuhEGtF/xl3CqWOBX0lnmPRMy8/Vul+xf4dM/8txo8jCjOesD7nFjrtR8kUF8/P
- 39IKEUFEIi/CsTmmYleEqHXH96idfaCzbEtMaEgb4+vWV5PlSl3yOD9+HyfDUxzxH/
- vm8xB2Ga+nc9g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ad3mjyDsaKKFCeHW4LqrArzpfPHiidyEqr5+ZWpnp57yTz7Dy63HdD7GFpuOf0Awn
+ z/qIUgJ/4SVATJfeoSNITfksZGDWLl17NB19Xn9usdmBPG0BQLaUG2KRt8qUg9tflv
+ 0mpU2f66JHZfGsD8aBAHc4gW5q4mJPUeP6rLkO/h18HOLDVcRPPy9Tnj9TjOQdeaPn
+ 6zjKOweu6Xk8sAwZHbYihNEAmi3QE+ypJt4wEyD9V37pICXrEccoYGtPNn9/fPxtYY
+ iSs6b6MGKimN/VipToPacj7/J/MErMTgx1t7k/dhTzgeH0eDCkuxP12+O8e2hnQo8L
+ J+Oxpx6u2RSRw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=sBLEvqdP
-Subject: Re: [Buildroot] [PATCH v1] package/grep: bump version to 3.10
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ad3mjyDs
+Subject: Re: [Buildroot] [PATCH] package/lualdap: bump to version 1.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,20 +76,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Francois, All,
 
-On 2023-03-23 22:49 +0100, Peter Seiderer spake thusly:
-> For details see [1].
-> 
-> [1] https://lists.gnu.org/archive/html/info-gnu/2023-03/msg00007.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On 2023-03-15 10:07 +0100, Francois Perrad spake thusly:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Applied to master, thanks.
 
@@ -97,37 +93,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/grep/grep.hash | 4 ++--
->  package/grep/grep.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/lualdap/lualdap.hash | 2 +-
+>  package/lualdap/lualdap.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-> index c83e4653c3..142d15644d 100644
-> --- a/package/grep/grep.hash
-> +++ b/package/grep/grep.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking signature
-> -# https://ftp.gnu.org/gnu/grep/grep-3.9.tar.xz.sig
-> +# https://ftp.gnu.org/gnu/grep/grep-3.10.tar.xz.sig
->  # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
-> -sha256  abcd11409ee23d4caf35feb422e53bbac867014cfeed313bb5f488aca170b599  grep-3.9.tar.xz
-> +sha256  24efa5b595fb5a7100879b51b8868a0bb87a71c183d02c4c602633b88af6855b  grep-3.10.tar.xz
->  sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-> diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-> index 309987010f..2f3b405f93 100644
-> --- a/package/grep/grep.mk
-> +++ b/package/grep/grep.mk
+> diff --git a/package/lualdap/lualdap.hash b/package/lualdap/lualdap.hash
+> index 15ca840f1..97aa3b570 100644
+> --- a/package/lualdap/lualdap.hash
+> +++ b/package/lualdap/lualdap.hash
+> @@ -1,3 +1,3 @@
+>  # computed by luarocks/buildroot
+> -sha256  49c253f540187c61850c856b8e70e45dca904b81720a760f6a94e4eb474958ad  lualdap-1.3.0-1.src.rock
+> +sha256  c1772077ebfd02e082e89583701ef27dd348dc76ae015247f21a2756f5fac0ae  lualdap-1.3.1-1.src.rock
+>  sha256  b9b75da18d1e1147ec47bff508ffdce831da07dc371891b9057cf1c422660af4  lualdap/docs/license.md
+> diff --git a/package/lualdap/lualdap.mk b/package/lualdap/lualdap.mk
+> index 5dfba8b7a..375754180 100644
+> --- a/package/lualdap/lualdap.mk
+> +++ b/package/lualdap/lualdap.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -GREP_VERSION = 3.9
-> +GREP_VERSION = 3.10
->  GREP_SITE = $(BR2_GNU_MIRROR)/grep
->  GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
->  GREP_LICENSE = GPL-3.0+
+> -LUALDAP_VERSION = 1.3.0-1
+> +LUALDAP_VERSION = 1.3.1-1
+>  LUALDAP_SUBDIR = lualdap
+>  LUALDAP_LICENSE = MIT
+>  LUALDAP_LICENSE_FILES = $(LUALDAP_SUBDIR)/docs/license.md
 > -- 
-> 2.39.2
+> 2.37.2
 > 
 > _______________________________________________
 > buildroot mailing list
