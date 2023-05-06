@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52362C77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67451C77B75
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:47:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0502F61162;
-	Sat,  6 May 2023 14:46:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0502F61162
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF78261162;
+	Sat,  6 May 2023 14:47:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF78261162
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nypTm-OBnqjx; Sat,  6 May 2023 14:46:20 +0000 (UTC)
+	with ESMTP id hNf7fMsi7p8d; Sat,  6 May 2023 14:47:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 215BB61119;
-	Sat,  6 May 2023 14:46:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 215BB61119
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3F556104F;
+	Sat,  6 May 2023 14:47:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3F556104F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A127D1BF36E
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:46:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3B7EB1BF36E
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:47:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77F0341764
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:46:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77F0341764
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FC4541764
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:47:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FC4541764
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 43pceBHZYjah for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 14:46:16 +0000 (UTC)
+ with ESMTP id zeIPK9JYb88o for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 14:47:20 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B9DB41718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0BA841718
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3B9DB41718
- for <buildroot@buildroot.org>; Sat,  6 May 2023 14:46:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C0BA841718
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 14:47:19 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:ae89:1f5e:7283:231f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 88B81B0052C;
- Sat,  6 May 2023 16:46:12 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 1C612B00593;
+ Sat,  6 May 2023 16:47:15 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 May 2023 16:46:12 +0200
-Date: Sat, 6 May 2023 16:46:12 +0200
+ Sat, 06 May 2023 16:47:14 +0200
+Date: Sat, 6 May 2023 16:47:14 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230506144612.GJ2661@scaer>
-References: <20230325181958.25542-1-ps.report@gmx.net>
+Message-ID: <20230506144714.GK2661@scaer>
+References: <20230322162445.19051-1-ps.report@gmx.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230325181958.25542-1-ps.report@gmx.net>
+In-Reply-To: <20230322162445.19051-1-ps.report@gmx.net>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683384374;
- bh=TJue+9Q71HlNHV0TUPNw+zImhZ+SrCpKI1tadaVcsXM=;
+ d=free.fr; s=smtp-20201208; t=1683384438;
+ bh=3lIrVl+WWZYL67WsE39pbbOu6JB9NzKOw1pwWvuKLtg=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Vx8K6Eim+T1KuPUQbYAh3iqSidTmatw+O29K3o3ylbhTA4omkLXoTytZkb2bZ3LZC
- zVk6iAx4xro+SKL5IwT5z3kVlTRxPleEORMxaDAAOQG7u78X+z1tjZbgiKweEo2lk9
- ju9wi5D9YeMXQeWrFxKDSI5+p/0DhbC2jqYXBfqCEGg1MfzbQjw2wGOqUq1LnKvO1M
- CxFVPxVnCvhyoQZ6Fo25Essfsi09tIhk1NMVx9+P24mbkqwnZYGhh2hZ6TwXiaIMhP
- NW1sP/w2smj3y+xS5+O22Nm4tgO19yOXGx6W+8axqB+ZT+hUuxBdOoq12CsM9gy8Jp
- E+mxuj5N68Evg==
+ b=UUoTW6ZscHI9tp8jG16kFu7hUM/2UtbW3CH/KE8IVikMvlE10iL2HWcZzgUg5c0z4
+ 4P0BhcgvBxYX6TEAIC9NN2MQnu2ap1cV53Fee+T39Yjxso9EyQWk+27X4/PJQJqqs3
+ QLzw6AcFzqpXc4z+9ULutSPqQ5A19gd3IJnCTrFQGpfLP6xw5ISACMB6DuvP5GcTiq
+ s/aGoyakjsEf/aqczfQE/rmvHS7YUDSM7859CCPc9ANrhbUxEy5A4OLja1k9yb9IpQ
+ qrsIr1h4cAhTqU1j9RJF0j0PR7UyAMscEgGVoBcxAF74WorTn4uOYt0h4j1GqmQxfS
+ G+x5qazOa6ahw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Vx8K6Eim
-Subject: Re: [Buildroot] [PATCH v1] package/libcurl: disable NTLM support
- definitely
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=UUoTW6Zs
+Subject: Re: [Buildroot] [PATCH v1] package/libcurl: bump version to 8.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,15 +82,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All
+Peter, All,
 
-On 2023-03-25 19:19 +0100, Peter Seiderer spake thusly:
-> - do not only disable NTLM delegation to winbinds ntlm_auth but
->   disable NTLM support overall (and drop enforced libopenssl DES
->   dependency introduced by 'package/libcurl: make sure openssl
->   supports DES' (commit f25c820a4f93ad0ca7eaf5e504667bd4099b878c)
-> - change man page hint to https URL
-> - rearrange configure options to one option per line
+Peter K: this is a security fix, maybe candidate for backporting?
+
+On 2023-03-22 17:24 +0100, Peter Seiderer spake thusly:
+> For details see [1] and [2].
+> 
+> [1] https://curl.se/changes.html#8_0_0
+> [1] https://curl.se/changes.html#8_0_1
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
@@ -101,58 +100,35 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> Patch works for libcurl-7.88.1 and libcurl-8.0.1
-> ---
->  package/libcurl/Config.in  |  1 -
->  package/libcurl/libcurl.mk | 21 ++++++++++++++-------
->  2 files changed, 14 insertions(+), 8 deletions(-)
+>  package/libcurl/libcurl.hash | 4 ++--
+>  package/libcurl/libcurl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-> index 218309ed56..adab1ca3e6 100644
-> --- a/package/libcurl/Config.in
-> +++ b/package/libcurl/Config.in
-> @@ -57,7 +57,6 @@ choice
->  config BR2_PACKAGE_LIBCURL_OPENSSL
->  	bool "OpenSSL"
->  	depends on BR2_PACKAGE_OPENSSL
-> -	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
->  
->  config BR2_PACKAGE_LIBCURL_BEARSSL
->  	bool "BearSSL"
+> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+> index 32b3d0b5e2..8a29e7b977 100644
+> --- a/package/libcurl/libcurl.hash
+> +++ b/package/libcurl/libcurl.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+> -# https://curl.se/download/curl-7.88.1.tar.xz.asc
+> +# https://curl.se/download/curl-8.0.1.tar.xz.asc
+>  # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+> -sha256  1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f  curl-7.88.1.tar.xz
+> +sha256  0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0  curl-8.0.1.tar.xz
+>  sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
 > diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index 1a1594a45e..1ff0ecc004 100644
+> index 1a1594a45e..1354e526ad 100644
 > --- a/package/libcurl/libcurl.mk
 > +++ b/package/libcurl/libcurl.mk
-> @@ -16,15 +16,22 @@ LIBCURL_CPE_ID_VENDOR = haxx
->  LIBCURL_CPE_ID_PRODUCT = libcurl
->  LIBCURL_INSTALL_STAGING = YES
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> -# We disable NTLM support because it uses fork(), which doesn't work
-> -# on non-MMU platforms. Moreover, this authentication method is
-> -# probably almost never used. See
-> -# http://curl.se/docs/manpage.html#--ntlm.
-> +# We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
-> +# support because it uses fork(), which doesn't work on non-MMU platforms.
-> +# Moreover, this authentication method is probably almost never used (see
-> +# https://curl.se/docs/manpage.html#--ntlm), so disable NTLM support overall.
-> +#
->  # Likewise, there is no compiler on the target, so libcurl-option (to
->  # generate C code) isn't very useful
-> -LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
-> -	--with-random=/dev/urandom --disable-curldebug \
-> -	--disable-libcurl-option --disable-ldap --disable-ldaps
-> +LIBCURL_CONF_OPTS = \
-> +	--disable-manual \
-> +	--disable-ntlm \
-> +	--disable-ntlm-wb \
-> +	--with-random=/dev/urandom \
-> +	--disable-curldebug \
-> +	--disable-libcurl-option \
-> +	--disable-ldap \
-> +	--disable-ldaps
->  
->  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
->  LIBCURL_CONF_OPTS += --enable-threaded-resolver
+> -LIBCURL_VERSION = 7.88.1
+> +LIBCURL_VERSION = 8.0.1
+>  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+>  LIBCURL_SITE = https://curl.se/download
+>  LIBCURL_DEPENDENCIES = host-pkgconf \
 > -- 
 > 2.39.2
 > 
