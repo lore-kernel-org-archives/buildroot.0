@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEB85C77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52362C77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:46:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AD2A61159;
-	Sat,  6 May 2023 14:45:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AD2A61159
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0502F61162;
+	Sat,  6 May 2023 14:46:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0502F61162
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gfQObvQSXG62; Sat,  6 May 2023 14:45:33 +0000 (UTC)
+	with ESMTP id nypTm-OBnqjx; Sat,  6 May 2023 14:46:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9631761131;
-	Sat,  6 May 2023 14:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9631761131
+	by smtp3.osuosl.org (Postfix) with ESMTP id 215BB61119;
+	Sat,  6 May 2023 14:46:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 215BB61119
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 639991BF36E
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:45:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A127D1BF36E
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:46:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B747416CC
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:45:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B747416CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77F0341764
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:46:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77F0341764
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FzmR9dQr9o8r for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 14:45:30 +0000 (UTC)
+ with ESMTP id 43pceBHZYjah for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 14:46:16 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0448441506
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B9DB41718
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0448441506
- for <buildroot@buildroot.org>; Sat,  6 May 2023 14:45:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3B9DB41718
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 14:46:16 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:ae89:1f5e:7283:231f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 55193B0056B;
- Sat,  6 May 2023 16:45:26 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 88B81B0052C;
+ Sat,  6 May 2023 16:46:12 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 May 2023 16:45:26 +0200
-Date: Sat, 6 May 2023 16:45:26 +0200
+ Sat, 06 May 2023 16:46:12 +0200
+Date: Sat, 6 May 2023 16:46:12 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Nicolas Serafini <nicolas.serafini@ik.me>
-Message-ID: <20230506144526.GI2661@scaer>
-References: <20230320120101.595396-1-nicolas.serafini@ik.me>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20230506144612.GJ2661@scaer>
+References: <20230325181958.25542-1-ps.report@gmx.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230320120101.595396-1-nicolas.serafini@ik.me>
+In-Reply-To: <20230325181958.25542-1-ps.report@gmx.net>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683384328;
- bh=KfjdvPEnxRI/OFvlbf83ouN2hfLhshsKXtLjSZ5qjgU=;
+ d=free.fr; s=smtp-20201208; t=1683384374;
+ bh=TJue+9Q71HlNHV0TUPNw+zImhZ+SrCpKI1tadaVcsXM=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Bl0IRIXFFnSB6jpKUFLu+qYeLKpF27xpgokszwI4UV+skJmMa3CrtyZ0tNfsDwTNo
- sUbeHVi5PK+ZXfPxFcH9cLHgYHn8mMTIYShza4ZGkg5iELVZQYRMCxkUcMBo4n6+CC
- sOZuDVI7902mTfg+m1HZZFDRAWLyR9jqvDQ+dkx3jJ3/nRRatIx79xaCfQNpkKodpK
- EwKBYEJ3wZXmKRuC2iN+V2ZXdcPaY9jDJA3CMzN/rTUYgqM3B61EXWTGf6x9+9n4l6
- GEXnCnE9Xm1eO1qpEa4qLndrLrtMSIPGQSd0YVycOwl8F1qlaKwJD+IdQtvsO3uQOO
- BUpP1qoZFM5mA==
+ b=Vx8K6Eim+T1KuPUQbYAh3iqSidTmatw+O29K3o3ylbhTA4omkLXoTytZkb2bZ3LZC
+ zVk6iAx4xro+SKL5IwT5z3kVlTRxPleEORMxaDAAOQG7u78X+z1tjZbgiKweEo2lk9
+ ju9wi5D9YeMXQeWrFxKDSI5+p/0DhbC2jqYXBfqCEGg1MfzbQjw2wGOqUq1LnKvO1M
+ CxFVPxVnCvhyoQZ6Fo25Essfsi09tIhk1NMVx9+P24mbkqwnZYGhh2hZ6TwXiaIMhP
+ NW1sP/w2smj3y+xS5+O22Nm4tgO19yOXGx6W+8axqB+ZT+hUuxBdOoq12CsM9gy8Jp
+ E+mxuj5N68Evg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Bl0IRIXF
-Subject: Re: [Buildroot] [PATCH] package/exiv2: bump version to 0.27.6
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Vx8K6Eim
+Subject: Re: [Buildroot] [PATCH v1] package/libcurl: disable NTLM support
+ definitely
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,18 +83,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Nicolas, All,
+Peter, All
 
-On 2023-03-20 13:01 +0100, Nicolas Serafini via buildroot spake thusly:
-> Updated the link to the sources on github, the previous link no longer
-> exists.
-
-It's also just because upstream now pushes their releases on github.
-
-> Release notes:
-> https://github.com/Exiv2/exiv2/releases/tag/v0.27.6
+On 2023-03-25 19:19 +0100, Peter Seiderer spake thusly:
+> - do not only disable NTLM delegation to winbinds ntlm_auth but
+>   disable NTLM support overall (and drop enforced libopenssl DES
+>   dependency introduced by 'package/libcurl: make sure openssl
+>   supports DES' (commit f25c820a4f93ad0ca7eaf5e504667bd4099b878c)
+> - change man page hint to https URL
+> - rearrange configure options to one option per line
 > 
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@ik.me>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Applied to master, thanks.
 
@@ -101,35 +101,58 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/exiv2/exiv2.hash | 2 +-
->  package/exiv2/exiv2.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Patch works for libcurl-7.88.1 and libcurl-8.0.1
+> ---
+>  package/libcurl/Config.in  |  1 -
+>  package/libcurl/libcurl.mk | 21 ++++++++++++++-------
+>  2 files changed, 14 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-> index a405d2611b..c871277801 100644
-> --- a/package/exiv2/exiv2.hash
-> +++ b/package/exiv2/exiv2.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  35a58618ab236a901ca4928b0ad8b31007ebdc0386d904409d825024e45ea6e2  exiv2-0.27.5-Source.tar.gz
-> +sha256  4c192483a1125dc59a3d70b30d30d32edace9e14adf52802d2f853abf72db8a6  exiv2-0.27.6-Source.tar.gz
->  sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
-> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-> index 2a91c71c8f..869f8e48dd 100644
-> --- a/package/exiv2/exiv2.mk
-> +++ b/package/exiv2/exiv2.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
+> diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+> index 218309ed56..adab1ca3e6 100644
+> --- a/package/libcurl/Config.in
+> +++ b/package/libcurl/Config.in
+> @@ -57,7 +57,6 @@ choice
+>  config BR2_PACKAGE_LIBCURL_OPENSSL
+>  	bool "OpenSSL"
+>  	depends on BR2_PACKAGE_OPENSSL
+> -	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
 >  
-> -EXIV2_VERSION = 0.27.5
-> +EXIV2_VERSION = 0.27.6
->  EXIV2_SOURCE = exiv2-$(EXIV2_VERSION)-Source.tar.gz
-> -EXIV2_SITE = https://exiv2.org/builds
-> +EXIV2_SITE = https://github.com/Exiv2/exiv2/releases/download/v$(EXIV2_VERSION)
->  EXIV2_INSTALL_STAGING = YES
->  EXIV2_LICENSE = GPL-2.0+
->  EXIV2_LICENSE_FILES = COPYING
+>  config BR2_PACKAGE_LIBCURL_BEARSSL
+>  	bool "BearSSL"
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 1a1594a45e..1ff0ecc004 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -16,15 +16,22 @@ LIBCURL_CPE_ID_VENDOR = haxx
+>  LIBCURL_CPE_ID_PRODUCT = libcurl
+>  LIBCURL_INSTALL_STAGING = YES
+>  
+> -# We disable NTLM support because it uses fork(), which doesn't work
+> -# on non-MMU platforms. Moreover, this authentication method is
+> -# probably almost never used. See
+> -# http://curl.se/docs/manpage.html#--ntlm.
+> +# We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
+> +# support because it uses fork(), which doesn't work on non-MMU platforms.
+> +# Moreover, this authentication method is probably almost never used (see
+> +# https://curl.se/docs/manpage.html#--ntlm), so disable NTLM support overall.
+> +#
+>  # Likewise, there is no compiler on the target, so libcurl-option (to
+>  # generate C code) isn't very useful
+> -LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+> -	--with-random=/dev/urandom --disable-curldebug \
+> -	--disable-libcurl-option --disable-ldap --disable-ldaps
+> +LIBCURL_CONF_OPTS = \
+> +	--disable-manual \
+> +	--disable-ntlm \
+> +	--disable-ntlm-wb \
+> +	--with-random=/dev/urandom \
+> +	--disable-curldebug \
+> +	--disable-libcurl-option \
+> +	--disable-ldap \
+> +	--disable-ldaps
+>  
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>  LIBCURL_CONF_OPTS += --enable-threaded-resolver
 > -- 
 > 2.39.2
 > 
