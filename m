@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0D7EC77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:42:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 845D0C77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:43:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88EE261110;
-	Sat,  6 May 2023 14:42:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88EE261110
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30B90612CB;
+	Sat,  6 May 2023 14:43:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30B90612CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1pb9UiZhVRHJ; Sat,  6 May 2023 14:42:47 +0000 (UTC)
+	with ESMTP id FI-959h-Xp_M; Sat,  6 May 2023 14:43:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DA78610C9;
-	Sat,  6 May 2023 14:42:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DA78610C9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 10C211BF36E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CAEC61169;
+	Sat,  6 May 2023 14:42:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CAEC61169
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F9B61BF859
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:41:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D70B083F89
+ by smtp2.osuosl.org (Postfix) with ESMTP id D58F340A7D
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:41:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D70B083F89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D58F340A7D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z6vvBslnccRs for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 14:41:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1BYLM4oZHhxf for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 14:41:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D053B82321
+ by smtp2.osuosl.org (Postfix) with ESMTP id E830A405B0
  for <buildroot@buildroot.org>; Sat,  6 May 2023 14:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D053B82321
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E830A405B0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C001485DB4; Sat,  6 May 2023 14:41:02 +0000 (UTC)
+ id D76E785DCC; Sat,  6 May 2023 14:41:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 6 May 2023 16:28:32 +0200
+Date: Sat, 6 May 2023 16:28:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b613beef33dac6a3118172fd4c23f32af54ee5ba
-X-Git-Newrev: 7d8da5965b9b9474e4bdbe1d41204e3a88c48e18
+X-Git-Oldrev: a3c50b74275149f03447f311927500c4c5a0d0f5
+X-Git-Newrev: 341c6a58cef152dd1a6ab7e3e6153eaf3186e811
 X-Patchwork-Hint: ignore
-Message-Id: <20230506144102.C001485DB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/exiv2: bump version to 0.27.6
+Message-Id: <20230506144102.D76E785DCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/mx53loco: bump U-Boot and kernel
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d8da5965b9b9474e4bdbe1d41204e3a88c48e18
+commit: https://git.buildroot.net/buildroot/commit/?id=341c6a58cef152dd1a6ab7e3e6153eaf3186e811
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated the link to the sources on github, the previous link no longer
-exists.
+Bump to U-Boot 2023.01 and kernel 6.1.20 versions.
 
-Release notes:
-https://github.com/Exiv2/exiv2/releases/tag/v0.27.6
-
-Signed-off-by: Nicolas Serafini <nicolas.serafini@ik.me>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/exiv2/exiv2.hash | 2 +-
- package/exiv2/exiv2.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-index a405d2611b..c871277801 100644
---- a/package/exiv2/exiv2.hash
-+++ b/package/exiv2/exiv2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  35a58618ab236a901ca4928b0ad8b31007ebdc0386d904409d825024e45ea6e2  exiv2-0.27.5-Source.tar.gz
-+sha256  4c192483a1125dc59a3d70b30d30d32edace9e14adf52802d2f853abf72db8a6  exiv2-0.27.6-Source.tar.gz
- sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index 2a91c71c8f..869f8e48dd 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 18785aa0c8..212a032d84 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
  
--EXIV2_VERSION = 0.27.5
-+EXIV2_VERSION = 0.27.6
- EXIV2_SOURCE = exiv2-$(EXIV2_VERSION)-Source.tar.gz
--EXIV2_SITE = https://exiv2.org/builds
-+EXIV2_SITE = https://github.com/Exiv2/exiv2/releases/download/v$(EXIV2_VERSION)
- EXIV2_INSTALL_STAGING = YES
- EXIV2_LICENSE = GPL-2.0+
- EXIV2_LICENSE_FILES = COPYING
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.20"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
