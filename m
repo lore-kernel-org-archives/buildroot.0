@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75721C77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:11:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C8D8C77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:11:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 162AC41F79;
-	Sat,  6 May 2023 16:11:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 162AC41F79
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BB4341F51;
+	Sat,  6 May 2023 16:11:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BB4341F51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fAoD8gNtGyU7; Sat,  6 May 2023 16:11:20 +0000 (UTC)
+	with ESMTP id vn_FTJoix1d6; Sat,  6 May 2023 16:11:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD0284208B;
-	Sat,  6 May 2023 16:11:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD0284208B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 701F11BF36A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0ED004208B;
+	Sat,  6 May 2023 16:11:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0ED004208B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A3DE01BF36A
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:09:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45E9D40102
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7AC4941F4B
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45E9D40102
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AC4941F4B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id diSu5UtD4-6w for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cwtgo980vmMO for <buildroot@lists.busybox.net>;
  Sat,  6 May 2023 16:09:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85874401CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DDFB417D3
  for <buildroot@buildroot.org>; Sat,  6 May 2023 16:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85874401CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DDFB417D3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 748E885EC2; Sat,  6 May 2023 16:09:24 +0000 (UTC)
+ id 5B69385EC6; Sat,  6 May 2023 16:09:24 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 6 May 2023 18:02:16 +0200
+Date: Sat, 6 May 2023 18:01:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bf9a5c397c1c952fc8b5cd75cf4d651c746759fb
-X-Git-Newrev: 2b18a93cd5cdb56dd2a0e85ea9d04e16f1513fa4
+X-Git-Oldrev: e5fbe807f3ca01881d8a8c0944fc18634a74a047
+X-Git-Newrev: f32ef0be878e8a2db8e3077a85fc54f14adf7870
 X-Patchwork-Hint: ignore
-Message-Id: <20230506160924.748E885EC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/moby-buildkit: bump version to
- 0.11.6
+Message-Id: <20230506160924.5B69385EC6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fuse-overlayfs: bump version to
+ 1.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b18a93cd5cdb56dd2a0e85ea9d04e16f1513fa4
+commit: https://git.buildroot.net/buildroot/commit/?id=f32ef0be878e8a2db8e3077a85fc54f14adf7870
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfixes.
-
-https://github.com/moby/buildkit/releases/tag/v0.11.6
+https://github.com/containers/fuse-overlayfs/releases/tag/v1.11
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/moby-buildkit/moby-buildkit.hash | 2 +-
- package/moby-buildkit/moby-buildkit.mk   | 2 +-
+ package/fuse-overlayfs/fuse-overlayfs.hash | 2 +-
+ package/fuse-overlayfs/fuse-overlayfs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/moby-buildkit/moby-buildkit.hash b/package/moby-buildkit/moby-buildkit.hash
-index ef927636d9..f7922d7e8f 100644
---- a/package/moby-buildkit/moby-buildkit.hash
-+++ b/package/moby-buildkit/moby-buildkit.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b1746575f37715a8a2f2df5bab77ea081ba8436854e241792702109fc9e3653d  moby-buildkit-0.11.2.tar.gz
-+sha256  1efa1c54b299c463c1b039d3df8ba1c68e70fe4de608fd14653fcebf9f27837b  moby-buildkit-0.11.6.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
-index a25f676710..91560c1ed1 100644
---- a/package/moby-buildkit/moby-buildkit.mk
-+++ b/package/moby-buildkit/moby-buildkit.mk
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
+index aa5438755e..b8df6c88a5 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.hash
++++ b/package/fuse-overlayfs/fuse-overlayfs.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  4351eaed7cf26a5012c14c6e0fc883ef65a7b5dcc95ba129ce485904106c25a9  fuse-overlayfs-1.10.tar.gz
++sha256  320a411425414679736dcb7f3b05146430ca4af20ded0096c69ac3c7540ebca2  fuse-overlayfs-1.11.tar.gz
+ # Locally computed
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+index 1633d3bd41..4db2ccd7d5 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.mk
++++ b/package/fuse-overlayfs/fuse-overlayfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOBY_BUILDKIT_VERSION = 0.11.2
-+MOBY_BUILDKIT_VERSION = 0.11.6
- MOBY_BUILDKIT_SITE = $(call github,moby,buildkit,v$(MOBY_BUILDKIT_VERSION))
- MOBY_BUILDKIT_LICENSE = Apache-2.0
- MOBY_BUILDKIT_LICENSE_FILES = LICENSE
+-FUSE_OVERLAYFS_VERSION = 1.10
++FUSE_OVERLAYFS_VERSION = 1.11
+ FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
+ FUSE_OVERLAYFS_LICENSE = GPL-3.0
+ FUSE_OVERLAYFS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
