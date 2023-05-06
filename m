@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17641C77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C1AC77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AAE9942047;
-	Sat,  6 May 2023 16:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAE9942047
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F54241F4C;
+	Sat,  6 May 2023 16:17:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F54241F4C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Znx9qzNYq-F; Sat,  6 May 2023 16:15:18 +0000 (UTC)
+	with ESMTP id uxS6ZXaDSs3e; Sat,  6 May 2023 16:17:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C0124177C;
-	Sat,  6 May 2023 16:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C0124177C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D18C1BF36A
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:12:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35B504177A;
+	Sat,  6 May 2023 16:17:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35B504177A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 49C281BF36A
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:17:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB0A7401B7
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:12:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB0A7401B7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30A6C83EF3
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:17:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30A6C83EF3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tKtEPAz0y54C for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 16:12:53 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F375040102
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F375040102
- for <buildroot@buildroot.org>; Sat,  6 May 2023 16:12:52 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:ae89:1f5e:7283:231f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4E2B8B0053D;
- Sat,  6 May 2023 18:12:48 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 May 2023 18:12:48 +0200
-Date: Sat, 6 May 2023 18:12:48 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Christian Stewart <christian@aperture.us>
-Message-ID: <20230506161248.GX252090@scaer>
-References: <20230504073711.3469113-1-christian@aperture.us>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230504073711.3469113-1-christian@aperture.us>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683389571;
- bh=QIgdPCIWKuOrwXm3CrAIjWWqJOvBlK+zr70nqCtG6/c=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OGm1XncqF6vsPW6+naoRvQpwMWmY/zD/bD0+pZQXmr4/TpRgaZMOr9NZQ46R5Ll7F
- I6BtkMhjWBVvUpUrWfV4PlfmaIlF1M0MqQ0D8C/7YnaMv0PSURQ5SKCQDtyKDehKN+
- gdUlm36JcrjkRY1YBGTVzdM3GgFUNWZZTBJxATGv+wefXtEdvBOYFQ8ZqlfVBKy+ZY
- 3kxN1Dm5EorrxvpAwbuRmdP2m/MlDFuUu3xcmU1gOKXwD1toe3hz9TdEYFA+/4rNzk
- XvjWLPvY+jCTYSqMTC5BraPoD0ajb+skiInkUUKZ9g5hkKDwMdvfU7HiNESc6podfW
- MEBam2aKmFsRg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=OGm1Xncq
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/nerdctl: bump version to
- 1.3.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vjHZmq30QYjC for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 16:17:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 710F183EDC
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 16:17:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 710F183EDC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5E86485EC8; Sat,  6 May 2023 16:17:27 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 6 May 2023 18:15:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d65570fac4d577bd3661ad892df80bc9601f4ae
+X-Git-Newrev: e0ef6ddcf9231d367b3f4a0fb1c4cca40b3e6f2e
+X-Patchwork-Hint: ignore
+Message-Id: <20230506161727.5E86485EC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] .checkpackageignore: regenerate list
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,68 +56,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Christian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=e0ef6ddcf9231d367b3f4a0fb1c4cca40b3e6f2e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-05-04 00:37 -0700, Christian Stewart via buildroot spake thusly:
-> Bugfixes and features.
-> 
-> https://github.com/containerd/nerdctl/releases/tag/v1.3.1
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+Some patches were removed in recent version bumps:
+  - 2d7cfd49ba  package/valgrind: bump version to 3.20.0
+  - 4aef53575b  package/libgit2: bump version to 1.6.4
+  - b0306d94b2  package/cpio: bump version to 2.14
+  - f292d9b736  package/gocryptfs: bump version to 2.3.2
 
-Applied to master, thanks.
+Update the ignore list accordingly.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .checkpackageignore | 6 ------
+ 1 file changed, 6 deletions(-)
 
-> ---
->  package/nerdctl/nerdctl.hash | 2 +-
->  package/nerdctl/nerdctl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/nerdctl/nerdctl.hash b/package/nerdctl/nerdctl.hash
-> index 8f2c678198..1fb0649fb2 100644
-> --- a/package/nerdctl/nerdctl.hash
-> +++ b/package/nerdctl/nerdctl.hash
-> @@ -1,3 +1,3 @@
->  # Computed locally
-> -sha256  08a84b9481b37dbd8cc6f955dbec0c18a1934bcffeb135fd5d2dc23987152b7c  nerdctl-1.2.0.tar.gz
-> +sha256  574438dd7c88e6a607c6f82932f8ada174b1133a66ee0fa0f7510e7c3bebacb4  nerdctl-1.3.1.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/nerdctl/nerdctl.mk b/package/nerdctl/nerdctl.mk
-> index 7556bcc391..43e862f7f9 100644
-> --- a/package/nerdctl/nerdctl.mk
-> +++ b/package/nerdctl/nerdctl.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -NERDCTL_VERSION = 1.2.0
-> +NERDCTL_VERSION = 1.3.1
->  NERDCTL_SITE = $(call github,containerd,nerdctl,v$(NERDCTL_VERSION))
->  
->  NERDCTL_LICENSE = Apache-2.0
-> -- 
-> 2.40.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/.checkpackageignore b/.checkpackageignore
+index d1626326a8..9363e7f3bb 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -317,9 +317,6 @@ package/connman/0003-wispr-Update-portal-context-references.patch Upstream
+ package/connman/S45connman Variables
+ package/copas/0001-Do-not-load-coxpcall-for-LuaJIT.patch Upstream
+ package/coremark-pro/coremark-pro.sh.in Shellcheck
+-package/cpio/0001-Minor-fix.patch Upstream
+-package/cpio/0002-Rewrite-dynamic-string-support.patch Upstream
+-package/cpio/0003-Fix-previous-commit.patch Upstream
+ package/cppdb/0001-mysql-library-suffix.patch Upstream
+ package/cpulimit/0001-Fix-crash-and-compiler-warnings.patch Upstream
+ package/cpulimit/0002-Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch Upstream
+@@ -622,7 +619,6 @@ package/gob2/0001-dont-include-from-prefix.patch Upstream
+ package/gobject-introspection/0001-disable-tests.patch Upstream
+ package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch Upstream
+ package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch Upstream
+-package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch Upstream
+ package/google-breakpad/gen-syms.sh Shellcheck
+ package/gpm/0001-Added-musl-support-to-libgpm-and-the-daemon.patch Upstream
+ package/gpm/0002-Install-unversioned-solibrary.patch Upstream
+@@ -795,7 +791,6 @@ package/libfuse/0002-util-ulockmgr_server-c-conditionally-define-closefrom-fix-g
+ package/libfuse3/0001-Fix-MS_LAZYTIME-not-defined-on-uclibc.patch Upstream
+ package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch Upstream
+ package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.patch Upstream
+-package/libgit2/0001-sysdir-Do-not-declare-win32-functions-on-non-win32-p.patch Upstream
+ package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch Upstream
+ package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch Upstream
+ package/libgpgme/0001-Fix-build-without-threads.patch Upstream
+@@ -1644,7 +1639,6 @@ package/vala/0001-dont-add-dirty-to-valac-version.patch Upstream
+ package/vala/vala-wrapper Shellcheck
+ package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch Upstream
+ package/valgrind/0002-Define-PTRACE_GETSIGINFO-on-PowerPC-when-not-availab.patch Upstream
+-package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch Upstream
+ package/vboot-utils/0001-Add-missing-definition-of-MTD_CHAR_MAJOR.patch Upstream
+ package/vboot-utils/0002-Add-missing-header-include-for-ssize_t.patch Upstream
+ package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch Upstream
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
