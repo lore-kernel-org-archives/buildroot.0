@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35C9EC77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 17:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5085FC77B7F
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 17:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B44EA42A9D;
-	Sat,  6 May 2023 17:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B44EA42A9D
+	by smtp2.osuosl.org (Postfix) with ESMTP id F069D40C12;
+	Sat,  6 May 2023 17:43:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F069D40C12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lxB21r1h1XEK; Sat,  6 May 2023 17:43:06 +0000 (UTC)
+	with ESMTP id nGcRRLAiwMIq; Sat,  6 May 2023 17:43:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A1D0F40CA8;
-	Sat,  6 May 2023 17:43:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1D0F40CA8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9D9DC1BF859
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1555142A7A;
+	Sat,  6 May 2023 17:43:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1555142A7A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AAC6C1BF85D
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75B9F83EE1
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75B9F83EE1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 908B9415CB
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 908B9415CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qQ9DW3EuNAt1 for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 17:39:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I2EZKB6gJc6m for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 17:39:29 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02E8D83CEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53212409B1
 Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 02E8D83CEA
- for <buildroot@buildroot.org>; Sat,  6 May 2023 17:39:22 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout03.t-online.de (Postfix) with SMTP id 703A85843
- for <buildroot@buildroot.org>; Sat,  6 May 2023 19:39:20 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd72.t-online.de
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 53212409B1
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 17:39:29 +0000 (UTC)
+Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
+ by mailout03.t-online.de (Postfix) with SMTP id 5126F583C
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 19:39:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd70.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pvLsO-1IXP6n0; Sat, 6 May 2023 19:39:20 +0200
+ esmtp id 1pvLsN-0Z0R1d0; Sat, 6 May 2023 19:39:19 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36596)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pvLsN-0004jT-2J
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pvLsN-0004jT-0f
  for buildroot@buildroot.org; Sat, 06 May 2023 19:39:19 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat,  6 May 2023 19:39:16 +0200
-Message-Id: <20230506173917.1112500-21-bernd.kuhls@t-online.de>
+Date: Sat,  6 May 2023 19:39:09 +0200
+Message-Id: <20230506173917.1112500-14-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
 References: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683394760-3D8ADC0E-4774840B/0/0 CLEAN NORMAL
-X-TOI-MSGID: b4c522e1-c4ec-4406-8407-69c14d10379d
-Subject: [Buildroot] [PATCH 21/22] package/x11r7/xdriver_xf86-video-amdgpu:
- bump version to 23.0.0
+X-TOI-EXPURGATEID: 150726::1683394759-DD540C15-C7965C4B/0/0 CLEAN NORMAL
+X-TOI-MSGID: 735515f4-c607-4872-99d2-73edd1a19718
+Subject: [Buildroot] [PATCH 14/22] package/x11r7/xapp_xwininfo: bump version
+ to 1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,43 +74,48 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-February/003334.html
+https://lists.x.org/archives/xorg-announce/2023-April/003379.html
+
+Updated license hash due to upstream commit:
+https://gitlab.freedesktop.org/xorg/app/xwininfo/-/commit/9a5623e2ffc6995b2c6edf379f191d76d7b4444a
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-amdgpu.hash                          | 6 +++---
- .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk  | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.hash | 10 ++++------
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-index c45ae59ee4..962cb0e16b 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg/2022-February/060928.html
--sha256  9d23fb602915dc3ccde92aa4d1e9485e7e54eaae2f41f485e55eb20761778266  xf86-video-amdgpu-22.0.0.tar.xz
--sha512  95c64e3fef7729ced6e7adc5e81c60cc218f6d8b6604f7b290e86ff52c917426b5102decbf8be8a66c9181ccde6e5dff7083dca8cc0c493a39e82625b5c7cb2a  xf86-video-amdgpu-22.0.0.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003334.html
-+sha256  4f04f0ea66f3ced0dcc58f617409860163a19c4e8c285cfb5285f36ba09cc061  xf86-video-amdgpu-23.0.0.tar.xz
-+sha512  bf26f147629a34e84a0ae8435119e170b9c95edafcab1995b63bb8f55abef32f2efbf4536eb070e64b2ae1460424b1b27a4206cb9836d33ddc6dfbee404f718b  xf86-video-amdgpu-23.0.0.tar.xz
+diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+index fbc7f7be00..bbf2e37328 100644
+--- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
++++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003012.html
+-md5  26d46f7ef0588d3392da3ad5802be420  xwininfo-1.1.5.tar.bz2
+-sha1  9f67b1eb07c5824d437bf577cf6198962af1aeb7  xwininfo-1.1.5.tar.bz2
+-sha256  7a405441dfc476666c744f5fcd1bc8a75abf8b5b1d85db7b88b370982365080e  xwininfo-1.1.5.tar.bz2
+-sha512  a3268bbeeeeafac94e589fdd47554a965910d40df7cc3d9c36c7c24fa4f5dd49615484d5916ccb41efca9cd4cf9d8981a4c60953b921220b3f4f57f9cce0e1a6  xwininfo-1.1.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-April/003379.html
++sha256  3518897c17448df9ba99ad6d9bb1ca0f17bc0ed7c0fd61281b34ceed29a9253f  xwininfo-1.1.6.tar.xz
++sha512  c6df4ed3dcf97772450612f2786ecab8313a43bb78e0b8020cc9ec228b3f466f55090313ad02c8159a73a6892d117322ad85e28d9d76e38bb84c9750712c20bc  xwininfo-1.1.6.tar.xz
  # Locally computed
- sha256  58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index ba4ab43db2..84f8e39ddd 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-@@ -4,9 +4,9 @@
+-sha256  443d675237c023a47e4886506b72796afbb2633394812027f91d6e8fa433b2af  COPYING
++sha256  1be1f0763a5efd08e48089c52728a822bf769b690a2fd82fbab456cfffee822f  COPYING
+diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+index 9652487aae..196b73c83d 100644
+--- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
++++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 22.0.0
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 23.0.0
- XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.xz
--XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_AMDGPU_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_AMDGPU_DEPENDENCIES = \
+-XAPP_XWININFO_VERSION = 1.1.5
+-XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.bz2
++XAPP_XWININFO_VERSION = 1.1.6
++XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.xz
+ XAPP_XWININFO_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XWININFO_LICENSE = MIT
+ XAPP_XWININFO_LICENSE_FILES = COPYING
 -- 
 2.39.2
 
