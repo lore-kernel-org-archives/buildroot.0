@@ -4,59 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C21CC77B7F
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 17:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08DF0C77B7F
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 17:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 569CD40BFE;
-	Sat,  6 May 2023 17:39:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 569CD40BFE
+	by smtp2.osuosl.org (Postfix) with ESMTP id A878840CB3;
+	Sat,  6 May 2023 17:39:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A878840CB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zRjMP275iFwG; Sat,  6 May 2023 17:39:27 +0000 (UTC)
+	with ESMTP id i1XuuQMAq0vA; Sat,  6 May 2023 17:39:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5643240C12;
-	Sat,  6 May 2023 17:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5643240C12
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3D0F81BF369
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4E1240C5A;
+	Sat,  6 May 2023 17:39:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4E1240C5A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 463971BF859
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2358C40BFE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FFE0607F7
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2358C40BFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FFE0607F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MHXfRaBWnit4 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PMIaX1p2Rcag for <buildroot@lists.busybox.net>;
  Sat,  6 May 2023 17:39:21 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 476D740B80
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 476D740B80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AD59607CA
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3AD59607CA
  for <buildroot@buildroot.org>; Sat,  6 May 2023 17:39:21 +0000 (UTC)
 Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout03.t-online.de (Postfix) with SMTP id 792D35836
+ by mailout09.t-online.de (Postfix) with SMTP id 51682A15A
  for <buildroot@buildroot.org>; Sat,  6 May 2023 19:39:18 +0200 (CEST)
 Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd85.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pvLsM-3RK6La0; Sat, 6 May 2023 19:39:18 +0200
+ esmtp id 1pvLsM-3RK6LZ0; Sat, 6 May 2023 19:39:18 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36596)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pvLsM-0004jT-0L
- for buildroot@buildroot.org; Sat, 06 May 2023 19:39:18 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pvLsL-0004jT-2Z
+ for buildroot@buildroot.org; Sat, 06 May 2023 19:39:17 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat,  6 May 2023 19:39:00 +0200
-Message-Id: <20230506173917.1112500-5-bernd.kuhls@t-online.de>
+Date: Sat,  6 May 2023 19:38:56 +0200
+Message-Id: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
-References: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683394758-A57C7C52-6D3F320D/0/0 CLEAN NORMAL
-X-TOI-MSGID: 63dcb80c-c42b-4bd4-bd6c-c70d88e6978a
-Subject: [Buildroot] [PATCH 05/22] package/x11r7/xapp_xinput: bump version
- to 1.6.4
+X-TOI-EXPURGATEID: 150726::1683394758-A57C7C52-90AB38A2/0/0 CLEAN NORMAL
+X-TOI-MSGID: e4c05520-83a3-489a-9911-28677a9da758
+Subject: [Buildroot] [PATCH 01/22] package/x11r7/xdriver_xf86-video-geode:
+ bump version to 2.11.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,44 +72,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-April/003389.html
+https://lists.x.org/archives/xorg-announce/2023-May/003393.html
 
+Fixes:
+http://autobuild.buildroot.net/results/d1d/d1dae8c7ba9dc82fbbcc5914ea3b378e48304617/
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xinput/xapp_xinput.hash | 8 +++-----
- package/x11r7/xapp_xinput/xapp_xinput.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ .../xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash  | 4 +++-
+ .../xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk    | 6 +++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_xinput/xapp_xinput.hash b/package/x11r7/xapp_xinput/xapp_xinput.hash
-index 0961879637..d3a6a66902 100644
---- a/package/x11r7/xapp_xinput/xapp_xinput.hash
-+++ b/package/x11r7/xapp_xinput/xapp_xinput.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-July/003013.html
--md5  ac6b7432726008b2f50eba82b0e2dbe4  xinput-1.6.3.tar.bz2
--sha1  92ea7dfb3d8465921b0dca85da7d5b01cedae6c8  xinput-1.6.3.tar.bz2
--sha256  35a281dd3b9b22ea85e39869bb7670ba78955d5fec17c6ef7165d61e5aeb66ed  xinput-1.6.3.tar.bz2
--sha512  cb2fef866ac5a71dbca3e23b4ecadaca38e65dc1b30f8bb024bad92486554fafc472706619a1af04c746a4f53ce6aea827d694b9f4f0c7d0d46bb1da81984076  xinput-1.6.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-April/003389.html
-+sha256  ad04d00d656884d133110eeddc34e9c69e626ebebbbab04dc95791c2907057c8  xinput-1.6.4.tar.xz
-+sha512  6734860852715e5cb9d26259a173e42413fc037546ed7fa4173ffa802c2619ee0322bed228a28cd1911be759d860070867d9b89b115f37323cca1c9ef75354b9  xinput-1.6.4.tar.xz
- # Locally computed
- sha256  bbd35c7a8e8c5cb073935e84b29b0c53f7131a4ef1ce737dc2be5616941e07e1  COPYING
-diff --git a/package/x11r7/xapp_xinput/xapp_xinput.mk b/package/x11r7/xapp_xinput/xapp_xinput.mk
-index 0d6c0deffe..614b62fe77 100644
---- a/package/x11r7/xapp_xinput/xapp_xinput.mk
-+++ b/package/x11r7/xapp_xinput/xapp_xinput.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
+index 7a66c28b52..7dcb99fe2a 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
++++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
+@@ -1,3 +1,5 @@
++# From https://lists.x.org/archives/xorg-announce/2023-May/003393.html
++sha256  8256ac3f14117324d00b7bfa8053645ca92562fe837c542489a502adbb5f9f1e  xf86-video-geode-2.11.21.tar.xz
++sha512  e12f74268ab7d16b57644a9465b4be1ca28d250625a31b8810e19a1f94a17e47e0a258455155fd8f336fa59fd78160cdf3763aa94b85c6ccc2c42edf3b65bc61  xf86-video-geode-2.11.21.tar.xz
+ # Locally calculated
+-sha256  f497d0bfb09f36c72e3467e2d701f57f6b03ab8992c5d570e66582f714f84d64  xf86-video-geode-2.11.20.tar.bz2
+ sha256  3994ef7cee54f0935a4b57b1c34efd904da567931dd9e1a2d9390d22c8332ea2  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
+index dbeae1aa65..8f84e4863f 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
++++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XINPUT_VERSION = 1.6.3
--XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
-+XAPP_XINPUT_VERSION = 1.6.4
-+XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.xz
- XAPP_XINPUT_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XINPUT_LICENSE = MIT
- XAPP_XINPUT_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.20
+-XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_GEODE_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.21
++XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_GEODE_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_GEODE_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_GEODE_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_GEODE_DEPENDENCIES = xserver_xorg-server xorgproto
 -- 
 2.39.2
 
