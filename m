@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC7ECC77B75
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9C1BC77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5ED1E42058;
-	Sat,  6 May 2023 16:09:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ED1E42058
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F4384207B;
+	Sat,  6 May 2023 16:10:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F4384207B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QqJtE6D0MpWI; Sat,  6 May 2023 16:09:55 +0000 (UTC)
+	with ESMTP id tFRwtOZS5MLg; Sat,  6 May 2023 16:10:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F26FF4201F;
-	Sat,  6 May 2023 16:09:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F26FF4201F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3A8A21BF85D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22C974204F;
+	Sat,  6 May 2023 16:10:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22C974204F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 86B031BF36A
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 13FE9610C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5ECC44177C
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13FE9610C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ECC44177C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uLZW0Y7aq-2Y for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SvpLihol_-_y for <buildroot@lists.busybox.net>;
  Sat,  6 May 2023 16:09:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C74360A9A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63E10417B2
  for <buildroot@buildroot.org>; Sat,  6 May 2023 16:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C74360A9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63E10417B2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1863B85EC2; Sat,  6 May 2023 16:09:24 +0000 (UTC)
+ id 538DC85EC5; Sat,  6 May 2023 16:09:24 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 6 May 2023 18:01:19 +0200
+Date: Sat, 6 May 2023 18:01:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 87c2f04e7cd453d2e2f2752e812a7324f9963775
-X-Git-Newrev: a27cb09d9aaa4f6f1056c520f8d0c48912451734
+X-Git-Oldrev: f3bb3797af6247398850c56247d1dd724cfe5539
+X-Git-Newrev: e5fbe807f3ca01881d8a8c0944fc18634a74a047
 X-Patchwork-Hint: ignore
-Message-Id: <20230506160924.1863B85EC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnupg2: bump version to 2.4.1
+Message-Id: <20230506160924.538DC85EC5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-compose: bump version to
+ 2.17.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,49 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a27cb09d9aaa4f6f1056c520f8d0c48912451734
+commit: https://git.buildroot.net/buildroot/commit/?id=e5fbe807f3ca01881d8a8c0944fc18634a74a047
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+https://github.com/docker/compose/releases/tag/v2.17.3
 
-[1] https://lists.gnupg.org/pipermail/gnupg-announce/2023q2/000478.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/docker-compose/docker-compose.hash | 2 +-
+ package/docker-compose/docker-compose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index c642862fe2..baee824104 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000477.html
--sha1  63dde155a8df0d5e1987efa5fc17438beca83ac1  gnupg-2.4.0.tar.bz2
-+# From  https://lists.gnupg.org/pipermail/gnupg-announce/2023q2/000478.html
-+sha1  d7d021101361a5e1166a6c0cc1731276e7134547  gnupg-2.4.1.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.0.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.1.tar.bz2.sig
- # using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  1d79158dd01d992431dd2e3facb89fdac97127f89784ea2cb610c600fb0c1483  gnupg-2.4.0.tar.bz2
-+sha256  76b71e5aeb443bfd910ce9cbc8281b617c8341687afb67bae455877972b59de8  gnupg-2.4.1.tar.bz2
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 73de185ba7..f7c7ae847c 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
+index 2c924d5080..4fe6d73139 100644
+--- a/package/docker-compose/docker-compose.hash
++++ b/package/docker-compose/docker-compose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  346571ca487bf3f4b3dc9caeadc88a645354b0e098fa60f350249ec35ab3f240  docker-compose-2.15.1.tar.gz
++sha256  3a777f6442db77447919cc7006d8b9439c95cc61c04acad4039e0120a8e591ea  docker-compose-2.17.3.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
+index 3bced8bb7b..09f611e185 100644
+--- a/package/docker-compose/docker-compose.mk
++++ b/package/docker-compose/docker-compose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.4.0
-+GNUPG2_VERSION = 2.4.1
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-DOCKER_COMPOSE_VERSION = 2.15.1
++DOCKER_COMPOSE_VERSION = 2.17.3
+ DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
+ DOCKER_COMPOSE_LICENSE = Apache-2.0
+ DOCKER_COMPOSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
