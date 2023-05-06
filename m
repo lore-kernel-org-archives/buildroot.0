@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4301C77B7F
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 15:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32E76C77B7F
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 15:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C10181E22;
-	Sat,  6 May 2023 15:38:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C10181E22
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC41E820BB;
+	Sat,  6 May 2023 15:39:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC41E820BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tWoqQWtTgef7; Sat,  6 May 2023 15:38:52 +0000 (UTC)
+	with ESMTP id s6W3iwHUZBsg; Sat,  6 May 2023 15:39:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B394281B36;
-	Sat,  6 May 2023 15:38:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B394281B36
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 81CA81BF36C
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:38:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F02C98214A;
+	Sat,  6 May 2023 15:39:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F02C98214A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 390D81BF36C
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:39:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5971481951
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5971481951
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12D1F40A86
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:39:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12D1F40A86
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5gqZ3fWrxEXY for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 15:38:49 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 126B381865
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 126B381865
- for <buildroot@busybox.net>; Sat,  6 May 2023 15:38:48 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:ae89:1f5e:7283:231f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2F1A2B00579;
- Sat,  6 May 2023 17:38:45 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 May 2023 17:38:44 +0200
-Date: Sat, 6 May 2023 17:38:44 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Baruch Siach <baruch@tkos.co.il>
-Message-ID: <20230506153844.GJ252090@scaer>
-References: <8bd45a8969a830626dc674204f09c522fd61bb6c.1683259990.git.baruch@tkos.co.il>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <8bd45a8969a830626dc674204f09c522fd61bb6c.1683259990.git.baruch@tkos.co.il>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683387527;
- bh=NMR4KKsSnYFefFO0EhWJ461Z7iZoFETL2iq0hSLJ0ZE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=E5u2XPEWRJPwrPcwWaM1rcv1NxQx0G/rHylCatAZup+CmrEAfv2fc55D26BWve/FY
- pPDkIpomRk0qdJXPaczlOBRHqmigBMFiwvsE0z2D3g72j2N92sq2ebjozeKzODlLgF
- 0JYuvud2GAz3CSuWdt4g8Wlj7ZQhxPn6S8L6JjaWU6rfTXyjFGZBAhD5ElBs3ekyZA
- Hvgugcp+YXbyMxLc5ZGeDZGJXM5F8H9o4Uaqf0V0m5Ses0EMU7PQHNN4yZz0Cyy/CW
- tgDfyJ6xyF5xbzh+qPuaPAY9F1OTsq6yqgv4K9IMwh6xd1JlQT3VfGyzf7eg3+tyNV
- C+BksHqaVR2LA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=E5u2XPEW
-Subject: Re: [Buildroot] [PATCH] package/libpcap: bump to version 1.10.4
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UoriCeigag3k for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 15:39:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40A47401B7
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 15:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40A47401B7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2FC9F85E43; Sat,  6 May 2023 15:39:07 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 6 May 2023 17:38:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a85f4b53466c609bb121e2a021b643283e1849c6
+X-Git-Newrev: 87c2f04e7cd453d2e2f2752e812a7324f9963775
+X-Patchwork-Hint: ignore
+Message-Id: <20230506153907.2FC9F85E43@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpcap: bump to version 1.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,68 +56,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Baruch, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=87c2f04e7cd453d2e2f2752e812a7324f9963775
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-05-05 07:13 +0300, Baruch Siach via buildroot spake thusly:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libpcap/libpcap.hash | 4 ++--
+ package/libpcap/libpcap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libpcap/libpcap.hash | 4 ++--
->  package/libpcap/libpcap.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
-> index 270fd8869dac..34339c126196 100644
-> --- a/package/libpcap/libpcap.hash
-> +++ b/package/libpcap/libpcap.hash
-> @@ -1,6 +1,6 @@
->  # Locally calculated after checking pgp signature
-> -# https://www.tcpdump.org/release/libpcap-1.10.3.tar.gz.sig
-> -sha256  2a8885c403516cf7b0933ed4b14d6caa30e02052489ebd414dc75ac52e7559e6  libpcap-1.10.3.tar.gz
-> +# https://www.tcpdump.org/release/libpcap-1.10.4.tar.gz.sig
-> +sha256  ed19a0383fad72e3ad435fd239d7cd80d64916b87269550159d20e47160ebe5f  libpcap-1.10.4.tar.gz
->  
->  # Hash for license file:
->  sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
-> diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-> index d4292ae9a3fb..a4523f22182b 100644
-> --- a/package/libpcap/libpcap.mk
-> +++ b/package/libpcap/libpcap.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBPCAP_VERSION = 1.10.3
-> +LIBPCAP_VERSION = 1.10.4
->  LIBPCAP_SITE = https://www.tcpdump.org/release
->  LIBPCAP_LICENSE = BSD-3-Clause
->  LIBPCAP_LICENSE_FILES = LICENSE
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index 270fd8869d..34339c1261 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.tcpdump.org/release/libpcap-1.10.3.tar.gz.sig
+-sha256  2a8885c403516cf7b0933ed4b14d6caa30e02052489ebd414dc75ac52e7559e6  libpcap-1.10.3.tar.gz
++# https://www.tcpdump.org/release/libpcap-1.10.4.tar.gz.sig
++sha256  ed19a0383fad72e3ad435fd239d7cd80d64916b87269550159d20e47160ebe5f  libpcap-1.10.4.tar.gz
+ 
+ # Hash for license file:
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index d4292ae9a3..a4523f2218 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPCAP_VERSION = 1.10.3
++LIBPCAP_VERSION = 1.10.4
+ LIBPCAP_SITE = https://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3-Clause
+ LIBPCAP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
