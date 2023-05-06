@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67451C77B75
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:47:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5B6AC77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 14:49:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF78261162;
-	Sat,  6 May 2023 14:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF78261162
+	by smtp3.osuosl.org (Postfix) with ESMTP id 806FA6110B;
+	Sat,  6 May 2023 14:49:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 806FA6110B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hNf7fMsi7p8d; Sat,  6 May 2023 14:47:24 +0000 (UTC)
+	with ESMTP id LSkVoh5CL9c9; Sat,  6 May 2023 14:49:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3F556104F;
-	Sat,  6 May 2023 14:47:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3F556104F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3B7EB1BF36E
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:47:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5BBA60812;
+	Sat,  6 May 2023 14:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5BBA60812
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CD86A1BF36E
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FC4541764
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:47:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FC4541764
+ by smtp1.osuosl.org (Postfix) with ESMTP id A737083AF0
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 14:49:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A737083AF0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zeIPK9JYb88o for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 14:47:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9no9tDLOAE9U for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 14:49:42 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0BA841718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABAE783AE5
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C0BA841718
- for <buildroot@buildroot.org>; Sat,  6 May 2023 14:47:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ABAE783AE5
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 14:49:42 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:ae89:1f5e:7283:231f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 1C612B00593;
- Sat,  6 May 2023 16:47:15 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 09A53B00585;
+ Sat,  6 May 2023 16:49:38 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 May 2023 16:47:14 +0200
-Date: Sat, 6 May 2023 16:47:14 +0200
+ Sat, 06 May 2023 16:49:38 +0200
+Date: Sat, 6 May 2023 16:49:38 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230506144714.GK2661@scaer>
-References: <20230322162445.19051-1-ps.report@gmx.net>
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+Message-ID: <20230506144938.GL2661@scaer>
+References: <20230322173707.355775-1-angelo@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230322162445.19051-1-ps.report@gmx.net>
+In-Reply-To: <20230322173707.355775-1-angelo@amarulasolutions.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683384438;
- bh=3lIrVl+WWZYL67WsE39pbbOu6JB9NzKOw1pwWvuKLtg=;
+ d=free.fr; s=smtp-20201208; t=1683384581;
+ bh=u2II5hZKzGPgGC1qcqMvNf+CoVkT7HZ3dQtZNEFyCm0=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=UUoTW6ZscHI9tp8jG16kFu7hUM/2UtbW3CH/KE8IVikMvlE10iL2HWcZzgUg5c0z4
- 4P0BhcgvBxYX6TEAIC9NN2MQnu2ap1cV53Fee+T39Yjxso9EyQWk+27X4/PJQJqqs3
- QLzw6AcFzqpXc4z+9ULutSPqQ5A19gd3IJnCTrFQGpfLP6xw5ISACMB6DuvP5GcTiq
- s/aGoyakjsEf/aqczfQE/rmvHS7YUDSM7859CCPc9ANrhbUxEy5A4OLja1k9yb9IpQ
- qrsIr1h4cAhTqU1j9RJF0j0PR7UyAMscEgGVoBcxAF74WorTn4uOYt0h4j1GqmQxfS
- G+x5qazOa6ahw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=RCJzBX9SAIOhvzC8cWjI5PjGzNjdtP9yJFTyZDfwUZJW5INjGReft+C4vVkeYKweb
+ tmHYHErqlGUqSIIUee2IffPHauPSs8txr/fFQHmA+gG1+XYgO5T6xmNcfHrgcCKY1K
+ 41esZWIsSVDyPXZklWhhazWFB3WOLpamTWRydQcReRUKLgzqW0GrPXx1PvAKvoQWA+
+ ofZTjgdVZv2HARptPFPT+R+05PE9a+iPQyHAIrm9UhPBpF/q+k5QnjR3zj1GJ05dd4
+ pu8ziVCJaxrcWO/aMb88ZZqDZH9c1tWFwcnFDLSlGhWacw/OrbQ6o1KayuNsJJQUG/
+ B66jmlpIqTkUA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=UUoTW6Zs
-Subject: Re: [Buildroot] [PATCH v1] package/libcurl: bump version to 8.0.1
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=RCJzBX9S
+Subject: Re: [Buildroot] [PATCH] package/cups-filters: bump to version
+ 1.28.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,17 +83,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Angelo, All,
 
-Peter K: this is a security fix, maybe candidate for backporting?
-
-On 2023-03-22 17:24 +0100, Peter Seiderer spake thusly:
-> For details see [1] and [2].
+On 2023-03-22 18:37 +0100, Angelo Compagnucci spake thusly:
+> Update also the release url because the OpenPrinting https archive page
+> is out of sync with the current release archive on the main github
+> project.
 > 
-> [1] https://curl.se/changes.html#8_0_0
-> [1] https://curl.se/changes.html#8_0_1
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
 Applied to master, thanks.
 
@@ -100,37 +98,36 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libcurl/libcurl.hash | 4 ++--
->  package/libcurl/libcurl.mk   | 2 +-
+>  package/cups-filters/cups-filters.hash | 2 +-
+>  package/cups-filters/cups-filters.mk   | 4 ++--
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-> index 32b3d0b5e2..8a29e7b977 100644
-> --- a/package/libcurl/libcurl.hash
-> +++ b/package/libcurl/libcurl.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -# https://curl.se/download/curl-7.88.1.tar.xz.asc
-> +# https://curl.se/download/curl-8.0.1.tar.xz.asc
->  # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-> -sha256  1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f  curl-7.88.1.tar.xz
-> +sha256  0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0  curl-8.0.1.tar.xz
->  sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
-> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index 1a1594a45e..1354e526ad 100644
-> --- a/package/libcurl/libcurl.mk
-> +++ b/package/libcurl/libcurl.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+> index b910cdce13..7fb3badf46 100644
+> --- a/package/cups-filters/cups-filters.hash
+> +++ b/package/cups-filters/cups-filters.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  0ca77bb820719a040ff003ecb478d0c2ceffc94e8bd1cd03ddb5a199444127ba  cups-filters-1.28.16.tar.gz
+> +sha256  01a2acbd6bb78f09638047e4e9ce305d7e5ef4cb9ed6949672b5d901b7321dd4  cups-filters-1.28.17.tar.gz
+>  sha256  38192ffdaca98b718f78b2d4abc38bb087f0bbcc9a16d212c98b903b985f900f  COPYING
+> diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+> index 3250649e07..19c859e602 100644
+> --- a/package/cups-filters/cups-filters.mk
+> +++ b/package/cups-filters/cups-filters.mk
+> @@ -4,8 +4,8 @@
 >  #
 >  ################################################################################
 >  
-> -LIBCURL_VERSION = 7.88.1
-> +LIBCURL_VERSION = 8.0.1
->  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
->  LIBCURL_SITE = https://curl.se/download
->  LIBCURL_DEPENDENCIES = host-pkgconf \
+> -CUPS_FILTERS_VERSION = 1.28.16
+> -CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+> +CUPS_FILTERS_VERSION = 1.28.17
+> +CUPS_FILTERS_SITE = https://github.com/OpenPrinting/cups-filters/releases/download/$(CUPS_FILTERS_VERSION)
+>  CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+>  CUPS_FILTERS_LICENSE_FILES = COPYING
+>  CUPS_FILTERS_CPE_ID_VENDOR = linuxfoundation
 > -- 
-> 2.39.2
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
