@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36946C77B75
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:10:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61ACEC77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 16:11:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C92074200F;
-	Sat,  6 May 2023 16:10:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C92074200F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CAC442641;
+	Sat,  6 May 2023 16:11:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CAC442641
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TUp35Sx3pG0f; Sat,  6 May 2023 16:10:51 +0000 (UTC)
+	with ESMTP id MGcZuQYSe-YQ; Sat,  6 May 2023 16:11:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C51D0417D5;
-	Sat,  6 May 2023 16:10:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C51D0417D5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C721F1BF36A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E67D40022;
+	Sat,  6 May 2023 16:11:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E67D40022
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D59051BF859
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:09:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC23C81775
+ by smtp3.osuosl.org (Postfix) with ESMTP id A822160A9A
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 16:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC23C81775
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A822160A9A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MJeHqTILnhzR for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YMTPXBA1RAiC for <buildroot@lists.busybox.net>;
  Sat,  6 May 2023 16:09:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 352268176B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B7FE60F3B
  for <buildroot@buildroot.org>; Sat,  6 May 2023 16:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 352268176B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B7FE60F3B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 22B9C85EC5; Sat,  6 May 2023 16:09:24 +0000 (UTC)
+ id 6467285EC8; Sat,  6 May 2023 16:09:24 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 6 May 2023 18:01:25 +0200
+Date: Sat, 6 May 2023 18:02:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a27cb09d9aaa4f6f1056c520f8d0c48912451734
-X-Git-Newrev: b0306d94b29d6f5e08735db0448019f9f4e4234b
+X-Git-Oldrev: f32ef0be878e8a2db8e3077a85fc54f14adf7870
+X-Git-Newrev: f292d9b736ad396f6013566da9c1d8273f421e47
 X-Patchwork-Hint: ignore
-Message-Id: <20230506160924.22B9C85EC5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cpio: bump version to 2.14
+Message-Id: <20230506160924.6467285EC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gocryptfs: bump version to 2.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,610 +62,235 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0306d94b29d6f5e08735db0448019f9f4e4234b
+commit: https://git.buildroot.net/buildroot/commit/?id=f292d9b736ad396f6013566da9c1d8273f421e47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- remove 0001-Minor-fix.patch
-  (from upstream, see [1])
-- remove 0002-Rewrite-dynamic-string-support.patch
-  (from upstream, see [2])
-- remove 0003-Fix-previous-commit.patch
-  (from upstream, see [3])
+Drop patch merged upstream fixing jacobsa-crypto on riscv.
 
-For details see [4].
+https://github.com/rfjakob/gocryptfs/releases/tag/v2.3.2
 
-[1] https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=641d3f489cf6238bb916368d4ba0d9325a235afb
-[2] https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=dd96882877721703e19272fe25034560b794061b
-[3] https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=dfc801c44a93bed7b3951905b188823d6a0432c8
-[4] https://lists.gnu.org/archive/html/info-gnu/2023-05/msg00001.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cpio/0001-Minor-fix.patch                  |  30 --
- .../cpio/0002-Rewrite-dynamic-string-support.patch | 461 ---------------------
- package/cpio/0003-Fix-previous-commit.patch        |  40 --
- package/cpio/cpio.hash                             |   7 +-
- package/cpio/cpio.mk                               |   2 +-
- 5 files changed, 4 insertions(+), 536 deletions(-)
+ ...o.mod-fix-jacobsa-crypto-build-on-riscv64.patch | 186 ---------------------
+ package/gocryptfs/gocryptfs.hash                   |   2 +-
+ package/gocryptfs/gocryptfs.mk                     |   2 +-
+ 3 files changed, 2 insertions(+), 188 deletions(-)
 
-diff --git a/package/cpio/0001-Minor-fix.patch b/package/cpio/0001-Minor-fix.patch
+diff --git a/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch b/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch
 deleted file mode 100644
-index 429df7d5f8..0000000000
---- a/package/cpio/0001-Minor-fix.patch
+index 0074932fba..0000000000
+--- a/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--From 641d3f489cf6238bb916368d4ba0d9325a235afb Mon Sep 17 00:00:00 2001
--From: Sergey Poznyakoff <gray@gnu.org>
--Date: Mon, 20 Jan 2020 07:45:39 +0200
--Subject: Minor fix * src/global.c: Remove superfluous declaration of
-- program_name
+@@ -1,186 +0,0 @@
+-From e72d34ef2c87e5c9ffd49c98b651641f48d89c24 Mon Sep 17 00:00:00 2001
+-From: Christian Stewart <christian@paral.in>
+-Date: Sat, 25 Jun 2022 14:57:38 -0700
+-Subject: [PATCH] go.mod: fix jacobsa/crypto build on riscv64
 -
--[Retrieved from:
--https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=641d3f489cf6238bb916368d4ba0d9325a235afb]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Replace dependency jacobsa/crypto with a fork with support for riscv64.
+-
+-Issue: https://github.com/rfjakob/gocryptfs/issues/666
+-
+-Upstream PR: https://github.com/jacobsa/crypto/issues/13
+-
+-Signed-off-by: Christian Stewart <christian@paral.in>
 ----
-- src/global.c | 3 ---
-- 1 file changed, 3 deletions(-)
+- go.mod                                        | 15 ++++---
+- go.sum                                        | 16 +++-----
+- .../jacobsa/crypto/cmac/hash_generic.go       | 40 +++++++++++++++++++
+- vendor/modules.txt                            | 16 ++------
+- 4 files changed, 59 insertions(+), 28 deletions(-)
+- create mode 100644 vendor/github.com/jacobsa/crypto/cmac/hash_generic.go
 -
--diff --git a/src/global.c b/src/global.c
--index fb3abe9..acf92bc 100644
----- a/src/global.c
--+++ b/src/global.c
--@@ -184,9 +184,6 @@ unsigned int warn_option = 0;
-- /* Extract to standard output? */
-- bool to_stdout_option = false;
+-diff --git a/go.mod b/go.mod
+-index 754a667..5103029 100644
+---- a/go.mod
+-+++ b/go.mod
+-@@ -2,19 +2,22 @@ module github.com/rfjakob/gocryptfs/v2
 - 
---/* The name this program was run with.  */
---char *program_name;
---
-- /* A pointer to either lstat or stat, depending on whether
--    dereferencing of symlinks is done for input files.  */
-- int (*xstat) ();
+- go 1.16
+- 
+-+// Fixes build against risc-v
+-+// See: https://github.com/jacobsa/crypto/issues/13
+-+replace github.com/jacobsa/crypto => github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93 // buildroot-1
+-+
+-+// Prevent x/sys version from changing and polluting vendor/
+-+// Pin it to the current version in the original go.mod.
+-+replace golang.org/x/sys => golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+-+
+- require (
+- 	github.com/hanwen/go-fuse/v2 v2.1.1-0.20211219085202-934a183ed914
+- 	github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115
+--	github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd // indirect
+--	github.com/jacobsa/oglemock v0.0.0-20150831005832-e94d794d06ff // indirect
+--	github.com/jacobsa/ogletest v0.0.0-20170503003838-80d50a735a11 // indirect
+--	github.com/jacobsa/reqtrace v0.0.0-20150505043853-245c9e0234cb // indirect
+- 	github.com/pkg/xattr v0.4.3
+- 	github.com/rfjakob/eme v1.1.2
+- 	github.com/sabhiram/go-gitignore v0.0.0-20201211210132-54b8a0bf510f
+- 	github.com/spf13/pflag v1.0.5
+- 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+--	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
+--	golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+-+	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a
+- 	golang.org/x/term v0.0.0-20220722155259-a9ba230a4035
+- )
+-diff --git a/go.sum b/go.sum
+-index 4167388..71826e9 100644
+---- a/go.sum
+-+++ b/go.sum
+-@@ -1,9 +1,9 @@
+-+github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93 h1:awSzmXfGWzvmRmrU1oSHqUdpxNcVPRMqv0rytbSA8kA=
+-+github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93/go.mod h1:SHG0nzlQikn4UxNIXqEKd2hvJM2tRIrdr1FfOrF+/wY=
+- github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
+- github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+- github.com/hanwen/go-fuse/v2 v2.1.1-0.20211219085202-934a183ed914 h1:hGXMxS1wTE4y+f7iBqFArrJ6X8QozHnEdnVzGZI9Ywc=
+- github.com/hanwen/go-fuse/v2 v2.1.1-0.20211219085202-934a183ed914/go.mod h1:B1nGE/6RBFyBRC1RRnf23UpwCdyJ31eukw34oAKukAc=
+--github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115 h1:YuDUUFNM21CAbyPOpOP8BicaTD/0klJEKt5p8yuw+uY=
+--github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115/go.mod h1:LadVJg0XuawGk+8L1rYnIED8451UyNxEMdTWCEt5kmU=
+- github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd h1:9GCSedGjMcLZCrusBZuo4tyKLpKUPenUUqi34AkuFmA=
+- github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd/go.mod h1:TlmyIZDpGmwRoTWiakdr+HA1Tukze6C6XbRVidYq02M=
+- github.com/jacobsa/oglemock v0.0.0-20150831005832-e94d794d06ff h1:2xRHTvkpJ5zJmglXLRqHiZQNjUoOkhUyhTAhEQvPAWw=
+-@@ -30,21 +30,17 @@ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
+- golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 h1:HWj/xjIHfjYU5nVXpTM0s39J9CbLn7Cc5a7IC5rwsMQ=
+- golang.org/x/crypto v0.0.0-20210817164053-32db794688a5/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
+- golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
+--golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d h1:LO7XpTYMwTqxjLcGWPijK3vRXg1aWdlNOVOHRq45d7c=
+--golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
+-+golang.org/x/net v0.0.0-20220708220712-1185a9018129 h1:vucSRfWwTsoXro7P+3Cjlr6flUMtzCwzlvkxEQtHHB0=
+-+golang.org/x/net v0.0.0-20220708220712-1185a9018129/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
+- golang.org/x/sync v0.0.0-20201207232520-09787c993a3a/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
+--golang.org/x/sys v0.0.0-20180830151530-49385e6e1522/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+--golang.org/x/sys v0.0.0-20201101102859-da207088b7d1/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+--golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+--golang.org/x/sys v0.0.0-20210423082822-04245dca01da/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+--golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+- golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2 h1:c8PlLMqBbOHoqtjteWm5/kbe6rNY2pbRfbIMVnepueo=
+- golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+- golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
+-+golang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=
+- golang.org/x/term v0.0.0-20220722155259-a9ba230a4035 h1:Q5284mrmYTpACcm+eAKjKJH48BBwSyfJqmmGDTtT8Vc=
+- golang.org/x/term v0.0.0-20220722155259-a9ba230a4035/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=
+- golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
+--golang.org/x/text v0.3.6/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
+-+golang.org/x/text v0.3.7/go.mod h1:u+2+/6zg+i71rQMx5EYifcz6MCKuco9NR6JIITiCfzQ=
+- golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+- gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+- gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c h1:dUUwHk2QECo/6vqA44rthZ8ie2QXMNeKRTHCNY2nXvo=
+-diff --git a/vendor/github.com/jacobsa/crypto/cmac/hash_generic.go b/vendor/github.com/jacobsa/crypto/cmac/hash_generic.go
+-new file mode 100644
+-index 0000000..235e3fc
+---- /dev/null
+-+++ b/vendor/github.com/jacobsa/crypto/cmac/hash_generic.go
+-@@ -0,0 +1,40 @@
+-+// Copyright 2012 Aaron Jacobs. All Rights Reserved.
+-+// Author: aaronjjacobs@gmail.com (Aaron Jacobs)
+-+//
+-+// Licensed under the Apache License, Version 2.0 (the "License");
+-+// you may not use this file except in compliance with the License.
+-+// You may obtain a copy of the License at
+-+//
+-+//     http://www.apache.org/licenses/LICENSE-2.0
+-+//
+-+// Unless required by applicable law or agreed to in writing, software
+-+// distributed under the License is distributed on an "AS IS" BASIS,
+-+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-+// See the License for the specific language governing permissions and
+-+// limitations under the License.
+-+
+-+// +build riscv64
+-+
+-+// This code doesn't require that it's safe to perform unaligned word-sized loads, but has a poor performance.
+-+
+-+package cmac
+-+
+-+import (
+-+	"unsafe"
+-+)
+-+
+-+// XOR the blockSize bytes starting at a and b, writing the result over dst.
+-+func xorBlock(
+-+	dstPtr unsafe.Pointer,
+-+	aPtr unsafe.Pointer,
+-+	bPtr unsafe.Pointer) {
+-+	// Convert.
+-+	a := (*[blockSize]byte)(aPtr)
+-+	b := (*[blockSize]byte)(bPtr)
+-+	dst := (*[blockSize]byte)(dstPtr)
+-+
+-+	// Compute.
+-+	for i := 0; i < blockSize; i++ {
+-+		dst[i] = a[i] ^ b[i]
+-+	}
+-+}
+-diff --git a/vendor/modules.txt b/vendor/modules.txt
+-index 0e97e42..634c079 100644
+---- a/vendor/modules.txt
+-+++ b/vendor/modules.txt
+-@@ -5,19 +5,11 @@ github.com/hanwen/go-fuse/v2/fuse
+- github.com/hanwen/go-fuse/v2/internal
+- github.com/hanwen/go-fuse/v2/internal/utimens
+- github.com/hanwen/go-fuse/v2/splice
+--# github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115
+-+# github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115 => github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93
+- ## explicit
+- github.com/jacobsa/crypto/cmac
+- github.com/jacobsa/crypto/common
+- github.com/jacobsa/crypto/siv
+--# github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd
+--## explicit
+--# github.com/jacobsa/oglemock v0.0.0-20150831005832-e94d794d06ff
+--## explicit
+--# github.com/jacobsa/ogletest v0.0.0-20170503003838-80d50a735a11
+--## explicit
+--# github.com/jacobsa/reqtrace v0.0.0-20150505043853-245c9e0234cb
+--## explicit
+- # github.com/pkg/xattr v0.4.3
+- ## explicit
+- github.com/pkg/xattr
+-@@ -39,9 +31,7 @@ golang.org/x/crypto/internal/subtle
+- golang.org/x/crypto/pbkdf2
+- golang.org/x/crypto/poly1305
+- golang.org/x/crypto/scrypt
+--# golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
+--## explicit
+--# golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+-+# golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a => golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+- ## explicit
+- golang.org/x/sys/cpu
+- golang.org/x/sys/internal/unsafeheader
+-@@ -51,3 +41,5 @@ golang.org/x/sys/windows
+- # golang.org/x/term v0.0.0-20220722155259-a9ba230a4035
+- ## explicit
+- golang.org/x/term
+-+# github.com/jacobsa/crypto => github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93
+-+# golang.org/x/sys => golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
 --- 
--cgit v1.2.1
+-2.38.1
 -
-diff --git a/package/cpio/0002-Rewrite-dynamic-string-support.patch b/package/cpio/0002-Rewrite-dynamic-string-support.patch
-deleted file mode 100644
-index 44282ae3f1..0000000000
---- a/package/cpio/0002-Rewrite-dynamic-string-support.patch
-+++ /dev/null
-@@ -1,461 +0,0 @@
--From dd96882877721703e19272fe25034560b794061b Mon Sep 17 00:00:00 2001
--From: Sergey Poznyakoff <gray@gnu.org>
--Date: Sat, 7 Aug 2021 12:52:21 +0300
--Subject: Rewrite dynamic string support.
--
--* src/dstring.c (ds_init): Take a single argument.
--(ds_free): New function.
--(ds_resize): Take a single argument.  Use x2nrealloc to expand
--the storage.
--(ds_reset,ds_append,ds_concat,ds_endswith): New function.
--(ds_fgetstr): Rewrite.  In particular, this fixes integer overflow.
--* src/dstring.h (dynamic_string): Keep both the allocated length
--(ds_size) and index of the next free byte in the string (ds_idx).
--(ds_init,ds_resize): Change signature.
--(ds_len): New macro.
--(ds_free,ds_reset,ds_append,ds_concat,ds_endswith): New protos.
--* src/copyin.c: Use new ds_ functions.
--* src/copyout.c: Likewise.
--* src/copypass.c: Likewise.
--* src/util.c: Likewise.
--
--[Retrieved from:
--https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=dd96882877721703e19272fe25034560b794061b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/copyin.c   | 40 +++++++++++++-------------
-- src/copyout.c  | 16 ++++-------
-- src/copypass.c | 34 +++++++++++------------
-- src/dstring.c  | 88 ++++++++++++++++++++++++++++++++++++++++++----------------
-- src/dstring.h  | 31 ++++++++++-----------
-- src/util.c     |  6 ++--
-- 6 files changed, 123 insertions(+), 92 deletions(-)
--
--diff --git a/src/copyin.c b/src/copyin.c
--index a096048..4fb14af 100644
----- a/src/copyin.c
--+++ b/src/copyin.c
--@@ -55,11 +55,12 @@ query_rename(struct cpio_file_stat* file_hdr, FILE *tty_in, FILE *tty_out,
--   char *str_res;		/* Result for string function.  */
--   static dynamic_string new_name;	/* New file name for rename option.  */
--   static int initialized_new_name = false;
--+
--   if (!initialized_new_name)
---  {
---    ds_init (&new_name, 128);
---    initialized_new_name = true;
---  }
--+    {
--+      ds_init (&new_name);
--+      initialized_new_name = true;
--+    }
-- 
--   if (rename_flag)
--     {
--@@ -780,37 +781,36 @@ long_format (struct cpio_file_stat *file_hdr, char const *link_name)
--    already in `save_patterns' (from the command line) are preserved.  */
-- 
-- static void
---read_pattern_file ()
--+read_pattern_file (void)
-- {
---  int max_new_patterns;
---  char **new_save_patterns;
---  int new_num_patterns;
--+  char **new_save_patterns = NULL;
--+  size_t max_new_patterns;
--+  size_t new_num_patterns;
--   int i;
---  dynamic_string pattern_name;
--+  dynamic_string pattern_name = DYNAMIC_STRING_INITIALIZER;
--   FILE *pattern_fp;
-- 
--   if (num_patterns < 0)
--     num_patterns = 0;
---  max_new_patterns = 1 + num_patterns;
---  new_save_patterns = (char **) xmalloc (max_new_patterns * sizeof (char *));
--   new_num_patterns = num_patterns;
---  ds_init (&pattern_name, 128);
--+  max_new_patterns = num_patterns;
--+  new_save_patterns = xcalloc (max_new_patterns, sizeof (new_save_patterns[0]));
-- 
--   pattern_fp = fopen (pattern_file_name, "r");
--   if (pattern_fp == NULL)
--     open_fatal (pattern_file_name);
--   while (ds_fgetstr (pattern_fp, &pattern_name, '\n') != NULL)
--     {
---      if (new_num_patterns >= max_new_patterns)
---	{
---	  max_new_patterns += 1;
---	  new_save_patterns = (char **)
---	    xrealloc ((char *) new_save_patterns,
---		      max_new_patterns * sizeof (char *));
---	}
--+      if (new_num_patterns == max_new_patterns)
--+	new_save_patterns = x2nrealloc (new_save_patterns,
--+					&max_new_patterns,
--+					sizeof (new_save_patterns[0]));
--       new_save_patterns[new_num_patterns] = xstrdup (pattern_name.ds_string);
--       ++new_num_patterns;
--     }
--+
--+  ds_free (&pattern_name);
--+  
--   if (ferror (pattern_fp) || fclose (pattern_fp) == EOF)
--     close_error (pattern_file_name);
-- 
--@@ -1210,7 +1210,7 @@ swab_array (char *ptr, int count)
--    in the file system.  */
-- 
-- void
---process_copy_in ()
--+process_copy_in (void)
-- {
--   FILE *tty_in = NULL;		/* Interactive file for rename option.  */
--   FILE *tty_out = NULL;		/* Interactive file for rename option.  */
--diff --git a/src/copyout.c b/src/copyout.c
--index 5ca587f..ca6798c 100644
----- a/src/copyout.c
--+++ b/src/copyout.c
--@@ -594,9 +594,10 @@ assign_string (char **pvar, char *value)
--    The format of the header depends on the compatibility (-c) flag.  */
-- 
-- void
---process_copy_out ()
--+process_copy_out (void)
-- {
---  dynamic_string input_name;	/* Name of file read from stdin.  */
--+  dynamic_string input_name = DYNAMIC_STRING_INITIALIZER;
--+                                /* Name of file read from stdin.  */
--   struct stat file_stat;	/* Stat record for file.  */
--   struct cpio_file_stat file_hdr = CPIO_FILE_STAT_INITIALIZER;
--                                 /* Output header information.  */
--@@ -605,7 +606,6 @@ process_copy_out ()
--   char *orig_file_name = NULL;
-- 
--   /* Initialize the copy out.  */
---  ds_init (&input_name, 128);
--   file_hdr.c_magic = 070707;
-- 
--   /* Check whether the output file might be a tape.  */
--@@ -657,14 +657,9 @@ process_copy_out ()
-- 	    {
-- 	      if (file_hdr.c_mode & CP_IFDIR)
-- 		{
---		  int len = strlen (input_name.ds_string);
-- 		  /* Make sure the name ends with a slash */
---		  if (input_name.ds_string[len-1] != '/')
---		    {
---		      ds_resize (&input_name, len + 2);
---		      input_name.ds_string[len] = '/';
---		      input_name.ds_string[len+1] = 0;
---		    }
--+		  if (!ds_endswith (&input_name, '/'))
--+		    ds_append (&input_name, '/');
-- 		}
-- 	    }
-- 	  
--@@ -875,6 +870,7 @@ process_copy_out ()
-- 			 (unsigned long) blocks), (unsigned long) blocks);
--     }
--   cpio_file_stat_free (&file_hdr);
--+  ds_free (&input_name);
-- }
-- 
-- 
--diff --git a/src/copypass.c b/src/copypass.c
--index 5d5e939..23ee687 100644
----- a/src/copypass.c
--+++ b/src/copypass.c
--@@ -48,10 +48,12 @@ set_copypass_perms (int fd, const char *name, struct stat *st)
--    If `link_flag', link instead of copying.  */
-- 
-- void
---process_copy_pass ()
--+process_copy_pass (void)
-- {
---  dynamic_string input_name;	/* Name of file from stdin.  */
---  dynamic_string output_name;	/* Name of new file.  */
--+  dynamic_string input_name = DYNAMIC_STRING_INITIALIZER;
--+                                /* Name of file from stdin.  */
--+  dynamic_string output_name = DYNAMIC_STRING_INITIALIZER;
--+                                /* Name of new file.  */
--   size_t dirname_len;		/* Length of `directory_name'.  */
--   int res;			/* Result of functions.  */
--   char *slash;			/* For moving past slashes in input name.  */
--@@ -65,25 +67,18 @@ process_copy_pass ()
-- 				   created files  */
-- 
--   /* Initialize the copy pass.  */
---  ds_init (&input_name, 128);
--   
--   dirname_len = strlen (directory_name);
--   if (change_directory_option && !ISSLASH (directory_name[0]))
--     {
--       char *pwd = xgetcwd ();
---
---      dirname_len += strlen (pwd) + 1;
---      ds_init (&output_name, dirname_len + 2);
---      strcpy (output_name.ds_string, pwd);
---      strcat (output_name.ds_string, "/");
---      strcat (output_name.ds_string, directory_name);
--+      
--+      ds_concat (&output_name, pwd);
--+      ds_append (&output_name, '/');
--     }
---  else
---    {
---      ds_init (&output_name, dirname_len + 2);
---      strcpy (output_name.ds_string, directory_name);
---    }
---  output_name.ds_string[dirname_len] = '/';
--+  ds_concat (&output_name, directory_name);
--+  ds_append (&output_name, '/');
--+  dirname_len = ds_len (&output_name);
--   output_is_seekable = true;
-- 
--   change_dir ();
--@@ -116,8 +111,8 @@ process_copy_pass ()
--       /* Make the name of the new file.  */
--       for (slash = input_name.ds_string; *slash == '/'; ++slash)
-- 	;
---      ds_resize (&output_name, dirname_len + strlen (slash) + 2);
---      strcpy (output_name.ds_string + dirname_len + 1, slash);
--+      ds_reset (&output_name, dirname_len);
--+      ds_concat (&output_name, slash);
-- 
--       existing_dir = false;
--       if (lstat (output_name.ds_string, &out_file_stat) == 0)
--@@ -333,6 +328,9 @@ process_copy_pass ()
-- 			 (unsigned long) blocks),
-- 	       (unsigned long) blocks);
--     }
--+
--+  ds_free (&input_name);
--+  ds_free (&output_name);
-- }
-- 
-- /* Try and create a hard link from FILE_NAME to another file 
--diff --git a/src/dstring.c b/src/dstring.c
--index b261d5a..692d3e7 100644
----- a/src/dstring.c
--+++ b/src/dstring.c
--@@ -20,8 +20,8 @@
-- #if defined(HAVE_CONFIG_H)
-- # include <config.h>
-- #endif
---
-- #include <stdio.h>
--+#include <stdlib.h>
-- #if defined(HAVE_STRING_H) || defined(STDC_HEADERS)
-- #include <string.h>
-- #else
--@@ -33,24 +33,41 @@
-- /* Initialiaze dynamic string STRING with space for SIZE characters.  */
-- 
-- void
---ds_init (dynamic_string *string, int size)
--+ds_init (dynamic_string *string)
--+{
--+  memset (string, 0, sizeof *string);
--+}
--+
--+/* Free the dynamic string storage. */
--+
--+void
--+ds_free (dynamic_string *string)
-- {
---  string->ds_length = size;
---  string->ds_string = (char *) xmalloc (size);
--+  free (string->ds_string);
-- }
-- 
---/* Expand dynamic string STRING, if necessary, to hold SIZE characters.  */
--+/* Expand dynamic string STRING, if necessary.  */
-- 
-- void
---ds_resize (dynamic_string *string, int size)
--+ds_resize (dynamic_string *string)
-- {
---  if (size > string->ds_length)
--+  if (string->ds_idx == string->ds_size)
--     {
---      string->ds_length = size;
---      string->ds_string = (char *) xrealloc ((char *) string->ds_string, size);
--+      string->ds_string = x2nrealloc (string->ds_string, &string->ds_size,
--+				      1);
--     }
-- }
-- 
--+/* Reset the index of the dynamic string S to LEN. */
--+
--+void
--+ds_reset (dynamic_string *s, size_t len)
--+{
--+  while (len > s->ds_size)
--+    ds_resize (s);
--+  s->ds_idx = len;
--+}
--+
-- /* Dynamic string S gets a string terminated by the EOS character
--    (which is removed) from file F.  S will increase
--    in size during the function if the string from F is longer than
--@@ -61,34 +78,50 @@ ds_resize (dynamic_string *string, int size)
-- char *
-- ds_fgetstr (FILE *f, dynamic_string *s, char eos)
-- {
---  int insize;			/* Amount needed for line.  */
---  int strsize;			/* Amount allocated for S.  */
--   int next_ch;
-- 
--   /* Initialize.  */
---  insize = 0;
---  strsize = s->ds_length;
--+  s->ds_idx = 0;
-- 
--   /* Read the input string.  */
---  next_ch = getc (f);
---  while (next_ch != eos && next_ch != EOF)
--+  while ((next_ch = getc (f)) != eos && next_ch != EOF)
--     {
---      if (insize >= strsize - 1)
---	{
---	  ds_resize (s, strsize * 2 + 2);
---	  strsize = s->ds_length;
---	}
---      s->ds_string[insize++] = next_ch;
---      next_ch = getc (f);
--+      ds_resize (s);
--+      s->ds_string[s->ds_idx++] = next_ch;
--     }
---  s->ds_string[insize++] = '\0';
--+  ds_resize (s);
--+  s->ds_string[s->ds_idx] = '\0';
-- 
---  if (insize == 1 && next_ch == EOF)
--+  if (s->ds_idx == 0 && next_ch == EOF)
--     return NULL;
--   else
--     return s->ds_string;
-- }
-- 
--+void
--+ds_append (dynamic_string *s, int c)
--+{
--+  ds_resize (s);
--+  s->ds_string[s->ds_idx] = c;
--+  if (c)
--+    {
--+      s->ds_idx++;
--+      ds_resize (s);
--+      s->ds_string[s->ds_idx] = 0;
--+    }      
--+}
--+
--+void
--+ds_concat (dynamic_string *s, char const *str)
--+{
--+  size_t len = strlen (str);
--+  while (len + 1 > s->ds_size)
--+    ds_resize (s);
--+  memcpy (s->ds_string + s->ds_idx, str, len);
--+  s->ds_idx += len;
--+  s->ds_string[s->ds_idx] = 0;
--+}
--+
-- char *
-- ds_fgets (FILE *f, dynamic_string *s)
-- {
--@@ -100,3 +133,10 @@ ds_fgetname (FILE *f, dynamic_string *s)
-- {
--   return ds_fgetstr (f, s, '\0');
-- }
--+
--+/* Return true if the dynamic string S ends with character C. */
--+int
--+ds_endswith (dynamic_string *s, int c)
--+{
--+  return (s->ds_idx > 0 && s->ds_string[s->ds_idx - 1] == c);
--+}
--diff --git a/src/dstring.h b/src/dstring.h
--index 5d24181..ca7a5f1 100644
----- a/src/dstring.h
--+++ b/src/dstring.h
--@@ -17,10 +17,6 @@
--    Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
--    Boston, MA 02110-1301 USA.  */
-- 
---#ifndef NULL
---#define NULL 0
---#endif
---
-- /* A dynamic string consists of record that records the size of an
--    allocated string and the pointer to that string.  The actual string
--    is a normal zero byte terminated string that can be used with the
--@@ -30,22 +26,25 @@
-- 
-- typedef struct
-- {
---  int ds_length;		/* Actual amount of storage allocated.  */
---  char *ds_string;		/* String.  */
--+  size_t ds_size;   /* Actual amount of storage allocated.  */
--+  size_t ds_idx;    /* Index of the next free byte in the string. */
--+  char *ds_string;  /* String storage. */
-- } dynamic_string;
-- 
--+#define DYNAMIC_STRING_INITIALIZER { 0, 0, NULL }
-- 
---/* Macros that look similar to the original string functions.
---   WARNING:  These macros work only on pointers to dynamic string records.
---   If used with a real record, an "&" must be used to get the pointer.  */
---#define ds_strlen(s)		strlen ((s)->ds_string)
---#define ds_strcmp(s1, s2)	strcmp ((s1)->ds_string, (s2)->ds_string)
---#define ds_strncmp(s1, s2, n)	strncmp ((s1)->ds_string, (s2)->ds_string, n)
---#define ds_index(s, c)		index ((s)->ds_string, c)
---#define ds_rindex(s, c)		rindex ((s)->ds_string, c)
--+void ds_init (dynamic_string *string);
--+void ds_free (dynamic_string *string);
--+void ds_reset (dynamic_string *s, size_t len);
-- 
---void ds_init (dynamic_string *string, int size);
---void ds_resize (dynamic_string *string, int size);
--+/* All functions below guarantee that s->ds_string[s->ds_idx] == '\0' */
-- char *ds_fgetname (FILE *f, dynamic_string *s);
-- char *ds_fgets (FILE *f, dynamic_string *s);
-- char *ds_fgetstr (FILE *f, dynamic_string *s, char eos);
--+void ds_append (dynamic_string *s, int c);
--+void ds_concat (dynamic_string *s, char const *str);
--+
--+#define ds_len(s) ((s)->ds_idx)
--+
--+int ds_endswith (dynamic_string *s, int c);
--+
--diff --git a/src/util.c b/src/util.c
--index 996d4fa..ff2746d 100644
----- a/src/util.c
--+++ b/src/util.c
--@@ -846,11 +846,9 @@ get_next_reel (int tape_des)
--   FILE *tty_out;		/* File for interacting with user.  */
--   int old_tape_des;
--   char *next_archive_name;
---  dynamic_string new_name;
--+  dynamic_string new_name = DYNAMIC_STRING_INITIALIZER;
--   char *str_res;
-- 
---  ds_init (&new_name, 128);
---
--   /* Open files for interactive communication.  */
--   tty_in = fopen (TTY_NAME, "r");
--   if (tty_in == NULL)
--@@ -925,7 +923,7 @@ get_next_reel (int tape_des)
--     error (PAXEXIT_FAILURE, 0, _("internal error: tape descriptor changed from %d to %d"),
-- 	   old_tape_des, tape_des);
-- 
---  free (new_name.ds_string);
--+  ds_free (&new_name);
--   fclose (tty_in);
--   fclose (tty_out);
-- }
---- 
--cgit v1.2.1
--
-diff --git a/package/cpio/0003-Fix-previous-commit.patch b/package/cpio/0003-Fix-previous-commit.patch
-deleted file mode 100644
-index e33a8523d8..0000000000
---- a/package/cpio/0003-Fix-previous-commit.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From dfc801c44a93bed7b3951905b188823d6a0432c8 Mon Sep 17 00:00:00 2001
--From: Sergey Poznyakoff <gray@gnu.org>
--Date: Wed, 11 Aug 2021 18:10:38 +0300
--Subject: Fix previous commit
--
--* src/dstring.c (ds_reset,ds_concat): Don't call ds_resize in a
--loop.
--
--[Retrieved from:
--https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=dfc801c44a93bed7b3951905b188823d6a0432c8]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/dstring.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/dstring.c b/src/dstring.c
--index 692d3e7..b7e0bb5 100644
----- a/src/dstring.c
--+++ b/src/dstring.c
--@@ -64,7 +64,7 @@ void
-- ds_reset (dynamic_string *s, size_t len)
-- {
--   while (len > s->ds_size)
---    ds_resize (s);
--+    s->ds_string = x2nrealloc (s->ds_string, &s->ds_size, 1);
--   s->ds_idx = len;
-- }
-- 
--@@ -116,7 +116,7 @@ ds_concat (dynamic_string *s, char const *str)
-- {
--   size_t len = strlen (str);
--   while (len + 1 > s->ds_size)
---    ds_resize (s);
--+    s->ds_string = x2nrealloc (s->ds_string, &s->ds_size, 1);
--   memcpy (s->ds_string + s->ds_idx, str, len);
--   s->ds_idx += len;
--   s->ds_string[s->ds_idx] = 0;
---- 
--cgit v1.2.1
--
-diff --git a/package/cpio/cpio.hash b/package/cpio/cpio.hash
-index b03114635c..20fd9392e7 100644
---- a/package/cpio/cpio.hash
-+++ b/package/cpio/cpio.hash
-@@ -1,7 +1,6 @@
--# From https://lists.gnu.org/archive/html/info-gnu/2019-11/msg00002.html
--md5  f3438e672e3fa273a7dc26339dd1eed6  cpio-2.13.tar.bz2
--sha1  4dcefc0e1bc36b11506a354768d82b15e3fe6bb8  cpio-2.13.tar.bz2
-+# From https://lists.gnu.org/archive/html/info-gnu/2023-05/msg00001.html
-+sha1  cbac50a61079b6f3bdcf9ffe42171d9257cfe877  cpio-2.14.tar.bz2
- # Locally calculated after checking pgp signature
--sha256  eab5bdc5ae1df285c59f2a4f140a98fc33678a0bf61bdba67d9436ae26b46f6d  cpio-2.13.tar.bz2
-+sha256  fcdc15d60f7267a6fc7efcd6b9db7b6c8966c4f2fbbb964c24d41336fd3f2c12  cpio-2.13.tar.bz2
- # Locally calculated
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-index e95ea742b3..19224000bb 100644
---- a/package/cpio/cpio.mk
-+++ b/package/cpio/cpio.mk
+diff --git a/package/gocryptfs/gocryptfs.hash b/package/gocryptfs/gocryptfs.hash
+index 28965a0648..e8691607b1 100644
+--- a/package/gocryptfs/gocryptfs.hash
++++ b/package/gocryptfs/gocryptfs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bfc98c18e44a2ca24a0e1472b6d9bb96e6072d7fb5651616515d2e7117b8fed9  gocryptfs-2.3.tar.gz
++sha256  7ad6138eb49d3a0481211ec4d4828f35e269f234433b57a4e4ea7cf6e63ba887  gocryptfs-2.3.2.tar.gz
+ sha256  322a7e3b02cf18e38b7e6b18cafefb773df8676c65634b34e8a2beb931294a4b  LICENSE
+diff --git a/package/gocryptfs/gocryptfs.mk b/package/gocryptfs/gocryptfs.mk
+index 077597e7e8..6d84acc23b 100644
+--- a/package/gocryptfs/gocryptfs.mk
++++ b/package/gocryptfs/gocryptfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CPIO_VERSION = 2.13
-+CPIO_VERSION = 2.14
- CPIO_SOURCE = cpio-$(CPIO_VERSION).tar.bz2
- CPIO_SITE = $(BR2_GNU_MIRROR)/cpio
- CPIO_CONF_OPTS = --bindir=/bin
+-GOCRYPTFS_VERSION = 2.3
++GOCRYPTFS_VERSION = 2.3.2
+ GOCRYPTFS_SITE = $(call github,rfjakob,gocryptfs,v$(GOCRYPTFS_VERSION))
+ GOCRYPTFS_LICENSE = MIT
+ GOCRYPTFS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
