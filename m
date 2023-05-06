@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E02C77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 17:41:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7977DC77B73
+	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 17:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E92D4107A;
-	Sat,  6 May 2023 17:41:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E92D4107A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2824042A56;
+	Sat,  6 May 2023 17:41:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2824042A56
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SxT_V0opqwU9; Sat,  6 May 2023 17:41:35 +0000 (UTC)
+	with ESMTP id pXhivI14MwZm; Sat,  6 May 2023 17:41:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 034804103C;
-	Sat,  6 May 2023 17:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 034804103C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D5621BF369
+	by smtp2.osuosl.org (Postfix) with ESMTP id 33AC240CB8;
+	Sat,  6 May 2023 17:41:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33AC240CB8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C56C1BF859
  for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FD5683EF3
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FD5683EF3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0066B409B1
+ for <buildroot@lists.busybox.net>; Sat,  6 May 2023 17:39:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0066B409B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z1PB_Qy5Ed3h for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 17:39:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0gv894rDDC8Q for <buildroot@lists.busybox.net>;
+ Sat,  6 May 2023 17:39:26 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 038E783EF2
-Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 038E783EF2
- for <buildroot@buildroot.org>; Sat,  6 May 2023 17:39:23 +0000 (UTC)
-Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
- by mailout09.t-online.de (Postfix) with SMTP id 08333A155
- for <buildroot@buildroot.org>; Sat,  6 May 2023 19:39:22 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd87.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8728409FB
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C8728409FB
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 17:39:25 +0000 (UTC)
+Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
+ by mailout02.t-online.de (Postfix) with SMTP id 265F295FC
+ for <buildroot@buildroot.org>; Sat,  6 May 2023 19:39:23 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd86.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pvLsN-1rHtIY0; Sat, 6 May 2023 19:39:19 +0200
+ esmtp id 1pvLsN-29CGmn0; Sat, 6 May 2023 19:39:19 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36596)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pvLsM-0004jT-36
- for buildroot@buildroot.org; Sat, 06 May 2023 19:39:19 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pvLsM-0004jT-2T
+ for buildroot@buildroot.org; Sat, 06 May 2023 19:39:18 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat,  6 May 2023 19:39:07 +0200
-Message-Id: <20230506173917.1112500-12-bernd.kuhls@t-online.de>
+Date: Sat,  6 May 2023 19:39:04 +0200
+Message-Id: <20230506173917.1112500-9-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
 References: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683394759-EEFFAC53-45007385/0/0 CLEAN NORMAL
-X-TOI-MSGID: bbc482a2-104d-4ab5-a75e-30cd0d21cf52
-Subject: [Buildroot] [PATCH 12/22] package/x11r7/xdriver_xf86-video-savage:
- bump version to 2.4.0
+X-TOI-EXPURGATEID: 150726::1683394759-AFFFCC11-6E87BB55/0/0 CLEAN NORMAL
+X-TOI-MSGID: c486048d-eb88-4dee-8c51-ad10ce221d8a
+Subject: [Buildroot] [PATCH 09/22] package/x11r7/xlib_libXft: bump version
+ to 2.3.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,116 +74,40 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-April/003381.html
-
-Removed all patches due to upstream commits:
-https://gitlab.freedesktop.org/xorg/driver/xf86-video-savage/-/commit/2ec88355123b1def99d8c79769f396ac97bc5008
-https://gitlab.freedesktop.org/xorg/driver/xf86-video-savage/-/commit/0ece556daa8a88771b669d8104396abd9166d2d0
+https://lists.x.org/archives/xorg-announce/2023-April/003384.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-cross-compile.patch                  | 27 -------------------
- .../0002-xorg-xserver120.patch                | 23 ----------------
- .../xdriver_xf86-video-savage.hash            |  5 ++--
- .../xdriver_xf86-video-savage.mk              |  7 +++--
- 4 files changed, 6 insertions(+), 56 deletions(-)
- delete mode 100644 package/x11r7/xdriver_xf86-video-savage/0001-cross-compile.patch
- delete mode 100644 package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
+ package/x11r7/xlib_libXft/xlib_libXft.hash | 6 +++---
+ package/x11r7/xlib_libXft/xlib_libXft.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-savage/0001-cross-compile.patch b/package/x11r7/xdriver_xf86-video-savage/0001-cross-compile.patch
-deleted file mode 100644
-index b9c296b6b5..0000000000
---- a/package/x11r7/xdriver_xf86-video-savage/0001-cross-compile.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
----- a/configure.ac	2008-05-21 16:04:23.000000000 -0400
--+++ b/configure.ac	2008-06-23 11:41:50.000000000 -0400
--@@ -68,12 +68,18 @@ sdkdir=$(pkg-config --variable=sdkdir xo
-- AC_HEADER_STDC
-- 
-- if test "$DRI" != no; then
---        AC_CHECK_FILE([${sdkdir}/dri.h],
---                      [have_dri_h="yes"], [have_dri_h="no"])
---        AC_CHECK_FILE([${sdkdir}/sarea.h],
---                      [have_sarea_h="yes"], [have_sarea_h="no"])
---        AC_CHECK_FILE([${sdkdir}/dristruct.h],
---                      [have_dristruct_h="yes"], [have_dristruct_h="no"])
--+  	if test "$cross_compiling" = "no" ; then
--+ 		AC_CHECK_FILE([${sdkdir}/dri.h],
--+                        [have_dri_h="yes"], [have_dri_h="no"])
--+ 		AC_CHECK_FILE([${sdkdir}/sarea.h],
--+                        [have_sarea_h="yes"], [have_sarea_h="no"])
--+ 		AC_CHECK_FILE([${sdkdir}/dristruct.h],
--+                        [have_dristruct_h="yes"], [have_dristruct_h="no"])
--+  	else
--+  		have_dri_h="yes"
--+  		have_sarea_h="yes"
--+  		have_dristruct_h="yes"
--+  	fi
-- fi
-- 
-- AC_MSG_CHECKING([whether to include DRI support])
-diff --git a/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch b/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
-deleted file mode 100644
-index 4c695960d1..0000000000
---- a/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Fix build with modular-xorg-server-1.20
--
--Downloaded from
--http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/x11/xf86-video-savage/patches/patch-src_savage__driver.c?rev=1.3&content-type=text/x-cvsweb-markup
--
--Patch was sent upstream by Thomas Klausner <wiz@netbsd.org>:
--https://lists.x.org/archives/xorg-devel/2018-May/056952.html
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- a/src/savage_driver.c.orig	2017-01-17 22:43:40.000000000 +0000
--+++ b/src/savage_driver.c
--@@ -2034,8 +2034,10 @@ static Bool SavagePreInit(ScrnInfoPtr pS
--     xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Detected current MCLK value of %1.3f MHz\n",
-- 	       mclk / 1000.0);
-- 
--+#if 0
--     pScrn->maxHValue = 2048 << 3;	/* 11 bits of h_total 8-pixel units */
--     pScrn->maxVValue = 2048;		/* 11 bits of v_total */
--+#endif
--     pScrn->virtualX = pScrn->display->virtualX;
--     pScrn->virtualY = pScrn->display->virtualY;
-- 
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
-index 661c8749f2..4482ff5991 100644
---- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
-@@ -1,4 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2017-January/002760.html
--sha256  2c93c4db1f71e725dda0caee5821253129d4b52d7aa0fd720593e7769bceec86  xf86-video-savage-2.3.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-April/003381.html
-+sha256  b36cf02cfdd08a39423bb977c45397fbca5813267c727f0fd3c963ac38b601fd  xf86-video-savage-2.4.0.tar.xz
-+sha512  a4db097c200f1430887e4c52bbe14aeaaa2c73dfc392beeed104c682114bd067f89b69994d649829cdc5d188cdbe7a41b22c82b0b49e3a02cdf366013ebbc161  xf86-video-savage-2.4.0.tar.xz
- # Locally calculated
- sha256  611f4020815e3d5011a39a58f0958262715cd3becd9cb1ef14cc166fd84ec5a6  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-index 9e5bf61997..03983d5cdc 100644
---- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-@@ -4,12 +4,11 @@
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
+index 5074365aed..749aa0ad62 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.hash
++++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg/2022-November/061175.html
+-sha256  79f0b37c45007381c371a790c2754644ad955166dbf2a48e3625032e9bdd4f71  libXft-2.3.7.tar.xz
+-sha512  9df29d3c7b88a21952df1015604511e5d79856d721b2a61eb2c5a062a9abccf16318132432a7c86c0ef816bf174ae86842fa67dabbaa0b163dfa56d99022de19  libXft-2.3.7.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-April/003384.html
++sha256  5e8c3c4bc2d4c0a40aef6b4b38ed2fb74301640da29f6528154b5009b1c6dd49  libXft-2.3.8.tar.xz
++sha512  fc385d73e1acb701942c154ffb5a283d17891f21d3ac598c4a3fb375a7d6082734593062368c15cad67c1a94177dd15deed878ec5ea852188393b52e92c372c8  libXft-2.3.8.tar.xz
+ # Locally computed
+ sha256  7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index 845b612669..154c220aa1 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SAVAGE_VERSION = 2.3.9
--XDRIVER_XF86_VIDEO_SAVAGE_SOURCE = xf86-video-savage-$(XDRIVER_XF86_VIDEO_SAVAGE_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_SAVAGE_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_SAVAGE_VERSION = 2.4.0
-+XDRIVER_XF86_VIDEO_SAVAGE_SOURCE = xf86-video-savage-$(XDRIVER_XF86_VIDEO_SAVAGE_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_SAVAGE_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_SAVAGE_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_SAVAGE_DEPENDENCIES = xserver_xorg-server libdrm xorgproto
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+-XLIB_LIBXFT_VERSION = 2.3.7
++XLIB_LIBXFT_VERSION = 2.3.8
+ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.xz
+ XLIB_LIBXFT_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
 -- 
 2.39.2
 
