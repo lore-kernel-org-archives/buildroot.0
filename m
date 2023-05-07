@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3CACC77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EEF0C77B75
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:26:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74D6E408A5;
-	Sun,  7 May 2023 21:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74D6E408A5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2616940A0A;
+	Sun,  7 May 2023 21:26:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2616940A0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kJktqR1DW51a; Sun,  7 May 2023 21:20:49 +0000 (UTC)
+	with ESMTP id e1kWATmldwow; Sun,  7 May 2023 21:26:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8147640629;
-	Sun,  7 May 2023 21:20:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8147640629
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E4071BF2C4
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:20:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D8B2408CF;
+	Sun,  7 May 2023 21:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D8B2408CF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D3F6D1BF2C4
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:26:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 538124181F
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:20:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 538124181F
+ by smtp3.osuosl.org (Postfix) with ESMTP id B90C560F47
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B90C560F47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pwBU5l1H52N2 for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 21:20:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE5374181E
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CE5374181E
- for <buildroot@buildroot.org>; Sun,  7 May 2023 21:20:45 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:7bde:4dbc:bac0:54b7])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 42D9B2003DD;
- Sun,  7 May 2023 23:20:39 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 07 May 2023 23:20:38 +0200
-Date: Sun, 7 May 2023 23:20:38 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Knight <james.d.knight@live.com>
-Message-ID: <20230507212038.GP252090@scaer>
-References: <SN4P221MB068289AD66243971AC49547BA0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <SN4P221MB068289AD66243971AC49547BA0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683494443;
- bh=k9hJC1jy2KMSFktRcv2WXg0VWxyvqPq4E7yBLWoG9Cs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=YbMbJ7PpVoc0lFRcVp0bqZfhc6Ulj2DjyR0fZnv4I3zAsAMn3CgJlP9Vw3+w1pQid
- IPcb6z8/mq/rplK4ZLOmErUSsjvBNul4bfKZ4D4ROcKgT/+/HVkWZCvzp6W/84N1y/
- EC+w9tFmZ1wAMd2H6uH6SHMEDWVf8GMkPZws8HxVtA4txT6rF6UbvSBYDlF58o/WoZ
- kJXNNCJiIhI/+NmrWuDYHn4W7l1S0ZvCO+mcB4bqjt9Gst3v6QhChWJY40a36tIHmS
- 7D2Xw2nFp2bQ/Sx4fBbCDKiCrqo7ySv+4773PgnCDD8ZkhJxtvZUj37gJQ67gsNBJR
- Po8vq2X0LsEzw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YbMbJ7Pp
-Subject: Re: [Buildroot] [PATCH] utils/check-package: improve windows support
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BSPXYADXh_Du for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 21:26:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FADE60F45
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 21:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FADE60F45
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6DC658607E; Sun,  7 May 2023 21:26:07 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 7 May 2023 23:21:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 73e3a8f8a8d906627a15f4f5be81ce0ceca4aeb0
+X-Git-Newrev: a1b98a6c2f21ea071aea7e25e02949cadf6f752e
+X-Patchwork-Hint: ignore
+Message-Id: <20230507212607.6DC658607E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bat: bump version to 0.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,130 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a1b98a6c2f21ea071aea7e25e02949cadf6f752e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-04-29 14:51 -0400, James Knight spake thusly:
-> The following includes a series of tweaks to the check-package script to
-> provide flexibility when sanity checking files when sources are checked
-> out in a Windows environment.
+Update hash for LICENSE-MIT, to account for an update in the copyright years:
+https://github.com/sharkdp/bat/commit/d43d241f5bac0fde7881b55f61644e0408181cf7
 
-To be honest and direct, I am not sure this is a setup we want to
-support.
+Signed-off-by: Leon Rinkel <leon@rinkel.me>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/bat/bat.hash | 4 ++--
+ package/bat/bat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Buildroot is not supposed to be working on non-Linux environements;
-there are so many things that will break if the uderlying filesystem
-can't differentiate between Foo and foo, and so on...
-
-The best solution is one is locked into such a broken environemnt such
-as Windows, is to use a VM.
-
-> This includes:
-> 
-> - When populating a list of files to check, ensure POSIX paths are used;
->    otherwise, the internal list of files to check will be improperly
->    formed and no checks will occur.
-> - When interpreting an ignore list (which provides POSIX paths of files
->    to ignore), resolve the absolute file path for these entries to
->    ensure files can be ignored when cycling through a provided file
->    list.
-> - Ignore execute bit checks on Windows since X_OK is only an existence
->    check on Windows.
-> - When running ShellCheck, always ignore SC1017 [1] to avoid line
->    ending warnings since Windows environments will typically utilize
->    `git config core.autocrlf`.
-
-Typically, we will explicitly not want to disable that check, as we want
-to ensure Unix end-of-lines (LF).
-
-Regards,
-Yann E. MORIN.
-
-> [1]: https://www.shellcheck.net/wiki/SC1017
-> 
-> Signed-off-by: James Knight <james.d.knight@live.com>
-> ---
->  utils/check-package           | 9 +++++++--
->  utils/checkpackagelib/tool.py | 4 +++-
->  2 files changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/utils/check-package b/utils/check-package
-> index 83b9750f5a9c181dc96dcba508682776a600aac5..817dcb0b7203d28b7d2133ac1d8c27ac8093b3c4 100755
-> --- a/utils/check-package
-> +++ b/utils/check-package
-> @@ -5,6 +5,7 @@ import argparse
->  import inspect
->  import magic
->  import os
-> +import posixpath
->  import re
->  import sys
->  
-> @@ -50,7 +51,8 @@ def get_ignored_parsers_per_file(intree_only, ignore_filename):
->          for line in f.readlines():
->              filename, warnings_str = line.split(' ', 1)
->              warnings = warnings_str.split()
-> -            ignored[os.path.join(entry_base_dir, filename)] = warnings
-> +            entry = os.path.abspath(os.path.join(entry_base_dir, filename))
-> +            ignored[entry] = warnings
->      return ignored
->  
->  
-> @@ -275,7 +277,10 @@ def __main__():
->      if flags.intree_only:
->          # change all paths received to be relative to the base dir
->          base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-> -        files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in flags.files]
-> +        files_to_check = []
-> +        for f in flags.files:
-> +            relpath = os.path.relpath(os.path.abspath(f), base_dir)
-> +            files_to_check.append(relpath.replace(os.sep, posixpath.sep))
->          # move current dir so the script find the files
->          os.chdir(base_dir)
->      else:
-> diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
-> index 907ada704fe4beaa57b1c18e7ce2f17977272257..8b2af64d3899a2e7958f79d61722b1b359351747 100644
-> --- a/utils/checkpackagelib/tool.py
-> +++ b/utils/checkpackagelib/tool.py
-> @@ -12,7 +12,7 @@ class NotExecutable(_Tool):
->      def run(self):
->          if self.ignore():
->              return
-> -        if os.access(self.filename, os.X_OK):
-> +        if os.access(self.filename, os.X_OK) and os.name != "nt":
->              return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
->  
->  
-> @@ -32,6 +32,8 @@ class Flake8(_Tool):
->  class Shellcheck(_Tool):
->      def run(self):
->          cmd = ['shellcheck', self.filename]
-> +        if os.name == "nt":
-> +            cmd.append("--exclude=SC1017")
->          try:
->              p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
->              stdout = p.communicate()[0]
-> -- 
-> 2.40.1.windows.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/bat/bat.hash b/package/bat/bat.hash
+index f4d3e32c34..a79cb8f9a3 100644
+--- a/package/bat/bat.hash
++++ b/package/bat/bat.hash
+@@ -1,4 +1,4 @@
+ # Locally generated
+-sha256  7940641baaa61cd3bcd1c3db4804d179609d6ccd955868928a129bf3f853e0b2  bat-0.19.0.tar.gz
++sha256  b29af37f274019cf1a36d9483c6f30ff780d3be9d0a9e6a96a43737388b7e409  bat-0.23.0.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+-sha256  64de710b6309a7db5e44ad0af382300c7fb6f6d116d8ae32f0164e05db033068  LICENSE-MIT
++sha256  dccda9eb9533f5c65624a1106536c6cfde46008d58e60b3faf154e8b9fd5b46e  LICENSE-MIT
+diff --git a/package/bat/bat.mk b/package/bat/bat.mk
+index dc29a85429..395134df17 100644
+--- a/package/bat/bat.mk
++++ b/package/bat/bat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BAT_VERSION = 0.19.0
++BAT_VERSION = 0.23.0
+ BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
+ BAT_LICENSE = Apache-2.0 or MIT
+ BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
