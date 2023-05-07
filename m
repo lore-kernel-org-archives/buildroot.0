@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1DFDC77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D1A6C77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47044821D8;
-	Sun,  7 May 2023 12:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47044821D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id E028282199;
+	Sun,  7 May 2023 12:27:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E028282199
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eO-XFr7bQ718; Sun,  7 May 2023 12:26:56 +0000 (UTC)
+	with ESMTP id zSNIXY2lFBp0; Sun,  7 May 2023 12:27:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 724C282199;
-	Sun,  7 May 2023 12:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 724C282199
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A9EB1BF391
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06504821E8;
+	Sun,  7 May 2023 12:27:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06504821E8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 87BBB1BF861
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 346B9821CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61B63404F5
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:26:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 346B9821CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61B63404F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UkcSN0a9bEql for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZG5Zn1AjQZCw for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 12:26:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7EB6D82193
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7737140192
  for <buildroot@buildroot.org>; Sun,  7 May 2023 12:26:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EB6D82193
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7737140192
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6AED385F1B; Sun,  7 May 2023 12:26:52 +0000 (UTC)
+ id 5E38C85F1A; Sun,  7 May 2023 12:26:52 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 14:24:07 +0200
+Date: Sun, 7 May 2023 14:23:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab1955c112fcfbf4d56b1c9c9ee9eb9b3fff5dd0
-X-Git-Newrev: 92b435cf4e6ca4de762e67b167b38534b7efd4eb
+X-Git-Oldrev: 9aa67d7409e0c33cdbc9a6b5103f287bc87b4be5
+X-Git-Newrev: ab1955c112fcfbf4d56b1c9c9ee9eb9b3fff5dd0
 X-Patchwork-Hint: ignore
-Message-Id: <20230507122652.6AED385F1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bento4: bump version to
- 1.6.0-639-7-Omega
+Message-Id: <20230507122652.5E38C85F1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: update
+ license info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92b435cf4e6ca4de762e67b167b38534b7efd4eb
+commit: https://git.buildroot.net/buildroot/commit/?id=ab1955c112fcfbf4d56b1c9c9ee9eb9b3fff5dd0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Needed for the upcoming version bump of the Nexus version of
-kodi-inputstream-adaptive.
+Include all licenses mentioned in LICENSES/README.md and update the
+deprecated SPDX identifier for the GPL-2.0 license:
+https://spdx.org/licenses/GPL-2.0+.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bento4/bento4.hash | 2 +-
- package/bento4/bento4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../kodi-inputstream-adaptive.hash                     |  1 +
+ .../kodi-inputstream-adaptive.mk                       | 18 ++++++++++++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/bento4/bento4.hash b/package/bento4/bento4.hash
-index 8e2033dc98..b9391aed6a 100644
---- a/package/bento4/bento4.hash
-+++ b/package/bento4/bento4.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8afa4ae07a7629a65e0d5014750960ced33a8771d363652f3913261fb5d0c84f  bento4-1.6.0-639-6-Nexus.tar.gz
-+sha256  4464cd47b597e6dedbfc231bb6eb097c45cfe5ee0051082460d9ac53e9d74dc3  bento4-1.6.0-639-7-Omega.tar.gz
- sha256  7daae92c8628ada28def8d096fe2fde298b72ec3e2d64a3c408afce38edb361b  Documents/LICENSE.txt
-diff --git a/package/bento4/bento4.mk b/package/bento4/bento4.mk
-index a2e0805c17..8aefc401ef 100644
---- a/package/bento4/bento4.mk
-+++ b/package/bento4/bento4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 18df044c62..f94c0455bb 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,4 @@
+ # Locally computed
+ sha256  907915228335eeb9217e6f069cbb210fffce01095a6326908015cd89165a0328  kodi-inputstream-adaptive-20.3.6-Nexus.tar.gz
+ sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
++sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 1f3e86bb27..31b04c9e89 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -6,8 +6,22 @@
  
--BENTO4_VERSION = 1.6.0-639-6-Nexus
-+BENTO4_VERSION = 1.6.0-639-7-Omega
- BENTO4_SITE = $(call github,xbmc,Bento4,$(BENTO4_VERSION))
- BENTO4_INSTALL_STAGING = YES
- BENTO4_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.6-Nexus
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+-KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+-KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.md
++KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
++	BSD-2-Clause-Views \
++	BSD-3-Clause \
++	google-patent-license-webm \
++	GPL-2.0-or-later \
++	RSA-MD5
++
++KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = \
++	LICENSE.md \
++	LICENSES/README.md \
++	LICENSES/BSD-2-Clause-Views \
++	LICENSES/BSD-3-Clause \
++	LICENSES/google-patent-license-webm \
++	LICENSES/GPL-2.0-or-later \
++	LICENSES/RSA-MD
++
+ KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = bento4 expat kodi
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
