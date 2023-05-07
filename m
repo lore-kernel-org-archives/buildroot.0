@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5740EC77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:32:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8ABFC77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:32:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F34A340639;
-	Sun,  7 May 2023 21:32:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F34A340639
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9404D40145;
+	Sun,  7 May 2023 21:32:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9404D40145
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id et2Fs6q6b7eq; Sun,  7 May 2023 21:32:27 +0000 (UTC)
+	with ESMTP id 3djvIhx_KFff; Sun,  7 May 2023 21:32:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3041F408A5;
-	Sun,  7 May 2023 21:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3041F408A5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E09E31BF2C4
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:32:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF169408A5;
+	Sun,  7 May 2023 21:32:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF169408A5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 24A821BF2C4
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:32:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C74DE613F0
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2A8483B06
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:32:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C74DE613F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2A8483B06
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cxDUYsgx1m64 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DG_3D6lxA3dZ for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 21:32:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0884760F47
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E3EC83AF1
  for <buildroot@buildroot.org>; Sun,  7 May 2023 21:32:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0884760F47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E3EC83AF1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E75F7860AE; Sun,  7 May 2023 21:32:23 +0000 (UTC)
+ id 1A9A0860B1; Sun,  7 May 2023 21:32:24 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 23:28:46 +0200
+Date: Sun, 7 May 2023 23:31:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1b98a6c2f21ea071aea7e25e02949cadf6f752e
-X-Git-Newrev: b01a20694c7eae222a1dd64ffb458ce8d6e7ab4b
+X-Git-Oldrev: 8a56e501bba53748d4fdb7f6341b99e10cb75a5f
+X-Git-Newrev: b2c399ec67ad7d35547b172fb25b86d7e5be25d2
 X-Patchwork-Hint: ignore
-Message-Id: <20230507213223.E75F7860AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_arm_vexpress_tz_defconfig:
- don't embed optee-benchmark
+Message-Id: <20230507213224.1A9A0860B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/optee-test: bump to version 3.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b01a20694c7eae222a1dd64ffb458ce8d6e7ab4b
+commit: https://git.buildroot.net/buildroot/commit/?id=b2c399ec67ad7d35547b172fb25b86d7e5be25d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Package optee-benchmark is no more maintained by OP-TEE community
-hence don't enable that package in qemu_arm_vexpress_tz_defconfig.
+Bumps OP-TEE test package version to OP-TEE release 3.21.0.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/qemu_arm_vexpress_tz_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ package/optee-test/optee-test.hash | 4 ++--
+ package/optee-test/optee-test.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index 576c441154..b24fab5e42 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -40,7 +40,6 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BL32_RAM_LOCATION=tdram"
- BR2_TARGET_OPTEE_OS=y
- BR2_TARGET_OPTEE_OS_NEEDS_DTC=y
- BR2_TARGET_OPTEE_OS_PLATFORM="vexpress-qemu_virt"
--BR2_PACKAGE_OPTEE_BENCHMARK=y
- BR2_PACKAGE_OPTEE_EXAMPLES=y
- BR2_PACKAGE_OPTEE_TEST=y
+diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
+index 4da3807bb5..08b3331374 100644
+--- a/package/optee-test/optee-test.hash
++++ b/package/optee-test/optee-test.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_test/archive/3.19.0/optee-test-3.19.0.tar.gz
+-sha256  9435901e9329a25ef4de3904e27d80377b8bb4dd6b215e8fb29d66a7b76afa11  optee-test-3.19.0.tar.gz
++# From https://github.com/OP-TEE/optee_test/archive/3.21.0/optee-test-3.21.0.tar.gz
++sha256  44c7dc3df48e9d73f12bbbef1cc2a4e22d859ab8a5e67a07923267f924175d65  optee-test-3.21.0.tar.gz
+ # Locally computed
+ sha256  6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+index 7b065b6123..d306ef8269 100644
+--- a/package/optee-test/optee-test.mk
++++ b/package/optee-test/optee-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-OPTEE_TEST_VERSION = 3.19.0
++OPTEE_TEST_VERSION = 3.21.0
+ OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
+ OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
+ OPTEE_TEST_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
