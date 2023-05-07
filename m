@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87F9C77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5740EC77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:32:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98328408A5;
-	Sun,  7 May 2023 21:26:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98328408A5
+	by smtp2.osuosl.org (Postfix) with ESMTP id F34A340639;
+	Sun,  7 May 2023 21:32:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F34A340639
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dmVKxWsfw_sp; Sun,  7 May 2023 21:26:51 +0000 (UTC)
+	with ESMTP id et2Fs6q6b7eq; Sun,  7 May 2023 21:32:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BE42640629;
-	Sun,  7 May 2023 21:26:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE42640629
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3041F408A5;
+	Sun,  7 May 2023 21:32:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3041F408A5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EF3A71BF2C4
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:26:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E09E31BF2C4
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:32:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C854460F47
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:26:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C854460F47
+ by smtp3.osuosl.org (Postfix) with ESMTP id C74DE613F0
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C74DE613F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d4Gl7z75b7kd for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 21:26:46 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86EAE60F45
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 86EAE60F45
- for <buildroot@buildroot.org>; Sun,  7 May 2023 21:26:46 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:7bde:4dbc:bac0:54b7])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id C14B22003A4;
- Sun,  7 May 2023 23:26:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 07 May 2023 23:26:40 +0200
-Date: Sun, 7 May 2023 23:26:40 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Leon Rinkel <leon@rinkel.me>
-Message-ID: <20230507212640.GQ252090@scaer>
-References: <20230507204842.1390-1-leon@rinkel.me>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230507204842.1390-1-leon@rinkel.me>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683494803;
- bh=7PoTEYmnO0YVvKM2KzuIzL9SPRsXYvTj8jImCRQntsk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qjl2himJBODbROO9cBCqdxtIg9T5ko5lECIjJ04GiL5R2IQwLfEWdPocr5LrBaOKR
- GEuP4gWMAJEyGT6XNJ3kjtgBiPwx6vlRLT0H2qR2fj6Yf47Nz4myTLgUrAuSjgtnfe
- No1CkSWFJiqBgRcU0fIakE2H7rF2oNvOrqWQabxJejOkeyAZ3Bv6DdUGwKIIsYf+W3
- 3OQPQZ7jl84s6OhizCCIWa+yRon/U2aY9zYobOrqK9AmzBo+XRw7dMchb4iAWtKCor
- rpFdcs785lMzpC92fOuyOx04b4jZAzigmzzSfNCivbxpgnE+CKOSNutDex7p/bZ3/H
- 1RIwOIgSfk6lQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=qjl2himJ
-Subject: Re: [Buildroot] [PATCH v2] package/bat: bump version to 0.23.0
+ with ESMTP id cxDUYsgx1m64 for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 21:32:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0884760F47
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 21:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0884760F47
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E75F7860AE; Sun,  7 May 2023 21:32:23 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 7 May 2023 23:28:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a1b98a6c2f21ea071aea7e25e02949cadf6f752e
+X-Git-Newrev: b01a20694c7eae222a1dd64ffb458ce8d6e7ab4b
+X-Patchwork-Hint: ignore
+Message-Id: <20230507213223.E75F7860AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_arm_vexpress_tz_defconfig:
+ don't embed optee-benchmark
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,74 +57,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David Pierret <david.pierret@smile.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Leon, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b01a20694c7eae222a1dd64ffb458ce8d6e7ab4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-05-07 20:48 +0000, Leon Rinkel spake thusly:
-> Update hash for LICENSE-MIT, to account for an update in the copyright years:
-> https://github.com/sharkdp/bat/commit/d43d241f5bac0fde7881b55f61644e0408181cf7
-> 
-> Signed-off-by: Leon Rinkel <leon@rinkel.me>
+Package optee-benchmark is no more maintained by OP-TEE community
+hence don't enable that package in qemu_arm_vexpress_tz_defconfig.
 
-Applied to master, thanks.
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/qemu_arm_vexpress_tz_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->   - Justify license hash change in commit message (requested by Yann E. MORIN)
-> 
-> Signed-off-by: Leon Rinkel <leon@rinkel.me>
-> ---
->  package/bat/bat.hash | 4 ++--
->  package/bat/bat.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/bat/bat.hash b/package/bat/bat.hash
-> index f4d3e32c34..a79cb8f9a3 100644
-> --- a/package/bat/bat.hash
-> +++ b/package/bat/bat.hash
-> @@ -1,4 +1,4 @@
->  # Locally generated
-> -sha256  7940641baaa61cd3bcd1c3db4804d179609d6ccd955868928a129bf3f853e0b2  bat-0.19.0.tar.gz
-> +sha256  b29af37f274019cf1a36d9483c6f30ff780d3be9d0a9e6a96a43737388b7e409  bat-0.23.0.tar.gz
->  sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
-> -sha256  64de710b6309a7db5e44ad0af382300c7fb6f6d116d8ae32f0164e05db033068  LICENSE-MIT
-> +sha256  dccda9eb9533f5c65624a1106536c6cfde46008d58e60b3faf154e8b9fd5b46e  LICENSE-MIT
-> diff --git a/package/bat/bat.mk b/package/bat/bat.mk
-> index dc29a85429..395134df17 100644
-> --- a/package/bat/bat.mk
-> +++ b/package/bat/bat.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -BAT_VERSION = 0.19.0
-> +BAT_VERSION = 0.23.0
->  BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
->  BAT_LICENSE = Apache-2.0 or MIT
->  BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index 576c441154..b24fab5e42 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -40,7 +40,6 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BL32_RAM_LOCATION=tdram"
+ BR2_TARGET_OPTEE_OS=y
+ BR2_TARGET_OPTEE_OS_NEEDS_DTC=y
+ BR2_TARGET_OPTEE_OS_PLATFORM="vexpress-qemu_virt"
+-BR2_PACKAGE_OPTEE_BENCHMARK=y
+ BR2_PACKAGE_OPTEE_EXAMPLES=y
+ BR2_PACKAGE_OPTEE_TEST=y
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
