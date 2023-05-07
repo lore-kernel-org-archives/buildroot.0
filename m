@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5108BC77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:47:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79E81C77B7D
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F27928129B;
-	Sun,  7 May 2023 21:47:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F27928129B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25AE7813E5;
+	Sun,  7 May 2023 21:47:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25AE7813E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cc587EfeuzMr; Sun,  7 May 2023 21:47:37 +0000 (UTC)
+	with ESMTP id FjSOLUi5xwKn; Sun,  7 May 2023 21:47:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63C71812F6;
-	Sun,  7 May 2023 21:47:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63C71812F6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 853661BF861
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C982812A9;
+	Sun,  7 May 2023 21:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C982812A9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 994591BF863
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D6B8417FF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72692613F5
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:47:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D6B8417FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72692613F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zSyLzqEWh2pw for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uxYwjMV18yU5 for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 21:47:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FA2E4177F
+ by smtp3.osuosl.org (Postfix) with ESMTP id AB1B6613F4
  for <buildroot@buildroot.org>; Sun,  7 May 2023 21:47:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FA2E4177F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB1B6613F4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 67EF0860D1; Sun,  7 May 2023 21:47:21 +0000 (UTC)
+ id 97595860D1; Sun,  7 May 2023 21:47:21 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 23:44:39 +0200
+Date: Sun, 7 May 2023 23:45:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fe0e4bf560273d104fc10b4b9b402fba5538d726
-X-Git-Newrev: b7de8417e1b8f36da2b002a7adb9a633cdcc0ac4
+X-Git-Oldrev: 38c4621df340ea7a76033f5955be1b277554920f
+X-Git-Newrev: aeff26d21dd72eb01a970dd392c06aa52268cfdc
 X-Patchwork-Hint: ignore
-Message-Id: <20230507214721.67EF0860D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rpm: drop remnants of custom CFLAGS
+Message-Id: <20230507214721.97595860D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpm: add readline support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,32 +62,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7de8417e1b8f36da2b002a7adb9a633cdcc0ac4
+commit: https://git.buildroot.net/buildroot/commit/?id=aeff26d21dd72eb01a970dd392c06aa52268cfdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drops the use of `RPM_CFLAGS`, which their use has been obsolete when
-this package bumped to v4.17 [1].
-
-[1]: 429e247b869027f6ecd4efa0f31bccd2765e3875
+When readline support is detected, enable readline support.
 
 Signed-off-by: James Knight <james.d.knight@live.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rpm/rpm.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/rpm/rpm.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index fc57a14fd6..08bcb85ae4 100644
+index 2964c6a512..c66ce6992d 100644
 --- a/package/rpm/rpm.mk
 +++ b/package/rpm/rpm.mk
-@@ -104,7 +104,6 @@ endif
- # ac_cv_prog_cc_c99: RPM uses non-standard GCC extensions (ex. `asm`).
- RPM_CONF_ENV = \
- 	ac_cv_prog_cc_c99='-std=gnu99' \
--	CFLAGS="$(TARGET_CFLAGS) $(RPM_CFLAGS)" \
- 	LIBS=$(TARGET_NLS_LIBS)
+@@ -89,6 +89,13 @@ else
+ RPM_CONF_OPTS += --disable-python
+ endif
  
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_READLINE),y)
++RPM_DEPENDENCIES += readline
++RPM_CONF_OPTS += --with-readline
++else
++RPM_CONF_OPTS += --without-readline
++endif
++
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ RPM_DEPENDENCIES += sqlite
+ RPM_CONF_OPTS += --enable-sqlite
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
