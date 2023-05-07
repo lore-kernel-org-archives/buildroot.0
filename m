@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A57BC77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCBE7C77B75
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:27:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA2588225C;
-	Sun,  7 May 2023 12:27:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA2588225C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67ED9821F5;
+	Sun,  7 May 2023 12:27:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67ED9821F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sh3Q4UQpAKtP; Sun,  7 May 2023 12:27:22 +0000 (UTC)
+	with ESMTP id RIPFwgwCPyQL; Sun,  7 May 2023 12:27:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFDF882199;
-	Sun,  7 May 2023 12:27:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFDF882199
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C2B931BF391
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:26:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F11A821F4;
+	Sun,  7 May 2023 12:27:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F11A821F4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BAC11BF391
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:26:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A8D4418BE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6154582193
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:26:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A8D4418BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6154582193
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LqrwkYvoqPuq for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DjW1EUgFwL7T for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 12:26:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A2254176F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C1FC82199
  for <buildroot@buildroot.org>; Sun,  7 May 2023 12:26:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A2254176F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C1FC82199
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85F4C85F1D; Sun,  7 May 2023 12:26:52 +0000 (UTC)
+ id 775E885F1C; Sun,  7 May 2023 12:26:52 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 14:25:47 +0200
+Date: Sun, 7 May 2023 14:24:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eb22e467c75c875542c3cfea9875f4d6cfa93fe1
-X-Git-Newrev: 0ce2d42aa7f603f3441d3f7481372663b1a2090c
+X-Git-Oldrev: 92b435cf4e6ca4de762e67b167b38534b7efd4eb
+X-Git-Newrev: eb22e467c75c875542c3cfea9875f4d6cfa93fe1
 X-Patchwork-Hint: ignore
-Message-Id: <20230507122652.85F4C85F1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi: update patch status
+Message-Id: <20230507122652.775E885F1C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+ version to 20.3.7-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,55 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ce2d42aa7f603f3441d3f7481372663b1a2090c
+commit: https://git.buildroot.net/buildroot/commit/?id=eb22e467c75c875542c3cfea9875f4d6cfa93fe1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Depends on bento4 version bump included in this patch series:
+https://github.com/xbmc/inputstream.adaptive/commit/55fbc78aaf081b63773fe98cfd03b1bbed8642a5
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                                     | 1 -
- .../0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch     | 2 +-
- package/kodi/0002-cmake-modules-fix-python-detection.patch              | 2 +-
- 3 files changed, 2 insertions(+), 3 deletions(-)
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index e80e2a845f..cd0ccc1abd 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -706,7 +706,6 @@ package/keyutils/0002-cifs.patch Sob Upstream
- package/kmod/0001-fix-O_CLOEXEC.patch Upstream
- package/kodi-texturepacker/0001-texturepacker.patch Upstream
- package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch Upstream
--package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch Upstream
- package/kodi/S50kodi Shellcheck Variables
- package/latencytop/0001-makefile.patch Upstream
- package/lbase64/0001-retro-compatible-with-Lua-5.1.patch Upstream
-diff --git a/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch b/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-index 057d2254bc..4fb95c8b4a 100644
---- a/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-+++ b/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-@@ -8,7 +8,7 @@ When cross-compiling, the location at build time of the libraries is
- not the same as the one at run-time. The CMAKE_FIND_ROOT_PATH variable
- is here to handle this difference, so use it in kodi-config.cmake.
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index f94c0455bb..f562fe193c 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  907915228335eeb9217e6f069cbb210fffce01095a6326908015cd89165a0328  kodi-inputstream-adaptive-20.3.6-Nexus.tar.gz
++sha256  6454f40c6e89e7ce2a9492197954bbef856ee83e242ef610c905d42aed7484d7  kodi-inputstream-adaptive-20.3.7-Nexus.tar.gz
+ sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
+ sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 31b04c9e89..f86438166b 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--Upstream status: Reverted (PR 17616)
-+Upstream: Reverted (PR 17616 and 18680)
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- (rebased and simplified for Kodi 17.0-Krypton)
-diff --git a/package/kodi/0002-cmake-modules-fix-python-detection.patch b/package/kodi/0002-cmake-modules-fix-python-detection.patch
-index 92a4ac904d..fcf35b25b2 100644
---- a/package/kodi/0002-cmake-modules-fix-python-detection.patch
-+++ b/package/kodi/0002-cmake-modules-fix-python-detection.patch
-@@ -5,7 +5,7 @@ Subject: [PATCH] cmake/modules: fix python detection
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
--Upstream: unknown
-+Upstream: https://github.com/xbmc/xbmc/pull/23230
- ---
-  cmake/modules/FindPython.cmake | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.6-Nexus
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.7-Nexus
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
+ 	BSD-2-Clause-Views \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
