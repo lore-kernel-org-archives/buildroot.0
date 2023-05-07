@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C937BC77B7D
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2666DC77B7D
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:03:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 376D040642;
-	Sun,  7 May 2023 21:02:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 376D040642
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9552341776;
+	Sun,  7 May 2023 21:03:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9552341776
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 01jyEUrQ57-r; Sun,  7 May 2023 21:02:50 +0000 (UTC)
+	with ESMTP id q4ak_E9qVkbr; Sun,  7 May 2023 21:03:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B791140636;
-	Sun,  7 May 2023 21:02:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B791140636
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A19B21BF2CC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 94DE5400D6;
+	Sun,  7 May 2023 21:03:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94DE5400D6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AD7191BF861
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A2D383AE2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9436A4013B
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:02:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A2D383AE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9436A4013B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fj3ppgh5N1ur for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rV9yoD0lTB1L for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 21:02:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF95A83794
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDF1D400D6
  for <buildroot@buildroot.org>; Sun,  7 May 2023 21:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF95A83794
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDF1D400D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 969D086065; Sun,  7 May 2023 21:02:46 +0000 (UTC)
+ id A3E0786069; Sun,  7 May 2023 21:02:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 22:34:01 +0200
+Date: Sun, 7 May 2023 22:59:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 64f1f82385b2af1c690d64ae3d72856a707b177e
-X-Git-Newrev: c110bb17ade18f446dd663c984dc3ef48b20fc64
+X-Git-Oldrev: c110bb17ade18f446dd663c984dc3ef48b20fc64
+X-Git-Newrev: d06dca38bb0373a13736a349f7795713458a2188
 X-Patchwork-Hint: ignore
-Message-Id: <20230507210246.969D086065@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-utils.mk: make kconfig
- set/disable operations quiet
+Message-Id: <20230507210246.A3E0786069@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: cleanup kconfig fixup processing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +62,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c110bb17ade18f446dd663c984dc3ef48b20fc64
+commit: https://git.buildroot.net/buildroot/commit/?id=d06dca38bb0373a13736a349f7795713458a2188
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In a previous commit [1], the use of `KCONFIG_ENABLE_OPT` was tweaked in
-a way which no longer generates a default output unless the quiet flag
-is unset (`Q=`). The use of `KCONFIG_SET_OPT` and `KCONFIG_DISABLE_OPT`
-does not apply a quiet operation. In order to make all these kernel
-configuration defines operate in a consistent way, adjusting both
-`KCONFIG_SET_OPT` and `KCONFIG_DISABLE_OPT` to be default-quiet as well.
+The following is an attempt o cleanup the output generated when fixing
+up a Linux's Kconfig:
 
-[1]: 66d2ff25bad813659ed4541b3f4c6c2a09455bd7
+- Quiet the conditional check host-pahole to avoid having the message
+   used to describe a failure generate in the output in its script form.
+- Move the initramfs fixups to their own conditional macros, and move
+   the comments out of the macro (mainly for developers managing the
+   implementation).
+- Adding a generic "Updating kernel config..." message, to help inform
+   builders that the framework is actively processing Kconfig's (while
+   users may be pondering why the closing of a `linux-menuconfig` is
+   doing).
 
 Signed-off-by: James Knight <james.d.knight@live.com>
+[yann.morin.1998@free.fr:
+  - introduce LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
+  - use MESSAGE to display... a message...
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-utils.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 0945e6ed31..530638566c 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -34,9 +34,9 @@ define KCONFIG_ENABLE_OPT
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 37797fc4f0..8027274c32 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -127,7 +127,7 @@ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE),y)
+ LINUX_DEPENDENCIES += host-pahole
+ else
+ define LINUX_FIXUP_CONFIG_PAHOLE_CHECK
+-	if grep -q "^CONFIG_DEBUG_INFO_BTF=y" $(KCONFIG_DOT_CONFIG); then \
++	$(Q)if grep -q "^CONFIG_DEBUG_INFO_BTF=y" $(KCONFIG_DOT_CONFIG); then \
+ 		echo "To use CONFIG_DEBUG_INFO_BTF, enable host-pahole (BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE)" 1>&2; \
+ 		exit 1; \
  	fi
+@@ -366,7 +366,22 @@ define LINUX_FIXUP_CONFIG_ENDIANNESS
  endef
- # KCONFIG_SET_OPT (option, value [, file])
--KCONFIG_SET_OPT     = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=$(2), $(3))
-+KCONFIG_SET_OPT     = $(Q)$(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=$(2), $(3))
- # KCONFIG_DISABLE_OPT  (option [, file])
--KCONFIG_DISABLE_OPT = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(SHARP_SIGN) $(1) is not set, $(2))
-+KCONFIG_DISABLE_OPT = $(Q)$(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(SHARP_SIGN) $(1) is not set, $(2))
+ endif
  
- # Helper functions to determine the name of a package and its
- # directory from its makefile directory, using the $(MAKEFILE_LIST)
++# As the kernel gets compiled before root filesystems are
++# built, we create a fake cpio file. It'll be
++# replaced later by the real cpio archive, and the kernel will be
++# rebuilt using the linux-rebuild-with-initramfs target.
++ifneq ($(BR2_TARGET_ROOTFS_INITRAMFS),)
++define LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
++	@mkdir -p $(BINARIES_DIR)
++	$(Q)touch $(BINARIES_DIR)/rootfs.cpio
++	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
++	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
++	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0))
++endef
++endif
++
+ define LINUX_KCONFIG_FIXUP_CMDS
++	@$(call MESSAGE,"Updating kernel config with fixups")
+ 	$(if $(LINUX_NEEDS_MODULES),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES))
+ 	$(call KCONFIG_ENABLE_OPT,$(strip $(LINUX_COMPRESSION_OPT_y)))
+@@ -401,16 +416,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM64_64K_PAGES))
+ 	$(if $(BR2_TARGET_ROOTFS_CPIO),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD))
+-	# As the kernel gets compiled before root filesystems are
+-	# built, we create a fake cpio file. It'll be
+-	# replaced later by the real cpio archive, and the kernel will be
+-	# rebuilt using the linux-rebuild-with-initramfs target.
+-	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
+-		mkdir -p $(BINARIES_DIR)
+-		touch $(BINARIES_DIR)/rootfs.cpio
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0))
++	$(LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO)
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
