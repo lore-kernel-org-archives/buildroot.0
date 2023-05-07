@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4356C77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:08:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0BD8C77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 759F481E67;
-	Sun,  7 May 2023 12:08:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 759F481E67
+	by smtp1.osuosl.org (Postfix) with ESMTP id 592DB83C47;
+	Sun,  7 May 2023 12:09:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 592DB83C47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nlI0he1PUluj; Sun,  7 May 2023 12:08:56 +0000 (UTC)
+	with ESMTP id C_HNwXpB5WUu; Sun,  7 May 2023 12:09:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87E0881F1B;
-	Sun,  7 May 2023 12:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87E0881F1B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C484E1BF2FA
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D38783C2D;
+	Sun,  7 May 2023 12:09:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D38783C2D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 91C331BF2FA
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69FD44049E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94505418BE
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69FD44049E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94505418BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NxHkyS4kKpZH for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xlvuOkpgS7HU for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 12:04:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF722404FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01F58418D2
  for <buildroot@buildroot.org>; Sun,  7 May 2023 12:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF722404FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01F58418D2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED68F85EEC; Sun,  7 May 2023 12:04:38 +0000 (UTC)
+ id E320785EEF; Sun,  7 May 2023 12:04:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 13:59:36 +0200
+Date: Sun, 7 May 2023 13:59:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f4e8a18e96724339b69cade4f6bb1c3d27e360b1
-X-Git-Newrev: cd1b1bcc0ec31b3af8d901cb7e05bd2794e3130f
+X-Git-Oldrev: 551a702b93ea356a7e050ce4710eed30ededf793
+X-Git-Newrev: f4e8a18e96724339b69cade4f6bb1c3d27e360b1
 X-Patchwork-Hint: ignore
-Message-Id: <20230507120438.ED68F85EEC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ark: bump
- version to 0.7.6
+Message-Id: <20230507120438.E320785EEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-amdgpu:
+ bump version to 23.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,111 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd1b1bcc0ec31b3af8d901cb7e05bd2794e3130f
+commit: https://git.buildroot.net/buildroot/commit/?id=f4e8a18e96724339b69cade4f6bb1c3d27e360b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-February/003328.html
-
-Removed patch which was applied upstream.
+https://lists.x.org/archives/xorg-announce/2023-February/003334.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[yann.morin.1998@free.fr: regenerate .checkpackageignore]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                |  1 -
- .../xdriver_xf86-video-ark/0001-mibstore.patch     | 40 ----------------------
- .../xdriver_xf86-video-ark.hash                    |  5 +--
- .../xdriver_xf86-video-ark.mk                      |  6 ++--
- 4 files changed, 6 insertions(+), 46 deletions(-)
+ .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash  | 6 +++---
+ .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk    | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index dd57e8062d..476a802770 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1695,7 +1695,6 @@ package/x11r7/xdriver_xf86-input-joystick/0001-build-get-rid-of-sdkdir.patch Ups
- package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch Upstream
- package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch Upstream
- package/x11r7/xdriver_xf86-input-synaptics/0001-build-get-rid-of-sdkdir.patch Upstream
--package/x11r7/xdriver_xf86-video-ark/0001-mibstore.patch Upstream
- package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch Upstream
- package/x11r7/xdriver_xf86-video-ati/0002-ati-cleanup-terminology-to-use-primary-secondary.patch Upstream
- package/x11r7/xdriver_xf86-video-ati/0003-Guard-local-variable-priv-only-used-with-glamor.patch Upstream
-diff --git a/package/x11r7/xdriver_xf86-video-ark/0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-ark/0001-mibstore.patch
-deleted file mode 100644
-index fa3e68596a..0000000000
---- a/package/x11r7/xdriver_xf86-video-ark/0001-mibstore.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 3a3eb72baec46f48e6cf15a834271c3d3386deac Mon Sep 17 00:00:00 2001
--From: Gaetan Nadon <memsize@videotron.ca>
--Date: Tue, 17 Sep 2013 19:55:37 +0000
--Subject: Remove usage of mibstore.h (removed from server)
--
--The module had a compile error for this missing header file.
--
--Changes similar to vmware commit
--23d87c92b7211cc5249eefe4ab3a2c7f370e279e
--
--Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
--Signed-off-by: Gaetan Nadon <memsize@videotron.ca>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-ark/commit/?id=3a3eb72baec46f48e6cf15a834271c3d3386deac
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/ark_driver.c b/src/ark_driver.c
--index b7c287c..65cfe84 100644
----- a/src/ark_driver.c
--+++ b/src/ark_driver.c
--@@ -39,7 +39,6 @@
-- #include "compiler.h"
-- #include "mipointer.h"
-- #include "micmap.h"
---#include "mibstore.h"
-- #include "fb.h"
-- #include "ark.h"
-- 
--@@ -538,7 +537,6 @@ static Bool ARKScreenInit(SCREEN_INIT_ARGS_DECL)
-- 
-- 	fbPictureInit (pScreen, 0, 0);
-- 
---	miInitializeBackingStore(pScreen);
-- 	xf86SetBackingStore(pScreen);
-- 
-- 	if (!pARK->NoAccel) {
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.hash b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.hash
-index 2e2e953676..68131fdb38 100644
---- a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.hash
-+++ b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2012-July/002007.html
--sha256  c690e046f34a393aac1c8d9616b4790e93cda60a460b00b9597d322175dbe51e  xf86-video-ark-0.7.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003328.html
-+sha256  5acc9e78122ff6f4390787b2d0d44df81379bd613b6245983cc4bf3f325d085d  xf86-video-ark-0.7.6.tar.xz
-+sha512  a52623e07eef6fa12d77b1afc55bb74b21662b850515b3a32bbf5988dcea2e787b4eddf4e020279aa4e4ddba436505ca9298548406913031e0ed5edaac835491  xf86-video-ark-0.7.6.tar.xz
- # Locally calculated
- sha256  8ba9850fb0ecd9033bb1d25c1be85625cb53ca56ce76b71f78f4a034f7310bda  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
-index 3f2a63609e..6301a97300 100644
---- a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
-+++ b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+index c45ae59ee4..962cb0e16b 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg/2022-February/060928.html
+-sha256  9d23fb602915dc3ccde92aa4d1e9485e7e54eaae2f41f485e55eb20761778266  xf86-video-amdgpu-22.0.0.tar.xz
+-sha512  95c64e3fef7729ced6e7adc5e81c60cc218f6d8b6604f7b290e86ff52c917426b5102decbf8be8a66c9181ccde6e5dff7083dca8cc0c493a39e82625b5c7cb2a  xf86-video-amdgpu-22.0.0.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-February/003334.html
++sha256  4f04f0ea66f3ced0dcc58f617409860163a19c4e8c285cfb5285f36ba09cc061  xf86-video-amdgpu-23.0.0.tar.xz
++sha512  bf26f147629a34e84a0ae8435119e170b9c95edafcab1995b63bb8f55abef32f2efbf4536eb070e64b2ae1460424b1b27a4206cb9836d33ddc6dfbee404f718b  xf86-video-amdgpu-23.0.0.tar.xz
+ # Locally computed
+ sha256  58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+index ba4ab43db2..84f8e39ddd 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_ARK_VERSION = 0.7.5
--XDRIVER_XF86_VIDEO_ARK_SOURCE = xf86-video-ark-$(XDRIVER_XF86_VIDEO_ARK_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_ARK_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_ARK_VERSION = 0.7.6
-+XDRIVER_XF86_VIDEO_ARK_SOURCE = xf86-video-ark-$(XDRIVER_XF86_VIDEO_ARK_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_ARK_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_ARK_LICENSE = MIT
- XDRIVER_XF86_VIDEO_ARK_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_ARK_DEPENDENCIES = xserver_xorg-server xorgproto
+-XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 22.0.0
++XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 23.0.0
+ XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.xz
+-XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_AMDGPU_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_AMDGPU_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
