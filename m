@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BA46C77B7D
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9178C77B75
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:54:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E29FC613DD;
-	Sun,  7 May 2023 16:54:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E29FC613DD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D5F5613E9;
+	Sun,  7 May 2023 16:54:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D5F5613E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z42EVxZRHVau; Sun,  7 May 2023 16:54:10 +0000 (UTC)
+	with ESMTP id yKW--Ksr--Cl; Sun,  7 May 2023 16:54:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 136BD613E5;
-	Sun,  7 May 2023 16:54:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 136BD613E5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 957871BF2F0
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9920060C33;
+	Sun,  7 May 2023 16:54:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9920060C33
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B4971BF2F0
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D42E4173C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43EBA4016D
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D42E4173C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43EBA4016D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WlrWtsRDK93T for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ijNGqHOcC8DD for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 16:53:48 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8C92416B4
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A8C92416B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 240444177A
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 240444177A
  for <buildroot@buildroot.org>; Sun,  7 May 2023 16:53:47 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue010
- [212.227.15.167]) with ESMTPSA (Nemesis) id 1M6DnM-1ptUiM2XZg-006jTo; Sun, 07
- May 2023 18:53:42 +0200
+ [212.227.15.167]) with ESMTPSA (Nemesis) id 1N95Rn-1qFa0e12vf-0164tH; Sun, 07
+ May 2023 18:53:43 +0200
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Sun,  7 May 2023 18:53:36 +0200
-Message-Id: <20230507165340.42151-2-laurent@vivier.eu>
+Date: Sun,  7 May 2023 18:53:37 +0200
+Message-Id: <20230507165340.42151-3-laurent@vivier.eu>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230507165340.42151-1-laurent@vivier.eu>
 References: <20230507165340.42151-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:6GEE/3WGaAJJUfGBxDn61eTw57v4vil/fpmL6qezuuyvtzLHB1c
- hOfDIunyURishLRhQyq5gxWxNfHiZhqv4CeI6st11C7ruoJI3hhqnDy/NLHz94jXIaexQM1
- O2TJp9x7D6MhzDwvoLDNdLUMjkESYLF8Ek64O1m8vtPs6ZRClJnXFsxZIzu/QppsDCSqe8t
- 2nUZoJvfhYESJUTEppM6g==
-UI-OutboundReport: notjunk:1;M01:P0:eOEDO2Ey+H0=;rYGZpBtZvGjm39RGujgKxTJRLaI
- VyCk5omF0U5Mynr+ARxIzPUVMXopyFfD8ySp87VEwu/g31ukx2UWJIaZisfgUZmm4RDAFuYko
- f3Ev1r2WcwVKhBEpvltYOWr+5dfa6ItWhVgERhKwPK4X0Vv8NNIdkAmyBLz3iJv3+QPKthboR
- Ivi3XU4CJwdrFyJlt+YABs1lMvLDsmgNNLhUqqtNVi6EstxcmB8a6Jbbw5Of6msDaOeBn9BYh
- GrxVTOcNHYzwcIa16u2m5Nlnik+0WDRD9NgXkdA14LfMqIpefRcWvlrIStFIKdOGb4j1jSRuM
- DX/at+1jB9Dg6mj4H5oR4bQA2JddS8OY31nBKxIfSEMb+xcHA7wuo+V7Fl8pikR7bZPRlfOgo
- oxvrk8DlH8mPcBI+2OXm7Hc01hoTOuaWeVHGKqdT8e6YxbcmU2Ms5PlOGBTB2IdnpKLfpb6TP
- TW8LPCNV4aI7jIjvmy5ThEYOKdV23uBQcFKreAFOTr/xF8XnAx1kYAsZujVZ9qtzP8vOjstx8
- zVhmY38VCjXfjIgYG1W8hJ4XzuBSd/lvwfGVtsczNC/ClmX4/FgtJjE4xYYeT92zvhmXu8BrW
- yl0+wrUpc8IsZVudri6in2+jJGmrIfGQnn/IYKWt6v2mLX1uPjUBwwB9LaD0HWAAPOmh84VuX
- n4LRTPgXDPwjEc0KrD37x/0phKmkjgtwa8fjBKELNw==
-Subject: [Buildroot] [PATCH v12 1/5] kexec: fix sys/random.h with uclibc
+X-Provags-ID: V03:K1:KAfu/jmCkxqCptCwgcfUnSk1iAhlR6XE7wZ8I9teLcYrVtRV1Fo
+ Ficl3zNHTdWWRxvcyKUcnI/142NuqT7JyEzR1y2WQvHULLnVehndAi32O5YuTHatnge2/o0
+ fJaveKueWbiNWAfYMMTBhft72f5otP+EqdyyDUNCJo9CN0fcaJqn3nDIS3vebZ7egUbKzc5
+ BwsZCF4vmW1kHLs7Ryi1Q==
+UI-OutboundReport: notjunk:1;M01:P0:eNdkg0yDL9U=;X5xBHzwahDxsvvx0KT/4L8rAK7/
+ EPBAxti8WsA4o65FjVh4CFxBETBa8vayLay94192CIi+Rp6mHNZF5sPCS3mlM9fuljZhKLWPQ
+ 7ZgrH1nLzQovOdLCa39IXzzmflfErvpw9QBXWAQYmrZw0OwfmEtV6r0Had7ypx2vPS/l40aGC
+ 0weoDZGIBNT6yzaF7aam83xSBn2lctlYYscHtPc1iz3nTuWb3S3mAbmoTszX/roEaBxDw/l6V
+ Xz9SCqpt56JhRSwjufniwDxrz+uk/0/WmOn8BoOY5GJj4CYyGSHKvLjVjoILI3hxYWYF1YQyK
+ OUBtUdgJzcLZ12aXyqmExqwm3O1eRkR1fyo/XM2F4EUjDuGIMcVDNGMpmcxdZYBR6EdnBaFql
+ qY3VTHjAMRZZa25n/8PDtlWu796G/AZxlwzm6asvq4RK22KG8+lWGo2fmk9cKKRZ+47weEuQQ
+ J0BT/fyQES5LB+39emWwvgRefGDqbLXeec863TzqBgsSLIMqDcQ8dDrzDZ4C39Wogho2JOEnh
+ 0zRgPYAYazXFawJgXyivk6wQltv0YXAp6FJMI9FRq9uXd4xbZ5Kin5uMUTn5l8PgIaTYZeblT
+ d6p5M9tANGyeLOE9Gs6pbiDNr3I6IqQUi1xdTOYspj6cg2aVAqC5mjcxA9h1AMqzsG+zr3BuF
+ lZfnzOObPpvdSDaD8rfqsuLspSjKd8CgXwiBFwaKug==
+Subject: [Buildroot] [PATCH v12 2/5] petitboot: add pb-discover daemon
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,52 +84,86 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 ---
- ...1-m68k-fix-getrandom-use-with-uclibc.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch
+ package/petitboot/S15pb-discover | 54 ++++++++++++++++++++++++++++++++
+ package/petitboot/petitboot.mk   |  4 +++
+ 2 files changed, 58 insertions(+)
+ create mode 100644 package/petitboot/S15pb-discover
 
-diff --git a/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch b/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch
+diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
 new file mode 100644
-index 000000000000..6661349aba75
+index 000000000000..83305ed9ea8a
 --- /dev/null
-+++ b/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch
-@@ -0,0 +1,36 @@
-+From 491439a5c55b18dce96b522f3a603faaf1908ede Mon Sep 17 00:00:00 2001
-+From: Laurent Vivier <laurent@vivier.eu>
-+Date: Fri, 21 Apr 2023 18:22:07 +0200
-+Subject: [PATCH] m68k: fix getrandom() use with uclibc
++++ b/package/petitboot/S15pb-discover
+@@ -0,0 +1,54 @@
++#!/bin/sh
 +
-+With uclibc, getrandom() is only defined with _GNU_SOURCE, fix that:
++DAEMON="pb-discover"
++PIDFILE="/var/run/$DAEMON.pid"
++LOGFILE="/var/log/$DAEMON.log"
 +
-+kexec/arch/m68k/bootinfo.c: In function 'bootinfo_add_rng_seed':
-+kexec/arch/m68k/bootinfo.c:231:13: warning: implicit declaration of function 'getrandom'; did you mean 'srandom'? [-Wimplicit-function-declaration]
-+  231 |         if (getrandom(bi->rng_seed.data, RNG_SEED_LEN, GRND_NONBLOCK) != RNG_SEED_LEN) {
-+      |             ^~~~~~~~~
-+      |             srandom
-+kexec/arch/m68k/bootinfo.c:231:56: error: 'GRND_NONBLOCK' undeclared (first use in this function)
-+  231 |         if (getrandom(bi->rng_seed.data, RNG_SEED_LEN, GRND_NONBLOCK) != RNG_SEED_LEN) {
-+      |                                                        ^~~~~~~~~~~~~
++PB_DISCOVER_ARGS="-l $LOGFILE"
 +
-+Fixes:  b9de05184816 ("m68k: pass rng seed via BI_RNG_SEED")
-+Upstream: https://lore.kernel.org/kexec/20230422095904.1303434-1-laurent@vivier.eu/
-+Cc: Jason@zx2c4.com
-+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-+---
-+ kexec/arch/m68k/bootinfo.c | 1 +
-+ 1 file changed, 1 insertion(+)
++if [ "$(pb-config debug)" = "enabled" ] ; then
++	PB_DISCOVER_ARGS="$PB_DISCOVER_ARGS --verbose"
++fi
 +
-+diff --git a/kexec/arch/m68k/bootinfo.c b/kexec/arch/m68k/bootinfo.c
-+index 086a34bdfdeb..5afd212d9d34 100644
-+--- a/kexec/arch/m68k/bootinfo.c
-++++ b/kexec/arch/m68k/bootinfo.c
-+@@ -1,3 +1,4 @@
-++#define _GNU_SOURCE
-+ 
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-- 
-+2.40.0
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -b -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
++		-- $PB_DISCOVER_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
 +
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++		;;
++esac
+diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+index a798e7ca614f..4d56b73938e7 100644
+--- a/package/petitboot/petitboot.mk
++++ b/package/petitboot/petitboot.mk
+@@ -53,6 +53,10 @@ define PETITBOOT_POST_INSTALL
+ 		$(TARGET_DIR)/etc/petitboot/boot.d/01-create-default-dtb
+ 	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/90-sort-dtb \
+ 		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
++	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
++		$(TARGET_DIR)/etc/init.d/S15pb-discover
++	ln -sf /usr/sbin/pb-udhcpc \
++		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
+ endef
+ 
+ PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL
 -- 
 2.40.1
 
