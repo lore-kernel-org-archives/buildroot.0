@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9178C77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C1F6C77B75
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:54:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D5F5613E9;
-	Sun,  7 May 2023 16:54:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D5F5613E9
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7A2760B2F;
+	Sun,  7 May 2023 16:54:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7A2760B2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yKW--Ksr--Cl; Sun,  7 May 2023 16:54:22 +0000 (UTC)
+	with ESMTP id IwoBOulUruBK; Sun,  7 May 2023 16:54:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9920060C33;
-	Sun,  7 May 2023 16:54:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9920060C33
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6B4971BF2F0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13476613DC;
+	Sun,  7 May 2023 16:54:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13476613DC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 80C721BF861
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43EBA4016D
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43EBA4016D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 666B0416B4
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 666B0416B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ijNGqHOcC8DD for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 16:53:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QRtvOYLljQVS for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 16:53:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 240444177A
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 240444177A
- for <buildroot@buildroot.org>; Sun,  7 May 2023 16:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A26F4171B
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9A26F4171B
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 16:53:48 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue010
- [212.227.15.167]) with ESMTPSA (Nemesis) id 1N95Rn-1qFa0e12vf-0164tH; Sun, 07
- May 2023 18:53:43 +0200
+ [212.227.15.167]) with ESMTPSA (Nemesis) id 1MdNoW-1qUlLL3eb2-00ZRS8; Sun, 07
+ May 2023 18:53:44 +0200
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Sun,  7 May 2023 18:53:37 +0200
-Message-Id: <20230507165340.42151-3-laurent@vivier.eu>
+Date: Sun,  7 May 2023 18:53:38 +0200
+Message-Id: <20230507165340.42151-4-laurent@vivier.eu>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230507165340.42151-1-laurent@vivier.eu>
 References: <20230507165340.42151-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:KAfu/jmCkxqCptCwgcfUnSk1iAhlR6XE7wZ8I9teLcYrVtRV1Fo
- Ficl3zNHTdWWRxvcyKUcnI/142NuqT7JyEzR1y2WQvHULLnVehndAi32O5YuTHatnge2/o0
- fJaveKueWbiNWAfYMMTBhft72f5otP+EqdyyDUNCJo9CN0fcaJqn3nDIS3vebZ7egUbKzc5
- BwsZCF4vmW1kHLs7Ryi1Q==
-UI-OutboundReport: notjunk:1;M01:P0:eNdkg0yDL9U=;X5xBHzwahDxsvvx0KT/4L8rAK7/
- EPBAxti8WsA4o65FjVh4CFxBETBa8vayLay94192CIi+Rp6mHNZF5sPCS3mlM9fuljZhKLWPQ
- 7ZgrH1nLzQovOdLCa39IXzzmflfErvpw9QBXWAQYmrZw0OwfmEtV6r0Had7ypx2vPS/l40aGC
- 0weoDZGIBNT6yzaF7aam83xSBn2lctlYYscHtPc1iz3nTuWb3S3mAbmoTszX/roEaBxDw/l6V
- Xz9SCqpt56JhRSwjufniwDxrz+uk/0/WmOn8BoOY5GJj4CYyGSHKvLjVjoILI3hxYWYF1YQyK
- OUBtUdgJzcLZ12aXyqmExqwm3O1eRkR1fyo/XM2F4EUjDuGIMcVDNGMpmcxdZYBR6EdnBaFql
- qY3VTHjAMRZZa25n/8PDtlWu796G/AZxlwzm6asvq4RK22KG8+lWGo2fmk9cKKRZ+47weEuQQ
- J0BT/fyQES5LB+39emWwvgRefGDqbLXeec863TzqBgsSLIMqDcQ8dDrzDZ4C39Wogho2JOEnh
- 0zRgPYAYazXFawJgXyivk6wQltv0YXAp6FJMI9FRq9uXd4xbZ5Kin5uMUTn5l8PgIaTYZeblT
- d6p5M9tANGyeLOE9Gs6pbiDNr3I6IqQUi1xdTOYspj6cg2aVAqC5mjcxA9h1AMqzsG+zr3BuF
- lZfnzOObPpvdSDaD8rfqsuLspSjKd8CgXwiBFwaKug==
-Subject: [Buildroot] [PATCH v12 2/5] petitboot: add pb-discover daemon
+X-Provags-ID: V03:K1:ye1mgZ2uroAIYhBLz3C43dcJxKcPozMDaUa3zLqx3KuuqWICzbi
+ tVZOGO6z4cIj71Jm/usvarqCokPSxga82SH1PYUse+pqfOTOlszAfupGeALZ23x71wQ2vm+
+ 0ci1jBqcS4RTZG4sfYk5TzTfJZneR/yQA2B7CCg3S0RpZbDP0wDwCkd6sKGl0kEZ4F6jQoI
+ DAeV+vQeNYbirx6Mj4B5g==
+UI-OutboundReport: notjunk:1;M01:P0:KeRwQRy0c+g=;aAkfsqOKSQFRCJpCIWFm1YgYwtz
+ 7TNI+YE2ueYKBuh9Q3tGgJjmR+/5VWyL3Of2tNaNbKhITQvyNvYBYdfCswLsYM1Q18utugZ0x
+ gJDpUuGqDqavLfVOGnEqZvD9Pkf1Y+oirIV4A0ZofTiH+RVMpi8PtKqtISTCEVWKzQNbe9H/u
+ OSrjEnU2Ab66EQeHceCJ2WMcFuoBXARk8Ta0s7nR0Pt1aehLTxv7jjNh1xd1cgV8+h1mXo3Ku
+ CN/LuAojsNWHicWZL9LvwPLrkGam7BgBr41oq9UHCAmkER5jnCKDsYW3nzHuPjXJusfsEYo0t
+ tF0RihrRIO/uEJ8cHu126JgnpRdDTYdVZvwNC5zJaFexxcXSsn36DNpf8OCj+3aHYmXedLJe/
+ fpbBe3CJhCxK23aH5kKGWBzioRqDr9KpypB7vd53rDMMhy47Wtpszy7JjDWUqC5dXOahq0Rk5
+ QnPqasa6UaQ5blkk+5uoT0ifq2TBx4+ppUxngvO+0f6bNdWbyzaTMkbsgpYa+MgjEKEV8yq34
+ LkqNzLs1nCW24519IVO2iZLMolI9qbE5+pep+8q3oSC/9gwddeoj3Fe1e8WcyyHNDpTT6TrFJ
+ vwmqv7gMA/8/aMP1wtwW2Mi+8TtqJUU9cuPEzIvhwQ70RZLz+78rkQf2m+pg+hNWGWn2kqbWg
+ In2v7N17NZBtryzdmcPD2TuoIrlq7KcirUfdW98O7Q==
+Subject: [Buildroot] [PATCH v12 3/5] petitboot: start petitboot on all tty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,86 +84,60 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 ---
- package/petitboot/S15pb-discover | 54 ++++++++++++++++++++++++++++++++
- package/petitboot/petitboot.mk   |  4 +++
- 2 files changed, 58 insertions(+)
- create mode 100644 package/petitboot/S15pb-discover
+ package/petitboot/petitboot-console-ui.rules | 5 +++++
+ package/petitboot/petitboot.mk               | 4 ++++
+ package/petitboot/sysctl.conf                | 1 +
+ system/Config.in                             | 2 +-
+ 4 files changed, 11 insertions(+), 1 deletion(-)
+ create mode 100644 package/petitboot/petitboot-console-ui.rules
+ create mode 100644 package/petitboot/sysctl.conf
 
-diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
+diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
 new file mode 100644
-index 000000000000..83305ed9ea8a
+index 000000000000..ceeada256f2b
 --- /dev/null
-+++ b/package/petitboot/S15pb-discover
-@@ -0,0 +1,54 @@
-+#!/bin/sh
-+
-+DAEMON="pb-discover"
-+PIDFILE="/var/run/$DAEMON.pid"
-+LOGFILE="/var/log/$DAEMON.log"
-+
-+PB_DISCOVER_ARGS="-l $LOGFILE"
-+
-+if [ "$(pb-config debug)" = "enabled" ] ; then
-+	PB_DISCOVER_ARGS="$PB_DISCOVER_ARGS --verbose"
-+fi
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -S -q -b -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-+		-- $PB_DISCOVER_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+		;;
-+esac
++++ b/package/petitboot/petitboot-console-ui.rules
+@@ -0,0 +1,5 @@
++# spawn a petitboot UI on common user-visible interface devices
++SUBSYSTEM=="tty", KERNEL=="ttyGF*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
++SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
++SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
++SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
 diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-index a798e7ca614f..4d56b73938e7 100644
+index 4d56b73938e7..e74a5ff623ea 100644
 --- a/package/petitboot/petitboot.mk
 +++ b/package/petitboot/petitboot.mk
-@@ -53,6 +53,10 @@ define PETITBOOT_POST_INSTALL
- 		$(TARGET_DIR)/etc/petitboot/boot.d/01-create-default-dtb
- 	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/90-sort-dtb \
+@@ -55,6 +55,10 @@ define PETITBOOT_POST_INSTALL
  		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
-+	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
-+		$(TARGET_DIR)/etc/init.d/S15pb-discover
-+	ln -sf /usr/sbin/pb-udhcpc \
-+		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
+ 	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
+ 		$(TARGET_DIR)/etc/init.d/S15pb-discover
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/petitboot-console-ui.rules
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/sysctl.conf \
++		$(TARGET_DIR)/etc/sysctl.conf
+ 	ln -sf /usr/sbin/pb-udhcpc \
+ 		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
  endef
+diff --git a/package/petitboot/sysctl.conf b/package/petitboot/sysctl.conf
+new file mode 100644
+index 000000000000..02ab8e3275b5
+--- /dev/null
++++ b/package/petitboot/sysctl.conf
+@@ -0,0 +1 @@
++kernel.printk = 1 1 1 1
+diff --git a/system/Config.in b/system/Config.in
+index 1ca7690ea3ba..786ec9a1c6b3 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -375,7 +375,7 @@ config BR2_SYSTEM_BIN_SH
  
- PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL
+ menuconfig BR2_TARGET_GENERIC_GETTY
+ 	bool "Run a getty (login prompt) after boot"
+-	default y
++	default y         if !BR2_PACKAGE_PETITBOOT
+ 
+ if BR2_TARGET_GENERIC_GETTY
+ config BR2_TARGET_GENERIC_GETTY_PORT
 -- 
 2.40.1
 
