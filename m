@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33414C77B7D
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11DDFC77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:05:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A134E82199;
-	Sun,  7 May 2023 12:04:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A134E82199
+	by smtp1.osuosl.org (Postfix) with ESMTP id B11A982201;
+	Sun,  7 May 2023 12:05:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B11A982201
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IgzW0GfBrfWy; Sun,  7 May 2023 12:04:54 +0000 (UTC)
+	with ESMTP id bF1i7rcAQhg6; Sun,  7 May 2023 12:05:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9FE182182;
-	Sun,  7 May 2023 12:04:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9FE182182
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 976991BF861
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9068C821C5;
+	Sun,  7 May 2023 12:05:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9068C821C5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A5611BF863
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B102821C5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7BA8A60E07
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B102821C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BA8A60E07
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3xjT2OI5YMCh for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gC9tI1E-coE3 for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 12:04:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B49782109
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8154560BCA
  for <buildroot@buildroot.org>; Sun,  7 May 2023 12:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B49782109
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8154560BCA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 497BE85EE9; Sun,  7 May 2023 12:04:38 +0000 (UTC)
+ id 6F86585EEE; Sun,  7 May 2023 12:04:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 13:10:14 +0200
+Date: Sun, 7 May 2023 13:10:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a81a2f28c5e59dadcddefe2c38613ebad5e51c6
-X-Git-Newrev: b30206b708e02adb1b287a2d450f48c4bd12f754
+X-Git-Oldrev: 33916e184b1e6efa9221c66707132d9b997eb98b
+X-Git-Newrev: 770c9baa3ebc56ef0633948ecc0ccceb12b7825c
 X-Patchwork-Hint: ignore
-Message-Id: <20230507120438.497BE85EE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-mouse:
- bump version to 1.9.5
+Message-Id: <20230507120438.6F86585EEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xdpyinfo: bump version
+ to 1.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b30206b708e02adb1b287a2d450f48c4bd12f754
+commit: https://git.buildroot.net/buildroot/commit/?id=770c9baa3ebc56ef0633948ecc0ccceb12b7825c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-May/003392.html
-
-Updated license hash due to update in copyrighht years with upstream
-commit:
-https://gitlab.freedesktop.org/xorg/driver/xf86-input-mouse/-/commit/5f63ab04338fd811c610ae7617757ede52471316
+https://lists.x.org/archives/xorg-announce/2023-April/003388.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash  | 8 ++++----
- .../x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk    | 2 +-
+ package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.hash | 6 +++---
+ package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-index adba659aea..d654c362a9 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+diff --git a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.hash b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.hash
+index 07a3eb936c..b0afdc15ac 100644
+--- a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.hash
++++ b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003247.html
--sha256  7f6f8551fc238abdddcf9f38906564c1f8c7dacb0ad947cfc110487aefbd8d4c  xf86-input-mouse-1.9.4.tar.xz
--sha512  7dfde3b1e0c1291c4d78ee920942771808b007f743bfc6eed20de12579383745858673dd874a4b5cf4ab8d9d15f6f7ca2db81ee831547a488d64848a7fe5e16c  xf86-input-mouse-1.9.4.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-May/003392.html
-+sha256  4fde8ae9b44352e2a208584c36528ee3ed13cf5fe4417208a9785daccefd9968  xf86-input-mouse-1.9.5.tar.xz
-+sha512  ed9bd9cb9a05dac0ff1bfb4e4704cb2e94117afb400aa9e0b7ccdbb102bc6db1b0d3af7cb6f99d0892f8fc306f1643286291c0fa7114af8e65864412bd6c1afa  xf86-input-mouse-1.9.5.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2022-April/003157.html
+-sha256  356d5fd62f3e98ee36d6becf1b32d4ab6112d618339fb4b592ccffbd9e0fc206  xdpyinfo-1.3.3.tar.xz
+-sha512  47fe0821bc64145876853712ebd7c0af80111c243813615b892429021cc9a53abd38c4684551ae300cb5a4eacdd3d26e2c93e789ed91a948b20e2c37cd2d2442  xdpyinfo-1.3.3.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-April/003388.html
++sha256  a8ada581dbd7266440d7c3794fa89edf6b99b8857fc2e8c31042684f3af4822b  xdpyinfo-1.3.4.tar.xz
++sha512  9ef9f5c10e15a40895e8f008896b960fdd438277657c7159d16f05db79cd2374cfaca4af2f4e59335824bfd2f74a045ef89dd99ea4130ed436ea59fbbb1cbe12  xdpyinfo-1.3.4.tar.xz
  # Locally computed
--sha256  472ff645ead9bf3ffb48d42c596376ffc595897e0c0993a071a7ada0da1f4f10  COPYING
-+sha256  5b066654bdb61a1ef41f38cceda752897bbddb6e60e20f5889cab436a9b7b813  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-index 4a9eb3089f..25e25ab93d 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-@@ -4,7 +4,7 @@
+ sha256  49733ead65fdfa1da0d176f9b965cc08dae74d73d66c9606488d52f6fc036abf  COPYING
+diff --git a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
+index c5e2a857e3..a198fc44c3 100644
+--- a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
++++ b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.4
-+XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.5
- XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.xz
- XDRIVER_XF86_INPUT_MOUSE_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
+-XAPP_XDPYINFO_VERSION = 1.3.3
++XAPP_XDPYINFO_VERSION = 1.3.4
+ XAPP_XDPYINFO_SOURCE = xdpyinfo-$(XAPP_XDPYINFO_VERSION).tar.xz
+-XAPP_XDPYINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XDPYINFO_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XDPYINFO_LICENSE = MIT
+ XAPP_XDPYINFO_LICENSE_FILES = COPYING
+ XAPP_XDPYINFO_CONF_OPTS = --without-xf86misc # not in BR
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
