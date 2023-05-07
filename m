@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FAC8C77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 469AEC77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C09A83C77;
-	Sun,  7 May 2023 12:09:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C09A83C77
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA03C83C19;
+	Sun,  7 May 2023 12:09:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA03C83C19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wsBqm3-lFoeB; Sun,  7 May 2023 12:09:33 +0000 (UTC)
+	with ESMTP id 22b-qS5Bmg2X; Sun,  7 May 2023 12:09:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23DB483BD2;
-	Sun,  7 May 2023 12:09:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23DB483BD2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C2DA1BF2FA
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:05:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0310381A29;
+	Sun,  7 May 2023 12:09:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0310381A29
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E6901BF2FA
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 138608227F
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:05:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 138608227F
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7675418C3
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:09:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7675418C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H1NHNYKBllCl for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 12:05:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 803C382109
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 803C382109
- for <buildroot@buildroot.org>; Sun,  7 May 2023 12:05:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7CFcr4wjj6rZ for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 12:09:49 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8659B418C5
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8659B418C5
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 12:09:49 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:5f9f:2ea:ec9d:3930])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id B73D419F743;
- Sun,  7 May 2023 14:04:57 +0200 (CEST)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id DA09419F58A;
+ Sun,  7 May 2023 14:09:44 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 07 May 2023 14:04:57 +0200
-Date: Sun, 7 May 2023 14:04:57 +0200
+ Sun, 07 May 2023 14:09:44 +0200
+Date: Sun, 7 May 2023 14:09:44 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20230507120457.GI252090@scaer>
+Message-ID: <20230507120944.GJ252090@scaer>
 References: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
+ <20230506173917.1112500-2-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230506173917.1112500-1-bernd.kuhls@t-online.de>
+In-Reply-To: <20230506173917.1112500-2-bernd.kuhls@t-online.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683461099;
- bh=y3tkKMFdUv8Xn3PlNepMAVV8qBaFOkJ2QzakzzbGYsY=;
+ d=free.fr; s=smtp-20201208; t=1683461387;
+ bh=g2onOLqa5PbgLa0yecHtpdFAxjN8DCrLOumBVN+JGQY=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Wq4gf+qn6iYjMffnw+m7F/NF6cpmC+gmWUnW3FaEpX8qfEh3A/jT5XNYFETjT0hcX
- x0v8l/sVFncoFai52mHUpIrKrZOOAirPvkU83GzV/e9+2ATQ/UvphUGdEvmggMsEyr
- ZL7gr2ftYGCeuf/koSKux8qf1Pm7EnlisP03J0M3WvVRGHg+otzZbN2xYrBl0I22Dg
- E5DVr0q0A5/wa8rPuSUBWFKClcURgq7yhrJiMeP4Qo2fpF0dzK/IESqLcSWDFV8prz
- XwpMjCvL8j548EPLMCCOJwlWwjhNfvHANSBWsQ4EtCq0QjZPpVdShCxblKughhXMN+
- vjitIGNf/XY6g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=oW3WL/Nv/1d9x4O2lWzLLkC0TJHfLdOp0yXmCPzF01gsFvvojfZJS8ok3yK3TLiwZ
+ DcDnvKu9YdnkzDDddAG+3rg2fesfqRZJiBpJRZknXLDJP8P6PkbIO35KQEsazjAysl
+ RGWMkX9kDbB1HQ0m4O9nV8AFRjAfSUE2J7qz2T9lKdREe24HnJmNx+9zuJ6Mmmx9zO
+ fRAIjtqx9Pkl6LvroV6OAgZBIU8Y5oJi8MNK6umO8b8RJ7hdo915jrIbETiQ6jDHF+
+ 6kHOzJF2+uHT+6yh0WMKkdH3H1Npl0LvC6tZ4qV8teL+6LayFQ6Qva9guS10107WER
+ b7QS9KHvZRpaw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Wq4gf+qn
-Subject: Re: [Buildroot] [PATCH 01/22]
- package/x11r7/xdriver_xf86-video-geode: bump version to 2.11.21
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=oW3WL/Nv
+Subject: Re: [Buildroot] [PATCH 02/22]
+ package/x11r7/xdriver_xf86-input-mouse: bump version to 1.9.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,53 +88,64 @@ Bernd, All,
 
 On 2023-05-06 19:38 +0200, Bernd Kuhls spake thusly:
 > Release notes:
-> https://lists.x.org/archives/xorg-announce/2023-May/003393.html
+> https://lists.x.org/archives/xorg-announce/2023-May/003392.html
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/d1d/d1dae8c7ba9dc82fbbcc5914ea3b378e48304617/
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Updated license hash due to upstream commit
+> https://gitlab.freedesktop.org/xorg/driver/xf86-input-mouse/-/commit/5f63ab04338fd811c610ae7617757ede52471316
 
-Whole series applied to master, thanks.
+If you change the hash of COPYING (or any other license-text-bearing
+file), it is obvious that there has been an upstream commit that
+changed, so just saying "there was an upstream commit that changed the
+license file" does not bring any valuable information.
 
-I however had to do a few teeaks on some patches, I'll reply to them
-individually.
+Waht we really need to know and track in such a situation, is what the
+change was, and how it impacts the licensing terms.
+
+In this case, the change was just about an update in the copyright
+years, and so has no impact on the licensing terms.
+
+Applied to master with the c ommit log amended to reflect the above
+(check it to see how simple it can be), thanks!
+
+I also had to do some similar changes in a few other patches, but next
+time it wouls be nice if you could do that on your side. Thanks! ;-)
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  .../xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash  | 4 +++-
->  .../xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk    | 6 +++---
->  2 files changed, 6 insertions(+), 4 deletions(-)
+>  .../xdriver_xf86-input-mouse.hash                         | 8 ++++----
+>  .../xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk  | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-> index 7a66c28b52..7dcb99fe2a 100644
-> --- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-> +++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-> @@ -1,3 +1,5 @@
-> +# From https://lists.x.org/archives/xorg-announce/2023-May/003393.html
-> +sha256  8256ac3f14117324d00b7bfa8053645ca92562fe837c542489a502adbb5f9f1e  xf86-video-geode-2.11.21.tar.xz
-> +sha512  e12f74268ab7d16b57644a9465b4be1ca28d250625a31b8810e19a1f94a17e47e0a258455155fd8f336fa59fd78160cdf3763aa94b85c6ccc2c42edf3b65bc61  xf86-video-geode-2.11.21.tar.xz
->  # Locally calculated
-> -sha256  f497d0bfb09f36c72e3467e2d701f57f6b03ab8992c5d570e66582f714f84d64  xf86-video-geode-2.11.20.tar.bz2
->  sha256  3994ef7cee54f0935a4b57b1c34efd904da567931dd9e1a2d9390d22c8332ea2  COPYING
-> diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-> index dbeae1aa65..8f84e4863f 100644
-> --- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-> +++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-> @@ -4,9 +4,9 @@
+> diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+> index adba659aea..d654c362a9 100644
+> --- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+> +++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+> @@ -1,5 +1,5 @@
+> -# From https://lists.x.org/archives/xorg-announce/2022-November/003247.html
+> -sha256  7f6f8551fc238abdddcf9f38906564c1f8c7dacb0ad947cfc110487aefbd8d4c  xf86-input-mouse-1.9.4.tar.xz
+> -sha512  7dfde3b1e0c1291c4d78ee920942771808b007f743bfc6eed20de12579383745858673dd874a4b5cf4ab8d9d15f6f7ca2db81ee831547a488d64848a7fe5e16c  xf86-input-mouse-1.9.4.tar.xz
+> +# From https://lists.x.org/archives/xorg-announce/2023-May/003392.html
+> +sha256  4fde8ae9b44352e2a208584c36528ee3ed13cf5fe4417208a9785daccefd9968  xf86-input-mouse-1.9.5.tar.xz
+> +sha512  ed9bd9cb9a05dac0ff1bfb4e4704cb2e94117afb400aa9e0b7ccdbb102bc6db1b0d3af7cb6f99d0892f8fc306f1643286291c0fa7114af8e65864412bd6c1afa  xf86-input-mouse-1.9.5.tar.xz
+>  # Locally computed
+> -sha256  472ff645ead9bf3ffb48d42c596376ffc595897e0c0993a071a7ada0da1f4f10  COPYING
+> +sha256  5b066654bdb61a1ef41f38cceda752897bbddb6e60e20f5889cab436a9b7b813  COPYING
+> diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+> index 4a9eb3089f..25e25ab93d 100644
+> --- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+> +++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.20
-> -XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.bz2
-> -XDRIVER_XF86_VIDEO_GEODE_SITE = http://xorg.freedesktop.org/releases/individual/driver
-> +XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.21
-> +XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.xz
-> +XDRIVER_XF86_VIDEO_GEODE_SITE = https://xorg.freedesktop.org/archive/individual/driver
->  XDRIVER_XF86_VIDEO_GEODE_LICENSE = MIT
->  XDRIVER_XF86_VIDEO_GEODE_LICENSE_FILES = COPYING
->  XDRIVER_XF86_VIDEO_GEODE_DEPENDENCIES = xserver_xorg-server xorgproto
+> -XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.4
+> +XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.5
+>  XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.xz
+>  XDRIVER_XF86_INPUT_MOUSE_SITE = https://xorg.freedesktop.org/archive/individual/driver
+>  XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
 > -- 
 > 2.39.2
 > 
