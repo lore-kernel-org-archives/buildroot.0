@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1E42C77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 19:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ECAEC77B75
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 19:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6040981E7F;
-	Sun,  7 May 2023 19:13:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6040981E7F
+	by smtp1.osuosl.org (Postfix) with ESMTP id C47D581EB9;
+	Sun,  7 May 2023 19:13:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C47D581EB9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cLbNabEqt0MH; Sun,  7 May 2023 19:13:45 +0000 (UTC)
+	with ESMTP id D6vWkv_clhRQ; Sun,  7 May 2023 19:13:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C09981C56;
-	Sun,  7 May 2023 19:13:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C09981C56
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB50781F17;
+	Sun,  7 May 2023 19:13:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB50781F17
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 16E281BF2CD
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 19:13:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D0EA1BF2CD
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 19:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC0CA60E5E
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 19:13:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC0CA60E5E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 024E660F19
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 19:13:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 024E660F19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uKNxSNYUQ0BF for <buildroot@lists.busybox.net>;
+ with ESMTP id X3As6xxDAcCG for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 19:13:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B34860BDC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B36260E35
  for <buildroot@buildroot.org>; Sun,  7 May 2023 19:13:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B34860BDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B36260E35
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 126CF86030; Sun,  7 May 2023 19:13:42 +0000 (UTC)
+ id 1A03286020; Sun,  7 May 2023 19:13:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 21:12:33 +0200
+Date: Sun, 7 May 2023 21:13:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8b584dbf0636c53ae743469ae604d1bb1b85ea2e
-X-Git-Newrev: ee348693531d581ad57a0c605dbebd8fba673ca3
+X-Git-Oldrev: ee348693531d581ad57a0c605dbebd8fba673ca3
+X-Git-Newrev: c9e0b980b5ebe34100d0dc723b2bd945f75615e6
 X-Patchwork-Hint: ignore
-Message-Id: <20230507191342.126CF86030@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgeos: bump version to 3.11.2
+Message-Id: <20230507191342.1A03286020@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee348693531d581ad57a0c605dbebd8fba673ca3
+commit: https://git.buildroot.net/buildroot/commit/?id=c9e0b980b5ebe34100d0dc723b2bd945f75615e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/libgeos/geos/releases/tag/3.11.2
+Release notes: https://github.com/timescale/timescaledb/blob/2.10.3/CHANGELOG.md
 
 Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libgeos/libgeos.hash | 2 +-
- package/libgeos/libgeos.mk   | 2 +-
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
-index cd0a4e0330..54f53d19de 100644
---- a/package/libgeos/libgeos.hash
-+++ b/package/libgeos/libgeos.hash
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index b05c7802c2..9ec92244a7 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  6d0eb3cfa9f92d947731cc75f1750356b3bdfc07ea020553daf6af1c768e0be2  geos-3.11.1.tar.bz2
-+sha256  b1f077669481c5a3e62affc49e96eb06f281987a5d36fdab225217e5b825e4cc  geos-3.11.2.tar.bz2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
-index c6d470dc97..5a7932bad2 100644
---- a/package/libgeos/libgeos.mk
-+++ b/package/libgeos/libgeos.mk
+-sha256  6fca72a6ed0f6d32d2b3523951ede73dc5f9b0077b38450a029a5f411fdb8c73  timescaledb-2.10.1.tar.gz
++sha256  d3bd209ebe48f058fd3fa2aa0d6a74fbce2023d64dbb205e58e2c9ab62059cce  timescaledb-2.10.3.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index bcda07f893..cd02d8df50 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGEOS_VERSION = 3.11.1
-+LIBGEOS_VERSION = 3.11.2
- LIBGEOS_SITE = http://download.osgeo.org/geos
- LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
- LIBGEOS_LICENSE = LGPL-2.1
+-TIMESCALEDB_VERSION = 2.10.1
++TIMESCALEDB_VERSION = 2.10.3
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
