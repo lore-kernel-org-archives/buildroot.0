@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67847C77B7D
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33DEFC77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:05:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E0A782199;
-	Sun,  7 May 2023 12:05:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E0A782199
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2A1582342;
+	Sun,  7 May 2023 12:05:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2A1582342
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NPG4DSVlCDSt; Sun,  7 May 2023 12:05:20 +0000 (UTC)
+	with ESMTP id tJIXkxDF-mz2; Sun,  7 May 2023 12:05:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F2AB83AF0;
-	Sun,  7 May 2023 12:05:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F2AB83AF0
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE25482199;
+	Sun,  7 May 2023 12:05:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE25482199
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A58D61BF865
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0EFB21BF2FA
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D8D2418D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98124418B3
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D8D2418D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98124418B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wfAm2VDVn2rQ for <buildroot@lists.busybox.net>;
+ with ESMTP id NjzLT6aHJOaG for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 12:04:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64B8E418B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92CB0418B6
  for <buildroot@buildroot.org>; Sun,  7 May 2023 12:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64B8E418B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92CB0418B6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 51BBC85EEF; Sun,  7 May 2023 12:04:38 +0000 (UTC)
+ id 82AF685EEF; Sun,  7 May 2023 12:04:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 13:10:50 +0200
+Date: Sun, 7 May 2023 13:11:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b30206b708e02adb1b287a2d450f48c4bd12f754
-X-Git-Newrev: e07901f5e74c0d97a98a69dae4aad5014bb6983b
+X-Git-Oldrev: a8c003ae295f056699a325ba1bf9ec0c4d8e37e9
+X-Git-Newrev: 634a119e9c04c68408800f78e05f9d29d5750627
 X-Patchwork-Hint: ignore
-Message-Id: <20230507120438.51BBC85EEF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xcalc: bump version to
- 1.1.2
+Message-Id: <20230507120438.82AF685EEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXft: bump version to
+ 2.3.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e07901f5e74c0d97a98a69dae4aad5014bb6983b
+commit: https://git.buildroot.net/buildroot/commit/?id=634a119e9c04c68408800f78e05f9d29d5750627
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-May/003391.html
+https://lists.x.org/archives/xorg-announce/2023-April/003384.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xcalc/xapp_xcalc.hash | 6 +++---
- package/x11r7/xapp_xcalc/xapp_xcalc.mk   | 2 +-
+ package/x11r7/xlib_libXft/xlib_libXft.hash | 6 +++---
+ package/x11r7/xlib_libXft/xlib_libXft.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_xcalc/xapp_xcalc.hash b/package/x11r7/xapp_xcalc/xapp_xcalc.hash
-index 0580253dd6..12633a41a9 100644
---- a/package/x11r7/xapp_xcalc/xapp_xcalc.hash
-+++ b/package/x11r7/xapp_xcalc/xapp_xcalc.hash
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
+index 5074365aed..749aa0ad62 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.hash
++++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-April/003138.html
--sha256  8cb08212c5322e8043f39b28699e13a43f000976c90b3c7fadd4fae2766326b4  xcalc-1.1.1.tar.xz
--sha512  a261e9798d62727f40b9aff07e68e63ba40aa7f4f9b1811d8efd8c3e73cd5912d6178c55ca3c059968191051bd20b889b06b5e92b3df70c7b5d09bd013b9ebdb  xcalc-1.1.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-May/003391.html
-+sha256  8578dfa1457e94289f6d6ed6146714307d8a73a1b54d2f42af1321b625fc1cd4  xcalc-1.1.2.tar.xz
-+sha512  51da677dc88bcd7299ed8d678cb26b048fdb82a1983e1496a06253ee2dceefca4ac87d1a74432b4a76dcc11921a61339bb3d292607be46228164140b430bbad2  xcalc-1.1.2.tar.xz
+-# From https://lists.x.org/archives/xorg/2022-November/061175.html
+-sha256  79f0b37c45007381c371a790c2754644ad955166dbf2a48e3625032e9bdd4f71  libXft-2.3.7.tar.xz
+-sha512  9df29d3c7b88a21952df1015604511e5d79856d721b2a61eb2c5a062a9abccf16318132432a7c86c0ef816bf174ae86842fa67dabbaa0b163dfa56d99022de19  libXft-2.3.7.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-April/003384.html
++sha256  5e8c3c4bc2d4c0a40aef6b4b38ed2fb74301640da29f6528154b5009b1c6dd49  libXft-2.3.8.tar.xz
++sha512  fc385d73e1acb701942c154ffb5a283d17891f21d3ac598c4a3fb375a7d6082734593062368c15cad67c1a94177dd15deed878ec5ea852188393b52e92c372c8  libXft-2.3.8.tar.xz
  # Locally computed
- sha256  8dd69dbec37866a41d3040c5c478aca46e0b50c30319f178064d5e2ed9d3f912  COPYING
-diff --git a/package/x11r7/xapp_xcalc/xapp_xcalc.mk b/package/x11r7/xapp_xcalc/xapp_xcalc.mk
-index 849746ece3..ffb724e39c 100644
---- a/package/x11r7/xapp_xcalc/xapp_xcalc.mk
-+++ b/package/x11r7/xapp_xcalc/xapp_xcalc.mk
+ sha256  7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index 845b612669..154c220aa1 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XCALC_VERSION = 1.1.1
-+XAPP_XCALC_VERSION = 1.1.2
- XAPP_XCALC_SOURCE = xcalc-$(XAPP_XCALC_VERSION).tar.xz
- XAPP_XCALC_SITE = https://xorg.freedesktop.org/releases/individual/app
- XAPP_XCALC_LICENSE = MIT
+-XLIB_LIBXFT_VERSION = 2.3.7
++XLIB_LIBXFT_VERSION = 2.3.8
+ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.xz
+ XLIB_LIBXFT_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
