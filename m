@@ -4,64 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C1F6C77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA633C77B75
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7A2760B2F;
-	Sun,  7 May 2023 16:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7A2760B2F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52B8E613DB;
+	Sun,  7 May 2023 16:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52B8E613DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IwoBOulUruBK; Sun,  7 May 2023 16:54:35 +0000 (UTC)
+	with ESMTP id zDhxLXo0KTsM; Sun,  7 May 2023 16:54:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13476613DC;
-	Sun,  7 May 2023 16:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13476613DC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 80C721BF861
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B791613DC;
+	Sun,  7 May 2023 16:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B791613DC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BED31BF2F0
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 666B0416B4
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 666B0416B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22FA360071
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:53:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22FA360071
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QRtvOYLljQVS for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2n4ZFpupLhNC for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 16:53:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A26F4171B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B69860E5F
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9A26F4171B
- for <buildroot@buildroot.org>; Sun,  7 May 2023 16:53:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3B69860E5F
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 16:53:49 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue010
- [212.227.15.167]) with ESMTPSA (Nemesis) id 1MdNoW-1qUlLL3eb2-00ZRS8; Sun, 07
+ [212.227.15.167]) with ESMTPSA (Nemesis) id 1Mow06-1qZjQU2Bhu-00qTog; Sun, 07
  May 2023 18:53:44 +0200
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Sun,  7 May 2023 18:53:38 +0200
-Message-Id: <20230507165340.42151-4-laurent@vivier.eu>
+Date: Sun,  7 May 2023 18:53:39 +0200
+Message-Id: <20230507165340.42151-5-laurent@vivier.eu>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230507165340.42151-1-laurent@vivier.eu>
 References: <20230507165340.42151-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:ye1mgZ2uroAIYhBLz3C43dcJxKcPozMDaUa3zLqx3KuuqWICzbi
- tVZOGO6z4cIj71Jm/usvarqCokPSxga82SH1PYUse+pqfOTOlszAfupGeALZ23x71wQ2vm+
- 0ci1jBqcS4RTZG4sfYk5TzTfJZneR/yQA2B7CCg3S0RpZbDP0wDwCkd6sKGl0kEZ4F6jQoI
- DAeV+vQeNYbirx6Mj4B5g==
-UI-OutboundReport: notjunk:1;M01:P0:KeRwQRy0c+g=;aAkfsqOKSQFRCJpCIWFm1YgYwtz
- 7TNI+YE2ueYKBuh9Q3tGgJjmR+/5VWyL3Of2tNaNbKhITQvyNvYBYdfCswLsYM1Q18utugZ0x
- gJDpUuGqDqavLfVOGnEqZvD9Pkf1Y+oirIV4A0ZofTiH+RVMpi8PtKqtISTCEVWKzQNbe9H/u
- OSrjEnU2Ab66EQeHceCJ2WMcFuoBXARk8Ta0s7nR0Pt1aehLTxv7jjNh1xd1cgV8+h1mXo3Ku
- CN/LuAojsNWHicWZL9LvwPLrkGam7BgBr41oq9UHCAmkER5jnCKDsYW3nzHuPjXJusfsEYo0t
- tF0RihrRIO/uEJ8cHu126JgnpRdDTYdVZvwNC5zJaFexxcXSsn36DNpf8OCj+3aHYmXedLJe/
- fpbBe3CJhCxK23aH5kKGWBzioRqDr9KpypB7vd53rDMMhy47Wtpszy7JjDWUqC5dXOahq0Rk5
- QnPqasa6UaQ5blkk+5uoT0ifq2TBx4+ppUxngvO+0f6bNdWbyzaTMkbsgpYa+MgjEKEV8yq34
- LkqNzLs1nCW24519IVO2iZLMolI9qbE5+pep+8q3oSC/9gwddeoj3Fe1e8WcyyHNDpTT6TrFJ
- vwmqv7gMA/8/aMP1wtwW2Mi+8TtqJUU9cuPEzIvhwQ70RZLz+78rkQf2m+pg+hNWGWn2kqbWg
- In2v7N17NZBtryzdmcPD2TuoIrlq7KcirUfdW98O7Q==
-Subject: [Buildroot] [PATCH v12 3/5] petitboot: start petitboot on all tty
+X-Provags-ID: V03:K1:wVSfOFZfZcRVwkZBTlskeAzioQMbn+UehORKmsvaYsLEF8Et1Wf
+ XI+4gy9mpPw4pSURv0kAQwvNvOv3dgzDYE+KUU0BzBK+NsfAzgW/IOAerkzCJPuYMlL8GVc
+ tVt97VgB7eNuy1VKyW8YMjdkTYGCku4vBPg5rSnKMQJ1Vi97wXAQuqwZy2VaFDAmKugRrQB
+ EF3R7PKes2NZKj2qP4/sA==
+UI-OutboundReport: notjunk:1;M01:P0:1xxhzVgwvNs=;Q3DdA7e4RUiFmMK+7NoDaV2IIi3
+ i+r1q3In+gzxEr486MfczdHXMdvp28YwPiKM5pwhPsBrkYAmbqN1Go+lXEXZNzYgNi+V59BHD
+ wO9l9EB3TSsX80Z8PC3/ikzmwAvw35xNjGuzH4DUiwP+9Vo5EVE08F/NdVwt8be4G0a8I84tZ
+ xhD/nBzwU6AX4fHWc0a8oXPsojHPVdIZnjQRyqxcvdaQtNd2jMRDjWlH94LMS7lOV2k7P+gy7
+ Fpqzs2gSDOc4yWZhi/ncdWypqLTzoXhuUjCyNeNcUNqs/dMjuZ41iA3UAwrpN9LAidufl+hFF
+ DQUNcbOee1rApzgS8dcLZjAaL3xKPg/lZmXZ2BNRgVqRdyCcDRP3y52T3yAwh0D0LbUdZoRq+
+ nCZrQ0MJGI1St9LkQfGGNw3ta9eUaJiB4X3m7kbjqL+2alF/d8KaaOfWS9sLGubtzmrfC8Mf6
+ 5pZWjHjqjA7nZpem6PCKPRSomrETU/IOqoBalVPnvZoPQm2Blau6U5M6u2sGBbgf8rfKOzWhn
+ s2ivFQ5wgqz3B0zEdiYrgu5R5OPcqstWJCc+XPriP5bpOEhEFX+wB0m3pFwKMxXbn8hgcSjsF
+ qB4LeB3+AD69Lvh8nBC1ev4A8/8imkep7MqupagXYSB0+wFoUYUXliXQO4v+EIz+EJS8FzVfZ
+ +9MedzXmEb5nPLjzZIGu5OFSD7v5UDiVX24hfmrvGQ==
+Subject: [Buildroot] [PATCH v12 4/5] board/qemu/m68k-virt: Add virt-m68k
+ linux config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,62 +83,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Build a 5.19 (first version with the m68k virt machine) kernel
+for "qemu-system-m68k -M virt" machine.
+
 Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 ---
- package/petitboot/petitboot-console-ui.rules | 5 +++++
- package/petitboot/petitboot.mk               | 4 ++++
- package/petitboot/sysctl.conf                | 1 +
- system/Config.in                             | 2 +-
- 4 files changed, 11 insertions(+), 1 deletion(-)
- create mode 100644 package/petitboot/petitboot-console-ui.rules
- create mode 100644 package/petitboot/sysctl.conf
+ DEVELOPERS                                 |  2 ++
+ board/qemu/m68k-virt/linux.fragment        | 21 +++++++++++++++++++
+ board/qemu/m68k-virt/readme.txt            |  5 +++++
+ configs/qemu_m68k_virt_petitboot_defconfig | 24 ++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 board/qemu/m68k-virt/linux.fragment
+ create mode 100644 board/qemu/m68k-virt/readme.txt
+ create mode 100644 configs/qemu_m68k_virt_petitboot_defconfig
 
-diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 57b67e091e1c..fbca55ec46af 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1819,6 +1819,8 @@ F:	package/open-lldp/
+ 
+ N:	Laurent Vivier <laurent@vivier.eu>
+ F:	package/petitboot/
++F:	board/qemu/m68k-virt/
++F:	configs/qemu_m68k_virt_petitboot_defconfig
+ 
+ N:	Lee Jones <lee.jones@linaro.org>
+ F:	boot/afboot-stm32/
+diff --git a/board/qemu/m68k-virt/linux.fragment b/board/qemu/m68k-virt/linux.fragment
 new file mode 100644
-index 000000000000..ceeada256f2b
+index 000000000000..49416982601c
 --- /dev/null
-+++ b/package/petitboot/petitboot-console-ui.rules
++++ b/board/qemu/m68k-virt/linux.fragment
+@@ -0,0 +1,21 @@
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_KEXEC=y
++CONFIG_BOOTINFO_PROC=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_MD=y
++CONFIG_MD_LINEAR=y
++CONFIG_MD_MULTIPATH=y
++CONFIG_MD_FAULTY=y
++CONFIG_BLK_DEV_DM=y
++CONFIG_DM_UNSTRIPED=y
++CONFIG_DM_CRYPT=y
++CONFIG_DM_SNAPSHOT=y
++CONFIG_DM_THIN_PROVISIONING=y
++CONFIG_DM_CACHE=y
++CONFIG_DM_WRITECACHE=y
++CONFIG_DM_EBS=y
++CONFIG_DM_ERA=y
++CONFIG_DM_CLONE=y
++CONFIG_DM_MIRROR=y
++CONFIG_DM_RAID=y
++CONFIG_DM_ZERO=y
+diff --git a/board/qemu/m68k-virt/readme.txt b/board/qemu/m68k-virt/readme.txt
+new file mode 100644
+index 000000000000..714b74c70ea1
+--- /dev/null
++++ b/board/qemu/m68k-virt/readme.txt
 @@ -0,0 +1,5 @@
-+# spawn a petitboot UI on common user-visible interface devices
-+SUBSYSTEM=="tty", KERNEL=="ttyGF*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
-+SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
-+SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
-+SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
-diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-index 4d56b73938e7..e74a5ff623ea 100644
---- a/package/petitboot/petitboot.mk
-+++ b/package/petitboot/petitboot.mk
-@@ -55,6 +55,10 @@ define PETITBOOT_POST_INSTALL
- 		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
- 	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
- 		$(TARGET_DIR)/etc/init.d/S15pb-discover
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/petitboot-console-ui.rules
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/sysctl.conf \
-+		$(TARGET_DIR)/etc/sysctl.conf
- 	ln -sf /usr/sbin/pb-udhcpc \
- 		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
- endef
-diff --git a/package/petitboot/sysctl.conf b/package/petitboot/sysctl.conf
++Run the emulation with:
++
++ qemu-system-m68k -M virt -kernel output/images/vmlinux -initrd output/images/rootfs.cpio.xz -append "console=ttyGF0" --nographic # qemu_m68k_virt_petitboot_defconfig
++
++The petiboot menu will appear in the terminal where QEMU has been started.
+diff --git a/configs/qemu_m68k_virt_petitboot_defconfig b/configs/qemu_m68k_virt_petitboot_defconfig
 new file mode 100644
-index 000000000000..02ab8e3275b5
+index 000000000000..a109553187b4
 --- /dev/null
-+++ b/package/petitboot/sysctl.conf
-@@ -0,0 +1 @@
-+kernel.printk = 1 1 1 1
-diff --git a/system/Config.in b/system/Config.in
-index 1ca7690ea3ba..786ec9a1c6b3 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -375,7 +375,7 @@ config BR2_SYSTEM_BIN_SH
- 
- menuconfig BR2_TARGET_GENERIC_GETTY
- 	bool "Run a getty (login prompt) after boot"
--	default y
-+	default y         if !BR2_PACKAGE_PETITBOOT
- 
- if BR2_TARGET_GENERIC_GETTY
- config BR2_TARGET_GENERIC_GETTY_PORT
++++ b/configs/qemu_m68k_virt_petitboot_defconfig
+@@ -0,0 +1,24 @@
++BR2_m68k=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_CCACHE=y
++BR2_RELRO_NONE=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Petitboot"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_ROOTFS_MERGED_USR=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
++BR2_LINUX_KERNEL_DEFCONFIG="virt"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/m68k-virt/linux.fragment"
++BR2_LINUX_KERNEL_XZ=y
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KEXEC=y
++BR2_PACKAGE_KEXEC_ZLIB=y
++BR2_PACKAGE_ETHTOOL=y
++BR2_PACKAGE_NET_TOOLS=y
++BR2_PACKAGE_NETCAT=y
++BR2_PACKAGE_RSYNC=y
++BR2_PACKAGE_PETITBOOT=y
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_XZ=y
 -- 
 2.40.1
 
