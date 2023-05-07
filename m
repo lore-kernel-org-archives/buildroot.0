@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FD4AC77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 193ECC7EE22
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EEDCA83BF3;
-	Sun,  7 May 2023 12:06:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEDCA83BF3
+	by smtp1.osuosl.org (Postfix) with ESMTP id C49EC83BD9;
+	Sun,  7 May 2023 12:06:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C49EC83BD9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mtbK41WvOUR8; Sun,  7 May 2023 12:06:23 +0000 (UTC)
+	with ESMTP id 3_aQdtlaXg5U; Sun,  7 May 2023 12:06:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 627BB83BD9;
-	Sun,  7 May 2023 12:06:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 627BB83BD9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3DCB91BF2FA
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA5D9821CB;
+	Sun,  7 May 2023 12:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA5D9821CB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A21F81BF2FA
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D139610FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D6AE4053D
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D139610FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D6AE4053D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b9tyeh8VqYTm for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aCkTkIFrg9ZS for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 12:04:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BBDFC60BFA
+ by smtp2.osuosl.org (Postfix) with ESMTP id A838D404F8
  for <buildroot@buildroot.org>; Sun,  7 May 2023 12:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBDFC60BFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A838D404F8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B7DA685EE9; Sun,  7 May 2023 12:04:38 +0000 (UTC)
+ id A5FE085EEC; Sun,  7 May 2023 12:04:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 13:59:19 +0200
+Date: Sun, 7 May 2023 13:56:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e24cd30a147992a6647da23cc4ff5b4aac1aa120
-X-Git-Newrev: 0864f874287c06cdbc54c6150f52c003b5741226
+X-Git-Oldrev: cb4b592f6654ba15f21b4cead97661e18df2beec
+X-Git-Newrev: de8a3a53e52dc1ac6e04e623739aa67d412e965e
 X-Patchwork-Hint: ignore
-Message-Id: <20230507120438.B7DA685EE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXaw: bump version to
- 1.0.15
+Message-Id: <20230507120438.A5FE085EEC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xwininfo: bump version
+ to 1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0864f874287c06cdbc54c6150f52c003b5741226
+commit: https://git.buildroot.net/buildroot/commit/?id=de8a3a53e52dc1ac6e04e623739aa67d412e965e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-March/003372.html
+https://lists.x.org/archives/xorg-announce/2023-April/003379.html
+
+Updated license hash due to upstream commit:
+https://gitlab.freedesktop.org/xorg/app/xwininfo/-/commit/9a5623e2ffc6995b2c6edf379f191d76d7b4444a
+  -> drop "all rights reserved", update years
+  -> no change in licensing
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXaw/xlib_libXaw.hash | 7 +++----
- package/x11r7/xlib_libXaw/xlib_libXaw.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.hash | 10 ++++------
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.hash b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-index f289e66153..ce2ec4a3e1 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-March/003077.html
--sha256  76aef98ea3df92615faec28004b5ce4e5c6855e716fa16de40c32030722a6f8e  libXaw-1.0.14.tar.bz2
--sha512  29d1c151369523ae6cb418e636b0b7b39ccccc35462a0b394dbeb46d5b6d780badd2eb872a55d9fbba1ee1af034e76c0463f40f8d8a7be2c336d08b3b1bf81d4  libXaw-1.0.14.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2023-March/003372.html
-+sha256  ab35f70fde9fb02cc71b342f654846a74328b74cb3a0703c02d20eddb212754a  libXaw-1.0.15.tar.xz
-+sha512  8edbf280b7b24b9040c291545053c1251d6af7e7f56da43a6065a1848245863eb52bdfc28c2f18dbb6597a4064394a44f4df5d8596a1a467549ccc9ce50a7821  libXaw-1.0.15.tar.xz
- # Locally calculated
- sha256  9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d  COPYING
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-index 6b615a8de5..f81a7b4a88 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+index fbc7f7be00..bbf2e37328 100644
+--- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
++++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003012.html
+-md5  26d46f7ef0588d3392da3ad5802be420  xwininfo-1.1.5.tar.bz2
+-sha1  9f67b1eb07c5824d437bf577cf6198962af1aeb7  xwininfo-1.1.5.tar.bz2
+-sha256  7a405441dfc476666c744f5fcd1bc8a75abf8b5b1d85db7b88b370982365080e  xwininfo-1.1.5.tar.bz2
+-sha512  a3268bbeeeeafac94e589fdd47554a965910d40df7cc3d9c36c7c24fa4f5dd49615484d5916ccb41efca9cd4cf9d8981a4c60953b921220b3f4f57f9cce0e1a6  xwininfo-1.1.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-April/003379.html
++sha256  3518897c17448df9ba99ad6d9bb1ca0f17bc0ed7c0fd61281b34ceed29a9253f  xwininfo-1.1.6.tar.xz
++sha512  c6df4ed3dcf97772450612f2786ecab8313a43bb78e0b8020cc9ec228b3f466f55090313ad02c8159a73a6892d117322ad85e28d9d76e38bb84c9750712c20bc  xwininfo-1.1.6.tar.xz
+ # Locally computed
+-sha256  443d675237c023a47e4886506b72796afbb2633394812027f91d6e8fa433b2af  COPYING
++sha256  1be1f0763a5efd08e48089c52728a822bf769b690a2fd82fbab456cfffee822f  COPYING
+diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+index 9652487aae..196b73c83d 100644
+--- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
++++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXAW_VERSION = 1.0.14
--XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.bz2
--XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXAW_VERSION = 1.0.15
-+XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.xz
-+XLIB_LIBXAW_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXAW_LICENSE = MIT
- XLIB_LIBXAW_LICENSE_FILES = COPYING
- XLIB_LIBXAW_INSTALL_STAGING = YES
+-XAPP_XWININFO_VERSION = 1.1.5
+-XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.bz2
++XAPP_XWININFO_VERSION = 1.1.6
++XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.xz
+ XAPP_XWININFO_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XWININFO_LICENSE = MIT
+ XAPP_XWININFO_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
