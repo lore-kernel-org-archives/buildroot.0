@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC3AC77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:47:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5544C77B7D
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 443B5404FF;
-	Sun,  7 May 2023 12:47:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 443B5404FF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C79640523;
+	Sun,  7 May 2023 12:48:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C79640523
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h2ASkUY2nroO; Sun,  7 May 2023 12:47:28 +0000 (UTC)
+	with ESMTP id xhT1FmrqOU9t; Sun,  7 May 2023 12:48:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D4A6404F8;
-	Sun,  7 May 2023 12:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D4A6404F8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 501671BF391
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:47:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B115A404F8;
+	Sun,  7 May 2023 12:48:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B115A404F8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 002F11BF391
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2AAB981FE8
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AAB981FE8
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDF7A404F8
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:48:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDF7A404F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oC_QXYTw72Tc for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 12:47:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69A7281FE0
- for <buildroot@buildroot.org>; Sun,  7 May 2023 12:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69A7281FE0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59D9585F87; Sun,  7 May 2023 12:47:24 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 14:46:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8d6ddb7a290545dff5b9f07d042bd7512d258882
-X-Git-Newrev: 65ff3e10ed14fe2e42eeacf6037981730b63177d
-X-Patchwork-Hint: ignore
-Message-Id: <20230507124724.59D9585F87@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/stm32f429_disco_xip_defconfig: fix
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y1USV_mTJD3c for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 12:48:36 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1FF940192
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D1FF940192
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 12:48:35 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:5f9f:2ea:ec9d:3930])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 1AD7519F58A;
+ Sun,  7 May 2023 14:48:30 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 07 May 2023 14:48:29 +0200
+Date: Sun, 7 May 2023 14:48:29 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20230507124829.GR252090@scaer>
+References: <20230501162619.1260325-1-giulio.benetti@benettiengineering.com>
+ <CABGWkvqpAsu8NjkfW7RVQTbBrrsA_koVffPSVh8K5dUYhmHX6Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CABGWkvqpAsu8NjkfW7RVQTbBrrsA_koVffPSVh8K5dUYhmHX6Q@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1683463714;
+ bh=i1XyQq7za3p8jV1DhZe+VsYfIeo88uxec9jIlAw8GMc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=otbtiI3XtBnPDEQrFFeHSfwzVhxjD2HzHgRJr9YGceaYnWbc2eokrWPyCxei1cpOl
+ qgMssmHqWyrqbUfRDqklp0frG+QeUFFzKJSQ2DWmabsgAiDyttHBFylXHyl+01yyBb
+ YhLp3osSfPdXwIgf5XHQZZngbruLeQ2NjN3wmVJTuDb4m9x5s1HpAlXZmz1xeFV4BD
+ +IyH5fSz9C+ws8Mi8FlR6sWGSs32T201zq0K5lXxcf5O1O8rDpaDLal15JLjyBhM4N
+ yNxUDvwh3WPqe4YlU2lLeglxgv1iWow0ri/sWRzJwKc+9hRn9wZQlabr0H7sQcYI43
+ tgwriS280eZjQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=otbtiI3X
+Subject: Re: [Buildroot] [PATCH] configs/stm32f429_disco_xip_defconfig: fix
  runtime error due to low ram space and bump to linux version 6.1.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,55 +78,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65ff3e10ed14fe2e42eeacf6037981730b63177d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-After booting Linux the userspace is unusable since every command issued,
-that is a symlink to busybox, fails because of no free ram. So let's
-disable IIO in linux.config to give some more ram to userspace.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- board/stmicroelectronics/stm32f429-disco/linux.config | 4 ----
- configs/stm32f429_disco_xip_defconfig                 | 2 +-
- 2 files changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/board/stmicroelectronics/stm32f429-disco/linux.config b/board/stmicroelectronics/stm32f429-disco/linux.config
-index 7b5c60f180..02d9c2d1e0 100644
---- a/board/stmicroelectronics/stm32f429-disco/linux.config
-+++ b/board/stmicroelectronics/stm32f429-disco/linux.config
-@@ -95,10 +95,6 @@ CONFIG_STM32_MDMA=y
- CONFIG_SYNC_FILE=y
- # CONFIG_VIRTIO_MENU is not set
- # CONFIG_VHOST_MENU is not set
--CONFIG_IIO=y
--CONFIG_IIO_BUFFER=y
--CONFIG_IIO_TRIGGERED_BUFFER=y
--CONFIG_IIO_STM32_TIMER_TRIGGER=y
- # CONFIG_FILE_LOCKING is not set
- # CONFIG_DNOTIFY is not set
- # CONFIG_INOTIFY_USER is not set
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index 872e4b6a30..1aea741f7e 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -6,7 +6,7 @@ BR2_ENABLE_LTO=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.27"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RGFyaW8sIEFsbCwKCk9uIDIwMjMtMDUtMDYgMTY6MjEgKzAyMDAsIERhcmlvIEJpbmFjY2hpIHNw
+YWtlIHRodXNseToKPiBPbiBNb24sIE1heSAxLCAyMDIzIGF0IDY6MjbigK9QTSBHaXVsaW8gQmVu
+ZXR0aQo+IDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPiB3cm90ZToKPiA+
+IEFmdGVyIGJvb3RpbmcgTGludXggdGhlIHVzZXJzcGFjZSBpcyB1bnVzYWJsZSBzaW5jZSBldmVy
+eSBjb21tYW5kIGlzc3VlZCwKPiA+IHRoYXQgaXMgYSBzeW1saW5rIHRvIGJ1c3lib3gsIGZhaWxz
+IGJlY2F1c2Ugb2Ygbm8gZnJlZSByYW0uIFNvIGxldCdzCj4gPiBkaXNhYmxlIElJTyBpbiBsaW51
+eC5jb25maWcgdG8gZ2l2ZSBzb21lIG1vcmUgcmFtIHRvIHVzZXJzcGFjZS4KPiBJIGhhdmUgYWxz
+byBleHBlcmllbmNlZCB0aGlzIHR5cGUgb2YgYmVoYXZpb3Igd2hlbiB1c2luZyBTVCBib2FyZHMg
+aW4KPiBnZW5lcmFsIChzdG0zMmY0MjktZGlzY28sIHN0bTMyZjQ2OS1kaXNjbywKPiBhbmQgc3Rt
+MzJmNzY5LWRpc2NvKSwgYW5kIGV2ZXJ5IHRpbWUgSSB3b25kZXIgd2hldGhlciBpdCBpcyBiZXR0
+ZXIgdG8KPiB1cGRhdGUgdGhlIGtlcm5lbCAod2hpY2ggYWx3YXlzIG9jY3VwaWVzIG1vcmUKPiBt
+ZW1vcnkgd2l0aCBlYWNoIG5ldyB2ZXJzaW9uKSBvciBub3QuIFRoZSBpZGVhIEkgaGF2ZSBpcyB0
+byBwcmVmZXIgdGhlCj4ga2VybmVsIHRvIHVzZXIgc3BhY2UsIGFuZCB0aGVyZWZvcmUgZGlzYWJs
+ZQo+IHN0YXJ0aW5nIGZyb20gdGhlIHVzZXIgc3BhY2UgZmlyc3Qgb2YgYWxsLCBidXQgbXkgb3Bp
+bmlvbiBpcyBkZWJhdGFibGUuCgpUaGFua3MgZm9yIHRoZSBmZWVkYmFjay4KClRoZSB0aGluZyBp
+czogaG93IHVzZWZ1bCBpcyBJbmR1c3RyaWFsIElPIChJSU8pIG9uIGEgZGV2aWNlIHN1Y2ggYXMg
+dGhlCnN0bTMyIGRpc2NvIGZhbWlseT8gSSBzdXNwZWN0IHRoZSBpbnRlcmVzdCBpbiBJSU8gZm9y
+IHRob3NlIGRldmljZXMgdG8KYmUgdmlydHVhbGx5IG5pbGwsIHNvIEdpdWxpbydzIGNoYW5nZSBk
+b2VzIG1ha2Ugc2Vuc2UuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiBUaGFua3MgYW5kIHJl
+Z2FyZHMsCj4gRGFyaW8KPiAKPiA+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVs
+aW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+ID4gLS0tCj4gPiAgYm9hcmQvc3Rt
+aWNyb2VsZWN0cm9uaWNzL3N0bTMyZjQyOS1kaXNjby9saW51eC5jb25maWcgfCA0IC0tLS0KPiA+
+ICBjb25maWdzL3N0bTMyZjQyOV9kaXNjb194aXBfZGVmY29uZmlnICAgICAgICAgICAgICAgICB8
+IDIgKy0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCA1IGRlbGV0aW9ucygt
+KQo+ID4KPiA+IGRpZmYgLS1naXQgYS9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNDI5
+LWRpc2NvL2xpbnV4LmNvbmZpZyBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY0Mjkt
+ZGlzY28vbGludXguY29uZmlnCj4gPiBpbmRleCA3YjVjNjBmMTgwLi4wMmQ5YzJkMWUwIDEwMDY0
+NAo+ID4gLS0tIGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMyZjQyOS1kaXNjby9saW51
+eC5jb25maWcKPiA+ICsrKyBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY0MjktZGlz
+Y28vbGludXguY29uZmlnCj4gPiBAQCAtOTUsMTAgKzk1LDYgQEAgQ09ORklHX1NUTTMyX01ETUE9
+eQo+ID4gIENPTkZJR19TWU5DX0ZJTEU9eQo+ID4gICMgQ09ORklHX1ZJUlRJT19NRU5VIGlzIG5v
+dCBzZXQKPiA+ICAjIENPTkZJR19WSE9TVF9NRU5VIGlzIG5vdCBzZXQKPiA+IC1DT05GSUdfSUlP
+PXkKPiA+IC1DT05GSUdfSUlPX0JVRkZFUj15Cj4gPiAtQ09ORklHX0lJT19UUklHR0VSRURfQlVG
+RkVSPXkKPiA+IC1DT05GSUdfSUlPX1NUTTMyX1RJTUVSX1RSSUdHRVI9eQo+ID4gICMgQ09ORklH
+X0ZJTEVfTE9DS0lORyBpcyBub3Qgc2V0Cj4gPiAgIyBDT05GSUdfRE5PVElGWSBpcyBub3Qgc2V0
+Cj4gPiAgIyBDT05GSUdfSU5PVElGWV9VU0VSIGlzIG5vdCBzZXQKPiA+IGRpZmYgLS1naXQgYS9j
+b25maWdzL3N0bTMyZjQyOV9kaXNjb194aXBfZGVmY29uZmlnIGIvY29uZmlncy9zdG0zMmY0Mjlf
+ZGlzY29feGlwX2RlZmNvbmZpZwo+ID4gaW5kZXggODcyZTRiNmEzMC4uMWFlYTc0MWY3ZSAxMDA2
+NDQKPiA+IC0tLSBhL2NvbmZpZ3Mvc3RtMzJmNDI5X2Rpc2NvX3hpcF9kZWZjb25maWcKPiA+ICsr
+KyBiL2NvbmZpZ3Mvc3RtMzJmNDI5X2Rpc2NvX3hpcF9kZWZjb25maWcKPiA+IEBAIC02LDcgKzYs
+NyBAQCBCUjJfRU5BQkxFX0xUTz15Cj4gPiAgQlIyX1JPT1RGU19QT1NUX0JVSUxEX1NDUklQVD0i
+Ym9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0zMmY0eHgvc3RtMzItcG9zdC1idWls
+ZC5zaCIKPiA+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiA+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RP
+TV9WRVJTSU9OPXkKPiA+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2
+LjEuMTAiCj4gPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xLjI3
+Igo+ID4gIEJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ID4gIEJSMl9MSU5V
+WF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3Rt
+MzJmNDI5LWRpc2NvL2xpbnV4LmNvbmZpZyIKPiA+ICBCUjJfTElOVVhfS0VSTkVMX0lNQUdFX1RB
+UkdFVF9DVVNUT009eQo+ID4gLS0KPiA+IDIuMzQuMQo+ID4KPiAKPiAKPiAtLSAKPiAKPiBEYXJp
+byBCaW5hY2NoaQo+IAo+IFNlbmlvciBFbWJlZGRlZCBMaW51eCBEZXZlbG9wZXIKPiAKPiBkYXJp
+by5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbQo+IAo+IF9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KPiAKPiAKPiBBbWFydWxhIFNvbHV0aW9ucyBTUkwKPiAKPiBWaWEgTGUg
+Q2FuZXZhcmUgMzAsIDMxMTAwIFRyZXZpc28sIFZlbmV0bywgSVQKPiAKPiBULiArMzkgMDQyIDI0
+MyA1MzEwCj4gaW5mb0BhbWFydWxhc29sdXRpb25zLmNvbQo+IAo+IHd3dy5hbWFydWxhc29sdXRp
+b25zLmNvbQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAK
+Li0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
+LS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1i
+ZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYy
+IDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAg
+ICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAg
+WCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlz
+LWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFj
+eS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0t
+LS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
