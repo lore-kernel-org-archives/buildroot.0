@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E869BC77B7D
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 14:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2792EC77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79DAB418AB;
-	Sun,  7 May 2023 14:47:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79DAB418AB
+	by smtp4.osuosl.org (Postfix) with ESMTP id A73DF41765;
+	Sun,  7 May 2023 16:18:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A73DF41765
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2QfevrjJMPkD; Sun,  7 May 2023 14:47:40 +0000 (UTC)
+	with ESMTP id crmaFW0WDzsY; Sun,  7 May 2023 16:18:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7331A4187B;
-	Sun,  7 May 2023 14:47:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7331A4187B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 355341BF2F8
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 14:47:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5C7541505;
+	Sun,  7 May 2023 16:18:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5C7541505
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BDF401BF2F0
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:18:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E30460D76
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 14:47:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E30460D76
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3C5B41505
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:18:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3C5B41505
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1WqkaErJQUxQ for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 14:47:36 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F2B760C2A
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3F2B760C2A
- for <buildroot@buildroot.org>; Sun,  7 May 2023 14:47:35 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 94A5C44064B;
- Sun,  7 May 2023 17:47:31 +0300 (IDT)
-References: <20230507133235.584153-1-yann.morin.1998@free.fr>
- <20230507133555.GW252090@scaer> <87zg6g5i8e.fsf@dell.be.48ers.dk>
-User-agent: mu4e 1.9.21; emacs 28.2
-To: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 May 2023 17:44:25 +0300
-In-reply-to: <87zg6g5i8e.fsf@dell.be.48ers.dk>
-Message-ID: <874joo8agr.fsf@tarshish>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1683470851;
- bh=cVY1L/jup2U8QkBlE9Dr5WmTiUXoDfi7i/1GD+dmHBU=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=lvBIbLHWzRXrAt58vH/aDQPuYdUyjbBiq3wyf7yKf5kAkTaKEZSPax4BT0dorpFB4
- yPrLANpLGp3JFDShoOnr3eh7eCAm4sP5Tl2L7oJ8a9ZS5h1iwjUsO3NG7n4m9Pzctj
- fL8njgeaKLumRPWOc8iut09ac3FMXZ51drgjLODEV+ADrAzr7X77nCbdwadYhwkGKs
- 7q9UtXp6aNFFetbcKOZcd8obR2wypJlIIOBprQMl+fkcZHVc8AOuLU/IVc4QjRZWu0
- YupmiBRPMscxPrlId2pwGkwWWgwY+tdwYarAaTtkathya3KoZFpSJLOAHueyNScJPs
- t+QbRQBwqKruw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=lvBIbLHW
-Subject: Re: [Buildroot] [PATCH 2022.02.x] package/postgresql: fix licensing
- hash
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YgJ3p1gETbjc for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 16:18:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB873410BD
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 16:18:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB873410BD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5989385FD0; Sun,  7 May 2023 16:18:31 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 7 May 2023 18:10:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f7d0ed4a78f4aa3741f94c4bbb69efbe74c920a9
+X-Git-Newrev: 827bc83cb1aa891fbb41ea332a013d850a121760
+X-Patchwork-Hint: ignore
+Message-Id: <20230507161831.5989385FD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libutp: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,36 +56,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=827bc83cb1aa891fbb41ea332a013d850a121760
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, May 07 2023, Peter Korsgaard wrote:
+Needed for bumping transmission to version 4.0.1.
 
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  > Peter K., All,
->  > I know you just EOLed 2022.02.x a few days ago, but maybe a quick
->  > 2022.02.13 (or 2022.02.12.1) with just this?
->
-> Perhaps, yes. I've applied the patch and will wait a few days to see if
-> any other issues show up.
+Added configure option to fix build error with gcc-12.
 
-If another 2022.02.x release is planned you might want to consider the
-libcurl security bump (commit 1e735c48372).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libutp/libutp.hash | 2 +-
+ package/libutp/libutp.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/libutp/libutp.hash b/package/libutp/libutp.hash
+index f347dc3f2c..0312f42612 100644
+--- a/package/libutp/libutp.hash
++++ b/package/libutp/libutp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  484f802d044f774fa5f669476ecdd9cb6110c383781c39adc03bbf6575090771  libutp-059c9449a104e440e4f913756a5f560dd4ae76a9.tar.gz
++sha256  d856fde68828d52eb39df40e15ad5dc4efaa9a51d4121bcbfbe47fed2163d20a  libutp-c95738b1a6644b919e5b64d3ea9736cfc5894e0b.tar.gz
+ sha256  73b400bf61dde52223dae1642205ca187f1a6b24a508dcce52bf386c27a0e58c  LICENSE
+diff --git a/package/libutp/libutp.mk b/package/libutp/libutp.mk
+index 394c1e9cb9..df0617555d 100644
+--- a/package/libutp/libutp.mk
++++ b/package/libutp/libutp.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBUTP_VERSION = 059c9449a104e440e4f913756a5f560dd4ae76a9
++LIBUTP_VERSION = c95738b1a6644b919e5b64d3ea9736cfc5894e0b
+ LIBUTP_SITE = $(call github,transmission,libutp,$(LIBUTP_VERSION))
+ LIBUTP_LICENSE = MIT
+ LIBUTP_LICENSE_FILES = LICENSE
+ LIBUTP_INSTALL_STAGING = YES
++LIBUTP_CONF_OPTS = -DLIBUTP_ENABLE_WERROR=OFF
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
