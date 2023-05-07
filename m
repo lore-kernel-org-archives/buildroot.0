@@ -4,59 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03CCEC77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 11:42:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 337F7C77B7D
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 12:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EA0A82660;
-	Sun,  7 May 2023 11:42:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EA0A82660
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC12D82109;
+	Sun,  7 May 2023 12:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC12D82109
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ecQzGokrWUTQ; Sun,  7 May 2023 11:42:58 +0000 (UTC)
+	with ESMTP id YexD5Au2i83U; Sun,  7 May 2023 12:04:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C57A78202F;
-	Sun,  7 May 2023 11:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C57A78202F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D9E921BF301
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 11:42:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E271082199;
+	Sun,  7 May 2023 12:04:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E271082199
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 945FC1BF2FA
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFBEB8205A
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 11:42:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFBEB8205A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B10D4050C
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 12:04:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B10D4050C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TB_p34fA0eXN for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 11:42:42 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91BAB82034
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 91BAB82034
- for <buildroot@buildroot.org>; Sun,  7 May 2023 11:42:42 +0000 (UTC)
-Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
- by mailout01.t-online.de (Postfix) with SMTP id D4E563767E
- for <buildroot@buildroot.org>; Sun,  7 May 2023 13:42:24 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd81.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pvcmW-3Z8cWP0; Sun, 7 May 2023 13:42:24 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60270)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pvcmW-0003uR-17
- for buildroot@buildroot.org; Sun, 07 May 2023 13:42:24 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b_Lfb3buafVN for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 12:04:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78F454049E
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 12:04:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78F454049E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 669B685EF1; Sun,  7 May 2023 12:04:38 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  7 May 2023 13:42:23 +0200
-Message-Id: <20230507114224.3774853-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230507114224.3774853-1-bernd.kuhls@t-online.de>
-References: <20230507114224.3774853-1-bernd.kuhls@t-online.de>
-MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683459744-F0F94C73-4594EA66/0/0 CLEAN NORMAL
-X-TOI-MSGID: 6433aed0-9919-4286-89dc-490bc14e43a1
-Subject: [Buildroot] [PATCH 2/3] package/kodi-inputstream-adaptive: bump
- version to 20.3.7-Nexus
+Date: Sun, 7 May 2023 13:10:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e45fb0242496ed4d5bb43108c8bac0ba01af2fff
+X-Git-Newrev: 33916e184b1e6efa9221c66707132d9b997eb98b
+X-Patchwork-Hint: ignore
+Message-Id: <20230507120438.669B685EF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xinput: bump version to
+ 1.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,45 +57,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Depends on bento4 version bump included in this patch series:
-https://github.com/xbmc/inputstream.adaptive/commit/55fbc78aaf081b63773fe98cfd03b1bbed8642a5
+commit: https://git.buildroot.net/buildroot/commit/?id=33916e184b1e6efa9221c66707132d9b997eb98b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://lists.x.org/archives/xorg-announce/2023-April/003389.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_xinput/xapp_xinput.hash | 8 +++-----
+ package/x11r7/xapp_xinput/xapp_xinput.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 18df044c62..4c5eafc4b6 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/x11r7/xapp_xinput/xapp_xinput.hash b/package/x11r7/xapp_xinput/xapp_xinput.hash
+index 0961879637..d3a6a66902 100644
+--- a/package/x11r7/xapp_xinput/xapp_xinput.hash
++++ b/package/x11r7/xapp_xinput/xapp_xinput.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003013.html
+-md5  ac6b7432726008b2f50eba82b0e2dbe4  xinput-1.6.3.tar.bz2
+-sha1  92ea7dfb3d8465921b0dca85da7d5b01cedae6c8  xinput-1.6.3.tar.bz2
+-sha256  35a281dd3b9b22ea85e39869bb7670ba78955d5fec17c6ef7165d61e5aeb66ed  xinput-1.6.3.tar.bz2
+-sha512  cb2fef866ac5a71dbca3e23b4ecadaca38e65dc1b30f8bb024bad92486554fafc472706619a1af04c746a4f53ce6aea827d694b9f4f0c7d0d46bb1da81984076  xinput-1.6.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-April/003389.html
++sha256  ad04d00d656884d133110eeddc34e9c69e626ebebbbab04dc95791c2907057c8  xinput-1.6.4.tar.xz
++sha512  6734860852715e5cb9d26259a173e42413fc037546ed7fa4173ffa802c2619ee0322bed228a28cd1911be759d860070867d9b89b115f37323cca1c9ef75354b9  xinput-1.6.4.tar.xz
  # Locally computed
--sha256  907915228335eeb9217e6f069cbb210fffce01095a6326908015cd89165a0328  kodi-inputstream-adaptive-20.3.6-Nexus.tar.gz
-+sha256  6454f40c6e89e7ce2a9492197954bbef856ee83e242ef610c905d42aed7484d7  kodi-inputstream-adaptive-20.3.7-Nexus.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 1f3e86bb27..6d97f1766b 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
+ sha256  bbd35c7a8e8c5cb073935e84b29b0c53f7131a4ef1ce737dc2be5616941e07e1  COPYING
+diff --git a/package/x11r7/xapp_xinput/xapp_xinput.mk b/package/x11r7/xapp_xinput/xapp_xinput.mk
+index 0d6c0deffe..614b62fe77 100644
+--- a/package/x11r7/xapp_xinput/xapp_xinput.mk
++++ b/package/x11r7/xapp_xinput/xapp_xinput.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.6-Nexus
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.7-Nexus
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.md
--- 
-2.39.2
-
+-XAPP_XINPUT_VERSION = 1.6.3
+-XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
++XAPP_XINPUT_VERSION = 1.6.4
++XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.xz
+ XAPP_XINPUT_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XINPUT_LICENSE = MIT
+ XAPP_XINPUT_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
