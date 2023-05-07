@@ -4,103 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95B67C77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB43FC77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3904C400D6;
-	Sun,  7 May 2023 21:35:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3904C400D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F796409D5;
+	Sun,  7 May 2023 21:35:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F796409D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bpFa3STMjNCu; Sun,  7 May 2023 21:35:12 +0000 (UTC)
+	with ESMTP id SCnl3lOtlwss; Sun,  7 May 2023 21:35:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 756B5408D3;
-	Sun,  7 May 2023 21:35:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 756B5408D3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 414291BF2C4
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:35:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1452C41793;
+	Sun,  7 May 2023 21:35:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1452C41793
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3005C1BF2C4
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:35:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 19DC0821D0
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:35:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19DC0821D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0900840639
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0900840639
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sHKWUXMFwnuX for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 21:35:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7F5DIf0DyWx9 for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 21:35:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7D66821AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FD70400D6
 Received: from NAM10-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam10olkn20815.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e89::815])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C7D66821AB
- for <buildroot@buildroot.org>; Sun,  7 May 2023 21:35:08 +0000 (UTC)
+ (mail-mw2nam10olkn20825.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e89::825])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2FD70400D6
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 21:35:10 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kaGqDR4L2l811MzRE+vNrty17g8PtkmhCiXKXZCFH+iK7Bnbl1Q6Ce8rNbLEABxUfhxyf2rRb/rSSkF7Q9y/3NOocMb6UGI5cf+0u25pBscDSzh6LKFo4+3PIkVHW3BRQ1S6dEyOAKisOzWK+fSQzgWRrHMIKqPRVtYDjPrXJb9m2qe4Hsbk/UdrhyxwEwVQzhRSo8wRcKbedtMd+saA/TBh/c4McAetqsq1SMyrQIRhRUb71M/joaOerBn3WiiPgHIid4r5/hHhjwyCB7WAuErgc00jLH4kTwDSd6G4b5WkRZEwy7p35ypcT2sQlwOuOjV7KxyK7KnMEPA/YCRo9A==
+ b=evtSpYtEqEwCdGnNfFV3Pf7PyphbW4rPOv51uf2m+XOprDEp3NOXmkTYNG3ZroDxiAXlHLaDMo0NecajHfKTpHIWNN04Xi24gX2ZBiNq2oPcZfl7iyM3J8SvCqi9Veq9FzT+/HDrH8qPLzL7wmSJARa7CpEUnCT9Gbd1mOmr32jL3RYy01CiVS2XYLW4rSG3Z1KfiwCPt6EnMeQFodgHWwByGT2CymkS6X2HJ+c0t5V+a6yhfaaFFe/DwkSkBzmoFX8oU1wN+uuNrLkDm4jykVK/Nk6I13SqjVHas5119GWnfAe/hWS2CbSsED24duYHtZFzf+3fBtL89uQRyv2ung==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Rv9Z11IM6EUUJcKpyJr8FA1EbMsjMeZM44RsM7+5+I=;
- b=Lm7qS4DSOgL9zbDljWGIUK+AvcqYYhdfQD+afgJsi8LJs0fhL1rZtFWb6UfZpRsDxJM2l9V43Tw5rF7xLAfbzmuYlE35Hus1YPLoHz2paapYsvN77nFy1M4aG8lsygnYAhPyHdHO0L0oYB3dK58EZEsXhETyvGF3jyMnUeHlXXiAEf6SSJUFuErBKBIzG8FmD8JvIZgRp2l3KJk/1sjBhos6nkbAeHMWnpJTr1vMh16KELp3QKRnbWMiHjbavqDZtFIMrAeaUt+6+xGyoYE/OBC37kBGyAdJYUt3GD/9SdCztVzP4QVF0IV4RJs41s7kRO8JJAaGj8YTvbq9KKRx6Q==
+ bh=chalJv1y3zE/5nchSc200udnDfybBStmlE7CnehyC9w=;
+ b=R6OMqdp1r3Z7CQXYxpBkKcXUZPLZwTCYzVj2hEdETLM6mg9lHvT+jr00kuZ3VFriFovRpuPjuaJhr5bTQ2TgsjvaJfj5hQ2wUQ4fs4ZO3Mh70Wkted+43ULGWUhx4eKCp33pH63vDLiBGUEX7CIs5Hb6NquFZa/BVUZV14iFiYd41qlnaBgO55MRGwfaIReiolIFcZH6a9cl0snEOhqnt0cOB2DpRdk3ra59jC2BFE+VuF3ce3aVXjWduKbrm7vF+ZzIcAkk5IQ905imR+pdo5W3FOi8G3THH7qLMW8geqcmWDHbetWzOZGC2oq5pNNDOVY0qOFJKr2UXBY8ETUbUA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:1e9::12)
  by PH0P221MB0831.NAMP221.PROD.OUTLOOK.COM (2603:10b6:510:fd::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Sun, 7 May
- 2023 21:35:06 +0000
+ 2023 21:35:09 +0000
 Received: from SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8]) by SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  ([fe80::e6be:cc11:976e:e2b8%5]) with mapi id 15.20.6363.029; Sun, 7 May 2023
- 21:35:06 +0000
+ 21:35:09 +0000
 From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 May 2023 17:34:29 -0400
-Message-ID: <SN4P221MB0682A85E1D08A44BED847C8EA0709@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+Date: Sun,  7 May 2023 17:34:32 -0400
+Message-ID: <SN4P221MB06823E01BB288F84CBD70019A0709@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.40.1.windows.1
-X-TMN: [VkH4J4psvyls/5+nDNA3pVELhNoWblLZ]
+In-Reply-To: <20230507213433.4128-1-james.d.knight@live.com>
+References: <20230507213433.4128-1-james.d.knight@live.com>
+X-TMN: [vGQqbq0Bky8E5mIJzqf4pdo8sVNkveNk]
 X-ClientProxiedBy: YQBPR01CA0156.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:c01:7e::20) To SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
  (2603:10b6:806:1e9::12)
-X-Microsoft-Original-Message-ID: <20230507213433.4128-1-james.d.knight@live.com>
+X-Microsoft-Original-Message-ID: <20230507213433.4128-4-james.d.knight@live.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SN4P221MB0682:EE_|PH0P221MB0831:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9d926bab-2dcb-42e8-4e9c-08db4f42ecc1
-X-MS-Exchange-SLBlob-MailProps: 0wLWl8rLpvtRtQtMOsBtDaMYSViNzYjvu8FcUOwpmSz8cNP6EqzX6JPtkTC5Xr5uW/oe368xqkKXxZmHLL4OgDYFUqKi2BbxWq609nuWfyAFsFQuu/Wb4VcLVlMP688ZE5XZAwANu56zPO9wnLrRFN+UZE9wYQu10UvfwJx7hA+i/RBuVoXE5+QTQpdlrk7TAQAnz/AVnYE7JqzJH2tjXVl3vfVbs5eDFyGG0n1puTk58xEkm7Q+IxrD3hyrue3zdqwFRkcKoxGrSU/fcDLBXqRfs+cKbYs1nBxjay2xnzOmAUF7/PQZSNrEjEwmEj0BG8ihrLL8Fr/+EDvm0z/odCKAUDKjLFdCNyMm+g2gwM1LGxvPEaHj6TXmq4gkmWiBBlXa8FWQqfd7JT4GNQvvI2MClSzYKhsTUkf+PfHs3Z5EuTWACT2rhBLj9TOaoZlRg4VQGnV+lOwJ0LvkEZNEChLU4ftyq+OovkgrwuaxedAxWJmjIk396fklM3sM6EbpjCz6oBhhv/ZkLrg5A6VyRtAnPP5bLELe8uaeokpE0LK49xJSXUI54D50f0ssQLfqLY1Vn8JtwD7oon5NJG8Gr3Z9vI8cwARftZHycb0F5NCidLRYmJVTIYd3vlDKR+0tuYu8cf1TFb6O9+tsEcZce9K/y7iaiS0HuAcfm55xS1pf4osSguXD8PzN3UeXiBjJc21uHFRl5R+uyHP4Jguc3mp91IbK2vnQcitSvZbJUKeGcws4RvsbrR6A5dyoVdcJrztlBr99d6s=
+X-MS-Office365-Filtering-Correlation-Id: 95d9b8f9-a2c8-4bd6-8b83-08db4f42ee56
+X-MS-Exchange-SLBlob-MailProps: 0wLWl8rLpvtRtQtMOsBtDaMYSViNzYjvr8mocDzCefY5kWHBt3HgmdQ44+csFQLGwP/9uPrmgT4hjt10QWFteuSYNT4gyAH+y+sX7Wq7ODjgt+U68YiZAxwzbJuFZ5qQ8QipqWyeozz0wDkbsuN+N1tv+Msc4A66J4A0AXiUYlS4PH5DMy/+d0G3RRAf0YVqDUA2p76oDCFUdGW2cQlhOAAEid02/U9BWYfsbMeDvtWRQ9LA8ggiZEaCeHs9AoNGFxZv90ZHFSYdsvu4lH3eIVL4eL64xyIaTI73FpeWt2YDYdKscbJlxj2SuDw1+AYqsoH2BN8A1dGxTNP9gYtMiDbZ3yJ3UPaNB7jQp73O2EcLX6sCyZHpE+O0XTszD6vgbNVQE4jXLXFSx9RQzfQllHEPWDsrLgzp4vsIIKxyHMTaDJ9dq7r5xjvLt3DUTwqHIWbT20sS/1I0+ZN5W3+qtNwRMmtDotP7VOJ4kiitWN2doEnb/LsRMbN7u0V6NPYnmYN8cI9F0IHbLXOmkMrx7ts+9JiA/ZYI8T+NNbv39G12oZtRrezDuCw1myXaOjHPFQFkaxOV+v4y0qiR+P9TFgLlQ93mo08+dIdRLKwK8GzQ7XjO7gflWSXk5x95b8kiX9ngVe5KVC0lE0tzXSTmtXnK58wIECeQ5ghxsHVQViN8ooVRfLNGl3rWCjY0CkdDODVdUFZBt0UzeTZGElZ8zYX4/prhQCwgAT75DRfdKhXyH6aFvAWVIrCAtVQ0Ebynr/bIvW/6GYw=
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JEU8s4dXIR1V+klh6k/7mi9TrTM7A8LtMbnp22hWx7Y2Yt412mHa4wXNFLh8bjQe96XMToBBMu5mNXCZ13cJvDaNmgxYbwPZ/9kqwtlbl/IAfx3yhUGtOlpy2IHMm+/vXJ2qwkUGdo55mLZT5nnrLtprrSC/3zLR9j6OSIhY/MTecuSITpHAQffnuNTBLIhvr7/7Xl73M5ftYpJGlOQOf5uFpaPrQOj/kBdvjq8VCl9pnAOMs3bwH4ybMRBE9LOjDHFtsAkJm+J1pLXtWkbRQNkDdLz5s9lGIvjqHRgrfwY4vDo88nkug5lJlYLRO/ILR0shsFTOPHnjEIRvyKN1r3TUO/5njyMyDyByiazX+N23q+jU/OgbL4QEgz7EnhYr/jdfJT8H9Q5y63fzaQ9ih7ZASsJUNuWmHcSg1lgPBjYJo0RaKLe2VgeNaVkiXTC0WdussoL3N3OKL4YoGT2fOLFpAT8rzTIUv3hKeTD5+g6sWNQQ58Plr/VA3F6DmbQOldk1kGaLbOwgg8YxOliRx1KcVGfyHyIdLgFM27neHRhdUMpRzSgw7nsRVbEP4l5/5dTMZGggZJW2sFj9X4WFYBlPx10eLtOz5n/0DJknOldhHuz+MGMPIigs9geuI8cQ
+X-Microsoft-Antispam-Message-Info: BLT6ysSvE23oxf68kjcVl6Q7BWmPkjvrwza+OgKdON5iC+Q9Eim5gOFOlgHwb9ij6Qo9/Dxf/DFNtaIkSCMdHrZ9+5h2qTYRrz3Zf/xx0gMYsFoDDeek/g70F8FSS9vhEK5ZBrVhWDEFWhAvbgNY2QRXN5ROq41QUClIMlv9KAuHxiy492joIEUB9ELwtf80anwYGTIZnTO+TVu8WvwHij3tZyO+jZSuWwCfa7R4kdQbT5y1JtrO4MrwcSYnVEo2bxRu4tXqScabelob9bT6PAUqePyTgcFS33lE1TNVoOLY99oaJDovVRqm2RmOOyjU/+w7xbOj4hJF0NHFdrJOpLH66IMb0ZvvxFFYlKay22hFNtev7kui3jKaGWYpSt+dF2Ui2OTVsJ1rl3JbR5npeGL+UoahrD9NYzxdJdOUn2OqrrT7FochuKAt9deLBW+LmjKLB48cSfJxr0R2yeZIBdbD2TQiF+opjI89DT3V/ocrzerQHpRaoSi4TWV3/7iNN0WB/9pUJS9yg8m3hQQmh05Y91h3FrTm1rIdcbuLbzSc5B9hIB0Als5nGgR181AAciPe1Fh2ccdn0PeHNHkzIIeVHJ3oJx6t2CuW7yJBE94=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7ze2tPdmKMP8cABDk86jXORolZg0fSYALe9Gz8qD5JfppG7p+hMSlUzbJH8l?=
- =?us-ascii?Q?aVizw1caItyn2itwFuYYFfBBHscpeuV+Qu6D2Kr9HGvddzdI2eyTB9v5msfi?=
- =?us-ascii?Q?dfeZhQIcSzRZ1bPyAFgWzJj9f8d4WuBHJj7ldTZa561R68AQf1yWhnQ2XfS3?=
- =?us-ascii?Q?eTUaZ0UURwvsWp7ibbiltV5h58W9s+th2WR44MBg+/ElzSXdClWDZ3j58PtH?=
- =?us-ascii?Q?h/XDFYifAHQl2jEtYNStuf3A9kyrYdJexXYA5IihlE3IUmfVVKEfVWYN5HMh?=
- =?us-ascii?Q?dUg0+ukd2wgqvm0TostVIjLWUZJDUlrIv2b5dfQlfRsAt99DMenSqjEdFgv+?=
- =?us-ascii?Q?UlM/4Wf5v2pYsPZk9b8KMjxvYZWzT7DaItdgksYx7zyCdmgoo7GiXETvq2yG?=
- =?us-ascii?Q?XNAUnn/yOepIsJCi1OfFVVPsTofWij3y9aR+9sUrEuvYHa4ql9XTxQtfbD1d?=
- =?us-ascii?Q?UhCZFHzGMxKR5/z3pEPXJqEekYZaZ3Xz+KnsiWg7wP02zxkH/mm2RaoYbY9R?=
- =?us-ascii?Q?pzP6eS3K2SoEu4B8DS7OoK+cm9i20BuINHEYpX7juwpEPsfbpmlokCDdzJXp?=
- =?us-ascii?Q?Ts3Q6TjVxwEVHsmvDbwMVzPmaMrAIds54D4nYQ9N/TGlUzonFPYY7aRbOvcr?=
- =?us-ascii?Q?5a64Af9KGlwreA4Wi1636JHDWHnz3SldvWRMhblT7lgIU+Vi1faqzVk26s59?=
- =?us-ascii?Q?VXqtgwUhW7JVi0yVyl+dr7NHZblH0TKcZ9h6pbEl6LCCyPzb84xi1QWZSG+l?=
- =?us-ascii?Q?y5DQ3RFDsMj3UnWpap3G3mtovabQzhHaT34gxr+yEE/Bm9ItuwLzU7PJ4B68?=
- =?us-ascii?Q?/oJykQ1AcsUsVxnS5coo6m3dM1UAkq1ZWcjdZnvu5K+p5Fw/HMhgzGtk98ZG?=
- =?us-ascii?Q?TLdRw5p/6/NN+Td6rvrwAoYBbF495BDsk9tcEueOyIC00eXPC54zR1pEMNl3?=
- =?us-ascii?Q?pEnoHBZk4eLq2NpoLyrfUL3vBQVjYbUhDlps+voaV9ax/Z19widhWutnqHAQ?=
- =?us-ascii?Q?K/DO1azxxgqfiDUwUY5wFOegvbR3DIO8kypvHvM8ypafLhv1csrUghJGSDyc?=
- =?us-ascii?Q?pBAMO0TdIt7Tm5zawGm8anGiyc3WupkEdomQoK00GRKjPsb2wJMQusrLk+Xj?=
- =?us-ascii?Q?0u68atOfWk2mmusW/MpeMEKQq/FCEaG1lAE68nFAfa6Ypql8TEt0XIBOnP/o?=
- =?us-ascii?Q?YTNRaV1G+LJvsFQ1P609mFQ7YHEKRiYFZkPHeNRRcTFEDEuCrBz4P1Hawms?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XdmivnnJvfOtuK9ty1ci0ujmQRDjCKqCsdinnAlzMTqBbo6uflHUmbXhM4P9?=
+ =?us-ascii?Q?4YRhZ3Ny69AL4tg+Js8ycpeqMrUPCJf/fQQxWoX90ERc3KXj4ohE7wy3iy5R?=
+ =?us-ascii?Q?4OLWe4qtDzg7l4q5p7U4u3JWTRM0M3bR9CHGeG18u6c0IqufJASmud9NBE/V?=
+ =?us-ascii?Q?ZPpIZj2B48HEQoHl7x8HzOdNZXZ0elHJWDV/7y/cePNagR7tXLdlPsQNsHT2?=
+ =?us-ascii?Q?j/V3vTuPhCQ+DN4mY8tla9Qd3T87n64IrQD1R4j0PPRbXU84qjg9Dj2zEW2N?=
+ =?us-ascii?Q?590qh1d6GY0k5+dmdaR5stwcJ+k6nig+IvyE2sYFnXvM5irfZ5N7Ote3xDHJ?=
+ =?us-ascii?Q?gW1Jqjjz6pRRg1lE4L8hWpcsn9T9mQWLSgGcRMScTFXlkFeSs7VXW9nTqffF?=
+ =?us-ascii?Q?hDYjNao/V7afQ5bS1krH2msor+1lxMoYyHF3nH2RvOg2EEKW9J1aD6WQ0XP7?=
+ =?us-ascii?Q?BSa0Gi9wQ1WezG72MrMkPpd/jtQ7fk1Z5BPR8ZP8NDVW+aqrqeL5vi626j90?=
+ =?us-ascii?Q?omOsRs+FH3MFthK1v4w9mrKeTQqn8C9o1o694wgXZjGEXK+LX5oXCYDp9dSc?=
+ =?us-ascii?Q?RYe8WS/i+7BmgeqY7oi4A23eyypW3ZS75Gtu+terHUtFStZDGwG9Nq3c+oA8?=
+ =?us-ascii?Q?WYp9J3TivrRzT1rW2kh3p+5yP57z8Ni4zcpPEg3PS1+t7nban66kDQmLM5A6?=
+ =?us-ascii?Q?o9ktrUebj24EMVyeBfBkVm9qwl0SNLAzV6yJUfOCCx0rnkGEnYmKrHdrfU8c?=
+ =?us-ascii?Q?tjWeftux1Vpy+Hzqp30RMHZYrPVrVsagm4h119p5s24xh4LUccBKldwMDUPZ?=
+ =?us-ascii?Q?hlFMQQofuNWTUtgaiwQtyiYglS88D3rPTktGthYzGIrKJLphwYQISiHvhd1T?=
+ =?us-ascii?Q?EhdMpvQGZnnvKeon6cH8UldayCNre9qRUg2gdzA7MBZW7VN+794v6/6B9kim?=
+ =?us-ascii?Q?xnP62XkVQ/bupwbNlNT1V6cr/khbJvY3Ywo20sp1M4cGAygmM6v+YplANLGj?=
+ =?us-ascii?Q?AOLX/lyTeJ0REULZkDk7yM/VyeSp+RonVE/+O7KaoV0/Dy8NJDuCSIZrufIQ?=
+ =?us-ascii?Q?8/dAwFPLCiBi9xqd1p+Iyt0h4yNwKDjQ8rRcRF9QxdMtA9jfLFL7+QjFxpyF?=
+ =?us-ascii?Q?PRekLZ1HPQIzA4hipeB6UqHoOLbAcvIXbsvrnvEobrysGlhR1ignqjnrZGCD?=
+ =?us-ascii?Q?DSDa/5tfRtOBo2pqHPbLoSQ+4Ozwzzk96Eb8ujc2un82EMfr3cxsCl+Daac?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-f5d03.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d926bab-2dcb-42e8-4e9c-08db4f42ecc1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95d9b8f9-a2c8-4bd6-8b83-08db4f42ee56
 X-MS-Exchange-CrossTenant-AuthSource: SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2023 21:35:06.7351 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2023 21:35:09.2343 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
@@ -108,14 +110,13 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0P221MB0831
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=live.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7Rv9Z11IM6EUUJcKpyJr8FA1EbMsjMeZM44RsM7+5+I=;
- b=Ba9lBcPVc4/imJMzBCTq/nA96/bRB/V4xuHXz4ywjUVTQQqmPjRxcK+F2qpig/aturpimrFkIAXGeKgQ4JgX3gzYzh6pkGeMV3DJmoS/YyJqiMWdUs0Y61H4r8m9ilZlF6Q/uuzx8yUgvAbcIG1Ger9uvvndfneT+4/yiAzgkq63Ccl1R0cnZvy76Fm6ZtbfmmZFF6b8hTNSxOw4tgwd+LgjDHLQXSl791pyQES62TfTkI46aLey/8PbDgnVsQOxNAZ8yZ+ucplB1RcIQKRUczZsHF1UQZANhpE+mR9SMD89NAw9vFAB/tpXYfOIDqfbOe6GOJRYO+Ftu69w7yRMTA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=chalJv1y3zE/5nchSc200udnDfybBStmlE7CnehyC9w=;
+ b=pL2cQfQ5mmv7O8VXJiBLNHuxBNLhD5i0tY3hH7xCQJY2q3gAJSeopRfMBIT9XgPZwiQtpvZB/PJu2SCC3Gn6tz8CRWL9TcY5cLs+iX713VKSVbd5Fok5Om+ZqevFtGpdj53XMtfWoeOUPnhYz7Sal92m5PvJudY5ZkRPmRlJ8gNo026syi2OtvZ+0Ke8mpQBlF0OyVoKISc2vaOaJocJrV69q2iNZdYLpeDKp/W01viz0nnbCrR7ieZzt3M1HsMWcx1U4XK/e9LwhciKLG3MEEnaJtnWZITk0XTaS5+ugwX3cZ/auYzNYROr+Pl4aeQmtp6Rb+svGswdtcXuxDeKqg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=live.com header.i=@live.com header.a=rsa-sha256
- header.s=selector1 header.b=Ba9lBcPV
-Subject: [Buildroot] [PATCH v2 1/5] package/rpm: drop remnants of custom
- CFLAGS
+ header.s=selector1 header.b=pL2cQfQ5
+Subject: [Buildroot] [PATCH v2 4/5] package/rpm: add python support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -133,32 +134,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drops the use of `RPM_CFLAGS`, which their use has been obsolete when
-this package bumped to v4.17 [1].
-
-[1]: 429e247b869027f6ecd4efa0f31bccd2765e3875
+When Python 3 support is detected, enable Python 3-related support.
 
 Signed-off-by: James Knight <james.d.knight@live.com>
 ---
 Changes v1 -> v2:
-  - This patch has been split across multiple patches; no changes to the
-     implementation itself (suggested by Yann E. MORIN)
+  - New patch in v2, with changes from the original first patch.
 ---
- package/rpm/rpm.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/rpm/rpm.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index fc57a14fd6518ddcd65a90f294ecabbca8057f67..08bcb85ae41701a192330732984401d7092cd492 100644
+index 2b289fcc9f8d6972bece4492736277ec5efa209f..2964c6a51202772a3ce74c18b7f7e5b5ffa4d49e 100644
 --- a/package/rpm/rpm.mk
 +++ b/package/rpm/rpm.mk
-@@ -104,7 +104,6 @@ endif
- # ac_cv_prog_cc_c99: RPM uses non-standard GCC extensions (ex. `asm`).
- RPM_CONF_ENV = \
- 	ac_cv_prog_cc_c99='-std=gnu99' \
--	CFLAGS="$(TARGET_CFLAGS) $(RPM_CFLAGS)" \
- 	LIBS=$(TARGET_NLS_LIBS)
+@@ -27,7 +27,6 @@ RPM_SELINUX_MODULES = rpm
+ # --enable-openmp is provided and OpenMP is < 4.5:
+ # https://github.com/rpm-software-management/rpm/pull/1433
+ RPM_CONF_OPTS = \
+-	--disable-python \
+ 	--disable-rpath \
+ 	--with-gnu-ld \
+ 	--without-fapolicyd \
+@@ -83,6 +82,13 @@ else
+ RPM_CONF_OPTS += --without-selinux
+ endif
  
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++RPM_DEPENDENCIES += python3
++RPM_CONF_OPTS += --enable-python
++else
++RPM_CONF_OPTS += --disable-python
++endif
++
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ RPM_DEPENDENCIES += sqlite
+ RPM_CONF_OPTS += --enable-sqlite
 -- 
 2.40.1.windows.1
 
