@@ -4,81 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B07C77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 20:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85504C77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 20:24:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECA31613F0;
-	Sun,  7 May 2023 20:17:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECA31613F0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2974B613F7;
+	Sun,  7 May 2023 20:24:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2974B613F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S77qrs7chVug; Sun,  7 May 2023 20:17:19 +0000 (UTC)
+	with ESMTP id hAt1ty8NR4wS; Sun,  7 May 2023 20:24:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED40760F51;
-	Sun,  7 May 2023 20:17:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED40760F51
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1BA2C1BF2CC
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 20:17:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F05A60BDC;
+	Sun,  7 May 2023 20:24:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F05A60BDC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BFD9D1BF2CC
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 20:24:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5A5E82298
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 20:17:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5A5E82298
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98BD740395
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 20:24:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98BD740395
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fpEe2Pfnihi6 for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 20:17:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3E3982279
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E3E3982279
- for <buildroot@buildroot.org>; Sun,  7 May 2023 20:17:13 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([213.225.6.203]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MRTRN-1pbD8718sf-00NRkn; Sun, 07 May 2023 22:17:10 +0200
-From: Daniel Lang <dalang@gmx.at>
-To: buildroot@buildroot.org
-Date: Sun,  7 May 2023 22:16:36 +0200
-Message-Id: <20230507201636.52947-1-dalang@gmx.at>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S4JnGkRF8jcs for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 20:24:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 432CF401A3
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 432CF401A3
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 20:24:00 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:7bde:4dbc:bac0:54b7])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 5CF682003DD;
+ Sun,  7 May 2023 22:23:54 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 07 May 2023 22:23:54 +0200
+Date: Sun, 7 May 2023 22:23:53 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Leon Rinkel <leon@rinkel.me>
+Message-ID: <20230507202353.GL252090@scaer>
+References: <20230507195031.163142-1-leon@rinkel.me>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:fZT2LJXVT3oljgPgQbTDAOrdtbfuZwTAWrYlH7OPxBjLfBadL4v
- Ie5h/jk7g3bYyYsAEf018HZrhCs1ashXT0fcdsXlsRdqe912ni3s6I1SFH3oWvc8uusjDtW
- lwBT6MTPIdu3jHtzQWojbTJfdAS2AouFNTFgJJuF3qyImwuDwS8hd6+SfGYBwE9GELNWvoG
- tUzshzUOB1JkgRurvZl/w==
-UI-OutboundReport: notjunk:1;M01:P0:Rxs0VS6tj/k=;KgGjlHgxlTF/1i+/Z5uKfP1hvvE
- gqRPsupW7o9NRjeyRuapDDJLIoKFgXpPb+NZZcyVjUPJA+VvhWyeWsl3ySeK76TMpDveTO6Ei
- fk97MiUdWcVASQD07CtdQE/skkHrjnpCG5iOY+POlkFkvVQDF9qJ2tdYoO49OpTQk4Zwtty3V
- yB4R5wnyNzuTojxIj6m1w5gF7JrxfWs2R/X+vyuL+VKAhNCHj8DoSiFRRHCqeTjb8u0ywaMGk
- GMHvfMHySEeBosMu8Kx9uqvYjXQIeOyKuBU5OB7JrQ8FYr6h01EG7n/zM66nr+ZM3xYi5kmpw
- mfW655+mdMbPp3AAzbNeay75I/6wx7Wb8J7uU1LKeP5jRSW44/x+3qzMYBgFHPIS7YPn5xrUt
- N6NFlJnHs9ZxiLDmR4pTUZfnoJsvHNMfRCUEFPqUzmVgDeONwFm94kKLoXNw/2aDMuqtkeVEn
- d8pO9qNGzhSKlX4G80Sf4X9vTf22gPGf1xMc3kKaQ8NOqMw4rXiBpf7PnplnEzFtLD4xuzaDx
- WsMCAXOfqHM8ZgyLWG27usxs2bnabyPo7ij0vNHNcHXR144S5JSfozAms8c+U9HzNsqLkiXdL
- kYeALesWMkMxhs2FNTW7rr20LCCJ9frejQEh6igex/UBO36YSyTNfTO2B2OFE30gidlJpQgvE
- EzuTSBlVLiMAmg1wSPYNgZrL8VTr2Nct1IO2+qp6qS+AhWho7qifQFc63XP2S4oL8iJD7A3HG
- 08RI6Y4EJUFhRYx8LPIwl5ZfvC8PjwnLJ7/TldXBeNNeat0rT02YXBVlspTIp9dnfpAurmGBy
- P1hTsA1I0CaaQFxeVwHSokZpn0HJtgLJlfvsYoyx5G1qWCwciafVsISlwEg3yE/3PrR13V+Fo
- NCcvAioRQKQbSIUanH67SbBpzLu/o5NSfxyaDpDWBtzTOgtkvny59MfHXiIhHco9nH7zsukXu
- yrAOKlgHlejVorWh8cXMnRQN5BA=
+Content-Disposition: inline
+In-Reply-To: <20230507195031.163142-1-leon@rinkel.me>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; s=s31663417; 
- t=1683490630; i=dalang@gmx.at;
- bh=wnxePhAfK13cE8WqojDvXy9+5pvu+oASJs2hy/xc524=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=ho0Y2IP+bJ5NX+A+c0Xfa5Q7IFs95uaXa8C4nzbd78B59hrMu+0jaJSxcdRJdf6a2
- sc4B0iSBR6Dq5VLTs+UuRgI0WjPPA9K3iczUt1ngicprsN5kX3Aqv9ZMZ6UCkNGRTy
- JsgVpk00fjEycmFlI3E2Fs/gy7+2ihZ2n5VNcgX++1eHK3ZXhliR6TwGAMqgMvk6rG
- ZMHYoQGAlbAUo+bw1UfoF8/s5VmMuasUeQKI3FKyyJ1K9+Gy54C1j4SD0OOPP2TGFH
- 9UB1n7qkjDNRbXRkuJZcabb4i4Mxw5u84ohGgt5Cx++f2fLLRLgXssIQEJm/l0LvbI
- 9R/fxmZRFfuaw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=ho0Y2IP+
-Subject: [Buildroot] [PATCH] package/cairomm1_14: use official website
+ d=free.fr; s=smtp-20201208; t=1683491037;
+ bh=wqEzv7LKPVhqtZVRqJychL6xlR2I0CX/sCnCfDlikg0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=skGWBCC49/izvOh2+iL6S51TYf8nDGuCpwtdbGH3D3rEMqb9Y+KDTmxIDN2cOhN7a
+ vRDcNydsiP1uUzbqRyjx75FTPsjQ++oFWhuwxo06EuLFE3U9xaITq6ymwYqlBFl2VX
+ dn82j4JR74fT4tPPklKFZFVtDZmSPUlsqsqBkdl5zlNQq00sY8qmOpfucc1oScP02T
+ UzWRJTPxH5cA/U199VtGsVdlrxNcn6XVHXG/iq30cxkTibP2WMC0cXqyPYlVQoOI68
+ TpwuJWLfNp/UhzERTMFXWblivWw8WO4x9/AabtJTr8JqDV9F35coQBQAdJ0+dm08zG
+ sHNlqQ3zo++aA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=skGWBCC4
+Subject: Re: [Buildroot] [PATCH 1/1] package/bat: bump version to 0.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,71 +76,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Lang <d.lang@abatec.at>
+Cc: David Pierret <david.pierret@smile.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The website [1] states that the released version can be downloaded from
-the cairo release area [2], which also features a sha1 hash.
+Leon, All,
 
-[1]: https://www.cairographics.org/cairomm/
-[2]: https://www.cairographics.org/releases/
+Thanks for this patch. However, I have a important comment about it, see
+below...
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
----
-v1 -> v2:
-- split patch from unrelated cairomm patches
----
- package/cairomm1_14/Config.in        | 2 +-
- package/cairomm1_14/cairomm1_14.hash | 5 ++++-
- package/cairomm1_14/cairomm1_14.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 4 deletions(-)
+On 2023-05-07 19:50 +0000, Leon Rinkel spake thusly:
+> Signed-off-by: Leon Rinkel <leon@rinkel.me>
+> ---
+>  package/bat/bat.hash | 4 ++--
+>  package/bat/bat.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/bat/bat.hash b/package/bat/bat.hash
+> index f4d3e32c34..a79cb8f9a3 100644
+> --- a/package/bat/bat.hash
+> +++ b/package/bat/bat.hash
+> @@ -1,4 +1,4 @@
+>  # Locally generated
+> -sha256  7940641baaa61cd3bcd1c3db4804d179609d6ccd955868928a129bf3f853e0b2  bat-0.19.0.tar.gz
+> +sha256  b29af37f274019cf1a36d9483c6f30ff780d3be9d0a9e6a96a43737388b7e409  bat-0.23.0.tar.gz
+>  sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+> -sha256  64de710b6309a7db5e44ad0af382300c7fb6f6d116d8ae32f0164e05db033068  LICENSE-MIT
+> +sha256  dccda9eb9533f5c65624a1106536c6cfde46008d58e60b3faf154e8b9fd5b46e  LICENSE-MIT
 
-diff --git a/package/cairomm1_14/Config.in b/package/cairomm1_14/Config.in
-index 6e767d2428..e369aa6f4a 100644
---- a/package/cairomm1_14/Config.in
-+++ b/package/cairomm1_14/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_CAIROMM1_14
- 	  This is the last version before the API and ABI change
- 	  introduced in 1.16.0 which requires C++17.
- 
--	  http://www.gtkmm.org/
-+	  https://www.cairographics.org/cairomm/
- 
- comment "cairomm (1.14.x) needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
- 	depends on BR2_USE_MMU
-diff --git a/package/cairomm1_14/cairomm1_14.hash b/package/cairomm1_14/cairomm1_14.hash
-index 521e7cc546..6d58de360a 100644
---- a/package/cairomm1_14/cairomm1_14.hash
-+++ b/package/cairomm1_14/cairomm1_14.hash
-@@ -1,3 +1,6 @@
-+# From https://www.cairographics.org/releases/cairomm-1.14.4.tar.xz.sha1
-+sha1  a58419bb9792a2c998631704ce5671c38e0c82a1  cairomm-1.14.4.tar.xz
-+
- # Locally computed
--sha256  ee12b920b2d47cea1b6e20c367690d726eb22b4ca9fc711db329d03adcc0c8e0  cairomm-1.14.4.tar.gz
-+sha256  4749d25a2b2ef67cc0c014caaf5c87fa46792fc4b3ede186fb0fc932d2055158  cairomm-1.14.4.tar.xz
- sha256  bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd  COPYING
-diff --git a/package/cairomm1_14/cairomm1_14.mk b/package/cairomm1_14/cairomm1_14.mk
-index 5d076ddf0a..6502d34c5a 100644
---- a/package/cairomm1_14/cairomm1_14.mk
-+++ b/package/cairomm1_14/cairomm1_14.mk
-@@ -7,8 +7,8 @@
- CAIROMM1_14_VERSION = 1.14.4
- CAIROMM1_14_LICENSE = LGPL-2.0+
- CAIROMM1_14_LICENSE_FILES = COPYING
--CAIROMM1_14_SOURCE = cairomm-$(CAIROMM1_14_VERSION).tar.gz
--CAIROMM1_14_SITE = https://gitlab.freedesktop.org/cairo/cairomm/-/archive/$(CAIROMM1_14_VERSION)
-+CAIROMM1_14_SOURCE = cairomm-$(CAIROMM1_14_VERSION).tar.xz
-+CAIROMM1_14_SITE = https://cairographics.org/releases
- CAIROMM1_14_INSTALL_STAGING = YES
- CAIROMM1_14_DEPENDENCIES = cairo libglib2 libsigc2 host-pkgconf
- CAIROMM1_14_CONF_OPTS = -Dbuild-examples=false -Dbuild-tests=false
+When you update the hash for a license file, it merans the file has
+changed. We have hashes for liocense files, explicitly to detect that
+they have changed, so that we can assess whether the licensing terms
+have changed (or not).
+
+Silently updating the license hash without explaining what has changed,
+defeats the purpose for what we have those hashes to begin with.
+
+In this case, the change is due to an update in the copyright years, so
+just state that in the commit log, something along the lines of:
+
+    Update hash for LICENSE-MIT, to  account for an update in the
+    copyright years:
+        https://github.com/sharkdp/bat/commit/d43d241f5bac0fde7881b55f61644e0408181cf7
+
+Care to respoin, please?
+
+Regards,
+Yann E. MORIN.
+
+> diff --git a/package/bat/bat.mk b/package/bat/bat.mk
+> index dc29a85429..395134df17 100644
+> --- a/package/bat/bat.mk
+> +++ b/package/bat/bat.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -BAT_VERSION = 0.19.0
+> +BAT_VERSION = 0.23.0
+>  BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
+>  BAT_LICENSE = Apache-2.0 or MIT
+>  BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.40.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
