@@ -4,56 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28D05C77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 11:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ECAAC77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 11:42:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2A2081BC2;
-	Sun,  7 May 2023 11:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2A2081BC2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6531382027;
+	Sun,  7 May 2023 11:42:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6531382027
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aJ5tJ5xZrfWX; Sun,  7 May 2023 11:25:33 +0000 (UTC)
+	with ESMTP id vghm-MMQ53nL; Sun,  7 May 2023 11:42:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1E2A81A92;
-	Sun,  7 May 2023 11:25:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1E2A81A92
+	by smtp1.osuosl.org (Postfix) with ESMTP id B713482018;
+	Sun,  7 May 2023 11:42:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B713482018
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2FABD1BF301
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 11:25:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0F3041BF301
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 11:42:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16E5940286
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 11:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16E5940286
+ by smtp2.osuosl.org (Postfix) with ESMTP id D69FA4049E
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 11:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D69FA4049E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FoBbgyX5YIhZ for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 11:25:29 +0000 (UTC)
+ with ESMTP id x3fTJPbQIjVw for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 11:42:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C103840106
-Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C103840106
- for <buildroot@buildroot.org>; Sun,  7 May 2023 11:25:28 +0000 (UTC)
-Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
- by mailout09.t-online.de (Postfix) with SMTP id B87FD278E0
- for <buildroot@buildroot.org>; Sun,  7 May 2023 13:25:25 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd88.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B90540286
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B90540286
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 11:42:29 +0000 (UTC)
+Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
+ by mailout04.t-online.de (Postfix) with SMTP id 4FF5F4D20
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 13:42:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd86.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pvcW5-310uED0; Sun, 7 May 2023 13:25:25 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60794)
+ esmtp id 1pvcmW-11gCDB0; Sun, 7 May 2023 13:42:24 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60270)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pvcW5-0000zW-0W
- for buildroot@buildroot.org; Sun, 07 May 2023 13:25:25 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pvcmW-0003uR-0x
+ for buildroot@buildroot.org; Sun, 07 May 2023 13:42:24 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun,  7 May 2023 13:25:25 +0200
-Message-Id: <20230507112525.3575289-1-bernd.kuhls@t-online.de>
+Date: Sun,  7 May 2023 13:42:22 +0200
+Message-Id: <20230507114224.3774853-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683458725-0BFFCC01-65F7F385/0/0 CLEAN NORMAL
-X-TOI-MSGID: ebd315ab-9c4c-4609-836f-7db882104cce
-Subject: [Buildroot] [PATCH 1/1] package/kodi: update patch status
+X-TOI-EXPURGATEID: 150726::1683459744-BD176C11-537B57C2/0/0 CLEAN NORMAL
+X-TOI-MSGID: e763e043-5ca9-4075-af35-ade47634584f
+Subject: [Buildroot] [PATCH 1/3] package/bento4: bump version to
+ 1.6.0-639-7-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,51 +71,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Needed for the upcoming version bump of the Nexus version of
+kodi-inputstream-adaptive.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .checkpackageignore                                             | 1 -
- ...1-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch | 2 +-
- package/kodi/0002-cmake-modules-fix-python-detection.patch      | 2 +-
- 3 files changed, 2 insertions(+), 3 deletions(-)
+ package/bento4/bento4.hash | 2 +-
+ package/bento4/bento4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index aef67e3403..949f92b4bf 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -704,7 +704,6 @@ package/keyutils/0002-cifs.patch Sob Upstream
- package/kmod/0001-fix-O_CLOEXEC.patch Upstream
- package/kodi-texturepacker/0001-texturepacker.patch Upstream
- package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch Upstream
--package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch Upstream
- package/kodi/S50kodi Shellcheck Variables
- package/latencytop/0001-makefile.patch Upstream
- package/lbase64/0001-retro-compatible-with-Lua-5.1.patch Upstream
-diff --git a/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch b/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-index 057d2254bc..d564a3e2be 100644
---- a/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-+++ b/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-@@ -8,7 +8,7 @@ When cross-compiling, the location at build time of the libraries is
- not the same as the one at run-time. The CMAKE_FIND_ROOT_PATH variable
- is here to handle this difference, so use it in kodi-config.cmake.
+diff --git a/package/bento4/bento4.hash b/package/bento4/bento4.hash
+index 8e2033dc98..b9391aed6a 100644
+--- a/package/bento4/bento4.hash
++++ b/package/bento4/bento4.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8afa4ae07a7629a65e0d5014750960ced33a8771d363652f3913261fb5d0c84f  bento4-1.6.0-639-6-Nexus.tar.gz
++sha256  4464cd47b597e6dedbfc231bb6eb097c45cfe5ee0051082460d9ac53e9d74dc3  bento4-1.6.0-639-7-Omega.tar.gz
+ sha256  7daae92c8628ada28def8d096fe2fde298b72ec3e2d64a3c408afce38edb361b  Documents/LICENSE.txt
+diff --git a/package/bento4/bento4.mk b/package/bento4/bento4.mk
+index a2e0805c17..8aefc401ef 100644
+--- a/package/bento4/bento4.mk
++++ b/package/bento4/bento4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--Upstream status: Reverted (PR 17616)
-+Upstream: Reverted (PR 17616)
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- (rebased and simplified for Kodi 17.0-Krypton)
-diff --git a/package/kodi/0002-cmake-modules-fix-python-detection.patch b/package/kodi/0002-cmake-modules-fix-python-detection.patch
-index 92a4ac904d..fcf35b25b2 100644
---- a/package/kodi/0002-cmake-modules-fix-python-detection.patch
-+++ b/package/kodi/0002-cmake-modules-fix-python-detection.patch
-@@ -5,7 +5,7 @@ Subject: [PATCH] cmake/modules: fix python detection
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
--Upstream: unknown
-+Upstream: https://github.com/xbmc/xbmc/pull/23230
- ---
-  cmake/modules/FindPython.cmake | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+-BENTO4_VERSION = 1.6.0-639-6-Nexus
++BENTO4_VERSION = 1.6.0-639-7-Omega
+ BENTO4_SITE = $(call github,xbmc,Bento4,$(BENTO4_VERSION))
+ BENTO4_INSTALL_STAGING = YES
+ BENTO4_LICENSE = GPL-2.0+
 -- 
 2.39.2
 
