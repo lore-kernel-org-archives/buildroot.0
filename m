@@ -4,57 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E720C77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:43:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E1BC77B7D
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 21:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1492B417BE;
-	Sun,  7 May 2023 21:43:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1492B417BE
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE193417C2;
+	Sun,  7 May 2023 21:44:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE193417C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BwTxRglcKmMF; Sun,  7 May 2023 21:43:53 +0000 (UTC)
+	with ESMTP id YkuthlmhmzPz; Sun,  7 May 2023 21:44:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 32B3C408CF;
-	Sun,  7 May 2023 21:43:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32B3C408CF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 744761BF861
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:43:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DDE01417BE;
+	Sun,  7 May 2023 21:44:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDE01417BE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 135071BF2C4
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59C69415CF
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:43:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59C69415CF
+ by smtp1.osuosl.org (Postfix) with ESMTP id EEE798174C
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 21:43:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEE798174C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3g35Z_niT6CY for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 21:43:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ddld6hUeiuwm for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 21:43:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F62E41584
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2F62E41584
- for <buildroot@buildroot.org>; Sun,  7 May 2023 21:43:26 +0000 (UTC)
-Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
- by mailout02.t-online.de (Postfix) with SMTP id 64FB624D11;
- Sun,  7 May 2023 23:43:24 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd70.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E52B816F5
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0E52B816F5
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 21:43:29 +0000 (UTC)
+Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
+ by mailout06.t-online.de (Postfix) with SMTP id 62AEE1AF05;
+ Sun,  7 May 2023 23:43:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd84.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pvmA1-0rQR8b0; Sun, 7 May 2023 23:43:18 +0200
+ esmtp id 1pvmA2-1dO61S0; Sun, 7 May 2023 23:43:18 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50572)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pvmA1-0006xu-1x;
- Sun, 07 May 2023 23:43:17 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pvmA1-0006xu-31;
+ Sun, 07 May 2023 23:43:18 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun,  7 May 2023 23:43:13 +0200
-Message-Id: <20230507214317.409305-1-bernd.kuhls@t-online.de>
+Date: Sun,  7 May 2023 23:43:16 +0200
+Message-Id: <20230507214317.409305-4-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230507214317.409305-1-bernd.kuhls@t-online.de>
+References: <20230507214317.409305-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683495798-DDD43C15-788A28FF/0/0 CLEAN NORMAL
-X-TOI-MSGID: 59cf77f8-fe46-4a22-a04f-0ea01980f17b
-Subject: [Buildroot] [PATCH 1/5] package/intel-mediasdk: fix build with
- gcc-13
+X-TOI-EXPURGATEID: 150726::1683495798-98D4DC79-6E8F76F0/0/0 CLEAN NORMAL
+X-TOI-MSGID: c3bf7b81-2d8b-4fd6-bda0-d39a0c4bad3c
+Subject: [Buildroot] [PATCH 4/5] package/kodi-inputstream-ffmpeg: fix build
+ with gcc-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,47 +80,65 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...dd-missing-stdint.h-to-mfxparser-cpp.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/intel-mediasdk/0002-add-missing-stdint.h-to-mfxparser-cpp.patch
+ ...de-missing-cstdint-to-support-gcc-13.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/kodi-inputstream-ffmpegdirect/0001-include-missing-cstdint-to-support-gcc-13.patch
 
-diff --git a/package/intel-mediasdk/0002-add-missing-stdint.h-to-mfxparser-cpp.patch b/package/intel-mediasdk/0002-add-missing-stdint.h-to-mfxparser-cpp.patch
+diff --git a/package/kodi-inputstream-ffmpegdirect/0001-include-missing-cstdint-to-support-gcc-13.patch b/package/kodi-inputstream-ffmpegdirect/0001-include-missing-cstdint-to-support-gcc-13.patch
 new file mode 100644
-index 0000000000..d2a095c39a
+index 0000000000..65db2b4702
 --- /dev/null
-+++ b/package/intel-mediasdk/0002-add-missing-stdint.h-to-mfxparser-cpp.patch
-@@ -0,0 +1,31 @@
-+From 8fb9f5feaf738f69b278d2cac15baada1447aae8 Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyich@gmail.com>
-+Date: Mon, 28 Nov 2022 23:31:29 +0000
-+Subject: [PATCH] add missing <stdint.h> to mfxparser.cpp
++++ b/package/kodi-inputstream-ffmpegdirect/0001-include-missing-cstdint-to-support-gcc-13.patch
+@@ -0,0 +1,49 @@
++From fd7bd5ad86fd0006ad571a051fa5d5603a47e4b4 Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Wed, 26 Apr 2023 17:15:00 +0000
++Subject: [PATCH] include missing <cstdint> to support gcc-13
 +
-+Without the change build fails on `gcc-13` as:
++gcc 13 moved some includes around and as a result <cstdint> is no longer transitively
++included [1]. Explicitly include it for uint{32,64}_t.
 +
-+    MediaSDK/api/mfx_dispatch/linux/mfxparser.cpp: In function 'std::string MFX::printCodecId(mfxU32)':
-+    MediaSDK/api/mfx_dispatch/linux/mfxparser.cpp:60:3: error: 'uint8_t' was not declared in this scope
-+       60 |   uint8_t* data = reinterpret_cast<uint8_t*>(&id);
-+          |   ^~~~~~~
++[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
 +
-+Upstream: https://github.com/Intel-Media-SDK/MediaSDK/pull/2998
-+
++Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Upstream: https://github.com/xbmc/inputstream.ffmpegdirect/commit/fd7bd5ad86fd0006ad571a051fa5d5603a47e4b4
 +---
-+ api/mfx_dispatch/linux/mfxparser.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/utils/DiskUtils.h | 1 +
++ src/utils/HttpProxy.h | 3 ++-
++ 2 files changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/api/mfx_dispatch/linux/mfxparser.cpp b/api/mfx_dispatch/linux/mfxparser.cpp
-+index 9d3823ec3e..12e46d1881 100644
-+--- a/api/mfx_dispatch/linux/mfxparser.cpp
-++++ b/api/mfx_dispatch/linux/mfxparser.cpp
-+@@ -20,6 +20,7 @@
++diff --git a/src/utils/DiskUtils.h b/src/utils/DiskUtils.h
++index 79e34268..f900ec58 100644
++--- a/src/utils/DiskUtils.h
+++++ b/src/utils/DiskUtils.h
++@@ -7,6 +7,7 @@
 + 
-+ #include <ctype.h>
-+ #include <stdio.h>
-++#include <stdint.h>
-+ #include <stdlib.h>
-+ #include <string.h>
++ #pragma once
 + 
+++#include <cstdint>
++ #include <string>
++ 
++ namespace ffmpegdirect
++diff --git a/src/utils/HttpProxy.h b/src/utils/HttpProxy.h
++index eb0c99cb..d203ce36 100644
++--- a/src/utils/HttpProxy.h
+++++ b/src/utils/HttpProxy.h
++@@ -7,6 +7,7 @@
++ 
++ #pragma once
++ 
+++#include <cstdint>
++ #include <string>
++ 
++ namespace ffmpegdirect
++@@ -36,4 +37,4 @@ namespace ffmpegdirect
++     std::string m_user;
++     std::string m_password;
++   };
++-} //namespace ffmpegdirect
++\ No newline at end of file
+++} //namespace ffmpegdirect
 -- 
 2.39.2
 
