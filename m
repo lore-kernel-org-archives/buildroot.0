@@ -4,69 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 560DFC77B75
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0A17C77B75
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 16:39:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D80E04194C;
-	Sun,  7 May 2023 16:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D80E04194C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47BB9408D9;
+	Sun,  7 May 2023 16:39:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47BB9408D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eKGTYDLzI-h8; Sun,  7 May 2023 16:24:00 +0000 (UTC)
+	with ESMTP id fqmn9FHFen52; Sun,  7 May 2023 16:39:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD66041685;
-	Sun,  7 May 2023 16:23:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD66041685
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6850A1BF2F0
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:23:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E50EB408E8;
+	Sun,  7 May 2023 16:39:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E50EB408E8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 675F41BF2F0
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E78D613CB
- for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:23:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E78D613CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F12D408C5
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 16:39:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F12D408C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id whvkeV9PSFY2 for <buildroot@lists.busybox.net>;
- Sun,  7 May 2023 16:23:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B7CE613C6
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4B7CE613C6
- for <buildroot@buildroot.org>; Sun,  7 May 2023 16:23:55 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:5f9f:2ea:ec9d:3930])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5C92519F5AF;
- Sun,  7 May 2023 18:23:49 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 07 May 2023 18:23:49 +0200
-Date: Sun, 7 May 2023 18:23:49 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20230507162349.GA252090@scaer>
-References: <20230506160524.2231307-1-bernd.kuhls@t-online.de>
- <20230506160524.2231307-2-bernd.kuhls@t-online.de>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xAcVUarC6otR for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 16:39:48 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EC5B408A5
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3EC5B408A5
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 16:39:48 +0000 (UTC)
+Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
+ by mailout06.t-online.de (Postfix) with SMTP id D95F4A3CC
+ for <buildroot@buildroot.org>; Sun,  7 May 2023 18:39:45 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.192.80]) by fwd78.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pvhQH-0YLjmr0; Sun, 7 May 2023 18:39:45 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:33150)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pvhQH-0004rT-0l
+ for buildroot@buildroot.org; Sun, 07 May 2023 18:39:45 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sun,  7 May 2023 18:39:45 +0200
+Message-Id: <20230507163945.4013013-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230507163945.4013013-1-bernd.kuhls@t-online.de>
+References: <20230507163945.4013013-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230506160524.2231307-2-bernd.kuhls@t-online.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683476632;
- bh=xdR5C4K/855Xq80Eb7/YuOu/L5G2qzj5ptxbItGcH5E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=VE6pTXiFiBiqWmIS1dQ5fO+w+eQeDpm6RT3+b/JjdVRG7Ik+byLSMAJUeWnbrcdGL
- QGevO6mqpZHfITErYUxnzyEJkqD7mNAq/NNPk6Z/QkTo/ebRcBFQk8erTwbJ5vz3Mp
- ROCBZOAWhYRKaW+arMWADDk0SvsODQG1nBDkTI+NsJteanhK/1TuiLiNz5uhWga7Du
- Fli669GeCZPxCVNS8y9Z07+yi3dYHx2/XrhuJ4oXUe+NmXWN7/SKW1Wccr4Gg11JkD
- ssgPdb0z8f5Keg2Kng3M8TRJDphFHsQg6u+iehDSD8BQBz6KnIbLvO1NcEoPp5zOUD
- CVgK+0vl3OUuw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VE6pTXiF
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/transmission: bump version
- to 4.0.3
+X-TOI-EXPURGATEID: 150726::1683477585-E6F18C0B-271B0007/0/0 CLEAN NORMAL
+X-TOI-MSGID: d17fc046-5d7b-49a0-a865-763cb600aed8
+Subject: [Buildroot] [PATCH 2/2] package/fontconfig: bump version to 2.14.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,377 +67,233 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+Removed patch included in upstream release, renumbered and reformatted
+Upstream: tag for remaining patch, updated .checkpackageignore.
 
-On 2023-05-06 18:05 +0200, Bernd Kuhls spake thusly:
-> This bump depends on bumping libutp to at least
-> c95738b1a6644b919e5b64d3ea9736cfc5894e0b.
-> 
-> Updated license hash due to copyright year bump:
-> https://github.com/transmission/transmission/commit/4b8cfa2e576feea6a6f2fd5ae5fe1a59449aca6f
-> 
-> Switched buildsystem to cmake, reworked dependencies.
-> 
-> Removed all patches, transmission now depends on the libutp package and
-> uses cmake as build system.
-> 
-> Upstream removed the configure option for lightweight build:
-> https://github.com/transmission/transmission/commit/47ebb3f63a2f8983f9858bfbec6b72c42588a388
-> 
-> Removed the option to disable uTP support, for details see upstream issue:
-> https://github.com/transmission/transmission/issues/4751
+Updated license hash due to upstream commit:
+"Add line between licenses in COPYING."
+https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/23cede3e955fcdbc6d6d9b5a5974aaac5760c217
 
-I reworded that sentence with the results of our discussion in the
-thread.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .checkpackageignore                           |   2 -
+ ...x-the-build-issue-with-enable-static.patch | 133 ------------------
+ ...ead-as-a-dependency-of-a-static-lib.patch} |   3 +-
+ package/fontconfig/fontconfig.hash            |   6 +-
+ package/fontconfig/fontconfig.mk              |   8 +-
+ 5 files changed, 8 insertions(+), 144 deletions(-)
+ delete mode 100644 package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+ rename package/fontconfig/{0002-add-pthread-as-a-dependency-of-a-static-lib.patch => 0001-add-pthread-as-a-dependency-of-a-static-lib.patch} (93%)
 
-[--SNIP--]
-> diff --git a/package/transmission/0001-fix-utypes.patch b/package/transmission/0001-fix-utypes.patch
-> deleted file mode 100644
-> index 81efa884a7..0000000000
-> --- a/package/transmission/0001-fix-utypes.patch
-> +++ /dev/null
-> @@ -1,30 +0,0 @@
-> -Fix build error "conflicting types for 'UTP_Write'"
-> -
-> -Fetch from: http://www.adminsehow.com/2012/10/how-to-install-transmission-2-71-on-debian-6-0-squeeze/
-> -
-> -The corresponding upstream bug report (unfixed) can be found here:
-> -https://trac.transmissionbt.com/ticket/5232
-> -
-> -Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> -[Fabrice: adapt to 3.00, which always uses stdbool.h]
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[yann.morin.1998@free.fr:
-> -  - don't comment-out dropped code, just drop it
-> -  - use CR-LF in replacement code, as used by upstream
-> -]
-> -Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> -
-> ---- transmission-2.82.org/third-party/libutp/utypes.h	2013-08-09 04:47:43.000000000 +0200
-> -+++ transmission-2.82/third-party/libutp/utypes.h	2014-01-02 20:17:18.000000000 +0100
-> -@@ -35,8 +35,8 @@
-> - typedef const char * cstr;
-> - typedef char * str;
-> - 
-> --#ifndef __cplusplus
-> --typedef uint8 bool;
-> --#endif
-> -+#ifndef __cplusplus
-> -+#include <stdbool.h>
-> -+#endif
-> - 
-> - #endif //__UTYPES_H__
-
-This hunk fails to apply:
-
-    error: patch failed: package/transmission/0001-fix-utypes.patch:1
-    error: package/transmission/0001-fix-utypes.patch: patch does not apply
-
-I guess that's because there are CRLF, and patchwork borked them
-(again).
-
-So I manually fixed it before comitting, please check that I did not
-bork it too much.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> diff --git a/package/transmission/0002-fix-utp-include.patch b/package/transmission/0002-fix-utp-include.patch
-> deleted file mode 100644
-> index db8b5ab39b..0000000000
-> --- a/package/transmission/0002-fix-utp-include.patch
-> +++ /dev/null
-> @@ -1,46 +0,0 @@
-> -Fix compilation when using system libminiupnpc with libutp disabled
-> -
-> -If transmission uses its own copy of libminiupnpc in third-party/ then
-> -the configure script adds that path to CFLAGS:
-> -https://trac.transmissionbt.com/browser/trunk/configure.ac#L455
-> -
-> -This path is also added if transmission uses its own copy of libutp:
-> -https://trac.transmissionbt.com/browser/trunk/configure.ac#L349
-> -
-> -But if a system-provided libminiupnpc is used and utp-support is
-> -disabled using --disable-utp the result is a build error, detected by
-> -buildroot autobuilders:
-> -http://autobuild.buildroot.net/results/b79/b79e51140cb0320554a58ce59dcb33f53cd9211a/build-end.log
-> -
-> -net.c:40:24: fatal error: libutp/utp.h: No such file or directory
-> -
-> -Patch proposed by Yann E. MORIN:
-> -http://lists.busybox.net/pipermail/buildroot/2016-July/167896.html
-> -
-> -Patch sent upstream: https://trac.transmissionbt.com/ticket/6163
-> -
-> -Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> -
-> -diff -uNr transmission-2.92.org/configure.ac transmission-2.92/configure.ac
-> ---- transmission-2.92.org/configure.ac	2016-03-06 21:23:45.336198393 +0100
-> -+++ transmission-2.92/configure.ac	2016-07-31 12:13:40.921660078 +0200
-> -@@ -358,6 +358,10 @@
-> -     else
-> -       AC_MSG_ERROR("Unable to build uTP support -- C++ compiler not found")
-> -     fi
-> -+else
-> -+    # For the system libminiupnpc with UTC disabled,
-> -+    # point to our bundled UTP headers
-> -+    LIBUTP_CFLAGS="-I\$(top_srcdir)/third-party/"
-> - fi
-> - AC_SUBST(LIBUTP_CFLAGS)
-> - AC_SUBST(LIBUTP_LIBS)
-> -@@ -457,7 +461,7 @@
-> -     LIBUPNP_LIBS_QT="\$\${TRANSMISSION_TOP}/third-party/miniupnp/libminiupnp.a"
-> - else
-> -     AC_DEFINE([SYSTEM_MINIUPNP])
-> --    LIBUPNP_CFLAGS="" 
-> -+    LIBUPNP_CFLAGS="${LIBUTP_CFLAGS}"
-> -     LIBUPNP_LIBS="-lminiupnpc"
-> -     LIBUPNP_LIBS_QT="-lminiupnpc"
-> - fi
-> diff --git a/package/transmission/0003-configure.ac-fix-autoreconf-with-autoconf-2.70.patch b/package/transmission/0003-configure.ac-fix-autoreconf-with-autoconf-2.70.patch
-> deleted file mode 100644
-> index bfb0084bc4..0000000000
-> --- a/package/transmission/0003-configure.ac-fix-autoreconf-with-autoconf-2.70.patch
-> +++ /dev/null
-> @@ -1,42 +0,0 @@
-> -From 857ac91a03a096601f62b358fc61355d4cc25b9b Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Sat, 9 Oct 2021 18:51:13 +0200
-> -Subject: [PATCH] configure.ac: fix autoreconf with autoconf >= 2.70
-> -
-> -Remove the whitespace before IT_PROG_INTLTOOL as suggested in
-> -https://www.mail-archive.com/bug-autoconf@gnu.org/msg04851.html
-> -to avoid the following build failure with autoconf >= 2.70:
-> -
-> -ERROR: 'IT_PROG_INTLTOOL' must appear in configure.ac for intltool to work.
-> -
-> -The problem has been introduced by upstream autoconf commit
-> -http://git.savannah.gnu.org/gitweb/?p=autoconf.git;a=commit;h=b3b3af821a0b9e82ebe56b77b1731d2fe58f52de
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/e8bea26f6b12adf16335b24836a7c5c31911af6a
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: not upstreamable as upstream swicthed to cmake (
-> -https://github.com/transmission/transmission/issues/1573)]
-> ----
-> - configure.ac | 4 +---
-> - 1 file changed, 1 insertion(+), 3 deletions(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index fd1132fda..04e0e19bb 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -555,9 +555,7 @@ dnl it should be safe to re-edit 0.40 back down to 0.23
-> - use_nls=no
-> - if test "x$enable_nls" = "xyes" ; then
-> -     use_nls=yes
-> --    m4_ifdef([IT_PROG_INTLTOOL],
-> --             [IT_PROG_INTLTOOL([0.35.0],[no-xml])],
-> --             [AC_MSG_ERROR("--enable-nls requires intltool to be installed.")])
-> -+IT_PROG_INTLTOOL([0.35.0],[no-xml])
-> -     AC_CHECK_HEADERS([libintl.h])
-> -     GETTEXT_PACKAGE=transmission-gtk
-> -     AC_SUBST(GETTEXT_PACKAGE)
-> --- 
-> -2.33.0
-> -
-> diff --git a/package/transmission/Config.in b/package/transmission/Config.in
-> index 980b042e33..84bd85eeff 100644
-> --- a/package/transmission/Config.in
-> +++ b/package/transmission/Config.in
-> @@ -1,12 +1,23 @@
->  config BR2_PACKAGE_TRANSMISSION
->  	bool "transmission"
-> +	depends on !BR2_BINFMT_FLAT # libnatpmp
-> +	depends on BR2_INSTALL_LIBSTDCPP # libutp
-> +	depends on !BR2_STATIC_LIBS # libnatpmp
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # fork()
-> -	select BR2_PACKAGE_ZLIB
-> -	select BR2_PACKAGE_OPENSSL
-> -	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
-> +	depends on BR2_USE_WCHAR # libpsl
-> +	select BR2_PACKAGE_DHT
-> +	select BR2_PACKAGE_LIBB64
->  	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBDEFLATE
->  	select BR2_PACKAGE_LIBEVENT
-> +	select BR2_PACKAGE_LIBMINIUPNPC
-> +	select BR2_PACKAGE_LIBNATPMP
-> +	select BR2_PACKAGE_LIBPSL
-> +	select BR2_PACKAGE_LIBUTP
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_ZLIB
->  	help
->  	  Transmission is a cross-platform BitTorrent client.
->  
-> @@ -14,15 +25,6 @@ config BR2_PACKAGE_TRANSMISSION
->  
->  if BR2_PACKAGE_TRANSMISSION
->  
-> -config BR2_PACKAGE_TRANSMISSION_UTP
-> -	bool "Transmission uTP support"
-> -	depends on BR2_INSTALL_LIBSTDCPP
-> -	help
-> -	  Install support for uTorrent Transport Protocol
-> -
-> -comment "uTP needs a toolchain w/ C++"
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> -
->  config BR2_PACKAGE_TRANSMISSION_CLI
->  	bool "transmission-cli"
->  	help
-> @@ -43,6 +45,8 @@ comment "transmission-gtk needs NLS enabled"
->  	depends on BR2_PACKAGE_LIBGTK3 && !BR2_SYSTEM_ENABLE_NLS
->  endif
->  
-> -comment "transmission needs a toolchain w/ threads"
-> +comment "transmission needs a toolchain w/ dynamic library, threads, C++, gcc >= 7"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_BINFMT_FLAT
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_STATIC_LIBS
-> diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-> index 13cbc969d3..e6775c47e7 100644
-> --- a/package/transmission/transmission.hash
-> +++ b/package/transmission/transmission.hash
-> @@ -1,3 +1,4 @@
-> +# From https://transmissionbt.com/download
-> +sha256  b6b01fd58e42bb14f7aba0253db932ced050fcd2bba5d9f8469d77ddd8ad545a  transmission-4.0.3.tar.xz
->  # Locally calculated
-> -sha256  9144652fe742f7f7dd6657716e378da60b751aaeda8bef8344b3eefc4db255f2  transmission-3.00.tar.xz
-> -sha256  2b16da5bd02790d1e4d332cfd42b9dfd7d1b0ed3a16a75dc7e76b6ed239fdba9  COPYING
-> +sha256  f56732960a61ecf3b9637404eef1a39221d2006336a98792b7b65a79f155449c  COPYING
-> diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-> index 1660d2c2b9..f3a200ced3 100644
-> --- a/package/transmission/transmission.mk
-> +++ b/package/transmission/transmission.mk
-> @@ -4,55 +4,54 @@
->  #
->  ################################################################################
->  
-> -TRANSMISSION_VERSION = 3.00
-> -TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
-> +TRANSMISSION_VERSION = 4.0.3
->  TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
-> +TRANSMISSION_SITE = https://github.com/transmission/transmission/releases/download/$(TRANSMISSION_VERSION)
->  TRANSMISSION_DEPENDENCIES = \
->  	host-pkgconf \
-> -	host-intltool \
-> +	dht \
-> +	libb64 \
->  	libcurl \
-> +	libdeflate \
->  	libevent \
-> +	libminiupnpc \
-> +	libnatpmp \
-> +	libpsl \
-> +	libutp \
->  	openssl \
->  	zlib
-> -TRANSMISSION_AUTORECONF = YES
->  TRANSMISSION_CONF_OPTS = \
-> -	--without-inotify \
-> -	--enable-lightweight
-> +	-DENABLE_TESTS=OFF \
-> +	-DRUN_CLANG_TIDY=OFF \
-> +	-DUSE_SYSTEM_B64=ON \
-> +	-DUSE_SYSTEM_DEFLATE=ON \
-> +	-DUSE_SYSTEM_DHT=ON \
-> +	-DUSE_SYSTEM_NATPMP=ON \
-> +	-DUSE_SYSTEM_PSL=ON \
-> +	-DWITH_INOTIFY=OFF
->  TRANSMISSION_LICENSE = GPL-2.0 or GPL-3.0 with OpenSSL exception
->  TRANSMISSION_LICENSE_FILES = COPYING
->  TRANSMISSION_CPE_ID_VENDOR = transmissionbt
->  
-> -ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
-> -TRANSMISSION_DEPENDENCIES += libminiupnpc
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_LIBNATPMP),y)
-> -TRANSMISSION_DEPENDENCIES += libnatpmp
-> -TRANSMISSION_CONF_OPTS += --enable-external-natpmp
-> -else
-> -TRANSMISSION_CONF_OPTS += --disable-external-natpmp
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_TRANSMISSION_UTP),y)
-> -TRANSMISSION_CONF_OPTS += --enable-utp
-> -else
-> -TRANSMISSION_CONF_OPTS += --disable-utp
-> +# Uses __atomic_load_8
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +TRANSMISSION_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->  
->  ifeq ($(BR2_PACKAGE_TRANSMISSION_CLI),y)
-> -TRANSMISSION_CONF_OPTS += --enable-cli
-> +TRANSMISSION_CONF_OPTS += -DENABLE_CLI=ON
->  else
-> -TRANSMISSION_CONF_OPTS += --disable-cli
-> +TRANSMISSION_CONF_OPTS += -DENABLE_CLI=OFF
->  endif
->  
->  ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
-> -TRANSMISSION_CONF_OPTS += --enable-daemon
-> +TRANSMISSION_CONF_OPTS += -DENABLE_DAEMON=ON
->  
->  ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->  TRANSMISSION_DEPENDENCIES += systemd
-> -TRANSMISSION_CONF_OPTS += --with-systemd
-> +TRANSMISSION_CONF_OPTS += -DWITH_SYSTEMD=ON
->  else
-> -TRANSMISSION_CONF_OPTS += --without-systemd
-> +TRANSMISSION_CONF_OPTS += -DWITH_SYSTEMD=OFF
->  endif
->  
->  define TRANSMISSION_USERS
-> @@ -70,14 +69,14 @@ define TRANSMISSION_INSTALL_INIT_SYSTEMD
->  endef
->  
->  else
-> -TRANSMISSION_CONF_OPTS += --disable-daemon
-> +TRANSMISSION_CONF_OPTS += -DENABLE_DAEMON=OFF
->  endif
->  
->  ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
-> -TRANSMISSION_CONF_OPTS += --with-gtk
-> +TRANSMISSION_CONF_OPTS += -DENABLE_GTK=ON
->  TRANSMISSION_DEPENDENCIES += libgtk3
->  else
-> -TRANSMISSION_CONF_OPTS += --without-gtk
-> +TRANSMISSION_CONF_OPTS += -DENABLE_GTK=OFF
->  endif
->  
-> -$(eval $(autotools-package))
-> +$(eval $(cmake-package))
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index cd0ccc1abd..5893803096 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -500,8 +500,6 @@ package/fluent-bit/0001-lib-cfl-fixup-static_assert.patch Upstream
+ package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch Upstream
+ package/fluent-bit/0003-fix-build-without-C.patch Upstream
+ package/fluxbox/0001-fixes-bug-1138.patch Upstream
+-package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch Upstream
+-package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch Upstream
+ package/freeipmi/0001-add-disable-doc.patch Upstream
+ package/freeradius-client/0001-fix-for-nettle.patch Upstream
+ package/freerdp/0001-Fix-variable-declaration-in-loop.patch Upstream
+diff --git a/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+deleted file mode 100644
+index bf04bd95fc..0000000000
+--- a/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
++++ /dev/null
+@@ -1,133 +0,0 @@
+-From 8208f99fa1676c42bfd8d74de3e9dac5366c150c Mon Sep 17 00:00:00 2001
+-From: Akira TAGOH <akira@tagoh.org>
+-Date: Mon, 3 Sep 2018 04:56:16 +0000
+-Subject: [PATCH] Fix the build issue with --enable-static
+-
+-Fixes https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/8208f99fa1676c42bfd8d74de3e9dac5366c150c]
+----
+- doc/fcstring.fncs       | 12 ++++++++++++
+- fontconfig/fontconfig.h |  4 ++++
+- src/fcint.h             |  4 ----
+- test/test-bz106632.c    | 35 ++++++++++++-----------------------
+- 4 files changed, 28 insertions(+), 27 deletions(-)
+-
+-diff --git a/doc/fcstring.fncs b/doc/fcstring.fncs
+-index 0412bbd..d5ec043 100644
+---- a/doc/fcstring.fncs
+-+++ b/doc/fcstring.fncs
+-@@ -223,6 +223,18 @@ This is just a wrapper around free(3) which helps track memory usage of
+- strings within the fontconfig library.
+- @@
+- 
+-+@RET@		FcChar8 *
+-+@FUNC@		FcStrBuildFilename
+-+@TYPE1@		const FcChar8 *			@ARG1@		path
+-+@TYPE2@		...
+-+@PURPOSE@	Concatenate strings as a file path
+-+@DESC@
+-+Creates a filename from the given elements of strings as file paths
+-+and concatenate them with the appropriate file separator.
+-+Arguments must be null-terminated.
+-+This returns a newly-allocated memory which should be freed when no longer needed.
+-+@@
+-+
+- @RET@		FcChar8 *
+- @FUNC@		FcStrDirname
+- @TYPE1@		const FcChar8 *			@ARG1@		file
+-diff --git a/fontconfig/fontconfig.h b/fontconfig/fontconfig.h
+-index bac1dda..af870d0 100644
+---- a/fontconfig/fontconfig.h
+-+++ b/fontconfig/fontconfig.h
+-@@ -1076,6 +1076,10 @@ FcUtf16Len (const FcChar8   *string,
+- 	    int		    *nchar,
+- 	    int		    *wchar);
+- 
+-+FcPublic FcChar8 *
+-+FcStrBuildFilename (const FcChar8 *path,
+-+		    ...);
+-+
+- FcPublic FcChar8 *
+- FcStrDirname (const FcChar8 *file);
+- 
+-diff --git a/src/fcint.h b/src/fcint.h
+-index de78cd8..a9d075a 100644
+---- a/src/fcint.h
+-+++ b/src/fcint.h
+-@@ -1282,10 +1282,6 @@ FcStrUsesHome (const FcChar8 *s);
+- FcPrivate FcBool
+- FcStrIsAbsoluteFilename (const FcChar8 *s);
+- 
+--FcPrivate FcChar8 *
+--FcStrBuildFilename (const FcChar8 *path,
+--		    ...);
+--
+- FcPrivate FcChar8 *
+- FcStrLastSlash (const FcChar8  *path);
+- 
+-diff --git a/test/test-bz106632.c b/test/test-bz106632.c
+-index daa0c1e..2d67c2e 100644
+---- a/test/test-bz106632.c
+-+++ b/test/test-bz106632.c
+-@@ -25,25 +25,26 @@
+- #ifdef HAVE_CONFIG_H
+- #include "config.h"
+- #endif
+-+#include <stdio.h>
+- #include <stdlib.h>
+-+#include <string.h>
+- #include <dirent.h>
+-+#include <unistd.h>
+-+#include <errno.h>
+- #ifndef HAVE_STRUCT_DIRENT_D_TYPE
+- #include <sys/types.h>
+- #include <sys/stat.h>
+--#include <unistd.h>
+- #endif
+--#include "fcstr.c"
+--#undef FcConfigBuildFonts
+--#undef FcConfigCreate
+--#undef FcConfigGetCurrent
+--#undef FcConfigParseAndLoadFromMemory
+--#undef FcConfigUptoDate
+--#undef FcFontList
+--#undef FcInitReinitialize
+--#undef FcPatternCreate
+--#undef FcPatternDestroy
+- #include <fontconfig/fontconfig.h>
+- 
+-+#ifdef _WIN32
+-+#  define FC_DIR_SEPARATOR         '\\'
+-+#  define FC_DIR_SEPARATOR_S       "\\"
+-+#else
+-+#  define FC_DIR_SEPARATOR         '/'
+-+#  define FC_DIR_SEPARATOR_S       "/"
+-+#endif
+-+
+- #ifdef HAVE_MKDTEMP
+- #define fc_mkdtemp	mkdtemp
+- #else
+-@@ -154,18 +155,6 @@ unlink_dirs (const char *dir)
+-     return ret;
+- }
+- 
+--FcChar8 *
+--FcLangNormalize (const FcChar8 *lang)
+--{
+--    return NULL;
+--}
+--
+--FcChar8 *
+--FcConfigHome (void)
+--{
+--    return NULL;
+--}
+--
+- int
+- main (void)
+- {
+--- 
+-2.18.1
+-
+diff --git a/package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch b/package/fontconfig/0001-add-pthread-as-a-dependency-of-a-static-lib.patch
+similarity index 93%
+rename from package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch
+rename to package/fontconfig/0001-add-pthread-as-a-dependency-of-a-static-lib.patch
+index eed9dba005..c6aa514534 100644
+--- a/package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch
++++ b/package/fontconfig/0001-add-pthread-as-a-dependency-of-a-static-lib.patch
+@@ -5,8 +5,7 @@ Subject: [PATCH] add pthread as a dependency of a static lib
+ 
+ Downloaded from https://trac.netlabs.org/ports/changeset/2220
+ 
+-Patch sent upstream:
+-https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/121
++Upstream: https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/121
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
+index 844ee426d4..a4f87caf1e 100644
+--- a/package/fontconfig/fontconfig.hash
++++ b/package/fontconfig/fontconfig.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/fontconfig/2018-August/006324.html
+-sha256  f655dd2a986d7aa97e052261b36aa67b0a64989496361eca8d604e6414006741  fontconfig-2.13.1.tar.bz2
++# From https://lists.freedesktop.org/archives/fontconfig/2023-January/006950.html
++sha256  dba695b57bce15023d2ceedef82062c2b925e51f5d4cc4aef736cf13f60a468b  fontconfig-2.14.2.tar.xz
+ 
+ # Locally calculated
+-sha256  fa4cd9ab005185e10cd8f7504518856c7dd36c01e766c2bac87f4fc638e9f886  COPYING
++sha256  51a51aa9823704fd90bccc616cdd17ebabb5b2b3e9cbde886ca02c7002288067  COPYING
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index e34acde534..d2eb76e40a 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-FONTCONFIG_VERSION = 2.13.1
+-FONTCONFIG_SITE = http://fontconfig.org/release
+-FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+-# 0002-add-pthread-as-a-dependency-of-a-static-lib.patch
++FONTCONFIG_VERSION = 2.14.2
++FONTCONFIG_SITE = https://www.freedesktop.org/software/fontconfig/release
++FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.xz
++# 0001-add-pthread-as-a-dependency-of-a-static-lib.patch
+ FONTCONFIG_AUTORECONF = YES
+ FONTCONFIG_INSTALL_STAGING = YES
+ FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
