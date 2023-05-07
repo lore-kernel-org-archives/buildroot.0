@@ -1,68 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F4AEC77B73
-	for <buildroot@archiver.kernel.org>; Sat,  6 May 2023 15:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C722C77B7D
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 15:07:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDC608401B;
-	Sat,  6 May 2023 15:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDC608401B
+	by smtp4.osuosl.org (Postfix) with ESMTP id E150D418C3;
+	Sun,  7 May 2023 15:07:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E150D418C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RszcQ3qPux1O; Sat,  6 May 2023 15:21:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IGNQ4dT80se8; Sun,  7 May 2023 15:07:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 373E484020;
-	Sat,  6 May 2023 15:21:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 373E484020
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4C9211BF36C
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:21:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDD95415FD;
+	Sun,  7 May 2023 15:07:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDD95415FD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E45B1BF2F7
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 15:07:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2372D40B5D
- for <buildroot@lists.busybox.net>; Sat,  6 May 2023 15:21:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2372D40B5D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42AC9415FD
+ for <buildroot@lists.busybox.net>; Sun,  7 May 2023 15:07:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42AC9415FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gKlvtnlo0OKA for <buildroot@lists.busybox.net>;
- Sat,  6 May 2023 15:21:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63E6F40514
- for <buildroot@uclibc.org>; Sat,  6 May 2023 15:21:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63E6F40514
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 5221E85D74; Sat,  6 May 2023 15:21:05 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xv1t8ArxxM3L for <buildroot@lists.busybox.net>;
+ Sun,  7 May 2023 15:07:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32191410B1
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 32191410B1
+ for <buildroot@uclibc.org>; Sun,  7 May 2023 15:07:10 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1pvfyd-0000MB-9F
+ for buildroot@uclibc.org; Sun, 07 May 2023 17:07:07 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Sat, 06 May 2023 15:21:05 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2021.02.7
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: yann.morin.1998@free.fr
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status cc resolution
-Message-ID: <bug-14356-163-9AlFLvCqmd@https.bugs.busybox.net/>
-In-Reply-To: <bug-14356-163@https.bugs.busybox.net/>
-References: <bug-14356-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14356] cronstamp jobs are not performed with
- bumped version of dcron
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 07 May 2023 17:06:51 +0200
+Message-ID: <pan$8f26f$e0484769$516297af$9e67e51c@ID-313208.user.individual.net>
+References: <20230506160524.2231307-1-bernd.kuhls@t-online.de>
+ <20230506160524.2231307-2-bernd.kuhls@t-online.de>
+ <20230507105218.GH252090__6425.69195931486$1683456775$gmane$org@scaer>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/transmission: bump version
+ to 4.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,34 +61,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14356
-
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998@free.fr
-         Resolution|---                         |FIXED
-
---- Comment #7 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Dominique, All,
-
-Thanks for the report and the feedback. As you noticed, this is now supposed
-to be fixed with commit 1557312f, so I'm closing this bug report. Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QW0gU3VuLCA3IE1heSAyMDIzIDEyOjUyOjE4ICswMjAwIHNjaHJpZWIgWWFubiBFLiBNT1JJTjoK
+Cj4+IFJlbW92ZWQgdGhlIG9wdGlvbiB0byBkaXNhYmxlIHVUUCBzdXBwb3J0LCBmb3IgZGV0YWls
+cyBzZWUgdXBzdHJlYW0gCmlzc3VlOgo+PiBodHRwczovL2dpdGh1Yi5jb20vdHJhbnNtaXNzaW9u
+L3RyYW5zbWlzc2lvbi9pc3N1ZXMvNDc1MQo+IAo+IFRoZSBvcHRpb24gaXMgc3RpbGwgcHJlc2Vu
+dCwgc28gd2h5IHdvdWxkIHdlIHdhbnQgdG8gcmVtb3ZlIGl0Pwo+IAo+ICAgICBodHRwczovL2dp
+dGh1Yi5jb20vdHJhbnNtaXNzaW9uL3RyYW5zbWlzc2lvbi9ibG9iL21haW4vCkNNYWtlTGlzdHMu
+dHh0Cj4gICAgIDU3ICBvcHRpb24oRU5BQkxFX1VUUCAiQnVpbGQgwrVUUCBzdXBwb3J0IiBPTikK
+CkhpIFlhbm4sCgpiZWNhdXNlIGJ1aWxkaW5nIHdpdGhvdXQgdXRwIHN1cHBvcnQgaXMgYnJva2Vu
+OgoKLS0gQ29uZmlndXJpbmcgZG9uZQpDTWFrZSBFcnJvciBhdCBsaWJ0cmFuc21pc3Npb24vQ01h
+a2VMaXN0cy50eHQ6MjczICh0YXJnZXRfbGlua19saWJyYXJpZXMpOgogIFRhcmdldCAidHJhbnNt
+aXNzaW9uIiBsaW5rcyB0bzoKCiAgICBsaWJ1dHA6OmxpYnV0cAoKICBidXQgdGhlIHRhcmdldCB3
+YXMgbm90IGZvdW5kLiAgUG9zc2libGUgcmVhc29ucyBpbmNsdWRlOgoKbGlidXRwIGlzIHJlcXVp
+cmVkIGJ5IGh0dHBzOi8vZ2l0aHViLmNvbS90cmFuc21pc3Npb24vdHJhbnNtaXNzaW9uL2Jsb2Iv
+CjBkM2IzMjFiYWNhMmNkMDJjYzRiMjAxODI2YWVkMmI0ODVlMzdjM2YvbGlidHJhbnNtaXNzaW9u
+LwpDTWFrZUxpc3RzLnR4dCNMMjg1CgpUaGlzIHdhcyBkaXNjdXNzZWQgdXBzdHJlYW0gaW4gdGhl
+IGZvcmVtZW50aW9uZWQgaXNzdWUgNDc1MQpodHRwczovL2dpdGh1Yi5jb20vdHJhbnNtaXNzaW9u
+L3RyYW5zbWlzc2lvbi9pc3N1ZXMvCjQ3NTEjaXNzdWVjb21tZW50LTE0NjQyODQ1ODUKIi4uLiBi
+dXQgYXMgYSBwcmFjdGljYWwgbWF0dGVyLCBubyBkaXN0cm9zIGFyZSBnb2luZyB0byBkaXNhYmxl
+IFVUUCAKc3VwcG9ydC4gU28gSSBkb24ndCBzZWUgYW4gYXVkaWVuY2UgZm9yIHRoaXMgYnVpbGQg
+b3B0aW9uLiIKCkdldHRpbmcgcmlkIG9mIHRoZSBsaWJ1dHAgZGVwZW5kZW5jeSBpbiBsaWJ0cmFu
+c21pc3Npb24gd2FzIHJlamVjdGVkIGJ0dzoKaHR0cHM6Ly9naXRodWIuY29tL3RyYW5zbWlzc2lv
+bi90cmFuc21pc3Npb24vcHVsbC80ODgyLwoKUmVnYXJkcywgQmVybmQKCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
