@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06F3CC77B7C
-	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 10:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFDB2C77B7C
+	for <buildroot@archiver.kernel.org>; Sun,  7 May 2023 10:37:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8ADB682105;
-	Sun,  7 May 2023 10:37:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ADB682105
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88EAA820F2;
+	Sun,  7 May 2023 10:37:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88EAA820F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C6h7dbW1Sj5b; Sun,  7 May 2023 10:37:27 +0000 (UTC)
+	with ESMTP id 2IhHgrpJLOey; Sun,  7 May 2023 10:37:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CC5F820F1;
-	Sun,  7 May 2023 10:37:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CC5F820F1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 717831BF307
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E72982181;
+	Sun,  7 May 2023 10:37:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E72982181
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D42B1BF861
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 10:37:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A8B682105
+ by smtp2.osuosl.org (Postfix) with ESMTP id 760194029F
  for <buildroot@lists.busybox.net>; Sun,  7 May 2023 10:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A8B682105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 760194029F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rnt3ePkHf1Bk for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wbqVkb3oBjB4 for <buildroot@lists.busybox.net>;
  Sun,  7 May 2023 10:37:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7132B82077
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F3C740273
  for <buildroot@buildroot.org>; Sun,  7 May 2023 10:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7132B82077
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F3C740273
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 536BD85EE7; Sun,  7 May 2023 10:37:23 +0000 (UTC)
+ id 841A685EED; Sun,  7 May 2023 10:37:23 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 May 2023 11:22:30 +0200
+Date: Sun, 7 May 2023 12:28:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 55ceaef8f65eeb0fd9ca7314b03668cf9dd325ca
-X-Git-Newrev: 129c83bdd40376eecbcb45653a36d2ce6920892d
+X-Git-Oldrev: b516744fd1eb2621efb676561460d817de3a1d04
+X-Git-Newrev: efa3bdcdba716e1a3370f08e8c8cfc4c1f1e2093
 X-Patchwork-Hint: ignore
-Message-Id: <20230507103723.536BD85EE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bento4: bump version to
- 1.6.0-639-6-Nexus
+Message-Id: <20230507103723.841A685EED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+ version to Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=129c83bdd40376eecbcb45653a36d2ce6920892d
+commit: https://git.buildroot.net/buildroot/commit/?id=efa3bdcdba716e1a3370f08e8c8cfc4c1f1e2093
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to kodi fork, remove all kodi-related patches.
+Added dependency to bento4 needed after upstream commit
+https://github.com/xbmc/inputstream.adaptive/commit/70625e76702186c73ddb43440f44262c48e14755
 
-Needed by upcoming bump of kodi-inputstream-adaptive.
+License file renamed
+https://github.com/xbmc/inputstream.adaptive/commit/b555973d98e15bb40022dd1ab704d8d42efd7686
+and updated upstream
+https://github.com/xbmc/inputstream.adaptive/commit/4b62e9e3257526e0359e0b797902ba9119633c16
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[yann.morin.1998@free.fr: update .checkpackageignore]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                |  16 -
- .../0001-Add-support-for-cmake-install.patch       | 130 -----
- ...ional-methods-funtions-and-passing-poolid.patch | 634 ---------------------
- .../0003-Backport-Smmothstream-changes.patch       |  99 ----
- package/bento4/0004-more-SPS-parameters.patch      | 219 -------
- .../0005-AVC-extract-VUI-values-from-SPS.patch     |  96 ----
- .../bento4/0006-Implement-SPS-Frame-parser.patch   |  67 ---
- .../0007-Fix-segfault-when-AP4_Sample-s-seek.patch |  25 -
- package/bento4/0008-Hack-HBO.patch                 | 214 -------
- package/bento4/0009-Android-32-ftello-fix.patch    |  31 -
- .../0010-Dazn-sample-duration-workaround.patch     |  30 -
- ...argument-to-reuse-single-sample-decrypter.patch | 179 ------
- .../0012-Static-ReadGolomb-SignedGolomb.patch      |  54 --
- package/bento4/0013-Add-GetChannels-method.patch   |  40 --
- ...-GetSampleIndexForTimeStamp-GetNearestSyn.patch |  59 --
- .../0015-Avoid-set-next-fragment-position.patch    |  43 --
- ...-segfault-in-AP4_LinearReader-ProcessMoof.patch |  27 -
- package/bento4/bento4.hash                         |   2 +-
- package/bento4/bento4.mk                           |   4 +-
- 19 files changed, 3 insertions(+), 1966 deletions(-)
+ package/kodi-inputstream-adaptive/Config.in                      | 1 +
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 4 ++--
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+index f0a24b7043..3efe3aa114 100644
+--- a/package/kodi-inputstream-adaptive/Config.in
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+ 	# wvdecrypter/cdm/build/build_config.h
+ 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
+ 		|| BR2_mips64el || BR2_x86_64
++	select BR2_PACKAGE_BENTO4
+ 	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  Kodi inputstream addon for several manifest types
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index a36095c38c..18df044c62 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b208313fd50442cabd339a16a3beec8cfa41c1b6bf19617ffeb269144c5f65fe  kodi-inputstream-adaptive-19.0.7-Matrix.tar.gz
+-sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
++sha256  907915228335eeb9217e6f069cbb210fffce01095a6326908015cd89165a0328  kodi-inputstream-adaptive-20.3.6-Nexus.tar.gz
++sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 9da87e0e38..1f3e86bb27 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.7-Matrix
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.6-Nexus
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+-KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+-KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = expat kodi
++KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.md
++KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = bento4 expat kodi
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
