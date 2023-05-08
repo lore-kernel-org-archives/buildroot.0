@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5F41C7EE22
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 20:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B244BC77B7F
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 20:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F11F4288E;
-	Mon,  8 May 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F11F4288E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2886B428C0;
+	Mon,  8 May 2023 20:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2886B428C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3VjSE_6EIYKT; Mon,  8 May 2023 20:52:47 +0000 (UTC)
+	with ESMTP id EalJUXQIow-Z; Mon,  8 May 2023 20:53:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D7CC41EE8;
-	Mon,  8 May 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D7CC41EE8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C2B771BF34E
+	by smtp4.osuosl.org (Postfix) with ESMTP id D728942897;
+	Mon,  8 May 2023 20:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D728942897
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E14C41BF868
  for <buildroot@lists.busybox.net>; Mon,  8 May 2023 20:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9635440571
+ by smtp3.osuosl.org (Postfix) with ESMTP id C86F760E4B
  for <buildroot@lists.busybox.net>; Mon,  8 May 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9635440571
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C86F760E4B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EDgd4G02Ipse for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2wopxNM3qtw2 for <buildroot@lists.busybox.net>;
  Mon,  8 May 2023 20:52:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21C114049F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BD7360D6B
  for <buildroot@buildroot.org>; Mon,  8 May 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21C114049F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BD7360D6B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10C8F86242; Mon,  8 May 2023 20:52:43 +0000 (UTC)
+ id 0836786241; Mon,  8 May 2023 20:52:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 8 May 2023 22:47:31 +0200
+Date: Mon, 8 May 2023 22:47:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a0484b888f8d1e30590758d8a8f6730e3a2890fa
-X-Git-Newrev: 3686e16b5213431ee44d6599486d05d9c07854d1
+X-Git-Oldrev: 8a289667f5dba6fffb3a21faa14517e9b49726a4
+X-Git-Newrev: a0484b888f8d1e30590758d8a8f6730e3a2890fa
 X-Patchwork-Hint: ignore
-Message-Id: <20230508205243.10C8F86242@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_openblas.py: new runtime test
+Message-Id: <20230508205243.0836786241@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openblas: add a new option to
+ install tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,90 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3686e16b5213431ee44d6599486d05d9c07854d1
+commit: https://git.buildroot.net/buildroot/commit/?id=a0484b888f8d1e30590758d8a8f6730e3a2890fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This option can be used for runtime testing or package debugging.
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+[yann.morin.1998@free.fr: tweak the comment]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                     |  1 +
- support/testing/tests/package/test_openblas.py | 56 ++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
+ package/openblas/Config.in   |  5 +++++
+ package/openblas/openblas.mk | 19 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index efb2907d1b..37c1f06ec1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1748,6 +1748,7 @@ F:	support/testing/tests/package/test_ncdu.py
- F:	support/testing/tests/package/test_octave.py
- F:	support/testing/tests/package/test_ola.py
- F:	support/testing/tests/package/test_ola/
-+F:	support/testing/tests/package/test_openblas.py
- F:	support/testing/tests/package/test_perftest.py
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
-diff --git a/support/testing/tests/package/test_openblas.py b/support/testing/tests/package/test_openblas.py
-new file mode 100644
-index 0000000000..9cfe08ef2c
---- /dev/null
-+++ b/support/testing/tests/package/test_openblas.py
-@@ -0,0 +1,56 @@
-+import os
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 0144e93a3f..58976e657a 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -94,4 +94,9 @@ config BR2_PACKAGE_OPENBLAS_USE_LOCKING
+ 	  function calls from multiple threads, then locking is
+ 	  mandatory for correct operation.
+ 
++config BR2_PACKAGE_OPENBLAS_INSTALL_TESTS
++	bool "install tests"
++	help
++	  Install C test programs on target.
 +
-+import infra.basetest
+ endif
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index f7a50d7bc7..d8fcb4a2c6 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -77,4 +77,23 @@ define OPENBLAS_INSTALL_TARGET_CMDS
+ 		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
+ endef
+ 
++ifeq ($(BR2_PACKAGE_OPENBLAS_INSTALL_TESTS),y)
++# Tests are always built, but are not installed, so we need to install
++# them manually. The set of available tests may fluctuate depending on
++# the architecture and other options, so only install whatever gets
++# built.
++define OPENBLAS_INSTALL_TESTS
++	mkdir -p $(TARGET_DIR)/usr/libexec/openblas/tests
++	find $(@D)/ctest \
++		-type f -name "x[sdcz]cblat[123]" -perm -0100 \
++		-exec $(INSTALL) -m 0755 {} \
++			$(TARGET_DIR)/usr/libexec/openblas/tests \;
++	find $(@D)/ctest \
++		-type f -name "[sdcz]in[123]" \
++		-exec $(INSTALL) -m 0644 {} \
++			$(TARGET_DIR)/usr/libexec/openblas/tests \;
++endef
++OPENBLAS_POST_INSTALL_TARGET_HOOKS += OPENBLAS_INSTALL_TESTS
++endif
 +
-+
-+class TestOpenBLAS(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.27"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_OPENBLAS=y
-+        BR2_PACKAGE_OPENBLAS_INSTALL_TESTS=y
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-smp", "2", "-m", "512M", "-initrd", img])
-+        self.emulator.login()
-+
-+        test_prefix = "/usr/libexec/openblas/tests"
-+
-+        # BLAS data types:
-+        blas_data_types = [
-+            "s",  # Single precision (32bit) float
-+            "d",  # Double precision (64bit) double
-+            "c",  # Single precision (32bit) complex
-+            "z"   # Double precision (64bit) complex
-+        ]
-+
-+        # BLAS routine levels:
-+        # Level 1: Vector operations,
-+        # Level 2: Matrix-Vector operations,
-+        # Level 3: Matrix-Matrix operations.
-+        for blas_level in range(1, 4):
-+            for blas_data_type in blas_data_types:
-+                test_name = f"x{blas_data_type}cblat{blas_level}"
-+                cmd = test_prefix + "/" + test_name
-+
-+                if blas_level > 1:
-+                    cmd += f" < {test_prefix}/{blas_data_type}in{blas_level}"
-+
-+                self.assertRunOk(cmd, timeout=30)
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
