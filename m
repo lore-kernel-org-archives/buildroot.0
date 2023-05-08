@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41220C77B75
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 19:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1A2DC77B7F
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 19:19:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B193D40B5E;
-	Mon,  8 May 2023 19:18:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B193D40B5E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 87DC240BD3;
+	Mon,  8 May 2023 19:19:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87DC240BD3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 16GWqaT-e1Oa; Mon,  8 May 2023 19:18:55 +0000 (UTC)
+	with ESMTP id Uv6bIcydr3rb; Mon,  8 May 2023 19:19:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFFBB41D31;
-	Mon,  8 May 2023 19:18:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFFBB41D31
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C6D441BF868
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:18:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D19542A92;
+	Mon,  8 May 2023 19:19:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D19542A92
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A3E361BF867
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A023D41D7E
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:18:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A023D41D7E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B9B18135F
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:18:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B9B18135F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PrTJ7ah7L-Ra for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WBK15jpt2Nve for <buildroot@lists.busybox.net>;
  Mon,  8 May 2023 19:18:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A4D4415C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6A1C81351
  for <buildroot@buildroot.org>; Mon,  8 May 2023 19:18:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A4D4415C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6A1C81351
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72D9E8615A; Mon,  8 May 2023 19:18:39 +0000 (UTC)
+ id 940AB8615C; Mon,  8 May 2023 19:18:39 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 8 May 2023 21:17:38 +0200
+Date: Mon, 8 May 2023 21:17:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3caf10cb0c384d189e800bc23b7d01b9c0c6a62c
-X-Git-Newrev: 37fd4ee80a408d8fa810eb1926cac111acbba811
+X-Git-Oldrev: 9cc48fb94a4f3594f378f6fb5b6a98b0bbb80743
+X-Git-Newrev: a7e7ef2eadfd18c940718ac63a1614709451a398
 X-Patchwork-Hint: ignore
-Message-Id: <20230508191839.72D9E8615A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dav1d: bump version to 1.2.0
+Message-Id: <20230508191839.940AB8615C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libvpx: bump version to 1.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37fd4ee80a408d8fa810eb1926cac111acbba811
+commit: https://git.buildroot.net/buildroot/commit/?id=a7e7ef2eadfd18c940718ac63a1614709451a398
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
+Changelog: https://github.com/webmproject/libvpx/blob/main/CHANGELOG
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dav1d/dav1d.hash | 4 ++--
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libvpx/libvpx.hash | 2 +-
+ package/libvpx/libvpx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index cbeebc579d..1af699dbe3 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index 828718e713..c88e6840cf 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
 @@ -1,4 +1,4 @@
--# From https://download.videolan.org/pub/videolan/dav1d/1.1.0/dav1d-1.1.0.tar.xz.sha256
--sha256  fb57aae7875f28c30fb3dbae4a3683d27e2f91dde09ce5c60c22cef9bc58dfd1  dav1d-1.1.0.tar.xz
-+# From https://download.videolan.org/pub/videolan/dav1d/1.2.0/dav1d-1.2.0.tar.xz.sha256
-+sha256  231bed8bc1bb28a41d88da6b4c2c118de84b92e5f1d67caffa1b7f81aaea8c6e  dav1d-1.2.0.tar.xz
- # Locally computed
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 5fe603fc1c..f8d4464cd4 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
+ # Locally computed:
+-sha256  f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb  libvpx-1.12.0.tar.gz
++sha256  cb2a393c9c1fae7aba76b950bb0ad393ba105409fe1a147ccd61b0aaa1501066  libvpx-1.13.0.tar.gz
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
+ sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index c8a22b9ab2..67b25c9100 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DAV1D_VERSION = 1.1.0
-+DAV1D_VERSION = 1.2.0
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
- DAV1D_SITE = https://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+-LIBVPX_VERSION = 1.12.0
++LIBVPX_VERSION = 1.13.0
+ LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
+ LIBVPX_LICENSE = BSD-3-Clause
+ LIBVPX_LICENSE_FILES = LICENSE PATENTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
