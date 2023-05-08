@@ -1,70 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C87C8C77B7F
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 21:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55A10C7EE22
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 21:42:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64935428C1;
-	Mon,  8 May 2023 21:02:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64935428C1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8lxvGvUO2YCf; Mon,  8 May 2023 21:02:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0316B428BF;
-	Mon,  8 May 2023 21:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0316B428BF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5CDAD1BF34E
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:02:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 362C761308
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:02:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 362C761308
+	by smtp3.osuosl.org (Postfix) with ESMTP id D92596148E;
+	Mon,  8 May 2023 21:42:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D92596148E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oCvrlhCfXS8b for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 21:02:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4F3561114
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E4F3561114
- for <buildroot@buildroot.org>; Mon,  8 May 2023 21:02:43 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:89f6:f9b6:d1a9:3e6e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 3FC53780507;
- Mon,  8 May 2023 23:02:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 May 2023 23:02:39 +0200
-Date: Mon, 8 May 2023 23:02:39 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Message-ID: <20230508210239.GU252090@scaer>
-References: <20230425070923.1294644-1-raphael.melotte@mind.be>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230425070923.1294644-1-raphael.melotte@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683579762;
- bh=bdL/gcBK0Hh6aXXi3SWnGCvdkbaMp9LxgGt1ViIDsDw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=E20zBjVVvgxk1GJEYf9JICnYUsz3IaGwTd7iXJZGJ2ZhWgSux4Q2A84L7ENBPYXCg
- /5oVyzzvPMgzAtH+yd65ekVTMNNPk8OmVkD9cAA9v8R3ZM/fZRHE6Tnip08Bte8uxL
- 8KSJF5S8JMmwu0qnkRSTPIL65LWzc569T7nNg/co0K39iVmg4qk8+Dw0pJAkQoLC6t
- u20k0/LWB34fJlgeCrOto2UjgyXu9SA6vvfLOltTHXQA7TSrMqjfP/CzuCeFIY0N5S
- sG+6bdN59TVJ7rktmT60qiiJsJvBFi6yd3w6E45dd8h1M1qGbCJ5gFK6VWvPYTiu+x
- xLEwzOmK61Cig==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=E20zBjVV
-Subject: Re: [Buildroot] [PATCH 1/1] package/mupdf: fix building with zlib-ng
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CwCt9ssdikLd; Mon,  8 May 2023 21:41:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7446613AA;
+	Mon,  8 May 2023 21:41:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7446613AA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C3ADB1BF34C
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:41:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C01F41DE6
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:41:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C01F41DE6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4UYJUckUuqm3 for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 21:41:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5C2241DCB
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 21:41:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5C2241DCB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C190A81221; Mon,  8 May 2023 21:41:53 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 8 May 2023 23:40:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b20eb56440fd2a7b8f578bf9eda89160c8053434
+X-Git-Newrev: 4938d2d232496b58c1093664fe9a86b6ea62bc72
+X-Patchwork-Hint: ignore
+Message-Id: <20230508214153.C190A81221@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "package: busybox: backport fix for
+ missing getrandom()"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,93 +57,263 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5433452773618361940=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmFwaGHDq2wsIEFsbCwKCk9uIDIwMjMtMDQtMjUgMDk6MDkgKzAyMDAsIFJhcGhhw6tsIE3DqWxv
-dHRlIHNwYWtlIHRodXNseToKPiBUaGUgY3VycmVudCBtdXBkZiB2ZXJzaW9uIGZhaWxzIHRvIGJ1
-aWxkIHdoZW4gemxpYi1uZyBpcyB1c2VkIGFzIHRoZQo+IHpsaWIgaW1wbGVtZW50YXRpb24uIEFk
-ZCBhIHBhdGNoIHRvIGZpeCBpdC4KPiAKPiBUaGlzIGZpeGVzIHRoZSBmb2xsb3dpbmcgYnVpbGQg
-ZmFpbHVyZSByYWlzZWQgc2luY2UgdGhlIGJ1bXAgdG8KPiB2ZXJzaW9uIDEuMjEuMCBvZiB0aGUg
-bXVwZGYgcGFja2FnZSBpbiBjb21taXQKPiAzYzIwMzNjZDJhY2UwNzdlN2RmYWY1OGEyNTg5YjJh
-OTNhNWZkN2IwOgo+IAo+IHNvdXJjZS9maXR6L2VuY29kZS1iYXNpYy5jOiBJbiBmdW5jdGlvbiAn
-ZGVmbGF0ZV93cml0ZSc6Cj4gc291cmNlL2ZpdHovZW5jb2RlLWJhc2ljLmM6MzQzOjI3OiBlcnJv
-cjogJ1VJTlRfTUFYJyB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKPiAg
-IDM0MyB8ICAgICAgICAgbmV3YnVmc2l6ZSA9IG4gPj0gVUlOVF9NQVggPyBVSU5UX01BWCA6IGRl
-ZmxhdGVCb3VuZCgmc3RhdGUtPnosIG4pOwo+ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBefn5+fn5+fgo+IHNvdXJjZS9maXR6L2VuY29kZS1iYXNpYy5jOjI2OjE6IG5vdGU6ICdV
-SU5UX01BWCcgaXMgZGVmaW5lZCBpbiBoZWFkZXIgJzxsaW1pdHMuaD4nOyBkaWQgeW91IGZvcmdl
-dCB0byAnI2luY2x1ZGUgPGxpbWl0cy5oPic/Cj4gCj4gRml4ZXM6IGh0dHA6Ly9hdXRvYnVpbGQu
-YnVpbGRyb290Lm5ldC9yZXN1bHRzLzg3MTI4ZTk5NjdjZmYyMDA3OGM2NWFiODQ3ODc3YWE0NGNj
-NDA5ZDkKPiAKPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxv
-dHRlQG1pbmQuYmU+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKUmVnYXJkcywKWWFubiBF
-LiBNT1JJTi4KCj4gLS0tCj4gIC4uLmlzc2luZy1saW1pdHMuaC1pbmNsdWRlLWZvci1VSU5UX01B
-WC5wYXRjaCB8IDcwICsrKysrKysrKysrKysrKysrKysKPiAgMSBmaWxlIGNoYW5nZWQsIDcwIGlu
-c2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbXVwZGYvMDAwMS1BZGQt
-bWlzc2luZy1saW1pdHMuaC1pbmNsdWRlLWZvci1VSU5UX01BWC5wYXRjaAo+IAo+IGRpZmYgLS1n
-aXQgYS9wYWNrYWdlL211cGRmLzAwMDEtQWRkLW1pc3NpbmctbGltaXRzLmgtaW5jbHVkZS1mb3It
-VUlOVF9NQVgucGF0Y2ggYi9wYWNrYWdlL211cGRmLzAwMDEtQWRkLW1pc3NpbmctbGltaXRzLmgt
-aW5jbHVkZS1mb3ItVUlOVF9NQVgucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4
-IDAwMDAwMDAwMDAuLjk1ZjJmODY2NjYKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9t
-dXBkZi8wMDAxLUFkZC1taXNzaW5nLWxpbWl0cy5oLWluY2x1ZGUtZm9yLVVJTlRfTUFYLnBhdGNo
-Cj4gQEAgLTAsMCArMSw3MCBAQAo+ICtGcm9tIGViY2U5ZjFiMTI5ZWJjOGYyYjE3YWZhMDJhNGZm
-Y2I5NDUzYzExZDkgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206ID0/VVRGLTg/cT9S
-YXBoYT1DMz1BQmw9MjBNPUMzPUE5bG90dGU/PSA8cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+Cj4g
-K0RhdGU6IE1vbiwgMjQgQXByIDIwMjMgMTc6Mjc6MzUgKzAyMDAKPiArU3ViamVjdDogW1BBVENI
-XSBBZGQgbWlzc2luZyBsaW1pdHMuaCBpbmNsdWRlIGZvciBVSU5UX01BWAo+ICtNSU1FLVZlcnNp
-b246IDEuMAo+ICtDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKPiArQ29u
-dGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAo+ICsKPiArZW5jb2RlLWJhc2ljLmMgdXNlcyAn
-VUlOVF9NQVgnLCB3aGljaCBpcyBhdmFpbGFibGUgaW4gdGhlICdsaW1pdHMuaCcKPiAraGVhZGVy
-Lgo+ICsKPiArSW4gc29tZSBjb25maWd1cmF0aW9ucyB0aGF0IGJ1aWxkIHdpdGggemxpYiBmcm9t
-IFsxXSwgYnkgY2hhbmNlCj4gK2xpbWl0cy5oIGdldHMgaW5kaXJlY3RseSBpbmNsdWRlZCB3aGVu
-IGluY2x1ZGluZyAnei1pbXAuaCcgKHRoZQo+ICtpbmNsdWRlcyBhcmU6ICd6LWltcC5oJyAtPiAn
-emxpYi5oJyAtPiAnemNvbmYuaCcgLT4gJ2xpbWl0cy5oJyksIHNvCj4gK3RoZSBidWlsZCBzdWNj
-ZWVkcy4KPiArCj4gK1doZW4gdXNpbmcgb3RoZXIgemxpYiBpbXBsZW1lbnRhdGlvbnMgaG93ZXZl
-ciAoZm9yIGV4YW1wbGUgZnJvbSBbMl0pLAo+ICtsaW1pdHMuaCBpcyBub3QgbmVjZXNzYXJpbHkg
-aW5jbHVkZWQgaW5kaXJlY3RseSwgd2hpY2ggbGVhZHMgdG8gdGhlCj4gK2J1aWxkIGZhaWxpbmcg
-aW4gdGhlIGZvbGxvd2luZyB3YXk6Cj4gKwo+ICtzb3VyY2UvZml0ei9lbmNvZGUtYmFzaWMuYzog
-SW4gZnVuY3Rpb24gJ2RlZmxhdGVfd3JpdGUnOgo+ICtzb3VyY2UvZml0ei9lbmNvZGUtYmFzaWMu
-YzozNDM6Mjc6IGVycm9yOiAnVUlOVF9NQVgnIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlz
-IGZ1bmN0aW9uKQo+ICsgIDM0MyB8ICAgICAgICAgbmV3YnVmc2l6ZSA9IG4gPj0gVUlOVF9NQVgg
-PyBVSU5UX01BWCA6IGRlZmxhdGVCb3VuZCgmc3RhdGUtPnosIG4pOwo+ICsgICAgICB8ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn4KPiArc291cmNlL2ZpdHovZW5jb2RlLWJhc2lj
-LmM6MjY6MTogbm90ZTogJ1VJTlRfTUFYJyBpcyBkZWZpbmVkIGluIGhlYWRlciAnPGxpbWl0cy5o
-Pic7IGRpZCB5b3UgZm9yZ2V0IHRvICcjaW5jbHVkZSA8bGltaXRzLmg+Jz8KPiArCj4gK0FkZCB0
-aGUgbWlzc2luZyBpbmNsdWRlLCBzbyB0aGF0IHRoZSBidWlsZCBzdWNjZWVkcyBubyBtYXR0ZXIg
-aWYgemxpYgo+ICtpbmRpcmVjdGx5IGluY2x1ZGVzICdsaW1pdC5oJyBvciBub3QuCj4gKwo+ICtT
-aW1pbGFybHksIGFsc28gYWRkIGl0IGluIG91dHB1dC1wcy5jIHdoZXJlIGl0J3MgYWxzbyBtaXNz
-aW5nLgo+ICsKPiArWzFdOiBodHRwczovL3psaWIubmV0Lwo+ICtbMl06IGh0dHBzOi8vZ2l0aHVi
-LmNvbS96bGliLW5nL3psaWItbmcKPiArCj4gK1NpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxv
-dHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KPiArVXBzdHJlYW06IGh0dHBzOi8vYnVncy5n
-aG9zdHNjcmlwdC5jb20vc2hvd19idWcuY2dpP2lkPTcwNjY2Nwo+ICstLS0KPiArIHNvdXJjZS9m
-aXR6L2VuY29kZS1iYXNpYy5jIHwgMiArKwo+ICsgc291cmNlL2ZpdHovb3V0cHV0LXBzLmMgICAg
-fCAyICsrCj4gKyAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQo+ICsKPiArZGlmZiAt
-LWdpdCBhL3NvdXJjZS9maXR6L2VuY29kZS1iYXNpYy5jIGIvc291cmNlL2ZpdHovZW5jb2RlLWJh
-c2ljLmMKPiAraW5kZXggMDNhNGZmNzZiLi44NGYwYzM1ZTYgMTAwNjQ0Cj4gKy0tLSBhL3NvdXJj
-ZS9maXR6L2VuY29kZS1iYXNpYy5jCj4gKysrKyBiL3NvdXJjZS9maXR6L2VuY29kZS1iYXNpYy5j
-Cj4gK0BAIC0yNCw2ICsyNCw4IEBACj4gKyAKPiArICNpbmNsdWRlICJ6LWltcC5oIgo+ICsgCj4g
-KysjaW5jbHVkZSA8bGltaXRzLmg+Cj4gKysKPiArIHN0cnVjdCBhaHgKPiArIHsKPiArIAlmel9v
-dXRwdXQgKmNoYWluOwo+ICtkaWZmIC0tZ2l0IGEvc291cmNlL2ZpdHovb3V0cHV0LXBzLmMgYi9z
-b3VyY2UvZml0ei9vdXRwdXQtcHMuYwo+ICtpbmRleCBlZjIyYzNjZDYuLjNkYzhlYTE3ZCAxMDA2
-NDQKPiArLS0tIGEvc291cmNlL2ZpdHovb3V0cHV0LXBzLmMKPiArKysrIGIvc291cmNlL2ZpdHov
-b3V0cHV0LXBzLmMKPiArQEAgLTI0LDYgKzI0LDggQEAKPiArIAo+ICsgI2luY2x1ZGUgInotaW1w
-LmgiCj4gKyAKPiArKyNpbmNsdWRlIDxsaW1pdHMuaD4KPiArKwo+ICsgdHlwZWRlZiBzdHJ1Y3Qg
-cHNfYmFuZF93cml0ZXJfcwo+ICsgewo+ICsgCWZ6X2JhbmRfd3JpdGVyIHN1cGVyOwo+ICstLSAK
-PiArMi4zOS4xCj4gKwo+IC0tIAo+IDIuMzkuMQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
-LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBF
-LiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3Mn
-IGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBc
-IC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0Mjcg
-YC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMg
-bm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBN
-QUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============5433452773618361940==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4938d2d232496b58c1093664fe9a86b6ea62bc72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This casues build failures:
+
+..../build/busybox-1.36.0/Makefile.flags:165: *** unterminated call to function 'shell': missing ')'.  Stop.
+
+This reverts commit 441c44626f3c8b6181b7b4be0757d4eb2659dcee.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...ix-for-glibc-2.24-not-providing-getrandom.patch |  39 --------
+ ...-for-glibc-2.24-not-providing-random-head.patch |  60 ------------
+ ...ix-getrandom-detection-for-non-glibc-libc.patch | 106 ---------------------
+ 3 files changed, 205 deletions(-)
+
+diff --git a/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch b/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch
+deleted file mode 100644
+index 4a194612b4..0000000000
+--- a/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 200a9669fbf6f06894e4243cccc9fc11a1a6073a Mon Sep 17 00:00:00 2001
+-From: Denys Vlasenko <vda.linux@googlemail.com>
+-Date: Mon, 10 Apr 2023 17:26:04 +0200
+-Subject: [PATCH] seedrng: fix for glibc <= 2.24 not providing getrandom()
+-
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-Upstream: https://git.busybox.net/busybox/commit/?id=200a9669fbf6f06894e4243cccc9fc11a1a6073a
+----
+- miscutils/seedrng.c | 14 ++++++++++++++
+- 1 file changed, 14 insertions(+)
+-
+-diff --git a/miscutils/seedrng.c b/miscutils/seedrng.c
+-index 967741dc7..7cc855141 100644
+---- a/miscutils/seedrng.c
+-+++ b/miscutils/seedrng.c
+-@@ -45,6 +45,20 @@
+- #include <sys/random.h>
+- #include <sys/file.h>
+- 
+-+/* Fix up glibc <= 2.24 not having getrandom() */
+-+#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 24
+-+#include <sys/syscall.h>
+-+# define getrandom(...) bb_getrandom(__VA_ARGS__)
+-+static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
+-+{
+-+# if defined(__NR_getrandom)
+-+	return syscall(__NR_getrandom, buffer, length, flags);
+-+# else
+-+	return ENOSYS;
+-+# endif
+-+}
+-+#endif
+-+
+- #ifndef GRND_INSECURE
+- #define GRND_INSECURE 0x0004 /* Apparently some headers don't ship with this yet. */
+- #endif
+--- 
+-2.39.1
+-
+diff --git a/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch b/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch
+deleted file mode 100644
+index d729884805..0000000000
+--- a/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From cb57abb46f06f4ede8d9ccbdaac67377fdf416cf Mon Sep 17 00:00:00 2001
+-From: Thomas Devoogdt <thomas@devoogdt.com>
+-Date: Mon, 10 Apr 2023 19:58:15 +0200
+-Subject: [PATCH] seedrng: fix for glibc <= 2.24 not providing random header
+-
+- - dropped the wrong define (not sure why it was there)
+- - <sys/random.h> not available if glibc <= 2.24
+- - GRND_NONBLOCK not defined if <sys/random.h> not included
+- - ret < 0 && errno == ENOSYS has to be true to get creditable set
+-
+-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-Upstream: https://git.busybox.net/busybox/commit/?id=cb57abb46f06f4ede8d9ccbdaac67377fdf416cf
+----
+- miscutils/seedrng.c | 14 ++++++++++----
+- 1 file changed, 10 insertions(+), 4 deletions(-)
+-
+-diff --git a/miscutils/seedrng.c b/miscutils/seedrng.c
+-index 7cc855141..3bf6e2ea7 100644
+---- a/miscutils/seedrng.c
+-+++ b/miscutils/seedrng.c
+-@@ -42,25 +42,31 @@
+- #include "libbb.h"
+- 
+- #include <linux/random.h>
+--#include <sys/random.h>
+- #include <sys/file.h>
+- 
+- /* Fix up glibc <= 2.24 not having getrandom() */
+- #if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 24
+- #include <sys/syscall.h>
+--# define getrandom(...) bb_getrandom(__VA_ARGS__)
+- static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
+- {
+- # if defined(__NR_getrandom)
+- 	return syscall(__NR_getrandom, buffer, length, flags);
+- # else
+--	return ENOSYS;
+-+	errno = ENOSYS;
+-+	return -1;
+- # endif
+- }
+-+#else
+-+#include <sys/random.h>
+-+#endif
+-+
+-+/* Apparently some headers don't ship with this yet. */
+-+#ifndef GRND_NONBLOCK
+-+#define GRND_NONBLOCK 0x0001
+- #endif
+- 
+- #ifndef GRND_INSECURE
+--#define GRND_INSECURE 0x0004 /* Apparently some headers don't ship with this yet. */
+-+#define GRND_INSECURE 0x0004
+- #endif
+- 
+- #define DEFAULT_SEED_DIR         "/var/lib/seedrng"
+--- 
+-2.39.1
+-
+diff --git a/package/busybox/0007-seedrng-fix-getrandom-detection-for-non-glibc-libc.patch b/package/busybox/0007-seedrng-fix-getrandom-detection-for-non-glibc-libc.patch
+deleted file mode 100644
+index 90cace7968..0000000000
+--- a/package/busybox/0007-seedrng-fix-getrandom-detection-for-non-glibc-libc.patch
++++ /dev/null
+@@ -1,106 +0,0 @@
+-From b8d32dba741daea2ed01a0da32083b1bc994aa04 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+-Date: Tue, 18 Apr 2023 15:54:43 +0200
+-Subject: [PATCH] seedrng: fix getrandom() detection for non-glibc libc
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-glibc <= 2.24 does not provide getrandom(). A check for it has been
+-added in 200a9669fbf6f06894e4243cccc9fc11a1a6073a and fixed in
+-cb57abb46f06f4ede8d9ccbdaac67377fdf416cf.
+-
+-However, building with a libc other than glibc can lead to the same
+-problem as not every other libc has getrandom() either:
+-
+-- uClibc provides it from v1.0.2 onwards, but requires to define
+-_GNU_SOURCE (all versions - we already define it by default), and
+-stddef to be included first (when using uClibc < 1.0.35 - we already
+-include it through libbb.h).
+-
+-- musl libc has getrandom(), but only from version 1.1.20 onwards. As
+-musl does not provide __MUSL__ or version information, it's not
+-possible to check for it like we did for glibc.
+-
+-All of this makes it difficult (or impossible in case of musl) to
+-check what we need to do to have getrandom() based on each libc
+-versions.
+-
+-On top of that, getrandom() is also not available on older kernels. As
+-an example, when using a 3.10 kernel with uClibc 1.0.26, getrandom()
+-is declared so compiling works, but it fails at link time because
+-getrandom() is not defined.
+-
+-To make it easier, take a similar approach to what was done for the
+-crypt library: try to build a sample program to see if we have
+-getrandom().
+-
+-Based on the new Makefile variable, we now either use the
+-libc-provided getrandom() when it's available, or use our own
+-implementation when it's not (like it was the case already for glibc <
+-2.25).
+-
+-This should fix compiling with many libc/kernel combinations.
+-
+-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+-Upstream: http://lists.busybox.net/pipermail/busybox/2023-April/090285.html
+----
+-Note that I was not able to test every single combination, but I could
+-confirm it builds successfully for:
+-uClibc 10.0.24, linux headers 3.10 (libc getrandom NOT used)
+-uClibc 1.0.36, linux headers 4.9 (libc getrandom used)
+-musl 1.1.16, linux headers 4.12 (libc getrandom NOT used)
+-musl 1.2.1, linux headers (libc getrandom used)
+-glibc 2.25, linux headers 4.10 (libc getrandom used)
+-
+- Makefile.flags      | 7 +++++++
+- miscutils/seedrng.c | 8 ++++----
+- 2 files changed, 11 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile.flags b/Makefile.flags
+-index 1cec5ba20..88c11862f 100644
+---- a/Makefile.flags
+-+++ b/Makefile.flags
+-@@ -161,6 +161,13 @@ ifeq ($(RT_AVAILABLE),y)
+- LDLIBS += rt
+- endif
+- 
+-+# Not all libc versions have getrandom, so check for it.
+-+HAVE_GETRANDOM := $(shell printf '#include <stddef.h>\n#include <sys/random.h>\nint main(void){char buf[256];\ngetrandom(buf,sizeof(buf),GRND_NONBLOCK);}' >bb_libtest.c; $(CC) $(CFLAGS) $(CFLAGS_busybox) -D_GNU_SOURCE -o /dev/null bb_libtest.c >/dev/null 2>&1 && echo "y"; rm bb_libtest.c)
+-+
+-+ifeq ($(HAVE_GETRANDOM),y)
+-+CFLAGS += -DHAVE_GETRANDOM
+-+endif
+-+
+- # libpam may use libpthread, libdl and/or libaudit.
+- # On some platforms that requires an explicit -lpthread, -ldl, -laudit.
+- # However, on *other platforms* it fails when some of those flags
+-diff --git a/miscutils/seedrng.c b/miscutils/seedrng.c
+-index 3bf6e2ea7..2f1e18c32 100644
+---- a/miscutils/seedrng.c
+-+++ b/miscutils/seedrng.c
+-@@ -44,8 +44,10 @@
+- #include <linux/random.h>
+- #include <sys/file.h>
+- 
+--/* Fix up glibc <= 2.24 not having getrandom() */
+--#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 24
+-+/* Fix up some libc (e.g. glibc <= 2.24) not having getrandom() */
+-+#if defined HAVE_GETRANDOM
+-+#include <sys/random.h>
+-+#else /* No getrandom */
+- #include <sys/syscall.h>
+- static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
+- {
+-@@ -56,8 +58,6 @@ static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
+- 	return -1;
+- # endif
+- }
+--#else
+--#include <sys/random.h>
+- #endif
+- 
+- /* Apparently some headers don't ship with this yet. */
+--- 
+-2.39.1
+-
+
+--===============5433452773618361940==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5433452773618361940==--
