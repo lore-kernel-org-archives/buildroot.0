@@ -1,74 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CB04C77B7F
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 12:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A17C7C7EE22
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 14:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E80BA841FB;
-	Mon,  8 May 2023 12:33:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E80BA841FB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Rqb44meQBFe; Mon,  8 May 2023 12:33:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AD9A841D4;
-	Mon,  8 May 2023 12:33:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AD9A841D4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E54C1BF364
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 12:33:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6598141C2D
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 12:33:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6598141C2D
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0A3C41B61;
+	Mon,  8 May 2023 14:36:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0A3C41B61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kxNW0GdpakLV for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 12:33:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF90041BD4
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DF90041BD4
- for <buildroot@buildroot.org>; Mon,  8 May 2023 12:33:02 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:947:6e20:965e:82e6:aea4:42c0] (unknown
- [IPv6:2a01:e0a:947:6e20:965e:82e6:aea4:42c0])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 7CC38BFD9C;
- Mon,  8 May 2023 14:32:59 +0200 (CEST)
-Message-ID: <f04ebbbb-b8a1-2a44-9ad8-d20fffdbae94@grenoble.cnrs.fr>
-Date: Mon, 8 May 2023 14:32:56 +0200
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z-hCAR3n800a; Mon,  8 May 2023 14:36:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1ACC414E2;
+	Mon,  8 May 2023 14:36:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1ACC414E2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C1581BF279
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 14:36:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 329F0605EC
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 14:36:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 329F0605EC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tgoMl0237iiC for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 14:36:00 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CCE26150D
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7CCE26150D
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 14:35:59 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.localdomain ([213.225.6.203]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MfYLQ-1qOm4x1jOS-00fxTz; Mon, 08 May 2023 16:35:55 +0200
+From: Daniel Lang <dalang@gmx.at>
+To: buildroot@buildroot.org
+Date: Mon,  8 May 2023 16:35:06 +0200
+Message-Id: <20230508143506.137329-1-dalang@gmx.at>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To: Sourabh Hegde <hrsourabh011@gmail.com>, buildroot@buildroot.org
-References: <CADYjeSv5qORodur3uKXp3zm_DRtVEeX=jTR_oBcTYMKks3k+iQ@mail.gmail.com>
-Content-Language: en-US
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <CADYjeSv5qORodur3uKXp3zm_DRtVEeX=jTR_oBcTYMKks3k+iQ@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1683549179;
- bh=46FI4rFVKvktAcgp3Gik1CrYND3QkE8MUEROcqsLmAY=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=DwtFnSDeNmcnyd0ugnfo7QvXibwM455Yx4ef0kyrubnrz+cN2JA0PHeoQl7LQhuU8
- nLGVofnZiwxtSHJsl1dF/SaVch+vIFXJWzBmcABFZ8/M008mMuEAMpKcwn6hCG6aiZ
- MUXsj7zron9pV7F8Ql1SJemhC03zilsWoZ2uTMo4ck5gn7In8aemz4Fle3PW06NaKA
- XipxJQzddpPHF9ICp03Vz/wtTL0ublu6SysPrTtyoTogjB45uuCgD5ECYvdilbIqrm
- 7nT+cjYFsEex0w78xfEdKq0cQK7BX7aojcECKSYGhlOO0rnIrsK3kESu0zXb16sS9i
- K00ciiEXaYfvg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=DwtFnSDe
-Subject: Re: [Buildroot] Adding custom package to buildroot | tar.gz: not in
- gzip format
+X-Provags-ID: V03:K1:Sy4Gwf38uwFyIwubS7rR00OzBNkq11gCKaDZbWCgVwgJtk1tTT/
+ S6VGYI9b2D23cnemQ6kHonYNXRhpTJDvI3qtH5024wfukvMNAhErHjOkHdwNkQzOR9O11Vk
+ c9EWQKStcRJw29cmHtHfxhuBPb7wqj7URMUG8LBfocNmL+rg5CtnPN53FehdFHg9QICf3j5
+ NqT5EnZAWaSIuFaBEVUiQ==
+UI-OutboundReport: notjunk:1;M01:P0:QrWFvanmOqI=;bGHic3NNevRkwiy4vC3vZKq9xh0
+ 51VTUHl8gccYq8hdBgGPvjVzUJFb33mlWrDq/mZIDQffGDE6vucKILoHt7t7qRqMWCnb3UKHD
+ wOmfAnBZkm7iRhugfq2TMmQPC4gU/jmE2PJmiFsDib69KyyJ+aR52EP5vb26/elW44XhfnP2C
+ 6VOdSyWLQX0c8FmlgYQ9WoshBScIfL/yPnRasTIJKoII/HFGk3Fq/ARNin2v70EhdGPAWjvV6
+ Rh9g/Np7fHiBOo2LdMVmu+f+Qga0NaZmvXUboApQFFg3QfPy5VNh24sZvhiYe4EdXtAnWn3q9
+ Zeagt+Wbz8FkMFQa/W1LuhzA3vxSIzt9txjaOSSwuyUaxidPOyUvHuMty4aJFNuabjsTc1QkX
+ WLgayD7mWoIdzeXu7WKzzFq6cqcKwdfiwgWfWPVM0yRaZP2zDCH7lVg3CvwDBDUb1bWkhQ/70
+ Rdbm7diXUJRhks5y7HoRgk5aCbPaauRx6PBOLuh05xNjQ+/nRaisBCMyY2cAaH1UH2ANVPqo4
+ wJAG+BYCM6tPmL33qCMuwegrNhPAXWz6Vooc11E0a7fcDHcpFSdoV+0BolL2UblQLZ9I6fbET
+ gGuWZzZYoRWOUI0SNlhywucx9YGPtUnTtZCCZF9TU0XBBgFs1Jb5qbVXBDoZfoL84L3/hCzvH
+ i58iLQtP0hUMucvNBy9+UKFCFE+zQwFTdxQ6fiswp7Gn4BH6DlKOi6rbOVfXyBa68apaKuOFW
+ J9yZp8L1v1bcE7xuThv2Uv2s+rALVOE8XeWA+f2GXqrp2WDDB+gnTS8ntyQP8rYQqELztpDZA
+ HOeARPjKv5yKZk6Lj21tyE54VhF+nbTSHlNYg5ItS1C8R959TOudaZwUQHU+MQ42D2kETK+Ec
+ Rq+ufyerlAX4lX4wmyuX7MgDFN+hPeRLBWAmnec+kDGQk8eMlAXryCA3E5BY+gJbEswMS6glQ
+ zvrqsh88MtrD+0Bueo0EdSD8adw=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.at; s=s31663417; 
+ t=1683556555; i=dalang@gmx.at;
+ bh=kYy5i9C2sP8kwLLq26QpGQ5jvPYLIiql8tZqtECAt5E=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=lgtQ4Sd1wYHv2lPJAfchLzYh27R4te8aNIui8BAuUYcLZ0T3XZWisXeLJSZjHyi/c
+ O+1WS5Ib/uS0OsT4CXy+kgRfX6Yqnpkor2ZTEhyodmgQlTMbUwVc2B48XY6IxP7lEr
+ 7GvikzxoJWuCzHg20Ry2Z+/lL9/Rj7wTd8hoVf+C/h+639VrbWI4Fjylrqch68V82y
+ QwRSuehcG3QgLxsj2DGEjntdejmiKtugZuUSsyhI8bVMnLw8ggcZGHEHPIy02aUrIR
+ GZQf040nsSpqwNKA87jLu/h1TDS+A5y7LnCDaEB8Y4Qu8mUHGbtVEJqE0B1UrFpp08
+ DKUWWBGsM4OLw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
+ header.a=rsa-sha256 header.s=s31663417 header.b=lgtQ4Sd1
+Subject: [Buildroot] [PATCH] package/dbus-cxx: bump version to 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,55 +90,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Daniel Lang <d.lang@abatec.at>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello all!
+https://github.com/dbus-cxx/dbus-cxx/releases/tag/2.4.0
 
-Sourabh wrote:
-> I am trying to add a custom package to buildroot packages. The package
-> is a simple compiled binary file that will be downloaded from Git. I
-> am not doing any build in the buildroot. Only installing the binary to
-> target.
->
-> But, during package extracting process, I am getting below error:
->
-> gzip -d -c /dl/awsclient/awsclient-1.5.0.tar.gz | tar --strip-components=1 -C /home/ultratronik/tmp/br.mmia53.standard/build/awsclient-1.5.0   -xf -
->
-> gzip: /dl/awsclient/awsclient-1.5.0.tar.gz: not in gzip format
-> tar: This does not look like a tar archive
-> tar: Exiting with failure status due to previous errors
->
-> The tar.gz file is downloaded in the buildroot download directory but
-> it is not in gzip format.
-> Inspecting file with "file" showed:awsclient-1.5.0.tar.gz: HTML
-> document, UTF-8 Unicode text, with very long lines
->
-> The package Makefile:
->
-> AWSCLIENT_SOURCE=awsclient-$(AWSCLIENT_VERSION).tar.gz
-> AWSCLIENT_SITE=https://git.osb-connagtive.com/iot/public/awsclient-releases/uploads/a0e69fa56d7772454b2587df2a800feb/awsclient-1.5.0.tar.gz
-> AWSCLIENT_SITE_METHOD=git
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+---
+ package/dbus-cxx/dbus-cxx.hash | 2 +-
+ package/dbus-cxx/dbus-cxx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-The URL in AWSCLIENT_SITE does not appear to point to a git repository.
-It is just a tarball that can be downloaded directly. In this case, the
-download method should be "wget", but you can omit it, as it is the
-default for HTTP and HTTPS URLs.
+diff --git a/package/dbus-cxx/dbus-cxx.hash b/package/dbus-cxx/dbus-cxx.hash
+index 6a7a634ced..4ed9d73bac 100644
+--- a/package/dbus-cxx/dbus-cxx.hash
++++ b/package/dbus-cxx/dbus-cxx.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  88d4bd1d9af8563bda03f24b26ffe4efbc555ca82ac664ced572b053928f739a  dbus-cxx-2.3.1.tar.gz
++sha256  c38456ed70023d93e6e689087e4bbe030f1650bbda9de7c035d6f4ebac788379  dbus-cxx-2.4.0.tar.gz
+ sha256  99e5d0ad951d96567a6f9a17f3f17ac000c0582f53357c7f3601851c2dcbb786  COPYING
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  cmake-modules/LICENSE_1_0.txt
+ sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  tools/libcppgenerate/LICENSE
+diff --git a/package/dbus-cxx/dbus-cxx.mk b/package/dbus-cxx/dbus-cxx.mk
+index 554acaa67d..8e2b4f70fa 100644
+--- a/package/dbus-cxx/dbus-cxx.mk
++++ b/package/dbus-cxx/dbus-cxx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_CXX_VERSION = 2.3.1
++DBUS_CXX_VERSION = 2.4.0
+ DBUS_CXX_SITE = $(call github,dbus-cxx,dbus-cxx,$(DBUS_CXX_VERSION))
+ DBUS_CXX_LICENSE = LGPL-3.0+ or BSD-3-Clause, Boost license (cmake-modules), Apache 2.0 (libcppgenerate)
+ DBUS_CXX_LICENSE_FILES = COPYING cmake-modules/LICENSE_1_0.txt tools/libcppgenerate/LICENSE
+-- 
+2.40.1
 
-Besides that, two other changes are needed:
-
- - do not include the trailing file name ($AWSCLIENT_SOURCE) in
-   AWSCLIENT_SITE: it will be added automatically, do not include a
-   trailing slash either
-
- - add AWSCLIENT_STRIP_COMPONENTS=0, as this tarball is unusual in that
-   it doesn't include a leading directory in the stored path.
-
-Regards,
-
-Edgar.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
