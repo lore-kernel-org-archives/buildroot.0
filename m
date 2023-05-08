@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D839C7EE25
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 20:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77F8BC77B7F
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 21:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C30BF4288E;
-	Mon,  8 May 2023 20:56:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C30BF4288E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 009E142123;
+	Mon,  8 May 2023 21:00:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 009E142123
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SSL9k0v7igJv; Mon,  8 May 2023 20:56:55 +0000 (UTC)
+	with ESMTP id 6EBBQOXfpfVs; Mon,  8 May 2023 21:00:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 742F14202E;
-	Mon,  8 May 2023 20:56:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 742F14202E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8BD44202E;
+	Mon,  8 May 2023 20:59:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8BD44202E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89A461BF34E
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 20:56:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 338E61BF25B
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 20:59:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 632DC84421
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 20:56:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 632DC84421
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09B2B84436
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 20:59:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09B2B84436
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8OAR2_nCrxZr for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 20:56:51 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5202F8441A
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5202F8441A
- for <buildroot@buildroot.org>; Mon,  8 May 2023 20:56:51 +0000 (UTC)
+ with ESMTP id lIrCBiBsdthN for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 20:59:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2B3784433
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F2B3784433
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 20:59:56 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:89f6:f9b6:d1a9:3e6e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 475FC78031A;
- Mon,  8 May 2023 22:56:46 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4D5BC780503;
+ Mon,  8 May 2023 22:59:53 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 May 2023 22:56:46 +0200
-Date: Mon, 8 May 2023 22:56:46 +0200
+ Mon, 08 May 2023 22:59:53 +0200
+Date: Mon, 8 May 2023 22:59:53 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230508205646.GS252090@scaer>
-References: <20230508181001.18771-1-ju.o@free.fr>
+To: Yair Ben-Avraham <yairba@protonmail.com>
+Message-ID: <20230508205953.GT252090@scaer>
+References: <Tm7UB83oi2aPJoQgoeiYTQrMJLPO4yjcBMbKqUPLlebN4FU9m2kt2n7NpycuWBjEDKrXzTL0AngujcH42EmoZLtIdZ8PxVtmUE1fYjH3jJU=@protonmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230508181001.18771-1-ju.o@free.fr>
+In-Reply-To: <Tm7UB83oi2aPJoQgoeiYTQrMJLPO4yjcBMbKqUPLlebN4FU9m2kt2n7NpycuWBjEDKrXzTL0AngujcH42EmoZLtIdZ8PxVtmUE1fYjH3jJU=@protonmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683579408;
- bh=pcjeR9GLHLq2WRvhSrzQBwWXFnFUIGm4fD2vBbD4d5s=;
+ d=free.fr; s=smtp-20201208; t=1683579595;
+ bh=p9Kg3A/hTMERFXCI8UL6fQIKE2CbtI39VZFy61Qprd8=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MWdm4Qa8hl+8fHwcz8wwUx9ruiD+E3hBE2u7TTyXA4DcxkXj1ssfS4paApntahXrY
- veUapdfqa9sUWkpEj4csK9btNuBif/4XJeZfOWbcO1wtZREPi3HmtQNuLi9zwDYVem
- IkuY/53mhmWEh5UPVXeb0qFS++Pi3HlgPJ3VWhhqcEaTGjYToZzNgwD81YGeH5Brwv
- 88qJrsCWzcqafH8Sdor3tPKx4ZYr0pFkoiiyufSUqHmzmzhkdUBx8hgAP8D57rhejL
- RnrUDDaM4OoUCPel0MzN60Mf2cGEC9UahRKCKIgsUp815KK7mUqLlwgJRh5bxWo5bN
- h45kkWcIBhckA==
+ b=QC/yQ+cF7SfxMl20O30yQcmWRL+VIyyY7sUtstBaMUzV3cgz94d1vhL1IHuRFC4Uz
+ 35g9IaRaFhRAAOZVDq9hKt9nBGa8uj8mCVtSmPo1z2QTH+p7IifeKcVTNs5pbD4OtA
+ M8FRjx8X4FW1C+Kxu4np44PVxFxVFuSvgf0CfN+3Y+OOGMITRa/d27OaLPTCZc/wtF
+ zCHyAieUydcin+LdbbeTW0Zw6LH49UKqJHCGLGyQV7A10WNZnxEDxZ/XifeJgmfaCj
+ CVIAub6RwQgKwsDQ+s/uq9vYkEmFi+OT0dku2I69q+O/jd5CtVHufnPDjsyYGr26Zl
+ vOUQhYI1HUbBw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MWdm4Qa8
-Subject: Re: [Buildroot] [PATCH 1/2] package/openblas: add a new option to
- install tests
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QC/yQ+cF
+Subject: Re: [Buildroot] package/gloox: bump version to 1.0.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +76,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+Yair, All,
 
-On 2023-05-08 20:10 +0200, Julien Olivain spake thusly:
-> This option can be used for runtime testing or package debugging.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-
-Following our IRC discussion, and the various quick tests I did, it
-looks like tests are always built, in fact. The only reason a test would
-not be built, would be if BUILD_SINGLE et al. would be disabled.
-
-We do not offer that possibility in Buildroot, but maybe that is
-autodetected by openblas, where it would disable some stuff based on the
-target processor (or whatever).
-
-So, I tweaked the comment. It does not change much rom what you wrote.
-in the end...
+On 2023-04-25 13:34 +0000, Yair Ben-Avraham via buildroot spake thusly:
+> Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
 
 Applied to master, thanks.
 
@@ -107,54 +93,67 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/openblas/Config.in   |  5 +++++
->  package/openblas/openblas.mk | 18 ++++++++++++++++++
->  2 files changed, 23 insertions(+)
+>  ...src-connectiontcpserver-cpp-fix-musl.patch | 25 -------------------
+>  package/gloox/gloox.hash                      |  2 +-
+>  package/gloox/gloox.mk                        |  2 +-
+>  3 files changed, 2 insertions(+), 27 deletions(-)
+>  delete mode 100644 package/gloox/0001-src-connectiontcpserver-cpp-fix-musl.patch
 > 
-> diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-> index 0144e93a3f..58976e657a 100644
-> --- a/package/openblas/Config.in
-> +++ b/package/openblas/Config.in
-> @@ -94,4 +94,9 @@ config BR2_PACKAGE_OPENBLAS_USE_LOCKING
->  	  function calls from multiple threads, then locking is
->  	  mandatory for correct operation.
+> diff --git a/package/gloox/0001-src-connectiontcpserver-cpp-fix-musl.patch b/package/gloox/0001-src-connectiontcpserver-cpp-fix-musl.patch
+> deleted file mode 100644
+> index 56a2d4982c..0000000000
+> --- a/package/gloox/0001-src-connectiontcpserver-cpp-fix-musl.patch
+> +++ /dev/null
+> @@ -1,25 +0,0 @@
+> -src/connectiontcpserver.cpp: fix musl build
+> -
+> -Build on musl fails on:
+> -
+> -connectiontcpserver.cpp:131:13: error: 'strerror' was not declared in this scope
+> -           + strerror( err ) + " (errno: " + util::int2string( err ) + ")";
+> -             ^~~~~~~~
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/a61a91bb6e1156eff5fb756f9dccfc2bb6c0f277
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -[Upstream status: https://bugs.camaya.net/ticket/?id=291]
+> -
+> -diff -Nuar gloox-1.0.23-orig/src/connectiontcpserver.cpp gloox-1.0.23/src/connectiontcpserver.cpp
+> ---- gloox-1.0.23-orig/src/connectiontcpserver.cpp	2020-06-05 23:22:59.624018949 +0200
+> -+++ gloox-1.0.23/src/connectiontcpserver.cpp	2020-06-05 23:26:20.708027221 +0200
+> -@@ -36,6 +36,7 @@
+> - # include <resolv.h>
+> - # include <netdb.h>
+> - # include <arpa/inet.h>
+> -+# include <string.h>
+> - # include <sys/socket.h>
+> - # include <sys/un.h>
+> - # include <sys/select.h>
+> diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
+> index 6419db90f8..66a3c2d1be 100644
+> --- a/package/gloox/gloox.hash
+> +++ b/package/gloox/gloox.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  ae1462be2a2eb8fe5cd054825143617c53c2c9c7195606cb5a5ba68c0f68f9c9  gloox-1.0.24.tar.bz2
+> +sha256  0b8b7371439bc58d9e51384b616c964b18b7b41b87af1b7855104380eda86ffb  gloox-1.0.27.tar.bz2
+>  sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
+> diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
+> index b741d5ebc1..3495db96f0 100644
+> --- a/package/gloox/gloox.mk
+> +++ b/package/gloox/gloox.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +config BR2_PACKAGE_OPENBLAS_INSTALL_TESTS
-> +	bool "install tests"
-> +	help
-> +	  Install C test programs on target.
-> +
->  endif
-> diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-> index f7a50d7bc7..3fa0bbfce7 100644
-> --- a/package/openblas/openblas.mk
-> +++ b/package/openblas/openblas.mk
-> @@ -77,4 +77,22 @@ define OPENBLAS_INSTALL_TARGET_CMDS
->  		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
->  endef
->  
-> +ifeq ($(BR2_PACKAGE_OPENBLAS_INSTALL_TESTS),y)
-> +# The actual test list depends on the architecture and/or some build
-> +# options. This macro installs all the test programs and input data
-> +# found in the ctest build directory.
-> +define OPENBLAS_INSTALL_TESTS
-> +	mkdir -p $(TARGET_DIR)/usr/libexec/openblas/tests
-> +	find $(@D)/ctest \
-> +		-type f -name "x[sdcz]cblat[123]" -perm -0100 \
-> +		-exec $(INSTALL) -m 0755 {} \
-> +			$(TARGET_DIR)/usr/libexec/openblas/tests \;
-> +	find $(@D)/ctest \
-> +		-type f -name "[sdcz]in[123]" \
-> +		-exec $(INSTALL) -m 0644 {} \
-> +			$(TARGET_DIR)/usr/libexec/openblas/tests \;
-> +endef
-> +OPENBLAS_POST_INSTALL_TARGET_HOOKS += OPENBLAS_INSTALL_TESTS
-> +endif
-> +
->  $(eval $(generic-package))
+> -GLOOX_VERSION = 1.0.24
+> +GLOOX_VERSION = 1.0.27
+>  GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
+>  GLOOX_SITE = https://camaya.net/download
+>  GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
 > -- 
-> 2.40.1
-> 
+> 2.30.2
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
