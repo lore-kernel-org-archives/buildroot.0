@@ -4,78 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06D72C77B75
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 16:52:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 252F2C77B75
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 17:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 899DD6FE79;
-	Mon,  8 May 2023 16:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 899DD6FE79
+	by smtp3.osuosl.org (Postfix) with ESMTP id C26C260761;
+	Mon,  8 May 2023 17:03:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C26C260761
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VFJwlAk41Ywf; Mon,  8 May 2023 16:52:16 +0000 (UTC)
+	with ESMTP id N1sYXys2a8Pj; Mon,  8 May 2023 17:03:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDCB76FF00;
-	Mon,  8 May 2023 16:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDCB76FF00
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B28160E4B;
+	Mon,  8 May 2023 17:03:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B28160E4B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2396C1BF35B
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 16:52:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DD9B11BF35B
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 17:03:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C5B0420B0
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 16:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C5B0420B0
+ by smtp4.osuosl.org (Postfix) with ESMTP id B5E0C41DF1
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 17:03:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5E0C41DF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ElL6h8kWS3Jg for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 16:52:11 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ACD94208B
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com
- [209.85.167.49])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8ACD94208B
- for <buildroot@buildroot.org>; Mon,  8 May 2023 16:52:11 +0000 (UTC)
-Received: by mail-lf1-f49.google.com with SMTP id
- 2adb3069b0e04-4f1411e8111so5335850e87.1
- for <buildroot@buildroot.org>; Mon, 08 May 2023 09:52:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683564729; x=1686156729;
- h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=8OuXJEJ7BwtiJ18MlsJfa39+ESQAfDrryOUjLBKa+KY=;
- b=KikrMAYxhGrRFtAknA7XI3Wjh153Ysa+waRUWF/Ntl5z+G0QqJ3bpEHdsDJOiH/wIt
- LzkjEbmkK2BvA/z6sdE4v+KZOW50fjNVUM9+57U19c8rJEUhdaiYJaVOymtw3HDl+3Kq
- jl6XfByQ8adkt3uRi3NO2PfmjcSSmpW9DLR/QqHogJCiRk+U1g4Fz8J/8AG9BTKyhbDV
- HXdnqRyuklrVicslzk5Eoolr/8hgwk8VLnhLSakIOBiya8/FadAVvLXjbYxKMnT5lyjr
- VQacH/6XMPaWQB/GAF0mzLh8ahkxAYor7xKsmZNq7kYlyI3kgi7mR1zZOBbfuDLt4yLB
- BrhA==
-X-Gm-Message-State: AC+VfDzDFgtO+pPpXdFS7C/Bn+c4ajL7qGcZtGscN8JkOpl71upe6yyw
- RKk3iogy9vwQQWb3+QwgmjZL+q5tqIB+hfjm
-X-Google-Smtp-Source: ACHHUZ5SMbimBHDUtp4ee0F81/U8gUiRVsLrw5kkyp8+8nRLstGAqLVyJJ2KUYrdZbi+xvtbKte17g==
-X-Received: by 2002:a05:6512:208:b0:4f1:866d:9b01 with SMTP id
- a8-20020a056512020800b004f1866d9b01mr1811827lfo.3.1683564728951; 
- Mon, 08 May 2023 09:52:08 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com.
- [209.85.167.49]) by smtp.gmail.com with ESMTPSA id
- a16-20020a056512391000b004f0c9120a41sm41715lfu.214.2023.05.08.09.52.08
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 08 May 2023 09:52:08 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id
- 2adb3069b0e04-4f1411e8111so5335822e87.1
- for <buildroot@buildroot.org>; Mon, 08 May 2023 09:52:08 -0700 (PDT)
-X-Received: by 2002:a19:ac48:0:b0:4ef:d482:9c91 with SMTP id
- r8-20020a19ac48000000b004efd4829c91mr2479150lfc.47.1683564728622; Mon, 08 May
- 2023 09:52:08 -0700 (PDT)
+ with ESMTP id 30TFYjDNQzxt for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 17:03:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E80D41B36
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E80D41B36
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 17:03:47 +0000 (UTC)
+Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
+ by mailout12.t-online.de (Postfix) with SMTP id 6F18117559
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 19:03:43 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.197.49]) by fwd85.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pw4H1-3PqG0n0; Mon, 8 May 2023 19:03:43 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:36120)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pw4H0-0006ck-2g
+ for buildroot@buildroot.org; Mon, 08 May 2023 19:03:42 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Mon,  8 May 2023 19:03:42 +0200
+Message-Id: <20230508170342.1347176-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Mon, 8 May 2023 18:51:57 +0200
-X-Gmail-Original-Message-ID: <CACXRmJiBdi1U4efVAryrFeF_xMAyfQ7-+Wnv=4BHNhRpS5C=Dw@mail.gmail.com>
-Message-ID: <CACXRmJiBdi1U4efVAryrFeF_xMAyfQ7-+Wnv=4BHNhRpS5C=Dw@mail.gmail.com>
-To: giulio.benetti@benettiengineering.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/libgtk3: fix build failure on
- libinput due to the presence of atk-bridge-2.0 in gtk+-3.0.pc
+X-TOI-EXPURGATEID: 150726::1683565423-AE58CDAB-E3537ED0/0/0 CLEAN NORMAL
+X-TOI-MSGID: aec2a408-efed-434b-9c94-4245587cfdec
+Subject: [Buildroot] [PATCH 1/1] package/libass: bump version to 0.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,52 +65,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============6398827344967716976=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6398827344967716976==
-Content-Type: multipart/alternative; boundary="0000000000009b253e05fb31756c"
+Release notes: https://github.com/libass/libass/releases/tag/0.17.1
 
---0000000000009b253e05fb31756c
-Content-Type: text/plain; charset="UTF-8"
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
-The patch is dropped on master:
-https://git.buildroot.net/buildroot/commit/?id=05f9c34ad0b6bb3ef719db3df5fb44e3d6a5c2aa
-
-So this patch can be dropped.
-
-Kr,
-
-Thomas
-
---0000000000009b253e05fb31756c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto">Hi,<div dir=3D"auto"><br></div><div dir=3D"auto">The patc=
-h is dropped on master:</div><div dir=3D"auto"><a href=3D"https://git.build=
-root.net/buildroot/commit/?id=3D05f9c34ad0b6bb3ef719db3df5fb44e3d6a5c2aa">h=
-ttps://git.buildroot.net/buildroot/commit/?id=3D05f9c34ad0b6bb3ef719db3df5f=
-b44e3d6a5c2aa</a></div><div dir=3D"auto"><br></div><div dir=3D"auto">So thi=
-s patch can be dropped.=C2=A0</div><div dir=3D"auto"><br></div><div dir=3D"=
-auto">Kr,=C2=A0</div><div dir=3D"auto"><br></div><div dir=3D"auto">Thomas=
-=C2=A0</div></div>
-
---0000000000009b253e05fb31756c--
-
---===============6398827344967716976==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index beb7639b1f..bf9b8251d7 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  971e2e1db59d440f88516dcd1187108419a370e64863f70687da599fdf66cc1a  libass-0.17.0.tar.xz
++sha256  f0da0bbfba476c16ae3e1cfd862256d30915911f7abaa1b16ce62ee653192784  libass-0.17.1.tar.xz
+ sha256  f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index 1cc8310312..8b14c899c4 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBASS_VERSION = 0.17.0
++LIBASS_VERSION = 0.17.1
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6398827344967716976==--
