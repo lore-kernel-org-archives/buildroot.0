@@ -1,59 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D151C7EE22
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 17:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD852C7EE22
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 18:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBF0F60E4B;
-	Mon,  8 May 2023 17:08:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBF0F60E4B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5876041E05;
+	Mon,  8 May 2023 18:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5876041E05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rx3KBzoc94MM; Mon,  8 May 2023 17:08:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TQW1fTWB8omS; Mon,  8 May 2023 18:10:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AD9960BA2;
-	Mon,  8 May 2023 17:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AD9960BA2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B71491BF359
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 17:08:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1281241DB5;
+	Mon,  8 May 2023 18:10:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1281241DB5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F0BF81BF342
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 18:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 90BB460761
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 17:08:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90BB460761
+ by smtp2.osuosl.org (Postfix) with ESMTP id C888F40A5B
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 18:10:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C888F40A5B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6-ijG4MHdYrL for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 17:08:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E05A60669
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4E05A60669
- for <buildroot@buildroot.org>; Mon,  8 May 2023 17:08:30 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout10.t-online.de (Postfix) with SMTP id 3345C6ECC;
- Mon,  8 May 2023 19:08:28 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.197.49]) by fwd80.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pw4Lb-1I9Tqz0; Mon, 8 May 2023 19:08:27 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36312)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pw4La-0007RR-2x;
- Mon, 08 May 2023 19:08:26 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pfBXCwAH1VP5 for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 18:10:18 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 049344016F
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 049344016F
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 18:10:17 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.170.150.105])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id B9A43780512;
+ Mon,  8 May 2023 20:10:13 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon,  8 May 2023 19:08:26 +0200
-Message-Id: <20230508170826.1353566-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+Date: Mon,  8 May 2023 20:10:00 +0200
+Message-Id: <20230508181001.18771-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683565707-0A6CC4D3-A66B7B3B/0/0 CLEAN NORMAL
-X-TOI-MSGID: 61dc05dc-bd93-4895-aef0-340109facbfb
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.13.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1683569415;
+ bh=MTGpaELDhbdPRvCbbgECV+IVfKT/jCbOr7t3eJuYiMc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=YicutiHvmQIrhuXg1ilzpUjjGwznPWRrDICbgip+/2QCAGMqR9CktfoFMOh9KCpGF
+ Ub9YoHOprJ9zr5OBlbt4AboUoSDavHJloD+Hz/HLIx6taGlYrK4ZbxI7lab8+9/GBf
+ nk329sx1SmceNGVjDnEI5eLal+yMixdMrcQiCOHzoCsY8PNWY3lTyMxC7W1WHvTEXy
+ 7G3tqW9mOu64re7Kiz2fNxYnP62Wn005BViKAhk+zfY0a8NTXYqZJJL1j/P359L/sT
+ 0VRsJRR33Jqj+RVMHp+cmZkEoEd9EbviVE7WCsZwaU1YEoj+qyzedB/ueClUShtkBK
+ O5ohWGgFSqrsg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YicutiHv
+Subject: [Buildroot] [PATCH 1/2] package/openblas: add a new option to
+ install tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +71,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Spenser Gilliland <spenser@gillilanding.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://github.com/webmproject/libvpx/blob/main/CHANGELOG
+This option can be used for runtime testing or package debugging.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libvpx/libvpx.hash | 2 +-
- package/libvpx/libvpx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openblas/Config.in   |  5 +++++
+ package/openblas/openblas.mk | 18 ++++++++++++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index 828718e713..c88e6840cf 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb  libvpx-1.12.0.tar.gz
-+sha256  cb2a393c9c1fae7aba76b950bb0ad393ba105409fe1a147ccd61b0aaa1501066  libvpx-1.13.0.tar.gz
- sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
- sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index c8a22b9ab2..67b25c9100 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 0144e93a3f..58976e657a 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -94,4 +94,9 @@ config BR2_PACKAGE_OPENBLAS_USE_LOCKING
+ 	  function calls from multiple threads, then locking is
+ 	  mandatory for correct operation.
  
--LIBVPX_VERSION = 1.12.0
-+LIBVPX_VERSION = 1.13.0
- LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
- LIBVPX_LICENSE = BSD-3-Clause
- LIBVPX_LICENSE_FILES = LICENSE PATENTS
++config BR2_PACKAGE_OPENBLAS_INSTALL_TESTS
++	bool "install tests"
++	help
++	  Install C test programs on target.
++
+ endif
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index f7a50d7bc7..3fa0bbfce7 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -77,4 +77,22 @@ define OPENBLAS_INSTALL_TARGET_CMDS
+ 		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
+ endef
+ 
++ifeq ($(BR2_PACKAGE_OPENBLAS_INSTALL_TESTS),y)
++# The actual test list depends on the architecture and/or some build
++# options. This macro installs all the test programs and input data
++# found in the ctest build directory.
++define OPENBLAS_INSTALL_TESTS
++	mkdir -p $(TARGET_DIR)/usr/libexec/openblas/tests
++	find $(@D)/ctest \
++		-type f -name "x[sdcz]cblat[123]" -perm -0100 \
++		-exec $(INSTALL) -m 0755 {} \
++			$(TARGET_DIR)/usr/libexec/openblas/tests \;
++	find $(@D)/ctest \
++		-type f -name "[sdcz]in[123]" \
++		-exec $(INSTALL) -m 0644 {} \
++			$(TARGET_DIR)/usr/libexec/openblas/tests \;
++endef
++OPENBLAS_POST_INSTALL_TARGET_HOOKS += OPENBLAS_INSTALL_TESTS
++endif
++
+ $(eval $(generic-package))
 -- 
-2.39.2
+2.40.1
 
 _______________________________________________
 buildroot mailing list
