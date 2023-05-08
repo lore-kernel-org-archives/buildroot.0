@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E295FC77B75
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 16:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B3E3C77B7F
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 16:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F2AC84457;
-	Mon,  8 May 2023 16:06:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F2AC84457
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4CE884496;
+	Mon,  8 May 2023 16:06:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4CE884496
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qxM61chKaJFC; Mon,  8 May 2023 16:06:11 +0000 (UTC)
+	with ESMTP id 0LO5gPKJqFFI; Mon,  8 May 2023 16:06:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B3BF84487;
-	Mon,  8 May 2023 16:06:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B3BF84487
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C3F161BF35B
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 16:05:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 41EF68448C;
+	Mon,  8 May 2023 16:06:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41EF68448C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D34121BF867
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 16:05:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7187561392
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 16:05:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7187561392
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACBF341CDA
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 16:05:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACBF341CDA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZZM1qUgUV86y for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 16:05:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4971B606E6
- for <buildroot@buildroot.org>; Mon,  8 May 2023 16:05:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4971B606E6
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37DE086147; Mon,  8 May 2023 16:05:16 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 8 May 2023 17:51:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2f43af1b997f5f0e9262159be3336d73bd4d0d21
-X-Git-Newrev: 2c3ca7bea1de76163aeef432412eb14551ed0581
-X-Patchwork-Hint: ignore
-Message-Id: <20230508160516.37DE086147@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/atk: remove package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EhkDx37U7oeP for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 16:05:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEC9441CDF
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EEC9441CDF
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 16:05:49 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:7bde:4dbc:bac0:54b7])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 9034A2003DE;
+ Mon,  8 May 2023 18:05:38 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 08 May 2023 18:05:38 +0200
+Date: Mon, 8 May 2023 18:05:38 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Message-ID: <20230508160538.GY252090@scaer>
+References: <20230428075920.3750005-1-thomas@devoogdt.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230428075920.3750005-1-thomas@devoogdt.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1683561947;
+ bh=qDdVhVKYrPwDZsmbAS9uX264Ndj4WmdF2UA3nDTpDBA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Iht0bcDc3xkqpYb/VdSIX+MfCtbFfwP47pOa1GQrEBRIcNzMEhu+xI9fxgb6edlwR
+ R3oedey+rYn2W+Wwj50Lm796gVeGyLludFWHU7Is9OdsUsnPHAX2Fc3bvRBDeyAezC
+ Q952NV9DlfbxVn3xz9ukHVTBizYLk/z9PlJ8Vy0o7jvp1gewXPKVRgITXQYofBSWkp
+ fbzyX/X/sNcrOisJBr/ACxiDNKRGT+kSiOpgI30kge4tdJPUMl4koRIqbfH2O05vSL
+ Mblr0v2ueUX+E5t+voqcB7CZvAzGpTMkRuuU+44oqdrIbDmxgrSYgoRsLLqRay/g04
+ 0sK2yVilWh+8Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Iht0bcDc
+Subject: Re: [Buildroot] [PATCH v7 1/5] package/at-spi2-core: bump to
+ version 2.48.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,274 +77,251 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Joseph Kogut <joseph.kogut@gmail.com>, Daniel Lang <d.lang@abatec.at>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ James Knight <james.knight@collins.com>, buildroot@buildroot.org,
+ Adrian Perez de Castro <aperez@igalia.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c3ca7bea1de76163aeef432412eb14551ed0581
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-atk has been merged into at-spi2-core with version 2.45.1.
+On 2023-04-28 09:59 +0200, Thomas Devoogdt spake thusly:
+> From: Daniel Lang <d.lang@abatec.at>
+> 
+> https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_48_0/NEWS
+> 
+> - X11 is now optional.
+> - libxml2 is no longer optional.
+> - atk and at-spi2-atk have been merged into at-spi2-core.
+> - atk introspection option added.
+> - Added patch to which avoids requiring libsystemd when configured to use dbus-daemon.
+> - Added check on dlopen.
+> 
+> Signed-off-by: Daniel Lang <d.lang@abatec.at>
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_45_1/NEWS
-https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/78
+Series applied to master, thanks!
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Tested-by: Adrian Perez de Castro <aperez@igalia.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Config.in.legacy               |  6 ++++++
- package/Config.in              |  1 -
- package/atk/Config.in          | 14 --------------
- package/atk/atk.hash           |  5 -----
- package/atk/atk.mk             | 25 -------------------------
- package/atkmm/Config.in        |  8 ++++----
- package/atkmm/atkmm.mk         |  2 +-
- package/atkmm2_28/Config.in    |  8 ++++----
- package/atkmm2_28/atkmm2_28.mk |  2 +-
- package/libglade/Config.in     |  2 +-
- package/libglade/libglade.mk   |  2 +-
- package/libgtk2/Config.in      |  2 +-
- package/libgtk2/libgtk2.mk     |  2 +-
- package/libgtk3/Config.in      |  2 +-
- package/libgtk3/libgtk3.mk     |  2 +-
- 15 files changed, 22 insertions(+), 61 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7837f5a588..debe8428a5 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2023.05"
- 
-+config BR2_PACKAGE_ATK
-+	bool "atk removed"
-+	select BR2_LEGACY
-+	help
-+	  atk is now part of at-spi2-core.
-+
- config BR2_PACKAGE_AT_SPI2_ATK
- 	bool "at-spi2-atk removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 92ef7160d0..420ebaa370 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1555,7 +1555,6 @@ endmenu
- menu "Graphics"
- 	source "package/assimp/Config.in"
- 	source "package/at-spi2-core/Config.in"
--	source "package/atk/Config.in"
- 	source "package/atkmm/Config.in"
- 	source "package/atkmm2_28/Config.in"
- 	source "package/bayer2rgb-neon/Config.in"
-diff --git a/package/atk/Config.in b/package/atk/Config.in
-deleted file mode 100644
-index d9371b879b..0000000000
---- a/package/atk/Config.in
-+++ /dev/null
-@@ -1,14 +0,0 @@
--config BR2_PACKAGE_ATK
--	bool "atk"
--	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
--	depends on BR2_USE_MMU # glib2
--	select BR2_PACKAGE_LIBGLIB2
--	help
--	  The ATK accessibility toolkit, needed to build GTK+-2.x.
--
--	  https://gitlab.gnome.org/GNOME/atk
--
--comment "atk needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/atk/atk.hash b/package/atk/atk.hash
-deleted file mode 100644
-index d8cd69ff1f..0000000000
---- a/package/atk/atk.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# From http://ftp.gnome.org/pub/gnome/sources/atk/2.38/atk-2.38.0.sha256sum
--sha256  ac4de2a4ef4bd5665052952fe169657e65e895c5057dffb3c2a810f6191a0c36  atk-2.38.0.tar.xz
--
--# Hash for license file
--sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-deleted file mode 100644
-index 2820fb486d..0000000000
---- a/package/atk/atk.mk
-+++ /dev/null
-@@ -1,25 +0,0 @@
--################################################################################
--#
--# atk
--#
--################################################################################
--
--ATK_VERSION_MAJOR = 2.38
--ATK_VERSION = $(ATK_VERSION_MAJOR).0
--ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
--ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
--ATK_LICENSE = LGPL-2.0+
--ATK_LICENSE_FILES = COPYING
--ATK_INSTALL_STAGING = YES
--ATK_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
--
--ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--ATK_CONF_OPTS += -Dintrospection=true
--ATK_DEPENDENCIES += gobject-introspection
--else
--ATK_CONF_OPTS += -Dintrospection=false
--endif
--
--ATK_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
--
--$(eval $(meson-package))
-diff --git a/package/atkmm/Config.in b/package/atkmm/Config.in
-index 1f370356ea..571d7e69ad 100644
---- a/package/atkmm/Config.in
-+++ b/package/atkmm/Config.in
-@@ -2,10 +2,10 @@ config BR2_PACKAGE_ATKMM
- 	bool "atkmm (latest)"
- 	depends on BR2_INSTALL_LIBSTDCPP # glibmm
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libsigc
--	depends on BR2_TOOLCHAIN_HAS_THREADS # atk/glibmm -> libglib2
--	depends on BR2_USE_MMU # atk/glibmm -> libglib2
--	depends on BR2_USE_WCHAR # atk/glibmm -> libglib2
--	select BR2_PACKAGE_ATK
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
-+	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
-+	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_GLIBMM
- 	select BR2_PACKAGE_LIBSIGC
- 
-diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
-index 8afd058643..ec63d8ecbc 100644
---- a/package/atkmm/atkmm.mk
-+++ b/package/atkmm/atkmm.mk
-@@ -11,6 +11,6 @@ ATKMM_SITE = https://download.gnome.org/sources/atkmm/$(ATKMM_VERSION_MAJOR)
- ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- ATKMM_LICENSE_FILES = COPYING COPYING.tools
- ATKMM_INSTALL_STAGING = YES
--ATKMM_DEPENDENCIES = atk glibmm libsigc host-pkgconf
-+ATKMM_DEPENDENCIES = at-spi2-core glibmm libsigc host-pkgconf
- 
- $(eval $(meson-package))
-diff --git a/package/atkmm2_28/Config.in b/package/atkmm2_28/Config.in
-index 2340465b20..e88073b87a 100644
---- a/package/atkmm2_28/Config.in
-+++ b/package/atkmm2_28/Config.in
-@@ -2,10 +2,10 @@ config BR2_PACKAGE_ATKMM2_28
- 	bool "atkmm (2.28.x)"
- 	depends on BR2_INSTALL_LIBSTDCPP # glibmm
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
--	depends on BR2_TOOLCHAIN_HAS_THREADS # atk/glibmm -> libglib2
--	depends on BR2_USE_MMU # atk/glibmm -> libglib2
--	depends on BR2_USE_WCHAR # atk/glibmm -> libglib2
--	select BR2_PACKAGE_ATK
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
-+	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
-+	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_GLIBMM2_66
- 	select BR2_PACKAGE_LIBSIGC2
- 
-diff --git a/package/atkmm2_28/atkmm2_28.mk b/package/atkmm2_28/atkmm2_28.mk
-index dc57363cf5..b56da61ec0 100644
---- a/package/atkmm2_28/atkmm2_28.mk
-+++ b/package/atkmm2_28/atkmm2_28.mk
-@@ -11,6 +11,6 @@ ATKMM2_28_SITE = https://download.gnome.org/sources/atkmm/$(ATKMM2_28_VERSION_MA
- ATKMM2_28_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- ATKMM2_28_LICENSE_FILES = COPYING COPYING.tools
- ATKMM2_28_INSTALL_STAGING = YES
--ATKMM2_28_DEPENDENCIES = atk glibmm2_66 libsigc2 host-pkgconf
-+ATKMM2_28_DEPENDENCIES = at-spi2-core glibmm2_66 libsigc2 host-pkgconf
- 
- $(eval $(meson-package))
-diff --git a/package/libglade/Config.in b/package/libglade/Config.in
-index c97c9becd2..8d0d26f159 100644
---- a/package/libglade/Config.in
-+++ b/package/libglade/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBGLADE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_LIBXML2
- 	help
- 	  Libglade allows you to load glade interface files in a program
-diff --git a/package/libglade/libglade.mk b/package/libglade/libglade.mk
-index 21aed60605..af73d8bd00 100644
---- a/package/libglade/libglade.mk
-+++ b/package/libglade/libglade.mk
-@@ -9,7 +9,7 @@ LIBGLADE_VERSION = $(LIBGLADE_VERSION_MAJOR).4
- LIBGLADE_SOURCE = libglade-$(LIBGLADE_VERSION).tar.bz2
- LIBGLADE_SITE = https://download.gnome.org/sources/libglade/$(LIBGLADE_VERSION_MAJOR)
- LIBGLADE_INSTALL_STAGING = YES
--LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 atk libxml2
-+LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 at-spi2-core libxml2
- LIBGLADE_LICENSE = LGPL-2.0+
- LIBGLADE_LICENSE_FILES = COPYING
- 
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index c75c37fb63..f2888b2f51 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBGTK2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
- 	select BR2_PACKAGE_CAIRO_PDF
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 859925e8d3..608c263e4d 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -23,7 +23,7 @@ LIBGTK2_CONF_ENV = \
- 
- LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
- 
--LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango atk \
-+LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango at-spi2-core \
- 	gdk-pixbuf $(TARGET_NLS_DEPENDENCIES)
- 
- LIBGTK2_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index 82ca68d2da..34b8d49eb3 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_LIBGTK3
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		BR2_PACKAGE_HAS_LIBGL
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
- 	select BR2_PACKAGE_CAIRO_PDF
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index b41049b0ee..d1840ef112 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -14,7 +14,7 @@ LIBGTK3_CPE_ID_VENDOR = gnome
- LIBGTK3_CPE_ID_PRODUCT = gtk
- LIBGTK3_INSTALL_STAGING = YES
- 
--LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango \
-+LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 at-spi2-core libglib2 cairo pango \
- 	gdk-pixbuf libepoxy $(TARGET_NLS_DEPENDENCIES)
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+> ---
+> v3:
+>  - rebased on https://patchwork.ozlabs.org/project/buildroot/list/?series=336254
+>  - needed to fix the webkitgtk 2.38.5 compilation
+>    (https://patchwork.ozlabs.org/project/buildroot/patch/20230220090923.2155635-2-thomas.devoogdt@barco.com/)
+> v5: rebased + grouped patches
+> v6: rebased + added Adrians patch
+>  - note: 2.48.0 is out, but will first merge this one
+> v7: bumped to 2.48.0 + added dlopen check
+> ---
+>  ...iring-libsystemd-when-configured-to-.patch | 92 +++++++++++++++++++
+>  package/at-spi2-core/Config.in                | 13 +--
+>  package/at-spi2-core/at-spi2-core.hash        |  4 +-
+>  package/at-spi2-core/at-spi2-core.mk          | 18 +++-
+>  4 files changed, 115 insertions(+), 12 deletions(-)
+>  create mode 100644 package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
+> 
+> diff --git a/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch b/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
+> new file mode 100644
+> index 0000000000..29c3de8d2d
+> --- /dev/null
+> +++ b/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
+> @@ -0,0 +1,92 @@
+> +From aeb14ffccaabe65a64e976576d71f30eb2165f43 Mon Sep 17 00:00:00 2001
+> +From: Adrian Perez de Castro <aperez@igalia.com>
+> +Date: Mon, 24 Apr 2023 12:09:50 +0300
+> +Subject: [PATCH] meson: Avoid requiring libsystemd when configured to use
+> + dbus-daemon
+> +
+> +Checks for dbus-daemon and dbus-broker only when they are chosen
+> +with default_bus. This avoids requiring the systemd libraries if
+> +one wants the built at-spi2-core to use dbus-daemon, but dbus-worker
+> +is somehow available in the $PATH. A typical scenario is cross
+> +compilation, where the build host may have a dbus-broker program
+> +available, but the target system may not have it (or may not have
+> +nor want to use the systemd libraries).
+> +
+> +upstream: https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/134
+> +---
+> + bus/meson.build | 53 ++++++++++++++++++++++++-------------------------
+> + 1 file changed, 26 insertions(+), 27 deletions(-)
+> +
+> +diff --git a/bus/meson.build b/bus/meson.build
+> +index 22a1bce6..2f3c5621 100644
+> +--- a/bus/meson.build
+> ++++ b/bus/meson.build
+> +@@ -46,39 +46,38 @@ launcher_args = [
+> +              '-DDATADIR="@0@"'.format(atspi_datadir),
+> +            ]
+> + 
+> +-if get_option('dbus_daemon') != 'default'
+> +-  launcher_args += '-DDBUS_DAEMON="@0@"'.format(get_option('dbus_daemon'))
+> +-else
+> +-  dbus_daemon = find_program('dbus-daemon',
+> +-                             '/sbin/dbus-daemon',
+> +-                             '/usr/sbin/dbus-daemon',
+> +-                             '/libexec/dbus-daemon',
+> +-                             '/usr/libexec/dbus-daemon',
+> +-                             '/usr/lib/dbus-daemon',
+> +-                             '/usr/pkg/bin/dbus-daemon',
+> +-                             required: false)
+> +-  if dbus_daemon.found()
+> +-    launcher_args += '-DDBUS_DAEMON="@0@"'.format(dbus_daemon.full_path())
+> +-  endif
+> +-endif
+> +-
+> + needs_systemd = false
+> +-if get_option('dbus_broker') != 'default'
+> +-  launcher_args += '-DDBUS_BROKER="@0@"'.format(get_option('dbus_broker'))
+> +-  needs_systemd = true
+> ++if get_option('default_bus') == 'dbus-daemon'
+> ++  if get_option('dbus_daemon') != 'default'
+> ++    launcher_args += '-DDBUS_DAEMON="@0@"'.format(get_option('dbus_daemon'))
+> ++  else
+> ++    dbus_daemon = find_program('dbus-daemon',
+> ++                               '/sbin/dbus-daemon',
+> ++                               '/usr/sbin/dbus-daemon',
+> ++                               '/libexec/dbus-daemon',
+> ++                               '/usr/libexec/dbus-daemon',
+> ++                               '/usr/lib/dbus-daemon',
+> ++                               '/usr/pkg/bin/dbus-daemon',
+> ++                               required: false)
+> ++    if dbus_daemon.found()
+> ++      launcher_args += '-DDBUS_DAEMON="@0@"'.format(dbus_daemon.full_path())
+> ++    endif
+> ++  endif
+> + else
+> +-  dbus_broker = find_program('dbus-broker-launch',
+> +-                             required: false)
+> +-  if dbus_broker.found()
+> +-    launcher_args += '-DDBUS_BROKER="@0@"'.format(dbus_broker.full_path())
+> ++  launcher_args += '-DWANT_DBUS_BROKER'
+> ++  if get_option('dbus_broker') != 'default'
+> ++    launcher_args += '-DDBUS_BROKER="@0@"'.format(get_option('dbus_broker'))
+> +     needs_systemd = true
+> ++  else
+> ++    dbus_broker = find_program('dbus-broker-launch',
+> ++                               required: false)
+> ++    if dbus_broker.found()
+> ++      launcher_args += '-DDBUS_BROKER="@0@"'.format(dbus_broker.full_path())
+> ++      needs_systemd = true
+> ++    endif
+> +   endif
+> + endif
+> + 
+> +-if get_option('default_bus') == 'dbus-broker'
+> +-  launcher_args += '-DWANT_DBUS_BROKER'
+> +-endif
+> +-
+> + if needs_systemd
+> +   systemd_dep = dependency('libsystemd')
+> + else
+> +-- 
+> +2.34.1
+> +
+> diff --git a/package/at-spi2-core/Config.in b/package/at-spi2-core/Config.in
+> index f56c5b93c4..2a1b21d375 100644
+> --- a/package/at-spi2-core/Config.in
+> +++ b/package/at-spi2-core/Config.in
+> @@ -1,12 +1,13 @@
+>  config BR2_PACKAGE_AT_SPI2_CORE
+>  	bool "at-spi2-core"
+> -	depends on BR2_PACKAGE_XORG7 # xlib-libxtst
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
+>  	depends on BR2_USE_MMU # glib2
+>  	depends on BR2_USE_WCHAR # glib2
+> +	depends on !BR2_STATIC_LIBS # dlopen()
+>  	select BR2_PACKAGE_DBUS
+>  	select BR2_PACKAGE_LIBGLIB2
+> -	select BR2_PACKAGE_XLIB_LIBXTST
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_XLIB_LIBXTST if BR2_PACKAGE_XORG7 # optionally for X11
+>  	help
+>  	  The At-Spi2 Core package is a part of the GNOME
+>  	  Accessibility Project. It provides a Service Provider
+> @@ -16,10 +17,6 @@ config BR2_PACKAGE_AT_SPI2_CORE
+>  
+>  	  https://wiki.gnome.org/Accessibility
+>  
+> -comment "at-spi2-core needs a toolchain w/ wchar, threads"
+> +comment "at-spi2-core needs a toolchain w/ dynamic library, wchar, threads"
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> -
+> -comment "at-spi2-core depends on X.org"
+> -	depends on BR2_USE_MMU
+> -	depends on !BR2_PACKAGE_XORG7
+> +	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+> index 764e4c3661..9cf80d1cc0 100644
+> --- a/package/at-spi2-core/at-spi2-core.hash
+> +++ b/package/at-spi2-core/at-spi2-core.hash
+> @@ -1,5 +1,5 @@
+> -# From https://download.gnome.org/sources/at-spi2-core/2.36/at-spi2-core-2.36.0.sha256sum
+> -sha256  88da57de0a7e3c60bc341a974a80fdba091612db3547c410d6deab039ca5c05a  at-spi2-core-2.36.0.tar.xz
+> +# From https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.0.sha256sum
+> +sha256  905a5b6f1790b68ee803bffa9f5fab4ceb591fb4fae0b2f8c612c54f1d4e8a30  at-spi2-core-2.48.0.tar.xz
+>  
+>  # locally calculated
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+> diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+> index f0b019c0ed..e4489f6f88 100644
+> --- a/package/at-spi2-core/at-spi2-core.mk
+> +++ b/package/at-spi2-core/at-spi2-core.mk
+> @@ -4,17 +4,31 @@
+>  #
+>  ################################################################################
+>  
+> -AT_SPI2_CORE_VERSION_MAJOR = 2.36
+> +AT_SPI2_CORE_VERSION_MAJOR = 2.48
+>  AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
+>  AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+>  AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+>  AT_SPI2_CORE_LICENSE = LGPL-2.1+
+>  AT_SPI2_CORE_LICENSE_FILES = COPYING
+>  AT_SPI2_CORE_INSTALL_STAGING = YES
+> -AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst \
+> +AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 libxml2 \
+>  	$(TARGET_NLS_DEPENDENCIES)
+>  AT_SPI2_CORE_CONF_OPTS = -Ddbus_daemon=/usr/bin/dbus-daemon
+>  
+> +ifeq ($(BR2_PACKAGE_XORG7),y)
+> +AT_SPI2_CORE_CONF_OPTS += -Dx11=enabled
+> +AT_SPI2_CORE_DEPENDENCIES += xlib_libXtst
+> +else
+> +AT_SPI2_CORE_CONF_OPTS += -Dx11=disabled
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+> +AT_SPI2_CORE_CONF_OPTS += -Dintrospection=enabled
+> +AT_SPI2_CORE_DEPENDENCIES += gobject-introspection
+> +else
+> +AT_SPI2_CORE_CONF_OPTS += -Dintrospection=disabled
+> +endif
+> +
+>  AT_SPI2_CORE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+>  
+>  $(eval $(meson-package))
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
