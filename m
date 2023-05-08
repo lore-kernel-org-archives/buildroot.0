@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C924C77B7F
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 21:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17D76C7EE22
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 21:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBB6C6152F;
-	Mon,  8 May 2023 21:48:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBB6C6152F
+	by smtp3.osuosl.org (Postfix) with ESMTP id B44AE60BF8;
+	Mon,  8 May 2023 21:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B44AE60BF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f--nvpNCejif; Mon,  8 May 2023 21:48:02 +0000 (UTC)
+	with ESMTP id fED4QDu8Sr9a; Mon,  8 May 2023 21:53:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 078F1613AA;
-	Mon,  8 May 2023 21:48:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 078F1613AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id B97EF60B5C;
+	Mon,  8 May 2023 21:53:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B97EF60B5C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B75561BF34C
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:47:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4AA631BF34C
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BDA3415FB
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:47:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BDA3415FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23D6F40331
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:53:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23D6F40331
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nKCiHOdgT2-E for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 21:47:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7AE4415EC
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E7AE4415EC
- for <buildroot@buildroot.org>; Mon,  8 May 2023 21:47:57 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:89f6:f9b6:d1a9:3e6e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 3DD2E780507;
- Mon,  8 May 2023 23:47:54 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 May 2023 23:47:54 +0200
-Date: Mon, 8 May 2023 23:47:54 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Message-ID: <20230508214754.GW252090@scaer>
-References: <20230419125200.3533794-1-raphael.melotte@mind.be>
- <20230508214525.GV252090@scaer>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230508214525.GV252090@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683582476;
- bh=IIjqFq909qUTYyef7pBtiLMebZzsdYhvexqifyce1V0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qOEgMB/8MPt1BGy7SiZ0pxMvHqCY42s+Me5/xjHG+VQLDimzTVD+tnX/kCM6p5dks
- qsI/x2XdkUB0oQCX++hQwPBsNUEYyzhnadT8hpqj/FIoAh7rpUNWmvrKkmByPP+qzT
- n0zxECAsTQc3FqeVBjAR1+Wx22j0j7YuENfMZve58Mo8PVZm8pEikmX2BWm3fAuRXq
- Rd+ZFAYeYgqYDk9ULM1yUe5sjdhvCOQ+/g3d8/90/7g09rHt5ttNXLHd+c2j3iG6IB
- iBib3qKVvw4U043fqIzNsKy65Of1lHFpdftE/7j1aiBZgr7O51L5e6RHzD0rf4cNyx
- eHQ4D6/EM2ytA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=qOEgMB/8
-Subject: Re: [Buildroot] [PATCH 1/1] package: busybox: backport fix for
- missing getrandom()
+ with ESMTP id kA-Y0W0-rNSG for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 21:53:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15DBE4031B
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 21:53:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15DBE4031B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 01E9681E4C; Mon,  8 May 2023 21:53:32 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 8 May 2023 23:46:30 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4938d2d232496b58c1093664fe9a86b6ea62bc72
+X-Git-Newrev: 511f28ae5ca0fbd3c997f5c460747a5d3e0ca24b
+X-Patchwork-Hint: ignore
+Message-Id: <20230508215333.01E9681E4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: new runtime test for bash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,139 +56,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmFwaGHDq2wsIEFsbCwKCk9uIDIwMjMtMDUtMDggMjM6NDUgKzAyMDAsIFlhbm4gRS4gTU9SSU4g
-c3Bha2UgdGh1c2x5Ogo+IE9uIDIwMjMtMDQtMTkgMTQ6NTEgKzAyMDAsIFJhcGhhw6tsIE3DqWxv
-dHRlIHNwYWtlIHRodXNseToKWy0tU05JUC0tXQo+ID4gRml4ZXM6Cj4gPiAtIGh0dHBzOi8vZ2l0
-bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNDEyMjYyNDAyOAo+ID4gLSBo
-dHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzQxMjI2MjQw
-MzEKPiA+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVA
-bWluZC5iZT4KPiBJIGhhZCB0byBiYWNrcG9ydCB0aGlzIHBhdGNoLCBhcyBpdCBjYXVzZXMgYnVp
-bGQgZmFpbHVyZXM6CgpJIGhhZCB0byBfcmV2ZXJ0XyB0aGlzIHBhdGNoLi4uCgpSZWdhcmRzLApZ
-YW5uIEUuIE1PUklOLgoKPiAgICAgJCBjYXQgZGVmY29uZmlnCj4gICAgIEJSMl9hcm09eQo+ICAg
-ICBCUjJfY29ydGV4X2E3PXkKPiAgICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15Cj4gICAgIEJS
-Ml9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTj15Cj4gCj4gICAgICQgbWFrZSBidXN5Ym94LWNv
-bmZpZ3VyZQo+ICAgICBbLi4uXQo+ICAgICAuLi4uL2J1aWxkL2J1c3lib3gtMS4zNi4wL01ha2Vm
-aWxlLmZsYWdzOjE2NTogKioqIHVudGVybWluYXRlZCBjYWxsIHRvIGZ1bmN0aW9uICdzaGVsbCc6
-IG1pc3NpbmcgJyknLiAgU3RvcC4KPiAKPiAKPiAuLi4gd2hpY2ggaXMgZHVlcyB0byBzb21lIGlz
-c3VlIGluIChzY3JvbGwgZG93bikuLi4KPiAKPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2J1c3li
-b3gvMDAwNy1zZWVkcm5nLWZpeC1nZXRyYW5kb20tZGV0ZWN0aW9uLWZvci1ub24tZ2xpYmMtbGli
-Yy5wYXRjaCBiL3BhY2thZ2UvYnVzeWJveC8wMDA3LXNlZWRybmctZml4LWdldHJhbmRvbS1kZXRl
-Y3Rpb24tZm9yLW5vbi1nbGliYy1saWJjLnBhdGNoCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
-ID4gaW5kZXggMDAwMDAwMDAwMC4uOTBjYWNlNzk2OAo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysr
-IGIvcGFja2FnZS9idXN5Ym94LzAwMDctc2VlZHJuZy1maXgtZ2V0cmFuZG9tLWRldGVjdGlvbi1m
-b3Itbm9uLWdsaWJjLWxpYmMucGF0Y2gKPiA+IEBAIC0wLDAgKzEsMTA2IEBACj4gPiArRnJvbSBi
-OGQzMmRiYTc0MWRhZWEyZWQwMWEwZGEzMjA4M2IxYmM5OTRhYTA0IE1vbiBTZXAgMTcgMDA6MDA6
-MDAgMjAwMQo+ID4gK0Zyb206ID0/VVRGLTg/cT9SYXBoYT1DMz1BQmw9MjBNPUMzPUE5bG90dGU/
-PSA8cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+Cj4gPiArRGF0ZTogVHVlLCAxOCBBcHIgMjAyMyAx
-NTo1NDo0MyArMDIwMAo+ID4gK1N1YmplY3Q6IFtQQVRDSF0gc2VlZHJuZzogZml4IGdldHJhbmRv
-bSgpIGRldGVjdGlvbiBmb3Igbm9uLWdsaWJjIGxpYmMKPiA+ICtNSU1FLVZlcnNpb246IDEuMAo+
-ID4gK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+ID4gK0NvbnRlbnQt
-VHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKPiA+ICsKPiA+ICtnbGliYyA8PSAyLjI0IGRvZXMgbm90
-IHByb3ZpZGUgZ2V0cmFuZG9tKCkuIEEgY2hlY2sgZm9yIGl0IGhhcyBiZWVuCj4gPiArYWRkZWQg
-aW4gMjAwYTk2NjlmYmY2ZjA2ODk0ZTQyNDNjY2NjOWZjMTFhMWE2MDczYSBhbmQgZml4ZWQgaW4K
-PiA+ICtjYjU3YWJiNDZmMDZmNGVkZThkOWNjYmRhYWM2NzM3N2ZkZjQxNmNmLgo+ID4gKwo+ID4g
-K0hvd2V2ZXIsIGJ1aWxkaW5nIHdpdGggYSBsaWJjIG90aGVyIHRoYW4gZ2xpYmMgY2FuIGxlYWQg
-dG8gdGhlIHNhbWUKPiA+ICtwcm9ibGVtIGFzIG5vdCBldmVyeSBvdGhlciBsaWJjIGhhcyBnZXRy
-YW5kb20oKSBlaXRoZXI6Cj4gPiArCj4gPiArLSB1Q2xpYmMgcHJvdmlkZXMgaXQgZnJvbSB2MS4w
-LjIgb253YXJkcywgYnV0IHJlcXVpcmVzIHRvIGRlZmluZQo+ID4gK19HTlVfU09VUkNFIChhbGwg
-dmVyc2lvbnMgLSB3ZSBhbHJlYWR5IGRlZmluZSBpdCBieSBkZWZhdWx0KSwgYW5kCj4gPiArc3Rk
-ZGVmIHRvIGJlIGluY2x1ZGVkIGZpcnN0ICh3aGVuIHVzaW5nIHVDbGliYyA8IDEuMC4zNSAtIHdl
-IGFscmVhZHkKPiA+ICtpbmNsdWRlIGl0IHRocm91Z2ggbGliYmIuaCkuCj4gPiArCj4gPiArLSBt
-dXNsIGxpYmMgaGFzIGdldHJhbmRvbSgpLCBidXQgb25seSBmcm9tIHZlcnNpb24gMS4xLjIwIG9u
-d2FyZHMuIEFzCj4gPiArbXVzbCBkb2VzIG5vdCBwcm92aWRlIF9fTVVTTF9fIG9yIHZlcnNpb24g
-aW5mb3JtYXRpb24sIGl0J3Mgbm90Cj4gPiArcG9zc2libGUgdG8gY2hlY2sgZm9yIGl0IGxpa2Ug
-d2UgZGlkIGZvciBnbGliYy4KPiA+ICsKPiA+ICtBbGwgb2YgdGhpcyBtYWtlcyBpdCBkaWZmaWN1
-bHQgKG9yIGltcG9zc2libGUgaW4gY2FzZSBvZiBtdXNsKSB0bwo+ID4gK2NoZWNrIHdoYXQgd2Ug
-bmVlZCB0byBkbyB0byBoYXZlIGdldHJhbmRvbSgpIGJhc2VkIG9uIGVhY2ggbGliYwo+ID4gK3Zl
-cnNpb25zLgo+ID4gKwo+ID4gK09uIHRvcCBvZiB0aGF0LCBnZXRyYW5kb20oKSBpcyBhbHNvIG5v
-dCBhdmFpbGFibGUgb24gb2xkZXIga2VybmVscy4gQXMKPiA+ICthbiBleGFtcGxlLCB3aGVuIHVz
-aW5nIGEgMy4xMCBrZXJuZWwgd2l0aCB1Q2xpYmMgMS4wLjI2LCBnZXRyYW5kb20oKQo+ID4gK2lz
-IGRlY2xhcmVkIHNvIGNvbXBpbGluZyB3b3JrcywgYnV0IGl0IGZhaWxzIGF0IGxpbmsgdGltZSBi
-ZWNhdXNlCj4gPiArZ2V0cmFuZG9tKCkgaXMgbm90IGRlZmluZWQuCj4gPiArCj4gPiArVG8gbWFr
-ZSBpdCBlYXNpZXIsIHRha2UgYSBzaW1pbGFyIGFwcHJvYWNoIHRvIHdoYXQgd2FzIGRvbmUgZm9y
-IHRoZQo+ID4gK2NyeXB0IGxpYnJhcnk6IHRyeSB0byBidWlsZCBhIHNhbXBsZSBwcm9ncmFtIHRv
-IHNlZSBpZiB3ZSBoYXZlCj4gPiArZ2V0cmFuZG9tKCkuCj4gPiArCj4gPiArQmFzZWQgb24gdGhl
-IG5ldyBNYWtlZmlsZSB2YXJpYWJsZSwgd2Ugbm93IGVpdGhlciB1c2UgdGhlCj4gPiArbGliYy1w
-cm92aWRlZCBnZXRyYW5kb20oKSB3aGVuIGl0J3MgYXZhaWxhYmxlLCBvciB1c2Ugb3VyIG93bgo+
-ID4gK2ltcGxlbWVudGF0aW9uIHdoZW4gaXQncyBub3QgKGxpa2UgaXQgd2FzIHRoZSBjYXNlIGFs
-cmVhZHkgZm9yIGdsaWJjIDwKPiA+ICsyLjI1KS4KPiA+ICsKPiA+ICtUaGlzIHNob3VsZCBmaXgg
-Y29tcGlsaW5nIHdpdGggbWFueSBsaWJjL2tlcm5lbCBjb21iaW5hdGlvbnMuCj4gPiArCj4gPiAr
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90dGUgPHJhcGhhZWwubWVsb3R0ZUBtaW5kLmJl
-Pgo+ID4gK1Vwc3RyZWFtOiBodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvcGlwZXJtYWlsL2J1c3li
-b3gvMjAyMy1BcHJpbC8wOTAyODUuaHRtbAo+ID4gKy0tLQo+ID4gK05vdGUgdGhhdCBJIHdhcyBu
-b3QgYWJsZSB0byB0ZXN0IGV2ZXJ5IHNpbmdsZSBjb21iaW5hdGlvbiwgYnV0IEkgY291bGQKPiA+
-ICtjb25maXJtIGl0IGJ1aWxkcyBzdWNjZXNzZnVsbHkgZm9yOgo+ID4gK3VDbGliYyAxMC4wLjI0
-LCBsaW51eCBoZWFkZXJzIDMuMTAgKGxpYmMgZ2V0cmFuZG9tIE5PVCB1c2VkKQo+ID4gK3VDbGli
-YyAxLjAuMzYsIGxpbnV4IGhlYWRlcnMgNC45IChsaWJjIGdldHJhbmRvbSB1c2VkKQo+ID4gK211
-c2wgMS4xLjE2LCBsaW51eCBoZWFkZXJzIDQuMTIgKGxpYmMgZ2V0cmFuZG9tIE5PVCB1c2VkKQo+
-ID4gK211c2wgMS4yLjEsIGxpbnV4IGhlYWRlcnMgKGxpYmMgZ2V0cmFuZG9tIHVzZWQpCj4gPiAr
-Z2xpYmMgMi4yNSwgbGludXggaGVhZGVycyA0LjEwIChsaWJjIGdldHJhbmRvbSB1c2VkKQo+ID4g
-Kwo+ID4gKyBNYWtlZmlsZS5mbGFncyAgICAgIHwgNyArKysrKysrCj4gPiArIG1pc2N1dGlscy9z
-ZWVkcm5nLmMgfCA4ICsrKystLS0tCj4gPiArIDIgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9u
-cygrKSwgNCBkZWxldGlvbnMoLSkKPiA+ICsKPiA+ICtkaWZmIC0tZ2l0IGEvTWFrZWZpbGUuZmxh
-Z3MgYi9NYWtlZmlsZS5mbGFncwo+ID4gK2luZGV4IDFjZWM1YmEyMC4uODhjMTE4NjJmIDEwMDY0
-NAo+ID4gKy0tLSBhL01ha2VmaWxlLmZsYWdzCj4gPiArKysrIGIvTWFrZWZpbGUuZmxhZ3MKPiA+
-ICtAQCAtMTYxLDYgKzE2MSwxMyBAQCBpZmVxICgkKFJUX0FWQUlMQUJMRSkseSkKPiA+ICsgTERM
-SUJTICs9IHJ0Cj4gPiArIGVuZGlmCj4gPiArIAo+ID4gKysjIE5vdCBhbGwgbGliYyB2ZXJzaW9u
-cyBoYXZlIGdldHJhbmRvbSwgc28gY2hlY2sgZm9yIGl0Lgo+ID4gKytIQVZFX0dFVFJBTkRPTSA6
-PSAkKHNoZWxsIHByaW50ZiAnI2luY2x1ZGUgPHN0ZGRlZi5oPlxuI2luY2x1ZGUgPHN5cy9yYW5k
-b20uaD5cbmludCBtYWluKHZvaWQpe2NoYXIgYnVmWzI1Nl07XG5nZXRyYW5kb20oYnVmLHNpemVv
-ZihidWYpLEdSTkRfTk9OQkxPQ0spO30nID5iYl9saWJ0ZXN0LmM7ICQoQ0MpICQoQ0ZMQUdTKSAk
-KENGTEFHU19idXN5Ym94KSAtRF9HTlVfU09VUkNFIC1vIC9kZXYvbnVsbCBiYl9saWJ0ZXN0LmMg
-Pi9kZXYvbnVsbCAyPiYxICYmIGVjaG8gInkiOyBybSBiYl9saWJ0ZXN0LmMpCj4gCj4gLi4uIHRo
-aXMgYmlnIGxpbmUgaGVyZS4uLgo+IAo+IFJlZ2FyZHMsCj4gWWFubiBFLiBNT1JJTi4KPiAKPiA+
-ICsrCj4gPiArK2lmZXEgKCQoSEFWRV9HRVRSQU5ET00pLHkpCj4gPiArK0NGTEFHUyArPSAtREhB
-VkVfR0VUUkFORE9NCj4gPiArK2VuZGlmCj4gPiArKwo+ID4gKyAjIGxpYnBhbSBtYXkgdXNlIGxp
-YnB0aHJlYWQsIGxpYmRsIGFuZC9vciBsaWJhdWRpdC4KPiA+ICsgIyBPbiBzb21lIHBsYXRmb3Jt
-cyB0aGF0IHJlcXVpcmVzIGFuIGV4cGxpY2l0IC1scHRocmVhZCwgLWxkbCwgLWxhdWRpdC4KPiA+
-ICsgIyBIb3dldmVyLCBvbiAqb3RoZXIgcGxhdGZvcm1zKiBpdCBmYWlscyB3aGVuIHNvbWUgb2Yg
-dGhvc2UgZmxhZ3MKPiA+ICtkaWZmIC0tZ2l0IGEvbWlzY3V0aWxzL3NlZWRybmcuYyBiL21pc2N1
-dGlscy9zZWVkcm5nLmMKPiA+ICtpbmRleCAzYmY2ZTJlYTcuLjJmMWUxOGMzMiAxMDA2NDQKPiA+
-ICstLS0gYS9taXNjdXRpbHMvc2VlZHJuZy5jCj4gPiArKysrIGIvbWlzY3V0aWxzL3NlZWRybmcu
-Ywo+ID4gK0BAIC00NCw4ICs0NCwxMCBAQAo+ID4gKyAjaW5jbHVkZSA8bGludXgvcmFuZG9tLmg+
-Cj4gPiArICNpbmNsdWRlIDxzeXMvZmlsZS5oPgo+ID4gKyAKPiA+ICstLyogRml4IHVwIGdsaWJj
-IDw9IDIuMjQgbm90IGhhdmluZyBnZXRyYW5kb20oKSAqLwo+ID4gKy0jaWYgZGVmaW5lZChfX0dM
-SUJDX18pICYmIF9fR0xJQkNfXyA9PSAyICYmIF9fR0xJQkNfTUlOT1JfXyA8PSAyNAo+ID4gKysv
-KiBGaXggdXAgc29tZSBsaWJjIChlLmcuIGdsaWJjIDw9IDIuMjQpIG5vdCBoYXZpbmcgZ2V0cmFu
-ZG9tKCkgKi8KPiA+ICsrI2lmIGRlZmluZWQgSEFWRV9HRVRSQU5ET00KPiA+ICsrI2luY2x1ZGUg
-PHN5cy9yYW5kb20uaD4KPiA+ICsrI2Vsc2UgLyogTm8gZ2V0cmFuZG9tICovCj4gPiArICNpbmNs
-dWRlIDxzeXMvc3lzY2FsbC5oPgo+ID4gKyBzdGF0aWMgc3NpemVfdCBnZXRyYW5kb20odm9pZCAq
-YnVmZmVyLCBzaXplX3QgbGVuZ3RoLCB1bnNpZ25lZCBmbGFncykKPiA+ICsgewo+ID4gK0BAIC01
-Niw4ICs1OCw2IEBAIHN0YXRpYyBzc2l6ZV90IGdldHJhbmRvbSh2b2lkICpidWZmZXIsIHNpemVf
-dCBsZW5ndGgsIHVuc2lnbmVkIGZsYWdzKQo+ID4gKyAJcmV0dXJuIC0xOwo+ID4gKyAjIGVuZGlm
-Cj4gPiArIH0KPiA+ICstI2Vsc2UKPiA+ICstI2luY2x1ZGUgPHN5cy9yYW5kb20uaD4KPiA+ICsg
-I2VuZGlmCj4gPiArIAo+ID4gKyAvKiBBcHBhcmVudGx5IHNvbWUgaGVhZGVycyBkb24ndCBzaGlw
-IHdpdGggdGhpcyB5ZXQuICovCj4gPiArLS0gCj4gPiArMi4zOS4xCj4gPiArCj4gPiAtLSAKPiA+
-IDIuMzcuMwo+ID4gCj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwo+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4gYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKPiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo+IAo+IC0tIAo+IC4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0t
-LS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCj4gfCAgWWFubiBFLiBN
-T1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNv
-bnNwaXJhY3k6IHwKPiB8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwg
-LyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAo+IHwgKzMzIDU2MSAwOTkgNDI3
-IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlz
-IG5vICB8Cj4gfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRN
-TCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKPiAnLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0t
-Jwo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVp
-bGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0t
-LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
-LS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQg
-fCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAw
-NTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAg
-ICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdB
-SU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vl
-ay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwK
-Jy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
-LV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=511f28ae5ca0fbd3c997f5c460747a5d3e0ca24b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit 2dff6e93ca2a (package/readline: add upstream patch to fix crash
+with invalid locale specification) fixed a regression in readline 8.2
+[0], that could have been caught with a runtime test. readline is a
+library, so we need an executable that exercises readline.
+
+Since readline and bash are developped in tandem [1], it is only logical
+to use bash to test readline.
+
+Add a new runtime test for bash, that checks that we can indeed run an
+interactive shell, and that an non-existing locale does not cause the
+dreaded segfault. We do not use the default configuration, because it
+uses a uclibc toolchain, and we want to reproduce against a glibc one.
+
+[0] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1021109
+[1] https://tiswww.case.edu/php/chet/readline/rltop.html#Bugs
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/testing/tests/package/test_bash.py | 47 ++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+
+diff --git a/support/testing/tests/package/test_bash.py b/support/testing/tests/package/test_bash.py
+new file mode 100644
+index 0000000000..f0ee8cadc1
+--- /dev/null
++++ b/support/testing/tests/package/test_bash.py
+@@ -0,0 +1,47 @@
++import os
++
++import infra.basetest
++
++
++class TestBash(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_ENABLE_LOCALE_WHITELIST=""
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_BASH=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check that we are indeed not (yet) running bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "", "Already running bash instead of busybox' sh")
++
++        self.assertRunOk("bash -il")
++        # Twist! The above command is still runing, it's just that
++        # bash did display the prompt we expect. Check we are indeed
++        # actually bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "/bin/bash", "Not running bash")
++        # Exit bash, back to busybox' shell
++        self.emulator.run("exit 0")
++
++        # Check that we are indeed no longer running bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "", "Still running bash instead of busybox' sh")
++
++        # Try to run with a non-available locale
++        self.assertRunOk("LC_ALL=en_US bash -il")
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "/bin/bash", "Not running bash")
++        self.emulator.run("exit 0")
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
