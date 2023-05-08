@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C3B1C7EE25
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 21:00:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 898B0C77B7F
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 21:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2247542084;
-	Mon,  8 May 2023 21:00:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2247542084
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BD9942123;
+	Mon,  8 May 2023 21:02:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BD9942123
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OeLycfK7DROY; Mon,  8 May 2023 21:00:15 +0000 (UTC)
+	with ESMTP id 34d54wH6glpN; Mon,  8 May 2023 21:02:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEA3941F82;
-	Mon,  8 May 2023 21:00:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEA3941F82
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7BD7C1BF34E
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:00:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC39841E46;
+	Mon,  8 May 2023 21:02:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC39841E46
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 79B751BF34E
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 625508443B
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:00:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 625508443B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E73D41E46
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 21:02:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E73D41E46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TR0PIJHRzAYk for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 21:00:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FmySg6TxuWbb for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 21:02:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 932368443F
- for <buildroot@buildroot.org>; Mon,  8 May 2023 21:00:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 932368443F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F334404EE
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 21:02:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F334404EE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8127986248; Mon,  8 May 2023 21:00:06 +0000 (UTC)
+ id EEE0986253; Mon,  8 May 2023 21:02:23 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 8 May 2023 22:58:54 +0200
+Date: Mon, 8 May 2023 23:01:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3686e16b5213431ee44d6599486d05d9c07854d1
-X-Git-Newrev: e5b8646c19937ce030598e0037df9da1c75be727
+X-Git-Oldrev: e5b8646c19937ce030598e0037df9da1c75be727
+X-Git-Newrev: b20eb56440fd2a7b8f578bf9eda89160c8053434
 X-Patchwork-Hint: ignore
-Message-Id: <20230508210006.8127986248@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gloox: bump version to 1.0.27
+Message-Id: <20230508210223.EEE0986253@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mupdf: fix building with zlib-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,90 +57,123 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6593561293842817117=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5b8646c19937ce030598e0037df9da1c75be727
+--===============6593561293842817117==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b20eb56440fd2a7b8f578bf9eda89160c8053434
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-[yann.morin.1998@free.fr: regenerate .checkpackageignore]
+The current mupdf version fails to build when zlib-ng is used as the
+zlib implementation. Add a patch to fix it.
+
+This fixes the following build failure raised since the bump to
+version 1.21.0 of the mupdf package in commit
+3c2033cd2ace077e7dfaf58a2589b2a93a5fd7b0:
+
+source/fitz/encode-basic.c: In function 'deflate_write':
+source/fitz/encode-basic.c:343:27: error: 'UINT_MAX' undeclared (first use in this function)
+  343 |         newbufsize = n >= UINT_MAX ? UINT_MAX : deflateBound(&state->z, n);
+      |                           ^~~~~~~~
+source/fitz/encode-basic.c:26:1: note: 'UINT_MAX' is defined in header '<limits.h>'; did you forget to '#include <limits.h>'?
+
+Fixes: http://autobuild.buildroot.net/results/87128e9967cff20078c65ab847877aa44cc409d9
+
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                |  1 -
- ...0001-src-connectiontcpserver-cpp-fix-musl.patch | 25 ----------------------
- package/gloox/gloox.hash                           |  2 +-
- package/gloox/gloox.mk                             |  2 +-
- 4 files changed, 2 insertions(+), 28 deletions(-)
+ ...Add-missing-limits.h-include-for-UINT_MAX.patch | 70 ++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 3ac032400b..05459362ee 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -584,7 +584,6 @@ package/gli/0001-Optional-building-tests.patch Upstream
- package/glmark2/0001-wscript-use-find_program-to-find-wayland-scanner.patch Upstream
- package/glmark2/0002-libmatrix-Add-missing-utility-include.patch Upstream
- package/glog/0001-added-emscripten-support.patch Upstream
--package/gloox/0001-src-connectiontcpserver-cpp-fix-musl.patch Upstream
- package/glorytun/0001-Add-support-for-Apple-silicon.patch Upstream
- package/glorytun/0002-aegis256.c-fix-aarch64-build-with-uclibc.patch Upstream
- package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch Upstream
-diff --git a/package/gloox/0001-src-connectiontcpserver-cpp-fix-musl.patch b/package/gloox/0001-src-connectiontcpserver-cpp-fix-musl.patch
-deleted file mode 100644
-index 56a2d4982c..0000000000
---- a/package/gloox/0001-src-connectiontcpserver-cpp-fix-musl.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--src/connectiontcpserver.cpp: fix musl build
--
--Build on musl fails on:
--
--connectiontcpserver.cpp:131:13: error: 'strerror' was not declared in this scope
--           + strerror( err ) + " (errno: " + util::int2string( err ) + ")";
--             ^~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/a61a91bb6e1156eff5fb756f9dccfc2bb6c0f277
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://bugs.camaya.net/ticket/?id=291]
--
--diff -Nuar gloox-1.0.23-orig/src/connectiontcpserver.cpp gloox-1.0.23/src/connectiontcpserver.cpp
----- gloox-1.0.23-orig/src/connectiontcpserver.cpp	2020-06-05 23:22:59.624018949 +0200
--+++ gloox-1.0.23/src/connectiontcpserver.cpp	2020-06-05 23:26:20.708027221 +0200
--@@ -36,6 +36,7 @@
-- # include <resolv.h>
-- # include <netdb.h>
-- # include <arpa/inet.h>
--+# include <string.h>
-- # include <sys/socket.h>
-- # include <sys/un.h>
-- # include <sys/select.h>
-diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
-index 6419db90f8..66a3c2d1be 100644
---- a/package/gloox/gloox.hash
-+++ b/package/gloox/gloox.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ae1462be2a2eb8fe5cd054825143617c53c2c9c7195606cb5a5ba68c0f68f9c9  gloox-1.0.24.tar.bz2
-+sha256  0b8b7371439bc58d9e51384b616c964b18b7b41b87af1b7855104380eda86ffb  gloox-1.0.27.tar.bz2
- sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
-diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
-index b741d5ebc1..3495db96f0 100644
---- a/package/gloox/gloox.mk
-+++ b/package/gloox/gloox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLOOX_VERSION = 1.0.24
-+GLOOX_VERSION = 1.0.27
- GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
- GLOOX_SITE = https://camaya.net/download
- GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
+diff --git a/package/mupdf/0001-Add-missing-limits.h-include-for-UINT_MAX.patch b/package/mupdf/0001-Add-missing-limits.h-include-for-UINT_MAX.patch
+new file mode 100644
+index 0000000000..95f2f86666
+--- /dev/null
++++ b/package/mupdf/0001-Add-missing-limits.h-include-for-UINT_MAX.patch
+@@ -0,0 +1,70 @@
++From ebce9f1b129ebc8f2b17afa02a4ffcb9453c11d9 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
++Date: Mon, 24 Apr 2023 17:27:35 +0200
++Subject: [PATCH] Add missing limits.h include for UINT_MAX
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++encode-basic.c uses 'UINT_MAX', which is available in the 'limits.h'
++header.
++
++In some configurations that build with zlib from [1], by chance
++limits.h gets indirectly included when including 'z-imp.h' (the
++includes are: 'z-imp.h' -> 'zlib.h' -> 'zconf.h' -> 'limits.h'), so
++the build succeeds.
++
++When using other zlib implementations however (for example from [2]),
++limits.h is not necessarily included indirectly, which leads to the
++build failing in the following way:
++
++source/fitz/encode-basic.c: In function 'deflate_write':
++source/fitz/encode-basic.c:343:27: error: 'UINT_MAX' undeclared (first use in this function)
++  343 |         newbufsize = n >= UINT_MAX ? UINT_MAX : deflateBound(&state->z, n);
++      |                           ^~~~~~~~
++source/fitz/encode-basic.c:26:1: note: 'UINT_MAX' is defined in header '<limits.h>'; did you forget to '#include <limits.h>'?
++
++Add the missing include, so that the build succeeds no matter if zlib
++indirectly includes 'limit.h' or not.
++
++Similarly, also add it in output-ps.c where it's also missing.
++
++[1]: https://zlib.net/
++[2]: https://github.com/zlib-ng/zlib-ng
++
++Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
++Upstream: https://bugs.ghostscript.com/show_bug.cgi?id=706667
++---
++ source/fitz/encode-basic.c | 2 ++
++ source/fitz/output-ps.c    | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/source/fitz/encode-basic.c b/source/fitz/encode-basic.c
++index 03a4ff76b..84f0c35e6 100644
++--- a/source/fitz/encode-basic.c
+++++ b/source/fitz/encode-basic.c
++@@ -24,6 +24,8 @@
++ 
++ #include "z-imp.h"
++ 
+++#include <limits.h>
+++
++ struct ahx
++ {
++ 	fz_output *chain;
++diff --git a/source/fitz/output-ps.c b/source/fitz/output-ps.c
++index ef22c3cd6..3dc8ea17d 100644
++--- a/source/fitz/output-ps.c
+++++ b/source/fitz/output-ps.c
++@@ -24,6 +24,8 @@
++ 
++ #include "z-imp.h"
++ 
+++#include <limits.h>
+++
++ typedef struct ps_band_writer_s
++ {
++ 	fz_band_writer super;
++-- 
++2.39.1
++
+
+--===============6593561293842817117==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6593561293842817117==--
