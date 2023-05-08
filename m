@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3308C77B75
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 19:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61DE1C77B7F
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 19:29:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FF7C40589;
-	Mon,  8 May 2023 19:23:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FF7C40589
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D69041D15;
+	Mon,  8 May 2023 19:29:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D69041D15
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EMY1g9JpEoCV; Mon,  8 May 2023 19:23:52 +0000 (UTC)
+	with ESMTP id X3FylhdJliAX; Mon,  8 May 2023 19:29:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95C5342A98;
-	Mon,  8 May 2023 19:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95C5342A98
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9DFFB1BF867
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:23:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C322140B94;
+	Mon,  8 May 2023 19:29:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C322140B94
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B2C9C1BF867
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:29:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 773474086B
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:23:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 773474086B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D17840B94
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:29:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D17840B94
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3xRQOGhkWxDj for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 19:23:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TqJTZKRgSZF4 for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 19:29:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0C9D4051E
- for <buildroot@buildroot.org>; Mon,  8 May 2023 19:23:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0C9D4051E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C57E409C4
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 19:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C57E409C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CF2A38618E; Mon,  8 May 2023 19:23:10 +0000 (UTC)
+ id 3A65F86194; Mon,  8 May 2023 19:29:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 8 May 2023 21:21:30 +0200
+Date: Mon, 8 May 2023 21:26:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8d7471fcf1b018b8e93d2dfe5ca9e69b96c1f5cb
-X-Git-Newrev: 1a45c5f515d746adb09147f18585a78eb9a7557d
+X-Git-Oldrev: 34e029eacf31be9c53c88d6ec16c13a239e2c43d
+X-Git-Newrev: 441c44626f3c8b6181b7b4be0757d4eb2659dcee
 X-Patchwork-Hint: ignore
-Message-Id: <20230508192310.CF2A38618E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcamera: bump to version 0.0.5
+Message-Id: <20230508192942.3A65F86194@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: busybox: backport fix for missing
+ getrandom()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +58,291 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6598236583884826517=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a45c5f515d746adb09147f18585a78eb9a7557d
+--===============6598236583884826517==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=441c44626f3c8b6181b7b4be0757d4eb2659dcee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+The current Busybox version (1.36.0) fails to build with some
+libc/linux combinations where getrandom() is not available. Two fixes
+for glibc already exists upstream, so backport them here. A third
+one (submitted upstream, not part of the main branch yet) was needed
+to be able to compile with older musl and uClibc versions (or older
+kernels).
+
+This fixes the following build failure raised since commit
+d68b617993bd2f5c82a4936ed1e24e4fec6b94a2:
+
+miscutils/seedrng.c:45:24: fatal error: sys/random.h: No such file or directory
+ #include <sys/random.h>
+
+Fixes:
+- http://autobuild.buildroot.net/results/44a0476b86c579e6aa658f156f0292958d40513c
+- http://autobuild.buildroot.net/results/ed028160db397581558fd8c96755621dd8298bb1
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/4122624008
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/4122624034
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/4122624044
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/4122624048
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/4122624051
+
+It also fixes the following (similar) build failure, raised since the
+same commit:
+
+miscutils/lib.a(seedrng.o): In function `seedrng_main':
+seedrng.c:(.text.seedrng_main+0x26c): undefined reference to `getrandom'
+seedrng.c:(.text.seedrng_main+0x2e8): undefined reference to `getrandom'
+collect2: error: ld returned 1 exit status
+
+Fixes:
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/4122624028
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/4122624031
+
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ix-for-glibc-2.24-not-providing-getrandom.patch |  39 ++++++++
+ ...-for-glibc-2.24-not-providing-random-head.patch |  60 ++++++++++++
+ ...ix-getrandom-detection-for-non-glibc-libc.patch | 106 +++++++++++++++++++++
+ 3 files changed, 205 insertions(+)
 
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index ea204aee98..01505aa02e 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  13e53b33652b16454264b6eff0a6f032aa9331f919b07b6d0e622917ed7f7dd8  libcamera-v0.0.4-br1.tar.gz
-+sha256  0cad66dc09520dddd47510603e053cc9913dc968db4cebe2ac5ddd43fd08fef6  libcamera-v0.0.5-br1.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 01c4cb2ff2..2e30077e20 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = v0.0.4
-+LIBCAMERA_VERSION = v0.0.5
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
+diff --git a/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch b/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch
+new file mode 100644
+index 0000000000..4a194612b4
+--- /dev/null
++++ b/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch
+@@ -0,0 +1,39 @@
++From 200a9669fbf6f06894e4243cccc9fc11a1a6073a Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Mon, 10 Apr 2023 17:26:04 +0200
++Subject: [PATCH] seedrng: fix for glibc <= 2.24 not providing getrandom()
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Upstream: https://git.busybox.net/busybox/commit/?id=200a9669fbf6f06894e4243cccc9fc11a1a6073a
++---
++ miscutils/seedrng.c | 14 ++++++++++++++
++ 1 file changed, 14 insertions(+)
++
++diff --git a/miscutils/seedrng.c b/miscutils/seedrng.c
++index 967741dc7..7cc855141 100644
++--- a/miscutils/seedrng.c
+++++ b/miscutils/seedrng.c
++@@ -45,6 +45,20 @@
++ #include <sys/random.h>
++ #include <sys/file.h>
++ 
+++/* Fix up glibc <= 2.24 not having getrandom() */
+++#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 24
+++#include <sys/syscall.h>
+++# define getrandom(...) bb_getrandom(__VA_ARGS__)
+++static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
+++{
+++# if defined(__NR_getrandom)
+++	return syscall(__NR_getrandom, buffer, length, flags);
+++# else
+++	return ENOSYS;
+++# endif
+++}
+++#endif
+++
++ #ifndef GRND_INSECURE
++ #define GRND_INSECURE 0x0004 /* Apparently some headers don't ship with this yet. */
++ #endif
++-- 
++2.39.1
++
+diff --git a/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch b/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch
+new file mode 100644
+index 0000000000..d729884805
+--- /dev/null
++++ b/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch
+@@ -0,0 +1,60 @@
++From cb57abb46f06f4ede8d9ccbdaac67377fdf416cf Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Mon, 10 Apr 2023 19:58:15 +0200
++Subject: [PATCH] seedrng: fix for glibc <= 2.24 not providing random header
++
++ - dropped the wrong define (not sure why it was there)
++ - <sys/random.h> not available if glibc <= 2.24
++ - GRND_NONBLOCK not defined if <sys/random.h> not included
++ - ret < 0 && errno == ENOSYS has to be true to get creditable set
++
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Upstream: https://git.busybox.net/busybox/commit/?id=cb57abb46f06f4ede8d9ccbdaac67377fdf416cf
++---
++ miscutils/seedrng.c | 14 ++++++++++----
++ 1 file changed, 10 insertions(+), 4 deletions(-)
++
++diff --git a/miscutils/seedrng.c b/miscutils/seedrng.c
++index 7cc855141..3bf6e2ea7 100644
++--- a/miscutils/seedrng.c
+++++ b/miscutils/seedrng.c
++@@ -42,25 +42,31 @@
++ #include "libbb.h"
++ 
++ #include <linux/random.h>
++-#include <sys/random.h>
++ #include <sys/file.h>
++ 
++ /* Fix up glibc <= 2.24 not having getrandom() */
++ #if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 24
++ #include <sys/syscall.h>
++-# define getrandom(...) bb_getrandom(__VA_ARGS__)
++ static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
++ {
++ # if defined(__NR_getrandom)
++ 	return syscall(__NR_getrandom, buffer, length, flags);
++ # else
++-	return ENOSYS;
+++	errno = ENOSYS;
+++	return -1;
++ # endif
++ }
+++#else
+++#include <sys/random.h>
+++#endif
+++
+++/* Apparently some headers don't ship with this yet. */
+++#ifndef GRND_NONBLOCK
+++#define GRND_NONBLOCK 0x0001
++ #endif
++ 
++ #ifndef GRND_INSECURE
++-#define GRND_INSECURE 0x0004 /* Apparently some headers don't ship with this yet. */
+++#define GRND_INSECURE 0x0004
++ #endif
++ 
++ #define DEFAULT_SEED_DIR         "/var/lib/seedrng"
++-- 
++2.39.1
++
+diff --git a/package/busybox/0007-seedrng-fix-getrandom-detection-for-non-glibc-libc.patch b/package/busybox/0007-seedrng-fix-getrandom-detection-for-non-glibc-libc.patch
+new file mode 100644
+index 0000000000..90cace7968
+--- /dev/null
++++ b/package/busybox/0007-seedrng-fix-getrandom-detection-for-non-glibc-libc.patch
+@@ -0,0 +1,106 @@
++From b8d32dba741daea2ed01a0da32083b1bc994aa04 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
++Date: Tue, 18 Apr 2023 15:54:43 +0200
++Subject: [PATCH] seedrng: fix getrandom() detection for non-glibc libc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++glibc <= 2.24 does not provide getrandom(). A check for it has been
++added in 200a9669fbf6f06894e4243cccc9fc11a1a6073a and fixed in
++cb57abb46f06f4ede8d9ccbdaac67377fdf416cf.
++
++However, building with a libc other than glibc can lead to the same
++problem as not every other libc has getrandom() either:
++
++- uClibc provides it from v1.0.2 onwards, but requires to define
++_GNU_SOURCE (all versions - we already define it by default), and
++stddef to be included first (when using uClibc < 1.0.35 - we already
++include it through libbb.h).
++
++- musl libc has getrandom(), but only from version 1.1.20 onwards. As
++musl does not provide __MUSL__ or version information, it's not
++possible to check for it like we did for glibc.
++
++All of this makes it difficult (or impossible in case of musl) to
++check what we need to do to have getrandom() based on each libc
++versions.
++
++On top of that, getrandom() is also not available on older kernels. As
++an example, when using a 3.10 kernel with uClibc 1.0.26, getrandom()
++is declared so compiling works, but it fails at link time because
++getrandom() is not defined.
++
++To make it easier, take a similar approach to what was done for the
++crypt library: try to build a sample program to see if we have
++getrandom().
++
++Based on the new Makefile variable, we now either use the
++libc-provided getrandom() when it's available, or use our own
++implementation when it's not (like it was the case already for glibc <
++2.25).
++
++This should fix compiling with many libc/kernel combinations.
++
++Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
++Upstream: http://lists.busybox.net/pipermail/busybox/2023-April/090285.html
++---
++Note that I was not able to test every single combination, but I could
++confirm it builds successfully for:
++uClibc 10.0.24, linux headers 3.10 (libc getrandom NOT used)
++uClibc 1.0.36, linux headers 4.9 (libc getrandom used)
++musl 1.1.16, linux headers 4.12 (libc getrandom NOT used)
++musl 1.2.1, linux headers (libc getrandom used)
++glibc 2.25, linux headers 4.10 (libc getrandom used)
++
++ Makefile.flags      | 7 +++++++
++ miscutils/seedrng.c | 8 ++++----
++ 2 files changed, 11 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile.flags b/Makefile.flags
++index 1cec5ba20..88c11862f 100644
++--- a/Makefile.flags
+++++ b/Makefile.flags
++@@ -161,6 +161,13 @@ ifeq ($(RT_AVAILABLE),y)
++ LDLIBS += rt
++ endif
++ 
+++# Not all libc versions have getrandom, so check for it.
+++HAVE_GETRANDOM := $(shell printf '#include <stddef.h>\n#include <sys/random.h>\nint main(void){char buf[256];\ngetrandom(buf,sizeof(buf),GRND_NONBLOCK);}' >bb_libtest.c; $(CC) $(CFLAGS) $(CFLAGS_busybox) -D_GNU_SOURCE -o /dev/null bb_libtest.c >/dev/null 2>&1 && echo "y"; rm bb_libtest.c)
+++
+++ifeq ($(HAVE_GETRANDOM),y)
+++CFLAGS += -DHAVE_GETRANDOM
+++endif
+++
++ # libpam may use libpthread, libdl and/or libaudit.
++ # On some platforms that requires an explicit -lpthread, -ldl, -laudit.
++ # However, on *other platforms* it fails when some of those flags
++diff --git a/miscutils/seedrng.c b/miscutils/seedrng.c
++index 3bf6e2ea7..2f1e18c32 100644
++--- a/miscutils/seedrng.c
+++++ b/miscutils/seedrng.c
++@@ -44,8 +44,10 @@
++ #include <linux/random.h>
++ #include <sys/file.h>
++ 
++-/* Fix up glibc <= 2.24 not having getrandom() */
++-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 24
+++/* Fix up some libc (e.g. glibc <= 2.24) not having getrandom() */
+++#if defined HAVE_GETRANDOM
+++#include <sys/random.h>
+++#else /* No getrandom */
++ #include <sys/syscall.h>
++ static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
++ {
++@@ -56,8 +58,6 @@ static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
++ 	return -1;
++ # endif
++ }
++-#else
++-#include <sys/random.h>
++ #endif
++ 
++ /* Apparently some headers don't ship with this yet. */
++-- 
++2.39.1
++
+
+--===============6598236583884826517==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6598236583884826517==--
