@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92462C77B75
-	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 19:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0067C77B7F
+	for <buildroot@archiver.kernel.org>; Mon,  8 May 2023 19:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 422BD409C4;
-	Mon,  8 May 2023 19:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 422BD409C4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DA4542A92;
+	Mon,  8 May 2023 19:22:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DA4542A92
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1BDwPOtPuONo; Mon,  8 May 2023 19:21:59 +0000 (UTC)
+	with ESMTP id eHJ4_aVOAQP7; Mon,  8 May 2023 19:22:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B2F8640B5E;
-	Mon,  8 May 2023 19:21:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2F8640B5E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 788591BF867
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:21:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5A7D941D28;
+	Mon,  8 May 2023 19:22:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A7D941D28
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F40781BF867
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:22:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CE2C41D86
- for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:21:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CE2C41D86
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDE466FF70
+ for <buildroot@lists.busybox.net>; Mon,  8 May 2023 19:22:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDE466FF70
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IBRJ6mibr9yA for <buildroot@lists.busybox.net>;
- Mon,  8 May 2023 19:21:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD4B441D82
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD4B441D82
- for <buildroot@buildroot.org>; Mon,  8 May 2023 19:21:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AZPgcv7aC4kN for <buildroot@lists.busybox.net>;
+ Mon,  8 May 2023 19:22:08 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C005C60DED
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C005C60DED
+ for <buildroot@buildroot.org>; Mon,  8 May 2023 19:22:07 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:7bde:4dbc:bac0:54b7])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id C995F2005A4;
- Mon,  8 May 2023 21:21:49 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 093412005A6;
+ Mon,  8 May 2023 21:22:02 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 May 2023 21:21:49 +0200
-Date: Mon, 8 May 2023 21:21:49 +0200
+ Mon, 08 May 2023 21:22:02 +0200
+Date: Mon, 8 May 2023 21:22:02 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Nasser Afshin <afshin.nasser@gmail.com>
-Message-ID: <20230508192149.GE252090@scaer>
-References: <20230507225244.959609-1-afshin.nasser@gmail.com>
+To: Marcus Folkesson <marcus.folkesson@gmail.com>
+Message-ID: <20230508192202.GF252090@scaer>
+References: <20230508054134.570140-1-marcus.folkesson@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230507225244.959609-1-afshin.nasser@gmail.com>
+In-Reply-To: <20230508054134.570140-1-marcus.folkesson@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683573712;
- bh=txUkpBjngs5JFSKmAE4Ai/bNsF0PFYyCxw/j0dSxHl0=;
+ d=free.fr; s=smtp-20201208; t=1683573726;
+ bh=hTim6d5j/4wTzJwxw8K/Cuwn0/EkSaimeVTZM2gRQN4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CNmjg8YDZtXtd3uJ5kp+si5LtZcw3U3OdjQ8u1Y836S26Evhr+4CDEhCxFXZNQdCR
- dplq00Gpjy88/Txbcj9UrpcxeEzPFh0FLMj5OWCukNpGeUH2i0xuBFGZjqDAo6Oen8
- i6ndxEkQmOG65qKlH+yJmxXdJCdUQtqS78PTurQtlSuJ8huZOsWM/HxjcLETy2KCGY
- riC4dwYtmy+ZYdfn7Ty6sDa/7lIY/2kEBrG1JlKjljsybRp4gNCK/hfWNnM25NoxZU
- DRK52KM8AOV7Gc6M2OKow5SYTzEQkpQ6htbRKeX1JXFXAwtKHtFeUve/delCNcqyjS
- zHiD4oteyKoFQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=LvsJw4FdsAcHkHVU2AFNSDTrXW71bqUoR881/ZcL8uS6PxjNrZAthZnSdv1JuPoYF
+ TlumA+yhLoRQtivKVaUlWwqMa4lijjzAKFDDQYPAFUhPxGhW0X5N6t/0yoaoPX6oX1
+ cKH5ILUIqPkFd8zActsxRxP2q+0dWMdUcr4L7StTbiXdx+BWq4InyZ0JtsMCMEzSOq
+ oKyB7ud8WZRoE9P2GhxoNT0k0XJZprM68Jk28SjJ8v7Ttlb7QiLPbfvsS+dKz3q9Sj
+ RdfcOx+dZdoXfVtI48xjYcG6m+uZV836kFUALMV7N8/HMfWXVelyKPl2TJhJSOFkHD
+ LfhTYVeB+JKmw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CNmjg8YD
-Subject: Re: [Buildroot] [PATCH] package/python-pycrate: bump to version
- 0.6.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=LvsJw4Fd
+Subject: Re: [Buildroot] [PATCH] package/libcamera: bump to version 0.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,16 +76,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Nasser, All,
+Marcus, All,
 
-On 2023-05-08 02:22 +0330, Nasser Afshin spake thusly:
-> Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
+On 2023-05-08 07:41 +0200, Marcus Folkesson spake thusly:
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 
 Applied to master, thanks.
 
@@ -94,55 +93,35 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-pycrate/Config.in           | 3 ++-
->  package/python-pycrate/python-pycrate.hash | 6 +++---
->  package/python-pycrate/python-pycrate.mk   | 4 ++--
->  3 files changed, 7 insertions(+), 6 deletions(-)
+>  package/libcamera/libcamera.hash | 2 +-
+>  package/libcamera/libcamera.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/python-pycrate/Config.in b/package/python-pycrate/Config.in
-> index 193a973f7e..bbd6873938 100644
-> --- a/package/python-pycrate/Config.in
-> +++ b/package/python-pycrate/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_PYTHON_PYCRATE
->  	bool "python-pycrate"
->  	help
-> -	  A software suite to handle various data formats.
-> +	  A software suite to handle various data and protocol
-> +	  formats.
+> diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+> index ea204aee98..01505aa02e 100644
+> --- a/package/libcamera/libcamera.hash
+> +++ b/package/libcamera/libcamera.hash
+> @@ -1,4 +1,4 @@
+> -sha256  13e53b33652b16454264b6eff0a6f032aa9331f919b07b6d0e622917ed7f7dd8  libcamera-v0.0.4-br1.tar.gz
+> +sha256  0cad66dc09520dddd47510603e053cc9913dc968db4cebe2ac5ddd43fd08fef6  libcamera-v0.0.5-br1.tar.gz
 >  
->  	  https://github.com/P1sec/pycrate/
-> diff --git a/package/python-pycrate/python-pycrate.hash b/package/python-pycrate/python-pycrate.hash
-> index e37fd6743a..fd41274369 100644
-> --- a/package/python-pycrate/python-pycrate.hash
-> +++ b/package/python-pycrate/python-pycrate.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/pycrate/json
-> -md5  075622d5d573274cd4dbfe268ca52f7f  pycrate-0.5.5.tar.gz
-> -sha256  59f09331890a389a6b98412f19f4fb021c5a75a35ab07bf5ba0d1e299a0967af  pycrate-0.5.5.tar.gz
-> -# Locally computed
-> +md5  d51fd27d99481990ff85a1e418b1c938  pycrate-0.6.0.tar.gz
-> +sha256  b49738c02a3f93ba9f76c0dac82b689a5341882814b36c714e9600e9f560daf7  pycrate-0.6.0.tar.gz
-> +# Locally computed sha256 checksums
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  license.txt
-> diff --git a/package/python-pycrate/python-pycrate.mk b/package/python-pycrate/python-pycrate.mk
-> index 6779433556..2f947ab807 100644
-> --- a/package/python-pycrate/python-pycrate.mk
-> +++ b/package/python-pycrate/python-pycrate.mk
-> @@ -4,9 +4,9 @@
->  #
+>  # license files
+>  sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+> index 01c4cb2ff2..2e30077e20 100644
+> --- a/package/libcamera/libcamera.mk
+> +++ b/package/libcamera/libcamera.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -PYTHON_PYCRATE_VERSION = 0.5.5
-> +PYTHON_PYCRATE_VERSION = 0.6.0
->  PYTHON_PYCRATE_SOURCE = pycrate-$(PYTHON_PYCRATE_VERSION).tar.gz
-> -PYTHON_PYCRATE_SITE = https://files.pythonhosted.org/packages/25/8f/b3d7e0b541aa04b2f0f7aa694a6946b572bfa2e2627cf1f12b5416d633df
-> +PYTHON_PYCRATE_SITE = https://files.pythonhosted.org/packages/fb/7f/5f354100270a5d41350e9806dc9950a33e00a30eb3a7ab5fc9db86326856
->  PYTHON_PYCRATE_SETUP_TYPE = setuptools
->  PYTHON_PYCRATE_EXTRA_DOWNLOADS = https://raw.githubusercontent.com/P1sec/pycrate/$(PYTHON_PYCRATE_VERSION)/license.txt
->  PYTHON_PYCRATE_LICENSE = LGPL-2.1+
+>  LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+> -LIBCAMERA_VERSION = v0.0.4
+> +LIBCAMERA_VERSION = v0.0.5
+>  LIBCAMERA_SITE_METHOD = git
+>  LIBCAMERA_DEPENDENCIES = \
+>  	host-openssl \
 > -- 
-> 2.25.1
+> 2.39.2
 > 
 > _______________________________________________
 > buildroot mailing list
