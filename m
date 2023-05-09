@@ -4,70 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6FE0C7EE22
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 20:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD0E2C77B75
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 20:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA38D42753;
-	Tue,  9 May 2023 20:08:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA38D42753
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22B08427A3;
+	Tue,  9 May 2023 20:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22B08427A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9y5iyCbkwOf1; Tue,  9 May 2023 20:08:57 +0000 (UTC)
+	with ESMTP id vdgCZJZfzKvg; Tue,  9 May 2023 20:12:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F7B842742;
-	Tue,  9 May 2023 20:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F7B842742
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2ED471BF2FF
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:08:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D578742742;
+	Tue,  9 May 2023 20:12:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D578742742
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 51F0D1BF2FF
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12D0A42719
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12D0A42719
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25825846A7
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25825846A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7zG6Ex5M74dH for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 20:08:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 462AD41E0B
-Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 462AD41E0B
- for <buildroot@buildroot.org>; Tue,  9 May 2023 20:08:50 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.104.90])
- by Aruba Outgoing Smtp  with ESMTPSA
- id wTddpqvJ4M1GywTdepw5q4; Tue, 09 May 2023 22:08:47 +0200
-Content-Type: multipart/mixed; boundary="------------qkNCtwo8qzq5LwY8nR9Pc1UV"
-Message-ID: <30561c36-fde3-db5e-82e5-b71732eaa1fa@benettiengineering.com>
-Date: Tue, 9 May 2023 22:08:45 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bF8whCO9e866 for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 20:12:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E54C9846A6
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E54C9846A6
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 20:12:33 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-96598a7c5e0so1009567566b.3
+ for <buildroot@buildroot.org>; Tue, 09 May 2023 13:12:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1683663151; x=1686255151;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=WH8EqzcbljSombZI2YtbTDSmrBN0uu+H+409m8NDl9g=;
+ b=ALvMTwzMh8uUwCRfa2JanTMfynT9jvfCv1F1oXBIMWEOomIabzoSTbXrSKejsFnSDA
+ YwsgBMJisgA1S3CqIMrY3PuLzMoNsDMGnbgXcR1gCFkFJktExS/Zhv5uaiY1N22ok7dC
+ TBqXCyXk6AJuSg9n+BWpikU553Ifmy4rt7el1ixbUu8+YeDI8imxXCMRLRUdLtoXSFFM
+ ElWx8erZOhSR9q6q88NvhIz5vtn4aSwmcDO4XY2AX3zbmNlE23Ceuf9kMsWpv+ZY+Dsd
+ YcwK9ASUZXq4rlxX4lcsaOFgHM+YaheZEvIaTMNai3SlWe2YRzqkQZO4ee8OCjWABivz
+ iK3w==
+X-Gm-Message-State: AC+VfDzyygqADtJ7iAvKXKoIUQRtlE74VSgSvG0NkgEXU2auWM8GQDi/
+ 9uCUi60wHMo5AIIFpgKjpvmZINB2SOZUd7KDnmxvWg==
+X-Google-Smtp-Source: ACHHUZ5+zwEEvqdaRBQyF98eB0y2ye4NHNpRHdft1kfIPpltkjYQ6EulsZaKxthq50HJ6qKp601Zqw==
+X-Received: by 2002:a17:907:7250:b0:966:b4b:eb0 with SMTP id
+ ds16-20020a170907725000b009660b4b0eb0mr13273159ejc.30.1683663151654; 
+ Tue, 09 May 2023 13:12:31 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-79-40-97-5.business.telecomitalia.it. [79.40.97.5])
+ by smtp.gmail.com with ESMTPSA id
+ r23-20020aa7da17000000b00506987c5c71sm1157936eds.70.2023.05.09.13.12.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 09 May 2023 13:12:31 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Tue,  9 May 2023 22:11:49 +0200
+Message-Id: <20230509201153.2413972-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
-References: <20230423214014.2963361-1-aperez@igalia.com>
- <20230424004642.GB1857231@igalia.com> <20230509153301.GD2291742@igalia.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230509153301.GD2291742@igalia.com>
-X-CMAE-Envelope: MS4xfBeJtQpBS5gy9Do591Yc37jjY1kXVwY2QGvFN+mbAyr58CaMl3PUeHAQCn0iz2TO75lQzF4S1dF97I1gx6w42B0zt+fpvPS4Aa4h+keDgXZAre+6elIM
- o+QRqaYnzbsV/DPbB4gMc+dkXxuCCX7PI+Eqwv3OmeMdNed71NBfSiQPNt5glntdQQV2FforpqzXv3tiic/9UKT5cq+Y+F2J1dCs71YaXgBpYI7XcOl6fu8H
- OR8Z9dZ48fYJ3WYukZyCnw==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1683662927; bh=PqPocbgfZcUxfpLME84cbP3xboYjCMYajFWiY3gBtBc=;
- h=Content-Type:Date:MIME-Version:Subject:To:From;
- b=InNq2z1jO0ZrUZndgpIeZUfUbu18lKU3MmY2dUzRjOxjjA0PM7+ZTab1R60C5hxqE
- 1dBNFfmBWId47d/mvmRd0Zqx0nQewN4W1H7T6ufrmZ/QoXgf9cWi79pMM/UUOg2H1R
- RIAMOLdk4/hpv4JY7DdSOIcjQ63d4quQIYa/qxdEAtcf6WjUHdv7XwrTs542LkbMhS
- sEE7J4Otzvn56piTEAsNtkfxQ6AwFUCISamp0VIAA+jsfsoFrH/y8BK1l8lNQPeIpd
- ho+bIOC6kh24Z1eSod2srQUkYbD9H1cA7QUTt2rM+jO1hBPN+1FLC1PJzbiutmHxfr
- 4OEmxG2CdoqUw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=InNq2z1j
-Subject: Re: [Buildroot] [PATCH] package/sunxi-mali-utgard: support the
- wayland driver
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1683663151; x=1686255151;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=WH8EqzcbljSombZI2YtbTDSmrBN0uu+H+409m8NDl9g=;
+ b=W5obo4bpmyY+MDmxIi+G1kxoJocre/drhmLGssnhy9QduCklRCksQufqTHPSfK6OQi
+ dGHQCdd8wx7DGfrMu7ku410LsXG1dHlUh3HutGwRUxrfaA+XUo4ksF2eFTwxvZMMLuNC
+ g/+QYcctMZqb+bJAanG3FrVU47UpwiBDABvXA=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=W5obo4bp
+Subject: [Buildroot] [PATCH 0/4] manage CAN devices on MMU-less systems
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,206 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Dario Binacchi <dariobin@libero.it>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---------------qkNCtwo8qzq5LwY8nR9Pc1UV
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+This series is the result of the work done to add support for the bxCAN
+controller to the Linux kernel ([1], [2]). Since these are MMU-less
+systems, I had to apply some patches to the userspace tools required to
+test the driver. I also submitted a patch to busybox ([3]), but it has
+not been accepted yet, and I don't know if it will be in the future. In
+the meantime, the rtnl-link-can application can be used.
 
-Hi Adrian,
+This series allows the use of CAN devices on MMU-less systems before it
+is possible to bump can-utils and libmnl to the new versions containing
+these patches.
 
-On 09/05/23 14:33, Adrian Perez de Castro wrote:
-> On Mon, 24 Apr 2023 00:46:42 +0300 Adrian Perez de Castro <aperez@igalia.com> wrote:
->> Hi,
->>
->> On Mon, 24 Apr 2023 00:40:14 +0300 Adrian Perez de Castro <aperez@igalia.com> wrote:
->>> Add a choice to allow using the Wayland variant of the Mali driver. When
->>> selected, the package is marked as provider for libgbm as libMali.so
->>> includes the symbols and a libgbm.so symlink is installed; and both
->>> BR2_PACKAGE_HAS_{LIBGBM,LIBEGL_WAYLAND} are selected accordingly.
->>>
->>> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
->>
->> With this I have been able to build WebKitGTK, WPEWebKit, and the Cage
->> compositor without trouble, but unfortunately I do not have the hardware
->> to test it... so I cannot really tell whether things work as expected.
-> 
-> I forgot to mention that building WebKit{GTK,WPE} needs a small patch
-> for version 2.38.x, which was already submitted a little while ago:
-> 
->    https://patchwork.ozlabs.org/project/buildroot/patch/20230423213233.2961770-1-aperez@igalia.com/
-> 
-> Note to self: submit also this for package/webkitgtk O:-)
+[1] https://lore.kernel.org/all/20230328084710.jnrwvydewx3atxti@pengutronix.de/
+[2] https://lore.kernel.org/all/20230509-silt-gullible-a010971857fc-mkl@pengutronix.de/
+[3] http://lists.busybox.net/pipermail/busybox/2023-April/090294.html
 
-this is a curse, neither that patch fixes the previous build failure :-/
-Attached you find the defconfig I use for olinuxino lime.
-Can you confirm that it fails at you too?
+Dario Binacchi (4):
+  package/can-utils: bump to version 2023.03
+  package/can-utils: enable compilation on MMU-less systems
+  package/libmnl: add rtnl-link-can example
+  package/libmnl: simplify LIBMNL_EXAMPLES_INSTALL_TARGETS setting
 
-Thank you!
+ ...ograms-using-fork-on-MMU-less-system.patch | 257 +++++++++
+ package/can-utils/Config.in                   |   1 -
+ package/can-utils/can-utils.hash              |   2 +-
+ package/can-utils/can-utils.mk                |   2 +-
+ .../0001-examples-add-rtnl-link-can.patch     | 504 ++++++++++++++++++
+ package/libmnl/libmnl.mk                      |  15 +-
+ 6 files changed, 770 insertions(+), 11 deletions(-)
+ create mode 100644 package/can-utils/0001-Don-t-compile-programs-using-fork-on-MMU-less-system.patch
+ create mode 100644 package/libmnl/0001-examples-add-rtnl-link-can.patch
 
-Best regards
 -- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
-
->>> ---
->>>   package/sunxi-mali-utgard/Config.in           | 23 +++++++++++++++++++
->>>   .../sunxi-mali-utgard/sunxi-mali-utgard.mk    | 18 ++++++++++++---
->>>   2 files changed, 38 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/package/sunxi-mali-utgard/Config.in b/package/sunxi-mali-utgard/Config.in
->>> index 59ac21f5ab..0856f220fd 100644
->>> --- a/package/sunxi-mali-utgard/Config.in
->>> +++ b/package/sunxi-mali-utgard/Config.in
->>> @@ -18,6 +18,9 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
->>>   config BR2_PACKAGE_PROVIDES_LIBGLES
->>>   	default "sunxi-mali-utgard"
->>>   
->>> +config BR2_PACKAGE_PROVIDES_LIBGBM
->>> +	default "sunxi-mali-utgard" if BR2_PACKAGE_SUNXI_MALI_UTGARD_WAYLAND
->>> +
->>>   choice
->>>   	prompt "Version"
->>>   	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 # legacy
->>> @@ -38,6 +41,26 @@ config BR2_PACKAGE_SUNXI_MALI_UTGARD_REVISION
->>>   	default "r6p2"	if BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
->>>   	default "r8p1"	if BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1
->>>   
->>> +choice
->>> +	prompt "Platform"
->>> +	default BR2_PACKAGE_SUNXI_MALI_UTGARD_FBDEV
->>> +	help
->>> +	  Select the target EGL platform.
->>> +
->>> +config BR2_PACKAGE_SUNXI_MALI_UTGARD_FBDEV
->>> +	bool "fbdev"
->>> +config BR2_PACKAGE_SUNXI_MALI_UTGARD_WAYLAND
->>> +	bool "wayland"
->>> +	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
->>> +	select BR2_PACKAGE_HAS_LIBGBM
->>> +
->>> +endchoice
->>> +
->>> +config BR2_PACKAGE_SUNXI_MALI_UTGARD_PLATFORM
->>> +	string
->>> +	default "fbdev" if BR2_PACKAGE_SUNXI_MALI_UTGARD_FBDEV
->>> +	default "wayland" if BR2_PACKAGE_SUNXI_MALI_UTGARD_WAYLAND
->>> +
->>>   endif
->>>   
->>>   comment "sunxi-mali-utgard needs an EABIhf glibc toolchain"
->>> diff --git a/package/sunxi-mali-utgard/sunxi-mali-utgard.mk b/package/sunxi-mali-utgard/sunxi-mali-utgard.mk
->>> index f693667955..23c6e8ec6e 100644
->>> --- a/package/sunxi-mali-utgard/sunxi-mali-utgard.mk
->>> +++ b/package/sunxi-mali-utgard/sunxi-mali-utgard.mk
->>> @@ -24,9 +24,9 @@ endif
->>>   define SUNXI_MALI_UTGARD_INSTALL_STAGING_CMDS
->>>   	mkdir -p $(STAGING_DIR)/usr/lib $(STAGING_DIR)/usr/include
->>>   
->>> -	cp -rf $(@D)/$(SUNXI_MALI_UTGARD_REV)/$(SUNXI_MALI_UTGARD_ARCH)/fbdev/*.so* \
->>> +	cp -rf $(@D)/$(SUNXI_MALI_UTGARD_REV)/$(SUNXI_MALI_UTGARD_ARCH)/$(BR2_PACKAGE_SUNXI_MALI_UTGARD_PLATFORM)/*.so* \
->>>   		$(STAGING_DIR)/usr/lib/
->>> -	cp -rf $(@D)/include/fbdev/* $(STAGING_DIR)/usr/include/
->>> +	cp -rf $(@D)/include/$(BR2_PACKAGE_SUNXI_MALI_UTGARD_PLATFORM)/* $(STAGING_DIR)/usr/include/
->>>   
->>>   	$(INSTALL) -D -m 0644 package/sunxi-mali-utgard/egl.pc \
->>>   		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
->>> @@ -34,9 +34,21 @@ define SUNXI_MALI_UTGARD_INSTALL_STAGING_CMDS
->>>   		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
->>>   endef
->>>   
->>> +ifeq ($(BR2_PACKAGE_SUNXI_MALI_UTGARD_WAYLAND),y)
->>> +define SUNXI_MALI_UTGARD_INSTALL_FIXUP_STAGING_PC_FILES
->>> +	sed -e '/^Cflags:/s/$$/ -DWL_EGL_PLATFORM/' \
->>> +		-e '/^Requires:/s/$$/ wayland-client wayland-server/' \
->>> +		-i $(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
->>> +	sed -e '/^Requires:/s/$$/ wayland-client wayland-server/' \
->>> +		-i $(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
->>> +endef
->>> +SUNXI_MALI_UTGARD_POST_INSTALL_TARGET_HOOKS += SUNXI_MALI_UTGARD_INSTALL_FIXUP_STAGING_PC_FILES
->>> +SUNXI_MALI_UTGARD_DEPENDENCIES += wayland
->>> +endif
->>> +
->>>   define SUNXI_MALI_UTGARD_INSTALL_TARGET_CMDS
->>>   	mkdir -p $(TARGET_DIR)/usr/lib
->>> -	cp -rf $(@D)/$(SUNXI_MALI_UTGARD_REV)/$(SUNXI_MALI_UTGARD_ARCH)/fbdev/*.so* \
->>> +	cp -rf $(@D)/$(SUNXI_MALI_UTGARD_REV)/$(SUNXI_MALI_UTGARD_ARCH)/$(BR2_PACKAGE_SUNXI_MALI_UTGARD_PLATFORM)/*.so* \
->>>   		$(TARGET_DIR)/usr/lib/
->>>   endef
->>>   
->>> -- 
->>> 2.40.0
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot@buildroot.org
->>> https://lists.buildroot.org/mailman/listinfo/buildroot
->>>
->>
->> Cheers,
->> —Adrián
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> Cheers,
-> —Adrián
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
---------------qkNCtwo8qzq5LwY8nR9Pc1UV
-Content-Type: text/plain; charset=UTF-8; name="lime_mali_wl_defconfig"
-Content-Disposition: attachment; filename="lime_mali_wl_defconfig"
-Content-Transfer-Encoding: base64
-
-QlIyX2FybT15CkJSMl9jb3J0ZXhfYTc9eQpCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURF
-UlNfQ1VTVE9NXzZfMT15CkJSMl9UT09MQ0hBSU5fQlVJTERST09UX0NYWD15CkJSMl9UQVJH
-RVRfR0VORVJJQ19IT1NUTkFNRT0iYTIwLW9saW51eGlubyIKQlIyX1RBUkdFVF9HRU5FUklD
-X0lTU1VFPSJXZWxjb21lIHRvIE9MaW51WGlubyEiCkJSMl9UQVJHRVRfR0VORVJJQ19HRVRU
-WV9QT1JUPSJ0dHlTMCIKQlIyX1NZU1RFTV9ESENQPSJldGgwIgpCUjJfUk9PVEZTX09WRVJM
-QVk9ImJvYXJkL29saW1leC9hMjBfb2xpbnV4aW5vL3Jvb3Rmc19vdmVybGF5IgpCUjJfUk9P
-VEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCkJS
-Ml9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iLWMgYm9hcmQvb2xpbWV4L2EyMF9vbGludXhp
-bm8vZ2VuaW1hZ2UuY2ZnIgpCUjJfTElOVVhfS0VSTkVMPXkKQlIyX0xJTlVYX0tFUk5FTF9D
-VVNUT01fVkVSU0lPTj15CkJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9
-IjYuMS4yMiIKQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InN1bnhpIgpCUjJfTElOVVhf
-S0VSTkVMX0NPTkZJR19GUkFHTUVOVF9GSUxFUz0iYm9hcmQvb2xpbWV4L2EyMF9vbGludXhp
-bm8vbGludXgtZGlzYWJsZS1saW1hLmZyYWdtZW50IgpCUjJfTElOVVhfS0VSTkVMX0RUU19T
-VVBQT1JUPXkKQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9InN1bjdpLWEyMC1v
-bGludXhpbm8tbGltZSIKQlIyX0xJTlVYX0tFUk5FTF9JTlNUQUxMX1RBUkdFVD15CkJSMl9Q
-QUNLQUdFX1NVTlhJX1RPT0xTPXkKQlIyX1BBQ0tBR0VfU1VOWElfTUFMSV9VVEdBUkQ9eQpC
-UjJfUEFDS0FHRV9TVU5YSV9NQUxJX1VUR0FSRF9XQVlMQU5EPXkKQlIyX1BBQ0tBR0VfWkxJ
-Ql9ORz15CkJSMl9QQUNLQUdFX0xJQkdUSzM9eQpCUjJfUEFDS0FHRV9XRUJLSVRHVEs9eQpC
-UjJfUEFDS0FHRV9XRUJLSVRHVEtfU0FOREJPWD15CkJSMl9QQUNLQUdFX1dFQktJVEdUS19I
-VFRQUz15CkJSMl9QQUNLQUdFX1dQRUJBQ0tFTkRfRkRPPXkKQlIyX1BBQ0tBR0VfUENSRT15
-CkJSMl9QQUNLQUdFX1BDUkVfVUNQPXkKQlIyX1RBUkdFVF9ST09URlNfRVhUMj15CkJSMl9U
-QVJHRVRfUk9PVEZTX0VYVDJfND15CiMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBz
-ZXQKQlIyX1RBUkdFVF9VQk9PVD15CkJSMl9UQVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0tD
-T05GSUc9eQpCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OPXkKQlIyX1RBUkdFVF9V
-Qk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyMy4wNCIKQlIyX1RBUkdFVF9VQk9PVF9C
-T0FSRF9ERUZDT05GSUc9IkEyMC1PTGludVhpbm8tTGltZSIKQlIyX1RBUkdFVF9VQk9PVF9O
-RUVEU19EVEM9eQpCUjJfVEFSR0VUX1VCT09UX05FRURTX1BZTElCRkRUPXkKQlIyX1RBUkdF
-VF9VQk9PVF9ORUVEU19PUEVOU1NMPXkKQlIyX1RBUkdFVF9VQk9PVF9TUEw9eQpCUjJfVEFS
-R0VUX1VCT09UX1NQTF9OQU1FPSJ1LWJvb3Qtc3VueGktd2l0aC1zcGwuYmluIgpCUjJfUEFD
-S0FHRV9IT1NUX0dFTklNQUdFPXkKQlIyX1BBQ0tBR0VfSE9TVF9VQk9PVF9UT09MUz15Cg==
-
-
---------------qkNCtwo8qzq5LwY8nR9Pc1UV
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+2.32.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---------------qkNCtwo8qzq5LwY8nR9Pc1UV--
