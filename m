@@ -4,84 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD0E2C77B75
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 20:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCE7AC7EE22
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 20:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22B08427A3;
-	Tue,  9 May 2023 20:12:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22B08427A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B9A542778;
+	Tue,  9 May 2023 20:12:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B9A542778
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vdgCZJZfzKvg; Tue,  9 May 2023 20:12:38 +0000 (UTC)
+	with ESMTP id ARNJZtwLs476; Tue,  9 May 2023 20:12:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D578742742;
-	Tue,  9 May 2023 20:12:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D578742742
+	by smtp4.osuosl.org (Postfix) with ESMTP id A50F142773;
+	Tue,  9 May 2023 20:12:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A50F142773
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 51F0D1BF2FF
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:12:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4DF971BF2FF
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:12:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25825846A7
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:12:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25825846A7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 27361846A6
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:12:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27361846A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bF8whCO9e866 for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 20:12:34 +0000 (UTC)
+ with ESMTP id XCRKtu-X1eb5 for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 20:12:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E54C9846A6
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E54C9846A6
- for <buildroot@buildroot.org>; Tue,  9 May 2023 20:12:33 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-96598a7c5e0so1009567566b.3
- for <buildroot@buildroot.org>; Tue, 09 May 2023 13:12:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D271846AA
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2D271846AA
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 20:12:35 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id
+ 4fb4d7f45d1cf-50db91640d3so2006095a12.0
+ for <buildroot@buildroot.org>; Tue, 09 May 2023 13:12:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683663151; x=1686255151;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=WH8EqzcbljSombZI2YtbTDSmrBN0uu+H+409m8NDl9g=;
- b=ALvMTwzMh8uUwCRfa2JanTMfynT9jvfCv1F1oXBIMWEOomIabzoSTbXrSKejsFnSDA
- YwsgBMJisgA1S3CqIMrY3PuLzMoNsDMGnbgXcR1gCFkFJktExS/Zhv5uaiY1N22ok7dC
- TBqXCyXk6AJuSg9n+BWpikU553Ifmy4rt7el1ixbUu8+YeDI8imxXCMRLRUdLtoXSFFM
- ElWx8erZOhSR9q6q88NvhIz5vtn4aSwmcDO4XY2AX3zbmNlE23Ceuf9kMsWpv+ZY+Dsd
- YcwK9ASUZXq4rlxX4lcsaOFgHM+YaheZEvIaTMNai3SlWe2YRzqkQZO4ee8OCjWABivz
- iK3w==
-X-Gm-Message-State: AC+VfDzyygqADtJ7iAvKXKoIUQRtlE74VSgSvG0NkgEXU2auWM8GQDi/
- 9uCUi60wHMo5AIIFpgKjpvmZINB2SOZUd7KDnmxvWg==
-X-Google-Smtp-Source: ACHHUZ5+zwEEvqdaRBQyF98eB0y2ye4NHNpRHdft1kfIPpltkjYQ6EulsZaKxthq50HJ6qKp601Zqw==
-X-Received: by 2002:a17:907:7250:b0:966:b4b:eb0 with SMTP id
- ds16-20020a170907725000b009660b4b0eb0mr13273159ejc.30.1683663151654; 
- Tue, 09 May 2023 13:12:31 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1683663153; x=1686255153;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=m5/VVCAJgb8gt+nu4nvSKjTht8HvNC/1nWvE0sR18b4=;
+ b=I476DzC+3k7eClWmNrPoJIOXaC2a4rP8Hw3OlPTmhZ4239c889egmvkeEZ2Do7pHhi
+ idvsjK0rmicoVEV14T0qnB62XUdF5B1dMJ4DdOESKvJ9vJ49vn9k6C/KVa28d2FkqSFI
+ ERIpNofVREZ4o7p5BV98RVczR4UfSoi2Elgxv2ubd8Rqty6Fo8dfkMz4g7GZZOGM5Aqm
+ dfP0MxxwENUVLsW2Dx77uvMzbeg2Q5msaw/wiMb93l2qKzYO+Tq3uoWRPZnsoRvTlVC7
+ z1im81HtiwmoRk+uNHLThwLxea8ibUHahA557r+ZPm0YLgGTaAswTuPhjSWNl1/KKmw5
+ TraA==
+X-Gm-Message-State: AC+VfDwUDyF0koAjMiBYkGfur7NiSwSv1OmsKf21KqLXCkrBZz624X9I
+ huP/0hWOucEa2podSOac446RWvrkrHQl3ftUUsC4cA==
+X-Google-Smtp-Source: ACHHUZ6KOZtLoKEQpOGZUEhHMUkMgpqMS/jILNSUQn5IsXbGt3QlVTvERTrQYaRaKhheqjMuf4FIww==
+X-Received: by 2002:a05:6402:31f6:b0:50c:358:1eba with SMTP id
+ dy22-20020a05640231f600b0050c03581ebamr11119530edb.35.1683663152820; 
+ Tue, 09 May 2023 13:12:32 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-79-40-97-5.business.telecomitalia.it. [79.40.97.5])
  by smtp.gmail.com with ESMTPSA id
- r23-20020aa7da17000000b00506987c5c71sm1157936eds.70.2023.05.09.13.12.30
+ r23-20020aa7da17000000b00506987c5c71sm1157936eds.70.2023.05.09.13.12.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 May 2023 13:12:31 -0700 (PDT)
+ Tue, 09 May 2023 13:12:32 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 May 2023 22:11:49 +0200
-Message-Id: <20230509201153.2413972-1-dario.binacchi@amarulasolutions.com>
+Date: Tue,  9 May 2023 22:11:50 +0200
+Message-Id: <20230509201153.2413972-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20230509201153.2413972-1-dario.binacchi@amarulasolutions.com>
+References: <20230509201153.2413972-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1683663151; x=1686255151;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WH8EqzcbljSombZI2YtbTDSmrBN0uu+H+409m8NDl9g=;
- b=W5obo4bpmyY+MDmxIi+G1kxoJocre/drhmLGssnhy9QduCklRCksQufqTHPSfK6OQi
- dGHQCdd8wx7DGfrMu7ku410LsXG1dHlUh3HutGwRUxrfaA+XUo4ksF2eFTwxvZMMLuNC
- g/+QYcctMZqb+bJAanG3FrVU47UpwiBDABvXA=
+ d=amarulasolutions.com; s=google; t=1683663153; x=1686255153;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=m5/VVCAJgb8gt+nu4nvSKjTht8HvNC/1nWvE0sR18b4=;
+ b=fBZZVsiRsOR3vnTI4VCWVZ3IhtpsKMqUTMrDp3iUPkOkVhjwU2Vvxn5i1OAhaIb3iY
+ UxreRV+D7gfn1IGSYEGYMUo+51jOrfSodUVokxfIiyWX0VNSMeEQiwSdnm/3WVay2GIC
+ HOGHS8wDdN8QwLMfkW2bFgY1gGDhpAW0zMZaQ=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=W5obo4bp
-Subject: [Buildroot] [PATCH 0/4] manage CAN devices on MMU-less systems
+ header.b=fBZZVsiR
+Subject: [Buildroot] [PATCH 1/4] package/can-utils: bump to version 2023.03
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,37 +103,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series is the result of the work done to add support for the bxCAN
-controller to the Linux kernel ([1], [2]). Since these are MMU-less
-systems, I had to apply some patches to the userspace tools required to
-test the driver. I also submitted a patch to busybox ([3]), but it has
-not been accepted yet, and I don't know if it will be in the future. In
-the meantime, the rtnl-link-can application can be used.
+Release notes: https://github.com/linux-can/can-utils/releases/tag/v2023.03
 
-This series allows the use of CAN devices on MMU-less systems before it
-is possible to bump can-utils and libmnl to the new versions containing
-these patches.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ package/can-utils/can-utils.hash | 2 +-
+ package/can-utils/can-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-[1] https://lore.kernel.org/all/20230328084710.jnrwvydewx3atxti@pengutronix.de/
-[2] https://lore.kernel.org/all/20230509-silt-gullible-a010971857fc-mkl@pengutronix.de/
-[3] http://lists.busybox.net/pipermail/busybox/2023-April/090294.html
-
-Dario Binacchi (4):
-  package/can-utils: bump to version 2023.03
-  package/can-utils: enable compilation on MMU-less systems
-  package/libmnl: add rtnl-link-can example
-  package/libmnl: simplify LIBMNL_EXAMPLES_INSTALL_TARGETS setting
-
- ...ograms-using-fork-on-MMU-less-system.patch | 257 +++++++++
- package/can-utils/Config.in                   |   1 -
- package/can-utils/can-utils.hash              |   2 +-
- package/can-utils/can-utils.mk                |   2 +-
- .../0001-examples-add-rtnl-link-can.patch     | 504 ++++++++++++++++++
- package/libmnl/libmnl.mk                      |  15 +-
- 6 files changed, 770 insertions(+), 11 deletions(-)
- create mode 100644 package/can-utils/0001-Don-t-compile-programs-using-fork-on-MMU-less-system.patch
- create mode 100644 package/libmnl/0001-examples-add-rtnl-link-can.patch
-
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+index 4e47143f313b..e539e05b4569 100644
+--- a/package/can-utils/can-utils.hash
++++ b/package/can-utils/can-utils.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  c9b8f29515ad34af7f78450ec55c983abc5393e86b1f128a92ac0dfd141baaf7  can-utils-2021.08.0.tar.gz
++sha256  2790dfb57fe3ec22b6fd512838c6480c39f7c9ae193e59f1ae01221216505a7e  can-utils-2023.03.tar.gz
+ sha256  c3dc748f5e725cf5ed89784fe78e4ff1b05d309bf1e7ade4c572e8fde1b8406c  LICENSES/BSD-3-Clause
+ sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  LICENSES/GPL-2.0-only.txt
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index 5b8a2aeea3b8..462e123c6d92 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAN_UTILS_VERSION = 2021.08.0
++CAN_UTILS_VERSION = 2023.03
+ CAN_UTILS_SITE = $(call github,linux-can,can-utils,v$(CAN_UTILS_VERSION))
+ CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0
+ CAN_UTILS_LICENSE_FILES = LICENSES/BSD-3-Clause LICENSES/GPL-2.0-only.txt
 -- 
 2.32.0
 
