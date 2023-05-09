@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E86C77B7C
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 21:01:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AF7FC7EE22
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 21:01:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3974542BCA;
-	Tue,  9 May 2023 21:01:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3974542BCA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54DFD42BCE;
+	Tue,  9 May 2023 21:01:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54DFD42BCE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qq9yXHlCzqJl; Tue,  9 May 2023 21:01:37 +0000 (UTC)
+	with ESMTP id 7YYXcXZCQe5o; Tue,  9 May 2023 21:01:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC71E42BC6;
-	Tue,  9 May 2023 21:01:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC71E42BC6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1ECC61BF20B
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:59:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 71DF642BC5;
+	Tue,  9 May 2023 21:01:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71DF642BC5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E959B1BF2FF
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C432542793
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:59:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C432542793
+ by smtp1.osuosl.org (Postfix) with ESMTP id C372A83D1D
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:00:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C372A83D1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cej8t8ugjPW8 for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 20:59:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D0D6428DC
- for <buildroot@buildroot.org>; Tue,  9 May 2023 20:59:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D0D6428DC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5DFC862CB; Tue,  9 May 2023 20:59:11 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 9 May 2023 22:56:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b42b4442ca2a6c4a4286fdc2ce9dbdaacf6f6368
-X-Git-Newrev: 7d4f1fda8f8a5dc8b136367af73ecb0b97b84279
-X-Patchwork-Hint: ignore
-Message-Id: <20230509205911.E5DFC862CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/setools: bump to version 4.4.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V2vOm-luxzFc for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 21:00:28 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8622D83D1B
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8622D83D1B
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 21:00:28 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:3a04:4e20:1cde:35ad])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 1E52120047F;
+ Tue,  9 May 2023 23:00:18 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 09 May 2023 23:00:17 +0200
+Date: Tue, 9 May 2023 23:00:17 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Adam Duskett <aduskett@gmail.com>
+Message-ID: <20230509210017.GD252090@scaer>
+References: <20230425171454.48802-1-aduskett@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230425171454.48802-1-aduskett@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1683666025;
+ bh=+8xjc70griZFfPnCjm+5Tpwpm9VS389DXf5NPir28z8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=HflZ42gHE+rVGSnpZg0NUdFQOWFLSTxwISqx8qHc8H9bucQJFlVO0UM5LPuhXKHu9
+ YbM6bjv1szrqFhQ3347sofiD1jjN72T2l1nQiP6G7Zd8c0ShxqManmKzDSDlYyxgFA
+ vEyaCLJ8HJxKPXSHsEeRxKQJHzGNmV6xGHj3m1KUXvNg53EGT8HaPLn7ewrKiN1PfB
+ K5MxAARs7WyGiNiUJgAbg0a86AYVRUZowfZHqwpUqpn1iWUXFy4WVm3vB/tZy/CmBo
+ INtZOcK8qNJ70Yt+SCNcYRWNc2VkTg5z8T7lpdM4qR2HY2B9FXIZpSY2OfoxVnBc8J
+ gpLg2J40gxxzw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HflZ42gH
+Subject: Re: [Buildroot] [PATCH v2 00/13] Selinux: bump to 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,190 +76,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Antoine Tenart <atenart@kernel.org>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d4f1fda8f8a5dc8b136367af73ecb0b97b84279
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adam, All,
 
-In addition:
-  - Refresh 0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
+On 2023-04-25 10:14 -0700, Adam Duskett spake thusly:
+> It's been quite some time since anyone updated the SELinux packages (mainly me!)
+[--SNIP--]
+> Adam Duskett (13):
+>   package/libglib2/0003-disable-building-docs.patch: new patch
+>   package/python-pip: add host variant
+>   package/libsepol: bump to version 3.5
+>   package/libsemanage: bump to version 3.5
+>   package/libselinux: bump to version 3.5
+>   package/policycoreutils: bump to version 3.5
+>   package/checkpolicy: bump to version 3.5
+>   package/restorecond: bump to version 3.5
+>   package/semodule-utils: bump to version 3.5
+>   package/audit: bump to version 3.1
+>   package/selinux-python: bump to version 3.5
+>   package/setools: bump to version 4.4.2
+>   package/refpolicy: bump to version 2.20221101
 
-  - Update COPYING hash as the license file has been rewritten for clarity.
-    However, the licenses have not been changed.
+Entire series applied to master, thanls!
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...rt-use-setools.InfoFlowAnalysis-and-setoo.patch | 50 +++++++++++-----------
- package/setools/setools.hash                       |  4 +-
- package/setools/setools.mk                         |  2 +-
- 3 files changed, 28 insertions(+), 28 deletions(-)
+I had to do some fixups on some patches, I'll reply to them individually.
 
-diff --git a/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch b/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-index 3c3ae97dff..36063a4e13 100644
---- a/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-+++ b/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-@@ -15,22 +15,22 @@ sedta and seinfoflow to require python3-networkx
- Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
- [Refreshed for 4.3.0]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
--[Refreshed for 4.4.0]
-+[Refreshed for 4.4.2]
- ---
-  sedta                       | 3 ++-
-  seinfoflow                  | 5 +++--
-  setools/__init__.py         | 4 ++--
-  setoolsgui/apol/dta.py      | 2 +-
-  setoolsgui/apol/infoflow.py | 2 +-
-- tests/dta.py                | 2 +-
-- tests/infoflow.py           | 2 +-
-+ tests/test_dta.py           | 2 +-
-+ tests/test_infoflow.py      | 2 +-
-  7 files changed, 11 insertions(+), 9 deletions(-)
- 
- diff --git a/sedta b/sedta
--index 60861ca630a5..0056172a55e5 100755
-+index ffd9ede..4c53825 100755
- --- a/sedta
- +++ b/sedta
--@@ -23,6 +23,7 @@ import logging
-+@@ -10,6 +10,7 @@ import logging
-  import signal
-  
-  import setools
-@@ -38,7 +38,7 @@ index 60861ca630a5..0056172a55e5 100755
-  
-  
-  def print_transition(trans: setools.DomainTransition) -> None:
--@@ -114,7 +115,7 @@ else:
-+@@ -104,7 +105,7 @@ else:
-  
-  try:
-      p = setools.SELinuxPolicy(args.policy)
-@@ -48,10 +48,10 @@ index 60861ca630a5..0056172a55e5 100755
-      if args.shortest_path or args.all_paths:
-          if args.shortest_path:
- diff --git a/seinfoflow b/seinfoflow
--index f10c39de4d8e..fe733bbd0787 100755
-+index 5f4e764..a27b781 100755
- --- a/seinfoflow
- +++ b/seinfoflow
--@@ -18,6 +18,7 @@
-+@@ -5,6 +5,7 @@
-  #
-  
-  import setools
-@@ -59,7 +59,7 @@ index f10c39de4d8e..fe733bbd0787 100755
-  import argparse
-  import sys
-  import logging
--@@ -102,8 +103,8 @@ elif args.booleans is not None:
-+@@ -91,8 +92,8 @@ elif args.booleans is not None:
-  try:
-      p = setools.SELinuxPolicy(args.policy)
-      m = setools.PermissionMap(args.map)
-@@ -71,10 +71,10 @@ index f10c39de4d8e..fe733bbd0787 100755
-      if args.shortest_path or args.all_paths:
-          if args.shortest_path:
- diff --git a/setools/__init__.py b/setools/__init__.py
--index d72d343..4d5aaaa 100644
-+index ad9b36a..2bde01b 100644
- --- a/setools/__init__.py
- +++ b/setools/__init__.py
--@@ -91,11 +91,11 @@ from .pcideviceconquery import PcideviceconQuery
-+@@ -77,11 +77,11 @@ from .pcideviceconquery import PcideviceconQuery
-  from .devicetreeconquery import DevicetreeconQuery
-  
-  # Information Flow Analysis
-@@ -89,10 +89,10 @@ index d72d343..4d5aaaa 100644
-  # Policy difference
-  from .diff import PolicyDifference
- diff --git a/setoolsgui/apol/dta.py b/setoolsgui/apol/dta.py
--index 4608b9dbf34e..2cde44c142e9 100644
-+index a78d960..e71c70a 100644
- --- a/setoolsgui/apol/dta.py
- +++ b/setoolsgui/apol/dta.py
--@@ -24,7 +24,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-+@@ -11,7 +11,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-  from PyQt5.QtGui import QPalette, QTextCursor
-  from PyQt5.QtWidgets import QCompleter, QHeaderView, QMessageBox, QProgressDialog, \
-      QTreeWidgetItem
-@@ -102,10 +102,10 @@ index 4608b9dbf34e..2cde44c142e9 100644
-  from ..logtosignal import LogHandlerToSignal
-  from .analysistab import AnalysisSection, AnalysisTab
- diff --git a/setoolsgui/apol/infoflow.py b/setoolsgui/apol/infoflow.py
--index 7bca299d23fc..7fee2778f35f 100644
-+index fb9b409..738f1b8 100644
- --- a/setoolsgui/apol/infoflow.py
- +++ b/setoolsgui/apol/infoflow.py
--@@ -26,7 +26,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-+@@ -13,7 +13,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-  from PyQt5.QtGui import QPalette, QTextCursor
-  from PyQt5.QtWidgets import QCompleter, QHeaderView, QMessageBox, QProgressDialog, \
-      QTreeWidgetItem
-@@ -114,11 +114,11 @@ index 7bca299d23fc..7fee2778f35f 100644
-  from setools.exception import UnmappedClass, UnmappedPermission
-  
-  from ..logtosignal import LogHandlerToSignal
--diff --git a/tests/dta.py b/tests/dta.py
--index a0cc9381469c..177e6fb0b961 100644
----- a/tests/dta.py
--+++ b/tests/dta.py
--@@ -18,7 +18,7 @@
-+diff --git a/tests/test_dta.py b/tests/test_dta.py
-+index 7f9bbc9..48338c5 100644
-+--- a/tests/test_dta.py
-++++ b/tests/test_dta.py
-+@@ -5,7 +5,7 @@
-  import os
-  import unittest
-  
-@@ -127,11 +127,11 @@ index a0cc9381469c..177e6fb0b961 100644
-  from setools import TERuletype as TERT
-  from setools.exception import InvalidType
-  from setools.policyrep import Type
--diff --git a/tests/infoflow.py b/tests/infoflow.py
--index aa0e44a7e4f8..fca2848aeca5 100644
----- a/tests/infoflow.py
--+++ b/tests/infoflow.py
--@@ -18,7 +18,7 @@
-+diff --git a/tests/test_infoflow.py b/tests/test_infoflow.py
-+index 5a8f745..e25993b 100644
-+--- a/tests/test_infoflow.py
-++++ b/tests/test_infoflow.py
-+@@ -5,7 +5,7 @@
-  import os
-  import unittest
-  
-diff --git a/package/setools/setools.hash b/package/setools/setools.hash
-index fdb0919f11..c353e1f609 100644
---- a/package/setools/setools.hash
-+++ b/package/setools/setools.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  202eac5f857475937bee8136cff278aa2b4a4b94a0dec63fbbbe18c9eb644a4e  setools-4.4.0.tar.gz
--sha256  2f7547e10f76a382c24c053595f38a5cc6dda9347f508f254ca490e0046a9624  COPYING
-+sha256  998d12d01852feed1889110a4ca81090a47a2d9b47368e4dfe2b94d68696c813  setools-4.4.2.tar.gz
-+sha256  0e58d74751e394f39748c7b7b4039d6a883b5def9711160668ba962b52e69e01  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index ea355f10c8..b80d25a6b9 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SETOOLS_VERSION = 4.4.0
-+SETOOLS_VERSION = 4.4.2
- SETOOLS_SITE = $(call github,SELinuxProject,setools,$(SETOOLS_VERSION))
- SETOOLS_DEPENDENCIES = libselinux libsepol python-setuptools host-bison host-flex host-python-cython host-swig
- SETOOLS_INSTALL_STAGING = YES
+Regards,
+Yann E. MORIN.
+
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
