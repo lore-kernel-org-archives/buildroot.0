@@ -4,70 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1048C77B75
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 15:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63F19C7EE23
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 15:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 278DC40BD2;
-	Tue,  9 May 2023 15:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 278DC40BD2
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC286405BF;
+	Tue,  9 May 2023 15:45:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC286405BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PYPomHaG87iQ; Tue,  9 May 2023 15:41:33 +0000 (UTC)
+	with ESMTP id xyV3rke6x6B6; Tue,  9 May 2023 15:45:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 51FC2405D1;
-	Tue,  9 May 2023 15:41:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51FC2405D1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CA1601BF20B
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 15:41:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 027CD40B8D;
+	Tue,  9 May 2023 15:45:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 027CD40B8D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 26A2D1BF20B
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 15:45:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF8C684359
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 15:41:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF8C684359
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB9E540315
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 15:45:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB9E540315
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OagJ7GkS0i8K for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 15:41:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yT9E2riILucu for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 15:45:06 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6699484354
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A825404DF
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6699484354
- for <buildroot@buildroot.org>; Tue,  9 May 2023 15:41:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6A825404DF
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 15:45:05 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:89f6:f9b6:d1a9:3e6e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 829F0780511;
- Tue,  9 May 2023 17:41:24 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9893E78050E;
+ Tue,  9 May 2023 17:44:59 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 09 May 2023 17:41:24 +0200
-Date: Tue, 9 May 2023 17:41:24 +0200
+ Tue, 09 May 2023 17:44:59 +0200
+Date: Tue, 9 May 2023 17:44:59 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Message-ID: <20230509154124.GZ252090@scaer>
-References: <20230419125200.3533794-1-raphael.melotte@mind.be>
- <20230508214525.GV252090@scaer>
- <7812dded-6b51-a8e9-e506-4eb44297e2ef@mind.be>
+To: Etienne Carriere <etienne.carriere@linaro.org>
+Message-ID: <20230509154459.GA252090@scaer>
+References: <20230502154713.1490788-1-etienne.carriere@linaro.org>
+ <20230502154713.1490788-6-etienne.carriere@linaro.org>
+ <20230507213849.GT252090@scaer>
+ <CAN5uoS_PLOt-oPrNKiop4E-fQrVaRa+6GL9Fkqg=vC=waZoCAQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <7812dded-6b51-a8e9-e506-4eb44297e2ef@mind.be>
+In-Reply-To: <CAN5uoS_PLOt-oPrNKiop4E-fQrVaRa+6GL9Fkqg=vC=waZoCAQ@mail.gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683646886;
- bh=NGv4z1jhIZco1zLUDhx4qduJq84u1rBfWSmhKP5sDUA=;
+ d=free.fr; s=smtp-20201208; t=1683647102;
+ bh=EJSYbsPgdkuW5BuozBfJHB9OpG0E9DlaoVoHLRcvDdA=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=hu9iL9ki4ddv8wzqealdMm3ILTXjD48mOmxl6V9nleAdgeQI3iLWGRq0JBd/9l1R/
- g85DB8g3Pe+8wVmOAFAXoHzbteZHZh21S4CP4OW3DFAcy2M/pE1d1OkGb/z2C4g+1q
- gyM5/NchLGG9m8vpAbcEvVRrrjHBNrJzLPZ7Y6922Eb58IE3YHYz+2ROTudSnuPYJk
- gt6Ji1oCDryZVBT12bYzn+irmy191KWC0Ydl3+qqVXHt3PDM0jjpMCwBHZZzj7WmXn
- 4DklPu18JZRcz/CTuo1wbENKwVi51Uh/D5RZrpk0PK3PQ9IORRizf/+O5HsmmFFa+o
- XWBVDGSXKRwLQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=fCQpw/i7qakUef8LWcExHSlVrxq8dBGz+mAO9JSd8+2gbnr0PN2zNIhjA+Ym5Rig2
+ ayqVYWduoiU5vI0ZZL8IsphLFC9UAvyDahUGlxPGij1Zotg+TZuWzCuo6OeU8WtqVt
+ b0gex+V2WNwtgE4RdfDf6XikLEksjfcLe1XcSfHuBb52foG4Y+JLFsoyRwUTMozP8k
+ ExSajpBn4PQzZ0JPLbFyS/ZwUJ/3C0zYhhCbQX40UcAPTWrdsRqKOd8ZKpFzqHm7ZQ
+ qVQkube7hkBILyLJPZ/btzoyYqUO5yAqemSXfwr2uWrJeExlJtQVhdfC0PlOOMLj6i
+ ocn+YOEttsssA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hu9iL9ki
-Subject: Re: [Buildroot] [PATCH 1/1] package: busybox: backport fix for
- missing getrandom()
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fCQpw/i7
+Subject: Re: [Buildroot] [PATCH 6/6] package/optee-benchmark: remove
+ deprecated package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,34 +80,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmFwaGFlbCwgQWxsLAoKT24gMjAyMy0wNS0wOSAxMjowNyArMDIwMCwgUmFwaGHDq2wgTcOpbG90
-dGUgc3Bha2UgdGh1c2x5Ogo+IE9uIDUvOC8yMyAyMzo0NSwgWWFubiBFLiBNT1JJTiB3cm90ZToK
-PiA+ICAgICAuLi4uL2J1aWxkL2J1c3lib3gtMS4zNi4wL01ha2VmaWxlLmZsYWdzOjE2NTogKioq
-IHVudGVybWluYXRlZCBjYWxsIHRvIGZ1bmN0aW9uICdzaGVsbCc6IG1pc3NpbmcgJyknLiAgU3Rv
-cC4KPiBBcHBhcmVudGx5IHRoaXMgZGVwZW5kcyBvbiB0aGUgaG9zdCdzIG1ha2UgdmVyc2lvbiAo
-Zm9yIHJlZmVyZW5jZSBzZWUKPiBbMV0pLiBJdCdzIGxvb2tzIGxpa2UgdGhlIG51bWJlciBzaWdu
-ICgnIycpIHRoYXQgdGhlIHBhdGNoIHVzZXMgaW4gdGhlCj4gc2hlbGwgaW52b2NhdGlvbiBtdXN0
-ICpub3QqIGJlIGVzY2FwZWQgd2l0aCBHTlUgTWFrZSB2ZXJzaW9uIDQuMyssIGJ1dAo+ICptdXN0
-KiBiZSBlc2NhcGVkIHdpdGggdmVyc2lvbiA0LjIuMSBhbmQgZWFybGllci4uCj4gSSdsbCB0cnkg
-dG8gZml4IGl0IGFuZCBzZW5kIGEgVjIsIHNvcnJ5IGZvciB0aGUgYW5ub3lhbmNlLgoKU2VlIGhv
-dyB3ZSd2ZSBhbHJlYWR5IHNvbHZlZCBpdCBpbiBCdWlsZHJvb3Q6CiAgICAzNWM1Y2Y1NmQyMWEg
-IE1ha2VmaWxlOiBtYWtlLTQuMyBub3cgbG9uZ2VyIHVuLWVzY2FwZXMgXCMgaW4gbWFjcm9zCgog
-ICAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0LzM1
-YzVjZjU2ZDIxYQoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCi0tIAouLS0tLS0tLS0tLS0tLS0t
-LS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
-LS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJ
-SSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3
-YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8
-ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAg
-fCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBf
-LypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0t
-LS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Etienne, All,
+
+On 2023-05-09 09:17 +0200, Etienne Carriere spake thusly:
+> I didn't even noticed patch files were listed .checkpacakgeignore.
+
+That's relatively recent, and the tooling does not yet catches this
+issue; see:
+    https://patchwork.ozlabs.org/project/buildroot/patch/20230506212531.365446-1-yann.morin.1998@free.fr/
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
