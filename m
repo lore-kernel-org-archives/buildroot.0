@@ -1,91 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D46CDC7EE22
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 20:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 794CFC7EE22
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 20:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 700F64093B;
-	Tue,  9 May 2023 20:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 700F64093B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12E5A40A93;
+	Tue,  9 May 2023 20:39:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12E5A40A93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t6haH9ksvJwC; Tue,  9 May 2023 20:13:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 85FFZK4hnVix; Tue,  9 May 2023 20:39:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00C9141D85;
-	Tue,  9 May 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00C9141D85
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4C0931BF2FF
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:12:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31A4840242;
+	Tue,  9 May 2023 20:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31A4840242
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D40081BF2FF
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2027242742
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:12:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2027242742
+ by smtp3.osuosl.org (Postfix) with ESMTP id ACB21600C9
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:39:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACB21600C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NW2sj0_hp7l9 for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 20:12:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC44E42773
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BC44E42773
- for <buildroot@buildroot.org>; Tue,  9 May 2023 20:12:38 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-50bc1612940so11864973a12.2
- for <buildroot@buildroot.org>; Tue, 09 May 2023 13:12:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683663156; x=1686255156;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=UPEHfPcbcZDdfTJGYTQ64lR7s4bhzXpB9uPF9NNOTbE=;
- b=TPRb9PfWDmyyaH6wrmh+B82FSwFsjO4pcZxEDsNWFJ4dBYMFuZ+4aUlYFK1yDvKfsf
- m6pAEQ+Qrr0c0GgSuc311+ECIzJyJwzh56OwuKWLaWK54DXYFKbJ2Q3MdeuhjQ2sBvx6
- EGGR+Y/LtCLx/8dreKKZ052q9kPgVKGi4OM3NF98h2cMuU2jI18MiHMANGsq8atSOnMn
- Lvy26VWaIO8d7RK7zdkWoVKTgmQSG9xWduBv7vfrdxLOLPzc5TiphMJw4NnOhJ5STWZD
- Cnoi83h1UzFqDx38cRJ/+W6oH79MQQXhlmCBJeFt17pQZWFKHnB/9xpPbYlaJR1pKDwB
- pkqg==
-X-Gm-Message-State: AC+VfDz3ikhChe+gSCxZG2r4/p3UyuiCOrzfv3HYAuA5ny/Y0ZAhHgcN
- 5vGvz0StJ72Rh3+xlFnodleYZm1hsH7VP9OLPSvbgw==
-X-Google-Smtp-Source: ACHHUZ4tjhoPhL0ZrGv+3SES7Vnd0Y0RHeKav3Ss4LOmhChsUKrG4HVs9emWJ3OsQ2KAeZo2ciLEYg==
-X-Received: by 2002:a05:6402:606:b0:506:8dba:bd71 with SMTP id
- n6-20020a056402060600b005068dbabd71mr12968939edv.27.1683663156470; 
- Tue, 09 May 2023 13:12:36 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-40-97-5.business.telecomitalia.it. [79.40.97.5])
- by smtp.gmail.com with ESMTPSA id
- r23-20020aa7da17000000b00506987c5c71sm1157936eds.70.2023.05.09.13.12.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 May 2023 13:12:36 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 92cfNm2TL4NB for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 20:39:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A455D600C6
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 20:39:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A455D600C6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 84C47860F7; Tue,  9 May 2023 20:39:35 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 May 2023 22:11:53 +0200
-Message-Id: <20230509201153.2413972-5-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230509201153.2413972-1-dario.binacchi@amarulasolutions.com>
-References: <20230509201153.2413972-1-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1683663156; x=1686255156;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=UPEHfPcbcZDdfTJGYTQ64lR7s4bhzXpB9uPF9NNOTbE=;
- b=TQT16VollCqOoSb6WjjQk4mx/hBAm+N9xJYM+EEWcfkqT9f4j0gG/ALQer9XXyAy4o
- V+vDNmED+9PPiuGaHGsO+qj43FMTsXxBKFhss6cvskWLLIKxNDlxaQ+EJ/Z7dTcwrto5
- 77TYRmjbMCNmVHCPMoWb1WEL8FFle0MPbr19g=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=TQT16Vol
-Subject: [Buildroot] [PATCH 4/4] package/libmnl: simplify
- LIBMNL_EXAMPLES_INSTALL_TARGETS setting
+Date: Tue, 9 May 2023 22:38:47 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 9446c4a7b6836fa275917de6d72678bb12079cfb
+X-Git-Newrev: 8025cfad1055ad23a5935b7a69580ebc2b003e1e
+X-Patchwork-Hint: ignore
+Message-Id: <20230509203935.84C47860F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] Update for 2023.02.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,49 +56,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>, Dario Binacchi <dariobin@libero.it>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Simplify the setting of LIBMNL_EXAMPLES_INSTALL_TARGETS as suggested by
-Arnout Vandecappelle in [1].
+commit: https://git.buildroot.net/buildroot/commit/?id=8025cfad1055ad23a5935b7a69580ebc2b003e1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20220502051059.8301-1-dariobin@libero.it/
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmnl/libmnl.mk | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ CHANGES                  | 36 ++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 39 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
-index 7c48196d7529..cea528422ea8 100644
---- a/package/libmnl/libmnl.mk
-+++ b/package/libmnl/libmnl.mk
-@@ -20,15 +20,12 @@ define LIBMNL_EXAMPLES_BUILD_CMDS
- endef
- LIBMNL_POST_BUILD_HOOKS += LIBMNL_EXAMPLES_BUILD_CMDS
+diff --git a/CHANGES b/CHANGES
+index a03a4876b8..55dcc830de 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,39 @@
++2023.02.1, released May 9th, 2023
++
++	Important / security related fixes.
++
++	Infrastucture:
++	- go: Ensure go versions of os/user and net are used for
++          static builds so CGO is not used
++
++	- rust / cargo: Correctly split up rust flags for host and
++          target builds
++
++	Defconfigs: Olimex a20 olinuxino lime*: Bring up network at
++	boot, stmf469 disco sd: Lock U-Boot version
++
++	Updated/fixed packages: agentpp, apache, bluez5_utils,
++	ca-certificates, containerd, coremark, dcron, dnsmasq,
++	docker-cli, docker-engine, efivar, eudev, ffmpeg, flann,
++	fluidsynth, git, go, gst-omx, gst1-devtools, gst1-libav,
++	gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
++	gst1-plugins-ugly, gst1-python, gst1-rtsp-server, gst1-vaapi,
++	gstreamer1, gstreamer1-editing-services, intel-microcode,
++	kexec, libcurl, libite, libgtk3, libmicrohttpd, libxml2,
++	linux-tools, lua, mali-driver, matio, mdadm, nginx, openocd,
++	openssh, php, poppler, postgresql, python-web2py, qt6base,
++	readline, rtl8189fs, rtl8723ds, rtl8812au-aircrack-ng, runc,
++	rust, rust-bin, s390-tools, samba4, sdl2, snmppp, sudo,
++	systemd, tcpdump, uclibc, vim, webkitgtk, wireshark,
++	wpewebkit, xr819-radio, xserver_xorg-server, zeek
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#14356: cronstamp jobs are not performed with bumped version of...
++	#15306: glibc build fails in Docker container
++	#15376: Libiconv config
++	#15461: QtVirtualKeyboard segfaults
++
+ 2023.02, released March 12th, 2023
  
--LIBMNL_EXAMPLES_INSTALL_TARGETS += \
--	$(addprefix examples/genl/, genl-family-get genl-group-events)
--LIBMNL_EXAMPLES_INSTALL_TARGETS += \
--	$(addprefix examples/kobject/, kobject-event)
--LIBMNL_EXAMPLES_INSTALL_TARGETS += \
-+LIBMNL_EXAMPLES_INSTALL_TARGETS = \
-+	$(addprefix examples/genl/, genl-family-get genl-group-events) \
-+	$(addprefix examples/kobject/, kobject-event) \
- 	$(addprefix examples/netfilter/, nfct-create-batch \
- 		nfct-daemon nfct-dump nfct-event nf-log \
--		nf-queue)
--LIBMNL_EXAMPLES_INSTALL_TARGETS += \
-+		nf-queue) \
- 	$(addprefix examples/rtnl/, rtnl-addr-add rtnl-addr-dump \
- 		rtnl-link-can rtnl-link-dump rtnl-link-dump2 rtnl-link-dump3 \
- 		rtnl-link-event rtnl-link-set rtnl-neigh-dump \
--- 
-2.32.0
-
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 634780b421..000f1dcec0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2023.02
++export BR2_VERSION := 2023.02.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1678652000
++BR2_VERSION_EPOCH = 1683664000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index a1de170749..d1b75ed405 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2023.02'
++RELEASE='2023.02.1'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
