@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61D34C77B7C
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 21:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48DAFC7EE22
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 21:06:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0172642BAD;
-	Tue,  9 May 2023 21:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0172642BAD
+	by smtp2.osuosl.org (Postfix) with ESMTP id F14C942BA9;
+	Tue,  9 May 2023 21:06:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F14C942BA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QdszHRV6Snik; Tue,  9 May 2023 21:05:25 +0000 (UTC)
+	with ESMTP id 3B5czgb_TsGO; Tue,  9 May 2023 21:06:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09A6C42B91;
-	Tue,  9 May 2023 21:05:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09A6C42B91
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AC3481BF335
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:05:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 117B142B83;
+	Tue,  9 May 2023 21:06:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 117B142B83
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 50BCB1BF335
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85AD883B13
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:05:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85AD883B13
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3426B42919
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:06:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3426B42919
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MWit4XPydabk for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 21:05:21 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 710E283AF4
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 710E283AF4
- for <buildroot@buildroot.org>; Tue,  9 May 2023 21:05:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BYQPxP81V_3P for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 21:06:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B29C842918
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B29C842918
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 21:06:35 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:3a04:4e20:1cde:35ad])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 41ACF2003BE;
- Tue,  9 May 2023 23:05:12 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 429722003D3;
+ Tue,  9 May 2023 23:06:26 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 09 May 2023 23:05:12 +0200
-Date: Tue, 9 May 2023 23:05:11 +0200
+ Tue, 09 May 2023 23:06:26 +0200
+Date: Tue, 9 May 2023 23:06:26 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20230509210511.GG252090@scaer>
+Message-ID: <20230509210626.GH252090@scaer>
 References: <20230425171454.48802-1-aduskett@gmail.com>
- <20230425171454.48802-12-aduskett@gmail.com>
+ <20230425171454.48802-14-aduskett@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230425171454.48802-12-aduskett@gmail.com>
+In-Reply-To: <20230425171454.48802-14-aduskett@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683666319;
- bh=X4wSPVTwUbJA13alxBQsqA3PO5NhCGjpttopJ+Y+Icc=;
+ d=free.fr; s=smtp-20201208; t=1683666393;
+ bh=+vkZWQ2wdCS7VeNNbDS+lc15wKZy0VPCheSYH4nENU4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dZZZsAgOdmhuMTf0Po7WKS13oWF31H8TkyD3K9ZCS8CCouV3urdYW0dpn5/nfEO96
- CNGmu24IDbZ0jIzemXN0G7CTodcDf3GKQj8X8U2bBlv1/fRRVM20eS/AKgh7+UYGcU
- zWBwxCmok7ws6PBduihVvcCxvU++FfDatYwB7nk2feXfAl6NJdvUu0Tj37p4KmMi2Y
- 7fOsjdyCXEQYMXF31j49aXb/igSkCujqxppbOtqTDmuhZt+hq8rp3KUfu9NO6DRsu5
- FcclOf1TERXaee7enPREH26iNsHMhkWrkugfa6nWqxGlM6yH0vAMBeqS58H/RBAdyC
- 1uIh+zvORdGnQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=oghKZcF+IPhLcnnjwn1rbVB9WB5q0K3Kf1mT772XHvLQbjFA+cDGfxIgiXGGdZ5mW
+ UynzTayWvq0A68qJv3u3qMdFw2ZK2HFyBhfX5MB8iZ7gOTAuJBCOW46Mw5SY4Wdx5E
+ zdYh3dQf+PBbcQxkCpH0fHxZjnXxkwSWmQIucu05TYnGBsCmP2KIdpASVTg9gmb0kn
+ AbdVYiR6M7aUNOhZE0kGSbVKHNT5x7Cbfwq7cl2oZGssW252uAbGQ4zcUsT0Tcnfpx
+ iIHqNuWJbr8YsQJFfPEK+DVcBI+0zz7OfKDitfA0IRYcIy4kCyruiO7EzaakpKpUEB
+ P+USpgignowDA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dZZZsAgO
-Subject: Re: [Buildroot] [PATCH v2 11/13] package/selinux-python: bump to
- version 3.5
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=oghKZcF+
+Subject: Re: [Buildroot] [PATCH v2 13/13] package/refpolicy: bump to version
+ 2.20221101
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,43 +90,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Adam, All,
 
 On 2023-04-25 10:14 -0700, Adam Duskett spake thusly:
-> Also:
->   - Change the license file to LICENSE. The hash remains the same.
-> 
->   - Add 0001-fix-ausearch-path.patch as audit 3.1 installs ausearch to
->     /usr/sbin not /sbin
+> Add an upstream patch in package/refpolicy/2.20221101 that makes dbus optional
+> for the mount interface. The patch must go in the 2.20221101 directory or else
+> the build system will automatically attempt to apply the patch to a custom git
+> version of refpolicy if chosen.
 > 
 > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 > ---
->  .../0001-fix-ausearch-path.patch              | 37 +++++++++++++++++++
->  package/selinux-python/selinux-python.hash    |  4 +-
->  package/selinux-python/selinux-python.mk      |  4 +-
->  3 files changed, 41 insertions(+), 4 deletions(-)
->  create mode 100644 package/selinux-python/0001-fix-ausearch-path.patch
+> Changes v1 -> v2:
+>   - Added 2.20221101/0001-mount-dbus-interface-must-be-optional.patch
 > 
-> diff --git a/package/selinux-python/0001-fix-ausearch-path.patch b/package/selinux-python/0001-fix-ausearch-path.patch
+>  ...ount-dbus-interface-must-be-optional.patch | 33 +++++++++++++++++++
+>  package/refpolicy/refpolicy.hash              |  2 +-
+>  package/refpolicy/refpolicy.mk                |  2 +-
+>  3 files changed, 35 insertions(+), 2 deletions(-)
+>  create mode 100644 package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+> 
+> diff --git a/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
 > new file mode 100644
-> index 0000000000..c5f0a990ed
+> index 0000000000..dec0af828f
 > --- /dev/null
-> +++ b/package/selinux-python/0001-fix-ausearch-path.patch
-> @@ -0,0 +1,37 @@
-> +From 7a2456f18a49fa70de1f9ace12512bb00437b6ba Mon Sep 17 00:00:00 2001
+> +++ b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+> @@ -0,0 +1,33 @@
+> +From 6c6be65ccf0891391681d4662cc11f508c0f4aeb Mon Sep 17 00:00:00 2001
 > +From: Adam Duskett <aduskett@gmail.com>
-> +Date: Mon, 24 Apr 2023 12:25:19 -0700
-> +Subject: [PATCH 1/1] fix ausearch path
+> +Date: Mon, 24 Apr 2023 14:24:49 -0700
+> +Subject: [PATCH] mount: dbus interface must be optional
 > +
-> +ausearch is installed in /usr/sbin not /sbin
+> +If DBus isn't built, the build process fails due to mount.te always using a
+> +dbus interface even if the dbus module. Fix this by setting the dbus interface
+> +as optional.
 > +
 > +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> +Upstream-status: accepted. 207b09a656c2c3ac5c286d3f7eef085325e35408
 
-    $ ./utils/docker-run make check-package
-    package/selinux-python/0001-fix-ausearch-path.patch:4: generate your patches with 'git format-patch -N'
-    package/selinux-python/0001-fix-ausearch-path.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-
-I changed the commit to an upstreamable one, and rewrote the commit log
-with more in-depth explanations, so that fixed those two warnings.
-
-Can you see into pushing that patch upstream, please?
+The proper format for an Upstream: tag is just "Upstream:" (but that is
+a very recent change. so I just fixed it). We also prefer to have an URL
+to the upstream commit, so I changed that too.
 
 Applied to master, thanks.
 
@@ -134,63 +134,51 @@ Regards,
 Yann E. MORIN.
 
 > +---
-> + sepolgen/src/sepolgen/audit.py | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> + policy/modules/system/mount.te | 4 +++-
+> + 1 file changed, 3 insertions(+), 1 deletion(-)
 > +
-> +diff --git a/sepolgen/src/sepolgen/audit.py b/sepolgen/src/sepolgen/audit.py
-> +index 4adb851..5afe85d 100644
-> +--- a/sepolgen/src/sepolgen/audit.py
-> ++++ b/sepolgen/src/sepolgen/audit.py
-> +@@ -41,7 +41,7 @@ def get_audit_boot_msgs():
-> +     s = time.localtime(time.time() - off)
-> +     bootdate = time.strftime("%x", s)
-> +     boottime = time.strftime("%X", s)
-> +-    output = subprocess.Popen(["/sbin/ausearch", "-m", "AVC,USER_AVC,MAC_POLICY_LOAD,DAEMON_START,SELINUX_ERR", "-ts", bootdate, boottime],
-> ++    output = subprocess.Popen(["/usr/sbin/ausearch", "-m", "AVC,USER_AVC,MAC_POLICY_LOAD,DAEMON_START,SELINUX_ERR", "-ts", bootdate, boottime],
-> +                               stdout=subprocess.PIPE).communicate()[0]
-> +     if util.PY3:
-> +         output = util.decode_input(output)
-> +@@ -56,7 +56,7 @@ def get_audit_msgs():
-> +        string contain all of the audit messages returned by ausearch.
-> +     """
-> +     import subprocess
-> +-    output = subprocess.Popen(["/sbin/ausearch", "-m", "AVC,USER_AVC,MAC_POLICY_LOAD,DAEMON_START,SELINUX_ERR"],
-> ++    output = subprocess.Popen(["/usr/sbin/ausearch", "-m", "AVC,USER_AVC,MAC_POLICY_LOAD,DAEMON_START,SELINUX_ERR"],
-> +                               stdout=subprocess.PIPE).communicate()[0]
-> +     if util.PY3:
-> +         output = util.decode_input(output)
+> +diff --git a/policy/modules/system/mount.te b/policy/modules/system/mount.te
+> +index d028723..af84af0 100644
+> +--- a/policy/modules/system/mount.te
+> ++++ b/policy/modules/system/mount.te
+> +@@ -145,7 +145,9 @@ selinux_getattr_fs(mount_t)
+> + 
+> + userdom_use_all_users_fds(mount_t)
+> + 
+> +-dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
+> ++optional_policy(`
+> ++	dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
+> ++')
+> + 
+> + ifdef(`distro_redhat',`
+> + 	optional_policy(`
 > +-- 
 > +2.40.0
 > +
-> diff --git a/package/selinux-python/selinux-python.hash b/package/selinux-python/selinux-python.hash
-> index 6ada3fee36..3592540703 100644
-> --- a/package/selinux-python/selinux-python.hash
-> +++ b/package/selinux-python/selinux-python.hash
+> diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+> index b08c22ed4e..a09e59c270 100644
+> --- a/package/refpolicy/refpolicy.hash
+> +++ b/package/refpolicy/refpolicy.hash
 > @@ -1,5 +1,5 @@
->  # https://github.com/SELinuxProject/selinux/wiki/Releases
-> -sha256  8ad91061300387996ccb474962fb93dde263d924aa8f740618be16b22e2444ec  selinux-python-3.3.tar.gz
-> +sha256  8245bb4dae59333461f19ca0c79a829081f07972fa5e3ad4c2b2b917dd71d96b  selinux-python-3.5.tar.gz
+>  # From https://github.com/SELinuxProject/refpolicy/releases
+> -sha256  965f98f0b68a24fd0b8e8d973d319332aea88973e1d6c455ef9c2a31aefaeaa6  refpolicy-2.20220106.tar.bz2
+> +sha256  44f88e62c8efcef54d019b9ca077520d5993de580926bd7575788cfa78515396  refpolicy-2.20221101.tar.bz2
 >  
->  # Hash for license file
-> -sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-> +sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-> diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
-> index 0cec602f3d..7505474aa4 100644
-> --- a/package/selinux-python/selinux-python.mk
-> +++ b/package/selinux-python/selinux-python.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -SELINUX_PYTHON_VERSION = 3.3
-> +SELINUX_PYTHON_VERSION = 3.5
->  SELINUX_PYTHON_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(SELINUX_PYTHON_VERSION)
->  SELINUX_PYTHON_LICENSE = GPL-2.0
-> -SELINUX_PYTHON_LICENSE_FILES = COPYING
-> +SELINUX_PYTHON_LICENSE_FILES = LICENSE
->  SELINUX_PYTHON_DEPENDENCIES = python3
->  
->  SELINUX_PYTHON_MAKE_OPTS += \
+>  # Locally computed
+>  sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+> diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+> index f11b72755a..8fea7cc254 100644
+> --- a/package/refpolicy/refpolicy.mk
+> +++ b/package/refpolicy/refpolicy.mk
+> @@ -23,7 +23,7 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
+>  REFPOLICY_SITE_METHOD = git
+>  BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
+>  else
+> -REFPOLICY_VERSION = 2.20220106
+> +REFPOLICY_VERSION = 2.20221101
+>  REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+>  REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_$(subst .,_,$(REFPOLICY_VERSION))
+>  endif
 > -- 
 > 2.40.0
 > 
