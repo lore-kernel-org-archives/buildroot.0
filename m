@@ -4,67 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 331F9C77B75
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 13:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC346C7EE22
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 13:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB27D845FF;
-	Tue,  9 May 2023 13:31:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB27D845FF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9AABC84606;
+	Tue,  9 May 2023 13:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AABC84606
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6deHeZL_1gao; Tue,  9 May 2023 13:31:45 +0000 (UTC)
+	with ESMTP id A7S9G2GzYGWF; Tue,  9 May 2023 13:41:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5910845FA;
-	Tue,  9 May 2023 13:31:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5910845FA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2975B1BF867
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 13:31:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA3FD8406D;
+	Tue,  9 May 2023 13:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA3FD8406D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 492021BF867
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 13:41:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 02C4F845F4
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 13:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02C4F845F4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2200F61612
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 13:41:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2200F61612
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hpXT6Kymq686 for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 13:31:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F22E98456C
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com
- [209.85.208.53])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F22E98456C
- for <buildroot@buildroot.org>; Tue,  9 May 2023 13:31:41 +0000 (UTC)
-Received: by mail-ed1-f53.google.com with SMTP id
- 4fb4d7f45d1cf-50bc0ced1d9so8945307a12.0
- for <buildroot@buildroot.org>; Tue, 09 May 2023 06:31:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683639100; x=1686231100;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ik6rPcIQ13DetGJeOZARKwMOPnuEuq3JrV2q+wS6eGU=;
- b=L8/WwmBUXTrgrwalfjRAFQjPN5eEzoG+2lz/uxWlb6ph4OL4+sjiVdE/udEXIjuT/u
- UKamTh3aLYaOjZHGtt5Is7te11Y2p59OOiVvSsCTwjbbk7d3l/I2YmE3HL1cobp01Gxu
- Pb/UHdXr+ilbMkPaAmbdqVgf26Emfe1y/1/s6MS77y0otEHNtF39r7uZrB5Z5zeRdWQ/
- rXKmC4/gap/nUZ4WcQNp20bl/xHLFAKTP8tvAE1Bkhjbbh7ZGLe4lLiJCyPbZ9fxIHDl
- dfcLBdW2YzTOXKe45d5BD5Q5FfOSwxdYGxDePIdT1V4Ovxryb0+ogFn8fUWubZx0bdfN
- 9cpg==
-X-Gm-Message-State: AC+VfDw2eBkB/oAYBuSR1Fc7rQpi0OLCtA1lWxxKzO/3qY4o04MN7C3J
- UYpVBi6L3KSYok3dfGbtNedOEHMqECPzXko1fKnBxRzFWQ0ST7KdPvE=
-X-Google-Smtp-Source: ACHHUZ5KLv1qWSo2yXpT6cdsryrzUlGfblSXwDTJpQX2wK6OyLpCP4mQNUWUFxZhiYLaDDUUQ41rLneaafYK4assd4A=
-X-Received: by 2002:a17:907:3f9a:b0:94e:dd3f:b650 with SMTP id
- hr26-20020a1709073f9a00b0094edd3fb650mr13478726ejc.18.1683639100005; Tue, 09
- May 2023 06:31:40 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rm3kBMuZyCZZ for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 13:41:02 +0000 (UTC)
+X-Greylist: delayed 00:29:33 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FED960ADA
+Received: from smtp.zfn.uni-bremen.de (smtp.zfn.uni-bremen.de [134.102.50.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5FED960ADA
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 13:41:02 +0000 (UTC)
+Received: from [IPV6:2003:ca:7f37:2300:4625:d4a8:928a:b8]
+ (p200300ca7f3723004625d4a8928a00b8.dip0.t-ipconnect.de
+ [IPv6:2003:ca:7f37:2300:4625:d4a8:928a:b8])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.zfn.uni-bremen.de (Postfix) with ESMTPSA id 4QFz7g1hrszDCdm;
+ Tue,  9 May 2023 15:11:27 +0200 (CEST)
+Message-ID: <dbd01b75-87ae-639b-9118-2079cac505d3@itp.uni-bremen.de>
+Date: Tue, 9 May 2023 15:11:26 +0200
 MIME-Version: 1.0
-References: <CAOcd1mo0dRncibAFbShjgkPGOhPab_wd1n=b76r_tmEe=zEoCg@mail.gmail.com>
-In-Reply-To: <CAOcd1mo0dRncibAFbShjgkPGOhPab_wd1n=b76r_tmEe=zEoCg@mail.gmail.com>
-From: James Knight <james.d.knight@live.com>
-Date: Tue, 9 May 2023 09:31:29 -0400
-Message-ID: <CALAjcgXuSyV-5v=YHokFW7fc=Pt1fW8govYrpm7z=_724TmEYg@mail.gmail.com>
-To: Naveen Mamindlapalli <naveen.mamindlapalli@gmail.com>
-Subject: Re: [Buildroot] Bpftrace support in buildroot
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Content-Language: de-DE, en-US
+To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+References: <00604ac1-606d-ab11-8302-619aab02bcfe@t-online.de>
+ <ca66b08b-e69f-2cc0-102e-241f0a03fa93@mind.be>
+From: =?UTF-8?Q?Niclas_G=c3=b6tting?= <ngoetting@itp.uni-bremen.de>
+In-Reply-To: <ca66b08b-e69f-2cc0-102e-241f0a03fa93@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=uni-bremen.de; s=2019; 
+ t=1683637887; i=@uni-bremen.de;
+ bh=OLhx6DkXox/6JWk1SJWa55squpIO0KACBIerjEcv0l4=;
+ h=Date:To:Cc:References:From:In-Reply-To;
+ b=XG4tVH5LxFWOXhTKEySPgCkJlMh85Hy/yrhb55PWZxVkcRIcnmSLUfLVav3loT0ss
+ My/r+tX0TPbWnxTWNyJHnjr0ucgZr/HMrGs/TUQ89MCulV5zqElJC8Fc18LgihVv5K
+ 3l//hESE7/r0H6cfsGtwMLklHQyhwl1MzG0rUHQeKZMzZBYZNVZGtwKC0dGHCGk6/9
+ Fio0ZDyx22Vkkyk3e9bIU9649309sYdcKFFCarjo33yclkK534Po3ETooXDShZ+7Sn
+ oBjo1qj6IgSogSEGW1tz1cqZ97ipexwc8UqZyZzUYabmdVNL8DUcj9BS2zdEKk5ieY
+ MU9c+PkQA8Fgg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=uni-bremen.de header.i=@uni-bremen.de
+ header.a=rsa-sha256 header.s=2019 header.b=XG4tVH5L
+Subject: Re: [Buildroot] SWUpdate default services
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,22 +80,215 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Qais Yousef <qais.yousef@arm.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: multipart/mixed; boundary="===============8182383009531352950=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TmF2ZWVuLAoKT24gVHVlLCBNYXkgOSwgMjAyMyBhdCA3OjQ34oCvQU0gTmF2ZWVuIE1hbWluZGxh
-cGFsbGkKPG5hdmVlbi5tYW1pbmRsYXBhbGxpQGdtYWlsLmNvbT4gd3JvdGU6Cj4gQ2FuIGFueWJv
-ZHkgcGxlYXNlIGNsYXJpZnkgd2hldGhlciB0aGUgcGF0Y2hlcyBnb3QgYWNjZXB0ZWQgYW5kIG1l
-cmdlZAo+IHRvIGJ1aWxkcm9vdD8KCkl0IGFwcGVhcnMgdGhhdCB0aGUgd29yayBqdXN0IHN0YWxs
-ZWQgYXJvdW5kIG1pZC0yMDIxIFsxXS4gWW91IG1heSB0cnkKdG8gY29udGludWUgaXRzIGRldmVs
-b3BtZW50IGJ5IGNoZWNraW5nIHRvIHNlZSB0aGUgbW9zdCByZWNlbnQgY2hhbmdlcwpyZXF1ZXN0
-ZWQgYW5kIHN1Ym1pdCBhbiB1cGRhdGVkIHBhdGNoIHlvdXJzZWxmICh1bmxlc3MgdGhlIG9yaWdp
-bmFsCmF1dGhvcihzKSBwbGFuIHRvIG1ha2UgdGhlc2UgY2hhbmdlcyB0aGVtc2VsdmVzKS4KClsx
-XTogaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9saXN0Lz9x
-PWJwZnRyYWNlJnN0YXRlPSoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This is a multi-part message in MIME format.
+--===============8182383009531352950==
+Content-Type: multipart/alternative;
+ boundary="------------kbQJ0djggH6wVLNzsHBAepUE"
+Content-Language: de-DE, en-US
+
+This is a multi-part message in MIME format.
+--------------kbQJ0djggH6wVLNzsHBAepUE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Thank you for the fast response!
+
+On 25.04.23 22:25, Arnout Vandecappelle wrote:
+>  Adding James in Cc, he added this.
+>
+> On 24/04/2023 12:06, Niclas Götting wrote:
+>> Hi all,
+>>
+>> currently, the `swupdate`-package (for init-systems other than 
+>> systemd) automatically installs a file called 
+>> `/usr/lib/swupdate/conf.d/90-start-progress`, with the only content 
+>> being
+>>
+>> exec /usr/bin/swupdate-progress -w -r &
+>
+>  This was done in commit 0e94459ad52e87033c170522610e83215a444242 to 
+> align Buildroot with the upstream-maintained meta-swupdate. I.e., in 
+> meta-swupdate this is done by default.
+>
+>  I guess the idea is that most people want this progress feature.
+>> For me, this is problematic because of two reasons:
+>>
+>>  1. Having `swupdate-progress` running in the background is optional 
+>> and should
+>>     therefore not be the default.
+>
+>  If you don't want it, you can always remove it in a post-build script.
+Removing the file in a post-build script depends on the file always 
+being in the exact same location with the exact same name. I think it 
+would be much cleaner, if the file wasn't there in the first place. 
+After all it is a single line, which can indeed be trivially added in a 
+rootfs overlay and consistently so.
+>
+>>  2. The process is not handled via a service, but is started every 
+>> time the
+>>     `swupdate` service is started. If you restart SWUpdate five 
+>> times, there
+>>     will be five `swupdate-progress` processes.
+>
+>  That is indeed annoying. I'm not really sure how this conf.d works. 
+> Would there be a way to use start-stop daemon instead (and create a 
+> pid file), and stop it in the init script?
+
+Yes, the clean way would be to have separate service for 
+swupdate-progress, which could be shipped with buildroot. I would also 
+be okay with this solution.
+
+Generally, as SWUpdate is such a flexible framework, I don't know if it 
+is a good idea to include any standard service at all. Most people will 
+want different kinds of setups than the standard and then need to delete 
+all unneeded files in scripts, which I consider unclean.
+
+>
+>  Regards,
+>  Arnout
+>
+>> Maybe I have overseen something, but I believe the file should not 
+>> have been there in the first place and I would prefer to add my own 
+>> scripts if I needed them. In any case, I would propose an option to 
+>> disable installing this file.
+
+Best regards
+Niclas
+--------------kbQJ0djggH6wVLNzsHBAepUE
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <div class="moz-text-flowed" style="font-family: -moz-fixed;
+      font-size: 12px;" lang="x-unicode">Thank you for the fast
+      response!
+      <br>
+      <br>
+      On 25.04.23 22:25, Arnout Vandecappelle wrote:
+      <br>
+      <blockquote type="cite" style="color: #007cff;"> Adding James in
+        Cc, he added this.
+        <br>
+        <br>
+        On 24/04/2023 12:06, Niclas Götting wrote:
+        <br>
+        <blockquote type="cite" style="color: #007cff;">Hi all,
+          <br>
+          <br>
+          currently, the `swupdate`-package (for init-systems other than
+          systemd) automatically installs a file called
+          `/usr/lib/swupdate/conf.d/90-start-progress`, with the only
+          content being
+          <br>
+          <br>
+          exec /usr/bin/swupdate-progress -w -r &amp;
+          <br>
+        </blockquote>
+        <br>
+         This was done in commit
+        0e94459ad52e87033c170522610e83215a444242 to align Buildroot with
+        the upstream-maintained meta-swupdate. I.e., in meta-swupdate
+        this is done by default.
+        <br>
+        <br>
+         I guess the idea is that most people want this progress
+        feature.
+        <br>
+        <blockquote type="cite" style="color: #007cff;">For me, this is
+          problematic because of two reasons:
+          <br>
+          <br>
+           1. Having `swupdate-progress` running in the background is
+          optional and should
+          <br>
+              therefore not be the default.
+          <br>
+        </blockquote>
+        <br>
+         If you don't want it, you can always remove it in a post-build
+        script.
+        <br>
+      </blockquote>
+      Removing the file in a post-build script depends on the file
+      always being in the exact same location with the exact same name.
+      I think it would be much cleaner, if the file wasn't there in the
+      first place. After all it is a single line, which can indeed be
+      trivially added in a rootfs overlay and consistently so.
+      <br>
+      <blockquote type="cite" style="color: #007cff;">
+        <br>
+        <blockquote type="cite" style="color: #007cff;"> 2. The process
+          is not handled via a service, but is started every time the
+          <br>
+              `swupdate` service is started. If you restart SWUpdate
+          five times, there
+          <br>
+              will be five `swupdate-progress` processes.
+          <br>
+        </blockquote>
+        <br>
+         That is indeed annoying. I'm not really sure how this conf.d
+        works. Would there be a way to use start-stop daemon instead
+        (and create a pid file), and stop it in the init script?
+        <br>
+      </blockquote>
+      <br>
+      Yes, the clean way would be to have separate service for
+      swupdate-progress, which could be shipped with buildroot. I would
+      also be okay with this solution.
+      <br>
+      <br>
+      Generally, as SWUpdate is such a flexible framework, I don't know
+      if it is a good idea to include any standard service at all. Most
+      people will want different kinds of setups than the standard and
+      then need to delete all unneeded files in scripts, which I
+      consider unclean.
+      <br>
+      <br>
+      <blockquote type="cite" style="color: #007cff;">
+        <br>
+         Regards,
+        <br>
+         Arnout
+        <br>
+        <br>
+        <blockquote type="cite" style="color: #007cff;">Maybe I have
+          overseen something, but I believe the file should not have
+          been there in the first place and I would prefer to add my own
+          scripts if I needed them. In any case, I would propose an
+          option to disable installing this file.
+          <br>
+        </blockquote>
+      </blockquote>
+      <br>
+      Best regards
+      <br>
+      Niclas
+      <br>
+    </div>
+  </body>
+</html>
+
+--------------kbQJ0djggH6wVLNzsHBAepUE--
+
+--===============8182383009531352950==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8182383009531352950==--
