@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC27FC77B7C
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 06:25:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 632B3C77B75
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 07:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2855041E1D;
-	Tue,  9 May 2023 06:25:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2855041E1D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0B9141E92;
+	Tue,  9 May 2023 07:14:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0B9141E92
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y-fBr6giE8vS; Tue,  9 May 2023 06:24:58 +0000 (UTC)
+	with ESMTP id NoS06evyRpgf; Tue,  9 May 2023 07:14:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C3D441E1A;
-	Tue,  9 May 2023 06:24:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C3D441E1A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A1E151BF304
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 06:24:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B932841E71;
+	Tue,  9 May 2023 07:14:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B932841E71
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D58C1BF2C9
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 07:14:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 883016114E
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 06:24:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 883016114E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71C8741E71
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 07:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71C8741E71
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q3dZZSx89EZc for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 06:24:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qB4fyAsdoujN for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 07:14:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76B5E61135
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com
- [209.85.208.173])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 76B5E61135
- for <buildroot@buildroot.org>; Tue,  9 May 2023 06:24:55 +0000 (UTC)
-Received: by mail-lj1-f173.google.com with SMTP id
- 38308e7fff4ca-2ad714536cfso30230061fa.0
- for <buildroot@buildroot.org>; Mon, 08 May 2023 23:24:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0E7941BA5
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E0E7941BA5
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 07:14:44 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id
+ 4fb4d7f45d1cf-50bcb229adaso10376964a12.2
+ for <buildroot@buildroot.org>; Tue, 09 May 2023 00:14:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683613493; x=1686205493;
+ d=1e100.net; s=20221208; t=1683616483; x=1686208483;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ypJndKjsM7R2+3zrEQQ1py84lBH/Gnhtn+Sv6BJocBc=;
- b=EpQnIlK4dGk/oalOnXEI6qAUwuIj61mwO9RwX7w/RXS/oUJRTB5yx7RB4WaWgATeoN
- SrLjJRa8oW7LsQCxHNbJZJPcxxyPnBxb0Y0Eg5Ilkn9pqrePZTTjf6z28dmbYSeulr2F
- jN5QDS1QF9UKw6QGWXWvmq2H6r/Im2D9hmRAaAo9nDQuBIl/+7G4chR//EHjuI/AxpHf
- ubf2f/l5CnfCt8cvy+RRtOTBQqbIeXD8oqPrphRkH0iOwnxfts0kLk+NSysa47v2Irce
- Gho4BT6vPQltQ/zilrahEAQ55ch+9SC9WQJwd2e15Evrs+ihae4NOb38Wmeo7JrhBpJu
- zqHQ==
-X-Gm-Message-State: AC+VfDz1gOwr55y686hJo+L8/wGN6yxdibWuLQjjj9OxtZgPiev1AYMz
- vPdMCg+VVcL4DD2P38eKvMGPchMSK7Pa7bLy
-X-Google-Smtp-Source: ACHHUZ616EerAdjNyBsDWrBM9UZhlEvY9d/OiJXJz5ogWoSGVJOM4HO+sgoZi9KSqtLuRsiErZNyCA==
-X-Received: by 2002:a05:6512:4c9:b0:4ec:a8c1:a23f with SMTP id
- w9-20020a05651204c900b004eca8c1a23fmr514848lfq.51.1683613493084; 
- Mon, 08 May 2023 23:24:53 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com.
- [209.85.167.54]) by smtp.gmail.com with ESMTPSA id
- f1-20020ac25321000000b004eff3050e24sm229223lfh.125.2023.05.08.23.24.52
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 08 May 2023 23:24:52 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id
- 2adb3069b0e04-4f2510b2b98so1942033e87.3
- for <buildroot@buildroot.org>; Mon, 08 May 2023 23:24:52 -0700 (PDT)
-X-Received: by 2002:ac2:5110:0:b0:4f0:e03:75d9 with SMTP id
- q16-20020ac25110000000b004f00e0375d9mr462781lfb.48.1683613492394; Mon, 08 May
- 2023 23:24:52 -0700 (PDT)
+ bh=XsGsZ22uR1wEz8W3wABzuTNY3DVUK4/cVIPoyOuXqv8=;
+ b=JlW6BccquNPVGsPiGLyn76Li7jQOkSir1HspdTIpOTDPM5mpdqF2K7jN/GqFVVdThG
+ r/hK9+sCFSTzFKr6iFgy76IvhXu5Xzfd0Q1DavSeYoVR5UHn+jezUvM2ppNPsRyGtSoj
+ Qg9QRHy8TEVFTdcS05yplCdyy3oDv4ull29LSTUSgNgsnLZphx9LlYlbv4vsu7SPiSWN
+ lXX8llAV3zd5dIzOw3i6A/tVDu6SYhQVGaptajLJRTL8ucKH2f0EMSJNpleQuN/XNVr4
+ AB8JvgXmLDUIlTTfRXd0cn7c5F1AWdP2JZKdvxdmfkO/nyQVqzo8WW91B0SuQEpUE6Ne
+ zRPQ==
+X-Gm-Message-State: AC+VfDyqX4lQxra2sEFku25/d1fl2ngtCPp61vTHhjR2fK5/bDfxWlEs
+ yBuYjKlJ4H/lbLbMSL7N4cF06NEUD/tqa4Fb1aodStmJfVNx66NW
+X-Google-Smtp-Source: ACHHUZ4DlZYujL30GP8N6GdLJeF1Njkn6sKKDEHDjdYRnNYr3IMdsx640TOZ/9L82Kbx2Ztg5M1zumiYyvapSwL8ZmI=
+X-Received: by 2002:a17:906:ef0e:b0:965:c2ab:7014 with SMTP id
+ f14-20020a170906ef0e00b00965c2ab7014mr11245475ejs.35.1683616482974; Tue, 09
+ May 2023 00:14:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230428033137.620562-1-xiangyu.chen@eng.windriver.com>
- <CACXRmJio=RfDY7E+ekja9AyjioQQydcVfCRT1TrheV_OvPZmJw@mail.gmail.com>
- <20230508202808.GP252090@scaer>
-In-Reply-To: <20230508202808.GP252090@scaer>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Tue, 9 May 2023 08:24:41 +0200
-X-Gmail-Original-Message-ID: <CACXRmJjkvFP2chFc+fe_mpmZV7Bz5dqm6cNELnSEkNrp0gsMfw@mail.gmail.com>
-Message-ID: <CACXRmJjkvFP2chFc+fe_mpmZV7Bz5dqm6cNELnSEkNrp0gsMfw@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] package/dhcpcd: bump to version 10.0.1
+References: <20230508181850.21256-1-ju.o@free.fr>
+In-Reply-To: <20230508181850.21256-1-ju.o@free.fr>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Tue, 9 May 2023 09:14:32 +0200
+Message-ID: <CAN5uoS9yGv0O7XuGdSQ5hfLwmG_qVPvsnN7g=QPQ1JLV_vgSaw@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=linaro.org; s=google; t=1683616483; x=1686208483;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=XsGsZ22uR1wEz8W3wABzuTNY3DVUK4/cVIPoyOuXqv8=;
+ b=r8nNeb67G8cCvwfglDoZI8ebT1+xR5Ee8OZxUl4JMibSPS/LxJi9qqb1n9DpMDHpzE
+ CByqnIqdplOK/vNKxLwgdGb8IKxBlJ/4ScbWHIcTrNNXzYBxdSdSlzeOkdMORjeAxulp
+ I7IsxzYotqsSKwQ5e/tJMSMpglOGuaVZmcCOpiroCosTSquSiT1cwqdkQuBootvMTI09
+ TYib/sYwuQ2AcK63iN7ZZUFYxRJjwJSOTQnasWsMKGhfXYWXh7+NRXi2W4g9lah7SBow
+ twENv4+3A7zw8LSvZqUMN4IYxyyCfGhi5ZH2maLrt7dyDFHY8SiD7lZ8aHzNZUkK47SA
+ 0Y1A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org
+ header.a=rsa-sha256 header.s=google header.b=r8nNeb67
+Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: remove entry for
+ optee-benchmark
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,68 +91,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>, johns@msli.com,
- xiangyu.chen@eng.windriver.com, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Hello Julian,
 
-Thanks for pointing that out, you are right, I also see the file is
-hosted under another URL,
-so the helper can't be used to pick the release version.
+On Mon, 8 May 2023 at 20:19, Julien Olivain <ju.o@free.fr> wrote:
+>
+> optee-benchmark package was removed in commit cf39b596e7
+> ("package/optee-benchmark: remove deprecated package") but forgot to
+> remove the associated DEVELOPERS file entry.
+>
+> Using the get-developers script on any file generates a warning,
+> for example:
+>
+>     utils/get-developers DEVELOPERS
+>     WARNING: 'package/optee-benchmark/' doesn't match any file, line 865
+>     git send-email --to buildroot@buildroot.org
+>
+> This commit fixes the issue by removing the entry.
 
-Kind regards,
+Thanks for the fix. I've indeed  missed that.
 
-Thomas
+br,
+etienne
 
-Op ma 8 mei 2023 om 22:28 schreef Yann E. MORIN <yann.morin.1998@free.fr>:
 >
-> Thomas, All,
+> Cc: Etienne Carriere <etienne.carriere@linaro.org>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  DEVELOPERS | 1 -
+>  1 file changed, 1 deletion(-)
 >
-> On 2023-05-01 18:19 +0200, Thomas Devoogdt spake thusly:
-> > Buildroot has a custom site handling for GitHub [1] nowadays.
-> > So it should be something like this:
-> >
-> > DHCPCD_VERSION = 10.0.1
-> > DHCPCD_SITE = $(call github,NetworkConfiguration,dhcpcd,v$(DHCPCD_VERSION))
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 5658dfa14b..efb2907d1b 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -862,7 +862,6 @@ F:  package/python-kiwisolver/
 >
-> The $(gihub) helper should only be used for autogenetaed archives, i.e.
-> archives that are generated on-the-fly by Github.
->
-> For archives that were uploaded by the maintainers of a repository, the
-> $(github) helper must not be used, and the actual URL be used.
->
-> See the manual:
->     https://buildroot.org/downloads/manual/manual.html#github-download-url
->
-> For dhcpcd, we are not using an autogenerated archive, but one uploaded
-> by the maintainer, so we can't use the github helper.
->
-> Regards,
-> Yann E. MORIN.
->
-> > And the DHCPCD_SOURCE line can be dropped.
-> >
-> > kr,
-> >
-> > Thomas
-> >
-> > [1]: https://buildroot.org/downloads/manual/manual.html#github-download-url
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
+>  N:     Etienne Carriere <etienne.carriere@linaro.org>
+>  F:     boot/optee-os/
+> -F:     package/optee-benchmark/
+>  F:     package/optee-client/
+>  F:     package/optee-examples/
+>  F:     package/optee-test/
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> 2.40.1
 >
 _______________________________________________
 buildroot mailing list
