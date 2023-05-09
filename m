@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ECBEC77B7C
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 21:00:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A175C7EE22
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 21:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C0AB42B66;
-	Tue,  9 May 2023 21:00:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C0AB42B66
+	by smtp2.osuosl.org (Postfix) with ESMTP id F05EC42BAA;
+	Tue,  9 May 2023 21:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F05EC42BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 37MHSPWBClwX; Tue,  9 May 2023 21:00:58 +0000 (UTC)
+	with ESMTP id fYtOX8Hxw1eI; Tue,  9 May 2023 21:01:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 331FC42BBF;
-	Tue,  9 May 2023 21:00:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 331FC42BBF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F2DF41BF86B
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:59:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D0EE42BA6;
+	Tue,  9 May 2023 21:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D0EE42BA6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 09D971BF20B
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B98D1616A2
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:59:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B98D1616A2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 157B242734
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 20:59:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 157B242734
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tFh9ZWrjPgKs for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LvBvDs5N6l21 for <buildroot@lists.busybox.net>;
  Tue,  9 May 2023 20:59:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 091FF61694
+ by smtp4.osuosl.org (Postfix) with ESMTP id C244A428D8
  for <buildroot@buildroot.org>; Tue,  9 May 2023 20:59:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 091FF61694
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C244A428D8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE8F0862C7; Tue,  9 May 2023 20:59:11 +0000 (UTC)
+ id AA88E862CB; Tue,  9 May 2023 20:59:11 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 9 May 2023 22:57:35 +0200
+Date: Tue, 9 May 2023 22:21:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d4f1fda8f8a5dc8b136367af73ecb0b97b84279
-X-Git-Newrev: 6d1af313c3415e8bfb1bff6642d005ca51575dbb
+X-Git-Oldrev: 1db27ce253fd2ea6a71c5051f5f1ba1fc0067277
+X-Git-Newrev: e2b4398f410e3bb076662ced8fbd87ef42595b7e
 X-Patchwork-Hint: ignore
-Message-Id: <20230509205911.EE8F0862C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/refpolicy: bump to version
- 2.20221101
+Message-Id: <20230509205911.AA88E862CB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/policycoreutils: bump to version
+ 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,85 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d1af313c3415e8bfb1bff6642d005ca51575dbb
+commit: https://git.buildroot.net/buildroot/commit/?id=e2b4398f410e3bb076662ced8fbd87ef42595b7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream patch in package/refpolicy/2.20221101 that makes dbus optional
-for the mount interface. The patch must go in the 2.20221101 directory or else
-the build system will automatically attempt to apply the patch to a custom git
-version of refpolicy if chosen.
+Change the license file to LICENSE. The hash remains the same.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...001-mount-dbus-interface-must-be-optional.patch | 33 ++++++++++++++++++++++
- package/refpolicy/refpolicy.hash                   |  2 +-
- package/refpolicy/refpolicy.mk                     |  2 +-
- 3 files changed, 35 insertions(+), 2 deletions(-)
+ .../0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch     | 2 +-
+ package/policycoreutils/policycoreutils.hash                          | 4 ++--
+ package/policycoreutils/policycoreutils.mk                            | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
-new file mode 100644
-index 0000000000..adec7d98d0
---- /dev/null
-+++ b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
-@@ -0,0 +1,33 @@
-+From 6c6be65ccf0891391681d4662cc11f508c0f4aeb Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Mon, 24 Apr 2023 14:24:49 -0700
-+Subject: [PATCH] mount: dbus interface must be optional
-+
-+If DBus isn't built, the build process fails due to mount.te always using a
-+dbus interface even if the dbus module. Fix this by setting the dbus interface
-+as optional.
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+Upstream: https://github.com/SELinuxProject/refpolicy/commit/207b09a656c2c3ac5c286d3f7eef085325e35408
-+---
-+ policy/modules/system/mount.te | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/policy/modules/system/mount.te b/policy/modules/system/mount.te
-+index d028723..af84af0 100644
-+--- a/policy/modules/system/mount.te
-++++ b/policy/modules/system/mount.te
-+@@ -145,7 +145,9 @@ selinux_getattr_fs(mount_t)
-+ 
-+ userdom_use_all_users_fds(mount_t)
-+ 
-+-dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
-++optional_policy(`
-++	dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
-++')
-+ 
-+ ifdef(`distro_redhat',`
-+ 	optional_policy(`
-+-- 
-+2.40.0
-+
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-index b08c22ed4e..a09e59c270 100644
---- a/package/refpolicy/refpolicy.hash
-+++ b/package/refpolicy/refpolicy.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/SELinuxProject/refpolicy/releases
--sha256  965f98f0b68a24fd0b8e8d973d319332aea88973e1d6c455ef9c2a31aefaeaa6  refpolicy-2.20220106.tar.bz2
-+sha256  44f88e62c8efcef54d019b9ca077520d5993de580926bd7575788cfa78515396  refpolicy-2.20221101.tar.bz2
+diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
+index aa75ca63c0..18f0001aef 100644
+--- a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
++++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
+@@ -32,7 +32,7 @@ index a3bbbe1..df675cf 100644
+ +AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
+  
+  CFLAGS ?= -g -Werror -Wall -W
+- override LDLIBS += -lselinux -lsepol
++ override LDLIBS += -lselinux -lsepol -lpthread
+ -- 
+ 2.13.6
  
- # Locally computed
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index f11b72755a..8fea7cc254 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -23,7 +23,7 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
- REFPOLICY_SITE_METHOD = git
- BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
- else
--REFPOLICY_VERSION = 2.20220106
-+REFPOLICY_VERSION = 2.20221101
- REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
- REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_$(subst .,_,$(REFPOLICY_VERSION))
- endif
+diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
+index e7f006b023..e29d192b13 100644
+--- a/package/policycoreutils/policycoreutils.hash
++++ b/package/policycoreutils/policycoreutils.hash
+@@ -1,3 +1,3 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  d1331c6fa766c547b071c491de90b9f343c8dbffdb119be8a5a7e491199b93a9  policycoreutils-3.2.tar.gz
+-sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
++sha256  78453e1529fbbf800e88860094d555e781ce1fba11a7ef77b5aabb43e1173276  policycoreutils-3.5.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 8505dbca3f..61d91066d4 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-POLICYCOREUTILS_VERSION = 3.2
++POLICYCOREUTILS_VERSION = 3.5
+ POLICYCOREUTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(POLICYCOREUTILS_VERSION)
+ POLICYCOREUTILS_LICENSE = GPL-2.0
+-POLICYCOREUTILS_LICENSE_FILES = COPYING
++POLICYCOREUTILS_LICENSE_FILES = LICENSE
+ POLICYCOREUTILS_CPE_ID_VENDOR = selinuxproject
+ 
+ POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng $(TARGET_NLS_DEPENDENCIES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
