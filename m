@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655C4C77B7C
-	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 21:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61D34C77B7C
+	for <buildroot@archiver.kernel.org>; Tue,  9 May 2023 21:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B95242BAD;
-	Tue,  9 May 2023 21:03:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B95242BAD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0172642BAD;
+	Tue,  9 May 2023 21:05:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0172642BAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZltaJV1Jlcq5; Tue,  9 May 2023 21:03:10 +0000 (UTC)
+	with ESMTP id QdszHRV6Snik; Tue,  9 May 2023 21:05:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09A8242B83;
-	Tue,  9 May 2023 21:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09A8242B83
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AADCA1BF2FF
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:03:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09A6C42B91;
+	Tue,  9 May 2023 21:05:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09A6C42B91
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AC3481BF335
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:05:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8319360F42
- for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:03:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8319360F42
+ by smtp1.osuosl.org (Postfix) with ESMTP id 85AD883B13
+ for <buildroot@lists.busybox.net>; Tue,  9 May 2023 21:05:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85AD883B13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AiuzKGmU0wxl for <buildroot@lists.busybox.net>;
- Tue,  9 May 2023 21:03:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AAE960AFC
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3AAE960AFC
- for <buildroot@buildroot.org>; Tue,  9 May 2023 21:03:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MWit4XPydabk for <buildroot@lists.busybox.net>;
+ Tue,  9 May 2023 21:05:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 710E283AF4
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 710E283AF4
+ for <buildroot@buildroot.org>; Tue,  9 May 2023 21:05:21 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:3a04:4e20:1cde:35ad])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 16B8C2003AE;
- Tue,  9 May 2023 23:02:57 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 41ACF2003BE;
+ Tue,  9 May 2023 23:05:12 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 09 May 2023 23:02:56 +0200
-Date: Tue, 9 May 2023 23:02:56 +0200
+ Tue, 09 May 2023 23:05:12 +0200
+Date: Tue, 9 May 2023 23:05:11 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20230509210256.GF252090@scaer>
+Message-ID: <20230509210511.GG252090@scaer>
 References: <20230425171454.48802-1-aduskett@gmail.com>
- <20230425171454.48802-6-aduskett@gmail.com>
+ <20230425171454.48802-12-aduskett@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230425171454.48802-6-aduskett@gmail.com>
+In-Reply-To: <20230425171454.48802-12-aduskett@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683666184;
- bh=2oxJmRhKUW/vqRudjdhqMm4hQGd/gtZD51yUZlVSpXg=;
+ d=free.fr; s=smtp-20201208; t=1683666319;
+ bh=X4wSPVTwUbJA13alxBQsqA3PO5NhCGjpttopJ+Y+Icc=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=LPqdUvcThfXb5XmerOItDLJXYkeLd9ZyJgnoQ5Gr03A76f9x8FaenN41FKHJCDac0
- EjRQdJI56sje0IDwS/Aq09KIirbnfrg4US7dmCI/RLO8637/3RIXxU9lkVJIRbmsoJ
- qlU2bxTiPUwWa5vUEIhg1zr4Jt+d1HG/cYq1H9mYFhtPlHWkD7mBOnM4NbnfLGjp6v
- V9UBwBM3+R5yYA++mGPJOd0j1W1zsEHHWi5NetszmaoKElNWjgywDt+MNOymZ/imjQ
- KeXOnANPt1M/tKYJBjLkVZ8UXsE+4hP1xc6a38REeUsdUvq5U3ztwY1RxGx+Aim2Q9
- Kd5SDI+eTWE6A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=dZZZsAgOdmhuMTf0Po7WKS13oWF31H8TkyD3K9ZCS8CCouV3urdYW0dpn5/nfEO96
+ CNGmu24IDbZ0jIzemXN0G7CTodcDf3GKQj8X8U2bBlv1/fRRVM20eS/AKgh7+UYGcU
+ zWBwxCmok7ws6PBduihVvcCxvU++FfDatYwB7nk2feXfAl6NJdvUu0Tj37p4KmMi2Y
+ 7fOsjdyCXEQYMXF31j49aXb/igSkCujqxppbOtqTDmuhZt+hq8rp3KUfu9NO6DRsu5
+ FcclOf1TERXaee7enPREH26iNsHMhkWrkugfa6nWqxGlM6yH0vAMBeqS58H/RBAdyC
+ 1uIh+zvORdGnQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LPqdUvcT
-Subject: Re: [Buildroot] [PATCH v2 05/13] package/libselinux: bump to
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=dZZZsAgO
+Subject: Re: [Buildroot] [PATCH v2 11/13] package/selinux-python: bump to
  version 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -90,149 +90,107 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Adam, All,
 
 On 2023-04-25 10:14 -0700, Adam Duskett spake thusly:
-> - libselinux now requires pip to install the python tools.
+> Also:
+>   - Change the license file to LICENSE. The hash remains the same.
+> 
+>   - Add 0001-fix-ausearch-path.patch as audit 3.1 installs ausearch to
+>     /usr/sbin not /sbin
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  .../0001-fix-ausearch-path.patch              | 37 +++++++++++++++++++
+>  package/selinux-python/selinux-python.hash    |  4 +-
+>  package/selinux-python/selinux-python.mk      |  4 +-
+>  3 files changed, 41 insertions(+), 4 deletions(-)
+>  create mode 100644 package/selinux-python/0001-fix-ausearch-path.patch
+> 
+> diff --git a/package/selinux-python/0001-fix-ausearch-path.patch b/package/selinux-python/0001-fix-ausearch-path.patch
+> new file mode 100644
+> index 0000000000..c5f0a990ed
+> --- /dev/null
+> +++ b/package/selinux-python/0001-fix-ausearch-path.patch
+> @@ -0,0 +1,37 @@
+> +From 7a2456f18a49fa70de1f9ace12512bb00437b6ba Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <aduskett@gmail.com>
+> +Date: Mon, 24 Apr 2023 12:25:19 -0700
+> +Subject: [PATCH 1/1] fix ausearch path
+> +
+> +ausearch is installed in /usr/sbin not /sbin
+> +
+> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-I extended that to explain that is really is just about the
-installation, while the build is still performed with setuptools.
+    $ ./utils/docker-run make check-package
+    package/selinux-python/0001-fix-ausearch-path.patch:4: generate your patches with 'git format-patch -N'
+    package/selinux-python/0001-fix-ausearch-path.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
 
-Also, that python bindings, not python tools; python tools have their
-own dedicated pachage.selinux-python (which you update in a follow-up
-patch).
+I changed the commit to an upstreamable one, and rewrote the commit log
+with more in-depth explanations, so that fixed those two warnings.
 
-> - Rebase patches for version 3.5
-
-I also backported an upstream patch to fix intsallation of the python
-bindings.
+Can you see into pushing that patch upstream, please?
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/libselinux/0001-fix-musl-build.patch     |  4 ++--
->  ...CEXT-and-rely-on-the-installed-file-nam.patch |  8 ++++----
->  package/libselinux/Config.in                     |  1 +
->  package/libselinux/libselinux.hash               |  2 +-
->  package/libselinux/libselinux.mk                 | 16 +++++++++++++---
->  5 files changed, 21 insertions(+), 10 deletions(-)
-> 
-> diff --git a/package/libselinux/0001-fix-musl-build.patch b/package/libselinux/0001-fix-musl-build.patch
-> index 44189e6400..b8b16be26f 100644
-> --- a/package/libselinux/0001-fix-musl-build.patch
-> +++ b/package/libselinux/0001-fix-musl-build.patch
-> @@ -12,13 +12,13 @@ Domain, and we want to avoid license propagation, so this macro is
->  completely written from scratch, and non-optimal.
->  
->  Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> -[Updated for 3.0]
-> +[Updated for 3.5]
->  Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->  diff --git a/src/booleans.c b/src/booleans.c
->  index ffa8d26..8569002 100644
->  --- a/src/booleans.c
->  +++ b/src/booleans.c
-> -@@ -65,6 +65,14 @@ int security_get_boolean_names(char ***names, int *len)
-> +@@ -64,6 +64,14 @@ int security_get_boolean_names(char ***names, int *len)
->   		goto bad;
->   	}
->   
-> diff --git a/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch b/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-> index 18c79b3b4d..c744ca4069 100644
-> --- a/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-> +++ b/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-> @@ -18,7 +18,7 @@ was installed.
->  Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
->  [Refreshed for 3.1]
->  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> -[Refreshed for 3.0]
-> +[Refreshed for 3.5]
->  Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->  ---
->   src/Makefile | 3 +--
-> @@ -31,14 +31,14 @@ index 190016e2af34..7ee22fd35da3 100644
->  @@ -15,7 +15,6 @@ INCLUDEDIR ?= $(PREFIX)/include
->   PYINC ?= $(shell $(PKG_CONFIG) --cflags $(PYPREFIX))
->   PYLIBS ?= $(shell $(PKG_CONFIG) --libs $(PYPREFIX))
-> - PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(plat_specific=1, prefix='$(PREFIX)'))")
-> + PYTHONLIBDIR ?= $(shell $(PYTHON) -c "import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '$(PREFIX)', 'base': '$(PREFIX)'}))")
->  -PYCEXT ?= $(shell $(PYTHON) -c 'import importlib.machinery;print(importlib.machinery.EXTENSION_SUFFIXES[0])')
->   RUBYINC ?= $(shell $(RUBY) -e 'puts "-I" + RbConfig::CONFIG["rubyarchhdrdir"] + " -I" + RbConfig::CONFIG["rubyhdrdir"]')
->   RUBYLIBS ?= $(shell $(RUBY) -e 'puts "-L" + RbConfig::CONFIG["libdir"] + " -L" + RbConfig::CONFIG["archlibdir"] + " " + RbConfig::CONFIG["LIBRUBYARG_SHARED"]')
->   RUBYINSTALL ?= $(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
-> -@@ -184,7 +183,7 @@ install: all
-> +@@ -189,7 +188,7 @@ install: all
->   install-pywrap: pywrap
-> - 	$(PYTHON) setup.py install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` $(PYTHON_SETUP_ARGS)
-> + 	$(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
->   	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
->  -	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux$(PYCEXT) $(DESTDIR)$(PYTHONLIBDIR)/_selinux$(PYCEXT)
->  +	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
-> diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
-> index 3098fe3ea4..bc40e32a46 100644
-> --- a/package/libselinux/Config.in
-> +++ b/package/libselinux/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBSELINUX
->  	select BR2_PACKAGE_LIBSEPOL
->  	select BR2_PACKAGE_PCRE2
->  	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-> +	select BR2_PACKAGE_PYTHON_SETUPTOOLS if BR2_PACKAGE_PYTHON3
->  	help
->  	  libselinux is the runtime SELinux library that provides
->  	  interfaces (e.g. library functions for the SELinux kernel
-> diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
-> index a2e0083f7b..14bc627a80 100644
-> --- a/package/libselinux/libselinux.hash
-> +++ b/package/libselinux/libselinux.hash
+> +---
+> + sepolgen/src/sepolgen/audit.py | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/sepolgen/src/sepolgen/audit.py b/sepolgen/src/sepolgen/audit.py
+> +index 4adb851..5afe85d 100644
+> +--- a/sepolgen/src/sepolgen/audit.py
+> ++++ b/sepolgen/src/sepolgen/audit.py
+> +@@ -41,7 +41,7 @@ def get_audit_boot_msgs():
+> +     s = time.localtime(time.time() - off)
+> +     bootdate = time.strftime("%x", s)
+> +     boottime = time.strftime("%X", s)
+> +-    output = subprocess.Popen(["/sbin/ausearch", "-m", "AVC,USER_AVC,MAC_POLICY_LOAD,DAEMON_START,SELINUX_ERR", "-ts", bootdate, boottime],
+> ++    output = subprocess.Popen(["/usr/sbin/ausearch", "-m", "AVC,USER_AVC,MAC_POLICY_LOAD,DAEMON_START,SELINUX_ERR", "-ts", bootdate, boottime],
+> +                               stdout=subprocess.PIPE).communicate()[0]
+> +     if util.PY3:
+> +         output = util.decode_input(output)
+> +@@ -56,7 +56,7 @@ def get_audit_msgs():
+> +        string contain all of the audit messages returned by ausearch.
+> +     """
+> +     import subprocess
+> +-    output = subprocess.Popen(["/sbin/ausearch", "-m", "AVC,USER_AVC,MAC_POLICY_LOAD,DAEMON_START,SELINUX_ERR"],
+> ++    output = subprocess.Popen(["/usr/sbin/ausearch", "-m", "AVC,USER_AVC,MAC_POLICY_LOAD,DAEMON_START,SELINUX_ERR"],
+> +                               stdout=subprocess.PIPE).communicate()[0]
+> +     if util.PY3:
+> +         output = util.decode_input(output)
+> +-- 
+> +2.40.0
+> +
+> diff --git a/package/selinux-python/selinux-python.hash b/package/selinux-python/selinux-python.hash
+> index 6ada3fee36..3592540703 100644
+> --- a/package/selinux-python/selinux-python.hash
+> +++ b/package/selinux-python/selinux-python.hash
 > @@ -1,5 +1,5 @@
->  # From: https://github.com/SELinuxProject/selinux/wiki/Releases
-> -sha256  acfdee27633d2496508c28727c3d41d3748076f66d42fccde2e6b9f3463a7057  libselinux-3.3.tar.gz
-> +sha256  9a3a3705ac13a2ccca2de6d652b6356fead10f36fb33115c185c5ccdf29eec19  libselinux-3.5.tar.gz
+>  # https://github.com/SELinuxProject/selinux/wiki/Releases
+> -sha256  8ad91061300387996ccb474962fb93dde263d924aa8f740618be16b22e2444ec  selinux-python-3.3.tar.gz
+> +sha256  8245bb4dae59333461f19ca0c79a829081f07972fa5e3ad4c2b2b917dd71d96b  selinux-python-3.5.tar.gz
 >  
 >  # Hash for license file
->  sha256  86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364  LICENSE
-> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> index db35da130f..b8de21edaa 100644
-> --- a/package/libselinux/libselinux.mk
-> +++ b/package/libselinux/libselinux.mk
-> @@ -4,7 +4,7 @@
+> -sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+> +sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+> diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
+> index 0cec602f3d..7505474aa4 100644
+> --- a/package/selinux-python/selinux-python.mk
+> +++ b/package/selinux-python/selinux-python.mk
+> @@ -4,10 +4,10 @@
 >  #
 >  ################################################################################
 >  
-> -LIBSELINUX_VERSION = 3.3
-> +LIBSELINUX_VERSION = 3.5
->  LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSELINUX_VERSION)
->  LIBSELINUX_LICENSE = Public Domain
->  LIBSELINUX_LICENSE_FILES = LICENSE
-> @@ -31,7 +31,11 @@ LIBSELINUX_MAKE_OPTS += FTS_LDLIBS=-lfts
->  endif
+> -SELINUX_PYTHON_VERSION = 3.3
+> +SELINUX_PYTHON_VERSION = 3.5
+>  SELINUX_PYTHON_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(SELINUX_PYTHON_VERSION)
+>  SELINUX_PYTHON_LICENSE = GPL-2.0
+> -SELINUX_PYTHON_LICENSE_FILES = COPYING
+> +SELINUX_PYTHON_LICENSE_FILES = LICENSE
+>  SELINUX_PYTHON_DEPENDENCIES = python3
 >  
->  ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> -LIBSELINUX_DEPENDENCIES += python3 host-swig
-> +LIBSELINUX_DEPENDENCIES += \
-> +	python3 \
-> +	python-setuptools \
-> +	host-python-pip \
-> +	host-swig
->  
->  LIBSELINUX_MAKE_OPTS += \
->  	$(PKG_PYTHON_DISTUTILS_ENV) \
-> @@ -77,7 +81,13 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
->  endef
->  
->  HOST_LIBSELINUX_DEPENDENCIES = \
-> -	host-pkgconf host-libsepol host-pcre2 host-swig host-python3
-> +	host-pkgconf \
-> +	host-libsepol \
-> +	host-pcre2 \
-> +	host-swig \
-> +	host-python3 \
-> +	host-python-pip \
-> +	host-python-setuptools
->  
->  HOST_LIBSELINUX_MAKE_OPTS = \
->  	$(HOST_CONFIGURE_OPTS) \
+>  SELINUX_PYTHON_MAKE_OPTS += \
 > -- 
 > 2.40.0
 > 
