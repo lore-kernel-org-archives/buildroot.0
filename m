@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2331DC77B7F
-	for <buildroot@archiver.kernel.org>; Thu, 11 May 2023 13:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE318C77B7F
+	for <buildroot@archiver.kernel.org>; Thu, 11 May 2023 13:11:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B07D783ED3;
-	Thu, 11 May 2023 13:10:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B07D783ED3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 806AE8476C;
+	Thu, 11 May 2023 13:11:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 806AE8476C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VtBdClK8ErJj; Thu, 11 May 2023 13:10:02 +0000 (UTC)
+	with ESMTP id qkm8CIdJVaJP; Thu, 11 May 2023 13:11:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED24383E33;
-	Thu, 11 May 2023 13:10:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED24383E33
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 270431BF86C
- for <buildroot@lists.busybox.net>; Thu, 11 May 2023 13:09:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A01678476A;
+	Thu, 11 May 2023 13:11:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A01678476A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 429831BF86C
+ for <buildroot@lists.busybox.net>; Thu, 11 May 2023 13:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CF9141498
- for <buildroot@lists.busybox.net>; Thu, 11 May 2023 13:09:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CF9141498
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BCAB83F4C
+ for <buildroot@lists.busybox.net>; Thu, 11 May 2023 13:11:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BCAB83F4C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id usPB36eS_F7S for <buildroot@lists.busybox.net>;
- Thu, 11 May 2023 13:09:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F38B410B1
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5F38B410B1
- for <buildroot@buildroot.org>; Thu, 11 May 2023 13:09:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MsdxbK6azdYI for <buildroot@lists.busybox.net>;
+ Thu, 11 May 2023 13:11:18 +0000 (UTC)
+X-Greylist: delayed 00:06:26 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CC3983CCA
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5CC3983CCA
+ for <buildroot@buildroot.org>; Thu, 11 May 2023 13:11:18 +0000 (UTC)
 Received: from harderbit ([92.154.77.116]) by mrelayeu.kundenserver.de
  (mreue106 [212.227.15.184]) with ESMTPSA (Nemesis) id
- 1MsIbU-1qCqNO2Rcw-00tmYX; Thu, 11 May 2023 15:04:48 +0200
+ 1Mi27T-1qS3AS2BUn-00e1Gj; Thu, 11 May 2023 15:06:13 +0200
 From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 To: buildroot@buildroot.org
-Date: Thu, 11 May 2023 15:04:21 +0200
-Message-Id: <20230511130421.60538-1-thomas.claveirole@green-communications.fr>
+Date: Thu, 11 May 2023 15:06:04 +0200
+Message-Id: <20230511130605.60604-1-thomas.claveirole@green-communications.fr>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:BuLyFuOuc1bHhECC7mmumwI4Ph5bf5ORjLlNv8HONpUzf0kNsIk
- wpyG2wdUnA9U+zxeMnI6kBq2V5MphLU84tphaMS1t6zacRGOI2TYCc3ncmeYL1PRphR/2v4
- tlqFx5f2Eeth+QU39vcNJPZcSYJnpz+6tbw7kroYdG1Bor63+nGFAUwdUGOCdwCIRf6SnuZ
- mexTXgFtaM43Jkmxb3GWg==
-UI-OutboundReport: notjunk:1;M01:P0:U8CmW7Gk6pU=;dKVrBVkGFC9aUegD0L+z57Bx83u
- FltPSWbtnP4FenzP8O75O7skF3ccMhOqjAyxIPtr4itQBu+QfesHu9bXodds/t4ZG+CqAscyM
- ZjTyAUzOnvKUolmjMItVL0DMbIYu3Os3kBJXF5NwnhQ/3x0EvqINhL5IR2zSacG/xUkDYEDgU
- UIQSG8Oi5m61VlEzQA8BfX/+do+y34Y/UXLMHaefkhU8jbJHq0nmWDzEYt1JD2KpfAyduW67/
- LNB8IQuUmXFZLFRyiKxVwfYymO7JfmXer8fz7nmDVYFRHt7uSP14wWjs16JIU8hMbi0VpdKnC
- 32vl9qlSzzPiDgsUa9jnlKE1229xamThHYFLpydwmSAudLa7Wa5pa/kDL5MAdJqNcuSH6TqZ7
- 7pKtEznL0k6mcDF7IBeAJmGlyzmNgxyX7Uk+MxTWSIBh0o+Or66vbUZ6IVrc9u6LlVynDcyPl
- gdGRFjZxCoyHKMi683DTmMHsroQfonDPHTYVxtTbWTsvjCMxixL8Q9vRaiuNGQ5RJ7d/ATOqx
- kOwASnBvFwoftzMf2NCdmLkjazfiusRuQniUaOHqOT4K5cQphPihDjdmuEJqKZ6nJHTBd/bi3
- 5t/GiaBbBnrmpG9gAynLSIjoo60PBImErAGnC1Ac+dKBQuc9CFgRFD7V1ScwxqSg6DYxgR2yI
- Bp56H6uRaYgsmCItqD4BYry6exkF15FsppyBe8xplg==
-Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump to version 7.3.0
+X-Provags-ID: V03:K1:nCqpDr+W7pO1wZXD0Fvb6uLf08zFR9pFpkvkHJ9rypwwNiCIPlv
+ Sl+axDet7EnCRCkAd5UpUSOnQ7acBS2QRiLyRrduKnqbyFBRdNxb3+67ZqDmcPCoSIf2ffO
+ 59zWAfPP1mJu4h6dVjlqS6R9MzoeKGbwr9zLXBPMWprOvwc34h7MYqkoS5k56a3P7B2Xxbp
+ BWKWTBNYlUQS4GlksN8Tw==
+UI-OutboundReport: notjunk:1;M01:P0:uxtzkNmGMjo=;bKd3nvlEwSyy+ChBK86Q5mzOtYn
+ iqP/Qb2M14f5l1ntH42HlrBvXIBkbovpCR8VF6B/nOYM7/oODjVu0CTQdtl4JBeciwcw0ZagT
+ lN2nx0DiklzrK0mTGSlosy9+lgO6HBxCkPL8l/3aPAkfIv5Jhh3kpkQ8lRL7DXGDvwpRpY+hB
+ C9//SRr2mpDfk9GXlu5wxyzdBcga8zrfAhqrQX+pj3E3zzd55LJfFqEZV1Mv4YfDpCp+zLQVJ
+ /oM8/ZsLllUQRIyk2UUPSgp8gyMnl9gT4pCxX5/VAgUIPtxGcQrPW2L+X60jbm/WBfVRlLMrB
+ 5lnuZtDT3HT8PR+6aGwHr8OEa7gLuDmSthFPzv77ggK/kF4HAebKGFLFqPnbmne/oRbSLQ0ka
+ ZFsq0C5KxwRXiLMDCPTBgR3fg1sAk3L1iodfN5Pz/1cEraEqgAi2zF4U5axtW4+3kuIsLDWBS
+ V7tl8+L6/BrUzXUsGZQL30m5qA9WIMhvOqtquM721KOIZp98/nglUA5BRvjzJzWVMD7lKsYK+
+ gXh2gcXFaY/AstppmMZghgTwIjwum3l+xrJ06E33TbnX4tb83uKJTR568jW7Eg/gKdWER+3ky
+ bIeDXuaiicvMyybVNgKRBJKDHw9fKLe5k8Cs+FwrpMAA0delImtSoHEM3QBCNUcTVJuCjQnxg
+ ord7U9MNtBRjC/AhFh5w83d1vTQMQDDQYwCz6+44Nw==
+Subject: [Buildroot] [PATCH 1/2] package/vuejs: bump to version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,7 +71,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
+ Johan Oudinet <johan.oudinet@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -79,32 +80,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 ---
- package/openlayers/openlayers.hash | 2 +-
- package/openlayers/openlayers.mk   | 2 +-
+ package/vuejs/vuejs.hash | 2 +-
+ package/vuejs/vuejs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index 7e33716f78..61fe8aea2a 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
+diff --git a/package/vuejs/vuejs.hash b/package/vuejs/vuejs.hash
+index e66bee06d3..7960b594ce 100644
+--- a/package/vuejs/vuejs.hash
++++ b/package/vuejs/vuejs.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  31b848cc55967c7de63fece8cd1699fc51152421d04653b859103c7391ad5bbe  v7.2.2-package.zip
-+sha256  5d89c7017ca85b53bea6402a1222909dc49a061ffa351d3d1e0ac40b94dd2d38  v7.3.0-package.zip
- sha256  6c4347b83a8c9feef18d57b18e3b6c44cf901b3c344a4a1fbd837e421555ab8e  LICENSE.md
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 852f5f1dcf..37e530220a 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
+ # Locally computed
+-sha256  968e71a707a4a1961faa6e513b6bba162ef04c3413d7edaba0abc1a5996ae71b  vue-3.2.45.tgz
++sha256  c2e4197818c64d6ad9f344141a8adee354cbc321f63be7eef6802b4b02cf19f3  vue-3.3.1.tgz
+ sha256  1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175  LICENSE
+diff --git a/package/vuejs/vuejs.mk b/package/vuejs/vuejs.mk
+index 8f7d0cd3d4..a9058b0d44 100644
+--- a/package/vuejs/vuejs.mk
++++ b/package/vuejs/vuejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENLAYERS_VERSION = 7.2.2
-+OPENLAYERS_VERSION = 7.3.0
- OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-package.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
+-VUEJS_VERSION = 3.2.45
++VUEJS_VERSION = 3.3.1
+ VUEJS_SOURCE = vue-$(VUEJS_VERSION).tgz
+ VUEJS_SITE = https://registry.npmjs.org/vue/-
+ VUEJS_LICENSE = MIT
 -- 
 2.39.2
 
