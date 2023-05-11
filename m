@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78C95C77B7C
-	for <buildroot@archiver.kernel.org>; Thu, 11 May 2023 20:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3273C7EE22
+	for <buildroot@archiver.kernel.org>; Thu, 11 May 2023 20:26:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1907A70169;
-	Thu, 11 May 2023 20:26:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1907A70169
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93717615BD;
+	Thu, 11 May 2023 20:26:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93717615BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HjE7vOZRtY02; Thu, 11 May 2023 20:26:33 +0000 (UTC)
+	with ESMTP id GDglPtscndpT; Thu, 11 May 2023 20:26:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DD1E61393;
-	Thu, 11 May 2023 20:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DD1E61393
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E3F361BF283
- for <buildroot@lists.busybox.net>; Thu, 11 May 2023 20:26:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE1AC61393;
+	Thu, 11 May 2023 20:26:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE1AC61393
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 787061BF283
+ for <buildroot@lists.busybox.net>; Thu, 11 May 2023 20:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8D8542A9F
- for <buildroot@lists.busybox.net>; Thu, 11 May 2023 20:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8D8542A9F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D77C70018
+ for <buildroot@lists.busybox.net>; Thu, 11 May 2023 20:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D77C70018
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RtK0jevh0aBC for <buildroot@lists.busybox.net>;
- Thu, 11 May 2023 20:26:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UnRtnP_VcUOe for <buildroot@lists.busybox.net>;
+ Thu, 11 May 2023 20:26:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A981E42AD8
+ by smtp3.osuosl.org (Postfix) with ESMTP id EED3661374
  for <buildroot@buildroot.org>; Thu, 11 May 2023 20:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A981E42AD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EED3661374
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F0658637C; Thu, 11 May 2023 20:26:11 +0000 (UTC)
+ id 998D18637D; Thu, 11 May 2023 20:26:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 May 2023 22:23:38 +0200
+Date: Thu, 11 May 2023 22:24:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2003877ceb9724f0c92c4e894e9b461a940a747a
-X-Git-Newrev: 9868d37f5c07a1169e4c408433a57e2529bd3cfe
+X-Git-Oldrev: 9868d37f5c07a1169e4c408433a57e2529bd3cfe
+X-Git-Newrev: 015a9f441903f2d0f20bd5cfa492e888a11074d8
 X-Patchwork-Hint: ignore
-Message-Id: <20230511202611.8F0658637C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: 5.15.x / 6.{1, 2,
- 3}.x series
+Message-Id: <20230511202611.998D18637D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xr819-xradio: bump to version
+ 2023-05-10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9868d37f5c07a1169e4c408433a57e2529bd3cfe
+commit: https://git.buildroot.net/buildroot/commit/?id=015a9f441903f2d0f20bd5cfa492e888a11074d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+With this patch package builds with Linux up to version 6.3
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ package/xr819-xradio/xr819-xradio.hash | 2 +-
+ package/xr819-xradio/xr819-xradio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 65d3dc53c6..abb4bf922f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index 8676f065f8..1ff36368ec 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  93388424f1f136db541ce056be017f2f0f6688278ac15a88bef34da8f12ffea6  xr819-xradio-119cad7d07aef6973dd44e4dae74d4c9defd06a2.tar.gz
++sha256  e27b6b5fb35ef44a93eb1f5b29bd61c06109e951c8a5ea2cc3e0310663f22001  xr819-xradio-547521df27d1a80fb5542e93fa13bd09fb2259a2.tar.gz
+ # Locally computed
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+index 66c08e7921..1e4cdb6872 100644
+--- a/package/xr819-xradio/xr819-xradio.mk
++++ b/package/xr819-xradio/xr819-xradio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.3.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.3.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 75158437c7..fbc166afa2 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  78620fb4a7d5e0db1d4eb8d5b1c6e207ba5d19564efa63967a59b6daf89b3f2a  linux-6.3.1.tar.xz
--sha256  0ebc9fa309d496d474b06682578c5f7b42f0cf330365102b2feaab65ba296729  linux-6.2.14.tar.xz
--sha256  c2b74b96dd3d0cc9f300914ef7c4eef76d5fac9de6047961f49e69447ce9f905  linux-6.1.27.tar.xz
-+sha256  b612ecf282ca3f7989ff6d9f39082833b7dc2d522cb969a05334d3614e9c5328  linux-6.3.2.tar.xz
-+sha256  9ffa34921044660c6adb3eb5fd996192e322b15bbf532fe4e4e7a47079ed8fc1  linux-6.2.15.tar.xz
-+sha256  7a094c1428b20fef0b5429e4effcc6ed962a674ac6f04e606d63be1ddcc3a6f0  linux-6.1.28.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  9829fcc77b9978dce97a26980dec445caf2410024696625dbb2314ead4830b5b  linux-5.15.110.tar.xz
-+sha256  77ceea259c0158dd624304871170d09b2e59ed612f3a4d436fe0f07362dcaec2  linux-5.15.111.tar.xz
- sha256  1bbd445c154b053eea46acc883be548a98179988a9ed3a0b81bddfbf30a37e29  linux-5.10.179.tar.xz
- sha256  142f9aed1c9f2e409dd72c5c490ad824dddf31f955ed2097d5989c4b5074fc28  linux-5.4.242.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e2934b0f64..6f9c3b9418 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -404,10 +404,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.282"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.242"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.179"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.110"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.27"	if BR2_KERNEL_HEADERS_6_1
--	default "6.2.14"	if BR2_KERNEL_HEADERS_6_2
--	default "6.3.1"		if BR2_KERNEL_HEADERS_6_3
-+	default "5.15.111"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.28"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.2.15"	if BR2_KERNEL_HEADERS_6_2
-+	default "6.3.2"		if BR2_KERNEL_HEADERS_6_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-XR819_XRADIO_VERSION = 119cad7d07aef6973dd44e4dae74d4c9defd06a2
++XR819_XRADIO_VERSION = 547521df27d1a80fb5542e93fa13bd09fb2259a2
+ XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+ XR819_XRADIO_LICENSE = GPL-2.0
+ XR819_XRADIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
