@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CAD9C7EE22
-	for <buildroot@archiver.kernel.org>; Thu, 11 May 2023 20:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B29A3C77B7F
+	for <buildroot@archiver.kernel.org>; Thu, 11 May 2023 20:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F313613A1;
-	Thu, 11 May 2023 20:26:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F313613A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1805D613A1;
+	Thu, 11 May 2023 20:43:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1805D613A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CFk_mfcFFIt4; Thu, 11 May 2023 20:26:58 +0000 (UTC)
+	with ESMTP id QCXb_8gPOt9G; Thu, 11 May 2023 20:43:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69F9470169;
-	Thu, 11 May 2023 20:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69F9470169
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 04DC61BF283
- for <buildroot@lists.busybox.net>; Thu, 11 May 2023 20:26:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 305DC6116F;
+	Thu, 11 May 2023 20:43:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 305DC6116F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DAB21BF283
+ for <buildroot@lists.busybox.net>; Thu, 11 May 2023 20:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B18AA61360
- for <buildroot@lists.busybox.net>; Thu, 11 May 2023 20:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B18AA61360
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15B9F42A7A
+ for <buildroot@lists.busybox.net>; Thu, 11 May 2023 20:43:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15B9F42A7A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AmDMFMndy_Rt for <buildroot@lists.busybox.net>;
- Thu, 11 May 2023 20:26:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ySUksjZ5R7Dx for <buildroot@lists.busybox.net>;
+ Thu, 11 May 2023 20:43:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1502B6137D
- for <buildroot@buildroot.org>; Thu, 11 May 2023 20:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1502B6137D
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC92542A79
+ for <buildroot@buildroot.org>; Thu, 11 May 2023 20:43:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC92542A79
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A51F48637F; Thu, 11 May 2023 20:26:11 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id D7BC286383; Thu, 11 May 2023 20:43:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 11 May 2023 22:24:45 +0200
+Date: Thu, 11 May 2023 22:41:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 015a9f441903f2d0f20bd5cfa492e888a11074d8
-X-Git-Newrev: b2c4ceace12d4ae3659353d690ac6ac0e3aa5760
+X-Git-Oldrev: e217cd28ece8bb07d5eb5c61f9b22b3de8480b3c
+X-Git-Newrev: f3fa74a8f745de7b60752e0b15432eb1f2b4c638
 X-Patchwork-Hint: ignore
-Message-Id: <20230511202611.A51F48637F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 7.3.0
+Message-Id: <20230511204351.D7BC286383@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/busybox: disable stack
+ optimization for i386 target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +63,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2c4ceace12d4ae3659353d690ac6ac0e3aa5760
+commit: https://git.buildroot.net/buildroot/commit/?id=f3fa74a8f745de7b60752e0b15432eb1f2b4c638
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The toolchain-builder project reported an issue with Qemu 7.2.0 for
+x86-core2--glibc--bleeding-edge toolchain [1]:
+
+  Run /sbin/init as init process
+  random: fast init done
+  EXT4-fs (vda): warning: mounting unchecked fs, running e2fsck is recommended
+  EXT4-fs (vda): re-mounted. Opts: (null). Quota mode: disabled.
+  Starting syslogd: OK
+  traps: syslogd[52] general protection fault ip:b7e21465 sp:bfe59e6c error:0 in libc.so.6[b7d9b000+123000]
+  Starting klogd: OK
+  traps: klogd[56] general protection fault ip:b7e94465 sp:bf8f069c error:0 in libc.so.6[b7e0e000+123000]
+  Running sysctl: traps: logger[62] general protection fault ip:b7e48b6c sp:bfd7d194 error:0 in libc.so.6[b7e05000+123000]
+  Segmentation fault
+  traps: logger[64] general protection fault ip:b7dd3b6c sp:bf9b8604 error:0 in libc.so.6[b7d90000+123000]
+  Segmentation fault
+
+  (Followed by a kernel panic.)
+
+Testing with the pevious Qemu release (7.1.0) allows to boot the system without any problem.
+
+Building qemu sources between 7.1.0 and 7.2.0 allows to identify the first "bad" commit [2] and
+report to the Qemu project [3].
+
+Thanks to Qemu maintainers review, several issues was noticed:
+
+  "The default i386 busybox build config does not respect glibc's requirements around stack alignment
+  (see [4] for previous discussions and a workaround)."
+
+Disabling CONFIG_STACK_OPTIMIZATION_386 option (as suggested in the Gentoo bug report) fixed the issue!
+
+This option has been added and enabled by default in buxybox 1_29_0, so it was used since then the for
+Buildroot's qemu defconfig.
+
+Note: The x86-i686--glibc--bleeding-edge (generic x86) doesn't trigger the issue with
+CONFIG_STACK_OPTIMIZATION_386 enabled.
+
+Fixes:
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/3731683337
+
+[1] https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/3731683337
+[2] https://gitlab.com/qemu-project/qemu/-/commit/958e1dd1300f37f18b2161dfb4eb806fc8c19b44
+[3] https://gitlab.com/qemu-project/qemu/-/issues/1478
+[4] https://bugs.gentoo.org/725674
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
+ package/busybox/busybox-minimal.config | 2 +-
+ package/busybox/busybox.config         | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 88b90c8b39..6b3dfc22b7 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fc5560c807eae0efd5f95b5aa4c65800c7a8eed6642008a6b1e7e3ffff7873cc  harfbuzz-7.2.0.tar.xz
-+sha256  20770789749ac9ba846df33983dbda22db836c70d9f5d050cb9aa5347094a8fb  harfbuzz-7.3.0.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 23741ebace..981d911014 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/busybox/busybox-minimal.config b/package/busybox/busybox-minimal.config
+index 1fb4e39e21..1e7ad1d357 100644
+--- a/package/busybox/busybox-minimal.config
++++ b/package/busybox/busybox-minimal.config
+@@ -53,7 +53,7 @@ CONFIG_EXTRA_CFLAGS=""
+ CONFIG_EXTRA_LDFLAGS=""
+ CONFIG_EXTRA_LDLIBS=""
+ # CONFIG_USE_PORTABLE_CODE is not set
+-CONFIG_STACK_OPTIMIZATION_386=y
++# CONFIG_STACK_OPTIMIZATION_386 is not set
+ CONFIG_STATIC_LIBGCC=y
  
--HARFBUZZ_VERSION = 7.2.0
-+HARFBUZZ_VERSION = 7.3.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+ #
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 4826fb8242..6e8bd2799d 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -53,7 +53,7 @@ CONFIG_EXTRA_CFLAGS=""
+ CONFIG_EXTRA_LDFLAGS=""
+ CONFIG_EXTRA_LDLIBS=""
+ # CONFIG_USE_PORTABLE_CODE is not set
+-CONFIG_STACK_OPTIMIZATION_386=y
++# CONFIG_STACK_OPTIMIZATION_386 is not set
+ CONFIG_STATIC_LIBGCC=y
+ 
+ #
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
