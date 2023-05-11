@@ -4,57 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9390C7EE22
-	for <buildroot@archiver.kernel.org>; Thu, 11 May 2023 17:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F3AFC7EE24
+	for <buildroot@archiver.kernel.org>; Thu, 11 May 2023 17:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 343F670143;
-	Thu, 11 May 2023 17:03:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 343F670143
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F7F07012D;
+	Thu, 11 May 2023 17:59:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F7F07012D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uYlt9XjvUDmb; Thu, 11 May 2023 17:03:49 +0000 (UTC)
+	with ESMTP id ILCyAp9kD3Cu; Thu, 11 May 2023 17:59:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69E61610F4;
-	Thu, 11 May 2023 17:03:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69E61610F4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3C1851BF28F
- for <buildroot@lists.busybox.net>; Thu, 11 May 2023 17:03:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D47D260F1D;
+	Thu, 11 May 2023 17:59:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D47D260F1D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B673D1BF263
+ for <buildroot@lists.busybox.net>; Thu, 11 May 2023 17:59:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 15315610F4
- for <buildroot@lists.busybox.net>; Thu, 11 May 2023 17:03:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15315610F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CF5740BAD
+ for <buildroot@lists.busybox.net>; Thu, 11 May 2023 17:59:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CF5740BAD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 64DhHpg6E6c9 for <buildroot@lists.busybox.net>;
- Thu, 11 May 2023 17:03:45 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B081860F3B
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B081860F3B
- for <buildroot@buildroot.org>; Thu, 11 May 2023 17:03:45 +0000 (UTC)
-Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout02.t-online.de (Postfix) with SMTP id 3B0AD10DA9
- for <buildroot@buildroot.org>; Thu, 11 May 2023 19:03:30 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.197.49]) by fwd78.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1px9hQ-25txRp0; Thu, 11 May 2023 19:03:28 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34440)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1px9hQ-00036Q-0I
- for buildroot@buildroot.org; Thu, 11 May 2023 19:03:28 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ik_FUlb9SuEO for <buildroot@lists.busybox.net>;
+ Thu, 11 May 2023 17:59:44 +0000 (UTC)
+X-Greylist: delayed 00:24:24 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE1574046A
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.176])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CE1574046A
+ for <buildroot@buildroot.org>; Thu, 11 May 2023 17:59:44 +0000 (UTC)
+Received: from 1pxAZo-00038p-U2 by out3a.electric.net with emc1-ok (Exim 4.96)
+ (envelope-from <kris@embeddedTS.com>) id 1pxAZq-0003CK-TB;
+ Thu, 11 May 2023 10:59:42 -0700
+Received: by emcmailer; Thu, 11 May 2023 10:59:42 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+ by out3a.electric.net with esmtps (TLS1.2) tls TLS_DHE_RSA_WITH_SEED_CBC_SHA
+ (Exim 4.96) (envelope-from <kris@embeddedTS.com>)
+ id 1pxAZo-00038p-U2; Thu, 11 May 2023 10:59:40 -0700
+Received: from mark-desktop.ts-local.net (_gateway [192.168.0.64])
+ by mail.embeddedts.com (Postfix) with ESMTPSA id C7EB0E086;
+ Thu, 11 May 2023 10:59:39 -0700 (MST)
 To: buildroot@buildroot.org
-Date: Thu, 11 May 2023 19:03:27 +0200
-Message-Id: <20230511170327.2998168-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+Date: Thu, 11 May 2023 10:59:13 -0700
+Message-Id: <20230511175913.2360697-1-kris@embeddedTS.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683824608-0AFC8714-2E1F5ABF/0/0 CLEAN NORMAL
-X-TOI-MSGID: 6e8f3a22-c5d0-4b65-9c68-6ec60d6185e0
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: 5.15.x / 6.{1, 2,
- 3}.x series
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS: TLS1.2:DHE-RSA-SEED-SHA:128
+X-Authenticated_ID: 
+X-VIPRE-Scanners: virus_bd;virus_clamav;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;
+ h=MIME-Version:Message-Id:Date:To:From;
+ bh=AMePIQRfHz0zYIRd9ixBVxFjOR9otJywBwcZYoZ0rB0=;
+ b=Fu42DJhBvBaJIeMBESWyFy5FN3+Du8sx5jJnBPmDIrHjQOWZriB9uFEyTH9CO2aNI8jr7BblHfS2YcZdn/JxwDy7z+3UkBdu9hdc/lLE9jbZAzXYixVzbjvZOBH6AEEG2k93cs77hapKNHNykZqezcx2M70cJcduS/xm1nwpUZlrvaohyZD3mHF0aunyBe8hV5txoibBsGErDudrzove+1zdSR3cuVFkWFVNrpdR1ms5ahvCjGOUguxdS1yhvCtBd072RBbAAOlZqfXiDl05G/sjFiYHB8R10kNtD3q9AXA0Xxr4mk6X9MQny4mOavMsS/QcsFOIlKFnZDqXVVFCHQ==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=embeddedTS.com header.i=@embeddedTS.com
+ header.a=rsa-sha256 header.s=mailanyone20220121 header.b=Fu42DJhB
+Subject: [Buildroot] [PATCH 1/1] package/wilc-firmware: bump to 16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,70 +83,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
+Reply-To: Kris Bahnsen <kris@embeddedTS.com>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Mark Featherston <mark@embeddedTS.com>, Kris Bahnsen <kris@embeddedTS.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+According to release notes from Microchip, this fixes a memory
+leak in AP modes, fixes a failure with an undisclosed but specific
+AP, and re-certified with WFA for WILC1000.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 65d3dc53c6..abb4bf922f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+---
+ package/wilc-firmware/wilc-firmware.hash | 2 +-
+ package/wilc-firmware/wilc-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/wilc-firmware/wilc-firmware.hash b/package/wilc-firmware/wilc-firmware.hash
+index 6e7850df16..802cb4f9b1 100644
+--- a/package/wilc-firmware/wilc-firmware.hash
++++ b/package/wilc-firmware/wilc-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2c2e2927a65fe4d7ec2f9872fca35c6b7bf12090ac62116d63c5f17b95a3a786  wilc-firmware-wilc_linux_15_7.tar.gz
++sha256  a06a6a46e03ca00d35da220f7a9f353cc650e5e5657a7988ea732913ad26d9a0  wilc-firmware-wilc_linux_16_1.tar.gz
+ sha256  71355eee947a312594dbdaac039827544f93d23949b65c356b7b0ce09e2600fb  LICENSE.wilc_fw
+diff --git a/package/wilc-firmware/wilc-firmware.mk b/package/wilc-firmware/wilc-firmware.mk
+index e31829d430..12c825cf92 100644
+--- a/package/wilc-firmware/wilc-firmware.mk
++++ b/package/wilc-firmware/wilc-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.3.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.3.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 75158437c7..fbc166afa2 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  78620fb4a7d5e0db1d4eb8d5b1c6e207ba5d19564efa63967a59b6daf89b3f2a  linux-6.3.1.tar.xz
--sha256  0ebc9fa309d496d474b06682578c5f7b42f0cf330365102b2feaab65ba296729  linux-6.2.14.tar.xz
--sha256  c2b74b96dd3d0cc9f300914ef7c4eef76d5fac9de6047961f49e69447ce9f905  linux-6.1.27.tar.xz
-+sha256  b612ecf282ca3f7989ff6d9f39082833b7dc2d522cb969a05334d3614e9c5328  linux-6.3.2.tar.xz
-+sha256  9ffa34921044660c6adb3eb5fd996192e322b15bbf532fe4e4e7a47079ed8fc1  linux-6.2.15.tar.xz
-+sha256  7a094c1428b20fef0b5429e4effcc6ed962a674ac6f04e606d63be1ddcc3a6f0  linux-6.1.28.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  9829fcc77b9978dce97a26980dec445caf2410024696625dbb2314ead4830b5b  linux-5.15.110.tar.xz
-+sha256  77ceea259c0158dd624304871170d09b2e59ed612f3a4d436fe0f07362dcaec2  linux-5.15.111.tar.xz
- sha256  1bbd445c154b053eea46acc883be548a98179988a9ed3a0b81bddfbf30a37e29  linux-5.10.179.tar.xz
- sha256  142f9aed1c9f2e409dd72c5c490ad824dddf31f955ed2097d5989c4b5074fc28  linux-5.4.242.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e2934b0f64..6f9c3b9418 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -404,10 +404,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.282"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.242"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.179"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.110"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.27"	if BR2_KERNEL_HEADERS_6_1
--	default "6.2.14"	if BR2_KERNEL_HEADERS_6_2
--	default "6.3.1"		if BR2_KERNEL_HEADERS_6_3
-+	default "5.15.111"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.28"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.2.15"	if BR2_KERNEL_HEADERS_6_2
-+	default "6.3.2"		if BR2_KERNEL_HEADERS_6_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-WILC_FIRMWARE_VERSION = wilc_linux_15_7
++WILC_FIRMWARE_VERSION = wilc_linux_16_1
+ WILC_FIRMWARE_SITE = $(call github,linux4wilc,firmware,$(WILC_FIRMWARE_VERSION))
+ 
+ WILC_FIRMWARE_LICENSE = PROPRIETARY
 -- 
-2.39.2
+2.40.1
 
 _______________________________________________
 buildroot mailing list
