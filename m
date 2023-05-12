@@ -4,61 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E80C6C77B7C
-	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 05:29:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B6B4C77B7C
+	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 07:13:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9040142D3F;
-	Fri, 12 May 2023 05:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9040142D3F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9CEC84057C;
+	Fri, 12 May 2023 07:13:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CEC84057C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0xlld_tZideT; Fri, 12 May 2023 05:29:32 +0000 (UTC)
+	with ESMTP id vg4C6vJaNQrD; Fri, 12 May 2023 07:13:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5877142D39;
-	Fri, 12 May 2023 05:29:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5877142D39
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EC5201BF593
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 05:29:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D7F2402F3;
+	Fri, 12 May 2023 07:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D7F2402F3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04C291BF404
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 07:13:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD47784074
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 05:29:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD47784074
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF171402F3
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 07:13:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF171402F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4PxAbyytrCmj for <buildroot@lists.busybox.net>;
- Fri, 12 May 2023 05:29:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w_VgZW_KBZdY for <buildroot@lists.busybox.net>;
+ Fri, 12 May 2023 07:13:09 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCEEF84069
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BCEEF84069
- for <buildroot@buildroot.org>; Fri, 12 May 2023 05:29:27 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E766260008
- for <buildroot@buildroot.org>; Fri, 12 May 2023 05:29:24 +0000 (UTC)
-MIME-Version: 1.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C607840154
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C607840154
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 07:13:08 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.localdomain ([89.144.220.58]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MGQnF-1pyBG13QKL-00Gpb4; Fri, 12 May 2023 09:13:04 +0200
+From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Fri, 12 May 2023 05:29:24 -0000
-Message-Id: <20230512052929.BD47784074@smtp1.osuosl.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1683869365; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=nSzLlmjTXB9qdTOrlPtdF7EV84ooczzAc19u5wzu3s0=;
- b=GECyBmMCnvvOm2O2VL6bwPUaIRJs3JaIbDVJ63U19WzHXpDFlcrBAG1e51/VpDn9HLb9zq
- Ba+LrMhdmtnLPkGoTo4+mpasUzCb3lXbi0Y7voF9frag7BlpgNhx0sblBjtoFMTHKHL6aA
- gnTHjVYWoYZpute/cYVraIM+NEanG8R/kOviJXfRv2TpgQF3+lTF7DQ7/7RSr6LwPMM1cP
- kjyBZAc9LOUWf4g0wfUHoW5rm9+BWQgPLABZPmEPaODiq9/z7am6rO9SIxbBwx3fQxkWdo
- 6Z6JYwJYJmgrF+gdwkVsOwPo+q0dL6NO9ZW4ZLtRXNCLyeWX3Gts7Ceu6J3O7Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GECyBmMC
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-05-11
+Date: Fri, 12 May 2023 09:11:59 +0200
+Message-Id: <20230512071159.3478060-1-dalang@gmx.at>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:fLhhsL1cfi+TvmrI1N5X5d3jbsryoDqHIYDJfipeOv8U8IAU9ug
+ YyBU6FUIVWfA0/8biyT9BQkSnBJ/Z9ifjpRDqiialK7xR4YTRH6+KJdt4b6cOFsE19fpZ/a
+ sgIi2u9Uqv+xS7XbZOZiLDM89tvle/+G1ClJdYNlwnZEmBvPGnEjmsEZ2XcZ7UkeduGV6JV
+ Yr9ZYzoe6K3DEPfofOMPg==
+UI-OutboundReport: notjunk:1;M01:P0:IZrG/4uoV+o=;QGuagt1AJyWgisHZl4xQHjpK9SN
+ +7KoTjXMmhRjpWC6s794mWh3TPwvbw45uVzYLrVUmiV3e8tIG/j6WvUuM76DVBUncfCJC1DAB
+ PXy5Vbmf6aIFjMAzj/159vbCGXzpd/bM+kOEoTh/VeJAnCtUrBWUEq2+JQje1pHj+OiNSVr82
+ 1I84JubNa5lvnt0vdbypnWSzSPbkJPrxZ1Y9hxdIN4eErcKMcPiqN9haP7/yY7kFMRkL3jjhN
+ CBlTbPtKpDixiOdvYzV8xdl15Noel919wl/beKiY++JCVxgusAKuryfkiVM7KG8sztw9bcJ+D
+ QjHlzna9p0zfheho4/DkddsmMex7vAIBvhpBbJxv0wojc0iejh5yolvkXIKxRpd07A/MgYFZa
+ evnek6F3dmDhrfg3nueA+gmaL/UKEDRm3+/8euHEIykw8+luzEMOGSnz9rNudiXpT46GgZlGq
+ Ie7u1VFeKrvgcSPBgMyIJ4z9MdUXb57f0weYTNFILkM7dpC3ydfXP7f71RdJJ9SiX575xM8OF
+ srJjt2kGOF90kTC/VNQccB7J5Boyi/A62yCvXgMuVGuyroxF9vdoo970O0QY0A9rEbLHMTiJl
+ HL4q6BgVlx2n/JFVCOKLKLWgmb+LX9fooJTSUZnwf13J6MRN2zRb0RaNK+4Pp8jLU7XSicyfj
+ Yd+U2IVeiL77z+ezYIaCF6Ti0nLNKni99WkktARg6noEMx5wvRrVtDXB4+GzPqQIufCl+dTIZ
+ pYPeV6Sa3SFZVDE70Al/l+UJgjwfnuVr99KjHzE1gdarYhlgilxWfVxRPcERBSGNP/pz0XZZZ
+ VkjZ0hLsMPSp+mwHv3/SuKExga2WLXT6hkvaMghSBU+m+g+j7oQlQCSWI2AEI+JQPvUBdzXIQ
+ nU8nB6r1Ne+vX4uY0GXSiPC1IFwnq2hXVahE51tAj6SJEA/w7Ddi776mj74neJOSACDSn97uS
+ yCS4z1hKjaracpFd5uZCCxH9cdA=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.at; s=s31663417; 
+ t=1683875585; i=dalang@gmx.at;
+ bh=4aGlUgu7SAmYjIfONaW92OaDFELrPz/cwVfScT4bxLk=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=IvYnHIGss4trXIdijizHuCzPtbBeF2r4ZpGRPo6y1T9f+4hcJtVlhA+N54oPtE99l
+ kNghFhUd+BTGDNTpuTseRyrBeuVq8bhp7tHtBvZfcTX9eahURK26CofCJsghFleJ3c
+ zkdB0M/yBYPFLup88qhjPHqN+UT25aw4uhIrzVRxJduMLnrNMf753oDfzIfEB0x0i/
+ e/aChxpnre1YfNGEPIqyfDjgkLz7UdBhlMqZ9L8/ZyGJSfWmBYX+aeicV2pxyIjmYF
+ ktcOs8XEeLC5pzrtp+HFNrhi2Tg+b47CERowX9jUByf+n/GPMRQ2MgKWhjsBhocHD+
+ yMERNY+PjPQpg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
+ header.a=rsa-sha256 header.s=s31663417 header.b=IvYnHIGs
+Subject: [Buildroot] [PATCH] package/stress-ng: bump to version 0.15.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,201 +90,261 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Drop now included patches and regenerate ignore file.
 
-Autobuild statistics for 2023-05-11
-===================================
+https://github.com/ColinIanKing/stress-ng/blob/V0.15.07/debian/changelog
 
-      branch |  OK | NOK | TIM | TOT |
-  2022.02.x  |  5  |  1  |  0  |  6  |
-  2023.02.x  |  8  |  7  |  0  | 15  |
-    master   | 79  | 73  |  2  | 154 |
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+---
+ .checkpackageignore                           |  3 -
+ ...build-with-HAVE_SYSCALL-or-__NR_mmap.patch | 54 -------------
+ ...002-stress-regs-fix-build-on-riscv32.patch | 43 ----------
+ ...introduce-PRESERVE_CFLAGS-build-flag.patch | 78 -------------------
+ package/stress-ng/stress-ng.hash              |  2 +-
+ package/stress-ng/stress-ng.mk                |  2 +-
+ 6 files changed, 2 insertions(+), 180 deletions(-)
+ delete mode 100644 package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch
+ delete mode 100644 package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch
+ delete mode 100644 package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch
 
-Classification of failures by reason for master
------------------------------------------------
-
-               host-qemu-7.2.0 | 7 
-               syslog-ng-4.1.1 | 5 
-            host-binutils-2.38 | 4 
-         host-gcc-final-10.4.0 | 3 
-                   linux-6.3.1 | 3 
-                       unknown | 3 
-                 coreutils-9.3 | 2 
-                elfutils-0.186 | 2 
-glibc-2.37-2-g9f8513dc64119... | 2 
-         gobject-introspection | 2 
-         host-gcc-final-11.3.0 | 2 
-              host-rust-1.68.2 | 2 
-                    olsr-0.9.8 | 2 
-                   perl-5.36.1 | 2 
-                 agentpp-4.6.0 | 1 
-                     audit-3.1 | 1 
-                   bird-2.0.11 | 1 
-                  boost-1.82.0 | 1 
-                    brltty-6.5 | 1 
-              erlang-22.3.4.22 | 1 
-            flatbuffers-23.3.3 | 1 
-                     frr-8.4.2 | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-                 haproxy-2.6.9 | 1 
-            host-binutils-2.39 | 1 
-             host-delve-1.20.2 | 1 
-         host-gcc-final-12.2.0 | 1 
-host-gdb-arc-2020.09-releas... | 1 
-                host-go-1.19.9 | 1 
-host-heimdal-f4faaeaba371ff... | 1 
-     host-moby-buildkit-0.11.6 | 1 
-                  jack2-1.9.21 | 1 
-                  kexec-2.0.26 | 1 
-               libglib2-2.76.1 | 1 
-                 libnss-3.89.1 | 1 
-          linux-5.10.162-cip24 | 1 
-                 mesa3d-23.0.3 | 1 
-            ocf-linux-20171122 | 1 
-                 opensc-0.22.0 | 1 
-                     php-8.2.5 | 1 
-                     pv-1.6.20 | 1 
-                    sdl-1.2.15 | 1 
-                   trinity-1.9 | 1 
-ulog-0389d243352255f6182326... | 1 
-               xfsprogs-5.14.2 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  mips64el   |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/1b9d32379383dcf3d42abcf3bba1f2d3d83ef48a |     
-    arm      |           audit-3.1            | NOK | http://autobuild.buildroot.net/results/8aa804626ae5aff1db89f9481c5623730f4347c2 |     
-    arm      |          bird-2.0.11           | NOK | http://autobuild.buildroot.net/results/dd2c8cdb03d6619c5b15ed04ca6e991fa672c732 |     
-   arceb     |          boost-1.82.0          | NOK | http://autobuild.buildroot.net/results/e1703efdc24d9b6c067603a9efab672cf13cc946 |     
-powerpc64le  |           brltty-6.5           | NOK | http://autobuild.buildroot.net/results/9d73dd483deea8e275487459061f6c45fff7edf9 |     
-    i686     |         coreutils-9.3          | NOK | http://autobuild.buildroot.net/results/1b8e68977a654a599fbf3ae9b186b2101d5b3eed | ORPH
-    sh4a     |         coreutils-9.3          | NOK | http://autobuild.buildroot.net/results/f3ff6f07228e3694eee6f3953ac9a4cbdfb61ced | ORPH
- microblaze  |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/cec57f1f431fa2edb932292079c5d839f40548d6 | ORPH
-microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/b75597edbb96dd1dce3e878a28472a29e2431c48 | ORPH
-   mipsel    |        erlang-22.3.4.22        | NOK | http://autobuild.buildroot.net/results/8321595ff088707b9e6b9543a85387047a1f188e |     
-    arm      |       flatbuffers-23.3.3       | NOK | http://autobuild.buildroot.net/results/9ef5f45732b76b1ac344b430f996278aa318a1c1 |     
-   xtensa    |           frr-8.4.2            | NOK | http://autobuild.buildroot.net/results/7425dc6559c30dd1b04b16a4b9be265dae3eb834 |     
-    i686     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/813e7c08e64d616f0b4929ee67df3c23aa0d42dd |     
-   nios2     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/fdf298a21a2ff8846eaf671588e4dbb664c21d90 |     
-  powerpc    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/c821dae3f7c5c118a655b83f6f5bedfbe5f8b583 |     
-    arm      | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/adba8f87a3fd2020294bb727d1d280c5e981cadf |     
-  powerpc    | glibc-2.37-2-g9f8513dc64119... | NOK | http://autobuild.buildroot.net/results/6e2b690218e42ba976778e1d5f840a37529a0994 |     
- powerpc64   | glibc-2.37-2-g9f8513dc64119... | NOK | http://autobuild.buildroot.net/results/4fb215a5c13ca5b0dd7b135e1988b533c5c3edc3 |     
-microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/6244e23534867c3f919e54f293e1c9dd1ed59e0f |     
-   armeb     |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/4c9334a6d3eae29d192ab74e8bbf426895a56c86 |     
- aarch64_be  |         haproxy-2.6.9          | NOK | http://autobuild.buildroot.net/results/640aeae06a011e60a0c6cada70a9a184192f9927 |     
-  mips64el   |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/c2cd7353b5c2e232193183f2e2ca69f2c1ef4fb7 |     
-   s390x     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/c900ef42bea553be98ca7768aeadba776d62717a |     
-  aarch64    |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/a08c92f170a6f88f5fed844c2f51e0cf2b1d68d3 |     
- microblaze  |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/04e915c56e75775c9aa3e4b24407b7799f6e94b2 |     
-  sparc64    |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/d19ad6dc7ba2021e15d1c025694347892c45b85e |     
-  riscv64    |       host-delve-1.20.2        | NOK | http://autobuild.buildroot.net/results/56c73fbd76a5c95d734400985db6766f63b9a980 |     
-   sparc     |     host-gcc-final-10.4.0      | NOK | http://autobuild.buildroot.net/results/395f85f49d39b6b14c50322a35d9d9d284aaba67 |     
-   sparc     |     host-gcc-final-10.4.0      | NOK | http://autobuild.buildroot.net/results/f2f97604fbdc64541f9b086ebf4e6a3146e0e0b1 |     
-    or1k     |     host-gcc-final-10.4.0      | NOK | http://autobuild.buildroot.net/results/e0adcb20e1b026667bbaf3abb29715aad4e4d2ed |     
- microblaze  |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/00abdeec05dffa53990dd0cd5b34831212b929cd |     
-  powerpc    |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/a2b047cd61c75a46815979545dd72f85448dbf25 |     
-microblazeel |     host-gcc-final-12.2.0      | NOK | http://autobuild.buildroot.net/results/24c90f3e30f0f85d6a6a6dcdfba6cb3600f32f18 |     
-   arceb     | host-gdb-arc-2020.09-releas... | NOK | http://autobuild.buildroot.net/results/b1abe43a8a68babbdd6f1fe4d6e1da54c8a06c61 | ORPH
-  mips64el   |         host-go-1.19.9         | NOK | http://autobuild.buildroot.net/results/502ab553484d3d40e1b3f883a6852792d27e2170 |     
-    or1k     | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/89831f4cea83993d6100d04a1d64f368d6081c66 | ORPH
-    arm      |   host-moby-buildkit-0.11.6    | NOK | http://autobuild.buildroot.net/results/8d016966fa5dea46a73cc556b7d80145fa34f337 |     
-   s390x     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/f8affabe29f5f5eda1ab5b6ae01555d8eecb015d |     
-   nios2     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/d82e4c34721185c0415bfc494bc55559a06f4b29 |     
-    i686     |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/387b407cdbafd45451e896a5e5a563b11c95df87 |     
-  powerpc    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/e997dd6c7da891135e7017feb00c287ece8b5c2c |     
- powerpc64   |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/ddf9ece80dd42793ea063b26b2317dd78f999798 |     
-  sparc64    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/0971a1f9386dc1cf2b7c3fa050ada55e6bf2e1bd |     
-  aarch64    |        host-qemu-7.2.0         | NOK | http://autobuild.buildroot.net/results/79fbf87ce6eb108dc8a283a2dcb1ef0199e612c0 |     
-    mips     |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/c443b636ed8a25877db5b44bba1c6f7c948fe2e5 |     
-   armeb     |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/21c992ff02311a1a2e272006516a89c3a75753ae |     
-    m68k     |          jack2-1.9.21          | NOK | http://autobuild.buildroot.net/results/f6a6314b292addd7f0b4118420386becb16d88ab |     
-    m68k     |          kexec-2.0.26          | NOK | http://autobuild.buildroot.net/results/436d0b3ee7747dcf65c9a70dc88422136cf6fd46 |     
-   sparc     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/23676958011330d20889799f3287456d8a659a0d |     
-    arm      |         libnss-3.89.1          | NOK | http://autobuild.buildroot.net/results/688661a71dd514e338f93f6c7fe27b216c3beb16 |     
-   mipsel    |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/99377c95f8228f0058fc9c77620b474b69fec32d | ORPH
-  mips64el   |          linux-6.3.1           | NOK | http://autobuild.buildroot.net/results/e9e1dbd1edf7db2e5848d4c5e60293b58cae75b1 | ORPH
-   mips64    |          linux-6.3.1           | NOK | http://autobuild.buildroot.net/results/df47d61537a16a7393439ed4f19d0c97472dc946 | ORPH
-  mips64el   |          linux-6.3.1           | NOK | http://autobuild.buildroot.net/results/f2a3de28c5ed71685a1bb9c29c0df138e149385b | ORPH
-   s390x     |         mesa3d-23.0.3          | NOK | http://autobuild.buildroot.net/results/7e3cd8ac9e4d275c633c4477fe9f8958a73e774a |     
-microblazeel |       ocf-linux-20171122       | NOK | http://autobuild.buildroot.net/results/0c17f5f50391b7096c2498687b0b039bf10f790d | ORPH
-microblazeel |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/3141e68e9a348e4d9dff394ee02ed228c3b56f29 | ORPH
-  riscv32    |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/214daa1a2553a61c1a6ef1873e445438d6582253 | ORPH
-   mips64    |         opensc-0.22.0          | NOK | http://autobuild.buildroot.net/results/15b641eeab6470e90f5ebc78444d56e107efc14b |     
-   xtensa    |          perl-5.36.1           | NOK | http://autobuild.buildroot.net/results/d8351b61065b7d09325ad264fd423dc373bc7e6b |     
-   arceb     |          perl-5.36.1           | NOK | http://autobuild.buildroot.net/results/e2e1cee42787b35cd0038a1ef14cf5a8cb1f44ea |     
-    or1k     |           php-8.2.5            | NOK | http://autobuild.buildroot.net/results/4a111b387bc66893edb3e5fe235107f56ee6714f |     
-   armeb     |           pv-1.6.20            | NOK | http://autobuild.buildroot.net/results/8897a0d18055d0cd1bc0c443b386142a973f4008 | ORPH
-    sh4      |           sdl-1.2.15           | NOK | http://autobuild.buildroot.net/results/29c44926adf56454582ce5263e47987aadea3520 | ORPH
- microblaze  |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/ecba4aefdd2b1cb0ce980c0e8b638e58b7e23d3a |     
-    mips     |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/d272139f59bd92afa49da3a8a49143cad03a127c |     
-   mipsel    |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/cd7ea801aa3bcc7ce5921777783cb973356fd015 |     
- powerpc64   |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/cbf133272d503249d967419512d644de095da2e6 |     
-    i686     |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/88d3cc30da6c2db50e295a7d39b22c095c2dc13d |     
-  aarch64    |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/c14e7119d084a275c86dcd52242081b96b7dbd6d | ORPH
-  sparc64    | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/6d7d0d2aa9696af20c46e585d9316a0cf7da7fa0 |     
-   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/8da55061d8e6044c8d138eafea59c4bc7b48df6e |     
-   sh4aeb    |            unknown             | NOK | http://autobuild.buildroot.net/results/f3cc06c9ae999ac63c68a15c91a6348b27eb7781 |     
-   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/4c41d2847f803765dcabc0e42b2bc60a124bde09 |     
-    mips     |        xfsprogs-5.14.2         | NOK | http://autobuild.buildroot.net/results/e5a67ea3edadfa42a609ba511ecd03befec55c13 | ORPH
-
-
-Classification of failures by reason for 2022.02.x
---------------------------------------------------
-
-            igd2-for-linux-2.1 | 1 
-
-
-Detail of failures for 2022.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  aarch64    |       igd2-for-linux-2.1       | NOK | http://autobuild.buildroot.net/results/ce3f0ce1452a16fe2786e01fe662551990cfe1b4 |     
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-                 agentpp-4.6.0 | 1 
-                     efivar-38 | 1 
-                host-go-1.19.9 | 1 
-               libdeflate-1.15 | 1 
-               libmdbx-0.11.14 | 1 
-                     vdr-2.6.3 | 1 
-                     znc-1.8.2 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/16e17425f95fea608571aebdd3c3ed26efb70a13 |     
-  mips64el   |           efivar-38            | NOK | http://autobuild.buildroot.net/results/d3e4bf9b791f0ca5c70782a6644d86ec3131cdec |     
-  mips64el   |         host-go-1.19.9         | NOK | http://autobuild.buildroot.net/results/dbd04a589a50bf24f20e26b8768caa3e02c28448 |     
-    arm      |        libdeflate-1.15         | NOK | http://autobuild.buildroot.net/results/37fde6570a00fc6e417f8a78ac26a4cf29f7b89c |     
-  mips64el   |        libmdbx-0.11.14         | NOK | http://autobuild.buildroot.net/results/5f06a6eab21c29a50299c5ce4e9d3190bc53e62e |     
-   xtensa    |           vdr-2.6.3            | NOK | http://autobuild.buildroot.net/results/116967637f5b1cd6c4ec8d140932cce20c1bd33c |     
-  riscv64    |           znc-1.8.2            | NOK | http://autobuild.buildroot.net/results/de2d54b27620a3a8bf237ae08a99264e8bda750f |     
-
-
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a1895e54ea..1e131d00a6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1503,9 +1503,6 @@ package/start-stop-daemon/0001-add-uclibc-alias-and-musl.patch Upstream
+ package/start-stop-daemon/0002-just-warn-on-missing-arch.patch Upstream
+ package/statserial/0001-ncurses-link.patch Upstream
+ package/stellarium/0001-add-missing-include.patch Upstream
+-package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch Upstream
+-package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch Upstream
+-package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch Upstream
+ package/stunnel/S50stunnel Indent Shellcheck Variables
+ package/sudo/0001-configure.ac-fix-openssl-static-build.patch Upstream
+ package/supervisor/S99supervisord Variables
+diff --git a/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch b/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch
+deleted file mode 100644
+index 41a2647133..0000000000
+--- a/package/stress-ng/0001-stress-mmap-fix-build-with-HAVE_SYSCALL-or-__NR_mmap.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 625dd7e458e6aa488f7dd4764e4a62b6fbf79a9d Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <ju.o@free.fr>
+-Date: Thu, 23 Feb 2023 21:54:16 +0100
+-Subject: [PATCH] stress-mmap: fix build with HAVE_SYSCALL or __NR_mmap2 is
+- undefined
+-
+-Commit afae500a added macro tests for defined(HAVE_SYSCALL) and
+-system call numbers.
+-
+-More specifically, in stress-mmap.c, function mmap2_try() was defined
+-only if __NR_mmap2 is defined.  See:
+-https://github.com/ColinIanKing/stress-ng/commit/afae500a23b198b9df421ad0fd9270fcdf65c3fb#diff-ffb0db2473f6c5e1b93dd33bce389ee836671a628fff9f903d097733f7ddfc9c
+-
+-This commit forgot to replicate the same test when the mmap2_try()
+-function is used later at:
+-https://github.com/ColinIanKing/stress-ng/blob/50f3ef2560e928c4694894be0bb652e663af5076/stress-mmap.c#L754
+-
+-When HAVE_SYSCALL or __NR_mmap2 is undefined, compilation fails with:
+-
+-    stress-mmap.c: In function 'stress_mmap':
+-    stress-mmap.c:809:31: error: 'mmap2_try' undeclared (first use in this function); did you mean 'mmap_prot'?
+-       context.mmap = (mmap_func_t)mmap2_try;
+-                                   ^~~~~~~~~
+-                                   mmap_prot
+-    stress-mmap.c:809:31: note: each undeclared identifier is reported only once for each function it appears in
+-
+-This patch fixes this issue.
+-
+-Upstream-reference:
+-https://github.com/ColinIanKing/stress-ng/commit/3da49180fdfa8a70307569202ed9431f5295913e
+-
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- stress-mmap.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/stress-mmap.c b/stress-mmap.c
+-index cf343078..68f5a9b8 100644
+---- a/stress-mmap.c
+-+++ b/stress-mmap.c
+-@@ -805,7 +805,9 @@ static int stress_mmap(const stress_args_t *args)
+- 		context.mmap_file = true;
+- 
+- 	if (mmap_mmap2) {
+--#if defined(HAVE_MMAP2)
+-+#if defined(HAVE_MMAP2) && \
+-+    defined(HAVE_SYSCALL) && \
+-+    defined(__NR_mmap2)
+- 		context.mmap = (mmap_func_t)mmap2_try;
+- #else
+- 		if (args->instance == 0)
+--- 
+-2.39.2
+-
+diff --git a/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch b/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch
+deleted file mode 100644
+index cb2a507bfd..0000000000
+--- a/package/stress-ng/0002-stress-regs-fix-build-on-riscv32.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 40309f5d313524f4189f4ef158920391e92e226d Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <ju.o@free.fr>
+-Date: Thu, 23 Feb 2023 21:38:25 +0100
+-Subject: [PATCH] stress-regs: fix build on riscv32
+-
+-RISC-V register test routine is using 64bit registers only.
+-When compiling on 32bit RISC-V, compilation fails with output:
+-
+-    stress-regs.c: In function 'stress_regs_helper':
+-    stress-regs.c:485:27: error: register specified for 's1' isn't suitable for data type
+-      485 |         register uint64_t s1  __asm__("s1")  = v;
+-          |                           ^~
+-    stress-regs.c:495:27: error: register specified for 's11' isn't suitable for data type
+-      495 |         register uint64_t s11 __asm__("s11") = s1 ^ 0xa5a5a5a5a5a5a5a5ULL;
+-          |                           ^~~
+-
+-This patch fix this issue by protecting the stress_regs_helper()
+-function with an additional test, to restrict to 64bit.
+-
+-Upstream-reference:
+-https://github.com/ColinIanKing/stress-ng/commit/6c335ac3abba535e79ddbddf34591ef5b9ee0a96
+-
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- stress-regs.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/stress-regs.c b/stress-regs.c
+-index 4d4d32d2..0ffac4d1 100644
+---- a/stress-regs.c
+-+++ b/stress-regs.c
+-@@ -473,7 +473,7 @@ do {			\
+- }
+- #endif
+- 
+--#if defined(STRESS_ARCH_RISCV)
+-+#if defined(STRESS_ARCH_RISCV) && (__riscv_xlen == 64)
+- 
+- #define STRESS_REGS_HELPER
+- /*
+--- 
+-2.39.2
+-
+diff --git a/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch b/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch
+deleted file mode 100644
+index beb5429dc1..0000000000
+--- a/package/stress-ng/0003-Makefile-introduce-PRESERVE_CFLAGS-build-flag.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From d3ab0bad6afc2e8f4be70fe38dd24788f1b3d4be Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <ju.o@free.fr>
+-Date: Fri, 24 Feb 2023 21:11:30 +0100
+-Subject: [PATCH] Makefile: introduce PRESERVE_CFLAGS build flag
+-
+-The stress-ng Makefile includes many nice environment auto-detection
+-features to adjust compilation flags. This is very convenient in
+-many compilation use-cases. However, in some other specific cross
+-compilation environments, those automatic CFLAGS adjustments may
+-create compilation failures.
+-
+-For example, commit c00e695ed5 added -fstack-protector-strong if the
+-compiler recognize the flag. In some situations, for example a gcc
+-toolchain based on uClibc-ng without stack-protector libssp
+-enabled, gcc will recognize the option. Then, the Makefile adds the
+-option to CFLAGS, and the compilation/link fails at link time with an
+-error like:
+-
+-    /toolchain/arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp_nonshared: No such file or directory
+-    /toolchain/arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp: No such file or directory
+-
+-stress-ng is included in the Buildroot build system [1] [2], which
+-supports many architectures and toolchain configurations. This build
+-system carefully controls its CFLAGS. In such a case, it is
+-preferable for a package to avoid changing compilation flags.
+-
+-This patch introduces the PRESERVE_CFLAGS Makefile variable which will
+-disable those CFLAGS adjustments, if set to 1. The current build
+-behavior is preserved if unset.
+-
+-Upstream-reference:
+-https://github.com/ColinIanKing/stress-ng/commit/3d87d50561505a5a79008c01e35fc2e100000160
+-
+-[1] https://buildroot.org/
+-[2] https://git.buildroot.org/buildroot/tree/package/stress-ng?h=2022.11.1
+-
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- Makefile | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/Makefile b/Makefile
+-index 7a969aba..35151d74 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -45,6 +45,7 @@ endif
+- # Test for hardening flags and apply them if applicable
+- #
+- MACHINE = $(shell uname -m)
+-+ifneq ($(PRESERVE_CFLAGS),1)
+- ifneq ($(MACHINE),$(filter $(MACHINE),alpha parisc))
+- ifeq ($(shell $(CC) $(CFLAGS) -fstack-protector-strong -E -xc /dev/null > /dev/null 2>& 1 && echo 1),1)
+- CFLAGS += -fstack-protector-strong
+-@@ -58,6 +59,7 @@ ifeq ($(shell $(CC) $(CFLAGS) -D_FORTIFY_SOURCE=2 -E -xc /dev/null > /dev/null 2
+- CFLAGS += -D_FORTIFY_SOURCE=2
+- endif
+- endif
+-+endif
+- 
+- #
+- # Expected build warnings
+-@@ -83,11 +85,13 @@ PRE_V=
+- PRE_Q=@#
+- endif
+- 
+-+ifneq ($(PRESERVE_CFLAGS),1)
+- ifeq ($(findstring icc,$(CC)),icc)
+- CFLAGS += -no-inline-max-size -no-inline-max-total-size
+- CFLAGS += -axAVX,CORE-AVX2,CORE-AVX-I,CORE-AVX512,SSE2,SSE3,SSSE3,SSE4.1,SSE4.2,SANDYBRIDGE,SKYLAKE,SKYLAKE-AVX512,TIGERLAKE,SAPPHIRERAPIDS
+- CFLAGS += -ip -falign-loops -funroll-loops -ansi-alias -fma -qoverride-limits
+- endif
+-+endif
+- 
+- #ifeq ($(findstring clang,$(CC)),clang)
+- #CFLAGS += -Weverything
+--- 
+-2.39.2
+-
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index 5b967d2b95..a02b65c992 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  92922b979b5ca6ee05b03fd792c32a0b25a01fea6161b418b5e672c64ffb549f  stress-ng-0.15.04.tar.gz
++sha256  7ad1f30237011149e7f83451ea7cb49e88c0a79bed55e29b556c6a72b9f1d79d  stress-ng-0.15.07.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 28116b455d..0f204bcf79 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRESS_NG_VERSION = 0.15.04
++STRESS_NG_VERSION = 0.15.07
+ STRESS_NG_SITE = $(call github,ColinIanKing,stress-ng,V$(STRESS_NG_VERSION))
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
 -- 
-http://autobuild.buildroot.net
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
