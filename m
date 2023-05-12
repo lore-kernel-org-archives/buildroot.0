@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88704C77B7C
-	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 00:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0FA8C77B7F
+	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 01:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 279014204F;
-	Fri, 12 May 2023 00:25:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 279014204F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09E2142C33;
+	Fri, 12 May 2023 01:50:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09E2142C33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wGcl5ByElGVK; Fri, 12 May 2023 00:25:34 +0000 (UTC)
+	with ESMTP id pEvZWlcWeKKf; Fri, 12 May 2023 01:50:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 860D841F0B;
-	Fri, 12 May 2023 00:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 860D841F0B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CF5C01BF25F
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 00:25:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D3F942C2E;
+	Fri, 12 May 2023 01:50:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D3F942C2E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 373C91BF8B4
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 01:50:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A89F884020
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 00:25:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A89F884020
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0FFD67019C
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 01:50:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FFD67019C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lRzm1ufX5J9Z for <buildroot@lists.busybox.net>;
- Fri, 12 May 2023 00:25:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PuPoESPFj0fX for <buildroot@lists.busybox.net>;
+ Fri, 12 May 2023 01:50:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8495383CE6
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
- [IPv6:2607:f8b0:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8495383CE6
- for <buildroot@buildroot.org>; Fri, 12 May 2023 00:25:16 +0000 (UTC)
-Received: by mail-pl1-x629.google.com with SMTP id
- d9443c01a7336-1aaea3909d1so87254825ad.2
- for <buildroot@buildroot.org>; Thu, 11 May 2023 17:25:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C05060F58
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8C05060F58
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 01:50:45 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-1aaec6f189cso64860845ad.3
+ for <buildroot@buildroot.org>; Thu, 11 May 2023 18:50:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1683851116; x=1686443116;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=cAdOhgN62qNpMveyhSQ8qLGTLmHUzt6USk5mg4QDTZE=;
- b=VCgGIxAUUDtOMWHL5xJAilXLRfgiIRAQyiaYd3maEdu/VQ3gWFjs2HXXAoROZ8FIN2
- QHQdX0+r1KYG6j0lqPUNYTsEUc0qHP3zh8v4aBdi/hGb0WqTsw1WHjIZQQp33L4/y5E2
- vo1l1uBn9KY5T0QMgGt7Km6NazMVdeGlar5AmYJwDGhEUeczxA7TWFq7u14ChMIlaaCJ
- +Ek6FA1HmdWws4WL/oe6cMUDmw7AORT2EKFkuT1P9sq3Ukni+ZvUUt1hOJ5cMxst0MVE
- APkxYof891OsfdjCNveBvq7Uif+D3Ju1cu2b6fE8Tr8TPDD2MO+Vzl8RTiN+1JIDj3W+
- esag==
-X-Gm-Message-State: AC+VfDz+ooil2FNO/5T6osaZFL5gcx2N5poNtSz8n2Pq/vJglKV4RqHb
- yjjfSkLAiu0xry2HFI69N+/IW9GtlYpLdq8TGYtlYntH
-X-Google-Smtp-Source: ACHHUZ7OdUBUKmWBuyGoBidRVL6+KnN3v7v+blsxOhhl/m9rqN+x/6fvGEu0DVYnp2dTGz1lk/mzdA==
-X-Received: by 2002:a17:902:d68b:b0:1ab:7fb:aac1 with SMTP id
- v11-20020a170902d68b00b001ab07fbaac1mr23495337ply.24.1683851115718; 
- Thu, 11 May 2023 17:25:15 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1683856244; x=1686448244;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=jmH/GQCr8hRQi5t0+zeEYggo8bzUyf7EdSM1cBuSKrA=;
+ b=bwLt1q3dFJ96p+B94PJHEEokzy1+/0aQJdvNIqJazweHwr+b1YEaoj9K9iORh9xM6a
+ kx91HUU9tzu5hi2TZQSWaAjizOIRNMGjRKzFU6ZZXvh/K6fR48CvyhKj4ivJFijjwe8/
+ k5Si4yLWbYMpWMrNdSlPa3/44fP/m7aORl44OlWukhr0PFtOFYAbsfvZr5kjyRX9mT7w
+ 7GfD5N1TOqR/qxaLfKlJYf7zHKt+FZ/1r/0awz+W4EWL24m10lOAcRfhlyF37aKhrtNk
+ xRjd1z06hqsr0831VyXg7km79HMVUQa9sAl3bq2jakO20shuUACc2YiYdQTznNZpZdzr
+ ltDA==
+X-Gm-Message-State: AC+VfDzn6xUkaddRXCEWywC+WVh8DLDL6M1j1P3G7ZgzTvnME4EcCy9J
+ jLdjuHf8bnrDdnP6wQevnrOrqoTED/8kErcemqDKhBKH
+X-Google-Smtp-Source: ACHHUZ7oCAZ+E4b1pNo1Ht9v5Ui8vmQtN1EVfMawaAfwcC20+HHC9ONSXnvdb6Yifd5DGu935FVARA==
+X-Received: by 2002:a17:903:264b:b0:1ad:dd1a:6415 with SMTP id
+ je11-20020a170903264b00b001addd1a6415mr1355494plb.11.1683856244495; 
+ Thu, 11 May 2023 18:50:44 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- p4-20020a170902e74400b001aafe56ea70sm6567969plf.5.2023.05.11.17.25.15
+ jn22-20020a170903051600b001a80ad9c599sm6588618plb.294.2023.05.11.18.50.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 May 2023 17:25:15 -0700 (PDT)
+ Thu, 11 May 2023 18:50:43 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 11 May 2023 17:25:11 -0700
-Message-Id: <20230512002511.1356447-2-christian@aperture.us>
+Date: Thu, 11 May 2023 18:40:56 -0700
+Message-Id: <20230512014056.2107657-1-christian@aperture.us>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230512002511.1356447-1-christian@aperture.us>
-References: <20230512002511.1356447-1-christian@aperture.us>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1683851116; x=1686443116;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=cAdOhgN62qNpMveyhSQ8qLGTLmHUzt6USk5mg4QDTZE=;
- b=NtTQgAhg2P9Bi3Nhn9hh7BligdAxr5KJyjFLLuxva23zXIkQvf+LZc14jEJ9OX214U
- pbgrg2iRM3eVggXv8hOCHZBC2g/i7NCFHYJLR87pdspmOKYr/GRWssV4wwylmePQoGaq
- LlzFJW8dAXMfFzeJHd1XVkxcW7JNKxAjw8gIKR8Zsc/3dflKXVybMsZGtk8e8ALJ0Efs
- o1PHsrl5ZO4OZvLHtMUOI5FJ0Ej0/bWDpG8Fa7OObkcpSHgMEz6e6FvveDs2GyevxZVb
- rSvFOq6++EKnsBbt34duRgQwv/+LpnOVatI3CJabC8pInNGf2H4Cb6lgPVh6CXXwVJfw
- YrMg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=aperture.us; s=google; t=1683856244; x=1686448244;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=jmH/GQCr8hRQi5t0+zeEYggo8bzUyf7EdSM1cBuSKrA=;
+ b=hoZRgV9ElqDp+I+mSo1jqLDc3fSkMvMS/qBHrm5WwReaoyy/l3UUcbUfWi6vog6/vk
+ JO0RIwAZTy3FDfHx44HbVVIPTVpXPSrADwqvLRz3v+ljNwNq0YLsgIAdTPbNtHNqlq6g
+ oUgQ5s+hcV2OsPxJp7v6g+h8/bg+hAy4OcW945B9gG30HqOm1R7Gc96IrSG5LrEMyG6I
+ ABYKG4AHuWAKdbTTUMXv1BV81qDKswpBPLl58DzfsACtBDo/SOoUU4lctktF4cJeSQ6r
+ quq3iVinPHx3PmOI/1cL8veBojJ5Y773Smnoh/NZTfuRZ6ZEpARg4RYtmiOz0r15DRCd
+ dpCw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=NtTQgAhg
-Subject: [Buildroot] [PATCH v2 2/2] package/podman: new package
+ header.a=rsa-sha256 header.s=google header.b=hoZRgV9E
+Subject: [Buildroot] [PATCH v1 1/1] package/crio: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,74 +104,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-podman is a CLI tool for spawning and running containers according to the OCI
-specification.
+crio implements the Kubelet Container Runtime Interface (CRI) using OCI
+conformant runtimes like runc or podman.
 
-https://github.com/containers/podman
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
-
----
-
-v1 -> v2:
-
- - package/podman: bump version to v4.5.0
- - Add cmd/quadlet target as required by the install script.
+https://github.com/cri-o/cri-o/
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/Config.in                     |  1 +
- package/podman/Config.in              | 55 +++++++++++++++++++
- package/podman/containers-policy.json | 14 +++++
- package/podman/podman.hash            |  3 ++
- package/podman/podman.mk              | 77 +++++++++++++++++++++++++++
- 5 files changed, 150 insertions(+)
- create mode 100644 package/podman/Config.in
- create mode 100644 package/podman/containers-policy.json
- create mode 100644 package/podman/podman.hash
- create mode 100644 package/podman/podman.mk
+ package/Config.in      |  1 +
+ package/crio/Config.in | 54 ++++++++++++++++++++++++++++
+ package/crio/crio.hash |  3 ++
+ package/crio/crio.mk   | 82 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 140 insertions(+)
+ create mode 100644 package/crio/Config.in
+ create mode 100644 package/crio/crio.hash
+ create mode 100644 package/crio/crio.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 52bc10b91b..492baf25c4 100644
+index 420ebaa370..0b9d87470e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2684,6 +2684,7 @@ menu "System tools"
- 	source "package/openvmtools/Config.in"
- 	source "package/pamtester/Config.in"
- 	source "package/petitboot/Config.in"
-+	source "package/podman/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/procps-ng/Config.in"
-diff --git a/package/podman/Config.in b/package/podman/Config.in
+@@ -2635,6 +2635,7 @@ menu "System tools"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+ 	source "package/cpuload/Config.in"
++	source "package/crio/Config.in"
+ 	source "package/crun/Config.in"
+ 	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+diff --git a/package/crio/Config.in b/package/crio/Config.in
 new file mode 100644
-index 0000000000..f23435621a
+index 0000000000..35a38c587e
 --- /dev/null
-+++ b/package/podman/Config.in
-@@ -0,0 +1,55 @@
-+config BR2_PACKAGE_PODMAN
-+	bool "podman"
++++ b/package/crio/Config.in
+@@ -0,0 +1,54 @@
++config BR2_PACKAGE_CRIO
++	bool "crio"
 +	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
 +	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # iproute2, __kernel_{u,}long_t
 +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	depends on BR2_USE_MMU # libgpgme
-+	select BR2_PACKAGE_CATATONIT
-+	select BR2_PACKAGE_CNI_PLUGINS
-+	select BR2_PACKAGE_CONMON
-+	select BR2_PACKAGE_CNI_PLUGINS
-+	select BR2_PACKAGE_CRUN
++	depends on BR2_USE_MMU # libgpgme, iproute2, fork()
++	select BR2_PACKAGE_IPROUTE2
 +	select BR2_PACKAGE_IPTABLES
 +	select BR2_PACKAGE_LIBGPGME
 +	help
-+	  podman is a CLI tool for spawning and running containers
-+	  according to the OCI specification.
++	  crio implements the Kubelet Container Runtime Interface (CRI)
++	  using OCI conformant runtimes like runc or podman.
 +
-+	  https://github.com/containers/podman
++	  https://github.com/cri-o/cri-o/
 +
-+if BR2_PACKAGE_PODMAN
++if BR2_PACKAGE_CRIO
 +
-+config BR2_PACKAGE_PODMAN_DRIVER_BTRFS
++config BR2_PACKAGE_CRIO_DRIVER_BTRFS
 +	bool "btrfs filesystem driver"
 +	depends on BR2_USE_MMU # btrfs-progs
 +	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
@@ -182,7 +165,7 @@ index 0000000000..f23435621a
 +	help
 +	  Build the btrfs filesystem driver.
 +
-+config BR2_PACKAGE_PODMAN_DRIVER_DEVICEMAPPER
++config BR2_PACKAGE_CRIO_DRIVER_DEVICEMAPPER
 +	bool "devicemapper filesystem driver"
 +	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
 +	depends on BR2_USE_MMU # lvm2
@@ -191,131 +174,118 @@ index 0000000000..f23435621a
 +	help
 +	  Build the devicemapper filesystem driver.
 +
-+config BR2_PACKAGE_PODMAN_DRIVER_VFS
-+	bool "vfs filesystem driver"
-+	depends on BR2_USE_WCHAR # gvfs
-+	depends on BR2_USE_MMU # gvfs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
-+	depends on !BR2_STATIC_LIBS # gvfs
-+	select BR2_PACKAGE_GVFS
++config BR2_PACKAGE_CRIO_DRIVER_OSTREE
++	bool "ostree storage driver"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libostree, libgpgme, libgpg-error
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libostree, libglib2
++	depends on BR2_USE_WCHAR # libostree, libglib2
++	depends on BR2_USE_MMU # libostree, e2fsprogs, libglib2, libgpgme
++	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
++	depends on !BR2_TOOLCHAIN_USES_MUSL # libostree
++	select BR2_PACKAGE_LIBOSTREE
 +	help
-+	  Build the vfs filesystem driver.
++	  Build the ostree storage driver.
 +
 +endif
 +
-+comment "podman needs a glibc or musl toolchain w/ threads"
++comment "crio needs a glibc or musl toolchain w/ threads"
 +	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
 +		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/podman/containers-policy.json b/package/podman/containers-policy.json
+diff --git a/package/crio/crio.hash b/package/crio/crio.hash
 new file mode 100644
-index 0000000000..4480eb82b4
+index 0000000000..2cad8f8bb8
 --- /dev/null
-+++ b/package/podman/containers-policy.json
-@@ -0,0 +1,14 @@
-+{
-+  "default": [
-+    {
-+    "type": "insecureAcceptAnything"
-+  }
-+  ],
-+  "transports":
-+  {
-+    "docker-daemon":
-+    {
-+      "": [{"type":"insecureAcceptAnything"}]
-+    }
-+  }
-+}
-diff --git a/package/podman/podman.hash b/package/podman/podman.hash
-new file mode 100644
-index 0000000000..c011068682
---- /dev/null
-+++ b/package/podman/podman.hash
++++ b/package/crio/crio.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  830a633630bf6e61f2b8d4ca00efdd9a173ef25cdd49d4a4364c293e088561df  podman-4.5.0.tar.gz
-+sha256  62fb8a3a9621dc2388174caaabe9c2317b694bb9a1d46c98bcf5655b68f51be3  LICENSE
-diff --git a/package/podman/podman.mk b/package/podman/podman.mk
++sha256  8fd7c84ff74eff0a65e090bb9619f36508e461f6925f92a5b8886b759f2347d9  crio-1.27.0.tar.gz
++sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/crio/crio.mk b/package/crio/crio.mk
 new file mode 100644
-index 0000000000..1df3a06616
+index 0000000000..042c369799
 --- /dev/null
-+++ b/package/podman/podman.mk
-@@ -0,0 +1,77 @@
++++ b/package/crio/crio.mk
+@@ -0,0 +1,82 @@
 +################################################################################
 +#
-+# podman
++# crio
 +#
 +################################################################################
 +
-+PODMAN_VERSION = 4.5.0
-+PODMAN_SITE = $(call github,containers,podman,v$(PODMAN_VERSION))
-+PODMAN_LICENSE = Apache-2.0
-+PODMAN_LICENSE_FILES = LICENSE
++CRIO_VERSION = 1.27.0
++CRIO_SITE = $(call github,cri-o,cri-o,v$(CRIO_VERSION))
++CRIO_LICENSE = Apache-2.0
++CRIO_LICENSE_FILES = LICENSE
 +
-+PODMAN_CPE_ID_VENDOR = podman_project
-+PODMAN_GOMOD = github.com/containers/podman/v4
++CRIO_CPE_ID_VENDOR = kubernetes
++CRIO_CPE_ID_PRODUCT = cri-o
 +
-+PODMAN_BUILD_TARGETS = cmd/podman cmd/rootlessport cmd/quadlet
-+PODMAN_DEPENDENCIES += libgpgme
-+PODMAN_LDFLAGS = \
-+	-X $(PODMAN_GOMOD)/libpod/define.gitCommit=$(PODMAN_VERSION)
-+PODMAN_TAGS = \
-+	btrfs_noversion containers_image_openpgp \
-+	exclude_graphdriver_devicemapper exclude_graphdriver_zfs
++CRIO_BUILD_TARGETS = cmd/crio cmd/crio-status
++CRIO_DEPENDENCIES += libgpgme
++CRIO_LDFLAGS = \
++	-X $(CRIO_GOMOD)/internal/version.Version=$(CRIO_VERSION)
++CRIO_TAGS = exclude_graphdriver_zfs
 +
 +ifeq ($(BR2_INIT_SYSTEMD),y)
-+PODMAN_TAGS += systemd
++CRIO_TAGS += systemd
 +endif
 +
 +ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
-+PODMAN_DEPENDENCIES += libapparmor
-+PODMAN_TAGS += apparmor
++CRIO_DEPENDENCIES += libapparmor
++CRIO_TAGS += apparmor
 +endif
 +
 +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+PODMAN_TAGS += seccomp
-+PODMAN_DEPENDENCIES += libseccomp host-pkgconf
++CRIO_TAGS += seccomp
++CRIO_DEPENDENCIES += libseccomp host-pkgconf
 +endif
 +
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+PODMAN_TAGS += selinux
-+PODMAN_DEPENDENCIES += libselinux
++CRIO_TAGS += selinux
++CRIO_DEPENDENCIES += libselinux
 +endif
 +
-+ifeq ($(BR2_PACKAGE_PODMAN_DRIVER_BTRFS),y)
-+PODMAN_DEPENDENCIES += btrfs-progs
++ifeq ($(BR2_PACKAGE_CRIO_DRIVER_BTRFS),y)
++CRIO_DEPENDENCIES += btrfs-progs
 +else
-+PODMAN_TAGS += exclude_graphdriver_btrfs
++CRIO_TAGS += exclude_graphdriver_btrfs
 +endif
 +
-+ifeq ($(BR2_PACKAGE_PODMAN_DRIVER_DEVICEMAPPER),y)
-+PODMAN_DEPENDENCIES += lvm2
++ifeq ($(BR2_PACKAGE_CRIO_DRIVER_DEVICEMAPPER),y)
++CRIO_DEPENDENCIES += lvm2
 +else
-+PODMAN_TAGS += exclude_graphdriver_devicemapper
++CRIO_TAGS += exclude_graphdriver_devicemapper
 +endif
 +
-+ifeq ($(BR2_PACKAGE_PODMAN_DRIVER_VFS),y)
-+PODMAN_DEPENDENCIES += gvfs
-+else
-+PODMAN_TAGS += exclude_graphdriver_vfs
++ifeq ($(BR2_PACKAGE_CRIO_DRIVER_OSTREE),y)
++CRIO_DEPENDENCIES += libostree
++CRIO_TAGS += ostree
 +endif
 +
-+define PODMAN_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr \
-+		install.bin
++define CRIO_BUILD_PINNS
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" STRIP="$(TARGET_STRIP)" \
++		-C $(@D)/pinns ../bin/pinns
++endef
++CRIO_POST_BUILD_HOOKS += CRIO_BUILD_PINNS
++
++define CRIO_INSTALL_TARGET_CMDS
++	$(HOST_GO_COMMON_ENV) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc \
++		OPT_CNI_BIN_DIR=$(TARGET_DIR)/opt/cni/bin install.bin-nobuild
 +	$(INSTALL) -d -m 700 $(TARGET_DIR)/etc/cni
 +	$(INSTALL) -d -m 700 $(TARGET_DIR)/etc/cni/net.d
-+	$(INSTALL) -D -m 644 $(@D)/cni/87-podman-bridge.conflist \
-+		$(TARGET_DIR)/etc/cni/net.d/87-podman-bridge.conflist
-+	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/containers
-+	$(INSTALL) -D -m 644 $(PODMAN_PKGDIR)/containers-policy.json \
-+		$(TARGET_DIR)/etc/containers/policy.json
++	$(INSTALL) -D -m 644 $(@D)/contrib/cni/10-crio-bridge.conflist \
++		$(TARGET_DIR)/etc/cni/net.d/10-crio-bridge.conflist
 +endef
 +
-+define PODMAN_INSTALL_INIT_SYSTEMD
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr \
-+		install.systemd
++define CRIO_INSTALL_INIT_SYSTEMD
++	$(HOST_GO_COMMON_ENV) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc \
++		OPT_CNI_BIN_DIR=$(TARGET_DIR)/opt/cni/bin install.systemd
++	$(SED) 's,/usr/local/bin,/usr/bin,g' \
++		$(TARGET_DIR)/usr/lib/systemd/system/{crio,crio-wipe}.service
 +endef
 +
 +$(eval $(golang-package))
