@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B312C77B7C
-	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 05:21:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13B33C77B7C
+	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 05:26:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF81D42D28;
-	Fri, 12 May 2023 05:21:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF81D42D28
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8619042D2F;
+	Fri, 12 May 2023 05:26:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8619042D2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NECEeLh72tCf; Fri, 12 May 2023 05:21:53 +0000 (UTC)
+	with ESMTP id YA8zJz0TPMkH; Fri, 12 May 2023 05:26:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94FF942D2A;
-	Fri, 12 May 2023 05:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94FF942D2A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 00E2D1BF593
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 05:21:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BAA0842D34;
+	Fri, 12 May 2023 05:26:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAA0842D34
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 690BD1BF593
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 05:26:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE2D2701A9
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 05:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE2D2701A9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4049042B90
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 05:26:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4049042B90
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AlsElwJyt27P for <buildroot@lists.busybox.net>;
- Fri, 12 May 2023 05:21:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2Y4tPYUrRv0b for <buildroot@lists.busybox.net>;
+ Fri, 12 May 2023 05:26:39 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E51A36FFF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C31D42B53
 Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E51A36FFF2
- for <buildroot@buildroot.org>; Fri, 12 May 2023 05:21:47 +0000 (UTC)
-Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
- by mailout12.t-online.de (Postfix) with SMTP id D8A9580D8
- for <buildroot@buildroot.org>; Fri, 12 May 2023 07:21:44 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.197.49]) by fwd79.t-online.de
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0C31D42B53
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 05:26:38 +0000 (UTC)
+Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
+ by mailout12.t-online.de (Postfix) with SMTP id B654B6EF1;
+ Fri, 12 May 2023 07:26:24 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.197.49]) by fwd86.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pxLDs-2brCpF0; Fri, 12 May 2023 07:21:44 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59882)
+ esmtp id 1pxLIK-2g0JYP0; Fri, 12 May 2023 07:26:20 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57038)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pxLDs-0000yc-0n
- for buildroot@buildroot.org; Fri, 12 May 2023 07:21:44 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pxLIK-0001lO-1m;
+ Fri, 12 May 2023 07:26:20 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 12 May 2023 07:21:44 +0200
-Message-Id: <20230512052144.108768-1-bernd.kuhls@t-online.de>
+Date: Fri, 12 May 2023 07:26:20 +0200
+Message-Id: <20230512052620.372820-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1683868904-48E27266-CC9A46D6/0/0 CLEAN NORMAL
-X-TOI-MSGID: 51d022c6-3bec-45a5-bad1-2c7924f76cc0
-Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: bump
- version to 20.3.8-Nexus
+X-TOI-EXPURGATEID: 150726::1683869180-14ACBC77-0DC2281B/0/0 CLEAN NORMAL
+X-TOI-MSGID: 9714260e-a6f5-4e58-8215-506b9b7ee3d4
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump version
+ to 15.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,41 +66,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes:
+https://www.postgresql.org/about/news/postgresql-153-148-1311-1215-and-1120-released-2637/
+
+Fixes CVE-2023-2454 & CVE-2023-2455.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 89efd14222..63f34d7460 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  6454f40c6e89e7ce2a9492197954bbef856ee83e242ef610c905d42aed7484d7  kodi-inputstream-adaptive-20.3.7-Nexus.tar.gz
-+sha256  db972656dc42ce1e443b8aed8d410feb5093603b9c2beb3875eb6fafa3c9f3a9  kodi-inputstream-adaptive-20.3.8-Nexus.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index f86438166b..ea150f1201 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 3e89d3ec35..da6ec7f311 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v15.2/postgresql-15.2.tar.bz2.sha256
+-sha256  99a2171fc3d6b5b5f56b757a7a3cb85d509a38e4273805def23941ed2b8468c7  postgresql-15.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v15.3/postgresql-15.3.tar.bz2.sha256
++sha256  ffc7d4891f00ffbf5c3f4eab7fbbced8460b8c0ee63c5a5167133b9e6599d932  postgresql-15.3.tar.bz2
+ # License file, Locally calculated
+ sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index e46622c0e7..ca11a8191f 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.7-Nexus
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.8-Nexus
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+-POSTGRESQL_VERSION = 15.2
++POSTGRESQL_VERSION = 15.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
 2.39.2
 
