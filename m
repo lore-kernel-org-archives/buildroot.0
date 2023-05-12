@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E20F4C77B7C
-	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 19:05:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D729BC77B7F
+	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 19:18:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48F6370271;
-	Fri, 12 May 2023 19:05:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48F6370271
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DB827024D;
+	Fri, 12 May 2023 19:18:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DB827024D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GfxurJRB4Ojg; Fri, 12 May 2023 19:05:04 +0000 (UTC)
+	with ESMTP id noAUuOUwDp82; Fri, 12 May 2023 19:18:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 265C570269;
-	Fri, 12 May 2023 19:05:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 265C570269
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ADC8C1BF8B4
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 19:04:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2BD4613BD;
+	Fri, 12 May 2023 19:17:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2BD4613BD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F6CF1BF831
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 19:17:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 875F08471A
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 19:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 875F08471A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77C1D42CBD
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 19:17:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77C1D42CBD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rLXrvSMKJFYQ for <buildroot@lists.busybox.net>;
- Fri, 12 May 2023 19:04:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 579688470B
- for <buildroot@buildroot.org>; Fri, 12 May 2023 19:04:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 579688470B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 40F4B8642F; Fri, 12 May 2023 19:04:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XS2eMojnTfHn for <buildroot@lists.busybox.net>;
+ Fri, 12 May 2023 19:17:57 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84AF942CB2
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 84AF942CB2
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 19:17:57 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6F075240004;
+ Fri, 12 May 2023 19:17:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pxYH4-00GGqU-Iz; Fri, 12 May 2023 21:17:54 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 12 May 2023 20:54:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 203725a46bc6b61ed7e4fdb3d76f62327d3e47fa
-X-Git-Newrev: 3668c1f381a1f48593c03142cb47f4e24b742e98
-X-Patchwork-Hint: ignore
-Message-Id: <20230512190447.40F4B8642F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fluent-bit: bump to version 2.0.10
+To: Adam Duskett <aduskett@gmail.com>
+References: <20230412222602.1975782-1-aduskett@gmail.com>
+Date: Fri, 12 May 2023 21:17:54 +0200
+In-Reply-To: <20230412222602.1975782-1-aduskett@gmail.com> (Adam Duskett's
+ message of "Wed, 12 Apr 2023 15:26:00 -0700")
+Message-ID: <878rdt2wbh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/3] package/libnftnl: bump to version 1.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +63,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3668c1f381a1f48593c03142cb47f4e24b742e98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-- Release Notes:
+ > Also: Switch to tar.xz as the package is not distributed as a .bz2 any longer.
+ > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-    https://fluentbit.io/announcements/v2.0.10/
+Committed, thanks.
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fluent-bit/fluent-bit.hash | 2 +-
- package/fluent-bit/fluent-bit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-index 0caadcd56f..d60531438a 100644
---- a/package/fluent-bit/fluent-bit.hash
-+++ b/package/fluent-bit/fluent-bit.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  393ad4a6ced48c327607653d610ef273843085a17b6e5c8013877abdf31e6945  fluent-bit-2.0.9.tar.gz
-+sha256  aad5176cb4dcadacacd379ca43160074c6690012d37c4749536ac3b977d50495  fluent-bit-2.0.10.tar.gz
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 8ba16399bb..319815f056 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUENT_BIT_VERSION = 2.0.9
-+FLUENT_BIT_VERSION = 2.0.10
- FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
- FLUENT_BIT_LICENSE = Apache-2.0
- FLUENT_BIT_LICENSE_FILES = LICENSE
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
