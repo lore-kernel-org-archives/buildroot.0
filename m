@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E323FC77B75
-	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 15:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEF22C77B7C
+	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 15:24:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 821F5418B8;
-	Fri, 12 May 2023 15:23:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 821F5418B8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89C8942988;
+	Fri, 12 May 2023 15:24:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89C8942988
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sj5mK_6VU2nr; Fri, 12 May 2023 15:23:35 +0000 (UTC)
+	with ESMTP id 2NNEZ6VnIDJ5; Fri, 12 May 2023 15:23:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B1B8417D9;
-	Fri, 12 May 2023 15:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B1B8417D9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0B4651BF2CB
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0C0B41F04;
+	Fri, 12 May 2023 15:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0C0B41F04
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DCBC51BF2CB
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4A05417D9
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4A05417D9
+ by smtp3.osuosl.org (Postfix) with ESMTP id B66CF61376
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B66CF61376
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VLiPPjF3fz1d for <buildroot@lists.busybox.net>;
- Fri, 12 May 2023 15:23:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2E18417CA
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D2E18417CA
- for <buildroot@buildroot.org>; Fri, 12 May 2023 15:23:31 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DA0D24000B;
- Fri, 12 May 2023 15:23:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pxUcC-00G9df-KI; Fri, 12 May 2023 17:23:28 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TpaSJhGKDUXy for <buildroot@lists.busybox.net>;
+ Fri, 12 May 2023 15:23:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E83B161151
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 15:23:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E83B161151
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D46ED86405; Fri, 12 May 2023 15:23:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Andreas Ziegler <br015@umbiko.net>
-References: <20230512110438.233473-1-br015@umbiko.net>
-Date: Fri, 12 May 2023 17:23:28 +0200
-In-Reply-To: <20230512110438.233473-1-br015@umbiko.net> (Andreas Ziegler's
- message of "Fri, 12 May 2023 13:04:38 +0200")
-Message-ID: <874joh4lqn.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] linux/linux.mk: fix commit
- d06dca38bb0373a13736a349f7795713458a2188 - remove extra bracket
+To: buildroot@buildroot.org
+Date: Fri, 12 May 2023 17:18:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f3fa74a8f745de7b60752e0b15432eb1f2b4c638
+X-Git-Newrev: edb55d15c56d6936f0753fa7c4ca2ae2b0b47672
+X-Patchwork-Hint: ignore
+Message-Id: <20230512152353.D46ED86405@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+ version to 20.3.8-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,31 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Andreas" == Andreas Ziegler <br015@umbiko.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=edb55d15c56d6936f0753fa7c4ca2ae2b0b47672
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Commit d06dca38bb0373a13736a349f7795713458a2188 (linux: cleanup 
- > kconfig fixup processing) moved the initramfs setup out of an 
- > enclosing statement but kept the closing bracket. 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Remove the extra bracket to fix a syntax error in sed processing.
-
- > Fixes:
- >>>> linux 6.4-rc1 Updating kernel config with fixups
- >   /bin/bash: -c: line 1: syntax error near unexpected token `)'
- >   /bin/bash: -c: line 1: `/usr/bin/sed -i -e '/^\(# \)\?CONFIG_INITRAMFS_ROOT_GID\>/d' /home/data/buildroot.experimental/build/linux-6.4-rc1//.config && echo 'CONFIG_INITRAMFS_ROOT_GID=0' >> /home/data/buildroot.experimental/build/linux-6.4-rc1//.config)'
-
- > Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 89efd14222..63f34d7460 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  6454f40c6e89e7ce2a9492197954bbef856ee83e242ef610c905d42aed7484d7  kodi-inputstream-adaptive-20.3.7-Nexus.tar.gz
++sha256  db972656dc42ce1e443b8aed8d410feb5093603b9c2beb3875eb6fafa3c9f3a9  kodi-inputstream-adaptive-20.3.8-Nexus.tar.gz
+ sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
+ sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
+ sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index f86438166b..ea150f1201 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.7-Nexus
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.8-Nexus
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
+ 	BSD-2-Clause-Views \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
