@@ -1,51 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 509E7C77B7C
-	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 15:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36071C77B7F
+	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 16:07:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E431642CB2;
-	Fri, 12 May 2023 15:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E431642CB2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QEQd8RcQgqFh; Fri, 12 May 2023 15:24:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A36BD42C8C;
-	Fri, 12 May 2023 15:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A36BD42C8C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 45DFC1BF2CB
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DF738208A
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DF738208A
+	by smtp1.osuosl.org (Postfix) with ESMTP id C951084B19;
+	Fri, 12 May 2023 16:07:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C951084B19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w-_3e5ghQgaX for <buildroot@lists.busybox.net>;
- Fri, 12 May 2023 15:23:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D21B820AF
- for <buildroot@buildroot.org>; Fri, 12 May 2023 15:23:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D21B820AF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DD2186406; Fri, 12 May 2023 15:23:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 12 May 2023 17:23:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a157ea5fa6bba5fb8f1ce87fa041e4e77822c16c
-X-Git-Newrev: 142e574d5f57fd44a9bd5cc9fc39cfcff5b3da6a
-X-Patchwork-Hint: ignore
-Message-Id: <20230512152354.1DD2186406@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] linux/linux.mk: fix commit
- d06dca38bb0373a13736a349f7795713458a2188 - remove extra bracket
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lOZ0-PIqEVoc; Fri, 12 May 2023 16:07:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F103184B15;
+	Fri, 12 May 2023 16:07:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F103184B15
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 659A81BF284
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 16:07:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 375C0700E8
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 16:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 375C0700E8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yKEMFFPP5saO for <buildroot@lists.busybox.net>;
+ Fri, 12 May 2023 16:07:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05FEC61545
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 05FEC61545
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 16:07:39 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-307d20548adso1263511f8f.0
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 09:07:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1683907657; x=1686499657;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=7EXxj0vLJuEv5CwgqDgzO3VJ10J1EbgSUW+IDYmHF0U=;
+ b=lhIDVSwDH7LhhpvYVz77DkmGAuTicyLIxWM2ZzFL1Ad9zumXMohdWwfGa49UZGfqdx
+ bAvoxuGqGpJBYtCUodHdnEgUdWGzdd65TNrWOP/are9ih8wMvurkAXGfityAZLcpmq1s
+ zJlwJkWf2U1nW6dbEf/p+EGHsrotarXSx8pFeuJmvyPTWUDgTToKCEr2eMW981ymcN/3
+ pmX410BC2uWyRgosw1Fk0QOsyWpXA8b+JuHzeCv/fIBOtGqhWo92dZroPKcE4wOLHHrC
+ rQSQ8jC1ayJeSEvwMY9AH9unvTN8bG8wts71inzi3gpWWKmmrAEmWOs+w3yw2FVfrFze
+ QOKw==
+X-Gm-Message-State: AC+VfDynTfJC185kpz2YG3lWOMn1JVLzcZowtKSm4JMKhhiAEj0x3zkj
+ nxZ/wPtYveQAuy6tmSxMhpll+zp9wVQ=
+X-Google-Smtp-Source: ACHHUZ6oBzznrr71KQO1IyywgQR0jpZGH13gkeon9h67Uy9K+IxTAJaDmwF6eOCgiPpgBP96Q5SulA==
+X-Received: by 2002:a5d:5007:0:b0:306:46c4:d313 with SMTP id
+ e7-20020a5d5007000000b0030646c4d313mr16889682wrt.28.1683907657304; 
+ Fri, 12 May 2023 09:07:37 -0700 (PDT)
+Received: from p1g2 (aputeaux-652-1-54-113.w83-204.abo.wanadoo.fr.
+ [83.204.213.113]) by smtp.gmail.com with ESMTPSA id
+ e12-20020adfe7cc000000b002c54c9bd71fsm23881080wrn.93.2023.05.12.09.07.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 12 May 2023 09:07:36 -0700 (PDT)
+Date: Fri, 12 May 2023 18:07:35 +0200
+From: Gary Bisson <bisson.gary@gmail.com>
+To: Lang Daniel <d.lang@abatec.at>
+Message-ID: <ZF5kR5Ig0Y4kfTEP@p1g2>
+References: <VI1P190MB04933DDA75BE1BC9A23B06929FB99@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <VI1P190MB04933DDA75BE1BC9A23B06929FB99@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1683907657; x=1686499657;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=7EXxj0vLJuEv5CwgqDgzO3VJ10J1EbgSUW+IDYmHF0U=;
+ b=cDLw7HRf1oKQj6W4HQZJ3f8ewVfM1ckPolcLDooPgr48BiKom1qxjUTWTfjyErSV6E
+ uTDbPi7nDxhzAjjCHUhlhDcfWTTU+wPEHyEy8QMVPVgHjP//6/MTt5ZXaHUrAJl20k/r
+ wll6XSatTQ9VFaS6muUENnLOIdNYQNBXluT7ga8o4oJM6ZC6NCro/oNfd+ktdnBbIg4J
+ jQHPnssyt1Y37c9a8dEaUFGp1aeLeSSlHLUknEW23djJ4klJ28MXtevxSBOyMbx3zcRR
+ 21RTJD8gdcTK6mBkikNzGCjY8xUuSP2U0TVOGa53q5yKdcEVvBC0gpj7F6uWQgID35GH
+ H5qg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=cDLw7HRf
+Subject: Re: [Buildroot] [PATCH v3] package/freescale-imx/imx-gpu-viv: fix
+ aarch64 framebuffer support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +97,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "tuzakli.refik@gmail.com" <tuzakli.refik@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=142e574d5f57fd44a9bd5cc9fc39cfcff5b3da6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Commit d06dca38bb0373a13736a349f7795713458a2188 (linux: cleanup
-kconfig fixup processing) moved the initramfs setup out of an
-enclosing statement but kept the closing bracket.
+On Mon, Mar 13, 2023 at 09:16:31AM +0000, Lang Daniel wrote:
+> Since e8df0f7 (package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p4.4)
+> the fb folder for aarch64 is no longer included in the archive.
+> 
+> According to meta-freescale [0] the framebuffer output can be enabled on
+> IMX8 by using the wayland libraries together with egl.pc.
+> 
+> Tested on an imx8mn by running kmscube. EGL and GLES support detected.
+> 
+> [0]: https://git.yoctoproject.org/meta-freescale/tree/recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc
 
-Remove the extra bracket to fix a syntax error in sed processing.
+A possible improvement, that can be done in a follow-up patch, would be
+to remove the examples option when arm64+fb is used. It won't cause any
+build issue anyway, just that the examples require a wayland compositor.
 
-Fixes:
-  >>> linux 6.4-rc1 Updating kernel config with fixups
-  /bin/bash: -c: line 1: syntax error near unexpected token `)'
-  /bin/bash: -c: line 1: `/usr/bin/sed -i -e '/^\(# \)\?CONFIG_INITRAMFS_ROOT_GID\>/d' /home/data/buildroot.experimental/build/linux-6.4-rc1//.config && echo 'CONFIG_INITRAMFS_ROOT_GID=0' >> /home/data/buildroot.experimental/build/linux-6.4-rc1//.config)'
+> Fixes:
+> cp: cannot stat '/home/d.lang/buildroot/output/build/imx-gpu-viv-6.4.3.p4.4-aarch64/gpu-core/usr/lib/fb/*': No such file or directory
+> 
+> Signed-off-by: Daniel Lang <d.lang@abatec.at>
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Gary Bisson <bisson.gary@gmail.com>
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7c941fa339..cc36b5251d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -376,7 +376,7 @@ define LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
- 	$(Q)touch $(BINARIES_DIR)/rootfs.cpio
- 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
- 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
--	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0))
-+	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0)
- endef
- endif
- 
+Regards,
+Gary
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
