@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE263C77B7C
-	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 15:24:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 509E7C77B7C
+	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 15:24:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59C2642CA2;
-	Fri, 12 May 2023 15:24:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59C2642CA2
+	by smtp4.osuosl.org (Postfix) with ESMTP id E431642CB2;
+	Fri, 12 May 2023 15:24:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E431642CB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V-GOFdv2dOxG; Fri, 12 May 2023 15:24:40 +0000 (UTC)
+	with ESMTP id QEQd8RcQgqFh; Fri, 12 May 2023 15:24:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F16842CA0;
-	Fri, 12 May 2023 15:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F16842CA0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EF5EF1BF2CB
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A36BD42C8C;
+	Fri, 12 May 2023 15:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A36BD42C8C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 45DFC1BF2CB
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D47FC61151
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D47FC61151
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0DF738208A
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 15:23:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DF738208A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id InfnucLY7Qla for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w-_3e5ghQgaX for <buildroot@lists.busybox.net>;
  Fri, 12 May 2023 15:23:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EEE7761371
- for <buildroot@buildroot.org>; Fri, 12 May 2023 15:23:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEE7761371
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D21B820AF
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 15:23:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D21B820AF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD6B986406; Fri, 12 May 2023 15:23:53 +0000 (UTC)
+ id 1DD2186406; Fri, 12 May 2023 15:23:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 May 2023 17:19:06 +0200
+Date: Fri, 12 May 2023 17:23:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: edb55d15c56d6936f0753fa7c4ca2ae2b0b47672
-X-Git-Newrev: 2c6206b2179eee98795a7a3a01d9432dd06f4e85
+X-Git-Oldrev: a157ea5fa6bba5fb8f1ce87fa041e4e77822c16c
+X-Git-Newrev: 142e574d5f57fd44a9bd5cc9fc39cfcff5b3da6a
 X-Patchwork-Hint: ignore
-Message-Id: <20230512152353.DD6B986406@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/postgresql: security bump version
- to 15.3
+Message-Id: <20230512152354.1DD2186406@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux/linux.mk: fix commit
+ d06dca38bb0373a13736a349f7795713458a2188 - remove extra bracket
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c6206b2179eee98795a7a3a01d9432dd06f4e85
+commit: https://git.buildroot.net/buildroot/commit/?id=142e574d5f57fd44a9bd5cc9fc39cfcff5b3da6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://www.postgresql.org/about/news/postgresql-153-148-1311-1215-and-1120-released-2637/
+Commit d06dca38bb0373a13736a349f7795713458a2188 (linux: cleanup
+kconfig fixup processing) moved the initramfs setup out of an
+enclosing statement but kept the closing bracket.
 
-Fixes CVE-2023-2454 & CVE-2023-2455.
+Remove the extra bracket to fix a syntax error in sed processing.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Fixes:
+  >>> linux 6.4-rc1 Updating kernel config with fixups
+  /bin/bash: -c: line 1: syntax error near unexpected token `)'
+  /bin/bash: -c: line 1: `/usr/bin/sed -i -e '/^\(# \)\?CONFIG_INITRAMFS_ROOT_GID\>/d' /home/data/buildroot.experimental/build/linux-6.4-rc1//.config && echo 'CONFIG_INITRAMFS_ROOT_GID=0' >> /home/data/buildroot.experimental/build/linux-6.4-rc1//.config)'
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 3e89d3ec35..da6ec7f311 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v15.2/postgresql-15.2.tar.bz2.sha256
--sha256  99a2171fc3d6b5b5f56b757a7a3cb85d509a38e4273805def23941ed2b8468c7  postgresql-15.2.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v15.3/postgresql-15.3.tar.bz2.sha256
-+sha256  ffc7d4891f00ffbf5c3f4eab7fbbced8460b8c0ee63c5a5167133b9e6599d932  postgresql-15.3.tar.bz2
- # License file, Locally calculated
- sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index e46622c0e7..ca11a8191f 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7c941fa339..cc36b5251d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -376,7 +376,7 @@ define LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
+ 	$(Q)touch $(BINARIES_DIR)/rootfs.cpio
+ 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
+ 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
+-	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0))
++	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0)
+ endef
+ endif
  
--POSTGRESQL_VERSION = 15.2
-+POSTGRESQL_VERSION = 15.3
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
