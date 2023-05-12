@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08E96C77B7C
-	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 18:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7538C77B75
+	for <buildroot@archiver.kernel.org>; Fri, 12 May 2023 18:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83C6170263;
-	Fri, 12 May 2023 18:56:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83C6170263
+	by smtp3.osuosl.org (Postfix) with ESMTP id 344F07025D;
+	Fri, 12 May 2023 18:58:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 344F07025D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CKkDPs-iB588; Fri, 12 May 2023 18:56:14 +0000 (UTC)
+	with ESMTP id AnfsEoTFfQ6s; Fri, 12 May 2023 18:58:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5A5A7025C;
-	Fri, 12 May 2023 18:56:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5A5A7025C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DB32C1BF836
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 18:56:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63AE470253;
+	Fri, 12 May 2023 18:58:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63AE470253
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 034AD1BF836
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 18:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B4C107025C
- for <buildroot@lists.busybox.net>; Fri, 12 May 2023 18:56:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4C107025C
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC59F4095A
+ for <buildroot@lists.busybox.net>; Fri, 12 May 2023 18:58:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC59F4095A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rYSrQqmomURN for <buildroot@lists.busybox.net>;
- Fri, 12 May 2023 18:56:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 96y2sZV98Lhf for <buildroot@lists.busybox.net>;
+ Fri, 12 May 2023 18:58:40 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37C7A7025B
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 37C7A7025B
- for <buildroot@buildroot.org>; Fri, 12 May 2023 18:56:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1612408A3
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1612408A3
+ for <buildroot@buildroot.org>; Fri, 12 May 2023 18:58:39 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A0C4840004;
- Fri, 12 May 2023 18:56:07 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 92241240005;
+ Fri, 12 May 2023 18:58:36 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pxXvy-00GGEC-PE; Fri, 12 May 2023 20:56:06 +0200
+ id 1pxXyN-00GGHM-M6; Fri, 12 May 2023 20:58:35 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Devoogdt <thomas@devoogdt.com>
 References: <20230327141058.3669326-1-thomas.devoogdt@barco.com>
-Date: Fri, 12 May 2023 20:56:06 +0200
-In-Reply-To: <20230327141058.3669326-1-thomas.devoogdt@barco.com> (Thomas
- Devoogdt's message of "Mon, 27 Mar 2023 16:10:55 +0200")
-Message-ID: <87h6sh2xbt.fsf@dell.be.48ers.dk>
+ <20230327141058.3669326-2-thomas.devoogdt@barco.com>
+Date: Fri, 12 May 2023 20:58:35 +0200
+In-Reply-To: <20230327141058.3669326-2-thomas.devoogdt@barco.com> (Thomas
+ Devoogdt's message of "Mon, 27 Mar 2023 16:10:56 +0200")
+Message-ID: <87cz352x7o.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/4] package/fluent-bit: bump to version
- 2.0.10
+Subject: Re: [Buildroot] [PATCH 2/4] package/fluent-bit: fix luajit support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,12 +72,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
 
- > - Release Notes:
- >     https://fluentbit.io/announcements/v2.0.10/
+ > Fluent-bit doesn't link against any libraries,
+ > it just compiles everything as static sources,
+ > meaning that our buildroot BR2_PACKAGE_LUAJIT isn't
+ > the right check.
+
+ > The same -m32 fix as in the luajit package can't be done,
+ > since fluent-bit uses a custom cmake wrapper. So just check if the
+ > host and the target have the same number of bits.
+
+ > My intention here is to fix upstream build errors,
+ > not perse to have luajit support in fluent-bit.
 
  > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-Committed, thanks.
+Hmm, would it instead be possible to use an external luajit so we
+wouldn't have this problem in the first place?
 
 -- 
 Bye, Peter Korsgaard
