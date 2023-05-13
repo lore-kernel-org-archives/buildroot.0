@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E637EC77B7D
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 10:07:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 913A9C77B7C
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 10:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8145C42E04;
-	Sat, 13 May 2023 10:07:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8145C42E04
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36C914191F;
+	Sat, 13 May 2023 10:10:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36C914191F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CTT1Q4Tujz0Q; Sat, 13 May 2023 10:07:46 +0000 (UTC)
+	with ESMTP id 167UpMHZhndS; Sat, 13 May 2023 10:10:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53BFB42E44;
-	Sat, 13 May 2023 10:07:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53BFB42E44
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 52C8F1BF86B
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 10:07:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07AAD41854;
+	Sat, 13 May 2023 10:10:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07AAD41854
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 44B471BF424
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 10:10:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A4184012B
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 10:07:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A4184012B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EF35842F8
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 10:10:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EF35842F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ADlENBNN5xgL for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 10:07:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ytnbSJtQuL4y for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 10:10:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 724B0400AB
- for <buildroot@buildroot.org>; Sat, 13 May 2023 10:07:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 724B0400AB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3981E842F6
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 10:10:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3981E842F6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60EF886461; Sat, 13 May 2023 10:07:20 +0000 (UTC)
+ id 200A38648C; Sat, 13 May 2023 10:10:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 13 May 2023 12:06:08 +0200
+Date: Sat, 13 May 2023 12:08:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8a2b772e8c421c139a4959998fc4ab05ea69d34a
-X-Git-Newrev: 9ae089e2e93e26cc59b6aaee1760d43ee8e98889
+X-Git-Oldrev: 9ae089e2e93e26cc59b6aaee1760d43ee8e98889
+X-Git-Newrev: 5eac4f81eb1cfaf6bd8d07a5d78a48de28ae8e4c
 X-Patchwork-Hint: ignore
-Message-Id: <20230513100720.60EF886461@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] br2-external: make version of external
- trees available
+Message-Id: <20230513101005.200A38648C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/check-package: check ignored files
+ exist
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,101 +63,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ae089e2e93e26cc59b6aaee1760d43ee8e98889
+commit: https://git.buildroot.net/buildroot/commit/?id=5eac4f81eb1cfaf6bd8d07a5d78a48de28ae8e4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For various reasons, like debugging or compliance, it is important to
-identify what br2-external trees versions were used for a specific
-build.
+When an ignored file is removed (e.g. a package patch is no longer
+needed after a version bump), the corresponding entry in the ignore list
+is no longer needed.
 
-Add a Kconfig option that contains the version as computed by
-support/scripts/setlocalversion; this will appear in the .config file
-(but not in defconfig files, which is what we want).
+However, we currently only validate that an ignored *test* still fails,
+not that a ignore files is now missing.
 
-Also generate that variable on the .mk side, so that it gets properly
-exported in the environment, for post-build of post-iamge scripts to use
-as they see fit (like, ensuring there is no dirtyness when in a CI for
-example).
+Add a new test to check-package that does that check, and add a
+test-case for that check.
 
-Reported-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- support/scripts/br2-external | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ utils/check-package                      |  4 ++++
+ utils/checkpackagelib/lib_ignore.py      | 14 ++++++++++++++
+ utils/checkpackagelib/test_lib_ignore.py | 18 ++++++++++++++++++
+ 3 files changed, 36 insertions(+)
 
-diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-index 5815c6ded0..8aea479d20 100755
---- a/support/scripts/br2-external
-+++ b/support/scripts/br2-external
-@@ -66,7 +66,7 @@ do_validate() {
+diff --git a/utils/check-package b/utils/check-package
+index 83b9750f5a..3de3a72e0c 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -11,6 +11,7 @@ import sys
+ import checkpackagelib.base
+ import checkpackagelib.lib_config
+ import checkpackagelib.lib_hash
++import checkpackagelib.lib_ignore
+ import checkpackagelib.lib_mk
+ import checkpackagelib.lib_patch
+ import checkpackagelib.lib_python
+@@ -107,6 +108,7 @@ def get_lib_from_filetype(fname):
  
- do_validate_one() {
-     local br2_ext="${1}"
--    local br2_name br2_desc n d
-+    local br2_name br2_desc br2_ver n d
- 
-     if [ ! -d "${br2_ext}" ]; then
-         error "'%s': no such file or directory\n" "${br2_ext}"
-@@ -104,8 +104,10 @@ do_validate_one() {
- 
-     # Register this br2-external tree, use an absolute canonical path
-     br2_ext="$( cd "${br2_ext}"; pwd )"
-+    br2_ver="$( support/scripts/setlocalversion "${br2_ext}" )"
-     BR2_EXT_NAMES+=( "${br2_name}" )
-     eval BR2_EXT_PATHS_${br2_name}="\"\${br2_ext}\""
-+    eval BR2_EXT_VERS_${br2_name}="\"\${br2_ver}\""
-     eval BR2_EXT_DESCS_${br2_name}="\"\${br2_desc:-\${br2_name}}\""
- }
- 
-@@ -113,7 +115,7 @@ do_validate_one() {
- # for the br2-external tree
- do_mk() {
-     local outputdir="${1}"
--    local br2_name br2_desc br2_ext
-+    local br2_name br2_desc br2_ext br2_ver
- 
-     {
-         printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
-@@ -139,12 +141,14 @@ do_mk() {
-         for br2_name in "${BR2_EXT_NAMES[@]}"; do
-             eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
-             eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
-+            eval br2_ver="\"\${BR2_EXT_VERS_${br2_name}}\""
-             printf '\n'
-             printf 'BR2_EXTERNAL_NAMES += %s\n' "${br2_name}"
-             printf 'BR2_EXTERNAL_DIRS += %s\n' "${br2_ext}"
-             printf 'BR2_EXTERNAL_MKS += %s/external.mk\n' "${br2_ext}"
-             printf 'export BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
-             printf 'export BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
-+            printf 'export BR2_EXTERNAL_%s_VERSION = %s\n' "${br2_name}" "${br2_ver}"
-         done
-     } >"${outputdir}/.br2-external.mk"
- }
-@@ -152,7 +156,7 @@ do_mk() {
- # Generate the kconfig snippets for the br2-external tree.
- do_kconfig() {
-     local outputdir="${1}"
--    local br2_name br2_desc br2_ext br2
-+    local br2_name br2_desc br2_ext br2_ver br2
-     local -a items
- 
-     items=(
-@@ -192,11 +196,15 @@ do_kconfig() {
-     for br2_name in "${BR2_EXT_NAMES[@]}"; do
-         eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
-         eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
-+        eval br2_ver="\"\${BR2_EXT_VERS_${br2_name}}\""
- 
-         {
-             printf 'config BR2_EXTERNAL_%s_PATH\n' "${br2_name}"
-             printf '\tstring\n'
-             printf '\tdefault "%s"\n' "${br2_ext}"
-+            printf 'config BR2_EXTERNAL_%s_VERSION\n' "${br2_name}"
-+            printf '\tstring\n'
-+            printf '\tdefault "%s"\n' "${br2_ver}"
-             printf '\n'
-         } >>"${outputdir}/.br2-external.in.paths"
- 
+ CONFIG_IN_FILENAME = re.compile(r"Config\.\S*$")
+ DO_CHECK_INTREE = re.compile(r"|".join([
++    r".checkpackageignore",
+     r"Config.in",
+     r"arch/",
+     r"board/",
+@@ -146,6 +148,8 @@ def get_lib_from_filename(fname):
+         if os.path.basename(fname) == "external.mk" and \
+            os.path.exists(fname[:-2] + "desc"):
+             return None
++    if fname == ".checkpackageignore":
++        return checkpackagelib.lib_ignore
+     if CONFIG_IN_FILENAME.search(fname):
+         return checkpackagelib.lib_config
+     if fname.endswith(".hash"):
+diff --git a/utils/checkpackagelib/lib_ignore.py b/utils/checkpackagelib/lib_ignore.py
+new file mode 100644
+index 0000000000..f3698fc3b4
+--- /dev/null
++++ b/utils/checkpackagelib/lib_ignore.py
+@@ -0,0 +1,14 @@
++# See utils/checkpackagelib/readme.txt before editing this file.
++
++import os
++
++from checkpackagelib.base import _CheckFunction
++
++
++class IgnoreMissingFile(_CheckFunction):
++    def check_line(self, lineno, text):
++        fields = text.split()
++        if not os.path.exists(fields[0]):
++            return ["{}:{}: ignored file {} is missing"
++                    .format(self.filename, lineno, fields[0]),
++                    text]
+diff --git a/utils/checkpackagelib/test_lib_ignore.py b/utils/checkpackagelib/test_lib_ignore.py
+new file mode 100644
+index 0000000000..6cd856d669
+--- /dev/null
++++ b/utils/checkpackagelib/test_lib_ignore.py
+@@ -0,0 +1,18 @@
++import pytest
++import checkpackagelib.test_util as util
++import checkpackagelib.lib_ignore as m
++
++
++IgnoreMissingFile = [
++    ('missing ignored file',
++     '.checkpackageignore',
++     'this-file-does-not-exist SomeTest',
++     [['.checkpackageignore:1: ignored file this-file-does-not-exist is missing',
++       'this-file-does-not-exist SomeTest']]),
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,string,expected', IgnoreMissingFile)
++def test_IgnoreMissingFile(testname, filename, string, expected):
++    warnings = util.check_file(m.IgnoreMissingFile, filename, string)
++    assert warnings == expected
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
