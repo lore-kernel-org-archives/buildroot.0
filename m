@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C50D8C77B7C
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 09:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38FCFC77B7C
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 09:04:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A6D141FCF;
-	Sat, 13 May 2023 09:04:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A6D141FCF
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4870418FC;
+	Sat, 13 May 2023 09:04:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4870418FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r-j3oomLXl-4; Sat, 13 May 2023 09:04:05 +0000 (UTC)
+	with ESMTP id mvBfdTRivjJY; Sat, 13 May 2023 09:04:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 203CD41FA9;
-	Sat, 13 May 2023 09:04:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 203CD41FA9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B9B0C1BF86B
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 09:03:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DB1F418F8;
+	Sat, 13 May 2023 09:04:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DB1F418F8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D10471BF5E9
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 09:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 96BF984B9C
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 09:03:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96BF984B9C
+ by smtp3.osuosl.org (Postfix) with ESMTP id B782C60FB8
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 09:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B782C60FB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dxLH0lXgyNH3 for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 09:03:20 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F4ED84B9B
- for <buildroot@buildroot.org>; Sat, 13 May 2023 09:03:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F4ED84B9B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D17E8643C; Sat, 13 May 2023 09:03:20 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 13 May 2023 11:02:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: edb184fe46d3406add0cecae0dc0e4be52dff79c
-X-Git-Newrev: 77314408813186716ef3cb73d65da13705842e41
-X-Patchwork-Hint: ignore
-Message-Id: <20230513090320.3D17E8643C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmnl: add rtnl-link-can example
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l2cNxyLj6_qh for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 09:04:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0255E60F98
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0255E60F98
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 09:04:24 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:b62a:d745:2556:f18])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 04E1919F755;
+ Sat, 13 May 2023 11:04:17 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 13 May 2023 11:04:17 +0200
+Date: Sat, 13 May 2023 11:04:17 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20230513090417.GH2582048@scaer>
+References: <20230509201153.2413972-1-dario.binacchi@amarulasolutions.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230509201153.2413972-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1683968662;
+ bh=rROdLUydYu7cotIKfY6CClagJK0N4GswTzlvGMQLiEs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ntSvbdKLebOkFCht6yJ1UqJEsxwcIMb+7hWtjDnuPJrrx5Q76x9EVGQnq+rMHP0AF
+ sgk1+NhtvupQWl3WxXVUp6ldfsyvL18+kNSj8KQllmIqF0sd/RezstxOb02m80QMh+
+ tlQvP3kWGkUAe7yZcHEVYq9qFggRriVk7La3uGIym2MuQAPyknt2Uu8bjUx7tlH588
+ mF73c/m7hvyiCihpJcZgQ5yNjV78muirqiOB3DIlaMXpd/i009Fvvaypm3dINOsjO4
+ tDfUSZbq3yxsNhguwu1ejU2sHIZmKAMdmoY7bFLZ+HCpxmnusfZj8nZ+NH/gzrWnLj
+ a2Z3MxOJHL6rA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ntSvbdKL
+Subject: Re: [Buildroot] [PATCH 0/4] manage CAN devices on MMU-less systems
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,559 +76,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Dario Binacchi <dariobin@libero.it>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77314408813186716ef3cb73d65da13705842e41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dario, All,
 
-The iproute2 package requires MMU support, and the BusyBox "ip link"
-command does not handle CAN interfaces. The rtnl-link-can application,
-added by applying the upstream patch, allows for the use of CAN devices
-even on such systems.
+On 2023-05-09 22:11 +0200, Dario Binacchi spake thusly:
+> This series is the result of the work done to add support for the bxCAN
+> controller to the Linux kernel ([1], [2]). Since these are MMU-less
+> systems, I had to apply some patches to the userspace tools required to
+> test the driver. I also submitted a patch to busybox ([3]), but it has
+> not been accepted yet, and I don't know if it will be in the future. In
+> the meantime, the rtnl-link-can application can be used.
+> 
+> This series allows the use of CAN devices on MMU-less systems before it
+> is possible to bump can-utils and libmnl to the new versions containing
+> these patches.
+> 
+> [1] https://lore.kernel.org/all/20230328084710.jnrwvydewx3atxti@pengutronix.de/
+> [2] https://lore.kernel.org/all/20230509-silt-gullible-a010971857fc-mkl@pengutronix.de/
+> [3] http://lists.busybox.net/pipermail/busybox/2023-April/090294.html
+> 
+> Dario Binacchi (4):
+>   package/can-utils: bump to version 2023.03
+>   package/can-utils: enable compilation on MMU-less systems
+>   package/libmnl: add rtnl-link-can example
+>   package/libmnl: simplify LIBMNL_EXAMPLES_INSTALL_TARGETS setting
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../libmnl/0001-examples-add-rtnl-link-can.patch   | 504 +++++++++++++++++++++
- package/libmnl/libmnl.mk                           |   4 +-
- 2 files changed, 507 insertions(+), 1 deletion(-)
+All 4 patches applied to master, thanks.
 
-diff --git a/package/libmnl/0001-examples-add-rtnl-link-can.patch b/package/libmnl/0001-examples-add-rtnl-link-can.patch
-new file mode 100644
-index 0000000000..2bd034d024
---- /dev/null
-+++ b/package/libmnl/0001-examples-add-rtnl-link-can.patch
-@@ -0,0 +1,504 @@
-+From 80442c4e32cde0b27b471c5c9688ee8488f14bec Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Thu, 20 Apr 2023 21:21:15 +0200
-+Subject: [PATCH] examples: add rtnl-link-can
-+
-+I developed this application to test the Linux kernel series referenced below.
-+I could not use the iproute2 package since the microcontroller is without MMU.
-+
-+On suggestion of the Linux CAN subsystem maintainer I decided to upstream it.
-+
-+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-+Link: https://marc.info/?l=linux-netdev&m=167999323611710&w=2
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Signed-off-by: Florian Westphal <fw@strlen.de>
-+Upstream: https://git.netfilter.org/libmnl/commit/?id=80442c4e32cde0b27b471c5c9688ee8488f14bec
-+---
-+ examples/rtnl/Makefile.am     |   4 +
-+ examples/rtnl/rtnl-link-can.c | 452 ++++++++++++++++++++++++++++++++++
-+ 2 files changed, 456 insertions(+)
-+ create mode 100644 examples/rtnl/rtnl-link-can.c
-+
-+diff --git a/examples/rtnl/Makefile.am b/examples/rtnl/Makefile.am
-+index dd8a77d914b6..5a28e0965926 100644
-+--- a/examples/rtnl/Makefile.am
-++++ b/examples/rtnl/Makefile.am
-+@@ -2,6 +2,7 @@ include $(top_srcdir)/Make_global.am
-+ 
-+ check_PROGRAMS = rtnl-addr-add \
-+ 		 rtnl-addr-dump \
-++		 rtnl-link-can \
-+ 		 rtnl-link-dump rtnl-link-dump2 rtnl-link-dump3 \
-+ 		 rtnl-link-event \
-+ 		 rtnl-link-set \
-+@@ -13,6 +14,9 @@ check_PROGRAMS = rtnl-addr-add \
-+ rtnl_addr_add_SOURCES = rtnl-addr-add.c
-+ rtnl_addr_add_LDADD = ../../src/libmnl.la
-+ 
-++rtnl_link_can_SOURCES = rtnl-link-can.c
-++rtnl_link_can_LDADD = ../../src/libmnl.la
-++
-+ rtnl_addr_dump_SOURCES = rtnl-addr-dump.c
-+ rtnl_addr_dump_LDADD = ../../src/libmnl.la
-+ 
-+diff --git a/examples/rtnl/rtnl-link-can.c b/examples/rtnl/rtnl-link-can.c
-+new file mode 100644
-+index 000000000000..8ed70d141475
-+--- /dev/null
-++++ b/examples/rtnl/rtnl-link-can.c
-+@@ -0,0 +1,452 @@
-++/* This example is placed in the public domain. */
-++#include <errno.h>
-++#include <limits.h>
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include <string.h>
-++#include <unistd.h>
-++#include <time.h>
-++
-++#include <libmnl/libmnl.h>
-++#include <linux/can/netlink.h>
-++#include <linux/if.h>
-++#include <linux/if_link.h>
-++#include <linux/rtnetlink.h>
-++
-++static void incomplete_command(void) __attribute__((noreturn));
-++
-++#define NEXT_ARG()				\
-++	do { \
-++		if (argc <= 0) incomplete_command();	\
-++		argv++; \
-++		argc--; \
-++	} while (0)
-++
-++static void duparg2(const char *key, const char *arg)
-++{
-++	fprintf(stderr,
-++		"Error: either \"%s\" is duplicate, or \"%s\" is a garbage.\n",
-++		key, arg);
-++	exit(-1);
-++}
-++
-++static void incomplete_command(void)
-++{
-++	fprintf(stderr, "Command line is not complete. Try option \"help\"\n");
-++	exit(EXIT_FAILURE);
-++}
-++
-++/* Returns false if 'prefix' is a not empty prefix of 'string'.
-++ */
-++static bool matches(const char *prefix, const char *string)
-++{
-++	if (!*prefix)
-++		return true;
-++
-++	while (*string && *prefix == *string) {
-++		prefix++;
-++		string++;
-++	}
-++
-++	return !!*prefix;
-++}
-++
-++static int get_u16(__u16 *val, const char *arg, int base)
-++{
-++	unsigned long res;
-++	char *ptr;
-++
-++	if (!arg || !*arg)
-++		return -1;
-++
-++	res = strtoul(arg, &ptr, base);
-++
-++	/* empty string or trailing non-digits */
-++	if (!ptr || ptr == arg || *ptr)
-++		return -1;
-++
-++	/* overflow */
-++	if (res == ULONG_MAX && errno == ERANGE)
-++		return -1;
-++
-++	if (res > 0xFFFFUL)
-++		return -1;
-++
-++	*val = res;
-++	return 0;
-++}
-++
-++static int get_u32(__u32 *val, const char *arg, int base)
-++{
-++	unsigned long res;
-++	char *ptr;
-++
-++	if (!arg || !*arg)
-++		return -1;
-++
-++	res = strtoul(arg, &ptr, base);
-++
-++	/* empty string or trailing non-digits */
-++	if (!ptr || ptr == arg || *ptr)
-++		return -1;
-++
-++	/* overflow */
-++	if (res == ULONG_MAX && errno == ERANGE)
-++		return -1;
-++
-++	/* in case UL > 32 bits */
-++	if (res > 0xFFFFFFFFUL)
-++		return -1;
-++
-++	*val = res;
-++	return 0;
-++}
-++
-++static int get_float(float *val, const char *arg)
-++{
-++	float res;
-++	char *ptr;
-++
-++	if (!arg || !*arg)
-++		return -1;
-++
-++	res = strtof(arg, &ptr);
-++	if (!ptr || ptr == arg || *ptr)
-++		return -1;
-++
-++	*val = res;
-++	return 0;
-++}
-++
-++static void set_ctrlmode(char *name, char *arg,
-++			 struct can_ctrlmode *cm, __u32 flags)
-++{
-++	if (strcmp(arg, "on") == 0) {
-++		cm->flags |= flags;
-++	} else if (strcmp(arg, "off") != 0) {
-++		fprintf(stderr,
-++			"Error: argument of \"%s\" must be \"on\" or \"off\", not \"%s\"\n",
-++			name, arg);
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	cm->mask |= flags;
-++}
-++
-++static void invarg(const char *msg, const char *arg)
-++{
-++	fprintf(stderr, "Error: argument \"%s\" is wrong: %s\n", arg, msg);
-++	exit(-1);
-++}
-++
-++static void print_usage(FILE *f)
-++{
-++	fprintf(f,
-++		"Usage: ip link set DEVICE type can\n"
-++		"\t[ bitrate BITRATE [ sample-point SAMPLE-POINT] ] |\n"
-++		"\t[ tq TQ prop-seg PROP_SEG phase-seg1 PHASE-SEG1\n \t  phase-seg2 PHASE-SEG2 [ sjw SJW ] ]\n"
-++		"\n"
-++		"\t[ dbitrate BITRATE [ dsample-point SAMPLE-POINT] ] |\n"
-++		"\t[ dtq TQ dprop-seg PROP_SEG dphase-seg1 PHASE-SEG1\n \t  dphase-seg2 PHASE-SEG2 [ dsjw SJW ] ]\n"
-++		"\n"
-++		"\t[ loopback { on | off } ]\n"
-++		"\t[ listen-only { on | off } ]\n"
-++		"\t[ triple-sampling { on | off } ]\n"
-++		"\t[ one-shot { on | off } ]\n"
-++		"\t[ berr-reporting { on | off } ]\n"
-++		"\t[ fd { on | off } ]\n"
-++		"\t[ fd-non-iso { on | off } ]\n"
-++		"\t[ presume-ack { on | off } ]\n"
-++		"\t[ cc-len8-dlc { on | off } ]\n"
-++		"\n"
-++		"\t[ restart-ms TIME-MS ]\n"
-++		"\t[ restart ]\n"
-++		"\n"
-++		"\t[ termination { 0..65535 } ]\n"
-++		"\n"
-++		"\tWhere: BITRATE	:= { 1..1000000 }\n"
-++		"\t	  SAMPLE-POINT	:= { 0.000..0.999 }\n"
-++		"\t	  TQ		:= { NUMBER }\n"
-++		"\t	  PROP-SEG	:= { 1..8 }\n"
-++		"\t	  PHASE-SEG1	:= { 1..8 }\n"
-++		"\t	  PHASE-SEG2	:= { 1..8 }\n"
-++		"\t	  SJW		:= { 1..4 }\n"
-++		"\t	  RESTART-MS	:= { 0 | NUMBER }\n"
-++		);
-++}
-++
-++static void usage(void)
-++{
-++	print_usage(stderr);
-++}
-++
-++static int iplink_set_can_parse(int argc, char **argv, struct nlmsghdr *nlh)
-++{
-++	struct can_bittiming bt = {}, dbt = {};
-++	struct can_ctrlmode cm = {};
-++
-++	while (argc > 0) {
-++		if (matches(*argv, "bitrate") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&bt.bitrate, *argv, 0))
-++				invarg("invalid \"bitrate\" value\n", *argv);
-++		} else if (matches(*argv, "sample-point") == 0) {
-++			float sp;
-++
-++			NEXT_ARG();
-++			if (get_float(&sp, *argv))
-++				invarg("invalid \"sample-point\" value\n",
-++				       *argv);
-++
-++			bt.sample_point = (__u32)(sp * 1000);
-++		} else if (matches(*argv, "tq") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&bt.tq, *argv, 0))
-++				invarg("invalid \"tq\" value\n", *argv);
-++		} else if (matches(*argv, "prop-seg") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&bt.prop_seg, *argv, 0))
-++				invarg("invalid \"prop-seg\" value\n", *argv);
-++		} else if (matches(*argv, "phase-seg1") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&bt.phase_seg1, *argv, 0))
-++				invarg("invalid \"phase-seg1\" value\n", *argv);
-++		} else if (matches(*argv, "phase-seg2") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&bt.phase_seg2, *argv, 0))
-++				invarg("invalid \"phase-seg2\" value\n", *argv);
-++		} else if (matches(*argv, "sjw") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&bt.sjw, *argv, 0))
-++				invarg("invalid \"sjw\" value\n", *argv);
-++		} else if (matches(*argv, "dbitrate") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&dbt.bitrate, *argv, 0))
-++				invarg("invalid \"dbitrate\" value\n", *argv);
-++		} else if (matches(*argv, "dsample-point") == 0) {
-++			float sp;
-++
-++			NEXT_ARG();
-++			if (get_float(&sp, *argv))
-++				invarg("invalid \"dsample-point\" value\n", *argv);
-++			dbt.sample_point = (__u32)(sp * 1000);
-++		} else if (matches(*argv, "dtq") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&dbt.tq, *argv, 0))
-++				invarg("invalid \"dtq\" value\n", *argv);
-++		} else if (matches(*argv, "dprop-seg") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&dbt.prop_seg, *argv, 0))
-++				invarg("invalid \"dprop-seg\" value\n", *argv);
-++		} else if (matches(*argv, "dphase-seg1") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&dbt.phase_seg1, *argv, 0))
-++				invarg("invalid \"dphase-seg1\" value\n", *argv);
-++		} else if (matches(*argv, "dphase-seg2") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&dbt.phase_seg2, *argv, 0))
-++				invarg("invalid \"dphase-seg2\" value\n", *argv);
-++		} else if (matches(*argv, "dsjw") == 0) {
-++			NEXT_ARG();
-++			if (get_u32(&dbt.sjw, *argv, 0))
-++				invarg("invalid \"dsjw\" value\n", *argv);
-++		} else if (matches(*argv, "loopback") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("loopback", *argv, &cm,
-++				     CAN_CTRLMODE_LOOPBACK);
-++		} else if (matches(*argv, "listen-only") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("listen-only", *argv, &cm,
-++				     CAN_CTRLMODE_LISTENONLY);
-++		} else if (matches(*argv, "triple-sampling") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("triple-sampling", *argv, &cm,
-++				     CAN_CTRLMODE_3_SAMPLES);
-++		} else if (matches(*argv, "one-shot") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("one-shot", *argv, &cm,
-++				     CAN_CTRLMODE_ONE_SHOT);
-++		} else if (matches(*argv, "berr-reporting") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("berr-reporting", *argv, &cm,
-++				     CAN_CTRLMODE_BERR_REPORTING);
-++		} else if (matches(*argv, "fd") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("fd", *argv, &cm,
-++				     CAN_CTRLMODE_FD);
-++		} else if (matches(*argv, "fd-non-iso") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("fd-non-iso", *argv, &cm,
-++				     CAN_CTRLMODE_FD_NON_ISO);
-++		} else if (matches(*argv, "presume-ack") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("presume-ack", *argv, &cm,
-++				     CAN_CTRLMODE_PRESUME_ACK);
-++#if defined(CAN_CTRLMODE_CC_LEN8_DLC)
-++		} else if (matches(*argv, "cc-len8-dlc") == 0) {
-++			NEXT_ARG();
-++			set_ctrlmode("cc-len8-dlc", *argv, &cm,
-++				     CAN_CTRLMODE_CC_LEN8_DLC);
-++#endif
-++		} else if (matches(*argv, "restart") == 0) {
-++			__u32 val = 1;
-++
-++			mnl_attr_put(nlh, IFLA_CAN_RESTART, sizeof(val), &val);
-++		} else if (matches(*argv, "restart-ms") == 0) {
-++			__u32 val;
-++
-++			NEXT_ARG();
-++			if (get_u32(&val, *argv, 0))
-++				invarg("invalid \"restart-ms\" value\n", *argv);
-++
-++			mnl_attr_put(nlh, IFLA_CAN_RESTART_MS, sizeof(val), &val);
-++		} else if (matches(*argv, "termination") == 0) {
-++			__u16 val;
-++
-++			NEXT_ARG();
-++			if (get_u16(&val, *argv, 0))
-++				invarg("invalid \"termination\" value\n",
-++				       *argv);
-++
-++			mnl_attr_put(nlh, IFLA_CAN_TERMINATION, sizeof(val), &val);
-++		} else {
-++			fprintf(stderr, "unknown option \"%s\"\n", *argv);
-++			usage();
-++			return -1;
-++		}
-++
-++		NEXT_ARG();
-++	}
-++
-++	if (bt.bitrate || bt.tq)
-++		mnl_attr_put(nlh, IFLA_CAN_BITTIMING, sizeof(bt), &bt);
-++
-++	if (cm.mask)
-++		mnl_attr_put(nlh, IFLA_CAN_CTRLMODE, sizeof(cm), &cm);
-++
-++	return 0;
-++}
-++
-++int main(int argc, char *argv[])
-++{
-++	char buf[MNL_SOCKET_BUFFER_SIZE];
-++	struct mnl_socket *nl;
-++	struct nlmsghdr *nlh;
-++	struct ifinfomsg *ifm;
-++	int ret;
-++	unsigned int seq, portid;
-++	struct nlattr *linkinfo, *data;
-++	const char *signatures[] = {
-++		"ip", "link", "set", ""
-++	};
-++	char *type = NULL;
-++	char *dev = NULL;
-++	int i;
-++
-++	NEXT_ARG();
-++	for (i = 0; argc > 0 && signatures[i][0];) {
-++		if (matches(*argv, signatures[i]))
-++			incomplete_command();
-++
-++		NEXT_ARG();
-++		i++;
-++	}
-++
-++	if (argc == 0)
-++		incomplete_command();
-++
-++	nlh = mnl_nlmsg_put_header(buf);
-++	nlh->nlmsg_type	= RTM_NEWLINK;
-++	nlh->nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
-++	nlh->nlmsg_seq = seq = time(NULL);
-++	ifm = mnl_nlmsg_put_extra_header(nlh, sizeof(*ifm));
-++	ifm->ifi_family = AF_UNSPEC;
-++	ifm->ifi_change = 0;
-++	ifm->ifi_flags = 0;
-++
-++	while (argc > 0) {
-++		if (matches(*argv, "up") == 0) {
-++			ifm->ifi_change |= IFF_UP;
-++			ifm->ifi_flags |= IFF_UP;
-++		} else if (matches(*argv, "down") == 0) {
-++			ifm->ifi_change |= IFF_UP;
-++			ifm->ifi_flags &= ~IFF_UP;
-++		} else if (matches(*argv, "type") == 0) {
-++			NEXT_ARG();
-++			type = *argv;
-++			NEXT_ARG();
-++			break;
-++		} else if (matches(*argv, "help") == 0) {
-++			usage();
-++			exit(EXIT_FAILURE);
-++		} else {
-++			if (matches(*argv, "dev") == 0)
-++				NEXT_ARG();
-++
-++			if (dev)
-++				duparg2("dev", *argv);
-++
-++			dev = *argv;
-++		}
-++
-++		NEXT_ARG();
-++	}
-++
-++	if (dev)
-++		mnl_attr_put_str(nlh, IFLA_IFNAME, dev);
-++
-++	if (type) {
-++		if (matches(type, "can")) {
-++			fprintf(stderr, "unknown type \"%s\"\n", type);
-++			usage();
-++			exit(EXIT_FAILURE);
-++		}
-++
-++		linkinfo = mnl_attr_nest_start(nlh, IFLA_LINKINFO);
-++		mnl_attr_put_str(nlh, IFLA_INFO_KIND, "can");
-++		data = mnl_attr_nest_start(nlh, IFLA_INFO_DATA);
-++
-++		if (iplink_set_can_parse(argc, argv, nlh))
-++			return -1;
-++
-++		mnl_attr_nest_end(nlh, data);
-++		mnl_attr_nest_end(nlh, linkinfo);
-++	}
-++
-++	nl = mnl_socket_open(NETLINK_ROUTE);
-++	if (nl == NULL) {
-++		perror("mnl_socket_open");
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	if (mnl_socket_bind(nl, 0, MNL_SOCKET_AUTOPID) < 0) {
-++		perror("mnl_socket_bind");
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	portid = mnl_socket_get_portid(nl);
-++
-++	mnl_nlmsg_fprintf(stdout, nlh, nlh->nlmsg_len,
-++			  sizeof(struct ifinfomsg));
-++
-++	if (mnl_socket_sendto(nl, nlh, nlh->nlmsg_len) < 0) {
-++		perror("mnl_socket_sendto");
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
-++	if (ret == -1) {
-++		perror("mnl_socket_recvfrom");
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	ret = mnl_cb_run(buf, ret, seq, portid, NULL, NULL);
-++	if (ret == -1) {
-++		perror("mnl_cb_run");
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	mnl_socket_close(nl);
-++
-++	return 0;
-++}
-+-- 
-+2.32.0
-+
-diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
-index d9b1fbabe7..7c48196d75 100644
---- a/package/libmnl/libmnl.mk
-+++ b/package/libmnl/libmnl.mk
-@@ -11,6 +11,8 @@ LIBMNL_INSTALL_STAGING = YES
- LIBMNL_LICENSE = LGPL-2.1+
- LIBMNL_LICENSE_FILES = COPYING
- LIBMNL_CPE_ID_VENDOR = netfilter
-+# 0001-examples-add-rtnl-link-can.patch patches Makefile.am
-+LIBMNL_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_LIBMNL_EXAMPLES),y)
- define LIBMNL_EXAMPLES_BUILD_CMDS
-@@ -28,7 +30,7 @@ LIBMNL_EXAMPLES_INSTALL_TARGETS += \
- 		nf-queue)
- LIBMNL_EXAMPLES_INSTALL_TARGETS += \
- 	$(addprefix examples/rtnl/, rtnl-addr-add rtnl-addr-dump \
--		rtnl-link-dump rtnl-link-dump2 rtnl-link-dump3 \
-+		rtnl-link-can rtnl-link-dump rtnl-link-dump2 rtnl-link-dump3 \
- 		rtnl-link-event rtnl-link-set rtnl-neigh-dump \
- 		rtnl-route-add rtnl-route-dump rtnl-route-event)
- 
+I just tweaked the Upstream: tag for the libmnl patch, to point to the
+actual URL instead of just the sha1:
+    https://git.netfilter.org/libmnl/commit/?id=80442c4e32cde0b27b471c5c9688ee8488f14bec
+
+Regards,
+Yann E. MORIN.
+
+>  ...ograms-using-fork-on-MMU-less-system.patch | 257 +++++++++
+>  package/can-utils/Config.in                   |   1 -
+>  package/can-utils/can-utils.hash              |   2 +-
+>  package/can-utils/can-utils.mk                |   2 +-
+>  .../0001-examples-add-rtnl-link-can.patch     | 504 ++++++++++++++++++
+>  package/libmnl/libmnl.mk                      |  15 +-
+>  6 files changed, 770 insertions(+), 11 deletions(-)
+>  create mode 100644 package/can-utils/0001-Don-t-compile-programs-using-fork-on-MMU-less-system.patch
+>  create mode 100644 package/libmnl/0001-examples-add-rtnl-link-can.patch
+> 
+> -- 
+> 2.32.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
