@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FAEEC77B7D
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 10:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DED1C77B7F
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 10:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F23C42E1A;
-	Sat, 13 May 2023 10:07:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F23C42E1A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A98942E34;
+	Sat, 13 May 2023 10:07:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A98942E34
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JsiUmwYzF3S8; Sat, 13 May 2023 10:07:04 +0000 (UTC)
+	with ESMTP id rbK-xSi8AcNm; Sat, 13 May 2023 10:07:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 723D442E02;
-	Sat, 13 May 2023 10:07:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 723D442E02
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E0BB1BF424
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 10:07:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FE7B42E04;
+	Sat, 13 May 2023 10:07:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FE7B42E04
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 908471BF424
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 10:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 451E642E02
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 10:07:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 451E642E02
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A4834012B
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 10:07:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A4834012B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dDROBg4F1Z4B for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 10:06:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ipnv4baXg91S for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 10:07:09 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8D2F42E01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D5F400AB
 Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B8D2F42E01
- for <buildroot@buildroot.org>; Sat, 13 May 2023 10:06:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 46D5F400AB
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 10:07:09 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:b62a:d745:2556:f18])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 0D15719F5A7
- for <buildroot@buildroot.org>; Sat, 13 May 2023 12:06:55 +0200 (CEST)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id A14DA19F747
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 12:07:06 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 13 May 2023 12:06:55 +0200
-Date: Sat, 13 May 2023 12:06:55 +0200
+ Sat, 13 May 2023 12:07:06 +0200
+Date: Sat, 13 May 2023 12:07:06 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Message-ID: <20230513100655.GI2582048@scaer>
+Message-ID: <20230513100706.GJ2582048@scaer>
 References: <cover.1676112761.git.yann.morin.1998@free.fr>
- <912929d06f13459e472f6badf7e9251792b272fe.1676112761.git.yann.morin.1998@free.fr>
+ <ec2c6f0827a28d46c9b525f9c058f81cd4c9dd1b.1676112761.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <912929d06f13459e472f6badf7e9251792b272fe.1676112761.git.yann.morin.1998@free.fr>
+In-Reply-To: <ec2c6f0827a28d46c9b525f9c058f81cd4c9dd1b.1676112761.git.yann.morin.1998@free.fr>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683972417;
- bh=FjxomDKNdIMn9G3MdCRXELHiNMHcCJsSfpMwQsva0RQ=;
+ d=free.fr; s=smtp-20201208; t=1683972427;
+ bh=9TPRN+/qfiOuyepLM0ZweWfhCmvjWaA12xAO7tI12JE=;
  h=Date:From:To:Subject:References:In-Reply-To:From;
- b=TyEsLKm8z6YMDsYxYkVk8Wo9VJiqaByuYfrz6IeCe/rx54JYhHXMkuhhkRaB6r2Pl
- GTXmp2AXMUdgVws6hffSaNmTrVvPR/wTrSJWpVbQn6BGg7F6Hj0DJPPztC6N2Dxiiw
- cPY7EpQWMreyYnr5hDbMAsG6YOXBGeg6AA5UxtRVcAAtCSGca0azpPJyCMqoNR3W1g
- ftvoPvSaHHPL/lWx0bbYbtIoYR7K8pMaQbht/9Tt0ASLMWY1738aGNTOR/JlwuI7Qb
- 8AJP0CgH3l+27eLH7yq175rMyzvo1d2ZytbKiswKTO+LVzO/GSc34cPkd+/b/TDOAK
- g+7RZDNnEe6uw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=luywfv9iYEkerHym4KnWSpn4amAoUHzpddT5HrYI109nh8JzUnPCi6L1cNDvDucKP
+ NtOWUmui6tkpL0n3x8wNXmlgosdeeBonEbziaeeFRyNQiMgCghGyxuYzRPl6lazvgl
+ j54JMeRlHUa2F9lsVcgzE/tXeUVU4nSz5iXVsHWqghexfBwFXN/IitmImJv6ONybIY
+ cmJLepl2DTILabjREZsQy/vbGiM31ySxdtSH+MZeeJlgbkT+uZgrrqyuGj5ej+bkEf
+ ZEQ+DxYiM2U1QdFnPi0W223yHrGfEBwKZIVxGmYSqHqKUPFbvFlkdEuiRrc82sF5sR
+ flXyJYYkSmS5A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TyEsLKm8
-Subject: Re: [Buildroot] [PATCH 1/2] br2-external: make the list of external
- trees public
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=luywfv9i
+Subject: Re: [Buildroot] [PATCH 2/2] br2-external: make version of external
+ trees available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,12 +86,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 All,
 
 On 2023-02-11 11:52 +0100, Yann E. MORIN spake thusly:
-> Currently, the list of external trees is a private variable, but for
-> debugging or compliance, one may need to get that list.
+> For various reasons, like debugging or compliance, it is important to
+> identify what br2-external trees versions were used for a specific
+> build.
 > 
-> Add a Kconfig option so that the list appears in the .config file, and
-> export the already existing .mk variable in the environment, so that
-> post-build or post-image scripts can use it.
+> Add a Kconfig option that contains the version as computed by
+> support/scripts/setlocalversion; this will appear in the .config file
+> (but not in defconfig files, which is what we want).
+> 
+> Also generate that variable on the .mk side, so that it gets properly
+> exported in the environment, for post-build of post-iamge scripts to use
+> as they see fit (like, ensuring there is no dirtyness when in a CI for
+> example).
 > 
 > Reported-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
@@ -102,37 +108,82 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  support/scripts/br2-external | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>  support/scripts/br2-external | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 > 
 > diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-> index 2c33e6eacc..5815c6ded0 100755
+> index 5815c6ded0..8aea479d20 100755
 > --- a/support/scripts/br2-external
 > +++ b/support/scripts/br2-external
-> @@ -126,7 +126,7 @@ do_mk() {
+> @@ -66,7 +66,7 @@ do_validate() {
+>  
+>  do_validate_one() {
+>      local br2_ext="${1}"
+> -    local br2_name br2_desc n d
+> +    local br2_name br2_desc br2_ver n d
+>  
+>      if [ ! -d "${br2_ext}" ]; then
+>          error "'%s': no such file or directory\n" "${br2_ext}"
+> @@ -104,8 +104,10 @@ do_validate_one() {
+>  
+>      # Register this br2-external tree, use an absolute canonical path
+>      br2_ext="$( cd "${br2_ext}"; pwd )"
+> +    br2_ver="$( support/scripts/setlocalversion "${br2_ext}" )"
+>      BR2_EXT_NAMES+=( "${br2_name}" )
+>      eval BR2_EXT_PATHS_${br2_name}="\"\${br2_ext}\""
+> +    eval BR2_EXT_VERS_${br2_name}="\"\${br2_ver}\""
+>      eval BR2_EXT_DESCS_${br2_name}="\"\${br2_desc:-\${br2_name}}\""
+>  }
+>  
+> @@ -113,7 +115,7 @@ do_validate_one() {
+>  # for the br2-external tree
+>  do_mk() {
+>      local outputdir="${1}"
+> -    local br2_name br2_desc br2_ext
+> +    local br2_name br2_desc br2_ext br2_ver
+>  
+>      {
+>          printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
+> @@ -139,12 +141,14 @@ do_mk() {
+>          for br2_name in "${BR2_EXT_NAMES[@]}"; do
+>              eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
+>              eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
+> +            eval br2_ver="\"\${BR2_EXT_VERS_${br2_name}}\""
+>              printf '\n'
+>              printf 'BR2_EXTERNAL_NAMES += %s\n' "${br2_name}"
+>              printf 'BR2_EXTERNAL_DIRS += %s\n' "${br2_ext}"
+>              printf 'BR2_EXTERNAL_MKS += %s/external.mk\n' "${br2_ext}"
+>              printf 'export BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
+>              printf 'export BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
+> +            printf 'export BR2_EXTERNAL_%s_VERSION = %s\n' "${br2_name}" "${br2_ver}"
 >          done
->          printf '\n'
+>      } >"${outputdir}/.br2-external.mk"
+>  }
+> @@ -152,7 +156,7 @@ do_mk() {
+>  # Generate the kconfig snippets for the br2-external tree.
+>  do_kconfig() {
+>      local outputdir="${1}"
+> -    local br2_name br2_desc br2_ext br2
+> +    local br2_name br2_desc br2_ext br2_ver br2
+>      local -a items
 >  
-> -        printf 'BR2_EXTERNAL_NAMES = \n'
-> +        printf 'export BR2_EXTERNAL_NAMES = \n'
->          printf 'BR2_EXTERNAL_DIRS = \n'
->          printf 'BR2_EXTERNAL_MKS = \n'
->  
-> @@ -181,6 +181,14 @@ do_kconfig() {
->  
->      printf 'menu "External options"\n\n' >>"${outputdir}/.br2-external.in.menus"
->  
-> +    {
-> +        printf 'config BR2_EXTERNAL_NAMES\n'
-> +        printf '\tstring\n'
-> +        # Use star-expansion: we really one a single arg.
-> +        printf '\tdefault "%s"\n' "${BR2_EXT_NAMES[*]}"
-> +        printf '\n'
-> +    } >>"${outputdir}/.br2-external.in.paths"
-> +
+>      items=(
+> @@ -192,11 +196,15 @@ do_kconfig() {
 >      for br2_name in "${BR2_EXT_NAMES[@]}"; do
 >          eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
 >          eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
+> +        eval br2_ver="\"\${BR2_EXT_VERS_${br2_name}}\""
+>  
+>          {
+>              printf 'config BR2_EXTERNAL_%s_PATH\n' "${br2_name}"
+>              printf '\tstring\n'
+>              printf '\tdefault "%s"\n' "${br2_ext}"
+> +            printf 'config BR2_EXTERNAL_%s_VERSION\n' "${br2_name}"
+> +            printf '\tstring\n'
+> +            printf '\tdefault "%s"\n' "${br2_ver}"
+>              printf '\n'
+>          } >>"${outputdir}/.br2-external.in.paths"
+>  
 > -- 
 > 2.25.1
 > 
