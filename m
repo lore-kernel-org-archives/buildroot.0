@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 498EFC77B7F
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A028AC77B7F
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:36:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A817142A2A;
-	Sat, 13 May 2023 20:27:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A817142A2A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 330654207B;
+	Sat, 13 May 2023 20:36:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 330654207B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nvHdJ-wHY1Fp; Sat, 13 May 2023 20:27:08 +0000 (UTC)
+	with ESMTP id QYKCsDmyRoih; Sat, 13 May 2023 20:36:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C26D428A8;
-	Sat, 13 May 2023 20:27:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C26D428A8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C48E81BF86B
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:26:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED62441E19;
+	Sat, 13 May 2023 20:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED62441E19
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B63D1BF48C
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9BE314047D
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:26:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BE314047D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5406860C2F
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:36:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5406860C2F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8fealW-iq1K6 for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 20:26:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oaavrVKHqKWs for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 20:36:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3A5A4000B
- for <buildroot@buildroot.org>; Sat, 13 May 2023 20:26:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3A5A4000B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7906E60C02
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 20:36:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7906E60C02
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8FBB38660B; Sat, 13 May 2023 20:26:50 +0000 (UTC)
+ id 6108286613; Sat, 13 May 2023 20:36:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 13 May 2023 22:26:09 +0200
+Date: Sat, 13 May 2023 22:36:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2bfb4cd0dcc328cc875d3a7483fd944f75f9288f
-X-Git-Newrev: b1b8d5bf1b6468725a420fcaffa042303200ece6
+X-Git-Oldrev: b41ff7dd46c50728603f1d2953352f82bba8c538
+X-Git-Newrev: 8361da393bf7185950810e554bdd4d5aa1285faa
 X-Patchwork-Hint: ignore
-Message-Id: <20230513202650.8FBB38660B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2_mixer: bump version to 2.6.3
+Message-Id: <20230513203648.6108286613@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-mqtt: bump to version 0.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1b8d5bf1b6468725a420fcaffa042303200ece6
+commit: https://git.buildroot.net/buildroot/commit/?id=8361da393bf7185950810e554bdd4d5aa1285faa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
+diff COPYRIGHT:
+-Copyright (C) 2022 Francois Perrad.
++Copyright (C) 2022-2023 Francois Perrad.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sdl2_mixer/sdl2_mixer.hash | 2 +-
- package/sdl2_mixer/sdl2_mixer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lua-mqtt/lua-mqtt.hash | 4 ++--
+ package/lua-mqtt/lua-mqtt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sdl2_mixer/sdl2_mixer.hash b/package/sdl2_mixer/sdl2_mixer.hash
-index f3bab151f2..98c5fda6af 100644
---- a/package/sdl2_mixer/sdl2_mixer.hash
-+++ b/package/sdl2_mixer/sdl2_mixer.hash
+diff --git a/package/lua-mqtt/lua-mqtt.hash b/package/lua-mqtt/lua-mqtt.hash
+index 3636e9e6af..62f8f350fa 100644
+--- a/package/lua-mqtt/lua-mqtt.hash
++++ b/package/lua-mqtt/lua-mqtt.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b4cf5a382c061cd75081cf246c2aa2f9df8db04bdda8dcdc6b6cca55bede2419  SDL2_mixer-2.0.4.tar.gz
-+sha256  7a6ba86a478648ce617e3a5e9277181bc67f7ce9876605eea6affd4a0d6eea8f  SDL2_mixer-2.6.3.tar.gz
- sha256  113727180e7956cb9718b03b41da85b63ea54743a33047071a623bf672895a10  COPYING.txt
-diff --git a/package/sdl2_mixer/sdl2_mixer.mk b/package/sdl2_mixer/sdl2_mixer.mk
-index f349b8ca80..425380bf5d 100644
---- a/package/sdl2_mixer/sdl2_mixer.mk
-+++ b/package/sdl2_mixer/sdl2_mixer.mk
+ # computed by luarocks/buildroot
+-sha256  986ec63dd9f0761f9c5231f6e19529138602c289e13da5c71dc1449f5f247152  lua-mqtt-0.1.0-1.src.rock
+-sha256  e86d7c8adfabcb7c6515cc6e524bf0a76f7b3a86560a7ac47d7cabae5f8391a2  lua-mqtt-0.1.0/COPYRIGHT
++sha256  1b5ec0aebb2d41700762e3d6f542517c55b8cf44e323c53d55a47f19e22b664a  lua-mqtt-0.3.0-1.src.rock
++sha256  c8d12c868b979f5b9592eec503fc3de54e9feb92163f3cfc50a141ee2bcccc25  lua-mqtt-0.3.0/COPYRIGHT
+diff --git a/package/lua-mqtt/lua-mqtt.mk b/package/lua-mqtt/lua-mqtt.mk
+index a2f17d2b2e..ff889237e4 100644
+--- a/package/lua-mqtt/lua-mqtt.mk
++++ b/package/lua-mqtt/lua-mqtt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_MIXER_VERSION = 2.0.4
-+SDL2_MIXER_VERSION = 2.6.3
- SDL2_MIXER_SOURCE = SDL2_mixer-$(SDL2_MIXER_VERSION).tar.gz
- SDL2_MIXER_SITE = http://www.libsdl.org/projects/SDL_mixer/release
- SDL2_MIXER_LICENSE = Zlib
+-LUA_MQTT_VERSION = 0.1.0-1
++LUA_MQTT_VERSION = 0.3.0-1
+ LUA_MQTT_LICENSE = MIT
+ LUA_MQTT_LICENSE_FILES = $(LUA_MQTT_SUBDIR)/COPYRIGHT
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
