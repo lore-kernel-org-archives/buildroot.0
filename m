@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA908C77B7D
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 08:29:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C5DDC77B7F
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 09:03:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 753A442979;
-	Sat, 13 May 2023 08:29:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 753A442979
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD23041731;
+	Sat, 13 May 2023 09:03:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD23041731
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pkZY4Z5X8I9w; Sat, 13 May 2023 08:29:13 +0000 (UTC)
+	with ESMTP id VlY2ySGZFJAf; Sat, 13 May 2023 09:03:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 629874297E;
-	Sat, 13 May 2023 08:29:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 629874297E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E4761BF5DF
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 08:28:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAC6F415A4;
+	Sat, 13 May 2023 09:03:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAC6F415A4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 359DF1BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 09:03:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE05841EF2
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 08:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE05841EF2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04A1F60FB8
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 09:03:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04A1F60FB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9zuIKX0xd9Wr for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 08:28:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FAi9PfJMYzsd for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 09:03:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 128FC41EA2
- for <buildroot@buildroot.org>; Sat, 13 May 2023 08:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 128FC41EA2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4033060F98
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 09:03:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4033060F98
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0093585D78; Sat, 13 May 2023 08:28:51 +0000 (UTC)
+ id 288C38642F; Sat, 13 May 2023 09:03:20 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 13 May 2023 10:28:12 +0200
+Date: Sat, 13 May 2023 10:55:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 172e6aaa5ae1643ddfcac210994caa00e12090de
-X-Git-Newrev: e16d342c42431d9c7ac6d3cc19d0a6212d9d1f8a
+X-Git-Oldrev: e16d342c42431d9c7ac6d3cc19d0a6212d9d1f8a
+X-Git-Newrev: 25916a733c4387bc00be62587a5cc5845636cf08
 X-Patchwork-Hint: ignore
-Message-Id: <20230513082852.0093585D78@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cni-plugins: enable some missing
- plugins
+Message-Id: <20230513090320.288C38642F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/can-utils: bump to version 2023.03
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e16d342c42431d9c7ac6d3cc19d0a6212d9d1f8a
+commit: https://git.buildroot.net/buildroot/commit/?id=25916a733c4387bc00be62587a5cc5845636cf08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable ipam/host-local, ipam/static, and main/tap.
+Release notes: https://github.com/linux-can/can-utils/releases/tag/v2023.03
 
-Note: main/tap is new as of cni-plugins 1.3.0.
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cni-plugins/cni-plugins.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/can-utils/can-utils.hash | 2 +-
+ package/can-utils/can-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cni-plugins/cni-plugins.mk b/package/cni-plugins/cni-plugins.mk
-index 27a31b445a..bccc1674aa 100644
---- a/package/cni-plugins/cni-plugins.mk
-+++ b/package/cni-plugins/cni-plugins.mk
-@@ -11,6 +11,8 @@ CNI_PLUGINS_LICENSE_FILES = LICENSE
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+index 4e47143f31..e539e05b45 100644
+--- a/package/can-utils/can-utils.hash
++++ b/package/can-utils/can-utils.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  c9b8f29515ad34af7f78450ec55c983abc5393e86b1f128a92ac0dfd141baaf7  can-utils-2021.08.0.tar.gz
++sha256  2790dfb57fe3ec22b6fd512838c6480c39f7c9ae193e59f1ae01221216505a7e  can-utils-2023.03.tar.gz
+ sha256  c3dc748f5e725cf5ed89784fe78e4ff1b05d309bf1e7ade4c572e8fde1b8406c  LICENSES/BSD-3-Clause
+ sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  LICENSES/GPL-2.0-only.txt
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index 5b8a2aeea3..462e123c6d 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- CNI_PLUGINS_BUILD_TARGETS = \
- 	plugins/ipam/dhcp \
-+	plugins/ipam/host-local \
-+	plugins/ipam/static \
- 	plugins/main/bridge \
- 	plugins/main/dummy \
- 	plugins/main/host-device \
-@@ -18,6 +20,7 @@ CNI_PLUGINS_BUILD_TARGETS = \
- 	plugins/main/loopback \
- 	plugins/main/macvlan \
- 	plugins/main/ptp \
-+	plugins/main/tap \
- 	plugins/main/vlan \
- 	plugins/meta/bandwidth \
- 	plugins/meta/firewall \
+-CAN_UTILS_VERSION = 2021.08.0
++CAN_UTILS_VERSION = 2023.03
+ CAN_UTILS_SITE = $(call github,linux-can,can-utils,v$(CAN_UTILS_VERSION))
+ CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0
+ CAN_UTILS_LICENSE_FILES = LICENSES/BSD-3-Clause LICENSES/GPL-2.0-only.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
