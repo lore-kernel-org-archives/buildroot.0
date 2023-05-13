@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D1A8C77B7D
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA493C77B7F
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:40:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0AE241DA2;
-	Sat, 13 May 2023 20:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0AE241DA2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A5E04273D;
+	Sat, 13 May 2023 20:40:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A5E04273D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uk7DLXmyUW8B; Sat, 13 May 2023 20:39:38 +0000 (UTC)
+	with ESMTP id aox9ruhw7fXL; Sat, 13 May 2023 20:40:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C98F41D9B;
-	Sat, 13 May 2023 20:39:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C98F41D9B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2E96D1BF48C
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:39:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25F41426FF;
+	Sat, 13 May 2023 20:40:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25F41426FF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 369521BF48C
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01C8083BFF
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:39:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01C8083BFF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FCC8405BB
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FCC8405BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bqxulAnGptHY for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 20:39:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2D5D83BCB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F2D5D83BCB
- for <buildroot@busybox.net>; Sat, 13 May 2023 20:39:34 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:e91d:2912:5826:9d75])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2A85FB00563;
- Sat, 13 May 2023 22:39:30 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 13 May 2023 22:39:29 +0200
-Date: Sat, 13 May 2023 22:39:29 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20230513203929.GO2582048@scaer>
-References: <20230315090730.399162-1-francois.perrad@gadz.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230315090730.399162-1-francois.perrad@gadz.org>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1684010372;
- bh=hI/YVwSkYubGjat4VM0y0IEb4bYoBoabzytILHmQN1I=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=lWAVBWAEGjUkc8UNLdJH4DuAhqUuH8RgQsTX3merVc659iyZ3CfaEq2nqyAj9AHdJ
- gaHGFzxcRUBLG1SP8+PyqsN+/6Z+11WV3phfUK0HecmgDaY6FYzlOdR7AFfYJiJGdf
- /x+jJnkMOI6pXZBLenhAN9Pur58ec5Z2n1ouFCZ86w4oeIQIwsZmNjFSntfjdGOK3S
- EUixntM0sxz33ccH3OW/hiOR3GI+JrkdMX9OI1Kp6M83WvAiVSTW0o2EhJDGZg+Gnw
- lFpeMF1zL3IwSUltbyEwgoJ5aTTbv/Cy/pG469nAYKT+E16lJHGDvNEE26ddxSnZsp
- stZEmeGYYDK3g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lWAVBWAE
-Subject: Re: [Buildroot] [PATCH] package/lua-mqtt: bump to version 0.3.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JESXZ-AITdrI for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 20:40:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CC544000B
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 20:40:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CC544000B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 39A2386617; Sat, 13 May 2023 20:40:45 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 13 May 2023 22:40:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8361da393bf7185950810e554bdd4d5aa1285faa
+X-Git-Newrev: b97f479a9fec0f430e06aad8cd45d698d9b294c1
+X-Patchwork-Hint: ignore
+Message-Id: <20230513204045.39A2386617@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/olimex_stmp157: bump Linux and
+ U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,80 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Francois, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b97f479a9fec0f430e06aad8cd45d698d9b294c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-03-15 10:07 +0100, Francois Perrad spake thusly:
-> diff COPYRIGHT:
-> -Copyright (C) 2022 Francois Perrad.
-> +Copyright (C) 2022-2023 Francois Perrad.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/olimex_stmp157_olinuxino_lime_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-A diff hunk in the body can cause q few issues (some of my scripts choke
-on it, but it looks git-am does not, pfew...).
-
-Still, just state:
-
-    Update hash for license file, due to update in copyright years.
-
-The commit log is not a diff, it is meant to be read by humans, which
-expects human-readable text (well,m for a certain notion of redability,
-that is ;-] ).
-
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/lua-mqtt/lua-mqtt.hash | 4 ++--
->  package/lua-mqtt/lua-mqtt.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/lua-mqtt/lua-mqtt.hash b/package/lua-mqtt/lua-mqtt.hash
-> index 3636e9e6a..62f8f350f 100644
-> --- a/package/lua-mqtt/lua-mqtt.hash
-> +++ b/package/lua-mqtt/lua-mqtt.hash
-> @@ -1,3 +1,3 @@
->  # computed by luarocks/buildroot
-> -sha256  986ec63dd9f0761f9c5231f6e19529138602c289e13da5c71dc1449f5f247152  lua-mqtt-0.1.0-1.src.rock
-> -sha256  e86d7c8adfabcb7c6515cc6e524bf0a76f7b3a86560a7ac47d7cabae5f8391a2  lua-mqtt-0.1.0/COPYRIGHT
-> +sha256  1b5ec0aebb2d41700762e3d6f542517c55b8cf44e323c53d55a47f19e22b664a  lua-mqtt-0.3.0-1.src.rock
-> +sha256  c8d12c868b979f5b9592eec503fc3de54e9feb92163f3cfc50a141ee2bcccc25  lua-mqtt-0.3.0/COPYRIGHT
-> diff --git a/package/lua-mqtt/lua-mqtt.mk b/package/lua-mqtt/lua-mqtt.mk
-> index a2f17d2b2..ff889237e 100644
-> --- a/package/lua-mqtt/lua-mqtt.mk
-> +++ b/package/lua-mqtt/lua-mqtt.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LUA_MQTT_VERSION = 0.1.0-1
-> +LUA_MQTT_VERSION = 0.3.0-1
->  LUA_MQTT_LICENSE = MIT
->  LUA_MQTT_LICENSE_FILES = $(LUA_MQTT_SUBDIR)/COPYRIGHT
->  
-> -- 
-> 2.37.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
+index 60c34d7fa1..3b56fefeca 100644
+--- a/configs/olimex_stmp157_olinuxino_lime_defconfig
++++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
+@@ -17,8 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/stmp1_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/OLIMEX/linux-olimex.git"
+-# branch release-20221011-v5.10.105
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1b955f3ee7ef3234f290f65dbea108063996aea0"
++# branch release-20230217-v5.10.105
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c5a31724bdfaac894553b51c5a0fb92c1f10f3db"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/stmp1_olinuxino/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -35,8 +35,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/OLIMEX/u-boot-olinuxino.git"
+-# release-20220927, based on 2021.04
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="98ab5ecb0a16eeb426f34b2a1a28e56658c1a59c"
++# release-20230110, based on 2021.04
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="9a49a20f71c698f538defbb69a6c6cb657d4315f"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="STM32-OLinuXino-LIME"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
