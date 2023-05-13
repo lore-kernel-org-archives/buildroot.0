@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC653C77B7F
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 19:51:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D106C77B7F
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 727F060E97;
-	Sat, 13 May 2023 19:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 727F060E97
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8099B614B8;
+	Sat, 13 May 2023 20:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8099B614B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yu0HVt0XVpqJ; Sat, 13 May 2023 19:51:42 +0000 (UTC)
+	with ESMTP id L9bNEdeFAe1q; Sat, 13 May 2023 20:11:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76DF660A94;
-	Sat, 13 May 2023 19:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76DF660A94
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 944701BF5B4
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 19:51:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8F8161492;
+	Sat, 13 May 2023 20:11:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8F8161492
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 570811BF48C
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CC2660A94
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 19:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CC2660A94
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3D90384013
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:11:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D90384013
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1V1OHY9nNvmv for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 19:51:39 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F8E560A63
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3F8E560A63
- for <buildroot@buildroot.org>; Sat, 13 May 2023 19:51:39 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:b62a:d745:2556:f18])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 86AEC19F57C;
- Sat, 13 May 2023 21:51:34 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 13 May 2023 21:51:34 +0200
-Date: Sat, 13 May 2023 21:51:34 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Message-ID: <20230513195134.GF2582048@scaer>
-References: <20230418105814.2982312-1-raphael.melotte@mind.be>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230418105814.2982312-1-raphael.melotte@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1684007497;
- bh=ii0IEnR7JLGWStjfhvPCc9x39Xj2gVLgEFGGO1MYFlE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=mYGiqkac36ESJ8iJ3n1cmNMLAl0VbWrJWsWUKsBTtWf5EeW1Zwjs8rEG6ALFXFIqW
- OmcQTAdHUGgJCGFrVIwVAaZh+LpDbdQc3Q2xgo8bJxhLLbEV09HG8Ssb/Y2qjnnkql
- GFzzgapiKv71FFMpLYNxNpcNojfiGLpzMk8edW+n/2KZ4/5IeiW5arFqdZbWOOmb4c
- wpFVOVFEndLSBBqWsSetfjW0fZ0sZ8WPkJrfE+tiQHWcZSXLBkOHjt3FxRbBwdK01K
- wTxwGhDGJjtrWN3dmzx9kPHKHWwG2XE//vTXtdA04nHVPWYO4O6Libfg66paQQ0JIo
- kDIWbJ58zSLzA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mYGiqkac
-Subject: Re: [Buildroot] [PATCH 1/1] package: {,
- python-py}mupdf: bump to 1.22.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ty9YOZsLlFdt for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 20:11:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 696F883F9C
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 20:11:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 696F883F9C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 55060865CE; Sat, 13 May 2023 20:11:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 13 May 2023 22:11:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fe547366ef9c92da537e762b8a22e17c9badcaae
+X-Git-Newrev: eeff8d24e3fbfa85dabeee31a7623838093fa30b
+X-Patchwork-Hint: ignore
+Message-Id: <20230513201135.55060865CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnftnl: bump to version 1.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,98 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmFwaGHDq2wsIEFsbCwKCk9uIDIwMjMtMDQtMTggMTI6NTggKzAyMDAsIFJhcGhhw6tsIE3DqWxv
-dHRlIHNwYWtlIHRodXNseToKPiBBbHNvIHJlbW92ZSB0aGUgbGFzdCB0d28gJypfSUdOT1JFX0NW
-RVMnLCBzaW5jZSB0aGUgY29ycmVzcG9uZGluZwo+IHBhdGNoZXMgaGF2ZSBiZWVuIHJlbW92ZWQg
-KHRoZXkgYXJlIG5vdyBwYXJ0IG9mIHVwc3RyZWFtKSBpbgo+IDFmYjY0NjgwYmZmYmRhMWU1ZmI5
-NTIxNTA2NTJmNzMyMDUzMjI3MDcuCj4gCj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90
-dGUgPHJhcGhhZWwubWVsb3R0ZUBtaW5kLmJlPgo+IC0tLQo+ICBwYWNrYWdlL211cGRmL211cGRm
-Lmhhc2ggICAgICAgICAgICAgICAgICAgfCA0ICsrLS0KPiAgcGFja2FnZS9tdXBkZi9tdXBkZi5t
-ayAgICAgICAgICAgICAgICAgICAgIHwgOCArLS0tLS0tLQo+ICBwYWNrYWdlL3B5dGhvbi1weW11
-cGRmL3B5dGhvbi1weW11cGRmLmhhc2ggfCA0ICsrLS0KPiAgcGFja2FnZS9weXRob24tcHltdXBk
-Zi9weXRob24tcHltdXBkZi5tayAgIHwgNCArKy0tCj4gIDQgZmlsZXMgY2hhbmdlZCwgNyBpbnNl
-cnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9tdXBk
-Zi9tdXBkZi5oYXNoIGIvcGFja2FnZS9tdXBkZi9tdXBkZi5oYXNoCj4gaW5kZXggZWY5MWFiZWUx
-OC4uMWY2MzYwOTdlZCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL211cGRmL211cGRmLmhhc2gKPiAr
-KysgYi9wYWNrYWdlL211cGRmL211cGRmLmhhc2gKPiBAQCAtMSw4ICsxLDggQEAKPiAgIyBGcm9t
-IGh0dHBzOi8vbXVwZGYuY29tL2Rvd25sb2Fkcy9pbmRleC5odG1sOgo+IC1zaGExICBmNzU5ZDkx
-NGVjNmFkNmEzYjk2Zjk5NDYzMGZmNzBiNzU4MjM4MzFiICBtdXBkZi0xLjIxLjEtc291cmNlLnRh
-ci5sego+ICtzaGExICBiOTkwNzcyOWQ2MDRmMGJmMzg0NmI0NWNkNTg5MWUxMGQ3YTY2ZTI0ICBt
-dXBkZi0xLjIyLjAtc291cmNlLnRhci5sego+ICAKPiAgIyBMb2NhbGx5IGNvbXB1dGVkOgo+IC1z
-aGEyNTYgIDY2YTQzNDkwNjc2YzdmN2MyZmY3NDA2NzMyOGVmMTMyODU1MDZmY2M3NThkMzY1YWUy
-N2VhMzY2OGJkNWU2MjAgIG11cGRmLTEuMjEuMS1zb3VyY2UudGFyLmx6Cj4gK3NoYTI1NiAgYmVk
-NzhhMGFiZjg0OTZiMzBjNTIzNDk3MjkyZGU5NzlkYjYzM2VjYTU3ZTAyZjZjZDBmM2M3YzA0MjU1
-MWMzZSAgbXVwZGYtMS4yMi4wLXNvdXJjZS50YXIubHoKPiAgCj4gICMgSGFzaCBmb3IgbGljZW5z
-ZSBmaWxlczoKPiAgc2hhMjU2ICA1N2M4ZmYzM2M5YzBjZmMzZWYwMGU2NTBhMWNjOTEwZDdlZTQ3
-OWE4YmM1MDlmNmM5MjA5YTdjMmExMTM5OWQ2ICBDT1BZSU5HCj4gZGlmZiAtLWdpdCBhL3BhY2th
-Z2UvbXVwZGYvbXVwZGYubWsgYi9wYWNrYWdlL211cGRmL211cGRmLm1rCj4gaW5kZXggZDZjYzQw
-N2M0OS4uMDg4OTRkNzk4MCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL211cGRmL211cGRmLm1rCj4g
-KysrIGIvcGFja2FnZS9tdXBkZi9tdXBkZi5tawo+IEBAIC01LDcgKzUsNyBAQAo+ICAjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIwo+ICAKPiAgIyBweXRob24tcHltdXBkZidzIHZlcnNpb24gbXVzdCBt
-YXRjaCBtdXBkZidzIHZlcnNpb24KPiAtTVVQREZfVkVSU0lPTiA9IDEuMjEuMQo+ICtNVVBERl9W
-RVJTSU9OID0gMS4yMi4wCj4gIE1VUERGX1NPVVJDRSA9IG11cGRmLSQoTVVQREZfVkVSU0lPTikt
-c291cmNlLnRhci5sego+ICBNVVBERl9TSVRFID0gaHR0cHM6Ly9tdXBkZi5jb20vZG93bmxvYWRz
-L2FyY2hpdmUKPiAgTVVQREZfTElDRU5TRSA9IEFHUEwtMy4wKwo+IEBAIC0yMiwxMiArMjIsNiBA
-QCBNVVBERl9ERVBFTkRFTkNJRVMgPSBcCj4gIAl4bGliX2xpYlgxMSBcCj4gIAl6bGliCj4gIAo+
-IC0jIDAwMDItQnVnLTcwMzM2Ni1GaXgtZG91YmxlLWZyZWUtb2Ytb2JqZWN0LWR1cmluZy1saW5l
-YXJpemF0aW9uLnBhdGNoCj4gLU1VUERGX0lHTk9SRV9DVkVTICs9IENWRS0yMDIxLTM0MDcKPiAt
-Cj4gLSMgMDAwMy1CdWctNzAzNzkxLVN0YXktd2l0aGluLWhhc2gtdGFibGUtbWF4LWtleS1zaXpl
-LWluLWNhY2hlZC1jb2xvci1jb252ZXJ0ZXIucGF0Y2gKPiAtTVVQREZfSUdOT1JFX0NWRVMgKz0g
-Q1ZFLTIwMjEtMzcyMjAKCkRyb3BwaW5nIHRob3NlIGV4Y2x1c2lvbiBzaG91bGQgaGF2ZSBiZWVu
-IGluIGEgc2VhcHJhdGUgcGF0Y2gsIGJlY2F1c2UKdGhleSB3ZXJlIGFscmVhZHl1IGluY29ycmVj
-dCBldmVuIGJlZm9yZSB0aGUgYnVtcCB0byAxLjIyLjAgKHdlIG5vCmxvbmdlciBoYXZlIHRob3Nl
-IHR3byBwYXRjaGVzKS4KClNvLCBJIHNwbGl0IHRoYXQgaW50byBpdHMgb3duIHBhdGNoLgoKQW5k
-IHNvOiBib3RoIGFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUuIE1P
-UklOLgoKPiAgIyBUaGUgcGtnLWNvbmZpZyBuYW1lIGZvciBndW1iby1wYXJzZXIgaXMgYGd1bWJv
-YC4KPiAgTVVQREZfUEtHX0NPTkZJR19QQUNLQUdFUyA9IFwKPiAgCWZyZWV0eXBlMiBcCj4gZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVwZGYuaGFzaCBiL3Bh
-Y2thZ2UvcHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVwZGYuaGFzaAo+IGluZGV4IGJkYTM1NmQ5
-MDUuLjlmZDgxNTAwODggMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9weXRob24tcHltdXBkZi9weXRo
-b24tcHltdXBkZi5oYXNoCj4gKysrIGIvcGFja2FnZS9weXRob24tcHltdXBkZi9weXRob24tcHlt
-dXBkZi5oYXNoCj4gQEAgLTEsNSArMSw1IEBACj4gICMgbWQ1LCBzaGEyNTYgZnJvbSBodHRwczov
-L3B5cGkub3JnL3B5cGkvcHltdXBkZi9qc29uCj4gLW1kNSAgYmUxMDk2MzY3OWFjNmQ1MmI3YWVk
-MjMxMWNhN2UzYzUgIFB5TXVQREYtMS4yMS4xLnRhci5nego+IC1zaGEyNTYgIGY4MTU3NDFhNDM1
-YzYyYTAwMzZiYmNiZjVmYTZjNTMzNTY3YmQ2OWM1MzM4ZDQxMzcxNGZjNTdiMjJkYjkzZTAgIFB5
-TXVQREYtMS4yMS4xLnRhci5nego+ICttZDUgIDQ2OGZlNTYzNzVhMWZjYTk5ZTgzZmUwYWEwYjlm
-OGJkICBQeU11UERGLTEuMjIuMC50YXIuZ3oKPiArc2hhMjU2ICA2ZTE2OTRlNWMwY2Q4YjkyZDUw
-M2E1MDZlZThlNGJhMWJlZDc2ODUyOGRlNTg2ODg5ZDNlYzkwZTlkYzRhN2QzICBQeU11UERGLTEu
-MjIuMC50YXIuZ3oKPiAgIyBMb2NhbGx5IGNvbXB1dGVkIHNoYTI1NiBjaGVja3N1bXMKPiAgc2hh
-MjU2ICA1N2M4ZmYzM2M5YzBjZmMzZWYwMGU2NTBhMWNjOTEwZDdlZTQ3OWE4YmM1MDlmNmM5MjA5
-YTdjMmExMTM5OWQ2ICBDT1BZSU5HCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXB5bXVw
-ZGYvcHl0aG9uLXB5bXVwZGYubWsgYi9wYWNrYWdlL3B5dGhvbi1weW11cGRmL3B5dGhvbi1weW11
-cGRmLm1rCj4gaW5kZXggNzA0NDhlOGQ5MC4uNTFkOTU1ZDgzNSAxMDA2NDQKPiAtLS0gYS9wYWNr
-YWdlL3B5dGhvbi1weW11cGRmL3B5dGhvbi1weW11cGRmLm1rCj4gKysrIGIvcGFja2FnZS9weXRo
-b24tcHltdXBkZi9weXRob24tcHltdXBkZi5tawo+IEBAIC01LDkgKzUsOSBAQAo+ICAjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIwo+ICAKPiAgIyBweXRob24tcHltdXBkZidzIHZlcnNpb24gbXVzdCBt
-YXRjaCBtdXBkZidzIHZlcnNpb24KPiAtUFlUSE9OX1BZTVVQREZfVkVSU0lPTiA9IDEuMjEuMQo+
-ICtQWVRIT05fUFlNVVBERl9WRVJTSU9OID0gMS4yMi4wCj4gIFBZVEhPTl9QWU1VUERGX1NPVVJD
-RSA9IFB5TXVQREYtJChQWVRIT05fUFlNVVBERl9WRVJTSU9OKS50YXIuZ3oKPiAtUFlUSE9OX1BZ
-TVVQREZfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy8zMC80
-NC85ZmNlNzk2ODllNWRmN2RlZWJlMmQxN2NiMmI5YjJhNmI4ODg0MzljMjQxZTcxMjk2ZTczMmFl
-ZmE2NDkKPiArUFlUSE9OX1BZTVVQREZfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVk
-Lm9yZy9wYWNrYWdlcy8yOC9iYS9kNmJiNmZkNjc4ZTgzOTZkN2I5NDQ4NzAyODZmYjI1ZmQ2ZjQ5
-OWI4Y2I1OTliNTQzNmM4ZjcyNWFkYmYKPiAgUFlUSE9OX1BZTVVQREZfU0VUVVBfVFlQRSA9IHNl
-dHVwdG9vbHMKPiAgUFlUSE9OX1BZTVVQREZfTElDRU5TRSA9IEFHUEwtMy4wKwo+ICBQWVRIT05f
-UFlNVVBERl9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwo+IC0tIAo+IDIuMzkuMQo+IAo+IF9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1h
-aWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0t
-LS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0t
-LS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVND
-SUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0
-d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwK
-fCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAg
-IHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwg
-Xy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0t
-LS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=eeff8d24e3fbfa85dabeee31a7623838093fa30b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also: Switch to tar.xz as the package is not distributed as a .bz2 any longer.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libnftnl/libnftnl.hash | 2 +-
+ package/libnftnl/libnftnl.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
+index 113110fc1b..0cb3917f2d 100644
+--- a/package/libnftnl/libnftnl.hash
++++ b/package/libnftnl/libnftnl.hash
+@@ -1,3 +1,3 @@
+ # From http://www.netfilter.org/projects/libnftnl/downloads.html
+-sha256  e916ea9b79f9518560b9a187251a7c042442a9ecbce7f36be7908888605d0255  libnftnl-1.2.3.tar.bz2
++sha256  966de0a8120c8a53db859889749368bfb2cba0c4f0b4c1a30d264eccc45f1226  libnftnl-1.2.5.tar.xz
+ sha256  98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24  COPYING
+diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
+index fd87f70091..a7045337d0 100644
+--- a/package/libnftnl/libnftnl.mk
++++ b/package/libnftnl/libnftnl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBNFTNL_VERSION = 1.2.3
++LIBNFTNL_VERSION = 1.2.5
+ LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
+-LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
++LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.xz
+ LIBNFTNL_LICENSE = GPL-2.0+
+ LIBNFTNL_LICENSE_FILES = COPYING
+ LIBNFTNL_INSTALL_STAGING = YES
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
