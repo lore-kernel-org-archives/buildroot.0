@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBBB3C77B7D
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 19:33:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5675AC77B7A
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 19:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69C1F614FF;
-	Sat, 13 May 2023 19:33:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69C1F614FF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 044046150C;
+	Sat, 13 May 2023 19:33:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 044046150C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b_PmRh467acu; Sat, 13 May 2023 19:33:28 +0000 (UTC)
+	with ESMTP id Uy4VypWuZy2I; Sat, 13 May 2023 19:33:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89F6C614AA;
-	Sat, 13 May 2023 19:33:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89F6C614AA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 189381BF5B4
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 19:33:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F80E60AE5;
+	Sat, 13 May 2023 19:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F80E60AE5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BA1911BF5B4
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 19:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1750428A3
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 19:32:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1750428A3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91B65614AA
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 19:33:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91B65614AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dp427fQfnnJL for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 19:32:59 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E93C942891
- for <buildroot@buildroot.org>; Sat, 13 May 2023 19:32:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E93C942891
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE78B865A6; Sat, 13 May 2023 19:32:58 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 13 May 2023 21:32:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c3df47d035d3848cad5a056a3c99d11246ae578
-X-Git-Newrev: 839377f690f9313bef814e4fa2de8f7eab2273f3
-X-Patchwork-Hint: ignore
-Message-Id: <20230513193258.CE78B865A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package: python-boto3: bump to 1.26.115
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9qDpmITouj-I for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 19:33:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9433F60740
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9433F60740
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 19:33:30 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:b62a:d745:2556:f18])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id B173C19F73D;
+ Sat, 13 May 2023 21:33:24 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 13 May 2023 21:33:24 +0200
+Date: Sat, 13 May 2023 21:33:24 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: =?utf-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
+Message-ID: <20230513193324.GC2582048@scaer>
+References: <20230418094317.2236091-1-raphael.melotte@mind.be>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230418094317.2236091-1-raphael.melotte@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1684006407;
+ bh=CE9x1sHiz4HLAsnON13e2JWV6USzpghWx+ToAfu7r9g=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=G90Q2mJforxQCpmXHEfmKrWW+Q0nJpD8PT+pjdpdSSkGa1tFOo1Ws6/eYsArie5V2
+ wlIegS/RIeQRSbZsAG+dlc8AvnYZxd4rlqP30c8/5FN2wU4kk5z4zgqJKiwdOWRb73
+ MbgJK/oIdmv8ITe2krRzke+Wl2HhlLdh2kp8illSC4lu/FDs2TTjLbdek9o4tJB6RB
+ Lx2hFdn0yWLuCsdJs5VCHuJHZbllGMTKr3YLcB2ssjI77YF5kb6hz3IMuTBT03G81U
+ muThVMaIiLAhCnzE77ITFFnFLw0NNqXjTVBErLz0DqYtD4C8fAJdt9JFYY8p2nGF0u
+ bu1Y9lL26lIQQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=G90Q2mJf
+Subject: Re: [Buildroot] [PATCH 1/2] package: python-botocore: bump to
+ 1.29.115
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,62 +77,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0299418222940925813=="
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0299418222940925813==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=839377f690f9313bef814e4fa2de8f7eab2273f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-boto3/python-boto3.hash | 4 ++--
- package/python-boto3/python-boto3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
-index 6b3947978e..eae5081f34 100644
---- a/package/python-boto3/python-boto3.hash
-+++ b/package/python-boto3/python-boto3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/boto3/json
--md5  0913e2ad8eb208bccb826b10c92ccb5c  boto3-1.26.96.tar.gz
--sha256  7017102c58b9984749bef3b9f476940593c311504354b9ee9dd7bb0b4657a77d  boto3-1.26.96.tar.gz
-+md5  212358fb8b9cbea44a63ab9185c628e8  boto3-1.26.115.tar.gz
-+sha256  2272a060005bf8299f7342cbf1344304eb44b7060cddba6784f676e3bc737bb8  boto3-1.26.115.tar.gz
- # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
-index 572954e81a..78e410d804 100644
---- a/package/python-boto3/python-boto3.mk
-+++ b/package/python-boto3/python-boto3.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_BOTO3_VERSION = 1.26.96
-+PYTHON_BOTO3_VERSION = 1.26.115
- PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
--PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/c2/9b/8e9124c3d0306ab2ee865e6adffcfcb0127bf0c327386d62d2c9db19b6ae
-+PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/78/a8/b07686bd9a56e2556708d562c6b8ade423f3cf4cb1b7c3cbc9ed6c24d022
- PYTHON_BOTO3_SETUP_TYPE = setuptools
- PYTHON_BOTO3_LICENSE = Apache-2.0
- PYTHON_BOTO3_LICENSE_FILES = LICENSE
-
---===============0299418222940925813==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0299418222940925813==--
+UmFwaGHDq2wsIEFsbCwKCk9uIDIwMjMtMDQtMTggMTE6NDMgKzAyMDAsIFJhcGhhw6tsIE3DqWxv
+dHRlIHNwYWtlIHRodXNseToKPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFw
+aGFlbC5tZWxvdHRlQG1pbmQuYmU+CgpCb3RoIGFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpS
+ZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAtLS0KPiAgcGFja2FnZS9weXRob24tYm90b2NvcmUv
+cHl0aG9uLWJvdG9jb3JlLmhhc2ggfCA1ICsrKy0tCj4gIHBhY2thZ2UvcHl0aG9uLWJvdG9jb3Jl
+L3B5dGhvbi1ib3RvY29yZS5tayAgIHwgNiArKystLS0KPiAgMiBmaWxlcyBjaGFuZ2VkLCA2IGlu
+c2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0
+aG9uLWJvdG9jb3JlL3B5dGhvbi1ib3RvY29yZS5oYXNoIGIvcGFja2FnZS9weXRob24tYm90b2Nv
+cmUvcHl0aG9uLWJvdG9jb3JlLmhhc2gKPiBpbmRleCA1N2QwN2E2NzExLi44OWY0YzA2ZGU4IDEw
+MDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLWJvdG9jb3JlL3B5dGhvbi1ib3RvY29yZS5oYXNo
+Cj4gKysrIGIvcGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0aG9uLWJvdG9jb3JlLmhhc2gKPiBA
+QCAtMSw1ICsxLDYgQEAKPiAgIyBtZDUsIHNoYTI1NiBmcm9tIGh0dHBzOi8vcHlwaS5vcmcvcHlw
+aS9ib3RvY29yZS9qc29uCj4gLW1kNSAgYzYwODcwOWE1Y2YzZTY3NDQyZjQyNTRhMzRkMWZhYWIg
+IGJvdG9jb3JlLTEuMjkuOTYudGFyLmd6Cj4gLXNoYTI1NiAgYjk3ODExMDg4MTBlMzNmODQwNjk0
+MmMzZTNhYWI3NDg2NTBjNTlkNWNkZGI3YzlkMzIzZjRlMjY4MmU3YjBiNiAgYm90b2NvcmUtMS4y
+OS45Ni50YXIuZ3oKPiArbWQ1ICA4MDVlNjM4YzM1M2M1MzJjMmFmN2E3NTM4ZDViZDRkNiAgYm90
+b2NvcmUtMS4yOS4xMTUudGFyLmd6Cj4gK3NoYTI1NiAgNThlZWU4Y2Y4ZjRmM2U1MTVkZjI5ZjZk
+YzUzNWRkODZlZDNmNGNlYTQwOTk5YzViYzc0NjQwZmY0MGJkYzcxZiAgYm90b2NvcmUtMS4yOS4x
+MTUudGFyLmd6Cj4gICMgTG9jYWxseSBjb21wdXRlZCBzaGEyNTYgY2hlY2tzdW1zCj4gIHNoYTI1
+NiAgMGQ1NDJlMGM4ODA0ZTM5YWE3ZjM3ZWIwMGRhNWE3NjIxNDlkYzY4MmQ3ODI5NDUxMjg3ZTEx
+YjkzOGU5NDU5NCAgTElDRU5TRS50eHQKPiArc2hhMjU2ICBjZmM3NzQ5Yjk2ZjYzYmQzMWMzYzQy
+YjVjNDcxYmY3NTY4MTQwNTNlODQ3YzEwZjNlYjAwMzQxN2JjNTIzZDMwICB0ZXN0cy91bml0L2F1
+dGgvYXdzNF90ZXN0c3VpdGUvTElDRU5TRQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1i
+b3RvY29yZS9weXRob24tYm90b2NvcmUubWsgYi9wYWNrYWdlL3B5dGhvbi1ib3RvY29yZS9weXRo
+b24tYm90b2NvcmUubWsKPiBpbmRleCA2ZDA3NDdjMGRmLi4zZTgyOGZlZjc4IDEwMDY0NAo+IC0t
+LSBhL3BhY2thZ2UvcHl0aG9uLWJvdG9jb3JlL3B5dGhvbi1ib3RvY29yZS5tawo+ICsrKyBiL3Bh
+Y2thZ2UvcHl0aG9uLWJvdG9jb3JlL3B5dGhvbi1ib3RvY29yZS5tawo+IEBAIC00LDExICs0LDEx
+IEBACj4gICMKPiAgIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgCj4gLVBZVEhPTl9CT1RPQ09S
+RV9WRVJTSU9OID0gMS4yOS45Ngo+ICtQWVRIT05fQk9UT0NPUkVfVkVSU0lPTiA9IDEuMjkuMTE1
+Cj4gIFBZVEhPTl9CT1RPQ09SRV9TT1VSQ0UgPSBib3RvY29yZS0kKFBZVEhPTl9CT1RPQ09SRV9W
+RVJTSU9OKS50YXIuZ3oKPiAtUFlUSE9OX0JPVE9DT1JFX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5
+dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvMmQvYjUvNGE5ODZhZWI0ZTNkMTgyZjdlZjExNjcwNTk2
+MmQzYzk4YzAyNjNiZWFmODdjNDk4MzZiN2RmYjkxODM3Cj4gK1BZVEhPTl9CT1RPQ09SRV9TSVRF
+ID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzLzllLzAwLzQ1NjAwODFh
+NDMxYWFhMTRjMjI1NzA0MGQ0M2Y1NmMyY2NiYTgxNmQ4YmNlM2I4ZTE1NzdhMTlmNDA3Ngo+ICBQ
+WVRIT05fQk9UT0NPUkVfU0VUVVBfVFlQRSA9IHNldHVwdG9vbHMKPiAgUFlUSE9OX0JPVE9DT1JF
+X0xJQ0VOU0UgPSBBcGFjaGUtMi4wCj4gLVBZVEhPTl9CT1RPQ09SRV9MSUNFTlNFX0ZJTEVTID0g
+TElDRU5TRS50eHQKPiArUFlUSE9OX0JPVE9DT1JFX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLnR4
+dCB0ZXN0cy91bml0L2F1dGgvYXdzNF90ZXN0c3VpdGUvTElDRU5TRQo+ICAKPiAgJChldmFsICQo
+cHl0aG9uLXBhY2thZ2UpKQo+IC0tIAo+IDIuMzcuMwo+IAo+IF9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0t
+LS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFu
+biBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJp
+Y3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIg
+fCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0
+MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUg
+aXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRN
+TCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
