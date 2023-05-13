@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECF54C77B7C
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 08:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E04D0C77B7C
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 08:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D42B42CB3;
-	Sat, 13 May 2023 08:17:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D42B42CB3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EA2242E7E;
+	Sat, 13 May 2023 08:21:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EA2242E7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sokmJPamg3eg; Sat, 13 May 2023 08:17:01 +0000 (UTC)
+	with ESMTP id JenP3sjmz1AN; Sat, 13 May 2023 08:21:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8AEF42E99;
-	Sat, 13 May 2023 08:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8AEF42E99
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C4DB91BF5DF
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 08:16:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99AD342D1B;
+	Sat, 13 May 2023 08:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99AD342D1B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 43E531BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 08:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9996B42CB3
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 08:16:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9996B42CB3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A17760F7C
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 08:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A17760F7C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sZ-UklYBhXrs for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 08:16:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AD0142CB7
- for <buildroot@buildroot.org>; Sat, 13 May 2023 08:16:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AD0142CB7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5559C84142; Sat, 13 May 2023 08:16:14 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 13 May 2023 10:04:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33bb76627b4bb8c70b90ebf78dbe24b3eceff729
-X-Git-Newrev: 99bc8f4abe42fe9358c9dff8706f17203c6ffa3e
-X-Patchwork-Hint: ignore
-Message-Id: <20230513081614.5559C84142@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qemu: bump version to 7.2.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XqZnTvcwgGpJ for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 08:21:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4559B60F65
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4559B60F65
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 08:21:14 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:b62a:d745:2556:f18])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 07EC219F752;
+ Sat, 13 May 2023 10:21:07 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 13 May 2023 10:21:07 +0200
+Date: Sat, 13 May 2023 10:21:07 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: unixmania@gmail.com
+Message-ID: <20230513082107.GE2582048@scaer>
+References: <20230322231453.551305-1-unixmania@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230322231453.551305-1-unixmania@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1683966071;
+ bh=dqCGrqiaE87XIi9PqK3MLg2Q3ehHE/Z2H3QydpCJPqo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=SjjGJwc/gUJlHJA7bXvrRx7RCi0RGl68VpO6yAhqdWUpdACKWTKK/jfRsQnFJfATl
+ UOpl1R2IdWMB7ecNiCTLyFu+menHqS6EFF0UZhjD4wFR7TquYKIUpjo8Mb2pzq/a7C
+ RygAXVPDV/C1LqX1ZUiGWUvOL0JOd7SQU+CLX9anaCVVdINhgSolKWcTncanOMdU2m
+ Fxw5UyFxZCSmY6xgkq+kXUc+cePJ10QZS5drY8D20uJOrrXotrFjkpnB4uxE0eOEnt
+ LndEALwkwGm4iF25+wuAg169QfYIQkJx6NA7hEex6enWmv9vA/ML1Jq3YLz258lKyn
+ b9d06y9Ttnb9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=SjjGJwc/
+Subject: Re: [Buildroot] [PATCH] package/qemu: do not build the guest agent
+ for the host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,107 +77,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99bc8f4abe42fe9358c9dff8706f17203c6ffa3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Carlos, All,
 
-- remove 0003-target-sh4-Mask-restore-of-env-flags-from-tb-flags.patch
-  (from upstream, see [1])
+On 2023-03-22 20:14 -0300, unixmania@gmail.com spake thusly:
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> It does not make sense to build it for the host.
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-[1] https://gitlab.com/qemu-project/qemu/-/commit/e34f86a2f91c39d610d58baa6f4c9ed9a5a5d791
+Applied to master, thanks.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998@free.fr: regenerate .checkpackageignore]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .checkpackageignore                                |  1 -
- ...4-Mask-restore-of-env-flags-from-tb-flags.patch | 36 ----------------------
- package/qemu/qemu.hash                             |  2 +-
- package/qemu/qemu.mk                               |  2 +-
- 4 files changed, 2 insertions(+), 39 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 9b72a780d3..d7a1df1a74 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1332,7 +1332,6 @@ package/python3/0030-Add-an-option-to-disable-the-berkeleydb-module.patch Upstre
- package/python3/0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch Upstream
- package/qemu/0001-tests-fp-disable-fp-bench-build-by-default.patch Upstream
- package/qemu/0002-softmmu-qemu-seccomp.c-add-missing-header-for-CLONE_.patch Upstream
--package/qemu/0003-target-sh4-Mask-restore-of-env-flags-from-tb-flags.patch Upstream
- package/qextserialport/0001-Create-a-main-include-file-QExtSerialPort.patch Upstream
- package/qextserialport/0002-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch Upstream
- package/qt5/qt5base/0001-qtbase-Fix-build-error-when-using-EGL.patch Upstream
-diff --git a/package/qemu/0003-target-sh4-Mask-restore-of-env-flags-from-tb-flags.patch b/package/qemu/0003-target-sh4-Mask-restore-of-env-flags-from-tb-flags.patch
-deleted file mode 100644
-index 8dc2dd8823..0000000000
---- a/package/qemu/0003-target-sh4-Mask-restore-of-env-flags-from-tb-flags.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From bc2331635ce18ff068d2bb1e493bc546e1f786e1 Mon Sep 17 00:00:00 2001
--From: Guenter Roeck <linux@roeck-us.net>
--Date: Mon, 12 Dec 2022 09:03:17 -0600
--Subject: [PATCH] target/sh4: Mask restore of env->flags from tb->flags
--
--The values in env->flags are a subset of tb->flags.
--Restore only the bits that belong.
--
--Cc: qemu-stable@nongnu.org
--Fixes: ab419fd8a035 ("target/sh4: Fix TB_FLAG_UNALIGN")
--Signed-off-by: Guenter Roeck <linux@roeck-us.net>
--Message-ID: <20221212011345.GA2235238@roeck-us.net>
--[rth: Reduce to only the the superh_cpu_synchronize_from_tb change]
--Signed-off-by: Richard Henderson <richard.henderson@linaro.org>
--[yann.morin.1998@free.fr: backport from upstream]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- target/sh4/cpu.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/target/sh4/cpu.c b/target/sh4/cpu.c
--index 951eb6b9c8..f0934b20fa 100644
----- a/target/sh4/cpu.c
--+++ b/target/sh4/cpu.c
--@@ -47,7 +47,7 @@ static void superh_cpu_synchronize_from_tb(CPUState *cs,
--     SuperHCPU *cpu = SUPERH_CPU(cs);
-- 
--     cpu->env.pc = tb_pc(tb);
---    cpu->env.flags = tb->flags;
--+    cpu->env.flags = tb->flags & TB_FLAG_ENVFLAGS_MASK;
-- }
-- 
-- static void superh_restore_state_to_opc(CPUState *cs,
---- 
--2.25.1
--
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index e671e1d184..93f7c98f1c 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256  5b49ce2687744dad494ae90a898c52204a3406e84d072482a1e1be854eeb2157  qemu-7.2.0.tar.xz
-+sha256  8c85699acf9d7a43a5fe29a64cdd56370b0c2d1ad074baf7098a824d17aad73b  qemu-7.2.1.tar.xz
- sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 3f51cb572b..12d52f61bf 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, check whether the list of supported targets
- # needs to be updated.
--QEMU_VERSION = 7.2.0
-+QEMU_VERSION = 7.2.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = https://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+> ---
+>  package/qemu/qemu.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 4194670bb0..cdc1785375 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -486,6 +486,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+>  		--disable-vnc-sasl \
+>  		--enable-slirp \
+>  		--enable-tools \
+> +		--disable-guest-agent \
+>  		$(HOST_QEMU_OPTS)
+>  endef
+>  
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
