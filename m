@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66C64C77B7A
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:20:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7590C77B7A
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:21:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2406427DF;
-	Sat, 13 May 2023 20:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2406427DF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62EEF42798;
+	Sat, 13 May 2023 20:21:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62EEF42798
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EMJ3ec4iHNHm; Sat, 13 May 2023 20:20:35 +0000 (UTC)
+	with ESMTP id FuyeZ3OSux8l; Sat, 13 May 2023 20:21:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEFB542749;
-	Sat, 13 May 2023 20:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEFB542749
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F39D31BF48C
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:20:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C030B42875;
+	Sat, 13 May 2023 20:20:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C030B42875
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 67E411BF86B
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCEB36146A
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:20:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCEB36146A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 413FC83E33
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:20:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 413FC83E33
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iMJZ25cb6LzV for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 20:20:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 02CDA60B95
- for <buildroot@buildroot.org>; Sat, 13 May 2023 20:20:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02CDA60B95
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E3702865DE; Sat, 13 May 2023 20:20:29 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 13 May 2023 22:19:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d1b8e723fd1805f2de6b6401438a13db6e249fa4
-X-Git-Newrev: e6203db11ed40122a2d9f29012db5683a7eb10d0
-X-Patchwork-Hint: ignore
-Message-Id: <20230513202029.E3702865DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XzHNNz_OF1bI for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 20:20:57 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB5CE83D2B
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DB5CE83D2B
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 20:20:56 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:e91d:2912:5826:9d75])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6F9CCB00579;
+ Sat, 13 May 2023 22:20:49 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 13 May 2023 22:20:49 +0200
+Date: Sat, 13 May 2023 22:20:49 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230513202049.GI2582048@scaer>
+References: <20230511161048.21108-1-bernd.kuhls@t-online.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230511161048.21108-1-bernd.kuhls@t-online.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1684009253;
+ bh=apu6NrvU2yqaVmZAkpueHe9U8H6CHb2tNa9fXwV/jh0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=O/BFStjU/bCAriN26zzeFRmwFelzsCEOecblU6nRZ70hN0oWXBF/4J6PJcI2gp3UA
+ f3AjrmJz+nXiruWfE4edqR7BgKIhxA98WoJT+8UAlqUviK3c7NFvuC1jcdcnNEBtwL
+ VbKFCbohYr6lhS40vCdH9drqeK1TayuOKSRLsym6EDcjn+qn9duPeD1JIOTN8XTTJC
+ fA9V3yk/RygAwZEa4czUG4vsHITuy+jbKQoB/qEg7fo0XIeLlcayyIiQqGyJCeYPJb
+ 6fRfwlw4tS1SCOs8VejfF9GGqPmQjQuu6p9QdbhIhICO7Fl1wQ0W6XlRHN5ixq8hYw
+ LNi1/ItwSUQpA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=O/BFStjU
+Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
  mesa3d-headers}: bump version to 23.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,192 +77,212 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6203db11ed40122a2d9f29012db5683a7eb10d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, All,
 
-Release notes:
-https://www.phoronix.com/news/Mesa-23.1-Released
-https://lists.freedesktop.org/archives/mesa-announce/2023-May/000720.html
+On 2023-05-11 18:10 +0200, Bernd Kuhls spake thusly:
+> Release notes:
+> https://www.phoronix.com/news/Mesa-23.1-Released
+> https://lists.freedesktop.org/archives/mesa-announce/2023-May/000720.html
+> 
+> Rebased patch 0002 due to upstream commits
+> https://cgit.freedesktop.org/mesa/mesa/commit/?id=6f66b89ac3676bcdaad0da3b9af8aae0ef6b826a
+> https://cgit.freedesktop.org/mesa/mesa/commit/?id=a18f439f5260b3e183ec6a58bfff2760a5bbe407
+> 
+> Reformatted "Upstream:" tag in patches.
+> 
+> Removed vdpau support from r300 due to upstream commit
+> https://cgit.freedesktop.org/mesa/mesa/commit/?id=a06ab9849db7fdf8f5194412f0c5a15abd8ece9b
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Rebased patch 0002 due to upstream commits
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=6f66b89ac3676bcdaad0da3b9af8aae0ef6b826a
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=a18f439f5260b3e183ec6a58bfff2760a5bbe407
+Applied to master, thanks.
 
-Reformatted "Upstream:" tag in patches.
+Regards,
+Yann E. MORIN.
 
-Removed vdpau support from r300 due to upstream commit
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=a06ab9849db7fdf8f5194412f0c5a15abd8ece9b
+> ---
+>  .checkpackageignore                           |  3 ---
+>  package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
+>  ...tion-to-disable-optional-neon-suppor.patch | 20 +++++++++----------
+>  ...r-Include-stddef.h-to-fix-build-erro.patch |  3 +--
+>  package/mesa3d/0004-Fix-uClibc-build.patch    |  3 +--
+>  package/mesa3d/Config.in                      |  4 +---
+>  package/mesa3d/mesa3d.hash                    |  6 +++---
+>  package/mesa3d/mesa3d.mk                      |  2 +-
+>  8 files changed, 18 insertions(+), 25 deletions(-)
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index 41f2253398..23a9205944 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -1002,9 +1002,6 @@ package/mender-connect/S43mender-connect Shellcheck
+>  package/menu-cache/0001-Support-gcc10-compilation.patch Upstream
+>  package/mesa3d-demos/0001-demos-makes-opengl-an-optional-component.patch Upstream
+>  package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch Upstream
+> -package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch Upstream
+> -package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch Upstream
+> -package/mesa3d/0004-Fix-uClibc-build.patch Upstream
+>  package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch Upstream
+>  package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch Upstream
+>  package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch Upstream
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index 4685ad6695..6bfc61bcbf 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -12,7 +12,7 @@ endif
+>  
+>  # Not possible to directly refer to mesa3d variables, because of
+>  # first/second expansion trickery...
+> -MESA3D_HEADERS_VERSION = 23.0.3
+> +MESA3D_HEADERS_VERSION = 23.1.0
+>  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+>  MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+>  MESA3D_HEADERS_DL_SUBDIR = mesa3d
+> diff --git a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+> index bb5ef00a9f..a5564fcf3a 100644
+> --- a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+> +++ b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+> @@ -7,10 +7,10 @@ Not all toolchains are able to compile the runtime
+>  optional vc4 neon support, so add an meson option
+>  to force disabling it at compile time.
+>  
+> -[Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114]
+> +Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
+>  Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> -[rebased for 20.2.0, 20.3.0 & 21.1.0]
+> +[rebased for 20.2.0, 20.3.0, 21.1.0 & 23.1.0]
+>  ---
+>   meson_options.txt                    | 7 +++++++
+>   src/gallium/drivers/vc4/meson.build  | 4 ++--
+> @@ -21,20 +21,20 @@ diff --git a/meson_options.txt b/meson_options.txt
+>  index a39596a6f19..0f6b6c62b55 100644
+>  --- a/meson_options.txt
+>  +++ b/meson_options.txt
+> -@@ -123,6 +123,13 @@ option(
+> -   choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
+> -   description : 'enable gallium va frontend.',
+> +@@ -117,6 +117,13 @@
+>   )
+> -+option(
+> + 
+> + option(
+>  +  'gallium-vc4-neon',
+> -+  type : 'combo',
+> -+  value : 'auto',
+> -+  choices : ['auto', 'disabled'],
+> ++  type : 'feature',
+> ++  deprecated: {'true': 'enabled', 'false': 'disabled'},
+>  +  description : 'enable gallium vc4 optional neon support.',
+>  +)
+> - option(
+> ++
+> ++option(
+>     'va-libs-path',
+>     type : 'string',
+> +   value : '',
+>  diff --git a/src/gallium/drivers/vc4/meson.build b/src/gallium/drivers/vc4/meson.build
+>  index 5ce5af5f6b4..e3f7d8d62ae 100644
+>  --- a/src/gallium/drivers/vc4/meson.build
+> diff --git a/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch b/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+> index 538aa74e0c..e30cb97a72 100644
+> --- a/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+> +++ b/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+> @@ -15,8 +15,7 @@ output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35
+>  
+>  seen with gcc version 8.3.0 (Buildroot 2020.02) and uClibc.
+>  
+> -Patch sent upstream:
+> -https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6248
+> +Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6248
+>  
+>  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  ---
+> diff --git a/package/mesa3d/0004-Fix-uClibc-build.patch b/package/mesa3d/0004-Fix-uClibc-build.patch
+> index 95ca95fd67..ae1fc25f48 100644
+> --- a/package/mesa3d/0004-Fix-uClibc-build.patch
+> +++ b/package/mesa3d/0004-Fix-uClibc-build.patch
+> @@ -23,8 +23,7 @@ Fixes build errors with uClibc and gcc-9.3.0:
+>     74 |    static_assert(cond, #cond); \
+>        |    ^~~~~~~~~~~~~
+>  
+> -Patch sent upstream:
+> -https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/13898
+> +Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/13898
+>  
+>  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  ---
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index cae2161aa3..9ac946269a 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -283,7 +283,6 @@ config BR2_PACKAGE_MESA3D_VDPAU
+>  	bool "Gallium VDPAU state tracker"
+>  	depends on BR2_PACKAGE_XORG7
+>  	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+> -		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300 \
+>  		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
+>  		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+>  	select BR2_PACKAGE_MESA3D_NEEDS_X11
+> @@ -292,10 +291,9 @@ config BR2_PACKAGE_MESA3D_VDPAU
+>  	  VDPAU state tracker (needs r300, r600, radeonsi or nouveau
+>  	  gallium drivers).
+>  
+> -comment "Gallium VDPAU state tracker needs X.org and gallium drivers r300, r600, radeonsi or nouveau"
+> +comment "Gallium VDPAU state tracker needs X.org and gallium drivers r600, radeonsi or nouveau"
+>  	depends on !BR2_PACKAGE_XORG7 || \
+>  		!(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+> -		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300 \
+>  		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
+>  		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI)
+>  
+> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+> index 0de11663f4..f1eed92fb6 100644
+> --- a/package/mesa3d/mesa3d.hash
+> +++ b/package/mesa3d/mesa3d.hash
+> @@ -1,5 +1,5 @@
+> -# From https://lists.freedesktop.org/archives/mesa-announce/2023-April/000717.html
+> -sha256  386362a5d80df3b096636b67f340e1ce67b705b44767d5bdd11d2ed1037192d5  mesa-23.0.3.tar.xz
+> -sha512  52c778de61daa406c6a1e96a657e9b6fdcc71c8cfda80b7f53acc6470556c7d502c057b9481bb0c3d57ef0263263413fd0d25d53ebf5aa0246fbcc3309de64ae  mesa-23.0.3.tar.xz
+> +# From https://lists.freedesktop.org/archives/mesa-announce/2023-May/000720.html
+> +sha256  a9dde3c76571c4806245a05bda1cceee347c3267127e9e549e4f4e225d92e992  mesa-23.1.0.tar.xz
+> +sha512  bbcfd0dd8e5414826631e80edbbe48218115a7461ef4ac1f2e4e090a48d6c0e1ab3b51dd45e988d5f1572f29bfc03c33769263c0f3e04033138d5b1ec102e8c9  mesa-23.1.0.tar.xz
+>  # License
+>  sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 09a12b4b7e..7e41442398 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  # When updating the version, please also update mesa3d-headers
+> -MESA3D_VERSION = 23.0.3
+> +MESA3D_VERSION = 23.1.0
+>  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+>  MESA3D_SITE = https://archive.mesa3d.org
+>  MESA3D_LICENSE = MIT, SGI, Khronos
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .checkpackageignore                                  |  3 ---
- package/mesa3d-headers/mesa3d-headers.mk             |  2 +-
- ...eson-option-to-disable-optional-neon-suppor.patch | 20 ++++++++++----------
- ...rand_xor-Include-stddef.h-to-fix-build-erro.patch |  3 +--
- package/mesa3d/0004-Fix-uClibc-build.patch           |  3 +--
- package/mesa3d/Config.in                             |  4 +---
- package/mesa3d/mesa3d.hash                           |  6 +++---
- package/mesa3d/mesa3d.mk                             |  2 +-
- 8 files changed, 18 insertions(+), 25 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 773043effa..c916445d38 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -997,9 +997,6 @@ package/mender-connect/S43mender-connect Shellcheck
- package/menu-cache/0001-Support-gcc10-compilation.patch Upstream
- package/mesa3d-demos/0001-demos-makes-opengl-an-optional-component.patch Upstream
- package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch Upstream
--package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch Upstream
--package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch Upstream
--package/mesa3d/0004-Fix-uClibc-build.patch Upstream
- package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch Upstream
- package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch Upstream
- package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch Upstream
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 4685ad6695..6bfc61bcbf 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 23.0.3
-+MESA3D_HEADERS_VERSION = 23.1.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-index bb5ef00a9f..a5564fcf3a 100644
---- a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-+++ b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-@@ -7,10 +7,10 @@ Not all toolchains are able to compile the runtime
- optional vc4 neon support, so add an meson option
- to force disabling it at compile time.
- 
--[Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114]
-+Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[rebased for 20.2.0, 20.3.0 & 21.1.0]
-+[rebased for 20.2.0, 20.3.0, 21.1.0 & 23.1.0]
- ---
-  meson_options.txt                    | 7 +++++++
-  src/gallium/drivers/vc4/meson.build  | 4 ++--
-@@ -21,20 +21,20 @@ diff --git a/meson_options.txt b/meson_options.txt
- index a39596a6f19..0f6b6c62b55 100644
- --- a/meson_options.txt
- +++ b/meson_options.txt
--@@ -123,6 +123,13 @@ option(
--   choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
--   description : 'enable gallium va frontend.',
-+@@ -117,6 +117,13 @@
-  )
--+option(
-+ 
-+ option(
- +  'gallium-vc4-neon',
--+  type : 'combo',
--+  value : 'auto',
--+  choices : ['auto', 'disabled'],
-++  type : 'feature',
-++  deprecated: {'true': 'enabled', 'false': 'disabled'},
- +  description : 'enable gallium vc4 optional neon support.',
- +)
-- option(
-++
-++option(
-    'va-libs-path',
-    type : 'string',
-+   value : '',
- diff --git a/src/gallium/drivers/vc4/meson.build b/src/gallium/drivers/vc4/meson.build
- index 5ce5af5f6b4..e3f7d8d62ae 100644
- --- a/src/gallium/drivers/vc4/meson.build
-diff --git a/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch b/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
-index 538aa74e0c..e30cb97a72 100644
---- a/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
-+++ b/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
-@@ -15,8 +15,7 @@ output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35
- 
- seen with gcc version 8.3.0 (Buildroot 2020.02) and uClibc.
- 
--Patch sent upstream:
--https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6248
-+Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6248
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-diff --git a/package/mesa3d/0004-Fix-uClibc-build.patch b/package/mesa3d/0004-Fix-uClibc-build.patch
-index 95ca95fd67..ae1fc25f48 100644
---- a/package/mesa3d/0004-Fix-uClibc-build.patch
-+++ b/package/mesa3d/0004-Fix-uClibc-build.patch
-@@ -23,8 +23,7 @@ Fixes build errors with uClibc and gcc-9.3.0:
-    74 |    static_assert(cond, #cond); \
-       |    ^~~~~~~~~~~~~
- 
--Patch sent upstream:
--https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/13898
-+Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/13898
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index cae2161aa3..9ac946269a 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -283,7 +283,6 @@ config BR2_PACKAGE_MESA3D_VDPAU
- 	bool "Gallium VDPAU state tracker"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300 \
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	select BR2_PACKAGE_MESA3D_NEEDS_X11
-@@ -292,10 +291,9 @@ config BR2_PACKAGE_MESA3D_VDPAU
- 	  VDPAU state tracker (needs r300, r600, radeonsi or nouveau
- 	  gallium drivers).
- 
--comment "Gallium VDPAU state tracker needs X.org and gallium drivers r300, r600, radeonsi or nouveau"
-+comment "Gallium VDPAU state tracker needs X.org and gallium drivers r600, radeonsi or nouveau"
- 	depends on !BR2_PACKAGE_XORG7 || \
- 		!(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300 \
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI)
- 
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 0de11663f4..f1eed92fb6 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2023-April/000717.html
--sha256  386362a5d80df3b096636b67f340e1ce67b705b44767d5bdd11d2ed1037192d5  mesa-23.0.3.tar.xz
--sha512  52c778de61daa406c6a1e96a657e9b6fdcc71c8cfda80b7f53acc6470556c7d502c057b9481bb0c3d57ef0263263413fd0d25d53ebf5aa0246fbcc3309de64ae  mesa-23.0.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2023-May/000720.html
-+sha256  a9dde3c76571c4806245a05bda1cceee347c3267127e9e549e4f4e225d92e992  mesa-23.1.0.tar.xz
-+sha512  bbcfd0dd8e5414826631e80edbbe48218115a7461ef4ac1f2e4e090a48d6c0e1ab3b51dd45e988d5f1572f29bfc03c33769263c0f3e04033138d5b1ec102e8c9  mesa-23.1.0.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 09a12b4b7e..7e41442398 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 23.0.3
-+MESA3D_VERSION = 23.1.0
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
