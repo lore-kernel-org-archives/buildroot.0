@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 509E0C7EE24
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:28:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5777FC77B7A
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 20:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E65E24186C;
-	Sat, 13 May 2023 20:28:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E65E24186C
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA187410C3;
+	Sat, 13 May 2023 20:30:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA187410C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id td_KEgA-Zu5N; Sat, 13 May 2023 20:28:15 +0000 (UTC)
+	with ESMTP id U3HHSu-vt0Ob; Sat, 13 May 2023 20:30:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B24EA41516;
-	Sat, 13 May 2023 20:28:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B24EA41516
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ED3C51BF48C
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:28:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD89140570;
+	Sat, 13 May 2023 20:30:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD89140570
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8706C1BF48C
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:30:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C639360B95
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C639360B95
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6060B83F22
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 20:30:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6060B83F22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZmT5rV3nI4Sl for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 20:28:12 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC9B260B83
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CC9B260B83
- for <buildroot@uclibc.org>; Sat, 13 May 2023 20:28:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZjYXQ80ICODD for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 20:30:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33CD483F11
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 33CD483F11
+ for <buildroot@uclibc.org>; Sat, 13 May 2023 20:30:03 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:e91d:2912:5826:9d75])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0D6B2B004FF;
- Sat, 13 May 2023 22:28:08 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 427DBB0053E;
+ Sat, 13 May 2023 22:29:59 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 13 May 2023 22:28:07 +0200
-Date: Sat, 13 May 2023 22:28:07 +0200
+ Sat, 13 May 2023 22:29:59 +0200
+Date: Sat, 13 May 2023 22:29:59 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: "Luke D. Jones" <luke@ljones.dev>
-Message-ID: <20230513202807.GK2582048@scaer>
+Message-ID: <20230513202959.GL2582048@scaer>
 References: <20230315084624.1665061-1-luke@ljones.dev>
- <20230315084624.1665061-2-luke@ljones.dev>
+ <20230315084624.1665061-3-luke@ljones.dev>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230315084624.1665061-2-luke@ljones.dev>
+In-Reply-To: <20230315084624.1665061-3-luke@ljones.dev>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1684009690;
- bh=DKFQEYmmGsPqqLGFvVCtfOws5NjSUrwHqOzW6aC8tqI=;
+ d=free.fr; s=smtp-20201208; t=1684009801;
+ bh=66/WoZ5sMMxcLDh70cEa8WsrzRkbNIbmqZ1/kuq8LT4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ds1zrtO1Zl5julHv3JGmwkq1P18n+MnAxLcfPncS399im753f5AfWjIEo1rCXPu6L
- 7RHfya5Ka03D6vItpWPhaQK89If85CYMzs9wsMMmKKIoj5c1GvQ2c9DRBibB6VThT4
- D3J7dKL7oWB7gYcVx2dNR/Zego95eusFDCRLBAQlZvGQLDkHNkTLOtVNAl7xWBpU9b
- 3pI/SrrURM8vX0Z0aR3HCWJTCEOenRrd8FbHVeiAATQLzoy3mieetzqlekhxNQPVCf
- vB/3ySujeN0QnAl9LvHUYvFAgzuoHmqqZI/7EIaGJna/aO13IPInTswnkByad7Kh67
- NiiiCSgDXrLmQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=PDYypP6aIyhKMapUAgqpVAu0K/8qnr6Cd8pbM9nS2T6t8xdhXnyMjQBfEMv006P2m
+ Fq0ROCQ+8pm0i2LTOUDyH6HbitF5DjgKqoXFpQQ414/PahgSpDscZl61qGffSMrj3F
+ BVSYyTZrjZOIh/TCcb3rXQ/bjjUO0Jc9wlHcxGefJFav11/NXiDACvFoKsWqNDpMk8
+ MqaiIKgp3Pno25F8X/A7VHNvAVFN2vbD//EkJd3uzKk3PkBrIUnRH3bvFQY1Az0OLe
+ tqcRIJKqc5vh5lVrJ8yfmYcQovHulF4Cioeect+agTUwzid23Od1O1vs/rtFQRkpbW
+ 6FiPdLhpJBpuA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ds1zrtO1
-Subject: Re: [Buildroot] [PATCH 2/5] package/sdl2_mixer: bump version to
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PDYypP6a
+Subject: Re: [Buildroot] [PATCH 3/5] package/sdl2_image: bump version to
  2.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -88,39 +88,28 @@ Luke, All,
 
 On 2023-03-15 09:46 +0100, Luke D. Jones spake thusly:
 > Signed-off-by: Luke D. Jones <luke@ljones.dev>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
 > ---
->  package/sdl2_mixer/sdl2_mixer.hash | 2 +-
->  package/sdl2_mixer/sdl2_mixer.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/sdl2_mixer/sdl2_mixer.hash b/package/sdl2_mixer/sdl2_mixer.hash
-> index f3bab151f22c..98c5fda6af50 100644
-> --- a/package/sdl2_mixer/sdl2_mixer.hash
-> +++ b/package/sdl2_mixer/sdl2_mixer.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  b4cf5a382c061cd75081cf246c2aa2f9df8db04bdda8dcdc6b6cca55bede2419  SDL2_mixer-2.0.4.tar.gz
-> +sha256  7a6ba86a478648ce617e3a5e9277181bc67f7ce9876605eea6affd4a0d6eea8f  SDL2_mixer-2.6.3.tar.gz
->  sha256  113727180e7956cb9718b03b41da85b63ea54743a33047071a623bf672895a10  COPYING.txt
-> diff --git a/package/sdl2_mixer/sdl2_mixer.mk b/package/sdl2_mixer/sdl2_mixer.mk
-> index f349b8ca80cf..425380bf5dd5 100644
-> --- a/package/sdl2_mixer/sdl2_mixer.mk
-> +++ b/package/sdl2_mixer/sdl2_mixer.mk
+[--SNIP--]
+> diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+> index 953742de28ab..aaf379788cc4 100644
+> --- a/package/sdl2_image/sdl2_image.mk
+> +++ b/package/sdl2_image/sdl2_image.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -SDL2_MIXER_VERSION = 2.0.4
-> +SDL2_MIXER_VERSION = 2.6.3
->  SDL2_MIXER_SOURCE = SDL2_mixer-$(SDL2_MIXER_VERSION).tar.gz
->  SDL2_MIXER_SITE = http://www.libsdl.org/projects/SDL_mixer/release
->  SDL2_MIXER_LICENSE = Zlib
+> -SDL2_IMAGE_VERSION = 2.6.2
+> +SDL2_IMAGE_VERSION = 2.6.3
+
+This bump was also applied with a later patch (and sadly, we tend to
+look at more reent patch, sorry ...)
+
+Regards,
+Yann E. MORIN.
+
+>  SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
+>  SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+>  SDL2_IMAGE_INSTALL_STAGING = YES
 > -- 
 > 2.39.2
 > 
