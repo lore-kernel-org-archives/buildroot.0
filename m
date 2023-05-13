@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0A35C77B7F
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 12:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3216BC77B7C
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 12:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4213D80B3D;
-	Sat, 13 May 2023 12:38:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4213D80B3D
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB77C843C0;
+	Sat, 13 May 2023 12:39:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB77C843C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EvjM3vK3BEtd; Sat, 13 May 2023 12:38:27 +0000 (UTC)
+	with ESMTP id TNXIDJs7iMEc; Sat, 13 May 2023 12:39:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6090284485;
-	Sat, 13 May 2023 12:38:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6090284485
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 935E21BF3EB
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 12:38:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12A3681D3D;
+	Sat, 13 May 2023 12:39:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12A3681D3D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BD50C1BF3EB
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 12:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78243404E9
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 12:38:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78243404E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9753A60BE7
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 12:39:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9753A60BE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lp1jH6npQ1bl for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 12:38:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BAC14034D
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4BAC14034D
- for <buildroot@buildroot.org>; Sat, 13 May 2023 12:38:19 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:b62a:d745:2556:f18])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 7814719F74E;
- Sat, 13 May 2023 14:38:14 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 13 May 2023 14:38:14 +0200
-Date: Sat, 13 May 2023 14:38:14 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Gary Bisson <bisson.gary@gmail.com>
-Message-ID: <20230513123814.GR2582048@scaer>
-References: <20230512164248.3179932-1-bisson.gary@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230512164248.3179932-1-bisson.gary@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683981496;
- bh=UBQCebPBjVaJA0zgJ/JtS4MxmsDBCTKjXsQ3+LocP8s=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=VoHzh2wwxCJZmbARAWa7t/NUsqNf+VlLQOiMbzGQ5S1YWb9ovfKca0KHRWYc0yGi3
- ECYaQl/ODo4fMefLMz5VGP4dLAixR3bfgnRjDcSqp+W7xF3FrL1ilNCTDFq3hQnsOz
- kbMMQX2KGHH7BPN/jQKiXnuz0lFJ+6bohaJBTqt4QYVtElDd6QJbKVj3mjleFSuan4
- jYGR+nzF7rNERnl465fvF3ggEpDA9YR/gCH3VfzbdC/GCjxNhfGjw3+U+g6/HG18w4
- 79+asDPuQC0r6d/zOFZhsgB35ZGoIyZXRovPCpMhxDVCcU8B86gbybQolYp91zRVR7
- EoXwU5c1irtcw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VoHzh2ww
-Subject: Re: [Buildroot] [PATCH 0/3] Update NXP graphics libraries to
- v6.4.11.p1.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WfMArwQKAed6 for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 12:39:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB97E60C0A
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 12:39:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB97E60C0A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C71AB864E2; Sat, 13 May 2023 12:39:43 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 13 May 2023 14:39:17 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 95b711b363a25f1f7b77f7f2e0e5876c8f5024a6
+X-Git-Newrev: d5bb8282d046daf9ea75daa39b7bdf8cb6aa488e
+X-Patchwork-Hint: ignore
+Message-Id: <20230513123943.C71AB864E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vuejs: bump to version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,59 +56,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Gary, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5bb8282d046daf9ea75daa39b7bdf8cb6aa488e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-05-12 18:42 +0200, Gary Bisson spake thusly:
-> Hi,
-> 
-> This series updates the 3D & 2D GPU suppot for the NXP i.MX processors.
-> 
-> The version v6.4.11.p1.0 aligns with NXP release 6.1.1-1.0.0 (Yocto
-> Langdale).
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/vuejs/vuejs.hash | 2 +-
+ package/vuejs/vuejs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Whole series applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Regards,
-> Gary
-> 
-> Gary Bisson (3):
->   package/freescale-imx/kernel-module-imx-gpu-viv: bump to version
->     6.4.11.p1.0
->   package/freescale-imx/imx-gpu-viv: bump to version 6.4.11.p1.0
->   package/freescale-imx/imx-gpu-g2d: bump to version 6.4.11.p1.0
-> 
->  package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash        | 8 ++++----
->  package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk          | 4 ++--
->  package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash        | 8 ++++----
->  package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk          | 4 ++--
->  .../kernel-module-imx-gpu-viv.hash                        | 2 +-
->  .../kernel-module-imx-gpu-viv.mk                          | 2 +-
->  6 files changed, 14 insertions(+), 14 deletions(-)
-> 
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/vuejs/vuejs.hash b/package/vuejs/vuejs.hash
+index e66bee06d3..7960b594ce 100644
+--- a/package/vuejs/vuejs.hash
++++ b/package/vuejs/vuejs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  968e71a707a4a1961faa6e513b6bba162ef04c3413d7edaba0abc1a5996ae71b  vue-3.2.45.tgz
++sha256  c2e4197818c64d6ad9f344141a8adee354cbc321f63be7eef6802b4b02cf19f3  vue-3.3.1.tgz
+ sha256  1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175  LICENSE
+diff --git a/package/vuejs/vuejs.mk b/package/vuejs/vuejs.mk
+index 8f7d0cd3d4..a9058b0d44 100644
+--- a/package/vuejs/vuejs.mk
++++ b/package/vuejs/vuejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VUEJS_VERSION = 3.2.45
++VUEJS_VERSION = 3.3.1
+ VUEJS_SOURCE = vue-$(VUEJS_VERSION).tgz
+ VUEJS_SITE = https://registry.npmjs.org/vue/-
+ VUEJS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
