@@ -1,71 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DC7AC77B7F
-	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 16:09:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB94C77B7D
+	for <buildroot@archiver.kernel.org>; Sat, 13 May 2023 17:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 123F341C84;
-	Sat, 13 May 2023 16:09:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 123F341C84
+	by smtp4.osuosl.org (Postfix) with ESMTP id A50AA42EA5;
+	Sat, 13 May 2023 17:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A50AA42EA5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qpBeyjkiQ-VY; Sat, 13 May 2023 16:09:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wive4tq50tzu; Sat, 13 May 2023 17:52:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48D9441C77;
-	Sat, 13 May 2023 16:09:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48D9441C77
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A41701BF35C
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 16:09:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B54742E9B;
+	Sat, 13 May 2023 17:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B54742E9B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BD6331BF5DA
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 17:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D52283C68
- for <buildroot@lists.busybox.net>; Sat, 13 May 2023 16:09:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D52283C68
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9113B61478
+ for <buildroot@lists.busybox.net>; Sat, 13 May 2023 17:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9113B61478
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hNZdvGTymrYH for <buildroot@lists.busybox.net>;
- Sat, 13 May 2023 16:09:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rE63wF3e4ww7 for <buildroot@lists.busybox.net>;
+ Sat, 13 May 2023 17:52:31 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 316E183B9F
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 316E183B9F
- for <buildroot@buildroot.org>; Sat, 13 May 2023 16:09:40 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:b62a:d745:2556:f18])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id A894719F73B;
- Sat, 13 May 2023 18:09:34 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 13 May 2023 18:09:34 +0200
-Date: Sat, 13 May 2023 18:09:34 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Alistair Francis <alistair23@gmail.com>
-Message-ID: <20230513160934.GU2582048@scaer>
-References: <20230503023926.587412-1-alistair.francis@wdc.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C80EB61477
+Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C80EB61477
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 17:52:30 +0000 (UTC)
+Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
+ by mailout08.t-online.de (Postfix) with SMTP id 92A3B1AA4
+ for <buildroot@buildroot.org>; Sat, 13 May 2023 19:52:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.197.49]) by fwd79.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pxtPp-0Lf0rZ0; Sat, 13 May 2023 19:52:21 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39982)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pxtPp-00035k-00
+ for buildroot@buildroot.org; Sat, 13 May 2023 19:52:21 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sat, 13 May 2023 19:52:20 +0200
+Message-Id: <20230513175220.941172-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230503023926.587412-1-alistair.francis@wdc.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1683994178;
- bh=0v3H+ZYw0KZ/COVpC+n9YuJ64LqyESjeAa65VhpFPOY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uponcxmKUo1Bzc0Rm6euvRoO2ZM3VupL+Jaz4EC9RaUO8+accDgfdr11EgNL7g+rS
- 8ds7DtWAf6fMJUX5RFUDBuPXdwYarAqFxkj9Tfs6w6ILOaTGpZ2C3OmsMqAAW3EjcU
- VV107wCxaegj2cQNlUN5Fqg0FlV9yhtaIOi0C3fXAb5/nvnjgVYFxr8RIh9Xo3MMJb
- PLM2s5RiJA8/CCEy0SDJOWdMIp6DW0AJ0ur1OCeryFeX3GwFNFV/22PVZgz4XlRPuY
- LMCf0xssNN2z4nWisZ1JBdZtltSOoytDiJ+IWHysurE4l8ZJ3uqxCDcuhzC+FY5VLU
- 6HpfJaKrmTaAQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uponcxmK
-Subject: Re: [Buildroot] [PATCH] package/cmocka: Ensure we always build
- static libs
+X-TOI-EXPURGATEID: 150726::1684000341-42FF7266-4DA1FF01/0/0 CLEAN NORMAL
+X-TOI-MSGID: 0c4c92ba-0b49-4baa-84a1-762afdfa7ea7
+Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: security bump
+ version to 20230512
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,59 +66,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alistair Francis <alistair.francis@wdc.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Alistair, All,
+Release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20230512
+https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1905910.html
+"There's a new version 20230512 out which according to changelog
+fixes an undisclosed security issues for numerous platforms."
 
-On 2023-05-03 12:39 +1000, Alistair Francis spake thusly:
-> Some packages that use cmocka as a dependency will link against the
-> static libs, so let's build them by default.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-What packages? Are they in Buildroot? Why can't they link to the shared
-library?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> ---
->  package/cmocka/cmocka.mk | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/package/cmocka/cmocka.mk b/package/cmocka/cmocka.mk
-> index eafb4898e1..e21296921d 100644
-> --- a/package/cmocka/cmocka.mk
-> +++ b/package/cmocka/cmocka.mk
-> @@ -15,10 +15,6 @@ CMOCKA_CONF_OPTS = -DWITH_EXAMPLES=OFF
->  # cmocka only supports out of source builds
->  CMOCKA_SUPPORTS_IN_SOURCE_BUILD = NO
->  
-> -# cmocka always builds a shared library, but you can optionally build a static
-> -# library as well
-> -ifeq ($(BR2_SHARED_STATIC_LIBS),y)
->  CMOCKA_CONF_OPTS += -DWITH_STATIC_LIB=ON
-> -endif
->  
->  $(eval $(cmake-package))
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index acec71000f..3f12b71191 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  3a3cfe2c7642339af9f4c2ad69f5f367dfa4cd1f7f9fd4124dedefb7803591d4  intel-microcode-20230214.tar.gz
++sha256  58f3321dcf900175d87d5b39455138c2a24e69df4ba997fb44e3e0d19e531ad1  intel-microcode-20230512.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 6e7d66f482..48c6340af8 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MICROCODE_VERSION = 20230214
++INTEL_MICROCODE_VERSION = 20230512
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
