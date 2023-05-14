@@ -1,71 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39B74C7EE22
-	for <buildroot@archiver.kernel.org>; Sun, 14 May 2023 14:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A26EEC7EE22
+	for <buildroot@archiver.kernel.org>; Sun, 14 May 2023 14:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D67F441FF4;
-	Sun, 14 May 2023 14:11:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D67F441FF4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1907583B53;
+	Sun, 14 May 2023 14:45:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1907583B53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ea6Hx5qssmIE; Sun, 14 May 2023 14:11:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q1CgQWgl16XO; Sun, 14 May 2023 14:45:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E9D541FEE;
-	Sun, 14 May 2023 14:10:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E9D541FEE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4A5931BF3B9
- for <buildroot@lists.busybox.net>; Sun, 14 May 2023 14:10:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F11783B5D;
+	Sun, 14 May 2023 14:45:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F11783B5D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BF4B1BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 14 May 2023 14:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21B3541FDF
- for <buildroot@lists.busybox.net>; Sun, 14 May 2023 14:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21B3541FDF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5532483B5D
+ for <buildroot@lists.busybox.net>; Sun, 14 May 2023 14:45:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5532483B5D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7w2pQ7_kZxwr for <buildroot@lists.busybox.net>;
- Sun, 14 May 2023 14:10:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YDPSl6NqDYal for <buildroot@lists.busybox.net>;
+ Sun, 14 May 2023 14:45:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22E1441FDD
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 22E1441FDD
- for <buildroot@buildroot.org>; Sun, 14 May 2023 14:10:55 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:e91d:2912:5826:9d75])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 585FAB00535;
- Sun, 14 May 2023 16:10:50 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 14 May 2023 16:10:50 +0200
-Date: Sun, 14 May 2023 16:10:50 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Daniel Lang <dalang@gmx.at>
-Message-ID: <20230514141050.GJ2582048@scaer>
-References: <20230514132831.3555614-1-dalang@gmx.at>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED3E583B53
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ED3E583B53
+ for <buildroot@busybox.net>; Sun, 14 May 2023 14:45:19 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-3f42769a0c1so74284085e9.2
+ for <buildroot@busybox.net>; Sun, 14 May 2023 07:45:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1684075518; x=1686667518;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=kDWfpPDI6XqljQ7zt7cTsMeiTHqQrsf+FQ0RNio94Lk=;
+ b=I/MmbyOLy2uiKEKVGxWkcoA8yFW06uyBLQeIFSSncVSZaMU/7JhyLezLBYJLLDVRkk
+ iSz4cbi5kfRwfHIinzqLKIS/jtxmn9Y4ZtsR8QTLSgjzRtZqgvjWUGULLh9nnJFCXWjw
+ a7BT+3W+YMcXJvZUfwiVBGq1YZncR7I8YZW/SIMDIX0zC8EUKlXx/jHqP9tswAwrPGT0
+ dfvEU0x04gxkUFxAiv8/cR00vuf7Glcg00zw+Ri9hoPyWCTN58kcoxfsX08qDm0KiGRB
+ HgUgtKVS9TGD5RWL7PTdT5CBxVcqU5ffv6wPKcMPuuiUnAmArkYvC8+fR6DZJIjiJmNW
+ hAGw==
+X-Gm-Message-State: AC+VfDwoTDcY7s/o62uFz2dMtVS8mBfeHhkS8zV+6/s1adfyhONt1c3h
+ Tj8C5PgQqECWT9tN31oAsGHjpVhr6PI=
+X-Google-Smtp-Source: ACHHUZ5lf+RnWqPzZkyZA/k0jz42gI55shUjvy02V2HpZQKvdVomOwWra2f3K3llHQgQ0r1cW8xgtg==
+X-Received: by 2002:a1c:7713:0:b0:3f4:2297:630c with SMTP id
+ t19-20020a1c7713000000b003f42297630cmr17371171wmi.24.1684075517785; 
+ Sun, 14 May 2023 07:45:17 -0700 (PDT)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ w12-20020a05600c474c00b003f07ef4e3e0sm24906706wmo.0.2023.05.14.07.45.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 14 May 2023 07:45:17 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sun, 14 May 2023 16:45:12 +0200
+Message-Id: <20230514144512.9794-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230514132831.3555614-1-dalang@gmx.at>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1684073453;
- bh=0OMirZdC0dWlKZ1rcwaCx5E8i6hC2YWL6TXB3u/xQIs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=pDe0j2rfvFHgBNf8jZMEdXZT96Uduo/8gOwa1LNplycpSSLxfT4FqQRKcDRF2Pe/0
- ud0FEoei/r0W4FUa2DPH88FTPP7KUuTL2bAQtRTbq6EdziRHqnN5vAM6b9OJZ/gYwy
- 79TQkMkJvXIYoqofXR+OOXnp7HV1Gvqh9D3Ma73A6SPJZTWewxOHcriu+VgoXqs4r0
- NYiwYrL4zxnpH/5Y1e7blOoxH4q4qx5vAXNmGRly5uwUbtq35Qq2hyiuMlT5yy/Bmu
- qZfBelFhLdxGIQJ3O57IXeOsvm2J2fhvpU3umiVaN0Fba29v8TFDgQbUa0pUOsuzhp
- /EGwErf8AaxEQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pDe0j2rf
-Subject: Re: [Buildroot] [PATCH v2] package/at-spi2-core: bump to version
- 2.48.2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1684075518; x=1686667518;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=kDWfpPDI6XqljQ7zt7cTsMeiTHqQrsf+FQ0RNio94Lk=;
+ b=dCpr/QInieDyb8uvrs6o7lZix4KFdwhvgF3IaQeKO84IOpXPvCVOVujigt5Uy2qPYi
+ KvJKHvUVcusdDH+OzebxMl3njJ2dWC8WkWTIt/yL3cii5Oe9Jk9fNtvGpIxMLVUwtoFp
+ 9+nx8cP4agzuXE1/Rz5TmDNTWfR/cFXMJshB4RcL5yD5WZUrZn7B8EHSbAGztkvWDX/1
+ hZAcH0Fqy2LN99gCVsJek5183gG3Inycr07/xHkwannSXKo0uIeiF/smWNwb6Tm3Xmqb
+ OtV7iLBNvHPMwvJFylPZg5rrLTRTy6GEC3NN7DpeU6TGWdGslHzqNUnHK7SLG0sk8OYL
+ tcxg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=dCpr/QIn
+Subject: [Buildroot] [PATCH] package/lua: bump to version 5.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,177 +95,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Daniel, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ .checkpackageignore                                         | 6 +++---
+ package/lua/5.4.5/lua.hash                                  | 5 -----
+ package/lua/{5.4.5 => 5.4.6}/0001-root-path.patch           | 0
+ package/lua/{5.4.5 => 5.4.6}/0002-shared-libs-for-lua.patch | 0
+ package/lua/{5.4.5 => 5.4.6}/0011-linenoise.patch           | 0
+ package/lua/5.4.6/lua.hash                                  | 5 +++++
+ package/lua/lua.mk                                          | 2 +-
+ 7 files changed, 9 insertions(+), 9 deletions(-)
+ delete mode 100644 package/lua/5.4.5/lua.hash
+ rename package/lua/{5.4.5 => 5.4.6}/0001-root-path.patch (100%)
+ rename package/lua/{5.4.5 => 5.4.6}/0002-shared-libs-for-lua.patch (100%)
+ rename package/lua/{5.4.5 => 5.4.6}/0011-linenoise.patch (100%)
+ create mode 100644 package/lua/5.4.6/lua.hash
 
-On 2023-05-14 15:28 +0200, Daniel Lang spake thusly:
-> https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_48_2/NEWS
-> 
-> Upstream patch is included in this version.
-> 
-> Signed-off-by: Daniel Lang <dalang@gmx.at>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> v1 -> v2:
-> bump to 2.48.2 instead of 2.48.1
-> 
-> Signed-off-by: Daniel Lang <dalang@gmx.at>
-> ---
->  ...iring-libsystemd-when-configured-to-.patch | 93 -------------------
->  package/at-spi2-core/at-spi2-core.hash        |  4 +-
->  package/at-spi2-core/at-spi2-core.mk          |  2 +-
->  3 files changed, 3 insertions(+), 96 deletions(-)
->  delete mode 100644 package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
-> 
-> diff --git a/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch b/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
-> deleted file mode 100644
-> index 78d206ed79..0000000000
-> --- a/package/at-spi2-core/0001-meson-Avoid-requiring-libsystemd-when-configured-to-.patch
-> +++ /dev/null
-> @@ -1,93 +0,0 @@
-> -From aeb14ffccaabe65a64e976576d71f30eb2165f43 Mon Sep 17 00:00:00 2001
-> -From: Adrian Perez de Castro <aperez@igalia.com>
-> -Date: Mon, 24 Apr 2023 12:09:50 +0300
-> -Subject: [PATCH] meson: Avoid requiring libsystemd when configured to use
-> - dbus-daemon
-> -
-> -Checks for dbus-daemon and dbus-broker only when they are chosen
-> -with default_bus. This avoids requiring the systemd libraries if
-> -one wants the built at-spi2-core to use dbus-daemon, but dbus-worker
-> -is somehow available in the $PATH. A typical scenario is cross
-> -compilation, where the build host may have a dbus-broker program
-> -available, but the target system may not have it (or may not have
-> -nor want to use the systemd libraries).
-> -
-> -Upstream: https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/134
-> -Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> ----
-> - bus/meson.build | 53 ++++++++++++++++++++++++-------------------------
-> - 1 file changed, 26 insertions(+), 27 deletions(-)
-> -
-> -diff --git a/bus/meson.build b/bus/meson.build
-> -index 22a1bce6..2f3c5621 100644
-> ---- a/bus/meson.build
-> -+++ b/bus/meson.build
-> -@@ -46,39 +46,38 @@ launcher_args = [
-> -              '-DDATADIR="@0@"'.format(atspi_datadir),
-> -            ]
-> - 
-> --if get_option('dbus_daemon') != 'default'
-> --  launcher_args += '-DDBUS_DAEMON="@0@"'.format(get_option('dbus_daemon'))
-> --else
-> --  dbus_daemon = find_program('dbus-daemon',
-> --                             '/sbin/dbus-daemon',
-> --                             '/usr/sbin/dbus-daemon',
-> --                             '/libexec/dbus-daemon',
-> --                             '/usr/libexec/dbus-daemon',
-> --                             '/usr/lib/dbus-daemon',
-> --                             '/usr/pkg/bin/dbus-daemon',
-> --                             required: false)
-> --  if dbus_daemon.found()
-> --    launcher_args += '-DDBUS_DAEMON="@0@"'.format(dbus_daemon.full_path())
-> --  endif
-> --endif
-> --
-> - needs_systemd = false
-> --if get_option('dbus_broker') != 'default'
-> --  launcher_args += '-DDBUS_BROKER="@0@"'.format(get_option('dbus_broker'))
-> --  needs_systemd = true
-> -+if get_option('default_bus') == 'dbus-daemon'
-> -+  if get_option('dbus_daemon') != 'default'
-> -+    launcher_args += '-DDBUS_DAEMON="@0@"'.format(get_option('dbus_daemon'))
-> -+  else
-> -+    dbus_daemon = find_program('dbus-daemon',
-> -+                               '/sbin/dbus-daemon',
-> -+                               '/usr/sbin/dbus-daemon',
-> -+                               '/libexec/dbus-daemon',
-> -+                               '/usr/libexec/dbus-daemon',
-> -+                               '/usr/lib/dbus-daemon',
-> -+                               '/usr/pkg/bin/dbus-daemon',
-> -+                               required: false)
-> -+    if dbus_daemon.found()
-> -+      launcher_args += '-DDBUS_DAEMON="@0@"'.format(dbus_daemon.full_path())
-> -+    endif
-> -+  endif
-> - else
-> --  dbus_broker = find_program('dbus-broker-launch',
-> --                             required: false)
-> --  if dbus_broker.found()
-> --    launcher_args += '-DDBUS_BROKER="@0@"'.format(dbus_broker.full_path())
-> -+  launcher_args += '-DWANT_DBUS_BROKER'
-> -+  if get_option('dbus_broker') != 'default'
-> -+    launcher_args += '-DDBUS_BROKER="@0@"'.format(get_option('dbus_broker'))
-> -     needs_systemd = true
-> -+  else
-> -+    dbus_broker = find_program('dbus-broker-launch',
-> -+                               required: false)
-> -+    if dbus_broker.found()
-> -+      launcher_args += '-DDBUS_BROKER="@0@"'.format(dbus_broker.full_path())
-> -+      needs_systemd = true
-> -+    endif
-> -   endif
-> - endif
-> - 
-> --if get_option('default_bus') == 'dbus-broker'
-> --  launcher_args += '-DWANT_DBUS_BROKER'
-> --endif
-> --
-> - if needs_systemd
-> -   systemd_dep = dependency('libsystemd')
-> - else
-> --- 
-> -2.34.1
-> -
-> diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
-> index 9cf80d1cc0..db3ea7096e 100644
-> --- a/package/at-spi2-core/at-spi2-core.hash
-> +++ b/package/at-spi2-core/at-spi2-core.hash
-> @@ -1,5 +1,5 @@
-> -# From https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.0.sha256sum
-> -sha256  905a5b6f1790b68ee803bffa9f5fab4ceb591fb4fae0b2f8c612c54f1d4e8a30  at-spi2-core-2.48.0.tar.xz
-> +# From https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.2.sha256sum
-> +sha256  86ebcb55f678381d7ed7825736add42dfccb70ad3b981dfd65d72e58f87828ee  at-spi2-core-2.48.2.tar.xz
->  
->  # locally calculated
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
-> index e4489f6f88..e9a93b3eda 100644
-> --- a/package/at-spi2-core/at-spi2-core.mk
-> +++ b/package/at-spi2-core/at-spi2-core.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  AT_SPI2_CORE_VERSION_MAJOR = 2.48
-> -AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
-> +AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).2
->  AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
->  AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
->  AT_SPI2_CORE_LICENSE = LGPL-2.1+
-> -- 
-> 2.40.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 13f67695f5..947f4606aa 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -949,9 +949,9 @@ package/lua/5.1.5/0012-fix-reader-at-eoz.patch Upstream
+ package/lua/5.3.6/0001-root-path.patch Upstream
+ package/lua/5.3.6/0002-shared-libs-for-lua.patch Upstream
+ package/lua/5.3.6/0003-linenoise.patch Upstream
+-package/lua/5.4.5/0001-root-path.patch Upstream
+-package/lua/5.4.5/0002-shared-libs-for-lua.patch Upstream
+-package/lua/5.4.5/0011-linenoise.patch Upstream
++package/lua/5.4.6/0001-root-path.patch Upstream
++package/lua/5.4.6/0002-shared-libs-for-lua.patch Upstream
++package/lua/5.4.6/0011-linenoise.patch Upstream
+ package/luajit/0001-no-bin-symlink.patch Upstream
+ package/luajit/0002-install-inc.patch Upstream
+ package/luasyslog/0001-remove-AX_LUA_LIBS.patch Upstream
+diff --git a/package/lua/5.4.5/lua.hash b/package/lua/5.4.5/lua.hash
+deleted file mode 100644
+index 5526cd5125..0000000000
+--- a/package/lua/5.4.5/lua.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# Hashes from: https://www.lua.org/ftp/
+-sha256  59df426a3d50ea535a460a452315c4c0d4e1121ba72ff0bdde58c2ef31d6f444  lua-5.4.5.tar.gz
+-
+-# Locally computed
+-sha256  0d4ee721cf740f9cd878ef82ef75f4f2724dcf0403e56cd0b5643ad88f9de337  doc/readme.html
+diff --git a/package/lua/5.4.5/0001-root-path.patch b/package/lua/5.4.6/0001-root-path.patch
+similarity index 100%
+rename from package/lua/5.4.5/0001-root-path.patch
+rename to package/lua/5.4.6/0001-root-path.patch
+diff --git a/package/lua/5.4.5/0002-shared-libs-for-lua.patch b/package/lua/5.4.6/0002-shared-libs-for-lua.patch
+similarity index 100%
+rename from package/lua/5.4.5/0002-shared-libs-for-lua.patch
+rename to package/lua/5.4.6/0002-shared-libs-for-lua.patch
+diff --git a/package/lua/5.4.5/0011-linenoise.patch b/package/lua/5.4.6/0011-linenoise.patch
+similarity index 100%
+rename from package/lua/5.4.5/0011-linenoise.patch
+rename to package/lua/5.4.6/0011-linenoise.patch
+diff --git a/package/lua/5.4.6/lua.hash b/package/lua/5.4.6/lua.hash
+new file mode 100644
+index 0000000000..0b03fd563c
+--- /dev/null
++++ b/package/lua/5.4.6/lua.hash
+@@ -0,0 +1,5 @@
++# Hashes from: https://www.lua.org/ftp/
++sha256  7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88  lua-5.4.6.tar.gz
++
++# Locally computed
++sha256  8f1bff27c5b0585ab679dbe4e37e75a1014af0f79732f42a79f86728321a0c6d  doc/readme.html
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index ecb86c11ed..93d4803812 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_PACKAGE_LUA_5_4),y)
+-LUA_VERSION = 5.4.5
++LUA_VERSION = 5.4.6
+ else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUA_VERSION = 5.3.6
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.37.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
