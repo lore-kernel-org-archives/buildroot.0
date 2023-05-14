@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF03DC77B7D
-	for <buildroot@archiver.kernel.org>; Sun, 14 May 2023 12:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D671CC7EE22
+	for <buildroot@archiver.kernel.org>; Sun, 14 May 2023 12:25:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DE8840297;
-	Sun, 14 May 2023 12:23:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DE8840297
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38D8C41E56;
+	Sun, 14 May 2023 12:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38D8C41E56
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M0uGlolqEW_j; Sun, 14 May 2023 12:23:23 +0000 (UTC)
+	with ESMTP id izzRbRvzdKG0; Sun, 14 May 2023 12:25:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 209F240872;
-	Sun, 14 May 2023 12:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 209F240872
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9FAD11BF48B
- for <buildroot@lists.busybox.net>; Sun, 14 May 2023 12:23:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D303041E40;
+	Sun, 14 May 2023 12:25:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D303041E40
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E22531BF48B
+ for <buildroot@lists.busybox.net>; Sun, 14 May 2023 12:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85BB660BB9
- for <buildroot@lists.busybox.net>; Sun, 14 May 2023 12:23:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85BB660BB9
+ by smtp1.osuosl.org (Postfix) with ESMTP id C023183C16
+ for <buildroot@lists.busybox.net>; Sun, 14 May 2023 12:25:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C023183C16
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QZttPPImhSt1 for <buildroot@lists.busybox.net>;
- Sun, 14 May 2023 12:23:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3009760BDB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3009760BDB
- for <buildroot@buildroot.org>; Sun, 14 May 2023 12:23:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d_ItF1Z4Ms4e for <buildroot@lists.busybox.net>;
+ Sun, 14 May 2023 12:25:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB10683C14
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AB10683C14
+ for <buildroot@buildroot.org>; Sun, 14 May 2023 12:25:18 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:e91d:2912:5826:9d75])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4481CB0052C;
- Sun, 14 May 2023 14:23:14 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0648FB0053D;
+ Sun, 14 May 2023 14:25:14 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 14 May 2023 14:23:14 +0200
-Date: Sun, 14 May 2023 14:23:13 +0200
+ Sun, 14 May 2023 14:25:14 +0200
+Date: Sun, 14 May 2023 14:25:14 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230514122313.GT2582048@scaer>
-References: <20230514102037.261428-1-giulio.benetti@benettiengineering.com>
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230514122514.GU2582048@scaer>
+References: <20230513213918.802893-1-ju.o@free.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230514102037.261428-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230513213918.802893-1-ju.o@free.fr>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1684066996;
- bh=JZPOH0hn0kiayxzqQcqyYxsNeLq5J51Au0CgMfVT9CE=;
+ d=free.fr; s=smtp-20201208; t=1684067117;
+ bh=l2dXhS0WzZgi0o5Er1hBiRUyqkfQaRd89lJaJFd/fvA=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ar9NuT4545sM14D7DsYbbNTFbqOxlSbG+3HbF+xO3v0bxKHaSmy1llUHbR4uzuQCv
- HbkCp2ki7jOj4bh26oFoyt9pY1SOwbA4/bb8pf608Omcd3rP0lhkL8shxIi7WWrXne
- cW89qMS6aj4YE1f4fGKJxMz7wcYBog3VvWxbqNYxgE5KUz2zMUUmiHs3iXrVDW94wi
- /76+T+l69RV5wCtLRVIAwFXqGVdNYVzLlpX4tyT2fsKU1lXAUZvnFksT6e5b/NyH4e
- 2+EUUmA/8MjgIyORFKC9F+JgqfgXdoJS239UFM1JSFEqqT5z051dke98dXF8wr5OdA
- gIybzLbqyhBqw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=SjFbsa4CxLMRvU6Dp3Yt4k39vayG80U4+U+p7rZTGNDuJeY6xk4KezLtcBTVj28Nf
+ qbzOnBb2Hd888WfTm2IV8aSxKmwM3OMX6yEgcgW5nTn1RcxTpAHzc59UfP6RZvXFa2
+ n1cwdS4OTsgDWl4WYArSy3EritlunhrsIz0x0KvvZey0GVE4yWMyMSzWjyteNSPNqB
+ e8SwbgtNK1QAvEImvM9TN3WmcVf0LTLCyQ9h52Xptx4Wlb5+B6/7m4WML4C/Q+dBqK
+ At3kIdpYP7AKEgoiflJgA/uXj6d0jkugTtDWS/63r6vaY6GVhfEGj9J1bnOGFGOSfI
+ KzUXQfSrL84uw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ar9NuT45
-Subject: Re: [Buildroot] [PATCH] package/nfs-utils: fix host build failure
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=SjFbsa4C
+Subject: Re: [Buildroot] [PATCH 1/1] package/octave: bump to version 8.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,16 +82,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+Julien, All,
 
-On 2023-05-14 12:20 +0200, Giulio Benetti spake thusly:
-> Package nfs-utils requires libevent and sqlite so let's add these two
-> packages as dependencies for host package too.
+On 2023-05-13 23:39 +0200, Julien Olivain spake thusly:
+> See release note:
+> https://octave.org/news/release/2023/04/13/octave-8.2.0-released.html
 > 
-> Fixes:
-> http://autobuild.buildroot.org/results/5e1ac97e4023f902dffa066c895aa6f6005d541c/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to master, thanks.
 
@@ -99,24 +96,50 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/nfs-utils/nfs-utils.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Patch tested on branch master at commit b36e4b1 with commands:
 > 
-> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-> index 2f2e200bb5..3c85be0558 100644
-> --- a/package/nfs-utils/nfs-utils.mk
-> +++ b/package/nfs-utils/nfs-utils.mk
-> @@ -22,7 +22,7 @@ NFS_UTILS_CONF_OPTS = \
->  	--with-statedir=/run/nfs \
->  	--with-rpcgen=$(HOST_DIR)/bin/rpcgen
+>     utils/docker-run make check-package
+>     382265 lines processed
+>     0 warnings generated
+> 
+>     support/testing/run-tests \
+>         -d dl \
+>         -o output_folder \
+>         tests.package.test_octave
+>     ...
+>     OK
+> ---
+>  package/octave/octave.hash | 4 ++--
+>  package/octave/octave.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/octave/octave.hash b/package/octave/octave.hash
+> index f301feb6fd..6e82a589ec 100644
+> --- a/package/octave/octave.hash
+> +++ b/package/octave/octave.hash
+> @@ -1,5 +1,5 @@
+>  # Locally computed after checking signature
+> -# https://ftp.gnu.org/gnu/octave/octave-8.1.0.tar.lz.sig
+> +# https://ftp.gnu.org/gnu/octave/octave-8.2.0.tar.lz.sig
+>  # using key DBD9C84E39FE1AAE99F04446B05F05B75D36644B
+> -sha256  79f35c249e5ed71c6cafcf26ef72ffcf4845637093efde309b499a6690154b4f  octave-8.1.0.tar.lz
+> +sha256  8ac875a9f8e44b8eb4b75ca8638531e2ca47cd9d13a6ca39d3a0eccd175f8a05  octave-8.2.0.tar.lz
+>  sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+> diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+> index 63265e7d25..81954bbdd3 100644
+> --- a/package/octave/octave.mk
+> +++ b/package/octave/octave.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> -HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc
-> +HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libevent host-sqlite
->  
->  HOST_NFS_UTILS_CONF_OPTS = \
->  	--enable-tirpc \
+> -OCTAVE_VERSION = 8.1.0
+> +OCTAVE_VERSION = 8.2.0
+>  OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
+>  OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
+>  OCTAVE_LICENSE = GPL-3.0+
 > -- 
-> 2.34.1
+> 2.40.1
 > 
 > _______________________________________________
 > buildroot mailing list
