@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFD18C7EE22
-	for <buildroot@archiver.kernel.org>; Sun, 14 May 2023 14:03:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FDC0C7EE22
+	for <buildroot@archiver.kernel.org>; Sun, 14 May 2023 14:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60243400D6;
-	Sun, 14 May 2023 14:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60243400D6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17D9641FC3;
+	Sun, 14 May 2023 14:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17D9641FC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fKxr7tJD6D6O; Sun, 14 May 2023 14:03:09 +0000 (UTC)
+	with ESMTP id CQ86k0ZkDNUR; Sun, 14 May 2023 14:06:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 382AF41F1A;
-	Sun, 14 May 2023 14:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 382AF41F1A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 351BC1BF5A4
- for <buildroot@lists.busybox.net>; Sun, 14 May 2023 14:03:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F330341FB8;
+	Sun, 14 May 2023 14:06:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F330341FB8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D3CD1BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 14 May 2023 14:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EFB840487
- for <buildroot@lists.busybox.net>; Sun, 14 May 2023 14:03:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EFB840487
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52C9983C6B
+ for <buildroot@lists.busybox.net>; Sun, 14 May 2023 14:06:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52C9983C6B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pBxJjQT_dPy9 for <buildroot@lists.busybox.net>;
- Sun, 14 May 2023 14:03:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 171F1402F4
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 171F1402F4
- for <buildroot@buildroot.org>; Sun, 14 May 2023 14:03:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KIRMhb19LjPW for <buildroot@lists.busybox.net>;
+ Sun, 14 May 2023 14:06:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A23A83C6A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A23A83C6A
+ for <buildroot@buildroot.org>; Sun, 14 May 2023 14:06:55 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:e91d:2912:5826:9d75])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 47CFFB0059B;
- Sun, 14 May 2023 16:02:59 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 5C7E1B0059C;
+ Sun, 14 May 2023 16:06:47 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 14 May 2023 16:02:59 +0200
-Date: Sun, 14 May 2023 16:02:59 +0200
+ Sun, 14 May 2023 16:06:47 +0200
+Date: Sun, 14 May 2023 16:06:47 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Message-ID: <20230514140259.GG2582048@scaer>
+Message-ID: <20230514140647.GH2582048@scaer>
 References: <20230130144655.1193660-1-maxime.chevallier@bootlin.com>
- <20230130144655.1193660-3-maxime.chevallier@bootlin.com>
+ <20230130144655.1193660-4-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230130144655.1193660-3-maxime.chevallier@bootlin.com>
+In-Reply-To: <20230130144655.1193660-4-maxime.chevallier@bootlin.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1684072984;
- bh=zeFaaUIpdP95lHVsLjfaDqdBf/NsZwOoRqnqe+YUOtY=;
+ d=free.fr; s=smtp-20201208; t=1684073212;
+ bh=pudjBy18hr6Fo6tY1ojttUqj5w+DZTwY391nhagHh9Y=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=e5pHHjpXadLUlTLE730PUDBwzRpgBDtnz4nuimqlj32S+b7zCj8uD57HXMm79xjRu
- 48+U0GQzZN/fwweVqlU/RZpsvGUAZIUmYm3dfICYWhsqRbZgyDwX5OMlLQMGUBPtex
- nneSVF6rr02wptfKQ6zpCI75zXBdQovDEIhalIP+/hLivAs7S3P3z8d9wiQlKDDWvH
- d8BO/+cfx/MROQutLLGQAGWxMHXmeGCkYuSGDpclZFAARDOCneFQWESBEwhT4UjvvE
- BjdeBOe0audHr2MTxZ3sH22z3/FGWF1n7zUJ1yhQZkx/cLIoxunc9nuCH7TuKQfenc
- dXuMJclSv1Mtg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=nxTozZxKYlto5vSK0UTxvT2+UR2otXurBCeuabLrrBZvYec7JkbZ1NBKL+uhAHvw9
+ JioLfLhFk7pRhMUIijx/md/42p35mYQ0+wwJITN2OeveuuRWN0gD4MfHD5qfvTr8aS
+ V3n3INs5y0L3z/cljKco/KaKnBWdmzIwcRzUqZmDo8rX1NqLo5Q3vJ6mRJFpXHsOeN
+ V35DKYYmddruV+7aucwByFE4ls7zxlSqXAS68fARXlzIPAmp+e4zbQlGK58MRPMJLB
+ tJrr/EZjYdDK/BDaAGpZ/bQv939E17jrhCk7cWBOsuoJKSuF3n75rZH9zfXF2rflIm
+ 3eou/odT+zQpw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=e5pHHjpX
-Subject: Re: [Buildroot] [PATCH 2/4] package/libtracefs: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=nxTozZxK
+Subject: Re: [Buildroot] [PATCH 3/4] package/linux-tools: add rtla
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,34 +88,82 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Maxime, All,
 
 On 2023-01-30 15:46 +0100, Maxime Chevallier via buildroot spake thusly:
-> Introduce the libtracefs library, that used to be bundled with the
-> trace-cmd tool. This library is now used by several tools and libraries
-> such as trace-cmd and rtla, and is used as an interface to the ftrace
-> kernel subsystem through tracefs.
+> The RealTime Linux Analysis tool includes a set of commands that relies
+> on the osnoise and timerlat tracers from the ftrace kernel subsystem,
+> allowing to analyze the lantency sources coming from the hardware and
+> the kernel itself.
 > 
-> This package tries to install libraries in /usr/local/lib by default,
-> hence the redefinition of the "prefix" variable, so that the library
-> gets installed in "/usr/lib" instead.
-> 
-> The same applies to the pkgconfig handling of the proved Makefile, which
-> installs the .pc files in the /usr/local area by default, hence the
-> redefinition of the pkgconfig_dir to either the correct directory within the
-> staging area, or to empty value for the target to avoid installing the .pc
-> in that case.
+> This tool was introduced in v5.17, and relies on libtracefs and
+> libtraceevent, although libtraceevent itself is already a dependency for
+> libtracefs.
 > 
 > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 > ---
->  DEVELOPERS                       |  1 +
->  package/Config.in                |  1 +
->  package/libtracefs/Config.in     |  6 ++++++
->  package/libtracefs/libtracefs.mk | 35 ++++++++++++++++++++++++++++++++
+[--SNIP--]
+> diff --git a/package/linux-tools/linux-tool-rtla.mk.in b/package/linux-tools/linux-tool-rtla.mk.in
+> new file mode 100644
+> index 0000000000..a736e3b785
+> --- /dev/null
+> +++ b/package/linux-tools/linux-tool-rtla.mk.in
+> @@ -0,0 +1,32 @@
+> +################################################################################
+> +#
+> +# rtla
+> +#
+> +################################################################################
+> +
+> +LINUX_TOOLS += rtla
+> +
+> +RTLA_DEPENDENCIES = host-pkgconf libtracefs
+> +RTLA_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
+> +	CC=$(TARGET_CC) \
+> +	LDFLAGS="$(TARGET_LDFLAGS)" \
+> +	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
 
-Missing hash file.
+For multi-line assignment, start first assignment on its own line as
+well:
 
-Otherwise, I have the same comments and questions as for libtraceevent.
+    RTLA_MAKE_OPTS = \
+        $(LINUX_MAKE_FLAGS) \
+        CC=$(TARGET_CC) \
+        LDFLAGS="$(TARGET_LDFLAGS)" \
+        PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
+
+> +define RTLA_BUILD_CMDS
+> +	$(Q)if ! grep install $(LINUX_DIR)/tools/tracing/rtla/Makefile >/dev/null 2>&1 ; then \
+> +		echo "Your kernel version is too old and does not implement the rtla tool." ; \
+> +		echo "At least kernel 5.17 must be used." ; \
+> +		exit 1 ; \
+> +	fi
+> +
+> +	$(TARGET_MAKE_ENV) \
+> +	$(MAKE) $(RTLA_MAKE_OPTS) \
+> +	-C $(LINUX_DIR)/tools/tracing rtla
+
+Similarly to libtraceevent and libtracefs, indent the continuation
+lines. Also, keep coommon arguments in the same order for all _CMDS.
+
+I've marked the whole series as Changes Requested. Sorry for the long
+delay on providing that review... :-(
 
 Regards,
 Yann E. MORIN.
+
+> +endef
+> +
+> +define RTLA_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/tracing \
+> +	$(RTLA_MAKE_OPTS) \
+> +	DESTDIR=$(TARGET_DIR) \
+> +	rtla_install
+> +endef
+> -- 
+> 2.39.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
