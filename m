@@ -4,65 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC8EFC77B7D
-	for <buildroot@archiver.kernel.org>; Sun, 14 May 2023 09:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E3D2C7EE22
+	for <buildroot@archiver.kernel.org>; Sun, 14 May 2023 09:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36E2260F01;
-	Sun, 14 May 2023 09:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E2260F01
+	by smtp3.osuosl.org (Postfix) with ESMTP id A615A60F0E;
+	Sun, 14 May 2023 09:55:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A615A60F0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eeWDHnQj8fD4; Sun, 14 May 2023 09:46:21 +0000 (UTC)
+	with ESMTP id bEaUxC5pRQD7; Sun, 14 May 2023 09:55:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EE5160E0A;
-	Sun, 14 May 2023 09:46:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EE5160E0A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D19BD1BF41D
- for <buildroot@lists.busybox.net>; Sun, 14 May 2023 09:46:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEEBF60E44;
+	Sun, 14 May 2023 09:55:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEEBF60E44
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B84E1BF5DB
+ for <buildroot@lists.busybox.net>; Sun, 14 May 2023 09:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5D5B41ECB
- for <buildroot@lists.busybox.net>; Sun, 14 May 2023 09:46:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5D5B41ECB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2365460E44
+ for <buildroot@lists.busybox.net>; Sun, 14 May 2023 09:55:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2365460E44
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vkOfovbJcBUD for <buildroot@lists.busybox.net>;
- Sun, 14 May 2023 09:46:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FCB441E65
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FCB441E65
- for <buildroot@buildroot.org>; Sun, 14 May 2023 09:46:16 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.104.90])
- by Aruba Outgoing Smtp  with ESMTPA
- id y8IupE6KuJCZXy8IvpfMaD; Sun, 14 May 2023 11:46:13 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Sun, 14 May 2023 11:46:12 +0200
-Message-Id: <EF888116-F5C4-47F5-99F1-9125F9B1D199@benettiengineering.com>
-References: <20230514081642.GR2582048@scaer>
-In-Reply-To: <20230514081642.GR2582048@scaer>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailer: iPhone Mail (20E252)
-X-CMAE-Envelope: MS4xfGbKBQU02uI0qR1acJEdhkhvyC6lfTmCVWgXi9gDD8ITFOZulfiZZpO2t8U5q3E3r0DosTtfDItnORVu+gxio7BtM1CqFecIFRBthBNka/yyVpySyMKf
- JDAlZ757wwZCkEYUx5ye4oxSnmW/vb2mZEVXcYtk0bDBI58xbfMeZ2dbs4eX+Sw+abDg/JPwpPdAKrUZgDxCI4S0hF+CkX/pfDDINPoeRFEMSR9dgRkOOc7h
- DeaC1nXa6QWuww67deTqJGPauvXVptgLuokljzJlKJI=
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gzx1KN3Ad85X for <buildroot@lists.busybox.net>;
+ Sun, 14 May 2023 09:55:28 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A517660E0A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A517660E0A
+ for <buildroot@buildroot.org>; Sun, 14 May 2023 09:55:27 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:e91d:2912:5826:9d75])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id F37EBB0054E;
+ Sun, 14 May 2023 11:55:21 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 14 May 2023 11:55:21 +0200
+Date: Sun, 14 May 2023 11:55:21 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Message-ID: <20230514095521.GS2582048@scaer>
+References: <20230514053519.DFFD840B98@smtp2.osuosl.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230514053519.DFFD840B98@smtp2.osuosl.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1684057573; bh=0q0t5YGwF/aO7CD/2taZvIAGdyYfA3O9U5ffyYyc3Zc=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=BEZWVb3j2eZXXU9Qj5fmkbZmPqjuG6+1FXnCBYdX8tP8blxnr6pMO4cvdKWnjcpTF
- WpAT3mqRoQxM4iDZudAV178cJNnap266q7/fIn0R9r1UD+8AsDnxFcuvgYGfeTD3Yr
- 2HSQpzN+o960rPYE4/5aENtSwR2SRCD01il6ySmNRSi4HurAWmZae9H5/Vpk7cXrp1
- 21z245p8ANBZKPtcHqvt1m9wgDZZLkZesMpcy6rLJN7F4ZJzDrcAOX7zMdvYR9+FWU
- ReZ9sbz0FA7NqDZOrj4MaVHoqExbMmJRjQonuZv3S/vAZBwV1hSe1AOeBPdcP642uB
- 4UW7r6UtFdHfw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=BEZWVb3j
-Subject: Re: [Buildroot] [PATCH] package/nfs-utils: bump to version 2.6.3
+ d=free.fr; s=smtp-20201208; t=1684058125;
+ bh=4HrRH7+1tKWq8m56peWW7ialR4WINShBRb5GTinr444=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=R+D2Lmux30yykNHHVmIqCPLPhd2SXveZs1ZWJ9ZNlyE0Pot/h8pzqvUf93LE4lLlD
+ FvRvLtgh4JlrtAUh/+z52il1wTTfCfg3GtPDtGdKWLS2NjLXZgghXrkHIVjFGg4+UQ
+ is0ROD4nIrI0Qq8b8yB731rxrET0OhIoqNp5d0QJUjpw7aBIlDYq3Bmu3TnJ7uJavm
+ sXxUSU2a5oLtcjqlOD6WPtU3bX2ED7zx3vRWyVZ62h6a9EwvPaesYaoZuJ3ToDt8Uo
+ 26oClZgCbrTIXC/+Ep7L51COcCz7r55vT4UsNh0LKJxvxjQUM0E5AdQ/yavcWxT57T
+ IAOkSfrMsiycQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=R+D2Lmux
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2023-05-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,65 +79,67 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgWWFubiwKCj4gSWwgZ2lvcm5vIDE0IG1hZyAyMDIzLCBhbGxlIG9yZSAxMDoxNywgWWFubiBF
-LiBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IGhhIHNjcml0dG86Cj4gCj4g77u/R2l1
-bGlvLCBBbGwsCj4gCj4gT24gMjAyMy0wNS0xMSAyMjowMiArMDIwMCwgR2l1bGlvIEJlbmV0dGkg
-c3Bha2UgdGh1c2x5Ogo+PiBEcm9wIGxvY2FsIHBhdGNoZXMgc2luY2UgdGhleSBoYXZlIGJlZW4g
-dXBzdHJlYW1lZCBidXQgYWRkIGEgbmV3IGxvY2FsCj4+IHBhdGNoIGFscmVhZHkgdXBzdHJlYW1l
-ZCB0aGF0IGNoZWNrcyBmb3IgbGliZXZlbnQgYW5kIHNxbGl0ZSBzaW5jZSB3aXRoIHRoZQo+PiBh
-ZGRpbmcgb2YgcmVleHBvcnQgdGhleSBiZWNhbWUgbWFuZGF0b3J5LiBUaGlzIGlzIGJlY2F1c2Ug
-aXQncyBub3QgcG9zc2libGUKPj4gdG8gZGlzYWJsZSByZWV4cG9ydC4KPj4gCj4+IFNpZ25lZC1v
-ZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcu
-Y29tPgo+PiAtLS0KPiBbLS1TTklQLS1dCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL25mcy11dGls
-cy9uZnMtdXRpbHMubWsgYi9wYWNrYWdlL25mcy11dGlscy9uZnMtdXRpbHMubWsKPj4gaW5kZXgg
-MWE0YTk5ZjU2Ni4uMmYyZTIwMGJiNSAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9uZnMtdXRpbHMv
-bmZzLXV0aWxzLm1rCj4+ICsrKyBiL3BhY2thZ2UvbmZzLXV0aWxzL25mcy11dGlscy5tawo+PiBA
-QCAtNCwxMiArNCwxMiBAQAo+PiAjCj4+ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4+IAo+PiAt
-TkZTX1VUSUxTX1ZFUlNJT04gPSAyLjYuMgo+PiArTkZTX1VUSUxTX1ZFUlNJT04gPSAyLjYuMwo+
-IAo+IFRoaXMgYnVtcCBjYXVzZXMgYnVpbGQgZmFpbHVyZXMgZm9yIHRoZSBob3N0IHZhcmlhbnQ6
-Cj4gICAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNWUxYWM5N2U0MDIz
-ZjkwMmRmZmEwNjZjODk1YWE2ZjYwMDVkNTQxYy8KPiAKPiBiZWNhdXNlLi4uCj4gCj4+IE5GU19V
-VElMU19TT1VSQ0UgPSBuZnMtdXRpbHMtJChORlNfVVRJTFNfVkVSU0lPTikudGFyLnh6Cj4+IE5G
-U19VVElMU19TSVRFID0gaHR0cHM6Ly93d3cua2VybmVsLm9yZy9wdWIvbGludXgvdXRpbHMvbmZz
-LXV0aWxzLyQoTkZTX1VUSUxTX1ZFUlNJT04pCj4+IE5GU19VVElMU19MSUNFTlNFID0gR1BMLTIu
-MCsKPj4gTkZTX1VUSUxTX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCj4+IC1ORlNfVVRJTFNfREVQ
-RU5ERU5DSUVTID0gaG9zdC1uZnMtdXRpbHMgaG9zdC1wa2djb25mIGxpYnRpcnBjIHV0aWwtbGlu
-dXgKPj4gK05GU19VVElMU19ERVBFTkRFTkNJRVMgPSBob3N0LW5mcy11dGlscyBob3N0LXBrZ2Nv
-bmYgbGliZXZlbnQgbGlidGlycGMgc3FsaXRlIHV0aWwtbGludXgKPiAKPiAuLi4gbGliZXZlbnQg
-c2hvdWxkIGFsc28gYmUgYWRkZWQgdG8gdGhlIGhvc3QgdmFyaWFudCBkZXBlbmRlbmNpZXMgKGFz
-Cj4gaG9zdC1saWJldmVudCwgb2YgY291cnNlKS4KPiAKPiBDYXJlIHRvIGxvb2sgaW50byB0aGF0
-LCBwbGVhc2U/CgpTdXJlLCB0aGFua3MgZm9yIGFscmVhZHkgcG9pbnRpbmcgdGhlIHNvbHV0aW9u
-Cgo+IAo+IChOb3RlOiBvdXIgcmVmZXJlbmNlIGRvY2tlciBpYW1nZSBkb2VzIG5vdCBoYXZlIGxp
-YmV2ZW50LCBzbyBtYXliZSB0aGlzCj4gaXMgYSBnb29kIGlkZWEgdG8gdGVzdCBpbiB0aGVyZT8p
-CgpZZXMuIEZyb20gbm93IG9uIEnigJlsbCB0ZXN0IHBhY2thZ2VzIHVzaW5nIGRvY2tlciBiZWZv
-cmUgc2VuZGluZyBwYXRjaGVzLgoKQmVzdCByZWdhcmRzCkdpdWxpbwoKPiAKPiBSZWdhcmRzLAo+
-IFlhbm4gRS4gTU9SSU4uCj4gCj4+IE5GU19VVElMU19DUEVfSURfVkVORE9SID0gbGludXgtbmZz
-Cj4+IE5GU19VVElMU19BVVRPUkVDT05GID0gWUVTCj4+IAo+PiBAQCAtNDcsNyArNDcsNyBAQCBO
-RlNfVVRJTFNfVEFSR0VUU18kKEJSMl9QQUNLQUdFX05GU19VVElMU19SUENfTkZTRCkgKz0gdXNy
-L3NiaW4vZXhwb3J0ZnMgXAo+PiAKPj4gaWZlcSAoJChCUjJfUEFDS0FHRV9ORlNfVVRJTFNfTkZT
-VjQpLHkpCj4+IE5GU19VVElMU19DT05GX09QVFMgKz0gLS1lbmFibGUtbmZzdjQgLS1lbmFibGUt
-bmZzdjQxCj4+IC1ORlNfVVRJTFNfREVQRU5ERU5DSUVTICs9IGtleXV0aWxzIGxpYmV2ZW50IGx2
-bTIgc3FsaXRlCj4+ICtORlNfVVRJTFNfREVQRU5ERU5DSUVTICs9IGtleXV0aWxzIGx2bTIKPj4g
-ZWxzZQo+PiBORlNfVVRJTFNfQ09ORl9PUFRTICs9IC0tZGlzYWJsZS1uZnN2NCAtLWRpc2FibGUt
-bmZzdjQxCj4+IGVuZGlmCj4+IC0tIAo+PiAyLjM0LjEKPj4gCj4+IF9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-Pj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4gCj4gLS0gCj4gLi0tLS0tLS0tLS0tLS0tLS0t
-Li0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0t
-LS0tLS4KPiB8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJ
-SSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAo+IHwgKzMzIDY2MiAzNzYgMDU2IHwgU29m
-dHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8
-Cj4gfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAg
-ICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKPiB8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9y
-Zy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAo+ICct
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1e
-LS0tLS0tLS0tLS0tLS0tLS0tLS0nCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+Hello James, Eric, All,
+
+On 2023-05-14 05:35 -0000, Thomas Petazzoni via buildroot spake thusly:
+>    s390x     |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/4f6f3455f4d10d0643b1d33b5d708cf1d82f4239 |     
+>   aarch64    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/500db917497caa8cf57bb1e1e9b1a437e7c35062 |     
+>   sparc64    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/fba51e375bff1ed4a17b6a970ae699837d9edcbb |     
+>    mipsel    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/aacf81b5defa8964496b6fe38d3a492e29ac6e89 |     
+>    mipsel    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/3ead1a02eb29d25e6676d7452e7f75c40a15f85a |     
+
+We've been having those build failures for a while now: rust does not
+build if libz is not installed system-wide:
+
+       = note: /usr/bin/ld: cannot find -lz
+               collect2: error: ld returned 1 exit status
+
+         Building [=======================> ] 297/300: rustc_driver
+    error: could not compile `rustc_driver` due to previous error
+
+However, we do build host-libz:
+
+    $ ls -l outut/host/lib/libz.*
+    -rw-r--r-- 1 ymorin ymorin 128406 May 14 10:37 outut/host/lib/libz.a
+    lrwxrwxrwx 1 ymorin ymorin     14 May 14 10:37 outut/host/lib/libz.so -> libz.so.1.2.13
+    lrwxrwxrwx 1 ymorin ymorin     14 May 14 10:37 outut/host/lib/libz.so.1 -> libz.so.1.2.13
+    -rwxr-xr-x 1 ymorin ymorin 109784 May 14 10:37 outut/host/lib/libz.so.1.2.13
+
+This is because our HOST_LDFLAGS are somehow not passed down to the
+host-rust build, even though they do contain the proper -L and -rpath
+flags:
+
+    $ jq .HOST_LDFLAGS <output/vars.json
+    {
+      "expanded": "-L/home/ymorin/dev/buildroot/buildroot/master/output/host/lib -Wl,-rpath,/home/ymorin/dev/buildroot/buildroot/master/foo/host/lib",
+      "raw": "-L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib"
+    }
+
+I could not find an obvious way to pass those flags down, so it would be
+great if you could have a look...
+
+The failure is easy to rperoduce:
+
+    $ wget -O .config http://autobuild.buildroot.org/results/fba51e375bff1ed4a17b6a970ae699837d9edcbb/config
+    $ ./utils/docker-run make olddefconfig
+    $ ./utils/docker-run make host-rust
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
