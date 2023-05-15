@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CDF2C77B75
-	for <buildroot@archiver.kernel.org>; Mon, 15 May 2023 07:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739D8C77B75
+	for <buildroot@archiver.kernel.org>; Mon, 15 May 2023 08:47:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93CF24074E;
-	Mon, 15 May 2023 07:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93CF24074E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 079C542002;
+	Mon, 15 May 2023 08:47:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 079C542002
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uQHEPR27NY2e; Mon, 15 May 2023 08:47:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA6E941E79;
+	Mon, 15 May 2023 08:47:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA6E941E79
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F05E11BF592
+ for <buildroot@lists.busybox.net>; Mon, 15 May 2023 08:47:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA1D840FBF
+ for <buildroot@lists.busybox.net>; Mon, 15 May 2023 08:47:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA1D840FBF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wj6BLXZN0dIp; Mon, 15 May 2023 07:35:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D8BE340C6C;
-	Mon, 15 May 2023 07:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8BE340C6C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 577DB1BF316
- for <buildroot@lists.busybox.net>; Mon, 15 May 2023 07:35:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3085260BE4
- for <buildroot@lists.busybox.net>; Mon, 15 May 2023 07:35:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3085260BE4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BIodRKWdKKoi for <buildroot@lists.busybox.net>;
- Mon, 15 May 2023 07:35:43 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADA5D60BB5
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ADA5D60BB5
- for <buildroot@buildroot.org>; Mon, 15 May 2023 07:35:42 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([89.144.220.58]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mel3n-1qYLvN0SKz-00aqVP for <buildroot@buildroot.org>; Mon, 15 May 2023
- 09:35:40 +0200
-From: Daniel Lang <dalang@gmx.at>
-To: buildroot@buildroot.org
-Date: Mon, 15 May 2023 09:35:02 +0200
-Message-Id: <20230515073503.3567935-1-dalang@gmx.at>
-X-Mailer: git-send-email 2.40.1
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jI0qRheAfnQH for <buildroot@lists.busybox.net>;
+ Mon, 15 May 2023 08:47:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33C684014E
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com
+ [IPv6:2607:f8b0:4864:20::c2c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 33C684014E
+ for <buildroot@buildroot.org>; Mon, 15 May 2023 08:47:01 +0000 (UTC)
+Received: by mail-oo1-xc2c.google.com with SMTP id
+ 006d021491bc7-55272ea18e4so674366eaf.3
+ for <buildroot@buildroot.org>; Mon, 15 May 2023 01:47:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1684140420; x=1686732420;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Sv/YcL6WGFde1mxDpKln/lXISe7AHMJwXhg6v1zGvok=;
+ b=cT0hpBnaWlMrCntpOJmPWORD3iQYdOq4rhGD+OTICbs/f4uLDhwjzfeCm1hFWcYcQS
+ vqZW9HIVzlHqXSD5K/wId+K/811bjO6mVnTemnU8Mo/dVWSr9zzg0JjxwRLNY/9OIsz/
+ Jxb2fZiJXZh4Qrq95/RKSaUIwuBtIoaoc4+Tt24cYKnyOrvRuovcj6K+nxWXH/JlI9iM
+ qc6S3X+5qpXsliT8T4Hr0MFcy+Vrz7DJ40VeUO5C/p0ZucvTR5C7oH2HWYFtfkgAuFxz
+ 2yixrtYjt45E3uGGRc6QMLq4oTKXkKku2a5+8ZRIPnSc3cUMQ9ZwI0/8ecJygqpzTtLb
+ uOQA==
+X-Gm-Message-State: AC+VfDyDlc99AIXIYV2w41beh6iESBAzxi028QzCpUoO21rjvkRrrbfC
+ AeingJBITZWgeGCmeKMW9K/Meri4xtlmPo+clUgJZJL6
+X-Google-Smtp-Source: ACHHUZ6rBF6t/UoSNqfhcFQLPARNoCxekNYsTf/DDtxgkpRWuT4MED5kMXHNGCi8HyRq4+WrZaXVa6IYBmwFTtICt0E=
+X-Received: by 2002:a05:6820:291:b0:54f:84d1:51ac with SMTP id
+ q17-20020a056820029100b0054f84d151acmr9132958ood.6.1684140420086; Mon, 15 May
+ 2023 01:47:00 -0700 (PDT)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:SniUl448eFjmJWty4XfSaaUlb8w+bf7mV3FnRlZBMj6NlL0JGNn
- UyMWdZvYB4wFhxvZonwnMxWYSOEJtJqH11oVo+STTDfqRJRCJXYpYTiiHqZxocHMZoAStj4
- JmNA67kgyErhAvFO07zuUTyUtayMTMYZHJlq8fBhHSSKsCjQlnagf78AEYe3wGWlVVEoBU9
- IJNOvtTl7/nTfQu/mS+mg==
-UI-OutboundReport: notjunk:1;M01:P0:vRs6l50AOhY=;ioCQNpSI77XKlWYsXSBPMImVj/Z
- uk4Fm/gC9letbyS7ouu001UVriDHFmMG/3SUFIubHOayaUY2cWa1YyCP/+W4OnCs6V9luZf77
- so2O1EVg4luF04xbX+hQGJOUG69YED4YSi4YW8I0Afw9zLdSaM2xbR01lTDqswlBAlarVoF2n
- a4/6grUMCwVJSrqp4xmmEO/Nn0BKUp8v0sLWg8KrVAI9Yu9u+2ElhlBvzjoI80lFEshI14CA7
- dzDWKy6VCz/92JKDlco0Rj9J1hRNQiYFTXMgtpBpDJ8+u4up4DvIA+0wNnOHLYtzceQoSC4Ni
- PlbZ9VakOQItt/pcwkFkSGcnqMsyQCNc4p9K2yvIdUZYjrIC3wjGa3d7pUMBoi6GDg8nuRMbE
- A9oNewLcwtHW0muN8wWN2fesWEN7aO/EVjmQ0QqjXCE2N5W+fSgMkdyHCn1f6zy4cD1rnpVS6
- 12QvWbCITJHcoAz51GPUsvFv9v7+VcONOq8a52TNZgWTmid8TyManPkJq24ru4M7I18XNgT7z
- APwKEfQ+0T7unhBo8tqbB/NjBB8RFmH8z6XZJxhubDHPOZOTBWFmAPOMGI513K4N6+xvhR/jA
- 4itL0Tloehv9Okg+EjyhG7fbS3tm1lNAfETvw9rkKslnXzi05Tzh+iBR9phtNUI2GF+HJce1V
- yfVkeJmkoN5hHoHBuglCdqMUpomfkBR9K9zB7fLbkVGjbyqT1bzWudkNi/i2mGUyS6Mc+HC1e
- uarFh0ILNOBU89dZOT76xxItPdp1mUWEWGtsVOmHuW/rs8SF2tIlwQKU9/7Z6jc/PW8Pu8lqa
- f5tHP9UJ5aqeRO4YbFSxR/BQDhSYRvdxgZ0P6a6mHJ/27ixF+MmCZ+MB3AS9hfvvgwRR3wlQI
- rqOI36X1YeZ+aKLZAtryEtscHEH5WoafmbbJrjufV6mpvPp6p11jyzwJQAC3Cww3MQrQNQ4RE
- BnuyH59NKNNhTESQzaqSnQs9ico=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; s=s31663417; 
- t=1684136140; i=dalang@gmx.at;
- bh=1PjNVsPPxI5uRT7+iB12iixb11hmnNrKsBKDBh+N4ys=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=N/Nxg6oriEggN8HhRod0L4DAbTCFj6OXGmKX0fbIOFTwQxJyzAig160MdWm2TAP1H
- Jipqbc08zhu0kESWRgUvTHsBBEyzRqr3B+qItKfwzQ8HD/UVnWxXGYK8cixnfBV3y9
- u9kmEAE4SLkX4A8sK0MFYfhmBFAtyAxRGwIpk5gWMLKoZcIzQKgTyLyezF4N7nr6ck
- JcEPvOppUE6ozCxI/M2TjKjjVARijNuGOeulqKGcUjsVeTwNOaZ8ijXFdAy++zRBS6
- MuxFUr1CQq6p9pnp/jbm2gWVT60C7Tr3CEkA823O7Xikkl23lfCpCy1AG2cWm1aulf
- pCahJUWlWWqDw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=N/Nxg6or
-Subject: [Buildroot] [PATCH] package/sdl2_mixer: fix license hash
+References: <CADYjeSuD1_iZ8qpTwmAyTmbJT6Ah9gFENtge+inogwmcg=i1Ng@mail.gmail.com>
+ <20230513000754.57c0ac48@gmx.net>
+In-Reply-To: <20230513000754.57c0ac48@gmx.net>
+From: Sourabh Hegde <hrsourabh011@gmail.com>
+Date: Mon, 15 May 2023 10:46:49 +0200
+Message-ID: <CADYjeSt8aNewmt=b9c_NdjwqK2h9JCeQnYQu2+BhU7hsd_FEdQ@mail.gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1684140420; x=1686732420;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=Sv/YcL6WGFde1mxDpKln/lXISe7AHMJwXhg6v1zGvok=;
+ b=rYQiVZpmdpm4fcz+8kNy9+kcnO1Q18ekyRhcAGkJvcETCotszKRooc2MlMV32CXThu
+ mQVC3O7m0VT4gkjDdCZDT8+WjBOXmPS+91EmixqTQdSeJXZRZILzjBxOMWncxi7d8FrI
+ ScxdsmmTUgx5bYngV8TyILMDv1zdIXuhvMcxspyQF05YDrqFyICZfCK4zjBcqciW5KcE
+ E8CeqPXyguXuWNIywfdH6Ow2/Ek/XK9dpCKIHrz/UfFihqALmx9tEiXPl3D8g2TGk5lW
+ lGLJJRrGqzO+zFbjb5Z1d4GzimyLH3+l/dEjfFPkmus1Tg8V6hS6qG8rYkY1gi2sAGyN
+ 1MSA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=rYQiVZpm
+Subject: Re: [Buildroot] Compiling issue while adding tpm2-tss-engine as
+ Buildroot package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,58 +92,412 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============3020090492063510933=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-b1b8d5b ("package/sdl2_mixer: bump version to 2.6.3") forgot to update
-the hash of the license file.
-In 2021 the file was renamed from COPYING.txt to LICENSE.txt in two
-commits ([0] and [1]). The copyright year was subsequently updated for
-2022 [2] and 2023 [3].
-License is still Zlib - no changes there.
+--===============3020090492063510933==
+Content-Type: multipart/alternative; boundary="0000000000007dc0aa05fbb77f79"
 
-[0]: https://github.com/libsdl-org/SDL_mixer/commit/0f84f242643a913ba81bd6c260c39064c432afd3
-[1]: https://github.com/libsdl-org/SDL_mixer/commit/371bf1575913828c46212e9220d4a4685ed66bb5
-[2]: https://github.com/libsdl-org/SDL_mixer/commit/3f5a0502e0394aa967179d53e180f31cf038e032
-[3]: https://github.com/libsdl-org/SDL_mixer/commit/6fdd4d469b4065ddfb701530d2ea602efaa772b2
+--0000000000007dc0aa05fbb77f79
+Content-Type: text/plain; charset="UTF-8"
 
-Fixes:
- - http://autobuild.buildroot.net/results/302cbd0adc2c6190d8923b9449e26a3c519d2326
+Hello Peter,
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
----
- package/sdl2_mixer/sdl2_mixer.hash | 2 +-
- package/sdl2_mixer/sdl2_mixer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for the update.
 
-diff --git a/package/sdl2_mixer/sdl2_mixer.hash b/package/sdl2_mixer/sdl2_mixer.hash
-index 98c5fda6af..4592014d7f 100644
---- a/package/sdl2_mixer/sdl2_mixer.hash
-+++ b/package/sdl2_mixer/sdl2_mixer.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  7a6ba86a478648ce617e3a5e9277181bc67f7ce9876605eea6affd4a0d6eea8f  SDL2_mixer-2.6.3.tar.gz
--sha256  113727180e7956cb9718b03b41da85b63ea54743a33047071a623bf672895a10  COPYING.txt
-+sha256  1852c8549e3d154687197d46abababd3e8faae035f19991b2ca850fa3a43ad57  LICENSE.txt
-diff --git a/package/sdl2_mixer/sdl2_mixer.mk b/package/sdl2_mixer/sdl2_mixer.mk
-index 425380bf5d..074e282205 100644
---- a/package/sdl2_mixer/sdl2_mixer.mk
-+++ b/package/sdl2_mixer/sdl2_mixer.mk
-@@ -8,7 +8,7 @@ SDL2_MIXER_VERSION = 2.6.3
- SDL2_MIXER_SOURCE = SDL2_mixer-$(SDL2_MIXER_VERSION).tar.gz
- SDL2_MIXER_SITE = http://www.libsdl.org/projects/SDL_mixer/release
- SDL2_MIXER_LICENSE = Zlib
--SDL2_MIXER_LICENSE_FILES = COPYING.txt
-+SDL2_MIXER_LICENSE_FILES = LICENSE.txt
- SDL2_MIXER_INSTALL_STAGING = YES
- SDL2_MIXER_DEPENDENCIES = sdl2 host-pkgconf
- 
--- 
-2.40.1
+Yes, the above option fixed it. Now it's building fine.
+
+Regards,
+Sourabh
+
+On Sat, 13 May 2023 at 00:07, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Sourabh,
+>
+> On Fri, 12 May 2023 14:27:09 +0200, Sourabh Hegde <hrsourabh011@gmail.com>
+> wrote:
+>
+> > Hello,
+> >
+> > I am trying to add tpm2-tss-engine (OpenSSL Engine for TPM2 devices) (
+> > https://github.com/tpm2-software/tpm2-tss-engine) as a Buildroot package
+> > and below is the tpm2-tss-engine.mk file
+> >
+> >
+> ################################################################################
+> > #
+> > # tpm2-tss-engine
+> > #
+> >
+> ################################################################################
+> >
+> > TPM2_TSS_ENGINE_VERSION = 1.2.0
+> > TPM2_TSS_ENGINE_SITE =
+> >
+> https://github.com/tpm2-software/tpm2-tss-engine/releases/download/$(TPM2_TSS_ENGINE_VERSION)
+> > TPM2_TSS_ENGINE_LICENSE = BSD-3-Clause
+> > TPM2_TSS_ENGINE_LICENSE_FILES = LICENSE
+> > TPM2_TSS_ENGINE_DEPENDENCIES = libqrencode tpm2-tss host-pkgconf
+> > host-autoconf-archive
+> > TPM2_TSS_ENGINE_AUTORECONF = YES
+> > TPM2_TSS_ENGINE_AUTORECONF_OPTS = -I $(HOST_DIR)/share/autoconf-archive
+> > TPM2_TSS_ENGINE_CONF_OPTS = \
+> >         --disable-defaultflags \
+> >         --disable-doxygen-doc \
+> >         --disable-plymouth \
+> >         --without-initramfstoolsdir \
+> >         --without-mkinitcpiodir
+> >
+> > # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags
+> is
+> > used
+> > TPM2_TSS_ENGINE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+> >
+> > # do not build man pages
+> > TPM2_TSS_ENGINE_CONF_ENV += ac_cv_path_PANDOC=''
+> >
+> > $(eval $(autotools-package))
+> >
+> > Source code is being downloaded from Git and building. But in the next
+> step
+> > I am getting below error:
+> >
+> > >>> tpm2-tss-engine 1.2.0 Building
+> >
+> PATH="/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin:/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+> >  /usr/bin/make -j17  -C
+> > /home/[...]/tmp/br.test.standard/build/tpm2-tss-engine-1.2.0/
+> > make[2]: Nothing to be done for 'all'.
+> > >>> tpm2-tss-engine 1.2.0 Installing to target
+> >
+> PATH="/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin:/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+> >  /usr/bin/make -j17
+> >
+> DESTDIR=/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target
+> > install -C /home/[...]/tmp/br.test.standard/build/tpm2-tss-engine-1.2.0/
+> > ([ -e
+> >
+> /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1
+> > ] || \
+> >          /usr/bin/mkdir -p
+> >
+> /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1)
+> >  /usr/bin/mkdir -p
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/bin'
+> >  /usr/bin/mkdir -p
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/share/bash-completion/completions'
+> >  /usr/bin/mkdir -p
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/include'
+> >  /usr/bin/mkdir -p
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1'
+> >  /usr/bin/mkdir -p
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/share/man/man1'
+> >  /usr/bin/mkdir -p
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/share/man/man3'
+> >  /bin/bash ./libtool   --mode=install /usr/bin/install -c
+> libtpm2tss.la
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1'
+> >   /bin/bash ./libtool   --mode=install /usr/bin/install -c tpm2tss-genkey
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/bin'
+> >  /usr/bin/install -c -m 644 bash-completion/tpm2tss-genkey
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/share/bash-completion/completions'
+> >  /usr/bin/install -c -m 644 include/tpm2-tss-engine.h
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/include'
+> >  /usr/bin/install -c -m 644 man/man1/tpm2tss-genkey.1
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/share/man/man1'
+> >  /usr/bin/install -c -m 644 man/man3/tpm2tss_tpm2data_write.3
+> > man/man3/tpm2tss_rsa_makekey.3 man/man3/tpm2tss_rsa_genkey.3
+> > man/man3/tpm2tss_ecc_makekey.3 man/man3/tpm2tss_ecc_genkey.3
+> > man/man3/tpm2tss_ecc_getappdata.3 man/man3/tpm2tss_tpm2data_read.3
+> > man/man3/tpm2tss_ecc_setappdata.3
+> >
+> '/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/share/man/man3'
+> > libtool: install: /usr/bin/install -c .libs/libtpm2tss.so
+> >
+> /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1/libtpm2tss.so
+> > libtool: install: /usr/bin/install -c tpm2tss-genkey
+> >
+> /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/usr/bin/tpm2tss-genkey
+> > libtool: install: /usr/bin/install -c .libs/libtpm2tss.lai
+> >
+> /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1/
+> > libtpm2tss.la
+> > /usr/bin/make  install-exec-hook
+> > (cd
+> >
+> /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1
+> > && \
+> >          ln -s -f libtpm2tss.so tpm2tss.so)
+> > libtool: warning: remember to run 'libtool --finish
+> >
+> /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1'
+> > tpm2-tss-engine: installs files in
+> >
+> /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target//home/[...]/tmp/br.test.standard
+>
+> This is a check for files installed into target replicating your build
+> path, e.g.
+> in case your build in /home/my_name/buildroot_build_001 and your package
+> installs
+> files into
+> /home/my_name/buildroot_build_001/target/home/my_name/buildroot_build_001/usr/lib/...
+> instead into /home/my_name/buildroot_build_001/target/usr/lib/...
+>
+> In your case this can be fixed by adding
+> '--with-enginesdir=/usr/lib/engines-1.1' to
+> TPM2_TSS_ENGINE_CONF_OPTS options...
+>
+> Regards,
+> Peter
+>
+>
+> > make[1]: *** [package/pkg-generic.mk:390:
+> >
+> /home/[...]/tmp/br.test.standard/build/tpm2-tss-engine-1.2.0/.stamp_target_installed]
+> > Error 1
+> > make: *** [Makefile:23: _all] Error 2
+> >
+> >
+> > I have also added `libtool` (`BR2_PACKAGE_LIBTOOL`) in the `make
+> > menuconfig`.
+> > I am not sure what the actual error is.
+> >
+> > Can anyone please let me know how to resolve the above issue?
+> >
+> > Thank you,
+> > Sourabh
+>
+>
+
+--0000000000007dc0aa05fbb77f79
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello Peter,<div><br></div><div>Thanks for the update.</di=
+v><div><br></div><div>Yes, the above option fixed it. Now it&#39;s building=
+ fine.</div><div><br></div><div>Regards,</div><div>Sourabh</div></div><br><=
+div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Sat, 13 =
+May 2023 at 00:07, Peter Seiderer &lt;<a href=3D"mailto:ps.report@gmx.net">=
+ps.report@gmx.net</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
+adding-left:1ex">Hello Sourabh,<br>
+<br>
+On Fri, 12 May 2023 14:27:09 +0200, Sourabh Hegde &lt;<a href=3D"mailto:hrs=
+ourabh011@gmail.com" target=3D"_blank">hrsourabh011@gmail.com</a>&gt; wrote=
+:<br>
+<br>
+&gt; Hello,<br>
+&gt;<br>
+&gt; I am trying to add tpm2-tss-engine (OpenSSL Engine for TPM2 devices) (=
+<br>
+&gt; <a href=3D"https://github.com/tpm2-software/tpm2-tss-engine" rel=3D"no=
+referrer" target=3D"_blank">https://github.com/tpm2-software/tpm2-tss-engin=
+e</a>) as a Buildroot package<br>
+&gt; and below is the <a href=3D"http://tpm2-tss-engine.mk" rel=3D"noreferr=
+er" target=3D"_blank">tpm2-tss-engine.mk</a> file<br>
+&gt;<br>
+&gt; ######################################################################=
+##########<br>
+&gt; #<br>
+&gt; # tpm2-tss-engine<br>
+&gt; #<br>
+&gt; ######################################################################=
+##########<br>
+&gt;<br>
+&gt; TPM2_TSS_ENGINE_VERSION =3D 1.2.0<br>
+&gt; TPM2_TSS_ENGINE_SITE =3D<br>
+&gt; <a href=3D"https://github.com/tpm2-software/tpm2-tss-engine/releases/d=
+ownload/$(TPM2_TSS_ENGINE_VERSION)" rel=3D"noreferrer" target=3D"_blank">ht=
+tps://github.com/tpm2-software/tpm2-tss-engine/releases/download/$(TPM2_TSS=
+_ENGINE_VERSION)</a><br>
+&gt; TPM2_TSS_ENGINE_LICENSE =3D BSD-3-Clause<br>
+&gt; TPM2_TSS_ENGINE_LICENSE_FILES =3D LICENSE<br>
+&gt; TPM2_TSS_ENGINE_DEPENDENCIES =3D libqrencode tpm2-tss host-pkgconf<br>
+&gt; host-autoconf-archive<br>
+&gt; TPM2_TSS_ENGINE_AUTORECONF =3D YES<br>
+&gt; TPM2_TSS_ENGINE_AUTORECONF_OPTS =3D -I $(HOST_DIR)/share/autoconf-arch=
+ive<br>
+&gt; TPM2_TSS_ENGINE_CONF_OPTS =3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--disable-defaultflags \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--disable-doxygen-doc \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--disable-plymouth \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--without-initramfstoolsdir \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--without-mkinitcpiodir<br>
+&gt;<br>
+&gt; # uses C99 code but forgets to pass -std=3Dc99 when --disable-defaultf=
+lags is<br>
+&gt; used<br>
+&gt; TPM2_TSS_ENGINE_CONF_ENV +=3D CFLAGS=3D&quot;$(TARGET_CFLAGS) -std=3Dc=
+99&quot;<br>
+&gt;<br>
+&gt; # do not build man pages<br>
+&gt; TPM2_TSS_ENGINE_CONF_ENV +=3D ac_cv_path_PANDOC=3D&#39;&#39;<br>
+&gt;<br>
+&gt; $(eval $(autotools-package))<br>
+&gt;<br>
+&gt; Source code is being downloaded from Git and building. But in the next=
+ step<br>
+&gt; I am getting below error:<br>
+&gt;<br>
+&gt; &gt;&gt;&gt; tpm2-tss-engine 1.2.0 Building<br>
+&gt; PATH=3D&quot;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-eng=
+ine/host/bin:/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/h=
+ost/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;=
+<br>
+&gt;=C2=A0 /usr/bin/make -j17=C2=A0 -C<br>
+&gt; /home/[...]/tmp/br.test.standard/build/tpm2-tss-engine-1.2.0/<br>
+&gt; make[2]: Nothing to be done for &#39;all&#39;.<br>
+&gt; &gt;&gt;&gt; tpm2-tss-engine 1.2.0 Installing to target<br>
+&gt; PATH=3D&quot;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-eng=
+ine/host/bin:/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/h=
+ost/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;=
+<br>
+&gt;=C2=A0 /usr/bin/make -j17<br>
+&gt; DESTDIR=3D/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine=
+/target<br>
+&gt; install -C /home/[...]/tmp/br.test.standard/build/tpm2-tss-engine-1.2.=
+0/<br>
+&gt; ([ -e<br>
+&gt; /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/ho=
+me/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch=
+64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1<br>
+&gt; ] || \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 /usr/bin/mkdir -p<br>
+&gt; /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/ho=
+me/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch=
+64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1)<br>
+&gt;=C2=A0 /usr/bin/mkdir -p<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/bin&#39;<br>
+&gt;=C2=A0 /usr/bin/mkdir -p<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/share/bash-completion/completions&#39;<br>
+&gt;=C2=A0 /usr/bin/mkdir -p<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/include&#39;<br>
+&gt;=C2=A0 /usr/bin/mkdir -p<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../=
+aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1&#39;<br>
+&gt;=C2=A0 /usr/bin/mkdir -p<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/share/man/man1&#39;<br>
+&gt;=C2=A0 /usr/bin/mkdir -p<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/share/man/man3&#39;<br>
+&gt;=C2=A0 /bin/bash ./libtool=C2=A0 =C2=A0--mode=3Dinstall /usr/bin/instal=
+l -c=C2=A0 =C2=A0<a href=3D"http://libtpm2tss.la" rel=3D"noreferrer" target=
+=3D"_blank">libtpm2tss.la</a><br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../=
+aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1&#39;<br>
+&gt;=C2=A0 =C2=A0/bin/bash ./libtool=C2=A0 =C2=A0--mode=3Dinstall /usr/bin/=
+install -c tpm2tss-genkey<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/bin&#39;<br>
+&gt;=C2=A0 /usr/bin/install -c -m 644 bash-completion/tpm2tss-genkey<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/share/bash-completion/completions&#39;<br>
+&gt;=C2=A0 /usr/bin/install -c -m 644 include/tpm2-tss-engine.h<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/include&#39;<br>
+&gt;=C2=A0 /usr/bin/install -c -m 644 man/man1/tpm2tss-genkey.1<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/share/man/man1&#39;<br>
+&gt;=C2=A0 /usr/bin/install -c -m 644 man/man3/tpm2tss_tpm2data_write.3<br>
+&gt; man/man3/tpm2tss_rsa_makekey.3 man/man3/tpm2tss_rsa_genkey.3<br>
+&gt; man/man3/tpm2tss_ecc_makekey.3 man/man3/tpm2tss_ecc_genkey.3<br>
+&gt; man/man3/tpm2tss_ecc_getappdata.3 man/man3/tpm2tss_tpm2data_read.3<br>
+&gt; man/man3/tpm2tss_ecc_setappdata.3<br>
+&gt; &#39;/home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/targ=
+et/usr/share/man/man3&#39;<br>
+&gt; libtool: install: /usr/bin/install -c .libs/libtpm2tss.so<br>
+&gt; /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/ho=
+me/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch=
+64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1/libtpm2tss.so<br>
+&gt; libtool: install: /usr/bin/install -c tpm2tss-genkey<br>
+&gt; /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/us=
+r/bin/tpm2tss-genkey<br>
+&gt; libtool: install: /usr/bin/install -c .libs/libtpm2tss.lai<br>
+&gt; /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/ho=
+me/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch=
+64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1/<br>
+&gt; <a href=3D"http://libtpm2tss.la" rel=3D"noreferrer" target=3D"_blank">=
+libtpm2tss.la</a><br>
+&gt; /usr/bin/make=C2=A0 install-exec-hook<br>
+&gt; (cd<br>
+&gt; /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target/ho=
+me/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/../aarch=
+64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1<br>
+&gt; &amp;&amp; \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ln -s -f libtpm2tss.so tpm2tss.so)<b=
+r>
+&gt; libtool: warning: remember to run &#39;libtool --finish<br>
+&gt; /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/host/bin/=
+../aarch64-buildroot-linux-gnu/sysroot/usr/lib/engines-1.1&#39;<br>
+&gt; tpm2-tss-engine: installs files in<br>
+&gt; /home/[...]/tmp/br.test.standard/per-package/tpm2-tss-engine/target//h=
+ome/[...]/tmp/br.test.standard<br>
+<br>
+This is a check for files installed into target replicating your build path=
+, e.g.<br>
+in case your build in /home/my_name/buildroot_build_001 and your package in=
+stalls<br>
+files into /home/my_name/buildroot_build_001/target/home/my_name/buildroot_=
+build_001/usr/lib/...<br>
+instead into /home/my_name/buildroot_build_001/target/usr/lib/...<br>
+<br>
+In your case this can be fixed by adding &#39;--with-enginesdir=3D/usr/lib/=
+engines-1.1&#39; to<br>
+TPM2_TSS_ENGINE_CONF_OPTS options...<br>
+<br>
+Regards,<br>
+Peter<br>
+<br>
+<br>
+&gt; make[1]: *** [package/<a href=3D"http://pkg-generic.mk:390" rel=3D"nor=
+eferrer" target=3D"_blank">pkg-generic.mk:390</a>:<br>
+&gt; /home/[...]/tmp/br.test.standard/build/tpm2-tss-engine-1.2.0/.stamp_ta=
+rget_installed]<br>
+&gt; Error 1<br>
+&gt; make: *** [Makefile:23: _all] Error 2<br>
+&gt;<br>
+&gt;<br>
+&gt; I have also added `libtool` (`BR2_PACKAGE_LIBTOOL`) in the `make<br>
+&gt; menuconfig`.<br>
+&gt; I am not sure what the actual error is.<br>
+&gt;<br>
+&gt; Can anyone please let me know how to resolve the above issue?<br>
+&gt;<br>
+&gt; Thank you,<br>
+&gt; Sourabh<br>
+<br>
+</blockquote></div>
+
+--0000000000007dc0aa05fbb77f79--
+
+--===============3020090492063510933==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3020090492063510933==--
