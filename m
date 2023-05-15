@@ -4,56 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43A63C77B75
-	for <buildroot@archiver.kernel.org>; Mon, 15 May 2023 15:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3D76C77B75
+	for <buildroot@archiver.kernel.org>; Mon, 15 May 2023 15:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C191F41D6A;
-	Mon, 15 May 2023 15:26:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C191F41D6A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65CDC41D9D;
+	Mon, 15 May 2023 15:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65CDC41D9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lUEJh6Rwg8wK; Mon, 15 May 2023 15:26:37 +0000 (UTC)
+	with ESMTP id 8PI2_EzliGT9; Mon, 15 May 2023 15:52:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03D3C41D63;
-	Mon, 15 May 2023 15:26:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03D3C41D63
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 333081BF573
- for <buildroot@lists.busybox.net>; Mon, 15 May 2023 15:26:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D58741DA2;
+	Mon, 15 May 2023 15:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D58741DA2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D1DD61BF573
+ for <buildroot@lists.busybox.net>; Mon, 15 May 2023 15:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08BB58409E
- for <buildroot@lists.busybox.net>; Mon, 15 May 2023 15:26:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08BB58409E
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9312615D9
+ for <buildroot@lists.busybox.net>; Mon, 15 May 2023 15:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9312615D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tC3WJrt5WEmW for <buildroot@lists.busybox.net>;
- Mon, 15 May 2023 15:26:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 546F583C31
-Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 546F583C31
- for <buildroot@buildroot.org>; Mon, 15 May 2023 15:26:32 +0000 (UTC)
-Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
- by mailout06.t-online.de (Postfix) with SMTP id 35F04155D2
- for <buildroot@buildroot.org>; Mon, 15 May 2023 17:26:29 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd73.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pya5j-3LlY490; Mon, 15 May 2023 17:26:27 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48970)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pya5j-00015D-0R
- for buildroot@buildroot.org; Mon, 15 May 2023 17:26:27 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Mon, 15 May 2023 17:26:26 +0200
-Message-Id: <20230515152626.286921-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DAp6YY_odGPY for <buildroot@lists.busybox.net>;
+ Mon, 15 May 2023 15:51:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30627615D7
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 30627615D7
+ for <buildroot@buildroot.org>; Mon, 15 May 2023 15:51:55 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 05E82C0003;
+ Mon, 15 May 2023 15:51:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pyaUK-000G2G-82; Mon, 15 May 2023 17:51:52 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Daniel Lang <dalang@gmx.at>
+References: <20230515073503.3567935-1-dalang@gmx.at>
+Date: Mon, 15 May 2023 17:51:52 +0200
+In-Reply-To: <20230515073503.3567935-1-dalang@gmx.at> (Daniel Lang's message
+ of "Mon, 15 May 2023 09:35:02 +0200")
+Message-ID: <877ct91tk7.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1684164387-D3FE82C5-0C8360AA/0/0 CLEAN NORMAL
-X-TOI-MSGID: 106e9aea-023f-4182-a24c-2a63bd0d4168
-Subject: [Buildroot] [PATCH 1/1] package/clamav: fix build on mips64el
+Subject: Re: [Buildroot] [PATCH] package/sdl2_mixer: fix license hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +63,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/b64/b640937f35b11ddb9f1e29f0e44040eda8850f26/
-'Could not find specification for target "mips64el-unknown-linux-gnu".'
+>>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
 
-This patch changes
-    -DRUST_COMPILER_TARGET=mips64el-unknown-linux-gnu
-to
-    -DRUST_COMPILER_TARGET=mips64el-unknown-linux-gnuabi64
+ > b1b8d5b ("package/sdl2_mixer: bump version to 2.6.3") forgot to update
+ > the hash of the license file.
+ > In 2021 the file was renamed from COPYING.txt to LICENSE.txt in two
+ > commits ([0] and [1]). The copyright year was subsequently updated for
+ > 2022 [2] and 2023 [3].
+ > License is still Zlib - no changes there.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/clamav/clamav.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > [0]: https://github.com/libsdl-org/SDL_mixer/commit/0f84f242643a913ba81bd6c260c39064c432afd3
+ > [1]: https://github.com/libsdl-org/SDL_mixer/commit/371bf1575913828c46212e9220d4a4685ed66bb5
+ > [2]: https://github.com/libsdl-org/SDL_mixer/commit/3f5a0502e0394aa967179d53e180f31cf038e032
+ > [3]: https://github.com/libsdl-org/SDL_mixer/commit/6fdd4d469b4065ddfb701530d2ea602efaa772b2
 
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 977b6010b3..c3bede9ef3 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -54,7 +54,7 @@ CLAMAV_CONF_OPTS = \
- 	-DENABLE_MILTER=OFF \
- 	-DENABLE_TESTS=OFF \
- 	-DHAVE_SYSTEM_LFS_FTS=ON \
--	-DRUST_COMPILER_TARGET=$(ARCH)-unknown-$(TARGET_OS)-$(LIBC)$(ABI) \
-+	-DRUST_COMPILER_TARGET=$(ARCH)-unknown-$(TARGET_OS)-$(LIBC)$(RUSTC_ABI) \
- 	-Dtest_run_result=ON \
- 	-Dtest_run_result__TRYRUN_OUTPUT=ON
- 
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/302cbd0adc2c6190d8923b9449e26a3c519d2326
+
+ > Signed-off-by: Daniel Lang <dalang@gmx.at>
+
+Committed, thanks.
+
 -- 
-2.39.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
