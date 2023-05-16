@@ -4,135 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA57DC77B7F
-	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 05:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20B79C77B7A
+	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 05:36:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 864BF40529;
-	Tue, 16 May 2023 05:17:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 864BF40529
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9370240588;
+	Tue, 16 May 2023 05:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9370240588
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Shnpbns6-9v7; Tue, 16 May 2023 05:17:27 +0000 (UTC)
+	with ESMTP id oBjtqvX1ve_v; Tue, 16 May 2023 05:36:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 82DE640191;
-	Tue, 16 May 2023 05:17:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82DE640191
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 71C511BF34D
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 05:17:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 365AE40166;
+	Tue, 16 May 2023 05:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 365AE40166
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3385A1BF34D
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 05:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 338C960F3C
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 05:17:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 338C960F3C
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDBD584008
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 05:36:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDBD584008
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sn_TvRuK0Meo for <buildroot@lists.busybox.net>;
- Tue, 16 May 2023 05:17:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF06160EF3
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-sn1nam02on20624.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7ea9::624])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CF06160EF3
- for <buildroot@buildroot.org>; Tue, 16 May 2023 05:17:22 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mr0c9buZRpOaTY0HkHLckP300PRn/UFvPN1iXzkDDiR5cOs18MUrqrgDa7UyiEYk/4u9OJZWUDcPVgZiHBdZnNOdEvip0gaWVZtmEQWbi9AIA1C5CZoeHBTDf0PEjCpM1Gc4Rht1vyu2OxOPtD8pTYRkLD786HmOVPZlKHAii7b/nnjPwfDbASTHhTAO5IPvmfLpym5tuNkA4SjsNmvJbJNVjL/COkmzuN/ajK9jQELbeAKZx62ish810leirQE6XoxXry5/c3hcpzzh1CffBmFjm+f6tUnUNzPgP0+YN9x+a6AmT2300lVknS3oefHK+4o7PpTyu9cSPm27Luc9VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=coqZsO/RjqslKkXjZKX1h5xDf3078E/cwznHab2nn14=;
- b=fG8kE4TAOf2JnnGLgJi7HRgeby08WAUaKTVWFBFjFb4jF0FbL8CF/NieWDpkaAJuc5V9CXu9719BM9mTomkV10XUqO2XAvCsWrrnrwhz6azQlzj9sU8SS5TjVIy7GBbX3gIxOhvV5ysqpMzSiorsqqSLvYITVAfLMIlV92Kpfj2EAkzmbB1sxEDjcVAZNz82ApXsaeNg4+Q0z2QN8oGRdf7jl3zl992CPy1wvK2KkTVAvXPLOc4M4CQc8Jf2NRYlkmnlE09lhuXYy49AMv4epYIgQsbd8Axn10r9/+V2XXwZ10LNgHyPzg4SIOHa6CLSS39y8qYiUumlRwCEaJF3YA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by SJ0PR12MB6688.namprd12.prod.outlook.com (2603:10b6:a03:47d::19)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.29; Tue, 16 May
- 2023 05:17:19 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e72c:bce2:5835:cef4]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e72c:bce2:5835:cef4%6]) with mapi id 15.20.6387.030; Tue, 16 May 2023
- 05:17:18 +0000
-To: Baruch Siach <baruch@tkos.co.il>
-Thread-Topic: [PATCH v3 1/1] package/bootgen: bump to xilinx_v2023.1
-Thread-Index: AQHZh7Eli1UDO/edIkmATAXtPAMGD69cVDAAgAAHTE0=
-Date: Tue, 16 May 2023 05:17:18 +0000
-Message-ID: <CH2PR12MB5004E6CADE6B17221F5A6DC6F0799@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20230516044418.21419-1-neal.frager@amd.com>
- <874jocc22f.fsf@tarshish>
-In-Reply-To: <874jocc22f.fsf@tarshish>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SJ0PR12MB6688:EE_
-x-ms-office365-filtering-correlation-id: 3b501255-17f2-4047-27cf-08db55ccd1c0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J+YoxouLBEAmwu1uvZ4JshtfM3k1GhKvFDOvhqB5dQ28P9wqA0iqwO2TsvOcG/2dBuLU2cneGw291AbAZryKBB+waBMEjpwiWqYrBk80JWQ9mGUcCzfBZ2cawANBhiR7YkgrJjt9pvpSqZbS1ddPsfP43qv+2NYQkWl+Zh+4+G5m+lYXGxeiSVnZAFui+PSPcQ78JVRi6TmDr55em7opyDQhPsoGvlEvLxc0tZd9E/6JeH5AX4cp/c3SPhxNr7tL4JmJKYbaBuJogT36vAQWebvexMVyp2CI45an8GgKre8E0IWHCWBXAAL8ExklmI74lnimN4Rd/Rak3RkYGh9MCcVFopcMC/Www4O6y8Ptb+oYMNgi0GqBUqo/snOYgfMMHop4sugqPVYbcNBpcTnxFBFPcU39i6Z0Chcr6JKdymorQOrYnUWrrWkHqp85gOsZLrp8+Pgl74Ddk6i7d+GacwpD0emMuNcdKsm3Zz35jLxJzPLoBsuy3lYXP5R4maEJsDpT5YVVCpem0FtM15W7Zrbm/TK91MpMAJUDLHx3w63kNwmV2AUpVotDcwIkj4JALuxgWLsBxPwCwywtlHwtzDFXXAH7DL/8Pnt2vUAb+zI=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(451199021)(55016003)(4326008)(66476007)(966005)(64756008)(2906002)(83380400001)(478600001)(76116006)(66946007)(66556008)(66446008)(7696005)(91956017)(54906003)(186003)(6506007)(8936002)(52536014)(8676002)(26005)(9686003)(5660300002)(6916009)(316002)(71200400001)(41300700001)(86362001)(38070700005)(38100700002)(122000001)(33656002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?wjHz9fwEo5tJ58KiArE0Ufegc807Cigd4O97E6y4ZrQ6c943Toz4Y4w3Px?=
- =?iso-8859-1?Q?a+K86mL4KRvfsbLdtJAi/an8nqzXyu0FC996GKlCtJq2W9vzXsJYKFLMN3?=
- =?iso-8859-1?Q?FBCyKfjOKbnIXoJSAjI0LTEmZgAEVqe3OIN4rbHeeCnEed6AgCKq76puEE?=
- =?iso-8859-1?Q?pkfRbU8YTZAt7bXyEuCvLr2FLaXe3qxstqcpfK3I81BWYb32py7S/v0kst?=
- =?iso-8859-1?Q?ZQRQNHVWVUT7XTzSP/nT0gNLKkDMnix1tYDB9eZr7DOilzC5VNoxKkW457?=
- =?iso-8859-1?Q?FYEq7cvCjCdxDJgbgLwO/ms/LMEaUEhbd7gRqfr+tYThbTMJjjb9Je4u/A?=
- =?iso-8859-1?Q?6B1s5hkjCqqjPOrrq6r6rPwHS0x+A7UhzCrABxh93Wn5cRYnDXh+/GLSzO?=
- =?iso-8859-1?Q?Clt/AEWrjLf9tjmDV/4nxi0t/JmFPy/QJ61H8CwxcWH/Kwh5zqEx86yrkS?=
- =?iso-8859-1?Q?ciLWBxeMH1DiICCH/bvdiySaxO7FPQUMDF/rgjWbW5oz9FQn00LsfCoWsK?=
- =?iso-8859-1?Q?2PG1p+dwX9dLfY/qNfpLVxwTSq07t0oC6/ZXBELm8seDnBnGydfr0xP7/W?=
- =?iso-8859-1?Q?MOT//FrlfV4DNeHW2xlIVO8mTX7cq4006nExutrSb1iyzrc0PTKR3oa5xG?=
- =?iso-8859-1?Q?TTZggamjTUn6c4kW2C9v9Ej11RxZKWGu2rOCr0NgPulpxG9yBRU2GW/oiJ?=
- =?iso-8859-1?Q?7aJzAN+w5ani0OFNVycCS7XhC+lXciCPRU1kQYvPHagPU5Vmd61TD8oAMU?=
- =?iso-8859-1?Q?LQTp5wfPpn+yVWwYg6bugzsS2d8v4i6aAfXLdDObKkNcfon7XYFAAtWYF2?=
- =?iso-8859-1?Q?nzAb0r7fEAf5J0VfQC5yxsULowDkjHQrmfpCeeUswfBGZPrBKfEd3MinNM?=
- =?iso-8859-1?Q?CuMXKdOKYIYQLkh7Qjr9ckG37h7jVL+csOC2YWz69vaYV0IrrXd0wmn3c1?=
- =?iso-8859-1?Q?HursQnYSkMq6tFTcra4Khx67f1yYtKqdnPp0YRV44iSEn+B07Mc+vGHeQx?=
- =?iso-8859-1?Q?+ZiAO2F9yRa0CrdQNEbQspcvlau8kILO2Es3/biNY5orGoOSWuOr0q3Igb?=
- =?iso-8859-1?Q?7qtk2FM1mX34VXg/54cGS/pWzg6YHjXUbFF0oBwTS6n2/7HoeT3VxBlo9s?=
- =?iso-8859-1?Q?aOH4SmyKQv5w69+hJzrLpNfsyWMpwrd/7tpwo/jf0X4rCPFN/Z33Wvp9y8?=
- =?iso-8859-1?Q?tjYWHr2eAylwXiAXaNSp04rwCyQLekL756aIkSW583w5nyAW8rxuff8Y26?=
- =?iso-8859-1?Q?0DD+LTVVslsvTvS9CD86YEFY8vp0EHriJGIkpSefkRTQ9kBdeXqTjxteEw?=
- =?iso-8859-1?Q?lHE0YPXdEnVbj+MVQ9igJ0By0tVBv+XO0OkpYU1rvV3xC+o/aTCKSHmrrx?=
- =?iso-8859-1?Q?x4kJhHl79L0FeEoJMUBXyR4gJxjPn391xjdVRHT8GLXlJDBRVaB24BrmAg?=
- =?iso-8859-1?Q?QrvYEmgrqtLOf8XZq0tK+vOQVTfDf8NuBQuRPLM/8TDXyy9GyGq9j4EMGe?=
- =?iso-8859-1?Q?9vvNelohAK/JYsxaC22r3c6X91I7VByTr7SOvAkj7MDCqUvhS4XNei5t3L?=
- =?iso-8859-1?Q?XkK2UnT/iYdZAdaMTKwkvOFy3LeYp2VqcIkIZI2cugsKtoqMTjseKpTisj?=
- =?iso-8859-1?Q?QY2aNTiCw6dfw=3D?=
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vgGUZca7Q2j7 for <buildroot@lists.busybox.net>;
+ Tue, 16 May 2023 05:36:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFB7483FDD
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BFB7483FDD
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 05:36:12 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E13C86000E
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 05:36:09 +0000 (UTC)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b501255-17f2-4047-27cf-08db55ccd1c0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2023 05:17:18.3673 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ihpldPrIRwP6Fb74AfW330KCI3ob/d3adlcgZ6/vttldkhXWu12dfJdYqvLElDhg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6688
+To: buildroot@buildroot.org
+Date: Tue, 16 May 2023 05:36:09 -0000
+Message-Id: <20230516053614.DDBD584008@smtp1.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=coqZsO/RjqslKkXjZKX1h5xDf3078E/cwznHab2nn14=;
- b=Q9/O04vkBxKUSV5Axn517Zb+HyJwZb9OMb+rwv/0UwwEOsuURNR4T6Y/G0mfdHpNy0fJLQPYEvB8dciM5xQQy0XO8GhO6L8f+EwC9KHvDa/bGUf0ZpmUl2qq6UGSyzjlW3a/o5IKeyNLSz+JtfjNWU82Mcxjx6pO5ei2UduoJmE=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=Q9/O04vk
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/bootgen: bump to
- xilinx_v2023.1
+ d=bootlin.com; s=gm1; 
+ t=1684215370; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=62J/m3GmGynrkzYbdgwPolhHokprNFE6RDEKrdfS0Ms=;
+ b=WGDrIV2BT3+p6NBhaZOb8FusX37ZR9tE950KKJR7+WVn8By7ReJBd4KSJlOTn80U06Jb4w
+ uRWHOEnMjJuMfHFn7icwyj4dep1PD6rFetG8uZDbcGHKJGf6WOshjBFzXuK9mJHy8FISG/
+ sSACof2m85qPa0bZUesStd9O/4QpQyTesaHkXtdf+R+JyHtqziCNSFJlv1CdAgi77o75BZ
+ 825oDi8uRGDELqAc7TEd55/Q0fAEyVqTQyvwiHNlOC5xi6MlgjREf3XzUMZRgU4aWbunQu
+ r7DI7HHkuh6K1I3ng5hyHARjejv9E7kRbxXqU2Qv5hfBhobsbOQaaGv3fytZBw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WGDrIV2B
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-05-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -144,236 +70,236 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Simek, Michal" <michal.simek@amd.com>,
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Baruch,
+Hello,
 
-> Hi Neal,
+Autobuild statistics for 2023-05-15
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2022.02.x  |  5  |  2  |  0  |  7  |
+  2023.02.x  |  7  |  4  |  0  | 11  |
+    master   | 72  | 77  |  3  | 152 |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+                   linux-6.3.2 | 5 
+host-heimdal-f4faaeaba371ff... | 4 
+           at-spi2-core-2.48.2 | 3 
+                host-go-1.19.9 | 3 
+         sdl2_mixer-legal-info | 3 
+                       unknown | 3 
+                 agentpp-4.6.0 | 2 
+                elfutils-0.186 | 2 
+fs/ubifs/ubifs.mk:49: /home... | 2 
+         gobject-introspection | 2 
+              host-rust-1.68.2 | 2 
+               libcap-ng-0.8.3 | 2 
+               libglib2-2.76.1 | 2 
+          linux-5.10.162-cip24 | 2 
+            micropython-1.19.1 | 2 
+              open62541-v1.3.4 | 2 
+package/sdl2_mixer/sdl2_mix... | 2 
+                     php-8.2.6 | 2 
+            quickjs-2021-03-27 | 2 
+                   shadow-4.13 | 2 
+                   trinity-1.9 | 2 
+                     vdr-2.6.3 | 2 
+                    brltty-6.5 | 1 
+                 coreutils-9.3 | 1 
+                 dc3dd-7.2.641 | 1 
+                        ffmpeg | 1 
+                     frr-8.4.2 | 1 
+fs/jffs2/jffs2.mk:71: /home... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+glibc-2.37-2-g9f8513dc64119... | 1 
+google-breakpad-c85eb4a59b6... | 1 
+                haveged-1.9.18 | 1 
+            host-binutils-2.37 | 1 
+            host-binutils-2.38 | 1 
+            host-binutils-2.39 | 1 
+       host-python-sip-4.19.25 | 1 
+              libsodium-1.0.18 | 1 
+            live555-2021.05.03 | 1 
+        ltp-testsuite-20230127 | 1 
+          lttng-modules-2.13.7 | 1 
+                 openssh-9.3p1 | 1 
+                   perl-5.36.1 | 1 
+           python-pyicu-2.10.2 | 1 
+sconeserver-8d1935919a20133... | 1 
+               syslog-ng-4.1.1 | 1 
+           uboot-tools-2021.07 | 1 
+               zxing-cpp-1.4.0 | 1 
 
 
-> This patch bumps bootgen to version xilinx_v2023.1.
-> The patch for build machines with modern flex is no longer needed.
->
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-> V1->V2:
->=A0=A0 - Added patch file remove to commit
-> V2->V3:
->=A0=A0 - Fixed file name in bootgen.hash file
-> ---
->=A0 ...x-build-on-machines-with-modern-flex.patch | 133 ------------------
+Detail of failures for master
+-----------------------------
 
-> The patch should also be removed from the .checkpackageignore list.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/f94d989a8668f53d0f20a713fe5e28bd75bb9453 |     
+    arm      |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/f54eb81bd7f828a91697f010ee34ed87dbbd4e34 |     
+    or1k     |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/dec18d3a9fb45e205cb6b7707715317c8f3a5132 |     
+ aarch64_be  |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/12210154c269ee05bfa6df107c3b59cc559f1fdc |     
+    arm      |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/a4908a2c8cb75b602794e890fccb8dd42ef6ff41 |     
+microblazeel |           brltty-6.5           | NOK | http://autobuild.buildroot.net/results/021c726fb259558f89c6a88c27d7d1e071aa5f15 |     
+    arm      |         coreutils-9.3          | NOK | http://autobuild.buildroot.net/results/9d3e826d88fab202f91eec8526b332ec2c5b768d | ORPH
+    or1k     |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/8e26d9fe945bb2014be561a44d44eed23c57a679 | ORPH
+microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/e74e7435fc4888bdf0d0bd39401cc73a88100688 | ORPH
+microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/7ccf0736f51de99c54b9087c1ecee4d4ee5670f7 | ORPH
+    i686     |             ffmpeg             | TIM | http://autobuild.buildroot.net/results/bbc790d2dd4d511ba354e7b209db4efddd1f3702 |     
+    arc      |           frr-8.4.2            | NOK | http://autobuild.buildroot.net/results/1c9753421ec16afb913d15510960c8c5f6779c96 |     
+   mips64    | fs/jffs2/jffs2.mk:71: /home... | NOK | http://autobuild.buildroot.net/results/835d35ce8bc8093245dee4b8baa409505cf7575b |     
+    i586     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/ef0b37441581abb8d5e8db64faaf67244bde7d34 |     
+   xtensa    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/8bb8c96565d73712d2f1880654babdfb2c85cbf4 |     
+ aarch64_be  | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/509bbf71a1acb475319cad3e85af66120238cfc6 |     
+   mipsel    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/ef68421bf01b6e9868905230fe6eb68cba07bdc7 |     
+   s390x     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/fff925f0bbe144af36b5133b8ebc65d491b87ad6 |     
+  powerpc    | glibc-2.37-2-g9f8513dc64119... | NOK | http://autobuild.buildroot.net/results/7a82fa81c9064b25957dc338c55b0c2bdb8ee5f5 |     
+microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/6152674af6a911dcf33784351fa4b9cb79afb5cc |     
+ microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/94581b557b368691ad79c346e1f8e780d1f3dbe9 |     
+    arm      | google-breakpad-c85eb4a59b6... | NOK | http://autobuild.buildroot.net/results/68465929304b49121f0b60a07e58b6c6d4b98825 |     
+   arceb     |         haveged-1.9.18         | NOK | http://autobuild.buildroot.net/results/3fd8d8f8adc24078adbd3ac386f244c73d075d0f |     
+    mips     |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/6eb69dd8b2590359fa5b26c26b3934278b760214 |     
+ powerpc64   |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/e5fb99c7876e2e6ac3f30469e877c34b4911ef52 |     
+   s390x     |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/46913014e7ede84f842bf7dd2958e7e0344ad3fd |     
+  mips64el   |         host-go-1.19.9         | NOK | http://autobuild.buildroot.net/results/b2bef55faf4c2b824a9cf8eb15b6d937f2c6f1b3 |     
+    i586     |         host-go-1.19.9         | NOK | http://autobuild.buildroot.net/results/964ec0f37c41fc973832be8f31544c190bd56fbc |     
+    i686     |         host-go-1.19.9         | NOK | http://autobuild.buildroot.net/results/27941d030cf7e6681684e37e6cbfe72db12c1b97 |     
+   mipsel    | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/773a3cc4e43ea51223467dd2105e8593a9ed42c8 | ORPH
+   xtensa    | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/59023933b44bfafe0a81efbf640130810ac2416d | ORPH
+  powerpc    | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/c2ea80b5fe636b7b6374ed4d5a49149c200d4128 | ORPH
+powerpc64le  | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/84767fa34bb1cd24833bcbaed25c2c01abc5cd42 | ORPH
+    sh4      |    host-python-sip-4.19.25     | NOK | http://autobuild.buildroot.net/results/632c0529142412fc9324324551bc0fc77d134eba |     
+ powerpc64   |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/f2af06fee26d47540ee8b803ad62af63bdf9c7a0 |     
+  aarch64    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/cf393eaf359e07b125a296cb6f1ebf82ae799b39 |     
+  riscv64    |        libcap-ng-0.8.3         | NOK | http://autobuild.buildroot.net/results/e54f5bd3fab770a47a6b7ddaad6a752a68775c75 |     
+    or1k     |        libcap-ng-0.8.3         | NOK | http://autobuild.buildroot.net/results/477fe98c94be3d81d265d6acda344e7892c26c11 |     
+    mips     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/a6a92227ef518a47816f6329acd3735da707ecad |     
+   mipsel    |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/44378c7e07823837f3cab171bf2625f78623722c |     
+   arceb     |        libsodium-1.0.18        | NOK | http://autobuild.buildroot.net/results/399e8300a46139a7c2b833e85491af0d6330c16b |     
+  mips64el   |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/2296aceaa0f5c729487b37dd51510c40a0a7cfef | ORPH
+  powerpc    |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/41f3794b56c1e186dc58ce1d6596586c65e9dd03 | ORPH
+   mips64    |          linux-6.3.2           | NOK | http://autobuild.buildroot.net/results/39a0369438a48a74bc7424c322a0ccc420652b4d | ORPH
+    m68k     |          linux-6.3.2           | NOK | http://autobuild.buildroot.net/results/5bc4c8ba4a2dfde9bf0c3714eedcf4aa62449b18 | ORPH
+  mips64el   |          linux-6.3.2           | NOK | http://autobuild.buildroot.net/results/a9aa0705ede99df4fec655b8b583f7e277eeeb3e | ORPH
+    m68k     |          linux-6.3.2           | NOK | http://autobuild.buildroot.net/results/fc44c37d31d839640fbed7872919795ca83f1de1 | ORPH
+    mips     |          linux-6.3.2           | NOK | http://autobuild.buildroot.net/results/4647f53e8ee3782adf49d8c4741ea319372bd991 | ORPH
+   arceb     |       live555-2021.05.03       | NOK | http://autobuild.buildroot.net/results/d99fb5beaede60da8b9f4b8e1b6dd3de5861a9c4 | ORPH
+    sh4      |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/0061ba57f44c8211f923e2cea8f8b20e2147ee02 |     
+   arceb     |      lttng-modules-2.13.7      | NOK | http://autobuild.buildroot.net/results/a611d0bebfa59cac102b13d7896f029c2bf97080 |     
+ aarch64_be  |       micropython-1.19.1       | NOK | http://autobuild.buildroot.net/results/00d0ec7dcbadd67f8e547e36b85d32285ace1d13 |     
+  aarch64    |       micropython-1.19.1       | NOK | http://autobuild.buildroot.net/results/7d89e6903031722e5d70d4d78a1d44c89cff208f |     
+   nios2     |        open62541-v1.3.4        | NOK | http://autobuild.buildroot.net/results/f1a59666d4e8b9d11b4a0ecc46ed445e6aa89fe6 | ORPH
+   nios2     |        open62541-v1.3.4        | NOK | http://autobuild.buildroot.net/results/6e3612848fdb9700f1d38b0d9e4e3a277167e4f8 | ORPH
+    m68k     |         openssh-9.3p1          | NOK | http://autobuild.buildroot.net/results/c9f7163735e2cf5c123846601207ded23aaca901 | ORPH
+  mips64el   | package/sdl2_mixer/sdl2_mix... | NOK | http://autobuild.buildroot.net/results/63c62dc14460faf8911573c43d16842a1e0c4a4c |     
+    arc      | package/sdl2_mixer/sdl2_mix... | NOK | http://autobuild.buildroot.net/results/bfb62bcfce2530a8d2ab2fd1627719e27f5ad212 |     
+   armeb     |          perl-5.36.1           | NOK | http://autobuild.buildroot.net/results/2d6376ac199dca1377ff4cf01ea19af218200467 |     
+ microblaze  |           php-8.2.6            | NOK | http://autobuild.buildroot.net/results/54150004ec686428e8ed82930858827fe932ba81 |     
+    or1k     |           php-8.2.6            | NOK | http://autobuild.buildroot.net/results/77857026b7cb3b9eb5ef57c779f4737b094b6974 |     
+    sh4      |      python-pyicu-2.10.2       | NOK | http://autobuild.buildroot.net/results/6a2a4ed90c1a829e7b9442aaaaa1cd6e5efd9aab |     
+    or1k     |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/903c4b21658f8431861f95a280b10d1153bf546a |     
+  mips64el   |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/9152e9ca5da64182f27d88ea68b800fcffa1f18a |     
+    arc      | sconeserver-8d1935919a20133... | NOK | http://autobuild.buildroot.net/results/fbab524eaf3d8c0dbc32efc81243e78ad8bfe663 |     
+ powerpc64   |     sdl2_mixer-legal-info      | NOK | http://autobuild.buildroot.net/results/2af66d82973dd0d62aa156db81c45ea991c2b80d | ORPH
+  powerpc    |     sdl2_mixer-legal-info      | NOK | http://autobuild.buildroot.net/results/9f13ec7fc3041b27a7d1a78ffa1ed97ca056e98d | ORPH
+    arm      |     sdl2_mixer-legal-info      | NOK | http://autobuild.buildroot.net/results/ce7c443b77323bca7f2c55a759c4e85cc66c6cae | ORPH
+  sparc64    |          shadow-4.13           | NOK | http://autobuild.buildroot.net/results/26efead8d0114a1ba49f312e83ec306a2ce08f5d |     
+  powerpc    |          shadow-4.13           | NOK | http://autobuild.buildroot.net/results/38fd0ed3c0aa6e1ae49e290008571cb60ce6ad52 |     
+  powerpc    |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/ebb549ca564439a10f62113ec4e0ce9ce3db2207 |     
+  powerpc    |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/c7267c4534532dda850fc385a3dc87c8d3563ab7 | ORPH
+  powerpc    |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/454d176dc105758412bc9e7559201158f04bdedb | ORPH
+   nios2     |      uboot-tools-2021.07       | NOK | http://autobuild.buildroot.net/results/f69fec4ac5530ccfd5e674003c0bada1b0788d0b | ORPH
+    i686     |            unknown             | NOK | http://autobuild.buildroot.net/results/91e717e0130512b26e09ce5a65dec938394cc3ae |     
+  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/e6e6093639cb9d8ee6b431fb513848deed0bfa20 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/19aa5e86fe3ca0cbdfb1bc91b19d52b13d18bb97 |     
+microblazeel |           vdr-2.6.3            | NOK | http://autobuild.buildroot.net/results/d3a65044fabdafa1b6d75a508eae006a2cfebdc0 |     
+   x86_64    |           vdr-2.6.3            | NOK | http://autobuild.buildroot.net/results/bdacedd845a2bf4db9826f0d3868f6b48d456d2a |     
+ powerpc64   |        zxing-cpp-1.4.0         | NOK | http://autobuild.buildroot.net/results/3a39db8c426d1cd3c3b6ef309186d425cd7148cc |     
 
-I was not aware of this list.  The list is now updated in v4.
 
->=A0 package/bootgen/bootgen.hash=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 |=A0=A0 2 +-
->=A0 package/bootgen/bootgen.mk=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 |=A0=A0 2 +-
->=A0 3 files changed, 2 insertions(+), 135 deletions(-)
->=A0 delete mode 100644 package/bootgen/0001-Fix-build-on-machines-with-mod=
-ern-flex.patch
->
-> diff --git a/package/bootgen/0001-Fix-build-on-machines-with-modern-flex.=
-patch b/package/bootgen/0001-Fix-build-on-machines-with-modern-flex.patch
-> deleted file mode 100644
-> index ea82f5e70c..0000000000
-> --- a/package/bootgen/0001-Fix-build-on-machines-with-modern-flex.patch
-> +++ /dev/null
-> @@ -1,133 +0,0 @@
-> -From 7251dce3dc974c7372e7024ade3e8a455266cfd2 Mon Sep 17 00:00:00 2001
-> -From: Peter Korsgaard <peter@korsgaard.com>
-> -Date: Fri, 18 Mar 2022 09:02:31 +0100
-> -Subject: [PATCH] Fix build on machines with modern flex
-> -
-> -Bootgen embeds an old version of flex, but uses the system include syntax
-> -(#include <>) to reference it, causing conflicts on systems with the
-> -development headers for a modern flex version installed, leading to build
-> -issues like:
-> -
-> -../bisonflex/bif.yy.cpp: In member function 'virtual int BIF::FlexScanne=
-r::yylex()':
-> -../bisonflex/bif.yy.cpp:1608:18: error: no match for 'operator=3D' (oper=
-and types are 'std::istream' {aka 'std::basic_istream<char>'} and 'std::ist=
-ream*' {aka 'std::basic_istream<char>*'})
-> -
-> -Fix it by using normal local #include statements by:
-> -
-> -sed -i 's/<FlexLexer.h>/"FlexLexer.h"/g' *
-> -
-> -Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> -[Submitted upstream: https://github.com/Xilinx/bootgen/pull/20]
-> ----
-> - FlexLexer.h=A0=A0=A0=A0=A0=A0=A0=A0 | 6 +++---
-> - bif.yy.cpp=A0=A0=A0=A0=A0=A0=A0=A0=A0 | 2 +-
-> - bifscanner.h=A0=A0=A0=A0=A0=A0=A0 | 2 +-
-> - cmdoptions.yy.cpp=A0=A0 | 2 +-
-> - cmdoptionsscanner.h | 2 +-
-> - reginit.yy.cpp=A0=A0=A0=A0=A0 | 2 +-
-> - reginitscanner.h=A0=A0=A0 | 2 +-
-> - 7 files changed, 9 insertions(+), 9 deletions(-)
-> -
-> -diff --git a/FlexLexer.h b/FlexLexer.h
-> -index b115b5d..1c0386f 100755
-> ---- a/FlexLexer.h
-> -+++ b/FlexLexer.h
-> -@@ -33,15 +33,15 @@
-> - //
-> - // If you want to create multiple lexer classes, you use the -P flag
-> - // to rename each yyFlexLexer to some other xxFlexLexer.=A0 You then
-> --// include <FlexLexer.h> in your other sources once per lexer class:
-> -+// include "FlexLexer.h" in your other sources once per lexer class:
-> - //
-> - //=A0 #undef yyFlexLexer
-> - //=A0 #define yyFlexLexer xxFlexLexer
-> --//=A0 #include <FlexLexer.h>
-> -+//=A0 #include "FlexLexer.h"
-> - //
-> - //=A0 #undef yyFlexLexer
-> - //=A0 #define yyFlexLexer zzFlexLexer
-> --//=A0 #include <FlexLexer.h>
-> -+//=A0 #include "FlexLexer.h"
-> - //=A0 ...
-> - =
+Classification of failures by reason for 2022.02.x
+--------------------------------------------------
 
-> - #ifndef __FLEX_LEXER_H
-> -diff --git a/bif.yy.cpp b/bif.yy.cpp
-> -index 7dd0841..9e09267 100644
-> ---- a/bif.yy.cpp
-> -+++ b/bif.yy.cpp
-> -@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
-> - =
+                       unknown | 1 
+  xdriver_xf86-video-tga-1.2.2 | 1 
 
-> - #define yytext_ptr yytext
-> - =
 
-> --#include <FlexLexer.h>
-> -+#include "FlexLexer.h"
-> - =
+Detail of failures for 2022.02.x
+--------------------------------
 
-> - int yyFlexLexer::yywrap() { return 1; }
-> - int yyFlexLexer::yylex()
-> -diff --git a/bifscanner.h b/bifscanner.h
-> -index a6ec9e4..ded78da 100755
-> ---- a/bifscanner.h
-> -+++ b/bifscanner.h
-> -@@ -28,7 +28,7 @@
-> - #if ! defined(yyFlexLexerOnce)
-> - #undef yyFlexLexer
-> - #define yyFlexLexer bifFlexLexer
-> --#include <FlexLexer.h>
-> -+#include "FlexLexer.h"
-> - #endif
-> - =
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv32    |            unknown             | NOK | http://autobuild.buildroot.net/results/23d1b5c300ad90fa1dee3f50b0806acad9ba5478 |     
+  riscv32    |  xdriver_xf86-video-tga-1.2.2  | NOK | http://autobuild.buildroot.net/results/70d311876819fb7cf86aed4aa8f4d147fbdd5609 |     
 
-> - // Override the interface for yylex since we namespaced it
-> -diff --git a/cmdoptions.yy.cpp b/cmdoptions.yy.cpp
-> -index 6ee80de..1acfcce 100644
-> ---- a/cmdoptions.yy.cpp
-> -+++ b/cmdoptions.yy.cpp
-> -@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
-> - =
 
-> - #define yytext_ptr yytext
-> - =
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
 
-> --#include <FlexLexer.h>
-> -+#include "FlexLexer.h"
-> - =
+                 agentpp-4.6.0 | 1 
+                busybox-1.36.0 | 1 
+                    crun-1.7.2 | 1 
+         host-gcc-final-11.3.0 | 1 
 
-> - int yyFlexLexer::yywrap() { return 1; }
-> - int yyFlexLexer::yylex()
-> -diff --git a/cmdoptionsscanner.h b/cmdoptionsscanner.h
-> -index a48af09..e02c1f1 100755
-> ---- a/cmdoptionsscanner.h
-> -+++ b/cmdoptionsscanner.h
-> -@@ -29,7 +29,7 @@
-> - =
 
-> - #undef yyFlexLexer
-> - #define yyFlexLexer reginitFlexLexer
-> --#include <FlexLexer.h>
-> -+#include "FlexLexer.h"
-> - #endif
-> - =
+Detail of failures for 2023.02.x
+--------------------------------
 
-> - // Override the interface for yylex since we namespaced it
-> -diff --git a/reginit.yy.cpp b/reginit.yy.cpp
-> -index 8422867..ff088f9 100644
-> ---- a/reginit.yy.cpp
-> -+++ b/reginit.yy.cpp
-> -@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
-> - =
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/2e1ead3dd8468009aad8ae366c0cbda7a8e6c981 |     
+  mips64el   |         busybox-1.36.0         | NOK | http://autobuild.buildroot.net/results/082275b2b8aad9f343ebe6900478dade024a907c | ORPH
+   x86_64    |           crun-1.7.2           | NOK | http://autobuild.buildroot.net/results/e8637d2b933c8233bdbfbfe3e76d417c54c5778f |     
+ aarch64_be  |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/aef4bf871eda2ec581fa18cc7cfce23803486b98 |     
 
-> - #define yytext_ptr yytext
-> - =
 
-> --#include <FlexLexer.h>
-> -+#include "FlexLexer.h"
-> - =
+Gitlab CI results for 2023-05-15
+================================
 
-> - int yyFlexLexer::yywrap() { return 1; }
-> - int yyFlexLexer::yylex()
-> -diff --git a/reginitscanner.h b/reginitscanner.h
-> -index 4e78af9..23177be 100755
-> ---- a/reginitscanner.h
-> -+++ b/reginitscanner.h
-> -@@ -29,7 +29,7 @@
-> - =
+Detail of runtime-test failures for master
+------------------------------------------
 
-> - #undef yyFlexLexer
-> - #define yyFlexLexer reginitFlexLexer
-> --#include <FlexLexer.h>
-> -+#include "FlexLexer.h"
-> - #endif
-> - =
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+      TestClangCompilerRT | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172245  | ORPH 
+           TestCrudiniPy3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172246  | ORPH 
+        TestGdbFullTarget | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172255  | ORPH 
+              TestGlxinfo | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172267  | ORPH 
+           TestIPythonPy3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172278  | ORPH 
+                TestKexec | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172281  | ORPH 
+               TestLibJXL | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172285  | ORPH 
+      TestLuajitLuaArgon2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172310  | ORPH 
+             TestOpenBLAS | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172453  | ORPH 
+             TestPerftest | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172472  | ORPH 
+ TestPerlLWPProtocolhttps | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172501  | ORPH 
+       TestPerllibwwwperl | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172500  | ORPH 
+          TestPolkitInitd | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172523  | ORPH 
+         TestPythonPy3Can | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172572  | ORPH 
+      TestPythonPy3Django | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172620  | ORPH 
+    TestPythonPy3Dtschema | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172625  | ORPH 
+     TestPythonPy3Gobject | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172644  | ORPH 
+...PythonPy3MagicWormhole | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172660  | ORPH 
+      TestPythonPy3Smmap2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172714  | ORPH 
+                   TestS6 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172747  | ORPH 
+             TestZfsGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172771  | ORPH 
+              TestZfsMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172772  | ORPH 
+            TestZfsUclibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/4283172773  | ORPH 
 
-> - // Override the interface for yylex since we namespaced it
-> --- =
 
-> -2.30.2
-> -
-> diff --git a/package/bootgen/bootgen.hash b/package/bootgen/bootgen.hash
-> index 5d77c164f3..937509c859 100644
-> --- a/package/bootgen/bootgen.hash
-> +++ b/package/bootgen/bootgen.hash
-> @@ -1,3 +1,3 @@
->=A0 # Locally calculated
-> -sha256=A0 7e07c75aa3e3965c8e33faefde037877f78130451cebc2056b096db9c66acb=
-b3=A0 bootgen-xilinx_v2022.2.tar.gz
-> +sha256=A0 2fda35fac28f5753cfdd9c6d5c07fd2b018d55984681af79415a67ba5372ea=
-8e=A0 bootgen-xilinx_v2023.1.tar.gz
->=A0 sha256=A0 4da5f5eff0592e5d275f1871faf9e9a4fc0f6346027bfb777fa59d0aa6a5=
-9aa3=A0 LICENSE
-> diff --git a/package/bootgen/bootgen.mk b/package/bootgen/bootgen.mk
-> index 88bc73b604..d83980d925 100644
-> --- a/package/bootgen/bootgen.mk
-> +++ b/package/bootgen/bootgen.mk
-> @@ -4,7 +4,7 @@
->=A0 #
->=A0 ######################################################################=
-##########
->=A0 =
 
-> -BOOTGEN_VERSION =3D xilinx_v2022.2
-> +BOOTGEN_VERSION =3D xilinx_v2023.1
->=A0 BOOTGEN_SITE =3D $(call github,Xilinx,bootgen,$(BOOTGEN_VERSION))
->=A0 HOST_BOOTGEN_DEPENDENCIES =3D host-openssl host-pkgconf
->=A0 BOOTGEN_LICENSE =3D Apache-2.0
-
-Best regards,
-Neal Frager
-AMD
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
