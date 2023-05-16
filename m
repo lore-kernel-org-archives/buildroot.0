@@ -4,82 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6643C77B75
-	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 18:44:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58897C77B75
+	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 18:58:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79F9940BAF;
-	Tue, 16 May 2023 18:44:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79F9940BAF
+	by smtp2.osuosl.org (Postfix) with ESMTP id F268C40BB6;
+	Tue, 16 May 2023 18:58:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F268C40BB6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bMa0t7MYamr3; Tue, 16 May 2023 18:44:41 +0000 (UTC)
+	with ESMTP id vbB3182Pm45t; Tue, 16 May 2023 18:58:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE693408DD;
-	Tue, 16 May 2023 18:44:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE693408DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 27E2340BDF;
+	Tue, 16 May 2023 18:58:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27E2340BDF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C1C601BF295
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 18:44:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 469A31BF295
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 18:58:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9785783F5E
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 18:44:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9785783F5E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 202048412D
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 18:58:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 202048412D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VDA_JVl1fk-H for <buildroot@lists.busybox.net>;
- Tue, 16 May 2023 18:44:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87B5783F41
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com
- [IPv6:2607:f8b0:4864:20::102e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 87B5783F41
- for <buildroot@busybox.net>; Tue, 16 May 2023 18:44:36 +0000 (UTC)
-Received: by mail-pj1-x102e.google.com with SMTP id
- 98e67ed59e1d1-24e2bbec3d5so10422926a91.3
- for <buildroot@busybox.net>; Tue, 16 May 2023 11:44:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684262676; x=1686854676;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=SZKcc8gmB0RmhZYEEwcJGilr09DXdT/Wy2poQ3TB1i8=;
- b=VUv9y0L7/1z4oCENJjYkN6Ds3B57tbZRJTXCnGhlQ6PeGY9nP5t4wwPhzInBouMifC
- 5cIIjF2V3Fsk6H6m+67C8JtEe55J91RMqZw31nU3X+g22jyRmVKHYlFdvKaKZIN2/9OE
- 3q2XJ/zxMElFY9pPaCXYAz3/PYnw8QB8CrP4wThyJsOUW5mjYkd1WnkdwRAEUDGTqDIX
- nEULdosA+N3x6zAgdmF3oU1fa1rOqHJ6OZerjI8imQPJcsdi8DTZHyqF1Ocv8nEgEx3P
- FNrICwpJi0VsWfgczyTLC/8WakKZg/RE7MjZJapX9qrTGqjjD1GjXNqsJ8hdaW06E/7N
- e0oA==
-X-Gm-Message-State: AC+VfDwcxE9NTlq7NN9NV71ZmlF0elL/h5mqoq61lqzlHaxVfA5kaIUJ
- /F2jMi/QRR/eviqaKfi7ch8aAerLD1b6Sr8comJUYlaSZMw71nUE/sI=
-X-Google-Smtp-Source: ACHHUZ62dbUPPGzv1dpFvHjlW5y0Bw4RXxv2GShsCzRvsVQ2wszTcFPcvtJzI0V7X8kNu4DUPDwnmrVlnDAb2oJe6ps=
-X-Received: by 2002:a17:90a:7801:b0:24e:16aa:48 with SMTP id
- w1-20020a17090a780100b0024e16aa0048mr37560857pjk.15.1684262675827; Tue, 16
- May 2023 11:44:35 -0700 (PDT)
+ with ESMTP id 5h5AvBw1a7kU for <buildroot@lists.busybox.net>;
+ Tue, 16 May 2023 18:58:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F28C4840FE
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F28C4840FE
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 18:58:19 +0000 (UTC)
+Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
+ by mailout07.t-online.de (Postfix) with SMTP id 0ECB1C6D0
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 20:58:17 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd76.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pyzsG-2BHEiv0; Tue, 16 May 2023 20:58:16 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48524)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pyzsF-00057v-2V
+ for buildroot@buildroot.org; Tue, 16 May 2023 20:58:15 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Tue, 16 May 2023 20:58:15 +0200
+Message-Id: <20230516185815.1175350-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230429200133.152499-1-francois.perrad@gadz.org>
- <87wn1sik1p.fsf@dell.be.48ers.dk>
-In-Reply-To: <87wn1sik1p.fsf@dell.be.48ers.dk>
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 16 May 2023 20:44:24 +0200
-Message-ID: <CAAE6iEVDu0uRt4OncRAs-LdgwO=oVu89h0bboxEHR=enP=eQjg@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1684262676; x=1686854676;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=SZKcc8gmB0RmhZYEEwcJGilr09DXdT/Wy2poQ3TB1i8=;
- b=L/7pXMqm77MyLJlvGtzT9ReWGWosojRyGEEGqevkkAd4zcmyAAsKzqXWwQM4NVETQn
- lyauUZ0sBlRWjUelGzUOAE8DYgOzwZJ9ZB9zZLTgpk+nFwKEDYRlAPrrJobqbr/U7HSG
- 5ugFDokF3LGyTwdhUWrXx3MRnleHJguS4mdoxtDzY+LDwkoMXUr0ZmtASRHbJ4lqOB3u
- 5tD89jnbzZkW63mYdGc30B35S9Zj+hEFBS4fTo44FTqgG7cV676fDJXOoENfI9PEx2gF
- dTOFKROkAQsUL0HBcdx5mvIkyDIoV8L/4lRCppVY3kyRkfZ1cDDRjD37XTqomMfkvQsv
- dL7Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=L/7pXMqm
-Subject: Re: [Buildroot] [PATCH] package/lua: bump to version 5.4.5
+X-TOI-EXPURGATEID: 150726::1684263496-16FFE3A1-0EDCC452/0/0 CLEAN NORMAL
+X-TOI-MSGID: c97e7a61-40ac-46f2-ad1f-cc21871c845d
+Subject: [Buildroot] [PATCH 1/1] package/vdr: Fix patch for uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,94 +65,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
-Content-Type: multipart/mixed; boundary="===============1072595585879291655=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1072595585879291655==
-Content-Type: multipart/alternative; boundary="000000000000806aa605fbd3f6bd"
+uClibc-ng 1.0.42 added support for getloadavg:
+https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=ad3a130dad88ad7a59dcd965b0cf9bd0d713595e
 
---000000000000806aa605fbd3f6bd
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+leading to build errors of the vdr package:
 
-Le lun. 1 mai 2023 =C3=A0 09:32, Peter Korsgaard <peter@korsgaard.com> a =
-=C3=A9crit :
+skinlcars.c:1105:12: error: 'int getloadavg(double*, int)' was declared 'extern' and later 'static' [-fpermissive]
 
-> >>>>> "Francois" =3D=3D Francois Perrad <fperrad@gmail.com> writes:
->
->  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> Committed, thanks.
->
->
-Lua 5.4.5 was a failure. And it was retracted, see
-http://lua-users.org/lists/lua-l/2023-05/msg00014.html
+since its version bump in buildroot:
+https://git.busybox.net/buildroot/commit/?id=61ae6add9e5d4761536fa4ff24150d5f8f82a61d
 
-Please upgrade with Lua 5.4.6, see
-https://patchwork.ozlabs.org/project/buildroot/patch/20230514144512.9794-1-=
-francois.perrad@gadz.org/
+Fixes:
+http://autobuild.buildroot.net/results/d3a/d3a65044fabdafa1b6d75a508eae006a2cfebdc0/
 
-Fran=C3=A7ois
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+I do not know whether all external toolchains were already updated to
+uClibc-ng >= 1.0.42 so I fixed the patch instead of removing it.
+Due to uClibc-ng providing getloadavg() sending 0001-getloadavg.patch
+makes no sense imho.
 
---=20
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
+ package/vdr/0001-getloadavg.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---000000000000806aa605fbd3f6bd
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0lun. 1 mai 2023 =C3=A0=C2=A00=
-9:32, Peter Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">peter@kors=
-gaard.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
-04);padding-left:1ex">&gt;&gt;&gt;&gt;&gt; &quot;Francois&quot; =3D=3D Fran=
-cois Perrad &lt;<a href=3D"mailto:fperrad@gmail.com" target=3D"_blank">fper=
-rad@gmail.com</a>&gt; writes:<br>
-<br>
-=C2=A0&gt; Signed-off-by: Francois Perrad &lt;<a href=3D"mailto:francois.pe=
-rrad@gadz.org" target=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
-<br>
-Committed, thanks.<br>
-<br></blockquote><div><br></div><div>Lua 5.4.5 was a failure. And it was re=
-tracted, see <a href=3D"http://lua-users.org/lists/lua-l/2023-05/msg00014.h=
-tml">http://lua-users.org/lists/lua-l/2023-05/msg00014.html</a></div><div><=
-br></div><div>Please upgrade with Lua 5.4.6, see <a href=3D"https://patchwo=
-rk.ozlabs.org/project/buildroot/patch/20230514144512.9794-1-francois.perrad=
-@gadz.org/">https://patchwork.ozlabs.org/project/buildroot/patch/2023051414=
-4512.9794-1-francois.perrad@gadz.org/</a></div><div><br></div><div>Fran=C3=
-=A7ois<br></div><div><br></div><blockquote class=3D"gmail_quote" style=3D"m=
-argin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left=
-:1ex">
--- <br>
-Bye, Peter Korsgaard<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div></div>
-
---000000000000806aa605fbd3f6bd--
-
---===============1072595585879291655==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/vdr/0001-getloadavg.patch b/package/vdr/0001-getloadavg.patch
+index 9e6316e284..f6ba84c9e5 100644
+--- a/package/vdr/0001-getloadavg.patch
++++ b/package/vdr/0001-getloadavg.patch
+@@ -14,7 +14,7 @@ diff -uwNr vdr-2.3.1.org/skinlcars.c vdr-2.3.1/skinlcars.c
+  
+ +/* uclibc and dietlibc do not have this junk -ReneR */
+ +#if defined (__UCLIBC__) || defined (__dietlibc__)
+-+static int getloadavg (double loadavg[], int nelem)
+++int getloadavg (double loadavg[], int nelem)
+ +{
+ +  int fd;
+ +
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1072595585879291655==--
