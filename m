@@ -4,57 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB5D9C77B7F
-	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 19:33:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C67EC77B7A
+	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 19:49:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7ACEB40BFE;
-	Tue, 16 May 2023 19:33:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7ACEB40BFE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8931C429B2;
+	Tue, 16 May 2023 19:49:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8931C429B2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PXK1l8sDnBvh; Tue, 16 May 2023 19:33:24 +0000 (UTC)
+	with ESMTP id RtB3PznV9dAD; Tue, 16 May 2023 19:49:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A2BC408DD;
-	Tue, 16 May 2023 19:33:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A2BC408DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FD8E42999;
+	Tue, 16 May 2023 19:49:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FD8E42999
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 698441BF386
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 19:33:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 71CDD1BF386
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 19:49:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E6FD616AA
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 19:33:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E6FD616AA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 508D5616C2
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 19:49:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 508D5616C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 51SBTg0lmyXN for <buildroot@lists.busybox.net>;
- Tue, 16 May 2023 19:33:17 +0000 (UTC)
+ with ESMTP id qerx5oSbV_2C for <buildroot@lists.busybox.net>;
+ Tue, 16 May 2023 19:49:00 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E69160BC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4A3D616B1
 Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4E69160BC3
- for <buildroot@buildroot.org>; Tue, 16 May 2023 19:33:17 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout07.t-online.de (Postfix) with SMTP id 446E525E3F
- for <buildroot@buildroot.org>; Tue, 16 May 2023 21:33:08 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd72.t-online.de
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C4A3D616B1
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 19:48:59 +0000 (UTC)
+Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
+ by mailout07.t-online.de (Postfix) with SMTP id 0EF6FBE16
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 21:48:57 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd85.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pz0Q0-2wps9p0; Tue, 16 May 2023 21:33:08 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45938)
+ esmtp id 1pz0fI-0HGELZ0; Tue, 16 May 2023 21:48:56 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53394)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pz0Pz-0002jf-2d
- for buildroot@buildroot.org; Tue, 16 May 2023 21:33:07 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pz0fH-0005RO-2Y
+ for buildroot@buildroot.org; Tue, 16 May 2023 21:48:55 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Tue, 16 May 2023 21:33:07 +0200
-Message-Id: <20230516193307.1543455-1-bernd.kuhls@t-online.de>
+Date: Tue, 16 May 2023 21:48:54 +0200
+Message-Id: <20230516194855.1548486-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230516194855.1548486-1-bernd.kuhls@t-online.de>
+References: <20230516194855.1548486-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1684265588-5BFF457F-AAAB48E0/0/0 CLEAN NORMAL
-X-TOI-MSGID: f74c5a0a-c486-4dbc-8cdf-2344fdd3e32f
-Subject: [Buildroot] [PATCH 1/1] package/php: depend on libucontext for musl
- builds
+X-TOI-EXPURGATEID: 150726::1684266536-AD58EDAB-F433B210/0/0 CLEAN NORMAL
+X-TOI-MSGID: 7865d078-8172-48bd-ab11-4d636aea2a28
+Subject: [Buildroot] [PATCH 2/3] package/vdr: reformatted patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,61 +72,285 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Depends on new libucontext package:
-http://patchwork.ozlabs.org/project/buildroot/patch/20220811063502.1823571-1-james.hilliard1@gmail.com/
+git-formatted patches due to the upstream repo using git:
+http://git.tvdr.de/?p=vdr.git
 
-Musl does not implement functions operating on ucontext_t:
-https://wiki.musl-libc.org/open-issues.html
-
-Fixes:
-http://autobuild.buildroot.net/results/778/77857026b7cb3b9eb5ef57c779f4737b094b6974/
+Sent patches upstream and added Upstream: tags.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/Config.in | 6 +++++-
- package/php/php.mk    | 5 +++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+Resent patch, did not show-up on the buildroot mailinglist.
 
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 69b4268c1d..18779ba1f9 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -8,7 +8,9 @@ config BR2_PACKAGE_PHP_ARCH_SUPPORTS
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	default y if BR2_RISCV_64
- 	default y if BR2_s390x
--	default y if BR2_TOOLCHAIN_HAS_UCONTEXT
-+	default y if \
-+		BR2_TOOLCHAIN_HAS_UCONTEXT || \
-+		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
+ .checkpackageignore                           |  3 --
+ ...compat.patch => 0002-Fix-musl-build.patch} | 49 ++++++++++++------
+ package/vdr/0003-Include-limits.h.patch       | 51 +++++++++++++++++++
+ package/vdr/0003-include-missing-limits.patch | 30 -----------
+ ...at_cntr-is-an-internal-symbol-of-som.patch |  2 +
+ 5 files changed, 87 insertions(+), 48 deletions(-)
+ rename package/vdr/{0002-musl-compat.patch => 0002-Fix-musl-build.patch} (77%)
+ create mode 100644 package/vdr/0003-Include-limits.h.patch
+ delete mode 100644 package/vdr/0003-include-missing-limits.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 13f67695f5..2250f0ef08 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1596,9 +1596,6 @@ package/vde2/0001-no-cxx.patch Upstream
+ package/vde2/0002-fstp-Add-static-to-inline-functions.patch Upstream
+ package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch Upstream
+ package/vdr/0001-getloadavg.patch Upstream
+-package/vdr/0002-musl-compat.patch Upstream
+-package/vdr/0003-include-missing-limits.patch Upstream
+-package/vdr/0004-i18n.c-_nl_msg_cat_cntr-is-an-internal-symbol-of-som.patch Upstream
+ package/vlc/0001-Disable-building-of-statically-linked-vlc-binary.patch Upstream
+ package/vlc/0002-automake-add-subdir-objects-option.patch Upstream
+ package/vlc/0003-build-use-pkg-config-to-get-tremor-libs.patch Upstream
+diff --git a/package/vdr/0002-musl-compat.patch b/package/vdr/0002-Fix-musl-build.patch
+similarity index 77%
+rename from package/vdr/0002-musl-compat.patch
+rename to package/vdr/0002-Fix-musl-build.patch
+index b6f8f414a9..8c0b8d663b 100644
+--- a/package/vdr/0002-musl-compat.patch
++++ b/package/vdr/0002-Fix-musl-build.patch
+@@ -1,12 +1,28 @@
+-Fix musl build
++From fb44386acc2497ac250364bc08cebc26ded816cf Mon Sep 17 00:00:00 2001
++From: Carlo Landmeter <clandmeter@gmail.com>
++Date: Tue, 16 May 2023 19:57:39 +0200
++Subject: [PATCH] Fix musl build
  
- config BR2_PACKAGE_PHP
- 	bool "php"
-@@ -18,6 +20,8 @@ config BR2_PACKAGE_PHP
- 	# section .text LMA [...,...]"
- 	depends on !BR2_BINFMT_FLAT
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_LIBUCONTEXT if BR2_TOOLCHAIN_USES_MUSL && \
-+		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
- 	select BR2_PACKAGE_PHP_SAPI_CGI if \
- 	       !BR2_PACKAGE_PHP_SAPI_APACHE && \
- 	       !BR2_PACKAGE_PHP_SAPI_CLI && \
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 981da5b15d..0f6760afad 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -39,6 +39,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- PHP_EXTRA_LIBS += -latomic
- endif
+ Downloaded from
+ https://git.alpinelinux.org/aports/tree/community/vdr/musl-compat.patch
  
-+ifeq ($(BR2_PACKAGE_LIBUCONTEXT),y)
-+PHP_DEPENDENCIES += libucontext
-+PHP_EXTRA_LIBS += -lucontext
-+endif
++Initial commit:
++https://git.alpinelinux.org/aports/commit/?id=140248605cee4a0160f80b47ce77a823be2f740a
 +
- ifeq ($(call qstrip,$(BR2_TARGET_LOCALTIME)),)
- PHP_LOCALTIME = UTC
- else
++Upstream: https://www.linuxtv.org/pipermail/vdr/2023-May/029744.html
++
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ i18n.h   |  2 +-
++ osd.c    |  2 +-
++ thread.c |  4 +++-
++ tools.c  |  4 ++--
++ tools.h  | 14 ++++++++++++--
++ vdr.c    |  6 ++++++
++ 6 files changed, 25 insertions(+), 7 deletions(-)
+ 
+ diff --git a/i18n.h b/i18n.h
+-index f8ad9de..b002bbf 100644
++index 03deb6f2..85ce4077 100644
+ --- a/i18n.h
+ +++ b/i18n.h
+ @@ -46,7 +46,7 @@ const cStringList *I18nLanguages(void);
+@@ -19,7 +35,7 @@ index f8ad9de..b002bbf 100644
+     ///< the current language. If no translation is available, the original
+     ///< string will be returned.
+ diff --git a/osd.c b/osd.c
+-index 524700a..ef975f5 100644
++index 47bda686..0d360c81 100644
+ --- a/osd.c
+ +++ b/osd.c
+ @@ -12,7 +12,7 @@
+@@ -32,10 +48,10 @@ index 524700a..ef975f5 100644
+  #include "tools.h"
+  
+ diff --git a/thread.c b/thread.c
+-index 47eb977..58dba43 100644
++index 93eb8c0d..6e854541 100644
+ --- a/thread.c
+ +++ b/thread.c
+-@@ -155,7 +155,9 @@ cRwLock::cRwLock(bool PreferWriter)
++@@ -160,7 +160,9 @@ cRwLock::cRwLock(bool PreferWriter)
+    writeLockThreadId = 0;
+    pthread_rwlockattr_t attr;
+    pthread_rwlockattr_init(&attr);
+@@ -45,7 +61,7 @@ index 47eb977..58dba43 100644
+    pthread_rwlock_init(&rwlock, &attr);
+  }
+  
+-@@ -205,7 +207,7 @@ cMutex::cMutex(void)
++@@ -210,7 +212,7 @@ cMutex::cMutex(void)
+    locked = 0;
+    pthread_mutexattr_t attr;
+    pthread_mutexattr_init(&attr);
+@@ -55,10 +71,10 @@ index 47eb977..58dba43 100644
+  }
+  
+ diff --git a/tools.c b/tools.c
+-index 754673d..fef9d2d 100644
++index d04033b1..8b161eec 100644
+ --- a/tools.c
+ +++ b/tools.c
+-@@ -640,7 +640,7 @@ char *ReadLink(const char *FileName)
++@@ -672,7 +672,7 @@ char *ReadLink(const char *FileName)
+  {
+    if (!FileName)
+       return NULL;
+@@ -67,7 +83,7 @@ index 754673d..fef9d2d 100644
+    if (!TargetName) {
+       if (errno == ENOENT) // file doesn't exist
+          TargetName = strdup(FileName);
+-@@ -1528,7 +1528,7 @@
++@@ -1562,7 +1562,7 @@ cReadDir::~cReadDir()
+  struct dirent *cReadDir::Next(void)
+  {
+    if (directory) {
+@@ -77,7 +93,7 @@ index 754673d..fef9d2d 100644
+  #else
+       while ((result = readdir(directory)) != NULL) {
+ diff --git a/tools.h b/tools.h
+-index 73cca5a..03f5fd1 100644
++index ff6169ee..60eda179 100644
+ --- a/tools.h
+ +++ b/tools.h
+ @@ -28,6 +28,16 @@
+@@ -97,7 +113,7 @@ index 73cca5a..03f5fd1 100644
+  typedef unsigned char uchar;
+  
+  extern int SysLogLevel;
+-@@ -400,7 +410,7 @@
++@@ -444,7 +454,7 @@ class cReadDir {
+  private:
+    DIR *directory;
+    struct dirent *result;
+@@ -106,7 +122,7 @@ index 73cca5a..03f5fd1 100644
+    union { // according to "The GNU C Library Reference Manual"
+      struct dirent d;
+      char b[offsetof(struct dirent, d_name) + NAME_MAX + 1];
+-@@ -738,7 +748,7 @@ public:
++@@ -818,7 +828,7 @@ public:
+          data[i] = T(0);
+      size = 0;
+    }
+@@ -116,10 +132,10 @@ index 73cca5a..03f5fd1 100644
+      qsort(data, size, sizeof(T), Compare);
+    }
+ diff --git a/vdr.c b/vdr.c
+-index 8a49471..c2a82aa 100644
++index 1bdc51ab..0f426e61 100644
+ --- a/vdr.c
+ +++ b/vdr.c
+-@@ -670,12 +670,18 @@ int main(int argc, char *argv[])
++@@ -661,12 +661,18 @@ int main(int argc, char *argv[])
+          }
+       }
+    else if (Terminal) {
+@@ -137,4 +153,7 @@ index 8a49471..c2a82aa 100644
+ +#endif
+       }
+  
+-   isyslog("VDR version %s started", VDRVERSION);
++   // Set user id in case we were started as root:
++-- 
++2.39.2
++
+diff --git a/package/vdr/0003-Include-limits.h.patch b/package/vdr/0003-Include-limits.h.patch
+new file mode 100644
+index 0000000000..7ddfd1703c
+--- /dev/null
++++ b/package/vdr/0003-Include-limits.h.patch
+@@ -0,0 +1,51 @@
++From a4a3d9b012c12cd8aaa2526f0eacdcffcdd9f8f1 Mon Sep 17 00:00:00 2001
++From: Roberto Oliveira <robertoguimaraes8@gmail.com>
++Date: Tue, 16 May 2023 20:01:18 +0200
++Subject: [PATCH] Include limits.h
++
++vdr package uses some macros like HOST_NAME_MAX, NAME_MAX, which are defined
++in limits.h.
++Needs to be explicitly included on ppc64le and for all archs for debug build.
++
++Downloaded from
++https://git.alpinelinux.org/aports/tree/community/vdr/include-missing-limits.patch
++
++Initial commits:
++https://git.alpinelinux.org/aports/commit/?id=c9d8942ccf4825fd734b5f37157a49fc4f0b4339
++https://git.alpinelinux.org/aports/commit/?id=47965644c390b1be1117769b1e08b31858267e9a
++
++Upstream: https://www.linuxtv.org/pipermail/vdr/2023-May/029743.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ config.h | 1 +
++ tools.c  | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/config.h b/config.h
++index 72dd3d2a..b9ea769f 100644
++--- a/config.h
+++++ b/config.h
++@@ -19,6 +19,7 @@
++ #include "i18n.h"
++ #include "font.h"
++ #include "tools.h"
+++#include <limits.h>
++ 
++ // VDR's own version number:
++ 
++diff --git a/tools.c b/tools.c
++index 8b161eec..56a2e0dd 100644
++--- a/tools.c
+++++ b/tools.c
++@@ -27,6 +27,7 @@ extern "C" {
++ #include <utime.h>
++ #include "i18n.h"
++ #include "thread.h"
+++#include <limits.h>
++ 
++ int SysLogLevel = 3;
++ 
++-- 
++2.39.2
++
+diff --git a/package/vdr/0003-include-missing-limits.patch b/package/vdr/0003-include-missing-limits.patch
+deleted file mode 100644
+index c2efe291e6..0000000000
+--- a/package/vdr/0003-include-missing-limits.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-vdr package uses some macros like HOST_NAME_MAX, NAME_MAX, which are defined
+-in limits.h.
+-Needs to be explicitly included on ppc64le and for all archs for debug build.
+-
+-Downloaded from
+-https://git.alpinelinux.org/aports/tree/community/vdr/include-missing-limits.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-----
+-
+---- a/config.h
+-+++ b/config.h
+-@@ -19,6 +19,7 @@
+- #include "i18n.h"
+- #include "font.h"
+- #include "tools.h"
+-+#include <limits.h>
+- 
+- // VDR's own version number:
+- 
+---- a/tools.c
+-+++ b/tools.c
+-@@ -27,6 +27,7 @@
+- #include <utime.h>
+- #include "i18n.h"
+- #include "thread.h"
+-+#include <limits.h>
+- 
+- int SysLogLevel = 3;
+- 
+diff --git a/package/vdr/0004-i18n.c-_nl_msg_cat_cntr-is-an-internal-symbol-of-som.patch b/package/vdr/0004-i18n.c-_nl_msg_cat_cntr-is-an-internal-symbol-of-som.patch
+index 9cc45a96c1..7b1a4c2c05 100644
+--- a/package/vdr/0004-i18n.c-_nl_msg_cat_cntr-is-an-internal-symbol-of-som.patch
++++ b/package/vdr/0004-i18n.c-_nl_msg_cat_cntr-is-an-internal-symbol-of-som.patch
+@@ -10,6 +10,8 @@ anything because musl has a basic NLS implementation. Even
+ gettext-tiny defines _nl_msg_cat_cntr as a dummy symbol in its stub
+ libintl-musl implementation.
+ 
++Upstream: https://www.linuxtv.org/pipermail/vdr/2023-May/029745.html
++
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ ---
+  i18n.c | 2 ++
 -- 
 2.39.2
 
