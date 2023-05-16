@@ -4,87 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B022C77B7A
-	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 15:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 015E6C77B75
+	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 15:53:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA22341E4D;
-	Tue, 16 May 2023 15:53:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA22341E4D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 940FD41E5F;
+	Tue, 16 May 2023 15:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 940FD41E5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bjZzpVndtPTR; Tue, 16 May 2023 15:53:32 +0000 (UTC)
+	with ESMTP id JK1THves37om; Tue, 16 May 2023 15:53:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D5E741E3B;
-	Tue, 16 May 2023 15:53:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D5E741E3B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E4D1D1BF3AA
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 15:53:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28E9941E4B;
+	Tue, 16 May 2023 15:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28E9941E4B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B04E1BF3AA
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 15:53:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC93940345
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 15:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC93940345
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5434F6163E
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 15:53:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5434F6163E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oCqU1sWWUk1T for <buildroot@lists.busybox.net>;
- Tue, 16 May 2023 15:53:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PCIgQuic7TLO for <buildroot@lists.busybox.net>;
+ Tue, 16 May 2023 15:53:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C332740355
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C332740355
- for <buildroot@buildroot.org>; Tue, 16 May 2023 15:53:28 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-3f49bf0223cso72805365e9.1
- for <buildroot@buildroot.org>; Tue, 16 May 2023 08:53:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD0D16163D
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DD0D16163D
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 15:53:37 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3f42769a0c1so98638905e9.2
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 08:53:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684252406; x=1686844406;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=2CzlgxZcq0FqfNEKnRFFtDxEjxrcFlvXed+IoklM+ZM=;
- b=CjLhsvwz6jzXjX0NF6SfaihFlMgqUa/2sd3FJX8jwiBJewJKLvt/EGjdfBvz6Rk1AZ
- kflY7O2MAvcfLDsMKoKp70gYxGq6ZD0w7sibFfL6Uv9LU/EwK/BkOhiesLg+xDuY+3g3
- xPJ73qViIv+NoX2Oy1cyQoY5gBmgOJ0PXM3eLlmzwvuVQgCsao0UUGBhh6nXUkv9K/oX
- +vpwrCiT1lTK6TxR0mN2enAudcDPMsga7u9++sQMvtV4FfU7kYPL1pt1VaCYetKaxX3j
- wQsjr2cgDVYLyGcjsVfkUAc0mtCto9m1cWR73KKjqYhPUQgtr5IOngYz3nlU293XQ2Zu
- HlOg==
-X-Gm-Message-State: AC+VfDxeD/hDAQtsVbn0VNhvSELE1qAOwYZ3vo0QWGL73qVeVS65WNOd
- rClEMP4NcJjgRjl3ivyW3Sa+nOKKNlfs7pOi55g=
-X-Google-Smtp-Source: ACHHUZ4EGbVt+MfZHMuICq04soYAGwGzEAtIJMxXzY62EzjpkzGv6EgVTVB7yCxcK7ZduSUToLcj/Q==
-X-Received: by 2002:a7b:c449:0:b0:3f4:2d04:f3f0 with SMTP id
- l9-20020a7bc449000000b003f42d04f3f0mr16820194wmi.39.1684252406582; 
- Tue, 16 May 2023 08:53:26 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1684252415; x=1686844415;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=5smg/Q5tmXzlX06wSS9XwFnL74Ay9RmKYBdi4adEWgE=;
+ b=QZBo1M3z4sXSuUCV0UTvwteS1Lgyz5WEUX+DkuGMs6W54bvp/L4WYxrYVcQ7cwrcCp
+ E94PUhkgs/ACD8lXczCx542h+FW7HcOEcoP9vx5gF5u15Xl7bjv0XGXPjd8Midl78zNK
+ QtwEbc4rbnpr8+M5hDwf7UkXheR6EAqFbOygDWGnl5WYXlrj13YHmhpqSPZSWItR0g5s
+ T+BllRC2hMWQigwsH6Kdk1SpCd8wV5EOKOeLWwor1QDJFSNNXJJiUTZe7iMbl4RklOLi
+ QupZ2lyFuDan9uizQn0Kog/GnEvqhdAnwtRtdgZM5w9qTi26zl4pFl5mGx9fL5xB2N1i
+ 5rFA==
+X-Gm-Message-State: AC+VfDyA1iNzajzQZxe1uG3UDCXtcSWJsccbzFi/DZg7zj9iAQn+Oah/
+ cNAVlQiIbCglUpi+pKqxAptqJvM3ldVUfancvTY=
+X-Google-Smtp-Source: ACHHUZ4cu9HAU2wdoTwvNr+OC4QQ21jx1LMAmCNa3C8SCLgnoBEl15al4hP48gg3mZIRfD7RJvn9JA==
+X-Received: by 2002:a05:600c:21c1:b0:3f4:21ff:b91f with SMTP id
+ x1-20020a05600c21c100b003f421ffb91fmr22067536wmj.28.1684252415280; 
+ Tue, 16 May 2023 08:53:35 -0700 (PDT)
 Received: from P-NAN-LIMA.. ([2a04:cec0:1026:f768:f6ad:f1ca:511:b07f])
  by smtp.gmail.com with ESMTPSA id
- m25-20020a7bca59000000b003f17eaae2c9sm2817178wml.1.2023.05.16.08.53.24
+ m25-20020a7bca59000000b003f17eaae2c9sm2817178wml.1.2023.05.16.08.53.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 May 2023 08:53:25 -0700 (PDT)
+ Tue, 16 May 2023 08:53:34 -0700 (PDT)
 From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 16 May 2023 17:53:09 +0200
-Message-Id: <20230516155310.1341998-1-sebastian.weyer@smile.fr>
+Date: Tue, 16 May 2023 17:53:10 +0200
+Message-Id: <20230516155310.1341998-2-sebastian.weyer@smile.fr>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230516155310.1341998-1-sebastian.weyer@smile.fr>
+References: <20230516155310.1341998-1-sebastian.weyer@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1684252406; x=1686844406;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2CzlgxZcq0FqfNEKnRFFtDxEjxrcFlvXed+IoklM+ZM=;
- b=KtrspE5Z67/yyzivgS8ufdnr2S42o5z3h8q15Hks+imStasqE07h5GvwpPzgPCavdv
- QdqDcwF1AN6yNzhXyR9Kegom2pfvKzDOsn4UynggI7p+UPeECe6qi1pIg/eJIrU5PVfP
- O48cTCQlaevR8i7r5EL1QyGLghl77R1bEBCo2YWOw748jjliW8DxytkNA5xok3cuRp19
- MXpswjw9/kQncclBSAtq/ehIww5O5RC1iIbcSbqCgTo7iw0FP/W5N4hWnhs9VPPpRmZI
- 1eppYopvg5Le4Lh6obAnSNy4ha1FmEkl5kZYnVzwJBo9C+IBbiiUeMI8Jewkv2pTLEcD
- I5lg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1684252415; x=1686844415;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=5smg/Q5tmXzlX06wSS9XwFnL74Ay9RmKYBdi4adEWgE=;
+ b=ICgXOC6pJ8h/7sKW+SA8zk6XDQeNfbrUSveEId4j1FLj9JeetIQmWiGhtTzhoMs3+B
+ KODxzfVLrvmawRNCzSVGFGDTzGgeD/YbGIHGfpHIF06CqIsLbORg1pLab0569zur8Yam
+ YKJb4dq+5oRlfQwCp+7JhSxfy7qdm12WdcG6BQH9wE2gvkA8qod1dS+igr7NkUfVvpLx
+ KcRRM8sRxPKYChdtsQMGDn4DqDRuja1WZTXsh9ByhmvstAL5q3ffP2k0j4JEN39J+Jhc
+ iYKBka3AP6q1gC0NFILiK0Grbk/cdMGMhmjXtuHKUnL/boy77mnFipItfz2UxkMOg4aE
+ CgXQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
  header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=KtrspE5Z
-Subject: [Buildroot] [PATCH v2 1/2] package/amlogic-boot-fip: new host
- package to sign bootloader for amlogic SoCs
+ header.s=20221208 header.b=ICgXOC6p
+Subject: [Buildroot] [PATCH v2 2/2] configs/khadas_vim3_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,124 +99,285 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyB0b29sIGlzIG5lZWRlZCBieSBzb21lIFNvQ3MgdG8gc2lnbiB0aGUgYm9vdGxvYWRlci4g
-VGhlIHN1cHBvcnRlZApTb0NzIGFyZSB0aGUgZm9sbG93aW5nOgpiYW5hbmFwaS1jbTRpbwpiYW5h
-bmFwaS1tMi1wcm8KYmFuYW5hcGktbTJzCmJhbmFuYXBpLW01CmJlZWxpbmstZ3QxCmJlZWxpbmst
-czkyMngKamV0aHViLWoxMDAKamV0aHViLWo4MApraGFkYXMtdmltCmtoYWRhcy12aW0yCmtoYWRh
-cy12aW0zCmtoYWRhcy12aW0zbApsYWZyaXRlCmxlcG90YXRvCm5hbm9waS1rMgpvZHJvaWQtYzIK
-b2Ryb2lkLWM0Cm9kcm9pZC1nby11bHRyYQpvZHJvaWQtaGM0Cm9kcm9pZC1uMgpvZHJvaWQtbjJs
-Cm9kcm9pZC1uMi1wbHVzCnAyMDAKcDIwMQpwMjEyCnJhZHhhLXplcm8KcmFkeGEtemVybzIKczQw
-MApzZWk1MTAKc2VpNjEwCnRhcnRpZmxldHRlLXM5MDVkCnRhcnRpZmxldHRlLXM5MTIKdTIwMAp3
-ZXRlay1jb3JlMgp3ZXRlay1odWIKd2V0ZWstcGxheTIKClRoZSB2YXJpYWJsZSBCUjJfUEFDS0FH
-RV9IT1NUX0FNTE9HSUNfQk9PVF9GSVBfREVWSUNFIGlzIHVzZWQgdG8gc3BlY2lmeQpmb3Igd2hp
-Y2ggZGV2aWNlIHRoaXMgcGFja2FnZSBuZWVkcyB0byBiZSB1c2VkLgoKVGhpcyB0b29sIHVzZXMg
-cHJlLWNvbXBpbGVkIGJpbmFyaWVzIGluIG9yZGVyIHRvIHNpZ24gdGhlIGJvb3Rsb2FkZXIuClRo
-ZXNlIGJpbmFyaWVzIGFyZSBwcm92aWRlZCB1bmRlciBhIHByb3ByaWV0YXJ5IGxpY2Vuc2UgdGhh
-dCBwcm9oaWJpdHMKYW55IHJlZGlzdHJpYnV0aW9uIG9mIHRoZSByZXN1bHRpbmcgaW1hZ2VzLgoK
-QSBzaW1pbGFyIHRvb2wgd2FzIHRyaWVkIHRvIGJlIGFkZGVkIGluIHRoZSBwYXN0OgpodHRwOi8v
-cGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMTUzMzU0NTQwOC0x
-MTI0OC0yLWdpdC1zZW5kLWVtYWlsLW5hcm1zdHJvbmdAYmF5bGlicmUuY29tLwpUaGlzIHRpbWUg
-aG93ZXZlciBhIGxpY2Vuc2UgZmlsZSBpcyBwcmVzZW50IHdoaWNoIGNhbiBiZSB1c2VkIGJ5Cm1h
-a2UgbGVnYWwtaW5mby4gQWRkaXRpb25hbGx5LCBhY3NfdG9vbC5weWMgd2FzIHJlcGxhY2VkIGJ5
-IGFjc190b29sLnB5CmFuZCBpcyB0aGVyZWZvcmUgbm90IGNvbXBpbGVkIGFueW1vcmUuCgpTaWdu
-ZWQtb2ZmLWJ5OiBTZWJhc3RpYW4gV2V5ZXIgPHNlYmFzdGlhbi53ZXllckBzbWlsZS5mcj4KLS0t
-ClRvIG15IGtub3dsZWRnZSB0aGVyZSBpcyBubyBvcGVuLXNvdXJjZSBhbHRlcm5hdGl2ZSBmb3Ig
-QTMxMUQgU29DcyBsaWtlCnRoZSBLaGFkYXMgVklNMy4gRm9yIGRldmljZXMgdXNpbmcgYSBTODA1
-LCBTOTA1LCBTOTEyIG9yIEExMTNEIFNvQyBsaWtlIHRoZQpsYWZyaXRlLCB0aGUgbGVwb3RhdG8g
-b3IgdGhlIHRhcnRpZmxldHRlLCBhbiBvcGVuLXNvdXJjZSBhbHRlcm5hdGl2ZQptaWdodCBiZSBz
-dXBwb3J0ZWQ6IGh0dHBzOi8vZ2l0aHViLmNvbS9yZXBrL2d4bGltZwotLS0KIERFVkVMT1BFUlMg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAzICsrCiBwYWNrYWdlL0NvbmZp
-Zy5pbi5ob3N0ICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2FtbG9naWMt
-Ym9vdC1maXAvQ29uZmlnLmluLmhvc3QgICAgICAgfCA1MiArKysrKysrKysrKysrKysrKysrCiAu
-Li4vYW1sb2dpYy1ib290LWZpcC9hbWxvZ2ljLWJvb3QtZmlwLmhhc2ggICAgfCAgMyArKwogcGFj
-a2FnZS9hbWxvZ2ljLWJvb3QtZmlwL2FtbG9naWMtYm9vdC1maXAubWsgIHwgMzEgKysrKysrKysr
-KysKIDUgZmlsZXMgY2hhbmdlZCwgOTAgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UvYW1sb2dpYy1ib290LWZpcC9Db25maWcuaW4uaG9zdAogY3JlYXRlIG1vZGUgMTAw
-NjQ0IHBhY2thZ2UvYW1sb2dpYy1ib290LWZpcC9hbWxvZ2ljLWJvb3QtZmlwLmhhc2gKIGNyZWF0
-ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2FtbG9naWMtYm9vdC1maXAvYW1sb2dpYy1ib290LWZpcC5t
-awoKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IGU3NjcxN2U4NDUu
-LjUzY2U4NDA4ZGIgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAt
-MjU4OSw2ICsyNTg5LDkgQEAgRjoJc3VwcG9ydC9taXNjL3Rvb2xjaGFpbmZpbGUuY21ha2UuaW4K
-IE46CVNhbSBWb3NzIDxzYW0udm9zc0BnbWFpbC5jb20+CiBGOglwYWNrYWdlL3JpcGdyZXAvCiAK
-K046CVNlYmFzdGlhbiBXZXllciA8c2ViYXN0aWFuLndleWVyQHNtaWxlLmZyPgorRjoJcGFja2Fn
-ZS9hbWxvZ2ljLWJvb3QtZmlwCisKIE46CVPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4u
-c3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KIEY6CXBhY2thZ2UvbW1jLXV0aWxzLwogRjoJcGFja2Fn
-ZS9weXRob24tZmxhc2stanNvbnJwYy8KZGlmZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluLmhv
-c3QgYi9wYWNrYWdlL0NvbmZpZy5pbi5ob3N0CmluZGV4IGRjYWRiZmRmYzEuLjA3NGFkYzUxZjIg
-MTAwNjQ0Ci0tLSBhL3BhY2thZ2UvQ29uZmlnLmluLmhvc3QKKysrIGIvcGFja2FnZS9Db25maWcu
-aW4uaG9zdApAQCAtMyw2ICszLDcgQEAgbWVudSAiSG9zdCB1dGlsaXRpZXMiCiAJc291cmNlICJw
-YWNrYWdlL2Fib290aW1nL0NvbmZpZy5pbi5ob3N0IgogCXNvdXJjZSAicGFja2FnZS9hZXNwaXBl
-L0NvbmZpZy5pbi5ob3N0IgogCXNvdXJjZSAicGFja2FnZS9hZ2VudC1wcm94eS9Db25maWcuaW4u
-aG9zdCIKKwlzb3VyY2UgInBhY2thZ2UvYW1sb2dpYy1ib290LWZpcC9Db25maWcuaW4uaG9zdCIK
-IAlzb3VyY2UgInBhY2thZ2UvYW5kcm9pZC10b29scy9Db25maWcuaW4uaG9zdCIKIAlzb3VyY2Ug
-InBhY2thZ2UvYXNuMWMvQ29uZmlnLmluLmhvc3QiCiAJc291cmNlICJwYWNrYWdlL2JhYmVsdHJh
-Y2UyL0NvbmZpZy5pbi5ob3N0IgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9hbWxvZ2ljLWJvb3QtZmlw
-L0NvbmZpZy5pbi5ob3N0IGIvcGFja2FnZS9hbWxvZ2ljLWJvb3QtZmlwL0NvbmZpZy5pbi5ob3N0
-Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjE0ZWNjNjNiZmYKLS0tIC9k
-ZXYvbnVsbAorKysgYi9wYWNrYWdlL2FtbG9naWMtYm9vdC1maXAvQ29uZmlnLmluLmhvc3QKQEAg
-LTAsMCArMSw1MiBAQAorY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfQU1MT0dJQ19CT09UX0ZJUAor
-CWJvb2wgImhvc3QgYW1sb2dpYy1ib290LWZpcCIKKwlkZXBlbmRzIG9uIEJSMl9IT1NUQVJDSCA9
-ICJ4ODZfNjQiCisJaGVscAorCSAgRmlybXdhcmUgSW1hZ2UgUGFjYWtnZSAoRklQKSBzb3VyY2Vz
-IHVzZWQgdG8gc2lnbiBBbWxvZ2ljCisJICB1LWJvb3QgYmluYXJpZXMgaW4gTGlicmVFTEVDIGlt
-YWdlcworCisJICBodHRwczovL2dpdGh1Yi5jb20vTGlicmVFTEVDL2FtbG9naWMtYm9vdC1maXAK
-KworY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfQU1MT0dJQ19CT09UX0ZJUF9ERVZJQ0UKKwlzdHJp
-bmcgImFtbG9naWMtYm9vdC1maXAgZGV2aWNlIgorCWRlZmF1bHQgImtoYWRhcy12aW0zIgorCWRl
-cGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9TVF9BTUxPR0lDX0JPT1RfRklQCisJaGVscAorCSAgRGV2
-aWNlIGZvciB3aGljaCB5b3Ugd2FudCB0byB1c2UgdGhpcyBwYWNrYWdlLgorCSAgVmFsaWQgb3B0
-aW9ucyBhcmU6CisJICBiYW5hbmFwaS1jbTRpbworCSAgYmFuYW5hcGktbTItcHJvCisJICBiYW5h
-bmFwaS1tMnMKKwkgIGJhbmFuYXBpLW01CisJICBiZWVsaW5rLWd0MQorCSAgYmVlbGluay1zOTIy
-eAorCSAgamV0aHViLWoxMDAKKwkgIGpldGh1Yi1qODAKKwkgIGtoYWRhcy12aW0KKwkgIGtoYWRh
-cy12aW0yCisJICBraGFkYXMtdmltMworCSAga2hhZGFzLXZpbTNsCisJICBsYWZyaXRlCisJICBs
-ZXBvdGF0bworCSAgbmFub3BpLWsyCisJICBvZHJvaWQtYzIKKwkgIG9kcm9pZC1jNAorCSAgb2Ry
-b2lkLWdvLXVsdHJhCisJICBvZHJvaWQtaGM0CisJICBvZHJvaWQtbjIKKwkgIG9kcm9pZC1uMmwK
-KwkgIG9kcm9pZC1uMi1wbHVzCisJICBwMjAwCisJICBwMjAxCisJICBwMjEyCisJICByYWR4YS16
-ZXJvCisJICByYWR4YS16ZXJvMgorCSAgczQwMAorCSAgc2VpNTEwCisJICBzZWk2MTAKKwkgIHRh
-cnRpZmxldHRlLXM5MDVkCisJICB0YXJ0aWZsZXR0ZS1zOTEyCisJICB1MjAwCisJICB3ZXRlay1j
-b3JlMgorCSAgd2V0ZWstaHViCisJICB3ZXRlay1wbGF5MgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9h
-bWxvZ2ljLWJvb3QtZmlwL2FtbG9naWMtYm9vdC1maXAuaGFzaCBiL3BhY2thZ2UvYW1sb2dpYy1i
-b290LWZpcC9hbWxvZ2ljLWJvb3QtZmlwLmhhc2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
-MDAwMDAwMDAwMC4uMWEwODM0MTUzMgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvYW1sb2dp
-Yy1ib290LWZpcC9hbWxvZ2ljLWJvb3QtZmlwLmhhc2gKQEAgLTAsMCArMSwzIEBACisjIExvY2Fs
-bHkgY2FsY3VsYXRlZAorc2hhMjU2ICAyY2MwNmJjN2Q1NjQ3ZmQ4YzAwMjUxODFmYTQyYzRhOGVm
-MGVkMTZiOTE4YTFmYTIwNjBlYTgzYzIyZTQ3YjIwICBhbWxvZ2ljLWJvb3QtZmlwLWU5NmI2YTY5
-NDM4MGZmMDdkNWE5ZTRiZTY0NGZmZTI1NGJkMTg1MTIudGFyLmd6CitzaGEyNTYgIDQyNTU1Mzdm
-NzFiMWNkMGQ0ODdkZTBmYTJiOGVkZGYxZWI5NmVkOTZkMTE5NTA3MzM2ZGRlOGIzNzgyYjg2ZTYg
-IExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvYW1sb2dpYy1ib290LWZpcC9hbWxvZ2ljLWJv
-b3QtZmlwLm1rIGIvcGFja2FnZS9hbWxvZ2ljLWJvb3QtZmlwL2FtbG9naWMtYm9vdC1maXAubWsK
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uMGNiN2E4ZDkzZgotLS0gL2Rl
-di9udWxsCisrKyBiL3BhY2thZ2UvYW1sb2dpYy1ib290LWZpcC9hbWxvZ2ljLWJvb3QtZmlwLm1r
-CkBAIC0wLDAgKzEsMzEgQEAKKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCisjCisjIGFtbG9naWMt
-Ym9vdC1maXAKKyMKKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCisKK0FNTE9HSUNfQk9PVF9GSVBf
-VkVSU0lPTiA9IGU5NmI2YTY5NDM4MGZmMDdkNWE5ZTRiZTY0NGZmZTI1NGJkMTg1MTIKK0FNTE9H
-SUNfQk9PVF9GSVBfU0lURSA9ICQoY2FsbCBnaXRodWIsTGlicmVFTEVDLGFtbG9naWMtYm9vdC1m
-aXAsJChBTUxPR0lDX0JPT1RfRklQX1ZFUlNJT04pKQorQU1MT0dJQ19CT09UX0ZJUF9MSUNFTlNF
-ID0gUFJPUFJJRVRBUlkKK0FNTE9HSUNfQk9PVF9GSVBfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UK
-KworQU1MT0dJQ19CT09UX0ZJUF9JTlNUQUxMX0RJUiA9ICQoQklOQVJJRVNfRElSKS9hbWxvZ2lj
-LWJvb3QtZmlwCisKK0FNTE9HSUNfQk9PVF9GSVBfREVWSUNFID0gJChCUjJfUEFDS0FHRV9IT1NU
-X0FNTE9HSUNfQk9PVF9GSVBfREVWSUNFKQorCitkZWZpbmUgSE9TVF9BTUxPR0lDX0JPT1RfRklQ
-X0lOU1RBTExfQ01EUworCW1rZGlyIC1wICQoQU1MT0dJQ19CT09UX0ZJUF9JTlNUQUxMX0RJUikv
-JChBTUxPR0lDX0JPT1RfRklQX0RFVklDRSkKKwkkKElOU1RBTEwpIC1EIC1tIDA3NTUgJChARCkv
-YnVpbGQtYWxsLWZpcC5zaCAkKEFNTE9HSUNfQk9PVF9GSVBfSU5TVEFMTF9ESVIpCisJJChJTlNU
-QUxMKSAtRCAtbSAwNzU1ICQoQEQpL2J1aWxkLWZpcC5zaCAkKEFNTE9HSUNfQk9PVF9GSVBfSU5T
-VEFMTF9ESVIpCisJJChJTlNUQUxMKSAtRCAtbSAwNzU1ICQoQEQpL2cxMmEuaW5jICQoQU1MT0dJ
-Q19CT09UX0ZJUF9JTlNUQUxMX0RJUikKKwkkKElOU1RBTEwpIC1EIC1tIDA3NTUgJChARCkvJChB
-TUxPR0lDX0JPT1RfRklQX0RFVklDRSkvKiAkKEFNTE9HSUNfQk9PVF9GSVBfSU5TVEFMTF9ESVIp
-LyQoQU1MT0dJQ19CT09UX0ZJUF9ERVZJQ0UpCitlbmRlZgorCisjIGNoZWNrIGZvciBlbXB0eSBk
-ZXZpY2Ugc3RyaW5nIHdoZW4gd2UncmUgYnVpbGRpbmcKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfSE9T
-VF9BTUxPR0lDX0JPT1RfRklQKSQoQlJfQlVJTERJTkcpLHl5KQoraWZlcSAoJChjYWxsIHFzdHJp
-cCwkKEJSMl9QQUNLQUdFX0hPU1RfQU1MT0dJQ19CT09UX0ZJUF9ERVZJQ0UpKSwpCiskKGVycm9y
-IE5vIGRldmljZSBzcGVjaWZpZWQgZm9yIGFtbG9naWMtYm9vdC1maXAsIHBsZWFzZSBjaGVjayB5
-b3VyIEJSMl9QQUNLQUdFX0hPU1RfQU1MT0dJQ19CT09UX0ZJUF9ERVZJQ0Ugc2V0dGluZykKK2Vu
-ZGlmCitlbmRpZgorCiskKGV2YWwgJChob3N0LWdlbmVyaWMtcGFja2FnZSkpCi0tIAoyLjM0LjEK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Add defconfig for the Khadas VIM3 board which uses a A311D SoC with a 4x
+ARM Cortex-A73 + 2x ARM Cortex-A53 big.LITTLE architecture.
+
+This defconfig includes the Linux mainline kernel version 6.3 as well as
+mainline uboot version 2023.04 with an in-tree .dts and uboot-defconfig.
+It also includes the host-tool amlogic-boot-fip which is necessary for
+signing the bootloader. This host tool is used in the post-image.sh script
+in order to generate the signed binary.
+
+This binary is then flashed to the final sdcard.img after it is
+generated using genimage. It is done in this way because the bootloader
+image needs to be flashed in 2 steps. First the first 444 bytes need to
+be flashed to the beginning of the sdcard.img, then we need to skip 68 bytes
+in the source and the destination and then write the remaining
+bootloader image to the sdcard.img.
+Ref: http://docs.khadas.com/products/sbc/vim3/development/create-bootable-tf-card
+
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+---
+v2: when fixing warnings using shellcheck I added erroneous quotes in
+some paths in post-image.sh, leading to the error of not being able to
+find genimage.cfg.
+---
+ board/khadas/vim3/extlinux.conf |  4 ++
+ board/khadas/vim3/genimage.cfg  | 33 +++++++++++++++
+ board/khadas/vim3/post-build.sh |  5 +++
+ board/khadas/vim3/post-image.sh | 38 +++++++++++++++++
+ board/khadas/vim3/readme.txt    | 72 +++++++++++++++++++++++++++++++++
+ configs/khadas_vim3_defconfig   | 44 ++++++++++++++++++++
+ 6 files changed, 196 insertions(+)
+ create mode 100644 board/khadas/vim3/extlinux.conf
+ create mode 100644 board/khadas/vim3/genimage.cfg
+ create mode 100755 board/khadas/vim3/post-build.sh
+ create mode 100755 board/khadas/vim3/post-image.sh
+ create mode 100644 board/khadas/vim3/readme.txt
+ create mode 100644 configs/khadas_vim3_defconfig
+
+diff --git a/board/khadas/vim3/extlinux.conf b/board/khadas/vim3/extlinux.conf
+new file mode 100644
+index 0000000000..fede99b502
+--- /dev/null
++++ b/board/khadas/vim3/extlinux.conf
+@@ -0,0 +1,4 @@
++default buildroot
++label buildroot
++   kernel /Image
++append root=/dev/mmcblk0p2 rootwait console=ttyAML0,115200
+diff --git a/board/khadas/vim3/genimage.cfg b/board/khadas/vim3/genimage.cfg
+new file mode 100644
+index 0000000000..79d7f9ca07
+--- /dev/null
++++ b/board/khadas/vim3/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"Image",
++			"meson-g12b-a311d-khadas-vim3.dtb",
++			"extlinux"
++		}
++
++		label = "boot"
++	}
++
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image="boot.vfat"
++		size = 64M
++		offset = 2M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		size = 128M
++		offset = 0
++	}
++}
+diff --git a/board/khadas/vim3/post-build.sh b/board/khadas/vim3/post-build.sh
+new file mode 100755
+index 0000000000..8dae08a47c
+--- /dev/null
++++ b/board/khadas/vim3/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$BINARIES_DIR"/extlinux/extlinux.conf
+diff --git a/board/khadas/vim3/post-image.sh b/board/khadas/vim3/post-image.sh
+new file mode 100755
+index 0000000000..053e20faae
+--- /dev/null
++++ b/board/khadas/vim3/post-image.sh
+@@ -0,0 +1,38 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
++ROOTPATH_TMP="$(mktemp -d)"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++	--rootpath "${ROOTPATH_TMP}"   \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++AMLOGIC_DIR=${BINARIES_DIR}/amlogic-boot-fip
++FIP_DIR=${BINARIES_DIR}/fip
++
++if ! [ -d "${FIP_DIR}" ]
++then
++	mkdir "${FIP_DIR}"
++fi
++
++(cd "${AMLOGIC_DIR}" && \
++	./build-fip.sh khadas-vim3 \
++	"${BINARIES_DIR}"/u-boot.bin \
++	"${FIP_DIR}")
++
++dd if="${FIP_DIR}"/u-boot.bin.sd.bin \
++   of="${BINARIES_DIR}"/sdcard.img \
++   conv=fsync,notrunc bs=1 count=444
++
++dd if="${FIP_DIR}"/u-boot.bin.sd.bin \
++   of="${BINARIES_DIR}"/sdcard.img \
++   conv=fsync,notrunc bs=512 skip=1 seek=1
+diff --git a/board/khadas/vim3/readme.txt b/board/khadas/vim3/readme.txt
+new file mode 100644
+index 0000000000..4d1d78d80c
+--- /dev/null
++++ b/board/khadas/vim3/readme.txt
+@@ -0,0 +1,72 @@
++Khadas VIM3
++
++Description
++===========
++
++This configuration builds a complete image for the Khadas VIM3 to be flashed
++on an SD-card.
++
++How to build it
++===============
++
++Select the default configuration for the target:
++$ make khadas_vim3_defconfig
++
++Optional: modify the configuration:
++$ make menuconfig
++
++Build:
++$ make
++
++Result of the build
++===================
++output/images/
+++-- amlogic-boot-fip
+++   +-- build-all-fip.sh
+++   +-- build-fip.sh
+++   +-- g12a.inc
+++   `-- khadas-vim3
+++       +-- acs.bin
+++       +-- acs_tool.py
+++       +-- aml_ddr.fw
+++       +-- aml_encrypt_g12b
+++       +-- bl2.bin
+++       +-- bl301.bin
+++       +-- bl30.bin
+++       +-- bl31.bin
+++       +-- bl31.img
+++       +-- blx_fix.sh
+++       +-- ddr3_1d.fw
+++       +-- ddr4_1d.fw
+++       +-- ddr4_2d.fw
+++       +-- diag_lpddr4.fw
+++       +-- lpddr3_1d.fw
+++       +-- lpddr4_1d.fw
+++       +-- lpddr4_2d.fw
+++       +-- Makefile
+++       `-- piei.fw
+++-- boot.vfat
+++-- extlinux
+++   `-- extlinux.conf
+++-- fip
+++   +-- u-boot.bin
+++   +-- u-boot.bin.sd.bin
+++   +-- u-boot.bin.usb.bl2
+++   `-- u-boot.bin.usb.tpl
+++-- Image
+++-- meson-g12b-a311d-khadas-vim3.dtb
+++-- rootfs.ext2
+++-- rootfs.ext4 -> rootfs.ext2
+++-- rootfs.tar
+++-- sdcard.img
++`-- u-boot.bin
++
++The post-image script uses the files in the amlogic-boot-fip folder to sign
++the bootloader image before integrating it into the sdcard image.
++
++To copy the image file to the sdcard use dd:
++$ dd if=output/images/sdcard.img of=/dev/sdX
++
++Tested hardware
++===============
++Khadas vim3 (rev. 14)
+diff --git a/configs/khadas_vim3_defconfig b/configs/khadas_vim3_defconfig
+new file mode 100644
+index 0000000000..82cf323875
+--- /dev/null
++++ b/configs/khadas_vim3_defconfig
+@@ -0,0 +1,44 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a73_a53=y
++BR2_ARM_FPU_VFPV4=y
++
++# Image
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/khadas/vim3/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/khadas/vim3/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/khadas/vim3/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.3"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-g12b-a311d-khadas-vim3"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="khadas-vim3"
++
++# Required tool to sign the bootloader image
++BR2_PACKAGE_HOST_AMLOGIC_BOOT_FIP=y
++BR2_PACKAGE_HOST_AMLOGIC_BOOT_FIP_DEVICE="khadas-vim3"
++
++# Required tools to create the SD image
++BR2_PACKAGE_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Supporting host tools to build FIT image
++# BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++# BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
