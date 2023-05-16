@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3B75C77B7A
-	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 08:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 726F5C77B7F
+	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 08:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 593A1418EB;
-	Tue, 16 May 2023 08:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 593A1418EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E439418ED;
+	Tue, 16 May 2023 08:22:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E439418ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zm3lPOI29Opm; Tue, 16 May 2023 08:22:41 +0000 (UTC)
+	with ESMTP id EKitMv2Qr688; Tue, 16 May 2023 08:22:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EAC1418E3;
-	Tue, 16 May 2023 08:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EAC1418E3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 865F91BF2CF
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 08:22:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB0794191A;
+	Tue, 16 May 2023 08:22:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB0794191A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CC0D51BF2CF
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 08:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5CA6F418EB
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 08:22:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CA6F418EB
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5A72821AE
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 08:22:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5A72821AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YBIjfdAGfGjz for <buildroot@lists.busybox.net>;
- Tue, 16 May 2023 08:22:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x6NP5qf-qUTa for <buildroot@lists.busybox.net>;
+ Tue, 16 May 2023 08:22:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 411AC418DE
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com
- [209.85.218.50])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 411AC418DE
- for <buildroot@buildroot.org>; Tue, 16 May 2023 08:22:25 +0000 (UTC)
-Received: by mail-ej1-f50.google.com with SMTP id
- a640c23a62f3a-96b0235c10bso523967066b.3
- for <buildroot@buildroot.org>; Tue, 16 May 2023 01:22:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B361482021
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com
+ [209.85.208.43])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B361482021
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 08:22:26 +0000 (UTC)
+Received: by mail-ed1-f43.google.com with SMTP id
+ 4fb4d7f45d1cf-50bd37ca954so4752407a12.0
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 01:22:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684225343; x=1686817343;
+ d=1e100.net; s=20221208; t=1684225344; x=1686817344;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=y8dAaSzOi0d5XRrEpm5nav0j//Y1yPeWPiW+5lrodnk=;
- b=AUug2tkj//Nn1Hxm7jenwXj5IWNaECiNfA/CKSX9xnLwntboCY2Y+GC8kmnBeqvA0X
- C6VGgvzuZJavhC45CNPuLiFBcp7B8uwHSf6JYfyh3N52Tz3ifpIO9ajosXE03+B6Za5f
- D75aH6tjuDXGvC+g11y4f0Cw3TcuwdRbMobTgac2mg38N/LD8YMVbt/LUQpWZ2o9J1Ej
- GgMruHHxgkcTYgaXTGyjPju6eP77lNUu5HLT0OFuIZvICDOCSgdBY/IO31JvxL4b0oRV
- 8Ib4FetwMRyZeCTKWUv5wL7mWTv8yqEiNJvSBHNIBTH/FKHFiFgH4eiuompGwhNR9aIB
- yW5A==
-X-Gm-Message-State: AC+VfDx4rqz5/393IaYJRxUrzjPzZwJKcP4bz1Yqx4nz2EjWsdWPNG3p
- tzZGDPDNVCpRBxrSEt25EUDGg3iKhNpOruvp
-X-Google-Smtp-Source: ACHHUZ4gZcoCvwci9bLJuzfR10NqtRwQB0EnUwAuxs2p0wZfMZlTx+33wdguVMRcKTYPfp80nYACpg==
-X-Received: by 2002:a17:907:6e10:b0:968:1e8:a754 with SMTP id
- sd16-20020a1709076e1000b0096801e8a754mr23817025ejc.72.1684225342680; 
- Tue, 16 May 2023 01:22:22 -0700 (PDT)
+ bh=VW5DLLVP5Z4zDCmo8jwGuE6OWjjdJVKwmqqblH1Xx8c=;
+ b=LvB2WjApGThifu27lVeb+4dnuccfqPgWhMr4hNQx0M4z5sVVOa0WDXJjj6Sqlhej6l
+ /j7tto7lUosBcekJJgu1qvQjdZE3JQJsbrCbkNMOh8Asvo0xV0PAOl3ezBmeqn/foAB/
+ c1plUzBN3Mn8ugrVYKXWYrnXkhnCsjpzfT7qTNqwSLJcXbG2P0wGmBoVMxSTNTqH10gk
+ vpvCqCwhWAP2GAF822zFU+sV59a3germtJCb1tb1I9OFNEIQJM8p+iPspQDHDO452QIx
+ W7FPb5RumUnLsPUabiU8sqHTeUxzzF87YDcOnp07IRInXdvlgtjyo0VyCbD6qUGvul28
+ uULQ==
+X-Gm-Message-State: AC+VfDwdgRGTBrf3SHV8KEkWz6NOOsS1zRX0RV9uRLhb7P7k46N7/Vfs
+ bAaq9kCGgFQmmL261jLe0adlN37h195v/uIb
+X-Google-Smtp-Source: ACHHUZ6Ifxx06ISa7lu9KlL6AKP2KUr5szJYqp6+yH65xJD+ngT2L96OKJ9zkBve2BsvA/6yU2dg5g==
+X-Received: by 2002:a17:907:7251:b0:96a:1ee9:4b0 with SMTP id
+ ds17-20020a170907725100b0096a1ee904b0mr17995910ejc.33.1684225344365; 
+ Tue, 16 May 2023 01:22:24 -0700 (PDT)
 Received: from localhost.localdomain
  ([2a02:a03f:eb68:2f00:5cb4:21ec:50e8:94f8])
  by smtp.gmail.com with ESMTPSA id
- lt14-20020a170906fa8e00b0094efdfe60dcsm10422528ejb.206.2023.05.16.01.22.22
+ lt14-20020a170906fa8e00b0094efdfe60dcsm10422528ejb.206.2023.05.16.01.22.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 May 2023 01:22:22 -0700 (PDT)
+ Tue, 16 May 2023 01:22:24 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 May 2023 10:21:53 +0200
-Message-Id: <20230516082155.22014-2-thomas@devoogdt.com>
+Date: Tue, 16 May 2023 10:21:54 +0200
+Message-Id: <20230516082155.22014-3-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230516082155.22014-1-thomas@devoogdt.com>
 References: <20230516082155.22014-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v5 2/4] package/webkitgtk: use the CMAKE_NINJA
+Subject: [Buildroot] [PATCH v5 3/4] package/wpewebkit: use the CMAKE_NINJA
  flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -97,14 +97,14 @@ From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
 Replaces:
 
-commit 16e5c92ff5fd2b44a1126bd7d7538c68ce838213
+commit 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
 Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Thu Feb 9 18:07:05 2023 +0100
+Date:   Thu Feb 9 18:07:06 2023 +0100
 
-    package/webkitgtk: Build with ninja
+    package/wpewebkit: Build with ninja
 
-    Webkitgtk needs cmake >= 3.20 when building with the make backend since
-    webkitgtk 3.8.0.
+    Wpewebkit needs cmake >= 3.20 when building with the make backend since
+    wpewebkit 3.8.0.
 
     Cmake 3.20 is above our minimal version in
     support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
@@ -118,42 +118,42 @@ Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
 v5: no change
 ---
- package/webkitgtk/webkitgtk.mk | 20 +-------------------
+ package/wpewebkit/wpewebkit.mk | 20 +-------------------
  1 file changed, 1 insertion(+), 19 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index dd17b46e67..5184c69dbf 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -13,6 +13,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-APPLE \
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 7b8ac67d92..27745570bc 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -14,6 +14,7 @@ WPEWEBKIT_LICENSE_FILES = \
  	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_CPE_ID_VENDOR = webkitgtk
-+WEBKITGTK_CMAKE_NINJA = YES
- WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
-@@ -139,23 +140,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
+ WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
+ WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
++WPEWEBKIT_CMAKE_NINJA = YES
+ WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby \
+ 	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
+ 	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
+@@ -103,23 +104,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
+ WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
  endif
  
--# webkitgtk needs cmake >= 3.20 when not building with ninja, which is
+-# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
 -# above our minimal version in
 -# support/dependencies/check-host-cmake.mk, so use the ninja backend:
 -# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
--WEBKITGTK_CONF_OPTS += -GNinja
--WEBKITGTK_DEPENDENCIES += host-ninja
+-WPEWEBKIT_CONF_OPTS += -GNinja
+-WPEWEBKIT_DEPENDENCIES += host-ninja
 -
--define WEBKITGTK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WEBKITGTK_BUILDDIR)
+-define WPEWEBKIT_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
 -endef
 -
--define WEBKITGTK_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+-define WPEWEBKIT_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
 -endef
 -
--define WEBKITGTK_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+-define WPEWEBKIT_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
 -endef
 -
  $(eval $(cmake-package))
