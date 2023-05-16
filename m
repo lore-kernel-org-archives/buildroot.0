@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C8A7C77B7A
-	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 20:50:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8400C77B7A
+	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 20:51:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B40A18419E;
-	Tue, 16 May 2023 20:49:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B40A18419E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8148184110;
+	Tue, 16 May 2023 20:51:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8148184110
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DS486f0VIDzM; Tue, 16 May 2023 20:49:59 +0000 (UTC)
+	with ESMTP id Wl1-Vb7J_7rq; Tue, 16 May 2023 20:51:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E74EA83B48;
-	Tue, 16 May 2023 20:49:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E74EA83B48
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF7B684187;
+	Tue, 16 May 2023 20:51:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF7B684187
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0DC731BF426
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 20:49:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A2DE21BF426
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 20:51:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC58283B48
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 20:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC58283B48
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89AF484187
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 20:51:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89AF484187
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Inn-fU8OLsDr for <buildroot@lists.busybox.net>;
- Tue, 16 May 2023 20:49:56 +0000 (UTC)
+ with ESMTP id mNhAt3Y-Lqub for <buildroot@lists.busybox.net>;
+ Tue, 16 May 2023 20:51:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1729F81FAF
- for <buildroot@buildroot.org>; Tue, 16 May 2023 20:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1729F81FAF
+ by smtp1.osuosl.org (Postfix) with ESMTP id A47898406A
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 20:51:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A47898406A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0340A867A6; Tue, 16 May 2023 20:49:55 +0000 (UTC)
+ id 909C6867AB; Tue, 16 May 2023 20:51:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 May 2023 22:48:49 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: bd4d2ece38579906352bd75b813a73b1c20ace35
-X-Git-Newrev: 88aee033d14f729ea0f00f2327e399e249fc5be9
+Date: Tue, 16 May 2023 20:53:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fd5afab7b643997e89e1804de686a3935f8dd724
+X-Git-Newrev: 603df32a0cd416caa2d2688008cb87f14ad68ef3
 X-Patchwork-Hint: ignore
-Message-Id: <20230516204956.0340A867A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/lua: bump to
- version 5.4.6
+Message-Id: <20230516205110.909C6867AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua: bump to version 5.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,22 +62,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88aee033d14f729ea0f00f2327e399e249fc5be9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=603df32a0cd416caa2d2688008cb87f14ad68ef3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 603df32a0cd416caa2d2688008cb87f14ad68ef3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ .checkpackageignore                                         | 6 +++---
  package/lua/5.4.5/lua.hash                                  | 5 -----
  package/lua/{5.4.5 => 5.4.6}/0001-root-path.patch           | 0
  package/lua/{5.4.5 => 5.4.6}/0002-shared-libs-for-lua.patch | 0
  package/lua/{5.4.5 => 5.4.6}/0011-linenoise.patch           | 0
  package/lua/5.4.6/lua.hash                                  | 5 +++++
  package/lua/lua.mk                                          | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ 7 files changed, 9 insertions(+), 9 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 13f67695f5..947f4606aa 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -949,9 +949,9 @@ package/lua/5.1.5/0012-fix-reader-at-eoz.patch Upstream
+ package/lua/5.3.6/0001-root-path.patch Upstream
+ package/lua/5.3.6/0002-shared-libs-for-lua.patch Upstream
+ package/lua/5.3.6/0003-linenoise.patch Upstream
+-package/lua/5.4.5/0001-root-path.patch Upstream
+-package/lua/5.4.5/0002-shared-libs-for-lua.patch Upstream
+-package/lua/5.4.5/0011-linenoise.patch Upstream
++package/lua/5.4.6/0001-root-path.patch Upstream
++package/lua/5.4.6/0002-shared-libs-for-lua.patch Upstream
++package/lua/5.4.6/0011-linenoise.patch Upstream
+ package/luajit/0001-no-bin-symlink.patch Upstream
+ package/luajit/0002-install-inc.patch Upstream
+ package/luasyslog/0001-remove-AX_LUA_LIBS.patch Upstream
 diff --git a/package/lua/5.4.5/lua.hash b/package/lua/5.4.5/lua.hash
 deleted file mode 100644
 index 5526cd5125..0000000000
