@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E61BC77B7F
-	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 20:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9810AC77B7F
+	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 20:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0514B84252;
-	Tue, 16 May 2023 20:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0514B84252
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40C0F84110;
+	Tue, 16 May 2023 20:59:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40C0F84110
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IkX2I5OIN-Za; Tue, 16 May 2023 20:57:58 +0000 (UTC)
+	with ESMTP id hGvbtVTsCkdQ; Tue, 16 May 2023 20:59:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48DED8424E;
-	Tue, 16 May 2023 20:57:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48DED8424E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6101E84002;
+	Tue, 16 May 2023 20:59:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6101E84002
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D5F891BF426
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 20:57:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3EE271BF21A
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 20:59:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD97742110
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 20:57:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD97742110
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23DC1415DD
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 20:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23DC1415DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zyngTZqbk84D for <buildroot@lists.busybox.net>;
- Tue, 16 May 2023 20:57:53 +0000 (UTC)
+ with ESMTP id v1SrF6_ESbKp for <buildroot@lists.busybox.net>;
+ Tue, 16 May 2023 20:59:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 932024210B
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
- [IPv6:2607:f8b0:4864:20::102a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 932024210B
- for <buildroot@buildroot.org>; Tue, 16 May 2023 20:57:53 +0000 (UTC)
-Received: by mail-pj1-x102a.google.com with SMTP id
- 98e67ed59e1d1-24e16918323so91919a91.2
- for <buildroot@buildroot.org>; Tue, 16 May 2023 13:57:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E90E415BA
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
+ [IPv6:2607:f8b0:4864:20::1031])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E90E415BA
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 20:59:08 +0000 (UTC)
+Received: by mail-pj1-x1031.google.com with SMTP id
+ 98e67ed59e1d1-24e5d5782edso136126a91.0
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 13:59:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684270673; x=1686862673;
+ d=1e100.net; s=20221208; t=1684270747; x=1686862747;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=UIGBla2qCQLzsmLHdrXa0Kplt8xW2qUThtTvP8m9grM=;
- b=Gueq2OJDL5fvtvFsZYO9lxGs9dA5kEupu8rh/r3l7Zyd3puQssjSRJ1nfQWDFtol2Y
- 7ZtFmh3FYTd42B6ACXSv9krrTRgNRTw0/U65y2O/8YTPNWAWOKphHIgOn4SjeO2aXODo
- CKHNSEQy7eAulsK41TDSMOjdMdcriptyIAmq7yP+Pr/uqWHKiQlele3ix4egomJrl9FF
- S2+rt4BP9GNs9kYizwYMRQ/Qe7AtBgFrv2H0iN42Xx256GRCtQF4KDwdIYcJY2+MZ3Wb
- jUrs76VjHb++4qkJfNkgCXKpdTRoXhFrMMb1eiQ3Ig3ObSJ+5HPMKpeiWo96HQrc1aG6
- rDJw==
-X-Gm-Message-State: AC+VfDyuPyx1LZ9tsw+bn7W8jA0HfR2NRdf2menhHcSGQf/6y8QF+8DA
- F9Rn66BsQ8EgSZX0Kpcqf0BCUUgAF0ODvAwGedAipOA6
-X-Google-Smtp-Source: ACHHUZ6zjQ++V0mm6YzGlm5xGscWMN6ALkof0OrNWcJ8GP0b0yBWt4sNWjDOWxZE4jFrrZ7DVWCQvg==
-X-Received: by 2002:a17:90a:8a8d:b0:24e:69e:71f with SMTP id
- x13-20020a17090a8a8d00b0024e069e071fmr36877277pjn.7.1684270672843; 
- Tue, 16 May 2023 13:57:52 -0700 (PDT)
+ bh=OiDVwlmtp1yLO6tMRl+MBozmS+GbDSHjgiQJcfDDI7c=;
+ b=Ylbed16N3t7pY9JSMk30+6Pnc8C5FuK/7iDJdggXN5zJ+8+xsF/C0xNJp0SRjoKAPS
+ qBQxLMj93IsYed3VUZElZTZJQErpyID4TKqWI0e8CHAiYgU2PapW2ufnO8Q544APwe64
+ su/xnUDPZB3FzVSDRNjhao6OHe3FVJdbA5Kt0g1Ltl/8wnSPHAxNIdZKU+NOLJik+/1Y
+ ffbTwxnmv2d0/I2yPnQWxiVBMQn0NphWxSxS/q0VPzTF/1wyvj0p7xEUtxco/O+82ADQ
+ PAtqI/HhTuxUAYu6CkQsnVRzwrLAGl9SKzzZi0BZTG8KdTd59FfuIGjtt8PzOaUtUUbY
+ /34A==
+X-Gm-Message-State: AC+VfDx/L+z36L5sdSy3/sC57hF4VdB28QUFNCFx3tlK1JrQzpjlQbyC
+ 8ggdd0pY4/ZGEE/8oHCQXTfTiNXmB5YP+PFp0DdHBk57
+X-Google-Smtp-Source: ACHHUZ6+VR2trKPbRZHPSVY4fAtvokbXe1O194Ih40fL7ss0FKTQ7OrfGtqe0s5bV6IaJpe5ERFaPQ==
+X-Received: by 2002:a17:90a:b317:b0:250:78d0:f797 with SMTP id
+ d23-20020a17090ab31700b0025078d0f797mr32130360pjr.41.1684270747268; 
+ Tue, 16 May 2023 13:59:07 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- j22-20020a17090a589600b00250334d97dasm14976pji.31.2023.05.16.13.57.51
+ o11-20020a170902d4cb00b001a076025715sm15944060plg.117.2023.05.16.13.59.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 May 2023 13:57:52 -0700 (PDT)
+ Tue, 16 May 2023 13:59:06 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 16 May 2023 13:57:50 -0700
-Message-Id: <20230516205750.867334-1-christian@aperture.us>
+Date: Tue, 16 May 2023 13:59:04 -0700
+Message-Id: <20230516205904.895186-1-christian@aperture.us>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1684270673; x=1686862673;
+ d=aperture.us; s=google; t=1684270747; x=1686862747;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UIGBla2qCQLzsmLHdrXa0Kplt8xW2qUThtTvP8m9grM=;
- b=cz8P62RQHUyt+KR8JKT/qMyo5qRHYWMiJRkeEsD9TBTDJQ4AnjF+fNRWEoXJQgEE+P
- FDomoZwev8BvEJQtEC4rLgpPi5OLYjymzt/JnKwZGqvJOIPGe2E7S9oJnCEpdZo0uoSa
- 5VwKyvuvvtuP0feFIrc1lWEpDMtsWW4Oat+z1PD9Qw9MmT+d9HAgIBOKvJd2GSreDV+B
- ZAv84SjkOtXTkcCezvNeEzV4RVIgq+dG8E7cwdonu1bjWPpVNdHBcf2ZFKTzYWLvqh2N
- dbPbT+Tze5W7AFfd5+lfzny2LRqL1AVE7a0ji5vy2dRcAqVG4WavtzNrgB7nI0oc8M4E
- DoUw==
+ bh=OiDVwlmtp1yLO6tMRl+MBozmS+GbDSHjgiQJcfDDI7c=;
+ b=un6BL+YTgKIJyAB0jDHKnm5x7GjIFG12gGh/DAX62+5N+bQOQPxzcv0cfDm8t/p+2V
+ 1UJXJRQY2oYobdbZfVQDDfyda4+qesy9SJXWuksxrpWXOlG5AhoUswZZ8/PwVT0tgyfQ
+ RGJX8mhjDvnXO4CCzYPrgczmeoDnzn1W4r3nmGSLeoXjQ04aKS1cjqB7MlrmewXNFxoh
+ +O/JIWVL5dlZYpLhn9Hk9CrxBAyudQxOEJL14V3id/PxiHf59bDnCvE94ks8mkbufZP9
+ SQnqd28Jns9CXptfRIo0O6INPQ3o3PXLwaYKWPFfgqB0Iiag2Q/MpHXxgbcSf2XQmXjQ
+ uIfg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=cz8P62RQ
-Subject: [Buildroot] [PATCH v1 1/1] package/containerd: bump version to
- v1.6.21
+ header.a=rsa-sha256 header.s=google header.b=un6BL+YT
+Subject: [Buildroot] [PATCH v1 1/1] package/docker-compose: bump version to
+ v2.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,36 +104,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/containerd/containerd/releases/tag/v1.6.21
+https://github.com/docker/compose/releases/tag/v2.18.0
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
+ package/docker-compose/docker-compose.hash | 2 +-
+ package/docker-compose/docker-compose.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 65a87f25fa..345a7b16ff 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
+diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
+index 4fe6d73139..28f4b4d1de 100644
+--- a/package/docker-compose/docker-compose.hash
++++ b/package/docker-compose/docker-compose.hash
 @@ -1,3 +1,3 @@
- # Computed locally
--sha256  819086ccdca44cfc5f108e226c7a9294d8fad3eb32031a621623da80dedbfb11  containerd-1.6.20.tar.gz
-+sha256  9452e95455d03a00d78ae0587595d0c18555bae7912068269efa25a724efe713  containerd-1.6.21.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index bc1dd58611..83489a3abf 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
+ # Locally computed
+-sha256  3a777f6442db77447919cc7006d8b9439c95cc61c04acad4039e0120a8e591ea  docker-compose-2.17.3.tar.gz
++sha256  85e9d97bcde8ebc0709f0d75cbc56124b49ffe1c8e24345fce8739e00ded6cb1  docker-compose-2.18.0.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
+index 09f611e185..8c963d81d5 100644
+--- a/package/docker-compose/docker-compose.mk
++++ b/package/docker-compose/docker-compose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONTAINERD_VERSION = 1.6.20
-+CONTAINERD_VERSION = 1.6.21
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+-DOCKER_COMPOSE_VERSION = 2.17.3
++DOCKER_COMPOSE_VERSION = 2.18.0
+ DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
+ DOCKER_COMPOSE_LICENSE = Apache-2.0
+ DOCKER_COMPOSE_LICENSE_FILES = LICENSE
 -- 
 2.40.1
 
