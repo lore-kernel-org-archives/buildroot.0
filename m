@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C49EC77B75
-	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 14:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D42BEC77B7A
+	for <buildroot@archiver.kernel.org>; Tue, 16 May 2023 14:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD99B41DBD;
-	Tue, 16 May 2023 14:57:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD99B41DBD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7ADF740360;
+	Tue, 16 May 2023 14:58:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7ADF740360
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1XvMqWLgnOKP; Tue, 16 May 2023 14:57:38 +0000 (UTC)
+	with ESMTP id es2OPrZr3E8J; Tue, 16 May 2023 14:58:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA7EE418EB;
-	Tue, 16 May 2023 14:57:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA7EE418EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C3B840065;
+	Tue, 16 May 2023 14:58:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C3B840065
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 577141BF32D
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 14:57:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B356F1BF32D
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 14:58:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31C44409F8
- for <buildroot@lists.busybox.net>; Tue, 16 May 2023 14:57:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31C44409F8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D50A41DEE
+ for <buildroot@lists.busybox.net>; Tue, 16 May 2023 14:58:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D50A41DEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dDq7dyegzWQB for <buildroot@lists.busybox.net>;
- Tue, 16 May 2023 14:57:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 589FA401B1
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 589FA401B1
- for <buildroot@buildroot.org>; Tue, 16 May 2023 14:57:17 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D33EF1BF210;
- Tue, 16 May 2023 14:57:14 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pyw70-001DPQ-0B; Tue, 16 May 2023 16:57:14 +0200
+ with ESMTP id sVm1xrA066k9 for <buildroot@lists.busybox.net>;
+ Tue, 16 May 2023 14:58:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF9B5409F8
+ for <buildroot@buildroot.org>; Tue, 16 May 2023 14:58:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF9B5409F8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AC35A86799; Tue, 16 May 2023 14:58:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Neal Frager <neal.frager@amd.com>
-References: <20230516054053.22133-1-neal.frager@amd.com>
- <20230516054053.22133-3-neal.frager@amd.com>
-Date: Tue, 16 May 2023 16:57:13 +0200
-In-Reply-To: <20230516054053.22133-3-neal.frager@amd.com> (Neal Frager's
- message of "Tue, 16 May 2023 06:40:53 +0100")
-Message-ID: <874jocxr1y.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 3/3] configs/zynq_zed_defconfig: bump to
- xilinx-v2023.1
+To: buildroot@buildroot.org
+Date: Tue, 16 May 2023 16:53:19 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: e4ac14e09a57667168278187331cdf7238b80324
+X-Git-Newrev: fee9f199eea432c47c669ea61ef64f06d6592fd6
+X-Patchwork-Hint: ignore
+Message-Id: <20230516145807.AC35A86799@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/zynq_zc706_defconfig:
+ bump to xilinx-v2023.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,27 +57,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michal.simek@amd.com, luca.ceresoli@bootlin.com,
- thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fee9f199eea432c47c669ea61ef64f06d6592fd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > This patch bumps the zynq_zed_defconfig to xilinx-v2023.1 which includes
- > the following updates:
+This patch bumps the zynq_zc706_defconfig to xilinx-v2023.1 which includes
+the following updates:
 
- > - Linux v6.1.5
- > - U-Boot v2023.01
+- Linux v6.1.5
+- U-Boot v2023.01
 
- > Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/zynq_zc706_defconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index 3ad8cbafe3..55e4d8ea23 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -2,12 +2,12 @@ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+@@ -19,11 +19,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc706"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
