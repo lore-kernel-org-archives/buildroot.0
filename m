@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9AA3C77B7A
-	for <buildroot@archiver.kernel.org>; Wed, 17 May 2023 13:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A0BAC77B7A
+	for <buildroot@archiver.kernel.org>; Wed, 17 May 2023 13:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 307CF408FC;
-	Wed, 17 May 2023 13:04:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 307CF408FC
+	by smtp2.osuosl.org (Postfix) with ESMTP id A8327429F6;
+	Wed, 17 May 2023 13:04:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8327429F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DStYaSxVqY8L; Wed, 17 May 2023 13:04:42 +0000 (UTC)
+	with ESMTP id 1hLHsJSA8JO8; Wed, 17 May 2023 13:04:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 65F464026E;
-	Wed, 17 May 2023 13:04:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65F464026E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E2E361BF487
- for <buildroot@lists.busybox.net>; Wed, 17 May 2023 13:04:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2F59429E4;
+	Wed, 17 May 2023 13:04:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2F59429E4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BA63B1BF487
+ for <buildroot@lists.busybox.net>; Wed, 17 May 2023 13:04:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA54283C20
- for <buildroot@lists.busybox.net>; Wed, 17 May 2023 13:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA54283C20
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D9CA415D6
+ for <buildroot@lists.busybox.net>; Wed, 17 May 2023 13:04:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D9CA415D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 29Fvx-ooO-5d for <buildroot@lists.busybox.net>;
- Wed, 17 May 2023 13:04:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yF2Ia0zTHZri for <buildroot@lists.busybox.net>;
+ Wed, 17 May 2023 13:04:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4EBE821AC
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com
- [209.85.208.50])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C4EBE821AC
- for <buildroot@buildroot.org>; Wed, 17 May 2023 13:04:38 +0000 (UTC)
-Received: by mail-ed1-f50.google.com with SMTP id
- 4fb4d7f45d1cf-510d1972d5aso891034a12.0
- for <buildroot@buildroot.org>; Wed, 17 May 2023 06:04:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31AA0409AC
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com
+ [209.85.208.49])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 31AA0409AC
+ for <buildroot@buildroot.org>; Wed, 17 May 2023 13:04:37 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id
+ 4fb4d7f45d1cf-510b4e488e4so1355665a12.3
+ for <buildroot@buildroot.org>; Wed, 17 May 2023 06:04:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684328676; x=1686920676;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=4og/GwDmnNtyznmedM/DxVkbQ4Pxf+FdJkFNwOOBkDg=;
- b=MjL5218pPridVg9fvYmXywBwuksXqW/LN4nekYva7WOj01EX295eBLXmzaDDBVAmbz
- Op4nxb9v7clecTTqA1VLciLhbd2PiFF/ozHvl3AZW4louqjaDDMtTtN9EH3GMWNYUWSR
- mNQ1QhQeNoFGx5GhSfZLBaeg3RMGrdtXRN5oPpNOCQubaJ57ZEdZiGPp6lWg8PrUvYsC
- 95znaP20QBPFka/sI29f6EWj6kuTqp/lUDm2Ul8i119CrGKzG9ncvpzDT6Na7+tN3dKy
- /y4tiPkbAoRpJwyMPJTopJB0LG85cf9WW7pufrgrQnN9/SLA7KZcgOXdT0bk/N0/9orK
- krDg==
-X-Gm-Message-State: AC+VfDzsLpsT19YxsGt8AliUBRnYQgHYIEzyayNi/hPlXT9xcO44u3O7
- Z+uPzUsgCwBBtN24dwzPBrwf1nJWEEHNDQ==
-X-Google-Smtp-Source: ACHHUZ4No6A6DcFVXCA/p5aurTLDFFlL936twb6JztxvTmGPvVx/hUZGf8MFIRcX3YH25eth1FheUg==
-X-Received: by 2002:a17:907:72d6:b0:94e:43ce:95f6 with SMTP id
- du22-20020a17090772d600b0094e43ce95f6mr39807273ejc.47.1684328676192; 
- Wed, 17 May 2023 06:04:36 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1684328675; x=1686920675;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=TTHUVr2oarl39MoDNwje+ZezqMHclGRbTMJXuQftWZQ=;
+ b=X5JNw8pHcUg+1tvP3sNsxb7KrcU0Ay9PHjhGDXxTzSVOhObydzysXsCexQUG2Z/kz3
+ Jp3ulkyQ+cUN0ub97klu5wMHuRdCRLsYXOV0Rm7cI+ijY9t9wf2ypasNiu7LAeFaeSMX
+ 9n2CPcVPm73C1S4/p4U88qlHszzmIXnjJ/ubg4lUNu5Nn+WuUgA1+YNfjVpTIjv3ueD1
+ AEH8OEVMgYCBeA41djfq8Z3RkOvLCEo4ZxCrXQO9K5UKDHwAJ90n36+egyJZWxgwQzJ7
+ j1E7so565Vb6HvnsgV4FGDuuv289FFO/zR3RICFWg7k7X9XH1UOitwarEp+Odsf4Ka0K
+ wpuQ==
+X-Gm-Message-State: AC+VfDzLo4FP1ouwX+qkqBuzpmlmjbH6JeSaH5JnSl14o3A1SIXCUJ3g
+ 4y0V6IsBjjyywYWvn109ZbsXh16DQKk6cw==
+X-Google-Smtp-Source: ACHHUZ5oF+e1Ke+Ay4UfGo6+qweGEG/b1YX8K34P/PZg9xqPvco0oNSgs3GA/w48/FGdgKz3roZqyA==
+X-Received: by 2002:a17:906:9b8f:b0:96a:6c3:5e72 with SMTP id
+ dd15-20020a1709069b8f00b0096a06c35e72mr27355481ejc.10.1684328674606; 
+ Wed, 17 May 2023 06:04:34 -0700 (PDT)
 Received: from localhost.localdomain ([2a02:a03f:eb68:2f00:d0d:f903:7c5:c782])
  by smtp.gmail.com with ESMTPSA id
- k18-20020a17090632d200b009661f07db93sm12206929ejk.223.2023.05.17.06.04.35
+ k18-20020a17090632d200b009661f07db93sm12206929ejk.223.2023.05.17.06.04.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 17 May 2023 06:04:35 -0700 (PDT)
+ Wed, 17 May 2023 06:04:34 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 May 2023 15:04:28 +0200
-Message-Id: <20230517130430.2868648-2-thomas@devoogdt.com>
+Date: Wed, 17 May 2023 15:04:27 +0200
+Message-Id: <20230517130430.2868648-1-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230517130430.2868648-1-thomas@devoogdt.com>
-References: <20230517130430.2868648-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/4] package/fluent-bit: drop cxx handling
+Subject: [Buildroot] [PATCH 1/4] package/fluent-bit: use the system provided
+ LuaJIT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,50 +87,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fluent-bit is written in pure c, so drop any cxx handling. Only the wasm
-part needs c++, but that one doesn't need the fixes which are now dropped.
+Luajit was not used at all when it was selected, instead fluent-bit
+recompiled it without taking care of the complexities that were
+handled in the luajit package. Fix this by linking dynamically to the
+buildroot provided version.
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/fluent-bit/fluent-bit.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ ...-the-system-provided-LuaJIT-if-found.patch | 62 +++++++++++++++++++
+ package/fluent-bit/fluent-bit.mk              |  1 +
+ 2 files changed, 63 insertions(+)
+ create mode 100644 package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch
 
+diff --git a/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch b/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch
+new file mode 100644
+index 0000000000..9f6f4d0ebb
+--- /dev/null
++++ b/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch
+@@ -0,0 +1,62 @@
++From 4f8eb7bb5a39d83374806928b7a5b622136ef055 Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Fri, 28 Apr 2023 10:25:16 +0200
++Subject: [PATCH] build: use the system provided LuaJIT if found
++
++e.g. buildroot has logic to build luajit,
++so if pkg_check_modules can find a suitable version,
++then use that one if -DFLB_PREFER_SYSTEM_LIBS=Yes.
++
++Upstream: https://github.com/fluent/fluent-bit/pull/7286
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ CMakeLists.txt     | 12 +++++++++++-
++ src/CMakeLists.txt |  2 +-
++ 2 files changed, 12 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 9af783c79..0601b7c18 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -123,6 +123,7 @@ option(FLB_TESTS_INTERNAL_FUZZ "Enable internal fuzz tests"    No)
++ option(FLB_TESTS_OSSFUZZ       "Enable OSS-Fuzz build"         No)
++ option(FLB_MTRACE              "Enable mtrace support"         No)
++ option(FLB_POSIX_TLS           "Force POSIX thread storage"    No)
+++option(FLB_PREFER_SYSTEM_LIBS  "Prefer system installed libraries" No)
++ option(FLB_INOTIFY             "Enable inotify support"       Yes)
++ option(FLB_SQLDB               "Enable SQL embedded DB"       Yes)
++ option(FLB_HTTP_SERVER         "Enable HTTP Server"           Yes)
++@@ -1003,7 +1004,16 @@ endif()
++ # LuaJIT (Scripting Support)
++ # ==========================
++ if(FLB_LUAJIT)
++-  include(cmake/luajit.cmake)
+++  if(FLB_PREFER_SYSTEM_LIBS)
+++    find_package(PkgConfig)
+++    pkg_check_modules(LUAJIT luajit>=2.1.0)
+++  endif()
+++  if(LUAJIT_FOUND)
+++    include_directories(${LUAJIT_INCLUDE_DIRS})
+++  else()
+++    include(cmake/luajit.cmake)
+++    set(LUAJIT_LIBRARIES "libluajit")
+++  endif()
++   FLB_DEFINITION(FLB_HAVE_LUAJIT)
++ endif()
++ 
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 06a206dd4..8b66ddd22 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -220,7 +220,7 @@ endif()
++ if(FLB_LUAJIT)
++   set(extra_libs
++     ${extra_libs}
++-    "libluajit")
+++    ${LUAJIT_LIBRARIES})
++ endif()
++ 
++ if(FLB_SQLDB)
++-- 
++2.34.1
++
 diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 60a1d06dbf..d470e26b5e 100644
+index 319815f056..60a1d06dbf 100644
 --- a/package/fluent-bit/fluent-bit.mk
 +++ b/package/fluent-bit/fluent-bit.mk
-@@ -13,7 +13,6 @@ FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
- FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml openssl
+@@ -20,6 +20,7 @@ FLUENT_BIT_CONF_OPTS += \
+ 	-DFLB_RELEASE=Yes \
+ 	-DFLB_EXAMPLES=No \
+ 	-DFLB_CHUNK_TRACE=No \
++	-DFLB_PREFER_SYSTEM_LIBS=Yes \
+ 	-DFLB_BACKTRACE=No
  
- FLUENT_BIT_CFLAGS = $(TARGET_CFLAGS)
--FLUENT_BIT_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
- FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_DEBUG=No \
-@@ -49,13 +48,11 @@ FLUENT_BIT_CONF_OPTS += \
- # Fix multiple definition of `mk_tls_*'.
- # https://github.com/fluent/fluent-bit/issues/5537
- FLUENT_BIT_CFLAGS += -fcommon
--FLUENT_BIT_CXXFLAGS += -fcommon
- 
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
- # large file support.
- # https://bugzilla.redhat.com/show_bug.cgi?id=574992
- FLUENT_BIT_CFLAGS += -U_FILE_OFFSET_BITS
--FLUENT_BIT_CXXFLAGS += -U_FILE_OFFSET_BITS
- 
- ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
- FLUENT_BIT_DEPENDENCIES += libexecinfo
-@@ -74,8 +71,7 @@ endif
- 
- FLUENT_BIT_CONF_OPTS += \
- 	-DCMAKE_EXE_LINKER_FLAGS="$(FLUENT_BIT_LDFLAGS)" \
--	-DCMAKE_C_FLAGS="$(FLUENT_BIT_CFLAGS)" \
--	-DCMAKE_CXX_FLAGS="$(FLUENT_BIT_CXXFLAGS)"
-+	-DCMAKE_C_FLAGS="$(FLUENT_BIT_CFLAGS)"
- 
- define FLUENT_BIT_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
+ ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
 -- 
 2.34.1
 
