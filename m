@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DCBDC77B75
-	for <buildroot@archiver.kernel.org>; Wed, 17 May 2023 13:17:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D005C77B7A
+	for <buildroot@archiver.kernel.org>; Wed, 17 May 2023 18:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EA2C408C0;
-	Wed, 17 May 2023 13:17:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EA2C408C0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 830C183D10;
+	Wed, 17 May 2023 18:36:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 830C183D10
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8IDqLWl9KCrn; Wed, 17 May 2023 13:17:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qf5vL8M-7H3x; Wed, 17 May 2023 18:36:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D355140182;
-	Wed, 17 May 2023 13:17:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D355140182
+	by smtp1.osuosl.org (Postfix) with ESMTP id B455283CC8;
+	Wed, 17 May 2023 18:36:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B455283CC8
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 452791BF487
- for <buildroot@lists.busybox.net>; Wed, 17 May 2023 13:17:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BF31E1BF47F
+ for <buildroot@lists.busybox.net>; Wed, 17 May 2023 18:36:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 284E881FD3
- for <buildroot@lists.busybox.net>; Wed, 17 May 2023 13:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 284E881FD3
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5F5783CC8
+ for <buildroot@lists.busybox.net>; Wed, 17 May 2023 18:36:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5F5783CC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yFUtSUn-jngW for <buildroot@lists.busybox.net>;
- Wed, 17 May 2023 13:17:48 +0000 (UTC)
+ with ESMTP id Koq9oZmU4ipE for <buildroot@lists.busybox.net>;
+ Wed, 17 May 2023 18:36:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 62FE181F6F
- for <buildroot@uclibc.org>; Wed, 17 May 2023 13:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62FE181F6F
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9B1A83CC6
+ for <buildroot@uclibc.org>; Wed, 17 May 2023 18:36:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9B1A83CC6
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 4DB418643D; Wed, 17 May 2023 13:17:48 +0000 (UTC)
+ id D749A8673D; Wed, 17 May 2023 18:36:05 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 17 May 2023 13:17:47 +0000
+Date: Wed, 17 May 2023 18:36:05 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2023.02.1
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: simon.steindl@ginzinger.com
+X-Bugzilla-Who: ps.report@gmx.net
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15566-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15566-163-YXJm3yXav7@https.bugs.busybox.net/>
+In-Reply-To: <bug-15566-163@https.bugs.busybox.net/>
+References: <bug-15566-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15566] New: In package alsa-utils the files
- alsaucm and alsatplg are present in host but not in target directory.
+Subject: [Buildroot] [Bug 15566] In package alsa-utils the files alsaucm and
+ alsatplg are present in host but not in target directory.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,26 +81,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15566
 
-            Bug ID: 15566
-           Summary: In package alsa-utils the files alsaucm and alsatplg
-                    are present in host but not in target directory.
-           Product: buildroot
-           Version: 2023.02.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: simon.steindl@ginzinger.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+From package/alsa-utils/Config.in:
 
-In the package alsa-utils the binaries alsatplg and alsaucm are built for
-aarch64 in my case. The files were copied to
-host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/. The files are built for ARM
-aarch64, shouldn't they also be placed in target/usr/bin?
+ 42 config BR2_PACKAGE_ALSA_UTILS_ALSAUCM
+ 43         bool "alsaucm"
+ 44         select BR2_PACKAGE_ALSA_LIB_UCM
+ 45           
+ 46 config BR2_PACKAGE_ALSA_UTILS_ALSATPLG
+ 47         bool "alsatplg"
+ 48         depends on !BR2_STATIC_LIBS # dlfcn.h
+ 49         select BR2_PACKAGE_ALSA_LIB_TOPOLOGY
 
 -- 
 You are receiving this mail because:
