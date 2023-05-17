@@ -1,92 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67708C77B7A
-	for <buildroot@archiver.kernel.org>; Wed, 17 May 2023 06:46:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9AA3C77B7A
+	for <buildroot@archiver.kernel.org>; Wed, 17 May 2023 13:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E75C66FE80;
-	Wed, 17 May 2023 06:46:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E75C66FE80
+	by smtp2.osuosl.org (Postfix) with ESMTP id 307CF408FC;
+	Wed, 17 May 2023 13:04:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 307CF408FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ksHdp-Eome1N; Wed, 17 May 2023 06:46:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DStYaSxVqY8L; Wed, 17 May 2023 13:04:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38AC2611FD;
-	Wed, 17 May 2023 06:46:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38AC2611FD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9668E1BF4E4
- for <buildroot@lists.busybox.net>; Wed, 17 May 2023 06:46:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65F464026E;
+	Wed, 17 May 2023 13:04:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65F464026E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E2E361BF487
+ for <buildroot@lists.busybox.net>; Wed, 17 May 2023 13:04:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F613611FD
- for <buildroot@lists.busybox.net>; Wed, 17 May 2023 06:46:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F613611FD
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA54283C20
+ for <buildroot@lists.busybox.net>; Wed, 17 May 2023 13:04:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA54283C20
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2xzFwGkGBiy3 for <buildroot@lists.busybox.net>;
- Wed, 17 May 2023 06:46:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 29Fvx-ooO-5d for <buildroot@lists.busybox.net>;
+ Wed, 17 May 2023 13:04:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E0D0610F4
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9E0D0610F4
- for <buildroot@buildroot.org>; Wed, 17 May 2023 06:46:00 +0000 (UTC)
-Received: by mail-pl1-x634.google.com with SMTP id
- d9443c01a7336-1aad5245632so3530885ad.3
- for <buildroot@buildroot.org>; Tue, 16 May 2023 23:46:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4EBE821AC
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com
+ [209.85.208.50])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C4EBE821AC
+ for <buildroot@buildroot.org>; Wed, 17 May 2023 13:04:38 +0000 (UTC)
+Received: by mail-ed1-f50.google.com with SMTP id
+ 4fb4d7f45d1cf-510d1972d5aso891034a12.0
+ for <buildroot@buildroot.org>; Wed, 17 May 2023 06:04:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684305960; x=1686897960;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=rgJpdDgLJ8rs0AsTgOjq7pa6tM2EFk+RfMWKnT1JKr8=;
- b=jQSTCMzxceCzKSSMYBcAvMNKjOE41YHSLr+dh5On4FEZO4GTfhvwvDgxxX9uc4kOnF
- GyNiK7nQlrjw1h+OC3vtoCdxS/5MrxqnG6ANV0ZanqBeFgsjHF8FQno2JsL0wAQjM/Dp
- 5AQ9Q8loFhoab1bDbLJdYkjCceKRn3Bkiv7/2od/QNkX+Vaa9p76I9HZIIFA3zupJqfg
- Qk3OLj3YqAHp0WAKjYPTlv4hdnz+QFz+9vUnMSrAOFfsYGsNNkIrZC3D9Cuf6y0Tz+jm
- nYQtcDUFqHIhn933A69F1h9qNzIIx8qYZCqeCUoNDsa54a/BiGOZbRBiVxgG8EwUpOwA
- 1HnQ==
-X-Gm-Message-State: AC+VfDxM4u7uqTSzQWr+2em3Zg0ZorLajcsIKvbaX2kj9TnUGRxqPLMe
- 6OLEqYuH4HsjzmyXQPnTOQaGGGMGug8=
-X-Google-Smtp-Source: ACHHUZ6IoLN8FTwE2dD8e+CyCEu2QnOBkXpz6fIqtLx50w1+eNTGxWrQRTf3Z8UuQuYKYXLCCYs6Pg==
-X-Received: by 2002:a17:902:e5c3:b0:1ad:fa2e:17fc with SMTP id
- u3-20020a170902e5c300b001adfa2e17fcmr19498878plf.2.1684305959898; 
- Tue, 16 May 2023 23:45:59 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-16.three.co.id. [180.214.232.16])
+ d=1e100.net; s=20221208; t=1684328676; x=1686920676;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=4og/GwDmnNtyznmedM/DxVkbQ4Pxf+FdJkFNwOOBkDg=;
+ b=MjL5218pPridVg9fvYmXywBwuksXqW/LN4nekYva7WOj01EX295eBLXmzaDDBVAmbz
+ Op4nxb9v7clecTTqA1VLciLhbd2PiFF/ozHvl3AZW4louqjaDDMtTtN9EH3GMWNYUWSR
+ mNQ1QhQeNoFGx5GhSfZLBaeg3RMGrdtXRN5oPpNOCQubaJ57ZEdZiGPp6lWg8PrUvYsC
+ 95znaP20QBPFka/sI29f6EWj6kuTqp/lUDm2Ul8i119CrGKzG9ncvpzDT6Na7+tN3dKy
+ /y4tiPkbAoRpJwyMPJTopJB0LG85cf9WW7pufrgrQnN9/SLA7KZcgOXdT0bk/N0/9orK
+ krDg==
+X-Gm-Message-State: AC+VfDzsLpsT19YxsGt8AliUBRnYQgHYIEzyayNi/hPlXT9xcO44u3O7
+ Z+uPzUsgCwBBtN24dwzPBrwf1nJWEEHNDQ==
+X-Google-Smtp-Source: ACHHUZ4No6A6DcFVXCA/p5aurTLDFFlL936twb6JztxvTmGPvVx/hUZGf8MFIRcX3YH25eth1FheUg==
+X-Received: by 2002:a17:907:72d6:b0:94e:43ce:95f6 with SMTP id
+ du22-20020a17090772d600b0094e43ce95f6mr39807273ejc.47.1684328676192; 
+ Wed, 17 May 2023 06:04:36 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:a03f:eb68:2f00:d0d:f903:7c5:c782])
  by smtp.gmail.com with ESMTPSA id
- s3-20020a170902988300b001ac7c725c1asm14813836plp.6.2023.05.16.23.45.59
+ k18-20020a17090632d200b009661f07db93sm12206929ejk.223.2023.05.17.06.04.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 May 2023 23:45:59 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
- id 82EF710627D; Wed, 17 May 2023 13:45:56 +0700 (WIB)
-Date: Wed, 17 May 2023 13:45:56 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-Message-ID: <ZGR4JPCvobetfREP@debian.me>
-References: <20230507214317.409305-1-bernd.kuhls@t-online.de>
- <20230507214317.409305-5-bernd.kuhls@t-online.de>
+ Wed, 17 May 2023 06:04:35 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Date: Wed, 17 May 2023 15:04:28 +0200
+Message-Id: <20230517130430.2868648-2-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230517130430.2868648-1-thomas@devoogdt.com>
+References: <20230517130430.2868648-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-In-Reply-To: <20230507214317.409305-5-bernd.kuhls@t-online.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1684305960; x=1686897960;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=rgJpdDgLJ8rs0AsTgOjq7pa6tM2EFk+RfMWKnT1JKr8=;
- b=Gsc/nmx/B+rM0KNKppafUkfIY6y7AWZqkGrcbTmKJgQamHbxr5I0d+McDShBqC+Woh
- YACkzQthMNDmDFVHEOUyPiSEi3IgKlUi8lSIkhPD7Q3ZRcA2C+mNm8CV2FWehu/xZbKz
- H2pm+yTm77YeQUjZJiITQNtSBzRp3uMxTivErCu4L53dFYLjsaWh7oBcL+1NwP29cxQC
- 4ikJEl0fl7909yYua9Bk83oZAdEjSaJ61nXUm306PkyMU0sJ0GCu9I1K7JhveXFwUvWN
- MsOeo7x3sBlz4jT6D3feK7SSa21hqkteFhER2cxjxE3qzS3D4mqb3zc/hPZHhDm/vdD1
- qemg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Gsc/nmx/
-Subject: Re: [Buildroot] [PATCH 5/5] package/gcc: add support for gcc 13
+Subject: [Buildroot] [PATCH 2/4] package/fluent-bit: drop cxx handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,67 +82,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: multipart/mixed; boundary="===============8952826064101562368=="
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fluent-bit is written in pure c, so drop any cxx handling. Only the wasm
+part needs c++, but that one doesn't need the fixes which are now dropped.
 
---===============8952826064101562368==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="XpyVDDAMMiXB7VJC"
-Content-Disposition: inline
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+ package/fluent-bit/fluent-bit.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-
---XpyVDDAMMiXB7VJC
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, May 07, 2023 at 11:43:17PM +0200, Bernd Kuhls wrote:
-> https://gcc.gnu.org/gcc-13/changes.html
-> https://gcc.gnu.org/gcc-13/porting_to.html
->=20
-> Patch 0002 was not ported from gcc-12 because it is included in this
-> version:
-> https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommitdiff;h=3Dee4af2ed0b7322884=
-ec4ff537564683c3749b813
->=20
-
-Toolchain successfully built and so is package/git with the toolchain,
-thanks!
-
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---XpyVDDAMMiXB7VJC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABMIAB0WIQQJRmM4Nl+8BKPNGvtCNk3+7YYOdAUCZGR4HgAKCRBCNk3+7YYO
-dP7bAQCgcYDCxwYptirDSN90vaf7WyB0QvUAVImSrCdMHHdtsgD+JbCleBKLONyr
-YmjFAX7ZSBb1wavHDNTjWQbYQUI+Ibs=
-=Wazw
------END PGP SIGNATURE-----
-
---XpyVDDAMMiXB7VJC--
-
---===============8952826064101562368==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 60a1d06dbf..d470e26b5e 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -13,7 +13,6 @@ FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
+ FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml openssl
+ 
+ FLUENT_BIT_CFLAGS = $(TARGET_CFLAGS)
+-FLUENT_BIT_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+ FLUENT_BIT_CONF_OPTS += \
+ 	-DFLB_DEBUG=No \
+@@ -49,13 +48,11 @@ FLUENT_BIT_CONF_OPTS += \
+ # Fix multiple definition of `mk_tls_*'.
+ # https://github.com/fluent/fluent-bit/issues/5537
+ FLUENT_BIT_CFLAGS += -fcommon
+-FLUENT_BIT_CXXFLAGS += -fcommon
+ 
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+ # large file support.
+ # https://bugzilla.redhat.com/show_bug.cgi?id=574992
+ FLUENT_BIT_CFLAGS += -U_FILE_OFFSET_BITS
+-FLUENT_BIT_CXXFLAGS += -U_FILE_OFFSET_BITS
+ 
+ ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+ FLUENT_BIT_DEPENDENCIES += libexecinfo
+@@ -74,8 +71,7 @@ endif
+ 
+ FLUENT_BIT_CONF_OPTS += \
+ 	-DCMAKE_EXE_LINKER_FLAGS="$(FLUENT_BIT_LDFLAGS)" \
+-	-DCMAKE_C_FLAGS="$(FLUENT_BIT_CFLAGS)" \
+-	-DCMAKE_CXX_FLAGS="$(FLUENT_BIT_CXXFLAGS)"
++	-DCMAKE_C_FLAGS="$(FLUENT_BIT_CFLAGS)"
+ 
+ define FLUENT_BIT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8952826064101562368==--
