@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CC2EC77B7D
-	for <buildroot@archiver.kernel.org>; Thu, 18 May 2023 10:29:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE385C77B73
+	for <buildroot@archiver.kernel.org>; Thu, 18 May 2023 21:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3D8A4287F;
-	Thu, 18 May 2023 10:29:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3D8A4287F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0370984543;
+	Thu, 18 May 2023 21:07:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0370984543
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RwdgIf0q2w0w; Thu, 18 May 2023 10:29:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5tSkWF5HHbRZ; Thu, 18 May 2023 21:07:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17E404282E;
-	Thu, 18 May 2023 10:29:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17E404282E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 138AF1BF574
- for <buildroot@lists.busybox.net>; Thu, 18 May 2023 10:29:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E30084541;
+	Thu, 18 May 2023 21:07:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E30084541
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 47C5B1BF319
+ for <buildroot@lists.busybox.net>; Thu, 18 May 2023 21:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC9874282E
- for <buildroot@lists.busybox.net>; Thu, 18 May 2023 10:29:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC9874282E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E7B56FFD2
+ for <buildroot@lists.busybox.net>; Thu, 18 May 2023 21:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E7B56FFD2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d541X9DL6AO4 for <buildroot@lists.busybox.net>;
- Thu, 18 May 2023 10:29:31 +0000 (UTC)
-X-Greylist: delayed 00:08:42 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BE8D4282A
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uBrTWH-9k2Jl for <buildroot@lists.busybox.net>;
+ Thu, 18 May 2023 21:07:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 332A96FFEC
 Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1BE8D4282A
- for <buildroot@buildroot.org>; Thu, 18 May 2023 10:29:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 332A96FFEC
+ for <buildroot@buildroot.org>; Thu, 18 May 2023 21:07:25 +0000 (UTC)
 From: Paul Cercueil <paul@crapouillou.net>
 To: buildroot@buildroot.org
-Date: Thu, 18 May 2023 12:20:20 +0200
-Message-Id: <20230518102020.22694-1-paul@crapouillou.net>
+Date: Thu, 18 May 2023 23:06:57 +0200
+Message-Id: <20230518210657.1287204-1-paul@crapouillou.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=crapouillou.net; s=mail; t=1684405244;
+ d=crapouillou.net; s=mail; t=1684444041;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=SdIvH1RPcbnSgkQDoAaiFQ8HX+u6jCCs76q1mrBKVuc=;
- b=GXsJF9aO+12Q9b4qxuxwURdUzY9JgjV022yX3bqtMxeYXApmFlJ2cpz5p2aGyQrXUYf0Vg
- Hk56VlMhLi6R2pkqlmWMMTT4gYe5fcQeCMOTfU3hRMnNyOWEuhvG7OL5w83/QVd/QzeAMe
- Cw1klMxKH1mNoP3JBM+MxHKhU6vbeDA=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=hUec+AcjPk8Cr3ZNcgaJfSAF0UgEOWsrxBbm5TZX+do=;
+ b=h0mK5wVSAxG5meEHuJi9NlejRgTeYpKMU0VH4+a5fKsTyYpBmAXjKpB9jOukoaU6ijal9n
+ 1HUba2zxI5psz25m8bK5vfyccuIpmSpZYryCd5yC0RjvrfcN6KBa05fxLrUr+k7Sbim81c
+ s7x3Hs9MQtHhUZlnrNsBnZ38hMouEnw=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
- header.a=rsa-sha256 header.s=mail header.b=GXsJF9aO
-Subject: [Buildroot] [PATCH 1/1] package/lightning: bump version to 2.2.1
+ header.a=rsa-sha256 header.s=mail header.b=h0mK5wVS
+Subject: [Buildroot] [PATCH 1/1] package/strace: bump to version 6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,108 +70,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-And restore support for MIPS64, which is supported by Lightning.
-
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- .../0001-lib-jit_disasm.c-fix-build.patch     | 42 -------------------
- package/lightning/Config.in                   |  6 ++-
- package/lightning/lightning.hash              |  2 +-
- package/lightning/lightning.mk                |  2 +-
- 4 files changed, 6 insertions(+), 46 deletions(-)
- delete mode 100644 package/lightning/0001-lib-jit_disasm.c-fix-build.patch
+ package/strace/strace.hash | 2 +-
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch b/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
-deleted file mode 100644
-index 9e79be91a0..0000000000
---- a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 0d828c96c373c34b201ca7ea37b61c1e3b0485cd Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 19 Dec 2022 23:55:31 +0100
--Subject: [PATCH] lib/jit_disasm.c: fix build
--
--Fix the following build failure raised since
--http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=837c7a1e8d08fb9294578dc84694077f4d6106f9:
--
--jit_disasm.c: In function 'fprintf_styled':
--jit_disasm.c:57:27: error: parameter name omitted
--   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
--      |                           ^~~~~~
--jit_disasm.c:57:35: error: parameter name omitted
--   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
--      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/e15e01e98e0d8c873efd3f512b671d98e4daf6c0
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[yann.morin.1998@free.fr: make it a backport now it's applied upstream]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- lib/jit_disasm.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
--index 58a269b..68c966d 100644
----- a/lib/jit_disasm.c
--+++ b/lib/jit_disasm.c
--@@ -54,7 +54,7 @@ static FILE			 *disasm_stream;
-- #endif
-- 
-- #if BINUTILS_2_38
---static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
--+static int fprintf_styled(void * stream, enum disassembler_style style, const char* fmt, ...)
-- {
--   va_list args;
--   int r;
---- 
--2.25.1
--
-diff --git a/package/lightning/Config.in b/package/lightning/Config.in
-index 3cf7c28ae2..e42730addb 100644
---- a/package/lightning/Config.in
-+++ b/package/lightning/Config.in
-@@ -1,12 +1,14 @@
- comment "lightning needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
--		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
-+		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64 || \
-+		BR2_mips64 || BR2_mips64el
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_LIGHTNING
- 	bool "lightning"
- 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
--		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
-+		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64 || \
-+		BR2_mips64 || BR2_mips64el
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
-diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
-index 998ae3743b..97b391674c 100644
---- a/package/lightning/lightning.hash
-+++ b/package/lightning/lightning.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4e3984ff1ccf0ba30a985211d40fc5c06b25f014ebdf3d80d0fe3d0c80dd7c0e  lightning-2.2.0.tar.gz
-+sha256  98671681d5684770ccb06a07fa3b8f032a454bdb56eafc18e6fab04459ea3caa  lightning-2.2.1.tar.gz
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index 8ab2ca1f9d..4a8c7e5efd 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index d49abf1f16..de2f8c52b9 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+ # https://strace.io/files/6.2/strace-6.2.tar.xz.asc
+-sha256  0c7d38a449416268d3004029a220a15a77c2206a03cc88120f37f46e949177e8  strace-6.2.tar.xz
++sha256  e17878e301506c1cc301611118ad14efee7f8bcef63b27ace5d290acce7bb731  strace-6.3.tar.xz
+ sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 730a91d277..6514bfe354 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIGHTNING_VERSION = 2.2.0
-+LIGHTNING_VERSION = 2.2.1
- LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- LIGHTNING_LICENSE = LGPL-3.0+
- LIGHTNING_LICENSE_FILES = COPYING.LESSER
+-STRACE_VERSION = 6.2
++STRACE_VERSION = 6.3
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 -- 
 2.39.2
 
