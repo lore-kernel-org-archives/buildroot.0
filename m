@@ -4,82 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 576AFC77B7D
-	for <buildroot@archiver.kernel.org>; Thu, 18 May 2023 10:22:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CC2EC77B7D
+	for <buildroot@archiver.kernel.org>; Thu, 18 May 2023 10:29:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C23FF4282A;
-	Thu, 18 May 2023 10:22:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C23FF4282A
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3D8A4287F;
+	Thu, 18 May 2023 10:29:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3D8A4287F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uT1nkkUYdyr4; Thu, 18 May 2023 10:22:31 +0000 (UTC)
+	with ESMTP id RwdgIf0q2w0w; Thu, 18 May 2023 10:29:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81F8F4282E;
-	Thu, 18 May 2023 10:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81F8F4282E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D8F351BF574
- for <buildroot@lists.busybox.net>; Thu, 18 May 2023 10:22:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17E404282E;
+	Thu, 18 May 2023 10:29:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17E404282E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 138AF1BF574
+ for <buildroot@lists.busybox.net>; Thu, 18 May 2023 10:29:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2DDD4011F
- for <buildroot@lists.busybox.net>; Thu, 18 May 2023 10:22:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2DDD4011F
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC9874282E
+ for <buildroot@lists.busybox.net>; Thu, 18 May 2023 10:29:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC9874282E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7VjWFQXix8Gf for <buildroot@lists.busybox.net>;
- Thu, 18 May 2023 10:22:27 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4707400F8
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D4707400F8
- for <buildroot@buildroot.org>; Thu, 18 May 2023 10:22:26 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.209.166]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N2Dx8-1q9n4T00ze-013gmV; Thu, 18 May 2023 12:22:23 +0200
-From: Peter Seiderer <ps.report@gmx.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d541X9DL6AO4 for <buildroot@lists.busybox.net>;
+ Thu, 18 May 2023 10:29:31 +0000 (UTC)
+X-Greylist: delayed 00:08:42 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BE8D4282A
+Received: from aposti.net (aposti.net [89.234.176.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1BE8D4282A
+ for <buildroot@buildroot.org>; Thu, 18 May 2023 10:29:31 +0000 (UTC)
+From: Paul Cercueil <paul@crapouillou.net>
 To: buildroot@buildroot.org
-Date: Thu, 18 May 2023 12:22:22 +0200
-Message-Id: <20230518102222.11946-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.40.1
+Date: Thu, 18 May 2023 12:20:20 +0200
+Message-Id: <20230518102020.22694-1-paul@crapouillou.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:mYGQkfwuCyoMiOr4rpuM7/HZJMC56Fv3YtavB316LgIGL1O+bic
- ELZn8g/XbZbgqUrgT9ueYIXFchflwI1cW1n4CLTiiJAa12uwc1opMtC9e+70elrhPcvoknW
- gmMA7ZL3WIk2nxGVGBBHgC5SvrS9OU1p1Z3jIFkzaW5HWgGKUEkjwZYLREMwpjI3A5lNpqR
- datGe1nI5O+4QURJl/X9g==
-UI-OutboundReport: notjunk:1;M01:P0:9l8+tAXcriM=;zcY6X2v3Hgbnh3rMwLGowZdwz+l
- BgHR3rHC1L+vPNdvHDYF7OT1p1elilOFa8HeaBktGDYADgwDORZoZQN20Xlts5MNGZEMKkX91
- DPM/IJP9XmFflArF/z5yBFwNrXIfCgBPcQ1OwcAQAoEsnJicHJZnPZ9vvwObcv5GBqQmqIMov
- tPq7aDK+SpQUTPfpT/jIIUUJjiyfi5BiRgLJ+NYybrz6V9RVSbNm0jOUMTU1d+pqYEKMW/7Wk
- m4MTbLlJ2poEiHhLaWBJbYYYm3A4nFxXw4L0px7jkNVhXVjvF59PVj6w3GnxzuCuurCR1BsMH
- udDGEPU3oTIo6MPEv0AKXodbdssgzFRzp154VFoXlzStWp0YWv45QKM5EcvhVixQU3PQXk2bx
- xcUW4wfa76BkwU161Xql323yk6825K5UAZCq+05PQhQersmVMV62XFzuZGuKgX1vZgLVtsqIz
- UhUNEOTNLPHklGf+J16WaPnW3PFNnLMOC3bH3kUZTooO8AylclM6fCM921LSNEG2muKw2VnBN
- w0VHwqvccrbnw1jIH4Vr3BPb7X9dbCx20zMy2ZHcY8iuKrxVK2taSuCSlie5EYpmq0F/Mdt+/
- 0Zk0pC0I1DUsCmmOyrTsTXl6GSPXJjunTWICqhcfE1UtNyO1OB38CmEdcqjApxNya1Agx7lmN
- rMef51MvceU4h/+PKU+PvjX3X7bPmXfGv1q+a/mYobqWK8gffrT0RqA2SAhhPxLYbCABBskFL
- eDg80t5KbIeQAb7231h7O1bWrki9/H7/tL2hJFxlysmIPtTv5UAXKZO1zY1dtfu58FHco7Xod
- VoklYZOXhtWSG//vUk03ceUEgPd1sA6zb3OTOcipJ/T+a9pzLvG+1o73hr5niE3XydVPWUxC4
- T6yDqz0bWWOIs4DMmhJySWytdfqcCGH1So0cEuwmuvoyUiQsDAG2e9M9RiwDB+K8A82hi/Rrf
- UGLZ3SyEJcM7zd+VzJhmXfVdI18=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1684405343; i=ps.report@gmx.net;
- bh=VNcKf1XlAUfDYfzZSpGaaM2vcodUWecrzVZxGT3OUU4=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=qHDN7LbWbq2Rnbt0plVixhHmJhHoSq9c6jfBL8SNj075cgURk3XSceUZhtlWOOWU7
- DSM1UAJtGopTf78M0H6fcDekwwqJ+5j/8tsXMlRyZ++G1GUTJRSyT9eayAqcnGHFaF
- yc//clam03gQwJlaQHLgLKQgTj4mZBGKlUpAqkCmTLOAT2YNG6LBsOeHbRIvIMT9g/
- dngXybbt7ca00jqP/ayQBnyF22TWwFXzud0twXNvv9JW3+q2MgDWxSmlY/HWIvL99u
- 2bXGp4Tns3XtK4HHVi1qf/P3ZTq/CH++26CJdtmBqY3blpDHOehk9DaINF0cjd0Ii2
- NrUxtgjkVuDdA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=qHDN7LbW
-Subject: [Buildroot] [PATCH v1] package/llvm: add upstream patch to fix host
- compile (missing include in Signals.h)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=crapouillou.net; s=mail; t=1684405244;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=SdIvH1RPcbnSgkQDoAaiFQ8HX+u6jCCs76q1mrBKVuc=;
+ b=GXsJF9aO+12Q9b4qxuxwURdUzY9JgjV022yX3bqtMxeYXApmFlJ2cpz5p2aGyQrXUYf0Vg
+ Hk56VlMhLi6R2pkqlmWMMTT4gYe5fcQeCMOTfU3hRMnNyOWEuhvG7OL5w83/QVd/QzeAMe
+ Cw1klMxKH1mNoP3JBM+MxHKhU6vbeDA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
+ header.a=rsa-sha256 header.s=mail header.b=GXsJF9aO
+Subject: [Buildroot] [PATCH 1/1] package/lightning: bump version to 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,59 +64,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Paul Cercueil <paul@crapouillou.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIHVwc3RyZWFtIHBhdGNoIHRvIGZpeCBob3N0IGNvbXBpbGUgZXJyb3Igb24gb3BlblNVU0Ug
-VHVtYmxld2VlZAooZ2NjLTEzLjAuMSkuCgpGaXhlczoKCiAgLi4uL2J1aWxkL2hvc3QtbGx2bS0x
-MS4xLjAvaW5jbHVkZS9sbHZtL1N1cHBvcnQvU2lnbmFscy5oOjExNzo4OiBlcnJvcjogdmFyaWFi
-bGUgb3IgZmllbGQg4oCYQ2xlYW51cE9uU2lnbmFs4oCZIGRlY2xhcmVkIHZvaWQKICAgIDExNyB8
-ICAgdm9pZCBDbGVhbnVwT25TaWduYWwodWludHB0cl90IENvbnRleHQpOwogICAgICAgIHwgICAg
-ICAgIF5+fn5+fn5+fn5+fn5+fgogIC4uLi9idWlsZC9ob3N0LWxsdm0tMTEuMS4wL2luY2x1ZGUv
-bGx2bS9TdXBwb3J0L1NpZ25hbHMuaDoxMTc6MjQ6IGVycm9yOiDigJh1aW50cHRyX3TigJkgd2Fz
-IG5vdCBkZWNsYXJlZCBpbiB0aGlzIHNjb3BlCiAgICAxMTcgfCAgIHZvaWQgQ2xlYW51cE9uU2ln
-bmFsKHVpbnRwdHJfdCBDb250ZXh0KTsKICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAg
-Xn5+fn5+fn5+CiAgLi4uL2J1aWxkL2hvc3QtbGx2bS0xMS4xLjAvaW5jbHVkZS9sbHZtL1N1cHBv
-cnQvU2lnbmFscy5oOjE4OjE6IG5vdGU6IOKAmHVpbnRwdHJfdOKAmSBpcyBkZWZpbmVkIGluIGhl
-YWRlciDigJg8Y3N0ZGludD7igJk7IGRpZCB5b3UgZm9yZ2V0IHRvIOKAmCNpbmNsdWRlIDxjc3Rk
-aW50PuKAmT8KICAgICAxNyB8ICNpbmNsdWRlIDxzdHJpbmc+CiAgICArKysgfCsjaW5jbHVkZSA8
-Y3N0ZGludD4KICAgICAxOCB8CgpTaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMucmVw
-b3J0QGdteC5uZXQ+Ci0tLQogLi4uLW1pc3NpbmctY3N0ZGludC1oZWFkZXItdG8tU2lnbmFscy5o
-LnBhdGNoIHwgMzQgKysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDM0IGluc2Vy
-dGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xsdm0vMDAwMi1BZGQtbWlzc2lu
-Zy1jc3RkaW50LWhlYWRlci10by1TaWduYWxzLmgucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdl
-L2xsdm0vMDAwMi1BZGQtbWlzc2luZy1jc3RkaW50LWhlYWRlci10by1TaWduYWxzLmgucGF0Y2gg
-Yi9wYWNrYWdlL2xsdm0vMDAwMi1BZGQtbWlzc2luZy1jc3RkaW50LWhlYWRlci10by1TaWduYWxz
-LmgucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYzc5OGY1ODVk
-NgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGx2bS8wMDAyLUFkZC1taXNzaW5nLWNzdGRp
-bnQtaGVhZGVyLXRvLVNpZ25hbHMuaC5wYXRjaApAQCAtMCwwICsxLDM0IEBACitGcm9tIGM2Yzcx
-YWI0N2Q2NThhYjhmODRlNmE2MDY2ZDQ3NmZkOTYzMmJiY2EgTW9uIFNlcCAxNyAwMDowMDowMCAy
-MDAxCitGcm9tOiBTZXJnZWkgVHJvZmltb3ZpY2ggPHNseWljaEBnbWFpbC5jb20+CitEYXRlOiBN
-b24sIDIzIE1heSAyMDIyIDA4OjAzOjIzICswMTAwCitTdWJqZWN0OiBbUEFUQ0hdIEFkZCBtaXNz
-aW5nIDxjc3RkaW50PiBoZWFkZXIgdG8gU2lnbmFscy5oCisKK1dpdGhvdXQgdGhlIGNoYW5nZSBs
-bHZtIGJ1aWxkIGZhaWxzIG9uIHRoaXMgd2VlaydzIGdjYy0xMyBzbmFwc2hvdCBhczoKKworICAg
-IFsgIDAlXSBCdWlsZGluZyBDWFggb2JqZWN0IGxpYi9TdXBwb3J0L0NNYWtlRmlsZXMvTExWTVN1
-cHBvcnQuZGlyL1NpZ25hbHMuY3BwLm8KKyAgICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gbGx2bS9s
-aWIvU3VwcG9ydC9TaWduYWxzLmNwcDoxNDoKKyAgICBsbHZtL2luY2x1ZGUvbGx2bS9TdXBwb3J0
-L1NpZ25hbHMuaDoxMTk6ODogZXJyb3I6IHZhcmlhYmxlIG9yIGZpZWxkICdDbGVhbnVwT25TaWdu
-YWwnIGRlY2xhcmVkIHZvaWQKKyAgICAgIDExOSB8ICAgdm9pZCBDbGVhbnVwT25TaWduYWwodWlu
-dHB0cl90IENvbnRleHQpOworICAgICAgICAgIHwgICAgICAgIF5+fn5+fn5+fn5+fn5+fgorCitV
-cHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2xsdm0vbGx2bS1wcm9qZWN0L2NvbW1pdC9mZjE2
-ODFkZGIzMDMyMjM5NzM2NTNmN2Y1ZjNmMzQzNWI0OGExOTgzLnBhdGNoCitTaWduZWQtb2ZmLWJ5
-OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+CistLS0KKyBpbmNsdWRlL2xsdm0v
-U3VwcG9ydC9TaWduYWxzLmggfCAxICsKKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykK
-KworZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGx2bS9TdXBwb3J0L1NpZ25hbHMuaCBiL2luY2x1ZGUv
-bGx2bS9TdXBwb3J0L1NpZ25hbHMuaAoraW5kZXggZTBhMThlNzIuLjE0ODIxNmI4IDEwMDY0NAor
-LS0tIGEvaW5jbHVkZS9sbHZtL1N1cHBvcnQvU2lnbmFscy5oCisrKysgYi9pbmNsdWRlL2xsdm0v
-U3VwcG9ydC9TaWduYWxzLmgKK0BAIC0xNCw2ICsxNCw3IEBACisgI2lmbmRlZiBMTFZNX1NVUFBP
-UlRfU0lHTkFMU19ICisgI2RlZmluZSBMTFZNX1NVUFBPUlRfU0lHTkFMU19ICisgCisrI2luY2x1
-ZGUgPGNzdGRpbnQ+CisgI2luY2x1ZGUgPHN0cmluZz4KKyAKKyBuYW1lc3BhY2UgbGx2bSB7Cist
-LSAKKzIuNDAuMQorCi0tIAoyLjQwLjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+And restore support for MIPS64, which is supported by Lightning.
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ .../0001-lib-jit_disasm.c-fix-build.patch     | 42 -------------------
+ package/lightning/Config.in                   |  6 ++-
+ package/lightning/lightning.hash              |  2 +-
+ package/lightning/lightning.mk                |  2 +-
+ 4 files changed, 6 insertions(+), 46 deletions(-)
+ delete mode 100644 package/lightning/0001-lib-jit_disasm.c-fix-build.patch
+
+diff --git a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch b/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
+deleted file mode 100644
+index 9e79be91a0..0000000000
+--- a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 0d828c96c373c34b201ca7ea37b61c1e3b0485cd Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 19 Dec 2022 23:55:31 +0100
+-Subject: [PATCH] lib/jit_disasm.c: fix build
+-
+-Fix the following build failure raised since
+-http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=837c7a1e8d08fb9294578dc84694077f4d6106f9:
+-
+-jit_disasm.c: In function 'fprintf_styled':
+-jit_disasm.c:57:27: error: parameter name omitted
+-   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
+-      |                           ^~~~~~
+-jit_disasm.c:57:35: error: parameter name omitted
+-   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
+-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/e15e01e98e0d8c873efd3f512b671d98e4daf6c0
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[yann.morin.1998@free.fr: make it a backport now it's applied upstream]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- lib/jit_disasm.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
+-index 58a269b..68c966d 100644
+---- a/lib/jit_disasm.c
+-+++ b/lib/jit_disasm.c
+-@@ -54,7 +54,7 @@ static FILE			 *disasm_stream;
+- #endif
+- 
+- #if BINUTILS_2_38
+--static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
+-+static int fprintf_styled(void * stream, enum disassembler_style style, const char* fmt, ...)
+- {
+-   va_list args;
+-   int r;
+--- 
+-2.25.1
+-
+diff --git a/package/lightning/Config.in b/package/lightning/Config.in
+index 3cf7c28ae2..e42730addb 100644
+--- a/package/lightning/Config.in
++++ b/package/lightning/Config.in
+@@ -1,12 +1,14 @@
+ comment "lightning needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
+-		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
++		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64 || \
++		BR2_mips64 || BR2_mips64el
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_LIGHTNING
+ 	bool "lightning"
+ 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
+-		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
++		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64 || \
++		BR2_mips64 || BR2_mips64el
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
+index 998ae3743b..97b391674c 100644
+--- a/package/lightning/lightning.hash
++++ b/package/lightning/lightning.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4e3984ff1ccf0ba30a985211d40fc5c06b25f014ebdf3d80d0fe3d0c80dd7c0e  lightning-2.2.0.tar.gz
++sha256  98671681d5684770ccb06a07fa3b8f032a454bdb56eafc18e6fab04459ea3caa  lightning-2.2.1.tar.gz
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
+index 8ab2ca1f9d..4a8c7e5efd 100644
+--- a/package/lightning/lightning.mk
++++ b/package/lightning/lightning.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIGHTNING_VERSION = 2.2.0
++LIGHTNING_VERSION = 2.2.1
+ LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
+ LIGHTNING_LICENSE = LGPL-3.0+
+ LIGHTNING_LICENSE_FILES = COPYING.LESSER
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
