@@ -4,79 +4,128 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D7D7C77B7F
-	for <buildroot@archiver.kernel.org>; Fri, 19 May 2023 10:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 870D7C77B75
+	for <buildroot@archiver.kernel.org>; Fri, 19 May 2023 14:46:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 407D94248A;
-	Fri, 19 May 2023 10:59:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 407D94248A
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2BF44255E;
+	Fri, 19 May 2023 14:46:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2BF44255E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gzB519g0iBuy; Fri, 19 May 2023 10:59:49 +0000 (UTC)
+	with ESMTP id HtRSttxwpHUY; Fri, 19 May 2023 14:46:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3FF54248C;
-	Fri, 19 May 2023 10:59:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3FF54248C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D2B351BF215
- for <buildroot@lists.busybox.net>; Fri, 19 May 2023 10:59:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 694F54255A;
+	Fri, 19 May 2023 14:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 694F54255A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 36EC71BF3A1
+ for <buildroot@lists.busybox.net>; Fri, 19 May 2023 14:46:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA3894248C
- for <buildroot@lists.busybox.net>; Fri, 19 May 2023 10:59:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA3894248C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 277D383C24
+ for <buildroot@lists.busybox.net>; Fri, 19 May 2023 14:46:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 277D383C24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FvKeovaFnDgx for <buildroot@lists.busybox.net>;
- Fri, 19 May 2023 10:59:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UTKPO1gNRjIX for <buildroot@lists.busybox.net>;
+ Fri, 19 May 2023 14:46:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FE4C4248A
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com
- [IPv6:2001:4860:4864:20::2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7FE4C4248A
- for <buildroot@buildroot.org>; Fri, 19 May 2023 10:59:43 +0000 (UTC)
-Received: by mail-oa1-x2b.google.com with SMTP id
- 586e51a60fabf-18b1c643219so1249258fac.2
- for <buildroot@buildroot.org>; Fri, 19 May 2023 03:59:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684493982; x=1687085982;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=koqzZ/t49hOuZjZx6I3tY45pBZs3L/sNu4J8R/aVRm4=;
- b=jU7hfs9yPmeoXbJlYc5KI6ZHFUeS2fo60uZJIJ/RZJAHqjCbmOQNDZCxLrBfYXXCfa
- FhXbOHqzoiM8DFtVoGlE0MGU/jxuSVc2JuVp9eTIZYNzzIM19FNwBLkWXbLEI0ZC2Nb2
- kbaff3Wb5cbEv2hTtF6SgHn8GHDBcc+q+bENKGfsYYL4XFSQHCh+xrnpq+Q77cbgBdVK
- e9muEb6o7rcoVS8i4gN86H9uhFt+gbiFNgjUrP2jJBAdgj1LFyIENH6FKjjjQUnl+LgX
- McNbvmeSG1RQjgwqJ/XEqwh0H6ipHEtZAFmxICigmm9seNZFKvBWIARJ3JTqgx2yusNN
- 27fw==
-X-Gm-Message-State: AC+VfDwpxdeUlXhrCxL53EJGaxVd9slSvSFNLkLg9wdY+bAJnxwdW/hS
- 3TrAn9bXeuBoxOI9qWeZEbmx2q+8kftCKweVM+drBcWjcqg=
-X-Google-Smtp-Source: ACHHUZ62jCZQlzpXzJ4M0n7LeHjEMxIbbW+nXI8OXFyg8Mn47YI4p5fCsLXQnr8mrSUxtI0fRKlozJh3cUYluo1U6mM=
-X-Received: by 2002:aca:907:0:b0:396:26bf:d66c with SMTP id
- 7-20020aca0907000000b0039626bfd66cmr786563oij.45.1684493982038; Fri, 19 May
- 2023 03:59:42 -0700 (PDT)
-MIME-Version: 1.0
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Fri, 19 May 2023 12:59:30 +0200
-Message-ID: <CADYjeSuBBWWpoD3HKWQ6H0RV_EL4WAsBHxvHGTiV3P_-JrLy3g@mail.gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38A2283C22
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com
+ (mail-ve1eur01on061b.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe1f::61b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 38A2283C22
+ for <buildroot@buildroot.org>; Fri, 19 May 2023 14:46:07 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dYznNx08+WoDZNa/y8wvWwwHRQc0I8Uwwfs090ofdQqHBPHzohlCqfPMFarJPzhcx5h5R4wVNO9Nqe31/In8/I+QIwHWE6evqZuDK0E6iO3xfvMWX5NkJvPQQKqtH18IQjCk44sOv1AzxXUwjrqvu+pGUPLf8ZDPpjhHoBkoIg4WbR22gRCwO7KCicCccvSHB84V8FgomkDfzM3W4tJj/Au6DmTUi3Q4obORZj1xjEdTiwWSuZ6QXWxXDU3phjf2JflivsVMc0DXhBFTkt6Yp+987RuXVi36R8AZFnNIZX5NAS050gmmifkJv5CVPupEqM6DRwOUwqd+FYysFvm5BQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g0Tt416QzfiCXZBIcichl1ljoNaCCHPZm0Fxkckj3eg=;
+ b=LzcM7xSR4kyMRY8Twmroz+O0AgGNEpUnGT1rtJCrZfkUNg8/oKPym7bmhcahyQskTqYFMd9gB4b4bNrcKE//k8h3upPdMkAP9ZeNhAZTSreyaAEutBV42WdIqOaCMfJRAMPl43ptNy8oEHdvcgSR7Ql6tkuK96a1i8f43C8beQSkemcMAhFiYNzWhw4BMLQfdmSMj3yhobImMD8MRz0KJbRRAQgxshUrqLC+74UICt6DEQ32Z4qKi4eT9QCwK/lfB0YXwEZPBcBqf3/oZV6cVLkHHsYBHdhIatec7gKLcovNYTFLNiZfZYXtk+Q44oCbAYHqu+3cF2AbA2V70gwgDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vimar.com; dmarc=pass action=none header.from=vimar.com;
+ dkim=pass header.d=vimar.com; arc=none
+Received: from AS8PR08MB6870.eurprd08.prod.outlook.com (2603:10a6:20b:39a::21)
+ by AM0PR08MB5425.eurprd08.prod.outlook.com (2603:10a6:208:17d::20)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
+ 2023 14:46:02 +0000
+Received: from AS8PR08MB6870.eurprd08.prod.outlook.com
+ ([fe80::cf18:8d3e:30bc:6178]) by AS8PR08MB6870.eurprd08.prod.outlook.com
+ ([fe80::cf18:8d3e:30bc:6178%3]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 14:46:01 +0000
 To: buildroot@buildroot.org
+Date: Fri, 19 May 2023 16:45:57 +0200
+Message-Id: <1684507558-5929-1-git-send-email-luca.pesce@vimar.com>
+X-Mailer: git-send-email 2.7.4
+X-ClientProxiedBy: MR1P264CA0186.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:58::15) To AS8PR08MB6870.eurprd08.prod.outlook.com
+ (2603:10a6:20b:39a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR08MB6870:EE_|AM0PR08MB5425:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3bd26fae-77c9-4ec6-d700-08db5877c40b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 38tAUXsnEPEJfdb52sOseL0SyMN+2msbIn9p8PzTWF/t9I6Ngot3fsyReOQlBv2qHhw/rBHh0pPKXer5kdh0QgFKOcSNosRNUvV+Ph00+UGQFxzELAdBqlKWeCUZVfAjkpIy7Q3d+QDPWgR1Eou+dmlPp6Q2zDwM6RyIBSfQarNVLn65VYNwC5mEKFwH+99twxMXucaArPk+5nFVBrdpTU1t7FdBREu4mGuZSR9XopQ2qYQGyV7+uTuu3BC3Ivx6/AUvQc4NyYKIHwlm2RqTs93yj3pJ+hvv2Jc83R4StK5B3yb+yn1Ot+qGW8PnpqGA66q0gpd7zGswSMr45Pm1nW46HjyBkqSbW6Blyz7iV/t6EVWKh8ZruXt3ZgYjmQYlxxga4htYywdAv0jti4VqqPbfGuU0FRHUo+AV3Vbv/Q8tEkFWBiW3AObj4INbSzadSj1XrhTLNnoB2ACv7nKq98eLXq2WXJ+UOJux7jxgiMoPJB16kzexVF2kchGarBzdsKXOI23v4pmxZxlgEg/sGIIW3zrguO7udl+oh4tD9vIbtgztQM2sA3seujkWRqqwhdAcr7N4slRo5Z7bKyWXSVyyEWrgR3w7IcNXwd7HUdM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS8PR08MB6870.eurprd08.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230028)(4636009)(396003)(376002)(346002)(39850400004)(136003)(366004)(451199021)(86362001)(2906002)(6506007)(6512007)(66946007)(6916009)(186003)(26005)(66476007)(66556008)(54906003)(478600001)(36756003)(52116002)(6486002)(6666004)(966005)(38350700002)(38100700002)(2616005)(41300700001)(44832011)(83380400001)(8676002)(5660300002)(8936002)(4326008)(316002);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eQVJ4Rn/W57+5jDTPWBOjwY1AFOd5oitPnuKCTKpTX+Z+7ppQGfpIWt8w4Da?=
+ =?us-ascii?Q?SaqlduBjd2F0lTOvqOGASSPlFv/A+b1blnSVYRYF2rvXrGgu0N10DTgh3aZw?=
+ =?us-ascii?Q?q0AeZmP/GU2FAnuA/ebnL6LDx3OArLX7oN2s+hdpor1sM/ia0QVpz9Rv9u1O?=
+ =?us-ascii?Q?St4bSZ5db43+2Xnc+p1YpGTgafkrwvA12+hUNunAMclM2/4sfl1/j6b1kcSL?=
+ =?us-ascii?Q?pUrWWG/HlrE7Rm4noKpujL7Xx4lJTCcVWEZBC4y1h45irHB1W942LgmIGlD9?=
+ =?us-ascii?Q?wO+OW3jBRAoMvKWQR23VUQ/0M7gsuxCSrXBvOy7sy8bSBbIxNMs9+Vyjowfj?=
+ =?us-ascii?Q?TLNZUyyq3cccTUbiEOjEmB3p9Ul8eNUjkpDwJcfGwH/IJXaPze5A33QHYICk?=
+ =?us-ascii?Q?Gxb6wh0m8536red7p3LGh0aD8AWK7JXcDVzIWR1q98Fkt/nlWkBzVvszDIlT?=
+ =?us-ascii?Q?ebHG8jJqo3DwufBPVnJ5Ec3J08FBL+evWWHHgROMXV1RHbYMR1aiC6M/xzrE?=
+ =?us-ascii?Q?0MxbMK//lkyh9ow5nk+jCreVd+IR4SI0pXmECdyq0oik8e07P6iuFoQneMT0?=
+ =?us-ascii?Q?Ep5dedREvc9ixQ7I4EI1M0Q035ULwy164Zh0G42hJCkS7W1gK78Vcoe5wl2u?=
+ =?us-ascii?Q?jw3OxQJ95zf/aAXM7XqNhMvgmDuJiqdKAMBwydkGUF3JgmkmqJwZRxHGeaF7?=
+ =?us-ascii?Q?12bUQsMr1cTSAzC/rd4iEOKtptYvD//G57qAIPw2Ui0BkBiRsborq8E8GlG6?=
+ =?us-ascii?Q?CkoyL9ljCIU9P0dCYcJfh69xRWxQngsatYJ/PgwHztwFl3GVVrPJaZsBdQuE?=
+ =?us-ascii?Q?0wcb2YB8A7tYbFk3wdhJ971Bmy+3M2bn6vxBTALa4KZYzS7DTDMEYfohk9KB?=
+ =?us-ascii?Q?l7gAYSmr247VDaAbvro8NyuA34uQDOlUxP2RVmmKyn5H6tX8Gderl6lT4FQs?=
+ =?us-ascii?Q?y2REpHO4MW+TnTp4IcP+UBj3ecsivBx0s+hMBNNBCjS7nUkGosr08NBrWSw5?=
+ =?us-ascii?Q?GuFsNAkQX3hUp9RMpG4mXMCIDFGhdkZ/PMWYF7bRdbs0zMyNHvewSEvc1H1z?=
+ =?us-ascii?Q?WhZJzlkTbTHkfEj1KxAzda9Anxv+NbCexNbwJ8EYKwXu792KOj4ow0//izXN?=
+ =?us-ascii?Q?XhvsYVFQ6OiMJCM1AehGya63CJZ4trx8TiXlQ9UbsIMg762MsXKNaGUY7w4Z?=
+ =?us-ascii?Q?RlGXvrJES+cgre2WQK9BbkuA35UuowHK8aS+Vmwkc/HbHDxVlgO/2/Vdn0YL?=
+ =?us-ascii?Q?kUn4MeK4C69TZFD0mXVGmxc09C92VUJQ1pmtjNZnrx8jHx5Ldc7GK+HbFMZ6?=
+ =?us-ascii?Q?9upCmJlcWpdlOAy8exZXggFBjZzcTrB5+uwt0AZoztfyP8TqBqilqAnVZSaF?=
+ =?us-ascii?Q?C6HxCFwHqGnydtwzAyciZxcUFdkfeOG4v6nqDwux13j0DDcmR07U/GRHJwdW?=
+ =?us-ascii?Q?cnRrbZCu/om7Pqf04eVt4MfZ2h6UlS10vbVyy94UjnrG9PfFDbeOhpGs6P47?=
+ =?us-ascii?Q?tQQbQLlG4ELZ1GxlNlZ4DDSVzjmjJOwgayfW0GuwqbWVzQAr4tb3qDe8xq+5?=
+ =?us-ascii?Q?+qUKgJ4AaeEKwWxdJclyeTNNQkCpIjN7OlY9JExK?=
+X-OriginatorOrg: vimar.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3bd26fae-77c9-4ec6-d700-08db5877c40b
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR08MB6870.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 14:46:01.8409 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a1f008bc-d59b-4c66-8f87-60fd9af15c7f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 25BY9iQoX0yLE0IIbtLD/Exq3V8SdpIHPpVeYXyqgw9XiWhbjOcEZtLb/BIYG3PpP6mzqDBxCjTFB91O9AgoPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB5425
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1684493982; x=1687085982;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=koqzZ/t49hOuZjZx6I3tY45pBZs3L/sNu4J8R/aVRm4=;
- b=cKA9CjDYU6uJ6KCzHhBjztgFMlstFChnx3w7XdF9S8xyD0f1Mhkf+62Xb3NulZFJNm
- pplZLBg0Q2h9l+cJHb8LCS6l/hhNfRpUIqLnSoKrfKh2ScJd/84W+qukz1rSL0PtGkpj
- T1UvaPGWbnplMyCnG6y0ev2Mnva3rVVW5F+/3rJcAPDF6vYLQxoYkOPiQNvpB8K9i3LK
- WF3tZ41Jf+GLiRWikUfe+Urz46VuNVcdSvJUo4GkqNUyDzJHHBbx8Ry4RPAkP0wfU8wl
- VTQKqsu5ZaXIW6eKcMRzrHCimJEmRwLGVxVO0MNkrdgj9iCafRlaiuWhyOyaHHXqQoP2
- 3iXA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=cKA9CjDY
-Subject: [Buildroot] Error while building tpm2-tools package with fapi
- support
+ d=vimar.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g0Tt416QzfiCXZBIcichl1ljoNaCCHPZm0Fxkckj3eg=;
+ b=fpcUjYuSe+/FqdoI3CzF+inlR74MkXPg3zj0gv1mukA7qE+D0+r8GVFZhCYlZ3FYEFTpEFFlLD6GhfVMd8QspINb+Z23BtYN8K2/dJHB2tYgJVN0uwGApijfOr6+ig3BqY9TyBXhbXcrf3WzgznFryZAVscOhz03PB7GMvmtONk=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=vimar.com header.i=@vimar.com header.a=rsa-sha256
+ header.s=selector1 header.b=fpcUjYuS
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vimar.com;
+Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: added option to
+ (re-)enable external poll loop support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,157 +137,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============9156978566804544409=="
+From: Luca Pesce via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Pesce <luca.pesce@vimar.com>
+Cc: Luca Pesce <luca.pesce@vimar.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9156978566804544409==
-Content-Type: multipart/alternative; boundary="0000000000006cfe8f05fc09d125"
+Since version 3.2.0, libwebsockets does not compile its external loop support
+code anymore. That code was put under LWS_WITH_EXTERNAL_POLL compile option,
+which defaults to OFF.
+Applications relying on that support need to turn that option on, so let's
+add it to the package.
 
---0000000000006cfe8f05fc09d125
-Content-Type: text/plain; charset="UTF-8"
+For example, when libwebsockets in enabled, mosquitto broker is built with
+websocket support, but its code requires LWS_WITH_EXTERNAL_POLL to be on -
+otherwise, it gives compile-time warning hinting to unusable websocket support:
+https://github.com/eclipse/mosquitto/commit/1b24f625ea4ee77f3c4796ec2233d059f8c7977e
 
-Hello All,
+Signed-off-by: Luca Pesce <luca.pesce@vimar.com>
+---
+ package/libwebsockets/Config.in        | 10 ++++++++++
+ package/libwebsockets/libwebsockets.mk |  4 ++++
+ 2 files changed, 14 insertions(+)
 
-I am trying to build the package tpm2-tools
-https://github.com/buildroot/buildroot/tree/master/package/tpm2-tools with
-"fapi tools" option enabled
-https://github.com/buildroot/buildroot/blob/603df32a0cd416caa2d2688008cb87f14ad68ef3/package/tpm2-tools/Config.in#L26
- (BR2_PACKAGE_TPM2_TOOLS_FAPI=y, BR2_PACKAGE_TPM2_TSS_FAPI=y).
-But this results in below error
-
-checking whether -lc should be explicitly linked in... no
-checking dynamic linker characteristics... GNU/Linux ld.so
-checking how to hardcode library paths into programs... immediate
-checking whether stripping libraries is possible... yes
-checking if libtool supports shared libraries... yes
-checking whether to build shared libraries... yes
-checking whether to build static libraries... no
-checking for a BSD-compatible install... /usr/bin/install -c
-checking whether build environment is sane... yes
-checking for aarch64-buildroot-linux-gnu-strip... (cached)
-/home/build/per-package/tpm2-tools/host/bin/aarch64-linux-strip
-checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
-checking whether make sets $(MAKE)... yes
-checking whether make supports the include directive... yes (GNU style)
-checking whether make supports nested variables... yes
-checking dependency style of
-/home/build/per-package/tpm2-tools/host/bin/aarch64-linux-gcc... none
-checking whether make supports nested variables... (cached) yes
-checking whether to build with code coverage support... no
-checking for pandoc... (cached) no
-configure: WARNING: Required executable pandoc not found, man pages will
-not be built
-checking pkg-config is at least version 0.9.0... yes
-checking for TSS2_FAPI... no
-configure: error: Required module tss2-fapi not found
-
-However it builds successfully without BR2_PACKAGE_TPM2_TOOLS_FAPI selected.
-
-Below is the tpm2-tools.mk file
-
-################################################################################
-#
-# tpm2-tools
-#
-################################################################################
-
-TPM2_TOOLS_VERSION = 5.2
-TPM2_TOOLS_SITE =
-https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
-TPM2_TOOLS_LICENSE = BSD-3-Clause
-TPM2_TOOLS_LICENSE_FILES = doc/LICENSE
-TPM2_TOOLS_CPE_ID_VENDOR = tpm2-tools_project
-TPM2_TOOLS_SELINUX_MODULES = tpm2
-TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
-
-# -fstack-protector-all and FORTIFY_SOURCE=2 is used by
-# default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
-# in the toolchain wrapper and CFLAGS are used instead
-TPM2_TOOLS_CONF_OPTS = --disable-hardening
-
-# do not build man pages
-TPM2_TOOLS_CONF_ENV += ac_cv_prog_PANDOC=''
-
-ifeq ($(BR2_PACKAGE_TPM2_TOOLS_FAPI),y)
-TPM2_TOOLS_CONF_OPTS += --enable-fapi
-else
-TPM2_TOOLS_CONF_OPTS += --disable-fapi
-endif
-
-$(eval $(autotools-package))
-
-Can any one please let me know what the issue is?
-
-Thanks,
-Sourabh
-
---0000000000006cfe8f05fc09d125
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello All,<br><div><br></div><div>I am trying to build the=
- package tpm2-tools=C2=A0<a href=3D"https://github.com/buildroot/buildroot/=
-tree/master/package/tpm2-tools">https://github.com/buildroot/buildroot/tree=
-/master/package/tpm2-tools</a>=C2=A0with &quot;fapi tools&quot; option enab=
-led=C2=A0<a href=3D"https://github.com/buildroot/buildroot/blob/603df32a0cd=
-416caa2d2688008cb87f14ad68ef3/package/tpm2-tools/Config.in#L26">https://git=
-hub.com/buildroot/buildroot/blob/603df32a0cd416caa2d2688008cb87f14ad68ef3/p=
-ackage/tpm2-tools/Config.in#L26</a>=C2=A0(BR2_PACKAGE_TPM2_TOOLS_FAPI=3Dy,=
-=C2=A0BR2_PACKAGE_TPM2_TSS_FAPI=3Dy).</div><div>But this results in below e=
-rror<br><br></div><div>checking whether -lc should be explicitly linked in.=
-.. no<br>checking dynamic linker characteristics... GNU/Linux ld.so<br>chec=
-king how to hardcode library paths into programs... immediate<br>checking w=
-hether stripping libraries is possible... yes<br>checking if libtool suppor=
-ts shared libraries... yes<br>checking whether to build shared libraries...=
- yes<br>checking whether to build static libraries... no<br>checking for a =
-BSD-compatible install... /usr/bin/install -c<br>checking whether build env=
-ironment is sane... yes<br>checking for aarch64-buildroot-linux-gnu-strip..=
-. (cached) /home/build/per-package/tpm2-tools/host/bin/aarch64-linux-strip<=
-br>checking for a thread-safe mkdir -p... /usr/bin/mkdir -p<br>checking whe=
-ther make sets $(MAKE)... yes<br>checking whether make supports the include=
- directive... yes (GNU style)<br>checking whether make supports nested vari=
-ables... yes<br>checking dependency style of /home/build/per-package/tpm2-t=
-ools/host/bin/aarch64-linux-gcc... none<br>checking whether make supports n=
-ested variables... (cached) yes<br>checking whether to build with code cove=
-rage support... no<br>checking for pandoc... (cached) no<br>configure: WARN=
-ING: Required executable pandoc not found, man pages will not be built<br>c=
-hecking pkg-config is at least version 0.9.0... yes<br>checking for TSS2_FA=
-PI... no<br>configure: error: Required module tss2-fapi not found<br></div>=
-<div><br></div><div>However=C2=A0it builds successfully without=C2=A0BR2_PA=
-CKAGE_TPM2_TOOLS_FAPI selected.</div><div><br></div><div>Below is the <a hr=
-ef=3D"http://tpm2-tools.mk">tpm2-tools.mk</a> file</div><div><br></div><div=
->##########################################################################=
-######<br>#<br># tpm2-tools<br>#<br>#######################################=
-#########################################<br><br>TPM2_TOOLS_VERSION =3D 5.2=
-<br>TPM2_TOOLS_SITE =3D <a href=3D"https://github.com/tpm2-software/tpm2-to=
-ols/releases/download/$(TPM2_TOOLS_VERSION)">https://github.com/tpm2-softwa=
-re/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)</a><br>TPM2_TOOLS_LIC=
-ENSE =3D BSD-3-Clause<br>TPM2_TOOLS_LICENSE_FILES =3D doc/LICENSE<br>TPM2_T=
-OOLS_CPE_ID_VENDOR =3D tpm2-tools_project<br>TPM2_TOOLS_SELINUX_MODULES =3D=
- tpm2<br>TPM2_TOOLS_DEPENDENCIES =3D libcurl openssl tpm2-tss host-pkgconf<=
-br><br># -fstack-protector-all and FORTIFY_SOURCE=3D2 is used by<br># defau=
-lt. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options<br># in th=
-e toolchain wrapper and CFLAGS are used instead<br>TPM2_TOOLS_CONF_OPTS =3D=
- --disable-hardening<br><br># do not build man pages<br>TPM2_TOOLS_CONF_ENV=
- +=3D ac_cv_prog_PANDOC=3D&#39;&#39;<br><br>ifeq ($(BR2_PACKAGE_TPM2_TOOLS_=
-FAPI),y)<br>TPM2_TOOLS_CONF_OPTS +=3D --enable-fapi<br>else<br>TPM2_TOOLS_C=
-ONF_OPTS +=3D --disable-fapi<br>endif<br><br>$(eval $(autotools-package))<b=
-r></div><div><br></div><div>Can any one please let me know what the issue i=
-s?</div><div><br></div><div>Thanks,</div><div>Sourabh</div><div><br></div><=
-div><br></div></div>
-
---0000000000006cfe8f05fc09d125--
-
---===============9156978566804544409==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
+index d7b529c..1371717 100644
+--- a/package/libwebsockets/Config.in
++++ b/package/libwebsockets/Config.in
+@@ -9,5 +9,15 @@ config BR2_PACKAGE_LIBWEBSOCKETS
+ 
+ 	  https://libwebsockets.org/
+ 
++if BR2_PACKAGE_LIBWEBSOCKETS
++
++config BR2_PACKAGE_LIBWEBSOCKETS_EXT_POLL
++	bool "enable external poll loop support"
++	default n
++	help
++	  Enable external poll loop support code.
++
++endif
++
+ comment "libwebsockets needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index fb0ee66..86756ca 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -94,4 +94,8 @@ ifeq ($(BR2_SHARED_LIBS),y)
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_STATIC=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS_EXT_POLL),y)
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_EXTERNAL_POLL=ON
++endif
++
+ $(eval $(cmake-package))
+-- 
+2.7.4
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9156978566804544409==--
