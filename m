@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9E3BC77B75
-	for <buildroot@archiver.kernel.org>; Fri, 19 May 2023 16:20:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F950C77B7F
+	for <buildroot@archiver.kernel.org>; Sat, 20 May 2023 17:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0944941F1F;
-	Fri, 19 May 2023 16:20:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0944941F1F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 707CE41771;
+	Sat, 20 May 2023 17:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 707CE41771
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CGYutjgIIzDW; Fri, 19 May 2023 16:20:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bt91fsQvSGh9; Sat, 20 May 2023 17:09:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F078241E2B;
-	Fri, 19 May 2023 16:20:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F078241E2B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D81A51BF362
- for <buildroot@lists.busybox.net>; Fri, 19 May 2023 16:20:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A110540A7F;
+	Sat, 20 May 2023 17:09:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A110540A7F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B9AE01BF3F6
+ for <buildroot@lists.busybox.net>; Sat, 20 May 2023 17:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD01883005
- for <buildroot@lists.busybox.net>; Fri, 19 May 2023 16:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD01883005
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99A4F40A7F
+ for <buildroot@lists.busybox.net>; Sat, 20 May 2023 17:09:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99A4F40A7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eik7bbklRjpX for <buildroot@lists.busybox.net>;
- Fri, 19 May 2023 16:20:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qoIfzZzs1fMB for <buildroot@lists.busybox.net>;
+ Sat, 20 May 2023 17:09:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 134DA82336
- for <buildroot@uclibc.org>; Fri, 19 May 2023 16:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 134DA82336
+ by smtp2.osuosl.org (Postfix) with ESMTP id C20D940129
+ for <buildroot@uclibc.org>; Sat, 20 May 2023 17:09:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C20D940129
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 00332866F2; Fri, 19 May 2023 16:20:35 +0000 (UTC)
+ id AE1CE84631; Sat, 20 May 2023 17:09:54 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 19 May 2023 16:20:35 +0000
+Date: Sat, 20 May 2023 17:09:54 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
+X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
+X-Bugzilla-Version: 2023.02.1
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jbglaw@lug-owl.de
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Who: mscdex@mscdex.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-15421-163-AeYtjgnV2K@https.bugs.busybox.net/>
-In-Reply-To: <bug-15421-163@https.bugs.busybox.net/>
-References: <bug-15421-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-15576-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15421] qemu_aarch64_ebbr_defconfig: Missing Linux
- kernel source code
+Subject: [Buildroot] [Bug 15576] New: Cannot skip post-image script with
+ `make prepare-sdk`
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,17 +79,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15421
+https://bugs.busybox.net/show_bug.cgi?id=15576
 
-Jan-Benedict Glaw <jbglaw@lug-owl.de> changed:
+            Bug ID: 15576
+           Summary: Cannot skip post-image script with `make prepare-sdk`
+           Product: buildroot
+           Version: 2023.02.1
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: mscdex@mscdex.net
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Generally in my post-image scripts I perform some intensive tasks that are
+strictly for the benefit of the preparation and creation of disk images or
+ISOs. However, if all I want to do is to prepare an SDK, I don't need to do any
+of these tasks because the SDK should just be building the toolchain, host
+packages, and (in my case) generating the environment-setup script.
 
---- Comment #1 from Jan-Benedict Glaw <jbglaw@lug-owl.de> ---
-My most recent build was successful, so this ticket can be closed.
+It would be very useful to have an official/built-in way to bypass the
+post-image script (and possibly the other scripts) when doing `make
+prepare-sdk` (either implicitly or explicitly).
 
 -- 
 You are receiving this mail because:
