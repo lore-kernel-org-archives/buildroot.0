@@ -1,93 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE57C7EE23
-	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 04:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A08EC77B7C
+	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 08:16:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 144F281E65;
-	Sun, 21 May 2023 04:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 144F281E65
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EpDU2O3OxCsP; Sun, 21 May 2023 04:13:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3954D81E0B;
-	Sun, 21 May 2023 04:13:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3954D81E0B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3FA731BF3DD
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 04:13:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25BB460A95
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 04:13:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25BB460A95
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B28F60C2E;
+	Sun, 21 May 2023 08:16:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B28F60C2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bh5E-ULEqL8X for <buildroot@lists.busybox.net>;
- Sun, 21 May 2023 04:13:50 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GsIbrR0fX3Tj; Sun, 21 May 2023 08:16:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71AAA60B12;
+	Sun, 21 May 2023 08:16:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71AAA60B12
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 449651BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 08:16:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E30782C3C
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 08:16:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E30782C3C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f08V2Tt01Viz for <buildroot@lists.busybox.net>;
+ Sun, 21 May 2023 08:16:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E92FF60A8D
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
- [IPv6:2607:f8b0:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E92FF60A8D
- for <buildroot@buildroot.org>; Sun, 21 May 2023 04:13:49 +0000 (UTC)
-Received: by mail-pf1-x434.google.com with SMTP id
- d2e1a72fcca58-64d5b4c3ffeso273595b3a.2
- for <buildroot@buildroot.org>; Sat, 20 May 2023 21:13:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37A6182C33
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 37A6182C33
+ for <buildroot@busybox.net>; Sun, 21 May 2023 08:16:20 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-3f41d087a84so15775775e9.1
+ for <buildroot@busybox.net>; Sun, 21 May 2023 01:16:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684642429; x=1687234429;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=vvUdbB6m1twcojOXNx5BruuLkP1OJPSXjw5g8qgtyA4=;
- b=AV5l1xyLdw8FulDI0v8QwwdW4EnwyelapwsihJJDsb4hcYt9wRJbe+YzLy0qZZUr9h
- t4e04ADezEaWzEQWQ3FSpy2bPmTYAf01Nhrp6+m5lHKy/e0zFs1FY3wL3KjwWuTelJ4g
- bkOPFg4WDoAXp256OotCupwg0wiBuc28GEdnrzUyi8vAhz3O/Plp9hFIBEdkTZ9TTXDj
- n/ji82rp6GLUSNpezbGXs9PwMyL9fXCIEDzO9Pz+fmQOJEeXPqnT2Qty5IZ+vcx/qSm0
- htC2qCLRRK6+wyiPHP2SRVNSNwa2nrj0b/a5/XnFgfSHU+8WWBW7EtO0cnvbqNKgPZ4b
- 89UQ==
-X-Gm-Message-State: AC+VfDwLvamZRD1hXV7Y1dfpcdTzGwk8HzManH93u27tC7iHK6LiOcYB
- rCe9x8rw/R2C9MDYZuSw8IIEIn9DnOA=
-X-Google-Smtp-Source: ACHHUZ6MvHg0zJdpIgxLrYHMdUvXKNKQGR5dOZIgUQE7uo00svRjeZg4VDCmu8RlOCMnJU9Ul+0caQ==
-X-Received: by 2002:a05:6a00:13a2:b0:64d:2487:5b20 with SMTP id
- t34-20020a056a0013a200b0064d24875b20mr9505938pfg.9.1684642428861; 
- Sat, 20 May 2023 21:13:48 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-73.three.co.id. [180.214.233.73])
+ d=1e100.net; s=20221208; t=1684656978; x=1687248978;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=sBqBsBaUG5W/d455hA9g9nAig1i+FOqN1Q9agtqKOp8=;
+ b=GBcVtrbf3IEqiJQM2WUIUQcjz6qBda2N5Pb55IFHtmphuymEJ8vJT0Jjc1YSEHxCNr
+ s3TsOL0obiTqnqZtn1yecdnOWrE/scwxtZcrjTS8AhiSk2brQo0mP4tzqzaycNGyNRTW
+ YA64APOuziU+h8o2CY5yzTQX09NxR3LeoNhkOvf8qDi6pdcKyFQHeL7TXXh8II23RekO
+ kyrMkjg5SKLfCAs4xiG+LKLyfXGGq57NOydgAuZlVfabHlYxg0cosr+ZP+YyRRjKGc/U
+ SFVyOm2f6i6oxTU8igRYwLwfszcMhxsvG+Q2z5lRwnJ0wYP8m7I1chaHxCkBuamiCVg6
+ Bubg==
+X-Gm-Message-State: AC+VfDz8seE0Kc3T5iBfsbOWmPx7T6GDfKMWrkfvBW+jU09A4h3adT/8
+ JLFwJaGeAAcLVupfWIUa0Zo/VlIB/T8=
+X-Google-Smtp-Source: ACHHUZ68HXSjQ/IfOkPWMRj8oAn9qoqWC6SC8vEd5wFrn4C4DH25gvhWW9a8F37Lub8N+QnBI8g2lA==
+X-Received: by 2002:a7b:cb56:0:b0:3f4:fe7f:3d18 with SMTP id
+ v22-20020a7bcb56000000b003f4fe7f3d18mr4959331wmj.2.1684656977614; 
+ Sun, 21 May 2023 01:16:17 -0700 (PDT)
+Received: from pc-140.home ([2a01:cb1c:e03:bd00:5ffe:deec:ec3f:c958])
  by smtp.gmail.com with ESMTPSA id
- n14-20020aa7904e000000b006470a6ef529sm1917838pfo.88.2023.05.20.21.13.47
+ s4-20020a5d4244000000b00307bc4e39e5sm3930225wrr.117.2023.05.21.01.16.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 May 2023 21:13:48 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
- id 5258C106274; Sun, 21 May 2023 11:13:43 +0700 (WIB)
-Date: Sun, 21 May 2023 11:13:43 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-Message-ID: <ZGmad1hb8MQ6uyOh@debian.me>
-References: <20230516135107.238343-1-romain.naour@gmail.com>
- <20230516135107.238343-3-romain.naour@gmail.com>
+ Sun, 21 May 2023 01:16:17 -0700 (PDT)
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+To: buildroot@busybox.net
+Date: Sun, 21 May 2023 10:16:10 +0200
+Message-Id: <20230521081610.3495-1-guillaume.bressaix@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230516135107.238343-3-romain.naour@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1684642429; x=1687234429;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=vvUdbB6m1twcojOXNx5BruuLkP1OJPSXjw5g8qgtyA4=;
- b=Cbg0AL6cZxo2Tj0orUhTlIg+k6vtUjqfSE/9NFrgtal59TOyzZ/VHQolVZ2nWqG446
- 7tsNm63ijKFKsjvDk+WqFFtwXWTWDwEN2vV8Q/+CbHHzU9nb9R8KbM1/kulCkh3y6r8r
- vuqhEVZh8vvcqjhpA0y0zEjfcydOALicKSOaWjmAN6ujoV+24OkAIiSTwIqU/u0PABME
- +dfQDCIyQumYUH0k2xca8Ng2Fx6qkg9vRXNFzUFu0VESNggnbpB2afglKDIhRJtGQVGq
- obezmjOHBag/Ffu4WUk6M/Wh2lmMAcVE7vVkpk/Hvkxg9/T1zkA03d68AVIU/rXx9uqA
- S8sw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20221208; t=1684656978; x=1687248978;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=sBqBsBaUG5W/d455hA9g9nAig1i+FOqN1Q9agtqKOp8=;
+ b=gqSlO7zOWyvItJUVyPkt7Pme6JcALii9Yp/4AM5EwzTJ2yuqpfbnA7V/oD/yKRnQhZ
+ OCRtOqFZzdkyqHs0IKjCxx7ogIDjnbWABc/b3pG1C/G9MNBZiQQPQgmUdjmQf0JAnhtb
+ ELIczDdRKBK8jEiPFNYE/t1wEODdiICp98fUW/C9Jd5b8KljgVOvEYHIZ9XTrRZJBY1C
+ vAKgwboIl2sn+VHoAoa8WElB+tfuW7oi/jcOtoDL2CeCbjTIxCUyQDrtRA08E1YQ57wK
+ 4v4unv92QgtNcZ9nk3xPVvRRl9d4Q8+b6KSJ4p6vHOCDrvWR4+xDQH0mrhB6ScDw6Vhi
+ 888Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Cbg0AL6c
-Subject: Re: [Buildroot] [PATCH 3/6] package/gcc: add support for gcc 13
+ header.a=rsa-sha256 header.s=20221208 header.b=gqSlO7zO
+Subject: [Buildroot] [PATCH 1/1] package/libxcrypt: bump to version 4.4.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,41 +94,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, May 16, 2023 at 03:51:04PM +0200, Romain Naour wrote:
-> https://gcc.gnu.org/gcc-13/changes.html
-> https://gcc.gnu.org/gcc-13/porting_to.html
-> 
-> Backport upstream patch to gcc 13.1 for RISC-V build issue with gcc 4.9.x:
-> 
-> GCC should still build with GCC 4.8.3 or newer [1]
-> using C++03 by default. But a recent change in
-> RISC-V port introduced a C++11 feature "std::log2" [2].
-> 
-> Use log2 from the C header, without the namespace [3].
-> 
-> [1] https://gcc.gnu.org/install/prerequisites.html
-> [2] https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=7caa1ae5e451e780fbc4746a54e3f19d4f4304dc
-> [3] https://stackoverflow.com/questions/26733413/error-log2-is-not-a-member-of-std
-> 
-> Rebase patch 0001-disable-split-stack-for-non-thread-builds.patch
-> required for uClibc-ng without threads support.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/4202276589
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ package/libxcrypt/libxcrypt.hash | 2 +-
+ package/libxcrypt/libxcrypt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Carrying my tag from Bernd's series [1]:
-
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
-[1]: https://lore.kernel.org/buildroot/ZGR4JPCvobetfREP@debian.me/
-
+diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
+index e125072705..c13685e463 100644
+--- a/package/libxcrypt/libxcrypt.hash
++++ b/package/libxcrypt/libxcrypt.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  efb4e225c4e37658444ecdb4825883b70b744541b73022d91c4d12e0dd8e39a0  libxcrypt-4.4.29.tar.gz
++sha256  0a0c06bcd028fd0f0467f89f6a451112e8ec97c36e0f58e7464449a4c04607ed  libxcrypt-4.4.33.tar.gz
+ sha256  f9b48b0bc67a92b752780710aa774cf08b62ec2ebaa3f4aebd00069fba6effd2  LICENSING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
+index 18ea6e3c17..079445e489 100644
+--- a/package/libxcrypt/libxcrypt.mk
++++ b/package/libxcrypt/libxcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXCRYPT_VERSION = 4.4.29
++LIBXCRYPT_VERSION = 4.4.33
+ LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
+ LIBXCRYPT_LICENSE = LGPL-2.1+
+ LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
 -- 
-An old man doll... just what I always wanted! - Clara
+2.20.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
