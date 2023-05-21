@@ -4,59 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 306F7C77B73
-	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 20:12:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CFF2C77B73
+	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 20:14:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 617AD4175E;
-	Sun, 21 May 2023 20:12:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 617AD4175E
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA1C740910;
+	Sun, 21 May 2023 20:14:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA1C740910
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2SJY85B7RlOh; Sun, 21 May 2023 20:12:40 +0000 (UTC)
+	with ESMTP id 1feVv7-7A1fa; Sun, 21 May 2023 20:14:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFEB0417BE;
-	Sun, 21 May 2023 20:12:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFEB0417BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8ECA1408A7;
+	Sun, 21 May 2023 20:14:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ECA1408A7
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 94D6E1BF3CB
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 20:12:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5798D1BF3CB
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 20:14:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F55C404D8
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 20:12:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F55C404D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3139B404D8
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 20:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3139B404D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wROagGLDuNey for <buildroot@lists.busybox.net>;
- Sun, 21 May 2023 20:12:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ECBF40148
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5ECBF40148
- for <buildroot@buildroot.org>; Sun, 21 May 2023 20:12:32 +0000 (UTC)
-Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
- by mailout08.t-online.de (Postfix) with SMTP id 17F891F717;
- Sun, 21 May 2023 22:12:29 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd74.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q0pPg-0dO7LV0; Sun, 21 May 2023 22:12:20 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41120)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q0pPg-0004s1-14;
- Sun, 21 May 2023 22:12:20 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sun, 21 May 2023 22:12:20 +0200
-Message-Id: <20230521201220.3956344-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230521201220.3956344-1-bernd.kuhls@t-online.de>
-References: <20230521201220.3956344-1-bernd.kuhls@t-online.de>
+ with ESMTP id ANfd-ypeh6Ta for <buildroot@lists.busybox.net>;
+ Sun, 21 May 2023 20:14:45 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3186240148
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3186240148
+ for <buildroot@buildroot.org>; Sun, 21 May 2023 20:14:45 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:a137:d754:ea62:50f7])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 81BF05FF3F;
+ Sun, 21 May 2023 22:14:41 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 21 May 2023 22:14:41 +0200
+Date: Sun, 21 May 2023 22:14:41 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Adam Duskett <aduskett@gmail.com>
+Message-ID: <20230521201441.GE621937@scaer>
+References: <20230413170435.18131-1-aduskett@gmail.com>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1684699940-327FBCD8-890EE55E/0/0 CLEAN NORMAL
-X-TOI-MSGID: 208e4d90-1246-40c4-a914-0526553d14e7
-Subject: [Buildroot] [PATCH/next 2/2] package/waylandpp: bump version to
- 1.0.0
+Content-Disposition: inline
+In-Reply-To: <20230413170435.18131-1-aduskett@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1684700083;
+ bh=VX0K0Bc3ZoRB1TydGM2CEiMoWlswIW2g5xMqn3vOXmU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=PcUfBdQSolmLYXzmsMGD58E2wxmLIs7/ymYjOlHeWoDR063c6Sx6ToBOHZMYeHq0W
+ +7KnTJaeEtU3M5AleAWp6wT0WwNRxhILXHzotndtwk/2O78Mk/IrkrdTN9itt2vFrr
+ cRtb6eJDm5eGWSaBRucjHE2BSoiNhhUhbiuI44QdVq4AZK7oIfoNW+kYOxCqMvQSdH
+ KacDSvdZdaMvwj0m16DevGz/uE0Ychs+Qr/fJF5ylLGmhfLtfj9vdAzdWad8fcW/rH
+ 5P1Y1TuvLpDkURFtXzJ42m+vhVmXH4JOibUjZ5RGWC1rMIl39vVoZJngS9ny92EYoS
+ 9fqPgwMATMGKA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PcUfBdQS
+Subject: Re: [Buildroot] [PATCH 1/2] configs/pc_x86_64_{bios,
+ efi}_defconfig: Switch to kernel 6.1.24 LTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,51 +77,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/NilsBrause/waylandpp/releases
+Adam, All,
 
-Update license hash due to copyright year bump:
-https://github.com/NilsBrause/waylandpp/commit/1ea510aabd5ba8abdb5cd30c37481595f34c366c
++Jan-Benedict for BZ #15586
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/waylandpp/waylandpp.hash | 4 ++--
- package/waylandpp/waylandpp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2023-04-13 10:04 -0700, Adam Duskett spake thusly:
+> Let's use a more modern kernel with a broader range of hardware support
+> for PCs.
 
-diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
-index 1b806af9b0..a3eb5379af 100644
---- a/package/waylandpp/waylandpp.hash
-+++ b/package/waylandpp/waylandpp.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  e7f486165d3568c3558b5c7099133aea4a285b82820eeafad329fc10271c654d  waylandpp-0.2.8.tar.gz
--sha256  8ff91f682a38f8a603b173222a60e8dc71754a79a522a316fb6b76ce138c542c  LICENSE
-+sha256  b20b45917382c6b87e9380130c9a1a1c563da2f498de5830df12fbce326dd9f5  waylandpp-1.0.0.tar.gz
-+sha256  3eee5022ce84ead344e1c51b9d00c7f450f53003fe096fe460d66c616fe56782  LICENSE
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
-diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
-index 45d9ccd528..4a0d58ba50 100644
---- a/package/waylandpp/waylandpp.mk
-+++ b/package/waylandpp/waylandpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAYLANDPP_VERSION = 0.2.8
-+WAYLANDPP_VERSION = 1.0.0
- WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
- WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
- WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
+This also probably needs BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF.
+
+See:
+    https://bugs.busybox.net/show_bug.cgi?id=15586
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  configs/pc_x86_64_bios_defconfig | 6 +++---
+>  configs/pc_x86_64_efi_defconfig  | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+> index ec34a41667..a057ddd259 100644
+> --- a/configs/pc_x86_64_bios_defconfig
+> +++ b/configs/pc_x86_64_bios_defconfig
+> @@ -21,13 +21,13 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
+>  
+> -# Linux headers same as kernel, a 4.19 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> +# Linux headers same as kernel, a 6.1 LTS series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+>  
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.24"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+>  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+> index da05471e28..efa603f0c0 100644
+> --- a/configs/pc_x86_64_efi_defconfig
+> +++ b/configs/pc_x86_64_efi_defconfig
+> @@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
+>  
+> -# Linux headers same as kernel, a 4.19 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> +# Linux headers same as kernel, a 6.1 LTS series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+>  
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.24"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+>  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> -- 
+> 2.40.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.39.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
