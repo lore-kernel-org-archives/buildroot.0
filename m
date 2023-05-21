@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEBB3C77B7C
-	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 17:08:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3041C77B7C
+	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 17:49:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BACF60FBE;
-	Sun, 21 May 2023 17:08:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BACF60FBE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FC8D416BC;
+	Sun, 21 May 2023 17:49:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FC8D416BC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A34MfzYAB1A5; Sun, 21 May 2023 17:49:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0E514161A;
+	Sun, 21 May 2023 17:49:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0E514161A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B48A81BF3CA
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 17:49:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B53460E8D
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 17:49:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B53460E8D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ErBt0ZwZXRH; Sun, 21 May 2023 17:08:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97DAE60A64;
-	Sun, 21 May 2023 17:08:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97DAE60A64
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AEAD71BF3CA
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 17:08:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 838C081E3A
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 17:08:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 838C081E3A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ygnf6Mi_RPvq for <buildroot@lists.busybox.net>;
- Sun, 21 May 2023 17:08:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C54A81E1B
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7C54A81E1B
- for <buildroot@buildroot.org>; Sun, 21 May 2023 17:08:39 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:cc91:114a:eab6:96e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 91D77B00593;
- Sun, 21 May 2023 19:08:34 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 21 May 2023 19:08:34 +0200
-Date: Sun, 21 May 2023 19:08:34 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Luca Pesce <luca.pesce@vimar.com>
-Message-ID: <20230521170834.GA621937@scaer>
-References: <1684507558-5929-1-git-send-email-luca.pesce@vimar.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <1684507558-5929-1-git-send-email-luca.pesce@vimar.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1684688916;
- bh=jKkcJjg6WhM05mRiIPEzVWIj8VKLAj7JyZt2Y4eOHvw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uHDSzpVxgzb6mI0zoA/y+J8xYBBwnq0F2xfWiDj7P1XUouc4hzefmc8LNvqVYSVXN
- e/NKMUqNamINVgdmN1cwAoSEbG/Ij/zHZHZiYmPOr9DTckTPQwMbwvhRqQEl/DHwpO
- rgB27GhwsOJDzupUhlIRiZZ/XtkqVGnkkaFDhJAcWfa2TBd8oXHgqFjVrlDtikBr5c
- EYSgBbP3xtjIRSt1xazbMISA9mEIJXqX3DapanHaRx8aBX/jyRYfzrze8dEm7YdyKB
- GADDMUK+V/IVrHNXlcUw1F0VO000WlYehM0bJ50Ft72tn+mi37uyJ1YLOI17asmI8n
- QURqpwsXTPVEA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uHDSzpVx
-Subject: Re: [Buildroot] [PATCH 1/1] package/libwebsockets: added option to
- (re-)enable external poll loop support
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6qgFNJc4lSkf for <buildroot@lists.busybox.net>;
+ Sun, 21 May 2023 17:49:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5C0D60A71
+ for <buildroot@buildroot.org>; Sun, 21 May 2023 17:49:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5C0D60A71
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B2E3386738; Sun, 21 May 2023 17:49:15 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 21 May 2023 19:48:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4944ff2878733f4f6f837ee0d417423420c663ce
+X-Git-Newrev: 62b64c56b8714e159d9f4812fb05e6442d2837f2
+X-Patchwork-Hint: ignore
+Message-Id: <20230521174915.B2E3386738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: fix glxinfo crash when
+ gles1 is disabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,98 +57,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Luca, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=62b64c56b8714e159d9f4812fb05e6442d2837f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-05-19 16:45 +0200, Luca Pesce via buildroot spake thusly:
-> Since version 3.2.0, libwebsockets does not compile its external loop support
-> code anymore. That code was put under LWS_WITH_EXTERNAL_POLL compile option,
-> which defaults to OFF.
-> Applications relying on that support need to turn that option on, so let's
-> add it to the package.
+mesa3d 23.1 introduced a regression crashing glxinfo (and some piglit tests)
+when gles1 is disabled.
+See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/9038
 
-So, as I understand it, before 3.2.0, this was unconditionally compiled
-in, right?
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4287983490
 
-If so, for backward compatibility, should we default this new option to
-'y' ?
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998@free.fr: fix Upstream tag as noticed by Baruch]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...xit-early-when-trying-to-create-an-unsupp.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-> For example, when libwebsockets in enabled, mosquitto broker is built with
-> websocket support, but its code requires LWS_WITH_EXTERNAL_POLL to be on -
-> otherwise, it gives compile-time warning hinting to unusable websocket support:
-> https://github.com/eclipse/mosquitto/commit/1b24f625ea4ee77f3c4796ec2233d059f8c7977e
-
-Then, should mosquitto also select this new option?
-
-> Signed-off-by: Luca Pesce <luca.pesce@vimar.com>
-> ---
->  package/libwebsockets/Config.in        | 10 ++++++++++
->  package/libwebsockets/libwebsockets.mk |  4 ++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-> index d7b529c..1371717 100644
-> --- a/package/libwebsockets/Config.in
-> +++ b/package/libwebsockets/Config.in
-> @@ -9,5 +9,15 @@ config BR2_PACKAGE_LIBWEBSOCKETS
->  
->  	  https://libwebsockets.org/
->  
-> +if BR2_PACKAGE_LIBWEBSOCKETS
-> +
-> +config BR2_PACKAGE_LIBWEBSOCKETS_EXT_POLL
-> +	bool "enable external poll loop support"
-> +	default n
-
-'n' is the default, so no need to specify it.
-
-> +	help
-> +	  Enable external poll loop support code.
-
-I am not sure I understood this "external poll loop support". Does it
-mean that the loop must be handle by the application itself, rather than
-bey libwebsocket?
-
-Regards,
-Yann E. MORIN.
-
-> +endif
-> +
->  comment "libwebsockets needs a toolchain w/ dynamic library"
->  	depends on BR2_STATIC_LIBS
-> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-> index fb0ee66..86756ca 100644
-> --- a/package/libwebsockets/libwebsockets.mk
-> +++ b/package/libwebsockets/libwebsockets.mk
-> @@ -94,4 +94,8 @@ ifeq ($(BR2_SHARED_LIBS),y)
->  LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_STATIC=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS_EXT_POLL),y)
-> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_EXTERNAL_POLL=ON
-> +endif
-> +
->  $(eval $(cmake-package))
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mesa3d/0005-mesa-main-Exit-early-when-trying-to-create-an-unsupp.patch b/package/mesa3d/0005-mesa-main-Exit-early-when-trying-to-create-an-unsupp.patch
+new file mode 100644
+index 0000000000..278d75e64a
+--- /dev/null
++++ b/package/mesa3d/0005-mesa-main-Exit-early-when-trying-to-create-an-unsupp.patch
+@@ -0,0 +1,50 @@
++From 2a6908ff4c94284b39c3cd4c97e1069876720eb7 Mon Sep 17 00:00:00 2001
++From: Jordan Justen <jordan.l.justen@intel.com>
++Date: Tue, 16 May 2023 18:46:50 -0700
++Subject: [PATCH] mesa/main: Exit early when trying to create an unsupported
++ context API
++
++Fixes: adbe8b6c17a ("mesa: optimize out _mesa_is_desktop_gl*() and _mesa_is_gles*() calls when not built")
++Closes: https://gitlab.freedesktop.org/mesa/mesa/-/issues/9038
++Signed-off-by: Jordan Justen <jordan.l.justen@intel.com>
++Reviewed-by: Eric Engestrom <eric@engestrom.ch>
++Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/23068>
++Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/8bb1ecaa02177720758255bdd7ec34a5d15feca4
++[Romain: backport to 23.1]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/mesa/main/context.c | 18 ++++++++++++++++++
++ 1 file changed, 18 insertions(+)
++
++diff --git a/src/mesa/main/context.c b/src/mesa/main/context.c
++index d8eea2ea867..2b810b0d863 100644
++--- a/src/mesa/main/context.c
+++++ b/src/mesa/main/context.c
++@@ -996,6 +996,24 @@ _mesa_initialize_context(struct gl_context *ctx,
++    struct gl_shared_state *shared;
++    int i;
++ 
+++   switch (api) {
+++   case API_OPENGL_COMPAT:
+++   case API_OPENGL_CORE:
+++      if (!HAVE_OPENGL)
+++         return GL_FALSE;
+++      break;
+++   case API_OPENGLES2:
+++      if (!HAVE_OPENGL_ES_2)
+++         return GL_FALSE;
+++      break;
+++   case API_OPENGLES:
+++      if (!HAVE_OPENGL_ES_1)
+++         return GL_FALSE;
+++      break;
+++   default:
+++      return GL_FALSE;
+++   }
+++
++    ctx->API = api;
++    ctx->DrawBuffer = NULL;
++    ctx->ReadBuffer = NULL;
++-- 
++2.40.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
