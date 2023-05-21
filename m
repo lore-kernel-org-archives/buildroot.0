@@ -4,70 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 519CDC77B73
-	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 17:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEBB3C77B7C
+	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 17:08:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C93BC60FD7;
-	Sun, 21 May 2023 17:01:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C93BC60FD7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BACF60FBE;
+	Sun, 21 May 2023 17:08:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BACF60FBE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t3GE3VDdz1Yg; Sun, 21 May 2023 17:01:14 +0000 (UTC)
+	with ESMTP id 7ErBt0ZwZXRH; Sun, 21 May 2023 17:08:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED96460FC8;
-	Sun, 21 May 2023 17:01:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED96460FC8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97DAE60A64;
+	Sun, 21 May 2023 17:08:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97DAE60A64
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B90A61BF3EA
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 17:01:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AEAD71BF3CA
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 17:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9249881EC5
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 17:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9249881EC5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 838C081E3A
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 17:08:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 838C081E3A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WbNg1eXeI00N for <buildroot@lists.busybox.net>;
- Sun, 21 May 2023 17:01:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B36A827D9
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0B36A827D9
- for <buildroot@buildroot.org>; Sun, 21 May 2023 17:01:05 +0000 (UTC)
+ with ESMTP id Ygnf6Mi_RPvq for <buildroot@lists.busybox.net>;
+ Sun, 21 May 2023 17:08:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C54A81E1B
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7C54A81E1B
+ for <buildroot@buildroot.org>; Sun, 21 May 2023 17:08:39 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:cc91:114a:eab6:96e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 20B79B0051E;
- Sun, 21 May 2023 19:01:00 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 91D77B00593;
+ Sun, 21 May 2023 19:08:34 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 21 May 2023 19:00:59 +0200
-Date: Sun, 21 May 2023 19:00:59 +0200
+ Sun, 21 May 2023 19:08:34 +0200
+Date: Sun, 21 May 2023 19:08:34 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230521170059.GI171618@scaer>
-References: <20230428230618.261911-1-romain.naour@gmail.com>
- <20230428230618.261911-2-romain.naour@gmail.com>
+To: Luca Pesce <luca.pesce@vimar.com>
+Message-ID: <20230521170834.GA621937@scaer>
+References: <1684507558-5929-1-git-send-email-luca.pesce@vimar.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230428230618.261911-2-romain.naour@gmail.com>
+In-Reply-To: <1684507558-5929-1-git-send-email-luca.pesce@vimar.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1684688463;
- bh=NkDJo0YzXYZElBvCLagf6+kQ71i1L+zqw9qZ9AQZjX0=;
+ d=free.fr; s=smtp-20201208; t=1684688916;
+ bh=jKkcJjg6WhM05mRiIPEzVWIj8VKLAj7JyZt2Y4eOHvw=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OQ4wH5Vwy02eD2hVMCSICfPLrUbbijLY5mRkZSIGjRYYo7+mQwK3DWUjEXi9ux6/0
- acFQJZN0nwJSaT2RhqkUjLd/kkClCSwyboT5gA4KtKSBtPwJnyhSLnRBokFynrX3A+
- LWI2zGWx/YrqdRxIt5sCbPlywhH7prnwUD6x8d9H3/grNakoEum0YK0EkM3oYO7e0f
- j/72KvezyQ64Gxmaw7GP//Di8AcV4JazIZrjM8u4/nv73WyFfeErH8aJRvZW7Cv38D
- YrHl4eZ2iwtvcy3QYkBUxCN5twadDMVnNGW2M56dOiGjVK4UcdW7071dGtMsKP9OkY
- bRJXCmXPRuhGg==
+ b=uHDSzpVxgzb6mI0zoA/y+J8xYBBwnq0F2xfWiDj7P1XUouc4hzefmc8LNvqVYSVXN
+ e/NKMUqNamINVgdmN1cwAoSEbG/Ij/zHZHZiYmPOr9DTckTPQwMbwvhRqQEl/DHwpO
+ rgB27GhwsOJDzupUhlIRiZZ/XtkqVGnkkaFDhJAcWfa2TBd8oXHgqFjVrlDtikBr5c
+ EYSgBbP3xtjIRSt1xazbMISA9mEIJXqX3DapanHaRx8aBX/jyRYfzrze8dEm7YdyKB
+ GADDMUK+V/IVrHNXlcUw1F0VO000WlYehM0bJ50Ft72tn+mi37uyJ1YLOI17asmI8n
+ QURqpwsXTPVEA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=OQ4wH5Vw
-Subject: Re: [Buildroot] [PATCH]
- support/config-fragments/autobuild/br-arm-internal-glibc: update to
- bleeding edge components
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uHDSzpVx
+Subject: Re: [Buildroot] [PATCH 1/1] package/libwebsockets: added option to
+ (re-)enable external poll loop support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,53 +77,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Romain, All,
+Luca, All,
 
-On 2023-04-29 01:06 +0200, Romain Naour spake thusly:
-> The br-arm-internal-glibc.config used to be generally used as a configuration
-> to test the bleeding edge versions of components. However, it has been
-> lagging behind somewhat and produce invalid configuration since binutils 2.36
-> removal... so let's bring it up-to-date:
-> 
-> - Binutils 2.39.x
-> - GCC 12.x
-> 
-> Since Buildroot 2022.02, the autobuilders doesn't use the csv file anymore
-> but the test-pkg script still use it.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+On 2023-05-19 16:45 +0200, Luca Pesce via buildroot spake thusly:
+> Since version 3.2.0, libwebsockets does not compile its external loop support
+> code anymore. That code was put under LWS_WITH_EXTERNAL_POLL compile option,
+> which defaults to OFF.
+> Applications relying on that support need to turn that option on, so let's
+> add it to the package.
 
-Applied to master, thanks.
+So, as I understand it, before 3.2.0, this was unconditionally compiled
+in, right?
+
+If so, for backward compatibility, should we default this new option to
+'y' ?
+
+> For example, when libwebsockets in enabled, mosquitto broker is built with
+> websocket support, but its code requires LWS_WITH_EXTERNAL_POLL to be on -
+> otherwise, it gives compile-time warning hinting to unusable websocket support:
+> https://github.com/eclipse/mosquitto/commit/1b24f625ea4ee77f3c4796ec2233d059f8c7977e
+
+Then, should mosquitto also select this new option?
+
+> Signed-off-by: Luca Pesce <luca.pesce@vimar.com>
+> ---
+>  package/libwebsockets/Config.in        | 10 ++++++++++
+>  package/libwebsockets/libwebsockets.mk |  4 ++++
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
+> index d7b529c..1371717 100644
+> --- a/package/libwebsockets/Config.in
+> +++ b/package/libwebsockets/Config.in
+> @@ -9,5 +9,15 @@ config BR2_PACKAGE_LIBWEBSOCKETS
+>  
+>  	  https://libwebsockets.org/
+>  
+> +if BR2_PACKAGE_LIBWEBSOCKETS
+> +
+> +config BR2_PACKAGE_LIBWEBSOCKETS_EXT_POLL
+> +	bool "enable external poll loop support"
+> +	default n
+
+'n' is the default, so no need to specify it.
+
+> +	help
+> +	  Enable external poll loop support code.
+
+I am not sure I understood this "external poll loop support". Does it
+mean that the loop must be handle by the application itself, rather than
+bey libwebsocket?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  .../config-fragments/autobuild/br-arm-internal-glibc.config   | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/support/config-fragments/autobuild/br-arm-internal-glibc.config b/support/config-fragments/autobuild/br-arm-internal-glibc.config
-> index fb930cbef7..cd148f32e6 100644
-> --- a/support/config-fragments/autobuild/br-arm-internal-glibc.config
-> +++ b/support/config-fragments/autobuild/br-arm-internal-glibc.config
-> @@ -1,6 +1,6 @@
->  BR2_arm=y
->  BR2_cortex_a8=y
->  BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> -BR2_BINUTILS_VERSION_2_36_X=y
-> -BR2_GCC_VERSION_11_X=y
-> +BR2_BINUTILS_VERSION_2_39_X=y
-> +BR2_GCC_VERSION_12_X=y
->  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> +endif
+> +
+>  comment "libwebsockets needs a toolchain w/ dynamic library"
+>  	depends on BR2_STATIC_LIBS
+> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+> index fb0ee66..86756ca 100644
+> --- a/package/libwebsockets/libwebsockets.mk
+> +++ b/package/libwebsockets/libwebsockets.mk
+> @@ -94,4 +94,8 @@ ifeq ($(BR2_SHARED_LIBS),y)
+>  LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_STATIC=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS_EXT_POLL),y)
+> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_EXTERNAL_POLL=ON
+> +endif
+> +
+>  $(eval $(cmake-package))
 > -- 
-> 2.34.3
+> 2.7.4
 > 
 > _______________________________________________
 > buildroot mailing list
