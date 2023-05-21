@@ -4,56 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68D47C77B73
-	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 20:12:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 306F7C77B73
+	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 20:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DE03417C1;
-	Sun, 21 May 2023 20:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DE03417C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 617AD4175E;
+	Sun, 21 May 2023 20:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 617AD4175E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SunGYqwZ2qvv; Sun, 21 May 2023 20:12:26 +0000 (UTC)
+	with ESMTP id 2SJY85B7RlOh; Sun, 21 May 2023 20:12:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A4994179B;
-	Sun, 21 May 2023 20:12:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A4994179B
+	by smtp4.osuosl.org (Postfix) with ESMTP id DFEB0417BE;
+	Sun, 21 May 2023 20:12:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFEB0417BE
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 93EFC1BF3CB
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 20:12:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 94D6E1BF3CB
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 20:12:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A915404D8
- for <buildroot@lists.busybox.net>; Sun, 21 May 2023 20:12:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A915404D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F55C404D8
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 20:12:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F55C404D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZpA3aMX8M4RS for <buildroot@lists.busybox.net>;
- Sun, 21 May 2023 20:12:23 +0000 (UTC)
+ with ESMTP id wROagGLDuNey for <buildroot@lists.busybox.net>;
+ Sun, 21 May 2023 20:12:32 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CAB140148
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6CAB140148
- for <buildroot@buildroot.org>; Sun, 21 May 2023 20:12:23 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout01.t-online.de (Postfix) with SMTP id 0DDD7F36E;
- Sun, 21 May 2023 22:12:21 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd85.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ECBF40148
+Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5ECBF40148
+ for <buildroot@buildroot.org>; Sun, 21 May 2023 20:12:32 +0000 (UTC)
+Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
+ by mailout08.t-online.de (Postfix) with SMTP id 17F891F717;
+ Sun, 21 May 2023 22:12:29 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd74.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q0pPg-24qEl70; Sun, 21 May 2023 22:12:20 +0200
+ esmtp id 1q0pPg-0dO7LV0; Sun, 21 May 2023 22:12:20 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41120)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q0pPg-0004s1-0s;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q0pPg-0004s1-14;
  Sun, 21 May 2023 22:12:20 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 21 May 2023 22:12:19 +0200
-Message-Id: <20230521201220.3956344-1-bernd.kuhls@t-online.de>
+Date: Sun, 21 May 2023 22:12:20 +0200
+Message-Id: <20230521201220.3956344-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230521201220.3956344-1-bernd.kuhls@t-online.de>
+References: <20230521201220.3956344-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1684699940-AF592DAB-35B697A2/0/0 CLEAN NORMAL
-X-TOI-MSGID: faa1da78-c6ba-4778-9bf1-33337671a5dd
-Subject: [Buildroot] [PATCH/next 1/2] package/wayland: bump version to 1.22.0
+X-TOI-EXPURGATEID: 150726::1684699940-327FBCD8-890EE55E/0/0 CLEAN NORMAL
+X-TOI-MSGID: 208e4d90-1246-40c4-a914-0526553d14e7
+Subject: [Buildroot] [PATCH/next 2/2] package/waylandpp: bump version to
+ 1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,42 +75,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/wayland-devel/2023-April/042647.html
+Release notes: https://github.com/NilsBrause/waylandpp/releases
+
+Update license hash due to copyright year bump:
+https://github.com/NilsBrause/waylandpp/commit/1ea510aabd5ba8abdb5cd30c37481595f34c366c
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/wayland/wayland.hash | 6 +++---
- package/wayland/wayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/waylandpp/waylandpp.hash | 4 ++--
+ package/waylandpp/waylandpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index 1c7fe705e1..5da527e318 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2022-June/042268.html
--sha256  6dc64d7fc16837a693a51cfdb2e568db538bfdc9f457d4656285bb9594ef11ac  wayland-1.21.0.tar.xz
--sha512  5575216d30fdf5c63caa6bcad071e15f2a4f3acb12df776806073f65db37a50b5b5b3cc7957c5497636f4ac01893e2eaab26e453ded44b287acde01762f5fdc3  wayland-1.21.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2023-April/042647.html
-+sha256  1540af1ea698a471c2d8e9d288332c7e0fd360c8f1d12936ebb7e7cbc2425842  wayland-1.22.0.tar.xz
-+sha512  fb1974efc8433e97254eb83fe28974198f2b4d8246418eb3d34ce657055461e0c97bc06dd52e5066ae91bbe05bac611dc49a0937ba226ac6388d5a47241efb12  wayland-1.22.0.tar.xz
- 
- # Locally calculated
- sha256  6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  COPYING
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 0a6e5e9ec7..1a764d5580 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
+index 1b806af9b0..a3eb5379af 100644
+--- a/package/waylandpp/waylandpp.hash
++++ b/package/waylandpp/waylandpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  e7f486165d3568c3558b5c7099133aea4a285b82820eeafad329fc10271c654d  waylandpp-0.2.8.tar.gz
+-sha256  8ff91f682a38f8a603b173222a60e8dc71754a79a522a316fb6b76ce138c542c  LICENSE
++sha256  b20b45917382c6b87e9380130c9a1a1c563da2f498de5830df12fbce326dd9f5  waylandpp-1.0.0.tar.gz
++sha256  3eee5022ce84ead344e1c51b9d00c7f450f53003fe096fe460d66c616fe56782  LICENSE
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
+diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
+index 45d9ccd528..4a0d58ba50 100644
+--- a/package/waylandpp/waylandpp.mk
++++ b/package/waylandpp/waylandpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.21.0
-+WAYLAND_VERSION = 1.22.0
- WAYLAND_SITE = https://gitlab.freedesktop.org/wayland/wayland/-/releases/$(WAYLAND_VERSION)/downloads
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-WAYLANDPP_VERSION = 0.2.8
++WAYLANDPP_VERSION = 1.0.0
+ WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
+ WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
+ WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
 -- 
 2.39.2
 
