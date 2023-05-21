@@ -1,86 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF052C77B7C
-	for <buildroot@archiver.kernel.org>; Sat, 20 May 2023 21:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE57C7EE23
+	for <buildroot@archiver.kernel.org>; Sun, 21 May 2023 04:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 529D860BE6;
-	Sat, 20 May 2023 21:35:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 529D860BE6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 144F281E65;
+	Sun, 21 May 2023 04:13:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 144F281E65
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X7cC2H-EKHZj; Sat, 20 May 2023 21:35:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EpDU2O3OxCsP; Sun, 21 May 2023 04:13:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4ED8460BD1;
-	Sat, 20 May 2023 21:35:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ED8460BD1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3954D81E0B;
+	Sun, 21 May 2023 04:13:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3954D81E0B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3950E1BF3E9
- for <buildroot@lists.busybox.net>; Sat, 20 May 2023 21:34:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3FA731BF3DD
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 04:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 124F960BD1
- for <buildroot@lists.busybox.net>; Sat, 20 May 2023 21:34:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 124F960BD1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25BB460A95
+ for <buildroot@lists.busybox.net>; Sun, 21 May 2023 04:13:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25BB460A95
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mTQH1BLkYmqo for <buildroot@lists.busybox.net>;
- Sat, 20 May 2023 21:34:58 +0000 (UTC)
+ with ESMTP id bh5E-ULEqL8X for <buildroot@lists.busybox.net>;
+ Sun, 21 May 2023 04:13:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E063460BB6
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com
- [IPv6:2607:f8b0:4864:20::c2f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E063460BB6
- for <buildroot@buildroot.org>; Sat, 20 May 2023 21:34:57 +0000 (UTC)
-Received: by mail-oo1-xc2f.google.com with SMTP id
- 006d021491bc7-54fd1a3b821so2179198eaf.2
- for <buildroot@buildroot.org>; Sat, 20 May 2023 14:34:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E92FF60A8D
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
+ [IPv6:2607:f8b0:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E92FF60A8D
+ for <buildroot@buildroot.org>; Sun, 21 May 2023 04:13:49 +0000 (UTC)
+Received: by mail-pf1-x434.google.com with SMTP id
+ d2e1a72fcca58-64d5b4c3ffeso273595b3a.2
+ for <buildroot@buildroot.org>; Sat, 20 May 2023 21:13:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684618497; x=1687210497;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=UfM/iCnBbpJ4RmcUfqEddq46KRhcHmqeVwix+8DcQQ8=;
- b=GXFlUnl88gDBtgB8fMfAorTglRKWqoHmpPl9js5ro/RhJHdNTxIE/EsHPrJVFaOIjE
- EUe7Fw5sxYyv4Dn7wLOde1Ks3XTDwbpX6DI2akz4mMYkbtYO25GdTeK9yIJXrG0P3tS3
- Ppe0w2sZ+9PZ6wgkX2dIG1la3YvgMQ2BjtzhYUIj9NBp33ElmouJ4xKGkh9WVrFPl6+f
- a7sIosTmxfKR6sgOFVSOHN90UhUyj1YE13g7WJjwSzmJMDZLdue35ihHKy4p2nFT+Aur
- Gapp9g1Q/tAclX7/QB70OBnabnD/Nx8Nxt0WCDvsUFneddwilJQjQvxvGfcAQdPVqVZk
- spdA==
-X-Gm-Message-State: AC+VfDwQDHlQnbj/1Do8MnhzFjUvA8Agj+6f0gpQ1czgA78S/xABSmRS
- +b96dakchYOKzN6zR5DG732XQRRf1m5rj6P7ZUGipqYgSdE=
-X-Google-Smtp-Source: ACHHUZ5RUlqEB7vf8Otlv8PDnRVWNe4WwGGBvK9ii2VUH3IrsoS5iYh2zqimjoWnoY2zL9lNNnZhWzbPpdrOqBRFsFc=
-X-Received: by 2002:a4a:3003:0:b0:54f:49ad:1c91 with SMTP id
- q3-20020a4a3003000000b0054f49ad1c91mr3128573oof.9.1684618496885; Sat, 20 May
- 2023 14:34:56 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1684642429; x=1687234429;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=vvUdbB6m1twcojOXNx5BruuLkP1OJPSXjw5g8qgtyA4=;
+ b=AV5l1xyLdw8FulDI0v8QwwdW4EnwyelapwsihJJDsb4hcYt9wRJbe+YzLy0qZZUr9h
+ t4e04ADezEaWzEQWQ3FSpy2bPmTYAf01Nhrp6+m5lHKy/e0zFs1FY3wL3KjwWuTelJ4g
+ bkOPFg4WDoAXp256OotCupwg0wiBuc28GEdnrzUyi8vAhz3O/Plp9hFIBEdkTZ9TTXDj
+ n/ji82rp6GLUSNpezbGXs9PwMyL9fXCIEDzO9Pz+fmQOJEeXPqnT2Qty5IZ+vcx/qSm0
+ htC2qCLRRK6+wyiPHP2SRVNSNwa2nrj0b/a5/XnFgfSHU+8WWBW7EtO0cnvbqNKgPZ4b
+ 89UQ==
+X-Gm-Message-State: AC+VfDwLvamZRD1hXV7Y1dfpcdTzGwk8HzManH93u27tC7iHK6LiOcYB
+ rCe9x8rw/R2C9MDYZuSw8IIEIn9DnOA=
+X-Google-Smtp-Source: ACHHUZ6MvHg0zJdpIgxLrYHMdUvXKNKQGR5dOZIgUQE7uo00svRjeZg4VDCmu8RlOCMnJU9Ul+0caQ==
+X-Received: by 2002:a05:6a00:13a2:b0:64d:2487:5b20 with SMTP id
+ t34-20020a056a0013a200b0064d24875b20mr9505938pfg.9.1684642428861; 
+ Sat, 20 May 2023 21:13:48 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-73.three.co.id. [180.214.233.73])
+ by smtp.gmail.com with ESMTPSA id
+ n14-20020aa7904e000000b006470a6ef529sm1917838pfo.88.2023.05.20.21.13.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 20 May 2023 21:13:48 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+ id 5258C106274; Sun, 21 May 2023 11:13:43 +0700 (WIB)
+Date: Sun, 21 May 2023 11:13:43 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Message-ID: <ZGmad1hb8MQ6uyOh@debian.me>
+References: <20230516135107.238343-1-romain.naour@gmail.com>
+ <20230516135107.238343-3-romain.naour@gmail.com>
 MIME-Version: 1.0
-References: <CADYjeSuBBWWpoD3HKWQ6H0RV_EL4WAsBHxvHGTiV3P_-JrLy3g@mail.gmail.com>
- <20230520212437.2125e68b@windsurf>
-In-Reply-To: <20230520212437.2125e68b@windsurf>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Sat, 20 May 2023 23:34:48 +0200
-Message-ID: <CADYjeSs9N0nKpwFYp9YioQfBUGnbRim5PQNVqSZLFjnXZPMDLQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Disposition: inline
+In-Reply-To: <20230516135107.238343-3-romain.naour@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1684618497; x=1687210497;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=UfM/iCnBbpJ4RmcUfqEddq46KRhcHmqeVwix+8DcQQ8=;
- b=IoOcW74VDo1UqxMVtofKBVbFScbxTuORkzOLk7LjxbNmkDZdRPIIzjrX+Jrhuy+RBI
- ZqE1y2LiU4c6PXFCePCCmDxwxmbxx7pvIdqORvsoYeHtI1tFg9lRuRGpTWDdbtaaGxIo
- bScrXYifsMA5nmQe9XWfRwRIn0nsLuzqbkL/DDfLX+CMziQyRaTHUPaoSzCHi2gMMBmj
- tuYvKSy7y182ejrp/1GRQ6DQYC3ZEtVLUNzMwxtmkbAMj1ZYVD9A/kr3CMKoFsdm8O6H
- IYdzWLqzLJoKAvdSUb/5QMWpXqUgmNOvBcp7aakI3MDtiJfT8+ZiBytLJIzJVdWduda9
- fw6Q==
+ d=gmail.com; s=20221208; t=1684642429; x=1687234429;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=vvUdbB6m1twcojOXNx5BruuLkP1OJPSXjw5g8qgtyA4=;
+ b=Cbg0AL6cZxo2Tj0orUhTlIg+k6vtUjqfSE/9NFrgtal59TOyzZ/VHQolVZ2nWqG446
+ 7tsNm63ijKFKsjvDk+WqFFtwXWTWDwEN2vV8Q/+CbHHzU9nb9R8KbM1/kulCkh3y6r8r
+ vuqhEVZh8vvcqjhpA0y0zEjfcydOALicKSOaWjmAN6ujoV+24OkAIiSTwIqU/u0PABME
+ +dfQDCIyQumYUH0k2xca8Ng2Fx6qkg9vRXNFzUFu0VESNggnbpB2afglKDIhRJtGQVGq
+ obezmjOHBag/Ffu4WUk6M/Wh2lmMAcVE7vVkpk/Hvkxg9/T1zkA03d68AVIU/rXx9uqA
+ S8sw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=IoOcW74V
-Subject: Re: [Buildroot] Error while building tpm2-tools package with fapi
- support
+ header.a=rsa-sha256 header.s=20221208 header.b=Cbg0AL6c
+Subject: Re: [Buildroot] [PATCH 3/6] package/gcc: add support for gcc 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,195 +99,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5684054439693965369=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5684054439693965369==
-Content-Type: multipart/alternative; boundary="00000000000016c86305fc26cf47"
+On Tue, May 16, 2023 at 03:51:04PM +0200, Romain Naour wrote:
+> https://gcc.gnu.org/gcc-13/changes.html
+> https://gcc.gnu.org/gcc-13/porting_to.html
+> 
+> Backport upstream patch to gcc 13.1 for RISC-V build issue with gcc 4.9.x:
+> 
+> GCC should still build with GCC 4.8.3 or newer [1]
+> using C++03 by default. But a recent change in
+> RISC-V port introduced a C++11 feature "std::log2" [2].
+> 
+> Use log2 from the C header, without the namespace [3].
+> 
+> [1] https://gcc.gnu.org/install/prerequisites.html
+> [2] https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=7caa1ae5e451e780fbc4746a54e3f19d4f4304dc
+> [3] https://stackoverflow.com/questions/26733413/error-log2-is-not-a-member-of-std
+> 
+> Rebase patch 0001-disable-split-stack-for-non-thread-builds.patch
+> required for uClibc-ng without threads support.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/4202276589
 
---00000000000016c86305fc26cf47
-Content-Type: text/plain; charset="UTF-8"
+Carrying my tag from Bernd's series [1]:
 
-Hello Thomas,
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-So my guess is that you are doing a partial rebuild. You did a first
-> build without BR2_PACKAGE_TPM2_TOOLS_FAPI enabled, and then enabled it.
-> Thing is that tpm2-tss was already built as part of a previous build,
-> but without FAPI support.
->
+[1]: https://lore.kernel.org/buildroot/ZGR4JPCvobetfREP@debian.me/
 
-Yes, you are right.
-But, I did make "tpm2-tools-dirclean && make tpm2-tools-rebuild" and this
-didn't help.
-Also, I tried "make tpm2-tools-dirclean all" and "make tpm2-tools-dircclean
-&& make tpm2-tools-reconfigure". This also resulted in the same error.
-
- Could you please let me know what is the correct make command to rebuild
-the package again from scratch?
-
-Thank you,
-Sourabh
-
-On Sat, 20 May 2023 at 21:24, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-wrote:
-
-> Hello,
->
-> On Fri, 19 May 2023 12:59:30 +0200
-> Sourabh Hegde <hrsourabh011@gmail.com> wrote:
->
-> > Hello All,
-> >
-> > I am trying to build the package tpm2-tools
-> > https://github.com/buildroot/buildroot/tree/master/package/tpm2-tools
-> with
-> > "fapi tools" option enabled
-> >
-> https://github.com/buildroot/buildroot/blob/603df32a0cd416caa2d2688008cb87f14ad68ef3/package/tpm2-tools/Config.in#L26
-> >  (BR2_PACKAGE_TPM2_TOOLS_FAPI=y, BR2_PACKAGE_TPM2_TSS_FAPI=y).
-> > But this results in below error
->
-> I have just built the following configuration:
->
-> BR2_arm=y
-> BR2_cortex_a9=y
-> BR2_ARM_ENABLE_VFP=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_TPM2_TOOLS=y
-> BR2_PACKAGE_TPM2_TOOLS_FAPI=y
-> # BR2_TARGET_ROOTFS_TAR is not set
->
-> and it builds just fine here. Could you share your .config, or a
-> minimal configuration that exhibits the problem?
->
-> > checking for TSS2_FAPI... no
-> > configure: error: Required module tss2-fapi not found
->
-> It is simply using pkg-config to detect TSS2_FAPI. tpm2-tools correctly
-> has a dependency on host-pkgconf and tpm2-tss properly installs
-> tss2-fapi.pc.
->
-> So my guess is that you are doing a partial rebuild. You did a first
-> build without BR2_PACKAGE_TPM2_TOOLS_FAPI enabled, and then enabled it.
-> Thing is that tpm2-tss was already built as part of a previous build,
-> but without FAPI support.
->
-> See https://buildroot.org/downloads/manual/manual.html#full-rebuild for
-> some details on this.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
-
---00000000000016c86305fc26cf47
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello=C2=A0Thomas,<div><br></div><blockquote class=3D"gmai=
-l_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,20=
-4,204);padding-left:1ex">So my guess is that you are doing a partial rebuil=
-d. You did a first<br>build without BR2_PACKAGE_TPM2_TOOLS_FAPI enabled, an=
-d then enabled it.<br>Thing is that tpm2-tss was already built as part of a=
- previous build,<br>but without FAPI support.<br></blockquote><div><br></di=
-v><div>Yes, you are right.</div><div>But, I did make &quot;tpm2-tools-dircl=
-ean &amp;&amp; make tpm2-tools-rebuild&quot; and this didn&#39;t help.</div=
-><div>Also, I tried &quot;make tpm2-tools-dirclean=C2=A0all&quot; and &quot=
-;make tpm2-tools-dircclean &amp;&amp; make tpm2-tools-reconfigure&quot;. Th=
-is also resulted in the same error.</div><div><br></div><div>=C2=A0Could yo=
-u please=C2=A0let me know what is the correct make command to rebuild the p=
-ackage again from scratch?=C2=A0<br></div><div><br></div><div>Thank you,</d=
-iv><div>Sourabh</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
-class=3D"gmail_attr">On Sat, 20 May 2023 at 21:24, Thomas Petazzoni &lt;<a =
-href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</=
-a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0p=
-x 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">He=
-llo,<br>
-<br>
-On Fri, 19 May 2023 12:59:30 +0200<br>
-Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail.com" target=3D"_blan=
-k">hrsourabh011@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; Hello All,<br>
-&gt; <br>
-&gt; I am trying to build the package tpm2-tools<br>
-&gt; <a href=3D"https://github.com/buildroot/buildroot/tree/master/package/=
-tpm2-tools" rel=3D"noreferrer" target=3D"_blank">https://github.com/buildro=
-ot/buildroot/tree/master/package/tpm2-tools</a> with<br>
-&gt; &quot;fapi tools&quot; option enabled<br>
-&gt; <a href=3D"https://github.com/buildroot/buildroot/blob/603df32a0cd416c=
-aa2d2688008cb87f14ad68ef3/package/tpm2-tools/Config.in#L26" rel=3D"noreferr=
-er" target=3D"_blank">https://github.com/buildroot/buildroot/blob/603df32a0=
-cd416caa2d2688008cb87f14ad68ef3/package/tpm2-tools/Config.in#L26</a><br>
-&gt;=C2=A0 (BR2_PACKAGE_TPM2_TOOLS_FAPI=3Dy, BR2_PACKAGE_TPM2_TSS_FAPI=3Dy)=
-.<br>
-&gt; But this results in below error<br>
-<br>
-I have just built the following configuration:<br>
-<br>
-BR2_arm=3Dy<br>
-BR2_cortex_a9=3Dy<br>
-BR2_ARM_ENABLE_VFP=3Dy<br>
-BR2_TOOLCHAIN_EXTERNAL=3Dy<br>
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=3Dy<br>
-BR2_INIT_NONE=3Dy<br>
-BR2_SYSTEM_BIN_SH_NONE=3Dy<br>
-# BR2_PACKAGE_BUSYBOX is not set<br>
-BR2_PACKAGE_TPM2_TOOLS=3Dy<br>
-BR2_PACKAGE_TPM2_TOOLS_FAPI=3Dy<br>
-# BR2_TARGET_ROOTFS_TAR is not set<br>
-<br>
-and it builds just fine here. Could you share your .config, or a<br>
-minimal configuration that exhibits the problem?<br>
-<br>
-&gt; checking for TSS2_FAPI... no<br>
-&gt; configure: error: Required module tss2-fapi not found<br>
-<br>
-It is simply using pkg-config to detect TSS2_FAPI. tpm2-tools correctly<br>
-has a dependency on host-pkgconf and tpm2-tss properly installs<br>
-tss2-fapi.pc.<br>
-<br>
-So my guess is that you are doing a partial rebuild. You did a first<br>
-build without BR2_PACKAGE_TPM2_TOOLS_FAPI enabled, and then enabled it.<br>
-Thing is that tpm2-tss was already built as part of a previous build,<br>
-but without FAPI support.<br>
-<br>
-See <a href=3D"https://buildroot.org/downloads/manual/manual.html#full-rebu=
-ild" rel=3D"noreferrer" target=3D"_blank">https://buildroot.org/downloads/m=
-anual/manual.html#full-rebuild</a> for<br>
-some details on this.<br>
-<br>
-Best regards,<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
-
---00000000000016c86305fc26cf47--
-
---===============5684054439693965369==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+An old man doll... just what I always wanted! - Clara
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5684054439693965369==--
