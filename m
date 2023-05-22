@@ -4,84 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5846FC77B75
-	for <buildroot@archiver.kernel.org>; Mon, 22 May 2023 20:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CEEDC77B75
+	for <buildroot@archiver.kernel.org>; Mon, 22 May 2023 20:24:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA02641D9E;
-	Mon, 22 May 2023 20:24:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA02641D9E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B028341E64;
+	Mon, 22 May 2023 20:24:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B028341E64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id poLdv1VPfnAb; Mon, 22 May 2023 20:24:33 +0000 (UTC)
+	with ESMTP id IImb_nzLhNL2; Mon, 22 May 2023 20:24:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D92F41D75;
-	Mon, 22 May 2023 20:24:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D92F41D75
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5430241E21;
+	Mon, 22 May 2023 20:24:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5430241E21
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4100C1BF38D
- for <buildroot@lists.busybox.net>; Mon, 22 May 2023 20:24:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15E241BF38D
+ for <buildroot@lists.busybox.net>; Mon, 22 May 2023 20:24:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 187DA40BAA
+ by smtp2.osuosl.org (Postfix) with ESMTP id C10AC40112
  for <buildroot@lists.busybox.net>; Mon, 22 May 2023 20:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 187DA40BAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C10AC40112
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q2WFwEMoyNrG for <buildroot@lists.busybox.net>;
+ with ESMTP id gWroVZUGJBTP for <buildroot@lists.busybox.net>;
  Mon, 22 May 2023 20:24:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D519640112
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
- [IPv6:2607:f8b0:4864:20::52c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D519640112
- for <buildroot@buildroot.org>; Mon, 22 May 2023 20:24:29 +0000 (UTC)
-Received: by mail-pg1-x52c.google.com with SMTP id
- 41be03b00d2f7-517ab9a4a13so5793173a12.1
- for <buildroot@buildroot.org>; Mon, 22 May 2023 13:24:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E9EE40612
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
+ [IPv6:2607:f8b0:4864:20::62a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9E9EE40612
+ for <buildroot@buildroot.org>; Mon, 22 May 2023 20:24:30 +0000 (UTC)
+Received: by mail-pl1-x62a.google.com with SMTP id
+ d9443c01a7336-1ae52ce3205so44533465ad.3
+ for <buildroot@buildroot.org>; Mon, 22 May 2023 13:24:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684787069; x=1687379069;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=U5Lk58Vp3R5vcxU4LFTCy481y3RVqp3t9Ebay/pZdMA=;
- b=MeJSVST6yhaACJ+tOt88axz9jHMhYrtv4CZJoMuOVBA4UvO/TdjxQ/ZydPuJ5YkH85
- 592c6nIzWeZa66RL5HdsISRYP8DbVETGJU4my+TOfHSpC92xyBYNUd/r5D1QamN7/ygo
- E+YM/xAX2IQozz/lIKXTXTrUdXBt4EoaSm7rtW20g1IYlnquzc78KpSBPfS2enJ0GMuI
- MJ0kjxqxoIdb+Li1YV9B6k9oxmxnsZIkBR12uyPzJHxo4pTtB4BqDScIuYOBQof6CPL7
- 0FFk2dHTByL1ZG2A4bzpV4a6Fx6HhvieqV+MwpJ6YI/nmNjX8h0TzAD23pu6SBPidmgg
- WEUQ==
-X-Gm-Message-State: AC+VfDxfv8PSkmt2LcNhMdAF0w/1dFvOA04cf60WAkXmxdxqYt646h+r
- PpB+9Yn1BuLa/bDkBGWbsEE3kvfKv4arZlExZPs1WVby8rU=
-X-Google-Smtp-Source: ACHHUZ7giTdjPP4RMO0WRcOBAB7lquqSDZw5V7ofCgCY3Nwrc0Y0BS6RCZT5mEqmCEhzbGmMnkEQ4A==
-X-Received: by 2002:a17:902:e5ce:b0:1ac:b449:352d with SMTP id
- u14-20020a170902e5ce00b001acb449352dmr14174137plf.61.1684787069011; 
+ d=1e100.net; s=20221208; t=1684787070; x=1687379070;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=8jKAwAZGX02Ea9o5F9CRbggXRPwWFIrpcg75r/q8doU=;
+ b=lKYmDVwB6N6ceF6i4N7ejdgUpnriJ4iUU9uKOWXJ1N/q37A6SWNFFoiclijUTPHOxr
+ B9/OjwHalF3O46/m32MqQ/chFvLsUcFY91yXW3PUn7QmCzR2tuzN8NMJ7qsqN9M+7n4D
+ Vb1cq3lAEYRD1nHBQBK7s/tGnIm5ajNolwWUxcEHx1EC+uGn9IRr1g9qpj1J1g7K8jDj
+ 9ckXpDenkB+FJMSjKpgup5nOMTh1ICkf1e8KDOr9ZO8VMo9JB/2pmc7BfRD5QH0hdX2R
+ HEEufYgNlI/vCDEib22dIJoNgQzbTKOl8QWBXzYTzjbva/GDYGWtQ+vnWrGufqqC/RDZ
+ hW/A==
+X-Gm-Message-State: AC+VfDzag7ek5TFwriDBnHrl10AE6za611IxNu+Vff1anYTVdMzCe2yl
+ GfGE2qHm0JAAMS1ns5oSq0IWS/SpjblTwOVXNVocM6p7Ci4=
+X-Google-Smtp-Source: ACHHUZ6Ihx3vnW+mW4Sn4UD5ot1Os1jI3lPJQKUwY9jdxfNus2l2fPROrCDUQGz03dem461YYFDXTw==
+X-Received: by 2002:a17:902:ec8a:b0:1a9:9ace:3e74 with SMTP id
+ x10-20020a170902ec8a00b001a99ace3e74mr12822559plg.65.1684787069854; 
  Mon, 22 May 2023 13:24:29 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- u13-20020a170902e5cd00b001ac937171e4sm5234413plf.254.2023.05.22.13.24.28
+ u13-20020a170902e5cd00b001ac937171e4sm5234413plf.254.2023.05.22.13.24.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 May 2023 13:24:28 -0700 (PDT)
+ Mon, 22 May 2023 13:24:29 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon, 22 May 2023 13:23:45 -0700
-Message-Id: <20230522202346.209785-1-christian@aperture.us>
+Date: Mon, 22 May 2023 13:23:46 -0700
+Message-Id: <20230522202346.209785-2-christian@aperture.us>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230522202346.209785-1-christian@aperture.us>
+References: <20230522202346.209785-1-christian@aperture.us>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1684787069; x=1687379069;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=U5Lk58Vp3R5vcxU4LFTCy481y3RVqp3t9Ebay/pZdMA=;
- b=wUJScAiDTXAL7jV4PM1CZYlKGK9PScjGjBDWHdPV69ukg3qW7CmtvZxBttIqNog88r
- HWtfEL3p+0LS5ehBMP9uCQwUpff/dvywekgk4rbobY6/bVuxz768ylbC+lb10Phx6svi
- X4hGEwlKbpS8xk3jGAtNNnQOfWRlJ5dBD161+TYMZDi+TohBlLBN699dvypf8kC/9SYl
- kJYheNT3nn7L8ygd8EIc5ZnGXPjPTg4tctwkM+J2JlijWVfIRgu3R//EIBF1zFk8qp13
- cWJ1B8RjVJb+w/QKeZlowwPQST8jUYMccR6t3ObSvP2qyrQ57ZieB40oyD3dbNBu7uMq
- L5yA==
+ d=aperture.us; s=google; t=1684787070; x=1687379070;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=8jKAwAZGX02Ea9o5F9CRbggXRPwWFIrpcg75r/q8doU=;
+ b=PROgw0qGZj3LwwaWOTBn5zjFxyOXD6AzIQL/9Ef02Wtt7vFfZt6gRtmVf81Mt/F28P
+ nYRPffjMCyQQ2j52RqBUsfDpsBZa2LJ+w+Tue7RhDKDzO73bW/axob5S6hjPATkk7O66
+ kl9GXNWLhkaICtuV3vFB/HGsafxb9hUkaaT0/Bb4g8nZFBz+m2sAkKVNEsWKMM57sqRh
+ nkZ0/bZdm9GqR2Lg7wyK0Tkn18++Q456kNLdH8ZDC+tp7tnp4P9KDD1Fq/XUErHrhVm8
+ ypr2J7uYZUF2JpQcpOj2ubFSMBwB45qlRN4Vhya+TGrpfLRz21E9TX1agXnnoHBaKrB8
+ eKIQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=wUJScAiD
-Subject: [Buildroot] [PATCH v3 1/2] package/conmon: new package
+ header.a=rsa-sha256 header.s=google header.b=PROgw0qG
+Subject: [Buildroot] [PATCH v3 2/2] package/podman: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,11 +107,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Conmon is an OCI container runtime monitor.
+podman is a CLI tool for spawning and running containers according to the OCI
+specification.
 
-https://github.com/containers/conmon
-
-Dependency of podman.
+https://github.com/containers/podman
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 
@@ -116,124 +118,234 @@ Signed-off-by: Christian Stewart <christian@aperture.us>
 
 v1 -> v2:
 
- - requires libglib2, host-pkgconf
- - bump version to 2.1.7
+ - package/podman: bump version to v4.5.0
+ - Add cmd/quadlet target as required by the install script.
 
 v2 -> v3:
 
- - Added select BR2_PACKAGE_LIBGLIB2
- - Inverted CONMON_ENABLE_SECCOMP to CONMON_DISABLE_SECCOMP
+ - remove duplicate CNI_PLUGINS line in Config.in
+ - drop old unnecessary build tags:
+   - btrfs_noversion: not needed for btrfs >= 3.16.1
+   - containers_image_openpgp: no longer supported
+   - exclude_graphdriver_devicemapper: set later in the file
+ - Added myself to DEVELOPERS list
+ - Added conmon -> libglib2 depends statements
+ - Dropped CATATONIT select statement
+ - Added CGROUPFS_MOUNT dependency if not using systemd
  - Thanks to Joachim for the review.
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/conmon/Config.in   | 16 ++++++++++++++++
- package/conmon/conmon.hash |  3 +++
- package/conmon/conmon.mk   | 36 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 57 insertions(+)
- create mode 100644 package/conmon/Config.in
- create mode 100644 package/conmon/conmon.hash
- create mode 100644 package/conmon/conmon.mk
+ DEVELOPERS                            |  1 +
+ package/Config.in                     |  1 +
+ package/podman/Config.in              | 58 +++++++++++++++++++++
+ package/podman/containers-policy.json | 14 +++++
+ package/podman/podman.hash            |  3 ++
+ package/podman/podman.mk              | 75 +++++++++++++++++++++++++++
+ 6 files changed, 152 insertions(+)
+ create mode 100644 package/podman/Config.in
+ create mode 100644 package/podman/containers-policy.json
+ create mode 100644 package/podman/podman.hash
+ create mode 100644 package/podman/podman.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e76717e845..7b3287731a 100644
+index 7b3287731a..c5de54a637 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -543,6 +543,7 @@ F:	package/balena-engine/
- F:	package/batman-adv/
- F:	package/catatonit/
- F:	package/cni-plugins/
-+F:	package/conmon/
- F:	package/containerd/
- F:	package/crun/
- F:	package/delve/
+@@ -559,6 +559,7 @@ F:	package/moby-buildkit/
+ F:	package/mosh/
+ F:	package/nerdctl/
+ F:	package/pkg-golang.mk
++F:	package/podman/
+ F:	package/rtl8821au/
+ F:	package/rtl8821cu/
+ F:	package/runc/
 diff --git a/package/Config.in b/package/Config.in
-index 420ebaa370..52bc10b91b 100644
+index 52bc10b91b..492baf25c4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2631,6 +2631,7 @@ menu "System tools"
- 	source "package/bubblewrap/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/circus/Config.in"
-+	source "package/conmon/Config.in"
- 	source "package/containerd/Config.in"
- 	source "package/coreutils/Config.in"
- 	source "package/cpulimit/Config.in"
-diff --git a/package/conmon/Config.in b/package/conmon/Config.in
+@@ -2684,6 +2684,7 @@ menu "System tools"
+ 	source "package/openvmtools/Config.in"
+ 	source "package/pamtester/Config.in"
+ 	source "package/petitboot/Config.in"
++	source "package/podman/Config.in"
+ 	source "package/polkit/Config.in"
+ 	source "package/powerpc-utils/Config.in"
+ 	source "package/procps-ng/Config.in"
+diff --git a/package/podman/Config.in b/package/podman/Config.in
 new file mode 100644
-index 0000000000..65f693a29e
+index 0000000000..92f5d6ae3d
 --- /dev/null
-+++ b/package/conmon/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_CONMON
-+	bool "conmon"
++++ b/package/podman/Config.in
+@@ -0,0 +1,58 @@
++config BR2_PACKAGE_PODMAN
++	bool "podman"
 +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # conmon -> libglib2
++	depends on BR2_USE_MMU # libgpgme, conmon -> libglib2
++	depends on BR2_USE_WCHAR # conmon -> libglib2
++	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime
++	select BR2_PACKAGE_CNI_PLUGINS
++	select BR2_PACKAGE_CONMON
++	select BR2_PACKAGE_CRUN
++	select BR2_PACKAGE_IPTABLES
 +	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBGPGME
 +	help
-+	  Conmon is an OCI container runtime monitor.
++	  podman is a CLI tool for spawning and running containers
++	  according to the OCI specification.
 +
-+	  https://github.com/containers/conmon
++	  https://github.com/containers/podman
 +
-+comment "conmon needs a glibc or musl toolchain w/ threads, wchar"
++if BR2_PACKAGE_PODMAN
++
++config BR2_PACKAGE_PODMAN_DRIVER_BTRFS
++	bool "btrfs filesystem driver"
++	depends on BR2_USE_MMU # btrfs-progs
++	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
++	select BR2_PACKAGE_BTRFS_PROGS
++	help
++	  Build the btrfs filesystem driver.
++
++config BR2_PACKAGE_PODMAN_DRIVER_DEVICEMAPPER
++	bool "devicemapper filesystem driver"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
++	depends on BR2_USE_MMU # lvm2
++	depends on !BR2_STATIC_LIBS # lvm2
++	select BR2_PACKAGE_LVM2
++	help
++	  Build the devicemapper filesystem driver.
++
++config BR2_PACKAGE_PODMAN_DRIVER_VFS
++	bool "vfs filesystem driver"
++	depends on BR2_USE_WCHAR # gvfs
++	depends on BR2_USE_MMU # gvfs
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
++	depends on !BR2_STATIC_LIBS # gvfs
++	select BR2_PACKAGE_GVFS
++	help
++	  Build the vfs filesystem driver.
++
++endif
++
++comment "podman needs a glibc or musl toolchain w/ threads, wchar"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
++		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
 +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
 +		BR2_TOOLCHAIN_USES_UCLIBC
 +	depends on BR2_USE_MMU
-diff --git a/package/conmon/conmon.hash b/package/conmon/conmon.hash
+diff --git a/package/podman/containers-policy.json b/package/podman/containers-policy.json
 new file mode 100644
-index 0000000000..82d1d14ba3
+index 0000000000..4480eb82b4
 --- /dev/null
-+++ b/package/conmon/conmon.hash
++++ b/package/podman/containers-policy.json
+@@ -0,0 +1,14 @@
++{
++  "default": [
++    {
++    "type": "insecureAcceptAnything"
++  }
++  ],
++  "transports":
++  {
++    "docker-daemon":
++    {
++      "": [{"type":"insecureAcceptAnything"}]
++    }
++  }
++}
+diff --git a/package/podman/podman.hash b/package/podman/podman.hash
+new file mode 100644
+index 0000000000..c011068682
+--- /dev/null
++++ b/package/podman/podman.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  7d0f9a2f7cb8a76c51990128ac837aaf0cc89950b6ef9972e94417aa9cf901fe  conmon-2.1.7.tar.gz
-+sha256  9c9d771d4004725237a31ada889fe06c85a24fd0a29e41825181ab4cde54f016  LICENSE
-diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
++sha256  830a633630bf6e61f2b8d4ca00efdd9a173ef25cdd49d4a4364c293e088561df  podman-4.5.0.tar.gz
++sha256  62fb8a3a9621dc2388174caaabe9c2317b694bb9a1d46c98bcf5655b68f51be3  LICENSE
+diff --git a/package/podman/podman.mk b/package/podman/podman.mk
 new file mode 100644
-index 0000000000..dfac23189f
+index 0000000000..f888f3ae5e
 --- /dev/null
-+++ b/package/conmon/conmon.mk
-@@ -0,0 +1,36 @@
++++ b/package/podman/podman.mk
+@@ -0,0 +1,75 @@
 +################################################################################
 +#
-+# conmon
++# podman
 +#
 +################################################################################
 +
-+CONMON_VERSION = 2.1.7
-+CONMON_SITE = $(call github,containers,conmon,v$(CONMON_VERSION))
-+CONMON_LICENSE = Apache-2.0
-+CONMON_LICENSE_FILES = LICENSE
++PODMAN_VERSION = 4.5.0
++PODMAN_SITE = $(call github,containers,podman,v$(PODMAN_VERSION))
++PODMAN_LICENSE = Apache-2.0
++PODMAN_LICENSE_FILES = LICENSE
 +
-+CONMON_DEPENDENCIES += host-pkgconf libglib2
++PODMAN_CPE_ID_VENDOR = podman_project
++PODMAN_GOMOD = github.com/containers/podman/v4
 +
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+CONMON_DISABLE_SECCOMP = 0
-+CONMON_DEPENDENCIES += libseccomp
-+else
-+CONMON_DISABLE_SECCOMP = 1
++PODMAN_BUILD_TARGETS = cmd/podman cmd/rootlessport cmd/quadlet
++PODMAN_DEPENDENCIES += libglib2 libgpgme
++PODMAN_LDFLAGS = \
++	-X $(PODMAN_GOMOD)/libpod/define.gitCommit=$(PODMAN_VERSION)
++PODMAN_TAGS = exclude_graphdriver_zfs
++
++ifeq ($(BR2_INIT_SYSTEMD),y)
++PODMAN_TAGS += systemd
 +endif
 +
-+define CONMON_CONFIGURE_CMDS
-+	printf '#!/bin/bash\necho "$(CONMON_DISABLE_SECCOMP)"\n' > \
-+		$(@D)/hack/seccomp-notify.sh
-+	chmod +x $(@D)/hack/seccomp-notify.sh
++ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
++PODMAN_DEPENDENCIES += libapparmor
++PODMAN_TAGS += apparmor
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++PODMAN_TAGS += seccomp
++PODMAN_DEPENDENCIES += libseccomp host-pkgconf
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++PODMAN_TAGS += selinux
++PODMAN_DEPENDENCIES += libselinux
++endif
++
++ifeq ($(BR2_PACKAGE_PODMAN_DRIVER_BTRFS),y)
++PODMAN_DEPENDENCIES += btrfs-progs
++else
++PODMAN_TAGS += exclude_graphdriver_btrfs
++endif
++
++ifeq ($(BR2_PACKAGE_PODMAN_DRIVER_DEVICEMAPPER),y)
++PODMAN_DEPENDENCIES += lvm2
++else
++PODMAN_TAGS += exclude_graphdriver_devicemapper
++endif
++
++ifeq ($(BR2_PACKAGE_PODMAN_DRIVER_VFS),y)
++PODMAN_DEPENDENCIES += gvfs
++else
++PODMAN_TAGS += exclude_graphdriver_vfs
++endif
++
++define PODMAN_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr \
++		install.bin
++	$(INSTALL) -d -m 700 $(TARGET_DIR)/etc/cni
++	$(INSTALL) -d -m 700 $(TARGET_DIR)/etc/cni/net.d
++	$(INSTALL) -D -m 644 $(@D)/cni/87-podman-bridge.conflist \
++		$(TARGET_DIR)/etc/cni/net.d/87-podman-bridge.conflist
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/containers
++	$(INSTALL) -D -m 644 $(PODMAN_PKGDIR)/containers-policy.json \
++		$(TARGET_DIR)/etc/containers/policy.json
 +endef
 +
-+define CONMON_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D) bin/conmon
++define PODMAN_INSTALL_INIT_SYSTEMD
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr \
++		install.systemd
 +endef
 +
-+define CONMON_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/bin/conmon $(TARGET_DIR)/usr/bin/conmon
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(golang-package))
 -- 
 2.40.1
 
