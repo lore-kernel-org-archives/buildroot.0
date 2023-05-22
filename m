@@ -4,95 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E7DC7EE29
-	for <buildroot@archiver.kernel.org>; Mon, 22 May 2023 20:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5846FC77B75
+	for <buildroot@archiver.kernel.org>; Mon, 22 May 2023 20:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F31640164;
-	Mon, 22 May 2023 20:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F31640164
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA02641D9E;
+	Mon, 22 May 2023 20:24:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA02641D9E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tOQQhxjM8rWS; Mon, 22 May 2023 20:18:10 +0000 (UTC)
+	with ESMTP id poLdv1VPfnAb; Mon, 22 May 2023 20:24:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 098E141E4B;
-	Mon, 22 May 2023 20:18:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 098E141E4B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C75BD1BF38D
- for <buildroot@lists.busybox.net>; Mon, 22 May 2023 20:18:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D92F41D75;
+	Mon, 22 May 2023 20:24:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D92F41D75
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4100C1BF38D
+ for <buildroot@lists.busybox.net>; Mon, 22 May 2023 20:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EFD541E4B
- for <buildroot@lists.busybox.net>; Mon, 22 May 2023 20:18:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EFD541E4B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 187DA40BAA
+ for <buildroot@lists.busybox.net>; Mon, 22 May 2023 20:24:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 187DA40BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gzPRjPYdgBKr for <buildroot@lists.busybox.net>;
- Mon, 22 May 2023 20:18:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q2WFwEMoyNrG for <buildroot@lists.busybox.net>;
+ Mon, 22 May 2023 20:24:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16A8D41E62
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 16A8D41E62
- for <buildroot@buildroot.org>; Mon, 22 May 2023 20:18:05 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-96f5d651170so820178566b.1
- for <buildroot@buildroot.org>; Mon, 22 May 2023 13:18:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D519640112
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
+ [IPv6:2607:f8b0:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D519640112
+ for <buildroot@buildroot.org>; Mon, 22 May 2023 20:24:29 +0000 (UTC)
+Received: by mail-pg1-x52c.google.com with SMTP id
+ 41be03b00d2f7-517ab9a4a13so5793173a12.1
+ for <buildroot@buildroot.org>; Mon, 22 May 2023 13:24:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684786684; x=1687378684;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=p+m20tspjOKxToCeiUbWjg2TKhJBaALo5cQV00qd0lY=;
- b=lwvMRUbYEbosKnPvGhnHVPvyKZ13M4xw0RjPpe5LyF4nK0a1hqCsDvEIdW20fK4g+a
- paXcf6lU5R5Ca2VSkzl88mYvJIIJ58GrDaAEpASCO/eQYrNI0MU9jT6kAtj94hJmC1D0
- TrmAuNNnFhbsayjNoEcgFUFq/4X3ebPxtFfntC4qhn7Be2y+XPp9hrv8Tv1x1KgXxmvi
- hFzz3InvLEtCnF+V5+fhUYQK2tg+SUxEyGeUHMHKApue5JwlVAYPCdP6rObzfPEL62XI
- H1RSj0/tO562tZT2c3UwaFEwhvnwLwpkc4MX3XQsTIG/Dnl2HGgH7E2lPDN2QzgDXYgD
- jIFw==
-X-Gm-Message-State: AC+VfDxhWWegxBF3BIhps5FL3cFZBOrZGREns8uTDYO97bbTf031FuNv
- hmeykvW+1qLoBSxM00gb/Y4q1Xa/aXKEv5XsTdCd5w==
-X-Google-Smtp-Source: ACHHUZ6SKBsNo3jJSiGe+/jZYg8BXTZrG44tbJAzRMO5S5PhCZ6qTSvQRB6nvZJaDaENQ22jxSVLgQ==
-X-Received: by 2002:a17:907:d27:b0:94e:4285:390c with SMTP id
- gn39-20020a1709070d2700b0094e4285390cmr12438482ejc.10.1684786683890; 
- Mon, 22 May 2023 13:18:03 -0700 (PDT)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com.
- [209.85.208.49]) by smtp.gmail.com with ESMTPSA id
- qu7-20020a170907110700b0096a5d341b50sm3478614ejb.111.2023.05.22.13.18.02
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 22 May 2023 13:18:03 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id
- 4fb4d7f45d1cf-513fd8ad61dso56230a12.0
- for <buildroot@buildroot.org>; Mon, 22 May 2023 13:18:02 -0700 (PDT)
-X-Received: by 2002:a05:6402:3c4:b0:50d:9058:733 with SMTP id
- t4-20020a05640203c400b0050d90580733mr11692986edw.18.1684786682175; Mon, 22
- May 2023 13:18:02 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1684787069; x=1687379069;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=U5Lk58Vp3R5vcxU4LFTCy481y3RVqp3t9Ebay/pZdMA=;
+ b=MeJSVST6yhaACJ+tOt88axz9jHMhYrtv4CZJoMuOVBA4UvO/TdjxQ/ZydPuJ5YkH85
+ 592c6nIzWeZa66RL5HdsISRYP8DbVETGJU4my+TOfHSpC92xyBYNUd/r5D1QamN7/ygo
+ E+YM/xAX2IQozz/lIKXTXTrUdXBt4EoaSm7rtW20g1IYlnquzc78KpSBPfS2enJ0GMuI
+ MJ0kjxqxoIdb+Li1YV9B6k9oxmxnsZIkBR12uyPzJHxo4pTtB4BqDScIuYOBQof6CPL7
+ 0FFk2dHTByL1ZG2A4bzpV4a6Fx6HhvieqV+MwpJ6YI/nmNjX8h0TzAD23pu6SBPidmgg
+ WEUQ==
+X-Gm-Message-State: AC+VfDxfv8PSkmt2LcNhMdAF0w/1dFvOA04cf60WAkXmxdxqYt646h+r
+ PpB+9Yn1BuLa/bDkBGWbsEE3kvfKv4arZlExZPs1WVby8rU=
+X-Google-Smtp-Source: ACHHUZ7giTdjPP4RMO0WRcOBAB7lquqSDZw5V7ofCgCY3Nwrc0Y0BS6RCZT5mEqmCEhzbGmMnkEQ4A==
+X-Received: by 2002:a17:902:e5ce:b0:1ac:b449:352d with SMTP id
+ u14-20020a170902e5ce00b001acb449352dmr14174137plf.61.1684787069011; 
+ Mon, 22 May 2023 13:24:29 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ u13-20020a170902e5cd00b001ac937171e4sm5234413plf.254.2023.05.22.13.24.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 22 May 2023 13:24:28 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Mon, 22 May 2023 13:23:45 -0700
+Message-Id: <20230522202346.209785-1-christian@aperture.us>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230512002511.1356447-1-christian@aperture.us>
- <20230512002511.1356447-2-christian@aperture.us> <86h6sbtu2c.fsf@gmail.com>
-In-Reply-To: <86h6sbtu2c.fsf@gmail.com>
-Date: Mon, 22 May 2023 13:17:50 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2pZ3zDt4cD4HWD9Jg-pUNUQzr+3O1YqfOWsWxez+JjxZA@mail.gmail.com>
-Message-ID: <CA+h8R2pZ3zDt4cD4HWD9Jg-pUNUQzr+3O1YqfOWsWxez+JjxZA@mail.gmail.com>
-To: Joachim Wiberg <troglobit@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1684786684; x=1687378684;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=p+m20tspjOKxToCeiUbWjg2TKhJBaALo5cQV00qd0lY=;
- b=ieau6dyKhHBt4ds4KFsY9/Y53Q9RG0pYha+GpwJcu47zYB1TjwC+hMzeXkkKIlT0wa
- a1F0RWn5o2Dp9WcnvyHkGHtS5tiHNEb5AECVIk+pKkQiTk1kjoI72H404APsyFGH+2tp
- mxJr26i3O5++VEu83/sexr0GWKTfhFX2Fj9xquYpARzvzDtNlCWkQWOFrAgLw7erhYSX
- BTPEyw9LX6wki+ySqXPrzE6QG9BrTggY9kvI4aa/svXy/Jw8CUdoo2kLSqez1xdDB/S5
- Fo7wYrNYvv1AJAXe1Ske4+zgO19SA9ZhM57TNE8roXBHUZfWr7oMqi5wMqpToqhTckM2
- 4njQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=aperture.us; s=google; t=1684787069; x=1687379069;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=U5Lk58Vp3R5vcxU4LFTCy481y3RVqp3t9Ebay/pZdMA=;
+ b=wUJScAiDTXAL7jV4PM1CZYlKGK9PScjGjBDWHdPV69ukg3qW7CmtvZxBttIqNog88r
+ HWtfEL3p+0LS5ehBMP9uCQwUpff/dvywekgk4rbobY6/bVuxz768ylbC+lb10Phx6svi
+ X4hGEwlKbpS8xk3jGAtNNnQOfWRlJ5dBD161+TYMZDi+TohBlLBN699dvypf8kC/9SYl
+ kJYheNT3nn7L8ygd8EIc5ZnGXPjPTg4tctwkM+J2JlijWVfIRgu3R//EIBF1zFk8qp13
+ cWJ1B8RjVJb+w/QKeZlowwPQST8jUYMccR6t3ObSvP2qyrQ57ZieB40oyD3dbNBu7uMq
+ L5yA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=ieau6dyK
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/podman: new package
+ header.a=rsa-sha256 header.s=google header.b=wUJScAiD
+Subject: [Buildroot] [PATCH v3 1/2] package/conmon: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,54 +95,149 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Christian Stewart via buildroot <buildroot@buildroot.org>
 Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Tian Yuanhao <tianyuanhao3@163.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Christian Stewart via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Christian Stewart <christian@aperture.us>,
+ Joachim Wiberg <troglobit@gmail.com>, Tian Yuanhao <tianyuanhao3@163.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSm9hY2hpbSwKCk9uIFR1ZSwgTWF5IDE2LCAyMDIzIGF0IDEwOjE44oCvUE0gSm9hY2hpbSBX
-aWJlcmcgPHRyb2dsb2JpdEBnbWFpbC5jb20+IHdyb3RlOgo+IFlvdSBmb3Jnb3QgdG8gdXBkYXRl
-IHRoZSBERVZFTE9QRVJTIGZpbGUgd2l0aCB5b3VyIG5ldyBwYWNrYWdlLgoKV2lsbCBmaXggZm9y
-IG5leHQgcmV2aXNpb24sIHRoYW5rcy4KCgo+ID4gKyAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0NB
-VEFUT05JVAo+Cj4gTm9vYiBxdWVzdGlvbiwgaXMgQ0FUQVRPTklUIHJlYWxseSBhIGRlcGVuZGVu
-Y3k/ICBJIHRob3VnaHQgaXQgd2FzIG9ubHkKPiBuZWVkZWQvcmVjb21tZW5kZWQgd2hlbiBjb21w
-b3NpbmcgYSBuZXcgY29udGFpbmVyLgoKV2hlbiBzdGFydGluZyBhIGNvbnRhaW5lciB3aXRoIHRo
-ZSAtLWluaXQgZmxhZywgYm90aCBEb2NrZXIgYW5kIFBvZG1hbgp3aWxsIHVzZSBhbiBpbml0IGJp
-bmFyeSBhcyB0aGUgUElEIDEgd2l0aGluIHRoZSBjb250YWluZXIuIFRoZSBpbml0CmJpbmFyeSBj
-b21lcyBmcm9tIHRoZSBob3N0IHN5c3RlbS4gV2l0aCBEb2NrZXIgYW5kIENvbnRhaW5lcmQgd2Ug
-dXNlCi91c3IvYmluL3Rpbmkgc3ltbGluayB0byAvdXNyL2Jpbi90aW5pLgoKVGhlIGRlZmF1bHQg
-aW4gcG9kbWFuIGlzIHRvIHVzZSBjYXRhdG9uaXQgYXQgL3Vzci9iaW4vY2F0YXRvbml0IGZvcgot
-LWluaXQsIHNvIEkgaGFkIGluY2x1ZGVkIGl0IGFzIGEgZGVwZW5kZW5jeSBoZXJlLgoKQW4gYWx0
-ZXJuYXRpdmUgY291bGQgYmUgdG8gYWRkIGEgZGVwZW5kZW5jeSBvbiBUaW5pIGFuZCBhZGRpbmcK
-YGluaXRfcGF0aCA9ICIvdXNyL2Jpbi90aW5pImAgdG8gYC91c3Ivc2hhcmUvY29udGFpbmVycy9s
-aWJwb2QuY29uZmAuCgpIb3dldmVyOiBjdXJyZW50bHkgaW4gRG9ja2VyIGFuZCBDb250YWluZXJk
-IHdlIGRvIG5vdCBhY3R1YWxseSAic2VsZWN0ClRJTkkiLiBEb2NrZXIgd2lsbCB1c2UgaXQgaWYg
-aXQncyBwcmVzZW50LCBidXQgd2UgZG9uJ3QgZGVwZW5kIG9uIGl0CmRpcmVjdGx5LiBTbyBJIGhh
-dmUgZHJvcHBlZCB0aGUgInNlbGVjdCBDQVRBVE9OSVQiIGZvciB0aGUgbmV4dApwYWNrYWdlIHJl
-dmlzaW9uLgoKPgo+ID4gKyAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0NOSV9QTFVHSU5TCj4gPiAr
-ICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfQ09OTU9OCj4gPiArICAgICBzZWxlY3QgQlIyX1BBQ0tB
-R0VfQ05JX1BMVUdJTlMKPgo+IER1cGxpY2F0ZQoKRml4ZWQsIHRoYW5rcy4KCj4gTm90IHN1cmUs
-IGJ1dCBmb3IgY29udGFpbmVyIG5ldHdvcmtpbmcgd2UgYWxzbyBuZWVkIEJSSURHRV9VVElMUywg
-cmlnaHQ/CgpOb3QgZnJvbSB3aGF0IEkndmUgcmVhZCwgcGx1cyBJJ3ZlIGJlZW4gdGVzdGluZyB3
-aXRob3V0IGl0ICYgaXQgd29ya3MgZmluZS4KCkl0J3Mgbm90IGluIHRoZSBsaXN0IG9mIGRlcGVu
-ZGVuY2llcyBvbiB0aGUgYXJjaCBwYWNrYWdlIGVpdGhlci4KCj4gPiArICAgICBzZWxlY3QgQlIy
-X1BBQ0tBR0VfTElCR1BHTUUKPgo+IEZvciByb290bGVzcyBzdXBwb3J0LCBpc24ndCBTSEFET1cg
-KyBTSEFET1dfU1VCT1JESU5BVEVfSURTIGFuZAo+IFNMSVJQNE5FVE5TIHJlcXVpcmVkPwoKUG9z
-c2libHksIGJ1dCBnaXZlbiB0aGF0IG91ciBkZWZhdWx0IG1vZGUgaGVyZSBpcyB0byBydW4gcG9k
-bWFuIGFzIGEKc3lzdGVtIGRhZW1vbiwgSSBkb24ndCBrbm93IGlmIGVuZm9yY2luZyB0aGVzZSBy
-ZXF1aXJlbWVudHMgaXMKc3RyaWN0bHkgbmVjZXNzYXJ5LiBJZiBhIHVzZXIgd2FudHMgdG8gdXNl
-IHBvZG1hbiBpbiByb290bGVzcyBtb2RlCnRoZXkgY2FuIGVuYWJsZSB0aGVzZSB0aGluZ3MuCgo+
-IENHUk9VUEZTX01PVU5UIGlzIHByb2JhYmx5IG5lZWRlZCBmb3Igbm9uLXN5c3RlbWQgYnVpbGRz
-LgoKR29vZCBjYXRjaCwgYWRkZWQgJiBmaXhlZCwgdGhhbmtzLgoKPiBDQV9DRVJUSUZJQ0FURVMg
-aXMgbmVlZGVkIGZvciBodHRwcyBwdWxsLgoKVGhhdCdzIGFsc28gdHJ1ZSBmb3IgZG9ja2VyIGFu
-ZCBiYWxlbmEtZW5naW5lIGFuZCBjb250YWluZXJkLCBidXQgd2UKZG9uJ3Qgc2VsZWN0IENBX0NF
-UlRJRklDQVRFUyB0aGVyZS4KClBvZG1hbiB3aWxsIHdvcmsgZmluZSB3aXRob3V0IGl0LCBhc3N1
-bWluZyB5b3UganVzdCBsb2FkIGNvbnRhaW5lcgppbWFnZXMgbG9jYWxseSB3L28gaHR0cHMgcHVs
-bC4KClNlbnQgYW5vdGhlciByZXZpc2lvbiBhcyB2MywgdGhhbmtzIQoKQmVzdCByZWdhcmRzLApD
-aHJpc3RpYW4gU3Rld2FydApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Conmon is an OCI container runtime monitor.
+
+https://github.com/containers/conmon
+
+Dependency of podman.
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+
+---
+
+v1 -> v2:
+
+ - requires libglib2, host-pkgconf
+ - bump version to 2.1.7
+
+v2 -> v3:
+
+ - Added select BR2_PACKAGE_LIBGLIB2
+ - Inverted CONMON_ENABLE_SECCOMP to CONMON_DISABLE_SECCOMP
+ - Thanks to Joachim for the review.
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/conmon/Config.in   | 16 ++++++++++++++++
+ package/conmon/conmon.hash |  3 +++
+ package/conmon/conmon.mk   | 36 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 57 insertions(+)
+ create mode 100644 package/conmon/Config.in
+ create mode 100644 package/conmon/conmon.hash
+ create mode 100644 package/conmon/conmon.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e76717e845..7b3287731a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -543,6 +543,7 @@ F:	package/balena-engine/
+ F:	package/batman-adv/
+ F:	package/catatonit/
+ F:	package/cni-plugins/
++F:	package/conmon/
+ F:	package/containerd/
+ F:	package/crun/
+ F:	package/delve/
+diff --git a/package/Config.in b/package/Config.in
+index 420ebaa370..52bc10b91b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2631,6 +2631,7 @@ menu "System tools"
+ 	source "package/bubblewrap/Config.in"
+ 	source "package/cgroupfs-mount/Config.in"
+ 	source "package/circus/Config.in"
++	source "package/conmon/Config.in"
+ 	source "package/containerd/Config.in"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+diff --git a/package/conmon/Config.in b/package/conmon/Config.in
+new file mode 100644
+index 0000000000..65f693a29e
+--- /dev/null
++++ b/package/conmon/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_CONMON
++	bool "conmon"
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  Conmon is an OCI container runtime monitor.
++
++	  https://github.com/containers/conmon
++
++comment "conmon needs a glibc or musl toolchain w/ threads, wchar"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_USE_MMU
+diff --git a/package/conmon/conmon.hash b/package/conmon/conmon.hash
+new file mode 100644
+index 0000000000..82d1d14ba3
+--- /dev/null
++++ b/package/conmon/conmon.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  7d0f9a2f7cb8a76c51990128ac837aaf0cc89950b6ef9972e94417aa9cf901fe  conmon-2.1.7.tar.gz
++sha256  9c9d771d4004725237a31ada889fe06c85a24fd0a29e41825181ab4cde54f016  LICENSE
+diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
+new file mode 100644
+index 0000000000..dfac23189f
+--- /dev/null
++++ b/package/conmon/conmon.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# conmon
++#
++################################################################################
++
++CONMON_VERSION = 2.1.7
++CONMON_SITE = $(call github,containers,conmon,v$(CONMON_VERSION))
++CONMON_LICENSE = Apache-2.0
++CONMON_LICENSE_FILES = LICENSE
++
++CONMON_DEPENDENCIES += host-pkgconf libglib2
++
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++CONMON_DISABLE_SECCOMP = 0
++CONMON_DEPENDENCIES += libseccomp
++else
++CONMON_DISABLE_SECCOMP = 1
++endif
++
++define CONMON_CONFIGURE_CMDS
++	printf '#!/bin/bash\necho "$(CONMON_DISABLE_SECCOMP)"\n' > \
++		$(@D)/hack/seccomp-notify.sh
++	chmod +x $(@D)/hack/seccomp-notify.sh
++endef
++
++define CONMON_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D) bin/conmon
++endef
++
++define CONMON_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/bin/conmon $(TARGET_DIR)/usr/bin/conmon
++endef
++
++$(eval $(generic-package))
+-- 
+2.40.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
