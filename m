@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DFF3C77B75
-	for <buildroot@archiver.kernel.org>; Tue, 23 May 2023 16:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23780C7EE26
+	for <buildroot@archiver.kernel.org>; Tue, 23 May 2023 16:25:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27FAC83C67;
-	Tue, 23 May 2023 16:15:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27FAC83C67
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CF4281E74;
+	Tue, 23 May 2023 16:25:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CF4281E74
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9zd_-oi-SRuO; Tue, 23 May 2023 16:15:31 +0000 (UTC)
+	with ESMTP id UJ2W8oKgvGvj; Tue, 23 May 2023 16:25:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5284D83C54;
-	Tue, 23 May 2023 16:15:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5284D83C54
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00BEB1BF371
- for <buildroot@lists.busybox.net>; Tue, 23 May 2023 16:15:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD62D80BE1;
+	Tue, 23 May 2023 16:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD62D80BE1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8173C1BF371
+ for <buildroot@lists.busybox.net>; Tue, 23 May 2023 16:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DBD3883C43
- for <buildroot@lists.busybox.net>; Tue, 23 May 2023 16:15:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBD3883C43
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A0FF405DE
+ for <buildroot@lists.busybox.net>; Tue, 23 May 2023 16:25:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A0FF405DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N57Q_kjl18rk for <buildroot@lists.busybox.net>;
- Tue, 23 May 2023 16:15:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1f66YES4uids for <buildroot@lists.busybox.net>;
+ Tue, 23 May 2023 16:25:10 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C9CB83C0D
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0C9CB83C0D
- for <buildroot@buildroot.org>; Tue, 23 May 2023 16:15:27 +0000 (UTC)
-Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout10.t-online.de (Postfix) with SMTP id 5369E1A031
- for <buildroot@buildroot.org>; Tue, 23 May 2023 18:15:25 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd78.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 509A240869
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 509A240869
+ for <buildroot@buildroot.org>; Tue, 23 May 2023 16:25:10 +0000 (UTC)
+Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
+ by mailout01.t-online.de (Postfix) with SMTP id CC7F7142FB
+ for <buildroot@buildroot.org>; Tue, 23 May 2023 18:25:06 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd73.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q1UfT-46GjrN0; Tue, 23 May 2023 18:15:23 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42820)
+ esmtp id 1q1Uos-0JYwjJ0; Tue, 23 May 2023 18:25:06 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54070)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q1UfS-0007ol-2v
- for buildroot@buildroot.org; Tue, 23 May 2023 18:15:22 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q1Uos-00012E-0k
+ for buildroot@buildroot.org; Tue, 23 May 2023 18:25:06 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Tue, 23 May 2023 18:15:22 +0200
-Message-Id: <20230523161522.1275284-1-bernd.kuhls@t-online.de>
+Date: Tue, 23 May 2023 18:25:06 +0200
+Message-Id: <20230523162506.1279813-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1684858523-0A7CB714-E7BB867C/0/0 CLEAN NORMAL
-X-TOI-MSGID: 49d90c92-ccfc-42f2-9a5e-d15a2704b0c1
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-waipu: bump version
- to 20.9.0-Nexus
+X-TOI-EXPURGATEID: 150726::1684859106-D37E92C5-E946136C/0/0 CLEAN NORMAL
+X-TOI-MSGID: 1fe242a8-73f1-4e3e-bb1b-e51bc1938f60
+Subject: [Buildroot] [PATCH 1/1] package/kodi-skin-confluence: bump version
+ to Nexus branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,32 +73,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+This bump was forgotten when Kodi was bumped to version 20.1-Nexus,
+please included it into the master branch as it contains various
+fixed needed for Nexus:
+https://github.com/xbmc/skin.confluence/commits/Nexus
+
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-index cdcaeeff9d..ed447ce61f 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index c840e5b161..449a2113de 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  5dfe9f891edefd5334c7a45593651634b43e1fdbea5a1b396131a45f5928f4aa  kodi-pvr-waipu-20.8.1-Nexus.tar.gz
-+sha256  3a0a1dffe1bb8711dd6747b02a51aee6a0bce40ca6822cc2ab7f04b4b5acb82f  kodi-pvr-waipu-20.9.0-Nexus.tar.gz
- sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-index 41f9e82814..b098e10929 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+-sha256  c57b9a303ad1ebf14ad487901e5da15eba7b3a40304046974fad1d64fb7b8b57  kodi-skin-confluence-e6d31bc84eea73a04b2a23358929d5276be832b8.tar.gz
++sha256  1d55079d2b021b16ae8494497684abab184a86302426af588655577a641074ac  kodi-skin-confluence-a155597cb6bb0f9d46b26ad881be1148929a03af.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index c32718fd10..43d0c4bff6 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_WAIPU_VERSION = 20.8.1-Nexus
-+KODI_PVR_WAIPU_VERSION = 20.9.0-Nexus
- KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
- KODI_PVR_WAIPU_LICENSE = GPL-2.0+
- KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+-KODI_SKIN_CONFLUENCE_VERSION = e6d31bc84eea73a04b2a23358929d5276be832b8
++KODI_SKIN_CONFLUENCE_VERSION = a155597cb6bb0f9d46b26ad881be1148929a03af
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 -- 
 2.39.2
 
