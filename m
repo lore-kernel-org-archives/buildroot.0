@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFC38C7EE2E
-	for <buildroot@archiver.kernel.org>; Tue, 23 May 2023 15:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89852C77B75
+	for <buildroot@archiver.kernel.org>; Tue, 23 May 2023 15:34:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 448308329D;
-	Tue, 23 May 2023 15:31:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 448308329D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D2FE83227;
+	Tue, 23 May 2023 15:34:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D2FE83227
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8F1zucuOqxIc; Tue, 23 May 2023 15:31:54 +0000 (UTC)
+	with ESMTP id DmHaAwazM4ta; Tue, 23 May 2023 15:34:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AE59831FB;
-	Tue, 23 May 2023 15:31:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AE59831FB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C54FF1BF398
- for <buildroot@lists.busybox.net>; Tue, 23 May 2023 15:31:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1ECD78142E;
+	Tue, 23 May 2023 15:34:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ECD78142E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E9B21BF398
+ for <buildroot@lists.busybox.net>; Tue, 23 May 2023 15:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F0B460C33
- for <buildroot@lists.busybox.net>; Tue, 23 May 2023 15:31:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F0B460C33
+ by smtp2.osuosl.org (Postfix) with ESMTP id 485D1417C1
+ for <buildroot@lists.busybox.net>; Tue, 23 May 2023 15:34:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 485D1417C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aSDWYIbNLc-H for <buildroot@lists.busybox.net>;
- Tue, 23 May 2023 15:31:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SgOxtcUKAIBm for <buildroot@lists.busybox.net>;
+ Tue, 23 May 2023 15:34:17 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5505D60777
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32260417BF
 Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5505D60777
- for <buildroot@buildroot.org>; Tue, 23 May 2023 15:31:50 +0000 (UTC)
-Received: from fwd82.dcpf.telekom.de (fwd82.aul.t-online.de [10.223.144.108])
- by mailout12.t-online.de (Postfix) with SMTP id 1D708AD50;
- Tue, 23 May 2023 17:31:47 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd82.t-online.de
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 32260417BF
+ for <buildroot@buildroot.org>; Tue, 23 May 2023 15:34:17 +0000 (UTC)
+Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
+ by mailout12.t-online.de (Postfix) with SMTP id 7F80D3239;
+ Tue, 23 May 2023 17:33:48 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd81.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q1TzG-0zOr4b0; Tue, 23 May 2023 17:31:46 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36440)
+ esmtp id 1q1U1E-0zvqwT0; Tue, 23 May 2023 17:33:48 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54326)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q1TzG-0000HW-0X;
- Tue, 23 May 2023 17:31:46 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q1U1D-0000d5-34;
+ Tue, 23 May 2023 17:33:48 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Tue, 23 May 2023 17:31:46 +0200
-Message-Id: <20230523153146.418509-1-bernd.kuhls@t-online.de>
+Date: Tue, 23 May 2023 17:33:47 +0200
+Message-Id: <20230523153347.419295-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1684855906-637E49E6-89736765/0/0 CLEAN NORMAL
-X-TOI-MSGID: a9399b08-8b14-4fea-b687-5a81b6cc4a09
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: needs gcc >= 8
+X-TOI-EXPURGATEID: 150726::1684856028-D9FF9DA8-01F7B284/0/0 CLEAN NORMAL
+X-TOI-MSGID: 3eccfe39-2da3-411c-ae18-bb5593502c86
+Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: needs gcc >= 8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,9 +82,11 @@ http://autobuild.buildroot.net/results/011/01109560288f933019eea726a91c4109fbcca
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: fixed typo
+
  package/intel-mediadriver/Config.in |  5 +++--
- package/mesa3d/Config.in            | 14 ++++----------
- 2 files changed, 7 insertions(+), 12 deletions(-)
+ package/mesa3d/Config.in            | 16 +++++-----------
+ 2 files changed, 8 insertions(+), 13 deletions(-)
 
 diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
 index 537e4abd2f..c59437ec73 100644
@@ -109,7 +111,7 @@ index 537e4abd2f..c59437ec73 100644
 -		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
 +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index b01aeb391b..f7c59e60ce 100644
+index b01aeb391b..df500f0491 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
 @@ -4,7 +4,7 @@ menuconfig BR2_PACKAGE_MESA3D
@@ -136,8 +138,9 @@ index b01aeb391b..f7c59e60ce 100644
 -comment "llvm support needs a toolchain w/ wchar, threads, C++, gcc >= 5, dynamic library, host gcc >= 5"
 +comment "llvm support needs a toolchain w/ wchar, threads, C++, dynamic library, host gcc >= 5"
  	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
 -		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
  		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
  		|| !BR2_HOST_GCC_AT_LEAST_5
  
