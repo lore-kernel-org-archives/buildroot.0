@@ -4,61 +4,138 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BF39C77B73
-	for <buildroot@archiver.kernel.org>; Wed, 24 May 2023 05:30:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B97AC77B7A
+	for <buildroot@archiver.kernel.org>; Wed, 24 May 2023 06:01:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6830B84041;
-	Wed, 24 May 2023 05:30:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6830B84041
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1C548406E;
+	Wed, 24 May 2023 06:01:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1C548406E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4OAD8iOLfzzi; Wed, 24 May 2023 05:30:43 +0000 (UTC)
+	with ESMTP id 5ul32c6HZa3J; Wed, 24 May 2023 06:01:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 435B18406E;
-	Wed, 24 May 2023 05:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 435B18406E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7BF4B1BF352
- for <buildroot@lists.busybox.net>; Wed, 24 May 2023 05:30:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FBCB8402B;
+	Wed, 24 May 2023 06:00:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FBCB8402B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C211D1BF377
+ for <buildroot@lists.busybox.net>; Wed, 24 May 2023 06:00:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FAB261569
- for <buildroot@lists.busybox.net>; Wed, 24 May 2023 05:30:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FAB261569
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C8404206A
+ for <buildroot@lists.busybox.net>; Wed, 24 May 2023 06:00:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C8404206A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gSVn6GfG2bp0 for <buildroot@lists.busybox.net>;
- Wed, 24 May 2023 05:30:38 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1043614C4
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F1043614C4
- for <buildroot@buildroot.org>; Wed, 24 May 2023 05:30:37 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 263B12000D
- for <buildroot@buildroot.org>; Wed, 24 May 2023 05:30:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S4Pmdh7Rzw4n for <buildroot@lists.busybox.net>;
+ Wed, 24 May 2023 06:00:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 851FE42057
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com
+ (mail-vi1eur04on0625.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe0e::625])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 851FE42057
+ for <buildroot@buildroot.org>; Wed, 24 May 2023 06:00:53 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FyzvpgcLc737Yj1kmRazZvRjfKFuhnCEURXsPW11eRNhKlyn95RDjrBnxHQSGQe+MSnpw3fqkxAmdIkZo6gcbS6FqUy7g3NKy9V4I4dhJ4PR0QkrFA9C38ukghimcVG17CqXo/XG3ja33GbZZrxtDcF3p0BINuvzWiX4E7DeX/rzvtUdjJcqee/D2C55R9J249STsVVKkWE+INW8XSg7VHWoRMVlblLeTF1Z37t48hR/07TWxmDeL0VfupIrrdXAQgrtB7TP3Str2+WMZmT8xwBvcSdpsHTLSHt0NGXW/c54qHppw2FKoC4pc6aKIbph2AtgBPorR1eLZ4CehDvp/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3TX5AWYCOwveLit/z1z8C9jUQwxgLteb6aJcMBzz970=;
+ b=WVmlb1UBNF5uLqvGUsw+EILY8ykZDNCM0BxXiMkoksbhy5XApafbtNEfUwuLiwMfjLnnMSKt4/a1ntm5uuy1rrxIplCwzWaBTvYumbfXyvtEQfxaIUbv/IZLVd77/d770n9oYCL/TM+XzmxQmsR2iZeNXFo9TgLyCsUvqZSjgONWpbL2IpyNMB6OvtPvzoPGHkwIdGHQAZ8l0kmLx3jt1Dq9Ik8wIkfsYD0ke3KVcadgNLkCFTVBi5ebPLzDf8SRI+G1FvyEjuF7x31feGotTn4NxKcJdJaLlVSq5GQMiA2XGp8pMuLDLFP2O/Pr/SMnt6MKDLrkao//smJfPJOtZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vimar.com; dmarc=pass action=none header.from=vimar.com;
+ dkim=pass header.d=vimar.com; arc=none
+Received: from AS8PR08MB6870.eurprd08.prod.outlook.com (2603:10a6:20b:39a::21)
+ by PAXPR08MB7527.eurprd08.prod.outlook.com (2603:10a6:102:24d::16)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
+ 2023 06:00:47 +0000
+Received: from AS8PR08MB6870.eurprd08.prod.outlook.com
+ ([fe80::cf18:8d3e:30bc:6178]) by AS8PR08MB6870.eurprd08.prod.outlook.com
+ ([fe80::cf18:8d3e:30bc:6178%3]) with mapi id 15.20.6411.029; Wed, 24 May 2023
+ 06:00:47 +0000
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thread-Topic: [Buildroot] R: [PATCH 1/1] package/libwebsockets: added option
+ to (re-)enable external poll loop support
+Thread-Index: AQHZjZOH0Bwkf56G1Eqm4tojdB+O/q9o7Miy
+Date: Wed, 24 May 2023 06:00:47 +0000
+Message-ID: <AS8PR08MB6870B939A5DA48452F35198381419@AS8PR08MB6870.eurprd08.prod.outlook.com>
+References: <1684507558-5929-1-git-send-email-luca.pesce@vimar.com>
+ <20230521170834.GA621937@scaer>
+ <AS8PR08MB68702A3AC3BC40C1DDF695FE81439@AS8PR08MB6870.eurprd08.prod.outlook.com>
+ <20230523162749.GI621937@scaer>
+In-Reply-To: <20230523162749.GI621937@scaer>
+Accept-Language: it-IT, en-US
+Content-Language: it-IT
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR08MB6870:EE_|PAXPR08MB7527:EE_
+x-ms-office365-filtering-correlation-id: 37378521-1d65-4fb3-c4e8-08db5c1c3844
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T6Xt1YxsJ8vmHIiOFQblTXYJUkJ/k/BhtNqd9UNoJ9UbjhmKMeAoFeafxtNqzWh2si5iaZVztVWLVx8xw7ovBJR//+HXvRKoa9V3TKxzZE7mmuWqoAWaWlIZ02my0fDBVRz/KcfGbn+xZoRPsFevdV+gC3T9aJRbbvrMJ1ArN+kVj7vjMhlDjSdom/w/RDkZ0QqyVA+ozupfuXg4mBgdoFiUo79Br5SM6OUvmjJL3YD9AxwDgkAPwsSzKa+CA+d33kaMqQZ6xmdVS/BIYWNhO7J8tsgI7w1FqewkUXVh5lcOaEeJIAiChWheWTI2oP+iKTkMz51wyL6gILgJA30zmYy36d4ngBdx9SgXTL3fKkNZpT8wvR67czA64TUl3imM4dHnphz0s27d7OMmK3z2tktkWW8RTpyKVwXPaGNQiNqBMN8d5qi59Fn/quwrrI+72HCEAmcbjjiQO4xlAzh5BUyecU02DQc2IfEPRqntPcacxwTQ51ZOSKKDlYUJxPa/R7KG9OYbMz2Rk/Rmos2rQcroIu2KDqiNScG4ZFZPRBrBD9yIA1MIIfJjFq1hYxnot8whrIUqGfUSx+AfzbaafRJrShcRUBMl32qhLhthvSzr0SguvD2SXf2uDwcD1WJk34VqAkRJKvFtVFTKYS4rp261zP2GwomfANL3eNmYLZo=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS8PR08MB6870.eurprd08.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230028)(4636009)(396003)(376002)(346002)(136003)(39850400004)(366004)(451199021)(55016003)(33656002)(38100700002)(26005)(122000001)(186003)(9686003)(6506007)(83380400001)(2906002)(41300700001)(6916009)(7696005)(316002)(71200400001)(966005)(478600001)(66446008)(66556008)(66946007)(66476007)(76116006)(91956017)(64756008)(4326008)(45080400002)(38070700005)(86362001)(8936002)(66899021)(8676002)(5660300002)(52536014)(41080700001)(15866825006);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?I77cvPiltn3NMYYfGBHs1JZkaQ4uzLCF27bdY97vS/pzp1sLwfq21LuUms?=
+ =?iso-8859-1?Q?MPSnBtQOkyoSYmI2WWCRGPJ2nASTm6UY9XO/b1zNt+4ADP0cHg2bm5V4Lf?=
+ =?iso-8859-1?Q?6Mut9z/l4qYn8SFTHqVX1zWiTqt/Eul6KEszQeHcOTQeslllKVJKED2a9w?=
+ =?iso-8859-1?Q?TIIPOgqh6WISJxCy8EBTr77KBajXVIphmp3NS0g/zG7C86u7PV6NKGLp4b?=
+ =?iso-8859-1?Q?hfKCjizv7KV1xA3gFJedKFYy3sw7kGC5XLienQ7uN/6BqbEXMucUX2Y28N?=
+ =?iso-8859-1?Q?ebODvz4KZGXzlC4TWBeomqexcGQS/xpdidc/GSBIFZc6V9vT9qcMLTVFtq?=
+ =?iso-8859-1?Q?V7TnhmDTKlP7vZEcCGRU/vNfw7e0hqbtg4wlSJqN/5Q4iz14+Jc8cEwVPI?=
+ =?iso-8859-1?Q?Pt1qIYHrZGMVPgCsGeMp4qT1T/8lUWrTa10Pau0q+OJsjYQNcvUuSqK5Jc?=
+ =?iso-8859-1?Q?X8KxDOiAy7OgSAYyjfizUyt6xR6t0E8UJctrIzcSG129xV6n7OMXST6KrN?=
+ =?iso-8859-1?Q?zRgTOXgmKQPl6IoiwpLpDFNWJ+MMs+xziI+yK57BONHKMNIyHqYfdL4aOC?=
+ =?iso-8859-1?Q?loxTvqLdiRhOqKcbirQsgJjMNZyFKHwR/Atj7HyrJnfNtGGwpFCNscRDKE?=
+ =?iso-8859-1?Q?rBPUjH8tsb27Jb9ENyinB+OkJ0ZLv1TpnFWc4vuHTDTlnUH/Wd7cP8hA3H?=
+ =?iso-8859-1?Q?wOtQPU5FElUZD9DZsh8PZTbunExdasKQhfwKwgUdkKcw2WJen6vm07Wib7?=
+ =?iso-8859-1?Q?kw3q0EqeFfmdYBnVZrw5Lv9jz5s/BMwVxGC3NQs5KzhzH1nBIxXZJzxJ3h?=
+ =?iso-8859-1?Q?ooT25j/OR9xrBGMXf179Epx7j9vvICJ6X/OdNDs19iNBHlrObxpbCH0BXd?=
+ =?iso-8859-1?Q?MFVOb6EfyHKB70gbJj4tZvFAyD61yHwAVQPR+5d2wwDcOBGPu/4C1MRV4g?=
+ =?iso-8859-1?Q?EffMuQccUm4bM2udxw6X8BUUhVeGeux1oUBXcvPpyRs1D2fqeEouxbjds6?=
+ =?iso-8859-1?Q?Rw5NjFb0/qbVGO1UWaE6+VtgvjyaZG6sbSHmjVisbQwQbHfpdD/Fq6aPYq?=
+ =?iso-8859-1?Q?BKARHE5Rk93dJauTk32n8y8LpclAYVm/FQLbEYPSF/ISG3P2Y9tIBSHxEM?=
+ =?iso-8859-1?Q?ybLldtEuYpvOVg6OMsvzIz2tLL8H0sgWIrR45oxiLEHVEl0ORz/pid6IwS?=
+ =?iso-8859-1?Q?n4wDWhszR23QWu6c5Zd+7mdMdxzIQK8Gn9bvPCzcMdtTWdzev1f2J/LuGh?=
+ =?iso-8859-1?Q?1H6gHeRfpR0chEVc+dJt9aczO0zdQWJIiMLi/aPStTsmPv7s1fLAOOnN9w?=
+ =?iso-8859-1?Q?qtt9GwCoQ+HWfYw4gJOfjoqoVBVrlFA71ofwlmFB3g4pKFQKUxJRZa0hJd?=
+ =?iso-8859-1?Q?MGPZf+9rhiqfROgLmxJy6YicHAGA4HAWYwtATZx+E4c/ZpOyNnJ1KgnXhr?=
+ =?iso-8859-1?Q?sqTQrXtXb8urjcOrOAh5MWQfCGidpYPtvEvw5NX9a+EICTIlMNXnLUmnjp?=
+ =?iso-8859-1?Q?gBrML2vf/6Mm62h8nKyX5q0HrF8gSSPNotD3laEc/v3KVgHy206f54l3Lk?=
+ =?iso-8859-1?Q?sEt/GvQ8klPqXxORRRalgJ1ZTPXX3BBmf+HAHFerJfpX8IEtIa0usJXHlO?=
+ =?iso-8859-1?Q?HPBnyEnybEpzzAtYqlCa9PtWkZMgGxjXl5?=
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Wed, 24 May 2023 05:30:34 -0000
-Message-Id: <20230524053040.0FAB261569@smtp3.osuosl.org>
+X-OriginatorOrg: vimar.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR08MB6870.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37378521-1d65-4fb3-c4e8-08db5c1c3844
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2023 06:00:47.5768 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a1f008bc-d59b-4c66-8f87-60fd9af15c7f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vPep8eqfMdNKetN8yqIVnf/RIZoD/gN/5XU/ljlucZdmYsWP6rrAxV4QHa86pRvViHzbgS6WmMfdflsWZXsmiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB7527
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1684906235; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=iFUCoNWaSyn0ZUJ2ltEcydxEY64IgJZIeXuUVmPwp0M=;
- b=Wlv9jfq1E117rq5WIpGUKfaXDvxItCXr9a7f15PL6M8Z+ugZN5RaBcbvTwu3BzdDLxN2Kb
- 4fx4QqNhTtYKJNvlt862uC7o7mJatG0ZNyrMxbvsabrIKHcyVrj47irGlvEhBk+e8EmWD8
- rINab/1CvssRU5UbYDfy9AoT0+gx80WQFlYh/3ZlGqYXXnkjMYm2n1ncVjiHyezn5UabN0
- 7Ys+UTb7Gk8S4NpBOydaf1HAQMuOWk1wXljUGoJ4mEoZpsUgEqrzlMSO489xPOqQ60+BWz
- 4pk7oGqEKXcKZOWtv+XT14BShuiGBeG4EmfvH6h05CDJ+tgIrA4GQ+3300lKqQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Wlv9jfq1
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-05-23
+ d=vimar.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3TX5AWYCOwveLit/z1z8C9jUQwxgLteb6aJcMBzz970=;
+ b=VPDsxwK9Nz1Sys3K4/Q4rWtkU8kEshyCXq3xDWG91NnLFk51f6Jx8a9FfWaENoek+opu0+uDJkDLovKzsZfkx14k+RhoTKc/nV2Qy2q1gmsRcRDypTZsEpWGFSns07V9DfejhV9/x2nsFSsWCGx3LOY/3A0zkWL0gMu1Gp2+7P0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=vimar.com header.i=@vimar.com header.a=rsa-sha256
+ header.s=selector1 header.b=VPDsxwK9
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vimar.com;
+Subject: [Buildroot] R: R: [PATCH 1/1] package/libwebsockets: added option
+ to (re-)enable external poll loop support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,171 +147,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Pesce Luca via buildroot <buildroot@buildroot.org>
+Reply-To: Pesce Luca <Luca.Pesce@vimar.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hi Yann,
 
-Autobuild statistics for 2023-05-23
-===================================
+> Will you submit an updated patch (default to y, and select from
+> mosquitto) ?
 
-      branch |  OK | NOK | TIM | TOT |
-  2022.02.x  |  5  |  1  |  0  |  6  |
-  2023.02.x  |  5  |  4  |  0  |  9  |
-    master   | 81  | 60  |  0  | 141 |
+Yes. Would you prefer a single patch dealing with both libwebsockets
+and mosquitto, or rather a serie with two patches, one for libwebsockets
+and the other for mosquitto? The latter sounds more correct to me, but
+I can do either way.
 
-Classification of failures by reason for master
------------------------------------------------
+Regards,
+Luca
 
-           at-spi2-core-2.48.2 | 5 
-host-heimdal-f4faaeaba371ff... | 5 
-package/sdl2_net/sdl2_net.m... | 5 
-           sdl2_net-legal-info | 3 
-                 agentpp-4.6.0 | 2 
-  gobject-introspection-1.74.0 | 2 
-            host-binutils-2.39 | 2 
-              host-rust-1.68.2 | 2 
-sconeserver-8d1935919a20133... | 2 
-                    sdl-1.2.15 | 2 
-               syslog-ng-4.1.1 | 2 
-                  acpid-2.0.34 | 1 
-                     audit-3.1 | 1 
-                  clamav-1.0.1 | 1 
-                    crun-1.8.4 | 1 
-fs/cramfs/cramfs.mk:46: /ho... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-            host-binutils-2.37 | 1 
-         host-gcc-final-11.3.0 | 1 
-igh-ethercat-2e2cef61318953... | 1 
-               libcap-ng-0.8.3 | 1 
-           libfreeimage-3.18.0 | 1 
-               libglib2-2.76.1 | 1 
-                 libnss-3.89.1 | 1 
-     linux-5.10.162-cip24-rt10 | 1 
-                   linux-6.3.2 | 1 
-            linux-fusion-9.0.3 | 1 
-        ltp-testsuite-20230127 | 1 
-                mongodb-4.2.18 | 1 
-               nfs-utils-2.6.3 | 1 
-            python-sip-4.19.25 | 1 
-rtl8189fs-c223a25b1000d6443... | 1 
-                   shadow-4.13 | 1 
-                sysrepo-2.2.36 | 1 
-                   trinity-1.9 | 1 
-ulog-0389d243352255f6182326... | 1 
-                 wavemon-0.9.4 | 1 
-                    xen-4.14.5 | 1 
-                     znc-1.8.2 | 1 
+________________________________________
+Da: Yann E. MORIN <yann.morin.1998@free.fr>
+Inviato: marted=EC 23 maggio 2023 18:27
+A: Pesce Luca
+Cc: buildroot@buildroot.org
+Oggetto: Re: [Buildroot] R: [PATCH 1/1] package/libwebsockets: added option=
+ to (re-)enable external poll loop support
 
+Luca, All,
 
-Detail of failures for master
------------------------------
+On 2023-05-22 06:34 +0000, Pesce Luca via buildroot spake thusly:
+> > Da: Yann E. MORIN <yann.morin.1998@free.fr>
+> >On 2023-05-19 16:45 +0200, Luca Pesce via buildroot spake thusly:
+> >> Since version 3.2.0, libwebsockets does not compile its external loop =
+support
+> >> code anymore. That code was put under LWS_WITH_EXTERNAL_POLL compile o=
+ption,
+> >> which defaults to OFF.
+> >> Applications relying on that support need to turn that option on, so l=
+et's
+> >> add it to the package.
+> >So, as I understand it, before 3.2.0, this was unconditionally compiled
+> >in, right?
+> > If so, for backward compatibility, should we default this new option to
+> > 'y' ?
+> Well, it is not clear to me why in libwebsockets >=3D 3.2.0 the new optio=
+n defaults
+> to OFF, but it is hinting to something not so broadly used - the comment
+> of the commit which introduced that change says something:
+> https://github.com/warmcat/libwebsockets/commit/d3021980194991d175388115a=
+65a4265bd155f36
+>
+> So, I would say that the default should be n, and then let users enable i=
+t only if needed.
+> Maybe the help text in the Config.in may remind that this support was unc=
+onditionally
+> compiled in for version < 3.2.0.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   mips64    |          acpid-2.0.34          | NOK | http://autobuild.buildroot.net/results/2ccd53588a64f27993781650e5eadd64247dd1a9 | ORPH
- aarch64_be  |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/11c0308ac61795ae911176f1efd48233214c1773 |     
-  sparc64    |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/6caa5b0f56bc8e0e7bf94e2a940d005f5fc598d4 |     
-  sparc64    |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/778d09c39ad6f0fa46951ddda1d2e9da19848169 |     
-microblazeel |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/0356adf414eccff2f3b577919e04aefd563f683a |     
- aarch64_be  |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/d1d67bf147e2eca0c8606d3e989b8d61c58227a1 |     
-  sparc64    |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/105a18678b75db764c45826d9dc58cf4df45aefc |     
-    mips     |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/0be6118dab155eeb9602f59360b2934f19dea308 |     
-    arm      |           audit-3.1            | NOK | http://autobuild.buildroot.net/results/49ddae4f6891d753ae8ef9700144dc4b1b5464c9 |     
-    arm      |          clamav-1.0.1          | NOK | http://autobuild.buildroot.net/results/bee5dd5d8d22db812c78bf83c8b4b1a5bd9a0dcc |     
-   mips64    |           crun-1.8.4           | NOK | http://autobuild.buildroot.net/results/5a34b50e92414edba3196e5b0b75f10ca5ea9c9f |     
- aarch64_be  | fs/cramfs/cramfs.mk:46: /ho... | NOK | http://autobuild.buildroot.net/results/ff5010d2bd25661402fbe8a6c7c4a52e6bda7c6e |     
-   nios2     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/0a1b4fe36cbaf80d32ea46b34ff55fff0fc363e0 |     
-    or1k     |  gobject-introspection-1.74.0  | NOK | http://autobuild.buildroot.net/results/d53ce87037993f09fdaa1ba3b54f6cba4a44d0bb | ORPH
-powerpc64le  |  gobject-introspection-1.74.0  | NOK | http://autobuild.buildroot.net/results/a5628b32474a033fc30fbf36f8578a5ea9fe577a | ORPH
-   nios2     |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/f0d17567c08783bf3e5b3c12cd681fd575cb5dac |     
-    arm      |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/8d42d87fc7b9b498ae77cd2341b83770df1323cb |     
-microblazeel |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/f38736052db0bce1ce0e13d3512ab8780d126e91 |     
-microblazeel |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/bb5e6e3361e9c5a60a478fffcb9d002cc130bf9d |     
-   s390x     | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/8212f9725d82ffbe3b0629410a7923d209b8326f | ORPH
-   s390x     | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/5d45346be58aaa3b0f2a7e54b1d91930e88aca24 | ORPH
-   s390x     | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/aad95610365bff04200e2d41ddc409ea9f996631 | ORPH
-  sparc64    | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/b087f773c2126cadaf456c483cb93dc979e6bfe9 | ORPH
-powerpc64le  | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/aa35dd9b0f1083df7c37072977855e7b215725e1 | ORPH
-  powerpc    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/9068ac3bc75b70df0bab0ffefc3bc3a36013fc65 |     
-  sparc64    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/9b20e5dd57eb3dd36af798d65bfeacf5a65c0f05 |     
-  aarch64    | igh-ethercat-2e2cef61318953... | NOK | http://autobuild.buildroot.net/results/689282fad4765cff587ccbc4a4088a91227addcc |     
-  riscv64    |        libcap-ng-0.8.3         | NOK | http://autobuild.buildroot.net/results/89373a5ff16729da01a7a633e5d03916ea0e4cb9 |     
-  riscv64    |      libfreeimage-3.18.0       | NOK | http://autobuild.buildroot.net/results/5db8a8322f4eaed36ff5556877f3a590b714a10c |     
-   armeb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/989c5e5b50c7155ce4c09b68102decbb27ce0979 |     
-   mips64    |         libnss-3.89.1          | NOK | http://autobuild.buildroot.net/results/3b787fb514556dc57a50db760d6db2fb8a7fc7a5 |     
-  sparc64    |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/14ce852ff73bd155fc8ef2c1b5f5db55e54eb344 | ORPH
-    mips     |          linux-6.3.2           | NOK | http://autobuild.buildroot.net/results/7741b9752a77012bd68c6bf8fcec11160e5b9a67 | ORPH
-powerpc64le  |       linux-fusion-9.0.3       | NOK | http://autobuild.buildroot.net/results/c6bbcd2dc628e48e52fa665329d971d0658b22f5 | ORPH
-   x86_64    |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/211495f5566921339a0ac176be3067b88340187e |     
-    arm      |         mongodb-4.2.18         | NOK | http://autobuild.buildroot.net/results/0e5b7c37a6d1f90e211b64e6a9ecf975e9680e7e |     
-    arm      |        nfs-utils-2.6.3         | NOK | http://autobuild.buildroot.net/results/ddd8200fd66bcc4fb6aae9ab2e2b68d7b363bd7d |     
-   mipsel    | package/sdl2_net/sdl2_net.m... | NOK | http://autobuild.buildroot.net/results/117c1b290e4220c9f7c24e3da3884005f6f0faf1 |     
-   sh4eb     | package/sdl2_net/sdl2_net.m... | NOK | http://autobuild.buildroot.net/results/ce649540f680738b84856aaad85703e645f73cd1 |     
-    mips     | package/sdl2_net/sdl2_net.m... | NOK | http://autobuild.buildroot.net/results/a001deb8a4e5ba978c89bf1a7a258798a07444b5 |     
-   sparc     | package/sdl2_net/sdl2_net.m... | NOK | http://autobuild.buildroot.net/results/9fcedf10f89ab4a7810e548208da78304b6e6700 |     
-   sparc     | package/sdl2_net/sdl2_net.m... | NOK | http://autobuild.buildroot.net/results/b50f2df7800a44abd48b007b0bbc106d6f444c11 |     
-  aarch64    |       python-sip-4.19.25       | NOK | http://autobuild.buildroot.net/results/f0115684ea0188f6fbe0e9219eef4ae457f8fb95 |     
-    or1k     | rtl8189fs-c223a25b1000d6443... | NOK | http://autobuild.buildroot.net/results/0cf3f1dc1e1322ef8021d21ebc607c7e37e37acf |     
-    i586     | sconeserver-8d1935919a20133... | NOK | http://autobuild.buildroot.net/results/bba6123029e23f87f2a5ab36be75e4bab8615d9e |     
-   s390x     | sconeserver-8d1935919a20133... | NOK | http://autobuild.buildroot.net/results/db2deea1470a1116ba37b86c19fc464326eb4c37 |     
-   sh4eb     |           sdl-1.2.15           | NOK | http://autobuild.buildroot.net/results/d42d95bc28f66a11bc1a3b9dcf8dd008fb230b3e | ORPH
-    sh4      |           sdl-1.2.15           | NOK | http://autobuild.buildroot.net/results/79befda28701d4d4ec10e14803effb68d6558cdd | ORPH
-    arm      |      sdl2_net-legal-info       | NOK | http://autobuild.buildroot.net/results/5a9a6f97699ad70c9a1bdafff97b792216a3dc9e | ORPH
-   s390x     |      sdl2_net-legal-info       | NOK | http://autobuild.buildroot.net/results/7a500d21fa33a74a1cd7aec942974ba034299acf | ORPH
-    arm      |      sdl2_net-legal-info       | NOK | http://autobuild.buildroot.net/results/880f5dc8d727489d319aa4fe1f0df8d10e4bdbeb | ORPH
-    sh4a     |          shadow-4.13           | NOK | http://autobuild.buildroot.net/results/a90f3b20e1cc8a807a54cda476e60f4fc1232e37 |     
-    sh4      |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/f8b012b2deed6939f263ff57f5a801ed1d51ea4c |     
- powerpc64   |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/281ddd1dd086cd633d5a5dda92b82075ebba7d40 |     
-  riscv32    |         sysrepo-2.2.36         | NOK | http://autobuild.buildroot.net/results/62b3d50d9497a0181597800ed23fe6c631e72e64 |     
- powerpc64   |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/652ea09abd90079800677dfe2c850262b9f0d6a6 | ORPH
- aarch64_be  | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/38e4aa77dc8a8ffb4cfc7f1d66ab55b125d02706 |     
-  sparc64    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/6df18ac704e69f5660feff7ece264b723709a39e | ORPH
-  aarch64    |           xen-4.14.5           | NOK | http://autobuild.buildroot.net/results/442c0f535a22229bf27d9625e1c6e1bcadccc81e |     
-   s390x     |           znc-1.8.2            | NOK | http://autobuild.buildroot.net/results/14c44e94b6b588aa033f24202aa8437882cf8792 |     
+Our policy is not to change the default behaviour if at all possible, so
+I think this new symbol should default to 'y' (with a comment that
+states "legacy"):
 
+    default y  # legacy, was previously always enabled
 
-Classification of failures by reason for 2022.02.x
---------------------------------------------------
+> >> For example, when libwebsockets in enabled, mosquitto broker is built =
+with
+> >> websocket support, but its code requires LWS_WITH_EXTERNAL_POLL to be =
+on -
+> >> otherwise, it gives compile-time warning hinting to unusable websocket=
+ support:
+> >>Then, should mosquitto also select this new option?
+> It could, yes. It is not a compile-time requirement, but rather a run-tim=
+e one.
 
-libcamera-1966b9a58436fab51... | 1 
+Then yes, mosquitto should select it (otherwise there is a performance
+regression).
 
+[--SNIP--]
+> >> +     help
+> >> +       Enable external poll loop support code.
+> > I am not sure I understood this "external poll loop support". Does it
+> > mean that the loop must be handle by the application itself, rather than
+> > bey libwebsocket?
+> The library can be run on either its own internal loop (default behaviour=
+) or
+> by having its fds incorporated on an external one (so, the application ow=
+n loop),
+> using an application-provided callback. The latter is now under the
+> aforementioned cmake option (see the cited commit above).
 
-Detail of failures for 2022.02.x
---------------------------------
+ACK, thansks for the clarification.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   xtensa    | libcamera-1966b9a58436fab51... | NOK | http://autobuild.buildroot.net/results/f9e6b7383c0f353f682957aebb372c9741d4a77e |     
+Will you submit an updated patch (default to y, and select from
+mosquitto) ?
 
+Regards,
+Yann E. MORIN.
 
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-                 agentpp-4.6.0 | 1 
-                 coreutils-9.1 | 1 
-                elfutils-0.186 | 1 
-google-breakpad-c85eb4a59b6... | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
- aarch64_be  |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/091fdfa980d5e64b5cfa70bc4488de0e0ac253d9 |     
-   sh4aeb    |         coreutils-9.1          | NOK | http://autobuild.buildroot.net/results/ef09178216ae0e1b5847984154474fe03202194e | ORPH
-microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/67d8315d96c8bd8c440bfc690b3b197a8314efb8 | ORPH
-   mipsel    | google-breakpad-c85eb4a59b6... | NOK | http://autobuild.buildroot.net/results/cef3cca46e354b87d43d471fa96327a5bf6dd931 |     
-
-
-
--- 
-http://autobuild.buildroot.net
+--
+.-----------------.--------------------.------------------.----------------=
+----.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspira=
+cy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___           =
+    |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is =
+no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspirac=
+y.  |
+'------------------------------^-------^------------------^----------------=
+----'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
