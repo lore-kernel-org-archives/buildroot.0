@@ -4,94 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3F6C7EE29
-	for <buildroot@archiver.kernel.org>; Thu, 25 May 2023 21:44:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D542C77B7E
+	for <buildroot@archiver.kernel.org>; Thu, 25 May 2023 21:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0673342A1A;
-	Thu, 25 May 2023 21:44:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0673342A1A
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF5F642A1A;
+	Thu, 25 May 2023 21:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF5F642A1A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N9x7ZwdOkJV4; Thu, 25 May 2023 21:44:49 +0000 (UTC)
+	with ESMTP id WWMMWuNcS3oM; Thu, 25 May 2023 21:51:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C4DD400DD;
-	Thu, 25 May 2023 21:44:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C4DD400DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00C31400DD;
+	Thu, 25 May 2023 21:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00C31400DD
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5C0111BF360
- for <buildroot@lists.busybox.net>; Thu, 25 May 2023 21:44:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 500F81BF360
+ for <buildroot@lists.busybox.net>; Thu, 25 May 2023 21:51:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33C9E400DD
- for <buildroot@lists.busybox.net>; Thu, 25 May 2023 21:44:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33C9E400DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2866F400DD
+ for <buildroot@lists.busybox.net>; Thu, 25 May 2023 21:51:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2866F400DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Wdz0UzDKibC for <buildroot@lists.busybox.net>;
- Thu, 25 May 2023 21:44:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20A2940017
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 20A2940017
- for <buildroot@buildroot.org>; Thu, 25 May 2023 21:44:45 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-309438004a6so1750472f8f.2
- for <buildroot@buildroot.org>; Thu, 25 May 2023 14:44:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685051083; x=1687643083;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=93WdXQMeFKfFlXxnUThrrVqIXXjak8SQvZa0nOF/mQQ=;
- b=CAvxao486gIYZDCWy2n/GDvXW11HCT/iiFmGMaikoljk1e686VjXpx7fyNMQ7Ld4mv
- tkZAt3ZWA2cvVGuQpctTOfLomT9vKT+SMDVCVklKzzFnV4dHilDaUQVUGfP3UdFFPVMd
- NcCCoQf3GmtGfS/FF0lMG2EysmN6CKLdExAAueynehDlNeWCvbyvGEpivqPgzFUEyc70
- iVSnFPrIkolz9gVNz8BpKL6yFoNjO5+4jommrPA573mvOnQ2firApe6Xn7rLIIrPRiBK
- OZOMAnevDf0bVNi1NrABRC7/KhGAZf+euZtEUcw60SKwV+cRcwjNUZJsm4ovOsyFjur0
- 69gg==
-X-Gm-Message-State: AC+VfDyxBRbD5/T0MWZ+RyI+zHCBx6kFOSM/iHk5ibPfxYYUH51PkccJ
- aKIIfGAN2buBDp2cIHGF0eopeA==
-X-Google-Smtp-Source: ACHHUZ4ZEyympscKr0PGZsph8hos/r2uR31XErklo1ZfspLY1bnvetPIP2tdZUcMp1m9tbsYZz+Qjw==
-X-Received: by 2002:adf:f80f:0:b0:30a:8fcb:ec24 with SMTP id
- s15-20020adff80f000000b0030a8fcbec24mr2740194wrp.1.1685051083192; 
- Thu, 25 May 2023 14:44:43 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- u18-20020adfed52000000b003079986fd71sm2940145wro.88.2023.05.25.14.44.42
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 25 May 2023 14:44:42 -0700 (PDT)
-Message-ID: <e7edff90-429c-06fb-8127-263f62e53ede@smile.fr>
-Date: Thu, 25 May 2023 23:44:41 +0200
+ with ESMTP id emm63WDluRhD for <buildroot@lists.busybox.net>;
+ Thu, 25 May 2023 21:51:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48E5540017
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 48E5540017
+ for <buildroot@buildroot.org>; Thu, 25 May 2023 21:51:22 +0000 (UTC)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+ by mx.sberdevices.ru (Postfix) with ESMTP id 9FA875FD25;
+ Fri, 26 May 2023 00:51:18 +0300 (MSK)
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru
+ [172.16.1.4]) by mx.sberdevices.ru (Postfix) with ESMTP;
+ Fri, 26 May 2023 00:51:17 +0300 (MSK)
+To: <buildroot@buildroot.org>
+Date: Fri, 26 May 2023 00:51:01 +0300
+Message-ID: <20230525215103.37218-1-svromanov@sberdevices.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20230109042648.2342444-1-james.hilliard1@gmail.com>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20230109042648.2342444-1-james.hilliard1@gmail.com>
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
+ bases: 2023/05/25 11:25:00 #21349968
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1685051083; x=1687643083;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=93WdXQMeFKfFlXxnUThrrVqIXXjak8SQvZa0nOF/mQQ=;
- b=x1v6rHdNVy7Jjmnen4uwAj1F4vCjJmvr32xmgpV9PRGLzMO+5iCjC1QcSoQCsYhs98
- 6BMF48brGlhwL69wLFIqdWLYtqIHt0rLNjlv+KLWS+5bFhD9q2qCJd4TFEn82Yv4beyi
- FDkb3UJ4SLil0WOrPIcLi6wIv32adckKOHiinMbBN2YQlIrixUV9xqMihmeVBbrI/jPN
- i/XPBNyH1ZmvIfbiuwootS+8GIyCgZlquJKwOHQ2q7LHr+UX3Zya1GIV18R+8kq9aBPq
- d4nYo0+vD6ywo+4g5KBBwnNL/cqvzXKN2y8FrOgWkKH1iwTNTnqwkJpbHQZilRN9V5fR
- GlOw==
+ d=sberdevices.ru; s=mail; t=1685051478;
+ bh=uqmNXMRTstX5jhKyXeWoQRcJN10IlH7+zI/ScauhrCc=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+ b=kZCVZ1F50QXsMn7xHFsnvtaKdToZjYnkoqP1ruuHiNp3xju6zgPMkpU/kZ4MArbtW
+ 9QDF/AsuqQtDavYHtTW5ho5OV6ZGwQZvmj5MFhAuO1rm6pa16oJRcAuEZO1dIugukc
+ HOQXwLly7Mfi3jwHpKydBRq+Dtu91saQ/h2FXTOkZUmYje/S0AN0S0L/XvMTb0Pno4
+ 7A8B/eSN/p8OzKimsH4XJ4IFl7dmI+22CsURa7bXPzr4wRPtqBVRqWXbJm0hl8Vd6F
+ INdG5aT1AuygQvWoAkdeQxYsZ1TiBVUYh8lNbKUbiuBvJRd7V4PJ7BAq95w2+dO7+l
+ w82jclRk9iFqg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
- header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=x1v6rHdN
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
- 8.8.0
+ dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
+ header.a=rsa-sha256 header.s=mail header.b=kZCVZ1F5
+Subject: [Buildroot] [RFC PATCH v1 0/2] Added package: 'sysbench' and its
+ dependency: 'ck'.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,57 +83,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Philippe Proulx <eeppeliteloop@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Sergey Romanov via buildroot <buildroot@buildroot.org>
+Reply-To: Sergey Romanov <svromanov@sberdevices.ru>
+Cc: svromanov@sberdevices.ru, chip-club@ya.ru, akopytov@gmail.com,
+ sbahra@repnop.org, thomas.petazzoni@bootlin.com,
+ sdfw_system_team@sberdevices.ru, kernel@sberdevices.ru
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsCgpMZSAwOS8wMS8yMDIzIMOgIDA1OjI2LCBKYW1lcyBIaWxsaWFyZCBhIMOp
-Y3JpdMKgOgo+IFNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFA
-Z21haWwuY29tPgo+IC0tLQo+ICBwYWNrYWdlL3B5dGhvbi1pcHl0aG9uL3B5dGhvbi1pcHl0aG9u
-Lmhhc2ggfCA0ICsrLS0KPiAgcGFja2FnZS9weXRob24taXB5dGhvbi9weXRob24taXB5dGhvbi5t
-ayAgIHwgNCArKy0tCj4gIDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0
-aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1pcHl0aG9uL3B5dGhvbi1p
-cHl0aG9uLmhhc2ggYi9wYWNrYWdlL3B5dGhvbi1pcHl0aG9uL3B5dGhvbi1pcHl0aG9uLmhhc2gK
-PiBpbmRleCBhYWUzNGY2ZjliLi5mMTFhZDFlMThjIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0
-aG9uLWlweXRob24vcHl0aG9uLWlweXRob24uaGFzaAo+ICsrKyBiL3BhY2thZ2UvcHl0aG9uLWlw
-eXRob24vcHl0aG9uLWlweXRob24uaGFzaAo+IEBAIC0xLDYgKzEsNiBAQAo+ICAjIG1kNSwgc2hh
-MjU2IGZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL2lweXRob24vanNvbgo+IC1tZDUgIDNhZGY5
-ZmNhMzE3NTEyZTViMzUxNmE5YWMyNWIzNDQyICBpcHl0aG9uLTguNy4wLnRhci5nego+IC1zaGEy
-NTYgIDg4Mjg5OWZlNzhkNTQxN2EwYWEwN2Y5OTVkYjI5OGZhMjhiNThmYWViYTIxMTJkMmUzYTRj
-OTVmZTE0YmI3MzggIGlweXRob24tOC43LjAudGFyLmd6Cj4gK21kNSAgYTFlYTliNmU0M2M1NTY4
-ZTUwMzE5NzRlYjNhNmFjYjAgIGlweXRob24tOC44LjAudGFyLmd6Cj4gK3NoYTI1NiAgZjNiZjJj
-MDg1MDVhZDJjM2Y0ZWQ1YzQ2YWUwMzMxYTg1NDdkMzZiZjRiMjFhNDUxZThhZTgwYzA3OTFkYjk1
-YiAgaXB5dGhvbi04LjguMC50YXIuZ3oKPiAgIyBMb2NhbGx5IGNvbXB1dGVkIHNoYTI1NiBjaGVj
-a3N1bXMKPiAgc2hhMjU2ICAzNDFhZmNiZDcyOTg4N2I3MDQ2ZmU3Yjk4ZmM0ZjRlZGZmM2FlZDhk
-MzhmMDZlZWZkOWIzMDY3MGYwNDNkZjE3ICBDT1BZSU5HLnJzdAo+ICBzaGEyNTYgIGUwZTM5MDc0
-OGVkNDQwYWI4OTNjYTFmMTM1YTg4YTkyMGFhZjU0MDlkYmI5MGE1YjQyN2M3NWM1ZTUxMjY4ZmIg
-IExJQ0VOU0UKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24taXB5dGhvbi9weXRob24taXB5
-dGhvbi5tayBiL3BhY2thZ2UvcHl0aG9uLWlweXRob24vcHl0aG9uLWlweXRob24ubWsKPiBpbmRl
-eCAxYWYxMDgxNzQxLi5mNWExMTRjMmYzIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLWlw
-eXRob24vcHl0aG9uLWlweXRob24ubWsKPiArKysgYi9wYWNrYWdlL3B5dGhvbi1pcHl0aG9uL3B5
-dGhvbi1pcHl0aG9uLm1rCj4gQEAgLTQsOSArNCw5IEBACj4gICMKPiAgIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMKPiAgCj4gLVBZVEhPTl9JUFlUSE9OX1ZFUlNJT04gPSA4LjcuMAo+ICtQWVRIT05f
-SVBZVEhPTl9WRVJTSU9OID0gOC44LjAKClRoZSB0ZXN0IFRlc3RJUHl0aG9uUHkzIGZhaWwgWzFd
-IHNpbmNlIGl0IHdhcyB1cGRhdGVkIHRvIDguNi4wIHJlbGVhc2UganVzdAphZnRlciAyMDIyLjEx
-LgoKICBNb2R1bGVOb3RGb3VuZEVycm9yOiBObyBtb2R1bGUgbmFtZWQgJ3N0YWNrX2RhdGEnCgpJ
-bmRlZWQgdGhlcmUgaXMgbm8gc3VjaCBweXRob24zLXN0YWNrLWRhdGEgaW4gQnVpbGRyb290LgpG
-b3IgZXhhbXBsZSwgRmVkb3JhIHBhY2thZ2luZyBhZGRlZCBweXRob24zLXN0YWNrLWRhdGEgd2hp
-bGUgdXBkYXRpbmcgdG8gaXB5dGhvbgo4LjAuMS4KCkNhbiB5b3UgaGF2ZSBhIGxvb2sgcGxlYXNl
-PwoKWzFdIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMv
-NDMyMjgxOTA4OQpbMl0KaHR0cHM6Ly9zcmMuZmVkb3JhcHJvamVjdC5vcmcvcnBtcy9pcHl0aG9u
-L2MvZjdjODVmYmYyNDFhOWRmY2YyODY4MmY4YzFmZmUxMWYyZDI2ZTAxYQoKQmVzdCByZWdhcmRz
-LApSb21haW4KCgo+ICBQWVRIT05fSVBZVEhPTl9TT1VSQ0UgPSBpcHl0aG9uLSQoUFlUSE9OX0lQ
-WVRIT05fVkVSU0lPTikudGFyLmd6Cj4gLVBZVEhPTl9JUFlUSE9OX1NJVEUgPSBodHRwczovL2Zp
-bGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvODIvMmIvMDI2YWY0N2RhMDk5OTg0MDRmNTEw
-NjRkMzI4ZjVmMWY2OGM3ODgyOTA4MmQyOTQ1YmU0ODkzNDNmZGU2Cj4gK1BZVEhPTl9JUFlUSE9O
-X1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvZjUvMzkvODk2
-NjRkOGMzZTRkZmIwYTczODYyY2JiZmY4ZWI0MDI4YTFlM2Q0MzA1ZGE4MGFiMGE0OTM4NDhlZDli
-Cj4gIFBZVEhPTl9JUFlUSE9OX0xJQ0VOU0UgPSBCU0QtMy1DbGF1c2UKPiAgUFlUSE9OX0lQWVRI
-T05fTElDRU5TRV9GSUxFUyA9IENPUFlJTkcucnN0IExJQ0VOU0UKPiAgUFlUSE9OX0lQWVRIT05f
-Q1BFX0lEX1ZFTkRPUiA9IGlweXRob24KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+
+Sergey Romanov (2):
+  package/ck: new package
+  package/sysbench: new package
+
+ .checkpackageignore                           |   1 +
+ DEVELOPERS                                    |   4 +
+ package/Config.in                             |   2 +
+ ...oid-buildroot-s-influence-on-LDFLAGS.patch | 191 ++++++++++++++++++
+ package/ck/Config.in                          |  23 +++
+ package/ck/ck.hash                            |   3 +
+ package/ck/ck.mk                              |  42 ++++
+ package/sysbench/Config.in                    |  28 +++
+ package/sysbench/sysbench.hash                |   3 +
+ package/sysbench/sysbench.mk                  |  30 +++
+ 10 files changed, 327 insertions(+)
+ create mode 100644 package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch
+ create mode 100644 package/ck/Config.in
+ create mode 100644 package/ck/ck.hash
+ create mode 100644 package/ck/ck.mk
+ create mode 100644 package/sysbench/Config.in
+ create mode 100644 package/sysbench/sysbench.hash
+ create mode 100644 package/sysbench/sysbench.mk
+
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
