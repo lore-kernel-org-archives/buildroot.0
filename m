@@ -1,78 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42332C7EE29
-	for <buildroot@archiver.kernel.org>; Thu, 25 May 2023 21:51:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9077AC77B7A
+	for <buildroot@archiver.kernel.org>; Fri, 26 May 2023 09:43:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD73042A1E;
-	Thu, 25 May 2023 21:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD73042A1E
+	by smtp1.osuosl.org (Postfix) with ESMTP id D9C5782890;
+	Fri, 26 May 2023 09:43:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9C5782890
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VcE041VRteCc; Thu, 25 May 2023 21:51:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jRiH6YOWWVYp; Fri, 26 May 2023 09:43:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E75B41CF7;
-	Thu, 25 May 2023 21:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E75B41CF7
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB2DE81362;
+	Fri, 26 May 2023 09:43:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB2DE81362
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8579A1BF360
- for <buildroot@lists.busybox.net>; Thu, 25 May 2023 21:51:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AE6931BF859
+ for <buildroot@lists.busybox.net>; Fri, 26 May 2023 09:43:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6BD4E843DD
- for <buildroot@lists.busybox.net>; Thu, 25 May 2023 21:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BD4E843DD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 88485820B1
+ for <buildroot@lists.busybox.net>; Fri, 26 May 2023 09:43:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88485820B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eP3BpEOWH8mL for <buildroot@lists.busybox.net>;
- Thu, 25 May 2023 21:51:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFA04843DA
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BFA04843DA
- for <buildroot@buildroot.org>; Thu, 25 May 2023 21:51:32 +0000 (UTC)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
- by mx.sberdevices.ru (Postfix) with ESMTP id 7A34D5FD25;
- Fri, 26 May 2023 00:51:30 +0300 (MSK)
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru
- [172.16.1.4]) by mx.sberdevices.ru (Postfix) with ESMTP;
- Fri, 26 May 2023 00:51:30 +0300 (MSK)
-To: <buildroot@buildroot.org>
-Date: Fri, 26 May 2023 00:51:03 +0300
-Message-ID: <20230525215103.37218-3-svromanov@sberdevices.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230525215103.37218-1-svromanov@sberdevices.ru>
-References: <20230525215103.37218-1-svromanov@sberdevices.ru>
+ with ESMTP id 1TCuG80PzwKH for <buildroot@lists.busybox.net>;
+ Fri, 26 May 2023 09:43:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F31488134E
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F31488134E
+ for <buildroot@buildroot.org>; Fri, 26 May 2023 09:43:38 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-96fb1642b09so73425766b.0
+ for <buildroot@buildroot.org>; Fri, 26 May 2023 02:43:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1685094217; x=1687686217;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=iZCf04Wgfis5e1p3JPEaK/kfY6XJrrE/JknvgnvKeQQ=;
+ b=buY9dUMLCLyEuK8O2hLLHxIhSHaSXBp+7A1T46aXulpcFiTqHcBbHaRX1j5aQjQmb5
+ q4Dd0V1Jj+lZYIu1gYbIEexIhO0qvDgbunBQqKBJ5sOXiXzHQwUwzdnKEteCU2hVK1Xn
+ aAFJFwvdt8OYYc09H5i6EBJpZcFSsfDhgrE4gqJpVRHJjVnPPkpa/WNeGvyHvauFqWOx
+ nk46hCN+KK/SeI62QL6LVmYJlnW8S4eTh3O3ieAiSIk5MKJZl1aYMWfO4i64QnNjhiej
+ YE0ogv4AF7iS1+qJvmgWnTGqd0zCD7YPu2+jpWgLMRJNsaZWMkuaustWFBtAX3igw85Q
+ EK5g==
+X-Gm-Message-State: AC+VfDwKKL+V2p6N+Ju5FdKlGLmC+fBfLc7a/mY1FDGpdETv1PMbNFIZ
+ 9jLyA7r+95bEHO3J5RRyNzIsz0CqfYscgwj/n7Q=
+X-Google-Smtp-Source: ACHHUZ6D9T3t/pvxbwLRPZEXHTwmS4gwg3d0/vgtOcP2AoGXsXPQob59nN1zPChKqOU8l9VR79+OTA==
+X-Received: by 2002:a17:907:d10:b0:96f:d345:d100 with SMTP id
+ gn16-20020a1709070d1000b0096fd345d100mr1269885ejc.59.1685094216792; 
+ Fri, 26 May 2023 02:43:36 -0700 (PDT)
+Received: from localhost.localdomain ([91.90.166.178])
+ by smtp.gmail.com with ESMTPSA id
+ md20-20020a170906ae9400b0096599bf7029sm1942997ejb.145.2023.05.26.02.43.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 26 May 2023 02:43:36 -0700 (PDT)
+From: Witold Lipieta <witold.lipieta@thaumatec.com>
+To: buildroot@buildroot.org
+Date: Fri, 26 May 2023 11:42:19 +0200
+Message-Id: <20230526094219.3374291-1-witold.lipieta@thaumatec.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
- bases: 2023/05/25 11:25:00 #21349968
-X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sberdevices.ru; s=mail; t=1685051490;
- bh=Qe9q/qUXTImNB2pi2Is/MqdasauNif9W92JnXHjZ4eo=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
- b=qn7PTDzy6TbR7sDZg49tJWLwZS/vUloFDdSwaxAn4QfcF4fmwp44Aj8TkJvWphKkv
- KO5p77nVpd+CZXcSDdnbzFgrNwHvErP/FZRD7+68KY9MW72IqgpwxjbC6MtZ2Gf55Z
- 7nAWrfNNOQvjdqVvjaiB6p7e8Jx2Pfvnhb+TBRziv0da3Np3V+ABkeDpxelJOaW0HD
- EkDW7vZngB1Z70G/zUq/ulbd8nPgzVg+dKliYanNiJWu0KrvlQ30g0UeamuMUXoYhJ
- lIAoUWxHBd8zwNKUbWhYoZgbR7Sb+UAdeLdrDLyqMstmy6ixk9qIpqECAZwCStGgjp
- lNarVnUnuInBA==
+ d=thaumatec-com.20221208.gappssmtp.com; s=20221208; t=1685094217; x=1687686217;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=iZCf04Wgfis5e1p3JPEaK/kfY6XJrrE/JknvgnvKeQQ=;
+ b=nYuFXGKlvRdGJte4rtNe4Z6AFyL8052m5MA1L6s13+BVzB7JAa+QSJGZXFjXLvaQMe
+ 0klNyBBXNbGeT9GPCwwsNb94vAmQ5t4Jwo4HnmYh5lI1Dm4IwcUmCUnUiabfcPO0HtP8
+ vZdcXj9YmOkb1+3vNH4eG5IVVSIVAHcqjmQbZW7g+gEnymeiLAWMowAAz7yyB6Gnf5rR
+ O67Vjdva92Fv1uQgdBGEcpOf/NnOf4+pA3WgO7pdm0CQ2L3nkswSwHzp7cqnh/CtkBtr
+ SdTgFdigdHHoKJ0xa3Z1Zldrdd8+BMNuPxxRdf+J8vI9RP/EpFb1GJNOCmGNciB4kdL8
+ m7VA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
- header.a=rsa-sha256 header.s=mail header.b=qn7PTDzy
-Subject: [Buildroot] [RFC PATCH v1 2/2] package/sysbench: new package
+ dkim=pass (2048-bit key) header.d=thaumatec-com.20221208.gappssmtp.com
+ header.i=@thaumatec-com.20221208.gappssmtp.com header.a=rsa-sha256
+ header.s=20221208 header.b=nYuFXGKl
+Subject: [Buildroot] [PATCH 1/1] package/python-matplotlib: add Pillow
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,147 +96,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Sergey Romanov via buildroot <buildroot@buildroot.org>
-Reply-To: Sergey Romanov <svromanov@sberdevices.ru>
-Cc: svromanov@sberdevices.ru, chip-club@ya.ru, akopytov@gmail.com,
- sbahra@repnop.org, thomas.petazzoni@bootlin.com,
- sdfw_system_team@sberdevices.ru, kernel@sberdevices.ru
+Cc: Witold Lipieta <witold.lipieta@thaumatec.com>,
+ Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This benchmark was designed for identifying basic
-system parameters, as they are important for system
-using MySQL (w Innodb) under intensive load.
-Handling of IO in case of many parallel requests,
-checked as well as memory allocation/transfer
-speed and scheduler performance.
-CPU is benchmarked by using 64bit integer manipulation
-using Euklid algorithms for prime number computation.
-Benchmarks are designed to show benefit of multiple
-CPUs as well as of multiple hard drives,
-battery backed up write cache.
+Pillow is mandatory dependency since version 3.3.0.
 
-https://github.com/akopytov/sysbench.git
-
-Signed-off-by: Sergey Romanov <svromanov@sberdevices.ru>
+Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/sysbench/Config.in     | 28 ++++++++++++++++++++++++++++
- package/sysbench/sysbench.hash |  3 +++
- package/sysbench/sysbench.mk   | 30 ++++++++++++++++++++++++++++++
- 5 files changed, 63 insertions(+)
- create mode 100644 package/sysbench/Config.in
- create mode 100644 package/sysbench/sysbench.hash
- create mode 100644 package/sysbench/sysbench.mk
+ package/python-matplotlib/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4accefb251..d48cbbd145 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2628,6 +2628,7 @@ F:	package/xr819-xradio/
- 
- N:	Sergey Romanov <svromanov@sberdevices.ru>
- F:	package/ck/
-+F:	package/sysbench/
- 
- N:	Sergio Prado <sergio.prado@e-labworks.com>
- F:	board/toradex/apalis-imx6/
-diff --git a/package/Config.in b/package/Config.in
-index c81ddc81f6..0004f71846 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -152,6 +152,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/strace/Config.in"
- 	source "package/stress/Config.in"
- 	source "package/stress-ng/Config.in"
-+	source "package/sysbench/Config.in"
- 	source "package/sysdig/Config.in"
- 	source "package/sysprof/Config.in"
- 	source "package/tcf-agent/Config.in"
-diff --git a/package/sysbench/Config.in b/package/sysbench/Config.in
-new file mode 100644
-index 0000000000..a8377b5bfd
---- /dev/null
-+++ b/package/sysbench/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_SYSBENCH
-+	bool "sysbench"
-+	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_CK
-+	help
-+	  This benchmark was designed for identifying basic
-+	  system parameters, as they are important for system
-+	  using MySQL (w Innodb) under intensive load.
-+	  Handling of IO in case of many parallel requests,
-+	  checked as well as memory allocation/transfer
-+	  speed and scheduler performance.
-+	  CPU is benchmarked by using 64bit integer manipulation
-+	  using Euklid algorithms for prime number computation.
-+	  Benchmarks are designed to show benefit of multiple
-+	  CPUs as well as of multiple hard drives,
-+	  battery backed up write cache.
-+
-+	  https://github.com/akopytov/sysbench.git
-+
-+if BR2_PACKAGE_SYSBENCH
-+
-+config BR2_PACKAGE_SYSBENCH_WITH_MYSQL
-+	bool "configure with mysql"
-+	select BR2_PACKAGE_MYSQL
-+	help
-+	  Configure with mysql
-+
-+endif
-diff --git a/package/sysbench/sysbench.hash b/package/sysbench/sysbench.hash
-new file mode 100644
-index 0000000000..a31fdb1178
---- /dev/null
-+++ b/package/sysbench/sysbench.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  e8ee79b1f399b2d167e6a90de52ccc90e52408f7ade1b9b7135727efe181347f  sysbench-1.0.20.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sysbench/sysbench.mk b/package/sysbench/sysbench.mk
-new file mode 100644
-index 0000000000..748014f564
---- /dev/null
-+++ b/package/sysbench/sysbench.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# SYSBENCH
-+#
-+################################################################################
-+
-+SYSBENCH_VERSION = 1.0.20
-+SYSBENCH_SITE = $(call github,akopytov,sysbench,$(SYSBENCH_VERSION))
-+SYSBENCH_LICENSE = GPLv2
-+SYSBENCH_LICENSE_FILES = COPYING
-+
-+SYSBENCH_AUTORECONF = YES
-+
-+SYSBENCH_DEPENDENCIES = host-pkgconf
-+SYSBENCH_DEPENDENCIES += ck
-+SYSBENCH_DEPENDENCIES += luajit
-+
-+SYSBENCH_CONF_OPTS += --without-lib-prefix
-+SYSBENCH_CONF_OPTS += --with-system-luajit
-+SYSBENCH_CONF_OPTS += --with-system-ck
-+
-+ifneq ($(BR2_PACKAGE_SYSBENCH_WITH_MYSQL), y)
-+SYSBENCH_CONF_OPTS += --without-mysql
-+else
-+SYSBENCH_DEPENDENCIES += mysql
-+SYSBENCH_CONF_OPTS += --with-mysql-includes=$(STAGING_DIR)/usr/include/mysql
-+SYSBENCH_CONF_OPTS += --with-mysql-libs=$(STAGING_DIR)/usr/lib
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
+index b936777662..8a9281b8e7 100644
+--- a/package/python-matplotlib/Config.in
++++ b/package/python-matplotlib/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+ 	select BR2_PACKAGE_PYTHON_KIWISOLVER # runtime
+ 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
++	select BR2_PACKAGE_PYTHON_PILLOW # runtime
+ 	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+ 	select BR2_PACKAGE_QHULL
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
