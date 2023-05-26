@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80B82C77B73
-	for <buildroot@archiver.kernel.org>; Fri, 26 May 2023 17:55:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D449C77B73
+	for <buildroot@archiver.kernel.org>; Fri, 26 May 2023 17:56:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18BD442EF4;
-	Fri, 26 May 2023 17:55:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18BD442EF4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 389C942F08;
+	Fri, 26 May 2023 17:56:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 389C942F08
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pONIgagSFN01; Fri, 26 May 2023 17:55:46 +0000 (UTC)
+	with ESMTP id d23XgXeO9yEA; Fri, 26 May 2023 17:55:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06DE140B6B;
-	Fri, 26 May 2023 17:55:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06DE140B6B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 269B242EFE;
+	Fri, 26 May 2023 17:55:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 269B242EFE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 151A41BF29A
- for <buildroot@lists.busybox.net>; Fri, 26 May 2023 17:55:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 510021BF29A
+ for <buildroot@lists.busybox.net>; Fri, 26 May 2023 17:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E10AF4281B
- for <buildroot@lists.busybox.net>; Fri, 26 May 2023 17:55:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E10AF4281B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31B2B4281A
+ for <buildroot@lists.busybox.net>; Fri, 26 May 2023 17:55:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31B2B4281A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 41mlL5wPK92x for <buildroot@lists.busybox.net>;
- Fri, 26 May 2023 17:55:27 +0000 (UTC)
+ with ESMTP id z0__uzJgOCzr for <buildroot@lists.busybox.net>;
+ Fri, 26 May 2023 17:55:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DD6D4281A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D29834282A
 Received: from NAM11-BN8-obe.outbound.protection.outlook.com
  (mail-bn8nam11on20700.outbound.protection.outlook.com
  [IPv6:2a01:111:f400:7eae::700])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0DD6D4281A
- for <buildroot@buildroot.org>; Fri, 26 May 2023 17:55:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D29834282A
+ for <buildroot@buildroot.org>; Fri, 26 May 2023 17:55:27 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mApwTo5+WMWeFA3gF3+5ZE9zBdenndaviHUjxctDscycQv0xwFDFuRI7IlDVTB9Hi8lNx8dGTvpkk2vsDRMGjXQ/NyHppyFobpC/E9bjtUF6Y0A4nGccTk+Dx2EQn/RFVOC5NZz8sVhpfJ3W/W3ATX1yyNLw5pgqF/qrZHK9eV6pXZc894vopeBjIR11/XNAxinYcNvjnhBODbhRG74u3u1YF7edAX2EiqKfpfYJohp8/Qk1vnxEdZ0ccrnRCjxqHGX73COZGv4rpC2ZeaLFnKzYMfirTEuX5tTnHDXNrzuGjhnQOG7HZNks6FsyE06Bp8th/mjF6BOiYZqJ0T1iyQ==
+ b=PKm9+LFicO0ZhZtfaNg7nenlvC6B64pCxlEzaLwg9D4uKlMugQdZg7CAxTRqstCB6LC1LfKDET4PYwQrErigGfdasECLA+x4UTBuNL53VK4GeKuRxI5FzzjAshgk1j4OSI2bpQNxNSPqWjmIrKgQLny1CpUtay+P7r09nWohZiTc+iTfwdrdp+gAg1OikZ6vcBZKisyFifXPR9auswqyHwQ2aVhrGofhQD1dSFLP+kJiqQQmbu1y5UvvYhb0lzJ+xtiI0I0FFhlrFdYTss+Tt4hb75imYvAI+pC3SxjCqhdrqvG97skWsm9StyAZcpBe+sffRrRnqTeql/v8nKGEOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zcg56w5COkUhUtG9MdNNp0sS9fDCtnbtzKPv17/txh0=;
- b=lEEy9SikxftMad8JG40vUkYiGNnT5mxXFiX0N+xWLL/km7seXhsMF6uTXaJpHL9dr4zVq7zi8+mI0Nn3u5EgQmtivgGnzlPO0EgRNY9IDV8z93p7vtVRsGr1ZHiSCmPT+wU8A2d1AxMovNngZqadsQOTu83SHNi2R3GtTGbj8xseOJo58ZC35+BevFeMsnksB+gJqlVtaXo9Tzp91ekyZwb1gBD9hF6uQ3v+9DPO8vEK80mc9hjNCYpcjmuf4EJ3tbH/Jh8l+m/NT9tLoWgkTyLkxPA0D5VdpL9g2oULGDiBPgEwhSKUSPAYgJ7FPsmOIZmAdUDEP6j3BdlLm6NtOw==
+ bh=+f3eEW4gIH7vORE3OnGeffMXRjvTcWRHuPcNjvZlPTs=;
+ b=VVK89jSdqsIzvidTf8Z674mxd1BsLMOmWP+n72yw/YSXetnRtYU1pfdCpWeNGOilq1B3u567f4nRWOU87ghIbMOYjg4iMWcUHMEqeLs5mzwX7VrqY5A0msPhbNBjJAG2NIaeO863dQJ7q+UfSODc5mkO5bA+hqyRC9JeoKnaUrQcbGWqBY6WMIFqOg2UuSMj1XE6fSbENUEZFNLvBBahdhxr+ud+sm7Q4Hz34i+mK6biYeof0pvzjUDh2U5KbH9PTZd1CK8Fi6wZXphQF+08nMIwaJ1bz+xBvyKYwlRRBR+CD+RmqqaKU5oBsVOuAYzV/clNMR6dHGxcBliggtRnGw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=in-advantage.com; dmarc=pass action=none
  header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
@@ -51,15 +51,15 @@ Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
  (2603:10b6:301:35::37) by MN6PR10MB7421.namprd10.prod.outlook.com
  (2603:10b6:208:46e::5) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17; Fri, 26 May
- 2023 17:55:23 +0000
+ 2023 17:55:22 +0000
 Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
  ([fe80::50f4:806b:a6be:98da]) by MWHPR1001MB2351.namprd10.prod.outlook.com
  ([fe80::50f4:806b:a6be:98da%4]) with mapi id 15.20.6433.018; Fri, 26 May 2023
- 17:55:23 +0000
+ 17:55:22 +0000
 From: Colin Foster <colin.foster@in-advantage.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 May 2023 10:55:06 -0700
-Message-Id: <20230526175506.1071354-3-colin.foster@in-advantage.com>
+Date: Fri, 26 May 2023 10:55:05 -0700
+Message-Id: <20230526175506.1071354-2-colin.foster@in-advantage.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230526175506.1071354-1-colin.foster@in-advantage.com>
 References: <20230526175506.1071354-1-colin.foster@in-advantage.com>
@@ -69,66 +69,66 @@ X-ClientProxiedBy: MW4PR03CA0274.namprd03.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|MN6PR10MB7421:EE_
-X-MS-Office365-Filtering-Correlation-Id: 240cc131-38d6-4a14-11ca-08db5e1260ac
+X-MS-Office365-Filtering-Correlation-Id: 4c92c077-e405-426b-1fa4-08db5e125fd3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 121P26H3Y4q7O6B+fqtwQDRELTJZwt4gO3M9QlOONavqdVNMW8G4Pt90bnrVWFZwPMpxJevH5HXOr2kM7uqBcnaR9V4Gta/rCLIdNfCt7biTxjwHZMgi3gaiOVrd8/2OVijZpCk7+kYAI2EC4F8CQO+T0JIn7f3KOEEo3FLsdtWvQwawXpTlTvAnjsnfLCmgQxlF0z3tcR/3jpFTstUg2NucBeDp3vD1CmWg6qHchyAH3QzaOhgEMj0dgdzVSgPhqjf1tS1ic0w4bfy+M8KMqfmLiN8pJkZ6ZIV7uh6bbVWge/tORc2YUG42BCl/zHEOK1A+UiRt8VUgLNeFqhWNrfSCjXyePPIT66XWGJzezjK1dmJOCtMqVNPO68kGaQCIhmxb92wgwrURYz03Yh+B5deO2e9cIx4ona7LKPcBcgibI77oIcJwsMO7QnrDCUY4caTNV/M+vh1Vb1iT2eTa5tmmqgN5PyqwAynyUZJfRztDBY3R3r6WWU8cPN/Xbu1MlH+HbDsxQI5/oWd2bF45jspZKK6rS/ljUUvRFzXZFvTompnXsLDCuKEE6Y7sFgaSLA2+TIJshJymAVEI4HUkSEvKDS5IoEPGEQ6TD90A01NPunRNt1/JaBKxxNDZJzBRxMK440cv5ZKLZyFPP7UgCmIBUx9ycWQIw2av6y74IZo=
+X-Microsoft-Antispam-Message-Info: YVJGsQgdrHdTcx9NCRMz6ghF0Zpr/pkiePTY7fjWiDBo7qWKQnAqBxre71YEQCwz20Y0vTB7Xotd4qs5YSmNVzc9DIutfitKm54NPWZALHwC/USIAKmDutvlIuK1vTgu2PgMyk0Kdh3uSHh2ARCdPDpOm3FcWsyIMsct+8RcQTabA+7R8hMT135YNReo8uWpgzrp5D75STJsNPTvBziiwGFqXy8kkMPH0PcMsURHm+/Oo52cR235SGWH2LEuYUT5XC3o1rzHyCRgkuI/gXXi+lHSslpcBZfDZAl+0kpfU2jHLe2I1FaiS/pScCQu9cxWjakYgh6vqM3VjifMsvvxSoB/8SdA5tuasFxGXt3IQJ6pEC+LlLS6dsQCMuFy6pZKr0ZwCPYhW/phWfHQs5vNGkJlT4H9CzgALSWYr+uNoVhPlTXcZX9TNtGYHI0HAD5qo3Sd9FJeOrrjd0h2EzTqle0rIgrO72vcFX8I73No36ORWOiMHlvFXG+U5WBN3dOtemuriwNTvAd9WMbK2BvXgHlasH3TySGuZK+PYd0oG+uNX3BT1dv2yaX88Vav9EtlkERxBUY6+tml4jwOiAcPIbyTvbweWe9zBKRJy1BppBzrcZFfTrTlpqvbEr6lN8gDmuRQ8EGrDvE1puWWssv7fg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:MWHPR1001MB2351.namprd10.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230028)(376002)(396003)(136003)(39830400003)(346002)(366004)(451199021)(186003)(6506007)(2616005)(6512007)(41300700001)(8936002)(44832011)(1076003)(26005)(8676002)(86362001)(4326008)(38100700002)(36756003)(2906002)(52116002)(966005)(66476007)(66556008)(6916009)(478600001)(5660300002)(66946007)(83380400001)(316002)(54906003)(38350700002)(6666004)(6486002)(2004002)(41080700001);
+ SFS:(13230028)(376002)(396003)(136003)(39830400003)(346002)(366004)(451199021)(186003)(6506007)(2616005)(6512007)(41300700001)(8936002)(44832011)(1076003)(26005)(8676002)(86362001)(4326008)(38100700002)(36756003)(2906002)(52116002)(966005)(66476007)(66556008)(6916009)(478600001)(5660300002)(66946007)(83380400001)(316002)(54906003)(38350700002)(6666004)(6486002)(41080700001);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7MllZkLE3vTD1KyOvQ4t8aEFbfzP5uGXx1clGcNnho7T+H+H/Twe8rmwR1Zf?=
- =?us-ascii?Q?535tuykDDsrAjXif9c/t2WN42RXCY/q9lU3WBYdiYs0oVPuh5z/Kt+eWfOI0?=
- =?us-ascii?Q?HB0rXgu++FqodXc0TgfDJZzgNF2k42ePAai4keqxHKOAdvl4R0kpgw6pCi7N?=
- =?us-ascii?Q?G8Rzjcz7JOsUhTkO0w6QlBg93rtfwUFnDhxYmFErTGd67zAoIKsqyFw9tvZH?=
- =?us-ascii?Q?He7L2IFul8lM1OtRwLLLBE9qbfW7HrVDOiRd8Vi1bgaqUdJWAQ4ksJbLAZXl?=
- =?us-ascii?Q?/CT2/ba+RsB+dxOihJJJq0x6VFjPXzJBkpWJT0ZbVTWi5HG7usjEfa7H9fHR?=
- =?us-ascii?Q?nGDGpwIeG2B91zNJbX4Yr1HZrlACd+6TB12unxxClcjMayqWtoEkVGxIgr4t?=
- =?us-ascii?Q?CXVc/eS/frsbhNFFgCAihyqqRj32+AvTgPUcxzJZu3hRZmTrLMvFtZkypOXp?=
- =?us-ascii?Q?Gb+lRbdx0Dmbyi8y0uEOVCh7IgQGC1R4PTb/4UBTV/xMo4uPaixTSwpPqRDK?=
- =?us-ascii?Q?hsWU+WDhQcbxP5kjhT1dCbYXJssOVSq8m0zRGZff29tkKmZl6rpmCk/dhDzy?=
- =?us-ascii?Q?suqRETMm+zq9rXtS2i8XyGVmtik0E4/oS6126ns6r3fV457VzJWWzdH/ACL3?=
- =?us-ascii?Q?az0hLDY7U0RqzUoJabgCADgzmhaonbdsK0omCfBS3YnDJtblNvBhLphYfah8?=
- =?us-ascii?Q?5hmeYpJQDt8lU2GVS7bPz3gWRXGTDW6M5mbkAgoxXPiskinV/7xv3xf1JeaB?=
- =?us-ascii?Q?ksXki2Kw+hV9q98onFsvcnM52NBEG9KNGT9QETh8xmTUSK28zTi95cX1kFKm?=
- =?us-ascii?Q?w3xs/hUcIx65/JlYjo6wxmrfaJOQWmNDRfJxcLNly08qfUxo2WMQ/HHeAiTC?=
- =?us-ascii?Q?BDDNvy2YBYK16oLFbRkz25+FqWpBQQG3ykwzi73frRMDv4oCXqTm4KebrCiX?=
- =?us-ascii?Q?9ld8xB9NRRinLUFSrr+Fk7cq1lPn4dCi7UiBhWCTIR9griybvmBj1HFF3JdG?=
- =?us-ascii?Q?CmfdIBqkjVGpbYOEtUp+IQnNUHNU/Wi3SxcDs7ij52qk447qOXuMIAQEcJ4b?=
- =?us-ascii?Q?SL7+aJ9JSMqw338hAx/UoAjxPYw8+vaOXyznL1t9ZqbapISBckww/nfZobSl?=
- =?us-ascii?Q?ho7S5OW4n76o0TjH/mXyVqhehOUv3up0TSsy0vy/dt/Nh+5bCnz6Z0lNPEZC?=
- =?us-ascii?Q?qyQjXdjEh0MYyP6uNtDTUuiFFm8pW2zc97Pqi+DR2pgzvERikrf7NbV7eXbw?=
- =?us-ascii?Q?g38OiYMQlCQ71YKFfLzVaRHzIBHv/6pSe3JXfbT9FgT1PhAOcFlgvPP8ipG1?=
- =?us-ascii?Q?tmON7dB2CMo31XoITzvN9SpauYeDrybnQYehpr4OR4aTdIECrftcmmPfydia?=
- =?us-ascii?Q?Rd3djNm8AQgQiqc3BVeN7MDrM2a+CzDzs7oJ8lNb3wBszommydniIu3FSca2?=
- =?us-ascii?Q?oukvjIZCluOFuIyX1EyEvt7YndYUKts0NH4VgopULbTPYbflF89yR1hhZ35b?=
- =?us-ascii?Q?DxK5xtQNEMhSYXuBkEM6iVvaTIIh+Q/4HEGQAaXuMDmDzYpAOJkaf4Ib7L5F?=
- =?us-ascii?Q?2BngGb05E3t685X8yCITdW5PO7VAbetiyEQilGdRmulAsAAIepExzQBcxNNS?=
- =?us-ascii?Q?Mw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JysPZXTEvPY0EuU1YKR0NpqcSnWp0p+CvdY4+55uIbGgTrKzAjxx1gR5VSYM?=
+ =?us-ascii?Q?pau172H/hGpcy27Ub1Kgc09c51st0uJYgbOfHS6Mtiwn6kqbvfmtDXt9/din?=
+ =?us-ascii?Q?CMb1xYYvcVU7EPhsFpPJJtOo8kWCmA+uZ2Gog4sb81ho+uOXocTyJSq3LCS7?=
+ =?us-ascii?Q?xcb2CWAE+57TWgSY0x89XV+yQiD4WbA98YiGBygk0IdGyhoLtrbWuSbaWzON?=
+ =?us-ascii?Q?eGWWg0PtYgA2MlcrKdEUtXHDSxwbe9IhzJ8WDrrNXs8HSmXQrbKAY1twH7ra?=
+ =?us-ascii?Q?4SQClnoWYeJRb+37zeYPZvd0TygRkSpL0JQwJ7mSOIzFU1Ur+aGRigfkzC0w?=
+ =?us-ascii?Q?vdQNguQOjbiEAKOZ9nLJh7FY9qz+GFwj1p+g5RYOwJF1Yb1AYMwvHcM/GAER?=
+ =?us-ascii?Q?30JjLEVW5AT+odiwGzcpow3sHlNl4Fw3W4ZSzsDwPoQX/MkGq19/3TMkFX8c?=
+ =?us-ascii?Q?SqDlOpTIRQyGd0RWI7E4MrxS6YFoYhzI11oLs8YIkK8tkXJ4oR4gNgr1d8lq?=
+ =?us-ascii?Q?cIO/RdFjcJcIHLWEKkd54n3xyfuQf+l8nX2Vh8OT7DtJ7IAY0dNEg8qz2C4W?=
+ =?us-ascii?Q?dyOzE1JfPn+vw0K+EQJ99j9UrauKWWugn5CxCggtdkYTgRWUFhE6TdclCVYl?=
+ =?us-ascii?Q?41MlIUSi/RSQVg5+SBJz38FNCnwikjPsncM44AAaTKVTTKo9yol0lI86n4Jr?=
+ =?us-ascii?Q?zcYXnNQMDJvXeYNNbgbxEnK1x6mBOGsRzFyRjeE9Z3dgHPg3bB86lv/VcqfE?=
+ =?us-ascii?Q?WqZJiCaEr741IoVAaNh7eRO4gzUbh5SqxDISSqDowpknLe8rDcK0xAbDItSb?=
+ =?us-ascii?Q?Bg1XRlYWxXMsoLiGT7UMsu2VDiWvDOF7vu8cL7khZhFWoGNr8l9eXZCma0Au?=
+ =?us-ascii?Q?/0fEXl+Vh+p574fuDzcqBHJGvkdVDxYejkp4/iny4C1wStf4UryDZGglL8dF?=
+ =?us-ascii?Q?TYqTFyvkg6BhtOcgbdFBGgYyzXzKodXWvqedIwq5niXDc16aAz8oEWI+0PHd?=
+ =?us-ascii?Q?5eLb4eVKM/1IAdfSusC9NRfDRzO3YVVobMlGo028Lfz1IeB4uKkxeHnBBMvx?=
+ =?us-ascii?Q?pynjs02SQywnYrLfTI4VrmSYrBfJhJx+qJpWp5TA8JvRTYgechbqGDrWfcGO?=
+ =?us-ascii?Q?tikRqz7Sis+O6/J0WoNlPFup7mZPZVrXmRQQH94hRUZHGiuGWGtLwY0SBIHG?=
+ =?us-ascii?Q?mTS11xbMQjF6OCupfpYal8Mn8de28neqnxO+0sP7+Kt6wRjEMmBpvqFjE5vs?=
+ =?us-ascii?Q?hFBOgoZQ5Dhf6iSWlU9WVnfoqN4yW+yoQtMDH85wxaf7fMuzQpndJgLrjyVa?=
+ =?us-ascii?Q?pS6YC2ux8YEmQTGSRzb5aXQcDHp+l8g7kdW1M9KCURSl7APStzjQJWf7TifV?=
+ =?us-ascii?Q?RHYv22zomHuyOSjX2x/Nf2E9RjuRGWY5jZxZNfdsEIpQyXcVaZrEPpkutZrt?=
+ =?us-ascii?Q?+9S79x7NcykIs/kzqUIyqMq+vWZvmZduMjVHlv/2qZZHwahO9iA0gECRVcAm?=
+ =?us-ascii?Q?cil0rScSjHu6cnA6PjN1wbrz0y/+zb+Sc991z7ZCjSyfRRBTMCLYw9kL1yy0?=
+ =?us-ascii?Q?3awuvrAW8WS8ScDKVBjwUgCG9fkAyBMhZuEHG6plIyA+tbWQ2KwyAobbu7K/?=
+ =?us-ascii?Q?kQ=3D=3D?=
 X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 240cc131-38d6-4a14-11ca-08db5e1260ac
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c92c077-e405-426b-1fa4-08db5e125fd3
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 17:55:22.9449 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 17:55:21.9313 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GpJA2jKVIKlLEMdfHHpd3rhpvpHBTgbwINZ9ytHG0RUg/LUkG5wokfpgb2EeqRrdHb+TXwGi0oXBIa80wknu13P/EXz6jO1569MvPdP9hFA=
+X-MS-Exchange-CrossTenant-UserPrincipalName: G0aiN8LnBNDOYTN5NjyE+i+iMBW0MH6t1QLkv0lz9vWmJYo8NvT8tEZ7gkD0jDFi7lT7UsWe+H7ZADyOL66X0cTbCbxmlgir17B2Ckvn3Gg=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB7421
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zcg56w5COkUhUtG9MdNNp0sS9fDCtnbtzKPv17/txh0=;
- b=WyKDzPGknFoJIYw4bCfeNLVqpG6MMNoH9C7Rd6e6Zq0hHdxg8crEZOdXOeoPIqXkdBSnMZNFWJHdPFNA9gP1CrdurWgl4GrWt1di9zPR5pedhq+Jx3x04EMxhRnF31dQJ+9vvIdlRDmdYm2pyrbFA25BI7TEdbUPoP0fx+of92Y=
+ bh=+f3eEW4gIH7vORE3OnGeffMXRjvTcWRHuPcNjvZlPTs=;
+ b=Hl1GhFZ1NSkY5jg919IT3CH8chFkQiHSpXLrR+qR+fgkI1pmmvKGWl+0OhShDDxlojnIU/GUjCo0u0eSbIQnEY3k0knj1wRhYwwU8VtWRbL83iGN3r/gVA4FTSq9fiPPHatfHQgwmfbrbe0yCO6QiSQcYup8bngMlkW+RQytyT0=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com
  header.i=@inadvantage.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-inadvantage-onmicrosoft-com header.b=WyKDzPGk
+ header.s=selector2-inadvantage-onmicrosoft-com header.b=Hl1GhFZ1
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Subject: [Buildroot] [v2 2/2] bootpc: add dhcp-like configuration ability
+Subject: [Buildroot] [v2 1/2] package/bootpc: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -147,205 +147,184 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-bootpc only works on interfaces that are up. If BOOTP is desired to get
-an IP address to a running kernel, bootpc won't work.
-
-This scenario was brought up as a bug in Debian forums [1] in 2007. The
-response was to run the attached script to bring up the network without
-an IP address. Sure enough, it still works!
-
-Implement this bootpc script to allow IP configuration by way of
-"iface eth0 inet bootp" in /etc/network/interfaces.
-
-[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=436443
+Add the ability to select, build, and run bootpc - a client program for
+BOOTP requests.
 
 Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 ---
 
 v2:
-  * check-package fixups
-  * Ignore shellcheck issues in the bootpc_dhcp_script
-  * Fix max line lengths
-  * Fix stale OVERLAY reference
-  * Note: pre-up and post-up were suggested instead of doing things in
-    the bootpc_dhcp_script. If the script could be removed entirely, I
-    feel that'd be the best course, but it seemingly needs to be there
-    to apply the settings. Keeping things in the script leads to less
-    user configuration, so that was chosen.
+  * Fix all check-package warnings
+  * Add patch messages referencing upstream status
+  * Add hashes
+  * Add license references
 
 ---
- .checkpackageignore               |  1 +
- package/bootpc/Config.in          | 16 ++++++
- package/bootpc/bootpc.mk          | 22 +++++++-
- package/bootpc/bootpc_dhcp_script | 86 +++++++++++++++++++++++++++++++
- 4 files changed, 123 insertions(+), 2 deletions(-)
- create mode 100644 package/bootpc/bootpc_dhcp_script
+ package/Config.in                             |  1 +
+ package/bootpc/0001-main-fix-build.patch      | 49 +++++++++++++++++++
+ ...Makefile-remove-strip-from-the-build.patch | 33 +++++++++++++
+ package/bootpc/Config.in                      |  4 ++
+ package/bootpc/bootpc.hash                    |  3 ++
+ package/bootpc/bootpc.mk                      | 21 ++++++++
+ 6 files changed, 111 insertions(+)
+ create mode 100644 package/bootpc/0001-main-fix-build.patch
+ create mode 100644 package/bootpc/0002-Makefile-remove-strip-from-the-build.patch
+ create mode 100644 package/bootpc/Config.in
+ create mode 100644 package/bootpc/bootpc.hash
+ create mode 100644 package/bootpc/bootpc.mk
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 947f4606aa..15cfc6868b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -243,6 +243,7 @@ package/bmx7/0002-Fix-linking-error.patch Upstream
- package/bmx7/0003-Reorder-includes-to-avoid-ethhdr-collision.patch Upstream
- package/boinc/S99boinc-client Indent Shellcheck Variables
- package/bootgen/0001-Fix-build-on-machines-with-modern-flex.patch Upstream
-+package/bootpc/bootpc_dhcp_script Shellcheck
- package/botan/0001-Add-superh-alias-needed-by-Debian.patch Upstream
- package/botan/0002-src-build-data-arch-superh.txt-add-sh4-eb-aeb.patch Upstream
- package/brickd/S70brickd Indent Shellcheck Variables
+diff --git a/package/Config.in b/package/Config.in
+index 420ebaa370..4581455c2a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2273,6 +2273,7 @@ endif
+ 	source "package/bmon/Config.in"
+ 	source "package/bmx7/Config.in"
+ 	source "package/boinc/Config.in"
++	source "package/bootpc/Config.in"
+ 	source "package/brcm-patchram-plus/Config.in"
+ 	source "package/bridge-utils/Config.in"
+ 	source "package/bwm-ng/Config.in"
+diff --git a/package/bootpc/0001-main-fix-build.patch b/package/bootpc/0001-main-fix-build.patch
+new file mode 100644
+index 0000000000..5c0bc22d16
+--- /dev/null
++++ b/package/bootpc/0001-main-fix-build.patch
+@@ -0,0 +1,49 @@
++From e957c19edebf256d77c2d9ddaba76147208f978e Mon Sep 17 00:00:00 2001
++From: Colin Foster <colin.foster@in-advantage.com>
++Date: Mon, 20 Mar 2023 11:18:13 -0700
++Subject: [PATCH] main: fix build
++
++When buildroot attempts to compile bootpc, it comes across the following
++error:
++
++main.c:24:18: error: initializer element is not constant
++   24 | FILE * logfile = stderr ;
++      |                  ^~~~~~
++
++Fix this error by removing logfile entirely, and simply use stderr in
++all fprintf() calls.
++
++Upstream: N/A Has been sent to main developer, but project seems stale.
++Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
++---
++ main.c | 8 +++-----
++ 1 file changed, 3 insertions(+), 5 deletions(-)
++
++diff --git a/main.c b/main.c
++index 6774cf1..0aa3767 100644
++--- a/main.c
+++++ b/main.c
++@@ -21,8 +21,6 @@
++ 
++ #include "bootpc.h"
++ 
++-FILE * logfile = stderr ;
++-
++ int main(int argc,
++ 	 char *argv[])
++ {
++@@ -159,8 +157,8 @@ void doLogMessage(char * s, ...) {
++     va_list args;
++ 
++     va_start(args, s);
++-    fprintf(logfile, "* ");
++-    vfprintf(logfile, s, args);
++-    fprintf(logfile, "\n");
+++    fprintf(stderr, "* ");
+++    vfprintf(stderr, s, args);
+++    fprintf(stderr, "\n");
++     va_end(args);
++ }
++-- 
++2.25.1
++
+diff --git a/package/bootpc/0002-Makefile-remove-strip-from-the-build.patch b/package/bootpc/0002-Makefile-remove-strip-from-the-build.patch
+new file mode 100644
+index 0000000000..43efc5dd80
+--- /dev/null
++++ b/package/bootpc/0002-Makefile-remove-strip-from-the-build.patch
+@@ -0,0 +1,33 @@
++From 93ea730f4a6b9c6c786bbdad98213ddccc668986 Mon Sep 17 00:00:00 2001
++From: Colin Foster <colin.foster@in-advantage.com>
++Date: Mon, 20 Mar 2023 11:35:12 -0700
++Subject: [PATCH] Makefile: remove strip from the build
++
++Stripping of binary symbols should be an optional step after a build,
++not forced during every build.
++
++Upstream: N/A Has been sent to main developer, but project seems stale.
++Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
++---
++ Makefile | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 4189648..54562ba 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -33,11 +33,9 @@ clean:
++ 
++ ${PROG}: ${OBJS}
++ 	${CC} -o ${PROG} ${CFLAGS} ${OBJS}
++-	strip ${PROG}
++ 
++ ${PROG}-static: ${OBJS}
++ 	${CC} -static -o ${PROG} ${CFLAGS} ${OBJS}
++-	strip ${PROG}
++ 
++ # Make up a distribution file from the bits we want people to see
++ distrib:  $(CFILES) $(CHEADS) $(MISC)
++-- 
++2.25.1
++
 diff --git a/package/bootpc/Config.in b/package/bootpc/Config.in
-index 59c6a6e739..1a77181c35 100644
---- a/package/bootpc/Config.in
+new file mode 100644
+index 0000000000..59c6a6e739
+--- /dev/null
 +++ b/package/bootpc/Config.in
-@@ -2,3 +2,19 @@ config BR2_PACKAGE_BOOTPC
- 	bool "bootpc"
- 	help
- 	  Application to perform BOOTP
-+
-+if BR2_PACKAGE_BOOTPC
-+
-+config BR2_PACKAGE_BOOTPC_FULL_CONFIG
-+	bool "bootpc interface configuration script"
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_BOOTPC
++	bool "bootpc"
 +	help
-+	  BOOTP can be used to fully configure a network interface in a
-+	  similar manner to DHCP. bootpc requires the network interface
-+	  to be configured before this can happen.
-+
-+	  Replace the bootpc binary with a script that allows an
-+	  unconfigured network interface to work as a BOOTP client. The
-+	  setting can be applied with "iface eth0 inet bootp" in
-+	  /etc/network/interfaces.
-+
-+endif
++	  Application to perform BOOTP
+diff --git a/package/bootpc/bootpc.hash b/package/bootpc/bootpc.hash
+new file mode 100644
+index 0000000000..cfa7f49944
+--- /dev/null
++++ b/package/bootpc/bootpc.hash
+@@ -0,0 +1,3 @@
++sha256  b3ec94a1881f5dc4f7ad7832448bc5bd028bb413eac7032b481f2d8713910ba8  bootpc-80c0811dc69f9f3923661be4f9f9c09a44313f62-br1.tar.gz
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  LICENCE
++sha256  a31e61b9fc2de25c229bb9f1baa3138ed5e66ece7d5e203c5847f46d867cc1dd  NOTICE
 diff --git a/package/bootpc/bootpc.mk b/package/bootpc/bootpc.mk
-index 200ed24872..e3d41350d9 100644
---- a/package/bootpc/bootpc.mk
+new file mode 100644
+index 0000000000..200ed24872
+--- /dev/null
 +++ b/package/bootpc/bootpc.mk
-@@ -10,12 +10,30 @@ BOOTPC_SITE_METHOD = git
- BOOTPC_LICENSE = GPL-2.0-or-later
- BOOTPC_LICENSE_FILES = LICENSE NOTICE
- 
-+ifeq ($(BR2_PACKAGE_BOOTPC_FULL_CONFIG),y)
-+BOOTPC_TARGET_BIN_NAME = bootpc-bin
-+else
-+BOOTPC_TARGET_BIN_NAME = bootpc
-+endif
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# bootpc package
++#
++################################################################################
 +
- define BOOTPC_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		-C $(@D) \
-+		PROG=$(BOOTPC_TARGET_BIN_NAME) \
-+		all
++BOOTPC_VERSION = 80c0811dc69f9f3923661be4f9f9c09a44313f62
++BOOTPC_SITE = https://salsa.debian.org/debian/bootpc.git
++BOOTPC_SITE_METHOD = git
++BOOTPC_LICENSE = GPL-2.0-or-later
++BOOTPC_LICENSE_FILES = LICENSE NOTICE
++
++define BOOTPC_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
 +endef
 +
-+ifeq ($(BR2_PACKAGE_BOOTPC_FULL_CONFIG),y)
-+define BOOTPC_INSTALL_CONFIG_SCRIPT
-+	$(INSTALL) -m 0755 \
-+		package/bootpc/bootpc_dhcp_script \
-+		$(TARGET_DIR)/sbin/bootpc
- endef
-+endif
- 
- define BOOTPC_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/bootpc $(TARGET_DIR)/sbin
-+	$(INSTALL) -D -m 0755 $(@D)/$(BOOTPC_TARGET_BIN_NAME) $(TARGET_DIR)/sbin
-+	$(BOOTPC_INSTALL_CONFIG_SCRIPT)
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/bootpc/bootpc_dhcp_script b/package/bootpc/bootpc_dhcp_script
-new file mode 100644
-index 0000000000..239ef5ec03
---- /dev/null
-+++ b/package/bootpc/bootpc_dhcp_script
-@@ -0,0 +1,86 @@
-+#!/bin/sh
-+#
-+# script to initialize a network interface using bootp
-+#
-+# Copyright (C) 2008 by Fuji Xerox Co., Ltd. All rights reserved.
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+# GNU General Public License for more details.
-+#
-+# written by Kohei Tanaka <Kohei.Tanaka@fujixerox.co.jp>
++define BOOTPC_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bootpc $(TARGET_DIR)/sbin
++endef
 +
-+INTERFACE=eth0
-+
-+# load configuration file
-+[ -f /etc/default/bootpc ] && . /etc/default/bootpc
-+
-+# to get the interface looping over arguments
-+while [ $# -ne 0 ]
-+do
-+	case $1 in
-+	--dev)	INTERFACE=$2
-+		break;;
-+	*)	shift
-+		continue;;
-+	esac
-+done
-+
-+# up the interface for sending broadcast packet
-+ifconfig $INTERFACE up 0.0.0.0
-+route add default dev $INTERFACE
-+
-+TMPFILE=`mktemp /tmp/bootpc.XXXXXX`
-+
-+/sbin/bootpc-bin --dev $INTERFACE --returniffail --serverbcast > $TMPFILE
-+RET=$?
-+route del default
-+ifconfig $INTERFACE down
-+if [ $RET -ne 0 ]
-+then
-+	rm -rf $TMPFILE
-+	exit 1
-+fi
-+
-+. $TMPFILE
-+rm -rf $TMPFILE
-+
-+[ -z "$IPADDR" ] && exit 1
-+
-+OPT_NETMASK=""
-+OPT_BROADCAST=""
-+if [ -n "$NETMASK" ]
-+then
-+	OPT_NETMASK="netmask $NETMASK"
-+fi
-+if [ -n "$BROADCAST" ]
-+then
-+	OPT_BROADCAST="broadcast $BROADCAST"
-+fi
-+ifconfig $INTERFACE $IPADDR $OPT_NETMASK $OPT_BROADCAST
-+
-+# already added a route to the network.  just add default gateway.
-+for i in $GATEWAYS
-+do
-+	route add default gw $i
-+done
-+
-+[ x"$SETDNS" == xno ] && exit 0
-+if [ -n "$DOMAIN" ] || [ -n "$DNSSRVS" ]
-+then
-+	mv -f /etc/resolv.conf /etc/resolv.conf.old
-+	if [ -n "$DOMAIN" ]
-+	then
-+		echo "search $DOMAIN" >> /etc/resolv.conf
-+	fi
-+	for i in $DNSSRVS
-+	do
-+		echo "nameserver $i" >> /etc/resolv.conf
-+	done
-+fi
++$(eval $(generic-package))
 -- 
 2.25.1
 
