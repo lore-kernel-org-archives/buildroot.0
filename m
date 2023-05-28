@@ -4,47 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 147AEC77B7C
-	for <buildroot@archiver.kernel.org>; Sun, 28 May 2023 18:42:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6913AC77B7C
+	for <buildroot@archiver.kernel.org>; Sun, 28 May 2023 19:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A227741B61;
-	Sun, 28 May 2023 18:42:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A227741B61
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8451641B4C;
+	Sun, 28 May 2023 19:01:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8451641B4C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uBuLrehBiFnL; Sun, 28 May 2023 18:42:07 +0000 (UTC)
+	with ESMTP id VO0Hn4lLiWgj; Sun, 28 May 2023 19:01:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64B8641B4C;
-	Sun, 28 May 2023 18:42:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64B8641B4C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 775F61BF836
- for <buildroot@lists.busybox.net>; Sun, 28 May 2023 18:42:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38AF74193A;
+	Sun, 28 May 2023 19:01:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38AF74193A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DA461BF836
+ for <buildroot@lists.busybox.net>; Sun, 28 May 2023 19:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FA7841B4C
- for <buildroot@lists.busybox.net>; Sun, 28 May 2023 18:42:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FA7841B4C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23CAC402C3
+ for <buildroot@lists.busybox.net>; Sun, 28 May 2023 19:01:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23CAC402C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6r1xi-fIS3uk for <buildroot@lists.busybox.net>;
- Sun, 28 May 2023 18:42:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A7964191D
- for <buildroot@buildroot.org>; Sun, 28 May 2023 18:42:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A7964191D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06438869DE; Sun, 28 May 2023 18:42:04 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3TN8bD9vZLXH for <buildroot@lists.busybox.net>;
+ Sun, 28 May 2023 19:01:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D08340165
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6D08340165
+ for <buildroot@buildroot.org>; Sun, 28 May 2023 19:01:17 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-30ae901a9ffso489559f8f.2
+ for <buildroot@buildroot.org>; Sun, 28 May 2023 12:01:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1685300475; x=1687892475;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mP4QwVtRrTvjukCaSa+c3rHko2saBCzMY2HmYK9cNuc=;
+ b=UBdNrrG0DnDQkefp4weYx92FP31LH/FidysmfgiIf0hZHo+fbDC8lSGQkl5v59XjfA
+ Rbyml/6VCpkvUerPNoVmljIFgfdryFRCfSF6KHEWi/B6hVwAVuYfj4FMXHHL4VffUw4G
+ pguICNOKXyQ3uSBeUdp8n9387eaTRR1mfW1fg6tlXZ2zbgBMqLk8NfZCB2YqsxqnfxLG
+ ClZjrPhRZk+2WukcXRn+yyAOWa3s6WQ9lCeoALM9p+7NSGY8PeZneuYv050xG6egFOuO
+ 3YAr5DN7Kmi3qQ6VMhidHsyoqr8sy5OkTozQz3fIQk4ClLmDnHeiBCenNQRBZqtQckD4
+ AZRA==
+X-Gm-Message-State: AC+VfDyFKhlql6+z/uIxjUapttiVy2VzALdb7lCjsFlbKONzin3EsCCv
+ +sbKUUz2RJ6X6nIObScBwB/dgrsu+fQ=
+X-Google-Smtp-Source: ACHHUZ6dSfFRO2Bygk9zZJkwQTnaKonZXHTPq6phTB0N0icEo1oWV+3/LdcWjHfIS1cBAh5oWfkdAw==
+X-Received: by 2002:a05:6000:11:b0:306:2d45:a8e0 with SMTP id
+ h17-20020a056000001100b003062d45a8e0mr7722534wrx.15.1685300475258; 
+ Sun, 28 May 2023 12:01:15 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ t6-20020adff606000000b0030632833e74sm11440967wrp.11.2023.05.28.12.01.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 28 May 2023 12:01:14 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 May 2023 20:40:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 742258fec06df18782e4bd75b00ca530120312cb
-X-Git-Newrev: 222d747effc286ac71d643077ab96cf7e2182c6d
-X-Patchwork-Hint: ignore
-Message-Id: <20230528184204.06438869DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/znc: fix build with swig 4.1.x
+Date: Sun, 28 May 2023 21:01:07 +0200
+Message-Id: <20230528190111.2430580-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.34.3
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1685300475; x=1687892475;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mP4QwVtRrTvjukCaSa+c3rHko2saBCzMY2HmYK9cNuc=;
+ b=Z99Ihi1GGCf8zN1jOC1riGdn8lMvtEEQw1nQq9Qe1+idIfFlLroaNW1LtuzXikmUkb
+ DpzTnbtc44WbSh8fXuM/wnrpVnFA7m4qsoeObWE9ViXj0SfFAmleuygKt9JTCfR3n8PV
+ dErqpKvulv3hY9ZAFqA1VkwfyV7xQxHorRtxh09Y0J6jwPhy6bc6oJj9CRlN0qRl1Lld
+ swGWlAfqOxsP5F2x/NGvMZaeBXnoHiQl/zPXcCJFPvvQMtuIkYqLsxS2nN5oh1p7/5ul
+ pM/VEabMqgXXB+SdagI1EBlNjowW9UX3+IUxbTAwa9hHxOwJ7W7xZGwD6BEXj+mAlybh
+ 8dtw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=Z99Ihi1G
+Subject: [Buildroot] [PATCH 1/5] package/python-executing: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,87 +96,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=222d747effc286ac71d643077ab96cf7e2182c6d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Buildroot commit 260924e239627cbe1379cfc752939245d53a06e0
-"package/swig: bump to version 4.1.1"
-broke the build of znc.
-
-Fixes:
-http://autobuild.buildroot.net/results/14c/14c44e94b6b588aa033f24202aa8437882cf8792/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...support-SWIG-4.1.0-drop-support-for-4.0.1.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ package/Config.in                              |  1 +
+ package/python-executing/Config.in             |  7 +++++++
+ package/python-executing/python-executing.hash |  5 +++++
+ package/python-executing/python-executing.mk   | 16 ++++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/python-executing/Config.in
+ create mode 100644 package/python-executing/python-executing.hash
+ create mode 100644 package/python-executing/python-executing.mk
 
-diff --git a/package/znc/0004-Add-support-SWIG-4.1.0-drop-support-for-4.0.1.patch b/package/znc/0004-Add-support-SWIG-4.1.0-drop-support-for-4.0.1.patch
+diff --git a/package/Config.in b/package/Config.in
+index 0cf2f3998c..82aa348455 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1051,6 +1051,7 @@ menu "External python modules"
+ 	source "package/python-entrypoints/Config.in"
+ 	source "package/python-esptool/Config.in"
+ 	source "package/python-evdev/Config.in"
++	source "package/python-executing/Config.in"
+ 	source "package/python-falcon/Config.in"
+ 	source "package/python-filelock/Config.in"
+ 	source "package/python-fire/Config.in"
+diff --git a/package/python-executing/Config.in b/package/python-executing/Config.in
 new file mode 100644
-index 0000000000..cb0988e631
+index 0000000000..e1f8f8efdf
 --- /dev/null
-+++ b/package/znc/0004-Add-support-SWIG-4.1.0-drop-support-for-4.0.1.patch
-@@ -0,0 +1,53 @@
-+From fecdd9895894b3afe903021b0843a422eb4d3308 Mon Sep 17 00:00:00 2001
-+From: Alexey Sokolov <alexey+znc@asokolov.org>
-+Date: Sat, 5 Nov 2022 12:54:40 +0000
-+Subject: [PATCH] Add support SWIG 4.1.0, drop support for < 4.0.1
++++ b/package/python-executing/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_EXECUTING
++	bool "python-executing"
++	help
++	  Get the currently executing AST node of a frame, and other
++	  information.
 +
-+https://bugs.gentoo.org/878587
++	  https://github.com/alexmojaki/executing
+diff --git a/package/python-executing/python-executing.hash b/package/python-executing/python-executing.hash
+new file mode 100644
+index 0000000000..40fd43b5fd
+--- /dev/null
++++ b/package/python-executing/python-executing.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/executing/json
++md5  e6fa9a6abf00555ccc8a6b3524729238  executing-1.2.0.tar.gz
++sha256  19da64c18d2d851112f09c287f8d3dbbdf725ab0e569077efb6cdcbd3497c107  executing-1.2.0.tar.gz
++# Locally computed sha256 checksums
++sha256  a476a2cb0ef4c41450340a577a28b91ac4c7f669136b2ee148047fabd5fc4181  LICENSE.txt
+diff --git a/package/python-executing/python-executing.mk b/package/python-executing/python-executing.mk
+new file mode 100644
+index 0000000000..4c968323ea
+--- /dev/null
++++ b/package/python-executing/python-executing.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python-executing
++#
++################################################################################
 +
-+Upstream: https://github.com/znc/znc/commit/fecdd9895894b3afe903021b0843a422eb4d3308
++PYTHON_EXECUTING_VERSION = 1.2.0
++PYTHON_EXECUTING_SOURCE = executing-$(PYTHON_EXECUTING_VERSION).tar.gz
++PYTHON_EXECUTING_SITE = https://files.pythonhosted.org/packages/8f/ac/89ff37d8594b0eef176b7cec742ac868fef853b8e18df0309e3def9f480b
++PYTHON_EXECUTING_SETUP_TYPE = setuptools
++PYTHON_EXECUTING_LICENSE = MIT
++PYTHON_EXECUTING_LICENSE_FILES = LICENSE.txt
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ CMakeLists.txt                   | 2 +-
-+ modules/modperl/CMakeLists.txt   | 1 -
-+ modules/modpython/CMakeLists.txt | 1 -
-+ 3 files changed, 1 insertion(+), 3 deletions(-)
++PYTHON_EXECUTING_DEPENDENCIES = host-python-setuptools-scm
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9d43578e0e..efab0ee1ee 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -173,7 +173,7 @@ if(WANT_PYTHON AND NOT EXISTS
-+ 	endif()
-+ endif()
-+ if(search_swig)
-+-	find_package(SWIG 3.0.0)
-++	find_package(SWIG 4.0.1)
-+ 	if(NOT SWIG_FOUND)
-+ 		message(FATAL_ERROR
-+ 			"Can't find SWIG, therefore Perl and Python aren't supported. "
-+diff --git a/modules/modperl/CMakeLists.txt b/modules/modperl/CMakeLists.txt
-+index e18fe47644..a87f74e478 100644
-+--- a/modules/modperl/CMakeLists.txt
-++++ b/modules/modperl/CMakeLists.txt
-+@@ -53,7 +53,6 @@ if(SWIG_FOUND)
-+ 		"-I${PROJECT_SOURCE_DIR}/include"
-+ 		"-I${CMAKE_CURRENT_SOURCE_DIR}/.."
-+ 		"-I${CMAKE_CURRENT_SOURCE_DIR}/include"
-+-		-DZNC_EXPORT_LIB_EXPORT
-+ 		-outdir "${CMAKE_CURRENT_BINARY_DIR}"
-+ 		-o "${CMAKE_CURRENT_BINARY_DIR}/modperl_biglib.cpp"
-+ 		"${CMAKE_CURRENT_SOURCE_DIR}/modperl.i"
-+diff --git a/modules/modpython/CMakeLists.txt b/modules/modpython/CMakeLists.txt
-+index edbeb41ed5..36a2e649f0 100644
-+--- a/modules/modpython/CMakeLists.txt
-++++ b/modules/modpython/CMakeLists.txt
-+@@ -50,7 +50,6 @@ if(SWIG_FOUND)
-+ 		"-I${PROJECT_BINARY_DIR}/include"
-+ 		"-I${PROJECT_SOURCE_DIR}/include"
-+ 		"-I${CMAKE_CURRENT_SOURCE_DIR}/.."
-+-		-DZNC_EXPORT_LIB_EXPORT
-+ 		-outdir "${CMAKE_CURRENT_BINARY_DIR}"
-+ 		-o "${CMAKE_CURRENT_BINARY_DIR}/modpython_biglib.cpp"
-+ 		"${CMAKE_CURRENT_SOURCE_DIR}/modpython.i"
++$(eval $(python-package))
+-- 
+2.34.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
