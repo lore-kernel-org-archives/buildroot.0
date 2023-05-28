@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55F20C77B7C
-	for <buildroot@archiver.kernel.org>; Sun, 28 May 2023 18:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20B30C7EE29
+	for <buildroot@archiver.kernel.org>; Sun, 28 May 2023 18:39:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCBB54191F;
-	Sun, 28 May 2023 18:38:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCBB54191F
+	by smtp4.osuosl.org (Postfix) with ESMTP id B412741B61;
+	Sun, 28 May 2023 18:39:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B412741B61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I_EMKmdcc5-y; Sun, 28 May 2023 18:38:53 +0000 (UTC)
+	with ESMTP id 7KGaUAmgwNft; Sun, 28 May 2023 18:39:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6E5241913;
-	Sun, 28 May 2023 18:38:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6E5241913
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7AC911BF836
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DA0441924;
+	Sun, 28 May 2023 18:39:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DA0441924
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EF861BF95C
  for <buildroot@lists.busybox.net>; Sun, 28 May 2023 18:38:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 540368266D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 775BB41913
  for <buildroot@lists.busybox.net>; Sun, 28 May 2023 18:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 540368266D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 775BB41913
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SiZbD5wgwvLx for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XGlNB93E3Pkg for <buildroot@lists.busybox.net>;
  Sun, 28 May 2023 18:38:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8390E82640
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64ABF4190A
  for <buildroot@buildroot.org>; Sun, 28 May 2023 18:38:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8390E82640
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64ABF4190A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F478869DB; Sun, 28 May 2023 18:38:49 +0000 (UTC)
+ id 4C18C869D7; Sun, 28 May 2023 18:38:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 May 2023 20:36:57 +0200
+Date: Sun, 28 May 2023 20:27:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0ac6713cee7e683b08234df14fff652cfbfef91b
-X-Git-Newrev: 742258fec06df18782e4bd75b00ca530120312cb
+X-Git-Oldrev: d3a93df9e84a65bfdbf5748692f4d9241363c025
+X-Git-Newrev: 30a4e35c395fc05f27b0b74b492409ee7e983680
 X-Patchwork-Hint: ignore
-Message-Id: <20230528183849.6F478869DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-http-message: add missing
- perl-clone dependency
+Message-Id: <20230528183849.4C18C869D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libressl: bump to version 3.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=742258fec06df18782e4bd75b00ca530120312cb
+commit: https://git.buildroot.net/buildroot/commit/?id=30a4e35c395fc05f27b0b74b492409ee7e983680
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-perl-clone was added to perl-http-message v6.44 as mandatory
-dependency by commit [1]. While updating to v6.44 [2] in
-Buildroot the new dependency was forgotten.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819252
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819256
-
-[1] https://github.com/libwww-perl/HTTP-Message/commit/6b89d6b2cce67b540ade87fc6fdf88cdede20b46
-[2] 79e8aad721099eb05e60b449432136691275022f
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-http-message/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-http-message/Config.in b/package/perl-http-message/Config.in
-index 82538cfce8..3c6849487a 100644
---- a/package/perl-http-message/Config.in
-+++ b/package/perl-http-message/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PERL_HTTP_MESSAGE
- 	bool "perl-http-message"
-+	select BR2_PACKAGE_PERL_CLONE # runtime
- 	select BR2_PACKAGE_PERL_ENCODE_LOCALE # runtime
- 	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
- 	select BR2_PACKAGE_PERL_IO_HTML # runtime
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 03ec1e10c1..76a5acad6c 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  b06aa538fefc9c6b33c4db4931a09a5f52d9d2357219afcbff7d93fe12ebf6f7  libressl-3.7.2.tar.gz
++sha256  7948c856a90c825bd7268b6f85674a8dcd254bae42e221781b24e3f8dc335db3  libressl-3.7.3.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index ae3a249969..1a63a0f348 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 3.7.2
++LIBRESSL_VERSION = 3.7.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
