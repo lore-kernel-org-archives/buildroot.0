@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5DACC77B7E
-	for <buildroot@archiver.kernel.org>; Sun, 28 May 2023 19:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB681C77B7E
+	for <buildroot@archiver.kernel.org>; Sun, 28 May 2023 20:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F47740C43;
-	Sun, 28 May 2023 19:42:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F47740C43
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5450140C18;
+	Sun, 28 May 2023 20:18:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5450140C18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7WYNpCvAws5x; Sun, 28 May 2023 19:42:17 +0000 (UTC)
+	with ESMTP id tdo3qeIAqncV; Sun, 28 May 2023 20:18:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5161B40641;
-	Sun, 28 May 2023 19:42:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5161B40641
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D4C440470;
+	Sun, 28 May 2023 20:18:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D4C440470
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3CD4E1BF95C
- for <buildroot@lists.busybox.net>; Sun, 28 May 2023 19:42:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DED801BF41A
+ for <buildroot@lists.busybox.net>; Sun, 28 May 2023 20:18:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1695482005
- for <buildroot@lists.busybox.net>; Sun, 28 May 2023 19:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1695482005
+ by smtp1.osuosl.org (Postfix) with ESMTP id B1C0982C33
+ for <buildroot@lists.busybox.net>; Sun, 28 May 2023 20:18:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1C0982C33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AXuGxAzlUFRt for <buildroot@lists.busybox.net>;
- Sun, 28 May 2023 19:42:13 +0000 (UTC)
+ with ESMTP id SuRltxacI8Yq for <buildroot@lists.busybox.net>;
+ Sun, 28 May 2023 20:18:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1933A80A66
- for <buildroot@buildroot.org>; Sun, 28 May 2023 19:42:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1933A80A66
+ by smtp1.osuosl.org (Postfix) with ESMTP id C04E782B69
+ for <buildroot@buildroot.org>; Sun, 28 May 2023 20:18:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C04E782B69
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 05836869F2; Sun, 28 May 2023 19:42:13 +0000 (UTC)
+ id ACDBF86A04; Sun, 28 May 2023 20:18:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 May 2023 21:41:17 +0200
+Date: Sun, 28 May 2023 22:17:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 222d747effc286ac71d643077ab96cf7e2182c6d
-X-Git-Newrev: b6ce18b5ac78474611cdea07b887f4f83bc78648
+X-Git-Oldrev: b6ce18b5ac78474611cdea07b887f4f83bc78648
+X-Git-Newrev: c765ac9c02dbddd53cf6813cf59c8f265b043caf
 X-Patchwork-Hint: ignore
-Message-Id: <20230528194213.05836869F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/busybox: fix busybox lineedit
- signal handling
+Message-Id: <20230528201801.ACDBF86A04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2023.05-rc2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,135 +62,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6ce18b5ac78474611cdea07b887f4f83bc78648
+commit: https://git.buildroot.net/buildroot/commit/?id=c765ac9c02dbddd53cf6813cf59c8f265b043caf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the Busybox version bump to 1.36.0 the TestS6 fails during the
-test teardown.
-
-Backport an upstream patch fixing signal handling (SIGWINCH), see [1].
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819388
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=15256
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Peter: use upstream commit as-is]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...IGWINCH-and-SIGCHLD-in-hush-interrupting-.patch | 103 +++++++++++++++++++++
- 1 file changed, 103 insertions(+)
+ CHANGES                    | 16 ++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 4 files changed, 48 insertions(+), 11 deletions(-)
 
-diff --git a/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch b/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch
-new file mode 100644
-index 0000000000..8ebb487ec6
---- /dev/null
-+++ b/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch
-@@ -0,0 +1,103 @@
-+From 93e0898c663a533082b5f3c2e7dcce93ec47076d Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Thu, 26 Jan 2023 12:56:33 +0100
-+Subject: [PATCH] shell: fix SIGWINCH and SIGCHLD (in hush) interrupting line
-+ input, closes 15256
+diff --git a/CHANGES b/CHANGES
+index b81e3d7520..b0875759ff 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,19 @@
++2023.05-rc2, released May 28th, 2023
 +
-+function                                             old     new   delta
-+record_pending_signo                                  32      63     +31
-+lineedit_read_key                                    231     224      -7
-+------------------------------------------------------------------------------
-+(add/remove: 0/0 grow/shrink: 1/1 up/down: 31/-7)              Total: 24 bytes
++	Fixes all over the tree.
 +
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Upstream: https://git.busybox.net/busybox/commit/?id=93e0898c663a533082b5f3c2e7dcce93ec47076d
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ libbb/lineedit.c | 17 ++++++++++-------
-+ shell/ash.c      |  3 ++-
-+ shell/hush.c     | 10 ++++++++--
-+ 3 files changed, 20 insertions(+), 10 deletions(-)
++	Updated/fixed packages: busybox, clamav, crudini,
++	kodi-pvr-vbox, libcurl, libmnl, libpqxx, libressl, libssh,
++	llvm, lua, mesa3d, perl-http-message, python-can,
++	python-django, sdl2_mixer, webkitgtk, zfs, znc
 +
-+diff --git a/libbb/lineedit.c b/libbb/lineedit.c
-+index d6b2e76ff..b942f540a 100644
-+--- a/libbb/lineedit.c
-++++ b/libbb/lineedit.c
-+@@ -2180,7 +2180,8 @@ static int lineedit_read_key(char *read_key_buffer, int timeout)
-+ 		 * "\xff\n",pause,"ls\n" invalid and thus won't lose "ls".
-+ 		 *
-+ 		 * If LI_INTERRUPTIBLE, return -1 if got EINTR in poll()
-+-		 * inside read_key, or if bb_got_signal != 0 (IOW: if signal
-++		 * inside read_key and bb_got_signal became != 0,
-++		 * or if bb_got_signal != 0 (IOW: if signal
-+ 		 * arrived before poll() is reached).
-+ 		 *
-+ 		 * Note: read_key sets errno to 0 on success.
-+@@ -2197,14 +2198,16 @@ static int lineedit_read_key(char *read_key_buffer, int timeout)
-+ 			IF_FEATURE_EDITING_WINCH(S.ok_to_redraw = 0;)
-+ 			if (errno != EINTR)
-+ 				break;
-++			/* It was EINTR. Repeat read_key() unless... */
-+ 			if (state->flags & LI_INTERRUPTIBLE) {
-+-				/* LI_INTERRUPTIBLE bails out on EINTR,
-+-				 * but nothing really guarantees that bb_got_signal
-+-				 * is nonzero. Follow the least surprise principle:
-++				/* LI_INTERRUPTIBLE bails out on EINTR
-++				 * if bb_got_signal became nonzero.
-++				 * (It may stay zero: for example, our SIGWINCH
-++				 * handler does not set it. This is used for signals
-++				 * which should not interrupt line editing).
-+ 				 */
-+-				if (bb_got_signal == 0)
-+-					bb_got_signal = 255;
-+-				goto ret;
-++				if (bb_got_signal != 0)
-++					goto ret; /* will return -1 */
-+ 			}
-+ 		}
-+ 
-+diff --git a/shell/ash.c b/shell/ash.c
-+index 18ccc1329..5f8c8ea19 100644
-+--- a/shell/ash.c
-++++ b/shell/ash.c
-+@@ -10821,7 +10821,8 @@ preadfd(void)
-+  again:
-+ 		/* For shell, LI_INTERRUPTIBLE is set:
-+ 		 * read_line_input will abort on either
-+-		 * getting EINTR in poll(), or if it sees bb_got_signal != 0
-++		 * getting EINTR in poll() and bb_got_signal became != 0,
-++		 * or if it sees bb_got_signal != 0
-+ 		 * (IOW: if signal arrives before poll() is reached).
-+ 		 * Interactive testcases:
-+ 		 * (while kill -INT $$; do sleep 1; done) &
-+diff --git a/shell/hush.c b/shell/hush.c
-+index d111f0cc5..f064b8fd2 100644
-+--- a/shell/hush.c
-++++ b/shell/hush.c
-+@@ -1946,7 +1946,12 @@ static void record_pending_signo(int sig)
-+ {
-+ 	sigaddset(&G.pending_set, sig);
-+ #if ENABLE_FEATURE_EDITING
-+-	bb_got_signal = sig; /* for read_line_input: "we got a signal" */
-++	if (sig != SIGCHLD
-++	 || (G_traps && G_traps[SIGCHLD] && G_traps[SIGCHLD][0])
-++	 /* ^^^ if SIGCHLD, interrupt line reading only if it has a trap */
-++	) {
-++		bb_got_signal = sig; /* for read_line_input: "we got a signal" */
-++	}
-+ #endif
-+ #if ENABLE_HUSH_FAST
-+ 	if (sig == SIGCHLD) {
-+@@ -2669,7 +2674,8 @@ static int get_user_input(struct in_str *i)
-+ 		} else {
-+ 			/* For shell, LI_INTERRUPTIBLE is set:
-+ 			 * read_line_input will abort on either
-+-			 * getting EINTR in poll(), or if it sees bb_got_signal != 0
-++			 * getting EINTR in poll() and bb_got_signal became != 0,
-++			 * or if it sees bb_got_signal != 0
-+ 			 * (IOW: if signal arrives before poll() is reached).
-+ 			 * Interactive testcases:
-+ 			 * (while kill -INT $$; do sleep 1; done) &
-+-- 
-+2.30.2
++	New packages: perl-clone
 +
++	Issues resolved (http://bugs.uclibc.org):
++
++	#15421: qemu_aarch64_ebbr_defconfig: Missing Linux kernel source..
++	#15581: qemu_ppc_mpc8544ds_defconfig: Fails due to non-working patch
++
+ 2023.05-rc1, released May 15th, 2023
+ 
+ 	Fixes all over the tree and new features.
+diff --git a/Makefile b/Makefile
+index 6e094c8b13..2e1eff2f3c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2023.05-rc1
++export BR2_VERSION := 2023.05-rc2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1684130000
++BR2_VERSION_EPOCH = 1685305000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 7f43a6f66b..75b445d069 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ -->
+-      <h3 style="text-align: center;">Latest release candidate: <b>2023.05-rc1</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2023.05-rc2</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2023.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2023.05-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2023.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2023.05-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2023.05-rc1.tar.gz">buildroot-2023.05-rc1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2023.05-rc1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2023.05-rc2.tar.gz">buildroot-2023.05-rc2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2023.05-rc2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2023.05-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2023.05-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2023.05-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2023.05-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2023.05-rc1.tar.xz">buildroot-2023.05-rc1.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2023.05-rc1.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2023.05-rc2.tar.xz">buildroot-2023.05-rc2.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2023.05-rc2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 92dd469f51..28d0b83952 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2023.05-rc2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>28 May 2023</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>2023.05-rc2 has been released with more cleanups and build fixes. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2023.05-rc2">CHANGES</a>
++	  file for details.</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2023.05-rc2.tar.xz">2023.05-rc2
++	  release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
