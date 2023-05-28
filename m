@@ -4,55 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C9C2C77B7E
-	for <buildroot@archiver.kernel.org>; Sun, 28 May 2023 18:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF7D9C77B7E
+	for <buildroot@archiver.kernel.org>; Sun, 28 May 2023 18:34:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92A6341B55;
-	Sun, 28 May 2023 18:30:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92A6341B55
+	by smtp4.osuosl.org (Postfix) with ESMTP id 322DD418F9;
+	Sun, 28 May 2023 18:34:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 322DD418F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hZ1g4ihSteNz; Sun, 28 May 2023 18:30:23 +0000 (UTC)
+	with ESMTP id h3REsflQbSlk; Sun, 28 May 2023 18:34:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C6D941B50;
-	Sun, 28 May 2023 18:30:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C6D941B50
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E3D4C1BF836
- for <buildroot@lists.busybox.net>; Sun, 28 May 2023 18:30:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1A8E418E5;
+	Sun, 28 May 2023 18:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1A8E418E5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CFA21BF836
+ for <buildroot@lists.busybox.net>; Sun, 28 May 2023 18:34:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD48860B53
- for <buildroot@lists.busybox.net>; Sun, 28 May 2023 18:30:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD48860B53
+ by smtp4.osuosl.org (Postfix) with ESMTP id D564D418E0
+ for <buildroot@lists.busybox.net>; Sun, 28 May 2023 18:34:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D564D418E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SLFmXNYs_qq6 for <buildroot@lists.busybox.net>;
- Sun, 28 May 2023 18:30:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hlwEEt9tE_JO for <buildroot@lists.busybox.net>;
+ Sun, 28 May 2023 18:34:36 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EA4560B20
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6EA4560B20
- for <buildroot@buildroot.org>; Sun, 28 May 2023 18:30:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 638B1418D7
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 638B1418D7
+ for <buildroot@buildroot.org>; Sun, 28 May 2023 18:34:36 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EFDDEC0003;
- Sun, 28 May 2023 18:30:15 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 040B560004;
+ Sun, 28 May 2023 18:34:32 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q3L9j-0083SC-1u; Sun, 28 May 2023 20:30:15 +0200
+ id 1q3LDs-0083dJ-1G; Sun, 28 May 2023 20:34:32 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Romain Naour <romain.naour@gmail.com>
-References: <20230528124208.2415189-1-romain.naour@gmail.com>
-Date: Sun, 28 May 2023 20:30:15 +0200
-In-Reply-To: <20230528124208.2415189-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sun, 28 May 2023 14:42:08 +0200")
-Message-ID: <87zg5otiko.fsf@dell.be.48ers.dk>
+References: <20230527211144.2136991-1-romain.naour@gmail.com>
+Date: Sun, 28 May 2023 20:34:31 +0200
+In-Reply-To: <20230527211144.2136991-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 27 May 2023 23:11:44 +0200")
+Message-ID: <87v8gctidk.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/zfs: fix python3 support check
+Subject: Re: [Buildroot] [PATCH] support/dependencies: requires cmake >= 3.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +65,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -72,24 +73,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Backport an upstream commit fixing the python3 support check
- > "The 22.0 release of the python `packaging` package removed the
- >  `LegacyVersion` trait, causing ZFS to no longer compile.
+ > libjxl requires cmake 3.19 since version v0.7 due to the
+ > new behavior of cmake [1].
 
- >  This commit replaces the sections of `ax_python_dev.m4` that rely on
- >  `LegacyVersion` with updated implementations from the upstream
- >  `autoconf-archive`."
+ > -- Configuring done
+ > CMake Error at cmake/FindLCMS2.cmake:40 (add_library):
+ >   INTERFACE_LIBRARY targets may only have whitelisted properties.  The
+ >   property "INCLUDE_DIRECTORIES" is not allowed.
+ > Call Stack (most recent call first):
+ >   third_party/CMakeLists.txt:114 (find_package)
 
- > Add a comment above ZFS_AUTORECONF.
+ > The portability issue has already been reported upstream [2].
 
  > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819411
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819410
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819409
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819095
+
+ > [1] https://gitlab.kitware.com/cmake/cmake/-/commit/afb998704e67d3d3ce5b24c112cb06e770fca78d
+ > [2] https://github.com/libjxl/libjxl/issues/1425
 
  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Julien Olivain <ju.o@free.fr>
+ > ---
+ > This will increase the build time in gitlab-ci since
+ > our docker image provide cmake 3.18.
 
-Committed, thanks.
+Not only that, also users on E.G. Debian stable. Libjxl was added back
+in November, so we will also need to backport this to 2023.02.x :/
+
+Do we have any alternatives?
 
 -- 
 Bye, Peter Korsgaard
