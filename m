@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5250C77B7E
-	for <buildroot@archiver.kernel.org>; Mon, 29 May 2023 07:15:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E128C77B7E
+	for <buildroot@archiver.kernel.org>; Mon, 29 May 2023 07:16:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5004141C4E;
-	Mon, 29 May 2023 07:15:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5004141C4E
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFB7A41C54;
+	Mon, 29 May 2023 07:16:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFB7A41C54
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JUuCEXaGxDkG; Mon, 29 May 2023 07:15:51 +0000 (UTC)
+	with ESMTP id 6xiidJ7dfY7J; Mon, 29 May 2023 07:16:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67C0441C47;
-	Mon, 29 May 2023 07:15:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67C0441C47
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 666DD1BF964
- for <buildroot@lists.busybox.net>; Mon, 29 May 2023 07:15:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0116641C49;
+	Mon, 29 May 2023 07:16:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0116641C49
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DAD31BF30B
+ for <buildroot@lists.busybox.net>; Mon, 29 May 2023 07:15:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A79741B85
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3380482BD6
  for <buildroot@lists.busybox.net>; Mon, 29 May 2023 07:15:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A79741B85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3380482BD6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 89VDKUJbyirx for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NxTs-a3vPye8 for <buildroot@lists.busybox.net>;
  Mon, 29 May 2023 07:15:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D67C41B4E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5799482C91
  for <buildroot@buildroot.org>; Mon, 29 May 2023 07:15:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D67C41B4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5799482C91
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 281D286A29; Mon, 29 May 2023 07:15:23 +0000 (UTC)
+ id 3D88B86A2B; Mon, 29 May 2023 07:15:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 29 May 2023 08:53:26 +0200
+Date: Mon, 29 May 2023 09:09:31 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 88aee033d14f729ea0f00f2327e399e249fc5be9
-X-Git-Newrev: 0f229a4231ba4009fca0092fa0a77d84ea20c4b5
+X-Git-Oldrev: 8f0fa2899b4962ff3fe2f481d3f4f175da650737
+X-Git-Newrev: 0a92e971968191a7e209015721a5f44c38f5acaf
 X-Patchwork-Hint: ignore
-Message-Id: <20230529071523.281D286A29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- support/config-fragments/autobuild/br-arm-internal-glibc: update to
- bleeding edge components
+Message-Id: <20230529071523.3D88B86A2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libcurl: security
+ bump version to 8.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f229a4231ba4009fca0092fa0a77d84ea20c4b5
+commit: https://git.buildroot.net/buildroot/commit/?id=0a92e971968191a7e209015721a5f44c38f5acaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The br-arm-internal-glibc.config used to be generally used as a configuration
-to test the bleeding edge versions of components. However, it has been
-lagging behind somewhat and produce invalid configuration since binutils 2.36
-removal in d08639e6b9e5... so let's bring it up-to-date:
+For details see [1] and [2].
 
-- Binutils 2.39.x
-- GCC 12.x
+[1] https://curl.se/changes.html#8_0_0
+[1] https://curl.se/changes.html#8_0_1
 
-Since Buildroot 2022.02, the autobuilders doesn't use the csv file anymore
-but the test-pkg script still use it.
+Fixes the following security issues:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+CVE-2023-27533: https://curl.se/docs/CVE-2023-27533.html
+CVE-2023-27534: https://curl.se/docs/CVE-2023-27534.html
+CVE-2023-27535: https://curl.se/docs/CVE-2023-27535.html
+CVE-2023-27536: https://curl.se/docs/CVE-2023-27536.html
+CVE-2023-27537: https://curl.se/docs/CVE-2023-27537.html
+CVE-2023-27538: https://curl.se/docs/CVE-2023-27538.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4944ff2878733f4f6f837ee0d417423420c663ce)
+(cherry picked from commit 1e735c48372a40c0c838baf4946022545ed531f1)
+[Peter: Mark as security bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/config-fragments/autobuild/br-arm-internal-glibc.config | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/br-arm-internal-glibc.config b/support/config-fragments/autobuild/br-arm-internal-glibc.config
-index fb930cbef7..cd148f32e6 100644
---- a/support/config-fragments/autobuild/br-arm-internal-glibc.config
-+++ b/support/config-fragments/autobuild/br-arm-internal-glibc.config
-@@ -1,6 +1,6 @@
- BR2_arm=y
- BR2_cortex_a8=y
- BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
--BR2_BINUTILS_VERSION_2_36_X=y
--BR2_GCC_VERSION_11_X=y
-+BR2_BINUTILS_VERSION_2_39_X=y
-+BR2_GCC_VERSION_12_X=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 32b3d0b5e2..8a29e7b977 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-7.88.1.tar.xz.asc
++# https://curl.se/download/curl-8.0.1.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f  curl-7.88.1.tar.xz
++sha256  0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0  curl-8.0.1.tar.xz
+ sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index dd715c1bb6..a5313e686f 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.88.1
++LIBCURL_VERSION = 8.0.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
