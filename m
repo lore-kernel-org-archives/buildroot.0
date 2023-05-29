@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95712C77B7A
-	for <buildroot@archiver.kernel.org>; Mon, 29 May 2023 13:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A82DC77B7A
+	for <buildroot@archiver.kernel.org>; Mon, 29 May 2023 13:44:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 417F883A7A;
-	Mon, 29 May 2023 13:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 417F883A7A
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4EA182253;
+	Mon, 29 May 2023 13:44:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4EA182253
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QOyt7v-cBy1b; Mon, 29 May 2023 13:44:18 +0000 (UTC)
+	with ESMTP id 2nee1Z45vkAw; Mon, 29 May 2023 13:44:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7558B822C3;
-	Mon, 29 May 2023 13:44:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7558B822C3
+	by smtp1.osuosl.org (Postfix) with ESMTP id D49E083A94;
+	Mon, 29 May 2023 13:44:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D49E083A94
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E6E5A1BF404
- for <buildroot@lists.busybox.net>; Mon, 29 May 2023 13:44:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1002C1BF404
+ for <buildroot@lists.busybox.net>; Mon, 29 May 2023 13:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFD2860A8C
- for <buildroot@lists.busybox.net>; Mon, 29 May 2023 13:44:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFD2860A8C
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD93760A8C
+ for <buildroot@lists.busybox.net>; Mon, 29 May 2023 13:44:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD93760A8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vSZx8VGR1M24 for <buildroot@lists.busybox.net>;
- Mon, 29 May 2023 13:44:04 +0000 (UTC)
+ with ESMTP id NWMOPMnckdlh for <buildroot@lists.busybox.net>;
+ Mon, 29 May 2023 13:44:05 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF7A26080A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2840E6080A
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EF7A26080A
- for <buildroot@buildroot.org>; Mon, 29 May 2023 13:44:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2840E6080A
+ for <buildroot@buildroot.org>; Mon, 29 May 2023 13:44:05 +0000 (UTC)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
- by mx.sberdevices.ru (Postfix) with ESMTP id E0DD35FD10;
- Mon, 29 May 2023 16:44:00 +0300 (MSK)
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru
- [172.16.1.4]) by mx.sberdevices.ru (Postfix) with ESMTP;
- Mon, 29 May 2023 16:44:00 +0300 (MSK)
+ by mx.sberdevices.ru (Postfix) with ESMTP id 328915FD0A;
+ Mon, 29 May 2023 16:44:03 +0300 (MSK)
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru
+ [172.16.1.5]) by mx.sberdevices.ru (Postfix) with ESMTP;
+ Mon, 29 May 2023 16:44:03 +0300 (MSK)
 To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 2/3] package/earlyoom: restore missing startup message in
- the init script
-Thread-Index: AQHZkjOfTGQtHg8xgUKZS6GWHC5KHg==
-Date: Mon, 29 May 2023 13:44:00 +0000
-Message-ID: <20230529134320.1961326-2-SIBobrenok@sberdevices.ru>
+Thread-Topic: [PATCH 3/3] package/earlyoom: unhardcode package version in
+ CFLAGS
+Thread-Index: AQHZkjOgonNUKoY3oU6aYt2ZUbAHFA==
+Date: Mon, 29 May 2023 13:44:02 +0000
+Message-ID: <20230529134320.1961326-3-SIBobrenok@sberdevices.ru>
 References: <20230529134320.1961326-1-SIBobrenok@sberdevices.ru>
 In-Reply-To: <20230529134320.1961326-1-SIBobrenok@sberdevices.ru>
 Accept-Language: en-US, ru-RU
@@ -64,20 +64,20 @@ X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
  bases: 2023/05/29 07:59:00 #21367693
 X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sberdevices.ru; s=mail; t=1685367840;
- bh=L6mfsdOwPJoHtY6p1tjJyhRVxR322VBdb+mjcJ73WEM=;
+ d=sberdevices.ru; s=mail; t=1685367843;
+ bh=Lx+ZPsfX2SFs4A+dLOkxXgGDY+QrYCH3LaN/uNxiGbE=;
  h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
- b=s1gONBtvQxhW+MjfjRKnSzQQ4p6PNsBma088GAJ+MZF/2k8qQq6mQFNo8XXiRWhOi
- AEV2OEuX6kxQBnkufg8GpTiqNkt4F4c3cVx+QZnQMrj4Rm4k3pXf6sEBfEjh4Y6JVk
- jZBpwJdyCfkNn41iGuM/zDPmX6XeDCYdMNU0b8FA60J93B5Kmj74OApfMRcUepCZKj
- BHdHUF8J2oUWHml5Pk1RU249eF/sVBqHLrFH9qND6OR9ufIF15YbVAevgUneAN+sKK
- mU99/s9RCn328LLt0d24nHzSgxoNJ7ggV4+muB0mYEEdw0FA1zxxqjJ9UXUhepm5KH
- klmwIXRSZWoyw==
+ b=WKZZSdiA0q73p0NOz83V1fwk9atWnOlW4d6ve9frw9+BABXUORXN1l+HpqofC9Vbp
+ IOLrvi1a4sjpQu92aRyiWFLcijrvdYyX1Hwiapuax6eMHUJYvO9HmqQXR6h9XU2hnA
+ dt1B4Ovi3FZNWgo2F+Y93R6ICg19PRMxDQ27ct4Yxg3SIEJxFQYSPhb3X7bt79qS2V
+ PlwHMrEFX7ASc+fuzn6xQ/PkU65Wl1inLJHa78TOmHqmXy4HhMYY3ET6Nf8QavY/gD
+ rwoAUKEXPQAM70alV1BzQ8cSI8P6b2s8Y1CjDA0M3brz0ljci7fjHHMXsMfCbA3O7l
+ 19kRTA0qrHLLA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
- header.a=rsa-sha256 header.s=mail header.b=s1gONBtv
-Subject: [Buildroot] [PATCH 2/3] package/earlyoom: restore missing startup
- message in the init script
+ header.a=rsa-sha256 header.s=mail header.b=WKZZSdiA
+Subject: [Buildroot] [PATCH 3/3] package/earlyoom: unhardcode package
+ version in CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,27 +99,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-'/etc/init.d/S02earlyoom start' simply prints 'OK' instead of
-'Starting earlyoom: OK' because of a typo in the printf function call.
+'earlyoom --help' still says 'earlyoom 1.6' though it's already
+version 1.7. '-DVERSION' flag value should be either unhardcoded,
+either updated with each package version bump.
 
 Signed-off-by: Sergey Bobrenok <SIBobrenok@sberdevices.ru>
 ---
- package/earlyoom/S02earlyoom | 2 +-
+ package/earlyoom/earlyoom.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/earlyoom/S02earlyoom b/package/earlyoom/S02earlyoom
-index 35624f3c72..ac1734109e 100644
---- a/package/earlyoom/S02earlyoom
-+++ b/package/earlyoom/S02earlyoom
-@@ -8,7 +8,7 @@ EARLYOOM_ARGS=""
- [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+diff --git a/package/earlyoom/earlyoom.mk b/package/earlyoom/earlyoom.mk
+index c7042a054e..808b9c49fa 100644
+--- a/package/earlyoom/earlyoom.mk
++++ b/package/earlyoom/earlyoom.mk
+@@ -11,7 +11,7 @@ EARLYOOM_LICENSE_FILES = LICENSE
  
- start() {
--	printf() 'Starting %s: ' "$DAEMON"
-+	printf 'Starting %s: ' "$DAEMON"
- 	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
- 	       -- $EARLYOOM_ARGS
- 	status=$?
+ EARLYOOM_BUILD_TARGETS = earlyoom.service earlyoom
+ EARLYOOM_INSTALL_TARGETS = install-default install-bin
+-EARLYOOM_CFLAGS = '$(TARGET_CFLAGS) -std=gnu99 -DVERSION=\"1.6\"'
++EARLYOOM_CFLAGS = '$(TARGET_CFLAGS) -std=gnu99 -DVERSION=\"$(EARLYOOM_VERSION)\"'
+ 
+ EARLYOOM_MAKE_OPTS = \
+ 	$(TARGET_CONFIGURE_OPTS) \
 -- 
 2.25.1
 _______________________________________________
