@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E2F6C7EE31
-	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:55:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68A07C77B7A
+	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2D3F418EE;
-	Tue, 30 May 2023 19:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2D3F418EE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02C8E41B7F;
+	Tue, 30 May 2023 19:55:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02C8E41B7F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5ZA9GtZXsogJ; Tue, 30 May 2023 19:55:21 +0000 (UTC)
+	with ESMTP id iiaEkEsgjKy0; Tue, 30 May 2023 19:55:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C4C541875;
-	Tue, 30 May 2023 19:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C4C541875
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 79B581BF35F
+	by smtp4.osuosl.org (Postfix) with ESMTP id B208640992;
+	Tue, 30 May 2023 19:55:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B208640992
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A20C41BF966
  for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35D3340904
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:54:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35D3340904
+ by smtp1.osuosl.org (Postfix) with ESMTP id 875B181FC4
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:54:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 875B181FC4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sNDxYPp49sNJ for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gmP94XocNjnk for <buildroot@lists.busybox.net>;
  Tue, 30 May 2023 19:54:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DCA540962
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5065D81FB8
  for <buildroot@buildroot.org>; Tue, 30 May 2023 19:54:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DCA540962
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5065D81FB8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5AD2086AC4; Tue, 30 May 2023 19:54:43 +0000 (UTC)
+ id 3BF6186AC1; Tue, 30 May 2023 19:54:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 May 2023 21:52:47 +0200
+Date: Tue, 30 May 2023 21:50:50 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 3653187497c19a8535b5dac045f64e20fae639cf
-X-Git-Newrev: 21ae60c35f067ddaac03c70e2fa3fe279d695190
+X-Git-Oldrev: 387d2d12f33939d9eb86f7abe849110b63dfc703
+X-Git-Newrev: 83e422c4ae870cb69adeef99a783ba214228860c
 X-Patchwork-Hint: ignore
-Message-Id: <20230530195443.5AD2086AC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/runc: bump
- version to 1.1.7
+Message-Id: <20230530195443.3BF6186AC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/gnupg2: bump
+ version to 2.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21ae60c35f067ddaac03c70e2fa3fe279d695190
+commit: https://git.buildroot.net/buildroot/commit/?id=83e422c4ae870cb69adeef99a783ba214228860c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This is the last planned release of the 1.1.x series.
+For details see [1].
 
-https://github.com/opencontainers/runc/releases/tag/v1.1.7
+[1] https://lists.gnupg.org/pipermail/gnupg-announce/2023q2/000478.html
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c24012ad86d753f376e01fbaf1ea72cb5975365f)
+(cherry picked from commit a27cb09d9aaa4f6f1056c520f8d0c48912451734)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index eee2e34cbf..1a68b74ccb 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  76cbf30637cbb828794d72d32fb3fd6ff3139cd9743b8b44790fd110f43d96b2  runc-1.1.5.tar.gz
-+sha256  f1885d6dfa188f8112328ac2355e5d67346174a2e2e795ec514a972bcbfcc2fa  runc-1.1.7.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 9c6b5f9b37..805ff23964 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index c642862fe2..baee824104 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000477.html
+-sha1  63dde155a8df0d5e1987efa5fc17438beca83ac1  gnupg-2.4.0.tar.bz2
++# From  https://lists.gnupg.org/pipermail/gnupg-announce/2023q2/000478.html
++sha1  d7d021101361a5e1166a6c0cc1731276e7134547  gnupg-2.4.1.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.0.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.1.tar.bz2.sig
+ # using key 6DAA6E64A76D2840571B4902528897B826403ADA
+-sha256  1d79158dd01d992431dd2e3facb89fdac97127f89784ea2cb610c600fb0c1483  gnupg-2.4.0.tar.bz2
++sha256  76b71e5aeb443bfd910ce9cbc8281b617c8341687afb67bae455877972b59de8  gnupg-2.4.1.tar.bz2
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 73de185ba7..f7c7ae847c 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.1.5
-+RUNC_VERSION = 1.1.7
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+-GNUPG2_VERSION = 2.4.0
++GNUPG2_VERSION = 2.4.1
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
