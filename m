@@ -4,55 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 702B6C77B7A
-	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 18:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A350C77B73
+	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 18:52:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6A45405AB;
-	Tue, 30 May 2023 18:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6A45405AB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0812D405E3;
+	Tue, 30 May 2023 18:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0812D405E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0TbktGR8LPtN; Tue, 30 May 2023 18:52:34 +0000 (UTC)
+	with ESMTP id P0shaTaq5G_F; Tue, 30 May 2023 18:52:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC78940187;
-	Tue, 30 May 2023 18:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC78940187
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 615DA1BF3EB
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 18:52:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E31B40569;
+	Tue, 30 May 2023 18:52:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E31B40569
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D7141BF3EB
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 18:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 47F8B40187
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 18:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47F8B40187
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3546381FA0
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 18:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3546381FA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sL2Xw4mI01rO for <buildroot@lists.busybox.net>;
- Tue, 30 May 2023 18:52:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c1EYi8nONDsa for <buildroot@lists.busybox.net>;
+ Tue, 30 May 2023 18:52:36 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A7D84016C
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4A7D84016C
- for <buildroot@buildroot.org>; Tue, 30 May 2023 18:52:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CDE981F96
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0CDE981F96
+ for <buildroot@buildroot.org>; Tue, 30 May 2023 18:52:35 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 23FAAFF802;
- Tue, 30 May 2023 18:52:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D8E6EE0009;
+ Tue, 30 May 2023 18:52:32 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q44SH-009qFI-70; Tue, 30 May 2023 20:52:25 +0200
+ id 1q44SO-009qFc-1P; Tue, 30 May 2023 20:52:32 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Romain Naour <romain.naour@gmail.com>
 References: <20230528101241.67276-1-romain.naour@gmail.com>
-Date: Tue, 30 May 2023 20:52:25 +0200
-In-Reply-To: <20230528101241.67276-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sun, 28 May 2023 12:12:40 +0200")
-Message-ID: <87leh5ps7q.fsf@dell.be.48ers.dk>
+ <20230528101241.67276-2-romain.naour@gmail.com>
+Date: Tue, 30 May 2023 20:52:32 +0200
+In-Reply-To: <20230528101241.67276-2-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 28 May 2023 12:12:41 +0200")
+Message-ID: <87h6rtps7j.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/perl-clone: new package
+Subject: Re: [Buildroot] [PATCH 2/2] package/perl-http-message: add missing
+ perl-clone dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,10 +74,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > perl-clone is a new mandatory dependency of perl-http-message v6.44
- > that is already available in Buildroot since commit [1].
+ > perl-clone was added to perl-http-message v6.44 as mandatory
+ > dependency by commit [1]. While updating to v6.44 [2] in
+ > Buildroot the new dependency was forgotten.
 
- > [1] 79e8aad721099eb05e60b449432136691275022f
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819252
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819256
+
+ > [1]
+ > https://github.com/libwww-perl/HTTP-Message/commit/6b89d6b2cce67b540ade87fc6fdf88cdede20b46
+ > [2] 79e8aad721099eb05e60b449432136691275022f
 
  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
