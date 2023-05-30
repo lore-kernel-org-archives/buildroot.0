@@ -4,56 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63CFC77B73
-	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:51:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8AA6C77B7A
+	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35C0C4175B;
-	Tue, 30 May 2023 19:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35C0C4175B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C5FB40530;
+	Tue, 30 May 2023 19:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C5FB40530
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tawifDwEdrvQ; Tue, 30 May 2023 19:51:36 +0000 (UTC)
+	with ESMTP id AmfwwnOEloVH; Tue, 30 May 2023 19:53:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23F2941718;
-	Tue, 30 May 2023 19:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23F2941718
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 21CBC1BF35F
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:51:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 670E14034A;
+	Tue, 30 May 2023 19:53:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 670E14034A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 05E7D1BF35F
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF93660B92
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF93660B92
+ by smtp1.osuosl.org (Postfix) with ESMTP id D388F820F8
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:53:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D388F820F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kEoa4r8u8XWf for <buildroot@lists.busybox.net>;
- Tue, 30 May 2023 19:51:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6o6Y9tUldmhB for <buildroot@lists.busybox.net>;
+ Tue, 30 May 2023 19:53:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA03060AE2
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DA03060AE2
- for <buildroot@buildroot.org>; Tue, 30 May 2023 19:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C861F820E9
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C861F820E9
+ for <buildroot@buildroot.org>; Tue, 30 May 2023 19:53:10 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id ADA5620003;
- Tue, 30 May 2023 19:51:28 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 911526000A;
+ Tue, 30 May 2023 19:53:06 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q45NP-009sBh-NC; Tue, 30 May 2023 21:51:27 +0200
+ id 1q45Oz-009sJv-Du; Tue, 30 May 2023 21:53:05 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20230503185832.14339-1-ps.report@gmx.net>
-Date: Tue, 30 May 2023 21:51:27 +0200
-In-Reply-To: <20230503185832.14339-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Wed, 3 May 2023 20:58:32 +0200")
-Message-ID: <87r0qxoaww.fsf@dell.be.48ers.dk>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230504000403.1443221-1-christian@aperture.us>
+ <20230506161008.GO252090@scaer>
+Date: Tue, 30 May 2023 21:53:05 +0200
+In-Reply-To: <20230506161008.GO252090@scaer> (Yann E. MORIN's message of "Sat, 
+ 6 May 2023 18:10:08 +0200")
+Message-ID: <87mt1loau6.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/gnupg2: bump version to 2.4.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/runc: bump version to 1.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,18 +67,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > For details see [1].
- > [1] https://lists.gnupg.org/pipermail/gnupg-announce/2023q2/000478.html
+ > christian, All,
+ > On 2023-05-03 17:04 -0700, Christian Stewart via buildroot spake thusly:
+ >> This is the last planned release of the 1.1.x series.
+ >> 
+ >> https://github.com/opencontainers/runc/releases/tag/v1.1.7
+ >> 
+ >> Signed-off-by: Christian Stewart <christian@aperture.us>
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Applied to master, thanks.
 
 Committed to 2023.02.x, thanks.
 
