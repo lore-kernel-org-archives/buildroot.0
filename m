@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FAEEC77B7A
-	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:45:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFA69C77B7A
+	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:45:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4B5A41864;
-	Tue, 30 May 2023 19:45:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4B5A41864
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CD4941875;
+	Tue, 30 May 2023 19:45:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CD4941875
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7RcUBwro1Y3o; Tue, 30 May 2023 19:45:22 +0000 (UTC)
+	with ESMTP id S6Wg2m2VZV4L; Tue, 30 May 2023 19:45:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 343BF417BA;
-	Tue, 30 May 2023 19:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 343BF417BA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 100151BF35F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F64041733;
+	Tue, 30 May 2023 19:45:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F64041733
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EA0BB1BF35F
  for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E8CD241718
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:44:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8CD241718
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0DE881E99
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:44:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0DE881E99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QGevSan8JzEQ for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i9-hihx9VeYY for <buildroot@lists.busybox.net>;
  Tue, 30 May 2023 19:44:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBAA641726
+ by smtp1.osuosl.org (Postfix) with ESMTP id B346481EB0
  for <buildroot@buildroot.org>; Tue, 30 May 2023 19:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBAA641726
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B346481EB0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AAB7886A93; Tue, 30 May 2023 19:44:24 +0000 (UTC)
+ id A105786A95; Tue, 30 May 2023 19:44:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 May 2023 21:40:06 +0200
+Date: Tue, 30 May 2023 21:38:15 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: fcc906241d326d9c5e5bf39e86c1762f50bb6c12
-X-Git-Newrev: 387d2d12f33939d9eb86f7abe849110b63dfc703
+X-Git-Oldrev: 412e5f7c99c524a7c18234ac04a22a4b3a537307
+X-Git-Newrev: fcc906241d326d9c5e5bf39e86c1762f50bb6c12
 X-Patchwork-Hint: ignore
-Message-Id: <20230530194424.AAB7886A93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/ncurses: security
- bump to 6.4.20230429
+Message-Id: <20230530194424.A105786A95@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python-requests:
+ bump to version 2.28.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=387d2d12f33939d9eb86f7abe849110b63dfc703
+commit: https://git.buildroot.net/buildroot/commit/?id=fcc906241d326d9c5e5bf39e86c1762f50bb6c12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Update to 6.4 and use latest snapshot to fix CVE-2023-29491.
-COPYING has been changed in snapshot 20230107 to update the year [0].
-Update CVE version to major.minor.snapshot, as NVD uses the snapshot date as patch version [1].
+Get explicit compatibility with charset-normalizer 3.x
 
-[0]: https://github.com/ThomasDickey/ncurses-snapshots/commit/eedb756850fdddcd2767d488ed5ea323d40b37ec
-[1]: https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gnu:ncurses
-
-Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Aaron Sierra <aaron@bubbl-tek.com>
+Acked-by: Yann E. MORIN <yann.morin@orange.com>
+Tested-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit aee4f42ba07c603bbc7cf16b18f9706029ab5d74)
+(cherry picked from commit f9c196598d58cecef769194df3c54466cf62459d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/ncurses.hash | 4 ++--
- package/ncurses/ncurses.mk   | 9 +++------
- 2 files changed, 5 insertions(+), 8 deletions(-)
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
-index c96bf77bce..a5f83c8725 100644
---- a/package/ncurses/ncurses.hash
-+++ b/package/ncurses/ncurses.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  4057d800ee96623ae70d06b05b2dadb481a80c030e4968aa5d9bcea4439441da  ncurses-6.3-20221224.tar.gz
-+sha256  004603a9b3ec51599ef0a0089482004ee3d33b0240d87ce17b6f77525b51fb4e  ncurses-6.4-20230429.tar.gz
- # Locally computed
--sha256  63de87399e9fc8860236082b6b0520e068e9eb1fad0ebd30202aa30bb6f690ac  COPYING
-+sha256  0413b2f4ea863194c174673032f0fca84f1ea1ed4eed6476baea68c075a631ce  COPYING
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 73e3c3feb8..4753da299c 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -5,8 +5,8 @@
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 1383e680d5..b6f696000b 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5  796ea875cdae283529c03b9203d9c454  requests-2.28.1.tar.gz
+-sha256  7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983  requests-2.28.1.tar.gz
++md5  09b752e0b0a672d805ae54455c128d42  requests-2.28.2.tar.gz
++sha256  98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf  requests-2.28.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 7a21cca52c..8f9f4b2db4 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # When there is no snapshost yet for a new version, set it to the empty string
--NCURSES_VERSION_MAJOR = 6.3
--NCURSES_SNAPSHOT_DATE = 20221224
-+NCURSES_VERSION_MAJOR = 6.4
-+NCURSES_SNAPSHOT_DATE = 20230429
- NCURSES_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),-$(NCURSES_SNAPSHOT_DATE))
- NCURSES_VERSION_GIT = $(subst .,_,$(subst -,_,$(NCURSES_VERSION)))
- NCURSES_SITE = $(call github,ThomasDickey,ncurses-snapshots,v$(NCURSES_VERSION_GIT))
-@@ -15,12 +15,9 @@ NCURSES_DEPENDENCIES = host-ncurses
- NCURSES_LICENSE = MIT with advertising clause
- NCURSES_LICENSE_FILES = COPYING
- NCURSES_CPE_ID_VENDOR = gnu
--NCURSES_CPE_ID_VERSION = $(NCURSES_VERSION_MAJOR)
-+NCURSES_CPE_ID_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),.$(NCURSES_SNAPSHOT_DATE))
- NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
- 
--# Fixed since snapshot 20220416
--NCURSES_IGNORE_CVES += CVE-2022-29458
--
- NCURSES_CONF_OPTS = \
- 	--without-cxx \
- 	--without-cxx-binding \
+-PYTHON_REQUESTS_VERSION = 2.28.1
++PYTHON_REQUESTS_VERSION = 2.28.2
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/a5/61/a867851fd5ab77277495a8709ddda0861b28163c4613b011bc00228cc724
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/ee/391076f5937f0a8cdf5e53b701ffc91753e87b07d66bae4a09aa671897bf
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
