@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C934C77B73
-	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 07:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E9BAC7EE23
+	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 07:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF48C4188D;
-	Tue, 30 May 2023 07:34:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF48C4188D
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6F024187D;
+	Tue, 30 May 2023 07:34:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6F024187D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FZoxk-0HqKAt; Tue, 30 May 2023 07:34:17 +0000 (UTC)
+	with ESMTP id NqpJjxuuBBIq; Tue, 30 May 2023 07:34:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C07C4187A;
-	Tue, 30 May 2023 07:34:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C07C4187A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 89F601BF376
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 07:34:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8F32418AE;
+	Tue, 30 May 2023 07:34:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8F32418AE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 970B41BF376
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 07:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 601BB4187A
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 07:34:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 601BB4187A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F8224064C
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 07:34:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F8224064C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xFYEBR7GoA-d for <buildroot@lists.busybox.net>;
- Tue, 30 May 2023 07:34:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4988441704
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4988441704
- for <buildroot@buildroot.org>; Tue, 30 May 2023 07:34:13 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6796F2000D;
- Tue, 30 May 2023 07:34:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1q3tru-009Vgy-He; Tue, 30 May 2023 09:34:10 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gQ69vW8xCuOw for <buildroot@lists.busybox.net>;
+ Tue, 30 May 2023 07:34:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D1524014D
+ for <buildroot@buildroot.org>; Tue, 30 May 2023 07:34:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D1524014D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 78EF986A5C; Tue, 30 May 2023 07:34:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@gmail.com>
-References: <20230528124208.2415189-1-romain.naour@gmail.com>
-Date: Tue, 30 May 2023 09:34:10 +0200
-In-Reply-To: <20230528124208.2415189-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sun, 28 May 2023 14:42:08 +0200")
-Message-ID: <87r0qyp91p.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/zfs: fix python3 support check
+To: buildroot@buildroot.org
+Date: Tue, 30 May 2023 09:31:42 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: dbbcd3be5da0fe86a167ee8e86e7992aa1e92a7a
+X-Git-Newrev: 888eaf619ea2587b3e05c4e103b9b8926ea461cf
+X-Patchwork-Hint: ignore
+Message-Id: <20230530073422.78EF986A5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libressl: bump to
+ version 3.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,35 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=888eaf619ea2587b3e05c4e103b9b8926ea461cf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Backport an upstream commit fixing the python3 support check
- > "The 22.0 release of the python `packaging` package removed the
- >  `LegacyVersion` trait, causing ZFS to no longer compile.
+Bugfix release, fixing a number of issues.  For details, see the
+announcement:
 
- >  This commit replaces the sections of `ax_python_dev.m4` that rely on
- >  `LegacyVersion` with updated implementations from the upstream
- >  `autoconf-archive`."
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.6.3-relnotes.txt
 
- > Add a comment above ZFS_AUTORECONF.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819411
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819410
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819409
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-
-Committed to 2023.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 907b9cdd06..e2d4decb7c 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  4be80fff073746cf50b4a8e5babe2795acae98c6b132a9e02519b445dfbfd033  libressl-3.6.2.tar.gz
++sha256  87b1bbe36e9eec8d0ae5f04c83d36b2c5b0e581784c7eb0817025ed29eadea37  libressl-3.6.3.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index b5fae7e26e..58c8398e79 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 3.6.2
++LIBRESSL_VERSION = 3.6.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
