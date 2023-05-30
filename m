@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04E6FC77B7A
-	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF37BC77B73
+	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:44:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 813104167F;
-	Tue, 30 May 2023 19:40:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 813104167F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6070D4173C;
+	Tue, 30 May 2023 19:44:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6070D4173C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KP1EgeyiY6zf; Tue, 30 May 2023 19:40:34 +0000 (UTC)
+	with ESMTP id elucxmSEUqvt; Tue, 30 May 2023 19:44:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 028CD41615;
-	Tue, 30 May 2023 19:40:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 028CD41615
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BD9141726;
+	Tue, 30 May 2023 19:44:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BD9141726
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 93D521BF35F
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:40:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8EBFB1BF35F
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:44:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A46981FA7
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:40:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A46981FA7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7577381EB5
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:44:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7577381EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XgC0DCi2XiUW for <buildroot@lists.busybox.net>;
- Tue, 30 May 2023 19:40:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48E3A81F64
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 48E3A81F64
- for <buildroot@buildroot.org>; Tue, 30 May 2023 19:40:30 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 27295E0004;
- Tue, 30 May 2023 19:40:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1q45Cl-009rnL-9R; Tue, 30 May 2023 21:40:27 +0200
+ with ESMTP id 41AlUnDy9bAY for <buildroot@lists.busybox.net>;
+ Tue, 30 May 2023 19:44:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8EF8881E99
+ for <buildroot@buildroot.org>; Tue, 30 May 2023 19:44:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EF8881E99
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7D66586A93; Tue, 30 May 2023 19:44:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Daniel Lang <dalang@gmx.at>
-References: <20230505192743.6844-1-dalang@gmx.at>
-Date: Tue, 30 May 2023 21:40:27 +0200
-In-Reply-To: <20230505192743.6844-1-dalang@gmx.at> (Daniel Lang's message of
- "Fri, 5 May 2023 21:27:43 +0200")
-Message-ID: <87v8g9obf8.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/ncurses: security bump to
- 6.4.20230429
+To: buildroot@buildroot.org
+Date: Tue, 30 May 2023 21:27:40 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 23ac9f2a6e121eae576b9adbb565aafb1a1d3966
+X-Git-Newrev: 2317c7775b5237559e907fee28dc4b3bc253e8ee
+X-Patchwork-Hint: ignore
+Message-Id: <20230530194424.7D66586A93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/atkmm: bump to
+ version 2.36.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2317c7775b5237559e907fee28dc4b3bc253e8ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Update to 6.4 and use latest snapshot to fix CVE-2023-29491.
- > COPYING has been changed in snapshot 20230107 to update the year [0].
- > Update CVE version to major.minor.snapshot, as NVD uses the snapshot
- > date as patch version [1].
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6d7e5e2b63d138ac902e21644256d9fcbae686ef)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/atkmm/atkmm.hash | 4 ++--
+ package/atkmm/atkmm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > [0]:
- > https://github.com/ThomasDickey/ncurses-snapshots/commit/eedb756850fdddcd2767d488ed5ea323d40b37ec
- > [1]:
- > https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gnu:ncurses
-
- > Signed-off-by: Daniel Lang <dalang@gmx.at>
-
-Committed to 2023.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/atkmm/atkmm.hash b/package/atkmm/atkmm.hash
+index 9e2bb2830c..08cf86b3df 100644
+--- a/package/atkmm/atkmm.hash
++++ b/package/atkmm/atkmm.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/atkmm/2.36/atkmm-2.36.1.sha256sum
+-sha256  e11324bfed1b6e330a02db25cecc145dca03fb0dff47f0710c85e317687da458  atkmm-2.36.1.tar.xz
++# From https://download.gnome.org/sources/atkmm/2.36/atkmm-2.36.2.sha256sum
++sha256  6f62dd99f746985e573605937577ccfc944368f606a71ca46342d70e1cdae079  atkmm-2.36.2.tar.xz
+ # locally computed
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
+diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
+index 7ceb87b047..8afd058643 100644
+--- a/package/atkmm/atkmm.mk
++++ b/package/atkmm/atkmm.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ATKMM_VERSION_MAJOR = 2.36
+-ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).1
++ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).2
+ ATKMM_SOURCE = atkmm-$(ATKMM_VERSION).tar.xz
+ ATKMM_SITE = https://download.gnome.org/sources/atkmm/$(ATKMM_VERSION_MAJOR)
+ ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
