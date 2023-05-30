@@ -4,87 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1512CC7EE23
-	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99670C7EE31
+	for <buildroot@archiver.kernel.org>; Tue, 30 May 2023 19:28:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DBC040289;
-	Tue, 30 May 2023 19:28:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DBC040289
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DFA8408AF;
+	Tue, 30 May 2023 19:28:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DFA8408AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MZNVBOA8DyNn; Tue, 30 May 2023 19:28:10 +0000 (UTC)
+	with ESMTP id QItJLXd0DzjY; Tue, 30 May 2023 19:28:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DCCD415FD;
-	Tue, 30 May 2023 19:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DCCD415FD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D21E61BF35F
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:28:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1810F403ED;
+	Tue, 30 May 2023 19:28:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1810F403ED
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 04B771BF35F
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5ECA415FD
- for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:28:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5ECA415FD
+ by smtp3.osuosl.org (Postfix) with ESMTP id D145960B78
+ for <buildroot@lists.busybox.net>; Tue, 30 May 2023 19:28:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D145960B78
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TkLs4McvVIDa for <buildroot@lists.busybox.net>;
- Tue, 30 May 2023 19:28:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BAtTI9uBUyLL for <buildroot@lists.busybox.net>;
+ Tue, 30 May 2023 19:28:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A37C40289
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A37C40289
- for <buildroot@buildroot.org>; Tue, 30 May 2023 19:28:05 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-30aebe2602fso1951704f8f.3
- for <buildroot@buildroot.org>; Tue, 30 May 2023 12:28:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8CB960AE2
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B8CB960AE2
+ for <buildroot@buildroot.org>; Tue, 30 May 2023 19:28:08 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-3f6d01d390bso50756505e9.2
+ for <buildroot@buildroot.org>; Tue, 30 May 2023 12:28:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685474884; x=1688066884;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wJoaiNza3ifCRLPfPG8oRmMz/hl1aT4H6wUgePOU4UU=;
- b=NG91Fz6LmUajKkET6WUypLJL9eNy1IzzLE5F9d1HTgjFElipg7PQBteePC2O4JjLH2
- EfxD+mACfufNJYwf5S+fNgTJO9ubYeTg3kNKS3RE1T4HLxpvLYeE4kQgo9Q9arumteob
- f0XUvbkkUY7ZuGaEsB/IdaZSdMPH1jCIvT5vKwXrengWo3TZ2a5Pr+0SCqjCehN+3IM1
- jdh+GJK61KR0SiEXcea+CqK3hdd02Q/EAjCkQq3VDG2J9bgPj2JKUZotW3ZLlMlo/CVN
- znFFrOd4IvoBgfDj9STi6/xfU+zxspOWaUpwdhDCGpJQwGNQalcubVfeFjH/V+z5wbzr
- 7jzA==
-X-Gm-Message-State: AC+VfDyKaTGh26g4dwKf0Tz8XP4EmlfZe6OeeBs0umhy4VoSPrm9xQ6K
- ch3fwfxyfDRXOEMHCzCDlU+i5PS01eI=
-X-Google-Smtp-Source: ACHHUZ41zAAcdVka8la1bXWLdrIeH3tct85GtPkc7L4AGIZl9sdBnNgL3uEzbIHrOn7WFf81Gqr1JA==
-X-Received: by 2002:a5d:4acf:0:b0:309:4f23:e52e with SMTP id
- y15-20020a5d4acf000000b003094f23e52emr2510586wrs.15.1685474883661; 
- Tue, 30 May 2023 12:28:03 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1685474887; x=1688066887;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=CRf7W9/IhkQyCu/9XV1BvnVCPwjrEmWafxJtHcKYIV4=;
+ b=flSAWju/I8dNr+yAIB9pkfG05nACZ4VkfIQW3DKMW8oSY/Sbb/+eyE6LQMVYXemIV+
+ 4IN6OiW2XjjObWNrhmx1fxai8FjNFs2DM9o/K9FlUGFYqHf2uDyVSqag9acQ6UYQ6qRM
+ gACoFHOwURDAWt4tvxPXZcx3IL71JfSR2GtliHup4QC8MRfIt8/5Wz68gkCzXaJOvXFJ
+ ovNccJ/en9inc5V7l6IJg+duC3qYQyhNXovNt6CQMtJoy+yXK7xgvdiey5vR9L/TrcRz
+ 2NTYgzEHEDls0xM14s4dCbNrugrYFQKQTmNHrS8bckEEwzN8UMyn/SBuqt/mo49l/D75
+ /84A==
+X-Gm-Message-State: AC+VfDyphU7bmJ5IQykFd3aEeKwMLMJM1t4wMYfb+A6RtDlKX90WJguE
+ BIqRp3bN2x2POKaPulAL70FrQs1qkHU=
+X-Google-Smtp-Source: ACHHUZ6xGYlMxiPMSG0ngEB6e+8XV182U5JppNMZndGzD/MV15tJ69a9HBG9jIqjCDwKvgORYRIYnQ==
+X-Received: by 2002:a5d:66d1:0:b0:2f8:c94c:3895 with SMTP id
+ k17-20020a5d66d1000000b002f8c94c3895mr2726727wrw.23.1685474886285; 
+ Tue, 30 May 2023 12:28:06 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- x11-20020a5d490b000000b003063a92bbf5sm4169100wrq.70.2023.05.30.12.28.02
+ x11-20020a5d490b000000b003063a92bbf5sm4169100wrq.70.2023.05.30.12.28.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 30 May 2023 12:28:03 -0700 (PDT)
+ Tue, 30 May 2023 12:28:05 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 May 2023 21:27:56 +0200
-Message-Id: <20230530192757.2487642-1-romain.naour@gmail.com>
+Date: Tue, 30 May 2023 21:27:57 +0200
+Message-Id: <20230530192757.2487642-2-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.34.3
+In-Reply-To: <20230530192757.2487642-1-romain.naour@gmail.com>
+References: <20230530192757.2487642-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685474884; x=1688066884;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wJoaiNza3ifCRLPfPG8oRmMz/hl1aT4H6wUgePOU4UU=;
- b=HkMyUk5alTvaoxnhYRkAWFv1MGnDHvNpnQ3hIJhVtPuwPHt5A0DvlONm8F+GEDYSw0
- +PW4qIiwDRDsILyQ2dKPFc2rFxlSrmvfa8LbPqb4Cy1utu8aM3pPkrjjwTPIyeKPbJJK
- oA1V2VCsBA7j7CKU6vLCtErXl6Dk2YsP8B2S5w9LW0szIYWxwGiWqyxtu5Tpl/td0g5a
- f8yEVohri+lOb1RPGJmCnk855BFBTN0O046ai+cyAg2bu6lx5IO7h5RBlJIu8l6e74Zg
- 30WuP7zUt9L8uv/deqTqFvs8nKAqkUAiqAvzumelor/4bQNwhUwBkGxeh+Xwqbzb9Sk/
- kfhA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20221208; t=1685474887; x=1688066887;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=CRf7W9/IhkQyCu/9XV1BvnVCPwjrEmWafxJtHcKYIV4=;
+ b=hC17DsL1xft8ao2axVXrb85eEYoCRY9nycJ2bIBKZl9Qy2tKT7BEBcOIGKY29ZcbBB
+ Em6KH5fIExJXS97gxwy+UtoBPKfkf57MfA1vrXeQeB8ikx2K1AWq0ov7LGNck4McsKQe
+ 0QnaZYKGDu08PjOxZA5NFsCFBfMS0vKffD65c3Y0AcSN4U6hxecxvpk4We5ATSjbSMl+
+ gPdWE219bURDHOe902wqepeMI8GvVxR/Vyj15WwH3DV5H2avzsNEoVsrrZD9blz318Fx
+ 6kulXCuDJP1son7EhEwKjqtLouyQJEhVTr4jyShiEuEIbGGTRpjKRmHTBQ+bBU5dw/+2
+ dtbQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=HkMyUk5a
-Subject: [Buildroot] [PATCH 1/2] package/gcc: bump to version 12.3
+ header.a=rsa-sha256 header.s=20221208 header.b=hC17DsL1
+Subject: [Buildroot] [PATCH 2/2] package/gcc: bump to version 11.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,159 +105,455 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove upstream patch.
+Add Upstream tag to backported patches.
+Remove patches merged in gcc 11.4.
 
 See announce:
-https://gcc.gnu.org/pipermail/gcc-announce/2023/000176.html
+https://gcc.gnu.org/pipermail/gcc-announce/2023/000177.html
 
 Runtime tested:
-https://gitlab.com/kubu93/buildroot/-/pipelines/882178578
+https://gitlab.com/kubu93/buildroot/-/pipelines/882299806
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .checkpackageignore                           |  3 +-
- package/gcc/12.2.0/0002-fix-condvar.patch     | 82 -------------------
- ...le-split-stack-for-non-thread-builds.patch |  0
- package/gcc/Config.in.host                    |  2 +-
- package/gcc/gcc.hash                          |  4 +-
- 5 files changed, 4 insertions(+), 87 deletions(-)
- delete mode 100644 package/gcc/12.2.0/0002-fix-condvar.patch
- rename package/gcc/{12.2.0 => 12.3.0}/0001-disable-split-stack-for-non-thread-builds.patch (100%)
+ .checkpackageignore                           |   7 +-
+ .../11.3.0/0005-rs6000-Improve-.machine.patch | 120 ------------------
+ ...e-rs6000_cpu-for-.machine-ppc-and-pp.patch |  68 ----------
+ ...-mcmodel-option-to-handle-large-GOTs.patch |  12 +-
+ ...-cmodel-large-when-building-crtstuff.patch |  12 +-
+ ...TRANT-for-OpenRISC-when-pthread-is-p.patch |   8 +-
+ ...le-split-stack-for-non-thread-builds.patch |   2 +-
+ ...machine-names-in-__has_include-.-PR.patch} |   8 +-
+ package/gcc/Config.in.host                    |   2 +-
+ package/gcc/gcc.hash                          |   4 +-
+ 10 files changed, 31 insertions(+), 212 deletions(-)
+ delete mode 100644 package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
+ delete mode 100644 package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
+ rename package/gcc/{11.3.0 => 11.4.0}/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch (95%)
+ rename package/gcc/{11.3.0 => 11.4.0}/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch (88%)
+ rename package/gcc/{11.3.0 => 11.4.0}/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch (81%)
+ rename package/gcc/{11.3.0 => 11.4.0}/0004-disable-split-stack-for-non-thread-builds.patch (92%)
+ rename package/gcc/{11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch => 11.4.0/0005-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch} (96%)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index f2dea0dfd9..a8338883d0 100644
+index a8338883d0..ea5f6aafd3 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -524,8 +524,7 @@ package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.pat
- package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch Upstream
- package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch Upstream
- package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch Upstream
--package/gcc/12.2.0/0001-disable-split-stack-for-non-thread-builds.patch Upstream
--package/gcc/12.2.0/0002-fix-condvar.patch Upstream
-+package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch Upstream
+@@ -518,12 +518,7 @@ package/gcc/10.4.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch Upstr
+ package/gcc/10.4.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch Upstream
+ package/gcc/10.4.0/0004-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch Upstream
+ package/gcc/10.4.0/0005-disable-split-stack-for-non-thread-builds.patch Upstream
+-package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch Upstream
+-package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch Upstream
+-package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch Upstream
+-package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch Upstream
+-package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch Upstream
+-package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch Upstream
++package/gcc/11.4.0/0004-disable-split-stack-for-non-thread-builds.patch Upstream
+ package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch Upstream
  package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch Upstream
  package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch Upstream
- package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch Upstream
-diff --git a/package/gcc/12.2.0/0002-fix-condvar.patch b/package/gcc/12.2.0/0002-fix-condvar.patch
+diff --git a/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch b/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
 deleted file mode 100644
-index 5044942e9f..0000000000
---- a/package/gcc/12.2.0/0002-fix-condvar.patch
+index 82a667ab7b..0000000000
+--- a/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
 +++ /dev/null
-@@ -1,82 +0,0 @@
--From ee4af2ed0b7322884ec4ff537564683c3749b813 Mon Sep 17 00:00:00 2001
--From: Jonathan Wakely <jwakely@redhat.com>
--Date: Thu, 22 Dec 2022 09:56:47 +0000
--Subject: [PATCH] libstdc++: Avoid recursion in __nothrow_wait_cv::wait
-- [PR105730]
+@@ -1,120 +0,0 @@
+-From ca2c3a7d3db7a699c358d3408f820396dd536fc8 Mon Sep 17 00:00:00 2001
+-From: Segher Boessenkool <segher@kernel.crashing.org>
+-Date: Tue, 1 Mar 2022 17:04:29 +0000
+-Subject: [PATCH] rs6000: Improve .machine
 -
--The commit r12-5877-g9e18a25331fa25 removed the incorrect
--noexcept-specifier from std::condition_variable::wait and gave the new
--symbol version @@GLIBCXX_3.4.30. It also redefined the original symbol
--std::condition_variable::wait(unique_lock<mutex>&)@GLIBCXX_3.4.11 as an
--alias for a new symbol, __gnu_cxx::__nothrow_wait_cv::wait, which still
--has the incorrect noexcept guarantee. That __nothrow_wait_cv::wait is
--just a wrapper around the real condition_variable::wait which adds
--noexcept and so terminates on a __forced_unwind exception.
+-This adds more correct .machine for most older CPUs.  It should be
+-conservative in the sense that everything we handled before we handle at
+-least as well now.  This does not yet revamp the server CPU handling, it
+-is too risky at this point in time.
 -
--This doesn't work on uclibc, possibly due to a dynamic linker bug. When
--__nothrow_wait_cv::wait calls the condition_variable::wait function it
--binds to the alias symbol, which means it just calls itself recursively
--until the stack overflows.
+-Tested on powerpc64-linux {-m32,-m64}.  Also manually tested with all
+--mcpu=, and the output of that passed through the GNU assembler.
 -
--This change avoids the possibility of a recursive call by changing the
--__nothrow_wait_cv::wait function so that instead of calling
--condition_variable::wait it re-implements it. This requires accessing
--the private _M_cond member of condition_variable, so we need to use the
--trick of instantiating a template with the member-pointer of the private
--member.
+-2022-03-04  Segher Boessenkool  <segher@kernel.crashing.org>
 -
--libstdc++-v3/ChangeLog:
+-	* config/rs6000/rs6000.c (rs6000_machine_from_flags): Restructure a
+-	bit.  Handle most older CPUs.
 -
--	PR libstdc++/105730
--	* src/c++11/compatibility-condvar.cc (__nothrow_wait_cv::wait):
--	Access private data member of base class and call its wait
--	member.
--
--Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+-(cherry picked from commit 77eccbf39ed55297802bb66dff5f62507a7239e3)
+-(cherry picked from commit fc7e603edc67c66a14f893f3b5a0a34e7d26f77c)
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ----
-- .../src/c++11/compatibility-condvar.cc        | 22 ++++++++++++++++++-
-- 1 file changed, 21 insertions(+), 1 deletion(-)
+- gcc/config/rs6000/rs6000.c | 81 +++++++++++++++++++++++++-------------
+- 1 file changed, 54 insertions(+), 27 deletions(-)
 -
--diff --git a/libstdc++-v3/src/c++11/compatibility-condvar.cc b/libstdc++-v3/src/c++11/compatibility-condvar.cc
--index e3a8b8403ca..3cef3bc0714 100644
----- a/libstdc++-v3/src/c++11/compatibility-condvar.cc
--+++ b/libstdc++-v3/src/c++11/compatibility-condvar.cc
--@@ -67,6 +67,24 @@ _GLIBCXX_END_NAMESPACE_VERSION
--     && defined(_GLIBCXX_HAVE_SYMVER_SYMBOL_RENAMING_RUNTIME_SUPPORT)
-- namespace __gnu_cxx _GLIBCXX_VISIBILITY(default)
+-diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
+-index 0421dc7adb3..0a55c979c36 100644
+---- a/gcc/config/rs6000/rs6000.c
+-+++ b/gcc/config/rs6000/rs6000.c
+-@@ -5742,33 +5742,60 @@ const char *rs6000_machine;
+- const char *
+- rs6000_machine_from_flags (void)
 - {
--+namespace
--+{
--+  // Pointer-to-member for private std::condition_variable::_M_cond member.
--+  std::__condvar std::condition_variable::* __base_member;
+--  /* For some CPUs, the machine cannot be determined by ISA flags.  We have to
+--     check them first.  */
+--  switch (rs6000_cpu)
+--    {
+--    case PROCESSOR_PPC8540:
+--    case PROCESSOR_PPC8548:
+--      return "e500";
+--
+--    case PROCESSOR_PPCE300C2:
+--    case PROCESSOR_PPCE300C3:
+--      return "e300";
+--
+--    case PROCESSOR_PPCE500MC:
+--      return "e500mc";
+--
+--    case PROCESSOR_PPCE500MC64:
+--      return "e500mc64";
+--
+--    case PROCESSOR_PPCE5500:
+--      return "e5500";
+--
+--    case PROCESSOR_PPCE6500:
+--      return "e6500";
+--
+--    default:
+--      break;
+--    }
+-+  /* e300 and e500 */
+-+  if (rs6000_cpu == PROCESSOR_PPCE300C2 || rs6000_cpu == PROCESSOR_PPCE300C3)
+-+    return "e300";
+-+  if (rs6000_cpu == PROCESSOR_PPC8540 || rs6000_cpu == PROCESSOR_PPC8548)
+-+    return "e500";
+-+  if (rs6000_cpu == PROCESSOR_PPCE500MC)
+-+    return "e500mc";
+-+  if (rs6000_cpu == PROCESSOR_PPCE500MC64)
+-+    return "e500mc64";
+-+  if (rs6000_cpu == PROCESSOR_PPCE5500)
+-+    return "e5500";
+-+  if (rs6000_cpu == PROCESSOR_PPCE6500)
+-+    return "e6500";
 -+
--+  template<std::__condvar std::condition_variable::*X>
--+    struct cracker
--+    { static std::__condvar std::condition_variable::* value; };
+-+  /* 400 series */
+-+  if (rs6000_cpu == PROCESSOR_PPC403)
+-+    return "\"403\"";
+-+  if (rs6000_cpu == PROCESSOR_PPC405)
+-+    return "\"405\"";
+-+  if (rs6000_cpu == PROCESSOR_PPC440)
+-+    return "\"440\"";
+-+  if (rs6000_cpu == PROCESSOR_PPC476)
+-+    return "\"476\"";
 -+
--+  // Initializer for this static member also initializes __base_member.
--+  template<std::__condvar std::condition_variable::*X>
--+    std::__condvar std::condition_variable::*
--+      cracker<X>::value = __base_member = X;
+-+  /* A2 */
+-+  if (rs6000_cpu == PROCESSOR_PPCA2)
+-+    return "a2";
 -+
--+  // Explicit instantiation is allowed to access the private member.
--+  template class cracker<&std::condition_variable::_M_cond>;
--+}
+-+  /* Cell BE */
+-+  if (rs6000_cpu == PROCESSOR_CELL)
+-+    return "cell";
 -+
-- struct __nothrow_wait_cv : std::condition_variable
-- {
--   void wait(std::unique_lock<std::mutex>&) noexcept;
--@@ -76,7 +94,9 @@ __attribute__((used))
-- void
-- __nothrow_wait_cv::wait(std::unique_lock<std::mutex>& lock) noexcept
-- {
---  this->condition_variable::wait(lock);
--+  // In theory this could be simply this->std::condition_variable::wait(lock)
--+  // but with uclibc that binds to the @GLIBCXX_3.4.11 symbol, see PR 105730.
--+  (this->*__base_member).wait(*lock.mutex());
-- }
-- } // namespace __gnu_cxx
+-+  /* Titan */
+-+  if (rs6000_cpu == PROCESSOR_TITAN)
+-+    return "titan";
+-+
+-+  /* 500 series and 800 series */
+-+  if (rs6000_cpu == PROCESSOR_MPCCORE)
+-+    return "\"821\"";
+-+
+-+  /* 600 series and 700 series, "classic" */
+-+  if (rs6000_cpu == PROCESSOR_PPC601 || rs6000_cpu == PROCESSOR_PPC603
+-+      || rs6000_cpu == PROCESSOR_PPC604 || rs6000_cpu == PROCESSOR_PPC604e
+-+      || rs6000_cpu == PROCESSOR_PPC750 || rs6000_cpu == PROCESSOR_POWERPC)
+-+    return "ppc";
+-+
+-+  /* Classic with AltiVec, "G4" */
+-+  if (rs6000_cpu == PROCESSOR_PPC7400 || rs6000_cpu == PROCESSOR_PPC7450)
+-+    return "\"7450\"";
+-+
+-+  /* The older 64-bit CPUs */
+-+  if (rs6000_cpu == PROCESSOR_PPC620 || rs6000_cpu == PROCESSOR_PPC630
+-+      || rs6000_cpu == PROCESSOR_RS64A || rs6000_cpu == PROCESSOR_POWERPC64)
+-+    return "ppc64";
+- 
+-   HOST_WIDE_INT flags = rs6000_isa_flags;
 - 
 --- 
--2.31.1
+-2.34.3
 -
-diff --git a/package/gcc/12.2.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch
-similarity index 100%
-rename from package/gcc/12.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch
+diff --git a/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch b/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
+deleted file mode 100644
+index 43fed4c19f..0000000000
+--- a/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From 6de33ed642f119f1e2543095dd56e4a94f97c27f Mon Sep 17 00:00:00 2001
+-From: Segher Boessenkool <segher@kernel.crashing.org>
+-Date: Fri, 11 Mar 2022 21:15:18 +0000
+-Subject: [PATCH] rs6000: Do not use rs6000_cpu for .machine ppc and ppc64
+- (PR104829)
+-
+-Fixes: 77eccbf39ed5
+-
+-rs6000.h has
+-  #define PROCESSOR_POWERPC   PROCESSOR_PPC604
+-  #define PROCESSOR_POWERPC64 PROCESSOR_RS64A
+-which means that if you use things like  -mcpu=powerpc -mvsx  it will no
+-longer work after my latest .machine patch.  This causes GCC build errors
+-in some cases, not a good idea (even if the errors are actually
+-pre-existing: using -mvsx with a machine that does not have VSX cannot
+-work properly).
+-
+-2022-03-11  Segher Boessenkool  <segher@kernel.crashing.org>
+-
+-	PR target/104829
+-	* config/rs6000/rs6000.c (rs6000_machine_from_flags): Don't output
+-	"ppc" and "ppc64" based on rs6000_cpu.
+-
+-(cherry picked from commit 80fcc4b6afee72443bef551064826b3b4b6785e6)
+-(cherry picked from commit d87e0e297b1cba73a0c055d2a3e9267d288f435a)
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- gcc/config/rs6000/rs6000.c | 12 ++++++++++--
+- 1 file changed, 10 insertions(+), 2 deletions(-)
+-
+-diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
+-index 0a55c979c36..7e5cdd34840 100644
+---- a/gcc/config/rs6000/rs6000.c
+-+++ b/gcc/config/rs6000/rs6000.c
+-@@ -5782,20 +5782,28 @@ rs6000_machine_from_flags (void)
+-   if (rs6000_cpu == PROCESSOR_MPCCORE)
+-     return "\"821\"";
+- 
+-+#if 0
+-+  /* This (and ppc64 below) are disabled here (for now at least) because
+-+     PROCESSOR_POWERPC, PROCESSOR_POWERPC64, and PROCESSOR_COMMON
+-+     are #define'd as some of these.  Untangling that is a job for later.  */
+-+
+-   /* 600 series and 700 series, "classic" */
+-   if (rs6000_cpu == PROCESSOR_PPC601 || rs6000_cpu == PROCESSOR_PPC603
+-       || rs6000_cpu == PROCESSOR_PPC604 || rs6000_cpu == PROCESSOR_PPC604e
+--      || rs6000_cpu == PROCESSOR_PPC750 || rs6000_cpu == PROCESSOR_POWERPC)
+-+      || rs6000_cpu == PROCESSOR_PPC750)
+-     return "ppc";
+-+#endif
+- 
+-   /* Classic with AltiVec, "G4" */
+-   if (rs6000_cpu == PROCESSOR_PPC7400 || rs6000_cpu == PROCESSOR_PPC7450)
+-     return "\"7450\"";
+- 
+-+#if 0
+-   /* The older 64-bit CPUs */
+-   if (rs6000_cpu == PROCESSOR_PPC620 || rs6000_cpu == PROCESSOR_PPC630
+--      || rs6000_cpu == PROCESSOR_RS64A || rs6000_cpu == PROCESSOR_POWERPC64)
+-+      || rs6000_cpu == PROCESSOR_RS64A)
+-     return "ppc64";
+-+#endif
+- 
+-   HOST_WIDE_INT flags = rs6000_isa_flags;
+- 
+--- 
+-2.34.3
+-
+diff --git a/package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/11.4.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+similarity index 95%
+rename from package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+rename to package/gcc/11.4.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+index 4888f7e320..f927cd007d 100644
+--- a/package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
++++ b/package/gcc/11.4.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+@@ -1,4 +1,4 @@
+-From 7a20b4574f06472086c786bd1b078ee962cdb02c Mon Sep 17 00:00:00 2001
++From 35c0801efa26bf248d278b5711b77a19e95b2f57 Mon Sep 17 00:00:00 2001
+ From: Stafford Horne <shorne@gmail.com>
+ Date: Tue, 6 Apr 2021 05:47:17 +0900
+ Subject: [PATCH] or1k: Add mcmodel option to handle large GOTs
+@@ -28,7 +28,11 @@ gcc/ChangeLog:
+ 	* config/or1k/or1k.opt (mcmodel=): New option.
+ 	* doc/invoke.texi (OpenRISC Options): Document mcmodel.
+ 
++Uptream: eff8110674ef193481d3657456a262beeb9951ff
++
+ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Romain: add Upstream tag]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+  gcc/config/or1k/or1k-opts.h | 30 ++++++++++++++++++++++++++++++
+  gcc/config/or1k/or1k.c      | 11 +++++++++--
+@@ -166,7 +170,7 @@ index 6bd0f3eee6d..cc23e3b8856 100644
+  Target RejectNegative Mask(CMOV)
+  Enable generation of conditional move (l.cmov) instructions.  By default the
+ diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+-index 35508efb4ef..a1b7608a3aa 100644
++index f1217812280..90c6186fc14 100644
+ --- a/gcc/doc/invoke.texi
+ +++ b/gcc/doc/invoke.texi
+ @@ -1136,7 +1136,8 @@ Objective-C and Objective-C++ Dialects}.
+@@ -179,7 +183,7 @@ index 35508efb4ef..a1b7608a3aa 100644
+  
+  @emph{PDP-11 Options}
+  @gccoptlist{-mfpu  -msoft-float  -mac0  -mno-ac0  -m40  -m45  -m10 @gol
+-@@ -26443,6 +26444,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
++@@ -26444,6 +26445,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
+  @code{l.slli}) instructions.  By default extra instructions will be generated
+  to store the immediate to a register first.
+  
+@@ -196,5 +200,5 @@ index 35508efb4ef..a1b7608a3aa 100644
+  @end table
+  
+ -- 
+-2.35.1
++2.34.3
+ 
+diff --git a/package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/11.4.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
+similarity index 88%
+rename from package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
+rename to package/gcc/11.4.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
+index 716f007a24..eb45175135 100644
+--- a/package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
++++ b/package/gcc/11.4.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
+@@ -1,4 +1,4 @@
+-From c544a63928406b706b8493fd9b8ca2136b433cf0 Mon Sep 17 00:00:00 2001
++From f75178ccd2f5e4d73e27cccffffada859b87be7d Mon Sep 17 00:00:00 2001
+ From: Stafford Horne <shorne@gmail.com>
+ Date: Wed, 21 Apr 2021 05:33:15 +0900
+ Subject: [PATCH] or1k: Use cmodel=large when building crtstuff
+@@ -21,7 +21,11 @@ libgcc/ChangeLog:
+ 	* config.host (or1k-*, tmake_file): Add or1k/t-crtstuff.
+ 	* config/or1k/t-crtstuff: New file.
+ 
++Upstream: da8a9d695b3c4b9397b5d9a27660bfa48af8d707
++
+ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Romain: add Upstream tag]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+  libgcc/config.host            | 4 ++--
+  libgcc/config/or1k/t-crtstuff | 2 ++
+@@ -29,10 +33,10 @@ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+  create mode 100644 libgcc/config/or1k/t-crtstuff
+ 
+ diff --git a/libgcc/config.host b/libgcc/config.host
+-index f2dc7e266f4..6f193c32fbd 100644
++index 45f8e19ada4..5523345abb0 100644
+ --- a/libgcc/config.host
+ +++ b/libgcc/config.host
+-@@ -1132,12 +1132,12 @@ nios2-*-*)
++@@ -1150,12 +1150,12 @@ nios2-*-*)
+  	extra_parts="$extra_parts crti.o crtn.o"
+  	;;
+  or1k-*-linux*)
+@@ -56,5 +60,5 @@ index 00000000000..dcae7f3498e
+ +# Compile crtbeginS.o and crtendS.o with -mcmodel=large
+ +CRTSTUFF_T_CFLAGS_S += -mcmodel=large
+ -- 
+-2.35.1
++2.34.3
+ 
+diff --git a/package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch b/package/gcc/11.4.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
+similarity index 81%
+rename from package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
+rename to package/gcc/11.4.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
+index e33dec3ff6..cb407c78fc 100644
+--- a/package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
++++ b/package/gcc/11.4.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
+@@ -1,4 +1,4 @@
+-From 8ef5787701f4d7cf46a27771d38ab54af2499e25 Mon Sep 17 00:00:00 2001
++From 48ced46a5f81f49737ea13d11a099e03062cf141 Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Fri, 27 Mar 2020 21:23:53 +0100
+ Subject: [PATCH] gcc: define _REENTRANT for OpenRISC when -pthread is passed
+@@ -8,7 +8,11 @@ is defined. Added the CPP_SPEC definition to correct this.
+ 
+ Patch sent upstream: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94372
+ 
++Upstream: cac2f69cdad434ad5cb60f5fe931d45cd82ef476
++
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Romain: add Upstream tag]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+  gcc/config/or1k/linux.h | 2 ++
+  1 file changed, 2 insertions(+)
+@@ -27,5 +31,5 @@ index 196f3f3c8f0..0cbdc934af1 100644
+  #define LINK_SPEC "%{h*}			\
+     %{static:-Bstatic}				\
+ -- 
+-2.35.1
++2.34.3
+ 
+diff --git a/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch b/package/gcc/11.4.0/0004-disable-split-stack-for-non-thread-builds.patch
+similarity index 92%
+rename from package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
+rename to package/gcc/11.4.0/0004-disable-split-stack-for-non-thread-builds.patch
+index dba2d02d7f..817997e925 100644
+--- a/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
++++ b/package/gcc/11.4.0/0004-disable-split-stack-for-non-thread-builds.patch
+@@ -1,4 +1,4 @@
+-From 3b9d7d397fa6dc290eb05bffca80968efb6ec2e5 Mon Sep 17 00:00:00 2001
++From 590ef1956786bfd49dae7a5e2fed67509d06f36b Mon Sep 17 00:00:00 2001
+ From: Waldemar Brodkorb <wbx@openadk.org>
+ Date: Mon, 25 Jul 2022 00:29:55 +0200
+ Subject: [PATCH] disable split-stack for non-thread builds
+diff --git a/package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch b/package/gcc/11.4.0/0005-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
+similarity index 96%
+rename from package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
+rename to package/gcc/11.4.0/0005-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
+index 4e93f6ab96..88bc26e0d7 100644
+--- a/package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
++++ b/package/gcc/11.4.0/0005-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
+@@ -1,4 +1,4 @@
+-From de3f4ee9a5bd2adcb5ff2e1690db2567fda1473c Mon Sep 17 00:00:00 2001
++From 3e878f9d1c473f91a1377193d4d8d2616357bed1 Mon Sep 17 00:00:00 2001
+ From: Xi Ruoyao <xry111@mengyan1223.wang>
+ Date: Mon, 28 Jun 2021 13:54:58 +0800
+ Subject: [PATCH] fixinc: don't "fix" machine names in __has_include(...)
+@@ -93,10 +93,10 @@ index 5b23a8b640d..404b420f302 100644
+               with the appropriate underscores, then leave it alone.
+               We want exactly two leading and trailing underscores.  */
+ diff --git a/fixincludes/inclhack.def b/fixincludes/inclhack.def
+-index 066bef99162..b7ad6982e96 100644
++index c2f54d1189a..b2841d384f3 100644
+ --- a/fixincludes/inclhack.def
+ +++ b/fixincludes/inclhack.def
+-@@ -3154,7 +3154,8 @@ fix = {
++@@ -3201,7 +3201,8 @@ fix = {
+      c_fix     = machine_name;
+  
+      test_text = "/* MACH_DIFF: */\n"
+@@ -120,5 +120,5 @@ index cf95321fb86..8b3accaf04e 100644
+  #endif  /* MACHINE_NAME_CHECK */
+  
+ -- 
+-2.37.3
++2.34.3
+ 
 diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 400d8eb07b..f099ccb11b 100644
+index f099ccb11b..4a8bd4bbd3 100644
 --- a/package/gcc/Config.in.host
 +++ b/package/gcc/Config.in.host
-@@ -88,7 +88,7 @@ config BR2_GCC_VERSION
+@@ -87,7 +87,7 @@ config BR2_GCC_VERSION
+ 	string
  	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
  	default "10.4.0"    if BR2_GCC_VERSION_10_X
- 	default "11.3.0"    if BR2_GCC_VERSION_11_X
--	default "12.2.0"    if BR2_GCC_VERSION_12_X
-+	default "12.3.0"    if BR2_GCC_VERSION_12_X
+-	default "11.3.0"    if BR2_GCC_VERSION_11_X
++	default "11.4.0"    if BR2_GCC_VERSION_11_X
+ 	default "12.3.0"    if BR2_GCC_VERSION_12_X
  	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
  
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
 diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 666124fa6d..9082d25b78 100644
+index 9082d25b78..f478962af8 100644
 --- a/package/gcc/gcc.hash
 +++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
+@@ -2,8 +2,8 @@
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
  sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-11.3.0/sha512.sum
- sha512  f0be5ad705c73b84477128a69c047f57dd47002f375eb60e1e842e08cf2009a509e92152bca345823926d550b7395ae6d4de7db51d1ee371c2dc37313881fca7  gcc-11.3.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.2.0/sha512.sum
--sha512  e9e857bd81bf7a370307d6848c81b2f5403db8c7b5207f54bce3f3faac3bde63445684092c2bc1a2427cddb6f7746496d9fbbef05fbbd77f2810b2998f1f9173  gcc-12.2.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.3.0/sha512.sum
-+sha512  8fb799dfa2e5de5284edf8f821e3d40c2781e4c570f5adfdb1ca0671fcae3fb7f794ea783e80f01ec7bfbf912ca508e478bd749b2755c2c14e4055648146c204  gcc-12.3.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-11.3.0/sha512.sum
+-sha512  f0be5ad705c73b84477128a69c047f57dd47002f375eb60e1e842e08cf2009a509e92152bca345823926d550b7395ae6d4de7db51d1ee371c2dc37313881fca7  gcc-11.3.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-11.4.0/sha512.sum
++sha512  a5018bf1f1fa25ddf33f46e720675d261987763db48e7a5fdf4c26d3150a8abcb82fdc413402df1c32f2e6b057d9bae6bdfa026defc4030e10144a8532e60f14  gcc-11.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-12.3.0/sha512.sum
+ sha512  8fb799dfa2e5de5284edf8f821e3d40c2781e4c570f5adfdb1ca0671fcae3fb7f794ea783e80f01ec7bfbf912ca508e478bd749b2755c2c14e4055648146c204  gcc-12.3.0.tar.xz
  
- # Locally calculated (fetched from Github)
- sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
 -- 
 2.34.3
 
