@@ -4,94 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66D3BC77B7A
-	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 16:21:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B021C77B73
+	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 17:02:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2ED182EB5;
-	Wed, 31 May 2023 16:21:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2ED182EB5
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC72C81EE3;
+	Wed, 31 May 2023 17:02:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC72C81EE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FVVyRSVZvvce; Wed, 31 May 2023 16:21:36 +0000 (UTC)
+	with ESMTP id eAUEZPmMvO4P; Wed, 31 May 2023 17:02:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2E5482B3E;
-	Wed, 31 May 2023 16:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2E5482B3E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4A9761BF37C
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 16:21:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A8A081E9D;
+	Wed, 31 May 2023 17:02:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A8A081E9D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 278271BF37C
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 17:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3157D82B3E
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 16:21:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3157D82B3E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D4E8605AC
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 17:02:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D4E8605AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SgPpMP9Uay2S for <buildroot@lists.busybox.net>;
- Wed, 31 May 2023 16:21:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VjXgUzr9C7op for <buildroot@lists.busybox.net>;
+ Wed, 31 May 2023 17:02:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B84782136
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B84782136
- for <buildroot@buildroot.org>; Wed, 31 May 2023 16:21:31 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-3f68fc6b479so61631015e9.2
- for <buildroot@buildroot.org>; Wed, 31 May 2023 09:21:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685550089; x=1688142089;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=LVtmEaekJb/oqe1o6ti7Pt/gJYiCy12BzfcpAwcyQRc=;
- b=N2ANujpx6T1fXWw4AeZtyRPLoO+bAUwluEe2vZ5wLq7pjiKg9EoQAUY8Ygdl1GtL9M
- RAsb8EJo5Azy1Aa6eeM0QJudxm2u+m6aMw8YtRT9JwmUPKSZdnpoAf6K2M3MWif11rmH
- H81b1ChDgFN2UDj/A/P4mnvGX/gUF1Zg9cDHKxkHQT9NJvg/NNHPZGtJASLhXkmrPGZA
- iFm/XYgS7/W41OvRlMT94f7RSFparK3elXbYn74se7owEWFsriqmcMax19DCy8kzAzxf
- YdU3cvhCEkiSV9zSYrMmz/RdzpfmzADqSRhMDvBsakrp0rbPRvr0x3svgaWSGkh4dWo6
- 8d0Q==
-X-Gm-Message-State: AC+VfDyisd46muTSJ5wKefYdacbzg6YkaXfogjs2oN3J5ZEj55W9M2VR
- UhqG0e7IGQvaLD80n8SM+nfosw==
-X-Google-Smtp-Source: ACHHUZ45rabh8C3ef3deqZE873puD6KmBkSau9A8vLRq+TRKfXovhUkI0WRmkxuM47qPsXgwf8PTdQ==
-X-Received: by 2002:a5d:6809:0:b0:309:4999:7549 with SMTP id
- w9-20020a5d6809000000b0030949997549mr4267930wru.46.1685550089317; 
- Wed, 31 May 2023 09:21:29 -0700 (PDT)
-Received: from [10.5.3.217]
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- j12-20020a5d564c000000b0030af31c8c63sm6592897wrw.47.2023.05.31.09.21.29
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 31 May 2023 09:21:29 -0700 (PDT)
-Message-ID: <9ef183c1-d6cf-5bbf-af7a-da7911195aa7@smile.fr>
-Date: Wed, 31 May 2023 18:21:28 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4757D60030
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4757D60030
+ for <buildroot@buildroot.org>; Wed, 31 May 2023 17:02:23 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.169.185.158])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B6FAA13F8A9;
+ Wed, 31 May 2023 19:02:17 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 31 May 2023 19:02:07 +0200
+Message-Id: <20230531170207.727576-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: Peter Korsgaard <peter@korsgaard.com>,
- Romain Naour <romain.naour@gmail.com>
-References: <20230527211144.2136991-1-romain.naour@gmail.com>
- <87v8gctidk.fsf@dell.be.48ers.dk>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <87v8gctidk.fsf@dell.be.48ers.dk>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1685550089; x=1688142089;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=LVtmEaekJb/oqe1o6ti7Pt/gJYiCy12BzfcpAwcyQRc=;
- b=yo+NwlH3Psmz84q6jtCucUVXYIdHhRoMQ7RxAWlFvGsEfAeByNWDy5yGDrBSgk929/
- CQUYyYXmzPNLwzZAe64ONu6OxvHu4G4NEHKnB4DoO7ZtYjlFUlnlPvcED7d7dcBitRRE
- NgvtDPZlvjrv8XnQ0xIq8k8Qf9BtMsAtl8+0Hxk4WKDGMXXYl7bkA9yA51UVYb2WmcCL
- OhdjPy1uFceJblygSt3L2raGUBA9gLNFtZePuj9atZJskx4VaUHEMVDyQtrBu73ObNbY
- 1u69x4O9OFiDM5wgYHpiL+CcVSmAxye0uWuB3sJjfCiUQtEmLJhKr2eJyAkZiIFG2qwn
- cH5g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
- header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=yo+NwlH3
-Subject: Re: [Buildroot] [PATCH] support/dependencies: requires cmake >= 3.19
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1685552540;
+ bh=abc00Jm2c8A+FZAWSO6bv5TPn76V310/pet6UhB5ymI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ASgJeK8mau3y6RMbZRS/kHoLDmBrWQWjiPFGL1Hfh2GdfNc1UP0GbFVzVNXN2VQw/
+ vh6Fhq6Mb7mjXSALIzP/SuPPGR3o1jXvKuwNEAkOrZMChkauyUBjHQsIyaPNdlr4dB
+ V+kbcElo0BkM5edmTwjrJdVdoKvB2H6KLx1LVsggYJJJThMQbLd/KKQtaAcPVZXLvJ
+ ZPGhvcJG+n3dVFcL5VwxzEdYdumMUtjEQGUkDIgL3F3w7VxXZDS52fvhtLdPN7Iq+P
+ X9CponsDEhHbZ8lGm14H7V/8+0fuqpX1G4eQnv6jrOGzC2anc379vP5fs5vYrA1d+W
+ rl1X8MDsCtU/Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ASgJeK8m
+Subject: [Buildroot] [PATCH 1/1] package/acpica: bump to version 20230331
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,46 +70,191 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUGV0ZXIsCgpMZSAyOC8wNS8yMDIzIMOgIDIwOjM0LCBQZXRlciBLb3JzZ2FhcmQgYSDD
-qWNyaXTCoDoKPj4+Pj4+ICJSb21haW4iID09IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQGdt
-YWlsLmNvbT4gd3JpdGVzOgo+IAo+ICA+IGxpYmp4bCByZXF1aXJlcyBjbWFrZSAzLjE5IHNpbmNl
-IHZlcnNpb24gdjAuNyBkdWUgdG8gdGhlCj4gID4gbmV3IGJlaGF2aW9yIG9mIGNtYWtlIFsxXS4K
-PiAKPiAgPiAtLSBDb25maWd1cmluZyBkb25lCj4gID4gQ01ha2UgRXJyb3IgYXQgY21ha2UvRmlu
-ZExDTVMyLmNtYWtlOjQwIChhZGRfbGlicmFyeSk6Cj4gID4gICBJTlRFUkZBQ0VfTElCUkFSWSB0
-YXJnZXRzIG1heSBvbmx5IGhhdmUgd2hpdGVsaXN0ZWQgcHJvcGVydGllcy4gIFRoZQo+ICA+ICAg
-cHJvcGVydHkgIklOQ0xVREVfRElSRUNUT1JJRVMiIGlzIG5vdCBhbGxvd2VkLgo+ICA+IENhbGwg
-U3RhY2sgKG1vc3QgcmVjZW50IGNhbGwgZmlyc3QpOgo+ICA+ICAgdGhpcmRfcGFydHkvQ01ha2VM
-aXN0cy50eHQ6MTE0IChmaW5kX3BhY2thZ2UpCj4gCj4gID4gVGhlIHBvcnRhYmlsaXR5IGlzc3Vl
-IGhhcyBhbHJlYWR5IGJlZW4gcmVwb3J0ZWQgdXBzdHJlYW0gWzJdLgo+IAo+ICA+IEZpeGVzOgo+
-ICA+IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNDMy
-MjgxOTA5NQo+IAo+ICA+IFsxXSBodHRwczovL2dpdGxhYi5raXR3YXJlLmNvbS9jbWFrZS9jbWFr
-ZS8tL2NvbW1pdC9hZmI5OTg3MDRlNjdkM2QzY2U1YjI0YzExMmNiMDZlNzcwZmNhNzhkCj4gID4g
-WzJdIGh0dHBzOi8vZ2l0aHViLmNvbS9saWJqeGwvbGlianhsL2lzc3Vlcy8xNDI1Cj4gCj4gID4g
-U2lnbmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPgo+ICA+
-IENjOiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgo+ICA+IC0tLQo+ICA+IFRoaXMgd2ls
-bCBpbmNyZWFzZSB0aGUgYnVpbGQgdGltZSBpbiBnaXRsYWItY2kgc2luY2UKPiAgPiBvdXIgZG9j
-a2VyIGltYWdlIHByb3ZpZGUgY21ha2UgMy4xOC4KPiAKPiBOb3Qgb25seSB0aGF0LCBhbHNvIHVz
-ZXJzIG9uIEUuRy4gRGViaWFuIHN0YWJsZS4gTGlianhsIHdhcyBhZGRlZCBiYWNrCj4gaW4gTm92
-ZW1iZXIsIHNvIHdlIHdpbGwgYWxzbyBuZWVkIHRvIGJhY2twb3J0IHRoaXMgdG8gMjAyMy4wMi54
-IDovCj4gCj4gRG8gd2UgaGF2ZSBhbnkgYWx0ZXJuYXRpdmVzPwo+IAoKTWF5YmUgd2UgaGF2ZSB0
-byBjaGFuZ2UgdGhlIHJ1bGUgdG8gdXBkYXRlIHRoZSBjbWFrZSBtaW5pbXVtIHZlcnNpb24uCgpX
-ZSB1cGRhdGVkIHRoZSBjbWFrZSBtaW5pbXVtIHdoZW4gYXQgbGVhc3Qgb25lIHBhY2thZ2UgcmVx
-dWlyZWQgYSBuZXcgY21ha2UgdmVyc2lvbjoKCmh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qu
-b3JnL2J1aWxkcm9vdC8tL2NvbW1pdC9lZTg2MGNlM2RjM2RhZGE0ZWU0YWY0MWRkMGQwZWVlN2Mw
-NDg5YTI4CgpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21t
-aXQvM2FiOGFlZmE4N2Y5ZTZiYzQ1MWU5OGI4OWQ2M2QwMThmYWM2MDNkZgoKSW4gc3VwcG9ydC9k
-ZXBlbmRlbmNpZXMvY2hlY2staG9zdC1jbWFrZS5tayB3ZSBjYW4gZG8gc29tZXRoaW5nIGxpa2UK
-KHNpbXBsZSBidXQgbm90IGdyZWF0Li4uKToKCmlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCSlhMKSx5
-KQpCUjJfQ01BS0VfVkVSU0lPTl9NSU4gPSAzLjE5CmVsc2UKQlIyX0NNQUtFX1ZFUlNJT05fTUlO
-ID0gMy4xOAplbmRpZgoKb3IgYWRkIGEgbmV3IEtjb25maWcgQlIyX0hPU1RfQ01BS0VfQVRfTEVB
-U1RfMy4xOSBhbmQgbWFrZSBCUjJfQ01BS0VfVkVSU0lPTl9NSU4KY29uZmlndXJhYmxlIChub3Qg
-Z3JlYXQgZWl0aGVyKS4KCkJlc3QgcmVnYXJkcywKUm9tYWluCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+For change log since 20220331, see:
+- https://www.acpica.org/node/201
+- https://www.acpica.org/node/202
+or
+- https://github.com/acpica/acpica/blob/R03_31_23/documents/changes.txt
+
+This commit also drop the patch removing -Werror in CFLAGS, as an
+alternative is now available upstream, merged in:
+https://github.com/acpica/acpica/commit/3fd0f940408fc01a2c52c5be5f2beb0218a3d907
+which is included in release 20221020. The build commands are updated
+accordingly to set the new NOWERROR=TRUE option to achieve the same
+behavior.
+
+With the patch removal, .checkpackageignore is also updated
+accordingly.
+
+The license file hash is also updated, due to the copyright year
+update.
+
+This version bump is motivated by the introduction of RISC-V related
+definitions.
+
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested on branch master at commit c765ac9 with commands:
+
+    utils/docker-run make check-package
+    ...
+    0 warnings generated
+---
+ .checkpackageignore                           |  1 -
+ .../acpica/0001-build-do-not-use-Werror.patch | 82 -------------------
+ package/acpica/acpica.hash                    |  4 +-
+ package/acpica/acpica.mk                      |  4 +-
+ 4 files changed, 5 insertions(+), 86 deletions(-)
+ delete mode 100644 package/acpica/0001-build-do-not-use-Werror.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f2dea0dfd9..8468aad8ed 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -141,7 +141,6 @@ package/4th/0001-avoid-regen-during-install.patch Upstream
+ package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch Upstream
+ package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch Upstream
+ package/acl/0001-Build-with-old-GCC-versions.patch Upstream
+-package/acpica/0001-build-do-not-use-Werror.patch Upstream
+ package/acpid/0001-dont-use-isfdtype.patch Upstream
+ package/alchemy/0001-toolchains-remove-hash-style-management.patch Upstream
+ package/alsamixergui/0001-misc-fixes.patch Sob Upstream
+diff --git a/package/acpica/0001-build-do-not-use-Werror.patch b/package/acpica/0001-build-do-not-use-Werror.patch
+deleted file mode 100644
+index f905e552bd..0000000000
+--- a/package/acpica/0001-build-do-not-use-Werror.patch
++++ /dev/null
+@@ -1,82 +0,0 @@
+-From 9382ae2431d2962c430e7149302c8690f5bc159c Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 10 Jul 2016 15:06:15 +0200
+-Subject: [PATCH] build: do not use -Werror
+-
+-Warnings come and go with various compiler versions, so using -Werror is
+-prone to cause build failures with various compiler versions, especially
+-newer versions that introduce new warnings.
+-
+-Remove use of -Werror.
+-
+-[Vincent: tweak patch for 20170531 release]
+-[Bernd: tweak patch for 20191018 release]
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Signed-off-by: "Vicente Olivert Riera" <Vincent.Riera@imgtec.com>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- generate/unix/Makefile.config |  1 -
+- generate/unix/iasl/Makefile   | 16 ++++++++--------
+- 2 files changed, 8 insertions(+), 9 deletions(-)
+-
+-diff --git a/generate/unix/Makefile.config b/generate/unix/Makefile.config
+-index c28e8a9b1..7064bed97 100644
+---- a/generate/unix/Makefile.config
+-+++ b/generate/unix/Makefile.config
+-@@ -204,7 +204,6 @@ CWARNINGFLAGS = \
+-     -Wall\
+-     -Wbad-function-cast\
+-     -Wdeclaration-after-statement\
+--    -Werror\
+-     -Wformat=2\
+-     -Wmissing-declarations\
+-     -Wmissing-prototypes\
+-diff --git a/generate/unix/iasl/Makefile b/generate/unix/iasl/Makefile
+-index 47ea73cab..2c756af79 100644
+---- a/generate/unix/iasl/Makefile
+-+++ b/generate/unix/iasl/Makefile
+-@@ -360,32 +360,32 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
+- #
+- $(OBJDIR)/aslcompilerlex.o :   $(OBJDIR)/aslcompilerlex.c
+- 	@echo "- " "Intermediate" $<
+--	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+-+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+- 
+- $(OBJDIR)/aslcompilerparse.o : $(OBJDIR)/aslcompilerparse.c
+- 	@echo "- " "Intermediate" $<
+--	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+-+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+- 
+- $(OBJDIR)/dtcompilerparserlex.o :      $(OBJDIR)/dtcompilerparserlex.c
+- 	@echo "- " "Intermediate" $<
+--	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+-+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+- 
+- $(OBJDIR)/dtcompilerparserparse.o :    $(OBJDIR)/dtcompilerparserparse.c
+- 	@echo "- " "Intermediate" $<
+--	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+-+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+- 
+- $(OBJDIR)/dtparserlex.o :      $(OBJDIR)/dtparserlex.c
+- 	@echo "- " "Intermediate" $<
+--	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+-+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+- 
+- $(OBJDIR)/dtparserparse.o :    $(OBJDIR)/dtparserparse.c
+- 	@echo "- " "Intermediate" $<
+--	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+-+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+- 
+- $(OBJDIR)/prparserlex.o :      $(OBJDIR)/prparserlex.c
+- 	@echo "- " "Intermediate" $<
+--	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+-+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+- 
+- $(OBJDIR)/prparserparse.o :    $(OBJDIR)/prparserparse.c
+- 	@echo "- " "Intermediate" $<
+--	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+-+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+--- 
+-2.20.1
+-
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index 564e393cb4..a5056cf1a2 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  1ccda5c6a08a90b145777df635eb09f995b3472b3128f375009c5a6b01a04c7a  acpica-unix2-20220331.tar.gz
+-sha256  40d8e351f8dfdf5340ec76ac28f0c201b825077d7060bb3686ca1112cb26985d  source/include/acpi.h
++sha256  bd8ac5ffa77ddc5ffc1f88be412b65a0926d25750e87ac180666c5b63de7ea36  acpica-unix2-20230331.tar.gz
++sha256  42772064aec4f49677641690d2fab571c9d266922022e28af666072c60a04831  source/include/acpi.h
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 9901c1ed48..7b21202780 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ACPICA_VERSION = 20220331
++ACPICA_VERSION = 20230331
+ ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+ ACPICA_SITE = https://acpica.org/sites/acpica/files
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+@@ -15,11 +15,13 @@ HOST_ACPICA_DEPENDENCIES = host-bison host-flex
+ define ACPICA_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
++		NOWERROR=TRUE \
+ 		all
+ endef
+ 
+ define HOST_ACPICA_BUILD_CMDS
+ 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		NOWERROR=TRUE \
+ 		all
+ endef
+ 
+-- 
+2.40.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
