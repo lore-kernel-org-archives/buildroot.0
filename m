@@ -4,93 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1486C77B73
-	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 14:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EBD1C77B73
+	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 14:20:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E31881F54;
-	Wed, 31 May 2023 14:19:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E31881F54
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED90981F89;
+	Wed, 31 May 2023 14:20:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED90981F89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H3l47LEjRkls; Wed, 31 May 2023 14:19:10 +0000 (UTC)
+	with ESMTP id XOFKxzpBB11U; Wed, 31 May 2023 14:20:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 898A181F4B;
-	Wed, 31 May 2023 14:19:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 898A181F4B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A7C481F45;
+	Wed, 31 May 2023 14:20:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A7C481F45
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9168B1BF5A6
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:19:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD87A1BF5A6
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6AF2E81F45
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:19:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AF2E81F45
+ by smtp1.osuosl.org (Postfix) with ESMTP id 869D881F45
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:20:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 869D881F45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PN4e59MVQ1hg for <buildroot@lists.busybox.net>;
- Wed, 31 May 2023 14:19:06 +0000 (UTC)
+ with ESMTP id so63RNVXGSbX for <buildroot@lists.busybox.net>;
+ Wed, 31 May 2023 14:20:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE8F981F30
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE8F981F30
- for <buildroot@buildroot.org>; Wed, 31 May 2023 14:19:05 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-3f6d38a140bso8636575e9.1
- for <buildroot@buildroot.org>; Wed, 31 May 2023 07:19:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83681813D5
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
+ [IPv6:2001:4860:4864:20::30])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 83681813D5
+ for <buildroot@buildroot.org>; Wed, 31 May 2023 14:20:55 +0000 (UTC)
+Received: by mail-oa1-x30.google.com with SMTP id
+ 586e51a60fabf-19f8af9aa34so1948267fac.1
+ for <buildroot@buildroot.org>; Wed, 31 May 2023 07:20:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685542744; x=1688134744;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=pNT/G2J6E3qOsMcFvJv3fRUqJEuDyU8w8jR9Gg9DILc=;
- b=lBYSaNiZPQMx7OBDpsalDUfqbXCQHq8giyJ5rHpX+qZz/Sj3iKZuQcPTlw64LnaFfu
- V2GXIlScyOsRqqyZElmj1ALDECpozZkfFTB1hO0Hkgw5OB1L4sO/FMYFy3QADmxIGSkT
- mBY/uEspnrHpTlGBLf15iT6gU0rb8jNQHduM0uVOy1NbcWKEBMuU/F2BLYy90pi7ClxF
- 7vQoWkDzjmchVwsz7m3Qcu2ddx9o4Bnq5IqOW7lsXRbmuaGJusGmLmGjvIKiCaAQWU6M
- 72wxDQPKW3sD8SGo7hYjvnEGNd9RzFWfcHUaWMiFRAXv6UGNIWv5+chh7vrQ6S9HyZFR
- zFaQ==
-X-Gm-Message-State: AC+VfDwUKDeI7PnMS6gA6j6KAaf5ADWvjtymn+FW0AqYkzqqWxlFWgIp
- xTsxdt6W+OXcQN5FA5sHoWeM7w==
-X-Google-Smtp-Source: ACHHUZ6hqx+OO/LCstH0LO/dz/ZXMg4y4d5N1XoKbWK2NvSeT0qajuygyjsff95Aw3yHVlTQE6I8Tw==
-X-Received: by 2002:a7b:c448:0:b0:3f4:27ff:7d4e with SMTP id
- l8-20020a7bc448000000b003f427ff7d4emr4558987wmi.9.1685542744151; 
- Wed, 31 May 2023 07:19:04 -0700 (PDT)
-Received: from [10.5.3.217]
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- bg22-20020a05600c3c9600b003f4283f5c1bsm4254134wmb.2.2023.05.31.07.19.03
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 31 May 2023 07:19:03 -0700 (PDT)
-Message-ID: <468bf7d8-5ea2-d367-b6dc-65d01beb775c@smile.fr>
-Date: Wed, 31 May 2023 16:19:03 +0200
+ d=1e100.net; s=20221208; t=1685542854; x=1688134854;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=9dhq5G5W4H7Ek4IaoTa84OL4ItbZTpWmfTROFE046bc=;
+ b=YHp5c0vwfVt41Q2T6pCdj4MnB42vdOYo7/3YwDgnO6PRSVrl5OvOVqIa0MnE0ovrQb
+ dlxnxpfpZpfuENcvAl2vexd3F7ji6BbCr5IO8iNUhDIXEdEn/dthvbC2aK4nsAJzZ6Ty
+ OrQUjmP1okO/eaqbCWNfRKmnCQGlJ31wYM1VnDCMSDvsxUFFTedzmum9HDmwXabgLIjL
+ aIfYMEAhhcqymaAEBcllbFlW/mgAJxVKFqK/eQcMi0ax2sZ2+xvSCq+sr1nGbCSwvfLh
+ AzuL2P3UegQEMMDtyW0cB3Fg13wSwVN1RX1XSDCxdTHlluqzHwnXGMz4FIqHpRSPEMoe
+ h2gw==
+X-Gm-Message-State: AC+VfDxf1icff5bHf2kvyIEoN+1pHxIeFvrCkoa7mHm4zh6VfEzX5S+N
+ ggVy0/+lL6YQjZ6gqmDjOSKZ+FvrPgWoNVwzb/7Rp0mdW6I=
+X-Google-Smtp-Source: ACHHUZ6azsV1Oo/x0nD/LPHGaz1K8vmFwfMT+27rZwkRTL4yk2IxOuZaKucfuqrhLi47OcvCG/8Bbyu53YSahKljXnk=
+X-Received: by 2002:a05:6870:7731:b0:19f:9b81:342c with SMTP id
+ dw49-20020a056870773100b0019f9b81342cmr3571256oab.57.1685542854203; Wed, 31
+ May 2023 07:20:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>
 References: <20230109042648.2342444-1-james.hilliard1@gmail.com>
  <e7edff90-429c-06fb-8127-263f62e53ede@smile.fr>
  <CADvTj4o-0p0GLyp_LK_zciQACB9L5ZuTZyQU4My0ZcgwR0ym6w@mail.gmail.com>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <CADvTj4o-0p0GLyp_LK_zciQACB9L5ZuTZyQU4My0ZcgwR0ym6w@mail.gmail.com>
+ <468bf7d8-5ea2-d367-b6dc-65d01beb775c@smile.fr>
+In-Reply-To: <468bf7d8-5ea2-d367-b6dc-65d01beb775c@smile.fr>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 31 May 2023 08:20:42 -0600
+Message-ID: <CADvTj4okAxHFG_dOdqJYaKAnt_5jOTrtkbHp8KNPkYvN16Tk9g@mail.gmail.com>
+To: Romain Naour <romain.naour@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1685542744; x=1688134744;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=pNT/G2J6E3qOsMcFvJv3fRUqJEuDyU8w8jR9Gg9DILc=;
- b=fiZKWnRmWunHGfEumx16CwWNpWtukfk8k7pmOVrljZ9Ok2/PPto7mBdGdloFZ7ttNc
- 73sOmUASyFuSiPhhKhTtNUgfUinj6CjeO2XKMR7GUJIGVFGXI6yoq2SKAObcIJXkxKpW
- 6pVry/Rpzkql6okvLTrw0nUs374bfhpVOaoUzSPgJf7+VJ6ibCO0ZL+LN9qNUh8FJrcS
- sb0CFiJ45uNJKM2McKFsHehI8uJwUvvpR79vji57tPjYyGcRl/P0JXM91g5qmOQbtcS3
- xGAvUa5OPWosG59cXd4FWihtA2UerWwwIZ0RBJi0IX04FEKX6rIhUOkxktUoAT13uQx3
- T52Q==
+ d=gmail.com; s=20221208; t=1685542854; x=1688134854;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=9dhq5G5W4H7Ek4IaoTa84OL4ItbZTpWmfTROFE046bc=;
+ b=ELpa2YscyI8KNt0cP+W/dtMp0aFFrta11qiQXEJwCzvvu2dGw04QlidhV0u3Ak835T
+ Y2cTy39R5xu6gaFeAGZUtT54JJo0pk0cgJxwP4OgztNaD1wgyfN5Y4IeBGqHtuGMseC7
+ DmKzNs0+xPSEriaBmF7fB9s7RnDEsnmedvtv1y3ZOQej57/291f3J8MlYrblqFUsmvYz
+ L7BQOMNEYqpBzmTXcxVF+oiDumJULW5DehNAcL+/BDJmJUdxB2MZkdnvASVwoE/ZohK0
+ 0eUg56YMf+pX7N2YNEyzWtCHIj1VEAxmpaUdigFdLTt1rL80mTLNIw6+gJoqO32dGAp1
+ cvkQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
- header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=fiZKWnRm
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=ELpa2Ysc
 Subject: Re: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
  8.8.0
 X-BeenThere: buildroot@buildroot.org
@@ -111,26 +102,31 @@ Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsCgpMZSAyOS8wNS8yMDIzIMOgIDIyOjM5LCBKYW1lcyBIaWxsaWFyZCBhIMOp
-Y3JpdMKgOgo+IAo+IAo+IE9uIFRodSwgTWF5IDI1LCAyMDIzIGF0IDM6NDTigK9QTSBSb21haW4g
-TmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcgo+IDxtYWlsdG86cm9tYWluLm5hb3VyQHNtaWxl
-LmZyPj4gd3JvdGU6Cj4gCj4gICAgIEhlbGxvIEphbWVzLAo+IAoKWy4uLl0KCj4gICAgID4gLVBZ
-VEhPTl9JUFlUSE9OX1ZFUlNJT04gPSA4LjcuMAo+ICAgICA+ICtQWVRIT05fSVBZVEhPTl9WRVJT
-SU9OID0gOC44LjAKPiAKPiAgICAgVGhlIHRlc3QgVGVzdElQeXRob25QeTMgZmFpbCBbMV0gc2lu
-Y2UgaXQgd2FzIHVwZGF0ZWQgdG8gOC42LjAgcmVsZWFzZSBqdXN0Cj4gICAgIGFmdGVyIDIwMjIu
-MTEuCj4gCj4gICAgIMKgIE1vZHVsZU5vdEZvdW5kRXJyb3I6IE5vIG1vZHVsZSBuYW1lZCAnc3Rh
-Y2tfZGF0YScKPiAKPiAgICAgSW5kZWVkIHRoZXJlIGlzIG5vIHN1Y2ggcHl0aG9uMy1zdGFjay1k
-YXRhIGluIEJ1aWxkcm9vdC4KPiAgICAgRm9yIGV4YW1wbGUsIEZlZG9yYSBwYWNrYWdpbmcgYWRk
-ZWQgcHl0aG9uMy1zdGFjay1kYXRhIHdoaWxlIHVwZGF0aW5nIHRvIGlweXRob24KPiAgICAgOC4w
-LjEuCj4gCj4gICAgIENhbiB5b3UgaGF2ZSBhIGxvb2sgcGxlYXNlPwo+IAo+IAo+IE9oLCBtdXN0
-IGhhdmUgbWlzc2VkIHRoYXQgd2hlbiB1cGRhdGluZyBpcHl0aG9uIEkgc2VlIHlvdSBhbHJlYWR5
-IHNlbnQgYSBzZXJpZXMKPiBmaXhpbmcgdGhpczoKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9i
-dWlsZHJvb3QvMjAyMzA1MjgxOTAxMTEuMjQzMDU4MC01LXJvbWFpbi5uYW91ckBnbWFpbC5jb20v
-Cj4gPGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDIzMDUyODE5MDExMS4yNDMw
-NTgwLTUtcm9tYWluLm5hb3VyQGdtYWlsLmNvbS8+Cj4gwqAKCkRvIHlvdSB0aGluayB3ZSBzaG91
-bGQgcmV2ZXJ0IHRvIGlweXRob24gNy54IGZvciAyMDIzLjAyIGFuZCAyMDIzLjA1PyBJdCBpcyBz
-YWZlCnRvIGRvIHNvPwppcHl0aG9uIDgueCByZXF1aXJlcyA0IG5ldyBwYWNrYWdlcywgSSdtIG5v
-dCBzdXJlIGl0J3Mgc2FmZSB0byBhZGQgdGhlbSBmb3IKMjAyMy4wMiBhbmQgMjAyMy4wNS4KCkJl
-c3QgcmVnYXJkcywKUm9tYWluCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+T24gV2VkLCBNYXkgMzEsIDIwMjMgYXQgODoxOeKAr0FNIFJvbWFpbiBOYW91ciA8cm9tYWluLm5h
+b3VyQHNtaWxlLmZyPiB3cm90ZToKPgo+IEhlbGxvIEphbWVzLAo+Cj4gTGUgMjkvMDUvMjAyMyDD
+oCAyMjozOSwgSmFtZXMgSGlsbGlhcmQgYSDDqWNyaXQgOgo+ID4KPiA+Cj4gPiBPbiBUaHUsIE1h
+eSAyNSwgMjAyMyBhdCAzOjQ04oCvUE0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUu
+ZnIKPiA+IDxtYWlsdG86cm9tYWluLm5hb3VyQHNtaWxlLmZyPj4gd3JvdGU6Cj4gPgo+ID4gICAg
+IEhlbGxvIEphbWVzLAo+ID4KPgo+IFsuLi5dCj4KPiA+ICAgICA+IC1QWVRIT05fSVBZVEhPTl9W
+RVJTSU9OID0gOC43LjAKPiA+ICAgICA+ICtQWVRIT05fSVBZVEhPTl9WRVJTSU9OID0gOC44LjAK
+PiA+Cj4gPiAgICAgVGhlIHRlc3QgVGVzdElQeXRob25QeTMgZmFpbCBbMV0gc2luY2UgaXQgd2Fz
+IHVwZGF0ZWQgdG8gOC42LjAgcmVsZWFzZSBqdXN0Cj4gPiAgICAgYWZ0ZXIgMjAyMi4xMS4KPiA+
+Cj4gPiAgICAgICBNb2R1bGVOb3RGb3VuZEVycm9yOiBObyBtb2R1bGUgbmFtZWQgJ3N0YWNrX2Rh
+dGEnCj4gPgo+ID4gICAgIEluZGVlZCB0aGVyZSBpcyBubyBzdWNoIHB5dGhvbjMtc3RhY2stZGF0
+YSBpbiBCdWlsZHJvb3QuCj4gPiAgICAgRm9yIGV4YW1wbGUsIEZlZG9yYSBwYWNrYWdpbmcgYWRk
+ZWQgcHl0aG9uMy1zdGFjay1kYXRhIHdoaWxlIHVwZGF0aW5nIHRvIGlweXRob24KPiA+ICAgICA4
+LjAuMS4KPiA+Cj4gPiAgICAgQ2FuIHlvdSBoYXZlIGEgbG9vayBwbGVhc2U/Cj4gPgo+ID4KPiA+
+IE9oLCBtdXN0IGhhdmUgbWlzc2VkIHRoYXQgd2hlbiB1cGRhdGluZyBpcHl0aG9uIEkgc2VlIHlv
+dSBhbHJlYWR5IHNlbnQgYSBzZXJpZXMKPiA+IGZpeGluZyB0aGlzOgo+ID4gaHR0cHM6Ly9sb3Jl
+Lmtlcm5lbC5vcmcvYnVpbGRyb290LzIwMjMwNTI4MTkwMTExLjI0MzA1ODAtNS1yb21haW4ubmFv
+dXJAZ21haWwuY29tLwo+ID4gPGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDIz
+MDUyODE5MDExMS4yNDMwNTgwLTUtcm9tYWluLm5hb3VyQGdtYWlsLmNvbS8+Cj4gPgo+Cj4gRG8g
+eW91IHRoaW5rIHdlIHNob3VsZCByZXZlcnQgdG8gaXB5dGhvbiA3LnggZm9yIDIwMjMuMDIgYW5k
+IDIwMjMuMDU/IEl0IGlzIHNhZmUKPiB0byBkbyBzbz8KCkdvb2QgY2hhbmNlIHRoZXJlJ3Mgc29t
+ZSBpbmNvbXBhdGlibGUgZGVwZW5kZW5jaWVzLgoKPiBpcHl0aG9uIDgueCByZXF1aXJlcyA0IG5l
+dyBwYWNrYWdlcywgSSdtIG5vdCBzdXJlIGl0J3Mgc2FmZSB0byBhZGQgdGhlbSBmb3IKPiAyMDIz
+LjAyIGFuZCAyMDIzLjA1LgoKUHJvYmFibHkgc2FmZXIgdGhhbiB0cnlpbmcgdG8gcmV2ZXJ0LgoK
+Pgo+IEJlc3QgcmVnYXJkcywKPiBSb21haW4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
