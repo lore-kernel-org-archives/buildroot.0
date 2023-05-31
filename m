@@ -4,78 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F45FC77B73
-	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 14:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1486C77B73
+	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 14:19:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E513583563;
-	Wed, 31 May 2023 14:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E513583563
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E31881F54;
+	Wed, 31 May 2023 14:19:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E31881F54
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5lSV3OQKK7cS; Wed, 31 May 2023 14:09:28 +0000 (UTC)
+	with ESMTP id H3l47LEjRkls; Wed, 31 May 2023 14:19:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12458834B9;
-	Wed, 31 May 2023 14:09:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12458834B9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 898A181F4B;
+	Wed, 31 May 2023 14:19:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 898A181F4B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BDE371BF5A6
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:09:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9168B1BF5A6
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5155834B9
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5155834B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AF2E81F45
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:19:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AF2E81F45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XNZgppZzmFAH for <buildroot@lists.busybox.net>;
- Wed, 31 May 2023 14:09:23 +0000 (UTC)
+ with ESMTP id PN4e59MVQ1hg for <buildroot@lists.busybox.net>;
+ Wed, 31 May 2023 14:19:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A6AF833CD
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6A6AF833CD
- for <buildroot@buildroot.org>; Wed, 31 May 2023 14:09:23 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-2af2958db45so61869231fa.1
- for <buildroot@buildroot.org>; Wed, 31 May 2023 07:09:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE8F981F30
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EE8F981F30
+ for <buildroot@buildroot.org>; Wed, 31 May 2023 14:19:05 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-3f6d38a140bso8636575e9.1
+ for <buildroot@buildroot.org>; Wed, 31 May 2023 07:19:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685542161; x=1688134161;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=7YrAgL3pCqGmMVvZBmtjCtss6Mv+wsDUnpfAP1/nX1c=;
- b=GcmpIz+RR2xhl/dTAgDSExBW9UMID4GcDC54l5WIF6zYRiA2VUBGTYGiKwQRRtrnB3
- NH84Q+FQIWBW7uaoCbnc5Gu1JbJBFyzPzH0dsb+HdY0QZ5zLW5+Mt5haaUVGJrfIywEr
- C5UyVJPys0xGKHcndkgpELHYji9fBeAoqFZhTUxckwrHz4DHX9tv8+r/kQNNTiEblryl
- 5iWz5u8OEK3GvIW6pHvOTmFTwu/GKawNQG/j1PoWgoW4JqyhGETGLm8seNlxEv5tFuZR
- wCcW5jnA88N0XcLudyXezC1LGoq63p8eaGuOLYSMLLGfsEX5tuGVqG/ZcxDGALLmqek9
- ifBQ==
-X-Gm-Message-State: AC+VfDzb3c9koxT77mYfUSBRvZoUgCe+nb2MJbEzV/JbBh4q+OIMqqp4
- TswbH084kBiDxeUe1pC/OsMMe2eTzXrfff/RU4fpdtiDvY0=
-X-Google-Smtp-Source: ACHHUZ6BO9l/IPFbqy0UMpUemr+mXiuhvkqFiZYdKXRwmw1x6M1JLnjrHl42p//i4XXyuwdzRZCBXvFzHi0ZCfkNE6o=
-X-Received: by 2002:a2e:8018:0:b0:2af:3147:86d8 with SMTP id
- j24-20020a2e8018000000b002af314786d8mr2709980ljg.15.1685542160640; Wed, 31
- May 2023 07:09:20 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1685542744; x=1688134744;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=pNT/G2J6E3qOsMcFvJv3fRUqJEuDyU8w8jR9Gg9DILc=;
+ b=lBYSaNiZPQMx7OBDpsalDUfqbXCQHq8giyJ5rHpX+qZz/Sj3iKZuQcPTlw64LnaFfu
+ V2GXIlScyOsRqqyZElmj1ALDECpozZkfFTB1hO0Hkgw5OB1L4sO/FMYFy3QADmxIGSkT
+ mBY/uEspnrHpTlGBLf15iT6gU0rb8jNQHduM0uVOy1NbcWKEBMuU/F2BLYy90pi7ClxF
+ 7vQoWkDzjmchVwsz7m3Qcu2ddx9o4Bnq5IqOW7lsXRbmuaGJusGmLmGjvIKiCaAQWU6M
+ 72wxDQPKW3sD8SGo7hYjvnEGNd9RzFWfcHUaWMiFRAXv6UGNIWv5+chh7vrQ6S9HyZFR
+ zFaQ==
+X-Gm-Message-State: AC+VfDwUKDeI7PnMS6gA6j6KAaf5ADWvjtymn+FW0AqYkzqqWxlFWgIp
+ xTsxdt6W+OXcQN5FA5sHoWeM7w==
+X-Google-Smtp-Source: ACHHUZ6hqx+OO/LCstH0LO/dz/ZXMg4y4d5N1XoKbWK2NvSeT0qajuygyjsff95Aw3yHVlTQE6I8Tw==
+X-Received: by 2002:a7b:c448:0:b0:3f4:27ff:7d4e with SMTP id
+ l8-20020a7bc448000000b003f427ff7d4emr4558987wmi.9.1685542744151; 
+ Wed, 31 May 2023 07:19:04 -0700 (PDT)
+Received: from [10.5.3.217]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ bg22-20020a05600c3c9600b003f4283f5c1bsm4254134wmb.2.2023.05.31.07.19.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 31 May 2023 07:19:03 -0700 (PDT)
+Message-ID: <468bf7d8-5ea2-d367-b6dc-65d01beb775c@smile.fr>
+Date: Wed, 31 May 2023 16:19:03 +0200
 MIME-Version: 1.0
-From: Andy Bergh <allmyaddmin@gmail.com>
-Date: Wed, 31 May 2023 16:08:54 +0200
-Message-ID: <CAAmck7W3kdHCG00vBC_Umv48z4C5yMRVi--+WNGSkeREaTPMjg@mail.gmail.com>
-To: buildroot@buildroot.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20230109042648.2342444-1-james.hilliard1@gmail.com>
+ <e7edff90-429c-06fb-8127-263f62e53ede@smile.fr>
+ <CADvTj4o-0p0GLyp_LK_zciQACB9L5ZuTZyQU4My0ZcgwR0ym6w@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <CADvTj4o-0p0GLyp_LK_zciQACB9L5ZuTZyQU4My0ZcgwR0ym6w@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685542161; x=1688134161;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=7YrAgL3pCqGmMVvZBmtjCtss6Mv+wsDUnpfAP1/nX1c=;
- b=HTBZKUKtgLUl8YVBzk5Rjkk9x/uMZ7icjG+5hIOzHd3dD+DySo0PEe9DcxnhmQ3ZGb
- aN2cPijLJG/tR53NZIksIRKOce7GllDmzMZ6SjR/3CpWnFgKLwzZXzBtpyWl8gbIEbPP
- RDpwx2lnjRlh/VfoQOTd6jmexEcbtAyonxnwtwNMqEJ9n802Zq1WVn386Q5c4MiHIgCj
- L3e8mQ7WL6A+Hl8iX0GQNjkE9LpxetNl+YkbsGiM2L4MegHCsowd00JE4POpbBu/CLU8
- fnaZ9CZ5UdQ8Tc7BfcvorXBwFZahqMsrQCOb58vnh6kMJUgOcKDGJIFaBPF8tVMJDVFi
- Inug==
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1685542744; x=1688134744;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=pNT/G2J6E3qOsMcFvJv3fRUqJEuDyU8w8jR9Gg9DILc=;
+ b=fiZKWnRmWunHGfEumx16CwWNpWtukfk8k7pmOVrljZ9Ok2/PPto7mBdGdloFZ7ttNc
+ 73sOmUASyFuSiPhhKhTtNUgfUinj6CjeO2XKMR7GUJIGVFGXI6yoq2SKAObcIJXkxKpW
+ 6pVry/Rpzkql6okvLTrw0nUs374bfhpVOaoUzSPgJf7+VJ6ibCO0ZL+LN9qNUh8FJrcS
+ sb0CFiJ45uNJKM2McKFsHehI8uJwUvvpR79vji57tPjYyGcRl/P0JXM91g5qmOQbtcS3
+ xGAvUa5OPWosG59cXd4FWihtA2UerWwwIZ0RBJi0IX04FEKX6rIhUOkxktUoAT13uQx3
+ T52Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=HTBZKUKt
-Subject: [Buildroot] cpufreq: cpufreq_online: CPU0: Running at unlisted freq
+ dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
+ header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
+ header.s=20221208 header.b=fiZKWnRm
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
+ 8.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,92 +104,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6416395421825555413=="
+Cc: Philippe Proulx <eeppeliteloop@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6416395421825555413==
-Content-Type: multipart/alternative; boundary="000000000000bd301205fcfdddc4"
-
---000000000000bd301205fcfdddc4
-Content-Type: text/plain; charset="UTF-8"
-
-Hi,
-
-I was not able to access the mailing list to search for this topic, I hope
-I am not repeating the question.
-
-I am running a custom OS for the Beaglebone Black and am using the serial
-port to talk to an external LCD screen via UART1.
-This works most of the time at startup, but about 15% after powering on the
-board the LCD does not work. It looks like the BAUD
-rate on my OS is slightly off.
-
-After having a look at the console startup log I noticed that only on a
-failure do the following messages appear:
-...
-Calibrating delay loop... *915.86* BogoMIPS (lpj=4579328) *// On a
-normal/working startup the output is: 996.14 BogoMIPS (lpj=4980736)*
-...
-[4.214981] cpufreq: cpufreq_online: CPU0: Running at unlisted freq: 923076
-KHz
-[4.450726] cpufreq: cpufreq_online: CPU0: Unlisted initial frequency
-changed to: 1000000 KHz
-...
-I have searched extensively on the internet but could not resolve the issue.
-Based on what I read I also double checked the blob/*.dts files and
-everything seems in order. I used this link
-<https://software-dl.ti.com/processor-sdk-linux/esd/docs/06_03_00_106/AM335X/linux/Foundational_Components/Kernel/Kernel_Drivers/Power_Management.html#power-management>
-to verify my setup.
-
-Would anyone be able to point me in the right direction regarding this
-issue? How can I resolve this "*Running at unlisted freq*" warning?
-Any information would be much appreciated. I am at a loss here.
-
-Thank you and regards
-Andy
-
---000000000000bd301205fcfdddc4
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi,</div><div><br></div><div>I was not able to access=
- the mailing list to search for this topic, I hope I am not repeating the q=
-uestion.</div><div><br></div><div>I am running a custom OS for the Beaglebo=
-ne Black and am using the serial port to talk to an external LCD screen via=
- UART1.</div><div>This works most of=C2=A0the time at startup, but about 15=
-% after powering on the board the LCD does not work. It looks like the BAUD=
-</div><div>rate on my OS is slightly off.</div><div><br></div><div>After ha=
-ving a look at the console startup log I noticed that only on a failure do =
-the following messages appear:<br></div><div>...<br></div><div>Calibrating =
-delay loop... <b>915.86</b> BogoMIPS (lpj=3D4579328) <i>// On a normal/work=
-ing startup the output is: <b>996.14</b> BogoMIPS (lpj=3D4980736)</i></div>=
-<div>...<br></div><div>[4.214981] cpufreq: cpufreq_online: CPU0: Running at=
- unlisted freq: 923076 KHz<br>[4.450726] cpufreq: cpufreq_online: CPU0: Unl=
-isted initial frequency changed to: 1000000 KHz</div><div>...</div><div>I h=
-ave searched extensively on the internet but could not resolve the issue.</=
-div><div>Based on what I read I also double checked the blob/*.dts files an=
-d everything seems in order. I used <a href=3D"https://software-dl.ti.com/p=
-rocessor-sdk-linux/esd/docs/06_03_00_106/AM335X/linux/Foundational_Componen=
-ts/Kernel/Kernel_Drivers/Power_Management.html#power-management">this link<=
-/a> to verify my setup.</div><div><br></div><div>Would anyone be able to po=
-int me in the right direction regarding this issue? How can I resolve this =
-&quot;<b><i>Running at unlisted freq</i></b>&quot; warning?<br></div><div>A=
-ny information would be much appreciated. I am at a loss here.</div><div><b=
-r></div><div>Thank you and regards</div><div>Andy<br></div><div><br></div><=
-div><br></div></div>
-
---000000000000bd301205fcfdddc4--
-
---===============6416395421825555413==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6416395421825555413==--
+SGVsbG8gSmFtZXMsCgpMZSAyOS8wNS8yMDIzIMOgIDIyOjM5LCBKYW1lcyBIaWxsaWFyZCBhIMOp
+Y3JpdMKgOgo+IAo+IAo+IE9uIFRodSwgTWF5IDI1LCAyMDIzIGF0IDM6NDTigK9QTSBSb21haW4g
+TmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcgo+IDxtYWlsdG86cm9tYWluLm5hb3VyQHNtaWxl
+LmZyPj4gd3JvdGU6Cj4gCj4gICAgIEhlbGxvIEphbWVzLAo+IAoKWy4uLl0KCj4gICAgID4gLVBZ
+VEhPTl9JUFlUSE9OX1ZFUlNJT04gPSA4LjcuMAo+ICAgICA+ICtQWVRIT05fSVBZVEhPTl9WRVJT
+SU9OID0gOC44LjAKPiAKPiAgICAgVGhlIHRlc3QgVGVzdElQeXRob25QeTMgZmFpbCBbMV0gc2lu
+Y2UgaXQgd2FzIHVwZGF0ZWQgdG8gOC42LjAgcmVsZWFzZSBqdXN0Cj4gICAgIGFmdGVyIDIwMjIu
+MTEuCj4gCj4gICAgIMKgIE1vZHVsZU5vdEZvdW5kRXJyb3I6IE5vIG1vZHVsZSBuYW1lZCAnc3Rh
+Y2tfZGF0YScKPiAKPiAgICAgSW5kZWVkIHRoZXJlIGlzIG5vIHN1Y2ggcHl0aG9uMy1zdGFjay1k
+YXRhIGluIEJ1aWxkcm9vdC4KPiAgICAgRm9yIGV4YW1wbGUsIEZlZG9yYSBwYWNrYWdpbmcgYWRk
+ZWQgcHl0aG9uMy1zdGFjay1kYXRhIHdoaWxlIHVwZGF0aW5nIHRvIGlweXRob24KPiAgICAgOC4w
+LjEuCj4gCj4gICAgIENhbiB5b3UgaGF2ZSBhIGxvb2sgcGxlYXNlPwo+IAo+IAo+IE9oLCBtdXN0
+IGhhdmUgbWlzc2VkIHRoYXQgd2hlbiB1cGRhdGluZyBpcHl0aG9uIEkgc2VlIHlvdSBhbHJlYWR5
+IHNlbnQgYSBzZXJpZXMKPiBmaXhpbmcgdGhpczoKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9i
+dWlsZHJvb3QvMjAyMzA1MjgxOTAxMTEuMjQzMDU4MC01LXJvbWFpbi5uYW91ckBnbWFpbC5jb20v
+Cj4gPGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDIzMDUyODE5MDExMS4yNDMw
+NTgwLTUtcm9tYWluLm5hb3VyQGdtYWlsLmNvbS8+Cj4gwqAKCkRvIHlvdSB0aGluayB3ZSBzaG91
+bGQgcmV2ZXJ0IHRvIGlweXRob24gNy54IGZvciAyMDIzLjAyIGFuZCAyMDIzLjA1PyBJdCBpcyBz
+YWZlCnRvIGRvIHNvPwppcHl0aG9uIDgueCByZXF1aXJlcyA0IG5ldyBwYWNrYWdlcywgSSdtIG5v
+dCBzdXJlIGl0J3Mgc2FmZSB0byBhZGQgdGhlbSBmb3IKMjAyMy4wMiBhbmQgMjAyMy4wNS4KCkJl
+c3QgcmVnYXJkcywKUm9tYWluCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
