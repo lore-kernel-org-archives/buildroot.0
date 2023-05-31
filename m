@@ -4,48 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17E6FC77B7C
-	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 07:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8678C77B7C
+	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 07:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5640C40A01;
-	Wed, 31 May 2023 07:43:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5640C40A01
+	by smtp2.osuosl.org (Postfix) with ESMTP id 940F240A01;
+	Wed, 31 May 2023 07:44:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 940F240A01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JLqDCDct79gt; Wed, 31 May 2023 07:43:37 +0000 (UTC)
+	with ESMTP id OH7Y_H6MAVPD; Wed, 31 May 2023 07:44:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C5E441CA2;
-	Wed, 31 May 2023 07:43:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C5E441CA2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 333EF1BF853
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 07:43:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD2CA40482;
+	Wed, 31 May 2023 07:44:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD2CA40482
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BFB91BF853
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 07:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CBB360670
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 07:43:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CBB360670
+ by smtp4.osuosl.org (Postfix) with ESMTP id D78FA41F48
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 07:44:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D78FA41F48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7tBBCqqtDOfx for <buildroot@lists.busybox.net>;
- Wed, 31 May 2023 07:43:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39C28605D8
- for <buildroot@buildroot.org>; Wed, 31 May 2023 07:43:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C28605D8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2287986A5C; Wed, 31 May 2023 07:43:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yPy6AMcvg3rD for <buildroot@lists.busybox.net>;
+ Wed, 31 May 2023 07:44:42 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 963B741F44
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 963B741F44
+ for <buildroot@buildroot.org>; Wed, 31 May 2023 07:44:42 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9574F1C000C;
+ Wed, 31 May 2023 07:44:39 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1q4GVa-00ADQC-Ku; Wed, 31 May 2023 09:44:38 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 31 May 2023 09:14:27 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1d55413b5a41a29df382308a7fa2a60daadadd2f
-X-Git-Newrev: b713be49dba221591656977b152ea532a8740a2e
-X-Patchwork-Hint: ignore
-Message-Id: <20230531074334.2287986A5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/moby-buildkit:
- security bump version to 0.11.6
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230105191813.3533745-1-bernd.kuhls@t-online.de>
+ <20230507085232.GA252090@scaer>
+Date: Wed, 31 May 2023 09:44:38 +0200
+In-Reply-To: <20230507085232.GA252090@scaer> (Yann E. MORIN's message of "Sun, 
+ 7 May 2023 10:52:32 +0200")
+Message-ID: <87v8g9eyhl.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/freeswitch: ffmpeg's
+ libavresample is an optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +67,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b713be49dba221591656977b152ea532a8740a2e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Bugfixes and a security fix in v0.11.4:
+ > Bernd, All,
+ > On 2023-01-05 20:18 +0100, Bernd Kuhls spake thusly:
+ >> See upstream commit from 2019:
+ >> https://github.com/signalwire/freeswitch/commit/e9c58084db249845af88011a1e3c5d7b9ec05a76#diff-2cd3a5516ad0fc3cba6d14d0ea3e72da43a2c2fc3c21eb7ade6c49d52136bbd2R43
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-- CVE-2023-26054: Credentials inlined to Git URLs could end up in provenance
-  attestation
-  https://github.com/moby/buildkit/security/advisories/GHSA-gc89-7gcr-jxqc
+ > Applied to master, thanks.
 
-https://github.com/moby/buildkit/releases/tag/v0.11.6
+Committed to 2023.02.x, thanks.
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2b18a93cd5cdb56dd2a0e85ea9d04e16f1513fa4)
-[Peter: mark as security bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/moby-buildkit/moby-buildkit.hash | 2 +-
- package/moby-buildkit/moby-buildkit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/moby-buildkit/moby-buildkit.hash b/package/moby-buildkit/moby-buildkit.hash
-index ef927636d9..f7922d7e8f 100644
---- a/package/moby-buildkit/moby-buildkit.hash
-+++ b/package/moby-buildkit/moby-buildkit.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b1746575f37715a8a2f2df5bab77ea081ba8436854e241792702109fc9e3653d  moby-buildkit-0.11.2.tar.gz
-+sha256  1efa1c54b299c463c1b039d3df8ba1c68e70fe4de608fd14653fcebf9f27837b  moby-buildkit-0.11.6.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
-index a25f676710..91560c1ed1 100644
---- a/package/moby-buildkit/moby-buildkit.mk
-+++ b/package/moby-buildkit/moby-buildkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOBY_BUILDKIT_VERSION = 0.11.2
-+MOBY_BUILDKIT_VERSION = 0.11.6
- MOBY_BUILDKIT_SITE = $(call github,moby,buildkit,v$(MOBY_BUILDKIT_VERSION))
- MOBY_BUILDKIT_LICENSE = Apache-2.0
- MOBY_BUILDKIT_LICENSE_FILES = LICENSE
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
