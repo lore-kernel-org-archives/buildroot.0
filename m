@@ -1,89 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EBD1C77B73
-	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 14:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D169C7EE23
+	for <buildroot@archiver.kernel.org>; Wed, 31 May 2023 15:13:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED90981F89;
-	Wed, 31 May 2023 14:20:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED90981F89
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7ED3613A0;
+	Wed, 31 May 2023 15:13:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7ED3613A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XOFKxzpBB11U; Wed, 31 May 2023 14:20:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IT9hkK8vOeoV; Wed, 31 May 2023 15:13:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A7C481F45;
-	Wed, 31 May 2023 14:20:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A7C481F45
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD87A1BF5A6
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:20:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D74B6612E1;
+	Wed, 31 May 2023 15:13:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D74B6612E1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 614221BF5DB
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 15:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 869D881F45
- for <buildroot@lists.busybox.net>; Wed, 31 May 2023 14:20:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 869D881F45
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39EDB4054E
+ for <buildroot@lists.busybox.net>; Wed, 31 May 2023 15:12:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39EDB4054E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id so63RNVXGSbX for <buildroot@lists.busybox.net>;
- Wed, 31 May 2023 14:20:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83681813D5
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
- [IPv6:2001:4860:4864:20::30])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 83681813D5
- for <buildroot@buildroot.org>; Wed, 31 May 2023 14:20:55 +0000 (UTC)
-Received: by mail-oa1-x30.google.com with SMTP id
- 586e51a60fabf-19f8af9aa34so1948267fac.1
- for <buildroot@buildroot.org>; Wed, 31 May 2023 07:20:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685542854; x=1688134854;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=9dhq5G5W4H7Ek4IaoTa84OL4ItbZTpWmfTROFE046bc=;
- b=YHp5c0vwfVt41Q2T6pCdj4MnB42vdOYo7/3YwDgnO6PRSVrl5OvOVqIa0MnE0ovrQb
- dlxnxpfpZpfuENcvAl2vexd3F7ji6BbCr5IO8iNUhDIXEdEn/dthvbC2aK4nsAJzZ6Ty
- OrQUjmP1okO/eaqbCWNfRKmnCQGlJ31wYM1VnDCMSDvsxUFFTedzmum9HDmwXabgLIjL
- aIfYMEAhhcqymaAEBcllbFlW/mgAJxVKFqK/eQcMi0ax2sZ2+xvSCq+sr1nGbCSwvfLh
- AzuL2P3UegQEMMDtyW0cB3Fg13wSwVN1RX1XSDCxdTHlluqzHwnXGMz4FIqHpRSPEMoe
- h2gw==
-X-Gm-Message-State: AC+VfDxf1icff5bHf2kvyIEoN+1pHxIeFvrCkoa7mHm4zh6VfEzX5S+N
- ggVy0/+lL6YQjZ6gqmDjOSKZ+FvrPgWoNVwzb/7Rp0mdW6I=
-X-Google-Smtp-Source: ACHHUZ6azsV1Oo/x0nD/LPHGaz1K8vmFwfMT+27rZwkRTL4yk2IxOuZaKucfuqrhLi47OcvCG/8Bbyu53YSahKljXnk=
-X-Received: by 2002:a05:6870:7731:b0:19f:9b81:342c with SMTP id
- dw49-20020a056870773100b0019f9b81342cmr3571256oab.57.1685542854203; Wed, 31
- May 2023 07:20:54 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VDt8KfN9AAeQ for <buildroot@lists.busybox.net>;
+ Wed, 31 May 2023 15:12:57 +0000 (UTC)
+X-Greylist: delayed 00:06:41 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E03B40194
+Received: from mfwd10.mailplug.co.kr (mfwd10.mailplug.co.kr [14.63.168.55])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0E03B40194
+ for <buildroot@buildroot.org>; Wed, 31 May 2023 15:12:56 +0000 (UTC)
+Received: (qmail 25525 invoked from network); 1 Jun 2023 00:06:13 +0900
+Received: from wmail10.mailplug.com (121.156.118.13)
+ by 0 (qmail 1.03 + mailplug 2.0) with SMTP; 1 Jun 2023 00:05:13 +0900
+Received: (qmail 2375668 invoked from network); 1 Jun 2023 00:05:09 +0900
+Received: from unknown (HELO sslauth19)
+ (cherniaev.andrei@kairo.space@211.253.39.94)
+ by 0 (qmail 1.03 + mailplug 2.0) with SMTP; 1 Jun 2023 00:05:09 +0900
+From: AndreiCherniaev <cherniaev.andrei@kairo.space>
+To: buildroot@buildroot.org
+Date: Thu,  1 Jun 2023 00:05:06 +0900
+Message-Id: <20230531150507.67562-1-cherniaev.andrei@kairo.space>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230109042648.2342444-1-james.hilliard1@gmail.com>
- <e7edff90-429c-06fb-8127-263f62e53ede@smile.fr>
- <CADvTj4o-0p0GLyp_LK_zciQACB9L5ZuTZyQU4My0ZcgwR0ym6w@mail.gmail.com>
- <468bf7d8-5ea2-d367-b6dc-65d01beb775c@smile.fr>
-In-Reply-To: <468bf7d8-5ea2-d367-b6dc-65d01beb775c@smile.fr>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 31 May 2023 08:20:42 -0600
-Message-ID: <CADvTj4okAxHFG_dOdqJYaKAnt_5jOTrtkbHp8KNPkYvN16Tk9g@mail.gmail.com>
-To: Romain Naour <romain.naour@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685542854; x=1688134854;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=9dhq5G5W4H7Ek4IaoTa84OL4ItbZTpWmfTROFE046bc=;
- b=ELpa2YscyI8KNt0cP+W/dtMp0aFFrta11qiQXEJwCzvvu2dGw04QlidhV0u3Ak835T
- Y2cTy39R5xu6gaFeAGZUtT54JJo0pk0cgJxwP4OgztNaD1wgyfN5Y4IeBGqHtuGMseC7
- DmKzNs0+xPSEriaBmF7fB9s7RnDEsnmedvtv1y3ZOQej57/291f3J8MlYrblqFUsmvYz
- L7BQOMNEYqpBzmTXcxVF+oiDumJULW5DehNAcL+/BDJmJUdxB2MZkdnvASVwoE/ZohK0
- 0eUg56YMf+pX7N2YNEyzWtCHIj1VEAxmpaUdigFdLTt1rL80mTLNIw6+gJoqO32dGAp1
- cvkQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=ELpa2Ysc
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
- 8.8.0
+Subject: [Buildroot] [PATCH] add MMX instruction set capability for Geode CPU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,38 +60,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Philippe Proulx <eeppeliteloop@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCBNYXkgMzEsIDIwMjMgYXQgODoxOeKAr0FNIFJvbWFpbiBOYW91ciA8cm9tYWluLm5h
-b3VyQHNtaWxlLmZyPiB3cm90ZToKPgo+IEhlbGxvIEphbWVzLAo+Cj4gTGUgMjkvMDUvMjAyMyDD
-oCAyMjozOSwgSmFtZXMgSGlsbGlhcmQgYSDDqWNyaXQgOgo+ID4KPiA+Cj4gPiBPbiBUaHUsIE1h
-eSAyNSwgMjAyMyBhdCAzOjQ04oCvUE0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUu
-ZnIKPiA+IDxtYWlsdG86cm9tYWluLm5hb3VyQHNtaWxlLmZyPj4gd3JvdGU6Cj4gPgo+ID4gICAg
-IEhlbGxvIEphbWVzLAo+ID4KPgo+IFsuLi5dCj4KPiA+ICAgICA+IC1QWVRIT05fSVBZVEhPTl9W
-RVJTSU9OID0gOC43LjAKPiA+ICAgICA+ICtQWVRIT05fSVBZVEhPTl9WRVJTSU9OID0gOC44LjAK
-PiA+Cj4gPiAgICAgVGhlIHRlc3QgVGVzdElQeXRob25QeTMgZmFpbCBbMV0gc2luY2UgaXQgd2Fz
-IHVwZGF0ZWQgdG8gOC42LjAgcmVsZWFzZSBqdXN0Cj4gPiAgICAgYWZ0ZXIgMjAyMi4xMS4KPiA+
-Cj4gPiAgICAgICBNb2R1bGVOb3RGb3VuZEVycm9yOiBObyBtb2R1bGUgbmFtZWQgJ3N0YWNrX2Rh
-dGEnCj4gPgo+ID4gICAgIEluZGVlZCB0aGVyZSBpcyBubyBzdWNoIHB5dGhvbjMtc3RhY2stZGF0
-YSBpbiBCdWlsZHJvb3QuCj4gPiAgICAgRm9yIGV4YW1wbGUsIEZlZG9yYSBwYWNrYWdpbmcgYWRk
-ZWQgcHl0aG9uMy1zdGFjay1kYXRhIHdoaWxlIHVwZGF0aW5nIHRvIGlweXRob24KPiA+ICAgICA4
-LjAuMS4KPiA+Cj4gPiAgICAgQ2FuIHlvdSBoYXZlIGEgbG9vayBwbGVhc2U/Cj4gPgo+ID4KPiA+
-IE9oLCBtdXN0IGhhdmUgbWlzc2VkIHRoYXQgd2hlbiB1cGRhdGluZyBpcHl0aG9uIEkgc2VlIHlv
-dSBhbHJlYWR5IHNlbnQgYSBzZXJpZXMKPiA+IGZpeGluZyB0aGlzOgo+ID4gaHR0cHM6Ly9sb3Jl
-Lmtlcm5lbC5vcmcvYnVpbGRyb290LzIwMjMwNTI4MTkwMTExLjI0MzA1ODAtNS1yb21haW4ubmFv
-dXJAZ21haWwuY29tLwo+ID4gPGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDIz
-MDUyODE5MDExMS4yNDMwNTgwLTUtcm9tYWluLm5hb3VyQGdtYWlsLmNvbS8+Cj4gPgo+Cj4gRG8g
-eW91IHRoaW5rIHdlIHNob3VsZCByZXZlcnQgdG8gaXB5dGhvbiA3LnggZm9yIDIwMjMuMDIgYW5k
-IDIwMjMuMDU/IEl0IGlzIHNhZmUKPiB0byBkbyBzbz8KCkdvb2QgY2hhbmNlIHRoZXJlJ3Mgc29t
-ZSBpbmNvbXBhdGlibGUgZGVwZW5kZW5jaWVzLgoKPiBpcHl0aG9uIDgueCByZXF1aXJlcyA0IG5l
-dyBwYWNrYWdlcywgSSdtIG5vdCBzdXJlIGl0J3Mgc2FmZSB0byBhZGQgdGhlbSBmb3IKPiAyMDIz
-LjAyIGFuZCAyMDIzLjA1LgoKUHJvYmFibHkgc2FmZXIgdGhhbiB0cnlpbmcgdG8gcmV2ZXJ0LgoK
-Pgo+IEJlc3QgcmVnYXJkcywKPiBSb21haW4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Signed-off-by: AndreiCherniaev <cherniaev.andrei@kairo.space>
+
+Before this patch there is no way no enable MMX for Geode. Modern Geode CPU support MMX.
+This capability will interesting with ffmpeg for example.
+---
+ arch/Config.in.x86 | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index c770ae3ffe..595db48d91 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -521,11 +521,10 @@ config BR2_x86_steamroller
+ 	select BR2_X86_CPU_HAS_SSE4
+ 	select BR2_X86_CPU_HAS_SSE42
+ config BR2_x86_geode
+-	bool "geode"
+-	# Don't include MMX support because there several variant of geode
+-	# processor, some with MMX support, some without.
+-	# See: http://en.wikipedia.org/wiki/Geode_%28processor%29
+-	depends on !BR2_x86_64
++        bool "geode"
++        depends on !BR2_x86_64
++        help
++          see also BR2_x86_geode_with_MMX
+ config BR2_x86_c3
+ 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
+ 	depends on !BR2_x86_64
+@@ -633,5 +632,16 @@ config BR2_READELF_ARCH_NAME
+ 	default "Intel 80386"			if BR2_i386
+ 	default "Advanced Micro Devices X86-64" if BR2_x86_64
+ 
++config BR2_x86_geode_with_MMX
++        bool "GEODE with MMX"
++        depends on BR2_x86_geode
++        default n
++        select BR2_X86_CPU_HAS_MMX
++        help
++          there several variant of geode processor,
++          some with MMX support, some without.
++          See: http://en.wikipedia.org/wiki/Geode_%28processor%29
++          And decide can you use MMX or not
++
+ # vim: ft=kconfig
+ # -*- mode:kconfig; -*-
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
