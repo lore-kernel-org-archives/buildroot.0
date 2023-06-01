@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68654C7EE23
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jun 2023 16:36:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF882C77B7A
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jun 2023 16:44:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E49EF8430F;
-	Thu,  1 Jun 2023 16:36:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E49EF8430F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5495D83C14;
+	Thu,  1 Jun 2023 16:44:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5495D83C14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u6sZb5cj9CN2; Thu,  1 Jun 2023 16:36:10 +0000 (UTC)
+	with ESMTP id cRZmJuQOPtvq; Thu,  1 Jun 2023 16:44:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 321F1842F7;
-	Thu,  1 Jun 2023 16:36:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 321F1842F7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C34D83C8C;
+	Thu,  1 Jun 2023 16:44:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C34D83C8C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A6D441BF589
- for <buildroot@lists.busybox.net>; Thu,  1 Jun 2023 16:36:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4A35C1BF589
+ for <buildroot@lists.busybox.net>; Thu,  1 Jun 2023 16:44:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A267400FC
- for <buildroot@lists.busybox.net>; Thu,  1 Jun 2023 16:36:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A267400FC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30661400FC
+ for <buildroot@lists.busybox.net>; Thu,  1 Jun 2023 16:44:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30661400FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id icTXu7IM-nA8 for <buildroot@lists.busybox.net>;
- Thu,  1 Jun 2023 16:36:06 +0000 (UTC)
+ with ESMTP id KR9uCR7fHQjn for <buildroot@lists.busybox.net>;
+ Thu,  1 Jun 2023 16:44:04 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 392B4400C8
-Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 392B4400C8
- for <buildroot@buildroot.org>; Thu,  1 Jun 2023 16:36:05 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout07.t-online.de (Postfix) with SMTP id 2FBF437B26
- for <buildroot@buildroot.org>; Thu,  1 Jun 2023 18:36:03 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd80.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA4FE400C8
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CA4FE400C8
+ for <buildroot@buildroot.org>; Thu,  1 Jun 2023 16:44:03 +0000 (UTC)
+Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
+ by mailout12.t-online.de (Postfix) with SMTP id 7DCEB12647;
+ Thu,  1 Jun 2023 18:44:01 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd81.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q4lHN-0cP4UL0; Thu, 1 Jun 2023 18:36:02 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:32944)
+ esmtp id 1q4lP7-22Ifjd0; Thu, 1 Jun 2023 18:44:01 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35630)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q4lHN-00066E-1z
- for buildroot@buildroot.org; Thu, 01 Jun 2023 18:36:01 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q4lP6-0007Us-2R;
+ Thu, 01 Jun 2023 18:44:00 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu,  1 Jun 2023 18:36:01 +0200
-Message-Id: <20230601163601.44832-1-bernd.kuhls@t-online.de>
+Date: Thu,  1 Jun 2023 18:44:00 +0200
+Message-Id: <20230601164400.48962-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1685637362-FB7F84D3-53F29806/0/0 CLEAN NORMAL
-X-TOI-MSGID: e9ad7578-1003-46b3-b73e-ccd5e5c95f78
-Subject: [Buildroot] [PATCH/next 1/1] package/busybox: bump version to 1.36.1
+X-TOI-EXPURGATEID: 150726::1685637841-D97F8DA8-45F26C92/0/0 CLEAN NORMAL
+X-TOI-MSGID: 04f9247d-c97c-4b9b-9eba-983756895813
+Subject: [Buildroot] [PATCH/next 1/1] package/libcurl: bump version to 8.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,37 +70,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Changelog: https://curl.se/changes.html#8_1_2
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/busybox/busybox.hash | 4 ++--
- package/busybox/busybox.mk   | 2 +-
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 6d1c36906d..6eba365ecc 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 12d356118b..18b2dbfd86 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,5 +1,5 @@
--# From https://busybox.net/downloads/busybox-1.35.0.tar.bz2.sha256
--sha256  542750c8af7cb2630e201780b4f99f3dcceeb06f505b479ec68241c1e6af61a5  busybox-1.36.0.tar.bz2
-+# From https://busybox.net/downloads/busybox-1.36.1.tar.bz2.sha256
-+sha256  b8cc24c9574d809e7279c3be349795c5d5ceb6fdf19ca709f80cde50e47de314  busybox-1.36.1.tar.bz2
- # Locally computed
- sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
- sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index fd4f3c17c5..eb5e7ad922 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.1.1.tar.xz.asc
++# https://curl.se/download/curl-8.1.2.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  08a948e061929645597c1ef7194e07b308b22084ff03fa7400b465e6c05149e5  curl-8.1.1.tar.xz
++sha256  31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6  curl-8.1.2.tar.xz
+ sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 93e839798b..2be3415cb8 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BUSYBOX_VERSION = 1.36.0
-+BUSYBOX_VERSION = 1.36.1
- BUSYBOX_SITE = https://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+-LIBCURL_VERSION = 8.1.1
++LIBCURL_VERSION = 8.1.2
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
 2.39.2
 
