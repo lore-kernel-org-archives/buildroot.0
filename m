@@ -4,88 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43448C7EE24
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 06:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9FABC77B7A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 06:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA42E426DE;
-	Fri,  2 Jun 2023 06:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA42E426DE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1127D41E1C;
+	Fri,  2 Jun 2023 06:12:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1127D41E1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ou6ca2HSMMaL; Fri,  2 Jun 2023 06:06:26 +0000 (UTC)
+	with ESMTP id atppggpULYmd; Fri,  2 Jun 2023 06:12:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DA05426DB;
-	Fri,  2 Jun 2023 06:06:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DA05426DB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D21B11BF5A8
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 06:06:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D448416AA;
+	Fri,  2 Jun 2023 06:12:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D448416AA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DDD451BF5A8
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 06:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A65CC84209
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 06:06:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A65CC84209
+ by smtp4.osuosl.org (Postfix) with ESMTP id B59EB416AA
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 06:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B59EB416AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DCI_SccMt6Xm for <buildroot@lists.busybox.net>;
- Fri,  2 Jun 2023 06:06:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J3lVq0Z7FViR for <buildroot@lists.busybox.net>;
+ Fri,  2 Jun 2023 06:12:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D3B184206
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2D3B184206
- for <buildroot@buildroot.org>; Fri,  2 Jun 2023 06:06:23 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-4f3b5881734so2261105e87.0
- for <buildroot@buildroot.org>; Thu, 01 Jun 2023 23:06:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 894F04098F
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com
+ [IPv6:2001:4860:4864:20::2a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 894F04098F
+ for <buildroot@buildroot.org>; Fri,  2 Jun 2023 06:12:18 +0000 (UTC)
+Received: by mail-oa1-x2a.google.com with SMTP id
+ 586e51a60fabf-19f6211d4e1so1661391fac.1
+ for <buildroot@buildroot.org>; Thu, 01 Jun 2023 23:12:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685685981; x=1688277981;
- h=subject:from:to:content-language:user-agent:mime-version:date
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=r+W+2cyJESDu2AZwJ02X3eTNZFfCNRJXtEawhX7rHow=;
- b=APpwsUpEiVqo+A64L2vYaB3UBe3yOJMJpeTadfQCfhjw+RLkjeiiXlOpF8VQNPs3cF
- lzXw0kfr5JDf+OY80fU3T/6WErZWlSVNNcAX/MWbLv71KZzGGCK7EdkfeY8dpDh2alHU
- W3vrQ0xsfLxHS1z3FHlx7S5GfM1ju657+KgmevuoiV4B7kpgnHDNc9q/Q/iwgXP61wmE
- DEMEHu2oGE9kazBF3V5JuK+A8/t0QvBUNoS3oex47cgKrQepSPhf3t79ChMdNSBT8OjD
- dWLMzmJ15Y0jrAsGoAgJajaRUHFVNs4cpTuX/pW7k0O7I80jtWZjrQ166kJY4m5/GLNA
- zqrw==
-X-Gm-Message-State: AC+VfDxP6YWqE2T6Xq6TDKuZyGg5loqcBlA/+0mIe+Obu1d8HQ08T0hw
- XDVreHjocLeAy7PgeBlI++711xig6Nrgyg==
-X-Google-Smtp-Source: ACHHUZ6pUAN1Ehdtl2jRqKgH8GqXe2zEwTV2ePnbx49N1+pJI+vJJTfoDQ2QtOw+QKM4IMc3Z3+LJw==
-X-Received: by 2002:a05:6512:376f:b0:4f1:3eea:eaf9 with SMTP id
- z15-20020a056512376f00b004f13eeaeaf9mr1100746lft.24.1685685980754; 
- Thu, 01 Jun 2023 23:06:20 -0700 (PDT)
-Received: from [10.0.2.15] (89-64-5-54.dynamic.chello.pl. [89.64.5.54])
- by smtp.gmail.com with ESMTPSA id
- v7-20020a056512048700b004f508e8a9acsm50640lfq.301.2023.06.01.23.06.20
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 01 Jun 2023 23:06:20 -0700 (PDT)
-Message-ID: <81e83506-622a-7036-283c-eb0b19fcc369@gmail.com>
-Date: Fri, 2 Jun 2023 08:06:19 +0200
+ d=1e100.net; s=20221208; t=1685686337; x=1688278337;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=5/c665GfQbvqW5mS2I5kh6WpQe7Iz31mrjTEGAKLX6c=;
+ b=PpKqQvYkp3G1GZrvApF+GoYItUDcsIS5GZNfJZmT6oLIKJSwxIY/tglK/syYUgCh0Z
+ rCOWdUimujQI8/C1uLTnFtd2ZNGnYSv0sFhHA7O8PFgqwxz2gEc52nntFhokckIAqBeV
+ mujLs3BB6kLCvIQoD/oD8lJAYNrLoS4xQJy8OK8/tpl9l1S1/2BRxcU+MP4Q4WqBkxiE
+ CyzBG5OXyLMVqXb1sYcwldVi4jHp++tDtBqAYShYkX70E0m86tg5mWPvJqPWTpCS4Fyd
+ qqgoYJBsg7ize/f/WlRN284/LYHpBEfYd6gso06k1BGe1Oom+hGoxqVlVOurASy6krr/
+ /Dxg==
+X-Gm-Message-State: AC+VfDxEpJ+cc2GPgqPtL1bKKoFMHi9L2Ripa5knmtsT3xCGCwek5a3d
+ OwchfuuF+4I2lu8kRv3Gr2CcKyzTVGE1311fU2/1vlU1zPy5Rg==
+X-Google-Smtp-Source: ACHHUZ7vIwuQ3mBGY2A/f6JyQANdRXms3dGSxxsTCrd6jgOQAE1eUpQMVRIki6WjfhJ7yoe+WFx6RZlGrnyio6RBvV0=
+X-Received: by 2002:a05:6870:85c6:b0:196:553c:6207 with SMTP id
+ g6-20020a05687085c600b00196553c6207mr967303oal.59.1685686337278; Thu, 01 Jun
+ 2023 23:12:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To: buildroot@buildroot.org
-From: =?UTF-8?Q?Adrian_Pra=c5=82at?= <apralat.mikroel@gmail.com>
+References: <81e83506-622a-7036-283c-eb0b19fcc369@gmail.com>
+In-Reply-To: <81e83506-622a-7036-283c-eb0b19fcc369@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 2 Jun 2023 00:12:05 -0600
+Message-ID: <CADvTj4qqLZOe2jROO4Z3_9m4ErV97-1F3dETnM2xt0k4M1T-yA@mail.gmail.com>
+To: =?UTF-8?Q?Adrian_Pra=C5=82at?= <apralat.mikroel@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685685981; x=1688277981;
- h=subject:from:to:content-language:user-agent:mime-version:date
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=r+W+2cyJESDu2AZwJ02X3eTNZFfCNRJXtEawhX7rHow=;
- b=fjejSyQaRrjxufoPYdwiMfVw7fEE+l5oQc4rmiTZQedusQTyp6zHiGGagNvtYrSlmM
- IRR93465IzwAKyw9LanVBGlVv27To/FeBcce5OvZuHUpzHd6tq1PCxw742X7TwJXAN5V
- DCFo32/worVCUCEY46hk3iObl1xKqXZnsKPX/ZK2AA9DOPN3x/vjvTT812NISDnYOwZ9
- PEV0GGBi1Ab1LB3oJ3TCksmCUYmkqFy7mR1dziSdmrMZMkpWd7+fp+IWFAqAaY0XAtPU
- JXTnJdb9JHbfCVx7ikiTRZOdUxchy2bY5HX0FAPq9UWVjgA/9LAHsyNv73jQt+Ubpj1v
- mnwg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20221208; t=1685686337; x=1688278337;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=5/c665GfQbvqW5mS2I5kh6WpQe7Iz31mrjTEGAKLX6c=;
+ b=LJ+fJj9AUsjEh5SWT1yGD7c2LsiCgLXnVZfDMKQlnG2jVPRMjCtpc4sy9+OCtfrngS
+ c77ALAhIzHBmctd+6PEWpT+7GTSZN4d/97ZH515VBQBXywKuIQqyukSMt5/3p7YzSySD
+ vm1JTHqgdjUuPocNDNy9p/74J2ag9sn9LHaPrTCqlcxco9IplrPOg9YE/kmKkEJB81Q0
+ vc4aTvOzvXcFpFpzETgdVDyuwDua2iYErHjv700QHdproC5hHMl08s4ztZMaxEdxogGA
+ XQNypSpPUuZMrWDi7nASvh16zc4aj36d8evbd1Q3k+fvRBkMI4HFe47FH9cWzRJg2uSg
+ PrlQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=fjejSyQa
-Subject: [Buildroot] Issue with compiling buildroot toolchain on Fedora
+ header.a=rsa-sha256 header.s=20221208 header.b=LJ+fJj9A
+Subject: Re: [Buildroot] Issue with compiling buildroot toolchain on Fedora
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,96 +91,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0875425038905140289=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============0875425038905140289==
-Content-Type: multipart/alternative;
- boundary="------------q00cO8pO8P5TggQtGZ8NAUjO"
-Content-Language: en-US
-
-This is a multi-part message in MIME format.
---------------q00cO8pO8P5TggQtGZ8NAUjO
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-Hi all,
-
-today we hit an issue with compiling the toolchain for our device, the 
-issue is with the package M4.
-
-During the compilation on other machines running Debian (kernel 
-5.10.0-23-amd64) everything builds normally. On my system however 
-(Fedora 38, kernel 6.3.4-201.fc38.x86_64) the build fails with the message:
-
-configure: error: cannot compute suffix of object files: cannot compile
-See `config.log' for more details
-make: *** [package/pkg-generic.mk:222: 
-/home/mikroel/project/buildroot/output/build/host-m4-1.4.18/.stamp_configured] 
-Error 1
-
-The only difference should be the kernel, since we build our images in 
-ubuntu 22.04 docker containers. The issue is present on branch 2018.08.4 
-and also other branches, such as current 2023.05-rc2
-
-Any ideas on what can we can check or do to narrow down the issue and 
-correct the problem in buildroot itself?
-
--- 
-Pozdrawiam / Regards, *Adrian Prałat*
-
---------------q00cO8pO8P5TggQtGZ8NAUjO
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-<html>
-  <head>
-
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <p>Hi all,</p>
-    <p>today we hit an issue with compiling the toolchain for our
-      device, the issue is with the package M4.</p>
-    <p>During the compilation on other machines running Debian (kernel
-      5.10.0-23-amd64) everything builds normally. On my system however
-      (Fedora 38, kernel 6.3.4-201.fc38.x86_64) the build fails with the
-      message:</p>
-    <p>configure: error: cannot compute suffix of object files: cannot
-      compile<br>
-      See `config.log' for more details<br>
-      make: *** [package/pkg-generic.mk:222:
-/home/mikroel/project/buildroot/output/build/host-m4-1.4.18/.stamp_configured]
-      Error 1<br>
-    </p>
-    <p>The only difference should be the kernel, since we build our
-      images in ubuntu 22.04 docker containers. The issue is present on
-      branch 2018.08.4 and also other branches, such as current
-      2023.05-rc2<br>
-    </p>
-    <p>Any ideas on what can we can check or do to narrow down the issue
-      and correct the problem in buildroot itself?<br>
-    </p>
-    -- <br>
-    <div class="default-style"> </div>
-    Pozdrawiam / Regards, <strong>Adrian Prałat</strong>
-    <p></p>
-  </body>
-</html>
-
---------------q00cO8pO8P5TggQtGZ8NAUjO--
-
---===============0875425038905140289==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0875425038905140289==--
+T24gRnJpLCBKdW4gMiwgMjAyMyBhdCAxMjowNuKAr0FNIEFkcmlhbiBQcmHFgmF0IDxhcHJhbGF0
+Lm1pa3JvZWxAZ21haWwuY29tPiB3cm90ZToKPgo+IEhpIGFsbCwKPgo+IHRvZGF5IHdlIGhpdCBh
+biBpc3N1ZSB3aXRoIGNvbXBpbGluZyB0aGUgdG9vbGNoYWluIGZvciBvdXIgZGV2aWNlLCB0aGUg
+aXNzdWUgaXMgd2l0aCB0aGUgcGFja2FnZSBNNC4KPgo+IER1cmluZyB0aGUgY29tcGlsYXRpb24g
+b24gb3RoZXIgbWFjaGluZXMgcnVubmluZyBEZWJpYW4gKGtlcm5lbCA1LjEwLjAtMjMtYW1kNjQp
+IGV2ZXJ5dGhpbmcgYnVpbGRzIG5vcm1hbGx5LiBPbiBteSBzeXN0ZW0gaG93ZXZlciAoRmVkb3Jh
+IDM4LCBrZXJuZWwgNi4zLjQtMjAxLmZjMzgueDg2XzY0KSB0aGUgYnVpbGQgZmFpbHMgd2l0aCB0
+aGUgbWVzc2FnZToKPgo+IGNvbmZpZ3VyZTogZXJyb3I6IGNhbm5vdCBjb21wdXRlIHN1ZmZpeCBv
+ZiBvYmplY3QgZmlsZXM6IGNhbm5vdCBjb21waWxlCj4gU2VlIGBjb25maWcubG9nJyBmb3IgbW9y
+ZSBkZXRhaWxzCj4gbWFrZTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmljLm1rOjIyMjogL2hvbWUv
+bWlrcm9lbC9wcm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvaG9zdC1tNC0xLjQuMTgvLnN0
+YW1wX2NvbmZpZ3VyZWRdIEVycm9yIDEKPgo+IFRoZSBvbmx5IGRpZmZlcmVuY2Ugc2hvdWxkIGJl
+IHRoZSBrZXJuZWwsIHNpbmNlIHdlIGJ1aWxkIG91ciBpbWFnZXMgaW4gdWJ1bnR1IDIyLjA0IGRv
+Y2tlciBjb250YWluZXJzLiBUaGUgaXNzdWUgaXMgcHJlc2VudCBvbiBicmFuY2ggMjAxOC4wOC40
+IGFuZCBhbHNvIG90aGVyIGJyYW5jaGVzLCBzdWNoIGFzIGN1cnJlbnQgMjAyMy4wNS1yYzIKPgo+
+IEFueSBpZGVhcyBvbiB3aGF0IGNhbiB3ZSBjYW4gY2hlY2sgb3IgZG8gdG8gbmFycm93IGRvd24g
+dGhlIGlzc3VlIGFuZCBjb3JyZWN0IHRoZSBwcm9ibGVtIGluIGJ1aWxkcm9vdCBpdHNlbGY/CgpD
+aGVjayB0aGUgY29uZmlnLmxvZyBmaWxlIGFzIHRoZSBlcnJvciBtZXNzYWdlIHN1Z2dlc3RzLgoK
+Pgo+IC0tCj4gUG96ZHJhd2lhbSAvIFJlZ2FyZHMsIEFkcmlhbiBQcmHFgmF0Cj4KPiBfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
