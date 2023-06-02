@@ -1,96 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE29C7EE24
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 06:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6835AC7EE24
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 08:57:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9326960F75;
-	Fri,  2 Jun 2023 06:44:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9326960F75
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3DA94173B;
+	Fri,  2 Jun 2023 08:57:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3DA94173B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eqwfMmFgdvRe; Fri,  2 Jun 2023 06:44:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e-aVEYR9oayC; Fri,  2 Jun 2023 08:57:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70D0460F03;
-	Fri,  2 Jun 2023 06:44:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70D0460F03
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 29C5C1BF5A8
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 06:44:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE0F14057B;
+	Fri,  2 Jun 2023 08:57:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE0F14057B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 81F991BF291
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 08:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D14982153
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 06:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D14982153
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62B384057B
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 08:57:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62B384057B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IvuFMYjKWYSt for <buildroot@lists.busybox.net>;
- Fri,  2 Jun 2023 06:43:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z6TnmXs31Z-P for <buildroot@lists.busybox.net>;
+ Fri,  2 Jun 2023 08:57:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A53DF81F7F
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A53DF81F7F
- for <buildroot@buildroot.org>; Fri,  2 Jun 2023 06:43:58 +0000 (UTC)
-Received: by mail-lf1-x12d.google.com with SMTP id
- 2adb3069b0e04-4f4b384c09fso2278426e87.3
- for <buildroot@buildroot.org>; Thu, 01 Jun 2023 23:43:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C13A40120
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C13A40120
+ for <buildroot@buildroot.org>; Fri,  2 Jun 2023 08:57:49 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-9741caaf9d4so256130866b.0
+ for <buildroot@buildroot.org>; Fri, 02 Jun 2023 01:57:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685688236; x=1688280236;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=M5H7MLyPtmKpDxn5gifjU/aaOvGE65aV6nZxaqVDAUM=;
- b=PcYlEXEI6ZV7QCCxmfNmemLrJZUaU+Nz2KrNzylSfPk4CUPdG+d6F2fg7+g0rfdIZx
- 9wYWl9fsMQaeHLiRRyMyF8Goze9t0JrvFJVFLt77awWGFeT13lrpgdPs6g8ilo1cCJ+3
- Cdft+TnfRpUQ7qDL1FFNlQ17yE7CtjHhEqmEmsCUmnIodDCQPVKNpVqy9W8fimx5MS5H
- ixQz8cRix08EZDWOzUSIS1gSL5NuuuQEtrxJfWXC1GuG/iZsYeZbqoyEExo3B8vDRDuy
- FqZr/fto5Q3NcEp/k1MgxUtfzwU0B5GwOkrwZK/dkdk2hxHBGq12pHqplMl43KAAuFlX
- oQPw==
-X-Gm-Message-State: AC+VfDxwjFy+mFDN7KdCtr/fNKT2UE7UWho5E/64r/CqSjIWjFYT8hKM
- PIKMIHW9by4gUMyRt/spsTw=
-X-Google-Smtp-Source: ACHHUZ779dwNIuAi1lyyShyZoBnjrvtUKy3oiImWtOhFQa4UFlt7JuT1u4WnD2arUFC5SPOurtPDMw==
-X-Received: by 2002:ac2:4e71:0:b0:4f3:a5da:119d with SMTP id
- y17-20020ac24e71000000b004f3a5da119dmr1203854lfs.20.1685688236156; 
- Thu, 01 Jun 2023 23:43:56 -0700 (PDT)
-Received: from [10.0.2.15] (89-64-5-54.dynamic.chello.pl. [89.64.5.54])
+ d=1e100.net; s=20221208; t=1685696268; x=1688288268;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=1ueABlKFSM4WlPkhpjTfSWTM7LI6go4GrMeujQSqK/Y=;
+ b=MnK1bEhBn+6lQgoyvGR3pJzlrWNfSg5my2jb9Zcjla+rLilbS8yiBYvOxRRvvkslSC
+ y4j/DYJdU6EkwRl4MkV6p0Pp318bqoqhmRlzWkafU51gM9pB6b9fwr+ijMwRZGpRV+Mg
+ 4cCZDlepJ+MdHLspNzEeeW2qIUKbE7iLTlNER3JqENu/weCruxYDvlZklLq0LVzoGLip
+ SnB7rbJXVH2/t4zywcClCk2uUhVx0Z2xQ8rQrM6134vuaP3+9EzQnE2xMkwpIedIUpPc
+ D8BpoX5SDnwg5DR+QXNMQLduarkLzc87VlF4YYMA3XMVS4e2YLB+GZvYagl14mehM/Ny
+ Tc9g==
+X-Gm-Message-State: AC+VfDwqG1vXu6mtkkiE3+xLDAHFHIOH7+XAk1H8O7caX7ySYzoNTC2d
+ ylyE16/QanEVyBw+9Yh0c5IRI1LDFqL9SXcXgQOCDQ==
+X-Google-Smtp-Source: ACHHUZ5Dj1TsBbrCbcszQdGcurcX3lvopBao6gQoaIvwPPNERovGdhf0NrNncaA+9HPrF9xcWEy9/w==
+X-Received: by 2002:a17:907:2d9f:b0:973:ff4d:d01e with SMTP id
+ gt31-20020a1709072d9f00b00973ff4dd01emr10261349ejc.31.1685696267415; 
+ Fri, 02 Jun 2023 01:57:47 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-95-248-31-20.retail.telecomitalia.it. [95.248.31.20])
  by smtp.gmail.com with ESMTPSA id
- u4-20020a056512040400b004f3afe4ce20sm61964lfk.191.2023.06.01.23.43.55
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 01 Jun 2023 23:43:55 -0700 (PDT)
-Message-ID: <dd2fd3a5-fa99-bf00-50c1-2ec41579f5e9@gmail.com>
-Date: Fri, 2 Jun 2023 08:43:54 +0200
+ e4-20020a170906504400b0095342bfb701sm516187ejk.16.2023.06.02.01.57.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 02 Jun 2023 01:57:47 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Fri,  2 Jun 2023 10:57:41 +0200
+Message-Id: <20230602085741.3338373-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <81e83506-622a-7036-283c-eb0b19fcc369@gmail.com>
- <CADvTj4qqLZOe2jROO4Z3_9m4ErV97-1F3dETnM2xt0k4M1T-yA@mail.gmail.com>
- <59927b85-68ff-69a4-bfed-83a060e82d2d@gmail.com>
- <CADvTj4qMCkohVB720MzdcN6Q+aGO-S9ESR3tsmjwj+MCAvSv6A@mail.gmail.com>
-From: =?UTF-8?Q?Adrian_Pra=c5=82at?= <apralat.mikroel@gmail.com>
-In-Reply-To: <CADvTj4qMCkohVB720MzdcN6Q+aGO-S9ESR3tsmjwj+MCAvSv6A@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685688236; x=1688280236;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=M5H7MLyPtmKpDxn5gifjU/aaOvGE65aV6nZxaqVDAUM=;
- b=l/iJTmvhsgioPzm4fRbUQ/A00DND6HF+4ahLEEY6IyAQCdd+WHCZd8EIAgCr3/2BEh
- Tvyd1L2BBVHjA09XB9g4NTA31npthiuJQJhRWO/8e7LvTPNRgopSZ3gYB3ADgf4Rhdme
- 15TaH5Fdo7O2wIu54sgSlPX0UBAbGausu39uxX6J/+TCa1DYoe6GzRF+KN8/kgVIvWkp
- rqyxXaQnwnv1n42hQUSHcSgvy7VyF8nn8F+s2nRuDfPnlMH4TC6xEwgqmyHpWdsor1DV
- PFA0ND9cbjvc+TwgGpxhMMKU95CEt94GKqalrCl8FE1nEeZVI98nBLMvIW2nY9ksPjFB
- 3UlA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=l/iJTmvh
-Subject: Re: [Buildroot] Issue with compiling buildroot toolchain on Fedora
+ d=amarulasolutions.com; s=google; t=1685696268; x=1688288268;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=1ueABlKFSM4WlPkhpjTfSWTM7LI6go4GrMeujQSqK/Y=;
+ b=RUWIGjMazXl2j9lQXJgOGmQRu7fGdGOx2FfLDLt6Q9WJHLNcuCiHyimAVU7xwE9VYK
+ sQ/AuzbQ8phc+j9rh/jtwXoIgqhECDRfmRCX9sxy7yjqH93m4JnSh8/XvoH5/Twg+9RI
+ YKXvlz3fGPg61QCcd/ETvEEjwtxDNxR7pg+qE=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=RUWIGjMa
+Subject: [Buildroot] [PATCH 1/1] package/libmnl: remove dependency on kernel
+ headers version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,140 +94,614 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T2ssIGlzc3VlIGZpeGVkLCB0aGlzIHdhcyBub3QgcmVsYXRlZCB0byBidWlsZHJvb3QgYXQgYWxs
-IGJ1dCB0byBzZWxpbnV4LgoKSW4gb3VyIGNvbmZpZyB3ZSBoYXZlOgoKQlIyX0NDQUNIRT15CkJS
-Ml9DQ0FDSEVfRElSPSIkKEhPTUUpLy5idWlsZHJvb3QtY2NhY2hlIgoKYW5kIHNvbWUgaW5kaWNh
-dGlvbiBjb3VsZCBiZSB0aGF0IGluIHRoZSBjb25maWcubG9nIHRoZXJlIGlzIGEgbGluZToKCi9o
-b21lL21pa3JvZWwvLmJ1aWxkcm9vdC1jY2FjaGUvdG1wOiBQZXJtaXNzaW9uIGRlbmllZAoKQWZ0
-ZXIgY2hhbmdpbmcgdGhlIHNlbGludXggZmxhZ3Mgb24gdGhlIGRpcmVjdG9yeSBpdCBhbGwgc3Rh
-cnRlZCB3b3JraW5nIAphZ2FpbjoKCnN1ZG8gY2hjb24gLVJ0IHN2aXJ0X3NhbmRib3hfZmlsZV90
-IH4vLmJ1aWxkcm9vdC1jY2FjaGUvCgpUaGFuayB5b3UgSmFtZXMgZm9yIHlvdXIgaGVscC4KCk9u
-IDYvMi8yMyAwODozNSwgSmFtZXMgSGlsbGlhcmQgd3JvdGU6Cj4gT24gRnJpLCBKdW4gMiwgMjAy
-MyBhdCAxMjoyOOKAr0FNIEFkcmlhbiBQcmHFgmF0IDxhcHJhbGF0Lm1pa3JvZWxAZ21haWwuY29t
-PiB3cm90ZToKPj4gUmlnaHQsIHllc3RlcmRheSBJIGhhZCBubyB0aW1lIHNvIGEgcXVpY2sgZ2xh
-bmNlIGRpZCBub3Qgc2hvdyBhbnl0aGluZywKPj4gYnV0IHRvZGF5IEkgc2VhcmNoZWQgZm9yIGVy
-cm9ycyBhbmQgZm91bmQgdGhlIHBvc3NpYmxlIGN1bHByaXQ6Cj4+Cj4+IGNvbmZpZ3VyZTo0NzE1
-OiAkPyA9IDAKPj4gY29uZmlndXJlOjQ3MDQ6IC9ob21lL21pa3JvZWwvcHJvamVjdC9idWlsZHJv
-b3Qvb3V0cHV0L2hvc3QvYmluL2NjYWNoZQo+PiAvdXNyL2Jpbi9nY2MgLXYgPiY1Cj4+IFVzaW5n
-IGJ1aWx0LWluIHNwZWNzLgo+PiBDT0xMRUNUX0dDQz0vdXNyL2Jpbi9nY2MKPj4gQ09MTEVDVF9M
-VE9fV1JBUFBFUj0vdXNyL2xpYi9nY2MveDg2XzY0LWxpbnV4LWdudS85L2x0by13cmFwcGVyCj4+
-IE9GRkxPQURfVEFSR0VUX05BTUVTPW52cHR4LW5vbmU6aHNhCj4+IE9GRkxPQURfVEFSR0VUX0RF
-RkFVTFQ9MQo+PiBUYXJnZXQ6IHg4Nl82NC1saW51eC1nbnUKPj4gQ29uZmlndXJlZCB3aXRoOiAu
-Li9zcmMvY29uZmlndXJlIC12IC0td2l0aC1wa2d2ZXJzaW9uPSdVYnVudHUKPj4gOS40LjAtMXVi
-dW50dTF+MjAuMDQuMScKPj4gLS13aXRoLWJ1Z3VybD1maWxlOi8vL3Vzci9zaGFyZS9kb2MvZ2Nj
-LTkvUkVBRE1FLkJ1Z3MKPj4gLS1lbmFibGUtbGFuZ3VhZ2VzPWMsYWRhLGMrKyxnbyxicmlnLGQs
-Zm9ydHJhbixvYmpjLG9iai1jKyssZ20yCj4+IC0tcHJlZml4PS91c3IgLS13aXRoLWdjYy1tYWpv
-ci12ZXJzaW9uLW9ubHkgLS1wcm9ncmFtLXN1ZmZpeD0tOQo+PiAtLXByb2dyYW0tcHJlZml4PXg4
-Nl82NC1saW51eC1nbnUtIC0tZW5hYmxlLXNoYXJlZAo+PiAtLWVuYWJsZS1saW5rZXItYnVpbGQt
-aWQgLS1saWJleGVjZGlyPS91c3IvbGliCj4+IC0td2l0aG91dC1pbmNsdWRlZC1nZXR0ZXh0IC0t
-ZW5hYmxlLXRocmVhZHM9cG9zaXggLS1saWJkaXI9L3Vzci9saWIKPj4gLS1lbmFibGUtbmxzIC0t
-ZW5hYmxlLWNsb2NhbGU9Z251IC0tZW5hYmxlLWxpYnN0ZGN4eC1kZWJ1Zwo+PiAtLWVuYWJsZS1s
-aWJzdGRjeHgtdGltZT15ZXMgLS13aXRoLWRlZmF1bHQtbGlic3RkY3h4LWFiaT1uZXcKPj4gLS1l
-bmFibGUtZ251LXVuaXF1ZS1vYmplY3QgLS1kaXNhYmxlLXZ0YWJsZS12ZXJpZnkgLS1lbmFibGUt
-cGx1Z2luCj4+IC0tZW5hYmxlLWRlZmF1bHQtcGllIC0td2l0aC1zeXN0ZW0temxpYiAtLXdpdGgt
-dGFyZ2V0LXN5c3RlbS16bGliPWF1dG8KPj4gLS1lbmFibGUtb2JqYy1nYz1hdXRvIC0tZW5hYmxl
-LW11bHRpYXJjaCAtLWRpc2FibGUtd2Vycm9yCj4+IC0td2l0aC1hcmNoLTMyPWk2ODYgLS13aXRo
-LWFiaT1tNjQgLS13aXRoLW11bHRpbGliLWxpc3Q9bTMyLG02NCxteDMyCj4+IC0tZW5hYmxlLW11
-bHRpbGliIC0td2l0aC10dW5lPWdlbmVyaWMKPj4gLS1lbmFibGUtb2ZmbG9hZC10YXJnZXRzPW52
-cHR4LW5vbmU9L2J1aWxkL2djYy05LUF2M3VFZC9nY2MtOS05LjQuMC9kZWJpYW4vdG1wLW52cHR4
-L3Vzcixoc2EKPj4gLS13aXRob3V0LWN1ZGEtZHJpdmVyIC0tZW5hYmxlLWNoZWNraW5nPXJlbGVh
-c2UgLS1idWlsZD14ODZfNjQtbGludXgtZ251Cj4+IC0taG9zdD14ODZfNjQtbGludXgtZ251IC0t
-dGFyZ2V0PXg4Nl82NC1saW51eC1nbnUKPj4gVGhyZWFkIG1vZGVsOiBwb3NpeAo+PiBnY2MgdmVy
-c2lvbiA5LjQuMCAoVWJ1bnR1IDkuNC4wLTF1YnVudHUxfjIwLjA0LjEpCj4+IGNvbmZpZ3VyZTo0
-NzE1OiAkPyA9IDAKPj4gY29uZmlndXJlOjQ3MDQ6IC9ob21lL21pa3JvZWwvcHJvamVjdC9idWls
-ZHJvb3Qvb3V0cHV0L2hvc3QvYmluL2NjYWNoZQo+PiAvdXNyL2Jpbi9nY2MgLVYgPiY1Cj4+IGdj
-YzogZXJyb3I6IHVucmVjb2duaXplZCBjb21tYW5kIGxpbmUgb3B0aW9uICctVicKPj4gZ2NjOiBm
-YXRhbCBlcnJvcjogbm8gaW5wdXQgZmlsZXMKPj4gY29tcGlsYXRpb24gdGVybWluYXRlZC4KPj4g
-Y29uZmlndXJlOjQ3MTU6ICQ/ID0gMQo+PiBjb25maWd1cmU6NDcwNDogL2hvbWUvbWlrcm9lbC9w
-cm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9iaW4vY2NhY2hlCj4+IC91c3IvYmluL2djYyAt
-cXZlcnNpb24gPiY1Cj4+IGdjYzogZXJyb3I6IHVucmVjb2duaXplZCBjb21tYW5kIGxpbmUgb3B0
-aW9uICctcXZlcnNpb24nOyBkaWQgeW91IG1lYW4KPj4gJy0tdmVyc2lvbic/Cj4+IGdjYzogZmF0
-YWwgZXJyb3I6IG5vIGlucHV0IGZpbGVzCj4+IGNvbXBpbGF0aW9uIHRlcm1pbmF0ZWQuCj4+IGNv
-bmZpZ3VyZTo0NzE1OiAkPyA9IDEKPj4gY29uZmlndXJlOjQ3MzU6IGNoZWNraW5nIHdoZXRoZXIg
-dGhlIEMgY29tcGlsZXIgd29ya3MKPj4gY29uZmlndXJlOjQ3NTc6IC9ob21lL21pa3JvZWwvcHJv
-amVjdC9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvYmluL2NjYWNoZQo+PiAvdXNyL2Jpbi9nY2MgLU8y
-IC1JL2hvbWUvbWlrcm9lbC9wcm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9pbmNsdWRlCj4+
-IC1JL2hvbWUvbWlrcm9lbC9wcm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9pbmNsdWRlCj4+
-IC1ML2hvbWUvbWlrcm9lbC9wcm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9saWIKPj4gLVds
-LC1ycGF0aCwvaG9tZS9taWtyb2VsL3Byb2plY3QvYnVpbGRyb290L291dHB1dC9ob3N0L2xpYiBj
-b25mdGVzdC5jICA+JjUKPj4gY29uZmlndXJlOjQ3NjE6ICQ/ID0gMAo+PiBjb25maWd1cmU6NDgw
-OTogcmVzdWx0OiB5ZXMKPj4gY29uZmlndXJlOjQ4MTI6IGNoZWNraW5nIGZvciBDIGNvbXBpbGVy
-IGRlZmF1bHQgb3V0cHV0IGZpbGUgbmFtZQo+PiBjb25maWd1cmU6NDgxNDogcmVzdWx0OiBhLm91
-dAo+PiBjb25maWd1cmU6NDgyMDogY2hlY2tpbmcgZm9yIHN1ZmZpeCBvZiBleGVjdXRhYmxlcwo+
-PiBjb25maWd1cmU6NDgyNzogL2hvbWUvbWlrcm9lbC9wcm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQv
-aG9zdC9iaW4vY2NhY2hlCj4+IC91c3IvYmluL2djYyAtbyBjb25mdGVzdCAtTzIKPj4gLUkvaG9t
-ZS9taWtyb2VsL3Byb2plY3QvYnVpbGRyb290L291dHB1dC9ob3N0L2luY2x1ZGUKPj4gLUkvaG9t
-ZS9taWtyb2VsL3Byb2plY3QvYnVpbGRyb290L291dHB1dC9ob3N0L2luY2x1ZGUKPj4gLUwvaG9t
-ZS9taWtyb2VsL3Byb2plY3QvYnVpbGRyb290L291dHB1dC9ob3N0L2xpYgo+PiAtV2wsLXJwYXRo
-LC9ob21lL21pa3JvZWwvcHJvamVjdC9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvbGliIGNvbmZ0ZXN0
-LmMgID4mNQo+PiBjb25maWd1cmU6NDgzMTogJD8gPSAwCj4+IGNvbmZpZ3VyZTo0ODUzOiByZXN1
-bHQ6Cj4+IGNvbmZpZ3VyZTo0ODc1OiBjaGVja2luZyB3aGV0aGVyIHdlIGFyZSBjcm9zcyBjb21w
-aWxpbmcKPj4gY29uZmlndXJlOjQ4ODM6IC9ob21lL21pa3JvZWwvcHJvamVjdC9idWlsZHJvb3Qv
-b3V0cHV0L2hvc3QvYmluL2NjYWNoZQo+PiAvdXNyL2Jpbi9nY2MgLW8gY29uZnRlc3QgLU8yCj4+
-IC1JL2hvbWUvbWlrcm9lbC9wcm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9pbmNsdWRlCj4+
-IC1JL2hvbWUvbWlrcm9lbC9wcm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9pbmNsdWRlCj4+
-IC1ML2hvbWUvbWlrcm9lbC9wcm9qZWN0L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9saWIKPj4gLVds
-LC1ycGF0aCwvaG9tZS9taWtyb2VsL3Byb2plY3QvYnVpbGRyb290L291dHB1dC9ob3N0L2xpYiBj
-b25mdGVzdC5jICA+JjUKPj4gY29uZmlndXJlOjQ4ODc6ICQ/ID0gMAo+PiBjb25maWd1cmU6NDg5
-NDogLi9jb25mdGVzdAo+PiBjb25maWd1cmU6NDg5ODogJD8gPSAwCj4+IGNvbmZpZ3VyZTo0ODg2
-OiByZXN1bHQ6IG5vCj4+IGNvbmZpZ3VyZTo0ODkxOiBjaGVja2luZyBmb3Igc3VmZml4IG9mIG9i
-amVjdCBmaWxlcwo+PiBjb25maWd1cmU6NDkxMzogL2hvbWUvbWlrcm9lbC9wcm9qZWN0L2J1aWxk
-cm9vdC9vdXRwdXQvaG9zdC9iaW4vY2NhY2hlCj4+IC91c3IvYmluL2djYyAtYyAtTzIKPj4gLUkv
-aG9tZS9taWtyb2VsL3Byb2plY3QvYnVpbGRyb290L291dHB1dC9ob3N0L2luY2x1ZGUKPj4gLUkv
-aG9tZS9taWtyb2VsL3Byb2plY3QvYnVpbGRyb290L291dHB1dC9ob3N0L2luY2x1ZGUgY29uZnRl
-c3QuYyA+JjUKPj4gY2NhY2hlOiBlcnJvcjogRmFpbGVkIHRvIGNyZWF0ZSBkaXJlY3RvcnkKPj4g
-L2hvbWUvbWlrcm9lbC8uYnVpbGRyb290LWNjYWNoZS90bXA6IFBlcm1pc3Npb24gZGVuaWVkCj4+
-IGNvbmZpZ3VyZTo0OTE3OiAkPyA9IDEKPj4gY29uZmlndXJlOiBmYWlsZWQgcHJvZ3JhbSB3YXM6
-Cj4+IHwgLyogY29uZmRlZnMuaCAqLwo+PiB8ICNkZWZpbmUgUEFDS0FHRV9OQU1FICJHTlUgTTQi
-Cj4+IHwgI2RlZmluZSBQQUNLQUdFX1RBUk5BTUUgIm00Igo+PiB8ICNkZWZpbmUgUEFDS0FHRV9W
-RVJTSU9OICIxLjQuMTgiCj4+IHwgI2RlZmluZSBQQUNLQUdFX1NUUklORyAiR05VIE00IDEuNC4x
-OCIKPj4gfCAjZGVmaW5lIFBBQ0tBR0VfQlVHUkVQT1JUICJidWctbTRAZ251Lm9yZyIKPj4gfCAj
-ZGVmaW5lIFBBQ0tBR0VfVVJMICJodHRwOi8vd3d3LmdudS5vcmcvc29mdHdhcmUvbTQvIgo+PiB8
-ICNkZWZpbmUgUEFDS0FHRSAibTQiCj4+IHwgI2RlZmluZSBWRVJTSU9OICIxLjQuMTgiCj4+IHwg
-LyogZW5kIGNvbmZkZWZzLmguICAqLwo+PiB8Cj4+IHwgaW50Cj4+IHwgbWFpbiAoKQo+PiB8IHsK
-Pj4gfAo+PiB8ICAgOwo+PiB8ICAgcmV0dXJuIDA7Cj4+IHwgfQo+PiBjb25maWd1cmU6NDkzMTog
-ZXJyb3I6IGluCj4+IGAvaG9tZS9taWtyb2VsL3Byb2plY3QvYnVpbGRyb290L291dHB1dC9idWls
-ZC9ob3N0LW00LTEuNC4xOCc6Cj4+IGNvbmZpZ3VyZTo0OTMzOiBlcnJvcjogY2Fubm90IGNvbXB1
-dGUgc3VmZml4IG9mIG9iamVjdCBmaWxlczogY2Fubm90IGNvbXBpbGUKPj4gU2VlIGBjb25maWcu
-bG9nJyBmb3IgbW9yZSBkZXRhaWxzCj4+Cj4+ICMjIC0tLS0tLS0tLS0tLS0tLS0gIyMKPj4gIyMg
-Q2FjaGUgdmFyaWFibGVzLiAjIwo+PiAjIyAtLS0tLS0tLS0tLS0tLS0tICMjCj4+Cj4+IEluIHBh
-Y2thZ2UgY29uZmlnIEkgdHJpZWQgcGFzc2luZyBpbiB0aGUgYC0td2l0aG91dC1jb25maWdgIGZs
-YWcgaW4gdGhlCj4+IGBIT1NUX000X0NPTkZfT1BUU2AsIGJ1dCBpdCBtYWRlIG5vIGRpZmZlcmVu
-Y2UuIEhvd2V2ZXIsIGRpc2FibGluZyB0aGUKPj4gY2NhY2hlIGluIHRoZSBkZXZpY2UgY29uZmln
-IGZpbGUgYWxsb3dlZCB0aGUgY29tcGlsYXRpb24gdG8gcHJvY2VlZC4KPiBIbW0sIHllYWggZXJy
-b3IgZG9lcyBsb29rIGNjYWNoZSByZWxhdGVkLCB3aGF0J3MgeW91ciBkZXZpY2UgY29uZmlnIGxv
-b2sgbGlrZT8KPgo+PiBGb3IgbXkgcHVycG9zZXMgdGhpcyBpcyBvayBmb3Igbm93LCBidXQgSSB3
-b3VsZCBsaWtlIHRoZSBjY2FjaGUgdG8KPj4gZnVuY3Rpb24gcHJvcGVybHksIHdoYXQgY2FuIEkg
-ZG8gdG8gaGVscCBmaW5kIHRoZSBjYXVzZT8KPj4KPj4gT24gNi8yLzIzIDA4OjEyLCBKYW1lcyBI
-aWxsaWFyZCB3cm90ZToKPj4+IE9uIEZyaSwgSnVuIDIsIDIwMjMgYXQgMTI6MDbigK9BTSBBZHJp
-YW4gUHJhxYJhdCA8YXByYWxhdC5taWtyb2VsQGdtYWlsLmNvbT4gd3JvdGU6Cj4+Pj4gSGkgYWxs
-LAo+Pj4+Cj4+Pj4gdG9kYXkgd2UgaGl0IGFuIGlzc3VlIHdpdGggY29tcGlsaW5nIHRoZSB0b29s
-Y2hhaW4gZm9yIG91ciBkZXZpY2UsIHRoZSBpc3N1ZSBpcyB3aXRoIHRoZSBwYWNrYWdlIE00Lgo+
-Pj4+Cj4+Pj4gRHVyaW5nIHRoZSBjb21waWxhdGlvbiBvbiBvdGhlciBtYWNoaW5lcyBydW5uaW5n
-IERlYmlhbiAoa2VybmVsIDUuMTAuMC0yMy1hbWQ2NCkgZXZlcnl0aGluZyBidWlsZHMgbm9ybWFs
-bHkuIE9uIG15IHN5c3RlbSBob3dldmVyIChGZWRvcmEgMzgsIGtlcm5lbCA2LjMuNC0yMDEuZmMz
-OC54ODZfNjQpIHRoZSBidWlsZCBmYWlscyB3aXRoIHRoZSBtZXNzYWdlOgo+Pj4+Cj4+Pj4gY29u
-ZmlndXJlOiBlcnJvcjogY2Fubm90IGNvbXB1dGUgc3VmZml4IG9mIG9iamVjdCBmaWxlczogY2Fu
-bm90IGNvbXBpbGUKPj4+PiBTZWUgYGNvbmZpZy5sb2cnIGZvciBtb3JlIGRldGFpbHMKPj4+PiBt
-YWtlOiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMubWs6MjIyOiAvaG9tZS9taWtyb2VsL3Byb2pl
-Y3QvYnVpbGRyb290L291dHB1dC9idWlsZC9ob3N0LW00LTEuNC4xOC8uc3RhbXBfY29uZmlndXJl
-ZF0gRXJyb3IgMQo+Pj4+Cj4+Pj4gVGhlIG9ubHkgZGlmZmVyZW5jZSBzaG91bGQgYmUgdGhlIGtl
-cm5lbCwgc2luY2Ugd2UgYnVpbGQgb3VyIGltYWdlcyBpbiB1YnVudHUgMjIuMDQgZG9ja2VyIGNv
-bnRhaW5lcnMuIFRoZSBpc3N1ZSBpcyBwcmVzZW50IG9uIGJyYW5jaCAyMDE4LjA4LjQgYW5kIGFs
-c28gb3RoZXIgYnJhbmNoZXMsIHN1Y2ggYXMgY3VycmVudCAyMDIzLjA1LXJjMgo+Pj4+Cj4+Pj4g
-QW55IGlkZWFzIG9uIHdoYXQgY2FuIHdlIGNhbiBjaGVjayBvciBkbyB0byBuYXJyb3cgZG93biB0
-aGUgaXNzdWUgYW5kIGNvcnJlY3QgdGhlIHByb2JsZW0gaW4gYnVpbGRyb290IGl0c2VsZj8KPj4+
-IENoZWNrIHRoZSBjb25maWcubG9nIGZpbGUgYXMgdGhlIGVycm9yIG1lc3NhZ2Ugc3VnZ2VzdHMu
-Cj4+Pgo+Pj4+IC0tCj4+Pj4gUG96ZHJhd2lhbSAvIFJlZ2FyZHMsIEFkcmlhbiBQcmHFgmF0Cj4+
-Pj4KPj4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+
-Pj4+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPj4+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+
-Pj4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+As agreed in [1], now that the patch for including kernel headers has
+been applied upstream, we can remove the restrictions in Buildroot to
+avoid compilation failures.
+
+The patch is an adaptation of the one applied upstream.
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20230520210153.3944842-1-dario.binacchi@amarulasolutions.com/
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ ...ache-copy-of-can.h-and-can-netlink.h.patch | 548 ++++++++++++++++++
+ package/libmnl/Config.in                      |   4 -
+ package/libmnl/libmnl.mk                      |   1 +
+ 3 files changed, 549 insertions(+), 4 deletions(-)
+ create mode 100644 package/libmnl/0002-include-cache-copy-of-can.h-and-can-netlink.h.patch
+
+diff --git a/package/libmnl/0002-include-cache-copy-of-can.h-and-can-netlink.h.patch b/package/libmnl/0002-include-cache-copy-of-can.h-and-can-netlink.h.patch
+new file mode 100644
+index 000000000000..38948cd68a07
+--- /dev/null
++++ b/package/libmnl/0002-include-cache-copy-of-can.h-and-can-netlink.h.patch
+@@ -0,0 +1,548 @@
++From 46e6d487f9406001318e97d0349bcda07f923908 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Sat, 20 May 2023 10:22:52 +0200
++Subject: [PATCH] include: cache copy of can.h and can/netlink.h
++
++Ensure that rtnl-link-can example compiles in any installation. These
++headers are not installed in the system.
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://git.netfilter.org/libmnl/commit/?id=0b242d346dddba85384dd784759fe2b77f063e12
++---
++ configure.ac                  |   2 +-
++ include/linux/Makefile.am     |   4 +-
++ include/linux/can.h           | 298 ++++++++++++++++++++++++++++++++++
++ include/linux/can/Makefile.am |   1 +
++ include/linux/can/netlink.h   | 185 +++++++++++++++++++++
++ 5 files changed, 487 insertions(+), 3 deletions(-)
++ create mode 100644 include/linux/can.h
++ create mode 100644 include/linux/can/Makefile.am
++ create mode 100644 include/linux/can/netlink.h
++
++diff --git a/configure.ac b/configure.ac
++index 314481dae87e..c8a56c6d0550 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -27,7 +27,7 @@ regular_CFLAGS="-Wall -Waggregate-return -Wmissing-declarations \
++ 	-Wformat=2 -pipe"
++ AC_SUBST([regular_CPPFLAGS])
++ AC_SUBST([regular_CFLAGS])
++-AC_CONFIG_FILES([Makefile src/Makefile include/Makefile include/libmnl/Makefile include/linux/Makefile include/linux/netfilter/Makefile examples/Makefile examples/genl/Makefile examples/kobject/Makefile examples/netfilter/Makefile examples/rtnl/Makefile libmnl.pc doxygen.cfg doxygen/Makefile])
+++AC_CONFIG_FILES([Makefile src/Makefile include/Makefile include/libmnl/Makefile include/linux/Makefile include/linux/can/Makefile include/linux/netfilter/Makefile examples/Makefile examples/genl/Makefile examples/kobject/Makefile examples/netfilter/Makefile examples/rtnl/Makefile libmnl.pc doxygen.cfg doxygen/Makefile])
++ 
++ AC_ARG_WITH([doxygen], [AS_HELP_STRING([--with-doxygen],
++ 	    [create doxygen documentation])],
++diff --git a/include/linux/Makefile.am b/include/linux/Makefile.am
++index 08c600b5fa42..ee0993dae186 100644
++--- a/include/linux/Makefile.am
+++++ b/include/linux/Makefile.am
++@@ -1,2 +1,2 @@
++-SUBDIRS = netfilter
++-noinst_HEADERS = netlink.h socket.h
+++SUBDIRS = can netfilter
+++noinst_HEADERS = can.h netlink.h socket.h
++diff --git a/include/linux/can.h b/include/linux/can.h
++new file mode 100644
++index 000000000000..2c6a3ee7d32d
++--- /dev/null
+++++ b/include/linux/can.h
++@@ -0,0 +1,298 @@
+++/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
+++/*
+++ * linux/can.h
+++ *
+++ * Definitions for CAN network layer (socket addr / CAN frame / CAN filter)
+++ *
+++ * Authors: Oliver Hartkopp <oliver.hartkopp@volkswagen.de>
+++ *          Urs Thuermann   <urs.thuermann@volkswagen.de>
+++ * Copyright (c) 2002-2007 Volkswagen Group Electronic Research
+++ * All rights reserved.
+++ *
+++ * Redistribution and use in source and binary forms, with or without
+++ * modification, are permitted provided that the following conditions
+++ * are met:
+++ * 1. Redistributions of source code must retain the above copyright
+++ *    notice, this list of conditions and the following disclaimer.
+++ * 2. Redistributions in binary form must reproduce the above copyright
+++ *    notice, this list of conditions and the following disclaimer in the
+++ *    documentation and/or other materials provided with the distribution.
+++ * 3. Neither the name of Volkswagen nor the names of its contributors
+++ *    may be used to endorse or promote products derived from this software
+++ *    without specific prior written permission.
+++ *
+++ * Alternatively, provided that this notice is retained in full, this
+++ * software may be distributed under the terms of the GNU General
+++ * Public License ("GPL") version 2, in which case the provisions of the
+++ * GPL apply INSTEAD OF those given above.
+++ *
+++ * The provided data structures and external interfaces from this code
+++ * are not restricted to be used by modules with a GPL compatible license.
+++ *
+++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+++ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+++ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+++ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+++ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+++ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+++ * DAMAGE.
+++ */
+++
+++#ifndef _UAPI_CAN_H
+++#define _UAPI_CAN_H
+++
+++#include <linux/types.h>
+++#include <linux/socket.h>
+++#include <linux/stddef.h> /* for offsetof */
+++
+++/* controller area network (CAN) kernel definitions */
+++
+++/* special address description flags for the CAN_ID */
+++#define CAN_EFF_FLAG 0x80000000U /* EFF/SFF is set in the MSB */
+++#define CAN_RTR_FLAG 0x40000000U /* remote transmission request */
+++#define CAN_ERR_FLAG 0x20000000U /* error message frame */
+++
+++/* valid bits in CAN ID for frame formats */
+++#define CAN_SFF_MASK 0x000007FFU /* standard frame format (SFF) */
+++#define CAN_EFF_MASK 0x1FFFFFFFU /* extended frame format (EFF) */
+++#define CAN_ERR_MASK 0x1FFFFFFFU /* omit EFF, RTR, ERR flags */
+++#define CANXL_PRIO_MASK CAN_SFF_MASK /* 11 bit priority mask */
+++
+++/*
+++ * Controller Area Network Identifier structure
+++ *
+++ * bit 0-28	: CAN identifier (11/29 bit)
+++ * bit 29	: error message frame flag (0 = data frame, 1 = error message)
+++ * bit 30	: remote transmission request flag (1 = rtr frame)
+++ * bit 31	: frame format flag (0 = standard 11 bit, 1 = extended 29 bit)
+++ */
+++typedef __u32 canid_t;
+++
+++#define CAN_SFF_ID_BITS		11
+++#define CAN_EFF_ID_BITS		29
+++#define CANXL_PRIO_BITS		CAN_SFF_ID_BITS
+++
+++/*
+++ * Controller Area Network Error Message Frame Mask structure
+++ *
+++ * bit 0-28	: error class mask (see include/uapi/linux/can/error.h)
+++ * bit 29-31	: set to zero
+++ */
+++typedef __u32 can_err_mask_t;
+++
+++/* CAN payload length and DLC definitions according to ISO 11898-1 */
+++#define CAN_MAX_DLC 8
+++#define CAN_MAX_RAW_DLC 15
+++#define CAN_MAX_DLEN 8
+++
+++/* CAN FD payload length and DLC definitions according to ISO 11898-7 */
+++#define CANFD_MAX_DLC 15
+++#define CANFD_MAX_DLEN 64
+++
+++/*
+++ * CAN XL payload length and DLC definitions according to ISO 11898-1
+++ * CAN XL DLC ranges from 0 .. 2047 => data length from 1 .. 2048 byte
+++ */
+++#define CANXL_MIN_DLC 0
+++#define CANXL_MAX_DLC 2047
+++#define CANXL_MAX_DLC_MASK 0x07FF
+++#define CANXL_MIN_DLEN 1
+++#define CANXL_MAX_DLEN 2048
+++
+++/**
+++ * struct can_frame - Classical CAN frame structure (aka CAN 2.0B)
+++ * @can_id:   CAN ID of the frame and CAN_*_FLAG flags, see canid_t definition
+++ * @len:      CAN frame payload length in byte (0 .. 8)
+++ * @can_dlc:  deprecated name for CAN frame payload length in byte (0 .. 8)
+++ * @__pad:    padding
+++ * @__res0:   reserved / padding
+++ * @len8_dlc: optional DLC value (9 .. 15) at 8 byte payload length
+++ *            len8_dlc contains values from 9 .. 15 when the payload length is
+++ *            8 bytes but the DLC value (see ISO 11898-1) is greater then 8.
+++ *            CAN_CTRLMODE_CC_LEN8_DLC flag has to be enabled in CAN driver.
+++ * @data:     CAN frame payload (up to 8 byte)
+++ */
+++struct can_frame {
+++	canid_t can_id;  /* 32 bit CAN_ID + EFF/RTR/ERR flags */
+++	union {
+++		/* CAN frame payload length in byte (0 .. CAN_MAX_DLEN)
+++		 * was previously named can_dlc so we need to carry that
+++		 * name for legacy support
+++		 */
+++		__u8 len;
+++		__u8 can_dlc; /* deprecated */
+++	} __attribute__((packed)); /* disable padding added in some ABIs */
+++	__u8 __pad; /* padding */
+++	__u8 __res0; /* reserved / padding */
+++	__u8 len8_dlc; /* optional DLC for 8 byte payload length (9 .. 15) */
+++	__u8 data[CAN_MAX_DLEN] __attribute__((aligned(8)));
+++};
+++
+++/*
+++ * defined bits for canfd_frame.flags
+++ *
+++ * The use of struct canfd_frame implies the FD Frame (FDF) bit to
+++ * be set in the CAN frame bitstream on the wire. The FDF bit switch turns
+++ * the CAN controllers bitstream processor into the CAN FD mode which creates
+++ * two new options within the CAN FD frame specification:
+++ *
+++ * Bit Rate Switch - to indicate a second bitrate is/was used for the payload
+++ * Error State Indicator - represents the error state of the transmitting node
+++ *
+++ * As the CANFD_ESI bit is internally generated by the transmitting CAN
+++ * controller only the CANFD_BRS bit is relevant for real CAN controllers when
+++ * building a CAN FD frame for transmission. Setting the CANFD_ESI bit can make
+++ * sense for virtual CAN interfaces to test applications with echoed frames.
+++ *
+++ * The struct can_frame and struct canfd_frame intentionally share the same
+++ * layout to be able to write CAN frame content into a CAN FD frame structure.
+++ * When this is done the former differentiation via CAN_MTU / CANFD_MTU gets
+++ * lost. CANFD_FDF allows programmers to mark CAN FD frames in the case of
+++ * using struct canfd_frame for mixed CAN / CAN FD content (dual use).
+++ * Since the introduction of CAN XL the CANFD_FDF flag is set in all CAN FD
+++ * frame structures provided by the CAN subsystem of the Linux kernel.
+++ */
+++#define CANFD_BRS 0x01 /* bit rate switch (second bitrate for payload data) */
+++#define CANFD_ESI 0x02 /* error state indicator of the transmitting node */
+++#define CANFD_FDF 0x04 /* mark CAN FD for dual use of struct canfd_frame */
+++
+++/**
+++ * struct canfd_frame - CAN flexible data rate frame structure
+++ * @can_id: CAN ID of the frame and CAN_*_FLAG flags, see canid_t definition
+++ * @len:    frame payload length in byte (0 .. CANFD_MAX_DLEN)
+++ * @flags:  additional flags for CAN FD
+++ * @__res0: reserved / padding
+++ * @__res1: reserved / padding
+++ * @data:   CAN FD frame payload (up to CANFD_MAX_DLEN byte)
+++ */
+++struct canfd_frame {
+++	canid_t can_id;  /* 32 bit CAN_ID + EFF/RTR/ERR flags */
+++	__u8    len;     /* frame payload length in byte */
+++	__u8    flags;   /* additional flags for CAN FD */
+++	__u8    __res0;  /* reserved / padding */
+++	__u8    __res1;  /* reserved / padding */
+++	__u8    data[CANFD_MAX_DLEN] __attribute__((aligned(8)));
+++};
+++
+++/*
+++ * defined bits for canxl_frame.flags
+++ *
+++ * The canxl_frame.flags element contains two bits CANXL_XLF and CANXL_SEC
+++ * and shares the relative position of the struct can[fd]_frame.len element.
+++ * The CANXL_XLF bit ALWAYS needs to be set to indicate a valid CAN XL frame.
+++ * As a side effect setting this bit intentionally breaks the length checks
+++ * for Classical CAN and CAN FD frames.
+++ *
+++ * Undefined bits in canxl_frame.flags are reserved and shall be set to zero.
+++ */
+++#define CANXL_XLF 0x80 /* mandatory CAN XL frame flag (must always be set!) */
+++#define CANXL_SEC 0x01 /* Simple Extended Content (security/segmentation) */
+++
+++/**
+++ * struct canxl_frame - CAN with e'X'tended frame 'L'ength frame structure
+++ * @prio:  11 bit arbitration priority with zero'ed CAN_*_FLAG flags
+++ * @flags: additional flags for CAN XL
+++ * @sdt:   SDU (service data unit) type
+++ * @len:   frame payload length in byte (CANXL_MIN_DLEN .. CANXL_MAX_DLEN)
+++ * @af:    acceptance field
+++ * @data:  CAN XL frame payload (CANXL_MIN_DLEN .. CANXL_MAX_DLEN byte)
+++ *
+++ * @prio shares the same position as @can_id from struct can[fd]_frame.
+++ */
+++struct canxl_frame {
+++	canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
+++	__u8    flags; /* additional flags for CAN XL */
+++	__u8    sdt;   /* SDU (service data unit) type */
+++	__u16   len;   /* frame payload length in byte */
+++	__u32   af;    /* acceptance field */
+++	__u8    data[CANXL_MAX_DLEN];
+++};
+++
+++#define CAN_MTU		(sizeof(struct can_frame))
+++#define CANFD_MTU	(sizeof(struct canfd_frame))
+++#define CANXL_MTU	(sizeof(struct canxl_frame))
+++#define CANXL_HDR_SIZE	(offsetof(struct canxl_frame, data))
+++#define CANXL_MIN_MTU	(CANXL_HDR_SIZE + 64)
+++#define CANXL_MAX_MTU	CANXL_MTU
+++
+++/* particular protocols of the protocol family PF_CAN */
+++#define CAN_RAW		1 /* RAW sockets */
+++#define CAN_BCM		2 /* Broadcast Manager */
+++#define CAN_TP16	3 /* VAG Transport Protocol v1.6 */
+++#define CAN_TP20	4 /* VAG Transport Protocol v2.0 */
+++#define CAN_MCNET	5 /* Bosch MCNet */
+++#define CAN_ISOTP	6 /* ISO 15765-2 Transport Protocol */
+++#define CAN_J1939	7 /* SAE J1939 */
+++#define CAN_NPROTO	8
+++
+++#define SOL_CAN_BASE 100
+++
+++/*
+++ * This typedef was introduced in Linux v3.1-rc2
+++ * (commit 6602a4b net: Make userland include of netlink.h more sane)
+++ * in <linux/socket.h>. It must be duplicated here to make the CAN
+++ * headers self-contained.
+++ */
+++typedef unsigned short __kernel_sa_family_t;
+++
+++/**
+++ * struct sockaddr_can - the sockaddr structure for CAN sockets
+++ * @can_family:  address family number AF_CAN.
+++ * @can_ifindex: CAN network interface index.
+++ * @can_addr:    protocol specific address information
+++ */
+++struct sockaddr_can {
+++	__kernel_sa_family_t can_family;
+++	int         can_ifindex;
+++	union {
+++		/* transport protocol class address information (e.g. ISOTP) */
+++		struct { canid_t rx_id, tx_id; } tp;
+++
+++		/* J1939 address information */
+++		struct {
+++			/* 8 byte name when using dynamic addressing */
+++			__u64 name;
+++
+++			/* pgn:
+++			 * 8 bit: PS in PDU2 case, else 0
+++			 * 8 bit: PF
+++			 * 1 bit: DP
+++			 * 1 bit: reserved
+++			 */
+++			__u32 pgn;
+++
+++			/* 1 byte address */
+++			__u8 addr;
+++		} j1939;
+++
+++		/* reserved for future CAN protocols address information */
+++	} can_addr;
+++};
+++
+++/**
+++ * struct can_filter - CAN ID based filter in can_register().
+++ * @can_id:   relevant bits of CAN ID which are not masked out.
+++ * @can_mask: CAN mask (see description)
+++ *
+++ * Description:
+++ * A filter matches, when
+++ *
+++ *          <received_can_id> & mask == can_id & mask
+++ *
+++ * The filter can be inverted (CAN_INV_FILTER bit set in can_id) or it can
+++ * filter for error message frames (CAN_ERR_FLAG bit set in mask).
+++ */
+++struct can_filter {
+++	canid_t can_id;
+++	canid_t can_mask;
+++};
+++
+++#define CAN_INV_FILTER 0x20000000U /* to be set in can_filter.can_id */
+++#define CAN_RAW_FILTER_MAX 512 /* maximum number of can_filter set via setsockopt() */
+++
+++#endif /* !_UAPI_CAN_H */
++diff --git a/include/linux/can/Makefile.am b/include/linux/can/Makefile.am
++new file mode 100644
++index 000000000000..2d0288766894
++--- /dev/null
+++++ b/include/linux/can/Makefile.am
++@@ -0,0 +1 @@
+++noinst_HEADERS = netlink.h
++diff --git a/include/linux/can/netlink.h b/include/linux/can/netlink.h
++new file mode 100644
++index 000000000000..02ec32d69474
++--- /dev/null
+++++ b/include/linux/can/netlink.h
++@@ -0,0 +1,185 @@
+++/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
+++/*
+++ * linux/can/netlink.h
+++ *
+++ * Definitions for the CAN netlink interface
+++ *
+++ * Copyright (c) 2009 Wolfgang Grandegger <wg@grandegger.com>
+++ *
+++ * This program is free software; you can redistribute it and/or modify
+++ * it under the terms of the version 2 of the GNU General Public License
+++ * as published by the Free Software Foundation
+++ *
+++ * This program is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+++ * GNU General Public License for more details.
+++ */
+++
+++#ifndef _UAPI_CAN_NETLINK_H
+++#define _UAPI_CAN_NETLINK_H
+++
+++#include <linux/types.h>
+++
+++/*
+++ * CAN bit-timing parameters
+++ *
+++ * For further information, please read chapter "8 BIT TIMING
+++ * REQUIREMENTS" of the "Bosch CAN Specification version 2.0"
+++ * at http://www.semiconductors.bosch.de/pdf/can2spec.pdf.
+++ */
+++struct can_bittiming {
+++	__u32 bitrate;		/* Bit-rate in bits/second */
+++	__u32 sample_point;	/* Sample point in one-tenth of a percent */
+++	__u32 tq;		/* Time quanta (TQ) in nanoseconds */
+++	__u32 prop_seg;		/* Propagation segment in TQs */
+++	__u32 phase_seg1;	/* Phase buffer segment 1 in TQs */
+++	__u32 phase_seg2;	/* Phase buffer segment 2 in TQs */
+++	__u32 sjw;		/* Synchronisation jump width in TQs */
+++	__u32 brp;		/* Bit-rate prescaler */
+++};
+++
+++/*
+++ * CAN hardware-dependent bit-timing constant
+++ *
+++ * Used for calculating and checking bit-timing parameters
+++ */
+++struct can_bittiming_const {
+++	char name[16];		/* Name of the CAN controller hardware */
+++	__u32 tseg1_min;	/* Time segment 1 = prop_seg + phase_seg1 */
+++	__u32 tseg1_max;
+++	__u32 tseg2_min;	/* Time segment 2 = phase_seg2 */
+++	__u32 tseg2_max;
+++	__u32 sjw_max;		/* Synchronisation jump width */
+++	__u32 brp_min;		/* Bit-rate prescaler */
+++	__u32 brp_max;
+++	__u32 brp_inc;
+++};
+++
+++/*
+++ * CAN clock parameters
+++ */
+++struct can_clock {
+++	__u32 freq;		/* CAN system clock frequency in Hz */
+++};
+++
+++/*
+++ * CAN operational and error states
+++ */
+++enum can_state {
+++	CAN_STATE_ERROR_ACTIVE = 0,	/* RX/TX error count < 96 */
+++	CAN_STATE_ERROR_WARNING,	/* RX/TX error count < 128 */
+++	CAN_STATE_ERROR_PASSIVE,	/* RX/TX error count < 256 */
+++	CAN_STATE_BUS_OFF,		/* RX/TX error count >= 256 */
+++	CAN_STATE_STOPPED,		/* Device is stopped */
+++	CAN_STATE_SLEEPING,		/* Device is sleeping */
+++	CAN_STATE_MAX
+++};
+++
+++/*
+++ * CAN bus error counters
+++ */
+++struct can_berr_counter {
+++	__u16 txerr;
+++	__u16 rxerr;
+++};
+++
+++/*
+++ * CAN controller mode
+++ */
+++struct can_ctrlmode {
+++	__u32 mask;
+++	__u32 flags;
+++};
+++
+++#define CAN_CTRLMODE_LOOPBACK		0x01	/* Loopback mode */
+++#define CAN_CTRLMODE_LISTENONLY		0x02	/* Listen-only mode */
+++#define CAN_CTRLMODE_3_SAMPLES		0x04	/* Triple sampling mode */
+++#define CAN_CTRLMODE_ONE_SHOT		0x08	/* One-Shot mode */
+++#define CAN_CTRLMODE_BERR_REPORTING	0x10	/* Bus-error reporting */
+++#define CAN_CTRLMODE_FD			0x20	/* CAN FD mode */
+++#define CAN_CTRLMODE_PRESUME_ACK	0x40	/* Ignore missing CAN ACKs */
+++#define CAN_CTRLMODE_FD_NON_ISO		0x80	/* CAN FD in non-ISO mode */
+++#define CAN_CTRLMODE_CC_LEN8_DLC	0x100	/* Classic CAN DLC option */
+++#define CAN_CTRLMODE_TDC_AUTO		0x200	/* CAN transiver automatically calculates TDCV */
+++#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* TDCV is manually set up by user */
+++
+++/*
+++ * CAN device statistics
+++ */
+++struct can_device_stats {
+++	__u32 bus_error;	/* Bus errors */
+++	__u32 error_warning;	/* Changes to error warning state */
+++	__u32 error_passive;	/* Changes to error passive state */
+++	__u32 bus_off;		/* Changes to bus off state */
+++	__u32 arbitration_lost; /* Arbitration lost errors */
+++	__u32 restarts;		/* CAN controller re-starts */
+++};
+++
+++/*
+++ * CAN netlink interface
+++ */
+++enum {
+++	IFLA_CAN_UNSPEC,
+++	IFLA_CAN_BITTIMING,
+++	IFLA_CAN_BITTIMING_CONST,
+++	IFLA_CAN_CLOCK,
+++	IFLA_CAN_STATE,
+++	IFLA_CAN_CTRLMODE,
+++	IFLA_CAN_RESTART_MS,
+++	IFLA_CAN_RESTART,
+++	IFLA_CAN_BERR_COUNTER,
+++	IFLA_CAN_DATA_BITTIMING,
+++	IFLA_CAN_DATA_BITTIMING_CONST,
+++	IFLA_CAN_TERMINATION,
+++	IFLA_CAN_TERMINATION_CONST,
+++	IFLA_CAN_BITRATE_CONST,
+++	IFLA_CAN_DATA_BITRATE_CONST,
+++	IFLA_CAN_BITRATE_MAX,
+++	IFLA_CAN_TDC,
+++	IFLA_CAN_CTRLMODE_EXT,
+++
+++	/* add new constants above here */
+++	__IFLA_CAN_MAX,
+++	IFLA_CAN_MAX = __IFLA_CAN_MAX - 1
+++};
+++
+++/*
+++ * CAN FD Transmitter Delay Compensation (TDC)
+++ *
+++ * Please refer to struct can_tdc_const and can_tdc in
+++ * include/linux/can/bittiming.h for further details.
+++ */
+++enum {
+++	IFLA_CAN_TDC_UNSPEC,
+++	IFLA_CAN_TDC_TDCV_MIN,	/* u32 */
+++	IFLA_CAN_TDC_TDCV_MAX,	/* u32 */
+++	IFLA_CAN_TDC_TDCO_MIN,	/* u32 */
+++	IFLA_CAN_TDC_TDCO_MAX,	/* u32 */
+++	IFLA_CAN_TDC_TDCF_MIN,	/* u32 */
+++	IFLA_CAN_TDC_TDCF_MAX,	/* u32 */
+++	IFLA_CAN_TDC_TDCV,	/* u32 */
+++	IFLA_CAN_TDC_TDCO,	/* u32 */
+++	IFLA_CAN_TDC_TDCF,	/* u32 */
+++
+++	/* add new constants above here */
+++	__IFLA_CAN_TDC,
+++	IFLA_CAN_TDC_MAX = __IFLA_CAN_TDC - 1
+++};
+++
+++/*
+++ * IFLA_CAN_CTRLMODE_EXT nest: controller mode extended parameters
+++ */
+++enum {
+++	IFLA_CAN_CTRLMODE_UNSPEC,
+++	IFLA_CAN_CTRLMODE_SUPPORTED,	/* u32 */
+++
+++	/* add new constants above here */
+++	__IFLA_CAN_CTRLMODE,
+++	IFLA_CAN_CTRLMODE_MAX = __IFLA_CAN_CTRLMODE - 1
+++};
+++
+++/* u16 termination range: 1..65535 Ohms */
+++#define CAN_TERMINATION_DISABLED 0
+++
+++#endif /* !_UAPI_CAN_NETLINK_H */
++-- 
++2.32.0
++
+diff --git a/package/libmnl/Config.in b/package/libmnl/Config.in
+index 434778bf5547..b4a4195751ec 100644
+--- a/package/libmnl/Config.in
++++ b/package/libmnl/Config.in
+@@ -10,11 +10,7 @@ if BR2_PACKAGE_LIBMNL
+ 
+ config BR2_PACKAGE_LIBMNL_EXAMPLES
+ 	bool "install examples"
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+ 	help
+ 	  Install binary examples.
+ 
+-comment "examples needs a toolchain w/ headers >= 4.11"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+-
+ endif
+diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
+index cea528422ea8..08eebbaed9a8 100644
+--- a/package/libmnl/libmnl.mk
++++ b/package/libmnl/libmnl.mk
+@@ -12,6 +12,7 @@ LIBMNL_LICENSE = LGPL-2.1+
+ LIBMNL_LICENSE_FILES = COPYING
+ LIBMNL_CPE_ID_VENDOR = netfilter
+ # 0001-examples-add-rtnl-link-can.patch patches Makefile.am
++# 0002-include-cache-copy-of-can.h-and-can-netlink.h.patch patches configure.ac
+ LIBMNL_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBMNL_EXAMPLES),y)
+-- 
+2.32.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
