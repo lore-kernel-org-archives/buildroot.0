@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A0D5C7EE29
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 19:25:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B429FC7EE24
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 19:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D35BE41883;
-	Fri,  2 Jun 2023 19:25:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D35BE41883
+	by smtp2.osuosl.org (Postfix) with ESMTP id 603FF418A5;
+	Fri,  2 Jun 2023 19:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 603FF418A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qq2COWDXdWEw; Fri,  2 Jun 2023 19:25:32 +0000 (UTC)
+	with ESMTP id O1FXA3KbxJ5G; Fri,  2 Jun 2023 19:25:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 207D941896;
-	Fri,  2 Jun 2023 19:25:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 207D941896
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9457E4189C;
+	Fri,  2 Jun 2023 19:25:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9457E4189C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3C8691BF255
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 19:25:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 240451BF255
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 19:25:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 13B4D400B4
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 19:25:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13B4D400B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 089BE400B4
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 19:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 089BE400B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KB_MWhCP-bvN for <buildroot@lists.busybox.net>;
- Fri,  2 Jun 2023 19:25:19 +0000 (UTC)
+ with ESMTP id HS2Gbmbq1Xpf for <buildroot@lists.busybox.net>;
+ Fri,  2 Jun 2023 19:25:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0ECD140029
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0ECD140029
- for <buildroot@buildroot.org>; Fri,  2 Jun 2023 19:25:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F19B740029
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F19B740029
+ for <buildroot@buildroot.org>; Fri,  2 Jun 2023 19:25:24 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDFF0C0005;
- Fri,  2 Jun 2023 19:25:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DAC0A20005;
+ Fri,  2 Jun 2023 19:25:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q5AOh-00Bs5V-Vh; Fri, 02 Jun 2023 21:25:16 +0200
+ id 1q5AOm-00Bs5a-FR; Fri, 02 Jun 2023 21:25:20 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Sergey Bobrenok via buildroot <buildroot@buildroot.org>
 References: <20230529134320.1961326-1-SIBobrenok@sberdevices.ru>
- <20230529134320.1961326-2-SIBobrenok@sberdevices.ru>
-Date: Fri, 02 Jun 2023 21:25:15 +0200
-In-Reply-To: <20230529134320.1961326-2-SIBobrenok@sberdevices.ru> (Sergey
- Bobrenok via buildroot's message of "Mon, 29 May 2023 13:44:00 +0000")
-Message-ID: <87h6rpekf8.fsf@48ers.dk>
+ <20230529134320.1961326-3-SIBobrenok@sberdevices.ru>
+Date: Fri, 02 Jun 2023 21:25:20 +0200
+In-Reply-To: <20230529134320.1961326-3-SIBobrenok@sberdevices.ru> (Sergey
+ Bobrenok via buildroot's message of "Mon, 29 May 2023 13:44:02 +0000")
+Message-ID: <87cz2dekf3.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] package/earlyoom: restore missing
- startup message in the init script
+Subject: Re: [Buildroot] [PATCH 3/3] package/earlyoom: unhardcode package
+ version in CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,8 +78,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Sergey" == Sergey Bobrenok via buildroot <buildroot@buildroot.org> writes:
 
- > '/etc/init.d/S02earlyoom start' simply prints 'OK' instead of
- > 'Starting earlyoom: OK' because of a typo in the printf function call.
+ > 'earlyoom --help' still says 'earlyoom 1.6' though it's already
+ > version 1.7. '-DVERSION' flag value should be either unhardcoded,
+ > either updated with each package version bump.
 
  > Signed-off-by: Sergey Bobrenok <SIBobrenok@sberdevices.ru>
 
