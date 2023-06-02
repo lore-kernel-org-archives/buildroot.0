@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75D2AC77B7A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 19:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48672C77B7A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 19:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AC3F4285D;
-	Fri,  2 Jun 2023 19:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AC3F4285D
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2FC942869;
+	Fri,  2 Jun 2023 19:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2FC942869
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8M4Dn7kcNWxI; Fri,  2 Jun 2023 19:47:44 +0000 (UTC)
+	with ESMTP id JLVsl7C8AHN8; Fri,  2 Jun 2023 19:47:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79A194284F;
-	Fri,  2 Jun 2023 19:47:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79A194284F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64AAB4283A;
+	Fri,  2 Jun 2023 19:47:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64AAB4283A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 40EDE1BF255
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 19:47:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BCAC71BF255
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 19:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 26476616B6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 93F38616B1
  for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 19:47:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26476616B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93F38616B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nfGEMUPLFzpg for <buildroot@lists.busybox.net>;
+ with ESMTP id AKbQW_PhlRf0 for <buildroot@lists.busybox.net>;
  Fri,  2 Jun 2023 19:46:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94511616B1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A6BD616AE
  for <buildroot@buildroot.org>; Fri,  2 Jun 2023 19:46:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94511616B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A6BD616AE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 833C186BBC; Fri,  2 Jun 2023 19:46:59 +0000 (UTC)
+ id 7914A86BBB; Fri,  2 Jun 2023 19:46:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 2 Jun 2023 21:45:38 +0200
+Date: Fri, 2 Jun 2023 21:44:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa5c233c36bcc8fd51c84f7776c1b3a2875a3d98
-X-Git-Newrev: a1c55ea6dd4e7b93e4720206fc1ea390933ef675
+X-Git-Oldrev: c8e93f4a6b91ad42add41618b775a30dbfc79338
+X-Git-Newrev: aa5c233c36bcc8fd51c84f7776c1b3a2875a3d98
 X-Patchwork-Hint: ignore
-Message-Id: <20230602194659.833C186BBC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-stack-data: new package
+Message-Id: <20230602194659.7914A86BBB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-asttokens: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,75 +62,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1c55ea6dd4e7b93e4720206fc1ea390933ef675
+commit: https://git.buildroot.net/buildroot/commit/?id=aa5c233c36bcc8fd51c84f7776c1b3a2875a3d98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Peter: fix alphabetical ordering]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                                |  1 +
- package/python-stack-data/Config.in              | 10 ++++++++++
- package/python-stack-data/python-stack-data.hash |  5 +++++
- package/python-stack-data/python-stack-data.mk   | 14 ++++++++++++++
- 4 files changed, 30 insertions(+)
+ package/Config.in                              |  1 +
+ package/python-asttokens/Config.in             |  7 +++++++
+ package/python-asttokens/python-asttokens.hash |  5 +++++
+ package/python-asttokens/python-asttokens.mk   | 16 ++++++++++++++++
+ 4 files changed, 29 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index bc78acebda..ad438667d2 100644
+index 3da005b5e5..bc78acebda 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1310,6 +1310,7 @@ menu "External python modules"
- 	source "package/python-sqlalchemy/Config.in"
- 	source "package/python-sqliteschema/Config.in"
- 	source "package/python-sqlparse/Config.in"
-+	source "package/python-stack-data/Config.in"
- 	source "package/python-systemd/Config.in"
- 	source "package/python-tabledata/Config.in"
- 	source "package/python-tempora/Config.in"
-diff --git a/package/python-stack-data/Config.in b/package/python-stack-data/Config.in
+@@ -967,6 +967,7 @@ menu "External python modules"
+ 	source "package/python-arrow/Config.in"
+ 	source "package/python-asgiref/Config.in"
+ 	source "package/python-asn1crypto/Config.in"
++	source "package/python-asttokens/Config.in"
+ 	source "package/python-async-generator/Config.in"
+ 	source "package/python-async-lru/Config.in"
+ 	source "package/python-async-timeout/Config.in"
+diff --git a/package/python-asttokens/Config.in b/package/python-asttokens/Config.in
 new file mode 100644
-index 0000000000..508eb9cf13
+index 0000000000..2732b8124b
 --- /dev/null
-+++ b/package/python-stack-data/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_STACK_DATA
-+	bool "python-stack-data"
-+	select BR2_PACKAGE_PYTHON_ASTTOKENS # runtime
-+	select BR2_PACKAGE_PYTHON_EXECUTING # runtime
-+	select BR2_PACKAGE_PYTHON_PURE_EVAL # runtime
++++ b/package/python-asttokens/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ASTTOKENS
++	bool "python-asttokens"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
 +	help
-+	  Extract data from python stack frames and tracebacks
-+	  for informative displays.
++	  Annotate AST trees with source code positions.
 +
-+	  http://github.com/alexmojaki/stack_data
-diff --git a/package/python-stack-data/python-stack-data.hash b/package/python-stack-data/python-stack-data.hash
++	  https://github.com/gristlabs/asttokens
+diff --git a/package/python-asttokens/python-asttokens.hash b/package/python-asttokens/python-asttokens.hash
 new file mode 100644
-index 0000000000..6decd3ca8e
+index 0000000000..6529e4db41
 --- /dev/null
-+++ b/package/python-stack-data/python-stack-data.hash
++++ b/package/python-asttokens/python-asttokens.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/stack_data/json
-+md5  bf86c3c81a0158e1e7f3979da5a0033b  stack_data-0.6.2.tar.gz
-+sha256  32d2dd0376772d01b6cb9fc996f3c8b57a357089dec328ed4b6553d037eaf815  stack_data-0.6.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/asttokens/json
++md5  a9ae6ae0f85398e511bcb9ec87695eed  asttokens-2.2.1.tar.gz
++sha256  4622110b2a6f30b77e1473affaa97e711bc2f07d3f10848420ff1898edbe94f3  asttokens-2.2.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256  a476a2cb0ef4c41450340a577a28b91ac4c7f669136b2ee148047fabd5fc4181  LICENSE.txt
-diff --git a/package/python-stack-data/python-stack-data.mk b/package/python-stack-data/python-stack-data.mk
++sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/python-asttokens/python-asttokens.mk b/package/python-asttokens/python-asttokens.mk
 new file mode 100644
-index 0000000000..494ce8f454
+index 0000000000..8a8ce1ddd9
 --- /dev/null
-+++ b/package/python-stack-data/python-stack-data.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-asttokens/python-asttokens.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# python-stack-data
++# python-asttokens
 +#
 +################################################################################
 +
-+PYTHON_STACK_DATA_VERSION = 0.6.2
-+PYTHON_STACK_DATA_SOURCE = stack_data-$(PYTHON_STACK_DATA_VERSION).tar.gz
-+PYTHON_STACK_DATA_SITE = https://files.pythonhosted.org/packages/db/18/aa7f2b111aeba2cd83503254d9133a912d7f61f459a0c8561858f0d72a56
-+PYTHON_STACK_DATA_SETUP_TYPE = setuptools
-+PYTHON_STACK_DATA_LICENSE = MIT
-+PYTHON_STACK_DATA_LICENSE_FILES = LICENSE.txt
++PYTHON_ASTTOKENS_VERSION = 2.2.1
++PYTHON_ASTTOKENS_SOURCE = asttokens-$(PYTHON_ASTTOKENS_VERSION).tar.gz
++PYTHON_ASTTOKENS_SITE = https://files.pythonhosted.org/packages/c8/e3/b0b4f32162621126fbdaba636c152c6b6baec486c99f48686e66343d638f
++PYTHON_ASTTOKENS_SETUP_TYPE = setuptools
++PYTHON_ASTTOKENS_LICENSE = Apache-2.0
++PYTHON_ASTTOKENS_LICENSE_FILES = LICENSE
++
++PYTHON_ASTTOKENS_DEPENDENCIES = host-python-setuptools-scm
 +
 +$(eval $(python-package))
 _______________________________________________
