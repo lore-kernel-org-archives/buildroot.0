@@ -4,56 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3539AC77B7A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 18:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96BA1C77B7A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 18:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C50A741690;
-	Fri,  2 Jun 2023 18:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C50A741690
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F93F41854;
+	Fri,  2 Jun 2023 18:55:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F93F41854
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m9-Zz-aG5NUb; Fri,  2 Jun 2023 18:51:41 +0000 (UTC)
+	with ESMTP id 8Tf2KEro8Wmi; Fri,  2 Jun 2023 18:55:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 19FB740423;
-	Fri,  2 Jun 2023 18:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19FB740423
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3725E1BF2F2
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 18:51:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F13740423;
+	Fri,  2 Jun 2023 18:55:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F13740423
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 931BD1BF2F2
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 18:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10D108457C
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 18:51:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10D108457C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B52742809
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 18:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B52742809
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pTvFGJZk11HN for <buildroot@lists.busybox.net>;
- Fri,  2 Jun 2023 18:51:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TApj-_5UUbg0 for <buildroot@lists.busybox.net>;
+ Fri,  2 Jun 2023 18:55:21 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D49C8457A
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D49C8457A
- for <buildroot@busybox.net>; Fri,  2 Jun 2023 18:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D36B14280F
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D36B14280F
+ for <buildroot@buildroot.org>; Fri,  2 Jun 2023 18:55:20 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 59C3B240008;
- Fri,  2 Jun 2023 18:51:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B7EA5FF804;
+ Fri,  2 Jun 2023 18:55:17 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q59s6-00BpJC-Gr; Fri, 02 Jun 2023 20:51:34 +0200
+ id 1q59vg-00BpjA-Tq; Fri, 02 Jun 2023 20:55:16 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <fperrad@gmail.com>
-References: <20230601161146.40829-1-francois.perrad@gadz.org>
-Date: Fri, 02 Jun 2023 20:51:34 +0200
-In-Reply-To: <20230601161146.40829-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Thu, 1 Jun 2023 18:11:46 +0200")
-Message-ID: <87y1l1elzd.fsf@48ers.dk>
+To: Romain Naour <romain.naour@gmail.com>
+References: <20230530192757.2487642-1-romain.naour@gmail.com>
+Date: Fri, 02 Jun 2023 20:55:16 +0200
+In-Reply-To: <20230530192757.2487642-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 30 May 2023 21:27:56 +0200")
+Message-ID: <87ttvpelt7.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libopenssl: security bump to
- version 1.1.1u
+Subject: Re: [Buildroot] [PATCH 1/2] package/gcc: bump to version 12.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,18 +64,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > fix CVE-2023-2650  Possible DoS translating ASN.1 object identifiers
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > Remove upstream patch.
+ > See announce:
+ > https://gcc.gnu.org/pipermail/gcc-announce/2023/000176.html
 
-Committed, thanks.
+ > Runtime tested:
+ > https://gitlab.com/kubu93/buildroot/-/pipelines/882178578
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+I was hessitating if this should be applied to master or next, but given
+the bugfixes I went with master. Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
