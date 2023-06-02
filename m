@@ -4,55 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECE02C7EE2C
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 22:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 956C1C7EE2C
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 22:28:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2543E428BA;
-	Fri,  2 Jun 2023 22:27:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2543E428BA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 038C44010D;
+	Fri,  2 Jun 2023 22:28:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 038C44010D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s1bt8Cpmhz-V; Fri,  2 Jun 2023 22:27:57 +0000 (UTC)
+	with ESMTP id aUW8ujK20aUx; Fri,  2 Jun 2023 22:28:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EBB4428A0;
-	Fri,  2 Jun 2023 22:27:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EBB4428A0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 057011BF5DD
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 22:27:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4FCC428CA;
+	Fri,  2 Jun 2023 22:28:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4FCC428CA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 67DA91BF5DD
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 22:28:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D37B2408C0
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 22:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D37B2408C0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 419E960F3E
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 22:28:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 419E960F3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WFoeNHSg895T for <buildroot@lists.busybox.net>;
- Fri,  2 Jun 2023 22:27:52 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C79940142
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C79940142
- for <buildroot@buildroot.org>; Fri,  2 Jun 2023 22:27:52 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 785761C0002;
- Fri,  2 Jun 2023 22:27:49 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1q5DFM-00Byjh-Js; Sat, 03 Jun 2023 00:27:48 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VJxpQ4qe7CD1 for <buildroot@lists.busybox.net>;
+ Fri,  2 Jun 2023 22:28:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B8EF60EFC
+ for <buildroot@buildroot.org>; Fri,  2 Jun 2023 22:28:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B8EF60EFC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5406F86BEB; Fri,  2 Jun 2023 22:28:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Andreas Ziegler <br015@umbiko.net>
-References: <20230523085620.1529455-1-br015@umbiko.net>
-Date: Sat, 03 Jun 2023 00:27:48 +0200
-In-Reply-To: <20230523085620.1529455-1-br015@umbiko.net> (Andreas Ziegler's
- message of "Tue, 23 May 2023 10:56:20 +0200")
-Message-ID: <878rd1cxej.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/mpd: update to version 0.23.13
+To: buildroot@buildroot.org
+Date: Sat, 3 Jun 2023 00:27:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bab89b35f018a332c7d42ed6e6cb8d72fdeac4b2
+X-Git-Newrev: 502dcf46af1be88a4ac5973efc9f8eb95c461bf6
+X-Patchwork-Hint: ignore
+Message-Id: <20230602222807.5406F86BEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mpd: update to version 0.23.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,36 +56,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Andreas" == Andreas Ziegler <br015@umbiko.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=502dcf46af1be88a4ac5973efc9f8eb95c461bf6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - Bug fixes in input, archive/zzip, database/simple, decoder, 
- >   output/pipewire, process termination
- > - determine systemd unit directories via pkg-config
- > - support libfmt 10
+- Bug fixes in input, archive/zzip, database/simple, decoder,
+  output/pipewire, process termination
+- determine systemd unit directories via pkg-config
+- support libfmt 10
 
- > Change log:
- > 	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.13/NEWS
+Change log:
+	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.13/NEWS
 
- > Commit:
- > 	https://github.com/MusicPlayerDaemon/MPD/commit/9027e5c
+Commit:
+	https://github.com/MusicPlayerDaemon/MPD/commit/9027e5c
 
- > Tested on:
- > 	i386 (build, run)
- > 	Aarch64 (build, run)
+Tested on:
+	i386 (build, run)
+	Aarch64 (build, run)
 
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 2521238f64..8683b02e3b 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  b7fca62284ecc25a681ea6a07abc49200af5353be42cb5a31e3173be9d8702e7  mpd-0.23.12.tar.xz
++sha256  a96b01e6fbbb7e8ab25eb7c15d5c811c62eb19b76d143a802f51674791f1d519  mpd-0.23.13.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6c25c9b46f..d73072a439 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).12
++MPD_VERSION = $(MPD_VERSION_MAJOR).13
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
