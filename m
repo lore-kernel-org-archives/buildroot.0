@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07EE8C77B7A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 22:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67016C7EE2C
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jun 2023 22:32:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CB88428BA;
-	Fri,  2 Jun 2023 22:29:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CB88428BA
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8F1E428C1;
+	Fri,  2 Jun 2023 22:32:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8F1E428C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YBhp-X2kTU9k; Fri,  2 Jun 2023 22:29:40 +0000 (UTC)
+	with ESMTP id HIx4wlbeNSHL; Fri,  2 Jun 2023 22:32:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E11D428B4;
-	Fri,  2 Jun 2023 22:29:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E11D428B4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3040A1BF5DD
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 22:29:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0582428BA;
+	Fri,  2 Jun 2023 22:32:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0582428BA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5B31BF5DD
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 22:32:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0976160F90
- for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 22:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0976160F90
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67B7B428BA
+ for <buildroot@lists.busybox.net>; Fri,  2 Jun 2023 22:32:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67B7B428BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CSIkD1vBD4ok for <buildroot@lists.busybox.net>;
- Fri,  2 Jun 2023 22:29:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jX8hC0DJw5pV for <buildroot@lists.busybox.net>;
+ Fri,  2 Jun 2023 22:32:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C34860F3E
- for <buildroot@buildroot.org>; Fri,  2 Jun 2023 22:29:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C34860F3E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6019D408F0
+ for <buildroot@buildroot.org>; Fri,  2 Jun 2023 22:32:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6019D408F0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BE1786BF5; Fri,  2 Jun 2023 22:29:32 +0000 (UTC)
+ id 4BF3386BFE; Fri,  2 Jun 2023 22:32:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Jun 2023 00:28:29 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7e7c321ba0424123b0bf6f10a31af00607daaa8f
-X-Git-Newrev: a46ac2346558d05afe405dda3730169df4b677d2
+Date: Sat, 3 Jun 2023 00:31:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 502dcf46af1be88a4ac5973efc9f8eb95c461bf6
+X-Git-Newrev: e7d40576fad6784164b668776d81547edd8fafdd
 X-Patchwork-Hint: ignore
-Message-Id: <20230602222932.1BE1786BF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/openvpn: bump version
- to 2.6.4
+Message-Id: <20230602223200.4BF3386BFE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcurl: bump version to 8.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,78 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a46ac2346558d05afe405dda3730169df4b677d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=e7d40576fad6784164b668776d81547edd8fafdd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
-https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
-
-Added mandatory dependency to libcap-ng due to upstream commit
-https://github.com/OpenVPN/openvpn/commit/2e359a088226ab1e5ee41fbab27d38d8a8d192ac
-
-Added optional dependency to libnl due to upstream commit
-https://github.com/OpenVPN/openvpn/commit/f63c9b1edbda41491ba2e05ff706bf0233903cb6
+Changelog: https://curl.se/changes.html#8_1_2
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/Config.in    |  1 +
- package/openvpn/openvpn.hash |  2 +-
- package/openvpn/openvpn.mk   | 11 +++++++++--
- 3 files changed, 11 insertions(+), 3 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
-index cd8b1db996..5aa2386d36 100644
---- a/package/openvpn/Config.in
-+++ b/package/openvpn/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_OPENVPN
- 	bool "openvpn"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBCAP_NG
- 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	help
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 0959b7f838..8078b41157 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  08340a389905c84196b6cd750add1bc0fa2d46a1afebfd589c24120946c13e68  openvpn-2.5.7.tar.gz
-+sha256  371a2a323a99a79299b9b4caa4a31bc7b2cdff63236e68d429f3ee50e75f3dd4  openvpn-2.6.4.tar.gz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 5c602e0448..920677e170 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 12d356118b..18b2dbfd86 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.1.1.tar.xz.asc
++# https://curl.se/download/curl-8.1.2.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  08a948e061929645597c1ef7194e07b308b22084ff03fa7400b465e6c05149e5  curl-8.1.1.tar.xz
++sha256  31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6  curl-8.1.2.tar.xz
+ sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 93e839798b..2be3415cb8 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.5.7
-+OPENVPN_VERSION = 2.6.4
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
--OPENVPN_DEPENDENCIES = host-pkgconf
-+OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
- OPENVPN_LICENSE = GPL-2.0
- OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
- OPENVPN_CPE_ID_VENDOR = openvpn
-@@ -16,6 +16,13 @@ OPENVPN_CONF_OPTS = \
- 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
- OPENVPN_CONF_ENV = NETSTAT=/bin/netstat
- 
-+ifeq ($(BR2_PACKAGE_LIBNL),y)
-+OPENVPN_CONF_OPTS += --enable-dco
-+OPENVPN_DEPENDENCIES += libnl
-+else
-+OPENVPN_CONF_OPTS += --disable-dco
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
- OPENVPN_CONF_OPTS += \
- 	--enable-small \
+-LIBCURL_VERSION = 8.1.1
++LIBCURL_VERSION = 8.1.2
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
