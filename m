@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27E77C7EE25
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A27F3C7EE2E
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C9FE841A1B;
-	Fri,  9 Jun 2023 16:14:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9FE841A1B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DAA041A19;
+	Fri,  9 Jun 2023 16:14:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DAA041A19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yAWPd0ERu50a; Fri,  9 Jun 2023 16:14:40 +0000 (UTC)
+	with ESMTP id LcxgYtdsOQPg; Fri,  9 Jun 2023 16:14:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EAAC0417F1;
-	Fri,  9 Jun 2023 16:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAAC0417F1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5D8F51BF2AA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78A0B41A23;
+	Fri,  9 Jun 2023 16:14:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78A0B41A23
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C6D851BF2AA
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86D75419DF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60D8161614
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86D75419DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60D8161614
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qBc3GQhPK76m for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3FiuFPmFJFRB for <buildroot@lists.busybox.net>;
  Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B3A2C419F9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9290861619
  for <buildroot@buildroot.org>; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3A2C419F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9290861619
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B201D7F9BB; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
+ id 82BF58262C; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 4 Jun 2023 12:54:24 +0200
+Date: Sat, 3 Jun 2023 00:28:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 108bb3395b5ed2abe1c3c5a20fb9205dfc672b54
-X-Git-Newrev: fe567a81846b35b17c6989d759c2d893e46bc023
+X-Git-Oldrev: 7e7c321ba0424123b0bf6f10a31af00607daaa8f
+X-Git-Newrev: a46ac2346558d05afe405dda3730169df4b677d2
 X-Patchwork-Hint: ignore
-Message-Id: <20230609161307.B201D7F9BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/strace: bump to version 6.3
+Message-Id: <20230609161307.82BF58262C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openvpn: bump version to 2.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +62,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe567a81846b35b17c6989d759c2d893e46bc023
+commit: https://git.buildroot.net/buildroot/commit/?id=a46ac2346558d05afe405dda3730169df4b677d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Changelog:
+https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
+https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+
+Added mandatory dependency to libcap-ng due to upstream commit
+https://github.com/OpenVPN/openvpn/commit/2e359a088226ab1e5ee41fbab27d38d8a8d192ac
+
+Added optional dependency to libnl due to upstream commit
+https://github.com/OpenVPN/openvpn/commit/f63c9b1edbda41491ba2e05ff706bf0233903cb6
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/Config.in    |  1 +
+ package/openvpn/openvpn.hash |  2 +-
+ package/openvpn/openvpn.mk   | 11 +++++++++--
+ 3 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index d49abf1f16..555d074c5d 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.2/strace-6.2.tar.xz.asc
--sha256  0c7d38a449416268d3004029a220a15a77c2206a03cc88120f37f46e949177e8  strace-6.2.tar.xz
-+# https://strace.io/files/6.3/strace-6.3.tar.xz.asc
-+sha256  e17878e301506c1cc301611118ad14efee7f8bcef63b27ace5d290acce7bb731  strace-6.3.tar.xz
- sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 730a91d277..6514bfe354 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+index cd8b1db996..5aa2386d36 100644
+--- a/package/openvpn/Config.in
++++ b/package/openvpn/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_OPENVPN
+ 	bool "openvpn"
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBCAP_NG
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 0959b7f838..8078b41157 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  08340a389905c84196b6cd750add1bc0fa2d46a1afebfd589c24120946c13e68  openvpn-2.5.7.tar.gz
++sha256  371a2a323a99a79299b9b4caa4a31bc7b2cdff63236e68d429f3ee50e75f3dd4  openvpn-2.6.4.tar.gz
+ sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 5c602e0448..920677e170 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--STRACE_VERSION = 6.2
-+STRACE_VERSION = 6.3
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-OPENVPN_VERSION = 2.5.7
++OPENVPN_VERSION = 2.6.4
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+-OPENVPN_DEPENDENCIES = host-pkgconf
++OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
+ OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
+ OPENVPN_CPE_ID_VENDOR = openvpn
+@@ -16,6 +16,13 @@ OPENVPN_CONF_OPTS = \
+ 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
+ OPENVPN_CONF_ENV = NETSTAT=/bin/netstat
+ 
++ifeq ($(BR2_PACKAGE_LIBNL),y)
++OPENVPN_CONF_OPTS += --enable-dco
++OPENVPN_DEPENDENCIES += libnl
++else
++OPENVPN_CONF_OPTS += --disable-dco
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
+ OPENVPN_CONF_OPTS += \
+ 	--enable-small \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
