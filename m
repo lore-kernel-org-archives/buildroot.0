@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AB5CC77B7A
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jun 2023 19:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9098C77B73
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jun 2023 19:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB29940917;
-	Sat,  3 Jun 2023 19:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB29940917
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96C6741E82;
+	Sat,  3 Jun 2023 19:53:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96C6741E82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QTY0lyywZnPa; Sat,  3 Jun 2023 19:53:25 +0000 (UTC)
+	with ESMTP id PJxByquPWE3u; Sat,  3 Jun 2023 19:53:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 635D941E3F;
-	Sat,  3 Jun 2023 19:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 635D941E3F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE1681BF487
- for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 19:53:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60B4641E3E;
+	Sat,  3 Jun 2023 19:53:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60B4641E3E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 825F81BF487
+ for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 19:53:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B402160F0F
- for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 19:53:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B402160F0F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FFF041E3C
+ for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 19:53:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FFF041E3C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iQYxtrApCOQh for <buildroot@lists.busybox.net>;
- Sat,  3 Jun 2023 19:53:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iK9H2zUmLLo9 for <buildroot@lists.busybox.net>;
+ Sat,  3 Jun 2023 19:53:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD9F460EF6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0913E408A7
  for <buildroot@buildroot.org>; Sat,  3 Jun 2023 19:53:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD9F460EF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0913E408A7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B627A8697E; Sat,  3 Jun 2023 19:53:19 +0000 (UTC)
+ id C8E458698D; Sat,  3 Jun 2023 19:53:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Jun 2023 21:44:04 +0200
+Date: Sat, 3 Jun 2023 21:48:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11db2d6fde313fc832baef38a25b4a24c31375ce
-X-Git-Newrev: f3b46aa2aa5636a5d6d578b6960dc380740fd775
+X-Git-Oldrev: c9b2e252ca2eb76fc49eb7aafe0dfbc674b2c743
+X-Git-Newrev: 579f5a9782ee8694f4939c6a4f3efe51b476b487
 X-Patchwork-Hint: ignore
-Message-Id: <20230603195319.B627A8697E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vdr: Fix patch for uclibc build
+Message-Id: <20230603195319.C8E458698D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vdr: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3b46aa2aa5636a5d6d578b6960dc380740fd775
+commit: https://git.buildroot.net/buildroot/commit/?id=579f5a9782ee8694f4939c6a4f3efe51b476b487
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uClibc-ng 1.0.42 added support for getloadavg:
-https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=ad3a130dad88ad7a59dcd965b0cf9bd0d713595e
-
-leading to build errors of the vdr package:
-
-skinlcars.c:1105:12: error: 'int getloadavg(double*, int)' was declared 'extern' and later 'static' [-fpermissive]
-
-since its version bump in buildroot:
-https://git.busybox.net/buildroot/commit/?id=61ae6add9e5d4761536fa4ff24150d5f8f82a61d
-
 Fixes:
-http://autobuild.buildroot.net/results/d3a/d3a65044fabdafa1b6d75a508eae006a2cfebdc0/
+http://autobuild.buildroot.net/results/bdacedd845a2bf4db9826f0d3868f6b48d456d2a/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/vdr/0001-getloadavg.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/vdr/0005-Fix-musl-build.patch | 37 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/vdr/0001-getloadavg.patch b/package/vdr/0001-getloadavg.patch
-index 9e6316e284..f6ba84c9e5 100644
---- a/package/vdr/0001-getloadavg.patch
-+++ b/package/vdr/0001-getloadavg.patch
-@@ -14,7 +14,7 @@ diff -uwNr vdr-2.3.1.org/skinlcars.c vdr-2.3.1/skinlcars.c
-  
- +/* uclibc and dietlibc do not have this junk -ReneR */
- +#if defined (__UCLIBC__) || defined (__dietlibc__)
--+static int getloadavg (double loadavg[], int nelem)
-++int getloadavg (double loadavg[], int nelem)
- +{
- +  int fd;
- +
+diff --git a/package/vdr/0005-Fix-musl-build.patch b/package/vdr/0005-Fix-musl-build.patch
+new file mode 100644
+index 0000000000..390e78eab5
+--- /dev/null
++++ b/package/vdr/0005-Fix-musl-build.patch
+@@ -0,0 +1,37 @@
++From 075472ec580e03cc89971f0c118cb363776a304d Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Tue, 16 May 2023 20:22:12 +0200
++Subject: [PATCH] Fix musl build
++
++malloc_trim is a GNU extension and therefore not present in non-glibc C
++libraries such as musl. Wrapping this in an ifdef fixes musl builds.
++
++Upstream: https://www.linuxtv.org/pipermail/vdr/2023-May/029742.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ vdr.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/vdr.c b/vdr.c
++index 0f426e61..bc4902de 100644
++--- a/vdr.c
+++++ b/vdr.c
++@@ -1588,12 +1588,14 @@ int main(int argc, char *argv[])
++               cSchedules::Cleanup();
++               // Plugins housekeeping:
++               PluginManager.Housekeeping();
+++#if defined(__GLIBC__)
++               // Memory cleanup:
++               static time_t LastMemoryCleanup = 0;
++               if ((Now - LastMemoryCleanup) > MEMCLEANUPDELTA) {
++                  malloc_trim(0);
++                  LastMemoryCleanup = Now;
++                  }
+++#endif
++               }
++            }
++ 
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
