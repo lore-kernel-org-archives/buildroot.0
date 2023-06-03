@@ -1,91 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 093C9C77B73
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jun 2023 21:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C8D2C77B7A
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jun 2023 22:16:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45F4B83EE1;
-	Sat,  3 Jun 2023 21:06:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45F4B83EE1
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB71F41E56;
+	Sat,  3 Jun 2023 22:16:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB71F41E56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nsEhdMJmZ-vM; Sat,  3 Jun 2023 21:06:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RgoHK7UjY0Ud; Sat,  3 Jun 2023 22:16:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4307983EB3;
-	Sat,  3 Jun 2023 21:06:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4307983EB3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 861691BF309
- for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 21:06:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FBC541E53;
+	Sat,  3 Jun 2023 22:16:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FBC541E53
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 28D291BF36F
+ for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 22:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5FB8B60F93
- for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 21:06:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FB8B60F93
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F6E7405EB
+ for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 22:16:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F6E7405EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5wL5O6DOnZop for <buildroot@lists.busybox.net>;
- Sat,  3 Jun 2023 21:06:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z6C7Mwtt5eIF for <buildroot@lists.busybox.net>;
+ Sat,  3 Jun 2023 22:16:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3137760F0F
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3137760F0F
- for <buildroot@buildroot.org>; Sat,  3 Jun 2023 21:06:48 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-3f7353993cbso3203075e9.0
- for <buildroot@buildroot.org>; Sat, 03 Jun 2023 14:06:47 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3677404C2
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D3677404C2
+ for <buildroot@buildroot.org>; Sat,  3 Jun 2023 22:16:18 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-96f850b32caso546288766b.3
+ for <buildroot@buildroot.org>; Sat, 03 Jun 2023 15:16:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685826406; x=1688418406;
+ d=1e100.net; s=20221208; t=1685830577; x=1688422577;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=3Xr94jBI431THhbTY/GGH6ULSPPNaeS923Rb6A/4uJM=;
- b=cJMSi0ootFv1ZkV8fX5rNLFDGPLF92OsVoVwzAE5ik/GD573J75oRk4CiCxohPujHO
- DiKoM3nOwyYc31GNz6vmxyIUyH41iETV6RMhb4Oi2asSFeqeWnF9hg0i+/o3OOCm4AcO
- Wg7zT0XqugjDQoH01oqL9afKqPF9byOW4atELp0Tcm4hldpBPcqEcJgAhIYVM3QFEo8D
- W8B80+BoVjvyNNjbCf/KVEDESgwRys9yBHIOoJTaCMmY8tWJrtrumSuWWnqqyqQj94Qm
- 4e/SIK4Xt+Bc8FozpNXVVcr23MYIyMmjVEHKZEFd8cNKKIR3uUxcrIjAlJ34/t0U7/A0
- aocg==
-X-Gm-Message-State: AC+VfDxqc5PyGj0RgSIoXmSoUwZceUmM6xCu4dR+R+gbJ6e3qJEHmcpG
- TsecFoSh9i48TMlmmkCDk+yOUIU7Pew=
-X-Google-Smtp-Source: ACHHUZ6bzGkr27yjzdrgbVHJhGBqN8G5jSa15jndF3frlrOOnVQcBcJpC3YJJq8Mr8uzC+eYxy9okw==
-X-Received: by 2002:a1c:e901:0:b0:3f1:731e:cdb1 with SMTP id
- q1-20020a1ce901000000b003f1731ecdb1mr5036852wmc.6.1685826405978; 
- Sat, 03 Jun 2023 14:06:45 -0700 (PDT)
+ bh=WT52fB60/yYi1XBzXD/PE0oqV8P9kAHpkySK7XbeXJg=;
+ b=PgH2XfJoiVJRLpdxEM4m47tz2pvqn8B+B0VY7kZw57XnnF/6kjlQ6xC4a8mvsC90iT
+ W/oZy3X2JWB+28QW0r3DETbFHMjSRXvKZEQjRzyHAbICWtb5bXEfqBlOrkowTf4SqDXC
+ yeWqhn+5uswx7WJKrMR7fnChNZF63yPuYwYHlVq5V22OtmY4kXhKigEV0K+0r5HhZNDM
+ yk2qBUQ1pxowIJZ7GJZXMue9Rwoc7Ga8LXr57TlXw6AwH7VMVHqz/nPiGxju6xrWTnGp
+ LLBYu9uwes5OHndw1xlvMdBZIkwlPKpOadBOQgPNAd92SMQno/oeipiO/KouwPgq19Sf
+ /2kA==
+X-Gm-Message-State: AC+VfDx1Wdb2q2ZxvpK+QtMCu9GofRRNu5pjeBetWBQeL8VnLES+VYSw
+ dBs2L1CG/DEuLxpO/8c/jMxxcSkRSUk=
+X-Google-Smtp-Source: ACHHUZ73rZX9BOB9x3s403goiMOaz2unzzxrGjGKMFpPPYiglkm7KxiXrLbkoEYiHR+Uly+WHUYyyA==
+X-Received: by 2002:a17:907:168a:b0:973:d846:cd5d with SMTP id
+ hc10-20020a170907168a00b00973d846cd5dmr2759134ejc.74.1685830576788; 
+ Sat, 03 Jun 2023 15:16:16 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- n11-20020a7bcbcb000000b003f60d0eef36sm9600699wmi.48.2023.06.03.14.06.44
+ d6-20020a5d5386000000b00307c46f4f08sm5501133wrv.79.2023.06.03.15.16.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Jun 2023 14:06:45 -0700 (PDT)
+ Sat, 03 Jun 2023 15:16:16 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  3 Jun 2023 23:06:42 +0200
-Message-Id: <20230603210642.264930-1-romain.naour@gmail.com>
+Date: Sun,  4 Jun 2023 00:16:12 +0200
+Message-Id: <20230603221612.292994-1-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685826406; x=1688418406;
+ d=gmail.com; s=20221208; t=1685830577; x=1688422577;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3Xr94jBI431THhbTY/GGH6ULSPPNaeS923Rb6A/4uJM=;
- b=JSzYlm1fKU+o1TRUWznmVizTMsl84/1wZfdHeBlEf7NpL/qkyQfR5iNfA9Vu8tS/NF
- JMiR1zBEJ/AmB60gYXR26d4z13Ivpk1bk1au3xMP0ZKhWf9aXf4F4wHcQRJZlHmw6qoq
- nRFYUWGqVY34dLo7T0rjuipdf6NkncHVVl6TDvpYrP3TRWvaK9vjDNv5NXB3ArxYu8RM
- nZno3GMifbJCOyejKU2HH3pkdhkAkIGU8UByn4E+vCiw7khy49sZuH3dsyvb5IpFW1je
- e4ghGvu3Lln4tRsY3WV45xh+VHmOYRTPJHyq4gForXe30JanLsOE/FQDI5Q++PspAno8
- Q8/A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=WT52fB60/yYi1XBzXD/PE0oqV8P9kAHpkySK7XbeXJg=;
+ b=pInJdjmLL6ZsxFaTq0moN0o6HscdEElstB4B79e/3KZfF0dS5nChvcdlslgR9BY8p6
+ xuS2A1X/PMhfESajohuBgvDap8bpeGqycEnNkMDNMcp01s0msmziPcj0+Dfj9UeZYC/l
+ m6+RQM1cqEylv9L8FYYuAuMjkT/w0U3H64Ya5Nl1HVLM57omK31iaV1zVgTogyKFQ3he
+ 0yo/vgX6WLaKgY2YO5PxIhwIO2HGe/f0YhTRq7IJsHsHZzDVg6TSJA4QYmUyOpPF84Fy
+ JmtMjcZ6O4gVz9rfcQJU10hzPgEoc4ZDbPDbw5lIIhhU0zWGZNHoj3iFGBaHlOLN6XhT
+ +9Gw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=JSzYlm1f
-Subject: [Buildroot] [PATCH] package/perl-http-message: add missing reverse
- dependency on perl-clone
+ header.a=rsa-sha256 header.s=20221208 header.b=pInJdjmL
+Subject: [Buildroot] [RFC] support/dependencies: introduce
+ BR2_HOST_CMAKE_AT_LEAST
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,134 +97,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit [1] added dependency on perl-clone but forgot to propagate
-the reverse dependency on !BR2_STATIC_LIBS.
+libjxl requires cmake 3.19 since version v0.7 due to the
+new behavior of cmake [1].
+
+-- Configuring done
+CMake Error at cmake/FindLCMS2.cmake:40 (add_library):
+  INTERFACE_LIBRARY targets may only have whitelisted properties.  The
+  property "INCLUDE_DIRECTORIES" is not allowed.
+Call Stack (most recent call first):
+  third_party/CMakeLists.txt:114 (find_package)
+
+The portability issue has already been reported upstream [2].
+
+host-cmake is know to take a long time to build and we want
+to avoid bumping BR2_CMAKE_VERSION_MIN only for one package.
+As discussed on the mailing list [3] introduce
+BR2_HOST_CMAKE_AT_LEAST_X_Y selected by package that
+requires a higher cmake version than the one provided by
+the host.
 
 Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819095
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_PERL_CLONE
-  Depends on [n]: BR2_PACKAGE_PERL [=y] && !BR2_STATIC_LIBS [=y]
-  Selected by [y]:
-  - BR2_PACKAGE_PERL_HTTP_MESSAGE [=y] && BR2_PACKAGE_PERL [=y]
-
-http://autobuild.buildroot.org/results/5d5/5d503aaa94b56523c684be7946123921747ebf52
-
-[1] 742258fec06df18782e4bd75b00ca530120312cb
+[1] https://gitlab.kitware.com/cmake/cmake/-/commit/afb998704e67d3d3ce5b24c112cb06e770fca78d
+[2] https://github.com/libjxl/libjxl/issues/1425
+[3] http://lists.busybox.net/pipermail/buildroot/2023-June/668287.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-While looking at perl-clone build, I noticed that "-shared" is provided
-to lddlflags by the Perl package infrastructure:
+ package/cmake/Config.in.host             | 31 ++++++++++++++++++++++++
+ package/cmake/cmake.mk                   |  1 +
+ package/libjxl/Config.in                 |  1 +
+ support/dependencies/check-host-cmake.mk | 12 +++++----
+ 4 files changed, 40 insertions(+), 5 deletions(-)
 
-  --config lddlflags="-shared $$(TARGET_LDFLAGS)"
-
-It would means that any Perl package in Buildroot requires a dependency
-on !BR2_STATIC_LIBS.
-
-Currently some Perl packages doesn't requires !BR2_STATIC_LIBS since they
-simply copy some .pm files. But as soon as something is built, it break
-for static only builds.
----
- package/perl-http-cookies/Config.in   | 4 ++++
- package/perl-http-daemon/Config.in    | 4 ++++
- package/perl-http-message/Config.in   | 4 ++++
- package/perl-http-negotiate/Config.in | 4 ++++
- package/perl-plack/Config.in          | 4 ++++
- 5 files changed, 20 insertions(+)
-
-diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
-index 3ca461bf83..147d9521bb 100644
---- a/package/perl-http-cookies/Config.in
-+++ b/package/perl-http-cookies/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_PERL_HTTP_COOKIES
- 	bool "perl-http-cookies"
-+	depends on !BR2_STATIC_LIBS # perl-http-message -> perl-clone
- 	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
- 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
- 	help
- 	  HTTP cookie jars.
+diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+index b2e210ee2c..fe5640088e 100644
+--- a/package/cmake/Config.in.host
++++ b/package/cmake/Config.in.host
+@@ -9,3 +9,34 @@ config BR2_PACKAGE_HOST_CMAKE
+ 	  the compiler environment of your choice.
  
- 	  https://github.com/libwww-perl/HTTP-Cookies
+ 	  http://www.cmake.org/
 +
-+comment "perl-http-cookies needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-http-daemon/Config.in b/package/perl-http-daemon/Config.in
-index 0c7ffe723a..4d6277a799 100644
---- a/package/perl-http-daemon/Config.in
-+++ b/package/perl-http-daemon/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PERL_HTTP_DAEMON
- 	bool "perl-http-daemon"
-+	depends on !BR2_STATIC_LIBS # perl-http-message -> perl-clone
- 	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
- 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
- 	select BR2_PACKAGE_PERL_LWP_MEDIATYPES # runtime
-@@ -7,3 +8,6 @@ config BR2_PACKAGE_PERL_HTTP_DAEMON
- 	  A simple http server class.
++# The latest version in this list must match the one provided by host-cmake.
++config BR2_HOST_CMAKE_AT_LEAST_3_18 # Debian bullseye provide cmake 3.18.x
++	bool
++	default y
++
++config BR2_HOST_CMAKE_AT_LEAST_3_19
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_18
++
++config BR2_HOST_CMAKE_AT_LEAST_3_20
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_19
++
++config BR2_HOST_CMAKE_AT_LEAST_3_21
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_20
++
++config BR2_HOST_CMAKE_AT_LEAST_3_22
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_21
++
++# This order guarantees that the highest version is set, as kconfig
++# stops affecting a value on the first matching default.
++config BR2_HOST_CMAKE_AT_LEAST
++	string
++	default "3.22"	if BR2_HOST_CMAKE_AT_LEAST_3_22
++	default "3.21"	if BR2_HOST_CMAKE_AT_LEAST_3_21
++	default "3.20"	if BR2_HOST_CMAKE_AT_LEAST_3_20
++	default "3.19"	if BR2_HOST_CMAKE_AT_LEAST_3_19
++	default "3.18"	if BR2_HOST_CMAKE_AT_LEAST_3_18
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index dc92c8bb4e..b99877696a 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/libwww-perl/HTTP-Daemon
-+
-+comment "perl-http-daemon needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-http-message/Config.in b/package/perl-http-message/Config.in
-index 3c6849487a..e2cb42f941 100644
---- a/package/perl-http-message/Config.in
-+++ b/package/perl-http-message/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PERL_HTTP_MESSAGE
- 	bool "perl-http-message"
-+	depends on !BR2_STATIC_LIBS # perl-clone
- 	select BR2_PACKAGE_PERL_CLONE # runtime
- 	select BR2_PACKAGE_PERL_ENCODE_LOCALE # runtime
- 	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
-@@ -10,3 +11,6 @@ config BR2_PACKAGE_PERL_HTTP_MESSAGE
- 	  HTTP style message (base class).
++# When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+ CMAKE_VERSION_MAJOR = 3.22
+ CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+diff --git a/package/libjxl/Config.in b/package/libjxl/Config.in
+index da04b89f9b..923560298f 100644
+--- a/package/libjxl/Config.in
++++ b/package/libjxl/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBJXL
+ 	# libjxl fail to link statically due to libatomic issue
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_81426
++	select BR2_HOST_CMAKE_AT_LEAST_3_19
+ 	select BR2_PACKAGE_BROTLI
+ 	select BR2_PACKAGE_HIGHWAY
+ 	select BR2_PACKAGE_LCMS2
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+index 5760e4ded1..e367690319 100644
+--- a/support/dependencies/check-host-cmake.mk
++++ b/support/dependencies/check-host-cmake.mk
+@@ -1,9 +1,11 @@
+-# Set this to either 3.18 or higher, depending on the highest minimum
+-# version required by any of the packages bundled in Buildroot. If a
+-# package is bumped or a new one added, and it requires a higher
+-# version, our cmake infra will catch it and build its own.
++# The cmake minimum version is set to either 3.18 or higher,
++# depending on the highest minimum version required by any
++# of the packages bundled in Buildroot. If a package is
++# bumped or a new one added, and it requires a higher
++# cmake version than the one provided by the host, our
++# cmake infra will catch it and build its own.
+ #
+-BR2_CMAKE_VERSION_MIN = 3.18
++BR2_CMAKE_VERSION_MIN = $(BR2_HOST_CMAKE_AT_LEAST)
  
- 	  https://github.com/libwww-perl/HTTP-Message
-+
-+comment "perl-http-message needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-http-negotiate/Config.in b/package/perl-http-negotiate/Config.in
-index c519ede2df..2e82ce5ad2 100644
---- a/package/perl-http-negotiate/Config.in
-+++ b/package/perl-http-negotiate/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_PERL_HTTP_NEGOTIATE
- 	bool "perl-http-negotiate"
-+	depends on !BR2_STATIC_LIBS # perl-http-message -> perl-clone
- 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
- 	help
- 	  choose a variant to serve.
- 
- 	  https://metacpan.org/release/HTTP-Negotiate
-+
-+comment "perl-http-negotiate needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-plack/Config.in b/package/perl-plack/Config.in
-index c81ac4a444..420f8257e5 100644
---- a/package/perl-plack/Config.in
-+++ b/package/perl-plack/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PERL_PLACK
- 	bool "perl-plack"
-+	depends on !BR2_STATIC_LIBS # perl-http-message -> perl-clone
- 	select BR2_PACKAGE_PERL_APACHE_LOGFORMAT_COMPILER # runtime
- 	select BR2_PACKAGE_PERL_COOKIE_BAKER # runtime
- 	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE # runtime
-@@ -19,3 +20,6 @@ config BR2_PACKAGE_PERL_PLACK
- 	  toolkit).
- 
- 	  https://github.com/plack/Plack
-+
-+comment "perl-plack needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+ BR2_CMAKE_CANDIDATES ?= cmake cmake3
+ BR2_CMAKE ?= $(call suitable-host-package,cmake,\
 -- 
 2.34.3
 
