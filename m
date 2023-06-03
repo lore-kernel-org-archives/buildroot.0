@@ -4,92 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E79AFC7EE24
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jun 2023 20:41:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 641B2C77B73
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jun 2023 20:49:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6CB8983D39;
-	Sat,  3 Jun 2023 20:41:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CB8983D39
+	by smtp1.osuosl.org (Postfix) with ESMTP id F394783CDE;
+	Sat,  3 Jun 2023 20:49:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F394783CDE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pmBTH4mD94E3; Sat,  3 Jun 2023 20:41:35 +0000 (UTC)
+	with ESMTP id sFW2vyTaJIx7; Sat,  3 Jun 2023 20:49:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DD8983D0F;
-	Sat,  3 Jun 2023 20:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DD8983D0F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B55283B23;
+	Sat,  3 Jun 2023 20:49:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B55283B23
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E302D1BF3DF
- for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 20:41:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4EAF91BF3DF
+ for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 20:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC8CA83D0F
- for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 20:41:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC8CA83D0F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2277983B23
+ for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 20:49:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2277983B23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1x7-OojTmC1q for <buildroot@lists.busybox.net>;
- Sat,  3 Jun 2023 20:41:30 +0000 (UTC)
+ with ESMTP id GcnUyB1mNRGe for <buildroot@lists.busybox.net>;
+ Sat,  3 Jun 2023 20:49:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 755C683CE1
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 755C683CE1
- for <buildroot@buildroot.org>; Sat,  3 Jun 2023 20:41:30 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-5148f299105so7132198a12.1
- for <buildroot@buildroot.org>; Sat, 03 Jun 2023 13:41:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FA7583B03
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1FA7583B03
+ for <buildroot@buildroot.org>; Sat,  3 Jun 2023 20:49:18 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id
+ a640c23a62f3a-96fab30d1e1so716016666b.0
+ for <buildroot@buildroot.org>; Sat, 03 Jun 2023 13:49:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685824888; x=1688416888;
+ d=1e100.net; s=20221208; t=1685825356; x=1688417356;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=FH3TIBp0hwATbHV/xbh7kkou6zrVc1NK1mx6QUWPyDI=;
- b=CCj8RURH8YyjLEoU3PjvMlAk0fIhavjh8Yv08f6l209kmMiQSu5fgIG6NquA7X+vam
- 7r84QhrsVtJ/YR5ME+M0x1Lg81RWGn7JocVycJKlJkPyEZNIv+g8vzfnna22KS8Zm2rM
- YIaHzLW9pf5b9sjDK0dalRTh28GTkP4TQt/JEPjmbmtEySxwSwHDmCA3WDmY1mg3WGlS
- 6+PD91eWBj4NDF+Fbb8vzmiKD8zGrkz2E5WBzPZe7rNAr/t+nh5LC+/2WCc8gIelnZxJ
- 5DCKVqmdW7axVDvrKovBn3jNwydegD57PFnOUQUUgNPkSca8Ej/cHqmHnjYpqxe5Tdia
- Q2Ug==
-X-Gm-Message-State: AC+VfDxhO/gcC+ObSltUntpfNaUn7hRB79nucHvyaKNjDNegFkUFfV10
- PFgVSFyiMFoFaFVgIz4BXrZy2w==
-X-Google-Smtp-Source: ACHHUZ6/xE9svUwyl0StDy2Z0l9npNaUSTr9xqHUDxY6nQu2oOT0hKQuMf7RenwslC4QaZw63bKc9Q==
-X-Received: by 2002:aa7:c616:0:b0:50c:161b:9154 with SMTP id
- h22-20020aa7c616000000b0050c161b9154mr6692999edq.11.1685824888470; 
- Sat, 03 Jun 2023 13:41:28 -0700 (PDT)
+ bh=QGvVJnhLxPsfWKbm5EsNuZwnNifAoD4uX1PqJEEUIIk=;
+ b=XAxGDWufsni3676l88ABDSf7N/sevCkVTRLKw4kmNzaBvFfezPAmREw5ELrg/w83y3
+ 7G7+qEuRAf7erytdd1PxxPxW7XDTfKw4t/h/0yYtOwzYIjgsKRiorX//cjnlrwuif/VZ
+ GUOZ0TscPqokCvoYK1W5pCiEsOjy6758hnuBc6X1rhp+Q3wbW527R37mUBKCgTq9Q6Ic
+ kI95JCGz2o+/r8gK8+jVbFYhHi9PfylIzw3c/+8kiq0+/FSxRQntI66nwc6LCwoATgxg
+ GFukqBgo024wb/hgiZhQZmYNZw/uNXdVcYrW/VS2E5Y44SElxqekpS7KLo70x+wJUovi
+ mkvw==
+X-Gm-Message-State: AC+VfDwXRzWObXkASoMtaPo7CuBWtrfSLCMjkWCp39uA+cAOY4iVjH/d
+ 3m9Y7fcRkeCeQfgw2ITskECzug==
+X-Google-Smtp-Source: ACHHUZ5cEaZ7zBHivH96IcrxX9HhDir5Jf9nq5QRS6yU6o60xCT3Tx75kTiOVmUes5TEBaWFXfZUZQ==
+X-Received: by 2002:a17:907:72cb:b0:966:1bf2:2af5 with SMTP id
+ du11-20020a17090772cb00b009661bf22af5mr1928895ejc.22.1685825356259; 
+ Sat, 03 Jun 2023 13:49:16 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- k6-20020a05640212c600b005149c7b1f49sm2073247edx.64.2023.06.03.13.41.27
+ k7-20020a170906128700b0094f7744d135sm2304260ejb.78.2023.06.03.13.49.14
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 03 Jun 2023 13:41:27 -0700 (PDT)
-Message-ID: <57ffa030-89c0-cb57-b7b2-cc8ffa452d01@mind.be>
-Date: Sat, 3 Jun 2023 22:41:25 +0200
+ Sat, 03 Jun 2023 13:49:15 -0700 (PDT)
+Message-ID: <69492cb3-b861-df1d-fc1d-314f93b076d9@mind.be>
+Date: Sat, 3 Jun 2023 22:49:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
 Content-Language: en-GB
-To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
-References: <20230510202434.13975-1-ps.report@gmx.net>
-In-Reply-To: <20230510202434.13975-1-ps.report@gmx.net>
+To: Laurent Vivier <laurent@vivier.eu>, buildroot@buildroot.org
+References: <20230421185003.1221000-1-laurent@vivier.eu>
+ <20230421185003.1221000-2-laurent@vivier.eu>
+In-Reply-To: <20230421185003.1221000-2-laurent@vivier.eu>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1685824888; x=1688416888;
+ d=mind.be; s=google; t=1685825356; x=1688417356;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=FH3TIBp0hwATbHV/xbh7kkou6zrVc1NK1mx6QUWPyDI=;
- b=PWciMFb3oO3ARIEfH1CyytPtlSuhibOQYXr/1OANNWAbp0AzHfNKWX2V6lP5sDE6g6
- 4/JSp6K5+UTDk9dMa1ABeF6/2B4yL6YIWhcLRhpOsla+axai9S437Zh2BTTT9jH46sLn
- gRnB40lPqjcf6S6ldEHpYqlbE4Ek7o3d9HvNo7A/xp/UhNtU0ClxD3UvOAXpl/88PVxC
- L9//PcCPSh4DNGWD1MlqtKrkriAgVSKXyrKCzHzIw0BkuySFfrroQYcSJYIrTprvj6UJ
- QO/gjFADGQ5zZNFAzcrlpkPkWnsHhYj/E42PEAuz1Fj6FN0AwlZYqb7CmS2hXk1CgItn
- Uc+A==
+ bh=QGvVJnhLxPsfWKbm5EsNuZwnNifAoD4uX1PqJEEUIIk=;
+ b=id44PZNM7BJoLLW4WwQu2XOr+1K7ktE9CosdyaM2ajfMHWydopTO8SXVEtJ5KLyqGG
+ czHpGW2kEBeG83ecBeAPwqEGiJabASJgqXaCK2MTND4CvF2lEzye/hInpnb0zDQDXIGh
+ D5KJqbLO8ILAb18SZiNmxopfqFCtCSi0yU0FfUUUD4EYPuZFU8wXYHCj/wIJ5DhKeIXF
+ Upr4RKSkrS2dZ4fqDoSSTvjepFD5le7a0y0RVfAVca7mWGNt3t19DRtF48oUjEPzV18/
+ QwN6eRIubmTuv9bPdJs0dzyqOgcvqFjMvJKxzSw/fKJTRHt+OIvT0jmqpShUpLKl58Aw
+ ispg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=PWciMFb3
-Subject: Re: [Buildroot] [RFC v1] package/coreutils: needs toolchain headers
- >= 5.6 (32-bit system with 64-bit time_t)
+ header.a=rsa-sha256 header.s=google header.b=id44PZNM
+Subject: Re: [Buildroot] [PATCH v11 1/5] kexec: fix sys/random.h with uclibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,9 +103,9 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
+ =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -113,109 +113,68 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/05/2023 22:24, Peter Seiderer wrote:
-> Add coreutils dependency on toolchain headers >= 5.6 for 32-bit system to
-> gain access to 64-bit time_t.
-> 
-> Fixes:
-> 
->    http://autobuild.buildroot.net/results/a5bac0aaadea43fcedf3a51b070e605e3906c237
-> 
->    checking for .../host/bin/arm-none-linux-gnueabi-gcc -std=gnu11 option to enable timestamps after Jan 2038... support not detected
->    configure: error: in '.../build/coreutils-9.3':
->    configure: error: support for timestamps after Jan 2038 is required
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
->    - Config.in comment section for package/glslsandbox-player and
->      package/opkg-utils missing
->    - Not sure if this is sufficient (e.g. possible libc system and/or
->      version dependency), other possible solution would be something
->      like introducing BR2_TOOLCHAIN_HAS_64_BIT_TIME_T
+On 21/04/2023 20:49, Laurent Vivier wrote:
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
-  The current situation of 64-bit time_t is:
+  Applied to master, thanks.
 
-	depends on BR2_ARCH_IS_64 || \
-		BR2_TOOLCHAIN_USES_MUSL || \
-		(BR2_TOOLCHAIN_USES_GLIBC && BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6)
-i.e.:
-  - 64-bit platforms always have 64-bit time.
-  - musl AFAIK always has 64-bit time in the headers (not sure what happens in 
-the actual syscalls).
-  - uClibc never has 64-bit time.
-  - glibc has 64-bit time with sufficiently recent headers.
+  I applied v12, but for some reason I don't have that version in my inbox, so I 
+reply to v11.
 
-  It's actually a bit more complicated still, because on some architectures 
-(riscv for example), there's always 64-bit time even if it's a 32-bit 
-architecture. So on those, even uClibc has 64-bit time.
+  I also added a recent autobuild failure in a Fixes tag.
 
-  Because of all this complexity, I think it's better to introduce something 
-like BR2_TOOLCHAIN_HAS_TIME_T_64 that encodes those conditions. It would be a 
-blind symbol that defaults y for 64-bit architectures and is selected by the 
-respective arch or toolchain symbols. It's a bit complicated that way, but gives 
-us most flexibility to get all the conditions right. For instance, in external 
-toolchains it would only be selected if glibc is sufficiently recent.
-
-  Therefore, I've marked this patch as Changes Requested. But I also added the 
-other matinainters in Cc because they may have different opinions.
+Fixes: 
+http://autobuild.buildroot.net/results/b5a/b5a46cc164cb0fe6bf37dacb917b3664d2710a4a
 
   Regards,
   Arnout
 
 > ---
->   package/coreutils/Config.in          | 6 ++++--
->   package/glslsandbox-player/Config.in | 1 +
->   package/opkg-utils/Config.in         | 2 ++
->   3 files changed, 7 insertions(+), 2 deletions(-)
+>   ...1-m68k-fix-getrandom-use-with-uclibc.patch | 35 +++++++++++++++++++
+>   1 file changed, 35 insertions(+)
+>   create mode 100644 package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch
 > 
-> diff --git a/package/coreutils/Config.in b/package/coreutils/Config.in
-> index 705013bae0..968c7a97cd 100644
-> --- a/package/coreutils/Config.in
-> +++ b/package/coreutils/Config.in
-> @@ -1,5 +1,6 @@
->   config BR2_PACKAGE_COREUTILS
->   	bool "coreutils"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6 || BR2_ARCH_IS_64
->   	depends on BR2_USE_WCHAR
->   	depends on BR2_USE_MMU # fork()
->   	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> @@ -33,7 +34,8 @@ comment "coreutils individual binaries need a toolchain w/ dynamic library"
->   
->   endif
->   
-> -comment "coreutils needs a toolchain w/ wchar"
-> +comment "coreutils needs a toolchain w/ headers >= 5.6 (32-bit only), wchar"
->   	depends on BR2_USE_MMU
-> -	depends on !BR2_USE_WCHAR
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6 && !BR2_ARCH_IS_64 || \
-> +		!BR2_USE_WCHAR
->   	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
-> index 530c158fc3..78d6dd9a6f 100644
-> --- a/package/glslsandbox-player/Config.in
-> +++ b/package/glslsandbox-player/Config.in
-> @@ -32,6 +32,7 @@ config BR2_PACKAGE_GLSLSANDBOX_PLAYER_SCRIPTS
->   	bool "Install scripts"
->   	depends on !BR2_STATIC_LIBS # python3
->   	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6 || BR2_ARCH_IS_64 # coreutls
->   	depends on BR2_USE_MMU # bash, python3
->   	depends on BR2_USE_WCHAR # python3
->   	select BR2_PACKAGE_BASH # runtime
-> diff --git a/package/opkg-utils/Config.in b/package/opkg-utils/Config.in
-> index 2973055baf..cdefa193b7 100644
-> --- a/package/opkg-utils/Config.in
-> +++ b/package/opkg-utils/Config.in
-> @@ -3,6 +3,8 @@ config BR2_PACKAGE_OPKG_UTILS
->   	depends on !BR2_nios2 || BR2_PACKAGE_BUSYBOX # binutils
->   	depends on BR2_USE_MMU # bash, python3
->   	depends on BR2_USE_WCHAR # python3
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6 || BR2_ARCH_IS_64 || \
-> +		BR2_PACKAGE_BUSYBOX # coreutils
->   	depends on BR2_TOOLCHAIN_HAS_THREADS # python3 <- libffi
->   	depends on !BR2_STATIC_LIBS # python3
->   	select BR2_PACKAGE_BINUTILS if !BR2_PACKAGE_BUSYBOX # runtime
+> diff --git a/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch b/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch
+> new file mode 100644
+> index 000000000000..d2fc3bc88641
+> --- /dev/null
+> +++ b/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch
+> @@ -0,0 +1,35 @@
+> +From 491439a5c55b18dce96b522f3a603faaf1908ede Mon Sep 17 00:00:00 2001
+> +From: Laurent Vivier <laurent@vivier.eu>
+> +Date: Fri, 21 Apr 2023 18:22:07 +0200
+> +Subject: [PATCH] m68k: fix getrandom() use with uclibc
+> +
+> +With uclibc, getrandom() is only defined with _GNU_SOURCE, fix that:
+> +
+> +kexec/arch/m68k/bootinfo.c: In function 'bootinfo_add_rng_seed':
+> +kexec/arch/m68k/bootinfo.c:231:13: warning: implicit declaration of function 'getrandom'; did you mean 'srandom'? [-Wimplicit-function-declaration]
+> +  231 |         if (getrandom(bi->rng_seed.data, RNG_SEED_LEN, GRND_NONBLOCK) != RNG_SEED_LEN) {
+> +      |             ^~~~~~~~~
+> +      |             srandom
+> +kexec/arch/m68k/bootinfo.c:231:56: error: 'GRND_NONBLOCK' undeclared (first use in this function)
+> +  231 |         if (getrandom(bi->rng_seed.data, RNG_SEED_LEN, GRND_NONBLOCK) != RNG_SEED_LEN) {
+> +      |                                                        ^~~~~~~~~~~~~
+> +
+> +Fixes:  b9de05184816 ("m68k: pass rng seed via BI_RNG_SEED")
+> +Cc: Jason@zx2c4.com
+> +Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> +---
+> + kexec/arch/m68k/bootinfo.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/kexec/arch/m68k/bootinfo.c b/kexec/arch/m68k/bootinfo.c
+> +index 086a34bdfdeb..5afd212d9d34 100644
+> +--- a/kexec/arch/m68k/bootinfo.c
+> ++++ b/kexec/arch/m68k/bootinfo.c
+> +@@ -1,3 +1,4 @@
+> ++#define _GNU_SOURCE
+> +
+> + #include <stdio.h>
+> + #include <stdlib.h>
+> +--
+> +2.40.0
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
