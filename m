@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EDF6C7EE29
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 10:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4516BC7EE29
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 10:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A007A41B5D;
-	Sun,  4 Jun 2023 10:53:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A007A41B5D
+	by smtp4.osuosl.org (Postfix) with ESMTP id D89FD41BB7;
+	Sun,  4 Jun 2023 10:53:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D89FD41BB7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F39FVBiVNjrx; Sun,  4 Jun 2023 10:53:40 +0000 (UTC)
+	with ESMTP id Pb-ziZT1xOIe; Sun,  4 Jun 2023 10:53:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1B70418B3;
-	Sun,  4 Jun 2023 10:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1B70418B3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A7551BF3B5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F37741857;
+	Sun,  4 Jun 2023 10:53:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F37741857
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 53C851BF954
  for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 10:53:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2441960ADD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3984741857
  for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 10:53:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2441960ADD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3984741857
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i7eKJZlHWvjk for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H9bh2Z6JTXuH for <buildroot@lists.busybox.net>;
  Sun,  4 Jun 2023 10:53:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B7AE60761
+ by smtp4.osuosl.org (Postfix) with ESMTP id 424FD41824
  for <buildroot@buildroot.org>; Sun,  4 Jun 2023 10:53:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B7AE60761
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 424FD41824
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A22286AD9; Sun,  4 Jun 2023 10:53:36 +0000 (UTC)
+ id 1344586AD2; Sun,  4 Jun 2023 10:53:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 4 Jun 2023 12:52:50 +0200
+Date: Sun, 4 Jun 2023 12:43:31 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6b26999abca4e9fb4c2050123af028b80fa0c990
-X-Git-Newrev: 108bb3395b5ed2abe1c3c5a20fb9205dfc672b54
+X-Git-Oldrev: 2cd0059419ced783957a6c2d18bac529173fdfcd
+X-Git-Newrev: 2e511e791daab76b1da42cb3a69a4d7c2baeb85d
 X-Patchwork-Hint: ignore
-Message-Id: <20230604105336.3A22286AD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/z3: bump to version
- 4.12.2
+Message-Id: <20230604105336.1344586AD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gnuplot: bump version
+ to 5.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=108bb3395b5ed2abe1c3c5a20fb9205dfc672b54
+commit: https://git.buildroot.net/buildroot/commit/?id=2e511e791daab76b1da42cb3a69a4d7c2baeb85d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log since v4.12.1, see:
-- https://github.com/Z3Prover/z3/releases/tag/z3-4.12.2
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/z3/z3.hash | 2 +-
- package/z3/z3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnuplot/gnuplot.hash | 8 ++++----
+ package/gnuplot/gnuplot.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/z3/z3.hash b/package/z3/z3.hash
-index 8a511c3fe5..bddf3066ba 100644
---- a/package/z3/z3.hash
-+++ b/package/z3/z3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a3735fabf00e1341adcc70394993c05fd3e2ae167a3e9bb46045e33084eb64a3  z3-4.12.1.tar.gz
-+sha256  9f58f3710bd2094085951a75791550f547903d75fe7e2fcb373c5f03fc761b8f  z3-4.12.2.tar.gz
- sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
-diff --git a/package/z3/z3.mk b/package/z3/z3.mk
-index 45c412ad12..501d9ee61a 100644
---- a/package/z3/z3.mk
-+++ b/package/z3/z3.mk
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+index de0741d609..2f482ca434 100644
+--- a/package/gnuplot/gnuplot.hash
++++ b/package/gnuplot/gnuplot.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.6/
+-md5  da719235bb2f46830f9d2101d04b14a5  gnuplot-5.4.6.tar.gz
+-sha1  31ea0c00af5c156e5d068e3b1cc2fb1847f471ab  gnuplot-5.4.6.tar.gz
++# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.7/
++md5  cdc9bb3ac0cc7e717246ed3df2d6ffa2  gnuplot-5.4.7.tar.gz
++sha1  6e68f94af822ff56549beab3a465c2fe976d3b34  gnuplot-5.4.7.tar.gz
+ # Locally computed
+-sha256  02fc27918200ed64d8f0c3b84fe81b95b59cd47ad99f270939ae497c19f27419  gnuplot-5.4.6.tar.gz
++sha256  318a1501c9e659f39cf05ee5268335671bddc6c20eae06851f262fde27c2e739  gnuplot-5.4.7.tar.gz
+ sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index c49fbc497d..23fbae10a9 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--Z3_VERSION = 4.12.1
-+Z3_VERSION = 4.12.2
- Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
- Z3_LICENSE = MIT
- Z3_LICENSE_FILES = LICENSE.txt
+-GNUPLOT_VERSION = 5.4.6
++GNUPLOT_VERSION = 5.4.7
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
