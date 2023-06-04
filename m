@@ -1,88 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D7AC77B7A
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 02:52:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77653C7EE23
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 04:40:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A793940ABE;
-	Sun,  4 Jun 2023 02:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A793940ABE
+	by smtp1.osuosl.org (Postfix) with ESMTP id C84DF83807;
+	Sun,  4 Jun 2023 04:40:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C84DF83807
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Xlc0WTwM0Xg; Sun,  4 Jun 2023 02:52:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e6aPg1uNyw2O; Sun,  4 Jun 2023 04:40:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 232F3404B0;
-	Sun,  4 Jun 2023 02:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 232F3404B0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C3C2A1BF2C0
- for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 02:52:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9682837A4;
+	Sun,  4 Jun 2023 04:40:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9682837A4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E41241BF47A
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 04:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A8179404B0
- for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 02:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8179404B0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 98914837A4
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 04:39:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98914837A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GJ_-eooVIErY for <buildroot@lists.busybox.net>;
- Sun,  4 Jun 2023 02:52:09 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A68A4048A
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
- [IPv6:2607:f8b0:4864:20::1031])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4A68A4048A
- for <buildroot@buildroot.org>; Sun,  4 Jun 2023 02:52:08 +0000 (UTC)
-Received: by mail-pj1-x1031.google.com with SMTP id
- 98e67ed59e1d1-256e1d87998so2995960a91.3
- for <buildroot@buildroot.org>; Sat, 03 Jun 2023 19:52:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685847128; x=1688439128;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=AQh/Eru9Yl1V4WYMHcp84WWgcngFXqgWib2Fvzrq9g4=;
- b=esmQLKHUWHbI/aKR3TYrRLGoFIkppceJ/tiSbWX/JnakFfb9s5CLzUd/V7k83nAjVP
- 6AV+aeVuHaCMP4B2uqi5ZRnHDyTxEysZ/Xs9QLdHvGm7fvJhUxBbqDrv2xKwEwEXsfZh
- bKUiDaX5cGNcpNktl/YxArX8J3liFft8MTmz8h2pGccrk0sWGk6kCzPDFRZ0BKSVfkqH
- e2axlrTpzgYjTkiLwYxKmSRb/xAI5plRUJS5ZlQym6UrEI5iTVh6m77jMTBP1mHE0L+e
- x8WZzQEUc6UP425o1Ro18HSzNHYRcacvWofRvKN5MxJ7OyiihYpjk8CuJvpXs+ncdsTQ
- 3s/A==
-X-Gm-Message-State: AC+VfDw7jCPoUY6ji8/rbuG50mfiVA2rCDfapxGCLBRbAfcUZ8x0cnoh
- 3BE1D9sPDdX5XOCEg3pFHqDxHAy6YECnpg==
-X-Google-Smtp-Source: ACHHUZ6zIsZ8vwivEsaVn+7dibudBDYWLs27ZBHKt/MA4X5mMptJ/7lf09KR10PhXQrAi5rvrrRULA==
-X-Received: by 2002:a17:90b:1c06:b0:258:9180:1999 with SMTP id
- oc6-20020a17090b1c0600b0025891801999mr4248074pjb.32.1685847127475; 
- Sat, 03 Jun 2023 19:52:07 -0700 (PDT)
-Received: from fedora.hsd1.wa.comcast.net ([2601:603:2180:ebe0::2ff5])
- by smtp.gmail.com with ESMTPSA id
- j12-20020a17090a840c00b00253311d508esm5260717pjn.27.2023.06.03.19.52.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Jun 2023 19:52:07 -0700 (PDT)
-From: Adam Duskett <aduskett@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  3 Jun 2023 19:52:04 -0700
-Message-Id: <20230604025204.324443-1-aduskett@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RrOC_PNy-rnk for <buildroot@lists.busybox.net>;
+ Sun,  4 Jun 2023 04:39:58 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A430F8376B
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A430F8376B
+ for <buildroot@buildroot.org>; Sun,  4 Jun 2023 04:39:57 +0000 (UTC)
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 988D960007
+ for <buildroot@buildroot.org>; Sun,  4 Jun 2023 04:39:54 +0000 (UTC)
 MIME-Version: 1.0
+To: buildroot@buildroot.org
+Date: Sun, 04 Jun 2023 04:39:54 -0000
+Message-Id: <20230604043959.98914837A4@smtp1.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685847128; x=1688439128;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AQh/Eru9Yl1V4WYMHcp84WWgcngFXqgWib2Fvzrq9g4=;
- b=D4ecrIV9fDrWcz5v0CAxk90F8jSiJX/xC7La5nRSHhPXY6TiW12dI7zP+Mun0PXIAj
- FHop3Eo8XtzPoq1mkh6ogfkMiikP9aPd9PwVku9wMtRXNRafkyyt2KQ1XlNQoCQgMCc2
- wRahtMTAHabDe5VVsOhG7/OCEYfkSnx5jzoVm7dn4yIdpDUULmMDwaIEV7K8oJa8uWP6
- uu+rxo1fFBluhPtSZ/iko5Lcd/wKSinU3OM0hjs8sK1hn9d+EeS22CAf5dliu5yCbbbg
- Kzr/Xbf7aJbjrfZKyoZn80PTU+s0NQYuhufBqbO7JDX8UWNaYzVIUTjM0ap04qTUaWc7
- YhSw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=D4ecrIV9
-Subject: [Buildroot] [PATCH v2 1/1] package/firewalld: new package
+ d=bootlin.com; s=gm1; 
+ t=1685853594; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=N+2zh+H0fVS7Ts+U/S6dBeYaYW/o7AUuKXXwpNQws3A=;
+ b=ogArQ0HBwI6+O9QV+lOiuHQ8D3VJgs/Edl7iz20Jl8kvO4jWmA7bDuM0AaXVYxrJDqRndX
+ 4Y14l5RZ7KtMrkONKAMC5vzySMO7Q+3h1ZO/guVcRp7G8E3brT7V9TOQGJk4mXreLSrmfn
+ 5oaUd7/lxYUCJvcy/bDAhb8Uj26QDGPTH/QWzGmEmru9hW0OCEY1T30JYCASM2tGOH/sTT
+ tr9VcNCC7IFCP8dASOd21J2QF5kafY2lOFGjlVf1mhdrdcjKEXlFj8NnwbA2p7W9Az9zB1
+ 2H/QlAJInIADshft0Dyih2wmmcku3LY6wQ7Gl6Bbj+EtALDX04ML8l8NdHBQDg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ogArQ0HB
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-06-03
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,472 +70,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Firewalld provides a dynamically managed firewall with
-support for network or firewall zones to define the trust level of network
-connections or interfaces.
+Hello,
 
-Items of note:
+Autobuild statistics for 2023-06-03
+===================================
 
- - Setting PYTHON="/usr/bin/env python$(PYTHON3_VERSION_MAJOR)" prevents
-   Firewalld from setting the shebang in the installed python files to the
-   full path to the python interpreter used when building.
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  4  |  7  |  0  | 11  |
+    master   | 82  | 58  |  1  | 141 |
 
- - The bundled provided SYSV init file has several bashisms and requires
-   /etc/init.d/functions which buildroot doesn't provide. So instead, a more
-   simple init.d file is provided in the package directory, which does not
-   require bash.
+Classification of failures by reason for master
+-----------------------------------------------
 
- - Firewalld >= 1.0.0 requires a linux kernel version of 5.3 or later.
-   Because Buildroot does not have a mechanism to detect what version a user
-   is compiling if the kernel is external, there is no way to prevent a user
-   with an external kernel older than 5.3 to select this package.
+           at-spi2-core-2.48.2 | 4 
+             dahdi-linux-3.2.0 | 3 
+package/sdl2_net/sdl2_net.m... | 3 
+               perl-clone-0.46 | 3 
+                     audit-3.1 | 2 
+                     efivar-38 | 2 
+host-heimdal-f4faaeaba371ff... | 2 
+                   linux-6.3.5 | 2 
+               syslog-ng-4.1.1 | 2 
+                   trinity-1.9 | 2 
+                       unknown | 2 
+                 agentpp-4.6.0 | 1 
+                alsa-lib-1.2.8 | 1 
+             batman-adv-2022.3 | 1 
+                    brltty-6.5 | 1 
+                  faad2-2.10.1 | 1 
+                  ffmpeg-4.4.4 | 1 
+             fontconfig-2.14.2 | 1 
+fs/ubi/ubi.mk:51: /home/bui... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+glibc-2.37-2-g9f8513dc64119... | 1 
+         gobject-introspection | 1 
+  gobject-introspection-1.74.0 | 1 
+google-breakpad-c85eb4a59b6... | 1 
+                haveged-1.9.18 | 1 
+            host-binutils-2.38 | 1 
+       host-python-sip-4.19.25 | 1 
+               host-runc-1.1.7 | 1 
+              host-rust-1.68.2 | 1 
+               ipmitool-1_8_19 | 1 
+                   json-c-0.16 | 1 
+                  kexec-2.0.26 | 1 
+              libgcrypt-1.10.1 | 1 
+            ocf-linux-20171122 | 1 
+                     pv-1.6.20 | 1 
+           python-bcrypt-4.0.1 | 1 
+           python-pyicu-2.10.2 | 1 
+            quickjs-2021-03-27 | 1 
+                   sdl2-2.26.5 | 1 
+uclibc-ng-test-6790eafe897b... | 1 
+               valgrind-3.20.0 | 1 
+                    volk-3.0.0 | 1 
+               zxing-cpp-1.4.0 | 1 
 
- - To run, Firewalld requires enabling almost every single nftables option in
-   the kernel menuconfig. Indeed for a regular user, this task is quite a
-   time-consuming operation, and missing even one required nftables option
-   results in firewalld failing to start.
 
-   Through a mix of trial and error and talking to the upstream developers,
-   the package selects the minimum amount of kernel options required for
-   runtime. Understandably the list is daunting. However, these options
-   have passed run-time tests with kernel 5.3 (the minimum kernel version
-   required) and kernel 6.2.10 (the latest kernel version as of this commit
-   log.)
+Detail of failures for master
+-----------------------------
 
-As such, it is safe to say these options will work for anybody wanting to
-use firewalld with a supported kernel version of 5.3 or higher.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  sparc64    |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/9fa63799e083b9a3d1f3c299108a46d208ed9749 |     
+    or1k     |         alsa-lib-1.2.8         | NOK | http://autobuild.buildroot.net/results/996b62880d108a93e95b90ff7cafa0e2358fa55f |     
+ aarch64_be  |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/231c7c93a82bdee699c429e6d870387351ec6471 |     
+    or1k     |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/e2eccf64de6f466e1fce2e14cffd47d920746978 |     
+  mips64el   |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/17db63fd282befa1dd4b785e472a1517fd2687d6 |     
+    or1k     |      at-spi2-core-2.48.2       | NOK | http://autobuild.buildroot.net/results/225032aa95ee98c57a8fced7d52426638cbda036 |     
+    arm      |           audit-3.1            | NOK | http://autobuild.buildroot.net/results/81b3ba92bd856202289bdb5a2de2580938b7e8ea |     
+   armeb     |           audit-3.1            | NOK | http://autobuild.buildroot.net/results/8224a9d3bc5a256ae56cd4d0b1ed3d72f8b4637e |     
+    or1k     |       batman-adv-2022.3        | NOK | http://autobuild.buildroot.net/results/053ef481605650a80844bff0d5226c8edc51ddb3 |     
+    mips     |           brltty-6.5           | NOK | http://autobuild.buildroot.net/results/c6e1a47150168ddb1693162c8894461175c526a6 |     
+   arceb     |       dahdi-linux-3.2.0        | NOK | http://autobuild.buildroot.net/results/63b46ad2fafa4664d8e176064ec4a91e2c680c44 |     
+microblazeel |       dahdi-linux-3.2.0        | NOK | http://autobuild.buildroot.net/results/a962b4994f220bf724223687a05605f9861e8b1a |     
+   x86_64    |       dahdi-linux-3.2.0        | NOK | http://autobuild.buildroot.net/results/059f6db1bb2a533028e35e764986dd214248dd33 |     
+  mips64el   |           efivar-38            | NOK | http://autobuild.buildroot.net/results/4d818690ec36c6e03c2e10dca7247e84ace3eb66 |     
+  aarch64    |           efivar-38            | NOK | http://autobuild.buildroot.net/results/1d73b4fe478d2c568c627456a95a77a6f00e451e |     
+   sh4eb     |          faad2-2.10.1          | NOK | http://autobuild.buildroot.net/results/1cc084bb5066ac72ffbeba51a9951c7d2e5957b2 |     
+   armeb     |          ffmpeg-4.4.4          | NOK | http://autobuild.buildroot.net/results/ec7a40a7460a701f2e8c9af482b4274f65901bc3 |     
+  riscv64    |       fontconfig-2.14.2        | NOK | http://autobuild.buildroot.net/results/f547c65802a0a705e866795a80e1b17ce80bcf0c | ORPH
+  aarch64    | fs/ubi/ubi.mk:51: /home/bui... | NOK | http://autobuild.buildroot.net/results/12b02fb6c68f0f4439f2573f8ef3ca80f77f43de |     
+  sparc64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/fa5989038e393e6d0d12c45438555f56c34be503 |     
+   arceb     | glibc-2.37-2-g9f8513dc64119... | NOK | http://autobuild.buildroot.net/results/e0cf7c414baf5226c9c9a026481293470e42562c |     
+ microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/ef59ab45874f4bc8a4aa59f1848d90eb5faee398 |     
+   s390x     |  gobject-introspection-1.74.0  | NOK | http://autobuild.buildroot.net/results/48ccff568423c04ee75a20628ae63a8f1e7fb223 | ORPH
+   x86_64    | google-breakpad-c85eb4a59b6... | NOK | http://autobuild.buildroot.net/results/124645014136d0c6ecbac334470954fbec19aeb1 |     
+   sparc     |         haveged-1.9.18         | NOK | http://autobuild.buildroot.net/results/c2d22fe0af22c50422f43236435cf47761cb36de |     
+   x86_64    |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/97ba45ddfe1440adefe2879ce5b806fc83aea8b7 |     
+    mips     | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/8970874719f544815623e3658f6016e1406b762b | ORPH
+ powerpc64   | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/a12d97c71a262c36fcc6f1cd2dbd7ecdc73e00bc | ORPH
+  riscv32    |    host-python-sip-4.19.25     | NOK | http://autobuild.buildroot.net/results/e6c62dc5ff4834714291ba30f1492313c7f2664d |     
+    mips     |        host-runc-1.1.7         | NOK | http://autobuild.buildroot.net/results/f4b493bf8c7211b2b201cb516cb3b847ffef8725 |     
+  aarch64    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/1b2acd87df9678e422af76807f188c451ce9c349 |     
+    or1k     |        ipmitool-1_8_19         | NOK | http://autobuild.buildroot.net/results/38bbef373f58d47b7383a4bbc9fc5cdf5db9a67a |     
+  riscv64    |          json-c-0.16           | NOK | http://autobuild.buildroot.net/results/7fe066b48f6af72f01253be69a1f0f319a5c339b |     
+    m68k     |          kexec-2.0.26          | NOK | http://autobuild.buildroot.net/results/b5a46cc164cb0fe6bf37dacb917b3664d2710a4a |     
+    i686     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/9c1b1ea2576a33b3cbd8d4a717a9d0b92fae3db4 | ORPH
+   mipsel    |          linux-6.3.5           | NOK | http://autobuild.buildroot.net/results/9b340911e51eea15b453fd4a4126b478a7be6fe9 | ORPH
+  powerpc    |          linux-6.3.5           | NOK | http://autobuild.buildroot.net/results/fcce6723f25c6def00b1978fdb53a6f35e0fcd28 | ORPH
+    i686     |       ocf-linux-20171122       | NOK | http://autobuild.buildroot.net/results/b35d8241fa2a154251c0d843e585a8b5ae17bc1f | ORPH
+    mips     | package/sdl2_net/sdl2_net.m... | NOK | http://autobuild.buildroot.net/results/440105258a1ae2ad115b9d47de5b219c5363afd6 |     
+  mips64el   | package/sdl2_net/sdl2_net.m... | NOK | http://autobuild.buildroot.net/results/b41b3853f9411b4fe05082685b91a913374b075c |     
+   sparc     | package/sdl2_net/sdl2_net.m... | NOK | http://autobuild.buildroot.net/results/c3a48213a34c8feea1e4256c4b69f73e571b2908 |     
+ aarch64_be  |        perl-clone-0.46         | NOK | http://autobuild.buildroot.net/results/25bd4398a56b3d4ad0b05f9213c7983d8f5d6087 |     
+ microblaze  |        perl-clone-0.46         | NOK | http://autobuild.buildroot.net/results/5d503aaa94b56523c684be7946123921747ebf52 |     
+   arceb     |        perl-clone-0.46         | NOK | http://autobuild.buildroot.net/results/acd02bbdbd1bf0c7e52b8a738699ec6b1b758279 |     
+   armeb     |           pv-1.6.20            | NOK | http://autobuild.buildroot.net/results/b5961fdb7d4ddcdfbb1d5c42e2b8be7a45ec6760 | ORPH
+   armeb     |      python-bcrypt-4.0.1       | NOK | http://autobuild.buildroot.net/results/a99318c6064a23086a894936d9eb1064114d84d2 |     
+   nios2     |      python-pyicu-2.10.2       | NOK | http://autobuild.buildroot.net/results/658364b015e6bb1d79351216e3a0725db7190f90 |     
+   sh4aeb    |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/cfe74ec6f8df2ea8c745dd7e9096bca4e0e86a15 |     
+    arm      |          sdl2-2.26.5           | NOK | http://autobuild.buildroot.net/results/afd227d3558aceca6e817d7ec1c1c54f7e97b366 |     
+ powerpc64   |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/dd6b3b8f30415f6c0e18eb5b34920327f99900ac |     
+   sparc     |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/c128ca386ed69d073930ecb3e30d8f6d2e4b1636 |     
+  powerpc    |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/82736ffe64c6b2547ee01a167f43b894036acb52 | ORPH
+    mips     |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/037f56a0f7e03d4f25af57e0739fdd3d3cfd5d75 | ORPH
+  mips64el   | uclibc-ng-test-6790eafe897b... | NOK | http://autobuild.buildroot.net/results/ae03c4a28a629a3340344a0699896628c71bdb03 |     
+  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/8243a0e836d91845fcf591d8ba847d88c404634d |     
+    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/35c23f2d80183752405f2e44f106b0ad65818164 |     
+   mipsel    |        valgrind-3.20.0         | NOK | http://autobuild.buildroot.net/results/7f8bf033c513716452b1a1cc3fc8ed3075fc0a60 | ORPH
+  powerpc    |           volk-3.0.0           | NOK | http://autobuild.buildroot.net/results/a71688145eb1632ad2bb73cdc057069e5e5d1d88 |     
+  riscv64    |        zxing-cpp-1.4.0         | NOK | http://autobuild.buildroot.net/results/47e2c1630eff716e05c2295b1b0ce9d5b7b53f78 |     
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
-Changes v1 -> v2:
-  - Fix verbage in Config.in
-  - Bump to version 1.3.2
 
- package/Config.in                |   1 +
- package/firewalld/Config.in      |  43 ++++++
- package/firewalld/S46firewalld   |  66 ++++++++
- package/firewalld/firewalld.hash |   3 +
- package/firewalld/firewalld.mk   | 257 +++++++++++++++++++++++++++++++
- 5 files changed, 370 insertions(+)
- create mode 100644 package/firewalld/Config.in
- create mode 100644 package/firewalld/S46firewalld
- create mode 100644 package/firewalld/firewalld.hash
- create mode 100644 package/firewalld/firewalld.mk
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
 
-diff --git a/package/Config.in b/package/Config.in
-index ad438667d2..da1b5bb4b9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2315,6 +2315,7 @@ endif
- 	source "package/fail2ban/Config.in"
- 	source "package/fastd/Config.in"
- 	source "package/fcgiwrap/Config.in"
-+	source "package/firewalld/Config.in"
- 	source "package/flannel/Config.in"
- 	source "package/fmc/Config.in"
- 	source "package/fping/Config.in"
-diff --git a/package/firewalld/Config.in b/package/firewalld/Config.in
-new file mode 100644
-index 0000000000..4f58a3ea05
---- /dev/null
-+++ b/package/firewalld/Config.in
-@@ -0,0 +1,43 @@
-+config BR2_PACKAGE_FIREWALLD
-+	bool "firewalld"
-+	depends on BR2_USE_MMU # gobject-introspection, python-gobject
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # glib2, dbus-python, nftables
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
-+	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection -> host-qemu
-+	depends on BR2_PACKAGE_PYTHON3 # dbus-python, gobject-introspection
-+	select BR2_PACKAGE_DBUS # dbus-python
-+	select BR2_PACKAGE_DBUS_PYTHON
-+	select BR2_PACKAGE_GOBJECT_INTROSPECTION
-+	select BR2_PACKAGE_JANSSON # Uses the nftables json interface
-+	select BR2_PACKAGE_NFTABLES
-+	select BR2_PACKAGE_PYTHON_GOBJECT
-+	help
-+	  Firewalld provides a dynamically managed firewall with
-+	  support for network or firewall zones to define the trust
-+	  level of network connections or interfaces. It has support
-+	  for IPv4, IPv6 firewall settings and for ethernet bridges and
-+	  a separation of runtime and permanent configuration options.
-+	  It also provides an interface for services or applications to
-+	  add ip*tables and ebtables rules directly.
-+
-+	  Note: Firewalld uses nftables as the backend and requires
-+	  kernel version >= 5.3.
-+
-+	  https://github.com/firewalld/firewalld
-+
-+comment "firewalld needs python3"
-+	depends on !BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+
-+comment "firewalld needs a glibc toolchain w/ wchar, dynamic library, headers >= 3.12, gcc >= 4.9, host gcc >= 8"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
-+		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_HOST_GCC_AT_LEAST_8
-diff --git a/package/firewalld/S46firewalld b/package/firewalld/S46firewalld
-new file mode 100644
-index 0000000000..40f43e1f57
---- /dev/null
-+++ b/package/firewalld/S46firewalld
-@@ -0,0 +1,66 @@
-+#!/bin/sh
-+
-+DAEMON=firewalld
-+PIDFILE=/var/run/$DAEMON.pid
-+
-+start() {
-+	printf "Starting firewalld: "
-+	start-stop-daemon -S -q --exec $DAEMON
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+}
-+stop() {
-+	printf "Stopping firewalld: "
-+	start-stop-daemon --stop --quiet --pidfile $PIDFILE
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+}
-+
-+reload(){
-+	printf "Reloading firewalld: "
-+	firewall-cmd --reload
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+status(){
-+	firewall-cmd --state
-+}
-+
-+case "$1" in
-+		start)
-+			start
-+			;;
-+		stop)
-+			stop
-+			;;
-+		restart)
-+			restart
-+			;;
-+		reload)
-+			reload
-+			;;
-+		status)
-+			status
-+			;;
-+		*)
-+			echo "Usage: $0 {start|stop|restart|reload|status}"
-+			exit 1
-+esac
-diff --git a/package/firewalld/firewalld.hash b/package/firewalld/firewalld.hash
-new file mode 100644
-index 0000000000..d8be3f7ba0
---- /dev/null
-+++ b/package/firewalld/firewalld.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  3be5a3caa36d1026c5b72d3f61dd963dccd953791b04af03d9946b24bef8391e  firewalld-1.3.2.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
-new file mode 100644
-index 0000000000..e91825601d
---- /dev/null
-+++ b/package/firewalld/firewalld.mk
-@@ -0,0 +1,257 @@
-+################################################################################
-+#
-+# firewalld
-+#
-+################################################################################
-+
-+FIREWALLD_VERSION = 1.3.2
-+FIREWALLD_SITE = $(call github,firewalld,firewalld,v$(FIREWALLD_VERSION))
-+FIREWALLD_LICENSE = GPL-2.0
-+FIREWALLD_LICENSE_FILES = COPYING
-+FIREWALLD_AUTORECONF = YES
-+
-+FIREWALLD_DEPENDENCIES = \
-+	host-intltool \
-+	host-libglib2 \
-+	host-libxml2 \
-+	host-libxslt \
-+	dbus-python \
-+	gobject-introspection \
-+	jansson \
-+	nftables \
-+	python3 \
-+	python-gobject
-+
-+# Firewalld hard codes the python shebangs to the full path of the
-+# python-interpreter. IE: #!/home/buildroot/output/host/bin/python.
-+# Force the proper python path.
-+FIREWALLD_CONF_ENV += PYTHON="/usr/bin/env python3"
-+
-+# /etc/sysconfig/firewalld is a Red Hat-ism, only referenced by
-+# the Red Hat-specific init script which isn't used, so we set
-+# --disable-sysconfig.
-+FIREWALLD_CONF_OPTS += \
-+	--disable-rpmmacros \
-+	--disable-sysconfig \
-+	--with-nft=/usr/sbin/nft \
-+	--without-ebtables \
-+	--without-ebtables-restore \
-+	--without-ipset \
-+	--without-xml-catalog
-+
-+ifeq ($(BR2_PACKAGE_IPTABLES),y)
-+FIREWALLD_DEPENDENCIES += iptables
-+FIREWALLD_CONF_OPTS += \
-+	--with-ip6tables-restore=/usr/sbin/ip6tables-restore \
-+	--with-ip6tables=/usr/sbin/ip6tables \
-+	--with-iptables-restore=/usr/sbin/iptables-restore \
-+	--with-iptables=/usr/sbin/iptables
-+else
-+FIREWALLD_CONF_OPTS += -without-iptables
-+endif
-+
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+FIREWALLD_CONF_OPTS += --enable-nls
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+FIREWALLD_DEPENDENCIES += systemd
-+FIREWALLD_CONF_OPTS += --with-systemd-unitdir=/usr/lib/systemd/system
-+else
-+FIREWALLD_CONF_OPTS += --disable-systemd
-+endif
-+
-+define FIREWALLD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/config/firewalld.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/firewalld.service
-+endef
-+
-+# The bundled sysvinit file requires /etc/init.d/functions which is not
-+# provided by buildroot. As such, we provide our own firewalld init file.
-+define FIREWALLD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 $(FIREWALLD_PKGDIR)/S46firewalld \
-+		$(TARGET_DIR)/etc/init.d/S46firewalld
-+endef
-+
-+# Firewalld requires almost every single nftable option selected.
-+define FIREWALLD_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_FILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_IPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MANGLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_AH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_EUI64)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_FRAG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_HL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_IPV6HEADER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_MH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_OPTS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RPFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_SRH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_RAW)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_HL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_MASQUERADE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_NPT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_REJECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_SYNPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARP_MANGLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MANGLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_AH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_ECN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_RPFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_TTL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_RAW)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_CLUSTERIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_ECN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_NETMAP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REDIRECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REJECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_SYNPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_TTL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IPMAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_PORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTNET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_MAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETIFACE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETNET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORTNET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_LIST_SET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_CONNCOUNT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK_GLUE_CT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_SYNPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_AMANDA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_BROADCAST)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_EVENTS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_FTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_H323)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_IRC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_LABELS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_NETBIOS_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PPTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PROCFS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SANE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SNMP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TFTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMEOUT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMESTAMP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_ZONES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_HELPER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_TIMEOUT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_DCCP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_GRE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_SCTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_UDPLITE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_ARP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_COMMON)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_AMANDA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_FTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_H323)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IRC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_NEEDED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PPTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_DCCP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_GRE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_SCTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_UDPLITE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_REDIRECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SNMP_BASIC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_TFTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_ARP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_SET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_BRIDGE_REJECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COMPAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CONNLIMIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COUNTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FLOW_OFFLOAD)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FWD_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_HASH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LIMIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LOG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NUMGEN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OBJREF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OSF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUEUE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUOTA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SOCKET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SYNPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TUNNEL)
-+endef
-+
-+$(eval $(autotools-package))
+             containerd-1.6.20 | 1 
+                 highway-1.0.2 | 1 
+            host-binutils-2.39 | 1 
+               host-runc-1.1.7 | 1 
+              host-rust-1.67.1 | 1 
+                  linux-6.1.30 | 1 
+                   perl-5.36.0 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |       containerd-1.6.20        | NOK | http://autobuild.buildroot.net/results/c1611740a150df364b1a88e47cb2c0a9a8b669a5 |     
+  aarch64    |         highway-1.0.2          | NOK | http://autobuild.buildroot.net/results/168adc1a685e5accaafc71d81b1c180f1db4ae5e |     
+ microblaze  |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/dda3c0281ce40d7510f59ce3be173877db5b3fce |     
+   x86_64    |        host-runc-1.1.7         | NOK | http://autobuild.buildroot.net/results/9dc65bcee661c318d777690ba2a829f973b8be2f |     
+   s390x     |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/6f685f687878845416e300ebd30017e26eddf85f |     
+  riscv64    |          linux-6.1.30          | NOK | http://autobuild.buildroot.net/results/7dc4e36a249bd5bfa1156e4b2938585331bd8df5 | ORPH
+    m68k     |          perl-5.36.0           | NOK | http://autobuild.buildroot.net/results/cfabf9a420cdca7d2347fbf3f50a0f24fbff95b6 |     
+
+
+
 -- 
-2.40.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
