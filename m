@@ -1,66 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0732C77B73
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 09:18:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0258EC7EE23
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 10:26:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DB7B60BD3;
-	Sun,  4 Jun 2023 09:18:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DB7B60BD3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D41B41904;
+	Sun,  4 Jun 2023 10:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D41B41904
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BE1o-fBrZQ5F; Sun,  4 Jun 2023 09:18:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rllJ11b3lKJL; Sun,  4 Jun 2023 10:26:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1244960BDD;
-	Sun,  4 Jun 2023 09:18:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1244960BDD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 108B941907;
+	Sun,  4 Jun 2023 10:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 108B941907
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 07CDB1BF3BE
- for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 09:18:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 321B71BF3B5
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 10:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCF8760BDD
- for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 09:17:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCF8760BDD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 10A8C60A9A
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 10:26:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10A8C60A9A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1O7UQg9H06Wh for <buildroot@lists.busybox.net>;
- Sun,  4 Jun 2023 09:17:58 +0000 (UTC)
+ with ESMTP id KstAXWP1Bq7r for <buildroot@lists.busybox.net>;
+ Sun,  4 Jun 2023 10:26:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D376660BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77E4C60A81
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D376660BD3
- for <buildroot@buildroot.org>; Sun,  4 Jun 2023 09:17:57 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.170.62.232])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 2A3C378050A;
- Sun,  4 Jun 2023 11:17:51 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun,  4 Jun 2023 11:17:44 +0200
-Message-Id: <20230604091744.8368-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230531170207.727576-1-ju.o@free.fr>
-References: <20230531170207.727576-1-ju.o@free.fr>
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 77E4C60A81
+ for <buildroot@buildroot.org>; Sun,  4 Jun 2023 10:26:16 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:8434:364d:2728:8930])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 583F67804FD;
+ Sun,  4 Jun 2023 12:26:07 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 04 Jun 2023 12:26:07 +0200
+Date: Sun, 4 Jun 2023 12:26:07 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20230604102607.GC3340@scaer>
+References: <20230603221612.292994-1-romain.naour@gmail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230603221612.292994-1-romain.naour@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1685870274;
- bh=mzRt6NG+fKtWpbKei40lorwkIJ9mLpVTnVFRC3qDJF8=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=BmCBbf4hFGdbl+tFh+JX5I3nqx6ouecRardwmC0utodCIUaiewLTbiKprtZMQFjxY
- zcxaRecVcpkX00vWOrBwefGHyCUWC6jn/I/gMpPbHfNRfA3xJUpc1WxnSEB0L5BBw2
- iRhuyhZo49NbxZPQdbTrAPRcecIc7HniAZP2f8EtmMAdtct2JxazGYr6k96J/rGRTL
- l70L+Nw8T7u7F1hZ87bnn7hOhTGpV4BOypVzzJ7VUXMRQlwGzygyobDyxkeFWlpWum
- 3eJKcDJXy5StodTp2wKtgH5gA7jV12Xid4v3eHLSRaR4lSAVm+nOAX7K3+1gf6gxe1
- jHNKgkVXRQ3aw==
+ d=free.fr; s=smtp-20201208; t=1685874373;
+ bh=qfpkU7871x/bGGyofGqmohG0q20PEoupsbD1sIhotn8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=awZm69MHsLDGhqvT+PbPc2o62eyoZkSXwvoiD32l4k/VuHlxcOjX7dakikNoZVbGb
+ +US1LxwLAt7+r5Hiz1/KVxUHTkNnMGUylILOKRFO1utJlTPFvUsvg3eNPHHW9djvBI
+ h61fXd619ZSzKR02beRPoC1nDJ29vKXMaPhJpdNqsDwpLccX0KqENlsCt1cqdayMg4
+ lYLZvB+VqVjZiZcOKcH3X29KQ0niIXE+qckKJvfBMiRa0gf3Xrw1qv0pEkobpnO26P
+ Ob5l9JNE9C+xqXlkDwJ0/eCeysa96+W21ITxtojdLwWnwX0My0Eq9A9T9sRqJ4bKc2
+ XhsMzn14FWXTA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BmCBbf4h
-Subject: [Buildroot] [PATCH v2 1/1] package/acpica: bump to version 20230331
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=awZm69MH
+Subject: Re: [Buildroot] [RFC] support/dependencies: introduce
+ BR2_HOST_CMAKE_AT_LEAST
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,223 +77,221 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 20220331, see:
-- https://www.acpica.org/node/201
-- https://www.acpica.org/node/202
-or
-- https://github.com/acpica/acpica/blob/R03_31_23/documents/changes.txt
+Romain, All,
 
-This commit also drop the patch removing -Werror in CFLAGS, as an
-alternative is now available upstream, merged in [1]. This commit is
-included in release 20221020. The build commands are updated
-accordingly to set the new NOWERROR=TRUE option to achieve the same
-behavior.
+On 2023-06-04 00:16 +0200, Romain Naour spake thusly:
+> libjxl requires cmake 3.19 since version v0.7 due to the
+> new behavior of cmake [1].
 
-With the patch removal, .checkpackageignore is also updated
-accordingly.
+This needs to be split in two:
+ 1. add the host-cmake versions
+ 2. fix libjxl to select the required version
 
-The license file hash is also updated, due to the copyright year
-update.
+This needs a more detailed commit log, please. ;-)
 
-Upstream commit [2] also introduced a use of wcslen() and <wchar.h>.
-This commit was first included in tag R10_20_22 (version 20221020).
-Therefore, this new version need wchar. The new depedency is added.
+For example:
 
-This version bump is motivated by the introduction of RISC-V related
-definitions.
+    Some packages (e.g. libjxl) requires a quite recent cmake version,
+    that is not yet available in most distributions, especially those
+    LTS versions.
 
-[1] https://github.com/acpica/acpica/commit/3fd0f940408fc01a2c52c5be5f2beb0218a3d907
-[2] https://github.com/acpica/acpica/commit/cd6a30897593f6052abf0b9a791671dcf07b9596
+    Currently, when we bump the minum cmake version we require, it gets
+    bumped for all packages, regardless of their own minimum required
+    version, which means that a given configuration will trigger the
+    build of our host-cmake even if the packages that require it are not
+    enabled and those that are would be content with the system-provided
+    cmake.
 
-Cc: Erico Nunes <nunes.erico@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Changes v1 -> v2:
-- Add the new dependency on BR2_USE_WCHAR in Config.in
----
-Patch tested on branch master at commit d2c1d8d with commands:
+    Since host-cmake can take quite some time to build, this can get a
+    bit annoying to pay the price of a host-cmake build that would
+    otherwise not be needed.
 
-    utils/docker-run make check-package
-    ...
-    0 warnings generated
+    We intriduce config options that packages can select to indicate
+    what minimal cmake version they require, and use that version as the
+    required minimal version required by the current configuration [0].
 
-    utils/test-pkg -a -p acpica
-    ...
-    45 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- .checkpackageignore                           |  1 -
- .../acpica/0001-build-do-not-use-Werror.patch | 82 -------------------
- package/acpica/Config.in                      |  5 +-
- package/acpica/acpica.hash                    |  4 +-
- package/acpica/acpica.mk                      |  4 +-
- 5 files changed, 8 insertions(+), 88 deletions(-)
- delete mode 100644 package/acpica/0001-build-do-not-use-Werror.patch
+    We would like to ensure that the currently selected minimum cmake
+    version is indeed lower (or equal) to the cmake version we package,
+    but that is not possible: dependencies.mk is parsed before we parse
+    packages, so we do not yet know the cmake version we have, and we
+    can't invert the parsing order as we need to know the requires
+    dependencies before we parse packages (so that we can build their
+    dependency rules in Makefile). So we can only add comments in both
+    places, that refer to the other location.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 10e70f0787..281334cd7d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -141,7 +141,6 @@ package/4th/0001-avoid-regen-during-install.patch Upstream
- package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch Upstream
- package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch Upstream
- package/acl/0001-Build-with-old-GCC-versions.patch Upstream
--package/acpica/0001-build-do-not-use-Werror.patch Upstream
- package/acpid/0001-dont-use-isfdtype.patch Upstream
- package/alchemy/0001-toolchains-remove-hash-style-management.patch Upstream
- package/alsamixergui/0001-misc-fixes.patch Sob Upstream
-diff --git a/package/acpica/0001-build-do-not-use-Werror.patch b/package/acpica/0001-build-do-not-use-Werror.patch
-deleted file mode 100644
-index f905e552bd..0000000000
---- a/package/acpica/0001-build-do-not-use-Werror.patch
-+++ /dev/null
-@@ -1,82 +0,0 @@
--From 9382ae2431d2962c430e7149302c8690f5bc159c Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 10 Jul 2016 15:06:15 +0200
--Subject: [PATCH] build: do not use -Werror
--
--Warnings come and go with various compiler versions, so using -Werror is
--prone to cause build failures with various compiler versions, especially
--newer versions that introduce new warnings.
--
--Remove use of -Werror.
--
--[Vincent: tweak patch for 20170531 release]
--[Bernd: tweak patch for 20191018 release]
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Signed-off-by: "Vicente Olivert Riera" <Vincent.Riera@imgtec.com>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- generate/unix/Makefile.config |  1 -
-- generate/unix/iasl/Makefile   | 16 ++++++++--------
-- 2 files changed, 8 insertions(+), 9 deletions(-)
--
--diff --git a/generate/unix/Makefile.config b/generate/unix/Makefile.config
--index c28e8a9b1..7064bed97 100644
----- a/generate/unix/Makefile.config
--+++ b/generate/unix/Makefile.config
--@@ -204,7 +204,6 @@ CWARNINGFLAGS = \
--     -Wall\
--     -Wbad-function-cast\
--     -Wdeclaration-after-statement\
---    -Werror\
--     -Wformat=2\
--     -Wmissing-declarations\
--     -Wmissing-prototypes\
--diff --git a/generate/unix/iasl/Makefile b/generate/unix/iasl/Makefile
--index 47ea73cab..2c756af79 100644
----- a/generate/unix/iasl/Makefile
--+++ b/generate/unix/iasl/Makefile
--@@ -360,32 +360,32 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
-- #
-- $(OBJDIR)/aslcompilerlex.o :   $(OBJDIR)/aslcompilerlex.c
-- 	@echo "- " "Intermediate" $<
---	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-- 
-- $(OBJDIR)/aslcompilerparse.o : $(OBJDIR)/aslcompilerparse.c
-- 	@echo "- " "Intermediate" $<
---	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-- 
-- $(OBJDIR)/dtcompilerparserlex.o :      $(OBJDIR)/dtcompilerparserlex.c
-- 	@echo "- " "Intermediate" $<
---	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-- 
-- $(OBJDIR)/dtcompilerparserparse.o :    $(OBJDIR)/dtcompilerparserparse.c
-- 	@echo "- " "Intermediate" $<
---	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-- 
-- $(OBJDIR)/dtparserlex.o :      $(OBJDIR)/dtparserlex.c
-- 	@echo "- " "Intermediate" $<
---	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-- 
-- $(OBJDIR)/dtparserparse.o :    $(OBJDIR)/dtparserparse.c
-- 	@echo "- " "Intermediate" $<
---	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-- 
-- $(OBJDIR)/prparserlex.o :      $(OBJDIR)/prparserlex.c
-- 	@echo "- " "Intermediate" $<
---	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-- 
-- $(OBJDIR)/prparserparse.o :    $(OBJDIR)/prparserparse.c
-- 	@echo "- " "Intermediate" $<
---	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
---- 
--2.20.1
--
-diff --git a/package/acpica/Config.in b/package/acpica/Config.in
-index c5ffb005f5..ec5865c357 100644
---- a/package/acpica/Config.in
-+++ b/package/acpica/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ACPICA
- 	bool "acpica"
-+	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  The ACPI Component Architecture (ACPICA) project provides an
-@@ -9,5 +10,5 @@ config BR2_PACKAGE_ACPICA
- 
- 	  https://www.acpica.org
- 
--comment "acpica needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "acpica needs a toolchain w/ threads, wchar"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 564e393cb4..a5056cf1a2 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  1ccda5c6a08a90b145777df635eb09f995b3472b3128f375009c5a6b01a04c7a  acpica-unix2-20220331.tar.gz
--sha256  40d8e351f8dfdf5340ec76ac28f0c201b825077d7060bb3686ca1112cb26985d  source/include/acpi.h
-+sha256  bd8ac5ffa77ddc5ffc1f88be412b65a0926d25750e87ac180666c5b63de7ea36  acpica-unix2-20230331.tar.gz
-+sha256  42772064aec4f49677641690d2fab571c9d266922022e28af666072c60a04831  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index 9901c1ed48..7b21202780 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ACPICA_VERSION = 20220331
-+ACPICA_VERSION = 20230331
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
-@@ -15,11 +15,13 @@ HOST_ACPICA_DEPENDENCIES = host-bison host-flex
- define ACPICA_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
- 		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
-+		NOWERROR=TRUE \
- 		all
- endef
- 
- define HOST_ACPICA_BUILD_CMDS
- 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		NOWERROR=TRUE \
- 		all
- endef
- 
+    [0] note that this is yet not optimal, as in such a case, host-cmake
+    would be in the dependency chain of all cmake-based packages, even
+    for those packages that do not require it. The optimum would be for
+    each package to gain such a dependency on an as-needed basis, but
+    this is by far more complex to achieve, and would only speed up
+    cases where a single package is built from scratch (e.g. with:
+    make clean; make foo), which is not worth optimising (yet?)
+
+> -- Configuring done
+> CMake Error at cmake/FindLCMS2.cmake:40 (add_library):
+>   INTERFACE_LIBRARY targets may only have whitelisted properties.  The
+>   property "INCLUDE_DIRECTORIES" is not allowed.
+> Call Stack (most recent call first):
+>   third_party/CMakeLists.txt:114 (find_package)
+> 
+> The portability issue has already been reported upstream [2].
+
+This part above would have to be moved into the commit that change
+libjxl to request host-cmake 3.22.
+
+> host-cmake is know to take a long time to build and we want
+> to avoid bumping BR2_CMAKE_VERSION_MIN only for one package.
+> As discussed on the mailing list [3] introduce
+> BR2_HOST_CMAKE_AT_LEAST_X_Y selected by package that
+> requires a higher cmake version than the one provided by
+> the host.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819095
+> 
+> [1] https://gitlab.kitware.com/cmake/cmake/-/commit/afb998704e67d3d3ce5b24c112cb06e770fca78d
+> [2] https://github.com/libjxl/libjxl/issues/1425
+> [3] http://lists.busybox.net/pipermail/buildroot/2023-June/668287.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Julien Olivain <ju.o@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/cmake/Config.in.host             | 31 ++++++++++++++++++++++++
+>  package/cmake/cmake.mk                   |  1 +
+>  package/libjxl/Config.in                 |  1 +
+>  support/dependencies/check-host-cmake.mk | 12 +++++----
+>  4 files changed, 40 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+> index b2e210ee2c..fe5640088e 100644
+> --- a/package/cmake/Config.in.host
+> +++ b/package/cmake/Config.in.host
+> @@ -9,3 +9,34 @@ config BR2_PACKAGE_HOST_CMAKE
+>  	  the compiler environment of your choice.
+>  
+>  	  http://www.cmake.org/
+> +
+> +# The latest version in this list must match the one provided by host-cmake.
+> +config BR2_HOST_CMAKE_AT_LEAST_3_18 # Debian bullseye provide cmake 3.18.x
+> +	bool
+> +	default y
+
+There is no need for this symbol, if...
+
+> +config BR2_HOST_CMAKE_AT_LEAST_3_19
+> +	bool
+> +	select BR2_HOST_CMAKE_AT_LEAST_3_18
+> +
+> +config BR2_HOST_CMAKE_AT_LEAST_3_20
+> +	bool
+> +	select BR2_HOST_CMAKE_AT_LEAST_3_19
+> +
+> +config BR2_HOST_CMAKE_AT_LEAST_3_21
+> +	bool
+> +	select BR2_HOST_CMAKE_AT_LEAST_3_20
+> +
+> +config BR2_HOST_CMAKE_AT_LEAST_3_22
+> +	bool
+> +	select BR2_HOST_CMAKE_AT_LEAST_3_21
+> +
+> +# This order guarantees that the highest version is set, as kconfig
+> +# stops affecting a value on the first matching default.
+> +config BR2_HOST_CMAKE_AT_LEAST
+> +	string
+> +	default "3.22"	if BR2_HOST_CMAKE_AT_LEAST_3_22
+> +	default "3.21"	if BR2_HOST_CMAKE_AT_LEAST_3_21
+> +	default "3.20"	if BR2_HOST_CMAKE_AT_LEAST_3_20
+> +	default "3.19"	if BR2_HOST_CMAKE_AT_LEAST_3_19
+> +	default "3.18"	if BR2_HOST_CMAKE_AT_LEAST_3_18
+
+... you remove the conditional here, e.g. just:
+
+    default "3.18"
+
+And I prefer that there is always a non-conditional default.
+
+In which case the first comment would change to:
+
+    # The minimum system cmake version we expect if 3.18 as provided by
+    # Debian bullseye, that we use in our reference build docker image.
+
+> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+> index dc92c8bb4e..b99877696a 100644
+> --- a/package/cmake/cmake.mk
+> +++ b/package/cmake/cmake.mk
+> @@ -4,6 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> +# When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+>  CMAKE_VERSION_MAJOR = 3.22
+>  CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
+>  CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+> diff --git a/package/libjxl/Config.in b/package/libjxl/Config.in
+> index da04b89f9b..923560298f 100644
+> --- a/package/libjxl/Config.in
+> +++ b/package/libjxl/Config.in
+> @@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBJXL
+>  	# libjxl fail to link statically due to libatomic issue
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_81426
+> +	select BR2_HOST_CMAKE_AT_LEAST_3_19
+
+As suggested above, this needs to be in a separate patch.
+
+Otherwise, this is a very good idea, much simpler than what I was
+thinking about (i.e. having each package depend on their required
+version).
+
+Regards,
+Yann E. MORIN.
+
+>  	select BR2_PACKAGE_BROTLI
+>  	select BR2_PACKAGE_HIGHWAY
+>  	select BR2_PACKAGE_LCMS2
+> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+> index 5760e4ded1..e367690319 100644
+> --- a/support/dependencies/check-host-cmake.mk
+> +++ b/support/dependencies/check-host-cmake.mk
+> @@ -1,9 +1,11 @@
+> -# Set this to either 3.18 or higher, depending on the highest minimum
+> -# version required by any of the packages bundled in Buildroot. If a
+> -# package is bumped or a new one added, and it requires a higher
+> -# version, our cmake infra will catch it and build its own.
+> +# The cmake minimum version is set to either 3.18 or higher,
+> +# depending on the highest minimum version required by any
+> +# of the packages bundled in Buildroot. If a package is
+> +# bumped or a new one added, and it requires a higher
+> +# cmake version than the one provided by the host, our
+> +# cmake infra will catch it and build its own.
+>  #
+> -BR2_CMAKE_VERSION_MIN = 3.18
+> +BR2_CMAKE_VERSION_MIN = $(BR2_HOST_CMAKE_AT_LEAST)
+>  
+>  BR2_CMAKE_CANDIDATES ?= cmake cmake3
+>  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+> -- 
+> 2.34.3
+> 
+
 -- 
-2.40.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
