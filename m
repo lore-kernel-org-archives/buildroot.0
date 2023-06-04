@@ -1,89 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3B66C77B73
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 16:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2001AC77B73
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 17:28:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 433164190B;
-	Sun,  4 Jun 2023 16:35:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 433164190B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 556D881EE7;
+	Sun,  4 Jun 2023 17:28:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 556D881EE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xXf7AJftKXJr; Sun,  4 Jun 2023 16:35:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Mfc2R4wBliT5; Sun,  4 Jun 2023 17:28:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7450B4190D;
-	Sun,  4 Jun 2023 16:35:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7450B4190D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9106C1BF574
- for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 16:35:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8126C81A9C;
+	Sun,  4 Jun 2023 17:28:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8126C81A9C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D43DB1BF42C
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 17:28:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 64AFD41908
- for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 16:35:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64AFD41908
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABCB0418BA
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 17:28:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABCB0418BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YprdveXa-Nyn for <buildroot@lists.busybox.net>;
- Sun,  4 Jun 2023 16:35:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D6BE4026A
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8D6BE4026A
- for <buildroot@buildroot.org>; Sun,  4 Jun 2023 16:35:46 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-5147f7d045bso5844117a12.2
- for <buildroot@buildroot.org>; Sun, 04 Jun 2023 09:35:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685896545; x=1688488545;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Yimmg3KyaTdhVHKAaowxbA2foVLumDVcLUen0INQN78=;
- b=CzT09LNdlaePngKvJT1B2c3iucTvX4SBMzHYD6Zl9TL/SqeBt+VEbFdO6NJcCwXzFu
- jCBwRslXflxK3j/6FHYGEzyePekT/oK7sJ5cyJKfDjoTQhjg9V7dvJeB49Nw9hwyi8lT
- h14lWsBLbyDJ0XUwBVndfbcupALq/Dh5faYCelzgd4Rjflhsq1maRqS3GNVfUZUX4exR
- alabCS9dxBi4puYZRoTxe0EbbGE9hR5kk35+YssOGfQ8ZITKzxuM8/wQ7SSOPEVfgpKM
- eMpCj4MoZlvGfXyV0NbHUJbvEM3IAB0t1nYh6C5ygHS9floZ5V91CSbHBki7KKjCXw8Y
- FI3Q==
-X-Gm-Message-State: AC+VfDxaXhTGljfeXv7DGWRLFbUQUDmWoIcX0ySbKNQbqiXzdor3yrAy
- R55sXEUbcQPtkGrs5kSXEent4g4IsNPycSwT
-X-Google-Smtp-Source: ACHHUZ64/vEvFK33s7grj/5wsy9YdCjAZDPxKyOmQLVcycs4sqlQgwkuPJ8Sln08M0CH0K9o0LjHHQ==
-X-Received: by 2002:a17:907:a41f:b0:973:daaa:f3e1 with SMTP id
- sg31-20020a170907a41f00b00973daaaf3e1mr4669080ejc.39.1685896544387; 
- Sun, 04 Jun 2023 09:35:44 -0700 (PDT)
-Received: from localhost ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
- by smtp.gmail.com with UTF8SMTPSA id
- a24-20020a170906245800b009745ecf5438sm3234392ejb.193.2023.06.04.09.35.43
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 04 Jun 2023 09:35:43 -0700 (PDT)
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZFIu35IhFF5z for <buildroot@lists.busybox.net>;
+ Sun,  4 Jun 2023 17:28:51 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DA04418B8
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4DA04418B8
+ for <buildroot@buildroot.org>; Sun,  4 Jun 2023 17:28:51 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout12.t-online.de (Postfix) with SMTP id 719F267A5;
+ Sun,  4 Jun 2023 19:28:48 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd80.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1q5rX5-1FK2eP0; Sun, 4 Jun 2023 19:28:47 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35660)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q5rX5-0004bR-1n;
+ Sun, 04 Jun 2023 19:28:47 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun,  4 Jun 2023 18:35:35 +0200
-Message-Id: <20230604163535.1102239-1-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Date: Sun,  4 Jun 2023 19:28:45 +0200
+Message-Id: <20230604172845.2291865-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230604172845.2291865-1-bernd.kuhls@t-online.de>
+References: <20230604172845.2291865-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685896545; x=1688488545;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Yimmg3KyaTdhVHKAaowxbA2foVLumDVcLUen0INQN78=;
- b=XM0Ij0J8BYiXTTdzGpThrhPvRxuRLq30Q8Q2anRFX4bQ3RqfQK52wSC79QOt6hANfm
- uxJw/2vmw9Y3hdmpQMjO3CKCTihTlt9tPPOa7z5/mr6AtKfCUtwT16JdlA48FoQbQOBD
- HkdHTRiGafNqEkJ4FRBfC8ZHjN3Cm4D12CqtiOZaF9flQS9GzOSQV8cigbkIjb9+N7X2
- ankDqsavA2lOOQM6hB0+6Ujpf6FwzJiQY8YSfsJ9kijbqSUKrF6fOwlMbINFFEAqh0tu
- QGBbwm2/eIwVGWS57D+Yc3NqqvMitpTSPmls64nvWheHc6JQ4ZQUwUsq1lzZm3akoIH4
- pb/g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=XM0Ij0J8
-Subject: [Buildroot] [PATCH] package/gcc: Disable libsanitizer on
- arm920t/thumb
+X-TOI-EXPURGATEID: 150726::1685899727-0A6CC4D3-9D6EFAF7/0/0 CLEAN NORMAL
+X-TOI-MSGID: ba756617-fc61-408f-a662-b35138ade12f
+Subject: [Buildroot] [PATCH/next 2/2] package/intel-mediasdk: bump version
+ to 23.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,44 +68,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libsanitizer is broken for Thumb1, sanitizer_linux.cc contains
-unconditional "ldr ip, [sp], #8", which causes:
-
-....s: Assembler messages:
-....s:4190: Error: lo register required -- `ldr ip,[sp],#8'
-
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gcc/gcc.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 25cb4ce8e2..1ecbf7e9b4 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -154,6 +154,14 @@ ifeq ($(BR2_mips)$(BR2_mipsel):$(BR2_TOOLCHAIN_GCC_AT_LEAST_12),y:y)
- HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
- endif
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index a00748b667..f975ab15c3 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  186bb82fc9fe23ed21be51a58036c66b109f64c49d923ebe8ac922133338991e  intel-mediasdk-23.2.1.tar.gz
++sha256  12f23a78104edc1c9bfa755effd2723866d107ad752f72d3839fcc8db0503cec  intel-mediasdk-23.2.2.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index eb7703dbb3..18a2938441 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# libsanitizer is broken for Thumb1, sanitizer_linux.cc contains unconditional
-+# "ldr ip, [sp], #8", which causes:
-+# ....s: Assembler messages:
-+# ....s:4190: Error: lo register required -- `ldr ip,[sp],#8'
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
-+endif
-+
- # The logic in libbacktrace/configure.ac to detect if __sync builtins
- # are available assumes they are as soon as target_subdir is not
- # empty, i.e when cross-compiling. However, some platforms do not have
+-INTEL_MEDIASDK_VERSION = 23.2.1
++INTEL_MEDIASDK_VERSION = 23.2.2
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
-2.40.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
