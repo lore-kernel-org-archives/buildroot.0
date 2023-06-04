@@ -4,56 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B11AC77B73
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 10:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6312C7EE29
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 10:48:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E49EC41B5A;
-	Sun,  4 Jun 2023 10:47:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E49EC41B5A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83A644077D;
+	Sun,  4 Jun 2023 10:48:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83A644077D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KA8OCQaM-xZs; Sun,  4 Jun 2023 10:47:26 +0000 (UTC)
+	with ESMTP id I9wmNRBZOiTT; Sun,  4 Jun 2023 10:48:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E156241B4B;
-	Sun,  4 Jun 2023 10:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E156241B4B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 762681BF3B5
- for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 10:47:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E04B405B7;
+	Sun,  4 Jun 2023 10:48:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E04B405B7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D8D7A1BF3B5
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 10:48:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D255405B1
- for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 10:47:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D255405B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE72F405A6
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 10:48:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE72F405A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kRDUvO5SoW7l for <buildroot@lists.busybox.net>;
- Sun,  4 Jun 2023 10:47:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B67C404B0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B67C404B0
- for <buildroot@buildroot.org>; Sun,  4 Jun 2023 10:47:22 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 53C40C0003;
- Sun,  4 Jun 2023 10:47:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1q5lGY-00CtIX-HQ; Sun, 04 Jun 2023 12:47:18 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0StRxL4uP87W for <buildroot@lists.busybox.net>;
+ Sun,  4 Jun 2023 10:48:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBBCD4058C
+ for <buildroot@buildroot.org>; Sun,  4 Jun 2023 10:48:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBBCD4058C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A0AF086A05; Sun,  4 Jun 2023 10:48:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Itz 'toinux' Wam <itz.wam@gmail.com>
-References: <20230524132037.90220-1-itz.wam@gmail.com>
-Date: Sun, 04 Jun 2023 12:47:18 +0200
-In-Reply-To: <20230524132037.90220-1-itz.wam@gmail.com> (Itz Wam's message of
- "Wed, 24 May 2023 15:20:36 +0200")
-Message-ID: <877csjbj2h.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/bird: bump to version 2.0.12
+To: buildroot@buildroot.org
+Date: Sun, 4 Jun 2023 12:47:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d2c1d8dfb5233acf90da6a3b26526fc9ceebe2df
+X-Git-Newrev: eb940ab43d6ec8b0703182fd491e3ef9c57acc6e
+X-Patchwork-Hint: ignore
+Message-Id: <20230604104817.A0AF086A05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bird: bump to version 2.0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,24 +56,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrien =?utf-8?Q?Gallou=C3=ABt?= <adrien@gallouet.fr>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Itz" == Itz 'toinux' Wam <itz.wam@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eb940ab43d6ec8b0703182fd491e3ef9c57acc6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: itzwam <itz.wam@gmail.com>
- > Signed-off-by: Itz 'toinux' Wam <itz.wam@gmail.com>
+Bugfix release, with "Important bugfixes".  For details, see the
+announcement:
 
-According to the announcement, this contains "Important bugfixes" (would
-have been good to mention in the commit message), so committed to
-master, thanks.
+https://bird.network.cz/pipermail/bird-users/2023-January/016560.html
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Itz 'toinux' Wam <itz.wam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bird/bird.hash | 2 +-
+ package/bird/bird.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/bird/bird.hash b/package/bird/bird.hash
+index 3e00a1993d..a62fbba630 100644
+--- a/package/bird/bird.hash
++++ b/package/bird/bird.hash
+@@ -1,2 +1,2 @@
+-sha256  60a7b83b67b9d089d2a745a11fddd12461f631abc7b645b6c085adf90b3f55d6  bird-2.0.11.tar.gz
++sha256  3ec462a237d06d1f4455d6ec00a42f0b1686061fc988e5c89a841d01dd753b53  bird-2.0.12.tar.gz
+ sha256  94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index 1295358fb9..f1b2ee6c5e 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIRD_VERSION = 2.0.11
++BIRD_VERSION = 2.0.12
+ BIRD_SITE = https://bird.network.cz/download
+ BIRD_LICENSE = GPL-2.0+
+ BIRD_LICENSE_FILES = README
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
