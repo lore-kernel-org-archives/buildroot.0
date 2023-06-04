@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A6D7C7EE25
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:14:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27E77C7EE25
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:14:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0AD5240292;
-	Fri,  9 Jun 2023 16:14:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AD5240292
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9FE841A1B;
+	Fri,  9 Jun 2023 16:14:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9FE841A1B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uFH9Zd8nhlQw; Fri,  9 Jun 2023 16:14:27 +0000 (UTC)
+	with ESMTP id yAWPd0ERu50a; Fri,  9 Jun 2023 16:14:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25AF041A2B;
-	Fri,  9 Jun 2023 16:14:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25AF041A2B
+	by smtp2.osuosl.org (Postfix) with ESMTP id EAAC0417F1;
+	Fri,  9 Jun 2023 16:14:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAAC0417F1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A72D71BF97F
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D8F51BF2AA
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7034640BD6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86D75419DF
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7034640BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86D75419DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Va_U6tkeaLn6 for <buildroot@lists.busybox.net>;
+ with ESMTP id qBc3GQhPK76m for <buildroot@lists.busybox.net>;
  Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83F68401D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3A2C419F9
  for <buildroot@buildroot.org>; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83F68401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3A2C419F9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F94782631; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id B201D7F9BB; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 24 May 2023 21:59:55 +0200
+Date: Sun, 4 Jun 2023 12:54:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a6599bc75384b4cd1052940297ba07d58346c97f
-X-Git-Newrev: 7685016cdc5582985dc8fcb1eac09623467a2bc0
+X-Git-Oldrev: 108bb3395b5ed2abe1c3c5a20fb9205dfc672b54
+X-Git-Newrev: fe567a81846b35b17c6989d759c2d893e46bc023
 X-Patchwork-Hint: ignore
-Message-Id: <20230609161307.6F94782631@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libwebsockets: (re-)enable
- external poll loop support
+Message-Id: <20230609161307.B201D7F9BB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strace: bump to version 6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7685016cdc5582985dc8fcb1eac09623467a2bc0
+commit: https://git.buildroot.net/buildroot/commit/?id=fe567a81846b35b17c6989d759c2d893e46bc023
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 3.2.0, libwebsockets does not compile its external loop
-support code anymore. That code was put under LWS_WITH_EXTERNAL_POLL
-compile option, which defaults to OFF.
-
-Applications relying on that support need to turn that option on, so
-let's add it to the package.
-
-For example, when libwebsockets is enabled, mosquitto broker is built
-with websocket support, but its code requires LWS_WITH_EXTERNAL_POLL
-to be on, otherwise it gives compile-time warning hinting to unusable
-websocket support:
-
-https://github.com/eclipse/mosquitto/commit/1b24f625ea4ee77f3c4796ec2233d059f8c7977e
-
-Signed-off-by: Luca Pesce <luca.pesce@vimar.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libwebsockets/Config.in        | 12 ++++++++++++
- package/libwebsockets/libwebsockets.mk |  4 ++++
- 2 files changed, 16 insertions(+)
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-index d7b529cafd..05c132641e 100644
---- a/package/libwebsockets/Config.in
-+++ b/package/libwebsockets/Config.in
-@@ -9,5 +9,17 @@ config BR2_PACKAGE_LIBWEBSOCKETS
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index d49abf1f16..555d074c5d 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/6.2/strace-6.2.tar.xz.asc
+-sha256  0c7d38a449416268d3004029a220a15a77c2206a03cc88120f37f46e949177e8  strace-6.2.tar.xz
++# https://strace.io/files/6.3/strace-6.3.tar.xz.asc
++sha256  e17878e301506c1cc301611118ad14efee7f8bcef63b27ace5d290acce7bb731  strace-6.3.tar.xz
+ sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 730a91d277..6514bfe354 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://libwebsockets.org/
- 
-+if BR2_PACKAGE_LIBWEBSOCKETS
-+
-+config BR2_PACKAGE_LIBWEBSOCKETS_EXT_POLL
-+	bool "enable external poll loop support"
-+	default y  # legacy, was previously always enabled
-+	help
-+	  Enable external poll loop support code. This was
-+	  unconditionally compiled in for library versions
-+	  prior to 3.2.0.
-+
-+endif
-+
- comment "libwebsockets needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index fb0ee66883..86756ca612 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -94,4 +94,8 @@ ifeq ($(BR2_SHARED_LIBS),y)
- LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_STATIC=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS_EXT_POLL),y)
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_EXTERNAL_POLL=ON
-+endif
-+
- $(eval $(cmake-package))
+-STRACE_VERSION = 6.2
++STRACE_VERSION = 6.3
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
