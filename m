@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A27F3C7EE2E
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE3FDC83005
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:15:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DAA041A19;
-	Fri,  9 Jun 2023 16:14:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DAA041A19
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CB56417F1;
+	Fri,  9 Jun 2023 16:15:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CB56417F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LcxgYtdsOQPg; Fri,  9 Jun 2023 16:14:52 +0000 (UTC)
+	with ESMTP id IhfMsyvpf07I; Fri,  9 Jun 2023 16:15:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 78A0B41A23;
-	Fri,  9 Jun 2023 16:14:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78A0B41A23
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6D851BF2AA
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48D86418F4;
+	Fri,  9 Jun 2023 16:15:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48D86418F4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 879CD1BF2AA
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 60D8161614
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A741401D8
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60D8161614
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A741401D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3FiuFPmFJFRB for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o9eV8qpd_jv0 for <buildroot@lists.busybox.net>;
  Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9290861619
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1679419F1
  for <buildroot@buildroot.org>; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9290861619
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1679419F1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82BF58262C; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
+ id 9FCAE8262B; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Jun 2023 00:28:29 +0200
+Date: Sun, 4 Jun 2023 12:52:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e7c321ba0424123b0bf6f10a31af00607daaa8f
-X-Git-Newrev: a46ac2346558d05afe405dda3730169df4b677d2
+X-Git-Oldrev: 2e511e791daab76b1da42cb3a69a4d7c2baeb85d
+X-Git-Newrev: 6b26999abca4e9fb4c2050123af028b80fa0c990
 X-Patchwork-Hint: ignore
-Message-Id: <20230609161307.82BF58262C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openvpn: bump version to 2.6.4
+Message-Id: <20230609161307.9FCAE8262B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lightning: bump version to 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,78 +62,124 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a46ac2346558d05afe405dda3730169df4b677d2
+commit: https://git.buildroot.net/buildroot/commit/?id=6b26999abca4e9fb4c2050123af028b80fa0c990
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
-https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+And restore support for MIPS64, which is supported by Lightning.
 
-Added mandatory dependency to libcap-ng due to upstream commit
-https://github.com/OpenVPN/openvpn/commit/2e359a088226ab1e5ee41fbab27d38d8a8d192ac
-
-Added optional dependency to libnl due to upstream commit
-https://github.com/OpenVPN/openvpn/commit/f63c9b1edbda41491ba2e05ff706bf0233903cb6
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/Config.in    |  1 +
- package/openvpn/openvpn.hash |  2 +-
- package/openvpn/openvpn.mk   | 11 +++++++++--
- 3 files changed, 11 insertions(+), 3 deletions(-)
+ .checkpackageignore                                |  1 -
+ .../0001-lib-jit_disasm.c-fix-build.patch          | 42 ----------------------
+ package/lightning/Config.in                        |  6 ++--
+ package/lightning/lightning.hash                   |  2 +-
+ package/lightning/lightning.mk                     |  2 +-
+ 5 files changed, 6 insertions(+), 47 deletions(-)
 
-diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
-index cd8b1db996..5aa2386d36 100644
---- a/package/openvpn/Config.in
-+++ b/package/openvpn/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_OPENVPN
- 	bool "openvpn"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBCAP_NG
- 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 81cf1afe6b..963efac992 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -893,7 +893,6 @@ package/libwebsock/0002-fix-ssl.patch Upstream
+ package/libwebsock/0003-fix-incorrect-inline.patch Upstream
+ package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch Upstream
+ package/libyuv/0001-i386-sse2.patch Upstream
+-package/lightning/0001-lib-jit_disasm.c-fix-build.patch Upstream
+ package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch Upstream
+ package/lighttpd/S50lighttpd EmptyLastLine Indent Shellcheck Variables
+ package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch Upstream
+diff --git a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch b/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
+deleted file mode 100644
+index 9e79be91a0..0000000000
+--- a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 0d828c96c373c34b201ca7ea37b61c1e3b0485cd Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 19 Dec 2022 23:55:31 +0100
+-Subject: [PATCH] lib/jit_disasm.c: fix build
+-
+-Fix the following build failure raised since
+-http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=837c7a1e8d08fb9294578dc84694077f4d6106f9:
+-
+-jit_disasm.c: In function 'fprintf_styled':
+-jit_disasm.c:57:27: error: parameter name omitted
+-   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
+-      |                           ^~~~~~
+-jit_disasm.c:57:35: error: parameter name omitted
+-   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
+-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/e15e01e98e0d8c873efd3f512b671d98e4daf6c0
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[yann.morin.1998@free.fr: make it a backport now it's applied upstream]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- lib/jit_disasm.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
+-index 58a269b..68c966d 100644
+---- a/lib/jit_disasm.c
+-+++ b/lib/jit_disasm.c
+-@@ -54,7 +54,7 @@ static FILE			 *disasm_stream;
+- #endif
+- 
+- #if BINUTILS_2_38
+--static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
+-+static int fprintf_styled(void * stream, enum disassembler_style style, const char* fmt, ...)
+- {
+-   va_list args;
+-   int r;
+--- 
+-2.25.1
+-
+diff --git a/package/lightning/Config.in b/package/lightning/Config.in
+index 3cf7c28ae2..e42730addb 100644
+--- a/package/lightning/Config.in
++++ b/package/lightning/Config.in
+@@ -1,12 +1,14 @@
+ comment "lightning needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
+-		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
++		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64 || \
++		BR2_mips64 || BR2_mips64el
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_LIGHTNING
+ 	bool "lightning"
+ 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
+-		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
++		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64 || \
++		BR2_mips64 || BR2_mips64el
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
  	help
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 0959b7f838..8078b41157 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
+diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
+index 998ae3743b..97b391674c 100644
+--- a/package/lightning/lightning.hash
++++ b/package/lightning/lightning.hash
 @@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  08340a389905c84196b6cd750add1bc0fa2d46a1afebfd589c24120946c13e68  openvpn-2.5.7.tar.gz
-+sha256  371a2a323a99a79299b9b4caa4a31bc7b2cdff63236e68d429f3ee50e75f3dd4  openvpn-2.6.4.tar.gz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 5c602e0448..920677e170 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,9 +4,9 @@
+ # Locally computed
+-sha256  4e3984ff1ccf0ba30a985211d40fc5c06b25f014ebdf3d80d0fe3d0c80dd7c0e  lightning-2.2.0.tar.gz
++sha256  98671681d5684770ccb06a07fa3b8f032a454bdb56eafc18e6fab04459ea3caa  lightning-2.2.1.tar.gz
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
+index 8ab2ca1f9d..4a8c7e5efd 100644
+--- a/package/lightning/lightning.mk
++++ b/package/lightning/lightning.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.5.7
-+OPENVPN_VERSION = 2.6.4
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
--OPENVPN_DEPENDENCIES = host-pkgconf
-+OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
- OPENVPN_LICENSE = GPL-2.0
- OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
- OPENVPN_CPE_ID_VENDOR = openvpn
-@@ -16,6 +16,13 @@ OPENVPN_CONF_OPTS = \
- 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
- OPENVPN_CONF_ENV = NETSTAT=/bin/netstat
- 
-+ifeq ($(BR2_PACKAGE_LIBNL),y)
-+OPENVPN_CONF_OPTS += --enable-dco
-+OPENVPN_DEPENDENCIES += libnl
-+else
-+OPENVPN_CONF_OPTS += --disable-dco
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
- OPENVPN_CONF_OPTS += \
- 	--enable-small \
+-LIGHTNING_VERSION = 2.2.0
++LIGHTNING_VERSION = 2.2.1
+ LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
+ LIGHTNING_LICENSE = LGPL-3.0+
+ LIGHTNING_LICENSE_FILES = COPYING.LESSER
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
