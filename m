@@ -1,91 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C8D2C77B7A
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jun 2023 22:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D7AC77B7A
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jun 2023 02:52:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB71F41E56;
-	Sat,  3 Jun 2023 22:16:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB71F41E56
+	by smtp2.osuosl.org (Postfix) with ESMTP id A793940ABE;
+	Sun,  4 Jun 2023 02:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A793940ABE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RgoHK7UjY0Ud; Sat,  3 Jun 2023 22:16:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3Xlc0WTwM0Xg; Sun,  4 Jun 2023 02:52:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FBC541E53;
-	Sat,  3 Jun 2023 22:16:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FBC541E53
+	by smtp2.osuosl.org (Postfix) with ESMTP id 232F3404B0;
+	Sun,  4 Jun 2023 02:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 232F3404B0
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 28D291BF36F
- for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 22:16:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C3C2A1BF2C0
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 02:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F6E7405EB
- for <buildroot@lists.busybox.net>; Sat,  3 Jun 2023 22:16:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F6E7405EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8179404B0
+ for <buildroot@lists.busybox.net>; Sun,  4 Jun 2023 02:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8179404B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z6C7Mwtt5eIF for <buildroot@lists.busybox.net>;
- Sat,  3 Jun 2023 22:16:19 +0000 (UTC)
+ with ESMTP id GJ_-eooVIErY for <buildroot@lists.busybox.net>;
+ Sun,  4 Jun 2023 02:52:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3677404C2
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D3677404C2
- for <buildroot@buildroot.org>; Sat,  3 Jun 2023 22:16:18 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-96f850b32caso546288766b.3
- for <buildroot@buildroot.org>; Sat, 03 Jun 2023 15:16:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A68A4048A
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
+ [IPv6:2607:f8b0:4864:20::1031])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4A68A4048A
+ for <buildroot@buildroot.org>; Sun,  4 Jun 2023 02:52:08 +0000 (UTC)
+Received: by mail-pj1-x1031.google.com with SMTP id
+ 98e67ed59e1d1-256e1d87998so2995960a91.3
+ for <buildroot@buildroot.org>; Sat, 03 Jun 2023 19:52:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685830577; x=1688422577;
+ d=1e100.net; s=20221208; t=1685847128; x=1688439128;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=WT52fB60/yYi1XBzXD/PE0oqV8P9kAHpkySK7XbeXJg=;
- b=PgH2XfJoiVJRLpdxEM4m47tz2pvqn8B+B0VY7kZw57XnnF/6kjlQ6xC4a8mvsC90iT
- W/oZy3X2JWB+28QW0r3DETbFHMjSRXvKZEQjRzyHAbICWtb5bXEfqBlOrkowTf4SqDXC
- yeWqhn+5uswx7WJKrMR7fnChNZF63yPuYwYHlVq5V22OtmY4kXhKigEV0K+0r5HhZNDM
- yk2qBUQ1pxowIJZ7GJZXMue9Rwoc7Ga8LXr57TlXw6AwH7VMVHqz/nPiGxju6xrWTnGp
- LLBYu9uwes5OHndw1xlvMdBZIkwlPKpOadBOQgPNAd92SMQno/oeipiO/KouwPgq19Sf
- /2kA==
-X-Gm-Message-State: AC+VfDx1Wdb2q2ZxvpK+QtMCu9GofRRNu5pjeBetWBQeL8VnLES+VYSw
- dBs2L1CG/DEuLxpO/8c/jMxxcSkRSUk=
-X-Google-Smtp-Source: ACHHUZ73rZX9BOB9x3s403goiMOaz2unzzxrGjGKMFpPPYiglkm7KxiXrLbkoEYiHR+Uly+WHUYyyA==
-X-Received: by 2002:a17:907:168a:b0:973:d846:cd5d with SMTP id
- hc10-20020a170907168a00b00973d846cd5dmr2759134ejc.74.1685830576788; 
- Sat, 03 Jun 2023 15:16:16 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ bh=AQh/Eru9Yl1V4WYMHcp84WWgcngFXqgWib2Fvzrq9g4=;
+ b=esmQLKHUWHbI/aKR3TYrRLGoFIkppceJ/tiSbWX/JnakFfb9s5CLzUd/V7k83nAjVP
+ 6AV+aeVuHaCMP4B2uqi5ZRnHDyTxEysZ/Xs9QLdHvGm7fvJhUxBbqDrv2xKwEwEXsfZh
+ bKUiDaX5cGNcpNktl/YxArX8J3liFft8MTmz8h2pGccrk0sWGk6kCzPDFRZ0BKSVfkqH
+ e2axlrTpzgYjTkiLwYxKmSRb/xAI5plRUJS5ZlQym6UrEI5iTVh6m77jMTBP1mHE0L+e
+ x8WZzQEUc6UP425o1Ro18HSzNHYRcacvWofRvKN5MxJ7OyiihYpjk8CuJvpXs+ncdsTQ
+ 3s/A==
+X-Gm-Message-State: AC+VfDw7jCPoUY6ji8/rbuG50mfiVA2rCDfapxGCLBRbAfcUZ8x0cnoh
+ 3BE1D9sPDdX5XOCEg3pFHqDxHAy6YECnpg==
+X-Google-Smtp-Source: ACHHUZ6zIsZ8vwivEsaVn+7dibudBDYWLs27ZBHKt/MA4X5mMptJ/7lf09KR10PhXQrAi5rvrrRULA==
+X-Received: by 2002:a17:90b:1c06:b0:258:9180:1999 with SMTP id
+ oc6-20020a17090b1c0600b0025891801999mr4248074pjb.32.1685847127475; 
+ Sat, 03 Jun 2023 19:52:07 -0700 (PDT)
+Received: from fedora.hsd1.wa.comcast.net ([2601:603:2180:ebe0::2ff5])
  by smtp.gmail.com with ESMTPSA id
- d6-20020a5d5386000000b00307c46f4f08sm5501133wrv.79.2023.06.03.15.16.15
+ j12-20020a17090a840c00b00253311d508esm5260717pjn.27.2023.06.03.19.52.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Jun 2023 15:16:16 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
+ Sat, 03 Jun 2023 19:52:07 -0700 (PDT)
+From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  4 Jun 2023 00:16:12 +0200
-Message-Id: <20230603221612.292994-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.34.3
+Date: Sat,  3 Jun 2023 19:52:04 -0700
+Message-Id: <20230604025204.324443-1-aduskett@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685830577; x=1688422577;
+ d=gmail.com; s=20221208; t=1685847128; x=1688439128;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WT52fB60/yYi1XBzXD/PE0oqV8P9kAHpkySK7XbeXJg=;
- b=pInJdjmLL6ZsxFaTq0moN0o6HscdEElstB4B79e/3KZfF0dS5nChvcdlslgR9BY8p6
- xuS2A1X/PMhfESajohuBgvDap8bpeGqycEnNkMDNMcp01s0msmziPcj0+Dfj9UeZYC/l
- m6+RQM1cqEylv9L8FYYuAuMjkT/w0U3H64Ya5Nl1HVLM57omK31iaV1zVgTogyKFQ3he
- 0yo/vgX6WLaKgY2YO5PxIhwIO2HGe/f0YhTRq7IJsHsHZzDVg6TSJA4QYmUyOpPF84Fy
- JmtMjcZ6O4gVz9rfcQJU10hzPgEoc4ZDbPDbw5lIIhhU0zWGZNHoj3iFGBaHlOLN6XhT
- +9Gw==
+ bh=AQh/Eru9Yl1V4WYMHcp84WWgcngFXqgWib2Fvzrq9g4=;
+ b=D4ecrIV9fDrWcz5v0CAxk90F8jSiJX/xC7La5nRSHhPXY6TiW12dI7zP+Mun0PXIAj
+ FHop3Eo8XtzPoq1mkh6ogfkMiikP9aPd9PwVku9wMtRXNRafkyyt2KQ1XlNQoCQgMCc2
+ wRahtMTAHabDe5VVsOhG7/OCEYfkSnx5jzoVm7dn4yIdpDUULmMDwaIEV7K8oJa8uWP6
+ uu+rxo1fFBluhPtSZ/iko5Lcd/wKSinU3OM0hjs8sK1hn9d+EeS22CAf5dliu5yCbbbg
+ Kzr/Xbf7aJbjrfZKyoZn80PTU+s0NQYuhufBqbO7JDX8UWNaYzVIUTjM0ap04qTUaWc7
+ YhSw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=pInJdjmL
-Subject: [Buildroot] [RFC] support/dependencies: introduce
- BR2_HOST_CMAKE_AT_LEAST
+ header.a=rsa-sha256 header.s=20221208 header.b=D4ecrIV9
+Subject: [Buildroot] [PATCH v2 1/1] package/firewalld: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,140 +94,471 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libjxl requires cmake 3.19 since version v0.7 due to the
-new behavior of cmake [1].
+Firewalld provides a dynamically managed firewall with
+support for network or firewall zones to define the trust level of network
+connections or interfaces.
 
--- Configuring done
-CMake Error at cmake/FindLCMS2.cmake:40 (add_library):
-  INTERFACE_LIBRARY targets may only have whitelisted properties.  The
-  property "INCLUDE_DIRECTORIES" is not allowed.
-Call Stack (most recent call first):
-  third_party/CMakeLists.txt:114 (find_package)
+Items of note:
 
-The portability issue has already been reported upstream [2].
+ - Setting PYTHON="/usr/bin/env python$(PYTHON3_VERSION_MAJOR)" prevents
+   Firewalld from setting the shebang in the installed python files to the
+   full path to the python interpreter used when building.
 
-host-cmake is know to take a long time to build and we want
-to avoid bumping BR2_CMAKE_VERSION_MIN only for one package.
-As discussed on the mailing list [3] introduce
-BR2_HOST_CMAKE_AT_LEAST_X_Y selected by package that
-requires a higher cmake version than the one provided by
-the host.
+ - The bundled provided SYSV init file has several bashisms and requires
+   /etc/init.d/functions which buildroot doesn't provide. So instead, a more
+   simple init.d file is provided in the package directory, which does not
+   require bash.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819095
+ - Firewalld >= 1.0.0 requires a linux kernel version of 5.3 or later.
+   Because Buildroot does not have a mechanism to detect what version a user
+   is compiling if the kernel is external, there is no way to prevent a user
+   with an external kernel older than 5.3 to select this package.
 
-[1] https://gitlab.kitware.com/cmake/cmake/-/commit/afb998704e67d3d3ce5b24c112cb06e770fca78d
-[2] https://github.com/libjxl/libjxl/issues/1425
-[3] http://lists.busybox.net/pipermail/buildroot/2023-June/668287.html
+ - To run, Firewalld requires enabling almost every single nftables option in
+   the kernel menuconfig. Indeed for a regular user, this task is quite a
+   time-consuming operation, and missing even one required nftables option
+   results in firewalld failing to start.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Julien Olivain <ju.o@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+   Through a mix of trial and error and talking to the upstream developers,
+   the package selects the minimum amount of kernel options required for
+   runtime. Understandably the list is daunting. However, these options
+   have passed run-time tests with kernel 5.3 (the minimum kernel version
+   required) and kernel 6.2.10 (the latest kernel version as of this commit
+   log.)
+
+As such, it is safe to say these options will work for anybody wanting to
+use firewalld with a supported kernel version of 5.3 or higher.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/cmake/Config.in.host             | 31 ++++++++++++++++++++++++
- package/cmake/cmake.mk                   |  1 +
- package/libjxl/Config.in                 |  1 +
- support/dependencies/check-host-cmake.mk | 12 +++++----
- 4 files changed, 40 insertions(+), 5 deletions(-)
+Changes v1 -> v2:
+  - Fix verbage in Config.in
+  - Bump to version 1.3.2
 
-diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
-index b2e210ee2c..fe5640088e 100644
---- a/package/cmake/Config.in.host
-+++ b/package/cmake/Config.in.host
-@@ -9,3 +9,34 @@ config BR2_PACKAGE_HOST_CMAKE
- 	  the compiler environment of your choice.
- 
- 	  http://www.cmake.org/
+ package/Config.in                |   1 +
+ package/firewalld/Config.in      |  43 ++++++
+ package/firewalld/S46firewalld   |  66 ++++++++
+ package/firewalld/firewalld.hash |   3 +
+ package/firewalld/firewalld.mk   | 257 +++++++++++++++++++++++++++++++
+ 5 files changed, 370 insertions(+)
+ create mode 100644 package/firewalld/Config.in
+ create mode 100644 package/firewalld/S46firewalld
+ create mode 100644 package/firewalld/firewalld.hash
+ create mode 100644 package/firewalld/firewalld.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index ad438667d2..da1b5bb4b9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2315,6 +2315,7 @@ endif
+ 	source "package/fail2ban/Config.in"
+ 	source "package/fastd/Config.in"
+ 	source "package/fcgiwrap/Config.in"
++	source "package/firewalld/Config.in"
+ 	source "package/flannel/Config.in"
+ 	source "package/fmc/Config.in"
+ 	source "package/fping/Config.in"
+diff --git a/package/firewalld/Config.in b/package/firewalld/Config.in
+new file mode 100644
+index 0000000000..4f58a3ea05
+--- /dev/null
++++ b/package/firewalld/Config.in
+@@ -0,0 +1,43 @@
++config BR2_PACKAGE_FIREWALLD
++	bool "firewalld"
++	depends on BR2_USE_MMU # gobject-introspection, python-gobject
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR # glib2, dbus-python, nftables
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
++	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection -> host-qemu
++	depends on BR2_PACKAGE_PYTHON3 # dbus-python, gobject-introspection
++	select BR2_PACKAGE_DBUS # dbus-python
++	select BR2_PACKAGE_DBUS_PYTHON
++	select BR2_PACKAGE_GOBJECT_INTROSPECTION
++	select BR2_PACKAGE_JANSSON # Uses the nftables json interface
++	select BR2_PACKAGE_NFTABLES
++	select BR2_PACKAGE_PYTHON_GOBJECT
++	help
++	  Firewalld provides a dynamically managed firewall with
++	  support for network or firewall zones to define the trust
++	  level of network connections or interfaces. It has support
++	  for IPv4, IPv6 firewall settings and for ethernet bridges and
++	  a separation of runtime and permanent configuration options.
++	  It also provides an interface for services or applications to
++	  add ip*tables and ebtables rules directly.
 +
-+# The latest version in this list must match the one provided by host-cmake.
-+config BR2_HOST_CMAKE_AT_LEAST_3_18 # Debian bullseye provide cmake 3.18.x
-+	bool
-+	default y
++	  Note: Firewalld uses nftables as the backend and requires
++	  kernel version >= 5.3.
 +
-+config BR2_HOST_CMAKE_AT_LEAST_3_19
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_3_18
++	  https://github.com/firewalld/firewalld
 +
-+config BR2_HOST_CMAKE_AT_LEAST_3_20
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_3_19
++comment "firewalld needs python3"
++	depends on !BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
 +
-+config BR2_HOST_CMAKE_AT_LEAST_3_21
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_3_20
++comment "firewalld needs a glibc toolchain w/ wchar, dynamic library, headers >= 3.12, gcc >= 4.9, host gcc >= 8"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
++		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_HOST_GCC_AT_LEAST_8
+diff --git a/package/firewalld/S46firewalld b/package/firewalld/S46firewalld
+new file mode 100644
+index 0000000000..40f43e1f57
+--- /dev/null
++++ b/package/firewalld/S46firewalld
+@@ -0,0 +1,66 @@
++#!/bin/sh
 +
-+config BR2_HOST_CMAKE_AT_LEAST_3_22
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_3_21
++DAEMON=firewalld
++PIDFILE=/var/run/$DAEMON.pid
 +
-+# This order guarantees that the highest version is set, as kconfig
-+# stops affecting a value on the first matching default.
-+config BR2_HOST_CMAKE_AT_LEAST
-+	string
-+	default "3.22"	if BR2_HOST_CMAKE_AT_LEAST_3_22
-+	default "3.21"	if BR2_HOST_CMAKE_AT_LEAST_3_21
-+	default "3.20"	if BR2_HOST_CMAKE_AT_LEAST_3_20
-+	default "3.19"	if BR2_HOST_CMAKE_AT_LEAST_3_19
-+	default "3.18"	if BR2_HOST_CMAKE_AT_LEAST_3_18
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index dc92c8bb4e..b99877696a 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
- CMAKE_VERSION_MAJOR = 3.22
- CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
-diff --git a/package/libjxl/Config.in b/package/libjxl/Config.in
-index da04b89f9b..923560298f 100644
---- a/package/libjxl/Config.in
-+++ b/package/libjxl/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBJXL
- 	# libjxl fail to link statically due to libatomic issue
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_81426
-+	select BR2_HOST_CMAKE_AT_LEAST_3_19
- 	select BR2_PACKAGE_BROTLI
- 	select BR2_PACKAGE_HIGHWAY
- 	select BR2_PACKAGE_LCMS2
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 5760e4ded1..e367690319 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -1,9 +1,11 @@
--# Set this to either 3.18 or higher, depending on the highest minimum
--# version required by any of the packages bundled in Buildroot. If a
--# package is bumped or a new one added, and it requires a higher
--# version, our cmake infra will catch it and build its own.
-+# The cmake minimum version is set to either 3.18 or higher,
-+# depending on the highest minimum version required by any
-+# of the packages bundled in Buildroot. If a package is
-+# bumped or a new one added, and it requires a higher
-+# cmake version than the one provided by the host, our
-+# cmake infra will catch it and build its own.
- #
--BR2_CMAKE_VERSION_MIN = 3.18
-+BR2_CMAKE_VERSION_MIN = $(BR2_HOST_CMAKE_AT_LEAST)
- 
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
++start() {
++	printf "Starting firewalld: "
++	start-stop-daemon -S -q --exec $DAEMON
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++}
++stop() {
++	printf "Stopping firewalld: "
++	start-stop-daemon --stop --quiet --pidfile $PIDFILE
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++}
++
++reload(){
++	printf "Reloading firewalld: "
++	firewall-cmd --reload
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++}
++
++restart() {
++	stop
++	start
++}
++
++status(){
++	firewall-cmd --state
++}
++
++case "$1" in
++		start)
++			start
++			;;
++		stop)
++			stop
++			;;
++		restart)
++			restart
++			;;
++		reload)
++			reload
++			;;
++		status)
++			status
++			;;
++		*)
++			echo "Usage: $0 {start|stop|restart|reload|status}"
++			exit 1
++esac
+diff --git a/package/firewalld/firewalld.hash b/package/firewalld/firewalld.hash
+new file mode 100644
+index 0000000000..d8be3f7ba0
+--- /dev/null
++++ b/package/firewalld/firewalld.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  3be5a3caa36d1026c5b72d3f61dd963dccd953791b04af03d9946b24bef8391e  firewalld-1.3.2.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
+new file mode 100644
+index 0000000000..e91825601d
+--- /dev/null
++++ b/package/firewalld/firewalld.mk
+@@ -0,0 +1,257 @@
++################################################################################
++#
++# firewalld
++#
++################################################################################
++
++FIREWALLD_VERSION = 1.3.2
++FIREWALLD_SITE = $(call github,firewalld,firewalld,v$(FIREWALLD_VERSION))
++FIREWALLD_LICENSE = GPL-2.0
++FIREWALLD_LICENSE_FILES = COPYING
++FIREWALLD_AUTORECONF = YES
++
++FIREWALLD_DEPENDENCIES = \
++	host-intltool \
++	host-libglib2 \
++	host-libxml2 \
++	host-libxslt \
++	dbus-python \
++	gobject-introspection \
++	jansson \
++	nftables \
++	python3 \
++	python-gobject
++
++# Firewalld hard codes the python shebangs to the full path of the
++# python-interpreter. IE: #!/home/buildroot/output/host/bin/python.
++# Force the proper python path.
++FIREWALLD_CONF_ENV += PYTHON="/usr/bin/env python3"
++
++# /etc/sysconfig/firewalld is a Red Hat-ism, only referenced by
++# the Red Hat-specific init script which isn't used, so we set
++# --disable-sysconfig.
++FIREWALLD_CONF_OPTS += \
++	--disable-rpmmacros \
++	--disable-sysconfig \
++	--with-nft=/usr/sbin/nft \
++	--without-ebtables \
++	--without-ebtables-restore \
++	--without-ipset \
++	--without-xml-catalog
++
++ifeq ($(BR2_PACKAGE_IPTABLES),y)
++FIREWALLD_DEPENDENCIES += iptables
++FIREWALLD_CONF_OPTS += \
++	--with-ip6tables-restore=/usr/sbin/ip6tables-restore \
++	--with-ip6tables=/usr/sbin/ip6tables \
++	--with-iptables-restore=/usr/sbin/iptables-restore \
++	--with-iptables=/usr/sbin/iptables
++else
++FIREWALLD_CONF_OPTS += -without-iptables
++endif
++
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++FIREWALLD_CONF_OPTS += --enable-nls
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++FIREWALLD_DEPENDENCIES += systemd
++FIREWALLD_CONF_OPTS += --with-systemd-unitdir=/usr/lib/systemd/system
++else
++FIREWALLD_CONF_OPTS += --disable-systemd
++endif
++
++define FIREWALLD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/config/firewalld.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/firewalld.service
++endef
++
++# The bundled sysvinit file requires /etc/init.d/functions which is not
++# provided by buildroot. As such, we provide our own firewalld init file.
++define FIREWALLD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(FIREWALLD_PKGDIR)/S46firewalld \
++		$(TARGET_DIR)/etc/init.d/S46firewalld
++endef
++
++# Firewalld requires almost every single nftable option selected.
++define FIREWALLD_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_FILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_IPTABLES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MANGLE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_AH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_EUI64)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_FRAG)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_HL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_IPV6HEADER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_MH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_OPTS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RPFILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_SRH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_NAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_RAW)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_HL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_MASQUERADE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_NPT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_REJECT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_SYNPROXY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARP_MANGLE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPFILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPTABLES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MANGLE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_AH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_ECN)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_RPFILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_TTL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_RAW)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_CLUSTERIP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_ECN)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_NETMAP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REDIRECT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REJECT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_SYNPROXY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_TTL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IPMAC)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_PORT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMAC)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMARK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTIP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTNET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_MAC)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETIFACE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETNET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORTNET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_LIST_SET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_CONNCOUNT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK_GLUE_CT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_SYNPROXY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_AMANDA)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_BROADCAST)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_EVENTS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_FTP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_H323)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_IRC)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_LABELS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_NETBIOS_NS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PPTP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PROCFS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SANE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SIP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SNMP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TFTP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMEOUT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMESTAMP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_ZONES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_HELPER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_TIMEOUT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_DCCP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_GRE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_SCTP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_UDPLITE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_NETDEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_INET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_ARP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_BRIDGE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_COMMON)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_NETDEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_AMANDA)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_FTP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_H323)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IRC)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_NEEDED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PPTP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_DCCP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_GRE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_SCTP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_UDPLITE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_REDIRECT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SIP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SNMP_BASIC)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_TFTP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_ARP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_BRIDGE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_NETDEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_SET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_BRIDGE_REJECT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COMPAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CONNLIMIT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COUNTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_NETDEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_INET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_NETDEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FLOW_OFFLOAD)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FWD_NETDEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_HASH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LIMIT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LOG)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NUMGEN)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OBJREF)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OSF)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUEUE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUOTA)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_INET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV6)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_NETDEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SOCKET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SYNPROXY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TPROXY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TUNNEL)
++endef
++
++$(eval $(autotools-package))
 -- 
-2.34.3
+2.40.1
 
 _______________________________________________
 buildroot mailing list
