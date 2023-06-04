@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE3FDC83005
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:15:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CA3C7EE25
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7CB56417F1;
-	Fri,  9 Jun 2023 16:15:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CB56417F1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E49740C25;
+	Fri,  9 Jun 2023 16:15:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E49740C25
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IhfMsyvpf07I; Fri,  9 Jun 2023 16:15:05 +0000 (UTC)
+	with ESMTP id tE_pb-SRU-4g; Fri,  9 Jun 2023 16:15:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48D86418F4;
-	Fri,  9 Jun 2023 16:15:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48D86418F4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 879CD1BF2AA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D5B941A3E;
+	Fri,  9 Jun 2023 16:15:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D5B941A3E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CACFC1BF2AA
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A741401D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B1E960BD2
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A741401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B1E960BD2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o9eV8qpd_jv0 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RRoqmkYuwiLB for <buildroot@lists.busybox.net>;
  Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1679419F1
+ by smtp3.osuosl.org (Postfix) with ESMTP id A4E1E6161A
  for <buildroot@buildroot.org>; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1679419F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4E1E6161A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FCAE8262B; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
+ id 9565782629; Fri,  9 Jun 2023 16:13:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 4 Jun 2023 12:52:33 +0200
+Date: Sun, 4 Jun 2023 12:43:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2e511e791daab76b1da42cb3a69a4d7c2baeb85d
-X-Git-Newrev: 6b26999abca4e9fb4c2050123af028b80fa0c990
+X-Git-Oldrev: 2cd0059419ced783957a6c2d18bac529173fdfcd
+X-Git-Newrev: 2e511e791daab76b1da42cb3a69a4d7c2baeb85d
 X-Patchwork-Hint: ignore
-Message-Id: <20230609161307.9FCAE8262B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lightning: bump version to 2.2.1
+Message-Id: <20230609161307.9565782629@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuplot: bump version to 5.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,124 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b26999abca4e9fb4c2050123af028b80fa0c990
+commit: https://git.buildroot.net/buildroot/commit/?id=2e511e791daab76b1da42cb3a69a4d7c2baeb85d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And restore support for MIPS64, which is supported by Lightning.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  1 -
- .../0001-lib-jit_disasm.c-fix-build.patch          | 42 ----------------------
- package/lightning/Config.in                        |  6 ++--
- package/lightning/lightning.hash                   |  2 +-
- package/lightning/lightning.mk                     |  2 +-
- 5 files changed, 6 insertions(+), 47 deletions(-)
+ package/gnuplot/gnuplot.hash | 8 ++++----
+ package/gnuplot/gnuplot.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 81cf1afe6b..963efac992 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -893,7 +893,6 @@ package/libwebsock/0002-fix-ssl.patch Upstream
- package/libwebsock/0003-fix-incorrect-inline.patch Upstream
- package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch Upstream
- package/libyuv/0001-i386-sse2.patch Upstream
--package/lightning/0001-lib-jit_disasm.c-fix-build.patch Upstream
- package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch Upstream
- package/lighttpd/S50lighttpd EmptyLastLine Indent Shellcheck Variables
- package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch Upstream
-diff --git a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch b/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
-deleted file mode 100644
-index 9e79be91a0..0000000000
---- a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 0d828c96c373c34b201ca7ea37b61c1e3b0485cd Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 19 Dec 2022 23:55:31 +0100
--Subject: [PATCH] lib/jit_disasm.c: fix build
--
--Fix the following build failure raised since
--http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=837c7a1e8d08fb9294578dc84694077f4d6106f9:
--
--jit_disasm.c: In function 'fprintf_styled':
--jit_disasm.c:57:27: error: parameter name omitted
--   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
--      |                           ^~~~~~
--jit_disasm.c:57:35: error: parameter name omitted
--   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
--      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/e15e01e98e0d8c873efd3f512b671d98e4daf6c0
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[yann.morin.1998@free.fr: make it a backport now it's applied upstream]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- lib/jit_disasm.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
--index 58a269b..68c966d 100644
----- a/lib/jit_disasm.c
--+++ b/lib/jit_disasm.c
--@@ -54,7 +54,7 @@ static FILE			 *disasm_stream;
-- #endif
-- 
-- #if BINUTILS_2_38
---static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
--+static int fprintf_styled(void * stream, enum disassembler_style style, const char* fmt, ...)
-- {
--   va_list args;
--   int r;
---- 
--2.25.1
--
-diff --git a/package/lightning/Config.in b/package/lightning/Config.in
-index 3cf7c28ae2..e42730addb 100644
---- a/package/lightning/Config.in
-+++ b/package/lightning/Config.in
-@@ -1,12 +1,14 @@
- comment "lightning needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
--		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
-+		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64 || \
-+		BR2_mips64 || BR2_mips64el
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_LIGHTNING
- 	bool "lightning"
- 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
--		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
-+		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64 || \
-+		BR2_mips64 || BR2_mips64el
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
-diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
-index 998ae3743b..97b391674c 100644
---- a/package/lightning/lightning.hash
-+++ b/package/lightning/lightning.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+index de0741d609..2f482ca434 100644
+--- a/package/gnuplot/gnuplot.hash
++++ b/package/gnuplot/gnuplot.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.6/
+-md5  da719235bb2f46830f9d2101d04b14a5  gnuplot-5.4.6.tar.gz
+-sha1  31ea0c00af5c156e5d068e3b1cc2fb1847f471ab  gnuplot-5.4.6.tar.gz
++# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.7/
++md5  cdc9bb3ac0cc7e717246ed3df2d6ffa2  gnuplot-5.4.7.tar.gz
++sha1  6e68f94af822ff56549beab3a465c2fe976d3b34  gnuplot-5.4.7.tar.gz
  # Locally computed
--sha256  4e3984ff1ccf0ba30a985211d40fc5c06b25f014ebdf3d80d0fe3d0c80dd7c0e  lightning-2.2.0.tar.gz
-+sha256  98671681d5684770ccb06a07fa3b8f032a454bdb56eafc18e6fab04459ea3caa  lightning-2.2.1.tar.gz
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index 8ab2ca1f9d..4a8c7e5efd 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
+-sha256  02fc27918200ed64d8f0c3b84fe81b95b59cd47ad99f270939ae497c19f27419  gnuplot-5.4.6.tar.gz
++sha256  318a1501c9e659f39cf05ee5268335671bddc6c20eae06851f262fde27c2e739  gnuplot-5.4.7.tar.gz
+ sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index c49fbc497d..23fbae10a9 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIGHTNING_VERSION = 2.2.0
-+LIGHTNING_VERSION = 2.2.1
- LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- LIGHTNING_LICENSE = LGPL-3.0+
- LIGHTNING_LICENSE_FILES = COPYING.LESSER
+-GNUPLOT_VERSION = 5.4.6
++GNUPLOT_VERSION = 5.4.7
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
