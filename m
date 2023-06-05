@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8FC7C77B73
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 09:39:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E64C77B73
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 09:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90C4F60F27;
-	Mon,  5 Jun 2023 09:39:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90C4F60F27
+	by smtp3.osuosl.org (Postfix) with ESMTP id 738BA60F27;
+	Mon,  5 Jun 2023 09:39:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 738BA60F27
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XCp7TY8O7JxS; Mon,  5 Jun 2023 09:39:30 +0000 (UTC)
+	with ESMTP id GEGoQRxW2liE; Mon,  5 Jun 2023 09:39:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A924D60F1E;
-	Mon,  5 Jun 2023 09:39:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A924D60F1E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A910C1BF3D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8061760F17;
+	Mon,  5 Jun 2023 09:39:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8061760F17
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E92321BF3D1
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 09:39:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82C7F40195
+ by smtp4.osuosl.org (Postfix) with ESMTP id C05BD417C3
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 09:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82C7F40195
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C05BD417C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p3w5uoRcugLD for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 16MKljpjh3Xl for <buildroot@lists.busybox.net>;
  Mon,  5 Jun 2023 09:39:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D22F40141
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84B4D417AE
  for <buildroot@buildroot.org>; Mon,  5 Jun 2023 09:39:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D22F40141
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84B4D417AE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6840C86C2B; Mon,  5 Jun 2023 09:39:27 +0000 (UTC)
+ id 7195486B0D; Mon,  5 Jun 2023 09:39:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Jun 2023 11:35:09 +0200
+Date: Mon, 5 Jun 2023 11:36:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25e485f462b7459dda6793d7eaa385c8617febff
-X-Git-Newrev: c29bf1d2db5afb8a0109260ed2477fa8fc49c2ba
+X-Git-Oldrev: c29bf1d2db5afb8a0109260ed2477fa8fc49c2ba
+X-Git-Newrev: 35dea785ef6a4c3f3faa91b20da60aef15d1bcdd
 X-Patchwork-Hint: ignore
-Message-Id: <20230605093927.6840C86C2B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/redis: security bump to v7.0.11
+Message-Id: <20230605093927.7195486B0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-http-message: add missing
+ reverse dependency from perl-clone
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,96 +63,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c29bf1d2db5afb8a0109260ed2477fa8fc49c2ba
+commit: https://git.buildroot.net/buildroot/commit/?id=35dea785ef6a4c3f3faa91b20da60aef15d1bcdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the release notes
-(see https://github.com/redis/redis/blob/7.0/00-RELEASENOTES):
+Commit [1] added dependency on perl-clone but forgot to propagate
+the reverse dependency on !BR2_STATIC_LIBS.
 
-================================================================================
-Redis 7.0.11 Released Mon Apr 17 16:00:00 IST 2023
-================================================================================
+Fixes:
 
-Upgrade urgency: SECURITY, contains fixes to security issues.
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PERL_CLONE
+  Depends on [n]: BR2_PACKAGE_PERL [=y] && !BR2_STATIC_LIBS [=y]
+  Selected by [y]:
+  - BR2_PACKAGE_PERL_HTTP_MESSAGE [=y] && BR2_PACKAGE_PERL [=y]
 
-Security Fixes:
-* (CVE-2023-28856) Authenticated users can use the HINCRBYFLOAT command to create
-  an invalid hash field that will crash Redis on access
+http://autobuild.buildroot.org/results/5d5/5d503aaa94b56523c684be7946123921747ebf52
 
-...
+[1] 742258fec06df18782e4bd75b00ca530120312cb
 
-================================================================================
-Redis 7.0.10 Released Mon Mar 20 16:00:00 IST 2023
-================================================================================
-
-Upgrade urgency: SECURITY, contains fixes to security issues.
-
-Security Fixes:
-* (CVE-2023-28425) Specially crafted MSETNX command can lead to assertion and denial-of-service
-
-...
-
-================================================================================
-Redis 7.0.9 Released Tue Feb 28 12:00:00 IST 2023
-================================================================================
-
-Upgrade urgency: SECURITY, contains fixes to security issues.
-
-Security Fixes:
-* (CVE-2023-25155) Specially crafted SRANDMEMBER, ZRANDMEMBER, and HRANDFIELD
-  commands can trigger an integer overflow, resulting in a runtime assertion
-  and termination of the Redis server process.
-* (CVE-2022-36021) String matching commands (like SCAN or KEYS) with a specially
-  crafted pattern to trigger a denial-of-service attack on Redis, causing it to
-  hang and consume 100% CPU time.
-
-...
-
-================================================================================
-Redis 7.0.8 Released Mon Jan 16 12:00:00 IDT 2023
-================================================================================
-
-Upgrade urgency: SECURITY, contains fixes to security issues.
-
-Security Fixes:
-* (CVE-2022-35977) Integer overflow in the Redis SETRANGE and SORT/SORT_RO
-  commands can drive Redis to OOM panic
-* (CVE-2023-22458) Integer overflow in the Redis HRANDFIELD and ZRANDMEMBER
-  commands can lead to denial-of-service
-
-...
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-http-cookies/Config.in   | 4 ++++
+ package/perl-http-daemon/Config.in    | 4 ++++
+ package/perl-http-message/Config.in   | 4 ++++
+ package/perl-http-negotiate/Config.in | 4 ++++
+ package/perl-plack/Config.in          | 4 ++++
+ 5 files changed, 20 insertions(+)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index eb8c21be98..69bfc1475f 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  8d327d7e887d1bb308fc37aaf717a0bf79f58129e3739069aaeeae88955ac586  redis-7.0.7.tar.gz
-+sha256  ce250d1fba042c613de38a15d40889b78f7cb6d5461a27e35017ba39b07221e3  redis-7.0.11.tar.gz
+diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
+index 3ca461bf83..147d9521bb 100644
+--- a/package/perl-http-cookies/Config.in
++++ b/package/perl-http-cookies/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_PERL_HTTP_COOKIES
+ 	bool "perl-http-cookies"
++	depends on !BR2_STATIC_LIBS # perl-http-message -> perl-clone
+ 	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
+ 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
+ 	help
+ 	  HTTP cookie jars.
  
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index b08be11538..e5d3de8eb9 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	  https://github.com/libwww-perl/HTTP-Cookies
++
++comment "perl-http-cookies needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-http-daemon/Config.in b/package/perl-http-daemon/Config.in
+index 0c7ffe723a..4d6277a799 100644
+--- a/package/perl-http-daemon/Config.in
++++ b/package/perl-http-daemon/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PERL_HTTP_DAEMON
+ 	bool "perl-http-daemon"
++	depends on !BR2_STATIC_LIBS # perl-http-message -> perl-clone
+ 	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
+ 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
+ 	select BR2_PACKAGE_PERL_LWP_MEDIATYPES # runtime
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_PERL_HTTP_DAEMON
+ 	  A simple http server class.
  
--REDIS_VERSION = 7.0.7
-+REDIS_VERSION = 7.0.11
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ 	  https://github.com/libwww-perl/HTTP-Daemon
++
++comment "perl-http-daemon needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-http-message/Config.in b/package/perl-http-message/Config.in
+index 3c6849487a..e2cb42f941 100644
+--- a/package/perl-http-message/Config.in
++++ b/package/perl-http-message/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PERL_HTTP_MESSAGE
+ 	bool "perl-http-message"
++	depends on !BR2_STATIC_LIBS # perl-clone
+ 	select BR2_PACKAGE_PERL_CLONE # runtime
+ 	select BR2_PACKAGE_PERL_ENCODE_LOCALE # runtime
+ 	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_PERL_HTTP_MESSAGE
+ 	  HTTP style message (base class).
+ 
+ 	  https://github.com/libwww-perl/HTTP-Message
++
++comment "perl-http-message needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-http-negotiate/Config.in b/package/perl-http-negotiate/Config.in
+index c519ede2df..2e82ce5ad2 100644
+--- a/package/perl-http-negotiate/Config.in
++++ b/package/perl-http-negotiate/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_PERL_HTTP_NEGOTIATE
+ 	bool "perl-http-negotiate"
++	depends on !BR2_STATIC_LIBS # perl-http-message -> perl-clone
+ 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
+ 	help
+ 	  choose a variant to serve.
+ 
+ 	  https://metacpan.org/release/HTTP-Negotiate
++
++comment "perl-http-negotiate needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-plack/Config.in b/package/perl-plack/Config.in
+index c81ac4a444..420f8257e5 100644
+--- a/package/perl-plack/Config.in
++++ b/package/perl-plack/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PERL_PLACK
+ 	bool "perl-plack"
++	depends on !BR2_STATIC_LIBS # perl-http-message -> perl-clone
+ 	select BR2_PACKAGE_PERL_APACHE_LOGFORMAT_COMPILER # runtime
+ 	select BR2_PACKAGE_PERL_COOKIE_BAKER # runtime
+ 	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE # runtime
+@@ -19,3 +20,6 @@ config BR2_PACKAGE_PERL_PLACK
+ 	  toolkit).
+ 
+ 	  https://github.com/plack/Plack
++
++comment "perl-plack needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
