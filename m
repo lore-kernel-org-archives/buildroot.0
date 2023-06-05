@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91ADC7EE23
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:46:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0F03C7EE23
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD9960F9B;
-	Mon,  5 Jun 2023 11:46:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DD9960F9B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D5CF60FB8;
+	Mon,  5 Jun 2023 11:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D5CF60FB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Otojq9mEbob1; Mon,  5 Jun 2023 11:46:12 +0000 (UTC)
+	with ESMTP id dndRF9ZB2ISF; Mon,  5 Jun 2023 11:46:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9CB8260D68;
-	Mon,  5 Jun 2023 11:46:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CB8260D68
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 04EC91BF4DA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6122160BF2;
+	Mon,  5 Jun 2023 11:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6122160BF2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FA921BF4DA
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B21040447
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BCA481FF5
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B21040447
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BCA481FF5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GSj6E__GAhNP for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qZV8Qv3zktP9 for <buildroot@lists.busybox.net>;
  Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33DB440166
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2807582137
  for <buildroot@buildroot.org>; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33DB440166
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2807582137
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31A1486C79; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
+ id 260D486C78; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Jun 2023 13:14:57 +0200
+Date: Mon, 5 Jun 2023 13:14:24 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: c9f2fca27619f76ded3b51931912e56c1698a125
-X-Git-Newrev: 2a23ae346c7563c8e9486903a13ff28d6bf0334f
+X-Git-Oldrev: 1e6a4f1fd632a3c9d6d81e5e4322140829009aee
+X-Git-Newrev: c9f2fca27619f76ded3b51931912e56c1698a125
 X-Patchwork-Hint: ignore
-Message-Id: <20230605114519.31A1486C79@busybox.osuosl.org>
+Message-Id: <20230605114519.260D486C78@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2023.02.x]
- package/x11r7/xapp_xwininfo: bump version to 1.1.6
+ package/x11r7/xdriver_xf86-video-neomagic: bump version to 1.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a23ae346c7563c8e9486903a13ff28d6bf0334f
+commit: https://git.buildroot.net/buildroot/commit/?id=c9f2fca27619f76ded3b51931912e56c1698a125
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-April/003379.html
-
-Updated license hash due to upstream commit:
-https://gitlab.freedesktop.org/xorg/app/xwininfo/-/commit/9a5623e2ffc6995b2c6edf379f191d76d7b4444a
-  -> drop "all rights reserved", update years
-  -> no change in licensing
+https://lists.x.org/archives/xorg-announce/2023-April/003380.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit de8a3a53e52dc1ac6e04e623739aa67d412e965e)
+(cherry picked from commit cb4b592f6654ba15f21b4cead97661e18df2beec)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_xwininfo/xapp_xwininfo.hash | 10 ++++------
- package/x11r7/xapp_xwininfo/xapp_xwininfo.mk   |  4 ++--
+ .../xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash  | 8 +++-----
+ .../xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk    | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
-index fbc7f7be00..bbf2e37328 100644
---- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
-+++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
+index acc65348f7..b5a139fdac 100644
+--- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
++++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-July/003012.html
--md5  26d46f7ef0588d3392da3ad5802be420  xwininfo-1.1.5.tar.bz2
--sha1  9f67b1eb07c5824d437bf577cf6198962af1aeb7  xwininfo-1.1.5.tar.bz2
--sha256  7a405441dfc476666c744f5fcd1bc8a75abf8b5b1d85db7b88b370982365080e  xwininfo-1.1.5.tar.bz2
--sha512  a3268bbeeeeafac94e589fdd47554a965910d40df7cc3d9c36c7c24fa4f5dd49615484d5916ccb41efca9cd4cf9d8981a4c60953b921220b3f4f57f9cce0e1a6  xwininfo-1.1.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-April/003379.html
-+sha256  3518897c17448df9ba99ad6d9bb1ca0f17bc0ed7c0fd61281b34ceed29a9253f  xwininfo-1.1.6.tar.xz
-+sha512  c6df4ed3dcf97772450612f2786ecab8313a43bb78e0b8020cc9ec228b3f466f55090313ad02c8159a73a6892d117322ad85e28d9d76e38bb84c9750712c20bc  xwininfo-1.1.6.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2018-December/002934.html
+-md5  349d5254d09eb46f2a1f151cd423b89a  xf86-video-neomagic-1.3.0.tar.bz2
+-sha1  6bccfa15ea05d5264120cd96ccf13687642e8f6d  xf86-video-neomagic-1.3.0.tar.bz2
+-sha256  93833950fae7757088eb6abb125e15e8c245e5e25681c19c3ad4213ec7319064  xf86-video-neomagic-1.3.0.tar.bz2
+-sha512  25d019a2556e52aeb4e25942f444437a921e76d527c10ddd420f16aa7d85bf2b8a51612c382a2a7e3e407bb1e8d610d063101184eea0889c3e1a69bfb3b37735  xf86-video-neomagic-1.3.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-April/003380.html
++sha256  b61fac7ec32971e92e34cfd51f88fef169e272a210455e0e1a0faa0d30fc7494  xf86-video-neomagic-1.3.1.tar.xz
++sha512  b2425c4e9b8e6e816cbb6fa436da12bd242acf55c3c615352fc80ea072b1822abdb40838c2adcc3c450e429ec6e3b5112d194e739cf5d8ac22d430e273d5378b  xf86-video-neomagic-1.3.1.tar.xz
  # Locally computed
--sha256  443d675237c023a47e4886506b72796afbb2633394812027f91d6e8fa433b2af  COPYING
-+sha256  1be1f0763a5efd08e48089c52728a822bf769b690a2fd82fbab456cfffee822f  COPYING
-diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
-index 9652487aae..196b73c83d 100644
---- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
-+++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
-@@ -4,8 +4,8 @@
+ sha256  95063ce9aa09850025dd317549ce688519079a8d3cf66ceb3d882cb2bafcced9  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+index 8dd2777ff9..8c7beeed6e 100644
+--- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
++++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XWININFO_VERSION = 1.1.5
--XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.bz2
-+XAPP_XWININFO_VERSION = 1.1.6
-+XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.xz
- XAPP_XWININFO_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XWININFO_LICENSE = MIT
- XAPP_XWININFO_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.3.0
+-XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.3.1
++XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_NEOMAGIC_DEPENDENCIES = xserver_xorg-server xorgproto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
