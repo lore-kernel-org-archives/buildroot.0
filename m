@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08F86C77B73
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91CFDC7EE23
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 909EA60D4D;
-	Mon,  5 Jun 2023 11:45:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 909EA60D4D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A31C60F62;
+	Mon,  5 Jun 2023 11:45:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A31C60F62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0DntthNl2pSh; Mon,  5 Jun 2023 11:45:34 +0000 (UTC)
+	with ESMTP id vkDhZwChSgB2; Mon,  5 Jun 2023 11:45:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B853E60D68;
-	Mon,  5 Jun 2023 11:45:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B853E60D68
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0CEB91BF95D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C9D660F9D;
+	Mon,  5 Jun 2023 11:45:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C9D660F9D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D6C81BF95E
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB42E4042B
+ by smtp4.osuosl.org (Postfix) with ESMTP id E483E417AB
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB42E4042B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E483E417AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C0JnwugwQai9 for <buildroot@lists.busybox.net>;
- Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CmkOE4DDliq2 for <buildroot@lists.busybox.net>;
+ Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 129A3404A0
- for <buildroot@buildroot.org>; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 129A3404A0
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC19341794
+ for <buildroot@buildroot.org>; Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC19341794
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0386386C79; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
+ id A3EBC86C77; Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Jun 2023 13:10:27 +0200
+Date: Mon, 5 Jun 2023 13:03:05 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 9c81ab45921df33cc5e7a3b5e60cde081b25a97b
-X-Git-Newrev: 4ad7b1f310bf708c9e406913e4fe7f3d37b34244
+X-Git-Oldrev: 791ad4cc89d489ed6d9b70834a4cc679398c853d
+X-Git-Newrev: d1bd45fdcd2e04af4715d67418dfbb372b0e9e0f
 X-Patchwork-Hint: ignore
-Message-Id: <20230605114519.0386386C79@busybox.osuosl.org>
+Message-Id: <20230605114518.A3EBC86C77@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2023.02.x]
- package/x11r7/xlib_libXpm: bump version to 3.5.16
+ package/x11r7/xdriver_xf86-video-geode: bump version to 2.11.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ad7b1f310bf708c9e406913e4fe7f3d37b34244
+commit: https://git.buildroot.net/buildroot/commit/?id=d1bd45fdcd2e04af4715d67418dfbb372b0e9e0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-April/003385.html
+https://lists.x.org/archives/xorg-announce/2023-May/003393.html
 
+Fixes:
+http://autobuild.buildroot.net/results/d1d/d1dae8c7ba9dc82fbbcc5914ea3b378e48304617/
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a8c003ae295f056699a325ba1bf9ec0c4d8e37e9)
+(cherry picked from commit 1a81a2f28c5e59dadcddefe2c38613ebad5e51c6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.hash | 6 +++---
- package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash    | 4 +++-
+ package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk  | 6 +++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-index 733c404543..a041f0d440 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-January/003313.html
--sha256  60bb906c5c317a6db863e39b69c4a83fdbd2ae2154fcf47640f8fefc9fdfd1c1  libXpm-3.5.15.tar.xz
--sha512  955d716fcea2c9d868ab941c56f017b39bfa0f47fd2904e9b04c6a9be17f23f8b8c906da9c90a89a789f1f399d419641705ff5b6f9921820e34d4807c7a1992f  libXpm-3.5.15.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-April/003385.html
-+sha256  e6bc5da7a69dbd9bcc67e87c93d4904fe2f5177a0711c56e71fa2f6eff649f51  libXpm-3.5.16.tar.xz
-+sha512  ee564311f8c1c9c08ed1035d55c287ecf7c20c6fee09ad448acfab59f38fd1ef381d4a24b4af2b581f3033730eebc7c690918e52ba706de689d1ef11085edac2  libXpm-3.5.16.tar.xz
+diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
+index 7a66c28b52..7dcb99fe2a 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
++++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
+@@ -1,3 +1,5 @@
++# From https://lists.x.org/archives/xorg-announce/2023-May/003393.html
++sha256  8256ac3f14117324d00b7bfa8053645ca92562fe837c542489a502adbb5f9f1e  xf86-video-geode-2.11.21.tar.xz
++sha512  e12f74268ab7d16b57644a9465b4be1ca28d250625a31b8810e19a1f94a17e47e0a258455155fd8f336fa59fd78160cdf3763aa94b85c6ccc2c42edf3b65bc61  xf86-video-geode-2.11.21.tar.xz
  # Locally calculated
- sha256  a80d706759624a04aa90fd62bc644a360fc3d72e08dcbfb129f167c11ca285de  COPYING
- sha256  cbe4ced0abc8a32bea471204ae01038c202758ce4e772d3d329a341ffa761e71  COPYRIGHT
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 970ec93407..51f6283370 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -4,7 +4,7 @@
+-sha256  f497d0bfb09f36c72e3467e2d701f57f6b03ab8992c5d570e66582f714f84d64  xf86-video-geode-2.11.20.tar.bz2
+ sha256  3994ef7cee54f0935a4b57b1c34efd904da567931dd9e1a2d9390d22c8332ea2  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
+index dbeae1aa65..8f84e4863f 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
++++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXPM_VERSION = 3.5.15
-+XLIB_LIBXPM_VERSION = 3.5.16
- XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
- XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.20
+-XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_GEODE_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.21
++XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_GEODE_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_GEODE_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_GEODE_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_GEODE_DEPENDENCIES = xserver_xorg-server xorgproto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
