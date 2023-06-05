@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8EAC7EE23
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C54DC77B73
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D93A60DED;
-	Mon,  5 Jun 2023 11:47:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D93A60DED
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AA1661140;
+	Mon,  5 Jun 2023 11:48:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AA1661140
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xPSG_QVLwZHx; Mon,  5 Jun 2023 11:47:54 +0000 (UTC)
+	with ESMTP id MTVMtVoUaTyY; Mon,  5 Jun 2023 11:48:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6395A610E7;
-	Mon,  5 Jun 2023 11:47:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6395A610E7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A35A41BF4DA
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 239E061106;
+	Mon,  5 Jun 2023 11:48:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 239E061106
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F4911BF4DA
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 674BB82138
+ by smtp4.osuosl.org (Postfix) with ESMTP id B107C417A3
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 674BB82138
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B107C417A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9RT4U6T8mr0w for <buildroot@lists.busybox.net>;
- Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1QSz7lFdjksc for <buildroot@lists.busybox.net>;
+ Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC37081F8C
- for <buildroot@buildroot.org>; Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC37081F8C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63604417A9
+ for <buildroot@buildroot.org>; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63604417A9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B34C686C78; Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
+ id 6108C86C77; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Jun 2023 13:05:46 +0200
+Date: Mon, 5 Jun 2023 13:39:53 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d1bd45fdcd2e04af4715d67418dfbb372b0e9e0f
-X-Git-Newrev: 8f059f406b823237e32004ed1fd01e3906d030f5
+X-Git-Oldrev: cf6733b7943347fde134cc2e3d6836d481e813a4
+X-Git-Newrev: 44b1e44ef9b62c637975d8446c24c8cc6653f912
 X-Patchwork-Hint: ignore
-Message-Id: <20230605114518.B34C686C78@busybox.osuosl.org>
+Message-Id: <20230605114519.6108C86C77@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2023.02.x]
- package/x11r7/xdriver_xf86-input-mouse: bump version to 1.9.5
+ package/x11r7/xdriver_xf86-video-ark: bump version to 0.7.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f059f406b823237e32004ed1fd01e3906d030f5
+commit: https://git.buildroot.net/buildroot/commit/?id=44b1e44ef9b62c637975d8446c24c8cc6653f912
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-May/003392.html
+https://lists.x.org/archives/xorg-announce/2023-February/003328.html
 
-Updated license hash due to update in copyrighht years with upstream
-commit:
-https://gitlab.freedesktop.org/xorg/driver/xf86-input-mouse/-/commit/5f63ab04338fd811c610ae7617757ede52471316
+Removed patch which was applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998@free.fr: regenerate .checkpackageignore]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b30206b708e02adb1b287a2d450f48c4bd12f754)
+(cherry picked from commit cd1b1bcc0ec31b3af8d901cb7e05bd2794e3130f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash  | 8 ++++----
- .../x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk    | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../xdriver_xf86-video-ark/0001-mibstore.patch     | 40 ----------------------
+ .../xdriver_xf86-video-ark.hash                    |  5 +--
+ .../xdriver_xf86-video-ark.mk                      |  6 ++--
+ 3 files changed, 6 insertions(+), 45 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-index adba659aea..d654c362a9 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003247.html
--sha256  7f6f8551fc238abdddcf9f38906564c1f8c7dacb0ad947cfc110487aefbd8d4c  xf86-input-mouse-1.9.4.tar.xz
--sha512  7dfde3b1e0c1291c4d78ee920942771808b007f743bfc6eed20de12579383745858673dd874a4b5cf4ab8d9d15f6f7ca2db81ee831547a488d64848a7fe5e16c  xf86-input-mouse-1.9.4.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-May/003392.html
-+sha256  4fde8ae9b44352e2a208584c36528ee3ed13cf5fe4417208a9785daccefd9968  xf86-input-mouse-1.9.5.tar.xz
-+sha512  ed9bd9cb9a05dac0ff1bfb4e4704cb2e94117afb400aa9e0b7ccdbb102bc6db1b0d3af7cb6f99d0892f8fc306f1643286291c0fa7114af8e65864412bd6c1afa  xf86-input-mouse-1.9.5.tar.xz
- # Locally computed
--sha256  472ff645ead9bf3ffb48d42c596376ffc595897e0c0993a071a7ada0da1f4f10  COPYING
-+sha256  5b066654bdb61a1ef41f38cceda752897bbddb6e60e20f5889cab436a9b7b813  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-index 4a9eb3089f..25e25ab93d 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-ark/0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-ark/0001-mibstore.patch
+deleted file mode 100644
+index fa3e68596a..0000000000
+--- a/package/x11r7/xdriver_xf86-video-ark/0001-mibstore.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 3a3eb72baec46f48e6cf15a834271c3d3386deac Mon Sep 17 00:00:00 2001
+-From: Gaetan Nadon <memsize@videotron.ca>
+-Date: Tue, 17 Sep 2013 19:55:37 +0000
+-Subject: Remove usage of mibstore.h (removed from server)
+-
+-The module had a compile error for this missing header file.
+-
+-Changes similar to vmware commit
+-23d87c92b7211cc5249eefe4ab3a2c7f370e279e
+-
+-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+-Signed-off-by: Gaetan Nadon <memsize@videotron.ca>
+----
+-Fetch from:
+-http://cgit.freedesktop.org/xorg/driver/xf86-video-ark/commit/?id=3a3eb72baec46f48e6cf15a834271c3d3386deac
+-
+-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+-
+-diff --git a/src/ark_driver.c b/src/ark_driver.c
+-index b7c287c..65cfe84 100644
+---- a/src/ark_driver.c
+-+++ b/src/ark_driver.c
+-@@ -39,7 +39,6 @@
+- #include "compiler.h"
+- #include "mipointer.h"
+- #include "micmap.h"
+--#include "mibstore.h"
+- #include "fb.h"
+- #include "ark.h"
+- 
+-@@ -538,7 +537,6 @@ static Bool ARKScreenInit(SCREEN_INIT_ARGS_DECL)
+- 
+- 	fbPictureInit (pScreen, 0, 0);
+- 
+--	miInitializeBackingStore(pScreen);
+- 	xf86SetBackingStore(pScreen);
+- 
+- 	if (!pARK->NoAccel) {
+---
+-cgit v0.9.0.2-2-gbebe
+diff --git a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.hash b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.hash
+index 2e2e953676..68131fdb38 100644
+--- a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.hash
++++ b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.hash
+@@ -1,4 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2012-July/002007.html
+-sha256  c690e046f34a393aac1c8d9616b4790e93cda60a460b00b9597d322175dbe51e  xf86-video-ark-0.7.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-February/003328.html
++sha256  5acc9e78122ff6f4390787b2d0d44df81379bd613b6245983cc4bf3f325d085d  xf86-video-ark-0.7.6.tar.xz
++sha512  a52623e07eef6fa12d77b1afc55bb74b21662b850515b3a32bbf5988dcea2e787b4eddf4e020279aa4e4ddba436505ca9298548406913031e0ed5edaac835491  xf86-video-ark-0.7.6.tar.xz
+ # Locally calculated
+ sha256  8ba9850fb0ecd9033bb1d25c1be85625cb53ca56ce76b71f78f4a034f7310bda  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
+index 3f2a63609e..6301a97300 100644
+--- a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
++++ b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.4
-+XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.5
- XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.xz
- XDRIVER_XF86_INPUT_MOUSE_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_ARK_VERSION = 0.7.5
+-XDRIVER_XF86_VIDEO_ARK_SOURCE = xf86-video-ark-$(XDRIVER_XF86_VIDEO_ARK_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_ARK_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_ARK_VERSION = 0.7.6
++XDRIVER_XF86_VIDEO_ARK_SOURCE = xf86-video-ark-$(XDRIVER_XF86_VIDEO_ARK_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_ARK_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_ARK_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_ARK_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_ARK_DEPENDENCIES = xserver_xorg-server xorgproto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
