@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93C03C77B73
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 20:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9771CC7EE24
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 20:59:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C35381D9F;
-	Mon,  5 Jun 2023 20:37:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C35381D9F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 096D940278;
+	Mon,  5 Jun 2023 20:59:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 096D940278
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZPdlIpgw45QZ; Mon,  5 Jun 2023 20:37:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aGHEQt8X7oci; Mon,  5 Jun 2023 20:59:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C33A81B60;
-	Mon,  5 Jun 2023 20:37:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C33A81B60
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 53B6C1BF3A1
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 20:37:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 44E044051C;
+	Mon,  5 Jun 2023 20:59:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44E044051C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D7DCA1BF215
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 20:59:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3AAD381B60
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 20:37:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AAD381B60
+ by smtp2.osuosl.org (Postfix) with ESMTP id B107D40156
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 20:59:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B107D40156
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xFw3rZnzcJNg for <buildroot@lists.busybox.net>;
- Mon,  5 Jun 2023 20:37:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B9F481A65
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3B9F481A65
- for <buildroot@buildroot.org>; Mon,  5 Jun 2023 20:37:46 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0F1C9E0006;
- Mon,  5 Jun 2023 20:37:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1q6GxS-00DseJ-5J; Mon, 05 Jun 2023 22:37:42 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d9VmRz1HIn2M for <buildroot@lists.busybox.net>;
+ Mon,  5 Jun 2023 20:59:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A409A400B8
+ for <buildroot@buildroot.org>; Mon,  5 Jun 2023 20:59:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A409A400B8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8F85C86CA8; Mon,  5 Jun 2023 20:59:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Knight <james.d.knight@live.com>
-References: <SN4P221MB0682F08F5BA15071DDED63A7A0729@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-Date: Mon, 05 Jun 2023 22:37:42 +0200
-In-Reply-To: <SN4P221MB0682F08F5BA15071DDED63A7A0729@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
- (James Knight's message of "Thu, 4 May 2023 23:43:17 -0400")
-Message-ID: <875y8163xl.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/pkg-utils.mk: suppress kconfig
- set/disable operations
+To: buildroot@buildroot.org
+Date: Mon, 5 Jun 2023 22:23:10 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 13e4f1942cb2aca57edf5b2b7514d491690e8eeb
+X-Git-Newrev: 96bc3c58cd0132ff5bae5b7f30b3dc9495e6f04d
+X-Patchwork-Hint: ignore
+Message-Id: <20230605205922.8F85C86CA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libgeos: bump
+ version to 3.11.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,29 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Knight <james.d.knight@live.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=96bc3c58cd0132ff5bae5b7f30b3dc9495e6f04d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > In a previous commit [1], the use of `KCONFIG_ENABLE_OPT` was tweaked in
- > a way which no longer generates a default output unless the quiet flag
- > is unset (`Q=`). The use of `KCONFIG_SET_OPT` and `KCONFIG_DISABLE_OPT`
- > does not apply a quiet operation. In order to make all these kernel
- > configuration defines operate in a consistent way, adjusting both
- > `KCONFIG_SET_OPT` and `KCONFIG_DISABLE_OPT` to be default-quiet as well.
+Changelog: https://github.com/libgeos/geos/releases/tag/3.11.2
 
- > [1]: 66d2ff25bad813659ed4541b3f4c6c2a09455bd7
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ee348693531d581ad57a0c605dbebd8fba673ca3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: James Knight <james.d.knight@live.com>
-
-Committed to 2023.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index cd0a4e0330..54f53d19de 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6d0eb3cfa9f92d947731cc75f1750356b3bdfc07ea020553daf6af1c768e0be2  geos-3.11.1.tar.bz2
++sha256  b1f077669481c5a3e62affc49e96eb06f281987a5d36fdab225217e5b825e4cc  geos-3.11.2.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index c6d470dc97..5a7932bad2 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGEOS_VERSION = 3.11.1
++LIBGEOS_VERSION = 3.11.2
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
