@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66026C7EE23
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91ADC7EE23
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:46:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04DA260FA5;
-	Mon,  5 Jun 2023 11:46:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04DA260FA5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD9960F9B;
+	Mon,  5 Jun 2023 11:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DD9960F9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i6ohLX0NAeWp; Mon,  5 Jun 2023 11:46:00 +0000 (UTC)
+	with ESMTP id Otojq9mEbob1; Mon,  5 Jun 2023 11:46:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0F5360F4D;
-	Mon,  5 Jun 2023 11:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0F5360F4D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F4511BF962
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CB8260D68;
+	Mon,  5 Jun 2023 11:46:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CB8260D68
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04EC91BF4DA
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 099C760D4D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B21040447
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 099C760D4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B21040447
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MRlhysmefdZE for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GSj6E__GAhNP for <buildroot@lists.busybox.net>;
  Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CE4C60BF2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33DB440166
  for <buildroot@buildroot.org>; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CE4C60BF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33DB440166
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B16186C77; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
+ id 31A1486C79; Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Jun 2023 13:13:29 +0200
+Date: Mon, 5 Jun 2023 13:14:57 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: aa4c242b56e017ce48a0db18adc9a6b0aac863af
-X-Git-Newrev: 1e6a4f1fd632a3c9d6d81e5e4322140829009aee
+X-Git-Oldrev: c9f2fca27619f76ded3b51931912e56c1698a125
+X-Git-Newrev: 2a23ae346c7563c8e9486903a13ff28d6bf0334f
 X-Patchwork-Hint: ignore
-Message-Id: <20230605114519.1B16186C77@busybox.osuosl.org>
+Message-Id: <20230605114519.31A1486C79@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2023.02.x]
- package/x11r7/xlib_libXfixes: bump version to 6.0.1
+ package/x11r7/xapp_xwininfo: bump version to 1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e6a4f1fd632a3c9d6d81e5e4322140829009aee
+commit: https://git.buildroot.net/buildroot/commit/?id=2a23ae346c7563c8e9486903a13ff28d6bf0334f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-April/003382.html
+https://lists.x.org/archives/xorg-announce/2023-April/003379.html
 
-Update license hash due to copyright update with upstream commit:
-https://gitlab.freedesktop.org/xorg/lib/libxfixes/-/commit/1f908b1f27723a9a8f532ab4cc58429c2f174224
-  -> drop "all rights reserved"
-  -> no licensing change
+Updated license hash due to upstream commit:
+https://gitlab.freedesktop.org/xorg/app/xwininfo/-/commit/9a5623e2ffc6995b2c6edf379f191d76d7b4444a
+  -> drop "all rights reserved", update years
+  -> no change in licensing
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6bd350f9bdd4f4358b037d6d873ee915f4dc5ac1)
+(cherry picked from commit de8a3a53e52dc1ac6e04e623739aa67d412e965e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXfixes/xlib_libXfixes.hash | 9 ++++-----
- package/x11r7/xlib_libXfixes/xlib_libXfixes.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.hash | 10 ++++------
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash b/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
-index 5dfe496052..03de906245 100644
---- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
-+++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-May/003086.html
--sha256  a7c1a24da53e0b46cac5aea79094b4b2257321c621b258729bc3139149245b4c  libXfixes-6.0.0.tar.bz2
--sha512  1985ef156f382e9a7e1cc7e044e0f626de1e4c82557a511cbcf6431994c0ac25b1f8b3a0293bd3089331593db8ce01d3a71ddec68f19b5fe6029d5082fb6885d  libXfixes-6.0.0.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2023-April/003382.html
-+sha256  b695f93cd2499421ab02d22744458e650ccc88c1d4c8130d60200213abc02d58  libXfixes-6.0.1.tar.xz
-+sha512  b46deffb30cd73ec8a127390d99f2ba2f3ab78f334fdba227f1f461441644a0c169b0d13ffa47576fa458780e7a6db664ff8b93e9195fb217262efd8128f1ffe  libXfixes-6.0.1.tar.xz
- # Locally calculated
--sha256  d64e671ffeb483d4543f98c842788ab34c77427e27d83d6b082065a4438d4885  COPYING
-+sha256  a07d8a5a6972638a745a03983207a1052881c24eea29021fdca7794bea8d7774  COPYING
-diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
-index c0229b57d2..3f535fc1d4 100644
---- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
-+++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+index fbc7f7be00..bbf2e37328 100644
+--- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
++++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003012.html
+-md5  26d46f7ef0588d3392da3ad5802be420  xwininfo-1.1.5.tar.bz2
+-sha1  9f67b1eb07c5824d437bf577cf6198962af1aeb7  xwininfo-1.1.5.tar.bz2
+-sha256  7a405441dfc476666c744f5fcd1bc8a75abf8b5b1d85db7b88b370982365080e  xwininfo-1.1.5.tar.bz2
+-sha512  a3268bbeeeeafac94e589fdd47554a965910d40df7cc3d9c36c7c24fa4f5dd49615484d5916ccb41efca9cd4cf9d8981a4c60953b921220b3f4f57f9cce0e1a6  xwininfo-1.1.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-April/003379.html
++sha256  3518897c17448df9ba99ad6d9bb1ca0f17bc0ed7c0fd61281b34ceed29a9253f  xwininfo-1.1.6.tar.xz
++sha512  c6df4ed3dcf97772450612f2786ecab8313a43bb78e0b8020cc9ec228b3f466f55090313ad02c8159a73a6892d117322ad85e28d9d76e38bb84c9750712c20bc  xwininfo-1.1.6.tar.xz
+ # Locally computed
+-sha256  443d675237c023a47e4886506b72796afbb2633394812027f91d6e8fa433b2af  COPYING
++sha256  1be1f0763a5efd08e48089c52728a822bf769b690a2fd82fbab456cfffee822f  COPYING
+diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+index 9652487aae..196b73c83d 100644
+--- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
++++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXFIXES_VERSION = 6.0.0
--XLIB_LIBXFIXES_SOURCE = libXfixes-$(XLIB_LIBXFIXES_VERSION).tar.bz2
--XLIB_LIBXFIXES_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXFIXES_VERSION = 6.0.1
-+XLIB_LIBXFIXES_SOURCE = libXfixes-$(XLIB_LIBXFIXES_VERSION).tar.xz
-+XLIB_LIBXFIXES_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXFIXES_LICENSE = MIT
- XLIB_LIBXFIXES_LICENSE_FILES = COPYING
- XLIB_LIBXFIXES_CPE_ID_VENDOR = x
+-XAPP_XWININFO_VERSION = 1.1.5
+-XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.bz2
++XAPP_XWININFO_VERSION = 1.1.6
++XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.xz
+ XAPP_XWININFO_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XWININFO_LICENSE = MIT
+ XAPP_XWININFO_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
