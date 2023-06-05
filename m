@@ -4,48 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C16C9C7EE23
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 20:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58272C7EE23
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 20:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E40A82217;
-	Mon,  5 Jun 2023 20:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E40A82217
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02F4A821F6;
+	Mon,  5 Jun 2023 20:12:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02F4A821F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZMHR1YX2-jvu; Mon,  5 Jun 2023 20:11:26 +0000 (UTC)
+	with ESMTP id W9MWC9fUg2P3; Mon,  5 Jun 2023 20:12:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89553821B4;
-	Mon,  5 Jun 2023 20:11:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89553821B4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E5D6821B7;
+	Mon,  5 Jun 2023 20:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E5D6821B7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 365051BF3A1
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 20:11:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 778621BF3A1
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 20:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3462A60F83
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 20:10:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3462A60F83
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E23660FE6
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 20:12:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E23660FE6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DwEb6PlckVmI for <buildroot@lists.busybox.net>;
- Mon,  5 Jun 2023 20:10:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 525B960FE6
- for <buildroot@buildroot.org>; Mon,  5 Jun 2023 20:10:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 525B960FE6
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A24386C8E; Mon,  5 Jun 2023 20:10:58 +0000 (UTC)
+ with ESMTP id E5Mj8oNZ5SU1 for <buildroot@lists.busybox.net>;
+ Mon,  5 Jun 2023 20:12:16 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1D1660F83
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E1D1660F83
+ for <buildroot@buildroot.org>; Mon,  5 Jun 2023 20:12:15 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E66E31BF205;
+ Mon,  5 Jun 2023 20:12:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1q6GYl-00DohP-VK; Mon, 05 Jun 2023 22:12:11 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 5 Jun 2023 22:09:26 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ff7de79f729ec54629db7c7e46ed620884995cb1
-X-Git-Newrev: 2cf01c59ed6a2e8500017936f3d6ecdb7940c399
-X-Patchwork-Hint: ignore
-Message-Id: <20230605201058.3A24386C8E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/busybox: disable
- sha1/sha256 hwaccel with x86
+To: Romain Naour <romain.naour@gmail.com>
+References: <20230502211158.2832484-1-romain.naour@gmail.com>
+Date: Mon, 05 Jun 2023 22:12:11 +0200
+In-Reply-To: <20230502211158.2832484-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 2 May 2023 23:11:58 +0200")
+Message-ID: <87ilc16544.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/gdb: disable gdb for or1k builds
+ with musl libc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,82 +66,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Stafford Horne <shorne@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cf01c59ed6a2e8500017936f3d6ecdb7940c399
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Buxybox's init segfault when built with x86 musl toolchain due to
-recent changes about sha1 and sha156 hwaccel support in Busybox 1.36.0.
+ > The or1k musl port is incomplete, elf_gregset_t definition is missing
+ > (user.h is empty) [1]. It fail to build gdbserver and the full gdb.
 
-From Alpinelinux [1]:
-"main/busybox: disable sha hwaccel
- the flag check for this seems incorrect- it triggers sha_ni use when
- the instructions aren't available, but avx512vl/bw is - Elly on irc
+ > [1] https://git.musl-libc.org/cgit/musl/tree/arch/or1k/bits/user.h?h=v1.2.3
 
- causes failures in github actions, which have avx512 but no sha_no"
+ > Fixes:
+ > https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/4202276569
 
-The flag check was supposed to be fixed upstream by commit [2].
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Stafford Horne <shorne@gmail.com>
+ > ---
+ > host-gdb build fine but it's useless without a gdbserver on the target.
+ > Keep it enabled for now to avoid dependency handling for or1k with musl...
 
-But init still crash with the latest 1_36_stable (with backported patch)
-and master branch...
+Committed to 2023.02.x, thanks.
 
-The same workaround has been applied to openembedded-core [3], which
-states that they also have the issue with glibc.
-
-Disable hardware sha acceleration on x86 (not x86_64), to avoid the
-issue.
-
-Checked that qemu_x86_64_defconfig with musl for x86_64 for core2 boot
-as expected with sha hwaccel enabled.
-
-Fixes:
-https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/4202276721
-
-[1] https://git.alpinelinux.org/aports/commit/main/busybox?id=ae2cfdf6f6da3dc46ee09d8ceafa26921f6e058e
-[2] https://git.busybox.net/busybox/commit/?id=bd76b75f72f717150b909e8c64edfda725cabe11
-[3] https://github.com/openembedded/openembedded-core/commit/22f639d61127f4b82a79008c5305e44e090a3680
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a57c02a4ea48bdb3ffc8cdba2569d240275b1bc3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/busybox/busybox.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 1633ca525d..fd4f3c17c5 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -276,6 +276,15 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
- endef
- endif
- 
-+# Disable SHA1 and SHA256 HWACCEL to avoid segfault in init
-+# with some x86 toolchains (mostly musl?).
-+ifeq ($(BR2_i386),y)
-+define BUSYBOX_MUSL_DISABLE_SHA_HWACCEL
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SHA1_HWACCEL)
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SHA256_HWACCEL)
-+endef
-+endif
-+
- # Only install our logging scripts if no other package does it.
- ifeq ($(BR2_PACKAGE_SYSKLOGD)$(BR2_PACKAGE_RSYSLOG)$(BR2_PACKAGE_SYSLOG_NG),)
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
-@@ -364,6 +373,7 @@ endef
- BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_INSTALL_ADD_TO_SHELLS
- 
- define BUSYBOX_KCONFIG_FIXUP_CMDS
-+	$(BUSYBOX_MUSL_DISABLE_SHA_HWACCEL)
- 	$(BUSYBOX_SET_MMU)
- 	$(BUSYBOX_PREFER_STATIC)
- 	$(BUSYBOX_SET_MDEV)
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
