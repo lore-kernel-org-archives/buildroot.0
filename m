@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1640C7EE24
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 05:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B58B8C77B73
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 06:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BD8B417E3;
-	Mon,  5 Jun 2023 05:47:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BD8B417E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14CFE41867;
+	Mon,  5 Jun 2023 06:25:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14CFE41867
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BlBAY5kJ1ptt; Mon,  5 Jun 2023 05:47:53 +0000 (UTC)
+	with ESMTP id Gbhpbmsl3E0P; Mon,  5 Jun 2023 06:25:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C1BA417DA;
-	Mon,  5 Jun 2023 05:47:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C1BA417DA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF3E81BF289
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 05:47:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B588341809;
+	Mon,  5 Jun 2023 06:25:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B588341809
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A5391BF59C
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 06:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80969417DA
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 05:47:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80969417DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 533BD60E2D
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 06:25:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 533BD60E2D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nweVAnNx2y5a for <buildroot@lists.busybox.net>;
- Mon,  5 Jun 2023 05:47:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xc6XFCStCeF2 for <buildroot@lists.busybox.net>;
+ Mon,  5 Jun 2023 06:25:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E0CD417CA
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
- [IPv6:2a00:1450:4864:20::232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E0CD417CA
- for <buildroot@buildroot.org>; Mon,  5 Jun 2023 05:47:49 +0000 (UTC)
-Received: by mail-lj1-x232.google.com with SMTP id
- 38308e7fff4ca-2b1c5a6129eso12262791fa.2
- for <buildroot@buildroot.org>; Sun, 04 Jun 2023 22:47:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFEE260784
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
+ [IPv6:2a00:1450:4864:20::136])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EFEE260784
+ for <buildroot@buildroot.org>; Mon,  5 Jun 2023 06:25:24 +0000 (UTC)
+Received: by mail-lf1-x136.google.com with SMTP id
+ 2adb3069b0e04-4f61d79b0f2so1760497e87.3
+ for <buildroot@buildroot.org>; Sun, 04 Jun 2023 23:25:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685944067; x=1688536067;
+ d=1e100.net; s=20221208; t=1685946323; x=1688538323;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=sMd0+omubH1UHlfNRr++Yi8PizVxGRy0LsnQpG+EVB4=;
- b=IHmO+vallZVuoZevFpb16dlLqPGELp77Is8zPvSBFp4X74HJIrhDw9UTLal3oTigD4
- vsr57vwITX13CGJvcs82w0/p6TT81/fV4CsTXC8xkE9dB36LFuCVZCG+h6uRl79JIMdW
- TtSb857PAV0+zGFWtuEFYzd+VTO5Wcig828LKCLeeQ+fi9SUG/vGK4WcrCSblU4vmYzn
- dLrD8Wql+MOg545eGaNaUPuWcjjVBgo1bozf4bHNnfh6I4IABRynqSCAH1pq6isktdiW
- Xw4UUCJ/svnKbCrw7mPpiDEFEcIIhKamzomAkWBYqdws30v+jzGA4t0NUGME9c8alXS7
- NjfQ==
-X-Gm-Message-State: AC+VfDyUbjbw3G8lIc3KC6G35kPc1oDvJRS8KeBsYOR+kc5K7Kaatr0k
- uCpvaUGaG618EAQ2p5O20fLiTiHNECQ=
-X-Google-Smtp-Source: ACHHUZ4MGgv8hSO+YmcLFE8o4XKci4nFsK9iMsN3WWMrHcgXSRqXMth3uJGhDVrz4pS0/kCOPiprAg==
-X-Received: by 2002:a2e:240f:0:b0:2b1:c751:e570 with SMTP id
- k15-20020a2e240f000000b002b1c751e570mr1347711ljk.16.1685944066553; 
- Sun, 04 Jun 2023 22:47:46 -0700 (PDT)
-Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
- [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
- k9-20020a2e9209000000b002ac833114besm1298702ljg.47.2023.06.04.22.47.45
+ bh=o7HREmHhz/Wie4QKCryPz6jcJ5YK8MLuZ0SXiWW/Glk=;
+ b=Q6YBgcffDXaZTNdctrWYc7r2+8P0aijuRyLbpR3fOkkTXzLCjMiJIHNZzizSOLFlzL
+ lDcOe/ZhjJLRo58vzWC5qLcttqNI2lx0hfXIlK0NoWbr7oq9naoetCWD3SOgLayXk5oK
+ XrefRW3Y6qgMwrJuNux84dHmtYtVIJpamqd7eY8gWfLONyN7vASBZJ77TzpqWgo5Vf1b
+ yYhBOv9gHiJh8sr2Tn68u8ONXGIvncCHTgiyxFSPsOr4HM31zrgVjpyi37Y7zxN9Cd7m
+ FA6qUXqb1eOucR+tizqPVTAmkpbv6LUJzxQZHEaF5pFfVaKhB1MErN5s4Wl1z+P2We5l
+ uzAw==
+X-Gm-Message-State: AC+VfDxpik+JUWMrkkFJ6wQdHxvTHIcR1VrFn1OscjeNm5ZG7zaB01sK
+ FjTcE9QEMQ/uLskZ6gZeNEiVju7ei+Y=
+X-Google-Smtp-Source: ACHHUZ7oguDAJ3nbOjvlxu7W3t0cXADDLmQqyL0SJZnpDMXBj4rfHC44AzVYLgHRiHSKWyjU2HKb9w==
+X-Received: by 2002:ac2:43b0:0:b0:4f4:c973:c97f with SMTP id
+ t16-20020ac243b0000000b004f4c973c97fmr4958460lfl.49.1685946322498; 
+ Sun, 04 Jun 2023 23:25:22 -0700 (PDT)
+Received: from localhost.localdomain (ip-185-104-137-32.ptr.icomera.net.
+ [185.104.137.32]) by smtp.gmail.com with ESMTPSA id
+ k7-20020ac24567000000b004e887fd71acsm996841lfm.236.2023.06.04.23.25.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Jun 2023 22:47:45 -0700 (PDT)
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
+ Sun, 04 Jun 2023 23:25:21 -0700 (PDT)
+From: Titouan Christophe <titouanchristophe@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  5 Jun 2023 07:49:12 +0200
-Message-Id: <20230605054912.2287333-1-marcus.folkesson@gmail.com>
+Date: Mon,  5 Jun 2023 08:24:51 +0200
+Message-Id: <20230605062451.405573-1-titouanchristophe@gmail.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685944067; x=1688536067;
+ d=gmail.com; s=20221208; t=1685946323; x=1688538323;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=sMd0+omubH1UHlfNRr++Yi8PizVxGRy0LsnQpG+EVB4=;
- b=mz/LLiuQNu3+NX0hFXI2WIOf1f056VAsLeWHhd+yNHIeFjx+dLxyWPxagfdHrH1wNw
- qSNgvNw6PKsyviJ+jVL8qBRxcVjmWtFOoTRwjKgDVVzo/PBbZM7ETQZFl/hJzBCekL59
- aMoZdzgwn/7Vuy045CD5qhfQLyzvbPuXjYemrsSxnkZRnieXe5O01kaMxuzaLtqLO45J
- j+kioxzyznK5OoW7auKjyMFmirEI9LjNzpVOLwmRzh7oo6TSLgl0j+R0JgnlGvgtABMf
- SDT2oGKhgg1s4upYyEwW88YiERSj/D5VREKvSo07Sh6aOam7WT3xz2FxakRu9bq7eMOj
- Tf/g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=o7HREmHhz/Wie4QKCryPz6jcJ5YK8MLuZ0SXiWW/Glk=;
+ b=rJHdpohoU5TtHSrQQWAo5lFywmklqSoKCl92yCX7LaGC5aVtj1644GI0NJGhXVepyb
+ WPmhxiOSON6c8UuEgcwVzPTtHlNL65l4kX8IuLWDEocdMdbfS1gTstEuMzw4J+YZ6D5l
+ bdyLPbLLMoaiYOTEtvpMPV+KfaCefVkulpvTw+eDTSJVRvjiIrf/+1UxtfAG4ydJQjYm
+ sZ95y0soWoP4GYv7Z7vdmPKBuk8LJxureRSRqdL5pMFuzWPRjQ8KTaTKxBZyB+ImzBFv
+ iCpNDpNruwQ+W+8a5EI7jegS4esOTfi6vOXoL+v7FQ/LHW/ZVVD51f6hhKxKV9hl9sR4
+ bT+g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=mz/LLiuQ
-Subject: [Buildroot] [PATCH] package/libostree: bump to version 2023.3
+ header.a=rsa-sha256 header.s=20221208 header.b=rJHdpoho
+Subject: [Buildroot] [PATCH 1/1] package/redis: security bump to v7.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,40 +94,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Daniel Price <daniel.price@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+From the release notes
+(see https://github.com/redis/redis/blob/7.0/00-RELEASENOTES):
+
+================================================================================
+Redis 7.0.11 Released Mon Apr 17 16:00:00 IST 2023
+================================================================================
+
+Upgrade urgency: SECURITY, contains fixes to security issues.
+
+Security Fixes:
+* (CVE-2023-28856) Authenticated users can use the HINCRBYFLOAT command to create
+  an invalid hash field that will crash Redis on access
+
+...
+
+================================================================================
+Redis 7.0.10 Released Mon Mar 20 16:00:00 IST 2023
+================================================================================
+
+Upgrade urgency: SECURITY, contains fixes to security issues.
+
+Security Fixes:
+* (CVE-2023-28425) Specially crafted MSETNX command can lead to assertion and denial-of-service
+
+...
+
+================================================================================
+Redis 7.0.9 Released Tue Feb 28 12:00:00 IST 2023
+================================================================================
+
+Upgrade urgency: SECURITY, contains fixes to security issues.
+
+Security Fixes:
+* (CVE-2023-25155) Specially crafted SRANDMEMBER, ZRANDMEMBER, and HRANDFIELD
+  commands can trigger an integer overflow, resulting in a runtime assertion
+  and termination of the Redis server process.
+* (CVE-2022-36021) String matching commands (like SCAN or KEYS) with a specially
+  crafted pattern to trigger a denial-of-service attack on Redis, causing it to
+  hang and consume 100% CPU time.
+
+...
+
+================================================================================
+Redis 7.0.8 Released Mon Jan 16 12:00:00 IDT 2023
+================================================================================
+
+Upgrade urgency: SECURITY, contains fixes to security issues.
+
+Security Fixes:
+* (CVE-2022-35977) Integer overflow in the Redis SETRANGE and SORT/SORT_RO
+  commands can drive Redis to OOM panic
+* (CVE-2023-22458) Integer overflow in the Redis HRANDFIELD and ZRANDMEMBER
+  commands can lead to denial-of-service
+
+...
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index db99b4b07b..088650a86f 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index eb8c21be98..69bfc1475f 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  8d327d7e887d1bb308fc37aaf717a0bf79f58129e3739069aaeeae88955ac586  redis-7.0.7.tar.gz
++sha256  ce250d1fba042c613de38a15d40889b78f7cb6d5461a27e35017ba39b07221e3  redis-7.0.11.tar.gz
+ 
  # Locally calculated
--sha256  ceb0788755a0bff5738d44543552fbf883cf71df481baa3ca7288da7a402bb85  libostree-2023.2.tar.xz
-+sha256  9c575a094da2c307769f0aee15de95470c3b5550cbff211fbbc4f6fc75f333b1  libostree-2023.3.tar.xz
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 367a833ac9..5c39090654 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index b08be11538..e5d3de8eb9 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSTREE_VERSION = 2023.2
-+LIBOSTREE_VERSION = 2023.3
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+-REDIS_VERSION = 7.0.7
++REDIS_VERSION = 7.0.11
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
 2.40.1
 
