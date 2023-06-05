@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 262AEC7EE23
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 07:29:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B158C7EE23
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 07:33:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A98C541704;
-	Mon,  5 Jun 2023 07:29:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A98C541704
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAFB3409AC;
+	Mon,  5 Jun 2023 07:33:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAFB3409AC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l1u3swUv_G6F; Mon,  5 Jun 2023 07:29:46 +0000 (UTC)
+	with ESMTP id Wxs6Kr0zocK1; Mon,  5 Jun 2023 07:33:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84347416AE;
-	Mon,  5 Jun 2023 07:29:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84347416AE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3294C1BF356
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 07:29:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92FDD4099F;
+	Mon,  5 Jun 2023 07:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92FDD4099F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EFE981BF356
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 07:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 19D20821FA
- for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 07:29:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19D20821FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2E2B40569
+ for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 07:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2E2B40569
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0y6mDyTeBJZM for <buildroot@lists.busybox.net>;
- Mon,  5 Jun 2023 07:29:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eVmUQBnjC5hv for <buildroot@lists.busybox.net>;
+ Mon,  5 Jun 2023 07:33:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E31C5821F7
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E31C5821F7
- for <buildroot@buildroot.org>; Mon,  5 Jun 2023 07:29:41 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id
- ca18e2360f4ac-77865f63473so2852239f.3
- for <buildroot@buildroot.org>; Mon, 05 Jun 2023 00:29:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78AC940598
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 78AC940598
+ for <buildroot@buildroot.org>; Mon,  5 Jun 2023 07:33:44 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-33b36a9fdf8so18113485ab.2
+ for <buildroot@buildroot.org>; Mon, 05 Jun 2023 00:33:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1685950180; x=1688542180;
+ d=1e100.net; s=20221208; t=1685950423; x=1688542423;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=PZW/g0rD2DFksfWm5ScJESuSjer16zCJfeEf45zLUbo=;
- b=ZgBwo0Mak9DgpyrKRX7ZkzrmflzUF5fWNucjJreEaPPbzSWxjHvinDT07fiP/QYKVO
- JYpoA3mnacbbXQNDgdoRfyDK4NJmgbO17Af1CuE2yFCoApK5SwEhKSIhkeDNSKg+qI46
- BvPQgJrwatvsy7H7FW7+tMbF6pJn0BEMgju44DDcFpjrO7FoP84ZfJ6rQ1GyuDemaZih
- xz5odr6/b9n0lZ0gSL6OwrREes8XG0Sjy5mdVUjrZugC5F4VLDTn1mFxyy6Zlx17FbkR
- 9pfwpAVKXivsa1IS+Vn/EN5+hKKnKpnZ9L94YdJfJF7DFuj/pNhyeri156mxkO7mexSb
- baNA==
-X-Gm-Message-State: AC+VfDxrN4c3qf7Y9+GjFd/MD3AVof7EYbc3P7vdmN5I8qyMPRWyzOJu
- H/Z8D/y+EIjFIUaY7s1T93dncTmvKizurg==
-X-Google-Smtp-Source: ACHHUZ7+/M1UNtvduOJEoXo4rW8MFw4NOCFHA6mhZFkWsbYe4dsz965c2ZJPdylENzaiegZRtMYy/Q==
-X-Received: by 2002:a05:6602:4284:b0:76c:8877:861d with SMTP id
- cd4-20020a056602428400b0076c8877861dmr7986809iob.1.1685950180630; 
- Mon, 05 Jun 2023 00:29:40 -0700 (PDT)
+ bh=B73rckci1qGYpUa10lOO6krehZ7+mPibL+JX/COg/Kc=;
+ b=TF+ZZjdnih7sHqLXYsIvGMeWe8nngCGaDfw1oVPB9KkZsswoWXuCPsWRDPid+JbCvb
+ u8NltlqVE0wOeDtFZ6b9fmMG58eciMkBrledkyF1wu5+nnl2ugbOY1VkZRGYuYIfsCUy
+ /9oyZO76MUbx+Q37tBOs6c8KIBJ7NvGan3XKGdLGj+BnFzruB3fEZoceMtC3eBiGZ0Xk
+ 34Vve2VkQlQdCS5aeQw2O6+FruvYeYT45mzGhh/yLca8OW1ACc4G5aAH2HvbfeJRJugZ
+ k88+k2FI5u//hddKXWJdDlszm+z/I86AMe9tWkT5w9C+ezXK2ntZrcCgy/eZTj/8/WTA
+ jJVg==
+X-Gm-Message-State: AC+VfDx7+9ovcK0BenKjQ+o1xGOQHxujPVwbWzQrtK2l9emvXx6VhYnC
+ uQqTRTvR9N/M6BM3L6gA4ljwUCGe6LXHow==
+X-Google-Smtp-Source: ACHHUZ7m3LKprf44j1QqLbVYJvxPcB4ELuhAto0ikTDI0EqGW1fK3ZpFohD3x2rjvuT7+lu3IdQgPQ==
+X-Received: by 2002:a92:d20f:0:b0:33b:f0a0:8dea with SMTP id
+ y15-20020a92d20f000000b0033bf0a08deamr17662219ily.26.1685950423384; 
+ Mon, 05 Jun 2023 00:33:43 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-129-69.hlrn.qwest.net.
  [71.33.129.69]) by smtp.gmail.com with ESMTPSA id
- c6-20020a5ea806000000b00760ed8349e6sm2360198ioa.7.2023.06.05.00.29.40
+ w25-20020a029699000000b003e8a17d7b1fsm2110398jai.27.2023.06.05.00.33.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 05 Jun 2023 00:29:40 -0700 (PDT)
+ Mon, 05 Jun 2023 00:33:43 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  5 Jun 2023 01:29:37 -0600
-Message-Id: <20230605072937.1885915-1-james.hilliard1@gmail.com>
+Date: Mon,  5 Jun 2023 01:33:24 -0600
+Message-Id: <20230605073324.1889371-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1685950180; x=1688542180;
+ d=gmail.com; s=20221208; t=1685950423; x=1688542423;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PZW/g0rD2DFksfWm5ScJESuSjer16zCJfeEf45zLUbo=;
- b=Yky4Id+YgQEVAFtaYLv44XC+Fz5y1Tq4vNRihyQFLCTzoc0iU88hE4WUB6wP4e3hfQ
- rEbL+k7mGb6VHcDfZWTf6F2bPNDiQ+MaRAwjvHaEWUNi09Puoszw2/LZ+4VkmraVpXYA
- CGzwUhihplTmQ3yplUFyGj8bLhUfeu/K10G7nX/h4odCcGpVpYhwewPveUAV49LLHfDc
- qZrYk4D2Fa2q0wtbi61gw4IXfQ7MrME++CNaUuRF8+sQj+8tlTICtYUnryjnMHXiRiaP
- BYEV4cfQmOewMauF2Ub2BsJM72tWFBDewdUwvGtbpuAn6N9/a+2Fi/jNf5gvwvvvoJBK
- VBmA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=B73rckci1qGYpUa10lOO6krehZ7+mPibL+JX/COg/Kc=;
+ b=fOjKRUwVRg/4q0yG3Xz2xTYrRyvUvmEHo4d7jSNZD1egE6PLx61bxujq6bu0ffZoqZ
+ MV0XA16hPCO7Od6+xbwSaeDMU/lTZm6sz/cG75snhQDojAKmQ9MRO0GBjQuW4X1ZbtW8
+ AMmHqMwEHJTJoVxiZVG4P0m233c3uyP0Fin9KuLo5n8Lb1PzSBknDsR4Jp22eFF03QUi
+ q64Jxo6VRtdc+vH/3xRKK2wmuP5stTSe1MK/IG6+sSwrOHU5R89L3bM3Tuzvo5Nvzd4i
+ PrIUfzPpov9pIYGig7XFkyPvBZqogx0bZWTQ3KTtJj26FqEfuhe79VHBL6aAX4JjjJKi
+ qvkw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Yky4Id+Y
-Subject: [Buildroot] [PATCH 1/1] package/python-selenium: bump to version
- 4.9.1
+ header.a=rsa-sha256 header.s=20221208 header.b=fOjKRUwV
+Subject: [Buildroot] [PATCH 1/1] package/python-requests: bump to version
+ 2.31.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,36 +103,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-selenium/python-selenium.hash | 4 ++--
- package/python-selenium/python-selenium.mk   | 4 ++--
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-selenium/python-selenium.hash b/package/python-selenium/python-selenium.hash
-index d462abc62b..03a9683a21 100644
---- a/package/python-selenium/python-selenium.hash
-+++ b/package/python-selenium/python-selenium.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/selenium/json
--md5  e9054eb95920bb2a1d594090f0773f61  selenium-4.8.0.tar.gz
--sha256  fee36724d6cf0b18c73781bb8ec7be4a35ab1e2564e64e64e64da75e50e052af  selenium-4.8.0.tar.gz
-+md5  02404033a10b2b29aa098f50503c0a1a  selenium-4.9.1.tar.gz
-+sha256  3444f4376321530c36ce8355b6b357d8cf4a7d588ce5cf772183465930bbed0e  selenium-4.9.1.tar.gz
-diff --git a/package/python-selenium/python-selenium.mk b/package/python-selenium/python-selenium.mk
-index 6dbea6fb7e..d59a16a57d 100644
---- a/package/python-selenium/python-selenium.mk
-+++ b/package/python-selenium/python-selenium.mk
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index b6f696000b..c4aeabb25d 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5  09b752e0b0a672d805ae54455c128d42  requests-2.28.2.tar.gz
+-sha256  98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf  requests-2.28.2.tar.gz
++md5  941e175c276cd7d39d098092c56679a4  requests-2.31.0.tar.gz
++sha256  942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1  requests-2.31.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 8f9f4b2db4..2c74db3711 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SELENIUM_VERSION = 4.8.0
-+PYTHON_SELENIUM_VERSION = 4.9.1
- PYTHON_SELENIUM_SOURCE = selenium-$(PYTHON_SELENIUM_VERSION).tar.gz
--PYTHON_SELENIUM_SITE = https://files.pythonhosted.org/packages/2e/3d/492cf1a6823c48369328572c6bc63b7a957ba25c0009ee6bdb507cd9a6a4
-+PYTHON_SELENIUM_SITE = https://files.pythonhosted.org/packages/fd/e2/0e5bee6762a7bf7852b47a79c5b12f9e526e6962958dbb9719fa490ba24c
- PYTHON_SELENIUM_SETUP_TYPE = setuptools
- PYTHON_SELENIUM_LICENSE = Apache-2.0
- 
+-PYTHON_REQUESTS_VERSION = 2.28.2
++PYTHON_REQUESTS_VERSION = 2.31.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/ee/391076f5937f0a8cdf5e53b701ffc91753e87b07d66bae4a09aa671897bf
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/be/10918a2eac4ae9f02f6cfe6414b7a155ccd8f7f9d4380d62fd5b955065c3
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
