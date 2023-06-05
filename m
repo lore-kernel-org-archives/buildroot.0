@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A07E5C7EE23
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:47:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8EAC7EE23
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jun 2023 11:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56FCD610C8;
-	Mon,  5 Jun 2023 11:47:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56FCD610C8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D93A60DED;
+	Mon,  5 Jun 2023 11:47:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D93A60DED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ylK31BbcOR9r; Mon,  5 Jun 2023 11:47:41 +0000 (UTC)
+	with ESMTP id xPSG_QVLwZHx; Mon,  5 Jun 2023 11:47:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66CCB60DED;
-	Mon,  5 Jun 2023 11:47:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66CCB60DED
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 25FA51BF95D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6395A610E7;
+	Mon,  5 Jun 2023 11:47:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6395A610E7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A35A41BF4DA
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CCA5940166
+ by smtp1.osuosl.org (Postfix) with ESMTP id 674BB82138
  for <buildroot@lists.busybox.net>; Mon,  5 Jun 2023 11:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCA5940166
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 674BB82138
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lssigmGlQENw for <buildroot@lists.busybox.net>;
- Mon,  5 Jun 2023 11:45:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9RT4U6T8mr0w for <buildroot@lists.busybox.net>;
+ Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E32704013F
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC37081F8C
  for <buildroot@buildroot.org>; Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E32704013F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC37081F8C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D125386C7A; Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
+ id B34C686C78; Mon,  5 Jun 2023 11:45:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Jun 2023 13:06:31 +0200
+Date: Mon, 5 Jun 2023 13:05:46 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 23db85f782e59e18e622937a4da03e61956243cb
-X-Git-Newrev: 0d622f347954e696033da0a318849e6ac7e0de12
+X-Git-Oldrev: d1bd45fdcd2e04af4715d67418dfbb372b0e9e0f
+X-Git-Newrev: 8f059f406b823237e32004ed1fd01e3906d030f5
 X-Patchwork-Hint: ignore
-Message-Id: <20230605114518.D125386C7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/x11r7/xlib_libXi:
- bump version to 1.8.1
+Message-Id: <20230605114518.B34C686C78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/x11r7/xdriver_xf86-input-mouse: bump version to 1.9.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d622f347954e696033da0a318849e6ac7e0de12
+commit: https://git.buildroot.net/buildroot/commit/?id=8f059f406b823237e32004ed1fd01e3906d030f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-May/003390.html
+https://lists.x.org/archives/xorg-announce/2023-May/003392.html
+
+Updated license hash due to update in copyrighht years with upstream
+commit:
+https://gitlab.freedesktop.org/xorg/driver/xf86-input-mouse/-/commit/5f63ab04338fd811c610ae7617757ede52471316
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e45fb0242496ed4d5bb43108c8bac0ba01af2fff)
+(cherry picked from commit b30206b708e02adb1b287a2d450f48c4bd12f754)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXi/xlib_libXi.hash | 6 +++---
- package/x11r7/xlib_libXi/xlib_libXi.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash  | 8 ++++----
+ .../x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk    | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.hash b/package/x11r7/xlib_libXi/xlib_libXi.hash
-index a86ef13225..545d4881f6 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.hash
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.hash
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+index adba659aea..d654c362a9 100644
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
++++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-September/003109.html
--sha256  2ed181446a61c7337576467870bc5336fc9e222a281122d96c4d39a3298bba00  libXi-1.8.tar.bz2
--sha512  4b2c667a8466eb389f253d77285c3f506c4a2b6c75054c722974a864565d565cc0c5701f8ea773eb929ceb94adfeb737ecd7a0bfc2c240157416a5f343c07aba  libXi-1.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-May/003390.html
-+sha256  89bfc0e814f288f784202e6e5f9b362b788ccecdeb078670145eacd8749656a7  libXi-1.8.1.tar.xz
-+sha512  a30b1a07e6d710f5196e7477415d68074736f89d954e8f2d5ccc9b5f349e7d1d440c90fb512508176b5db5ecad55608cfb540872936b731963fd83343db3a0b9  libXi-1.8.1.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2022-November/003247.html
+-sha256  7f6f8551fc238abdddcf9f38906564c1f8c7dacb0ad947cfc110487aefbd8d4c  xf86-input-mouse-1.9.4.tar.xz
+-sha512  7dfde3b1e0c1291c4d78ee920942771808b007f743bfc6eed20de12579383745858673dd874a4b5cf4ab8d9d15f6f7ca2db81ee831547a488d64848a7fe5e16c  xf86-input-mouse-1.9.4.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-May/003392.html
++sha256  4fde8ae9b44352e2a208584c36528ee3ed13cf5fe4417208a9785daccefd9968  xf86-input-mouse-1.9.5.tar.xz
++sha512  ed9bd9cb9a05dac0ff1bfb4e4704cb2e94117afb400aa9e0b7ccdbb102bc6db1b0d3af7cb6f99d0892f8fc306f1643286291c0fa7114af8e65864412bd6c1afa  xf86-input-mouse-1.9.5.tar.xz
  # Locally computed
- sha256  9392174bc86e291369fd2f61f3ed325962735a5f5c585ce8d7ebd365e2a5639f  COPYING
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
-index b4802cf018..6ae5ec8be8 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.mk
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
-@@ -4,9 +4,9 @@
+-sha256  472ff645ead9bf3ffb48d42c596376ffc595897e0c0993a071a7ada0da1f4f10  COPYING
++sha256  5b066654bdb61a1ef41f38cceda752897bbddb6e60e20f5889cab436a9b7b813  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+index 4a9eb3089f..25e25ab93d 100644
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
++++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXI_VERSION = 1.8
--XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
--XLIB_LIBXI_SITE = https://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXI_VERSION = 1.8.1
-+XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.xz
-+XLIB_LIBXI_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXI_LICENSE = MIT
- XLIB_LIBXI_LICENSE_FILES = COPYING
- XLIB_LIBXI_CPE_ID_VENDOR = x.org
+-XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.4
++XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.5
+ XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.xz
+ XDRIVER_XF86_INPUT_MOUSE_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
