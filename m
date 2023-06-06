@@ -1,65 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4129AC7EE24
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jun 2023 15:41:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21DC2C7EE24
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jun 2023 17:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBBA661283;
-	Tue,  6 Jun 2023 15:41:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBBA661283
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77B7D81FC6;
+	Tue,  6 Jun 2023 17:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77B7D81FC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YDvEnfcqbTy3; Tue,  6 Jun 2023 15:41:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9hUmt2p2G4Ed; Tue,  6 Jun 2023 17:50:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04F3D6126F;
-	Tue,  6 Jun 2023 15:41:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04F3D6126F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 07A9C1BF36B
- for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 15:41:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6298C81F9B;
+	Tue,  6 Jun 2023 17:50:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6298C81F9B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5051F1BF292
+ for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 17:50:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D31F4418C8
- for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 15:41:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D31F4418C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 245784018A
+ for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 17:50:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 245784018A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A8RxOzv8phWd for <buildroot@lists.busybox.net>;
- Tue,  6 Jun 2023 15:41:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A54141895
-Received: from serv15.avernis.de (serv15.avernis.de
- [IPv6:2a01:4f8:151:30a2::163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2A54141895
- for <buildroot@buildroot.org>; Tue,  6 Jun 2023 15:41:37 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id 0B0A1BDE7EB1;
- Tue,  6 Jun 2023 17:41:35 +0200 (CEST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vpL83Nyc1LyQ for <buildroot@lists.busybox.net>;
+ Tue,  6 Jun 2023 17:50:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1760400FC
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C1760400FC
+ for <buildroot@buildroot.org>; Tue,  6 Jun 2023 17:50:30 +0000 (UTC)
+Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
+ by mailout10.t-online.de (Postfix) with SMTP id 6EECB2EE21
+ for <buildroot@buildroot.org>; Tue,  6 Jun 2023 19:50:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd84.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1q6ap5-2qbWRV0; Tue, 6 Jun 2023 19:50:23 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40976)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q6ap5-0002le-12
+ for buildroot@buildroot.org; Tue, 06 Jun 2023 19:50:23 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Tue,  6 Jun 2023 19:50:23 +0200
+Message-Id: <20230606175023.80318-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Date: Tue, 06 Jun 2023 15:41:34 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Timothy Groves <the.tail.kinker@gmail.com>
-In-Reply-To: <mailman.2494.1686026379.114519.buildroot@buildroot.org>
-References: <mailman.2494.1686026379.114519.buildroot@buildroot.org>
-Message-ID: <9bbed1f622dcd34dc0a4811427ce9635@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.8 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1686066095; bh=YaOjSoyItyXzdQnd/hGtrfMBQYefrbakPP/nIUuFsRU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=Eck5cRXd+p4gEofT3sXQmOolbn4G9NVWUIo4C7tN49lUGCxcWp1PzDQiMRTqOmzWT
- Y8SKhhQbhZrhJTidtwKlSgzOjf3f5CKcCdzCnbFVyzbnccj8xM1C1p4iU6xrqbPMtG
- GCWuTcS/xrB8qe+N5p11svG+5Bp4+XhCqiuh7Qtg=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=umbiko.net header.i=@umbiko.net
- header.a=rsa-sha256 header.s=mail header.b=Eck5cRXd
-Subject: Re: [Buildroot] Total newbie in over my head
+X-TOI-EXPURGATEID: 150726::1686073823-59E6D570-F818CA2B/0/0 CLEAN NORMAL
+X-TOI-MSGID: f6f7bf92-ee0e-4422-a1ca-399c986436d3
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{4, 10,
+ 15}.x / 6.{1, 3}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,48 +66,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Timothy,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-On 2023-06-06 04:39, Timothy Groves wrote:
+diff --git a/linux/Config.in b/linux/Config.in
+index f288f52601..b4d32f6ea3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.3.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.3.6" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 4806bf711c..18ede2d60f 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  f5cd478c3d8b908ab606afd1e95a4f8f77e7186b4a82829251d6e6aaafff825e  linux-6.3.5.tar.xz
+-sha256  e86917bba1990e967943645484182a64ba325f98b114a1906cc1d50992e073c1  linux-6.1.31.tar.xz
++sha256  7a6a1f0dfa0bf7f45f9d4a7b409315cf32267850adab4db033a17de0320a24ef  linux-6.3.6.tar.xz
++sha256  7c88b7a09ba2b9e47b78eba2b32b1db6a4d89636f7ddd586545f9671a2521a6c  linux-6.1.32.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  e981ea5d219f77735bf5a3f7e84a8af578df8ac3e1c4ff1b0649e2b0795277d2  linux-5.15.114.tar.xz
+-sha256  ace6ceb73f5f2504bc1bcb9b8cd5b55d6ff8e90a81ee244ad2315fdd671ba4e7  linux-5.10.181.tar.xz
+-sha256  90f5280e95ed7b374ad6f3979ed08008e29a051e5f372d367c06ed75b002a21b  linux-5.4.244.tar.xz
++sha256  1b076860779235e90519e867c1ec78c7a34d1125d8fdba787ff495c7c14f1214  linux-5.15.115.tar.xz
++sha256  de8ec58929460e3a14c1b0502f4a449f24c988a7a4a03ff04a82fb2d665fe9f6  linux-5.10.182.tar.xz
++sha256  9607881878fbd21e0dec4e8192b0f6352d17fd74c3ec23ffe6b0a24093efb1a4  linux-5.4.245.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  7fb9ee20c7e52f9be6d9f501e8498a22f4b364abfde136143749a77e597fd03e  linux-4.19.284.tar.xz
+ sha256  ac8318f1c1d387e23ccfa760ec042943372df23e3c4e2408177fb5a3f6488f76  linux-4.14.316.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 51f475f16a..f9a164d78d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -398,11 +398,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.14.316"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.284"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.244"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.181"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.114"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.31"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.3.5"		if BR2_KERNEL_HEADERS_6_3
++	default "5.4.245"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.182"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.115"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.32"	if BR2_KERNEL_HEADERS_6_1
++	default "6.3.6"		if BR2_KERNEL_HEADERS_6_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.39.2
 
-> So I've gone over my settings six ways from Sunday, and confirmed that
-> they all appear correct, to the best of my knowledge.? And still this 
-> is
-> all I get:
-
-You should be able to load the kernel interactively, so try entering 
-'bzImage' (or <path>/bzImage) at the boot prompt.
-
- From the boot message "No DEFAULT or UI configuration directive found" 
-you are missing the syslinux.cfg file. As far as I know, this is not 
-provided by Buildroot. One minimal file looks like this:
-
-DEFAULT linux
-PROMPT 0
-
-LABEL linux
-   SAY Booting Linux ...
-   KERNEL /boot/bzImage
-
-At least in my configurations, iso/syslinux needs one additional module, 
-so BR2_TARGET_SYSLINUX_C32 needs to contain ldlinux.c32.
-
-Kind regards,
-Andreas
-
-> I cannot find any suggestion online about what I've done wrong.
-> 
-> -------------- next part --------------
-> An HTML attachment was scrubbed...
-...
-> URL: 
-> <http://lists.buildroot.org/pipermail/buildroot/attachments/20230605/e49219fc/attachment-0001.png>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
