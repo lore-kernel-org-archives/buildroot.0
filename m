@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A779C7EE24
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jun 2023 14:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9195C7EE24
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jun 2023 15:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2996418E8;
-	Tue,  6 Jun 2023 14:45:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2996418E8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4393541931;
+	Tue,  6 Jun 2023 15:04:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4393541931
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hb0jm4Y_sDOF; Tue,  6 Jun 2023 14:45:45 +0000 (UTC)
+	with ESMTP id iHRZKFmZsxvN; Tue,  6 Jun 2023 15:04:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9967418DB;
-	Tue,  6 Jun 2023 14:45:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9967418DB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6CF6A1BF57C
- for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 14:45:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0917741902;
+	Tue,  6 Jun 2023 15:04:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0917741902
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D62DA1BF215
+ for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 15:03:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43175418DB
- for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 14:45:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43175418DB
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCA5F610F8
+ for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 15:03:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCA5F610F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yUY6rpomBjBv for <buildroot@lists.busybox.net>;
- Tue,  6 Jun 2023 14:45:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jC4kHElj57LX for <buildroot@lists.busybox.net>;
+ Tue,  6 Jun 2023 15:03:39 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE662418D9
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CE662418D9
- for <buildroot@buildroot.org>; Tue,  6 Jun 2023 14:45:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 667EC60F5F
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 667EC60F5F
+ for <buildroot@buildroot.org>; Tue,  6 Jun 2023 15:03:39 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9C23740006;
- Tue,  6 Jun 2023 14:45:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D17260017;
+ Tue,  6 Jun 2023 15:03:36 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q6XwH-00EUJb-QT; Tue, 06 Jun 2023 16:45:37 +0200
+ id 1q6YDf-00EUt3-E7; Tue, 06 Jun 2023 17:03:35 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Romain Naour <romain.naour@gmail.com>
-References: <20230605195345.728177-1-romain.naour@gmail.com>
-Date: Tue, 06 Jun 2023 16:45:37 +0200
-In-Reply-To: <20230605195345.728177-1-romain.naour@gmail.com> (Romain Naour's
- message of "Mon, 5 Jun 2023 21:53:45 +0200")
-Message-ID: <87y1kw4pke.fsf@48ers.dk>
+References: <20230605102149.705474-1-romain.naour@gmail.com>
+Date: Tue, 06 Jun 2023 17:03:35 +0200
+In-Reply-To: <20230605102149.705474-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Mon, 5 Jun 2023 12:21:49 +0200")
+Message-ID: <87ttvk4oqg.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] support/testing/infra/emulator.py: fix typo
- in comment
+Subject: Re: [Buildroot] [PATCH] configs/qemu s390x: increase image size to
+ 120M
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,12 +73,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Artefact (British) and Artifact (American) are both valid spelling
- > but ARTIFACTS_URL is used in the emulator code.
+ > The default kernel configuration for s390x enable a lot of
+ > drivers by default so increase the image site to 120M.
 
- > Surprisingly, the url actually use "artefacts"
-
- >   http://autobuild.buildroot.net/artefacts
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/4364600444
 
  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
