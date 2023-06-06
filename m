@@ -4,60 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F298C7EE43
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jun 2023 20:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83734C7EE43
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jun 2023 20:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C416612EB;
-	Tue,  6 Jun 2023 20:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C416612EB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 118EF612FB;
+	Tue,  6 Jun 2023 20:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 118EF612FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qCOeTsfIMjD2; Tue,  6 Jun 2023 20:22:37 +0000 (UTC)
+	with ESMTP id O5NG7oXERQNU; Tue,  6 Jun 2023 20:23:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE581612D1;
-	Tue,  6 Jun 2023 20:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE581612D1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 386521BF3EF
- for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 20:22:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34116612E6;
+	Tue,  6 Jun 2023 20:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34116612E6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4D9D21BF3EF
+ for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 20:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 111DB4012C
- for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 20:22:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 111DB4012C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 279A74172B
+ for <buildroot@lists.busybox.net>; Tue,  6 Jun 2023 20:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 279A74172B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mPqjJd2H5N6q for <buildroot@lists.busybox.net>;
- Tue,  6 Jun 2023 20:22:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id agErjw4AEafg for <buildroot@lists.busybox.net>;
+ Tue,  6 Jun 2023 20:23:21 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CADB141B31
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CADB141B31
- for <buildroot@buildroot.org>; Tue,  6 Jun 2023 20:22:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F2A441722
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F2A441722
+ for <buildroot@buildroot.org>; Tue,  6 Jun 2023 20:23:20 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 808E0C0004;
- Tue,  6 Jun 2023 20:22:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8BCB7240003;
+ Tue,  6 Jun 2023 20:23:17 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q6dCH-00F3I8-HF; Tue, 06 Jun 2023 22:22:29 +0200
+ id 1q6dD2-00F5UA-L6; Tue, 06 Jun 2023 22:23:16 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Romain Naour <romain.naour@gmail.com>
 References: <20230605095607.332091-1-romain.naour@gmail.com>
-Date: Tue, 06 Jun 2023 22:22:27 +0200
-In-Reply-To: <20230605095607.332091-1-romain.naour@gmail.com> (Romain Naour's
- message of "Mon, 5 Jun 2023 11:56:06 +0200")
-Message-ID: <87cz2849z0.fsf@48ers.dk>
+ <20230605095607.332091-2-romain.naour@gmail.com>
+Date: Tue, 06 Jun 2023 22:23:16 +0200
+In-Reply-To: <20230605095607.332091-2-romain.naour@gmail.com> (Romain Naour's
+ message of "Mon, 5 Jun 2023 11:56:07 +0200")
+Message-ID: <878rcw49xn.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] support/dependencies: introduce
- BR2_HOST_CMAKE_AT_LEAST
+Subject: Re: [Buildroot] [PATCH 2/2] package/libjxl: requires host-cmake >=
+ 3.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,8 +67,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -78,56 +75,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Some packages (e.g. libjxl) requires a quite recent cmake version,
- > that is not yet available in most distributions, especially those
- > LTS versions.
+ > libjxl requires cmake 3.19 since version v0.7 due to the
+ > new behavior of cmake [1].
 
- > Currently, when we bump the minum cmake version we require, it gets
- > bumped for all packages, regardless of their own minimum required
- > version, which means that a given configuration will trigger the
- > build of our host-cmake even if the packages that require it are not
- > enabled and those that are would be content with the system-provided
- > cmake.
+ > -- Configuring done
+ > CMake Error at cmake/FindLCMS2.cmake:40 (add_library):
+ >   INTERFACE_LIBRARY targets may only have whitelisted properties.  The
+ >   property "INCLUDE_DIRECTORIES" is not allowed.
+ > Call Stack (most recent call first):
+ >   third_party/CMakeLists.txt:114 (find_package)
 
- > Since host-cmake can take quite some time to build, this can get a
- > bit annoying to pay the price of a host-cmake build that would
- > otherwise not be needed.
+ > The portability issue has already been reported upstream [2].
 
- > Some packages even use an alternative build system when available
- > since they requires a more recent version of cmake than the our
- > minum cmake version
- > (wpewebkit use Ninja: 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd).
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819095
 
- > We introduce config options that packages can select to indicate
- > what minimal cmake version they require, and use that version as the
- > required minimal version required by the current configuration [0].
-
- > We would like to ensure that the currently selected minimum cmake
- > version is indeed lower (or equal) to the cmake version we package,
- > but that is not possible: dependencies.mk is parsed before we parse
- > packages, so we do not yet know the cmake version we have, and we
- > can't invert the parsing order as we need to know the requires
- > dependencies before we parse packages (so that we can build their
- > dependency rules in Makefile). So we can only add comments in both
- > places, that refer to the other location.
-
- > [0] note that this is yet not optimal, as in such a case, host-cmake
- > would be in the dependency chain of all cmake-based packages, even
- > for those packages that do not require it. The optimum would be for
- > each package to gain such a dependency on an as-needed basis, but
- > this is by far more complex to achieve, and would only speed up
- > cases where a single package is built from scratch (e.g. with:
- > make clean; make foo), which is not worth optimising (yet?)
+ > [1] https://gitlab.kitware.com/cmake/cmake/-/commit/afb998704e67d3d3ce5b24c112cb06e770fca78d
+ > [2] https://github.com/libjxl/libjxl/issues/1425
 
  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Julien Olivain <ju.o@free.fr>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- > v2: Use the commit log suggested by Yann
- >     http://lists.busybox.net/pipermail/buildroot/2023-June/668312.html
 
 Committed, thanks.
 
