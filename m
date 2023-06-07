@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B79CDC77B7A
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jun 2023 20:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 052F0C77B7A
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jun 2023 20:44:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 382BF81E2A;
-	Wed,  7 Jun 2023 20:44:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 382BF81E2A
+	by smtp1.osuosl.org (Postfix) with ESMTP id A59B882ADD;
+	Wed,  7 Jun 2023 20:44:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A59B882ADD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tOYYwCaAynPH; Wed,  7 Jun 2023 20:44:19 +0000 (UTC)
+	with ESMTP id 7NTlRgIZYYuI; Wed,  7 Jun 2023 20:44:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C76E817A3;
-	Wed,  7 Jun 2023 20:44:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C76E817A3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 940481BF964
+	by smtp1.osuosl.org (Postfix) with ESMTP id D24DB82BE5;
+	Wed,  7 Jun 2023 20:44:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D24DB82BE5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B166F1BF969
  for <buildroot@lists.busybox.net>; Wed,  7 Jun 2023 20:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E5584054B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 988E960B19
  for <buildroot@lists.busybox.net>; Wed,  7 Jun 2023 20:44:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E5584054B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 988E960B19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id obUXymzcF7sm for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wDZltXcrdk5i for <buildroot@lists.busybox.net>;
  Wed,  7 Jun 2023 20:44:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E735403C4
+ by smtp3.osuosl.org (Postfix) with ESMTP id B503160AE1
  for <buildroot@buildroot.org>; Wed,  7 Jun 2023 20:44:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E735403C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B503160AE1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88C6386D6F; Wed,  7 Jun 2023 20:44:15 +0000 (UTC)
+ id 9EF5686D72; Wed,  7 Jun 2023 20:44:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Jun 2023 22:20:35 +0200
+Date: Wed, 7 Jun 2023 22:24:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4fec34ba231b78ea24a6480c31aa45132b40784
-X-Git-Newrev: 62200879d49c085b120f37ce31d9123ebcc5895a
+X-Git-Oldrev: 29e79c1f54407d0bb6cd9a3a27c65a4cbe3ccdcd
+X-Git-Newrev: 17393a78e53a3b56aa0416369604ccb1dde414ef
 X-Patchwork-Hint: ignore
-Message-Id: <20230607204415.88C6386D6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdeflate: force arm mode instead
- of Thumb mode
+Message-Id: <20230607204415.9EF5686D72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/at-spi2-core: security bump to
+ version 2.48.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62200879d49c085b120f37ce31d9123ebcc5895a
+commit: https://git.buildroot.net/buildroot/commit/?id=17393a78e53a3b56aa0416369604ccb1dde414ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure:
+https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_48_3/NEWS
 
-/tmp/ccGKQdKj.s: Assembler messages:
-/tmp/ccGKQdKj.s:199: Error: invalid constant (7) after fixup
-/tmp/ccGKQdKj.s:327: Error: invalid constant (0) after fixup
-/tmp/ccGKQdKj.s:338: Error: invalid constant (1) after fixup
-/tmp/ccGKQdKj.s:345: Error: invalid constant (20) after fixup
-/tmp/ccGKQdKj.s:354: Error: invalid constant (20) after fixup
-/tmp/ccGKQdKj.s:372: Error: invalid constant (20) after fixup
-/tmp/ccGKQdKj.s:528: Error: invalid constant (3f) after fixup
-/tmp/ccGKQdKj.s:531: Error: invalid constant (3f) after fixup
-/tmp/ccGKQdKj.s:202: Error: invalid constant (20000) after fixup
-/tmp/ccGKQdKj.s:482: Error: invalid constant (20000) after fixup
-/tmp/ccGKQdKj.s:549: Error: invalid constant (20000) after fixup
+Fixes a couple of use after frees when finalizing devices.
+Added systemd option to not fail if dbus-broker is detected on the host
+machine.
 
 Fixes:
-http://autobuild.buildroot.net/results/0103d64a4a6a9b0a708bfb77bf1714edc7acc714/
+- http://autobuild.buildroot.net/results/a4908a2c8cb75b602794e890fccb8dd42ef6ff41
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdeflate/libdeflate.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/at-spi2-core/at-spi2-core.hash | 4 ++--
+ package/at-spi2-core/at-spi2-core.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdeflate/libdeflate.mk b/package/libdeflate/libdeflate.mk
-index 67e97c6e5e..c09a033325 100644
---- a/package/libdeflate/libdeflate.mk
-+++ b/package/libdeflate/libdeflate.mk
-@@ -9,8 +9,17 @@ LIBDEFLATE_SITE = $(call github,ebiggers,libdeflate,v$(LIBDEFLATE_VERSION))
- LIBDEFLATE_LICENSE = MIT
- LIBDEFLATE_LICENSE_FILES = COPYING
- LIBDEFLATE_INSTALL_STAGING = YES
-+
-+LIBDEFLATE_CFLAGS = -D_DEFAULT_SOURCE
-+
-+# Thumb build is broken, build in ARM mode, since all architectures
-+# that support Thumb1 also support ARM.
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+LIBDEFLATE_CFLAGS += -marm
+diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+index db3ea7096e..8f856e1cac 100644
+--- a/package/at-spi2-core/at-spi2-core.hash
++++ b/package/at-spi2-core/at-spi2-core.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.2.sha256sum
+-sha256  86ebcb55f678381d7ed7825736add42dfccb70ad3b981dfd65d72e58f87828ee  at-spi2-core-2.48.2.tar.xz
++# From https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.3.sha256sum
++sha256  37316df43ca9989ce539d54cf429a768c28bb38a0b34950beadd0421827edf55  at-spi2-core-2.48.3.tar.xz
+ 
+ # locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+index e9a93b3eda..0ca5bc1817 100644
+--- a/package/at-spi2-core/at-spi2-core.mk
++++ b/package/at-spi2-core/at-spi2-core.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ AT_SPI2_CORE_VERSION_MAJOR = 2.48
+-AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).2
++AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).3
+ AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+ AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+ AT_SPI2_CORE_LICENSE = LGPL-2.1+
+@@ -29,6 +29,13 @@ else
+ AT_SPI2_CORE_CONF_OPTS += -Dintrospection=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++AT_SPI2_CORE_CONF_OPTS += -Duse_systemd=true
++AT_SPI2_CORE_DEPENDENCIES += systemd
++else
++AT_SPI2_CORE_CONF_OPTS += -Duse_systemd=false
 +endif
 +
- LIBDEFLATE_CONF_OPTS = \
--	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -D_DEFAULT_SOURCE"
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(LIBDEFLATE_CFLAGS)"
+ AT_SPI2_CORE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
  
- ifeq ($(BR2_SHARED_LIBS),y)
- LIBDEFLATE_CONF_OPTS += \
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
