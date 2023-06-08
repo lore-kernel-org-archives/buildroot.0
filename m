@@ -4,56 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64195C7EE2E
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 17:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C71E0C7EE29
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 17:50:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3734611D3;
-	Thu,  8 Jun 2023 17:49:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3734611D3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F67B611D7;
+	Thu,  8 Jun 2023 17:50:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F67B611D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oc9omoUw3_UT; Thu,  8 Jun 2023 17:49:47 +0000 (UTC)
+	with ESMTP id aLgPwrEPd0k4; Thu,  8 Jun 2023 17:50:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6475611C5;
-	Thu,  8 Jun 2023 17:49:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6475611C5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 262BE1BF39C
- for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 17:49:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FCE561230;
+	Thu,  8 Jun 2023 17:50:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FCE561230
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 75EE31BF39C
+ for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 17:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F320541FD8
- for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 17:49:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F320541FD8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F6C882279
+ for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 17:50:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F6C882279
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XmtHJuNsy8e7 for <buildroot@lists.busybox.net>;
- Thu,  8 Jun 2023 17:49:43 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF2BA41B42
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BF2BA41B42
- for <buildroot@buildroot.org>; Thu,  8 Jun 2023 17:49:42 +0000 (UTC)
-Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout03.t-online.de (Postfix) with SMTP id 1CB1626893;
- Thu,  8 Jun 2023 19:49:40 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd78.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q7JlT-2Z4F3x0; Thu, 8 Jun 2023 19:49:39 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43186)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q7JlS-000089-2p;
- Thu, 08 Jun 2023 19:49:38 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XW_5JsMMi4W2 for <buildroot@lists.busybox.net>;
+ Thu,  8 Jun 2023 17:50:22 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C6F783C28
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7C6F783C28
+ for <buildroot@buildroot.org>; Thu,  8 Jun 2023 17:50:22 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-30e5289105cso715075f8f.1
+ for <buildroot@buildroot.org>; Thu, 08 Jun 2023 10:50:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1686246620; x=1688838620;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=6w52rAKHSzeaiqQhh/2tkZugx5RxGbGQfOP/R3F5eGc=;
+ b=iYDflvexDMR/qcrMEUyTx2tu9eLfAjrGKFYnvupJJKIKFiO7Bea+DfzVXtvEir3LhR
+ o9MmnOLBkfVo60MYq5YMuN1kEgxA6+6h8mgWsumtt6R3araoCXp/oXZtbryhNPhqgMe1
+ KuoKSViJMTY7rD28nWcqbXbA/cSj56KMZ/EO4VZ7I5hcZt34WmD3784JcUGx7T8WCOOt
+ h09kYt5cEDqx02s6h7QBqxVayErnqknHOc4cmoOTV41GwjEp0WpPG9rwVAR9Wj8oEZpC
+ LmbEVwvC54eJG75F341H+EwW7ulPQkcHsGkwehaETOFHYA4QUVjebne+lT1tEukLxB6y
+ tRwQ==
+X-Gm-Message-State: AC+VfDwVZHccgrB4PlcbhB8Pd2DzEEaX8tqLLcJtlgqyx2SCzRDRvWL5
+ MBU5sgSX44fgvZdhPJq/p3tLN0x5ty0jHg==
+X-Google-Smtp-Source: ACHHUZ6Jv/EM9Z/Tqh6sFnglVgiDgr/7EM4jPYDgkYpJfpgBe5nAhVyAIPIyHIv7nl9wjZFMgRs6MQ==
+X-Received: by 2002:a05:6000:1cc6:b0:30e:3dc2:6f2f with SMTP id
+ bf6-20020a0560001cc600b0030e3dc26f2fmr2070099wrb.12.1686246620192; 
+ Thu, 08 Jun 2023 10:50:20 -0700 (PDT)
+Received: from cuervo.lan ([78.30.22.52]) by smtp.gmail.com with ESMTPSA id
+ c6-20020adffb46000000b0030ae7bd1737sm2188035wrs.45.2023.06.08.10.50.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 08 Jun 2023 10:50:19 -0700 (PDT)
+From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
+ <salvador.joseluis@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  8 Jun 2023 19:49:38 +0200
-Message-Id: <20230608174938.3436542-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+Date: Thu,  8 Jun 2023 19:50:16 +0200
+Message-ID: <20230608175016.1341416-1-salvador.joseluis@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20220724143533.GV2641@scaer>
+References: <20220724143533.GV2641@scaer>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686246579-097C5714-7A9EE83D/0/0 CLEAN NORMAL
-X-TOI-MSGID: 9fa80791-e315-4310-9ba3-c48460f39b77
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 1.1.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1686246620; x=1688838620;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=6w52rAKHSzeaiqQhh/2tkZugx5RxGbGQfOP/R3F5eGc=;
+ b=fCdwOLc66I0lHKSeWvhKdbScdecbk4wAWmfs5nIp/TZjQCWi6yEhvjBqID3COZYOWF
+ lvVKEFJuznxW2zOOTk+SauoWn7jLO3xVZasv5gupgNTKD27Lt0bpd8dpL9a91C13+05r
+ vdA6GqUkf9XjFqOOW89qhCW0zqkECxyUZMqxDfbif4Xymici/lA8Oz/+FAw3ymNY2qXn
+ yuiotZGHJXIMrmH9/E+4cj2xKFDngwWnzkLmL8Z6RfycpiuSCGGp4nAspFjeJEXPNJJ5
+ B2f3vSHLI3pLI6zigAJRa6DfaIUOMo2JFnjoSkb0WjOfkiN6c0+l68H+vGWhmGqXDdjI
+ mPyw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=fCdwOLc6
+Subject: [Buildroot] [PATCH] package/zfs: not using kernel-module infra
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +97,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Michael Zimmermann <sigmaepsilon92@gmail.com>,
+ =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
+ <salvador.joseluis@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 6993b756ae..cb36b674fa 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/1.0.0/meson-1.0.0.tar.gz.asc
--sha256  aa50a4ba4557c25e7d48446abfde857957dcdf58385fffbe670ba0e8efacce05  meson-1.0.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/1.1.1/meson-1.1.1.tar.gz.asc
-+sha256  d04b541f97ca439fb82fab7d0d480988be4bd4e62563a5ca35fadb5400727b1c  meson-1.1.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index e417d8d627..503aca8c25 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 1.0.0
-+MESON_VERSION = 1.1.1
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
--- 
-2.39.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+emZzIGFscmVhZHkgYnVpbGRzIHRoZSBrZXJuZWwgbW9kdWxlIGZyb20gdGhlIGF1dG90b29scyBp
+bmZyYXN0cnVjdHVyZS4KClNpZ25lZC1vZmYtYnk6IEpvc8OpIEx1aXMgU2FsdmFkb3IgUnVmbyA8
+c2FsdmFkb3Iuam9zZWx1aXNAZ21haWwuY29tPgotLS0KIHBhY2thZ2UvemZzL0NvbmZpZy5pbiB8
+IDEgKwogcGFja2FnZS96ZnMvemZzLm1rICAgIHwgNSArKystLQogMiBmaWxlcyBjaGFuZ2VkLCA0
+IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS96ZnMv
+Q29uZmlnLmluIGIvcGFja2FnZS96ZnMvQ29uZmlnLmluCmluZGV4IDYyMDljNTg2NWIuLjNiZDlm
+OGFiMDIgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvemZzL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL3pm
+cy9Db25maWcuaW4KQEAgLTExLDYgKzExLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1pGUwogCWRl
+cGVuZHMgb24gQlIyX1BBQ0tBR0VfSEFTX1VERVYKIAlkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICAj
+IHV0aWwtbGludXggKGxpYmJsa2lkKQogCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhS
+RUFEUyAgIyBsaWJ0aXJwYworCXNlbGVjdCBCUjJfTElOVVhfTkVFRFNfTU9EVUxFUyAjIG5vdCB1
+c2luZyBrZXJuZWwtbW9kdWxlIGluZnJhCiAJc2VsZWN0IEJSMl9QQUNLQUdFX1VUSUxfTElOVVgK
+IAlzZWxlY3QgQlIyX1BBQ0tBR0VfVVRJTF9MSU5VWF9MSUJCTEtJRAogCXNlbGVjdCBCUjJfUEFD
+S0FHRV9VVElMX0xJTlVYX0xJQlVVSUQKZGlmZiAtLWdpdCBhL3BhY2thZ2UvemZzL3pmcy5tayBi
+L3BhY2thZ2UvemZzL3pmcy5tawppbmRleCBlOTk0MTNlNjExLi41MGMxODY2MDQ1IDEwMDY0NAot
+LS0gYS9wYWNrYWdlL3pmcy96ZnMubWsKKysrIGIvcGFja2FnZS96ZnMvemZzLm1rCkBAIC0xNSw3
+ICsxNSw3IEBAIFpGU19DUEVfSURfUFJPRFVDVCA9IG9wZW56ZnMKICMgMDAwMS1yZW1vdmFsLW9m
+LUxlZ2FjeVZlcnNpb24tYnJva2UtYXhfcHl0aG9uX2Rldi5tNC5wYXRjaAogWkZTX0FVVE9SRUNP
+TkYgPSBZRVMKIAotWkZTX0RFUEVOREVOQ0lFUyA9IGxpYmFpbyBvcGVuc3NsIHVkZXYgdXRpbC1s
+aW51eCB6bGliIGxpYmN1cmwKK1pGU19ERVBFTkRFTkNJRVMgPSBsaWJhaW8gb3BlbnNzbCB1ZGV2
+IHV0aWwtbGludXggemxpYiBsaWJjdXJsIGxpbnV4CiAKICMgc3lzdmluaXQgaW5zdGFsbHMgb25s
+eSBhIGNvbW1lbnRlZC1vdXQgbW9kdWxlcy1sb2FkLmQvIGNvbmZpZyBmaWxlCiBaRlNfQ09ORl9P
+UFRTID0gXApAQCAtODcsNSArODcsNiBAQCBkZWZpbmUgWkZTX0xJTlVYX0NPTkZJR19GSVhVUFMK
+IAkkKGNhbGwgS0NPTkZJR19FTkFCTEVfT1BULENPTkZJR19aTElCX0lORkxBVEUpCiBlbmRlZgog
+Ci0kKGV2YWwgJChrZXJuZWwtbW9kdWxlKSkKKyMgWkZTIGF1dG90b29scyB3aWxsIGNvbXBpbGUg
+dGhlIGtlcm5lbCBtb2R1bGVzLCBzbyB0aGVyZSBpcyBub3QgbmVlZGVkIHRvIGV4ZWN1dGUKKyMg
+JChldmFsICQoa2VybmVsLW1vZHVsZSkpCiAkKGV2YWwgJChhdXRvdG9vbHMtcGFja2FnZSkpCi0t
+IAoyLjQxLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
