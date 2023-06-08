@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F385FC7EE45
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 23:30:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 026CFC7EE37
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 23:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9045542470;
-	Thu,  8 Jun 2023 23:30:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9045542470
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48EE042472;
+	Thu,  8 Jun 2023 23:30:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48EE042472
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jUnrhhpGP2H3; Thu,  8 Jun 2023 23:30:23 +0000 (UTC)
+	with ESMTP id 8itO0e8aG523; Thu,  8 Jun 2023 23:30:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3949342474;
-	Thu,  8 Jun 2023 23:30:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3949342474
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7A5901BF97D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DE154241E;
+	Thu,  8 Jun 2023 23:30:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DE154241E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C90D1BF97E
  for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 23:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5305E42037
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5633983C59
  for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 23:29:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5305E42037
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5633983C59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6nL_ENU9pGwW for <buildroot@lists.busybox.net>;
- Thu,  8 Jun 2023 23:29:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K-xZpf7-JcAS for <buildroot@lists.busybox.net>;
+ Thu,  8 Jun 2023 23:29:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5CEC420F2
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C5CEC420F2
- for <buildroot@buildroot.org>; Thu,  8 Jun 2023 23:29:08 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-3f7ebb2b82cso11944575e9.2
- for <buildroot@buildroot.org>; Thu, 08 Jun 2023 16:29:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E00983BF8
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E00983BF8
+ for <buildroot@buildroot.org>; Thu,  8 Jun 2023 23:29:10 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-3f6d38a140bso9133355e9.1
+ for <buildroot@buildroot.org>; Thu, 08 Jun 2023 16:29:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686266946; x=1688858946;
+ d=1e100.net; s=20221208; t=1686266948; x=1688858948;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=H04CYG1L6plEpOm0+0x8TTv/R6vUgmhy65snc+hJkC0=;
- b=Igdi7l5Z/W3c+rWkGqgosm3dra776cXv+pJsy3mkGgfjXa5fXMswZNOhnLNGM8kvj3
- s2LW5iAVBYJAV3182SmL9DTgr0wznFQvG4YlPu3hfScGwdb4PkrU2PS3+zFNGtAgkgNV
- +bf0W7+mO2mlnqXC9Dq+ejBPdDpHzd0wsYnQI0JwJNE4gc1+zjGlCbpsYHk+29MEtwS4
- vr9pBOjN3TNzoJ/qIQPa483S1bL2EXJ87VtCdFfmCFZvpyrtqfRY2aMv3MAs6nfWW7JS
- nfhWAJ6AEmTOpRbtErSR45BunkDrRogeQxTZM/Uzg8zkpcI8nh0PNCUWHKoqXLyiTXKV
- KS1w==
-X-Gm-Message-State: AC+VfDxCpjw57+NxsFwdDScnUegYPPSDpTPkiVswlv9gaTE/Qdi0loh2
- SeM8hzHXZFjK7D2/etB6vKI2+1+gukE=
-X-Google-Smtp-Source: ACHHUZ6UrBUFfiUW/NkROSjVhMoiG+xZ/LWOTfOMT1tv5zHEyn/XWW3sHYforBq03XHT7LIh/mB2GQ==
-X-Received: by 2002:a5d:4a0f:0:b0:30a:e332:a3ba with SMTP id
- m15-20020a5d4a0f000000b0030ae332a3bamr8192090wrq.27.1686266946552; 
- Thu, 08 Jun 2023 16:29:06 -0700 (PDT)
+ bh=l5JmrCyJEhsYfdzfLcHFVUgApKMWuopK5/jx8v4dyCY=;
+ b=kgtOTRuuIbgFM5VdSH2DPrAd492c6YSvAIji3zEvxb2/0A36YI2T7qt6k6gtdawrsA
+ nbsYNPA8o/mp9y3loB26sH26RrP2JkYZm0VN0YwgaJxbevEMLza0e7OttFIAzNZA198J
+ 0l2zkkd8ETRTMLjKK/0EYTym0B5+h8/bDuo00fVx4VOeRYFrJ/EzE9/elbeppGZUxmZ5
+ C4whV5PeGjTxowPOfTRSsL8va4T7qerK2tQvKJoQpmhYkcjfykTl+EbUCeryRElfZoBi
+ 6Q1vzb7qWJn/TpxiamUt5fWeJtk5304V1SfGec4NHBq7y3kMgb/FRyl+Um9XqvRAcarX
+ ZlFA==
+X-Gm-Message-State: AC+VfDwyW3+cnYTcgxpbOlUT6kjNliqMsRj533OmbjWhcr3EbHMci9WT
+ ENzxFOeFi4YF/YjPeNSZkBwzrsufEQs=
+X-Google-Smtp-Source: ACHHUZ6ebUPZWJzzJ+qvUZjT7VuVfPxKf5DUgpCEGuTK49PqvNDEI7vb/QEdgy2QHu/CWakWhzkLMw==
+X-Received: by 2002:a05:600c:1551:b0:3f7:408c:ad39 with SMTP id
+ f17-20020a05600c155100b003f7408cad39mr2421783wmg.14.1686266948523; 
+ Thu, 08 Jun 2023 16:29:08 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- c3-20020adffb03000000b0030ab5ebefa8sm2757522wrr.46.2023.06.08.16.29.05
+ c3-20020adffb03000000b0030ab5ebefa8sm2757522wrr.46.2023.06.08.16.29.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Jun 2023 16:29:06 -0700 (PDT)
+ Thu, 08 Jun 2023 16:29:07 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  9 Jun 2023 01:28:47 +0200
-Message-Id: <20230608232859.1245497-5-romain.naour@gmail.com>
+Date: Fri,  9 Jun 2023 01:28:49 +0200
+Message-Id: <20230608232859.1245497-7-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20230608232859.1245497-1-romain.naour@gmail.com>
 References: <20230608232859.1245497-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1686266946; x=1688858946;
+ d=gmail.com; s=20221208; t=1686266948; x=1688858948;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=H04CYG1L6plEpOm0+0x8TTv/R6vUgmhy65snc+hJkC0=;
- b=DyP6XPn9VR7CC9hjMLSMhB+TQPimbwClBGTjilDz2KCddJHU6fKoR6owC8ckozylZh
- 1xJzy0l6fJYkgUJKMMrpoGmcGBi77zjZgYLwTtVBhACBKL631PfYjgFnal10S/10wo84
- Da73Tnhtbm0uEnivjO9nWkVxe59kPdm7f/EapLBRewWmdooQ2KATqpt48RyGeoJG+BCT
- Q3yEY2IeKSm9CUZRcJz7haKhygX7q/TFf6mkZXXHJ15jYSAEnr1K7/ywapxR8zLr44kj
- vmbpB25sHPEsaVBEADH6/4/LlRpqQwcv5FRJ8S9dNUUSJ0FchV6ilxLLiLPdlod28lb+
- Z9xw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=l5JmrCyJEhsYfdzfLcHFVUgApKMWuopK5/jx8v4dyCY=;
+ b=AbWZJhdZPkl7QBa53ETjfhDy2MeFT+z/B2pBfpc2QpVLVlnoDw2oxmVut03DOVWrxF
+ PuoT5ODyHnjXPXDByEEReE5pv3pMP60rqUgyA8sv6nxCnw/Xg/ZfKSy81kl/bxFTQvU6
+ W5ZMP7mk9tvtOPDAhX7YBYSDc3M23jHD0OrqNrtFgYRhVVEKxMUeC1HiTXAcsmuKeLhp
+ 69pbbGF+RzKOP8AbYCR/Aan5KUxMH2noHp+bJokI63m7Zk3iZx36M46+zsRNZFgbsiFq
+ f4YnhCleKPb2QbD8VfpwIXAiDINk6e/5WBwmxYfaNhWieseLMT9+WEr+Yrmttg6o6hhT
+ QVMw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=DyP6XPn9
-Subject: [Buildroot] [PATCH v2 05/17] support/testing: TestSELinuxSystemd:
- kernel bump 6.1.26
+ header.a=rsa-sha256 header.s=20221208 header.b=AbWZJhdZ
+Subject: [Buildroot] [PATCH v2 07/17] support/testing: TestMtools: use base
+ configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,37 +106,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We are going to update the toolchain used by the Buildroot testsuite
-and this update will break the kernel build with the Bootlin stable
-toolchain due to an latent issue.
-
-Fixes:
-arch/x86/entry/thunk_64.o: warning: objtool: missing symbol table
-make[4]: *** [scripts/Makefile.build:361: arch/x86/entry/thunk_64.o] Error 1
-make[4]: *** Deleting file 'arch/x86/entry/thunk_64.o'
-make[4]: *** Waiting for unfinished jobs....
-
-[fixed since kernel 6.0]
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=de979c83574abf6e78f3fa65b716515c91b2613d
+The base configuration now provide a glibc toolchain,
+we can safely switch to it.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- support/testing/tests/init/test_systemd_selinux.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/test_mtools.py | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/support/testing/tests/init/test_systemd_selinux.py b/support/testing/tests/init/test_systemd_selinux.py
-index 73604cfc32..5f91243f37 100644
---- a/support/testing/tests/init/test_systemd_selinux.py
-+++ b/support/testing/tests/init/test_systemd_selinux.py
-@@ -12,7 +12,7 @@ class TestSELinuxSystemd(infra.basetest.BRTest):
-         BR2_INIT_SYSTEMD=y
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.12"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-         BR2_PACKAGE_LIBSELINUX=y
+diff --git a/support/testing/tests/package/test_mtools.py b/support/testing/tests/package/test_mtools.py
+index 51e5138481..4a232bc926 100644
+--- a/support/testing/tests/package/test_mtools.py
++++ b/support/testing/tests/package/test_mtools.py
+@@ -4,14 +4,8 @@ import infra.basetest
+ 
+ 
+ class TestMtools(infra.basetest.BRTest):
+-    # We use a glibc toolchain to have iconv conversion working for
+-    # codepage 850.
+-    config = \
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+-        BR2_arm=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_MTOOLS=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.34.3
 
