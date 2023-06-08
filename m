@@ -4,57 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A154FC7EE29
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 20:40:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 735CAC7EE29
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 20:42:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3553D4156F;
-	Thu,  8 Jun 2023 20:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3553D4156F
+	by smtp2.osuosl.org (Postfix) with ESMTP id F031741551;
+	Thu,  8 Jun 2023 20:42:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F031741551
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4RzWdANkjHsy; Thu,  8 Jun 2023 20:40:13 +0000 (UTC)
+	with ESMTP id N54kuuio1eOr; Thu,  8 Jun 2023 20:42:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64C3C41578;
-	Thu,  8 Jun 2023 20:40:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64C3C41578
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 371A91BF395
- for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 20:40:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 445B84154A;
+	Thu,  8 Jun 2023 20:42:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 445B84154A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F08561BF395
+ for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 20:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B1874154A
- for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 20:40:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B1874154A
+ by smtp3.osuosl.org (Postfix) with ESMTP id C680260F7B
+ for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 20:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C680260F7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wpV0KlHNaKQ4 for <buildroot@lists.busybox.net>;
- Thu,  8 Jun 2023 20:39:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lbiq3VFUnHsm for <buildroot@lists.busybox.net>;
+ Thu,  8 Jun 2023 20:42:28 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 507F041565
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 507F041565
- for <buildroot@buildroot.org>; Thu,  8 Jun 2023 20:39:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 614E460EF3
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 614E460EF3
+ for <buildroot@buildroot.org>; Thu,  8 Jun 2023 20:42:28 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 101281C0002;
- Thu,  8 Jun 2023 20:39:56 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2356F240003;
+ Thu,  8 Jun 2023 20:42:24 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q7MQG-0008X2-6R; Thu, 08 Jun 2023 22:39:56 +0200
+ id 1q7MSe-0008gX-Ac; Thu, 08 Jun 2023 22:42:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Knight <james.d.knight@live.com>
-References: <20230507213433.4128-1-james.d.knight@live.com>
- <SN4P221MB06822FC17FE7B81EA017CF06A0709@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-Date: Thu, 08 Jun 2023 22:39:56 +0200
-In-Reply-To: <SN4P221MB06822FC17FE7B81EA017CF06A0709@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
- (James Knight's message of "Sun, 7 May 2023 17:34:30 -0400")
-Message-ID: <87a5x93cyr.fsf@48ers.dk>
+To: Daniel Lang <dalang@gmx.at>
+References: <20230507201636.52947-1-dalang@gmx.at>
+Date: Thu, 08 Jun 2023 22:42:24 +0200
+In-Reply-To: <20230507201636.52947-1-dalang@gmx.at> (Daniel Lang's message of
+ "Sun, 7 May 2023 22:16:36 +0200")
+Message-ID: <875y7x3cun.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 2/5] package/rpm: add more disabling
- options
+Subject: Re: [Buildroot] [PATCH] package/cairomm1_14: use official website
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,21 +65,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Daniel Lang <d.lang@abatec.at>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Knight <james.d.knight@live.com> writes:
+>>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
 
- > Adding a series of feature-disable configurations of options introduced
- > over the recent versions, but where never added.
+ > The website [1] states that the released version can be downloaded from
+ > the cairo release area [2], which also features a sha1 hash.
 
- > Signed-off-by: James Knight <james.d.knight@live.com>
+ > [1]: https://www.cairographics.org/cairomm/
+ > [2]: https://www.cairographics.org/releases/
+
+ > Signed-off-by: Daniel Lang <dalang@gmx.at>
  > ---
- > Changes v1 -> v2:
- >   - New patch in v2, with changes from the original first patch.
+ > v1 -> v2:
+ > - split patch from unrelated cairomm patches
 
 Committed to 2023.02.x, thanks.
 
