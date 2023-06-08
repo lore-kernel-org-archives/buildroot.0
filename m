@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2701C7EE29
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 21:12:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21A39C7EE25
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 22:11:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 80AB54154F;
-	Thu,  8 Jun 2023 21:12:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80AB54154F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D32041551;
+	Thu,  8 Jun 2023 22:11:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D32041551
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2eQeWjDMfYZ4; Thu,  8 Jun 2023 21:12:41 +0000 (UTC)
+	with ESMTP id SQacb2Wof7pY; Thu,  8 Jun 2023 22:11:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2A0841551;
-	Thu,  8 Jun 2023 21:12:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2A0841551
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ACC461BF393
- for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 21:11:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEDEB404AB;
+	Thu,  8 Jun 2023 22:11:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEDEB404AB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 155A61BF392
+ for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 22:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E01A42441
- for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 21:11:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E01A42441
+ by smtp2.osuosl.org (Postfix) with ESMTP id E04CA404AB
+ for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 22:11:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E04CA404AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DsJkYcgT12u2 for <buildroot@lists.busybox.net>;
- Thu,  8 Jun 2023 21:11:15 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCC1D4242F
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DCC1D4242F
- for <buildroot@buildroot.org>; Thu,  8 Jun 2023 21:11:14 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C23E7E0007;
- Thu,  8 Jun 2023 21:11:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1q7MuU-000AUr-Rn; Thu, 08 Jun 2023 23:11:10 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OvmdJhBDvCFw for <buildroot@lists.busybox.net>;
+ Thu,  8 Jun 2023 22:11:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1333E4154A
+ for <buildroot@buildroot.org>; Thu,  8 Jun 2023 22:11:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1333E4154A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F3585821FE; Thu,  8 Jun 2023 22:11:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: yegorslists--- via buildroot <buildroot@buildroot.org>
-References: <20230426080824.2094413-1-yegorslists@googlemail.com>
-Date: Thu, 08 Jun 2023 23:11:10 +0200
-In-Reply-To: <20230426080824.2094413-1-yegorslists@googlemail.com>
- (yegorslists's message of "Wed, 26 Apr 2023 10:08:24 +0200")
-Message-ID: <87jzwd1wy9.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/mdio-tools: fix Config.in
+To: buildroot@buildroot.org
+Date: Thu, 8 Jun 2023 23:10:46 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: bff0536e4c642ff87c8a3f45a6d42d34a096b5fd
+X-Git-Newrev: 6bff385173bcd6628bd34a2c09c3253a6d057f8d
+X-Patchwork-Hint: ignore
+Message-Id: <20230608221116.F3585821FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/mdio-tools: fix
+ Config.in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,23 +57,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Robert Marko <robimarko@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "yegorslists---" == yegorslists--- via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6bff385173bcd6628bd34a2c09c3253a6d057f8d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Add project's site and add a full stop at the end of the description.
+Add project's site and add a full stop at the end of the description.
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6ea396aef272fa107775ea8e4903506d2ffc99e0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mdio-tools/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Committed to 2023.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
+index 237f4454cc..790c9c534a 100644
+--- a/package/mdio-tools/Config.in
++++ b/package/mdio-tools/Config.in
+@@ -14,4 +14,6 @@ config BR2_PACKAGE_MDIO_TOOLS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ 	select BR2_PACKAGE_LIBMNL
+ 	help
+-	  Low-level debug tools for MDIO devices
++	  Low-level debug tools for MDIO devices.
++
++	  https://github.com/wkz/mdio-tools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
