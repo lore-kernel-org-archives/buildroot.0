@@ -1,90 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4AA0C7EE29
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 08:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1D2AC7EE25
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 09:26:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8E02405D0;
-	Thu,  8 Jun 2023 08:50:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8E02405D0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20EF741F21;
+	Thu,  8 Jun 2023 09:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20EF741F21
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9QmctcXkQ0Ya; Thu,  8 Jun 2023 08:50:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kPFd5JMoJ98K; Thu,  8 Jun 2023 09:26:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03143403E0;
-	Thu,  8 Jun 2023 08:50:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03143403E0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A11411BF3BD
- for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 08:50:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE585416B0;
+	Thu,  8 Jun 2023 09:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE585416B0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 991421BF407
+ for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 09:26:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87B49403E0
- for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 08:50:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87B49403E0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7232460B9E
+ for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 09:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7232460B9E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3xJvpx4xwewa for <buildroot@lists.busybox.net>;
- Thu,  8 Jun 2023 08:50:25 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F41EC400FB
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F41EC400FB
- for <buildroot@buildroot.org>; Thu,  8 Jun 2023 08:50:24 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-30e412a852dso228390f8f.0
- for <buildroot@buildroot.org>; Thu, 08 Jun 2023 01:50:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686214223; x=1688806223;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=BvwAk08T69YSpc1GLI70f9nX/rTLWR7hL71YVkEcyf0=;
- b=PjLb3U4X28TpheUsv7NgKjykQPJndqRyGJ2e4YnGyoG1YUOKhfPkYngwAEfDC7WoM0
- zOjFSLGtc2eRflsSCspUtm/G37K2D0906fBMIWJ7mxNHLVZ5CMv5/CtITVrVc87coWji
- OLmmg6QsP1vGHxVO+AO0H0VMMK5TkrggQUcr75t5CEzHD+q5SSFzZVsnHYnGQdkycl2D
- vA6hyvtMhqdgthxjMy+8GOKtKSrsy2F59xDyqN32f8fgHc0c/jFs84kBsxMlj69pw+oB
- KRziQdj+ZVZWSI5sXCvmyyhjrpgSH03DvX4iN2idpJWn7kApkr4SiaS13r6AhaIsjjl0
- 4dMQ==
-X-Gm-Message-State: AC+VfDzx6J7DPr3oZ9eJM51BSZO/suJ+0kMsUiXRmyM2ylZOlbe4wfDT
- F5u61BcJpVQ2lwZlopXEqKxEhXs9yam/K8AUy9s=
-X-Google-Smtp-Source: ACHHUZ42hbsUlN7Ib0naASs5LyD9q+fegrrtOx19TgYCLv70PIPLVwfcY9WsOJ2iZYVPC8TU2w273Q==
-X-Received: by 2002:adf:fa4d:0:b0:306:3286:69a2 with SMTP id
- y13-20020adffa4d000000b00306328669a2mr6608920wrr.48.1686214222703; 
- Thu, 08 Jun 2023 01:50:22 -0700 (PDT)
-Received: from P-NAN-LIMA.nantes.intranet
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- e40-20020a5d5968000000b002fda1b12a0bsm928123wri.2.2023.06.08.01.50.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Jun 2023 01:50:22 -0700 (PDT)
-From: Sebastian Weyer <sebastian.weyer@smile.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8cYtLpceQTKM for <buildroot@lists.busybox.net>;
+ Thu,  8 Jun 2023 09:26:01 +0000 (UTC)
+X-Greylist: delayed 00:22:15 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE98260AD6
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DE98260AD6
+ for <buildroot@buildroot.org>; Thu,  8 Jun 2023 09:26:00 +0000 (UTC)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+ by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+ (Exim 4.94.2) (envelope-from <martin@geanix.com>)
+ id 1q7BYT-0001Wy-Lv; Thu, 08 Jun 2023 11:03:41 +0200
+Received: from [185.17.218.86] (helo=rap..)
+ by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+ (Exim 4.92) (envelope-from <martin@geanix.com>)
+ id 1q7BYT-000T3L-DZ; Thu, 08 Jun 2023 11:03:41 +0200
+From: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
 To: buildroot@buildroot.org
-Date: Thu,  8 Jun 2023 10:50:15 +0200
-Message-Id: <20230608085015.1075425-1-sebastian.weyer@smile.fr>
-X-Mailer: git-send-email 2.34.1
+Date: Thu,  8 Jun 2023 11:03:21 +0200
+Message-Id: <20230608090321.1213226-1-martin@geanix.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1686214223; x=1688806223;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=BvwAk08T69YSpc1GLI70f9nX/rTLWR7hL71YVkEcyf0=;
- b=BQ5smDnX7qALe5M2D6ATIsyoZvjprDNkMREF5W89xV8V/EdCk6xtabZ3WlofLQEy9x
- 6rI/wv1T+T/J99v9OHl4CTN/+EDTKydAx0unsh3tPvNNT1RM6G7EepNf9CCqCVXPGMq0
- Klrv+4dPzv76TXchgZ++pClXESJG1+wT1XISCUlIebHUHi9vkYsrJGQiCIQZmXpuc3D1
- vyJYahUtA9npNPToCXwlDs4Kos+kjwvHlMmkxEsVrzqMlSiB38qcM4SZ4Gi7IAFwzWZ2
- 05N0ZFl7jvDjo/AorcUGu5kIOuAXvltIoYNdFyovdvMwru4471B6eFsRORPDrKuYrpMM
- vRJQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
- header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=BQ5smDnX
-Subject: [Buildroot] [PATCH 1/1] package/rust-bindgen: new host package
+X-Authenticated-Sender: martin@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26933/Thu Jun  8 09:26:06 2023)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=geanix.com; 
+ s=default2211; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+ Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:In-Reply-To:References;
+ bh=R5WLWWfeLakpNDPZNbCwk456MMPYOiJhCxiKlUQFpMY=; b=jalvhD7jmjYh1rWbP3kEe26izN
+ jtkZ/u9qachjn5VPQwUiK2eWh9RRRSa7mRy2J6vzRIapi/IupUrVSei4UxHr3nOH7ApmXsxjYUi/X
+ 9BHloSIoBj336Q+9LH//cy1O2z3TaXm1xaYwtW6OGF0Op5aYxh/mw4P1wgAsSXQgw0FcCsm8/Hksx
+ s8vdAomS6ZaUkxi3gQzC318fDT3Jzlh0fjVlG+8Dt1byEO4DEnTqZDCz252huXD6LldX3x4A5GLQR
+ 8ii4Ew+u3hrU/x3TTr2dmxLm9uO3oOcwshGz4YD3BQkP3SCqpwaESUaEfo7ef84tpdfmZ1lLx3PTZ
+ /xHZCh9w==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com
+ header.a=rsa-sha256 header.s=default2211 header.b=jalvhD7j
+Subject: [Buildroot] [PATCH] package/python-flask-smorest: bump version to
+ 0.42.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,72 +79,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- Sebastian Weyer <sebastian.weyer@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Romain Naour <romain.naour@smile.fr>
-
-host-rust-bindgen will be required to build several different rust-based
-packages, includign a Linux kernel with rust modules and mesa3d's
-rusticl which is the rust-based implementation of OpenCL.
-
-The Cargo.toml file at the project root is a "virtual manifest". Since
-we only want to install rust-bindgen, we can specify RUST_BINDGEN_SUBDIR
-= bindgen-cli to use the Cargo.toml from this directory.
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
----
- package/rust-bindgen/rust-bindgen.hash |  3 +++
- package/rust-bindgen/rust-bindgen.mk   | 21 +++++++++++++++++++++
- 2 files changed, 24 insertions(+)
- create mode 100644 package/rust-bindgen/rust-bindgen.hash
- create mode 100644 package/rust-bindgen/rust-bindgen.mk
-
-diff --git a/package/rust-bindgen/rust-bindgen.hash b/package/rust-bindgen/rust-bindgen.hash
-new file mode 100644
-index 0000000000..fe94bbc096
---- /dev/null
-+++ b/package/rust-bindgen/rust-bindgen.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  e1cdbaa8e0ed96f647e49807aecfc44d9239d438c2b1c084edb9a3cca0b1f68f  rust-bindgen-0.65.1.tar.gz
-+sha256  c23953d9deb0a3312dbeaf6c128a657f3591acee45067612fa68405eaa4525db  LICENSE
-diff --git a/package/rust-bindgen/rust-bindgen.mk b/package/rust-bindgen/rust-bindgen.mk
-new file mode 100644
-index 0000000000..b9c7647716
---- /dev/null
-+++ b/package/rust-bindgen/rust-bindgen.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# rust-bindgen
-+#
-+################################################################################
-+
-+#When updating to a version >0.63.0, pay attention to the command line
-+#arguments --blacklist* and --whitelist* which are deprecated from 0.63.0
-+#onwards but are still used when compiling the Linux Kernel as of the time
-+#of this comment
-+RUST_BINDGEN_VERSION = 0.65.1
-+RUST_BINDGEN_SITE = $(call github,rust-lang,rust-bindgen,v$(RUST_BINDGEN_VERSION))
-+RUST_BINDGEN_LICENSE = BSD-3-clause
-+RUST_BINDGEN_LICENSE_FILES = LICENSE
-+
-+# The Cargo.toml at the root directory is an "virtual manifest".
-+# Since we only want to build and install bindgen use the Cargo.toml
-+# from the bindgen-cli subdirectory.
-+RUST_BINDGEN_SUBDIR = bindgen-cli
-+
-+$(eval $(host-cargo-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogTWFydGluIEh1bmRlYsO4bGwgPG1hcnRpbkBnZWFuaXguY29tPgotLS0K
+IHBhY2thZ2UvcHl0aG9uLWZsYXNrLXNtb3Jlc3QvcHl0aG9uLWZsYXNrLXNtb3Jlc3QuaGFzaCB8
+IDQgKystLQogcGFja2FnZS9weXRob24tZmxhc2stc21vcmVzdC9weXRob24tZmxhc2stc21vcmVz
+dC5tayAgIHwgNCArKy0tCiAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxl
+dGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1mbGFzay1zbW9yZXN0L3B5dGhv
+bi1mbGFzay1zbW9yZXN0Lmhhc2ggYi9wYWNrYWdlL3B5dGhvbi1mbGFzay1zbW9yZXN0L3B5dGhv
+bi1mbGFzay1zbW9yZXN0Lmhhc2gKaW5kZXggOTQxNTM1YzUwMy4uMmM5Y2YzYTUxYSAxMDA2NDQK
+LS0tIGEvcGFja2FnZS9weXRob24tZmxhc2stc21vcmVzdC9weXRob24tZmxhc2stc21vcmVzdC5o
+YXNoCisrKyBiL3BhY2thZ2UvcHl0aG9uLWZsYXNrLXNtb3Jlc3QvcHl0aG9uLWZsYXNrLXNtb3Jl
+c3QuaGFzaApAQCAtMSw1ICsxLDUgQEAKICMgbWQ1LCBzaGEyNTYgZnJvbSBodHRwczovL3B5cGku
+b3JnL3B5cGkvZmxhc2stc21vcmVzdC9qc29uCi1tZDUgIDFkYWQ1MmYyNmM1OWNhMmRjYWYwYzVk
+MTA5ODc5NjA1ICBmbGFzay1zbW9yZXN0LTAuNDAuMC50YXIuZ3oKLXNoYTI1NiAgOWI0NmI0OTM3
+Y2NmNzg3MDJkOTlmZWQ4Y2ZkMWNkNWMzNzYwOGRkZWZkNjVmZjE2YTg2ZDFhZDVjN2Y3ZDhjMCAg
+Zmxhc2stc21vcmVzdC0wLjQwLjAudGFyLmd6CittZDUgIGQ3ZjhiNGY3YzljNmMyNjA3ZGZjNjhi
+ZDViYmJkNTJkICBmbGFzay1zbW9yZXN0LTAuNDIuMC50YXIuZ3oKK3NoYTI1NiAgODY4NDIxYjI5
+ZTA2MGE2MDJlMzczOWMyY2FmN2I5N2NmZTIxYzNhYzQ4OGY1MWEyYjVlOTVlMTY4ZGQzYmVjMiAg
+Zmxhc2stc21vcmVzdC0wLjQyLjAudGFyLmd6CiAjIExvY2FsbHkgY29tcHV0ZWQgc2hhMjU2IGNo
+ZWNrc3Vtcwogc2hhMjU2ICA0MDk5OWVhMWQ5YzFiODIwMmZhNDRmOGU2ODQ5YTU1N2UyMmRmODky
+NDgxZTA2N2FiZjk5OTg3OTA2NGI5NTIxICBMSUNFTlNFCmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5
+dGhvbi1mbGFzay1zbW9yZXN0L3B5dGhvbi1mbGFzay1zbW9yZXN0Lm1rIGIvcGFja2FnZS9weXRo
+b24tZmxhc2stc21vcmVzdC9weXRob24tZmxhc2stc21vcmVzdC5tawppbmRleCAwNjlkOTI0NGRk
+Li5hYzRmZjE4OGE1IDEwMDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbi1mbGFzay1zbW9yZXN0L3B5
+dGhvbi1mbGFzay1zbW9yZXN0Lm1rCisrKyBiL3BhY2thZ2UvcHl0aG9uLWZsYXNrLXNtb3Jlc3Qv
+cHl0aG9uLWZsYXNrLXNtb3Jlc3QubWsKQEAgLTQsOSArNCw5IEBACiAjCiAjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIwogCi1QWVRIT05fRkxBU0tfU01PUkVTVF9WRVJTSU9OID0gMC40MC4wCitQWVRI
+T05fRkxBU0tfU01PUkVTVF9WRVJTSU9OID0gMC40Mi4wCiBQWVRIT05fRkxBU0tfU01PUkVTVF9T
+T1VSQ0UgPSBmbGFzay1zbW9yZXN0LSQoUFlUSE9OX0ZMQVNLX1NNT1JFU1RfVkVSU0lPTikudGFy
+Lmd6Ci1QWVRIT05fRkxBU0tfU01PUkVTVF9TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0
+ZWQub3JnL3BhY2thZ2VzL2U2L2I1LzFiODFlYTRmN2UzNzdjZjhhNjUzYWExMGMyNDk2NTZhMWM3
+M2RlN2EzNjk1YjI1NDRkN2E3MTNlYTNjMgorUFlUSE9OX0ZMQVNLX1NNT1JFU1RfU0lURSA9IGh0
+dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy80NS9lYy85Y2ViNTFhNGI4YTIw
+YWU2NmJmYzdlODNhZDY3ODFmMDNhOWYzN2NkZTZhNDExMWE2NWFhNmNiNjY5YTIKIFBZVEhPTl9G
+TEFTS19TTU9SRVNUX1NFVFVQX1RZUEUgPSBzZXR1cHRvb2xzCiBQWVRIT05fRkxBU0tfU01PUkVT
+VF9MSUNFTlNFID0gTUlUCiBQWVRIT05fRkxBU0tfU01PUkVTVF9MSUNFTlNFX0ZJTEVTID0gTElD
+RU5TRQotLSAKMi4zOS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
