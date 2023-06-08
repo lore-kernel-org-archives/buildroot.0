@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E054AC83003
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 23:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F385FC7EE45
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 23:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CDE94202E;
-	Thu,  8 Jun 2023 23:30:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CDE94202E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9045542470;
+	Thu,  8 Jun 2023 23:30:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9045542470
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lBxrXCbAoxW0; Thu,  8 Jun 2023 23:30:09 +0000 (UTC)
+	with ESMTP id jUnrhhpGP2H3; Thu,  8 Jun 2023 23:30:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E899E42445;
-	Thu,  8 Jun 2023 23:30:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E899E42445
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 763B81BF390
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3949342474;
+	Thu,  8 Jun 2023 23:30:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3949342474
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A5901BF97D
  for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 23:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50953401C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5305E42037
  for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 23:29:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50953401C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5305E42037
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IepnGTZhE4Hj for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6nL_ENU9pGwW for <buildroot@lists.busybox.net>;
  Thu,  8 Jun 2023 23:29:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76D8D405CD
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76D8D405CD
- for <buildroot@buildroot.org>; Thu,  8 Jun 2023 23:29:09 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-30e4eec95c8so1138709f8f.3
- for <buildroot@buildroot.org>; Thu, 08 Jun 2023 16:29:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5CEC420F2
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C5CEC420F2
+ for <buildroot@buildroot.org>; Thu,  8 Jun 2023 23:29:08 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-3f7ebb2b82cso11944575e9.2
+ for <buildroot@buildroot.org>; Thu, 08 Jun 2023 16:29:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686266947; x=1688858947;
+ d=1e100.net; s=20221208; t=1686266946; x=1688858946;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=U6MYL4kE+fVpupHkoxnXp2L5NpbirGLemaf/JqIFXxQ=;
- b=EmymRrkNcHY/FZ4wMoaKrhgCv2Usl5M2NuA9rFKBrqhvfDNeRiHN/Y0rNMlWc626SB
- 1MIH772PHmxs5pDFeJNjkWTMzZwfTmEPm0emMpp17bkJ7vSGCALxgn727h/IRflJw9Wb
- v22uN5+j8n26XW1C7JGVyL3vjyDAiFe/2CmtDsJ5N6wlSGQi62bXECgtgGwsrkWHrSOk
- WHP0rqhHqd4EhBUAzCKyuei36Yc0guxBuByOsFKudFMQWZIm3Ndvm74VdHDsYetPVwkk
- Zn8RE8CuAJL7Kp2M54Y98EUia++4lt1eMiguAHpCM6J/ifi+KvIDGAZZKIza08tEk26i
- oPGQ==
-X-Gm-Message-State: AC+VfDzg30nSQTvk91qieXibw6fKtDEYOgDPuS42Y30t5hstK//qAlTU
- PooX7gSVIn+aWTdRGwzaTuFyQ4UOUew=
-X-Google-Smtp-Source: ACHHUZ5GCnbR1urSnubQRB5JJWPesRLvQ6BjQiTf/X6FPI2SL2DhfGQohkgM9vunlE/wGB/eA2pBLg==
-X-Received: by 2002:a5d:474c:0:b0:30e:5433:db33 with SMTP id
- o12-20020a5d474c000000b0030e5433db33mr8942372wrs.43.1686266947564; 
- Thu, 08 Jun 2023 16:29:07 -0700 (PDT)
+ bh=H04CYG1L6plEpOm0+0x8TTv/R6vUgmhy65snc+hJkC0=;
+ b=Igdi7l5Z/W3c+rWkGqgosm3dra776cXv+pJsy3mkGgfjXa5fXMswZNOhnLNGM8kvj3
+ s2LW5iAVBYJAV3182SmL9DTgr0wznFQvG4YlPu3hfScGwdb4PkrU2PS3+zFNGtAgkgNV
+ +bf0W7+mO2mlnqXC9Dq+ejBPdDpHzd0wsYnQI0JwJNE4gc1+zjGlCbpsYHk+29MEtwS4
+ vr9pBOjN3TNzoJ/qIQPa483S1bL2EXJ87VtCdFfmCFZvpyrtqfRY2aMv3MAs6nfWW7JS
+ nfhWAJ6AEmTOpRbtErSR45BunkDrRogeQxTZM/Uzg8zkpcI8nh0PNCUWHKoqXLyiTXKV
+ KS1w==
+X-Gm-Message-State: AC+VfDxCpjw57+NxsFwdDScnUegYPPSDpTPkiVswlv9gaTE/Qdi0loh2
+ SeM8hzHXZFjK7D2/etB6vKI2+1+gukE=
+X-Google-Smtp-Source: ACHHUZ6UrBUFfiUW/NkROSjVhMoiG+xZ/LWOTfOMT1tv5zHEyn/XWW3sHYforBq03XHT7LIh/mB2GQ==
+X-Received: by 2002:a5d:4a0f:0:b0:30a:e332:a3ba with SMTP id
+ m15-20020a5d4a0f000000b0030ae332a3bamr8192090wrq.27.1686266946552; 
+ Thu, 08 Jun 2023 16:29:06 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- c3-20020adffb03000000b0030ab5ebefa8sm2757522wrr.46.2023.06.08.16.29.06
+ c3-20020adffb03000000b0030ab5ebefa8sm2757522wrr.46.2023.06.08.16.29.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Jun 2023 16:29:07 -0700 (PDT)
+ Thu, 08 Jun 2023 16:29:06 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  9 Jun 2023 01:28:48 +0200
-Message-Id: <20230608232859.1245497-6-romain.naour@gmail.com>
+Date: Fri,  9 Jun 2023 01:28:47 +0200
+Message-Id: <20230608232859.1245497-5-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20230608232859.1245497-1-romain.naour@gmail.com>
 References: <20230608232859.1245497-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1686266947; x=1688858947;
+ d=gmail.com; s=20221208; t=1686266946; x=1688858946;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=U6MYL4kE+fVpupHkoxnXp2L5NpbirGLemaf/JqIFXxQ=;
- b=OIEgQOjQK/dMa5DOZspWFGZT03dxWH4oIs2LjCRcIAFsT8OFSyz9aagE2xL+8+jdD/
- yFr5RrxqM1CoXCTMXHKfja4TcUEFY7PcVPjghfI9DSVsGlb6G0/EFdychz384INIFIQO
- q9Ur4e6USsgzENeSWq1rpUF/L1WnyijuM09UVqefyC2uVIUWKm036YvVA7TaCoXF6Z9/
- cb6mq3GsiFqLHgHLgMmiSMpvaU5lQeTvR2BFFzZUWeuXIqy3Pg64kHh1zpnGSGOs1KjC
- h3naFsMos9bb+9di4QpAGe+YkgwhJR4u0aYgSzDQsd4kVlZFtokHn45Spk1PdC96K6QU
- EOvg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=H04CYG1L6plEpOm0+0x8TTv/R6vUgmhy65snc+hJkC0=;
+ b=DyP6XPn9VR7CC9hjMLSMhB+TQPimbwClBGTjilDz2KCddJHU6fKoR6owC8ckozylZh
+ 1xJzy0l6fJYkgUJKMMrpoGmcGBi77zjZgYLwTtVBhACBKL631PfYjgFnal10S/10wo84
+ Da73Tnhtbm0uEnivjO9nWkVxe59kPdm7f/EapLBRewWmdooQ2KATqpt48RyGeoJG+BCT
+ Q3yEY2IeKSm9CUZRcJz7haKhygX7q/TFf6mkZXXHJ15jYSAEnr1K7/ywapxR8zLr44kj
+ vmbpB25sHPEsaVBEADH6/4/LlRpqQwcv5FRJ8S9dNUUSJ0FchV6ilxLLiLPdlod28lb+
+ Z9xw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=OIEgQOjQ
-Subject: [Buildroot] [PATCH v2 06/17] support/testing/infra/basetest.py: use
- Bootlin toolchain stable 2022.08-1
+ header.a=rsa-sha256 header.s=20221208 header.b=DyP6XPn9
+Subject: [Buildroot] [PATCH v2 05/17] support/testing: TestSELinuxSystemd:
+ kernel bump 6.1.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,170 +100,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>,
- Romain Naour <romain.naour@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Sebastian Weyer <sebastian.weyer@smile.fr>
+We are going to update the toolchain used by the Buildroot testsuite
+and this update will break the kernel build with the Bootlin stable
+toolchain due to an latent issue.
 
-This patch updates the default toolchain used for runtime tests. The
-last time this toolchain was updated was in commit
-0207a65323fc73fe9570f3d7e03bbfed4ab6d477 3 years ago. Since then,
-multiple things have changed:
+Fixes:
+arch/x86/entry/thunk_64.o: warning: objtool: missing symbol table
+make[4]: *** [scripts/Makefile.build:361: arch/x86/entry/thunk_64.o] Error 1
+make[4]: *** Deleting file 'arch/x86/entry/thunk_64.o'
+make[4]: *** Waiting for unfinished jobs....
 
-Firstly, it used uclibc-ng as the libc whereas since commit
-4057e36ca9665edd5248512e4edba2c243b8f4be, glibc is used as the default
-library.
+[fixed since kernel 6.0]
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=de979c83574abf6e78f3fa65b716515c91b2613d
 
-And secondly, since commit 531b2a10cda6bae78ecc141c9fe48f2024f71dbc, buildroot
-dropped the support for gcc 8 and it cannot be built internally anymore.
-So the testsuite was executed using a toolchain that can't be built by
-the Buildroot internal toolchain backend anymore.
-
-This new Bootlin toolchain stable 2022.08-1 is based on gcc 11.3.0,
-linux headers 4.9.327, glibc 2.35 and binutils 2.38.
-
-The previous toolchain bleeding edge 2018.11-1 is based on gcc 8.2.0,
-linux headers 4.14.80, uclibc 1.0.30 and binutils 2.31.1
-
-Nowadays Bootlin toolchains are packaged in Buildroot and we can
-directly select them from BASIC_TOOLCHAIN_CONFIG and avoid
-setting the toolchain parameters (BR2_TOOLCHAIN_EXTERNAL_CUSTOM...).
-
-The switch to Glibc requires to update some tests for the following
-reasons:
-
-- TestPython3Py, TestPython3Pyc and TestPython3PyPyc has been updated
-  since they use the libc binary file name in their test
-  (uClibc: libc.so.1 vs Glibc: libc.so.6).
-
-- TestTmux needs at least one locale to pass (as stated in tmux help
-  text "tmux needs a working UTF-8 locale"), so use "C.UTF-8".
-
-- TestOpenSsh needs a toolchain >= 5.x due to a openssh issue
-  (Similar to: https://bugs.busybox.net/show_bug.cgi?id=13671)
-  Use the Bootlin toolchain bleeding-edge 2022.08-1 rhat provide
-  kernel headers 5.4
-
-- TestShadow needs a toolchain >= 4.14
-  Use the Bootlin toolchain bleeding-edge 2022.08-1 rhat provide
-  kernel headers 5.4
-
-Runtime tested on the gcc farm server.
-
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- support/testing/infra/basetest.py             | 10 ++--------
- support/testing/tests/package/test_openssh.py |  8 +++++++-
- support/testing/tests/package/test_python.py  |  2 +-
- support/testing/tests/package/test_shadow.py  |  7 ++++++-
- support/testing/tests/package/test_tmux.py    |  1 +
- 5 files changed, 17 insertions(+), 11 deletions(-)
+ support/testing/tests/init/test_systemd_selinux.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 670c7213d6..12d96415da 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -9,14 +9,8 @@ BASIC_TOOLCHAIN_CONFIG = \
-     """
-     BR2_arm=y
-     BR2_TOOLCHAIN_EXTERNAL=y
--    BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--    BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/tarballs/armv5-eabi--uclibc--bleeding-edge-2018.11-1.tar.bz2"
--    BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
--    BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
--    BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--    BR2_TOOLCHAIN_HAS_THREADS_DEBUG=y
--    BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
-     """
- 
- MINIMAL_CONFIG = \
-diff --git a/support/testing/tests/package/test_openssh.py b/support/testing/tests/package/test_openssh.py
-index 4b48059573..a28c28f797 100644
---- a/support/testing/tests/package/test_openssh.py
-+++ b/support/testing/tests/package/test_openssh.py
-@@ -32,9 +32,13 @@ class TestOpensshBase(infra.basetest.BRTest):
- 
- 
- class TestOpenSshuClibc(TestOpensshBase):
--    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+    config = \
-         TestOpensshBase.opensshconfig + \
-         """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_STABLE=y
-         BR2_TARGET_ROOTFS_CPIO=y
-         """
- 
-@@ -43,12 +47,14 @@ class TestOpenSshuClibc(TestOpensshBase):
- 
- 
- class TestOpenSshGlibc(TestOpensshBase):
-+
-     config = \
-         TestOpensshBase.opensshconfig + \
-         """
-         BR2_arm=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE=y
-         BR2_PACKAGE_RNG_TOOLS=y
-         BR2_TARGET_ROOTFS_CPIO=y
-         """
-diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-index d6f69a83c7..c9ecf9acda 100644
---- a/support/testing/tests/package/test_python.py
-+++ b/support/testing/tests/package/test_python.py
-@@ -29,7 +29,7 @@ class TestPythonBase(infra.basetest.BRTest):
-     def libc_time_test(self, timeout=-1):
-         cmd = self.interpreter + " -c '"
-         cmd += "import ctypes;"
--        cmd += "libc = ctypes.cdll.LoadLibrary(\"libc.so.1\");"
-+        cmd += "libc = ctypes.cdll.LoadLibrary(\"libc.so.6\");"
-         cmd += "print(libc.time(None))'"
-         self.assertRunOk(cmd, timeout)
- 
-diff --git a/support/testing/tests/package/test_shadow.py b/support/testing/tests/package/test_shadow.py
-index 09b580de59..3352d454a5 100644
---- a/support/testing/tests/package/test_shadow.py
-+++ b/support/testing/tests/package/test_shadow.py
-@@ -5,9 +5,14 @@ from infra.basetest import BRTest, BASIC_TOOLCHAIN_CONFIG
- 
- class TestShadow(BRTest):
-     username = 'user_test'
--    config = BASIC_TOOLCHAIN_CONFIG + \
-+    # Need to use a different toolchain than the default due to
-+    # shadow package requiring a toolchain w/ headers >= 4.14
-+    config = \
-         """
-         BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE=y
-         BR2_PACKAGE_SHADOW=y
-         BR2_TARGET_ROOTFS_EXT2=y
-         BR2_TARGET_ROOTFS_EXT2_4=y
-diff --git a/support/testing/tests/package/test_tmux.py b/support/testing/tests/package/test_tmux.py
-index 7a10b7a2b0..f2c620d5ca 100644
---- a/support/testing/tests/package/test_tmux.py
-+++ b/support/testing/tests/package/test_tmux.py
-@@ -9,6 +9,7 @@ class TestTmux(infra.basetest.BRTest):
-         BR2_PACKAGE_TMUX=y
-         BR2_TARGET_ROOTFS_CPIO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_GENERATE_LOCALE="C.UTF-8"
-         """
- 
-     def test_run(self):
+diff --git a/support/testing/tests/init/test_systemd_selinux.py b/support/testing/tests/init/test_systemd_selinux.py
+index 73604cfc32..5f91243f37 100644
+--- a/support/testing/tests/init/test_systemd_selinux.py
++++ b/support/testing/tests/init/test_systemd_selinux.py
+@@ -12,7 +12,7 @@ class TestSELinuxSystemd(infra.basetest.BRTest):
+         BR2_INIT_SYSTEMD=y
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.12"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+         BR2_PACKAGE_LIBSELINUX=y
 -- 
 2.34.3
 
