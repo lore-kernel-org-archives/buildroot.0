@@ -4,87 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9623CC7EE29
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 18:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AF51C7EE29
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jun 2023 18:09:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B808611C6;
-	Thu,  8 Jun 2023 18:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B808611C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id C87FA61529;
+	Thu,  8 Jun 2023 18:09:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C87FA61529
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v0diAaCmq0Ue; Thu,  8 Jun 2023 18:08:54 +0000 (UTC)
+	with ESMTP id LP7NwZezaTgW; Thu,  8 Jun 2023 18:09:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71C8E610B6;
-	Thu,  8 Jun 2023 18:08:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71C8E610B6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9800E1BF3E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id F158561520;
+	Thu,  8 Jun 2023 18:09:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F158561520
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BF5D61BF97D
  for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 18:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D52A401CC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9911B610B6
  for <buildroot@lists.busybox.net>; Thu,  8 Jun 2023 18:08:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D52A401CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9911B610B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uvav_N80DYw7 for <buildroot@lists.busybox.net>;
- Thu,  8 Jun 2023 18:08:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Os3b0LTpDGB7 for <buildroot@lists.busybox.net>;
+ Thu,  8 Jun 2023 18:08:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB90D403EA
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB90D403EA
- for <buildroot@buildroot.org>; Thu,  8 Jun 2023 18:08:49 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-30af56f5f52so735794f8f.1
- for <buildroot@buildroot.org>; Thu, 08 Jun 2023 11:08:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE97060F8E
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CE97060F8E
+ for <buildroot@buildroot.org>; Thu,  8 Jun 2023 18:08:50 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-3090d3e9c92so943655f8f.2
+ for <buildroot@buildroot.org>; Thu, 08 Jun 2023 11:08:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686247728; x=1688839728;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=B+kkLY8SOuNyK4F6Uz3E3lyYpZDGmpB+3VwffrqGTKI=;
- b=KIwqqS3svMgjCCRt/iInI2ChV1SZL6WhLGkau4bACM7HPmlKKiXVlTzpQk+vIHCOU1
- FUiVim7+f1A3axJVkCK+BRmLGi4B5z6I1WPhVYeK0SBMWJ2U091VM8X7D1iTawnqTACt
- wNbpi+3SmrBzvDTKcZyB2WD6TqileZFSQTs9Co2oXHv8bcg+nvje+kMLhogxUmqZporc
- d8Vqh6WTGP3GmGonuapibB2HzqXzYFMF8qH9E7LWNamxE0rFZee7p5j1XEbMuJ5v5a9L
- rYysNO1NdL4a+FXVQzkce1vzrTigU5ejyoOSzW6SVHFNgZqm1dusYVjNlvmiRFifFxXr
- pWjQ==
-X-Gm-Message-State: AC+VfDxQzsTDKEudMUlyC0zZF/8oWvM/Ng2meuk9hpUwpN1s7rObMiz/
- ZjnutjdWj13Hjul1s3aJBVIgfUosmnk=
-X-Google-Smtp-Source: ACHHUZ6vtH18ZqS2Cd0HE03pdpPqQCTjm+YgxnvfwLsxocMcYzxxkuN7uN/7//mvBNNca4BaBWTidw==
-X-Received: by 2002:adf:e54c:0:b0:309:51ec:9ce0 with SMTP id
- z12-20020adfe54c000000b0030951ec9ce0mr6665746wrm.69.1686247727891; 
- Thu, 08 Jun 2023 11:08:47 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1686247729; x=1688839729;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=pBNrepenAjPUyfB6kwvm5k2NdsOtOQBRdbWy1mhaC5E=;
+ b=MA4ZGti+8En7yLaEtPMrhbYPmF2Nr7Dxl4Ad/nPfF6exWy1mqBoVne/crW+w3sTDm0
+ lAKpkgxUiaEay7JBp3ZYKzegWPaN2Frxq0gRRvo6+loMK272vuVvStE/EJSc9Rb9Scqn
+ jNDsKyWARrfU7J3VJKevIE3064q8LYuqLTnWNKjtrY/I2omr6dlHje6f9wN9ZFWONGh8
+ xp8fx9XCQRE9JI8At6TosuHRzpcBOimyxNpq+r4LzosuYQDIiuZXaTIlNjp/A9rf/dwv
+ l0a5z81Nkv/0rMqv68UnzcEY/sKrF3sbaitezorfbRUPDnDMtSZfybZwnSPv//FdO5xB
+ wRWg==
+X-Gm-Message-State: AC+VfDx8+29TlsXbyiEA/eHrJCdF6Xt6IH99Ym5KTBH+s7AEeDG/ewY4
+ 5v0OWFxUh23228EONr7H5I5dIwaxdG4=
+X-Google-Smtp-Source: ACHHUZ7rkee9r3CWbP43LhrNDEyrO1MsS/L/o2hOI9jGbqFjMgJ87tyk/miFtN4T23RlXONPLjgd1Q==
+X-Received: by 2002:a5d:4f8f:0:b0:30a:e6d4:f2b8 with SMTP id
+ d15-20020a5d4f8f000000b0030ae6d4f2b8mr7789497wru.25.1686247728941; 
+ Thu, 08 Jun 2023 11:08:48 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- x2-20020adfec02000000b002ffbf2213d4sm2221238wrn.75.2023.06.08.11.08.46
+ x2-20020adfec02000000b002ffbf2213d4sm2221238wrn.75.2023.06.08.11.08.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Jun 2023 11:08:47 -0700 (PDT)
+ Thu, 08 Jun 2023 11:08:48 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  8 Jun 2023 20:08:29 +0200
-Message-Id: <20230608180844.189528-1-romain.naour@gmail.com>
+Date: Thu,  8 Jun 2023 20:08:30 +0200
+Message-Id: <20230608180844.189528-2-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.34.3
+In-Reply-To: <20230608180844.189528-1-romain.naour@gmail.com>
+References: <20230608180844.189528-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1686247728; x=1688839728;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=B+kkLY8SOuNyK4F6Uz3E3lyYpZDGmpB+3VwffrqGTKI=;
- b=Y59fi8qYClV8rcc7aoFNTNwhWB1vBPkzfcQZQC5cseBBgx03hi/0P63BhJdhBKCHp4
- tfy4e1kQdic6c/ASh3dL9UGc1UWBWir9SvIc+tZHTvn6nWwejIfUicgepTCZhgKdmCiL
- yZNyl4uGJId86NvXvP/q40WduivLHwAs0Vy6qLlq4wBxleE6Q3vURqaO+UUnE5C6oGQX
- iETIUSy1P0skV0Z7ypK9rVD99nQbK5J+/80Q1U3eJS5eELhQp4LCcOInPbSFT+boqYRz
- GTD+ryOuariPDAB7VOmsSdaFqiyD7KKLJXIQywq6SOjpPbB0Lm7kjFapKsnXQhjoo/NE
- WrdA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20221208; t=1686247729; x=1688839729;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=pBNrepenAjPUyfB6kwvm5k2NdsOtOQBRdbWy1mhaC5E=;
+ b=IeJzWsmc3D7p4eg3qAhuI1wsFjvIqv220sMU5vI0BtqsdnCjewdQbk4ocVSLghhKtE
+ ere3zOmUF/BQWtX2pSJdqzDsI1zSHUOvVeCE5qVugADjpSaLf0O1p9rhJaamiQmuQ+0D
+ 3m78CUZn45RfNptYWqDn9xCEfjXDyZe7IkH63boww4y1K+6hE+X8OCIxqowbJQhUrgAe
+ RYG6aMvLPRj8bM0NdSMduD7n4EfGZz95wP30243PCUR3XO5K1VUKmgZrct7DIXEZVYoX
+ boTu8XH6E5iXBAc8muJOg7MU588Sp/75Hc/95TXsu/WS3YkyKRo7E1qL9r9A4c3AFQLS
+ VqOw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Y59fi8qY
-Subject: [Buildroot] [PATCH 01/16] support/testing: TestPythonPy3S3transfer:
+ header.a=rsa-sha256 header.s=20221208 header.b=IeJzWsmc
+Subject: [Buildroot] [PATCH 02/16] support/testing: TestPythonPy3Boto3:
  increase ext2 size to 250M
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -108,21 +111,21 @@ and this update will increase the size of the rootfs over 120M.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- support/testing/tests/package/test_python_s3transfer.py | 2 +-
+ support/testing/tests/package/test_python_boto3.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_python_s3transfer.py b/support/testing/tests/package/test_python_s3transfer.py
-index d81560aeb1..1578f3aa74 100644
---- a/support/testing/tests/package/test_python_s3transfer.py
-+++ b/support/testing/tests/package/test_python_s3transfer.py
-@@ -9,7 +9,7 @@ class TestPythonPy3S3transfer(TestPythonPackageBase):
+diff --git a/support/testing/tests/package/test_python_boto3.py b/support/testing/tests/package/test_python_boto3.py
+index 126ddae63a..02a1f69d40 100644
+--- a/support/testing/tests/package/test_python_boto3.py
++++ b/support/testing/tests/package/test_python_boto3.py
+@@ -9,7 +9,7 @@ class TestPythonPy3Boto3(TestPythonPackageBase):
          BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_S3TRANSFER=y
+         BR2_PACKAGE_PYTHON_BOTO3=y
          BR2_TARGET_ROOTFS_EXT2=y
 -        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
 +        BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
          """
-     sample_scripts = ["tests/package/sample_python_s3transfer.py"]
+     sample_scripts = ["tests/package/sample_python_boto3.py"]
      timeout = 10
 -- 
 2.34.3
