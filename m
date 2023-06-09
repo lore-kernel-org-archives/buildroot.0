@@ -4,89 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E57AC7EE25
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5AF2C7EE2E
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE63F40448;
-	Fri,  9 Jun 2023 16:21:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE63F40448
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67696419FF;
+	Fri,  9 Jun 2023 16:21:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67696419FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jd0JLYz9092z; Fri,  9 Jun 2023 16:21:45 +0000 (UTC)
+	with ESMTP id enOjDjbuU0-j; Fri,  9 Jun 2023 16:21:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A702419FF;
-	Fri,  9 Jun 2023 16:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A702419FF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9338B41A1C;
+	Fri,  9 Jun 2023 16:21:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9338B41A1C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3AB441BF2AA
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:20:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8EF451BF2AA
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:20:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1449B84238
+ by smtp1.osuosl.org (Postfix) with ESMTP id 739E983EBC
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1449B84238
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 739E983EBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I1xppgETBLTz for <buildroot@lists.busybox.net>;
+ with ESMTP id 2Z8k09-1lZhN for <buildroot@lists.busybox.net>;
  Fri,  9 Jun 2023 16:20:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3A1D83EBC
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E3A1D83EBC
- for <buildroot@busybox.net>; Fri,  9 Jun 2023 16:20:31 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-4f660e57123so402148e87.3
- for <buildroot@busybox.net>; Fri, 09 Jun 2023 09:20:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66F3084156
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 66F3084156
+ for <buildroot@busybox.net>; Fri,  9 Jun 2023 16:20:32 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-3f78a32266bso19273645e9.3
+ for <buildroot@busybox.net>; Fri, 09 Jun 2023 09:20:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686327629; x=1688919629;
+ d=1e100.net; s=20221208; t=1686327630; x=1688919630;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=sNUPnFZjcRvIFLADku5j981dcjn4dTeslhZHHxbK3mw=;
- b=jIUwVTNVMugzqBwWRkylNAY7k6mE9eIwnINXHR/nQW7QQ/PNQaRo2C5DKgj4YTv9o5
- 5ik4R0F7YUA4H8hVVA9tR6u1E8X0yAgX0GgPOic2pdCgIS5+duoKm6GLD9zbiqqikbh8
- NS6awaUZpgtyps+Eu/7XO2egOSnSYjB/wA/67E7UDesn6vMTEmd7ZfmCRhimhYiD/9k8
- wIYG084ihhGxPOlJ3bs8VqVHi9KWPOFBr0wHLsonb4P0JxwDnIjkPeydgLJBwsUNFwVk
- eDqYK2M9778xyge/+1ksR7PgNtKI9H32QUMRVjlxZN2fCs2M+PpzsH506MaQIyg03GYF
- hNyw==
-X-Gm-Message-State: AC+VfDz3TeWyTTtWQoLwn+S24t0LcMAuZvbG6QDtRG65C3e8wleGXcK1
- IiggntEVXiR37rUgyHfptV4+HmIoKgU=
-X-Google-Smtp-Source: ACHHUZ5bbqCqAJD+j6Kp4E+1lK6a1b9g1tgxDSPapAQLLLpHgyBasahJs8gu0Dej30DG6mRJGPGiow==
-X-Received: by 2002:ac2:4985:0:b0:4f3:a485:919a with SMTP id
- f5-20020ac24985000000b004f3a485919amr1073823lfl.57.1686327629479; 
- Fri, 09 Jun 2023 09:20:29 -0700 (PDT)
+ bh=bOjEXS0myY6fIEoZTQ8pjgZHSt6ACu91JyqrT6ArMUU=;
+ b=ll2p89C22rHvaA+qcM7u/fU4IwwAnvI3mKNoU8eGqA0l6zYYssfSGYcwiz/E5We3NL
+ lMAi0jVhha/4MFUoXjUtFW0gnQIWu0fjoqtUrp/32Bm/DTFul59d2DLgnAFMr29SCsay
+ lWpB5Wwh/WNDvpBinopYchA3e+rABey6G40nyMrLROOoF8R6Y2hMdV806TVJiLxplggT
+ 4Pln5jtrn3wzyYEK81TiYiHgTOl8sc+RXq0sbD8VI4MIS3H88VWWhbX/RLWBhphSSloX
+ lkmC4M+jAbLvT5lBjKi9Xpehc19qBFr0EzLD0f9k63YwK6JJZBupwO3ZqGlF0OCGgCJ2
+ G2oA==
+X-Gm-Message-State: AC+VfDzUd2KAK/VB3ng24pJ9N9BWDQhkOLIjjW94Yu+7RHGyyrM5cdwj
+ KPUYe5EpHEIvaayqLA95rxDUDqAdaOs=
+X-Google-Smtp-Source: ACHHUZ79j5IxP/F8IblcCUt47wR97GRrEvDZ2f2c02IEQ8cHld4o/717oHAfYr+c5IJjT39JRSm1IA==
+X-Received: by 2002:a05:600c:2116:b0:3f6:a44:73bb with SMTP id
+ u22-20020a05600c211600b003f60a4473bbmr1663015wml.8.1686327630511; 
+ Fri, 09 Jun 2023 09:20:30 -0700 (PDT)
 Received: from vm.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- x19-20020a1c7c13000000b003f7aad8c160sm3141044wmc.11.2023.06.09.09.20.28
+ x19-20020a1c7c13000000b003f7aad8c160sm3141044wmc.11.2023.06.09.09.20.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 09 Jun 2023 09:20:28 -0700 (PDT)
+ Fri, 09 Jun 2023 09:20:30 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri,  9 Jun 2023 18:20:17 +0200
-Message-Id: <20230609162018.1231615-7-francois.perrad@gadz.org>
+Date: Fri,  9 Jun 2023 18:20:18 +0200
+Message-Id: <20230609162018.1231615-8-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230609162018.1231615-1-francois.perrad@gadz.org>
 References: <20230609162018.1231615-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1686327629; x=1688919629;
+ d=gmail.com; s=20221208; t=1686327630; x=1688919630;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=sNUPnFZjcRvIFLADku5j981dcjn4dTeslhZHHxbK3mw=;
- b=Y3f28MDLJxV7Ak+JsqjDoh2ULssgELWsxPqy0Yd5LxYaSuBQLrcmtccTpjJZuIsv8R
- KIiuylAnEmtSG8fnoXK0Nk+5dPPhWSzF453V0fetVMi3shotq8eurl7AScKLw7UCA2TU
- 8bAAb1Swq0x+2bVtm8FmN/VAWOIWXJ79LRuhVN+fziPNnPByQhQAe4dzG5hwZN48BE7A
- 9YJM45fzVVLelIvsfX+Zw59UlTTmcDbxSicbBgqe4gMtC9bx3wAy8DHylmrlICV3FtMi
- rNaK7ZWOxZWGUyYZvbvBl5gvQjiHmHK9h5jEZm5GsE9We0oRLeWpLPv3Vc12V1AHhTHP
- 686Q==
+ bh=bOjEXS0myY6fIEoZTQ8pjgZHSt6ACu91JyqrT6ArMUU=;
+ b=DKFByrq7XD85iwr1I7AYzy9LjtG0UTAnyycBHJBjgW7T/Fcgqlca0vRvuuqbVk44mJ
+ P2HNcin+0kKSkzZhxunyW6/kIIEmiO1u8Y+CmqeSl8X5b6mv5JJA3Lb8N3idB1eHE/4R
+ PWABJP7cItyqNm0Fl8uuxC5IwansNFa2v/DyczAhF/aO04rdlKj4FZpvLz6cwY+BzKsM
+ G4KuBZX+WCkYEj4lk4ga+M+wyGnVIkHUWluD14Wr0phSaIpDYOwz4Bfqsj5+PTlrKXrL
+ bEcU/qVmDHpU6wZL8Irs4jn5ggaE9MPfNlXj5KqwZdYfW6AN8zRx5hqA5/tN9Hm9A4b6
+ gxAw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Y3f28MDL
-Subject: [Buildroot] [PATCH 7/8] package/perl-net-dns: bump to version 1.39
+ header.a=rsa-sha256 header.s=20221208 header.b=DKFByrq7
+Subject: [Buildroot] [PATCH 8/8] package/perl-uri: bump to version 5.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,37 +105,40 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-net-dns/perl-net-dns.hash | 6 +++---
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-uri/perl-uri.hash | 6 +++---
+ package/perl-uri/perl-uri.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index a98ac3525..cef979990 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index daf043347..a428b7c56 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  b70b74481908d995f57569ab7cfe6432  Net-DNS-1.36.tar.gz
--sha256  143ba0e530f8b727be61ec052974cbf52df5b0afc0582d75b04809e0b2a95ebe  Net-DNS-1.36.tar.gz
+-md5  63675c429cfb1df73d7d21a9302e1000  URI-5.17.tar.gz
+-sha256  5f7e42b769cb27499113cfae4b786c37d49e7c7d32dbb469602cd808308568f8  URI-5.17.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  4a20cb266f1f75d97b2d535655d211db  Net-DNS-1.39.tar.gz
-+sha256  e99cdedf9f0d60dca16f613e488c5b7f123c2fb24b3346d580cfe7da40851ac6  Net-DNS-1.39.tar.gz
++md5  3afa2a27cd215d88c3301087f7b150c1  URI-5.19.tar.gz
++sha256  8fed5f819905c8a8e18f4447034322d042c3536b43c13ac1f09ba92e1a50a394  URI-5.19.tar.gz
  
  # computed by scancpan
- sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index f4c20c07a..2626c22d6 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
-@@ -4,7 +4,7 @@
+ sha256  d4f0b7a8771dcb1eee79a38c2e466eb997e23565a6687dd1900a2027eabe12a0  LICENSE
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index d4bfcb44e..a7fab863a 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_NET_DNS_VERSION = 1.36
-+PERL_NET_DNS_VERSION = 1.39
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
+-PERL_URI_VERSION = 5.17
++PERL_URI_VERSION = 5.19
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+-PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
++PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SI/SIMBABQUE
+ PERL_URI_LICENSE = Artistic or GPL-1.0+
+ PERL_URI_LICENSE_FILES = LICENSE
+ PERL_URI_DISTNAME = URI
 -- 
 2.39.2
 
