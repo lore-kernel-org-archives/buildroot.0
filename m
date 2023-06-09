@@ -4,59 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3439BC7EE25
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 09:10:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D4AC7EE25
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 09:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3EA483C61;
-	Fri,  9 Jun 2023 09:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3EA483C61
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56EDE84170;
+	Fri,  9 Jun 2023 09:10:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56EDE84170
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rQlqKxWtqDY8; Fri,  9 Jun 2023 09:10:19 +0000 (UTC)
+	with ESMTP id 951FsmzyNM7n; Fri,  9 Jun 2023 09:10:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD6DE83C6E;
-	Fri,  9 Jun 2023 09:10:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD6DE83C6E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8ED0B1BF334
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 09:10:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9210E83FE7;
+	Fri,  9 Jun 2023 09:10:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9210E83FE7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D7D61BF334
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 09:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74DB740222
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 09:10:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74DB740222
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DA4E61564
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 09:10:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DA4E61564
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HXbG8my_JFNU for <buildroot@lists.busybox.net>;
- Fri,  9 Jun 2023 09:10:15 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5554016F
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1A5554016F
- for <buildroot@buildroot.org>; Fri,  9 Jun 2023 09:10:14 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AC228FF809;
- Fri,  9 Jun 2023 09:10:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1q7Y8I-000wPu-Qs; Fri, 09 Jun 2023 11:10:10 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 15ufalG_WnOq for <buildroot@lists.busybox.net>;
+ Fri,  9 Jun 2023 09:10:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A76B60F49
+ for <buildroot@buildroot.org>; Fri,  9 Jun 2023 09:10:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A76B60F49
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 63E4A8256E; Fri,  9 Jun 2023 09:10:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= via buildroot
- <buildroot@buildroot.org>
-References: <20230425070923.1294644-1-raphael.melotte@mind.be>
- <20230509115831.634176-1-raphael.melotte@mind.be>
-Date: Fri, 09 Jun 2023 11:10:10 +0200
-In-Reply-To: <20230509115831.634176-1-raphael.melotte@mind.be>
- (=?utf-8?Q?=22Rapha=C3=ABl=09M=C3=A9lotte?= via buildroot"'s message of
- "Tue, 9 May 2023 13:58:29 +0200")
-Message-ID: <877csd0znx.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package: busybox: backport fix for
- missing getrandom()
+To: buildroot@buildroot.org
+Date: Fri, 9 Jun 2023 10:12:23 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: d9f2fa8e63c35bdd79412902546f46a825d01305
+X-Git-Newrev: a5ce02522a7c0c2ced03cd1b0350db68c1b28f6d
+X-Patchwork-Hint: ignore
+Message-Id: <20230609091042.63E4A8256E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] support/testing: new
+ runtime test for bash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,46 +57,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlJhcGhhw6tsIiA9PSBSYXBoYcOrbCBNw6lsb3R0ZSB2aWEgYnVpbGRyb290IDxidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JpdGVzOgoKID4gVGhlIGN1cnJlbnQgQnVzeWJveCB2ZXJz
-aW9uICgxLjM2LjApIGZhaWxzIHRvIGJ1aWxkIHdpdGggc29tZQogPiBsaWJjL2xpbnV4IGNvbWJp
-bmF0aW9ucyB3aGVyZSBnZXRyYW5kb20oKSBpcyBub3QgYXZhaWxhYmxlLiBUd28gZml4ZXMKID4g
-Zm9yIGdsaWJjIGFscmVhZHkgZXhpc3RzIHVwc3RyZWFtLCBzbyBiYWNrcG9ydCB0aGVtIGhlcmUu
-IEEgdGhpcmQKID4gb25lIChzdWJtaXR0ZWQgdXBzdHJlYW0sIG5vdCBwYXJ0IG9mIHRoZSBtYWlu
-IGJyYW5jaCB5ZXQpIHdhcyBuZWVkZWQKID4gdG8gYmUgYWJsZSB0byBjb21waWxlIHdpdGggb2xk
-ZXIgbXVzbCBhbmQgdUNsaWJjIHZlcnNpb25zIChvciBvbGRlcgogPiBrZXJuZWxzKS4KCiA+IFRo
-aXMgZml4ZXMgdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJlIHJhaXNlZCBzaW5jZSBjb21taXQK
-ID4gZDY4YjYxNzk5M2JkMmY1YzgyYTQ5MzZlZDFlMjRlNGZlYzZiOTRhMjoKCiA+IG1pc2N1dGls
-cy9zZWVkcm5nLmM6NDU6MjQ6IGZhdGFsIGVycm9yOiBzeXMvcmFuZG9tLmg6IE5vIHN1Y2ggZmls
-ZSBvciBkaXJlY3RvcnkKID4gICNpbmNsdWRlIDxzeXMvcmFuZG9tLmg+CgogPiBGaXhlczoKID4g
-LSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy80NGEwNDc2Yjg2YzU3OWU2
-YWE2NThmMTU2ZjAyOTI5NThkNDA1MTNjCiA+IC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qu
-bmV0L3Jlc3VsdHMvZWQwMjgxNjBkYjM5NzU4MTU1OGZkOGM5Njc1NTYyMWRkODI5OGJiMQogPiAt
-IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNDEyMjYy
-NDAwOAogPiAtIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pv
-YnMvNDEyMjYyNDAzNAogPiAtIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxk
-cm9vdC8tL2pvYnMvNDEyMjYyNDA0NAogPiAtIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qu
-b3JnL2J1aWxkcm9vdC8tL2pvYnMvNDEyMjYyNDA0OAogPiAtIGh0dHBzOi8vZ2l0bGFiLmNvbS9i
-dWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNDEyMjYyNDA1MQoKID4gSXQgYWxzbyBmaXhl
-cyB0aGUgZm9sbG93aW5nIChzaW1pbGFyKSBidWlsZCBmYWlsdXJlLCByYWlzZWQgc2luY2UgdGhl
-CiA+IHNhbWUgY29tbWl0OgoKID4gbWlzY3V0aWxzL2xpYi5hKHNlZWRybmcubyk6IEluIGZ1bmN0
-aW9uIGBzZWVkcm5nX21haW4nOgogPiBzZWVkcm5nLmM6KC50ZXh0LnNlZWRybmdfbWFpbisweDI2
-Yyk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYGdldHJhbmRvbScKID4gc2VlZHJuZy5jOigudGV4
-dC5zZWVkcm5nX21haW4rMHgyZTgpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBnZXRyYW5kb20n
-CiA+IGNvbGxlY3QyOiBlcnJvcjogbGQgcmV0dXJuZWQgMSBleGl0IHN0YXR1cwoKID4gRml4ZXM6
-CiA+IC0gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy80
-MTIyNjI0MDI4CiA+IC0gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290
-Ly0vam9icy80MTIyNjI0MDMxCgogPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8
-cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+CiA+IC0tLQogPiBDaGFuZ2VzIHYxIC0+IHYyOgogPiAt
-IGZpeCBidWlsZGluZyB3aXRoIG1ha2UgNC4yLjEgYW5kIGVhcmxpZXIuCiA+IC0gdXNlIHRoZSBj
-dXJyZW50IGxhdGVzdCBwYXRjaCBzZW50IHVwc3RyZWFtICh2NCkuCgpDb21taXR0ZWQgdG8gMjAy
-My4wMi54LCB0aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=a5ce02522a7c0c2ced03cd1b0350db68c1b28f6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+
+Commit 2dff6e93ca2a (package/readline: add upstream patch to fix crash
+with invalid locale specification) fixed a regression in readline 8.2
+[0], that could have been caught with a runtime test. readline is a
+library, so we need an executable that exercises readline.
+
+Since readline and bash are developped in tandem [1], it is only logical
+to use bash to test readline.
+
+Add a new runtime test for bash, that checks that we can indeed run an
+interactive shell, and that an non-existing locale does not cause the
+dreaded segfault. We do not use the default configuration, because it
+uses a uclibc toolchain, and we want to reproduce against a glibc one.
+
+[0] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1021109
+[1] https://tiswww.case.edu/php/chet/readline/rltop.html#Bugs
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 511f28ae5ca0fbd3c997f5c460747a5d3e0ca24b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/testing/tests/package/test_bash.py | 47 ++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+
+diff --git a/support/testing/tests/package/test_bash.py b/support/testing/tests/package/test_bash.py
+new file mode 100644
+index 0000000000..f0ee8cadc1
+--- /dev/null
++++ b/support/testing/tests/package/test_bash.py
+@@ -0,0 +1,47 @@
++import os
++
++import infra.basetest
++
++
++class TestBash(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_ENABLE_LOCALE_WHITELIST=""
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_BASH=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check that we are indeed not (yet) running bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "", "Already running bash instead of busybox' sh")
++
++        self.assertRunOk("bash -il")
++        # Twist! The above command is still runing, it's just that
++        # bash did display the prompt we expect. Check we are indeed
++        # actually bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "/bin/bash", "Not running bash")
++        # Exit bash, back to busybox' shell
++        self.emulator.run("exit 0")
++
++        # Check that we are indeed no longer running bash
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "", "Still running bash instead of busybox' sh")
++
++        # Try to run with a non-available locale
++        self.assertRunOk("LC_ALL=en_US bash -il")
++        out, _ = self.emulator.run('echo "${BASH}"')
++        self.assertEqual(out[0], "/bin/bash", "Not running bash")
++        self.emulator.run("exit 0")
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
