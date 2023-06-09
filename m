@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D4AC7EE25
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 09:10:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 284B8C7EE25
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 09:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56EDE84170;
-	Fri,  9 Jun 2023 09:10:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56EDE84170
+	by smtp1.osuosl.org (Postfix) with ESMTP id B74EB83C56;
+	Fri,  9 Jun 2023 09:11:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B74EB83C56
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 951FsmzyNM7n; Fri,  9 Jun 2023 09:10:45 +0000 (UTC)
+	with ESMTP id ee9ICTG6HV7M; Fri,  9 Jun 2023 09:10:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9210E83FE7;
-	Fri,  9 Jun 2023 09:10:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9210E83FE7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7D7D61BF334
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DD3284199;
+	Fri,  9 Jun 2023 09:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DD3284199
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 896E01BF97F
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 09:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DA4E61564
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63B0D83C56
  for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 09:10:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DA4E61564
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63B0D83C56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 15ufalG_WnOq for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XqlyzHozyWkm for <buildroot@lists.busybox.net>;
  Fri,  9 Jun 2023 09:10:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A76B60F49
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FEE683FE7
  for <buildroot@buildroot.org>; Fri,  9 Jun 2023 09:10:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A76B60F49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FEE683FE7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63E4A8256E; Fri,  9 Jun 2023 09:10:42 +0000 (UTC)
+ id 5BCF88256D; Fri,  9 Jun 2023 09:10:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 9 Jun 2023 10:12:23 +0200
+Date: Fri, 9 Jun 2023 10:10:36 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d9f2fa8e63c35bdd79412902546f46a825d01305
-X-Git-Newrev: a5ce02522a7c0c2ced03cd1b0350db68c1b28f6d
+X-Git-Oldrev: 6bff385173bcd6628bd34a2c09c3253a6d057f8d
+X-Git-Newrev: d9f2fa8e63c35bdd79412902546f46a825d01305
 X-Patchwork-Hint: ignore
-Message-Id: <20230609091042.63E4A8256E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] support/testing: new
- runtime test for bash
+Message-Id: <20230609091042.5BCF88256D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/mupdf: fix
+ building with zlib-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,91 +58,125 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8564695534579925388=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5ce02522a7c0c2ced03cd1b0350db68c1b28f6d
+--===============8564695534579925388==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d9f2fa8e63c35bdd79412902546f46a825d01305
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Commit 2dff6e93ca2a (package/readline: add upstream patch to fix crash
-with invalid locale specification) fixed a regression in readline 8.2
-[0], that could have been caught with a runtime test. readline is a
-library, so we need an executable that exercises readline.
+The current mupdf version fails to build when zlib-ng is used as the
+zlib implementation. Add a patch to fix it.
 
-Since readline and bash are developped in tandem [1], it is only logical
-to use bash to test readline.
+This fixes the following build failure raised since the bump to
+version 1.21.0 of the mupdf package in commit
+3c2033cd2ace077e7dfaf58a2589b2a93a5fd7b0:
 
-Add a new runtime test for bash, that checks that we can indeed run an
-interactive shell, and that an non-existing locale does not cause the
-dreaded segfault. We do not use the default configuration, because it
-uses a uclibc toolchain, and we want to reproduce against a glibc one.
+source/fitz/encode-basic.c: In function 'deflate_write':
+source/fitz/encode-basic.c:343:27: error: 'UINT_MAX' undeclared (first use in this function)
+  343 |         newbufsize = n >= UINT_MAX ? UINT_MAX : deflateBound(&state->z, n);
+      |                           ^~~~~~~~
+source/fitz/encode-basic.c:26:1: note: 'UINT_MAX' is defined in header '<limits.h>'; did you forget to '#include <limits.h>'?
 
-[0] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1021109
-[1] https://tiswww.case.edu/php/chet/readline/rltop.html#Bugs
+Fixes: http://autobuild.buildroot.net/results/87128e9967cff20078c65ab847877aa44cc409d9
 
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 511f28ae5ca0fbd3c997f5c460747a5d3e0ca24b)
+(cherry picked from commit b20eb56440fd2a7b8f578bf9eda89160c8053434)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_bash.py | 47 ++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ ...Add-missing-limits.h-include-for-UINT_MAX.patch | 70 ++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/support/testing/tests/package/test_bash.py b/support/testing/tests/package/test_bash.py
+diff --git a/package/mupdf/0001-Add-missing-limits.h-include-for-UINT_MAX.patch b/package/mupdf/0001-Add-missing-limits.h-include-for-UINT_MAX.patch
 new file mode 100644
-index 0000000000..f0ee8cadc1
+index 0000000000..95f2f86666
 --- /dev/null
-+++ b/support/testing/tests/package/test_bash.py
-@@ -0,0 +1,47 @@
-+import os
++++ b/package/mupdf/0001-Add-missing-limits.h-include-for-UINT_MAX.patch
+@@ -0,0 +1,70 @@
++From ebce9f1b129ebc8f2b17afa02a4ffcb9453c11d9 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
++Date: Mon, 24 Apr 2023 17:27:35 +0200
++Subject: [PATCH] Add missing limits.h include for UINT_MAX
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+import infra.basetest
++encode-basic.c uses 'UINT_MAX', which is available in the 'limits.h'
++header.
 +
++In some configurations that build with zlib from [1], by chance
++limits.h gets indirectly included when including 'z-imp.h' (the
++includes are: 'z-imp.h' -> 'zlib.h' -> 'zconf.h' -> 'limits.h'), so
++the build succeeds.
 +
-+class TestBash(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_ENABLE_LOCALE_WHITELIST=""
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_BASH=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
++When using other zlib implementations however (for example from [2]),
++limits.h is not necessarily included indirectly, which leads to the
++build failing in the following way:
 +
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
++source/fitz/encode-basic.c: In function 'deflate_write':
++source/fitz/encode-basic.c:343:27: error: 'UINT_MAX' undeclared (first use in this function)
++  343 |         newbufsize = n >= UINT_MAX ? UINT_MAX : deflateBound(&state->z, n);
++      |                           ^~~~~~~~
++source/fitz/encode-basic.c:26:1: note: 'UINT_MAX' is defined in header '<limits.h>'; did you forget to '#include <limits.h>'?
 +
-+        # Check that we are indeed not (yet) running bash
-+        out, _ = self.emulator.run('echo "${BASH}"')
-+        self.assertEqual(out[0], "", "Already running bash instead of busybox' sh")
++Add the missing include, so that the build succeeds no matter if zlib
++indirectly includes 'limit.h' or not.
 +
-+        self.assertRunOk("bash -il")
-+        # Twist! The above command is still runing, it's just that
-+        # bash did display the prompt we expect. Check we are indeed
-+        # actually bash
-+        out, _ = self.emulator.run('echo "${BASH}"')
-+        self.assertEqual(out[0], "/bin/bash", "Not running bash")
-+        # Exit bash, back to busybox' shell
-+        self.emulator.run("exit 0")
++Similarly, also add it in output-ps.c where it's also missing.
 +
-+        # Check that we are indeed no longer running bash
-+        out, _ = self.emulator.run('echo "${BASH}"')
-+        self.assertEqual(out[0], "", "Still running bash instead of busybox' sh")
++[1]: https://zlib.net/
++[2]: https://github.com/zlib-ng/zlib-ng
 +
-+        # Try to run with a non-available locale
-+        self.assertRunOk("LC_ALL=en_US bash -il")
-+        out, _ = self.emulator.run('echo "${BASH}"')
-+        self.assertEqual(out[0], "/bin/bash", "Not running bash")
-+        self.emulator.run("exit 0")
++Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
++Upstream: https://bugs.ghostscript.com/show_bug.cgi?id=706667
++---
++ source/fitz/encode-basic.c | 2 ++
++ source/fitz/output-ps.c    | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/source/fitz/encode-basic.c b/source/fitz/encode-basic.c
++index 03a4ff76b..84f0c35e6 100644
++--- a/source/fitz/encode-basic.c
+++++ b/source/fitz/encode-basic.c
++@@ -24,6 +24,8 @@
++ 
++ #include "z-imp.h"
++ 
+++#include <limits.h>
+++
++ struct ahx
++ {
++ 	fz_output *chain;
++diff --git a/source/fitz/output-ps.c b/source/fitz/output-ps.c
++index ef22c3cd6..3dc8ea17d 100644
++--- a/source/fitz/output-ps.c
+++++ b/source/fitz/output-ps.c
++@@ -24,6 +24,8 @@
++ 
++ #include "z-imp.h"
++ 
+++#include <limits.h>
+++
++ typedef struct ps_band_writer_s
++ {
++ 	fz_band_writer super;
++-- 
++2.39.1
++
+
+--===============8564695534579925388==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8564695534579925388==--
