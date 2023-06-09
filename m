@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E43C7EE2E
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 11:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B97D4C7EE25
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 11:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D412424BC;
-	Fri,  9 Jun 2023 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D412424BC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C3A3424B3;
+	Fri,  9 Jun 2023 11:26:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C3A3424B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dz-fErmgJF1a; Fri,  9 Jun 2023 11:26:02 +0000 (UTC)
+	with ESMTP id wnhzfLsLExKC; Fri,  9 Jun 2023 11:26:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1949A424B8;
-	Fri,  9 Jun 2023 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1949A424B8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E1EF81BF37F
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 11:25:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09988424BA;
+	Fri,  9 Jun 2023 11:26:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09988424BA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B0811BF37F
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 11:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB44360AD0
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 11:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB44360AD0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11D9B841EC
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 11:25:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11D9B841EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s-L7iIlQjdeT for <buildroot@lists.busybox.net>;
- Fri,  9 Jun 2023 11:25:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZFf-UnwQ4gAE for <buildroot@lists.busybox.net>;
+ Fri,  9 Jun 2023 11:25:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 283FD60B0F
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 283FD60B0F
- for <buildroot@buildroot.org>; Fri,  9 Jun 2023 11:25:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B3B8841E9
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7B3B8841E9
+ for <buildroot@buildroot.org>; Fri,  9 Jun 2023 11:25:33 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue109
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1Mk0FS-1pjY5e1cTI-00kLmZ; Fri, 09
- Jun 2023 13:25:26 +0200
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1Macay-1paARB041y-00c8Iv; Fri, 09
+ Jun 2023 13:25:27 +0200
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Fri,  9 Jun 2023 13:25:21 +0200
-Message-Id: <20230609112522.97790-4-laurent@vivier.eu>
+Date: Fri,  9 Jun 2023 13:25:22 +0200
+Message-Id: <20230609112522.97790-5-laurent@vivier.eu>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230609112522.97790-1-laurent@vivier.eu>
 References: <20230609112522.97790-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:eBATgWv71tDBViTljo5sXfN/0FdJk7qc7cQ6nh1MPZwjnB+KD+t
- 7iaQ075gaHhqLdXzAH6lWNPJXGJ9jWIACRv6BUOywfVFhKPIlcX+i0oxXum6TxPlAaDAuk4
- LPZ3MmfDYdECAxYvG1UmQFnhowmDlhVRcUcLUaMSrKapvgP34BBD172uRtwJ/PDKZ4Zqaou
- xUPHKg/s6wCCyMdPNNeYA==
-UI-OutboundReport: notjunk:1;M01:P0:0z9/SdwZGPI=;z0pQRGAufJdL16YFMtsjApGz2o9
- qrualgz2ipamVcBS/2ny+P6q6ypjZwmiHQKfn4vtd4ZU4Jx0Q8ZA+nmGegAhPRRSsebq8Kn2G
- t12t7+UNOkR30K+2cl2t91rmlAy8KfTVTx391k/ZgUED/GEm3vGCTWcBRdkabgcMW8kF5Wt8W
- QT6sUjmiy8ajtjlieATuZMMMlYf6jcWsKsLWLRjzGxLFvaQyG2w7MlveGN0tTrFMbRI9EggU4
- o8fDN1K5KQxJ4d015z+CMualcPaC4AEkJipcj6bqE12N2SqgZJx92eK1Ozj8f4T6gQXUgIL4Y
- 7lHdreA7xFh9jgCCSaG65R1JeQflfPRzm6UqVqoD9VmKWPFos+YLxPMjdwje8IqslrzWQPJIc
- Oq0JQ+EwAJCmxL7D4tmfszIGs7J7RLx9JgdFzAwrqAq0E75OFRp2onn2RsDqsr27mAhyeOQfq
- TYO8z0fQddlSkT1HBai/pngUWx2Sx7ZEMiz2UVd0zkPyw+MXpnoQ5vET0s9NqVI4C0eCkE2VY
- 7Szjfz6+r9i46ywT+d9HxiD5jWYhW/AZYg/TWAa93skroI5st9qJKECXg40Uqgyglzri9C7Xc
- +xzmjXgwJU8y+bocAge2rXrZiaSY8v44Z7/mN2Nd/r3OSXAsCEXa0EcREtMFyJum20BPCPFa/
- /ldSkQd+WXwM6iahQGSN3FWQtIf2WJ/t2h198YqNXQ==
-Subject: [Buildroot] [PATCH v13 3/4] board/qemu/m68k-virt: Add virt-m68k
- linux config
+X-Provags-ID: V03:K1:XCKKQrB7KSdL5iGdbYyMo3wRP1Bm6PfzaLKtvQFe6Ky7ttgbSrA
+ YpdeiN3jg3px1NybHbSKNjtxCDqPbW7bGuyCJu2fZXrrPF3kil33uiUaYbTWrIvu/6oDC7a
+ Os6q5QAABjXfFIu1tZedyw8ODWmqOF2tnOvbBaG0F2h0VGJufwh+Ah58fOF00Np+tmGJttX
+ bHniOoU/grEurF39S1cNA==
+UI-OutboundReport: notjunk:1;M01:P0:m6jhp3wfOqE=;ADD41XAZCXibA9LaUUsIcMOfEEK
+ G8gbiqN7eqszOSGU2B+EpD6axUDSMqwYXMAJgvNRKlrm8FRaLGZyRTFVxCS77l8Pzrf4e8+Ea
+ Bmv9MKYiOTjseMlL7mxjBKnafGmOxElZnAcuzEhlplbglJYtVTzyyiTzRNrV4ZXcVU15Nnl7V
+ TSn2JCB+LJHoHlx8K/rMyx6F0NKKYg8s9wHwwd82ijbsC8Uh0KLUFirJ4pFuGaDAYSVmvrNiC
+ A94qJcB5t5XijnX/6N4MpqIJBGqxhE8tmGt8375vgnr8YZ+5P86xtf8PjUwql6YOSTHwOY7Wz
+ HFVolgCq5B7/7ahnhKUsY1hh2XhBmRkExDzXv1JdWZJ1tUj8jBXDMR9g7C/UNh+Z8DMKXvNi+
+ KupN8cRVkghCB2bgGDiJkzYdA+Fhp89mHPJFLDwned34MK7LGTeDkonCFRaPZYsve4n/Ff8V7
+ RDmURjBAbhn1ymVLTYM4ZEISZA1WRlRCO6gOBUUnftx6IjGdzfBJfgZ1Ak3q27anFTW13kkCc
+ OzMpHx9v6MxP+MgUYD61xt16BCWgA5utus3JiDwvH8tYOledxfOMFadQ/DHQAfFGZagWJe8Ex
+ So6YpZoOxk8Ua3lvmDPdJ0WeduR7pHPJcBrSETPIJu/3wGNLVlz3wEiYhV2v7EUwa5CCRMJ+h
+ 8HO3I5DQC0qqxPezDiO2nuWxvMhAxRKF7J3Oewfpew==
+Subject: [Buildroot] [PATCH v13 4/4] support/scripts/boot-qemu-image.py:
+ manage petitboot interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,101 +83,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Build a 5.19 (first version with the m68k virt machine) kernel
-for "qemu-system-m68k -M virt" machine.
+Petitboot doesn't start a shell but a GUI.
+Manage the menu to switch to the shell.
+
+Enable the test for qemu_m68K_virt.
 
 Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 ---
- DEVELOPERS                                 |  2 ++
- board/qemu/m68k-virt/linux.fragment        | 21 +++++++++++++++++++
- board/qemu/m68k-virt/readme.txt            |  5 +++++
- configs/qemu_m68k_virt_petitboot_defconfig | 24 ++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 board/qemu/m68k-virt/linux.fragment
- create mode 100644 board/qemu/m68k-virt/readme.txt
- create mode 100644 configs/qemu_m68k_virt_petitboot_defconfig
+ configs/qemu_m68k_virt_petitboot_defconfig | 5 +++++
+ support/scripts/boot-qemu-image.py         | 8 ++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7aa5980df7f3..804a4cd2c1d6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1820,6 +1820,8 @@ F:	package/open-lldp/
- 
- N:	Laurent Vivier <laurent@vivier.eu>
- F:	package/petitboot/
-+F:	board/qemu/m68k-virt/
-+F:	configs/qemu_m68k_virt_petitboot_defconfig
- 
- N:	Lee Jones <lee.jones@linaro.org>
- F:	boot/afboot-stm32/
-diff --git a/board/qemu/m68k-virt/linux.fragment b/board/qemu/m68k-virt/linux.fragment
-new file mode 100644
-index 000000000000..49416982601c
---- /dev/null
-+++ b/board/qemu/m68k-virt/linux.fragment
-@@ -0,0 +1,21 @@
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_KEXEC=y
-+CONFIG_BOOTINFO_PROC=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_MD=y
-+CONFIG_MD_LINEAR=y
-+CONFIG_MD_MULTIPATH=y
-+CONFIG_MD_FAULTY=y
-+CONFIG_BLK_DEV_DM=y
-+CONFIG_DM_UNSTRIPED=y
-+CONFIG_DM_CRYPT=y
-+CONFIG_DM_SNAPSHOT=y
-+CONFIG_DM_THIN_PROVISIONING=y
-+CONFIG_DM_CACHE=y
-+CONFIG_DM_WRITECACHE=y
-+CONFIG_DM_EBS=y
-+CONFIG_DM_ERA=y
-+CONFIG_DM_CLONE=y
-+CONFIG_DM_MIRROR=y
-+CONFIG_DM_RAID=y
-+CONFIG_DM_ZERO=y
-diff --git a/board/qemu/m68k-virt/readme.txt b/board/qemu/m68k-virt/readme.txt
-new file mode 100644
-index 000000000000..714b74c70ea1
---- /dev/null
-+++ b/board/qemu/m68k-virt/readme.txt
-@@ -0,0 +1,5 @@
-+Run the emulation with:
-+
-+ qemu-system-m68k -M virt -kernel output/images/vmlinux -initrd output/images/rootfs.cpio.xz -append "console=ttyGF0" --nographic # qemu_m68k_virt_petitboot_defconfig
-+
-+The petiboot menu will appear in the terminal where QEMU has been started.
 diff --git a/configs/qemu_m68k_virt_petitboot_defconfig b/configs/qemu_m68k_virt_petitboot_defconfig
-new file mode 100644
-index 000000000000..a109553187b4
---- /dev/null
+index a109553187b4..454c8e353f2a 100644
+--- a/configs/qemu_m68k_virt_petitboot_defconfig
 +++ b/configs/qemu_m68k_virt_petitboot_defconfig
-@@ -0,0 +1,24 @@
-+BR2_m68k=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_CCACHE=y
-+BR2_RELRO_NONE=y
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Petitboot"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_MERGED_USR=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
-+BR2_LINUX_KERNEL_DEFCONFIG="virt"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/m68k-virt/linux.fragment"
-+BR2_LINUX_KERNEL_XZ=y
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_KEXEC=y
-+BR2_PACKAGE_KEXEC_ZLIB=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_NET_TOOLS=y
-+BR2_PACKAGE_NETCAT=y
-+BR2_PACKAGE_RSYNC=y
-+BR2_PACKAGE_PETITBOOT=y
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_XZ=y
+@@ -6,6 +6,8 @@ BR2_RELRO_NONE=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Petitboot"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_MERGED_USR=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+@@ -22,3 +24,6 @@ BR2_PACKAGE_RSYNC=y
+ BR2_PACKAGE_PETITBOOT=y
+ BR2_TARGET_ROOTFS_CPIO=y
+ BR2_TARGET_ROOTFS_CPIO_XZ=y
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
+index ba50ea69ee9a..c94b7a5c969d 100755
+--- a/support/scripts/boot-qemu-image.py
++++ b/support/scripts/boot-qemu-image.py
+@@ -36,7 +36,7 @@ def main():
+     time.sleep(1)
+ 
+     try:
+-        child.expect(["buildroot login:"], timeout=600)
++        idx = child.expect(["buildroot login:", "Exit to shell"], timeout=600)
+     except pexpect.EOF as e:
+         # Some emulations require a fork of qemu-system, which may be
+         # missing on the system, and is not provided by Buildroot.
+@@ -55,7 +55,11 @@ def main():
+         print("System did not boot in time, exiting.")
+         sys.exit(1)
+ 
+-    child.sendline("root\r")
++    if idx == 0:
++        child.sendline("root\r")
++    elif idx == 1:
++        time.sleep(1)
++        child.sendline("\r")
+ 
+     try:
+         child.expect(["# "], timeout=600)
 -- 
 2.40.1
 
