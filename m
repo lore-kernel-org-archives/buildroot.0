@@ -4,89 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4C7EC7EE2E
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:20:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55329C7EE2E
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 16:21:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 70B2841A26;
-	Fri,  9 Jun 2023 16:20:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70B2841A26
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E0E3419FC;
+	Fri,  9 Jun 2023 16:21:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E0E3419FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4ZnaEUjnwS29; Fri,  9 Jun 2023 16:20:54 +0000 (UTC)
+	with ESMTP id xrVI6K7hMcpV; Fri,  9 Jun 2023 16:21:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9AD8D418FD;
-	Fri,  9 Jun 2023 16:20:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AD8D418FD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B1E741A27;
+	Fri,  9 Jun 2023 16:21:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B1E741A27
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 691191BF2AA
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:20:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9989D1BF2AA
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:20:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F50283C65
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:20:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F50283C65
+ by smtp1.osuosl.org (Postfix) with ESMTP id 809F483EBC
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 16:20:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 809F483EBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1oJZ8eyaMWzP for <buildroot@lists.busybox.net>;
- Fri,  9 Jun 2023 16:20:27 +0000 (UTC)
+ with ESMTP id weYlsQsPX_L0 for <buildroot@lists.busybox.net>;
+ Fri,  9 Jun 2023 16:20:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FF6583B97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75DD983B97
 Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
  [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3FF6583B97
- for <buildroot@busybox.net>; Fri,  9 Jun 2023 16:20:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 75DD983B97
+ for <buildroot@busybox.net>; Fri,  9 Jun 2023 16:20:28 +0000 (UTC)
 Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-3f6da07ff00so19919445e9.3
- for <buildroot@busybox.net>; Fri, 09 Jun 2023 09:20:27 -0700 (PDT)
+ 5b1f17b1804b1-3f7378a74faso15716705e9.0
+ for <buildroot@busybox.net>; Fri, 09 Jun 2023 09:20:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686327625; x=1688919625;
+ d=1e100.net; s=20221208; t=1686327626; x=1688919626;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=qNZnxI3oUKp9uDCzLHjhRv0jKvry2qeLUfNoof9hOEg=;
- b=hNeMvofppbSe86JXSsa3KdQHSH5BWtvrNqOSNkPWkcDLEr4lo4mzMknzHIPxr+Zvhj
- FIfXqt8bmclYQmtrPWe/YDy0OInsxDiHiqiPGI8FOjw3fuGsgArbROVM9mM+Bx/GGhJR
- +u+hJFOlg3qf5qbALD+yPzhOrrXy7qTItyWjVXBLejq3Hq3n8+KxdbudTFA1VMRWzXve
- t10YvGn6RQOea0AK1GN1zHe75Qn2DbG3e/4T7V2BD7A4lsVscBndfWbJu6bR3WM4YwbZ
- PPwoIU6jGoSH+FBedgUYiN56sea5yxHyY2IRRfR6qrzn70OyomIxj0hZpGHjeGPgwXaH
- 6YOw==
-X-Gm-Message-State: AC+VfDzSdnc09B4yjLnPLsUYD6QdutozmMuXKUNqLsKDcDu6+H2Aub1s
- jrWBKAkLdLAk3Oh3DMjd21jUwXPyN58=
-X-Google-Smtp-Source: ACHHUZ5Pkp9rwDs3N/A9lOi4mD8ujbyd575IlpyZwyJVV8RbQzDOmR3De/srH4YUavYOlkJirysuRw==
-X-Received: by 2002:a05:600c:210c:b0:3f7:4961:52b6 with SMTP id
- u12-20020a05600c210c00b003f7496152b6mr1609988wml.25.1686327625396; 
- Fri, 09 Jun 2023 09:20:25 -0700 (PDT)
+ bh=/wLwq+KNAPdyWYFyqIMFn6bvcwsCP17MjclX/d8I1ps=;
+ b=hDy+63fnmDGZTmTVVPd2R/Cw1uvovKko8WLb4HcqU4L9rnHQOWY1dg+ELzVfzecwVG
+ gjoKDiQpyh4tpJHpcr9g46uObdC/QJYDApIf+ACUv/CP7WJaknLVFiWda7grqEPISAKe
+ Jap+H1P+1GHbu7mgWA+aUOVUCd2y6F5nghVQTDvdrh6FQsGU0OFBXKKEu2yklVlfLBOu
+ CVYWNXZAnIOD71UjJORdkFRjd8iRu5gY61EOFU0OSnFHy38sp26SZryOGgjTw25Y/sHw
+ zlXdsP0YTo0HQeBiTpBwpgcjNpdoO131JG5O5B14cTGlIUQhzymQIoz8DTOX/tt+otiz
+ KqDw==
+X-Gm-Message-State: AC+VfDzFEuKAhbFr1PIiNcgHLi/KLAL9pZDTcszoboA+YzhCd1i4vxEW
+ 9AYlxxtiwfRWE2Bn7wVGARbKuK6tKSY=
+X-Google-Smtp-Source: ACHHUZ47pH6zaIgtrYa96daZz0AcR5NFMY0OZ1sQsey3fW9qlbllT3jsiOl+C+QfLWjxeZmcjpPHzA==
+X-Received: by 2002:a05:6000:1951:b0:30a:e699:20c6 with SMTP id
+ e17-20020a056000195100b0030ae69920c6mr1384615wry.0.1686327626403; 
+ Fri, 09 Jun 2023 09:20:26 -0700 (PDT)
 Received: from vm.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- x19-20020a1c7c13000000b003f7aad8c160sm3141044wmc.11.2023.06.09.09.20.24
+ x19-20020a1c7c13000000b003f7aad8c160sm3141044wmc.11.2023.06.09.09.20.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 09 Jun 2023 09:20:24 -0700 (PDT)
+ Fri, 09 Jun 2023 09:20:26 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri,  9 Jun 2023 18:20:13 +0200
-Message-Id: <20230609162018.1231615-3-francois.perrad@gadz.org>
+Date: Fri,  9 Jun 2023 18:20:14 +0200
+Message-Id: <20230609162018.1231615-4-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230609162018.1231615-1-francois.perrad@gadz.org>
 References: <20230609162018.1231615-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1686327625; x=1688919625;
+ d=gmail.com; s=20221208; t=1686327626; x=1688919626;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qNZnxI3oUKp9uDCzLHjhRv0jKvry2qeLUfNoof9hOEg=;
- b=MJwgK+GjFqTnbtpAK2KIrx32UcjbRI+3eZnLfgmGob0qW4+emWTDQm98WpvYyyYyXp
- TAUZmSoMjbgRfd15yCoyvBQD5InmX8DIOeru+2dLMl8uM84We4GC+h759QbnvTCzYjuq
- +sV0ZZISX4iV4rgHm0EcH32sDDJZkbb7Ct3b8zztRRnAdRmxz/XQ36t0reT5fBacYMli
- VXVvPpZDfFo0tt3uGIdCQC2BZCSAUa+oF2+Ba0BSyO95ps353jZWVy9gk/0OwLMlx+l0
- 5dJUVvoC2dEcIg1hBVtr3Tvh1czdtO6HwXGbBuK/ooJtls8vjq7cTlh55hMnQ1muvwhW
- fN+Q==
+ bh=/wLwq+KNAPdyWYFyqIMFn6bvcwsCP17MjclX/d8I1ps=;
+ b=WHJLCptSaot4BzAxFnRQfthKHys+gtCByS//xs4O9Zlx+m1aEIri4vf/ajjvvqq2NP
+ rJ7QPrblX5zOx/dFAR4l3pQUF4ub5sKPLS2qqmC1GBKnrJ+uU8QemFBzD44hLQH3x9fc
+ IWdIlo8JnKNlySrJ2c9Jkie/o/TrSJaGsg7ZQdwE1S82gR33gDoWW1WcEkujOs8ObftO
+ 319H+9Yt1eLeO804Zpqutk//T4osNhrbi2w7Xp2eF3slkldvp3lJLLCl3E6AZLu87/+r
+ mVurSGnTn9X9BXOJsHqpMhF9bzXAGyUp4BP2x3FWx4hF0RIizWd2sPW2vcsbyG8ZP4CE
+ 3cXA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=MJwgK+Gj
-Subject: [Buildroot] [PATCH 3/8] package/perl-gd: bump to version 2.77
+ header.a=rsa-sha256 header.s=20221208 header.b=WHJLCptS
+Subject: [Buildroot] [PATCH 4/8] package/perl-html-parser: bump to version
+ 3.81
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,51 +106,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-gd/Config.in    | 2 +-
- package/perl-gd/perl-gd.hash | 6 +++---
- package/perl-gd/perl-gd.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-html-parser/perl-html-parser.hash | 6 +++---
+ package/perl-html-parser/perl-html-parser.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
-index 044e60102..bff6244d9 100644
---- a/package/perl-gd/Config.in
-+++ b/package/perl-gd/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_PERL_GD
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_GD
- 	help
--	  Perl interface to the gd2 graphics library.
-+	  Perl interface to the libgd graphics library.
- 
- 	  https://metacpan.org/release/GD
- 
-diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
-index 97f1da821..fd9321be6 100644
---- a/package/perl-gd/perl-gd.hash
-+++ b/package/perl-gd/perl-gd.hash
+diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
+index ccd115d6c..71157c3cd 100644
+--- a/package/perl-html-parser/perl-html-parser.hash
++++ b/package/perl-html-parser/perl-html-parser.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  fb4bacab10ed4f28d52c2aabdaf866bb  GD-2.76.tar.gz
--sha256  693d9e3d709e9188a682cb9090a77b70aac12a04e84128677577b94e4331775b  GD-2.76.tar.gz
+-md5  8e7151d08f30457a2ba80020b936285f  HTML-Parser-3.80.tar.gz
+-sha256  63411db03016747e37c2636db11b05f8cc71608ef5bff36d04ddb0dc92f7835b  HTML-Parser-3.80.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  da3f969367ea2e6d217ec05d3b98bc6f  GD-2.77.tar.gz
-+sha256  b56c88b8ef3be016ce29bb62dd1f1b6f6b5fbcaa57fea59e9468af6901016fb5  GD-2.77.tar.gz
++md5  b9f5dd3b14632f7a60541a2b61389c06  HTML-Parser-3.81.tar.gz
++sha256  c0910a5c8f92f8817edd06ccfd224ba1c2ebe8c10f551f032587a1fc83d62ff2  HTML-Parser-3.81.tar.gz
  
  # computed by scancpan
- sha256  1e2250289d6df4ba1c24f7550982d7ffaff2c97cd02e847659406e1afd28e83f  LICENSE
-diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
-index cd32c7fb8..17c24bc97 100644
---- a/package/perl-gd/perl-gd.mk
-+++ b/package/perl-gd/perl-gd.mk
+ sha256  9081922eb873ec1809c20672a7385a65f3c6b1163166bf69b2bbe986fb5b0159  LICENSE
+diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
+index 1e1f8e605..50efaa273 100644
+--- a/package/perl-html-parser/perl-html-parser.mk
++++ b/package/perl-html-parser/perl-html-parser.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_GD_VERSION = 2.76
-+PERL_GD_VERSION = 2.77
- PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
- PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
- PERL_GD_DEPENDENCIES = host-perl-extutils-pkgconfig zlib gd
+-PERL_HTML_PARSER_VERSION = 3.80
++PERL_HTML_PARSER_VERSION = 3.81
+ PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
+ PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
 -- 
 2.39.2
 
