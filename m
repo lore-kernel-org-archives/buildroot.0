@@ -4,61 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 141E7C7EE43
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 04:39:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41735C7EE25
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 06:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64B2B40A08;
-	Fri,  9 Jun 2023 04:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64B2B40A08
+	by smtp2.osuosl.org (Postfix) with ESMTP id 94ABD40A9B;
+	Fri,  9 Jun 2023 06:35:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94ABD40A9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FjRrSrUKCwNB; Fri,  9 Jun 2023 04:39:47 +0000 (UTC)
+	with ESMTP id 91zrAAKlSIzD; Fri,  9 Jun 2023 06:35:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4948F40570;
-	Fri,  9 Jun 2023 04:39:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4948F40570
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B1BF21BF38B
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 04:39:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90C7C40A06;
+	Fri,  9 Jun 2023 06:35:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90C7C40A06
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D9941BF409
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 06:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B56240570
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 04:39:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B56240570
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DC2960F49
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 06:35:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DC2960F49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ODEC_1pYo9wW for <buildroot@lists.busybox.net>;
- Fri,  9 Jun 2023 04:39:43 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B037840189
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B037840189
- for <buildroot@buildroot.org>; Fri,  9 Jun 2023 04:39:42 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C4B8D1BF20C
- for <buildroot@buildroot.org>; Fri,  9 Jun 2023 04:39:39 +0000 (UTC)
-MIME-Version: 1.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P3yBikY71XwN for <buildroot@lists.busybox.net>;
+ Fri,  9 Jun 2023 06:35:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13AC960F01
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 13AC960F01
+ for <buildroot@buildroot.org>; Fri,  9 Jun 2023 06:35:49 +0000 (UTC)
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout02.mail.de (Postfix) with ESMTP id 356A3A036A;
+ Fri,  9 Jun 2023 08:35:47 +0200 (CEST)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix01.mail.de (Postfix) with ESMTP id 19F3B80151;
+ Fri,  9 Jun 2023 08:35:47 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 7517A100129;
+ Fri,  9 Jun 2023 08:35:46 +0200 (CEST)
+From: Kilian Zinnecker <kilian.zinnecker@mail.de>
 To: buildroot@buildroot.org
-Date: Fri, 09 Jun 2023 04:39:39 -0000
-Message-Id: <20230609043944.8B56240570@smtp2.osuosl.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1686285579; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=e1gzfRrm0j2O23beuD7MSU0CTBoRW86W5G2UYUTTUiA=;
- b=lonUDu9QbOKtkJjOdJxQDzRdg+YswtlmlCwcGNB4yTlHrHQwtHRNcrf5gxpGxZvsuFhzHV
- icEsmcD6vAKZg2LVBzKSxMebqfJYd90D/QsTOuTeghlxC/px4u2rYX1UaK6Ctaq3UtGBtI
- 4c7XwcCbDroSTPib0C+mMWJ4JNn7sbNyk4ezH9xk3j9G1DuwqE71hztO2Bg+Gj814kVbPS
- 2OoYfBX8iBIyGxL9wqpTMkW/kRuqoeiQecrgJgLzVqZtEX2B/SEwZYtyxKUCNy6HRiNG9m
- LUANRtqyJT6n0QNMMjRk8TWa+b4AVymmTf5WMOl554EJgOe4Q1A7kx5LsGrQtQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lonUDu9Q
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-06-08
+Date: Fri, 09 Jun 2023 08:35:45 +0200
+Message-ID: <5942184.lOV4Wx5bFT@kilian-aisec>
+In-Reply-To: <80f02657-9cfa-f12c-e5ed-4c1e55e0f280@benettiengineering.com>
+References: <12221308.O9o76ZdvQC@kilian-aisec>
+ <4834301.31r3eYUQgx@kilian-aisec>
+ <80f02657-9cfa-f12c-e5ed-4c1e55e0f280@benettiengineering.com>
+MIME-Version: 1.0
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 4782
+X-purgate-ID: 154282::1686292546-5CFFF7B6-121C652C/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1686292547;
+ bh=jrmXSX1WTQ2t7hDbcZdIV/mK1wUx0DgXXu3HGBhfELA=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=fnsgvb0Hr6v1tK5SOZ4Mg6XslENwZlLYoJs1jXCtQGFH3ZcjFKvJaZbj29oPyB5ZR
+ yhqdprrzhd1hHzr3IYiGyigUXM0Cp3g7amnH4BQgcvKrrqA5JF+QfbNyA7ETGUQ3p1
+ nuFYXVsbPrx6f9IEccvhxTBENE4cCj+zjB99Re23KM8Xbkbl35SIf+5jQiJ9WlYV1b
+ F4asOD/LDcIMqsCGB9YnQGIGnKs/HmsHklDkl3CpG1CfViDR263iIpVgIT2s+gIU4u
+ m1cRDwmAsJP5dyZYFpdh0i+tx6maYhiPCIxrWlJpZ8SK1X8fhRfd8DzzZlumuBHgVB
+ 4gj1ZswXKMw7Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
+ header.a=rsa-sha256 header.s=mailde202009 header.b=fnsgvb0H
+Subject: Re: [Buildroot] Interested in board support for Radxa Rock 5b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,138 +90,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hi Giulio
 
-Autobuild statistics for 2023-06-08
-===================================
+thanks again for your very helpful answer!
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  1  |  4  |  0  |  5  |
-    master   | 69  | 47  |  0  | 116 |
+> To begin is ok, but I see U-Boot supports this board, this is the defconfig:
+> https://source.denx.de/u-boot/u-boot/-/blob/master/configs/rock5b-rk3588_defconfig
+> that uses this dts file:
+> https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/dts/rk3588-rock-5b.dts
+>
+> So I would go with mainline uboot.
 
-Classification of failures by reason for master
------------------------------------------------
+Yes, absolutely correct, and the changes to support the Rock 5b's ethernet in
+U-Boot are also mainline already:
 
-                 agentpp-4.6.0 | 3 
-  gobject-introspection-1.74.0 | 3 
-            quickjs-2021-03-27 | 3 
-                 highway-1.0.3 | 2 
-host-heimdal-f4faaeaba371ff... | 2 
-              host-rust-1.68.2 | 2 
-                  kexec-2.0.26 | 2 
-                   linux-6.3.6 | 2 
-        ltp-testsuite-20230127 | 2 
-                xenomai-3.0.10 | 2 
-             dahdi-linux-3.2.0 | 1 
-              dropbear-2022.83 | 1 
-                elfutils-0.186 | 1 
-                  ffmpeg-4.4.4 | 1 
-                     file-5.43 | 1 
-fs/ubi/ubi.mk:51: /home/bui... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-                haveged-1.9.18 | 1 
-host-gdb-arc-2020.09-releas... | 1 
-kvmtool-f77d646ba01d04be5aa... | 1 
-                  libsepol-3.5 | 1 
-               libsigsegv-2.14 | 1 
-     linux-5.10.162-cip24-rt10 | 1 
-                  nginx-1.24.0 | 1 
-                    olsr-0.9.8 | 1 
-                 opensc-0.22.0 | 1 
-                   perl-5.36.1 | 1 
-                  reaver-1.6.6 | 1 
-                   sdl2-2.26.5 | 1 
-               syslog-ng-4.1.1 | 1 
-ulog-0389d243352255f6182326... | 1 
-                       unknown | 1 
-                  xvisor-0.3.1 | 1 
+https://source.denx.de/u-boot/u-boot/-/commit/
+bcbb64b1990cc1f3f8137c05fbc49b13fcb320ff
+
+Thank you, I actually did not realize this and used Collabora's gitlab
+repository. I just compiled the mainline U-Boot and tested the tftpboot and it
+works just fine!
 
 
-Detail of failures for master
------------------------------
+> For example there are already boards with RK3399 that is similar to
+> R3588. Take a look here at this defconfig:
+> https://gitlab.com/buildroot.org/buildroot/-/blob/master/configs/
+rockpro64_defconfig
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  aarch64    |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/d08ae911f875af77c6bb4f503301b35eb34353ac |     
-    m68k     |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/8e41403b086fd4380fbcd350fc4f89a0672b0f13 |     
- aarch64_be  |         agentpp-4.6.0          | NOK | http://autobuild.buildroot.net/results/36b9988c6e9334bd5810877b9178c813ad597e2b |     
-   xtensa    |       dahdi-linux-3.2.0        | NOK | http://autobuild.buildroot.net/results/1de887a1db20d3dc2f8c8f568e50d4c85655183a |     
-  riscv64    |        dropbear-2022.83        | NOK | http://autobuild.buildroot.net/results/e38b35ffbd644e94582f9e574dd08ace67a7a485 |     
- microblaze  |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/70e12067a1a081489f417a21519bce5aeb393320 | ORPH
-   arceb     |          ffmpeg-4.4.4          | NOK | http://autobuild.buildroot.net/results/ed96872d07c7d341bb27571feb8722cb35344f79 |     
-   x86_64    |           file-5.43            | NOK | http://autobuild.buildroot.net/results/8b282f2ba72950cd363d823ac9235b78dba6965f | ORPH
- aarch64_be  | fs/ubi/ubi.mk:51: /home/bui... | NOK | http://autobuild.buildroot.net/results/597cf8be36cc8a013faf3a75bcc79627f47d9908 |     
- aarch64_be  | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/50009053a83b6139b03a9cd36541da3951312c50 |     
-microblazeel | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/5b9504dd7473871efccfdffc10ea7dc5ca62cb80 |     
-  sparc64    |  gobject-introspection-1.74.0  | NOK | http://autobuild.buildroot.net/results/d6368f839d3031074e5c61096f86a98f9f3392e0 | ORPH
- powerpc64   |  gobject-introspection-1.74.0  | NOK | http://autobuild.buildroot.net/results/0d1b181640a10b9bd3a3a09b60c16b59ce4e2ad3 | ORPH
-    or1k     |  gobject-introspection-1.74.0  | NOK | http://autobuild.buildroot.net/results/74cee07f58429ea83af3468eb046ae31c1ba3e36 | ORPH
-   armeb     |         haveged-1.9.18         | NOK | http://autobuild.buildroot.net/results/45e2b136a58bfb6eb78f7b0da9466464c114465d |     
- aarch64_be  |         highway-1.0.3          | NOK | http://autobuild.buildroot.net/results/7c265cefe9b17924648f6bae6b75adbf72a69503 |     
-  riscv64    |         highway-1.0.3          | NOK | http://autobuild.buildroot.net/results/6ba12eeedda480f1287d94b5d3d7ace923cb9b68 |     
-   arceb     | host-gdb-arc-2020.09-releas... | NOK | http://autobuild.buildroot.net/results/bf917855ec091e2e1fee45d3dd6c1e7b849af40d | ORPH
-  sparc64    | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/48b52d205150e30e522b40d1c7b51f339ae8b0db | ORPH
-  powerpc    | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/764c94e1f9758dbadd595e052a8b40b0bb776e87 | ORPH
-  aarch64    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/790e4684825348037fcf4be97d5a7ad7780c3f75 |     
-   armeb     |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/02f1dae2c068ef4db1c056dbfba8e363369853be |     
-    arm      |          kexec-2.0.26          | NOK | http://autobuild.buildroot.net/results/edb0953f74dbc414e0ea814c6cbbeec8ab95995b |     
-   armeb     |          kexec-2.0.26          | NOK | http://autobuild.buildroot.net/results/9bda26c3ad5291c4cf7716059bd17da9172d9310 |     
-   x86_64    | kvmtool-f77d646ba01d04be5aa... | NOK | http://autobuild.buildroot.net/results/1f31f2d4917ea723cc2e1da573f5959520ee9e1e | ORPH
-    arm      |          libsepol-3.5          | NOK | http://autobuild.buildroot.net/results/79c58476cc80f216052c309746cd6afbeb59447a |     
-   arceb     |        libsigsegv-2.14         | NOK | http://autobuild.buildroot.net/results/ffb8393affafe03af8d2266feb7887ce65c5514b |     
-    mips     |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/311312ec6d0f184c98bb10800583200ea3d91414 | ORPH
-    or1k     |          linux-6.3.6           | NOK | http://autobuild.buildroot.net/results/4024f8dc2b86c743ec31061adddb9a091c1f5fd5 | ORPH
-  mips64el   |          linux-6.3.6           | NOK | http://autobuild.buildroot.net/results/59db86959cd38a518e7314bc076163af5d960902 | ORPH
-powerpc64le  |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/ba69e45336dd6042511a159155de0db07d21d2b2 |     
-   mips64    |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/f4791114a8eff203bbc27398b4cd306908b595c4 |     
-    arc      |          nginx-1.24.0          | NOK | http://autobuild.buildroot.net/results/621f7f9c07ae9ee6938f4b3b15421c3487afed56 |     
- aarch64_be  |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/9b7fc7b13dc5b18d3497dced35bc81ee0d108fe9 | ORPH
-   armeb     |         opensc-0.22.0          | NOK | http://autobuild.buildroot.net/results/98276ac6288b0b2652819c693775fd7757233538 |     
-   arceb     |          perl-5.36.1           | NOK | http://autobuild.buildroot.net/results/56a0f71af2cc4b8d099c9fe9de950dfcf76056c1 |     
-microblazeel |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/08656052483977b90baab86775ef20386669a1bd |     
- microblaze  |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/177494146317a5db576817f9f693c175ca208e38 |     
-    or1k     |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/6b31d82649778799a7a4d34409d6e6832bf68a8a |     
-    arc      |          reaver-1.6.6          | NOK | http://autobuild.buildroot.net/results/27aa55e5d1d480dbfbb3115289fb8a47ae9a853f |     
-   armeb     |          sdl2-2.26.5           | NOK | http://autobuild.buildroot.net/results/3629b08fe77f6cfc67213da92120aba46b23bfea |     
- powerpc64   |        syslog-ng-4.1.1         | NOK | http://autobuild.buildroot.net/results/412e67f4c8ac90e98afd1a3be4e513f9f306788f |     
-   s390x     | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/8b9a7f7a1a5c65dbd4108d9f2ea1df566850a8df |     
-   armeb     |            unknown             | NOK | http://autobuild.buildroot.net/results/c4ad8758d6f2096d5568452af93f40ab36633bd7 |     
-   x86_64    |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/ebee9d8558b1080b1da9006a47fb62352a047cd9 |     
-  powerpc    |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/6b5939695e2b6211f4233db611a12eb959520392 |     
-   x86_64    |          xvisor-0.3.1          | NOK | http://autobuild.buildroot.net/results/e6a0b19f34febf023d3612046d5f0b0bff6f5e6b |     
+As far as I see the rk3399 is actually a different case: For this particular
+SoC the ATF is released as source and part of the ATF repository, see here:
+
+https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/plat/
+rockchip.rst?plain=1#L12
+
+This is different for the rk3588, which is the SoC on the Rock 5b: For the
+rk3588 Rockchip did not release the ATF source code, hence one needs to use 2
+ATF blobs for U-Boot, see also the U-Boot documentation about this:
+
+https://source.denx.de/u-boot/u-boot/-/blob/master/doc/board/rockchip/
+rockchip.rst?plain=1#L199-200
+
+Both blobs are provided by the Rockchip, see here:
+
+https://github.com/rockchip-linux/rkbin/tree/master/bin/rk35
+
+So currently it seems mandatory to me to setup Buildroot in some way, that
+these two blobs are obtained from the rkbin repo and provided to U-Boot during
+build.
+
+> If you refer to BL31 or something similar that should already be an
+> infrastructure in Buildroot for it. I suggest you to take a look at
+> other similar boards in buildroot/configs and filter what you need and
+> give a try.
+
+As you suggested, I looked for Buildroot infrastructure to support such
+requirements and came across the following two patches on the ML, adding some
+similar support for IMX SoCs in the past:
+
+https://lists.buildroot.org/pipermail/buildroot/2021-September/622642.html
+https://lists.buildroot.org/pipermail/buildroot/2021-September/622643.html
+
+In recent Buildroot the support seems to be implemented as option
+BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE here:
+
+https://github.com/buildroot/buildroot/blob/master/boot/uboot/uboot.mk#L194-L208
+
+The option is currently used in four defconfigs:
+
+* imx8mn_bsh_smm_s2_defconfig
+* imx8mn_bsh_smm_s2_pro_defconfig
+* kontron_bl_imx8mm_defconfig
+* kontron_pitx_imx8m_defconfig
+
+However, the defconfigs don't set any option for some specific remote git
+repository, from which the binaries can be obtained. Instead "firmware-imx" is
+added to UBOOT_DEPENDENCIES in the uboot.mk. As I understand it, this
+corresponds to the package "package/freescale-imx/firmware-imx".
+
+So from my understanding, in order to set up the U-Boot build for the Rock 5b
+in buildroot, I would have to do the following steps:
+
+* Add a package "package/rockchip/firmware-rk" which fetches the rkbin
+  repository properly, similar to "package/freescale-imx/firmware-imx"
+
+* Implement the following targets in the uboot.mk similar to the IMX ones:
+    BR2_TARGET_UBOOT_NEEDS_RK_FIRMWARE
+    UBOOT_COPY_RK_FW_FILES
+    and add UBOOT_COPY_RK_FW_FILES to UBOOT_PRE_BUILD_HOOKS
+
+* Add a Rock 5b defconfig to buildroot with the BR2...UBOOT_NEEDS_RK_FIRMWARE
+  option activated
+
+What do you think? I would really like to do this! If I get it working it
+actually would be my first opensource contribution. However, I am on a one
+week vacation from tomorrow and will not have a laptop. So everybody who reads
+this and does not urgently need Rock 5b boar support: Please be a bit patient
+and let me do it in a week! ;)
 
 
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
+> > And even if it was present: How
+> > could I introduce a change, i.e. activate the Realtek R8169 driver?
+>
+> enable what we want using fragment files. Take a look here:
+> https://gitlab.com/buildroot.org/buildroot/-/blob/master/configs/olimex_a20_
+> olinuxino_lime2_defconfig#L29 and check the content of that .fragment file,
+> you will see that you can en/disable options you need
 
-fs/ubi/ubi.mk:51: /home/bui... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-host-gdb-arc-2020.09-releas... | 1 
-                       unknown | 1 
+> That is a very useful helper that does exist for gitlab too and it's
+> defined in:
+> https://gitlab.com/buildroot.org/buildroot/-/blob/master/package/pkg-download.mk#L63
+>
+> it takes 3 argument when called and return the URL referred to Github.
+> Same goes for Gitlab.
 
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel | fs/ubi/ubi.mk:51: /home/bui... | NOK | http://autobuild.buildroot.net/results/9f605710413ccffbbb3518377353137c3db839ee |     
-   x86_64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/17ca4c42abd64f85debf2aa63f41e30377785381 |     
-   arceb     | host-gdb-arc-2020.09-releas... | NOK | http://autobuild.buildroot.net/results/e76926c5bc00fa4f72cf7e89eab1db8e6c21485c | ORPH
-  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/fae47fac2a2924c28b7264a0e3f483854a018ca5 |     
+Thank you very much for the info!
 
 
+Best regards,
+Kilian
 
--- 
-http://autobuild.buildroot.net
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
