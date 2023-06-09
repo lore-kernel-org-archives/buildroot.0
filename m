@@ -1,77 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B15FC7EE2E
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 11:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96378C7EE29
+	for <buildroot@archiver.kernel.org>; Fri,  9 Jun 2023 14:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABBFF60C33;
-	Fri,  9 Jun 2023 11:34:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABBFF60C33
+	by smtp4.osuosl.org (Postfix) with ESMTP id C04F542512;
+	Fri,  9 Jun 2023 14:40:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C04F542512
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GgUqLvRkiBOh; Fri,  9 Jun 2023 11:34:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H8jqvSNswNY3; Fri,  9 Jun 2023 14:40:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD06A60BDD;
-	Fri,  9 Jun 2023 11:34:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD06A60BDD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 868AD424FC;
+	Fri,  9 Jun 2023 14:40:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 868AD424FC
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B9E51BF37F
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 11:34:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 502381BF2FC
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 14:40:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70B7441598
- for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 11:34:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70B7441598
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A628408C8
+ for <buildroot@lists.busybox.net>; Fri,  9 Jun 2023 14:40:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A628408C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2p0itnOdxCaS for <buildroot@lists.busybox.net>;
- Fri,  9 Jun 2023 11:34:28 +0000 (UTC)
+ with ESMTP id tze0aiJuWcFr for <buildroot@lists.busybox.net>;
+ Fri,  9 Jun 2023 14:40:31 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F8F540025
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6F8F540025
- for <buildroot@buildroot.org>; Fri,  9 Jun 2023 11:34:27 +0000 (UTC)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
- by mx.sberdevices.ru (Postfix) with ESMTP id DE53A5FD8E;
- Fri,  9 Jun 2023 14:34:23 +0300 (MSK)
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru
- [172.16.1.4]) by mx.sberdevices.ru (Postfix) with ESMTP;
- Fri,  9 Jun 2023 14:34:23 +0300 (MSK)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, "Yann E . MORIN"
- <yann.morin.1998@free.fr>, Herve Codina <herve.codina@bootlin.com>
-Date: Fri, 9 Jun 2023 14:34:15 +0300
-Message-ID: <20230609113415.13856-1-ddrokosov@sberdevices.ru>
-X-Mailer: git-send-email 2.36.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D066441528
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D066441528
+ for <buildroot@buildroot.org>; Fri,  9 Jun 2023 14:40:30 +0000 (UTC)
+Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
+ by mailout09.t-online.de (Postfix) with SMTP id 951052866A
+ for <buildroot@buildroot.org>; Fri,  9 Jun 2023 16:40:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd71.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1q7dHv-2oUdA90; Fri, 9 Jun 2023 16:40:27 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38392)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q7dHv-0003UF-08
+ for buildroot@buildroot.org; Fri, 09 Jun 2023 16:40:27 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Fri,  9 Jun 2023 16:40:26 +0200
+Message-Id: <20230609144026.56039-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
- bases: 2023/06/09 07:08:00 #21465535
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sberdevices.ru; s=mail; t=1686310463;
- bh=XcoHKyHADT7RPMPnbFDPW1MpCJLuG5EBmwqG1+ldWN4=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
- b=TbOTXo9Fhh3cjvGXpWt2sqbVtBfLfuddGoYh2wk2kyOBbWyGTVqgSUMrGwjPb4qT8
- 6Cs6lB8A30Y11/3n1UzN8GflxhPYQVXaa6JlVa9qaUUPL99y7fjdSkJjtVzEU//ji0
- n8xpVA3wM3Q2QeSVwW+8BPjD74z2kzeFQThXkugmqC4ZkczVXebFoCvSnHic0z78qD
- Rijbsmh0az3kMeLUJbnyy9ahhy1oe9ILLRYXoMOq92u7xtoUjzbnJTUgwAj5qwUE41
- GvAhyOj1pbPE18wA3zvJBvqXxtneckKvtPp0zFAxTBFmhr9edn3KIky/1DWFaJjUlC
- hp/4DLk2e0dHg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
- header.a=rsa-sha256 header.s=mail header.b=TbOTXo9F
-Subject: [Buildroot] [PATCH v1] package/linux-tools: introduce linux mm tools
+X-TOI-EXPURGATEID: 150726::1686321627-4D3BE3BC-18E38583/0/0 CLEAN NORMAL
+X-TOI-MSGID: f097b6da-1680-40ea-b103-7ff3b0c1c83f
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 3}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,131 +66,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Dmitry Rokosov via buildroot <buildroot@buildroot.org>
-Reply-To: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc: kernel@sberdevices.ru, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
- sdfw_system_team@sberdevices.ru, rockosov@gmail.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This toolset was designed to facilitate the testing, monitoring, and
-tracing of various things with virtual memory, pages, and slab objects.
-It is an invaluable resource for identifying and analyzing
-memory-related issues, such as leaks and bottlenecks, and can greatly
-enhance one's understanding of memory utilization within a system.
-
-The mm toolset includes:
-    - page_owner_sort: userspace helper to sort the output of
-      /sys/kernel/debug/page_owner, which helps to know who allocates
-      the page from kernel context
-    - slabinfo: the tool which gets reports about slabs, for example
-      show empty slabs, modify of slab debug options at runtime, display
-      all information about a slabcache
-    - page-types: a handy tool for querying page flags
-
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linux-tools/Config.in           | 18 ++++++++
- package/linux-tools/linux-tool-mm.mk.in | 59 +++++++++++++++++++++++++
- 2 files changed, 77 insertions(+)
- create mode 100644 package/linux-tools/linux-tool-mm.mk.in
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 880ad08f0f1c..3ecc45574b82 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -171,4 +171,22 @@ config BR2_PACKAGE_LINUX_TOOLS_HV_VSS_DAEMON
+diff --git a/linux/Config.in b/linux/Config.in
+index b4d32f6ea3..69bf91bbf9 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- endif # BR2_PACKAGE_LINUX_TOOLS_HV
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.3.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.3.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 18ede2d60f..20e67fc4d1 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  7a6a1f0dfa0bf7f45f9d4a7b409315cf32267850adab4db033a17de0320a24ef  linux-6.3.6.tar.xz
+-sha256  7c88b7a09ba2b9e47b78eba2b32b1db6a4d89636f7ddd586545f9671a2521a6c  linux-6.1.32.tar.xz
++sha256  fe369743996c522a7b473e99dcf8f88847bd5cc88546fd3b7a41d9fe5a5b97a9  linux-6.3.7.tar.xz
++sha256  b87d6ba8ea7328e8007a7ea9171d1aa0d540d95eacfcab09578e0a3b623dd2cd  linux-6.1.33.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  1b076860779235e90519e867c1ec78c7a34d1125d8fdba787ff495c7c14f1214  linux-5.15.115.tar.xz
+-sha256  de8ec58929460e3a14c1b0502f4a449f24c988a7a4a03ff04a82fb2d665fe9f6  linux-5.10.182.tar.xz
+-sha256  9607881878fbd21e0dec4e8192b0f6352d17fd74c3ec23ffe6b0a24093efb1a4  linux-5.4.245.tar.xz
++sha256  f617c9d1bb5326cc93495938f43eb8cb9aea9d2f451e5a99bce2893f296e179a  linux-5.15.116.tar.xz
++sha256  409497c635caf49614de21950ec091eb621a5d5fe1f63fc418ef68ac38b56119  linux-5.10.183.tar.xz
++sha256  0938790a858fd0af6aa6b27a3bdf4c5d4a46aba60e6178156980d58bef7ed9ea  linux-5.4.246.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  7fb9ee20c7e52f9be6d9f501e8498a22f4b364abfde136143749a77e597fd03e  linux-4.19.284.tar.xz
+-sha256  ac8318f1c1d387e23ccfa760ec042943372df23e3c4e2408177fb5a3f6488f76  linux-4.14.316.tar.xz
++sha256  aaa1775359c7a066ec70852ea2709fe7e7109517b7d895f34e237132db8edc16  linux-4.19.285.tar.xz
++sha256  8cf28f5aae6f77fa718861c415d646a189a7f9493ef0ccb461575a092af03c30  linux-4.14.317.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f9a164d78d..00ec22d606 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -396,13 +396,13 @@ endchoice
  
-+config BR2_PACKAGE_LINUX_TOOLS_MM
-+	bool "mm"
-+	select BR2_PACKAGE_LINUX_TOOLS
-+	help
-+	  mm is a toolset for testing/monitoring/tracing vm/pages/slabs objects.
-+
-+	  - page_owner_sort: userspace helper to sort the output of
-+	  /sys/kernel/debug/page_owner, which helps to know who allocates
-+	  the page from kernel context
-+
-+	  - slabinfo: the tool which gets reports about slabs, for example
-+	  show empty slabs, modify of slab debug options at runtime, display
-+	  all information about a slabcache
-+
-+	  - page-types: a handy tool for querying page flags
-+
-+	  These tools are available only from kernel version 3.4.
-+
- endmenu
-diff --git a/package/linux-tools/linux-tool-mm.mk.in b/package/linux-tools/linux-tool-mm.mk.in
-new file mode 100644
-index 000000000000..a59f1c46ff97
---- /dev/null
-+++ b/package/linux-tools/linux-tool-mm.mk.in
-@@ -0,0 +1,59 @@
-+################################################################################
-+#
-+# mm
-+#
-+################################################################################
-+
-+LINUX_TOOLS += mm
-+
-+MM_MAKE_OPTS = $(LINUX_MAKE_FLAGS) CC="$(TARGET_CC)"
-+
-+KVER = $(shell echo $(LINUX_VERSION_PROBED))
-+KVER_MAJOR = $(word 1,$(subst ., ,$(KVER)))
-+KVER_MINOR = $(word 2,$(subst ., ,$(KVER)))
-+
-+# For the first time tools/vm was introduced in the 3.4 kernel version
-+KVER_MAJOR_MIN = 3
-+KVER_MINOR_MIN = 4
-+
-+# Starting from 6.3 kernel version mm tools are located at tools/mm folder
-+# instead of tools/vm
-+KVER_MAJOR_MM = 6
-+KVER_MINOR_MM = 3
-+
-+define MM_BUILD_CMDS
-+	$(Q)if [ $(KVER_MAJOR) -lt $(KVER_MAJOR_MIN) ] || \
-+		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MIN) -a \
-+		  $(KVER_MINOR) -lt $(KVER_MINOR_MIN) ]; then \
-+		echo -n "Your kernel version $(KVER_MAJOR).$(KVER_MINOR) is "; \
-+		echo "too old and doesn't have the mm tools." ; \
-+		echo -n "At least $(KVER_MAJOR_MIN).$(KVER_MINOR_MIN) "; \
-+		echo "kernel must be used." ; \
-+		exit 1 ; \
-+	fi
-+
-+	$(Q)if [ $(KVER_MAJOR) -gt $(KVER_MAJOR_MM) ] || \
-+		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MM) -a \
-+		  $(KVER_MINOR) -ge $(KVER_MINOR_MM) ]; then \
-+		MM=mm; \
-+	else \
-+		MM=vm; \
-+	fi; \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
-+		$(MM_MAKE_OPTS) $${MM}
-+endef
-+
-+define MM_INSTALL_TARGET_CMDS
-+	$(Q)if [ $(KVER_MAJOR) -gt $(KVER_MAJOR_MM) ] || \
-+		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MM) -a \
-+		  $(KVER_MINOR) -ge $(KVER_MINOR_MM) ]; then \
-+		MM=mm; \
-+	else \
-+		MM=vm; \
-+	fi; \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
-+		$(MM_MAKE_OPTS) \
-+		INSTALL_ROOT=$(TARGET_DIR) \
-+		DESTDIR=$(TARGET_DIR) \
-+		$${MM}_install
-+endef
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.316"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.284"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.245"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.182"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.115"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.32"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.3.6"		if BR2_KERNEL_HEADERS_6_3
++	default "4.14.317"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.285"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.246"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.183"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.116"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.33"	if BR2_KERNEL_HEADERS_6_1
++	default "6.3.7"		if BR2_KERNEL_HEADERS_6_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.36.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
