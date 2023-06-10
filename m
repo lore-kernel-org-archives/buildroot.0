@@ -1,59 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD3AC7EE29
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 17:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B12EC77B7A
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 18:19:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 031F3404A1;
-	Sat, 10 Jun 2023 17:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 031F3404A1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7632F83B02;
+	Sat, 10 Jun 2023 18:19:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7632F83B02
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 86nMeQ1iRE0R; Sat, 10 Jun 2023 17:46:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XXzks_H_-yun; Sat, 10 Jun 2023 18:19:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42C9640217;
-	Sat, 10 Jun 2023 17:46:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42C9640217
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 83A661BF32B
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 17:46:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5B1A83A63;
+	Sat, 10 Jun 2023 18:19:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5B1A83A63
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F2A11BF354
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 18:19:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69BDA40217
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 17:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69BDA40217
+ by smtp4.osuosl.org (Postfix) with ESMTP id 141F0417A7
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 18:19:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 141F0417A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ix0AAYtH6Kew for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 17:46:29 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40AB440129
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 40AB440129
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 17:46:29 +0000 (UTC)
-Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
- by mailout12.t-online.de (Postfix) with SMTP id 33852136EA
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 19:46:27 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd81.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q82fR-4Mys8v0; Sat, 10 Jun 2023 19:46:26 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:53338)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q82fR-00041j-28
- for buildroot@buildroot.org; Sat, 10 Jun 2023 19:46:25 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xqZDN4FWSxEF for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 18:19:18 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E10534177A
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E10534177A
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 18:19:17 +0000 (UTC)
+Received: by mail-il1-x12a.google.com with SMTP id
+ e9e14a558f8ab-33e75ca0b23so13131835ab.1
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 11:19:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1686421157; x=1689013157;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=3Qf/YEBUqLw1WzrOaGoMvskcfXOD7Teddes+3WT+/g4=;
+ b=RNV7x3+7ww7w8znNdgEw9mkmmPalHrlTc4El+MbzWBkzqfrPw/N13oa51wvZgSU+Dx
+ mbeFXQ5lWw+GUhVuBjOsa4sWhoM+Chqf494XbuGmA+D6v/lpjw+Ak7wksx68uBfDWpMl
+ YKKgTdyfHx6/mp2fltIXcs3N4Y4pDgYi1DVpsP1JURmBwSLYm8lECf1EEP+vHJbCybco
+ oZ8symgi+qTwMb1U9DG9bfUL3HInPQGQCh6HhyhmzymnkGRdusvEPi2/80D4oyDCiF+G
+ CtYbIjN6O4yvCYBrxJhheruin08x97x9IBUHIe2Q3u4WBSO6qFxNtHJIZT8YdAC6gwan
+ xnJw==
+X-Gm-Message-State: AC+VfDx2kkxCN5lCgdSULT+crPY3c1bKVwqLQZ0UPqe2Q6BRLn+l7w9T
+ PcKlWF2YuC/8vk0ph0Kz2QUAJjWlSKI=
+X-Google-Smtp-Source: ACHHUZ57VBO2lIsXgYomEi6Xf7w8Ng79mJBWUbwUzOB0VHlevMKJubvPkNW5TQRF5QUjqlwwZ211qg==
+X-Received: by 2002:a92:c98d:0:b0:33e:7269:bb7b with SMTP id
+ y13-20020a92c98d000000b0033e7269bb7bmr3792174iln.3.1686421156596; 
+ Sat, 10 Jun 2023 11:19:16 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-133-19.hlrn.qwest.net.
+ [71.33.133.19]) by smtp.gmail.com with ESMTPSA id
+ h14-20020a0566380f0e00b0041cea93e589sm1653570jas.152.2023.06.10.11.19.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 10 Jun 2023 11:19:16 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Jun 2023 19:46:25 +0200
-Message-Id: <20230610174625.1122318-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+Date: Sat, 10 Jun 2023 12:19:14 -0600
+Message-Id: <20230610181914.541374-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686419186-DA7FADA8-B6CC7359/0/0 CLEAN NORMAL
-X-TOI-MSGID: 3fa506da-3de3-435a-a99a-4d36842bdce4
-Subject: [Buildroot] [PATCH 1/1] package/rrdtool: bump version to 1.8.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1686421157; x=1689013157;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=3Qf/YEBUqLw1WzrOaGoMvskcfXOD7Teddes+3WT+/g4=;
+ b=W1VOOP09TTjp1a9hBzE5hTHW00Pbs9Q2AndBAmn0qLRpfZu+b8Crgb2Ih5uRb2g/nc
+ VTLbwthI35vtjpK/kYmQ6MFzh9tiUdoe2gItVHMHJfJMiDzqUn6KMiGB2CHv8oyoAuT4
+ aIoE8GjeJlLp4N1v2vL/+r+Qypgakk/wJ/CZBbt5fWjcO6g527tQpKvJjdde3Sic218Z
+ 7RKraEOHgccQKf9wYjWI/UBNd9bVE+vw4Riz4wdlkazdDjdH6vJgKB+hGvhUNruowW4Y
+ CpMjQEbn3JZNaSjlR4Pfw0Sa8VjLHI65XkBN2fa6emoDZtw0VgdZWCnO4173Q4KVe9H6
+ y2Jg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=W1VOOP09
+Subject: [Buildroot] [PATCH 1/1] package/strace: use bundled headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +94,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/oetiker/rrdtool-1.x/releases/tag/v1.8.0
+Details: https://github.com/strace/strace/issues/253
 
-Switched _SITE due to upstream move: https://oss.oetiker.ch/rrdtool/pub/
+Fixes:
+ - http://autobuild.buildroot.net/results/867/8675aeca53653d9d792182be61a28ea550dc530d
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/rrdtool/rrdtool.hash | 2 +-
- package/rrdtool/rrdtool.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/strace/strace.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
-index 5266e5b7a1..1a6d18aea9 100644
---- a/package/rrdtool/rrdtool.hash
-+++ b/package/rrdtool/rrdtool.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  a199faeb7eff7cafc46fac253e682d833d08932f3db93a550a4a5af180ca58db  rrdtool-1.7.2.tar.gz
-+sha256  bd37614137d7a8dc523359648eb2a81631a34fd91a82ed5581916a52c08433f4  rrdtool-1.8.0.tar.gz
- sha256  ab6b4646e9e01f1ec287c29c351c886c4cb7f945c11efc0a1be9f6e5e6cc5320  COPYRIGHT
- sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  LICENSE
-diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-index 051aec1c19..24d84c79c3 100644
---- a/package/rrdtool/rrdtool.mk
-+++ b/package/rrdtool/rrdtool.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 6514bfe354..9f6b333318 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -10,7 +10,7 @@ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSI
+ STRACE_LICENSE = LGPL-2.1+
+ STRACE_LICENSE_FILES = COPYING LGPL-2.1-or-later
+ STRACE_CPE_ID_VENDOR = strace_project
+-STRACE_CONF_OPTS = --enable-mpers=no
++STRACE_CONF_OPTS = --enable-bundled=yes --enable-mpers=no
  
--RRDTOOL_VERSION = 1.7.2
--RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
-+RRDTOOL_VERSION = 1.8.0
-+RRDTOOL_SITE = https://github.com/oetiker/rrdtool-1.x/releases/download/v$(RRDTOOL_VERSION)
- RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
- RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
- RRDTOOL_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ STRACE_DEPENDENCIES += libunwind
 -- 
-2.39.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
