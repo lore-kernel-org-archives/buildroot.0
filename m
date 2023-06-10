@@ -1,89 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00BBEC7EE2F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 12:25:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A3ACC7EE29
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 13:33:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7D473408A5;
-	Sat, 10 Jun 2023 12:25:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D473408A5
+	by smtp3.osuosl.org (Postfix) with ESMTP id A71C060E80;
+	Sat, 10 Jun 2023 13:33:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A71C060E80
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M1UOXRyXzcKw; Sat, 10 Jun 2023 12:25:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A0tZmWB1-te4; Sat, 10 Jun 2023 13:33:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F811405F5;
-	Sat, 10 Jun 2023 12:25:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F811405F5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF19A1BF377
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 12:25:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 534C460BF2;
+	Sat, 10 Jun 2023 13:33:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 534C460BF2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6901C1BF343
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 13:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B838C83C5C
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 12:25:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B838C83C5C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42DD660BF2
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 13:32:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42DD660BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L19SyJInwJ8M for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 12:25:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AqgyzSdfPbXj for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 13:32:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A622D83C5B
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A622D83C5B
- for <buildroot@busybox.net>; Sat, 10 Jun 2023 12:25:23 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-3f736e0c9a8so20226515e9.2
- for <buildroot@busybox.net>; Sat, 10 Jun 2023 05:25:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8EF760AB5
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com
+ [209.85.218.54])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C8EF760AB5
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 13:32:57 +0000 (UTC)
+Received: by mail-ej1-f54.google.com with SMTP id
+ a640c23a62f3a-977d4a1cf0eso397737666b.1
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 06:32:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686399921; x=1688991921;
+ d=1e100.net; s=20221208; t=1686403975; x=1688995975;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=KSlmmc9JHUyUPhiiJzUaeYdUXmBN0YDQiIupPvYtNeM=;
- b=Hu6g96mAcLyo/0pzMhUymYQL1p8OGRV192+/ZSlnnimJL51KHNg7Z0a/ANVMV+tWT3
- C2c6a0JOT1Xh4DwHt8FOCFiiImbThizHSWX+TypFWJN5v0JcmTk0ZQ1U2DSOwgoiziRy
- f2gOiiHV3cTqKsqmNFhdekUz2RasNZIqP1pFIB7fZItow40agtCXtQ5h7WXViYF7cuKZ
- ovyj8/Na8pO+8Uz+2Is/t83tfv4s4HMuzjpQKt1YNI4jfkHxCJ5tGPFGYLpSJsCF/L9L
- TBV4e3kNO9oWzdnSRSVl9veOfQz7YqVrfozYQuakTL8APORWvg3R73WVZwwHt6iLWK2S
- NAWQ==
-X-Gm-Message-State: AC+VfDwpqtJkk5hjCMEvgPSjz66XFRMI/tnh6PPrhiV2C3Auwz8LaOAC
- bBxY5q2l7A9qJ9wHbw6cGWn9TjlN4+4=
-X-Google-Smtp-Source: ACHHUZ43kR5UljZNL88cjkt6CdD6/Syke5GWUin2faMrgqzyxImT3fKis7tRvs67I6BMP20UUG2gFw==
-X-Received: by 2002:a05:6000:196e:b0:30e:52ed:ddda with SMTP id
- da14-20020a056000196e00b0030e52eddddamr1025658wrb.38.1686399921373; 
- Sat, 10 Jun 2023 05:25:21 -0700 (PDT)
-Received: from vm.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ bh=NjtgJqZWtSqfAlZsFyNEmUyT8cNTgvvXSvwT3LaHgTo=;
+ b=GKAAwtywT+9Y2HJvVdu/WyQtb1WD1MuMQQ8PNzMPAcK0UJeR/3Wd38OCfZRAxcuRiT
+ txy71b/6pUltvOt2nqluo2HARGltpXeu4gfoNqne89Dkozd2zCOgu/GtwAwSyxVQ7p0r
+ wgi1Y63Gvw18BT1drvtx0vexDAsixIvJgNLVaMgMIBgIFLcoKC8TFtOqJD3MpcYXmURz
+ OOgSVXszKiEYyAJqnFT6Bn1cHCavabjZ2hxw20lVwHtyz2/7AJljXhOropVOqZ4Ny6c9
+ rQU4qcdrBcDTyWfRgZ/YX36SAws31vMsfkSV+e2JoGflkkYmdf2z5T9xxoVd006o5lCo
+ g+TA==
+X-Gm-Message-State: AC+VfDycMJs2D8UC6t+N5RNKTUo6Hgew7O21fRZltADtymPJdl6w/OmT
+ iL4TYM7BNDyqDsHdV2BDJJxrXOfbhTFMUg==
+X-Google-Smtp-Source: ACHHUZ68BR6tOfNtV9c7/cO16TwCJY/1QgRUy0RtAabwDvxTdz5Fyau1kE9u2JRdy5ByVjrqmUPdVw==
+X-Received: by 2002:a17:907:3f82:b0:96a:48ed:5333 with SMTP id
+ hr2-20020a1709073f8200b0096a48ed5333mr4901834ejc.50.1686403974950; 
+ Sat, 10 Jun 2023 06:32:54 -0700 (PDT)
+Received: from localhost.localdomain
+ ([2a02:a03f:eb68:2f00:9ac8:47a3:9e97:6ffe])
  by smtp.gmail.com with ESMTPSA id
- u8-20020adfeb48000000b003062b2c5255sm7043054wrn.40.2023.06.10.05.25.20
+ i23-20020a1709061cd700b0094f07545d40sm2559774ejh.220.2023.06.10.06.32.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Jun 2023 05:25:20 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat, 10 Jun 2023 14:25:15 +0200
-Message-Id: <20230610122516.1633303-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.39.2
+ Sat, 10 Jun 2023 06:32:54 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Date: Sat, 10 Jun 2023 15:32:48 +0200
+Message-Id: <20230610133251.97022-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1686399921; x=1688991921;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=KSlmmc9JHUyUPhiiJzUaeYdUXmBN0YDQiIupPvYtNeM=;
- b=UMVgKBi249ac4sUNylHTreSCdULzKlkxRA2OlPUJu9Mv/biS1usUwxjQUCFBTJcBYs
- yaMUtAhaJpppMEiHYREiDMZdLVbhJvg+PB4d4RE248zY46W20g6T1CYierB6DtaxZ0r1
- mrgYT6lvlYSRCm5Xip+FTe4ivbKl8tS6LIkpvFI9728et0qFR68IWAYZWVLmB1Ryuty4
- CXA4feVTsvUGP8KRHhBv2/YgSTnnTKGSOHDZVjGTFmAfF4SK9EgJk6Mkdmmp3j5bdTrN
- 7GDd9Mr3tdsynSufrNxq9mx9s546K4luqbUbtghcr/IeLhtWSs32nzUSjvuu3ZiVEZOE
- 2k8Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=UMVgKBi2
-Subject: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.38
+Subject: [Buildroot] [PATCH v2 1/4] package/fluent-bit: bump to version 2.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,44 +81,321 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Fluent Bit v2.1 is the start of the new stable series of the project.
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 22c37bf60..4d6c210c6 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.37.sha256sum
--sha256  6745f0b4c053794151fd0f0e2474b077cccff5f83e9dd1bf3d39fe9fe5fb7f57  gtk+-3.24.37.tar.xz
-+# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.38.sha256sum
-+sha256  ce11decf018b25bdd8505544a4f87242854ec88be054d9ade5f3a20444dd8ee7  gtk+-3.24.38.tar.xz
- 
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 8291b8d35..6655a0d09 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
+Release Notes:
+
+  https://fluentbit.io/announcements/v2.1.0/
+  https://fluentbit.io/announcements/v2.1.1/
+  https://fluentbit.io/announcements/v2.1.2/
+  https://fluentbit.io/announcements/v2.1.3/
+  https://fluentbit.io/announcements/v2.1.4/
+
+Fluent Bit v2.1.4 contains this list of upstreamed patches:
+
+  https://github.com/fluent/fluent-bit/pull/7266
+  https://github.com/fluent/fluent-bit/pull/7254
+  https://github.com/fluent/fluent-bit/pull/7253
+
+So the old patches can be dropped.
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+v2: bump from 2.1.3 to 2.1.4
+---
+ .checkpackageignore                           |   3 -
+ .../0001-lib-cfl-fixup-static_assert.patch    |  33 -----
+ .../0002-lib-c-ares-fixup-static_assert.patch |  56 --------
+ .../fluent-bit/0003-fix-build-without-C.patch | 131 ------------------
+ package/fluent-bit/fluent-bit.hash            |   2 +-
+ package/fluent-bit/fluent-bit.mk              |   2 +-
+ 6 files changed, 2 insertions(+), 225 deletions(-)
+ delete mode 100644 package/fluent-bit/0001-lib-cfl-fixup-static_assert.patch
+ delete mode 100644 package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
+ delete mode 100644 package/fluent-bit/0003-fix-build-without-C.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index c2316d1d4e..b4fcb051c3 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -480,9 +480,6 @@ package/flex/0002-build-make-it-possible-to-disable-the-build-of-the-f.patch Ups
+ package/flex/0003-build-make-it-possible-to-disable-the-build-of-the-d.patch Upstream
+ package/flite/0001-fix-alsa-static.patch Upstream
+ package/fltk/0001-disable-tests.patch Upstream
+-package/fluent-bit/0001-lib-cfl-fixup-static_assert.patch Upstream
+-package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch Upstream
+-package/fluent-bit/0003-fix-build-without-C.patch Upstream
+ package/fluxbox/0001-fixes-bug-1138.patch Upstream
+ package/freeipmi/0001-add-disable-doc.patch Upstream
+ package/freeradius-client/0001-fix-for-nettle.patch Upstream
+diff --git a/package/fluent-bit/0001-lib-cfl-fixup-static_assert.patch b/package/fluent-bit/0001-lib-cfl-fixup-static_assert.patch
+deleted file mode 100644
+index 19dab7cac6..0000000000
+--- a/package/fluent-bit/0001-lib-cfl-fixup-static_assert.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From e4f825dd9e952f4a056bf89342049e67102ae6bb Mon Sep 17 00:00:00 2001
+-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+-Date: Wed, 1 Feb 2023 11:38:15 +0100
+-Subject: [PATCH] lib: cfl: fixup static_assert
+-
+-"undefined reference to 'static_assert'"
+-
+-Not defined when using uClibc or if not C++ >= 11.
+-
+-upstream: https://github.com/Cyan4973/xxHash/commit/6189ecd3d44a693460f86280ccf49d33cb4b18e1
+-
+-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+----
+- lib/cfl/lib/xxhash/xxhash.h | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/lib/cfl/lib/xxhash/xxhash.h b/lib/cfl/lib/xxhash/xxhash.h
+-index 08ab79457..511c4d12b 100644
+---- a/lib/cfl/lib/xxhash/xxhash.h
+-+++ b/lib/cfl/lib/xxhash/xxhash.h
+-@@ -1546,8 +1546,7 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size)
+- /* note: use after variable declarations */
+- #ifndef XXH_STATIC_ASSERT
+- #  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)    /* C11 */
+--#    include <assert.h>
+--#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
+-+#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { _Static_assert((c),m); } while(0)
+- #  elif defined(__cplusplus) && (__cplusplus >= 201103L)            /* C++11 */
+- #    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
+- #  else
+--- 
+-2.34.1
+-
+diff --git a/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch b/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
+deleted file mode 100644
+index d9b918ea8a..0000000000
+--- a/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From f55f9bf6d9201169d2e5d3782068b03ff17dec90 Mon Sep 17 00:00:00 2001
+-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+-Date: Wed, 1 Feb 2023 11:26:56 +0100
+-Subject: [PATCH] lib: c-ares: fixup static_assert
+-
+-"undefined reference to 'static_assert'"
+-
+-Not defined when using uClibc or if not C++ >= 11.
+-
+-upstream: https://github.com/c-ares/c-ares/issues/504
+-
+-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+----
+- lib/c-ares-1.19.0/configure                      | 4 ++++
+- lib/c-ares-1.19.0/m4/ax_cxx_compile_stdcxx_11.m4 | 3 +++
+- 2 files changed, 7 insertions(+)
+-
+-diff --git a/lib/c-ares-1.19.0/configure b/lib/c-ares-1.19.0/configure
+-index 4c5e1a966..58712ec34 100755
+---- a/lib/c-ares-1.19.0/configure
+-+++ b/lib/c-ares-1.19.0/configure
+-@@ -6317,6 +6317,8 @@ else $as_nop
+-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- 
+-+#define static_assert _Static_assert
+-+
+-   template <typename T>
+-     struct check
+-     {
+-@@ -6394,6 +6396,8 @@ else $as_nop
+-          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- 
+-+#define static_assert _Static_assert
+-+
+-   template <typename T>
+-     struct check
+-     {
+-diff --git a/lib/c-ares-1.19.0/m4/ax_cxx_compile_stdcxx_11.m4 b/lib/c-ares-1.19.0/m4/ax_cxx_compile_stdcxx_11.m4
+-index 229de3091..fe4a11c67 100644
+---- a/lib/c-ares-1.19.0/m4/ax_cxx_compile_stdcxx_11.m4
+-+++ b/lib/c-ares-1.19.0/m4/ax_cxx_compile_stdcxx_11.m4
+-@@ -37,6 +37,9 @@
+- #serial 9
+- 
+- m4_define([_AX_CXX_COMPILE_STDCXX_11_testbody], [[
+-+
+-+#define static_assert _Static_assert
+-+
+-   template <typename T>
+-     struct check
+-     {
+--- 
+-2.34.1
+-
+diff --git a/package/fluent-bit/0003-fix-build-without-C.patch b/package/fluent-bit/0003-fix-build-without-C.patch
+deleted file mode 100644
+index 0f0b239216..0000000000
+--- a/package/fluent-bit/0003-fix-build-without-C.patch
++++ /dev/null
+@@ -1,131 +0,0 @@
+-From f2aeca6fcc37bf22dd7307cab8fc9db6b53dd652 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 21 Feb 2023 00:09:57 +0100
+-Subject: [PATCH] fix build without C++
+-
+-Fix the following build failure without C++:
+-
+--- Check for working CXX compiler: /usr/bin/c++ - broken
+-CMake Error at /home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake:62 (message):
+-  The C++ compiler
+-
+-    "/usr/bin/c++"
+-
+-  is not able to compile a simple test program.
+-
+-  It fails with the following output:
+-
+-    Change Dir: /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp
+-
+-    Run Build Command(s):/home/autobuild/make/make -f Makefile cmTC_bfb29/fast && make[1]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
+-    /home/autobuild/make/make  -f CMakeFiles/cmTC_bfb29.dir/build.make CMakeFiles/cmTC_bfb29.dir/build
+-    make[2]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
+-    Building CXX object CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o
+-    /usr/bin/c++ --sysroot=/home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/xtensa-buildroot-linux-uclibc/sysroot   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O2 -g0  -fcommon -U_FILE_OFFSET_BITS  -g -fPIE -o CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+-    c++: error: unrecognized command-line option '-mlongcalls'
+-    c++: error: unrecognized command-line option '-mauto-litpools'
+-    make[2]: *** [CMakeFiles/cmTC_bfb29.dir/build.make:78: CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o] Error 1
+-    make[2]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
+-    make[1]: *** [Makefile:127: cmTC_bfb29/fast] Error 2
+-    make[1]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
+-
+-  CMake will not be able to correctly generate this project.
+-Call Stack (most recent call first):
+-  lib/msgpack-c/CMakeLists.txt:2 (project)
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/4b0f90d79d6dbbf976acf1da839260b0ee94ddda
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/fluent/fluent-bit/pull/6893]
+----
+- lib/chunkio/CMakeLists.txt          | 2 +-
+- lib/lwrb/CMakeLists.txt             | 2 +-
+- lib/msgpack-c/CMakeLists.txt        | 2 +-
+- lib/onigmo/CMakeLists.txt           | 2 +-
+- lib/snappy-fef67ac/CMakeLists.txt   | 2 +-
+- lib/tutf8e/CMakeLists.txt           | 2 +-
+- src/stream_processor/CMakeLists.txt | 2 +-
+- 7 files changed, 7 insertions(+), 7 deletions(-)
+-
+-diff --git a/lib/chunkio/CMakeLists.txt b/lib/chunkio/CMakeLists.txt
+-index 233bce35c..8bfe5199d 100644
+---- a/lib/chunkio/CMakeLists.txt
+-+++ b/lib/chunkio/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 3.0)
+--project(chunk-io)
+-+project(chunk-io C)
+- 
+- set(CIO_VERSION_MAJOR  1)
+- set(CIO_VERSION_MINOR  4)
+-diff --git a/lib/lwrb/CMakeLists.txt b/lib/lwrb/CMakeLists.txt
+-index 2fabd6319..031cbc1dd 100644
+---- a/lib/lwrb/CMakeLists.txt
+-+++ b/lib/lwrb/CMakeLists.txt
+-@@ -1,7 +1,7 @@
+- cmake_minimum_required(VERSION 3.0)
+- 
+- # Setup project
+--project(LwLibPROJECT)
+-+project(LwLibPROJECT C)
+- 
+- # -------------------------------------------------
+- # This CMakeLists.txt is used only if it is a top-level file.
+-diff --git a/lib/msgpack-c/CMakeLists.txt b/lib/msgpack-c/CMakeLists.txt
+-index 810ad609a..ffbbc5ddb 100644
+---- a/lib/msgpack-c/CMakeLists.txt
+-+++ b/lib/msgpack-c/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 2.8)
+--project(msgpack-c)
+-+project(msgpack-c C)
+- 
+- set(src
+-     src/objectc.c
+-diff --git a/lib/onigmo/CMakeLists.txt b/lib/onigmo/CMakeLists.txt
+-index 4a3b30d7d..66865130a 100644
+---- a/lib/onigmo/CMakeLists.txt
+-+++ b/lib/onigmo/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 3.4)
+--project(onigmo)
+-+project(onigmo C)
+- 
+- # Onigmo Version
+- set(ONIGMO_VERSION_MAJOR  6)
+-diff --git a/lib/snappy-fef67ac/CMakeLists.txt b/lib/snappy-fef67ac/CMakeLists.txt
+-index 8bb1e9598..ae9225c49 100644
+---- a/lib/snappy-fef67ac/CMakeLists.txt
+-+++ b/lib/snappy-fef67ac/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 2.8)
+--project(snappy-c)
+-+project(snappy-c C)
+- 
+- set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+- 
+-diff --git a/lib/tutf8e/CMakeLists.txt b/lib/tutf8e/CMakeLists.txt
+-index 35cbe01ad..a056ef83c 100644
+---- a/lib/tutf8e/CMakeLists.txt
+-+++ b/lib/tutf8e/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 2.8)
+--project(tutf8e)
+-+project(tutf8e C)
+- 
+- # Not supported: -std=c90 (lacks support for inline)
+- # Supported:     -std=gnu90, -std=c99 or -std=gnu99
+-diff --git a/src/stream_processor/CMakeLists.txt b/src/stream_processor/CMakeLists.txt
+-index 8c5d70d13..de2c2fe38 100644
+---- a/src/stream_processor/CMakeLists.txt
+-+++ b/src/stream_processor/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--project(stream-processor)
+-+project(stream-processor C)
+- 
+- include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+- 
+--- 
+-2.39.1
+-
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+index d60531438a..ec55038f3a 100644
+--- a/package/fluent-bit/fluent-bit.hash
++++ b/package/fluent-bit/fluent-bit.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  aad5176cb4dcadacacd379ca43160074c6690012d37c4749536ac3b977d50495  fluent-bit-2.0.10.tar.gz
++sha256  27c50c04cc39f4327a168c7eb00b7ab9d587d1b414f046668bb6ba93020ac7a5  fluent-bit-2.1.4.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 319815f056..a6080b0aab 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).37
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).38
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+-FLUENT_BIT_VERSION = 2.0.10
++FLUENT_BIT_VERSION = 2.1.4
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
 -- 
-2.39.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
