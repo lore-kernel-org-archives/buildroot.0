@@ -4,56 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1DD7C77B7A
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 16:44:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9C6CC7EE2F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 16:50:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C42141FF9;
-	Sat, 10 Jun 2023 16:44:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C42141FF9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 303A441F69;
+	Sat, 10 Jun 2023 16:50:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 303A441F69
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1jtR-9G-8c3a; Sat, 10 Jun 2023 16:44:25 +0000 (UTC)
+	with ESMTP id H4P6t-yzqhlL; Sat, 10 Jun 2023 16:50:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1205242647;
-	Sat, 10 Jun 2023 16:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1205242647
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 70B191BF32E
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 16:44:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A0DA4267E;
+	Sat, 10 Jun 2023 16:50:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A0DA4267E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 23A691BF32E
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 16:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 578E660E74
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 16:44:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 578E660E74
+ by smtp4.osuosl.org (Postfix) with ESMTP id 090CA4267E
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 16:50:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 090CA4267E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rw3enORWmAK6 for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 16:44:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t2a4Kf-fdCl4 for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 16:50:04 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38FC260F53
-Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 38FC260F53
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 16:44:21 +0000 (UTC)
-Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
- by mailout09.t-online.de (Postfix) with SMTP id 320D259A3A
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 18:44:13 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd88.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3C544267D
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D3C544267D
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 16:50:03 +0000 (UTC)
+Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
+ by mailout03.t-online.de (Postfix) with SMTP id 7CD468E9B
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 18:50:01 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd78.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q81hE-1I5M7V0; Sat, 10 Jun 2023 18:44:12 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57504)
+ esmtp id 1q81mq-0BY3M10; Sat, 10 Jun 2023 18:50:00 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55796)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q81hE-0001jA-0k
- for buildroot@buildroot.org; Sat, 10 Jun 2023 18:44:12 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q81mp-0002iE-2b
+ for buildroot@buildroot.org; Sat, 10 Jun 2023 18:49:59 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 10 Jun 2023 18:44:12 +0200
-Message-Id: <20230610164412.1029852-1-bernd.kuhls@t-online.de>
+Date: Sat, 10 Jun 2023 18:49:59 +0200
+Message-Id: <20230610164959.1049309-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686415452-13FFFE62-F07AC57A/0/0 CLEAN NORMAL
-X-TOI-MSGID: ff88d40c-0d20-4bac-86cf-1647721acab1
-Subject: [Buildroot] [PATCH 1/1] package/mpg123: bump version to 1.31.3
+X-TOI-EXPURGATEID: 150726::1686415800-097C5714-88AF88F3/0/0 CLEAN NORMAL
+X-TOI-MSGID: 55059f07-0763-4238-9f65-3020ee309d12
+Subject: [Buildroot] [PATCH 1/1] package/ncurses: bump version to
+ 6.4.20230603
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,48 +71,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed md5 hash, switched _SITE to https.
-
-Updated license hash due to copyright year bump.
+Release notes:
+https://github.com/ThomasDickey/ncurses-snapshots/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mpg123/mpg123.hash | 9 ++++-----
- package/mpg123/mpg123.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/ncurses/ncurses.hash | 2 +-
+ package/ncurses/ncurses.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index e5fb09b46a..39ded93fb9 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,7 +1,6 @@
--# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.15/
--sha1  286fcb83afad3ecbfea60434d3ee1b6d7f41bb7c  mpg123-1.25.15.tar.bz2
--md5  9a050d4b3573661c606f8095a3f34ca3  mpg123-1.25.15.tar.bz2
-+# From https://sourceforge.net/projects/mpg123/files/mpg123/1.31.3/
-+sha1  c41b98e4c5ac55a5b3787b5aa309a71a6d458145  mpg123-1.31.3.tar.bz2
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index a5f83c8725..b82a7b29e4 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  503a76d82d97f1a6513bbeb284e460a99fb17ef80f23a661d8fc026ce6adcbbc  mpg123-1.25.15.tar.bz2
-+sha256  1ca77d3a69a5ff845b7a0536f783fee554e1041139a6b978f6afe14f5814ad1a  mpg123-1.31.3.tar.bz2
- # License file
--sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-+sha256  c22482728a634a8dfdb4ff72a96d4c1ed64cd8f3e79335c401751ac591609366  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index fbb011c2c2..64c8e0d8e5 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+-sha256  004603a9b3ec51599ef0a0089482004ee3d33b0240d87ce17b6f77525b51fb4e  ncurses-6.4-20230429.tar.gz
++sha256  b0910671694c2c8377f579eea68477a15d67bd20ddd4b29328cfe15c62c7b3fd  ncurses-6.4-20230603.tar.gz
+ # Locally computed
+ sha256  0413b2f4ea863194c174673032f0fca84f1ea1ed4eed6476baea68c075a631ce  COPYING
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 4753da299c..3b805cb1fd 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -6,7 +6,7 @@
  
--MPG123_VERSION = 1.25.15
-+MPG123_VERSION = 1.31.3
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
--MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
-+MPG123_SITE = https://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_INSTALL_STAGING = YES
- MPG123_LICENSE = LGPL-2.1
- MPG123_LICENSE_FILES = COPYING
+ # When there is no snapshost yet for a new version, set it to the empty string
+ NCURSES_VERSION_MAJOR = 6.4
+-NCURSES_SNAPSHOT_DATE = 20230429
++NCURSES_SNAPSHOT_DATE = 20230603
+ NCURSES_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),-$(NCURSES_SNAPSHOT_DATE))
+ NCURSES_VERSION_GIT = $(subst .,_,$(subst -,_,$(NCURSES_VERSION)))
+ NCURSES_SITE = $(call github,ThomasDickey,ncurses-snapshots,v$(NCURSES_VERSION_GIT))
 -- 
 2.39.2
 
