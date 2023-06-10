@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2883C83005
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 14:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6002EC7EE29
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 14:10:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6970160BA6;
-	Sat, 10 Jun 2023 14:08:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6970160BA6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07E2760BE6;
+	Sat, 10 Jun 2023 14:10:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07E2760BE6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XztZXKJcsd-N; Sat, 10 Jun 2023 14:08:04 +0000 (UTC)
+	with ESMTP id Ubjn47RiS6Sf; Sat, 10 Jun 2023 14:10:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A48E160B5A;
-	Sat, 10 Jun 2023 14:08:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A48E160B5A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E44DC1BF33F
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 14:08:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FC6360BA6;
+	Sat, 10 Jun 2023 14:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FC6360BA6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BC7C61BF33F
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 14:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDC2140143
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 14:08:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDC2140143
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9499A41DF8
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 14:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9499A41DF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aROYKAuCUFjI for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 14:08:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X2NuMf9W-2lt for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 14:10:23 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07AF6400DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D82341DF5
 Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 07AF6400DD
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 14:07:59 +0000 (UTC)
-Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
- by mailout07.t-online.de (Postfix) with SMTP id 16A2A13234
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 16:07:57 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd83.t-online.de
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6D82341DF5
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 14:10:23 +0000 (UTC)
+Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
+ by mailout07.t-online.de (Postfix) with SMTP id 6B5F9429FC
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 16:10:21 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd88.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q7zFn-0Clwqv0; Sat, 10 Jun 2023 16:07:43 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48142)
+ esmtp id 1q7zIJ-3Xt4jJ0; Sat, 10 Jun 2023 16:10:19 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60324)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q7zFn-0007vR-0O
- for buildroot@buildroot.org; Sat, 10 Jun 2023 16:07:43 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q7zII-0008Mv-2d
+ for buildroot@buildroot.org; Sat, 10 Jun 2023 16:10:18 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 10 Jun 2023 16:07:43 +0200
-Message-Id: <20230610140743.900775-1-bernd.kuhls@t-online.de>
+Date: Sat, 10 Jun 2023 16:10:18 +0200
+Message-Id: <20230610141018.901645-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686406063-95268480-9208DBD1/0/0 CLEAN NORMAL
-X-TOI-MSGID: be08db23-b2dc-49e5-b7e0-67d4f0e92d1b
-Subject: [Buildroot] [PATCH 1/1] package/ethtool: bump version to 6.3
+X-TOI-EXPURGATEID: 150726::1686406219-13FFFE62-CF45BB98/0/0 CLEAN NORMAL
+X-TOI-MSGID: 769dc93e-d7ec-4bf3-90d0-bf6ef4b6f257
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,38 +71,39 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS
+https://sourceforge.net/p/fetchmail/mailman/message/37770051/
+https://sourceforge.net/p/fetchmail/mailman/message/37783197/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fetchmail/fetchmail.hash | 4 ++--
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 846ca7efc3..905b47fb06 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  86df0114064d4d73f6bf72bf03e85c33964a519ee0c1d1ba65005ad2d0e570e1  ethtool-6.2.tar.xz
-+sha256  d9425f0a3df138734001fccc4175fe178c025f938460ac25c4ebc39960168822  ethtool-6.3.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index a35e274bc4..9f1ef19e7b 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index bb03dcf94a..9ca6b2c7a7 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/37756758/
+-sha256  7b0b56cbc0fca854504f167795fab532d5a54d5a7d3b6e3e36a33f34a0960a01  fetchmail-6.4.35.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/37783197/
++sha256  4a182e5d893e9abe6ac37ae71e542651fce6d606234fc735c2aaae18657e69ea  fetchmail-6.4.37.tar.xz
+ # Locally computed:
+ sha256  6d87443b61041067a5eddb2cabf8aebff15b8b40771ad6b5e4754e607ec21b39  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index d6053508a5..6d418f9739 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ETHTOOL_VERSION = 6.2
-+ETHTOOL_VERSION = 6.3
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).35
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).37
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 -- 
 2.39.2
 
