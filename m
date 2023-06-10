@@ -4,85 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC2D3C7EE2F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 12:08:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5ECFC7EE2F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 12:08:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED0DF405AB;
-	Sat, 10 Jun 2023 12:08:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED0DF405AB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DBD140195;
+	Sat, 10 Jun 2023 12:08:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DBD140195
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9jWxjYl2gaZx; Sat, 10 Jun 2023 12:08:27 +0000 (UTC)
+	with ESMTP id GDcR6yluIguj; Sat, 10 Jun 2023 12:08:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 30FCF40195;
-	Sat, 10 Jun 2023 12:08:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30FCF40195
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D92A11BF377
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 12:08:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 38105405C0;
+	Sat, 10 Jun 2023 12:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38105405C0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 939711BF377
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 12:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFBF58429D
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 12:08:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFBF58429D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CAA460C02
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 12:08:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CAA460C02
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zjJI0bP0zYAH for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 12:08:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EUYnCCxY6trK for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 12:08:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D5C084298
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
- [IPv6:2607:f8b0:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6D5C084298
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 12:08:22 +0000 (UTC)
-Received: by mail-pl1-x629.google.com with SMTP id
- d9443c01a7336-1b24cd75989so12774445ad.1
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 05:08:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FC2560AB0
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
+ [IPv6:2607:f8b0:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6FC2560AB0
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 12:08:23 +0000 (UTC)
+Received: by mail-pl1-x634.google.com with SMTP id
+ d9443c01a7336-1b3b56dcf1bso662755ad.2
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 05:08:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686398901; x=1688990901;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+tVsCgGFcBbuZblebA0/LFx4inNTxZrI2QIKpP/G9C4=;
- b=Ls8xcxK82A7DSSRfIH6rMbX0ceooYR94Dk6fOr7CDQKbRT9n6o1+mCOH7dr8AGxb/w
- QQUIj+Rk+zLEuDC+nU4Ca3f6AXXEloIKTvbBYduRx+fH7NKN83XggsoFD7uBk2bNK76r
- MnCg0UTp6ifcJ1nL1ssleOx4JchUpjbMfDP10NlSbigoyRF+05cP/8AtRnA1FW7+vgJ+
- GNT00TQOHNd6vsC3pLRO6CUmp3M5VCv1XmgpUIzwt08A2eVcmaTGb92e0PPngdDqZ69K
- aqOE4WWsF595wX4N1p+KcdHF05Qj82o9xHyKKJT5DC/KH1D6uC8weopcIVKs1H7xsntF
- pEhQ==
-X-Gm-Message-State: AC+VfDwl0ffryOBRP5Vm9Y8VV6DgcRU9ehxVx/e2z0eZx/7dYuovr6QS
- +kGvHMrlhOgf2lVnLS5olTG9MRGS/LRt85HDVvFzlw==
-X-Google-Smtp-Source: ACHHUZ4zebT33IjXpVnDf57H/zV28w0jVofeJCIjCxTHlMRQezggzm51iPBnAsYs/ty2aFzNIZJRKg==
-X-Received: by 2002:a17:902:74c2:b0:1a6:ff51:270 with SMTP id
- f2-20020a17090274c200b001a6ff510270mr1756286plt.29.1686398901502; 
- Sat, 10 Jun 2023 05:08:21 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1686398902; x=1688990902;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=vBe3I0j2SasFk5J5vGUij4sUigBYJFguCY0hyJPeedY=;
+ b=jnpobMcOLDAt6SqLKG6nGxXtGb4RHMKVbeZcBtXpNf1Juf3jnlqqr5Im5UQXZsuTi/
+ C3z+yzZekolNTmSRtX9DB0TGcIVpUeviGfDlQg1PFIYODHp/Tf4mvX6yJx0DImUwSb2/
+ jWAMFLsHbJB+79ajV3MSic+j7eOFIPNO1zerNeXmYmsS3H7yIFHsLPLP5zWDZw40HE4J
+ v4INfxiBVQVwtcph4zve8QV2G2SJ74mAyy5fO6SbdzCZnxK+rGkQZOWZpneKswwvhbyO
+ E+TOc3fE4I/526F7RD4LvZeGsCrHfYDxjJnEYwPR7gC6zerIPv4mShZibYi5Wub5J8ft
+ cWiA==
+X-Gm-Message-State: AC+VfDwDVPu+hV11ZDTMWvLusQGUSf9cUJWV1fj4FmJbiXfYQzAhO4qL
+ AU7R0A/NCEKJ+VoFYefWLadw2MDnrHI4OyNx5fFjKapi
+X-Google-Smtp-Source: ACHHUZ5srSjPow+dTbJu1XpUmE1swXRd+SEXXgUKACe4y1HFlyZGfU5HjaCzVGMeMeXVBvwKNyr/lQ==
+X-Received: by 2002:a17:902:da84:b0:1ae:10b3:61e9 with SMTP id
+ j4-20020a170902da8400b001ae10b361e9mr1958478plx.65.1686398902574; 
+ Sat, 10 Jun 2023 05:08:22 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- jj12-20020a170903048c00b001ac2c3e54adsm4894219plb.118.2023.06.10.05.08.20
+ jj12-20020a170903048c00b001ac2c3e54adsm4894219plb.118.2023.06.10.05.08.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Jun 2023 05:08:20 -0700 (PDT)
+ Sat, 10 Jun 2023 05:08:22 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat, 10 Jun 2023 05:08:17 -0700
-Message-ID: <20230610120818.968354-1-christian@aperture.us>
+Date: Sat, 10 Jun 2023 05:08:18 -0700
+Message-ID: <20230610120818.968354-2-christian@aperture.us>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230610120818.968354-1-christian@aperture.us>
+References: <20230610120818.968354-1-christian@aperture.us>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1686398901; x=1688990901;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+tVsCgGFcBbuZblebA0/LFx4inNTxZrI2QIKpP/G9C4=;
- b=nXXSZ/wOYz7wkeDlpNKKSuo+EKlh0a21L7yXyOydx2kT26lF13txcdnpnBSJ5RBFOD
- hANlUu0mVUmDHCyYuyRvWWOAD08kJroP7brcgEH4yKxl6FHLSzpuc5KQS5/72ZRbHNb5
- REDvopr570b79ZcuWclcb3PSeWSeqBLPc5EoBERgepHMTgnVagp39NPY513Q9011FEcy
- DBZbuV9fE4rcrQ3973QolOKpQF2d2JqdyQnRVGE5+0ct0ZEnrDJGEEWPP2nuxyjrVfF/
- 7SVsTab+7OLfZDjY2VALJA43GjkP3DMM1sFBE2xbDAW/hOyZ1r2YCviLCjpXnO91fwf4
- Oz6w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=aperture.us; s=google; t=1686398902; x=1688990902;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=vBe3I0j2SasFk5J5vGUij4sUigBYJFguCY0hyJPeedY=;
+ b=G6mhtkdjiVzExo0/gwaK70LMa+x5JQlm3kOH9//jLjI6oksllzv9n96aaKkt5JOgUW
+ BLZPxwIyMFbz84WM+Zai9s9xWvdJkNsC+CnnzRc4CWA8ruDDtIx/b1ApvzDUhNk6OROt
+ D+2RhEAyd0GFys1N4y4105m43h1FXJzSMvwm832g+QyT4/DFkQCSuIDPcIhphO4Whwkt
+ Ng+tlD4yY9K5y57GTnm10e/YbNxp+VkA2Fhshm1fWyQR4UW5/gtqqDa86ciOg/u4kZkX
+ rDCsznRJFBDfJHPkY0iX7Wc7ymExZlLyfITxUWlvFtXCMIdBkmA3uSVzLGs9IOFM+All
+ ebHg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=nXXSZ/wO
-Subject: [Buildroot] [PATCH 1/2] package/docker-engine: bump version to
- v24.0.2
+ header.a=rsa-sha256 header.s=google header.b=G6mhtkdj
+Subject: [Buildroot] [PATCH 2/2] package/docker-cli: bump version to v24.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,46 +110,48 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 v24.0.0 release notes:
 
 https://github.com/moby/moby/releases/tag/v24.0.0
-https://github.com/moby/moby/issues?q=is%3Aclosed+milestone%3A24.0.0
+https://github.com/docker/cli/issues?q=is%3Aclosed+milestone%3A24.0.0
 
 v24.0.1 patch release notes:
 
 https://github.com/moby/moby/releases/tag/v24.0.1
-https://github.com/moby/moby/issues?q=is%3Aclosed+milestone%3A24.0.1
+https://github.com/docker/cli/releases/tag/v24.0.1
+https://github.com/docker/cli/issues?q=is%3Aclosed+milestone%3A24.0.1
 
 v24.0.2 patch release notes:
 
 https://github.com/moby/moby/releases/tag/v24.0.2
-https://github.com/moby/moby/issues?q=is%3Aclosed+milestone%3A24.0.2
+https://github.com/docker/cli/releases/tag/v24.0.2
+https://github.com/docker/cli/issues?q=is%3Aclosed+milestone%3A24.0.2
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 092ec989cf..b6729ab660 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index e9e9a18cb1..dd5d598278 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  f502eba135828ae52cefb12f1c74092c8865e39cb94f5daed0f3f6717a8d50a3  docker-engine-23.0.5.tar.gz
-+sha256  f4bc7d7cc2ee3671371ae80fd624e61f0598e614b5c235012581f8ec1d593aa0  docker-engine-24.0.2.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index f904793aa2..8127689e9e 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+-sha256  2d6599783d447ac56d4caa482e9d8f09ad9e6f91ba2be6707bc107be04f89ddd  docker-cli-23.0.5.tar.gz
++sha256  632357aa58d7f5e16ce87dbd73641c5f65c25b6501e3917ac4f0ce553a01e0bc  docker-cli-24.0.2.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 522971ac98..ddd3e7bf91 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 23.0.5
-+DOCKER_ENGINE_VERSION = 24.0.2
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+-DOCKER_CLI_VERSION = 23.0.5
++DOCKER_CLI_VERSION = 24.0.2
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_CLI_LICENSE = Apache-2.0
 -- 
 2.41.0
 
