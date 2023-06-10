@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D36B9C7EE29
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 15:53:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DEEDC7EE29
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 16:29:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43A4B813C7;
-	Sat, 10 Jun 2023 15:53:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43A4B813C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B1D442668;
+	Sat, 10 Jun 2023 16:29:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B1D442668
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7fUnS4HSXwY8; Sat, 10 Jun 2023 15:53:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L1LJL1GAXeV9; Sat, 10 Jun 2023 16:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C876813A3;
-	Sat, 10 Jun 2023 15:53:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C876813A3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B0B601BF38C
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 15:53:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F11B42649;
+	Sat, 10 Jun 2023 16:29:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F11B42649
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C6FC1BF32E
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 16:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83939404ED
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 15:53:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83939404ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9A4B60F53
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 16:29:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9A4B60F53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id auu55hgo5DPv for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 15:53:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1wzXomtd9bNK for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 16:29:48 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E15ED40260
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E15ED40260
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 15:53:30 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout05.t-online.de (Postfix) with SMTP id 7C28F9BD8
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 17:53:28 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd85.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8ADE60F4D
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B8ADE60F4D
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 16:29:48 +0000 (UTC)
+Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
+ by mailout06.t-online.de (Postfix) with SMTP id 76C2722F88
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 18:29:45 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd78.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q80u4-11HRoH0; Sat, 10 Jun 2023 17:53:24 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60468)
+ esmtp id 1q81TB-4ONlb70; Sat, 10 Jun 2023 18:29:41 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52826)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q80u3-0001OP-2P
- for buildroot@buildroot.org; Sat, 10 Jun 2023 17:53:23 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q81TB-0007g8-0K
+ for buildroot@buildroot.org; Sat, 10 Jun 2023 18:29:41 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 10 Jun 2023 17:53:23 +0200
-Message-Id: <20230610155323.968228-1-bernd.kuhls@t-online.de>
+Date: Sat, 10 Jun 2023 18:29:41 +0200
+Message-Id: <20230610162941.1013899-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686412404-AFD93DAB-58E9F18E/0/0 CLEAN NORMAL
-X-TOI-MSGID: 50b50e5a-9b39-41cb-b472-f389fd3ed2b5
-Subject: [Buildroot] [PATCH 1/1] package/gnutls: bump version to 3.8.0
+X-TOI-EXPURGATEID: 150726::1686414581-097C5714-DF877A9C/0/0 CLEAN NORMAL
+X-TOI-MSGID: 4bae193c-ddb9-41d4-8dc2-2b2945116d4e
+Subject: [Buildroot] [PATCH 1/1] package/icu: bump version to 73-1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,65 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updated license hashes due to upstream commit:
-"Sync GPL/LGPL license files from Gnulib"
-https://github.com/gnutls/gnutls/commit/a39e528897184c6f6a33d245b82891a8dc8090ce
+Updated license hash due to copyright year bump:
+https://github.com/unicode-org/icu/commit/9e16711b54d055cad10f7dc59f19d124ca6618be
 
-Removed configure options related to guile which were removed upstream:
-https://github.com/gnutls/gnutls/commit/100cc2a706b8e097cbeb63d08c7ea59717c906ca
+Release notes:
+https://icu.unicode.org/download/71
+https://icu.unicode.org/download/72
+https://icu.unicode.org/download/73
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gnutls/gnutls.hash | 8 ++++----
- package/gnutls/gnutls.mk   | 6 ++----
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/icu/icu.hash | 4 ++--
+ package/icu/icu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 303f1351e0..2f6dba9d3c 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz.sig
--sha256  c58ad39af0670efe6a8aee5e3a8b2331a1200418b64b7c51977fb396d4617114  gnutls-3.7.8.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.0.tar.xz.sig
-+sha256  0ea0d11a1660a1e63f960f157b197abe6d0c8cb3255be24e1fb3815930b9bdc5  gnutls-3.8.0.tar.xz
- # Locally calculated
--sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
--sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 6e2cc501ef..d6b8b229bd 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
--GNUTLS_VERSION_MAJOR = 3.7
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
-+GNUTLS_VERSION_MAJOR = 3.8
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).0
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
-@@ -16,7 +16,6 @@ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 libunistring nettle
- GNUTLS_CPE_ID_VENDOR = gnu
- GNUTLS_CONF_OPTS = \
- 	--disable-doc \
--	--disable-guile \
- 	--disable-libdane \
- 	--disable-rpath \
- 	--disable-tests \
-@@ -44,7 +43,6 @@ GNUTLS_INSTALL_STAGING = YES
- HOST_GNUTLS_DEPENDENCIES = host-pkgconf host-libtasn1 host-libunistring host-nettle
- HOST_GNUTLS_CONF_OPTS = \
- 	--disable-doc \
--	--disable-guile \
- 	--disable-libdane \
- 	--disable-rpath \
- 	--disable-tests \
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 56a0a5dd53..77d5a9269c 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8d205428c17bf13bb535300669ed28b338a157b1c01ae66d31d0d3e2d47c3fd5  icu4c-70_1-src.tgz
+-sha256  861671f8c712aa046f8f5ac89239e6c33821636516c5d0cc8c4e1973085f27a6  LICENSE
++sha256  a457431de164b4aa7eca00ed134d00dfbf88a77c6986a10ae7774fc076bb8c45  icu4c-73_1-src.tgz
++sha256  f3005e195ff74d8812cc1f182a1c446fab678d70a10e3dada497585befee5416  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 8107796ae9..96ac5cef61 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,7 +7,7 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 70-1
++ICU_VERSION = 73-1
+ ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = \
+ 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
 -- 
 2.39.2
 
