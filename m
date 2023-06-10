@@ -4,74 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9297BC7EE37
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 13:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE88EC7EE2F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 13:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A45E60E6B;
-	Sat, 10 Jun 2023 13:33:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A45E60E6B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FBEC60E63;
+	Sat, 10 Jun 2023 13:53:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FBEC60E63
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HEId0tLkjWKR; Sat, 10 Jun 2023 13:33:41 +0000 (UTC)
+	with ESMTP id Ul3EMjxnx5HH; Sat, 10 Jun 2023 13:53:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA3B260F40;
-	Sat, 10 Jun 2023 13:33:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA3B260F40
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E74B1BF343
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 13:33:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92A2C60BA6;
+	Sat, 10 Jun 2023 13:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92A2C60BA6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BF891BF343
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 13:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0EA5D4258D
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 13:33:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EA5D4258D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6593083B23
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 13:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6593083B23
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sRW6knqy3fp9 for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 13:33:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SVl2KDcCbtlj for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 13:53:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93BA34258C
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com
- [209.85.208.48])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 93BA34258C
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 13:33:03 +0000 (UTC)
-Received: by mail-ed1-f48.google.com with SMTP id
- 4fb4d7f45d1cf-5149390b20aso4650387a12.3
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 06:33:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08FC483B01
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 08FC483B01
+ for <buildroot@busybox.net>; Sat, 10 Jun 2023 13:53:15 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-3f732d37d7bso19694715e9.0
+ for <buildroot@busybox.net>; Sat, 10 Jun 2023 06:53:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686403981; x=1688995981;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=MskS0P0rc8cFTTgyNlicvztAgkmjCSRSm+AuRlpSFCc=;
- b=EJYi2V2mJhZKd6+ekoCE28GPfwZd5Gl/WrLQ7Jhg5P5IwpMLNrlKeyrL18T8+56GvI
- FZXUUIxyZxQ3xSSI4KR419t1D0D2YC9GFj4QMRipWvrQNHIlhNZyi94TIyKEVEVZ3yks
- PJQbLOBaIAj2IMlhXEd6mYtBS9vaF7LcjV2nIh+MgGVsjFBFV+x6BIEfjazB+fGggCWJ
- MhKyt/6TDs/Omv9sIzcwnYJCO0hYQA7rkFpUHSALsRnKhnYFNrY7y/jTTx56pS8cvCEQ
- 0GT9O2swXK2ly596b0+m5YJzJUSjE3ZIf4CwQFaAoQDXIj/QoFydGkQjnKj6PiCtBfHE
- n7zg==
-X-Gm-Message-State: AC+VfDxlpPrwhT52FLVdezvC9m5fTrgc+4K3vxkWxPRuJHo0AVEsSr0M
- dTkgWn7TGz8M50b2n5OfRvJOQRYUU9Y3Cg==
-X-Google-Smtp-Source: ACHHUZ77E6CPGUmwNIeOY/Sj4DqGVedHTkXIA16BPDVrmUk9SW6yYHqPLlj55kRWKFtT060PJCAnsA==
-X-Received: by 2002:a17:907:6e26:b0:96f:912d:7922 with SMTP id
- sd38-20020a1709076e2600b0096f912d7922mr5397997ejc.53.1686403980978; 
- Sat, 10 Jun 2023 06:33:00 -0700 (PDT)
-Received: from localhost.localdomain
- ([2a02:a03f:eb68:2f00:9ac8:47a3:9e97:6ffe])
+ d=1e100.net; s=20221208; t=1686405194; x=1688997194;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=BUOhqRu2qay6sTJeY0G5Of2E3s193h5F8aeoNkToMfU=;
+ b=kA2BbO8O1xUfJHZqaWBsnA1Uzrp/j1vSlDIu3JKALS82iqDKpQ0HJUv/H8bOVmpR1x
+ ePKZb+vtnsTrZwi73Iub6Seb57vpeyt5dfaxfxqOtzZ3Ah5CRQBLk6IXQVxiVsHQetkT
+ H7hqHVP7ud08dPASdQTQstnjsdhKwL+0uD2nc5UFxKHdRsTyUDBFMd7pJkA43hingbTk
+ HT8DwkUNsXvT6c8md4oSs5ANVeJV0UcyBo8Amhq+EHUZ4GXtswE9Ye1DDMo8R1t3wcIe
+ MVfxORAmJNmHSsEuaL3Drgb70vsZQUoexo9ZBEYdot6jO4d/osI4ThdJK+0gpAOiBjIF
+ TkoQ==
+X-Gm-Message-State: AC+VfDw4hwj8iq1JzOf0aYCDFm59aPdI0eEPaevBJ1QyJ7OTyOdA1vnE
+ r9FWyuqeqVEcj7PMy7T0GYemReU8/hw=
+X-Google-Smtp-Source: ACHHUZ5JFQBjMsDHPMWif/5R1p5nTV8lygVT1f7XkpKvdLqmy+yTBF/2ZzM0mTF2zCc/shzMR7cMyQ==
+X-Received: by 2002:a1c:7903:0:b0:3f5:60b:33 with SMTP id
+ l3-20020a1c7903000000b003f5060b0033mr2451277wme.5.1686405193508; 
+ Sat, 10 Jun 2023 06:53:13 -0700 (PDT)
+Received: from vm.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- i23-20020a1709061cd700b0094f07545d40sm2559774ejh.220.2023.06.10.06.33.00
+ z15-20020a7bc7cf000000b003f6129d2e30sm5833564wmk.1.2023.06.10.06.53.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Jun 2023 06:33:00 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Date: Sat, 10 Jun 2023 15:32:51 +0200
-Message-Id: <20230610133251.97022-4-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230610133251.97022-1-thomas@devoogdt.com>
-References: <20230610133251.97022-1-thomas@devoogdt.com>
+ Sat, 10 Jun 2023 06:53:13 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sat, 10 Jun 2023 15:53:06 +0200
+Message-Id: <20230610135307.1721115-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 4/4] package/fluent-bit: rework wasm handling
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1686405194; x=1688997194;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=BUOhqRu2qay6sTJeY0G5Of2E3s193h5F8aeoNkToMfU=;
+ b=PqYBksg15uSQrTOGjtW58wdOCefXfQFTPNM73QYJEslP4FHP9I2HU0gzzF0jjVXeU1
+ YrQ0M5SBo+M37okLj4B0TTS+d38+Yh2KlSyJtfo1JVZIqZaD7bkNOdtoSCy1hF/5MMja
+ s4oU2dCENS4y2vCQBorET9MZy1pRenKuUw/Ig7BXOfFb8O3uMca2bWc23ZwmfH9pUKUS
+ EmREsM+b1+uvEen94051dRtVMOQgJaKeGXiwyPn7chYn50MAo+nPMULMWtc9YYf2ohJz
+ 2cpz5JNgMU4rR+8lX8a1unjTsKLVCJMrBcXCzQBVaG/fRXKd5LcdgahyctH/Qi0idWRf
+ mHHw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=PqYBksg1
+Subject: [Buildroot] [PATCH] package/mc: bump to version 4.8.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,174 +95,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fluent-bit isn't very great at supporting the various architectures,
-so help a little bit by defining the WAMR_BUILD_TARGET ourselves.
-
-./utils/test-pkg -c fluent-bit.config -p fluent-bit -a
-                             arm-aarch64 [ 1/45]: OK
-                   bootlin-aarch64-glibc [ 2/45]: OK
-               bootlin-arcle-hs38-uclibc [ 3/45]: OK
-                    bootlin-armv5-uclibc [ 4/45]: OK
-                     bootlin-armv7-glibc [ 5/45]: OK
-                   bootlin-armv7m-uclibc [ 6/45]: SKIPPED
-                      bootlin-armv7-musl [ 7/45]: OK
-                bootlin-m68k-5208-uclibc [ 8/45]: SKIPPED
-               bootlin-m68k-68040-uclibc [ 9/45]: OK
-             bootlin-microblazeel-uclibc [10/45]: OK
-                bootlin-mipsel32r6-glibc [11/45]: OK
-                   bootlin-mipsel-uclibc [12/45]: OK
-                     bootlin-nios2-glibc [13/45]: OK
-                 bootlin-openrisc-uclibc [14/45]: OK
-        bootlin-powerpc64le-power8-glibc [15/45]: OK
-           bootlin-powerpc-e500mc-uclibc [16/45]: OK
-                   bootlin-riscv32-glibc [17/45]: OK
-                   bootlin-riscv64-glibc [18/45]: OK
-                    bootlin-riscv64-musl [19/45]: OK
-                 bootlin-s390x-z13-glibc [20/45]: OK
-                      bootlin-sh4-uclibc [21/45]: OK
-                   bootlin-sparc64-glibc [22/45]: OK
-                    bootlin-sparc-uclibc [23/45]: SKIPPED
-                    bootlin-x86-64-glibc [24/45]: OK
-                     bootlin-x86-64-musl [25/45]: OK
-                   bootlin-x86-64-uclibc [26/45]: OK
-                   bootlin-xtensa-uclibc [27/45]: OK
-                            br-arm-basic [28/45]: OK
-                    br-arm-full-nothread [29/45]: SKIPPED
-                      br-arm-full-static [30/45]: SKIPPED
-                   br-i386-pentium4-full [31/45]: OK
-                br-i386-pentium-mmx-musl [32/45]: OK
-                      br-mips64-n64-full [33/45]: OK
-                 br-mips64r6-el-hf-glibc [34/45]: OK
-               br-powerpc-603e-basic-cpp [35/45]: OK
-               br-powerpc64-power7-glibc [36/45]: OK
-                       linaro-aarch64-be [37/45]: OK
-                          linaro-aarch64 [38/45]: OK
-                              linaro-arm [39/45]: OK
-                     sourcery-arm-armv4t [40/45]: OK
-                            sourcery-arm [41/45]: OK
-                     sourcery-arm-thumb2 [42/45]: OK
-                         sourcery-mips64 [43/45]: FAILED
-                           sourcery-mips [44/45]: FAILED
-                          sourcery-nios2 [45/45]: OK
-
-Two failures:
-
-- sourcery-mips64:
-
-core/iwasm/common/arch/invokeNative_mips.s: Assembler messages:
-core/iwasm/common/arch/invokeNative_mips.s:58: Error: opcode not supported on this processor: mips64r2 (mips64r2) `ldc1 $f12,0($sp)'
-core/iwasm/common/arch/invokeNative_mips.s:59: Error: opcode not supported on this processor: mips64r2 (mips64r2) `ldc1 $f14,8($sp)'
-make[4]: *** [src/wasm/CMakeFiles/vmlib-static.dir/build.make:495: src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.1.1/core/iwasm/common/arch/invokeNative_mips.s.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-
-- sourcery-mips:
-
-core/iwasm/common/arch/invokeNative_mips.s: Assembler messages:
-core/iwasm/common/arch/invokeNative_mips.s:58: Error: opcode not supported on this processor: mips32r2 (mips32r2) `ldc1 $f12,0($sp)'
-core/iwasm/common/arch/invokeNative_mips.s:59: Error: opcode not supported on this processor: mips32r2 (mips32r2) `ldc1 $f14,8($sp)'
-make[4]: *** [src/wasm/CMakeFiles/vmlib-static.dir/build.make:495: src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.1.1/core/iwasm/common/arch/invokeNative_mips.s.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-
-Fix see: https://github.com/bytecodealliance/wasm-micro-runtime/issues/625
-
->> Hi, building the invokeNative_general.c explicitly is supported now, please pull the latest code and use
->> "cmake -DWAMR_BUILD_INVOKE_NATIVE_GENERAL=1 ..." to build it.
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-v2: No change.
----
- package/fluent-bit/Config.in     | 25 -------------------------
- package/fluent-bit/fluent-bit.mk | 32 ++++++++++++++++++++++++++++++--
- 2 files changed, 30 insertions(+), 27 deletions(-)
+ package/mc/mc.hash | 4 ++--
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index bfdea895b0..dc477e9f39 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -11,31 +11,6 @@ config BR2_PACKAGE_FLUENT_BIT
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index b0381474f..5edfc7911 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,4 +1,4 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.28.sha256
+-sha256  e994d9be9a7172e9ac4a4ad62107921f6aa312e668b056dfe5b8bcebbaf53803  mc-4.8.28.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.29.sha256
++sha256  01d8a3b94f58180cca5bf17257b5078d1fd6fd27a9b5c0e970ec767549540ad4  mc-4.8.29.tar.xz
+ # sha256 locally computed:
+ sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index 3858d6288..894b23144 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/fluent/fluent-bit
- 
--if BR2_PACKAGE_FLUENT_BIT
--
--config BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
--	bool
--	# see lib/wasm-micro-runtime-WAMR-1.1.1/README.md#supported-architectures-and-platforms
--	default y if BR2_arc
--	default y if BR2_arm || BR2_armeb
--	default y if BR2_aarch64 || BR2_aarch64_be
--	default y if BR2_i386 || BR2_x86_64
--	default y if BR2_RISCV_64
--	default y if BR2_xtensa
--
--config BR2_PACKAGE_FLUENT_BIT_WASM
--	bool "wasm runtime support"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
--	help
--	  Support for WASM-based plugins.
--
--comment "wasm runtime support needs a toolchain w/ C++"
--	depends on BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP
--
--endif
--
- comment "fluent-bit needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 9df34efd78..46f7c603b5 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -22,8 +22,36 @@ FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_PREFER_SYSTEM_LIBS=Yes \
- 	-DFLB_BACKTRACE=No
- 
--ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
--FLUENT_BIT_CONF_OPTS += -DFLB_WASM=Yes
-+# WASM runtime support needs a toolchain w/ C++
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
-+FLUENT_BIT_WAMR_BUILD_TARGET = AARCH64
-+else ifeq ($(BR2_arcle)$(BR2_arceb),y)
-+FLUENT_BIT_WAMR_BUILD_TARGET = ARC
-+else ifeq ($(BR2_arm)$(BR2_armeb),y)
-+FLUENT_BIT_WAMR_BUILD_TARGET = ARM
-+else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-+FLUENT_BIT_WAMR_BUILD_TARGET = MIPS
-+# https://github.com/bytecodealliance/wasm-micro-runtime/issues/625
-+# Fix unknown opcode 'ldc1', seen on mips32r2 and mips64r2.
-+FLUENT_BIT_CONF_OPTS += \
-+	-DWAMR_BUILD_INVOKE_NATIVE_GENERAL=1
-+else ifeq ($(BR2_riscv)$(BR2_RISCV_32),yy)
-+FLUENT_BIT_WAMR_BUILD_TARGET = RISCV32
-+else ifeq ($(BR2_riscv)$(BR2_RISCV_64),yy)
-+FLUENT_BIT_WAMR_BUILD_TARGET = RISCV64
-+else ifeq ($(BR2_i386),y)
-+FLUENT_BIT_WAMR_BUILD_TARGET = X86_32
-+else ifeq ($(BR2_x86_64),y)
-+FLUENT_BIT_WAMR_BUILD_TARGET = X86_64
-+else ifeq ($(BR2_xtensa),y)
-+FLUENT_BIT_WAMR_BUILD_TARGET = XTENSA
-+endif
-+endif
-+
-+ifneq ($(FLUENT_BIT_WAMR_BUILD_TARGET),)
-+FLUENT_BIT_CONF_OPTS += -DFLB_WASM=Yes \
-+	-DWAMR_BUILD_TARGET=$(FLUENT_BIT_WAMR_BUILD_TARGET)
- else
- FLUENT_BIT_CONF_OPTS += -DFLB_WASM=No
- endif
+-MC_VERSION = 4.8.28
++MC_VERSION = 4.8.29
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
