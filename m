@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6B5C7EE2E
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 08:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5637C7EE43
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 08:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 860F6401ED;
-	Sat, 10 Jun 2023 08:35:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 860F6401ED
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F9AF400DD;
+	Sat, 10 Jun 2023 08:40:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F9AF400DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gmCwPvvzOlZk; Sat, 10 Jun 2023 08:35:39 +0000 (UTC)
+	with ESMTP id F2KZilGTo69s; Sat, 10 Jun 2023 08:40:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C21A840114;
-	Sat, 10 Jun 2023 08:35:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C21A840114
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3CB511BF35E
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 08:35:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB51D40114;
+	Sat, 10 Jun 2023 08:40:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB51D40114
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7003F1BF35E
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 08:40:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1687283BE7
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 08:35:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1687283BE7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 412CB424E1
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 08:40:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 412CB424E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bgD58ekLiLaR for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 08:35:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CpZqSOVR8J20 for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 08:40:01 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFC6383BE0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BFC6383BE0
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 08:35:34 +0000 (UTC)
-Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout10.t-online.de (Postfix) with SMTP id A66D137DEB;
- Sat, 10 Jun 2023 10:35:30 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd89.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5D1C424C2
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E5D1C424C2
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 08:40:00 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout03.t-online.de (Postfix) with SMTP id 81F34486B
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 10:39:58 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd80.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q7u4H-2E6OsT0; Sat, 10 Jun 2023 10:35:29 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50510)
+ esmtp id 1q7u8c-2OYoCX0; Sat, 10 Jun 2023 10:39:58 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35450)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q7u4G-0001Cs-2V;
- Sat, 10 Jun 2023 10:35:28 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q7u8b-0001y3-2X
+ for buildroot@buildroot.org; Sat, 10 Jun 2023 10:39:57 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 10 Jun 2023 10:35:28 +0200
-Message-Id: <20230610083528.3232068-1-bernd.kuhls@t-online.de>
+Date: Sat, 10 Jun 2023 10:39:57 +0200
+Message-Id: <20230610083957.3233937-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686386129-FBFE8283-C47A8837/0/0 CLEAN NORMAL
-X-TOI-MSGID: f3547c07-e5ed-49fa-84cf-aeda19e7f1f5
-Subject: [Buildroot] [PATCH 1/1] package/lcms2: bump version to 2.15
+X-TOI-EXPURGATEID: 150726::1686386398-FAFFF4D3-B547AB0C/0/0 CLEAN NORMAL
+X-TOI-MSGID: 36003162-617b-454a-a7bd-38e012ade411
+Subject: [Buildroot] [PATCH 1/1] package/leafpad: bump version to 0.8.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +65,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://littlecms.com/blog/2023/03/01/lcms2-2.15/
+Changelog: https://github.com/tarot231/leafpad/blob/main/ChangeLog
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/lcms2/lcms2.hash | 6 +++---
- package/lcms2/lcms2.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/leafpad/leafpad.hash | 2 +-
+ package/leafpad/leafpad.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
-index 700b9746f1..45728a36f1 100644
---- a/package/lcms2/lcms2.hash
-+++ b/package/lcms2/lcms2.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/lcms/files/lcms/2.14
--sha1  94350a2638fe58da736e8726048c859b46a69e6f  lcms2-2.14.tar.gz
-+# From https://sourceforge.net/projects/lcms/files/lcms/2.15
-+sha1  b143ff29b03676119dbca30f13cbed72af15cce8  lcms2-2.15.tar.gz
- # Locally computed:
--sha256  28474ea6f6591c4d4cee972123587001a4e6e353412a41b3e9e82219818d5740  lcms2-2.14.tar.gz
-+sha256  b20cbcbd0f503433be2a4e81462106fa61050a35074dc24a4e356792d971ab39  lcms2-2.15.tar.gz
- sha256  46d4e05af3bce75332a12d01f19bcce7e32b6bac544be28a64043d0231291e31  COPYING
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 743b0ec858..3892dbfbdc 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
+diff --git a/package/leafpad/leafpad.hash b/package/leafpad/leafpad.hash
+index e21c07ad2c..4f6e68f0a2 100644
+--- a/package/leafpad/leafpad.hash
++++ b/package/leafpad/leafpad.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  959d22ae07f22803bc66ff40d373a854532a6e4732680bf8a96a3fbcb9f80a2c  leafpad-0.8.18.1.tar.gz
++sha256  07d3f712f4dbd0a33251fd1dee14e21afdc9f92090fc768c11ab0ac556adbe97  leafpad-0.8.19.tar.gz
+ # Locally computed
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
+index c6c28d12e8..608fa37be4 100644
+--- a/package/leafpad/leafpad.mk
++++ b/package/leafpad/leafpad.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LCMS2_VERSION = 2.14
-+LCMS2_VERSION = 2.15
- LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = COPYING
+-LEAFPAD_VERSION = 0.8.18.1
++LEAFPAD_VERSION = 0.8.19
+ LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
+ LEAFPAD_DEPENDENCIES = libgtk2 host-intltool
+ LEAFPAD_LICENSE = GPL-2.0+
 -- 
 2.39.2
 
