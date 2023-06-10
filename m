@@ -4,56 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67757C7EE2E
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 08:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C5FBC7EE2E
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jun 2023 09:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0CF97400DD;
-	Sat, 10 Jun 2023 08:59:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CF97400DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1C964041C;
+	Sat, 10 Jun 2023 09:06:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1C964041C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2ri9ms3KvvBG; Sat, 10 Jun 2023 08:59:43 +0000 (UTC)
+	with ESMTP id IKWUWcuKh_me; Sat, 10 Jun 2023 09:06:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA83640114;
-	Sat, 10 Jun 2023 08:59:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA83640114
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 68FEE1BF2A7
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 08:59:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2DB8401ED;
+	Sat, 10 Jun 2023 09:06:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2DB8401ED
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FAC41BF3C5
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 09:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BD9360B71
- for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 08:59:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BD9360B71
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18497841D7
+ for <buildroot@lists.busybox.net>; Sat, 10 Jun 2023 09:06:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18497841D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uIQIpwhiDfcd for <buildroot@lists.busybox.net>;
- Sat, 10 Jun 2023 08:59:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1Rrg1tTnuZ_J for <buildroot@lists.busybox.net>;
+ Sat, 10 Jun 2023 09:06:11 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 855F560A63
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 855F560A63
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 08:59:38 +0000 (UTC)
-Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
- by mailout04.t-online.de (Postfix) with SMTP id 5B6C8D7DF
- for <buildroot@buildroot.org>; Sat, 10 Jun 2023 10:59:26 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd76.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00FEE841CA
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 00FEE841CA
+ for <buildroot@buildroot.org>; Sat, 10 Jun 2023 09:06:10 +0000 (UTC)
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout05.t-online.de (Postfix) with SMTP id BB3E41AC5F;
+ Sat, 10 Jun 2023 11:06:08 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd72.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q7uRR-0DNLVJ0; Sat, 10 Jun 2023 10:59:25 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38538)
+ esmtp id 1q7uXw-0umbA10; Sat, 10 Jun 2023 11:06:08 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34564)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q7uRQ-0005I8-2C
- for buildroot@buildroot.org; Sat, 10 Jun 2023 10:59:24 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q7uXw-0006We-0o;
+ Sat, 10 Jun 2023 11:06:08 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 10 Jun 2023 10:59:24 +0200
-Message-Id: <20230610085924.3246961-1-bernd.kuhls@t-online.de>
+Date: Sat, 10 Jun 2023 11:06:08 +0200
+Message-Id: <20230610090608.3255661-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686387565-157FD3A1-D28FB7DF/0/0 CLEAN NORMAL
-X-TOI-MSGID: b1689269-a46e-4387-89fe-00e931d843d1
-Subject: [Buildroot] [PATCH 1/1] package/libcodec2: bump version to 1.1.0
+X-TOI-EXPURGATEID: 150726::1686387968-5BFF457F-7F069068/0/0 CLEAN NORMAL
+X-TOI-MSGID: 09c49732-f730-4906-8fa4-ae75680e0322
+Subject: [Buildroot] [PATCH 1/1] package/libedit: bump version to
+ 20221030-3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,365 +66,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch which is included in this version.
+Rebased patch, switched _SITE to https.
 
-Release notes: https://github.com/drowe67/codec2/releases/tag/v1.1.0
+Changelog: https://www.thrysoee.dk/editline/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .checkpackageignore                       |   1 -
- package/libcodec2/0001-update-cmake.patch | 301 ----------------------
- package/libcodec2/libcodec2.hash          |   2 +-
- package/libcodec2/libcodec2.mk            |   2 +-
- 4 files changed, 2 insertions(+), 304 deletions(-)
- delete mode 100644 package/libcodec2/0001-update-cmake.patch
+ package/libedit/0001-check-bsd-functions-in-libbsd.patch | 8 ++++----
+ package/libedit/libedit.hash                             | 2 +-
+ package/libedit/libedit.mk                               | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 71a96a9116..754a6b0be0 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -708,7 +708,6 @@ package/libcec/0001-cecloader-h-fix-null-return.patch Upstream
- package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch Upstream
- package/libcgicc/0001-disable-documentation-option.patch Sob Upstream
- package/libclc/0001-support-out-of-tree-build.patch Upstream
--package/libcodec2/0001-update-cmake.patch Upstream
- package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch Upstream
- package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch Upstream
- package/libcuefile/0001-fix-static-link.patch Upstream
-diff --git a/package/libcodec2/0001-update-cmake.patch b/package/libcodec2/0001-update-cmake.patch
-deleted file mode 100644
-index e983800e27..0000000000
---- a/package/libcodec2/0001-update-cmake.patch
-+++ /dev/null
-@@ -1,301 +0,0 @@
--From 812d69af486e608a10380ed5817b03d08c6e786a Mon Sep 17 00:00:00 2001
--From: "A. Maitland Bottoms" <bottoms@debian.org>
--Date: Sun, 17 Jul 2022 17:04:44 -0400
--Subject: [PATCH] update cmake
--
--Some minor refactoring of Codec2 build to better use CMake
--features to improve readability ans maintainability.
--
--[Retrieved from:
--https://github.com/drowe67/codec2/commit/812d69af486e608a10380ed5817b03d08c6e786a]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CMakeLists.txt     | 48 +++++---------------------
-- src/CMakeLists.txt | 84 ++++++++++++++++++++++++----------------------
-- 2 files changed, 53 insertions(+), 79 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 54ac1f4f4..998af5ddf 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -5,19 +5,13 @@
-- # Please report questions, comments, problems, or patches to the freetel
-- # mailing list: https://lists.sourceforge.net/lists/listinfo/freetel-codec2
-- #
---set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum OS X deployment version")
---
---project(codec2)
---
---cmake_minimum_required(VERSION 3.0)
---
---# Set policies here, probably should move to cmake dir.
---if(POLICY CMP0075)
---    cmake_policy(SET CMP0075 NEW)
---endif()
---if(POLICY CMP0079)
---    cmake_policy(SET CMP0079 NEW)
---endif()
--+cmake_minimum_required(VERSION 3.13)
--+project(CODEC2
--+  VERSION 1.0.5
--+  DESCRIPTION "Next-Generation Digital Voice for Two-Way Radio"
--+  HOMEPAGE_URL "https://www.rowetel.com/codec2.html"
--+  LANGUAGES C
--+  )
-- 
-- include(GNUInstallDirs)
-- mark_as_advanced(CLEAR
--@@ -39,23 +33,6 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
--    "separate build directory and run cmake from there.")
-- endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
-- 
---#
---# Set project version information. This should probably be done via external
---# file at some point.
---#
---set(CODEC2_VERSION_MAJOR 1)
---set(CODEC2_VERSION_MINOR 0)
---# Set to patch level if needed, otherwise leave FALSE.
---# Must be positive (non-zero) if set, since 0 == FALSE in CMake.
---set(CODEC2_VERSION_PATCH 5)
---set(CODEC2_VERSION "${CODEC2_VERSION_MAJOR}.${CODEC2_VERSION_MINOR}")
---# Patch level version bumps should not change API/ABI.
---set(SOVERSION "${CODEC2_VERSION_MAJOR}.${CODEC2_VERSION_MINOR}")
---if(CODEC2_VERSION_PATCH)
---    set(CODEC2_VERSION "${CODEC2_VERSION}.${CODEC2_VERSION_PATCH}")
---endif()
---message(STATUS "codec2 version: ${CODEC2_VERSION}")
---
-- # Set default build type
-- if(NOT CMAKE_BUILD_TYPE)
--     set(CMAKE_BUILD_TYPE "Debug")
--@@ -65,6 +42,7 @@ endif()
-- if(BUILD_OSX_UNIVERSAL)
-- set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
-- endif(BUILD_OSX_UNIVERSAL)
--+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum OS X deployment version")
-- 
-- #
-- # Find the git hash if this is a working copy.
--@@ -190,10 +168,6 @@ if (_GNU_SOURCE)
--     add_definitions(-D_GNU_SOURCE=1)
-- endif()
-- 
---if(UNIX)
---    set(CMAKE_REQUIRED_LIBRARIES m)
---endif()
---
-- check_symbol_exists(floor  math.h   HAVE_FLOOR)
-- check_symbol_exists(ceil   math.h   HAVE_CEIL)
-- check_symbol_exists(pow    math.h   HAVE_POW)
--@@ -288,11 +262,7 @@ else()
-- endif()
-- 
-- # Return the date (yyyy-mm-dd)
---macro(DATE RESULT)
---  execute_process(COMMAND "date" "+%Y%m%d" OUTPUT_VARIABLE ${RESULT})
---endmacro()
---DATE(DATE_RESULT)
---string(REGEX REPLACE "\n$" "" DATE_RESULT "${DATE_RESULT}")
--+string(TIMESTAMP DATE_RESULT "%Y-%m-%d" UTC)
-- message(STATUS "Compilation date = XX${DATE_RESULT}XX")
-- 
-- set(CPACK_PACKAGE_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}-${DATE_RESULT}-${FREEDV_HASH}")
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 642404962..cb0990bc2 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -81,7 +81,7 @@ else(CMAKE_CROSSCOMPILING)
-- # Build code generator binaries. These do not get installed.
--     # generate_codebook
--     add_executable(generate_codebook generate_codebook.c)
---    target_link_libraries(generate_codebook m ${CMAKE_REQUIRED_LIBRARIES})
--+    target_link_libraries(generate_codebook m)
--     # Make native builds available for cross-compiling.
--     export(TARGETS generate_codebook
--         FILE ${CMAKE_BINARY_DIR}/ImportExecutables.cmake)
--@@ -238,12 +238,16 @@ set(CODEC2_PUBLIC_HEADERS
-- #
-- # Setup the codec2 library
-- #
--+# Patch level version bumps should not change API/ABI.
--+set(SOVERSION "${CODEC2_VERSION_MAJOR}.${CODEC2_VERSION_MINOR}")
--+message(STATUS "codec2 version: ${CODEC2_VERSION}")
-- add_library(codec2 ${CODEC2_SRCS})
-- if(UNIX)
---    target_link_libraries(codec2 m)
--+    target_link_libraries(codec2 PUBLIC m)
-- endif(UNIX)
-- if(LPCNET AND lpcnetfreedv_FOUND)
---    target_link_libraries(codec2 lpcnetfreedv)
--+    target_link_libraries(codec2 PRIVATE lpcnetfreedv)
--+    list(APPEND CODEC2_PUBLIC_HEADERS ${CMAKE_SOURCE_DIR}/lpcnet/src/lpcnet_freedv.h)
-- endif()
-- include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-- set_target_properties(codec2 PROPERTIES
--@@ -269,70 +273,70 @@ export(TARGETS codec2
-- )
-- 
-- add_executable(c2enc c2enc.c)
---target_link_libraries(c2enc ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(c2enc codec2)
-- 
-- add_executable(c2dec c2dec.c)
---target_link_libraries(c2dec ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(c2dec codec2)
-- 
-- add_executable(c2sim c2sim.c sd.c)
---target_link_libraries(c2sim ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(c2sim codec2)
-- 
-- add_executable(fdmdv_get_test_bits fdmdv_get_test_bits.c fdmdv.c kiss_fft.c codec2_fft.c kiss_fftr.c)
---target_link_libraries(fdmdv_get_test_bits m ${CMAKE_REQUIRED_LIBRARIES})
--+target_link_libraries(fdmdv_get_test_bits m)
-- 
-- add_executable(fdmdv_mod fdmdv_mod.c fdmdv.c kiss_fft.c codec2_fft.c kiss_fftr.c)
---target_link_libraries(fdmdv_mod m ${CMAKE_REQUIRED_LIBRARIES})
--+target_link_libraries(fdmdv_mod m)
-- 
-- add_executable(fdmdv_demod fdmdv_demod.c fdmdv.c kiss_fft.c octave.c modem_stats.c codec2_fft.c kiss_fftr.c)
---target_link_libraries(fdmdv_demod m ${CMAKE_REQUIRED_LIBRARIES})
--+target_link_libraries(fdmdv_demod m)
-- 
-- add_executable(fdmdv_put_test_bits fdmdv_put_test_bits.c fdmdv.c kiss_fft.c codec2_fft.c kiss_fftr.c)
---target_link_libraries(fdmdv_put_test_bits m ${CMAKE_REQUIRED_LIBRARIES})
--+target_link_libraries(fdmdv_put_test_bits m)
-- 
-- add_executable(fdmdv_channel fdmdv_channel.c)
---target_link_libraries(fdmdv_channel ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(fdmdv_channel codec2)
-- 
-- add_executable(insert_errors insert_errors.c)
---target_link_libraries(insert_errors ${CMAKE_REQUIRED_LIBRARIES})
--+target_link_libraries(insert_errors)
-- 
-- add_executable(freedv_tx freedv_tx.c)
---target_link_libraries(freedv_tx ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(freedv_tx codec2)
-- 
-- add_executable(freedv_rx freedv_rx.c)
---target_link_libraries(freedv_rx ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(freedv_rx codec2)
-- 
-- add_executable(freedv_data_raw_tx freedv_data_raw_tx.c)
---target_link_libraries(freedv_data_raw_tx ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(freedv_data_raw_tx codec2)
-- 
-- add_executable(freedv_data_raw_rx freedv_data_raw_rx.c octave.c)
---target_link_libraries(freedv_data_raw_rx ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(freedv_data_raw_rx codec2)
-- 
-- add_executable(freedv_data_tx freedv_data_tx.c)
---target_link_libraries(freedv_data_tx ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(freedv_data_tx codec2)
-- 
-- add_executable(freedv_data_rx freedv_data_rx.c)
---target_link_libraries(freedv_data_rx ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(freedv_data_rx codec2)
-- 
-- add_executable(freedv_mixed_tx freedv_mixed_tx.c)
---target_link_libraries(freedv_mixed_tx ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(freedv_mixed_tx codec2)
-- 
-- add_executable(freedv_mixed_rx freedv_mixed_rx.c)
---target_link_libraries(freedv_mixed_rx ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(freedv_mixed_rx codec2)
-- 
-- add_executable(fsk_mod fsk_mod.c)
---target_link_libraries(fsk_mod ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(fsk_mod codec2)
-- 
-- add_executable(fsk_mod_ext_vco fsk_mod_ext_vco.c)
---target_link_libraries(fsk_mod_ext_vco m ${CMAKE_REQUIRED_LIBRARIES})
--+target_link_libraries(fsk_mod_ext_vco m)
-- 
-- add_executable(fsk_demod fsk_demod.c modem_probe.c octave.c)
---target_link_libraries(fsk_demod ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(fsk_demod codec2)
-- 
-- add_executable(fsk_get_test_bits fsk_get_test_bits.c)
-- target_link_libraries(fsk_get_test_bits)
-- 
-- add_executable(fsk_put_test_bits fsk_put_test_bits.c)
---target_link_libraries(fsk_put_test_bits ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(fsk_put_test_bits codec2)
-- 
-- add_executable(framer framer.c)
-- target_link_libraries(framer)
--@@ -341,46 +345,46 @@ add_executable(deframer deframer.c)
-- target_link_libraries(deframer)
-- 
-- add_executable(fm_demod fm_demod.c fm.c)
---target_link_libraries(fm_demod m ${CMAKE_REQUIRED_LIBRARIES})
--+target_link_libraries(fm_demod m)
-- 
-- add_executable(cohpsk_mod cohpsk_mod.c)
---target_link_libraries(cohpsk_mod ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(cohpsk_mod codec2)
-- 
-- add_executable(ofdm_get_test_bits ofdm_get_test_bits.c)
---target_link_libraries(ofdm_get_test_bits ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(ofdm_get_test_bits codec2)
-- 
-- add_executable(ofdm_put_test_bits ofdm_put_test_bits.c)
---target_link_libraries(ofdm_put_test_bits ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(ofdm_put_test_bits codec2)
-- 
-- add_executable(ofdm_mod ofdm_mod.c)
---target_link_libraries(ofdm_mod ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(ofdm_mod codec2)
-- 
-- add_executable(ofdm_demod ofdm_demod.c octave.c)
---target_link_libraries(ofdm_demod ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(ofdm_demod codec2)
-- 
-- add_executable(fmfsk_mod fmfsk_mod.c)
---target_link_libraries(fmfsk_mod ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(fmfsk_mod codec2)
-- 
-- add_executable(fmfsk_demod fmfsk_demod.c modem_probe.c octave.c)
---target_link_libraries(fmfsk_demod ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(fmfsk_demod codec2)
-- 
-- add_executable(vhf_deframe_c2 vhf_deframe_c2.c)
---target_link_libraries(vhf_deframe_c2  ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(vhf_deframe_c2  codec2)
-- 
-- add_executable(vhf_frame_c2 vhf_frame_c2.c)
---target_link_libraries(vhf_frame_c2  ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(vhf_frame_c2  codec2)
-- 
-- add_executable(cohpsk_demod cohpsk_demod.c octave.c)
---target_link_libraries(cohpsk_demod ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(cohpsk_demod codec2)
-- 
-- add_executable(cohpsk_get_test_bits cohpsk_get_test_bits.c)
---target_link_libraries(cohpsk_get_test_bits ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(cohpsk_get_test_bits codec2)
-- 
-- add_executable(cohpsk_put_test_bits cohpsk_put_test_bits.c octave.c)
---target_link_libraries(cohpsk_put_test_bits ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(cohpsk_put_test_bits codec2)
-- 
-- add_executable(ch ch.c)
---target_link_libraries(ch ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(ch codec2)
-- 
-- add_executable(tollr tollr.c)
-- 
--@@ -388,10 +392,10 @@ add_executable(ldpc_noise ldpc_noise.c)
-- target_link_libraries(ldpc_noise m)
-- 
-- add_executable(ldpc_enc ldpc_enc.c)
---target_link_libraries(ldpc_enc ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(ldpc_enc codec2)
-- 
-- add_executable(ldpc_dec ldpc_dec.c)
---target_link_libraries(ldpc_dec ${CMAKE_REQUIRED_LIBRARIES} codec2)
--+target_link_libraries(ldpc_dec codec2)
-- 
-- install(TARGETS codec2 EXPORT codec2-config
--     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT lib
-diff --git a/package/libcodec2/libcodec2.hash b/package/libcodec2/libcodec2.hash
-index ba44aa015c..b2de750c34 100644
---- a/package/libcodec2/libcodec2.hash
-+++ b/package/libcodec2/libcodec2.hash
+diff --git a/package/libedit/0001-check-bsd-functions-in-libbsd.patch b/package/libedit/0001-check-bsd-functions-in-libbsd.patch
+index 0af9472f17..5f056ff5ad 100644
+--- a/package/libedit/0001-check-bsd-functions-in-libbsd.patch
++++ b/package/libedit/0001-check-bsd-functions-in-libbsd.patch
+@@ -3,20 +3,20 @@ configure: on Linux, the BSD functions require linking against libbsd
+ Signed-off-by: "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
+ (Rebased against 20210910-3.1)
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-(Rebased against 20150325-3.1)
++(Rebased against 20150325-3.1 & 20221030-3.1)
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ 
+ diff -durN libedit-20130712-3.1.orig/configure.ac libedit-20130712-3.1/configure.ac
+ --- libedit-20130712-3.1.orig/configure.ac	2013-07-12 20:39:22.000000000 +0200
+ +++ libedit-20130712-3.1/configure.ac	2013-07-28 23:35:35.012676469 +0200
+-@@ -117,6 +117,10 @@
++@@ -119,6 +119,10 @@
++ #AC_FUNC_MALLOC
+  #AC_FUNC_REALLOC
+- AC_TYPE_SIGNAL
+  AC_FUNC_STAT
+ +
+ +# Search for libbsd for *vis functions
+ +AC_CHECK_LIB([bsd], [vis])
+ +
+- AC_CHECK_FUNCS([endpwent isascii memchr memset re_comp regcomp strcasecmp strchr strcspn strdup strerror strrchr strstr strtol issetugid wcsdup strlcpy strlcat vis strvis strunvis __secure_getenv secure_getenv])
++ AC_CHECK_FUNCS([endpwent isascii memchr memset re_comp regcomp strcasecmp strchr strcspn strdup strerror strrchr strstr strtol issetugid wcsdup strlcpy strlcat vis strvis strunvis __secure_getenv secure_getenv reallocarr])
+ 
+  # strlcpy
+diff --git a/package/libedit/libedit.hash b/package/libedit/libedit.hash
+index 6d139730e8..2e7363d828 100644
+--- a/package/libedit/libedit.hash
++++ b/package/libedit/libedit.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  cd9a065dd1c3477f6172a0156294f767688847e4d170103d1f08b3a075f82826  libcodec2-1.0.5.tar.gz
-+sha256  d56ba661008a780b823d576a5a2742c94d0b0507574643a7d4f54c76134826a3  libcodec2-1.1.0.tar.gz
- sha256  9ebb6f82b7380a62ac74c5f0322c88e6744dedf2ebe1f54d6f088282b39844bf  COPYING
-diff --git a/package/libcodec2/libcodec2.mk b/package/libcodec2/libcodec2.mk
-index b97db8ff59..66758a1697 100644
---- a/package/libcodec2/libcodec2.mk
-+++ b/package/libcodec2/libcodec2.mk
-@@ -4,7 +4,7 @@
+-sha256  6792a6a992050762edcca28ff3318cdb7de37dccf7bc30db59fcd7017eed13c5  libedit-20210910-3.1.tar.gz
++sha256  f0925a5adf4b1bf116ee19766b7daa766917aec198747943b1c4edf67a4be2bb  libedit-20221030-3.1.tar.gz
+ sha256  9da6c9c74987a36c84302982799d17d2f748ba1c1c0c471425716173c1d07649  COPYING
+diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
+index 595a59f702..576a163173 100644
+--- a/package/libedit/libedit.mk
++++ b/package/libedit/libedit.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBCODEC2_VERSION = 1.0.5
-+LIBCODEC2_VERSION = 1.1.0
- LIBCODEC2_SITE = $(call github,drowe67,codec2,v$(LIBCODEC2_VERSION))
- LIBCODEC2_LICENSE = LGPL-2.1
- LIBCODEC2_LICENSE_FILES = COPYING
+-LIBEDIT_VERSION = 20210910-3.1
+-LIBEDIT_SITE = http://www.thrysoee.dk/editline
++LIBEDIT_VERSION = 20221030-3.1
++LIBEDIT_SITE = https://www.thrysoee.dk/editline
+ LIBEDIT_INSTALL_STAGING = YES
+ LIBEDIT_DEPENDENCIES = ncurses
+ LIBEDIT_LICENSE = BSD-3-Clause
 -- 
 2.39.2
 
