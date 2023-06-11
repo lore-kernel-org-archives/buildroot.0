@@ -1,69 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06342C7EE23
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 18:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C4FAC7EE2E
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 18:49:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4815F40BDE;
-	Sun, 11 Jun 2023 18:11:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4815F40BDE
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gxZDA9F7_GpZ; Sun, 11 Jun 2023 18:11:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 629A440BCB;
-	Sun, 11 Jun 2023 18:11:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 629A440BCB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DBD1F1BF27A
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 18:11:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC6C483112
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 18:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC6C483112
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16DE0822F5;
+	Sun, 11 Jun 2023 18:49:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16DE0822F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fBGwe1VDKx83 for <buildroot@lists.busybox.net>;
- Sun, 11 Jun 2023 18:11:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22DCF830DE
-Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 22DCF830DE
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 18:11:09 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.109.39])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 8PWtqB0zNgE4H8PWtqwGCX; Sun, 11 Jun 2023 20:11:08 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p8o21wSj8z40; Sun, 11 Jun 2023 18:49:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3086E81FCB;
+	Sun, 11 Jun 2023 18:49:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3086E81FCB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 647F21BF27A
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 18:49:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4BFDC402B1
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 18:49:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BFDC402B1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZP3TaIWz17X9 for <buildroot@lists.busybox.net>;
+ Sun, 11 Jun 2023 18:49:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A7FC400C8
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1A7FC400C8
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 18:49:35 +0000 (UTC)
+Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
+ by mailout01.t-online.de (Postfix) with SMTP id 34891FBCB;
+ Sun, 11 Jun 2023 20:49:32 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.180.237]) by fwd70.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1q8Q83-0Pkp0L0; Sun, 11 Jun 2023 20:49:31 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60046)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q8Q83-000219-1k;
+ Sun, 11 Jun 2023 20:49:31 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 11 Jun 2023 20:11:06 +0200
-Message-Id: <20230611181106.3454549-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <pan22fc181d07f22343b4@ID-313208.user.individual.net>
-References: <pan22fc181d07f22343b4@ID-313208.user.individual.net>
+Date: Sun, 11 Jun 2023 20:49:31 +0200
+Message-Id: <20230611184931.63796-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfG79uB8c4MOMaGIR0LetPOEqrdKOfaN/8zth4cjSRirmunUqQFZH6yzlrjUhuBCqG9PAy3n1Lira7Zg/c0UHdq57hCA3wYXH2U3aXwRucZWLdoVEssFb
- ZnDyqffH3Oxe5itF7crRUUO3v1Tbc9+Vw6DTqOsPOUJ0YoyWdlwKSEK6duOY/rzbtZcN62IF3V9cEwQ1JWUDZVDL3wZ8R1yqRlG0ZwDg6KAEpzzfUmOCq0iB
- JFUOMVBD/Hb9uwxtoUAmsCMr7fDovvAtmQvJwB3rh9jlz2/PBWWlJ25a2mtnNXiZFgmDYRmC4/GYOqxnq1uZOSb4tQd8dKIx+kSsZdLQl7pq59KMdT0mpZdi
- hF4WqTmY
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1686507068; bh=mreGP5bc+yM6EdlKMqWPPEU3oNhjN2VlX0PYTGvRXL0=;
- h=From:To:Subject:Date:MIME-Version;
- b=OCaSmmLykW7ZCyfFuiBFroi5VQqNfVOIOTc7pfitslJlLgZOyS56WomyFjFhuC5A1
- IDWfnVWBbCv+T/58Ex6LjO8hkHb7QSZ187thdxTwbpy8Rwjl9I9UO5Nlm3poQQx63Z
- /k/m+rp4EWD1RfImUxzAkF8lAIvR8iARgFokPTael80RwLeV0pAzBo6Q6QSVv2q9wd
- 1Y8pi5MQ/yeGJEFQCmnc5+DM4s0TOsRdgrixkx4ClBt8QvPw9/5OZCqcB0sCI+HjBp
- g/lBTWfYYVkYtfNfSQpWBIgtK0uK/nnzxMDpM5t2XorzQ2Fpoyoaf84/BOuH/1bpfB
- ne0E2TyolwGSg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=OCaSmmLy
-Subject: [Buildroot] [PATCH v2] package/libnss: bump version to 3.90
+X-TOI-EXPURGATEID: 150726::1686509372-96A47C57-C67C1742/0/0 CLEAN NORMAL
+X-TOI-MSGID: 7567ca53-99c1-47d0-8622-406b0e262835
+Subject: [Buildroot] [PATCH v2 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 23.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,96 +66,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Bernd Kuhls <bernd.kuhls@t-online.de>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch to fix build failure due to CURVE25519 used on non
-x86_64 architectures.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-May/000721.html
+https://lists.freedesktop.org/archives/mesa-announce/2023-June/000722.html
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* Add local patch to avoid build failure as suggested by Bernd Kuhls
----
- ...bling-ASM-C25519-for-A-but-X86_64-r-.patch | 36 +++++++++++++++++++
- package/libnss/libnss.hash                    |  4 +--
- package/libnss/libnss.mk                      |  2 +-
- 3 files changed, 39 insertions(+), 3 deletions(-)
- create mode 100644 package/libnss/0002-Bug-1836781-Disabling-ASM-C25519-for-A-but-X86_64-r-.patch
+Removed patch which is included in this version bump:
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=2630f4b310f534c830250be44d285e485da83869
 
-diff --git a/package/libnss/0002-Bug-1836781-Disabling-ASM-C25519-for-A-but-X86_64-r-.patch b/package/libnss/0002-Bug-1836781-Disabling-ASM-C25519-for-A-but-X86_64-r-.patch
-new file mode 100644
-index 0000000000..957dc8f624
---- /dev/null
-+++ b/package/libnss/0002-Bug-1836781-Disabling-ASM-C25519-for-A-but-X86_64-r-.patch
-@@ -0,0 +1,36 @@
-+From c07c4e073d95a25343cbf56b4a830a71e432869e Mon Sep 17 00:00:00 2001
-+From: Natalia Kulatova <nkulatova@mozilla.com>
-+Date: Mon, 5 Jun 2023 16:09:58 +0000
-+Subject: [PATCH] Bug 1836781 - Disabling ASM C25519 for A but X86_64
-+ r=bbeurdouche,nss-reviewers
-+
-+Differential Revision: https://phabricator.services.mozilla.com/D179969
-+
-+--HG--
-+extra : moz-landing-system : lando
-+
-+Upstream: https://hg.mozilla.org/projects/nss/rev/52a5d8fe37410d940e7d3ca244146ebc46a7d52a
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/freebl/Makefile | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
-+index 74e8e6545..ba7d83c4e 100644
-+--- a/nss/lib/freebl/Makefile
-++++ b/nss/lib/freebl/Makefile
-+@@ -568,7 +568,9 @@ ifneq ($(shell $(CC) -? 2>&1 >/dev/null </dev/null | sed -e 's/:.*//;1q'),lcc)
-+             HAVE_INT128_SUPPORT = 1
-+             DEFINES += -DHAVE_INT128_SUPPORT
-+     else ifeq (1,$(CC_IS_GCC))
-+-        SUPPORTS_VALE_CURVE25519 = 1
-++        ifeq ($(CPU_ARCH),x86_64)
-++            SUPPORTS_VALE_CURVE25519 = 1
-++        endif
-+         ifneq (,$(filter 4.6 4.7 4.8 4.9,$(word 1,$(GCC_VERSION)).$(word 2,$(GCC_VERSION))))
-+             HAVE_INT128_SUPPORT = 1
-+             DEFINES += -DHAVE_INT128_SUPPORT
-+-- 
-+2.34.1
-+
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 63a35285d7..7252c0f254 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_89_1_RTM/src/SHA256SUMS
--sha256  3adaedb9e70c3c5f40603bf60a01e336190a6dbe01929d395f16b01fe84a0156  nss-3.89.1.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_90_RTM/src/SHA256SUMS
-+sha256  9acd6534c41d8ead19fca6fcb3fffed2f9f09c437c3d79fee6a4ee668aaa93b6  nss-3.90.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index d3f227e909..1f8d1c0d31 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: squashed bump to 23.1.1
+
+ package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
+ ...arly-when-trying-to-create-an-unsupp.patch | 50 -------------------
+ package/mesa3d/mesa3d.hash                    |  6 +--
+ package/mesa3d/mesa3d.mk                      |  2 +-
+ 4 files changed, 5 insertions(+), 55 deletions(-)
+ delete mode 100644 package/mesa3d/0005-mesa-main-Exit-early-when-trying-to-create-an-unsupp.patch
+
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 6bfc61bcbf..f7b0ecfd52 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 23.1.0
++MESA3D_HEADERS_VERSION = 23.1.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0005-mesa-main-Exit-early-when-trying-to-create-an-unsupp.patch b/package/mesa3d/0005-mesa-main-Exit-early-when-trying-to-create-an-unsupp.patch
+deleted file mode 100644
+index 278d75e64a..0000000000
+--- a/package/mesa3d/0005-mesa-main-Exit-early-when-trying-to-create-an-unsupp.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From 2a6908ff4c94284b39c3cd4c97e1069876720eb7 Mon Sep 17 00:00:00 2001
+-From: Jordan Justen <jordan.l.justen@intel.com>
+-Date: Tue, 16 May 2023 18:46:50 -0700
+-Subject: [PATCH] mesa/main: Exit early when trying to create an unsupported
+- context API
+-
+-Fixes: adbe8b6c17a ("mesa: optimize out _mesa_is_desktop_gl*() and _mesa_is_gles*() calls when not built")
+-Closes: https://gitlab.freedesktop.org/mesa/mesa/-/issues/9038
+-Signed-off-by: Jordan Justen <jordan.l.justen@intel.com>
+-Reviewed-by: Eric Engestrom <eric@engestrom.ch>
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/23068>
+-Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/8bb1ecaa02177720758255bdd7ec34a5d15feca4
+-[Romain: backport to 23.1]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- src/mesa/main/context.c | 18 ++++++++++++++++++
+- 1 file changed, 18 insertions(+)
+-
+-diff --git a/src/mesa/main/context.c b/src/mesa/main/context.c
+-index d8eea2ea867..2b810b0d863 100644
+---- a/src/mesa/main/context.c
+-+++ b/src/mesa/main/context.c
+-@@ -996,6 +996,24 @@ _mesa_initialize_context(struct gl_context *ctx,
+-    struct gl_shared_state *shared;
+-    int i;
+- 
+-+   switch (api) {
+-+   case API_OPENGL_COMPAT:
+-+   case API_OPENGL_CORE:
+-+      if (!HAVE_OPENGL)
+-+         return GL_FALSE;
+-+      break;
+-+   case API_OPENGLES2:
+-+      if (!HAVE_OPENGL_ES_2)
+-+         return GL_FALSE;
+-+      break;
+-+   case API_OPENGLES:
+-+      if (!HAVE_OPENGL_ES_1)
+-+         return GL_FALSE;
+-+      break;
+-+   default:
+-+      return GL_FALSE;
+-+   }
+-+
+-    ctx->API = api;
+-    ctx->DrawBuffer = NULL;
+-    ctx->ReadBuffer = NULL;
+--- 
+-2.40.1
+-
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index f1eed92fb6..80272b70d6 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2023-May/000720.html
+-sha256  a9dde3c76571c4806245a05bda1cceee347c3267127e9e549e4f4e225d92e992  mesa-23.1.0.tar.xz
+-sha512  bbcfd0dd8e5414826631e80edbbe48218115a7461ef4ac1f2e4e090a48d6c0e1ab3b51dd45e988d5f1572f29bfc03c33769263c0f3e04033138d5b1ec102e8c9  mesa-23.1.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-June/000722.html
++sha256  60b1f3adb1561830c158bf3c68508943674fb9d69f384c3c7289694385ab5c7e  mesa-23.1.2.tar.xz
++sha512  728e79720d950b0f39fa55c21dff7caed3650e88dff52a2f3e70540a049f1baf78178e62e5d6b1e59c76f6555ab0be3f0043cfbddd4745c0a742ccef2f5774d4  mesa-23.1.2.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f2a6640b47..e4b03b65bb 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBNSS_VERSION = 3.89.1
-+LIBNSS_VERSION = 3.90
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 23.1.0
++MESA3D_VERSION = 23.1.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
