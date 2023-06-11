@@ -4,63 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 865D8C7EE2F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 23:36:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93830C77B7A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 23:36:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DA91400A6;
-	Sun, 11 Jun 2023 23:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DA91400A6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 17651402F2;
+	Sun, 11 Jun 2023 23:36:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17651402F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6S00teBJx_Ss; Sun, 11 Jun 2023 23:36:36 +0000 (UTC)
+	with ESMTP id NITaoX5oX6CD; Sun, 11 Jun 2023 23:36:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 715FF402F2;
-	Sun, 11 Jun 2023 23:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 715FF402F2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D5E781BF2F8
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 23:36:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 14005408D5;
+	Sun, 11 Jun 2023 23:36:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14005408D5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C5141BF2F8
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 23:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA84941621
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 23:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA84941621
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52D7281FE7
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 23:36:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52D7281FE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2K4uAfK1411p for <buildroot@lists.busybox.net>;
- Sun, 11 Jun 2023 23:36:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iKDjHjU_minu for <buildroot@lists.busybox.net>;
+ Sun, 11 Jun 2023 23:36:35 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C35B7415F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF3B781FD5
 Received: from 13.mo584.mail-out.ovh.net (13.mo584.mail-out.ovh.net
  [178.33.251.8])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C35B7415F8
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 23:36:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF3B781FD5
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 23:36:34 +0000 (UTC)
 Received: from director3.ghost.mail-out.ovh.net (unknown [10.108.20.200])
- by mo584.mail-out.ovh.net (Postfix) with ESMTP id 5D5F9233D5
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 23:36:30 +0000 (UTC)
+ by mo584.mail-out.ovh.net (Postfix) with ESMTP id ADA01233B4
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 23:36:32 +0000 (UTC)
 Received: from ghost-submission-6684bf9d7b-pl8sk (unknown [10.109.138.36])
- by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id A9D591FD10;
- Sun, 11 Jun 2023 23:36:29 +0000 (UTC)
+ by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id EB06A1FDAC;
+ Sun, 11 Jun 2023 23:36:31 +0000 (UTC)
 Received: from blach.pl ([37.59.142.107])
  by ghost-submission-6684bf9d7b-pl8sk with ESMTPSA
- id ashYIH1ahmSPFgAAc/dVnA
- (envelope-from <grzegorz@blach.pl>); Sun, 11 Jun 2023 23:36:29 +0000
+ id +Om3M39ahmSPFgAAc/dVnA
+ (envelope-from <grzegorz@blach.pl>); Sun, 11 Jun 2023 23:36:31 +0000
 X-OVh-ClientIp: 91.239.248.252
 From: Grzegorz Blach <grzegorz@blach.pl>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jun 2023 01:36:14 +0200
-Message-Id: <20230611233619.128038-1-grzegorz@blach.pl>
+Date: Mon, 12 Jun 2023 01:36:16 +0200
+Message-Id: <20230611233619.128038-3-grzegorz@blach.pl>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230611233619.128038-1-grzegorz@blach.pl>
+References: <20230611233619.128038-1-grzegorz@blach.pl>
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 6520649311172247873
+X-Ovh-Tracer-Id: 6521212264206516545
 X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgedufedgvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefirhiivghgohhriicuuehlrggthhcuoehgrhiivghgohhriiessghlrggthhdrphhlqeenucggtffrrghtthgvrhhnpeeuhfeiudffleeujeeghfetvddutdetjeekjeejfeekgfefheeivddvleffffelfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdeluddrvdefledrvdegkedrvdehvddpfeejrdehledrudegvddruddtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehgrhiivghgohhriiessghlrggthhdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkeegpdhmohguvgepshhmthhpohhuth
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgedufedgvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepifhriigvghhorhiiuceulhgrtghhuceoghhriigvghhorhiisegslhgrtghhrdhplheqnecuggftrfgrthhtvghrnhepffejteehieevhfdtveffieethfevheekgfdvfeelheehhfelfeefjeeigefhtefgnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpsghuihhlughrohhothdrohhrghdpphihphhirdhorhhgpdhphihthhhonhhhohhsthgvugdrohhrghenucfkphepuddvjedrtddrtddruddpledurddvfeelrddvgeekrddvhedvpdefjedrheelrddugedvrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoghhriigvghhorhiisegslhgrtghhrdhplheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheekgedpmhhouggvpehsmhhtphhouhht
 X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-107S0019b8adceb-b276-486e-806a-09f4414268f4,
+ (GARM-107S0018bee299a-757e-4e70-9eea-98d2afe70087,
  8D931DDE0DEECB89AEA118D672F623587F6625E2) smtp.auth=grzegorz@blach.pl
-Subject: [Buildroot] [PATCH 1/6] package/f2fs-tools: bump to version 1.16.0
+Subject: [Buildroot] [PATCH 3/6] package/python-hiredis: bump to version
+ 2.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,7 +75,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grzegorz Blach <grzegorz@blach.pl>
+Cc: Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -80,170 +83,90 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 ---
- ...1-configure-ac-fix-cross-compilation.patch | 88 -------------------
- ...s-tools-fix-build-error-on-lz4-1-9-4.patch | 34 -------
- package/f2fs-tools/f2fs-tools.hash            |  2 +-
- package/f2fs-tools/f2fs-tools.mk              |  2 +-
- 4 files changed, 2 insertions(+), 124 deletions(-)
- delete mode 100644 package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
- delete mode 100644 package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch
+ ...0001-setup.py-fix-build-with-gcc-4.8.patch | 43 -------------------
+ package/python-hiredis/python-hiredis.hash    |  4 +-
+ package/python-hiredis/python-hiredis.mk      |  4 +-
+ 3 files changed, 4 insertions(+), 47 deletions(-)
+ delete mode 100644 package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
 
-diff --git a/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
+diff --git a/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
 deleted file mode 100644
-index 0e3d4da191..0000000000
---- a/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
+index 93f9440a74..0000000000
+--- a/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
 +++ /dev/null
-@@ -1,88 +0,0 @@
--From 32e7d272344024c216f155c3463dd2d548f3fafd Mon Sep 17 00:00:00 2001
--From: Nick Hainke <vincent@systemli.org>
--Date: Mon, 4 Jul 2022 11:29:19 +0200
--Subject: configure.ac: fix cross compilation
+@@ -1,43 +0,0 @@
+-From 204898e28c7650089bf664eea8adfc16a22ba4f4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 6 Apr 2021 10:37:49 +0200
+-Subject: [PATCH] setup.py: fix build with gcc 4.8
 -
--AC_CHECK_LIB seems to not work correctly with OpenWrt. Add possibility
--to disable lz4 and lzo2 manually.
+-Fix the following build failure on gcc 4.8 which is raised since version
+-2.0.0 and
+-https://github.com/redis/hiredis-py/commit/9084152f624e8e593b4e86ddf8bd13329fdfc043:
 -
--Fixes errors in the form of:
--  Package f2fsck is missing dependencies for the following libraries:
--  liblz4.so.1
--  liblzo2.so.2
+-vendor/hiredis/read.c: In function 'redisReaderFree':
+-vendor/hiredis/read.c:646:9: error: 'for' loop initial declarations are only allowed in C99 mode
+-         for (int i = 0; i < r->tasks; i++) {
+-         ^
+-vendor/hiredis/read.c:646:9: note: use option -std=c99 or -std=gnu99 to compile your code
 -
--Signed-off-by: Nick Hainke <vincent@systemli.org>
--Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
--[Retrieved from:
--https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=32e7d272344024c216f155c3463dd2d548f3fafd]
+-This build failure is raised because hiredis source code is built
+-without C99:
+-https://github.com/redis/hiredis/commit/13a35bdb64615e381c5e1151cdd4e78bba71a6db
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
+-
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/redis/hiredis-py/pull/110]
 ----
-- configure.ac | 44 ++++++++++++++++++++++++++++++++++----------
-- 1 file changed, 34 insertions(+), 10 deletions(-)
+- setup.py | 1 +
+- 1 file changed, 1 insertion(+)
 -
--diff --git a/configure.ac b/configure.ac
--index ea39461..dbe9ad3 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -50,6 +50,18 @@ AC_ARG_WITH([blkid],
-- 	[],
-- 	[with_blkid=check])
+-diff --git a/setup.py b/setup.py
+-index d83153b..1f623c9 100755
+---- a/setup.py
+-+++ b/setup.py
+-@@ -13,6 +13,7 @@ def version():
+- ext = Extension("hiredis.hiredis",
+-   sources=sorted(glob.glob("src/*.c") +
+-                  ["vendor/hiredis/%s.c" % src for src in ("alloc", "read", "sds")]),
+-+  extra_compile_args=["-std=c99"],
+-   include_dirs=["vendor"])
 - 
--+AC_ARG_WITH([lzo2],
--+	[AS_HELP_STRING([--without-lzo2],
--+	  [Ignore presence of liblzo2 and disable lzo2 support])],
--+	[],
--+	[with_lzo2=check])
--+
--+AC_ARG_WITH([lz4],
--+	[AS_HELP_STRING([--without-lz4],
--+	  [Ignore presence of liblz4 and disable lz4 support])],
--+	[],
--+	[with_lz4=check])
--+
-- # Checks for programs.
-- AC_PROG_CC
-- AM_PROG_AR
--@@ -71,17 +83,29 @@ AS_IF([test "x$with_blkid" != xno],
--         fi
-- 	], -lblkid)])
-- 
---AC_CHECK_LIB([lzo2], [main],
---	[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
---		AC_DEFINE([HAVE_LIBLZO2], [1],
---		[Define if you have liblzo2])
---	], [], [])
--+AS_IF([test "x$with_lzo2" != xno],
--+	[AC_CHECK_LIB([lzo2], [main],
--+		[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
--+			AC_DEFINE([HAVE_LIBLZO2], [1],
--+			[Define if you have liblzo2])
--+		],
--+		[if test "x$with_lzo2" != xcheck; then
--+			AC_MSG_FAILURE(
--+                [--with-lzo2 was given, but test for lzo2 failed])
--+        fi
--+	], -llzo2)])
-- 
---AC_CHECK_LIB([lz4], [main],
---	[AC_SUBST([liblz4_LIBS], ["-llz4"])
---		AC_DEFINE([HAVE_LIBLZ4], [1],
---		[Define if you have liblz4])
---	], [], [])
--+AS_IF([test "x$with_lz4" != xno],
--+	[AC_CHECK_LIB([lz4], [main],
--+		[AC_SUBST([liblz4_LIBS], ["-llz4"])
--+			AC_DEFINE([HAVE_LIBLZ4], [1],
--+			[Define if you have liblz4])
--+		],
--+		[if test "x$with_lz4" != xcheck; then
--+			AC_MSG_FAILURE(
--+                [--with-lz4 was given, but test for lz4 failed])
--+        fi
--+	], -llz4)])
-- 
-- AS_IF([test "x$with_selinux" != xno],
-- 	[AC_CHECK_LIB([selinux], [getcon],
+- setup(
 --- 
--cgit 
+-2.30.2
 -
-diff --git a/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch b/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch
-deleted file mode 100644
-index b43def6bb7..0000000000
---- a/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 19f77c6f6277a274434d6d8883f50e7955c6a8db Mon Sep 17 00:00:00 2001
--From: Jaegeuk Kim <jaegeuk@kernel.org>
--Date: Mon, 29 Aug 2022 11:03:35 -0700
--Subject: f2fs-tools: fix build error on lz4-1.9.4
--
--LZ4_STREAMSIZE_U64 is undefined in new lz4 lib.
--
--Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
--[Retrieved from:
--https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=19f77c6f6277a274434d6d8883f50e7955c6a8db]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- fsck/compress.c | 5 +----
-- 1 file changed, 1 insertion(+), 4 deletions(-)
--
--diff --git a/fsck/compress.c b/fsck/compress.c
--index b413492..b15f0a4 100644
----- a/fsck/compress.c
--+++ b/fsck/compress.c
--@@ -32,10 +32,7 @@
-- #ifdef HAVE_LIBLZ4
-- #define LZ4_MEMORY_USAGE		14
-- #define LZ4_MAX_INPUT_SIZE		0x7E000000 /* 2 113 929 216 bytes */
---#ifndef LZ4_STREAMSIZE
---#define LZ4_STREAMSIZE			(LZ4_STREAMSIZE_U64 * sizeof(long long))
---#endif
---#define LZ4_MEM_COMPRESS		LZ4_STREAMSIZE
--+#define LZ4_MEM_COMPRESS		sizeof(LZ4_stream_t)
-- #define LZ4_ACCELERATION_DEFAULT	1
-- #define LZ4_WORK_SIZE			ALIGN_UP(LZ4_MEM_COMPRESS, 8)
-- #endif
---- 
--cgit 
--
-diff --git a/package/f2fs-tools/f2fs-tools.hash b/package/f2fs-tools/f2fs-tools.hash
-index 8d5ff31f0d..d1f183afff 100644
---- a/package/f2fs-tools/f2fs-tools.hash
-+++ b/package/f2fs-tools/f2fs-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  147d471040b44900283ce2c935f1d35d13d7f40008e7cb8fab2b69f54da01a4f  f2fs-tools-1.15.0.tar.gz
-+sha256  208c7a07e95383fbd7b466b5681590789dcb41f41bf197369c41a95383b57c5e  f2fs-tools-1.16.0.tar.gz
- sha256  662abb3a8a80b36ae7036c289dd1e03b361ee5dd2e6fd5211d0d8d029146449f  COPYING
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index f94244f2ad..a92ab4fe3e 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
+index 2e73d2f37b..5eaeab6d2a 100644
+--- a/package/python-hiredis/python-hiredis.hash
++++ b/package/python-hiredis/python-hiredis.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/hiredis/json
+-md5  0ab76a8b29deb737c9bfc7f631969e38  hiredis-2.0.0.tar.gz
+-sha256  81d6d8e39695f2c37954d1011c0480ef7cf444d4e3ae24bc5e89ee5de360139a  hiredis-2.0.0.tar.gz
++md5  670a932c2972cbd88f910c2b29f85c3c  hiredis-2.2.3.tar.gz
++sha256  e75163773a309e56a9b58165cf5a50e0f84b755f6ff863b2c01a38918fe92daa  hiredis-2.2.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
+ sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
+diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
+index 55f9a09f55..f99a2f7c65 100644
+--- a/package/python-hiredis/python-hiredis.mk
++++ b/package/python-hiredis/python-hiredis.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--F2FS_TOOLS_VERSION = 1.15.0
-+F2FS_TOOLS_VERSION = 1.16.0
- F2FS_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
- F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
+-PYTHON_HIREDIS_VERSION = 2.0.0
++PYTHON_HIREDIS_VERSION = 2.2.3
+ PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
+-PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/0c/39/eae11344d69ba435ec13d6bcc1a9eea3d2278324506fcd0e52d1ed8958c8
++PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/b0/04/dab6792584fc548803ffa50b5bb2b99f01d3ab04d7c7f64e85f1a22fb847
+ PYTHON_HIREDIS_SETUP_TYPE = setuptools
+ PYTHON_HIREDIS_LICENSE = BSD-3-Clause
+ PYTHON_HIREDIS_LICENSE_FILES = COPYING vendor/hiredis/COPYING
 -- 
 2.34.1
 
