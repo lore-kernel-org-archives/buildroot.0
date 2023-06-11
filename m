@@ -4,56 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB774C7EE2E
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 10:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 751FDC7EE23
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 10:45:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB57660E3A;
-	Sun, 11 Jun 2023 10:42:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB57660E3A
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5D2160E3A;
+	Sun, 11 Jun 2023 10:45:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5D2160E3A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qhitTiWtRxKr; Sun, 11 Jun 2023 10:42:11 +0000 (UTC)
+	with ESMTP id YEoB0XFy-2pU; Sun, 11 Jun 2023 10:45:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1876A60C07;
-	Sun, 11 Jun 2023 10:42:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1876A60C07
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C94F01BF389
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:42:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8C3060C07;
+	Sun, 11 Jun 2023 10:45:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8C3060C07
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1243A1BF389
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A16DC41834
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:42:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A16DC41834
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB27483C59
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:45:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB27483C59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pk2bhQkkVxVC for <buildroot@lists.busybox.net>;
- Sun, 11 Jun 2023 10:42:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WS57CBVFLSBt for <buildroot@lists.busybox.net>;
+ Sun, 11 Jun 2023 10:45:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 545594182C
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 545594182C
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 10:42:05 +0000 (UTC)
-Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
- by mailout12.t-online.de (Postfix) with SMTP id 9FE8E1623D
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 12:42:01 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd83.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q8IWG-1Mm0ob0; Sun, 11 Jun 2023 12:42:00 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60120)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q8IWF-0008Ez-3B
- for buildroot@buildroot.org; Sun, 11 Jun 2023 12:42:00 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F27783C51
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F27783C51
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 10:45:36 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.166.161.219])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 3D15178035B;
+ Sun, 11 Jun 2023 12:45:30 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Jun 2023 12:41:59 +0200
-Message-Id: <20230611104159.683078-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
+Date: Sun, 11 Jun 2023 12:45:16 +0200
+Message-ID: <20230611104518.337528-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686480120-877FF480-859C4D5F/0/0 CLEAN NORMAL
-X-TOI-MSGID: 9b8f25e6-99cd-4567-8dfd-260e781b74e9
-Subject: [Buildroot] [PATCH 1/1] package/util-linux: bump version to 2.39
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1686480333;
+ bh=HZmyXO8/2VuK4nEpzQ6bvM5DkGTYhSrtp1yYUEmJsRQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=mU+OZOjbOyN1tTjhvKtpLDxfEY/HW5eYwHdczOgNZiV51umTFYNkN/SlFoMFDvGAu
+ QT4ema7jWZ4ACGnbX1s8ycGjBHI9KgHp4KvHg3SkfjoEoAAwkywRsl/o0EqVxIUzE2
+ 2lUjW+q5QD28XQaQ/k6U45uVkkcFbfKMYGpmuCQmeE+zpc5cl09z8uo1L0jYJvZrky
+ mae8zORoJ6txnq6Qj2vGDQM8vf1mrMkSkf/W9BBHU7jXsdm5n9M00BBAmOCSfroapi
+ Mz78qkdqMbcAkrBHwN1Qu6E6U3v1CzQFYjV6N8s0oxDlCMGzK5faualnLiZZkCPpI+
+ PH1aumvo/9g3A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mU+OZOjb
+Subject: [Buildroot] [PATCH v2 1/3] support/testing/infra/emulator.py:
+ change the shell prompt before running tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,129 +71,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/v2.39-ReleaseNotes
+If a program has the string '# ' (i.e. the default shell prompt) in
+its output, the test execution in the Buildroot runtime test infra is
+failing.
 
-Removed patch which is included in this version bump.
+This can be reproduced by adding a single line in a package test
+script:
 
-Updated license hash duu to upstream commit
-https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=faeb1b64b36ededd1a0b62555cad65f002d47ac6
-adding the BSD-2-Clause license:
-https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/diff/README.licensing?id=faeb1b64b36ededd1a0b62555cad65f002d47ac6
+    self.assertRunOk("echo ### this is a string with hashes ###")
 
-Reformatted UTIL_LINUX_LICENSE and added BSD-2-Clause license.
+When executed with, for example, the command:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+    support/testing/run-tests \
+        -d dl -o output_folder tests.package.test_sometest
+
+The test will fail with output:
+
+    Traceback (most recent call last):
+      File "/buildroot/support/testing/tests/package/test_sometest.py", line 20, in test_run
+        self.assertRunOk("echo ### this is a string with hashes ###")
+      File "/buildroot/support/testing/infra/basetest.py", line 94, in assertRunOk
+        out, exit_code = self.emulator.run(cmd, timeout)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/buildroot/support/testing/infra/emulator.py", line 121, in run
+        exit_code = int(exit_code)
+                    ^^^^^^^^^^^^^^
+    ValueError: invalid literal for int() with base 10: ''
+
+This issue has been seen with real softwares, for example while
+writing tests for the dieharder package, which creates report tables
+formatted with hash characters. See:
+https://github.com/eddelbuettel/dieharder/blob/3.31.1.4/libdieharder/version.c#L34
+See also the output produced by a program invocation with command
+"dieharder -d 0". This issue has also been seen with dmidecode,
+producing comments in its output (when simply invoked with
+"dmidecode"). See:
+https://git.savannah.gnu.org/cgit/dmidecode.git/tree/dmioutput.c?h=dmidecode-3-5#n30
+
+This issue could technically be seen with program producing MarkDown
+formatted output (for example "# Header 1").
+
+This issue happen because the test infra emulator.run() method expect
+the prompt "# " after running a command and while getting the return
+code. See:
+https://git.buildroot.org/buildroot/tree/support/testing/infra/emulator.py?h=2023.05#n113
+
+Since the string "# " is quite common, this patch changes the prompt
+after the emulator.login(), by setting the PS1 variable to a string
+which is less likely to appear in a normal program output. A small
+caveat: since there is a command echo, the command setting the new
+prompt needs to be protected to make sure it will not be detected as
+an actual shell prompt. The prompt is encoded by single-quoting
+each character (e.g. abc -> 'a''b''c').
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                           |  1 -
- ...improve-dependence-on-NS_GET_-ioctls.patch | 34 -------------------
- package/util-linux/util-linux.hash            |  6 ++--
- package/util-linux/util-linux.mk              | 10 ++++--
- 4 files changed, 11 insertions(+), 40 deletions(-)
- delete mode 100644 package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch
+Changes v1 -> v2:
+- reworded commit log, to mention this issue was also seen while writing
+  a test for the dmidecode package
+- the patch series also introduce the new test for dmidecode
+---
+ support/testing/infra/emulator.py | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index c6c3c61320..b296f641f5 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1561,7 +1561,6 @@ package/ushare/0001-Don-t-build-po-files-if-NLS-is-disabled.patch Upstream
- package/ussp-push/0001-fix-build-against-bluez-4.patch Upstream
- package/ussp-push/0002-fix-build-again-obex-bluez.patch Upstream
- package/ussp-push/0003-add-OBEX_CharToUnicode.patch Upstream
--package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch Upstream
- package/vala/0001-dont-add-dirty-to-valac-version.patch Upstream
- package/vala/vala-wrapper Shellcheck
- package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch Upstream
-diff --git a/package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch b/package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch
-deleted file mode 100644
-index 8e79b8d4d3..0000000000
---- a/package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From fc686823b008bc95e2ebe904c706a117a03e2754 Mon Sep 17 00:00:00 2001
--From: Karel Zak <kzak@redhat.com>
--Date: Wed, 6 Apr 2022 10:38:43 +0200
--Subject: lsns: improve dependence on NS_GET_ ioctls
--
--Fixes: http://autobuild.buildroot.org/results/572ecf8e37ac733a4e4265f4f78f35230337278e
--Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Karel Zak <kzak@redhat.com>
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=fc686823b008bc95e2ebe904c706a117a03e2754]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- sys-utils/lsns.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/sys-utils/lsns.c b/sys-utils/lsns.c
--index 1a7e9f333..75625b3a6 100644
----- a/sys-utils/lsns.c
--+++ b/sys-utils/lsns.c
--@@ -40,7 +40,9 @@
-- 
-- #ifdef HAVE_LINUX_NSFS_H
-- # include <linux/nsfs.h>
---# define USE_NS_GET_API	1
--+# if defined(NS_GET_NSTYPE) && defined(NS_GET_OWNER_UID)
--+#  define USE_NS_GET_API	1
--+# endif
-- #endif
-- 
-- #include "pathnames.h"
---- 
--cgit 
--
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index 6f1bb74ecb..ab1807a287 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,7 +1,7 @@
--# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.38/sha256sums.asc
--sha256  6d111cbe4d55b336db2f1fbeffbc65b89908704c01136371d32aa9bec373eb64  util-linux-2.38.tar.xz
-+# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/sha256sums.asc
-+sha256  32b30a336cda903182ed61feb3e9b908b762a5e66fe14e43efb88d37162075cb  util-linux-2.39.tar.xz
- # License files, locally calculated
--sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
-+sha256  64dfeae1519bf0e27563d905a71264310fb6a8fa74e5cf99bb36e4d30d7ef455  README.licensing
- sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
- sha256  ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.BSD-4-Clause-UC
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPL-2.0-or-later
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 87ec3c19d7..621e43ba79 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -7,7 +7,7 @@
- # When making changes to this file, please check if
- # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 02cf486128..390c582e9d 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -13,6 +13,7 @@ class Emulator(object):
+         # can take a long time to run the emulator. Use a timeout multiplier
+         # when running the tests to avoid sporadic failures.
+         self.timeout_multiplier = timeout_multiplier
++        self.shell_prompt = "#BRTEST# "
  
--UTIL_LINUX_VERSION_MAJOR = 2.38
-+UTIL_LINUX_VERSION_MAJOR = 2.39
- UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
-@@ -15,7 +15,13 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
- # README.licensing claims that some files are GPL-2.0 only, but this is not
- # true. Some files are GPL-3.0+ but only in tests and optionally in hwclock
- # (but we disable that option). rfkill uses an ISC-style license.
--UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid), ISC (rfkill)
-+UTIL_LINUX_LICENSE = \
-+	GPL-2.0+, \
-+	BSD-4-Clause, \
-+	LGPL-2.1+ (libblkid, libfdisk, libmount), \
-+	BSD-3-Clause (libuuid), \
-+	BSD-2-Clause (xxhash), \
-+	ISC (rfkill)
- UTIL_LINUX_LICENSE_FILES = README.licensing \
- 	Documentation/licenses/COPYING.BSD-3-Clause \
- 	Documentation/licenses/COPYING.BSD-4-Clause-UC \
+     # Start Qemu to boot the system
+     #
+@@ -100,6 +101,15 @@ class Emulator(object):
+         index = self.qemu.expect(["# ", pexpect.TIMEOUT])
+         if index != 0:
+             raise SystemError("Cannot login")
++        # Set a special shell prompt while testing. Since the standard
++        # prompt '# ' is quite generic, a normal process output could
++        # contain that string and confuse expect. When changing the
++        # prompt, we also need to encode or escape it in some way to
++        # make sure the command echo will not be seen as a prompt
++        # itself. The prompt is encoded by single-quoting each
++        # character (e.g. abc -> 'a''b''c').
++        encoded_prompt = "''".join(self.shell_prompt)
++        self.run("export PS1='{}'".format(encoded_prompt))
+         self.run("dmesg -n 1")
+         # Prevent the shell from wrapping the commands at 80 columns.
+         self.run("stty columns 29999")
+@@ -110,13 +120,13 @@ class Emulator(object):
+         self.qemu.sendline(cmd)
+         if timeout != -1:
+             timeout *= self.timeout_multiplier
+-        self.qemu.expect("# ", timeout=timeout)
++        self.qemu.expect(self.shell_prompt, timeout=timeout)
+         # Remove double carriage return from qemu stdout so str.splitlines()
+         # works as expected.
+         output = self.qemu.before.replace("\r\r", "\r").splitlines()[1:]
+ 
+         self.qemu.sendline("echo $?")
+-        self.qemu.expect("# ")
++        self.qemu.expect(self.shell_prompt)
+         exit_code = self.qemu.before.splitlines()[2]
+         exit_code = int(exit_code)
+ 
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
