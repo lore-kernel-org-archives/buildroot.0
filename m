@@ -4,62 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 751FDC7EE23
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 10:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 155E8C7EE2E
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 10:48:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5D2160E3A;
-	Sun, 11 Jun 2023 10:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5D2160E3A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E38960EE3;
+	Sun, 11 Jun 2023 10:48:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E38960EE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YEoB0XFy-2pU; Sun, 11 Jun 2023 10:45:40 +0000 (UTC)
+	with ESMTP id ndMC02ScZjUX; Sun, 11 Jun 2023 10:48:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8C3060C07;
-	Sun, 11 Jun 2023 10:45:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8C3060C07
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1243A1BF389
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:45:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D022A60C07;
+	Sun, 11 Jun 2023 10:48:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D022A60C07
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 95B701BF389
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB27483C59
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:45:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB27483C59
+ by smtp2.osuosl.org (Postfix) with ESMTP id 760DA4011A
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:48:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 760DA4011A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WS57CBVFLSBt for <buildroot@lists.busybox.net>;
- Sun, 11 Jun 2023 10:45:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2upVsEvjcV6k for <buildroot@lists.busybox.net>;
+ Sun, 11 Jun 2023 10:48:01 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F27783C51
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4F27783C51
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 10:45:36 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.161.219])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 3D15178035B;
- Sun, 11 Jun 2023 12:45:30 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 133B0400D3
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 133B0400D3
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 10:48:00 +0000 (UTC)
+Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
+ by mailout04.t-online.de (Postfix) with SMTP id 84C44227DD;
+ Sun, 11 Jun 2023 12:47:58 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd81.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1q8Ibx-0GfNnF0; Sun, 11 Jun 2023 12:47:53 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41816)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q8Ibx-0000o5-1i;
+ Sun, 11 Jun 2023 12:47:53 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 11 Jun 2023 12:45:16 +0200
-Message-ID: <20230611104518.337528-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+Date: Sun, 11 Jun 2023 12:47:53 +0200
+Message-Id: <20230611104753.710849-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1686480333;
- bh=HZmyXO8/2VuK4nEpzQ6bvM5DkGTYhSrtp1yYUEmJsRQ=;
- h=From:To:Cc:Subject:Date:From;
- b=mU+OZOjbOyN1tTjhvKtpLDxfEY/HW5eYwHdczOgNZiV51umTFYNkN/SlFoMFDvGAu
- QT4ema7jWZ4ACGnbX1s8ycGjBHI9KgHp4KvHg3SkfjoEoAAwkywRsl/o0EqVxIUzE2
- 2lUjW+q5QD28XQaQ/k6U45uVkkcFbfKMYGpmuCQmeE+zpc5cl09z8uo1L0jYJvZrky
- mae8zORoJ6txnq6Qj2vGDQM8vf1mrMkSkf/W9BBHU7jXsdm5n9M00BBAmOCSfroapi
- Mz78qkdqMbcAkrBHwN1Qu6E6U3v1CzQFYjV6N8s0oxDlCMGzK5faualnLiZZkCPpI+
- PH1aumvo/9g3A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mU+OZOjb
-Subject: [Buildroot] [PATCH v2 1/3] support/testing/infra/emulator.py:
- change the shell prompt before running tests
+X-TOI-EXPURGATEID: 150726::1686480473-D97F8DA8-17269A83/0/0 CLEAN NORMAL
+X-TOI-MSGID: 65d40b69-3241-4e2a-aa0e-84cee5efcd51
+Subject: [Buildroot] [PATCH 1/1] package/sofia-sip: bump version to 1.13.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,122 +65,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Cc: Gregory Dymarek <gregd72002@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If a program has the string '# ' (i.e. the default shell prompt) in
-its output, the test execution in the Buildroot runtime test infra is
-failing.
-
-This can be reproduced by adding a single line in a package test
-script:
-
-    self.assertRunOk("echo ### this is a string with hashes ###")
-
-When executed with, for example, the command:
-
-    support/testing/run-tests \
-        -d dl -o output_folder tests.package.test_sometest
-
-The test will fail with output:
-
-    Traceback (most recent call last):
-      File "/buildroot/support/testing/tests/package/test_sometest.py", line 20, in test_run
-        self.assertRunOk("echo ### this is a string with hashes ###")
-      File "/buildroot/support/testing/infra/basetest.py", line 94, in assertRunOk
-        out, exit_code = self.emulator.run(cmd, timeout)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      File "/buildroot/support/testing/infra/emulator.py", line 121, in run
-        exit_code = int(exit_code)
-                    ^^^^^^^^^^^^^^
-    ValueError: invalid literal for int() with base 10: ''
-
-This issue has been seen with real softwares, for example while
-writing tests for the dieharder package, which creates report tables
-formatted with hash characters. See:
-https://github.com/eddelbuettel/dieharder/blob/3.31.1.4/libdieharder/version.c#L34
-See also the output produced by a program invocation with command
-"dieharder -d 0". This issue has also been seen with dmidecode,
-producing comments in its output (when simply invoked with
-"dmidecode"). See:
-https://git.savannah.gnu.org/cgit/dmidecode.git/tree/dmioutput.c?h=dmidecode-3-5#n30
-
-This issue could technically be seen with program producing MarkDown
-formatted output (for example "# Header 1").
-
-This issue happen because the test infra emulator.run() method expect
-the prompt "# " after running a command and while getting the return
-code. See:
-https://git.buildroot.org/buildroot/tree/support/testing/infra/emulator.py?h=2023.05#n113
-
-Since the string "# " is quite common, this patch changes the prompt
-after the emulator.login(), by setting the PS1 variable to a string
-which is less likely to appear in a normal program output. A small
-caveat: since there is a command echo, the command setting the new
-prompt needs to be protected to make sure it will not be detected as
-an actual shell prompt. The prompt is encoded by single-quoting
-each character (e.g. abc -> 'a''b''c').
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-- reworded commit log, to mention this issue was also seen while writing
-  a test for the dmidecode package
-- the patch series also introduce the new test for dmidecode
----
- support/testing/infra/emulator.py | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ package/sofia-sip/sofia-sip.hash | 2 +-
+ package/sofia-sip/sofia-sip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 02cf486128..390c582e9d 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -13,6 +13,7 @@ class Emulator(object):
-         # can take a long time to run the emulator. Use a timeout multiplier
-         # when running the tests to avoid sporadic failures.
-         self.timeout_multiplier = timeout_multiplier
-+        self.shell_prompt = "#BRTEST# "
+diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
+index 4617725571..f7293bd262 100644
+--- a/package/sofia-sip/sofia-sip.hash
++++ b/package/sofia-sip/sofia-sip.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  03dda8653367501b7b1188a6b6513416902372e27475553de9318ee89ac390ff  sofia-sip-1.13.12.tar.gz
++sha256  846b3d5eef57702e8d18967070b538030252116af1500f4baa78ad068c5fdd64  sofia-sip-1.13.15.tar.gz
+ sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
+ sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
+diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
+index 59c365365b..9734da5020 100644
+--- a/package/sofia-sip/sofia-sip.mk
++++ b/package/sofia-sip/sofia-sip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     # Start Qemu to boot the system
-     #
-@@ -100,6 +101,15 @@ class Emulator(object):
-         index = self.qemu.expect(["# ", pexpect.TIMEOUT])
-         if index != 0:
-             raise SystemError("Cannot login")
-+        # Set a special shell prompt while testing. Since the standard
-+        # prompt '# ' is quite generic, a normal process output could
-+        # contain that string and confuse expect. When changing the
-+        # prompt, we also need to encode or escape it in some way to
-+        # make sure the command echo will not be seen as a prompt
-+        # itself. The prompt is encoded by single-quoting each
-+        # character (e.g. abc -> 'a''b''c').
-+        encoded_prompt = "''".join(self.shell_prompt)
-+        self.run("export PS1='{}'".format(encoded_prompt))
-         self.run("dmesg -n 1")
-         # Prevent the shell from wrapping the commands at 80 columns.
-         self.run("stty columns 29999")
-@@ -110,13 +120,13 @@ class Emulator(object):
-         self.qemu.sendline(cmd)
-         if timeout != -1:
-             timeout *= self.timeout_multiplier
--        self.qemu.expect("# ", timeout=timeout)
-+        self.qemu.expect(self.shell_prompt, timeout=timeout)
-         # Remove double carriage return from qemu stdout so str.splitlines()
-         # works as expected.
-         output = self.qemu.before.replace("\r\r", "\r").splitlines()[1:]
- 
-         self.qemu.sendline("echo $?")
--        self.qemu.expect("# ")
-+        self.qemu.expect(self.shell_prompt)
-         exit_code = self.qemu.before.splitlines()[2]
-         exit_code = int(exit_code)
- 
+-SOFIA_SIP_VERSION = 1.13.12
++SOFIA_SIP_VERSION = 1.13.15
+ SOFIA_SIP_SITE = $(call github,freeswitch,sofia-sip,v$(SOFIA_SIP_VERSION))
+ SOFIA_SIP_INSTALL_STAGING = YES
+ # Fetched from github, no pre-generated configure script provided
 -- 
-2.41.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
