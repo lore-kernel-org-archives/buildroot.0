@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF468C7EE23
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 09:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB774C7EE2E
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 10:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69D9A610AC;
-	Sun, 11 Jun 2023 09:32:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69D9A610AC
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB57660E3A;
+	Sun, 11 Jun 2023 10:42:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB57660E3A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tg1yJh8jhuwJ; Sun, 11 Jun 2023 09:32:05 +0000 (UTC)
+	with ESMTP id qhitTiWtRxKr; Sun, 11 Jun 2023 10:42:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9653260A6B;
-	Sun, 11 Jun 2023 09:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9653260A6B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1876A60C07;
+	Sun, 11 Jun 2023 10:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1876A60C07
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 778FF1BF38D
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 09:32:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C94F01BF389
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:42:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49C8B418A9
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 09:32:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49C8B418A9
+ by smtp4.osuosl.org (Postfix) with ESMTP id A16DC41834
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 10:42:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A16DC41834
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J1gx_KKFrFWQ for <buildroot@lists.busybox.net>;
- Sun, 11 Jun 2023 09:32:01 +0000 (UTC)
+ with ESMTP id pk2bhQkkVxVC for <buildroot@lists.busybox.net>;
+ Sun, 11 Jun 2023 10:42:05 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F4004418A7
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F4004418A7
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 09:32:00 +0000 (UTC)
-Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout08.t-online.de (Postfix) with SMTP id D6A9A22F6B
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 11:31:57 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd78.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 545594182C
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 545594182C
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 10:42:05 +0000 (UTC)
+Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
+ by mailout12.t-online.de (Postfix) with SMTP id 9FE8E1623D
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 12:42:01 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd83.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q8HQT-0xCBlZ0; Sun, 11 Jun 2023 11:31:57 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33706)
+ esmtp id 1q8IWG-1Mm0ob0; Sun, 11 Jun 2023 12:42:00 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60120)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q8HQS-000444-38
- for buildroot@buildroot.org; Sun, 11 Jun 2023 11:31:57 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q8IWF-0008Ez-3B
+ for buildroot@buildroot.org; Sun, 11 Jun 2023 12:42:00 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 11 Jun 2023 11:31:56 +0200
-Message-Id: <20230611093156.655621-1-bernd.kuhls@t-online.de>
+Date: Sun, 11 Jun 2023 12:41:59 +0200
+Message-Id: <20230611104159.683078-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686475917-09FCA714-6E145B39/0/0 CLEAN NORMAL
-X-TOI-MSGID: a7f7662b-d522-45e4-af04-4a2c05d29c51
-Subject: [Buildroot] [PATCH 1/1] package/wget: bump version to 1.21.4
+X-TOI-EXPURGATEID: 150726::1686480120-877FF480-859C4D5F/0/0 CLEAN NORMAL
+X-TOI-MSGID: 9b8f25e6-99cd-4567-8dfd-260e781b74e9
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: bump version to 2.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,47 +71,121 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.gnu.org/archive/html/bug-wget/2023-05/msg00004.html
+https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/v2.39-ReleaseNotes
 
-Added upstream sha1 hash.
-Updated license hash due to copyright year bump:
-https://git.savannah.gnu.org/gitweb/?p=wget.git;a=commitdiff;h=42239969300cae065e38781df3d157483897ff6b
+Removed patch which is included in this version bump.
+
+Updated license hash duu to upstream commit
+https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=faeb1b64b36ededd1a0b62555cad65f002d47ac6
+adding the BSD-2-Clause license:
+https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/diff/README.licensing?id=faeb1b64b36ededd1a0b62555cad65f002d47ac6
+
+Reformatted UTIL_LINUX_LICENSE and added BSD-2-Clause license.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/wget/wget.hash | 8 +++++---
- package/wget/wget.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .checkpackageignore                           |  1 -
+ ...improve-dependence-on-NS_GET_-ioctls.patch | 34 -------------------
+ package/util-linux/util-linux.hash            |  6 ++--
+ package/util-linux/util-linux.mk              | 10 ++++--
+ 4 files changed, 11 insertions(+), 40 deletions(-)
+ delete mode 100644 package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 22674650a2..eed87e8e3d 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,6 +1,8 @@
-+# From https://lists.gnu.org/archive/html/bug-wget/2023-05/msg00004.html
-+sha1 42384273c1937458c9db3766a5509afa636a2f00  wget-1.21.4.tar.lz
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.lz.sig
-+# https://ftp.gnu.org/gnu/wget/wget-1.21.4.tar.lz.sig
- # with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
--sha256  dbd2fb5e47149d4752d0eaa0dac68cc49cf20d46df4f8e326ffc8f18b2af4ea5  wget-1.21.3.tar.lz
-+sha256  3683619a5f50edcbccb1720a79006fa37bf9b9a255a8c5b48048bc3c7a874bd9  wget-1.21.4.tar.lz
- # Locally calculated
--sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-+sha256  f7dc7522e7e1be9227f3dc8de8b39a4d1d2471968c893af15f00c1a2076a0eec  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 455faaed12..d2d3087961 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index c6c3c61320..b296f641f5 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1561,7 +1561,6 @@ package/ushare/0001-Don-t-build-po-files-if-NLS-is-disabled.patch Upstream
+ package/ussp-push/0001-fix-build-against-bluez-4.patch Upstream
+ package/ussp-push/0002-fix-build-again-obex-bluez.patch Upstream
+ package/ussp-push/0003-add-OBEX_CharToUnicode.patch Upstream
+-package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch Upstream
+ package/vala/0001-dont-add-dirty-to-valac-version.patch Upstream
+ package/vala/vala-wrapper Shellcheck
+ package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch Upstream
+diff --git a/package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch b/package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch
+deleted file mode 100644
+index 8e79b8d4d3..0000000000
+--- a/package/util-linux/0001-lsns-improve-dependence-on-NS_GET_-ioctls.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From fc686823b008bc95e2ebe904c706a117a03e2754 Mon Sep 17 00:00:00 2001
+-From: Karel Zak <kzak@redhat.com>
+-Date: Wed, 6 Apr 2022 10:38:43 +0200
+-Subject: lsns: improve dependence on NS_GET_ ioctls
+-
+-Fixes: http://autobuild.buildroot.org/results/572ecf8e37ac733a4e4265f4f78f35230337278e
+-Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Karel Zak <kzak@redhat.com>
+-
+-[Retrieved from:
+-https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=fc686823b008bc95e2ebe904c706a117a03e2754]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- sys-utils/lsns.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/sys-utils/lsns.c b/sys-utils/lsns.c
+-index 1a7e9f333..75625b3a6 100644
+---- a/sys-utils/lsns.c
+-+++ b/sys-utils/lsns.c
+-@@ -40,7 +40,9 @@
+- 
+- #ifdef HAVE_LINUX_NSFS_H
+- # include <linux/nsfs.h>
+--# define USE_NS_GET_API	1
+-+# if defined(NS_GET_NSTYPE) && defined(NS_GET_OWNER_UID)
+-+#  define USE_NS_GET_API	1
+-+# endif
+- #endif
+- 
+- #include "pathnames.h"
+--- 
+-cgit 
+-
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index 6f1bb74ecb..ab1807a287 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,7 +1,7 @@
+-# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.38/sha256sums.asc
+-sha256  6d111cbe4d55b336db2f1fbeffbc65b89908704c01136371d32aa9bec373eb64  util-linux-2.38.tar.xz
++# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/sha256sums.asc
++sha256  32b30a336cda903182ed61feb3e9b908b762a5e66fe14e43efb88d37162075cb  util-linux-2.39.tar.xz
+ # License files, locally calculated
+-sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
++sha256  64dfeae1519bf0e27563d905a71264310fb6a8fa74e5cf99bb36e4d30d7ef455  README.licensing
+ sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+ sha256  ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.BSD-4-Clause-UC
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPL-2.0-or-later
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 87ec3c19d7..621e43ba79 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -7,7 +7,7 @@
+ # When making changes to this file, please check if
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
  
--WGET_VERSION = 1.21.3
-+WGET_VERSION = 1.21.4
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+-UTIL_LINUX_VERSION_MAJOR = 2.38
++UTIL_LINUX_VERSION_MAJOR = 2.39
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+@@ -15,7 +15,13 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
+ # README.licensing claims that some files are GPL-2.0 only, but this is not
+ # true. Some files are GPL-3.0+ but only in tests and optionally in hwclock
+ # (but we disable that option). rfkill uses an ISC-style license.
+-UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid), ISC (rfkill)
++UTIL_LINUX_LICENSE = \
++	GPL-2.0+, \
++	BSD-4-Clause, \
++	LGPL-2.1+ (libblkid, libfdisk, libmount), \
++	BSD-3-Clause (libuuid), \
++	BSD-2-Clause (xxhash), \
++	ISC (rfkill)
+ UTIL_LINUX_LICENSE_FILES = README.licensing \
+ 	Documentation/licenses/COPYING.BSD-3-Clause \
+ 	Documentation/licenses/COPYING.BSD-4-Clause-UC \
 -- 
 2.39.2
 
