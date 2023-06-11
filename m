@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1940CC77B7A
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 14:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8755C77B7A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 14:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C14A560A6F;
-	Sun, 11 Jun 2023 14:58:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C14A560A6F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9538060597;
+	Sun, 11 Jun 2023 14:59:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9538060597
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WR2IjpHH87X0; Sun, 11 Jun 2023 14:58:47 +0000 (UTC)
+	with ESMTP id 6mNH-Q5J2wGD; Sun, 11 Jun 2023 14:59:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F954611E9;
-	Sun, 11 Jun 2023 14:58:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F954611E9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8D5071BF86B
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 14:56:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 668DB6119B;
+	Sun, 11 Jun 2023 14:59:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 668DB6119B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B6D51BF3E8
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 14:56:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 746CA60F58
+ by smtp1.osuosl.org (Postfix) with ESMTP id 528F982AED
  for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 14:56:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 746CA60F58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 528F982AED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xGWzNQs5XlLI for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gb-pNdF3ARaq for <buildroot@lists.busybox.net>;
  Sun, 11 Jun 2023 14:56:26 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87B9560C16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6552B82C35
 Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 87B9560C16
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6552B82C35
  for <buildroot@buildroot.org>; Sun, 11 Jun 2023 14:56:25 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout04.t-online.de (Postfix) with SMTP id B12A51A95C
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout04.t-online.de (Postfix) with SMTP id 284341A95F
  for <buildroot@buildroot.org>; Sun, 11 Jun 2023 16:56:23 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd85.t-online.de
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd72.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q8MUO-3zPtIX0; Sun, 11 Jun 2023 16:56:20 +0200
+ esmtp id 1q8MUQ-0A6gSX0; Sun, 11 Jun 2023 16:56:22 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:34716)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q8MUN-0001vD-32
- for buildroot@buildroot.org; Sun, 11 Jun 2023 16:56:20 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q8MUP-0001vD-0h
+ for buildroot@buildroot.org; Sun, 11 Jun 2023 16:56:21 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 11 Jun 2023 16:56:06 +0200
-Message-Id: <20230611145617.758070-2-bernd.kuhls@t-online.de>
+Date: Sun, 11 Jun 2023 16:56:15 +0200
+Message-Id: <20230611145617.758070-11-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230611145617.758070-1-bernd.kuhls@t-online.de>
 References: <20230611145617.758070-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686495381-AF592DAB-8794203E/0/0 CLEAN NORMAL
-X-TOI-MSGID: 2499767b-6a9d-4e71-bc16-8d8d9b9b2d9c
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xfont_font-*: mass version
+X-TOI-EXPURGATEID: 150726::1686495382-597F157F-CD952645/0/0 CLEAN NORMAL
+X-TOI-MSGID: 0f2e13d1-f626-4c50-a0d1-aaa39c36c119
+Subject: [Buildroot] [PATCH 10/12] package/x11r7/xfont_font-*: mass version
  bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,6 +77,10 @@ Release notes were posted in February 2023:
 https://lists.x.org/archives/xorg-announce/2023-February/date.html
 
 Switched tarball to xz and _SITE to https.
+
+Updated license hash of xfont_font-sun-misc due to upstream commit which
+removed "All rights reserved" from Oracle copyright notices:
+https://gitlab.freedesktop.org/xorg/font/sun-misc/-/commits/master/COPYING
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
@@ -114,7 +118,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  .../xfont_font-cronyx-cyrillic.mk                           | 6 +++---
  .../xfont_font-cursor-misc/xfont_font-cursor-misc.hash      | 2 +-
  .../x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk  | 6 +++---
- .../xfont_font-daewoo-misc/xfont_font-daewoo-misc.hash      | 2 +-
+ .../xfont_font-daewoo-misc/xfont_font-daewoo-misc.hash      | 3 ++-
  .../x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk  | 6 +++---
  package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.hash  | 2 +-
  package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk    | 6 +++---
@@ -142,13 +146,13 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  .../xfont_font-screen-cyrillic.mk                           | 6 +++---
  .../x11r7/xfont_font-sony-misc/xfont_font-sony-misc.hash    | 3 +--
  package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk  | 6 +++---
- package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash  | 3 +--
+ package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash  | 5 ++---
  package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk    | 6 +++---
  .../xfont_font-winitzki-cyrillic.hash                       | 3 +--
  .../xfont_font-winitzki-cyrillic.mk                         | 6 +++---
  .../xfont_font-xfree86-type1/xfont_font-xfree86-type1.hash  | 3 +--
  .../xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk    | 6 +++---
- 68 files changed, 137 insertions(+), 146 deletions(-)
+ 68 files changed, 139 insertions(+), 147 deletions(-)
 
 diff --git a/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.hash b/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.hash
 index 514c90915a..6c96f7dfea 100644
@@ -596,13 +600,14 @@ index e752803086..38366a8089 100644
  XFONT_FONT_CURSOR_MISC_LICENSE_FILES = COPYING
  
 diff --git a/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.hash b/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.hash
-index 1b4ebe9d9f..ea151826c9 100644
+index 1b4ebe9d9f..cebdbbba88 100644
 --- a/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.hash
 +++ b/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.hash
-@@ -1,2 +1,2 @@
+@@ -1,2 +1,3 @@
  # locally computed
 -sha256  bc65de70bee12698caa95b523d3b652c056347e17b68cc8b5d6bbdff235c4be8  font-daewoo-misc-1.0.3.tar.bz2
 +sha256  f63c8b3dc8f30098cb868b7db2c2c0c8b5b3fd2cefd044035697a43d4c7a4f31  font-daewoo-misc-1.0.4.tar.xz
++sha256  294f786aa8f0ad8f92979d153e18f5cf7cc95d872cace25338f9c95e7b348ed9  COPYING
 diff --git a/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk b/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk
 index f5bd941383..57e151383b 100644
 --- a/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk
@@ -963,15 +968,16 @@ index 6e580fd922..f77a5f004f 100644
  XFONT_FONT_SONY_MISC_LICENSE_FILES = COPYING
  
 diff --git a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash
-index 8b195c9f9b..6295324e78 100644
+index 8b195c9f9b..ac2f343906 100644
 --- a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash
 +++ b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash
 @@ -1,4 +1,3 @@
 -# From http://www.x.org/archive/current/src/everything/CHECKSUMS
 -sha256  481f4fcbbf7005658b080b3cf342c8c76de752e77f47958b2b383de73266d2e0  font-sun-misc-1.0.3.tar.bz2
  # Locally computed
+-sha256  dd6da1d39832ab2878c3304405c1c7883c6da292ffde262fca1785239534c40f  COPYING
 +sha256  dd84dd116d927affa4fa0fa29727b3ecfc0f064238817c0a1e552a0ac384db9f  font-sun-misc-1.0.4.tar.xz
- sha256  dd6da1d39832ab2878c3304405c1c7883c6da292ffde262fca1785239534c40f  COPYING
++sha256  d76b96147b5c155642652ca15e2e4cb4cc249ee2eaa02292e274b723224b88de  COPYING
 diff --git a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
 index 737cfb5c9b..3d3596a9b6 100644
 --- a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
