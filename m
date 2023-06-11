@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8A4AC7EE23
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 14:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7672DC7EE23
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 14:58:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84C77611CA;
-	Sun, 11 Jun 2023 14:57:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84C77611CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22E3561195;
+	Sun, 11 Jun 2023 14:58:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22E3561195
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gmP6V0KzHT8k; Sun, 11 Jun 2023 14:57:56 +0000 (UTC)
+	with ESMTP id 4aXqUOOOjbbK; Sun, 11 Jun 2023 14:58:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A500D611A4;
-	Sun, 11 Jun 2023 14:57:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A500D611A4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2E6E41BF3E8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AF4A611C3;
+	Sun, 11 Jun 2023 14:58:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AF4A611C3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B50F1BF3E8
  for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 14:56:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09031400C1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 544934170B
  for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 14:56:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09031400C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 544934170B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yGVncLMuSzV8 for <buildroot@lists.busybox.net>;
- Sun, 11 Jun 2023 14:56:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ey0KuH2QTC5i for <buildroot@lists.busybox.net>;
+ Sun, 11 Jun 2023 14:56:26 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE2FC40488
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE2FC40488
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 14:56:23 +0000 (UTC)
-Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
- by mailout10.t-online.de (Postfix) with SMTP id 71D5D4D3E8
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 16:56:21 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd79.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52FE841707
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 52FE841707
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 14:56:26 +0000 (UTC)
+Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
+ by mailout04.t-online.de (Postfix) with SMTP id 116681A965
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 16:56:24 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.6.127]) by fwd74.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q8MUO-1woWEj0; Sun, 11 Jun 2023 16:56:21 +0200
+ esmtp id 1q8MUQ-0RbUOn0; Sun, 11 Jun 2023 16:56:22 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:34716)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q8MUO-0001vD-27
- for buildroot@buildroot.org; Sun, 11 Jun 2023 16:56:20 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q8MUP-0001vD-31
+ for buildroot@buildroot.org; Sun, 11 Jun 2023 16:56:21 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 11 Jun 2023 16:56:07 +0200
-Message-Id: <20230611145617.758070-3-bernd.kuhls@t-online.de>
+Date: Sun, 11 Jun 2023 16:56:16 +0200
+Message-Id: <20230611145617.758070-12-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230611145617.758070-1-bernd.kuhls@t-online.de>
 References: <20230611145617.758070-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686495381-43FF1266-22AA49CD/0/0 CLEAN NORMAL
-X-TOI-MSGID: 96cd17ab-6d0e-499d-80d9-a5d2c4c9e50d
-Subject: [Buildroot] [PATCH 02/12] package/x11r7/xdriver_xf86-video-i128:
- bump version to 1.4.1
+X-TOI-EXPURGATEID: 150726::1686495382-327FBCD8-A29337C1/0/0 CLEAN NORMAL
+X-TOI-MSGID: 8fe65a8b-8298-4265-bc5f-889b671f5398
+Subject: [Buildroot] [PATCH 11/12] package/x11r7/xkeyboard-config: bump
+ version to 2.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,48 +74,38 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-May/003395.html
-
-Switched tarball to xz and _SITE to https.
+https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash  | 8 +++-----
- .../xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk    | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+The tarball for version 2.39 not yet available.
 
-diff --git a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
-index 96bd42ac36..c17d3086a1 100644
---- a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
-+++ b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-December/002932.html
--md5  a980f1b8532ccfe81932580bc4e0f2a0  xf86-video-i128-1.4.0.tar.bz2
--sha1  56d5b897b2695222c13e59d2ade74620a99e1011  xf86-video-i128-1.4.0.tar.bz2
--sha256  8f2c0a6bf5a169dad3fc07c6dd4537b492d0e44489e4a1297311e617c3bed0ea  xf86-video-i128-1.4.0.tar.bz2
--sha512  d58baee3f20b3ad2ece6853da0ff20a6d54b984c6e3289bad2715cc003b277a0b44d20ded25cfc116400468df552390bdb5d80fbd3fb60861488ee5d027664b2  xf86-video-i128-1.4.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-May/003395.html
-+sha256  7064b513ffe33efa040577c4d355ce2c76ed218989ab38feb8972750d5acbc46  xf86-video-i128-1.4.1.tar.xz
-+sha512  ec6b4dd9092292b5aabff7cf477090fe62c89944d251689817ac8114a65672f85880b719a442f4c742d63dc2d6c61ec315e53da5b5c625074d1aa0b9ace8e865  xf86-video-i128-1.4.1.tar.xz
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 08e36da1d0..3a19075ba1 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  7677424d79633dbf255a81bd4e05dd621931b89997af33c31522269ec2ed391e  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
-index e44deaf621..266678105c 100644
---- a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
-+++ b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
-@@ -4,9 +4,9 @@
+-sha256  eb1383a5ac4b6210d7c7302b9d6fab052abdf51c5d2c9b55f1f779997ba68c6c  xkeyboard-config-2.37.tar.xz
++sha256  0690a91bab86b18868f3eee6d41e9ec4ce6894f655443d490a2184bfac56c872  xkeyboard-config-2.38.tar.xz
+ sha256  6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index b82c15a23a..7c9c814d95 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_I128_VERSION = 1.4.0
--XDRIVER_XF86_VIDEO_I128_SOURCE = xf86-video-i128-$(XDRIVER_XF86_VIDEO_I128_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_I128_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_I128_VERSION = 1.4.1
-+XDRIVER_XF86_VIDEO_I128_SOURCE = xf86-video-i128-$(XDRIVER_XF86_VIDEO_I128_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_I128_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_I128_LICENSE = MIT
- XDRIVER_XF86_VIDEO_I128_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_I128_DEPENDENCIES = xserver_xorg-server xorgproto
+-XKEYBOARD_CONFIG_VERSION = 2.37
++XKEYBOARD_CONFIG_VERSION = 2.38
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.xz
+ XKEYBOARD_CONFIG_SITE = https://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
 -- 
 2.39.2
 
