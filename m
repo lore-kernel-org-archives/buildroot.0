@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF4EFC7EE2E
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 17:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06342C7EE23
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 18:11:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 090F640A7F;
-	Sun, 11 Jun 2023 17:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 090F640A7F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4815F40BDE;
+	Sun, 11 Jun 2023 18:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4815F40BDE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pn5vAfoJHgnz; Sun, 11 Jun 2023 17:53:37 +0000 (UTC)
+	with ESMTP id gxZDA9F7_GpZ; Sun, 11 Jun 2023 18:11:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 374E540A0A;
-	Sun, 11 Jun 2023 17:53:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 374E540A0A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D0901BF27E
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 17:53:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 629A440BCB;
+	Sun, 11 Jun 2023 18:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 629A440BCB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DBD1F1BF27A
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 18:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 369E960743
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 17:53:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 369E960743
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC6C483112
+ for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 18:11:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC6C483112
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W6mgL1y47YB6 for <buildroot@lists.busybox.net>;
- Sun, 11 Jun 2023 17:53:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fBGwe1VDKx83 for <buildroot@lists.busybox.net>;
+ Sun, 11 Jun 2023 18:11:10 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F2D86070A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22DCF830DE
 Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F2D86070A
- for <buildroot@buildroot.org>; Sun, 11 Jun 2023 17:53:32 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.109.39])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 22DCF830DE
+ for <buildroot@buildroot.org>; Sun, 11 Jun 2023 18:11:09 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.109.39])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 8PFqqAs2dgE4H8PFqqw9Yk; Sun, 11 Jun 2023 19:53:30 +0200
-Message-ID: <7bbe9b12-46bc-70d2-38a7-f76f5f8118c5@benettiengineering.com>
-Date: Sun, 11 Jun 2023 19:53:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20230611175142.5235-1-bernd.kuhls@t-online.de>
+ id 8PWtqB0zNgE4H8PWtqwGCX; Sun, 11 Jun 2023 20:11:08 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230611175142.5235-1-bernd.kuhls@t-online.de>
-X-CMAE-Envelope: MS4xfLeepZzqPGKLgD6FKuq9nQAlr4ThhwvPNqjoVSu71yIYm2XzpwgOR3QZh+Cceis8mF3VDro/y8A4lPoZiODjjhS0f23Un9qBMZxKh22pS1MMKdHHcIek
- BUrtm7u0jgXTVouGg8/KYfMBIvOMi82pu11OrSlvIjqhcL1N2edekaWwvAceKPBMR2qZG2C42Pd34CkhUlneRmg+yNcWDm0vGMP+h4+vo8gheSf1NK9GFJj7
- JzoiwINKgFjCeKO51gbJWAdBZ0Jlmjxr06CJeS2xw/pxfWA6EOhp+mLUz1bTNcOm
+To: buildroot@buildroot.org
+Date: Sun, 11 Jun 2023 20:11:06 +0200
+Message-Id: <20230611181106.3454549-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <pan22fc181d07f22343b4@ID-313208.user.individual.net>
+References: <pan22fc181d07f22343b4@ID-313208.user.individual.net>
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfG79uB8c4MOMaGIR0LetPOEqrdKOfaN/8zth4cjSRirmunUqQFZH6yzlrjUhuBCqG9PAy3n1Lira7Zg/c0UHdq57hCA3wYXH2U3aXwRucZWLdoVEssFb
+ ZnDyqffH3Oxe5itF7crRUUO3v1Tbc9+Vw6DTqOsPOUJ0YoyWdlwKSEK6duOY/rzbtZcN62IF3V9cEwQ1JWUDZVDL3wZ8R1yqRlG0ZwDg6KAEpzzfUmOCq0iB
+ JFUOMVBD/Hb9uwxtoUAmsCMr7fDovvAtmQvJwB3rh9jlz2/PBWWlJ25a2mtnNXiZFgmDYRmC4/GYOqxnq1uZOSb4tQd8dKIx+kSsZdLQl7pq59KMdT0mpZdi
+ hF4WqTmY
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1686506010; bh=2uVCXEh2d8Ps6kCmQNrPMeHQsFtZFEsYP0W3+K2xxOc=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=JeSIvmO2HVfKpqB7Uu41ZpdPYUilzvAOFOCvwYWfd01+CKbyHQTq4A7N4bVqiCAY1
- dV/0Ztrq3dLJTKBGwKWh44fB0hCnhPaUzyeziKOZIxRynFrikMBCVYlInSO19RXclU
- gciZTY4YlrBFuBcLYUGAo45Cx3h9DTwIRKCtil+lXnTwi3kFksnpocBQQ0JnCDBSVl
- d9/fbm8QxyQRcuqJQBzIK4OnIcL3kqU2BqsJ6e4113U+Pc9WTSPV7hagpt4GgP+hUy
- OdLcjIjDr+F7XGn2vJMMs5a2uLLFsZ9FG0Aimm9PfCXviJUGqi6rCcmV5nAsI/tPRy
- l9R8itx2lewnA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ t=1686507068; bh=mreGP5bc+yM6EdlKMqWPPEU3oNhjN2VlX0PYTGvRXL0=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=OCaSmmLykW7ZCyfFuiBFroi5VQqNfVOIOTc7pfitslJlLgZOyS56WomyFjFhuC5A1
+ IDWfnVWBbCv+T/58Ex6LjO8hkHb7QSZ187thdxTwbpy8Rwjl9I9UO5Nlm3poQQx63Z
+ /k/m+rp4EWD1RfImUxzAkF8lAIvR8iARgFokPTael80RwLeV0pAzBo6Q6QSVv2q9wd
+ 1Y8pi5MQ/yeGJEFQCmnc5+DM4s0TOsRdgrixkx4ClBt8QvPw9/5OZCqcB0sCI+HjBp
+ g/lBTWfYYVkYtfNfSQpWBIgtK0uK/nnzxMDpM5t2XorzQ2Fpoyoaf84/BOuH/1bpfB
+ ne0E2TyolwGSg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=JeSIvmO2
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/nfs-utils: fix static build
+ header.a=rsa-sha256 header.s=a1 header.b=OCaSmmLy
+Subject: [Buildroot] [PATCH v2] package/libnss: bump version to 3.90
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,84 +75,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/06/23 19:51, Bernd Kuhls wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/f17/f17a554c86f0b24327b49fdc75612cc133f129ed/
-> 
-> f9dc4bab9f4576eed3a22ca7517bfc88d9812c34 bumped nfs-utils to version
-> 2.6.3 which includes the addition of the two files patched here.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add local patch to fix build failure due to CURVE25519 used on non
+x86_64 architectures.
 
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+V1->V2:
+* Add local patch to avoid build failure as suggested by Bernd Kuhls
+---
+ ...bling-ASM-C25519-for-A-but-X86_64-r-.patch | 36 +++++++++++++++++++
+ package/libnss/libnss.hash                    |  4 +--
+ package/libnss/libnss.mk                      |  2 +-
+ 3 files changed, 39 insertions(+), 3 deletions(-)
+ create mode 100644 package/libnss/0002-Bug-1836781-Disabling-ASM-C25519-for-A-but-X86_64-r-.patch
 
-Best regards
+diff --git a/package/libnss/0002-Bug-1836781-Disabling-ASM-C25519-for-A-but-X86_64-r-.patch b/package/libnss/0002-Bug-1836781-Disabling-ASM-C25519-for-A-but-X86_64-r-.patch
+new file mode 100644
+index 0000000000..957dc8f624
+--- /dev/null
++++ b/package/libnss/0002-Bug-1836781-Disabling-ASM-C25519-for-A-but-X86_64-r-.patch
+@@ -0,0 +1,36 @@
++From c07c4e073d95a25343cbf56b4a830a71e432869e Mon Sep 17 00:00:00 2001
++From: Natalia Kulatova <nkulatova@mozilla.com>
++Date: Mon, 5 Jun 2023 16:09:58 +0000
++Subject: [PATCH] Bug 1836781 - Disabling ASM C25519 for A but X86_64
++ r=bbeurdouche,nss-reviewers
++
++Differential Revision: https://phabricator.services.mozilla.com/D179969
++
++--HG--
++extra : moz-landing-system : lando
++
++Upstream: https://hg.mozilla.org/projects/nss/rev/52a5d8fe37410d940e7d3ca244146ebc46a7d52a
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/Makefile | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
++index 74e8e6545..ba7d83c4e 100644
++--- a/nss/lib/freebl/Makefile
+++++ b/nss/lib/freebl/Makefile
++@@ -568,7 +568,9 @@ ifneq ($(shell $(CC) -? 2>&1 >/dev/null </dev/null | sed -e 's/:.*//;1q'),lcc)
++             HAVE_INT128_SUPPORT = 1
++             DEFINES += -DHAVE_INT128_SUPPORT
++     else ifeq (1,$(CC_IS_GCC))
++-        SUPPORTS_VALE_CURVE25519 = 1
+++        ifeq ($(CPU_ARCH),x86_64)
+++            SUPPORTS_VALE_CURVE25519 = 1
+++        endif
++         ifneq (,$(filter 4.6 4.7 4.8 4.9,$(word 1,$(GCC_VERSION)).$(word 2,$(GCC_VERSION))))
++             HAVE_INT128_SUPPORT = 1
++             DEFINES += -DHAVE_INT128_SUPPORT
++-- 
++2.34.1
++
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 63a35285d7..7252c0f254 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_89_1_RTM/src/SHA256SUMS
+-sha256  3adaedb9e70c3c5f40603bf60a01e336190a6dbe01929d395f16b01fe84a0156  nss-3.89.1.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_90_RTM/src/SHA256SUMS
++sha256  9acd6534c41d8ead19fca6fcb3fffed2f9f09c437c3d79fee6a4ee668aaa93b6  nss-3.90.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index d3f227e909..1f8d1c0d31 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.89.1
++LIBNSS_VERSION = 3.90
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-
-> ---
-> v2: added upstream URL
-> 
->   ...-guard-dlfcn.h-include-with-HAVE_DLF.patch | 44 +++++++++++++++++++
->   1 file changed, 44 insertions(+)
->   create mode 100644 package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
-> 
-> diff --git a/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch b/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
-> new file mode 100644
-> index 0000000000..5ffb15d86d
-> --- /dev/null
-> +++ b/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
-> @@ -0,0 +1,44 @@
-> +From 274e4d212c30183242e48b639889865819f3ac33 Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sun, 11 Jun 2023 08:57:11 +0200
-> +Subject: [PATCH] support/reexport: guard dlfcn.h include with HAVE_DLFCN_H
-> +
-> +Upstream: https://marc.info/?l=linux-nfs&m=168650558019402&w=2
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + support/reexport/fsidd.c    | 2 ++
-> + support/reexport/reexport.c | 2 ++
-> + 2 files changed, 4 insertions(+)
-> +
-> +diff --git a/support/reexport/fsidd.c b/support/reexport/fsidd.c
-> +index 37649d06..d4b245e8 100644
-> +--- a/support/reexport/fsidd.c
-> ++++ b/support/reexport/fsidd.c
-> +@@ -3,7 +3,9 @@
-> + #endif
-> +
-> + #include <assert.h>
-> ++#ifdef HAVE_DLFCN_H
-> + #include <dlfcn.h>
-> ++#endif
-> + #include <event2/event.h>
-> + #include <limits.h>
-> + #include <stdint.h>
-> +diff --git a/support/reexport/reexport.c b/support/reexport/reexport.c
-> +index d597a2f7..d9a700af 100644
-> +--- a/support/reexport/reexport.c
-> ++++ b/support/reexport/reexport.c
-> +@@ -2,7 +2,9 @@
-> + #include <config.h>
-> + #endif
-> +
-> ++#ifdef HAVE_DLFCN_H
-> + #include <dlfcn.h>
-> ++#endif
-> + #include <stdint.h>
-> + #include <stdio.h>
-> + #include <sys/random.h>
-> +--
-> +2.39.2
-> +
+2.34.1
 
 _______________________________________________
 buildroot mailing list
