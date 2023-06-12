@@ -1,71 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99C1C7EE2E
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jun 2023 18:06:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF219C7EE2F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 15:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47CFE403E7;
-	Sun, 11 Jun 2023 18:06:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47CFE403E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28ACF80BFC;
+	Mon, 12 Jun 2023 15:21:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28ACF80BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EZzefmfeYc83; Sun, 11 Jun 2023 18:06:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yCq-AxcGlr1k; Mon, 12 Jun 2023 15:21:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F73E400F2;
-	Sun, 11 Jun 2023 18:06:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F73E400F2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6C051BF27A
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 18:06:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 721218208B;
+	Mon, 12 Jun 2023 15:21:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 721218208B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 855DF1BF285
+ for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 15:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDB50400F2
- for <buildroot@lists.busybox.net>; Sun, 11 Jun 2023 18:06:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDB50400F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A39C41517
+ for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 15:21:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A39C41517
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mHb3tWl7E37E for <buildroot@lists.busybox.net>;
- Sun, 11 Jun 2023 18:06:09 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D73C9400E5
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D73C9400E5
- for <buildroot@uclibc.org>; Sun, 11 Jun 2023 18:06:08 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.109.39])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 8PS1qAySSgE4H8PS1qwENW; Sun, 11 Jun 2023 20:06:06 +0200
-Message-ID: <64f2c882-7018-8dc8-4897-bb1f23eb57e0@benettiengineering.com>
-Date: Sun, 11 Jun 2023 20:06:05 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 17p4eDbJRr6Z for <buildroot@lists.busybox.net>;
+ Mon, 12 Jun 2023 15:21:54 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E26824150E
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E26824150E
+ for <buildroot@buildroot.org>; Mon, 12 Jun 2023 15:21:53 +0000 (UTC)
+Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
+ by mailout03.t-online.de (Postfix) with SMTP id 1492B42D2C
+ for <buildroot@buildroot.org>; Mon, 12 Jun 2023 17:21:51 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.180.237]) by fwd79.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1q8jMa-2NiHrN0; Mon, 12 Jun 2023 17:21:48 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45842)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q8jMa-0001go-0U
+ for buildroot@buildroot.org; Mon, 12 Jun 2023 17:21:48 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Mon, 12 Jun 2023 17:21:48 +0200
+Message-Id: <20230612152148.424853-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@uclibc.org
-References: <20230604191614.78018-1-giulio.benetti__7689.64225878648$1685906204$gmane$org@benettiengineering.com>
- <pan$522fc$aec867d8$5181d07f$922343b4@ID-313208.user.individual.net>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <pan$522fc$aec867d8$5181d07f$922343b4@ID-313208.user.individual.net>
-X-CMAE-Envelope: MS4xfFO9jgwIg0Iea1ABLVfzDmgmioIDJohTZvYCt8qX+BSy2bDhoWpb0XWkBLHOm/SaAvVdZkRVwRjpp2wXezz3jnYMDgT8RcZM9F9X/gLG1+xerATFdntK
- wJCcQ5Ekx1W8J83hwi1kAdEyTzoEmLGCsmWx9lwPSmDa+CwCa2A4keqHVsaCBdrkzSqFVKVkqR6T41FnpTdvVNBpAqeYUzZF3pc1Br+oIYE4S1S62YZD2XGp
- 1wuHmma/jyW3XTKYE9x4Ug==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1686506766; bh=M010htlMLFLtWQoqqfTBDH+eFnHMnQE0QdMGaTYDIag=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=YR72ZWupNAhpjsQIOvJKVKhg5pDS9UPUOCOh/gz26O/RfU1GzOXgveJbHTVs8fciM
- YvXcbU0pC5e+SgHrifyFvYc9NhhvPaqTPkyHctsCTWm0+z9tc0gHR+bzj9YnQOJC3h
- mD5kx5WcYFDGHQAY/aRIlLh2OGyUcAopyEfko3UHAUrQc00jdhxvh9XRAhafL53aJB
- Bgxq29VDOUjVAnQCPXhmyyDrFnvkNhjf4nSxjAj3kvZHXp5prrpBnA7+z+LWm5LzPZ
- os0zxxJVMy5Vw3ulGB9Tjaj9Y6jz9b1esC90u1DWNtAPURWKiKtRbN/c2AGCugdTbU
- 670mT4HUn8+IA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=YR72ZWup
-Subject: Re: [Buildroot] [PATCH] package/libnss: bump version to 3.90
+X-TOI-EXPURGATEID: 150726::1686583308-49620266-DA6BF88B/0/0 CLEAN NORMAL
+X-TOI-MSGID: c9cce5f5-58c4-4e70-901a-118c06768f1f
+Subject: [Buildroot] [PATCH 1/1] package/libgcrypt: disable asm on i386
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,36 +65,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+Fixes:
+http://autobuild.buildroot.net/results/933/93330f9e1867b1ddc1de19b57d70d223b6f23994/
 
-On 11/06/23 10:22, Bernd Kuhls wrote:
-> Am Sun,  4 Jun 2023 21:16:14 +0200 schrieb Giulio Benetti:
-> 
->> Signed-off-by: Giulio Benetti
->> <giulio.benetti@benettiengineering.com>
->> ---
->>   package/libnss/libnss.hash | 4 ++--
->>   package/libnss/libnss.mk   | 2 +-
->>   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> Hi Giulio,
-> 
-> could you please check whether we need this fix?
-> https://bugzilla.mozilla.org/show_bug.cgi?id=1836781
+Code failing to build on i386 was added in libgcrypt-10.0.0
+https://github.com/gpg/libgcrypt/commit/9d909cb67e70fd792926ac1e2ab305b2cc96bc27
+which was added in buildroot with commit
+d96b9ed0738bae270c479bdaf21eebd4c1f9930d
 
-yes, we need it. Thanks for finding it, I have test'd-pkg
-without -a so I didn't see that build failure.
-Sending V2.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libgcrypt/libgcrypt.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Best regards
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 9232debb3a..2c4743d306 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -21,8 +21,8 @@ LIBGCRYPT_CONF_OPTS = \
+ 	$(if $(BR2_OPTIMIZE_0),--disable-ppc-crypto-support,) \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ 
+-# Libgcrypt doesn't support assembly for coldfire
+-ifeq ($(BR2_m68k_cf),y)
++# disable asm for broken archs
++ifeq ($(BR2_i386)$(BR2_m68k_cf),y)
+ LIBGCRYPT_CONF_OPTS += --disable-asm
+ endif
+ 
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
