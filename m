@@ -4,81 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 817A4C7EE2E
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 18:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C1DAC7EE2E
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 18:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDD0E40A16;
-	Mon, 12 Jun 2023 18:41:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDD0E40A16
+	by smtp2.osuosl.org (Postfix) with ESMTP id CEF4A4020B;
+	Mon, 12 Jun 2023 18:55:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEF4A4020B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lpux8VI0M4Cp; Mon, 12 Jun 2023 18:41:52 +0000 (UTC)
+	with ESMTP id UIs6XfSQaeCF; Mon, 12 Jun 2023 18:55:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25EB6403B8;
-	Mon, 12 Jun 2023 18:41:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25EB6403B8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A98971BF304
- for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 18:41:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E5EB4404C8;
+	Mon, 12 Jun 2023 18:55:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5EB4404C8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BAC11BF3F6
+ for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 18:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D2D1418E6
- for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 18:41:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D2D1418E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7150C404C8
+ for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 18:55:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7150C404C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZNbl7-KUj2xG for <buildroot@lists.busybox.net>;
- Mon, 12 Jun 2023 18:41:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1556E416F5
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1556E416F5
- for <buildroot@buildroot.org>; Mon, 12 Jun 2023 18:41:48 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id
- 4fb4d7f45d1cf-51492ae66a4so6654793a12.1
- for <buildroot@buildroot.org>; Mon, 12 Jun 2023 11:41:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686595306; x=1689187306;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=qIYZF/Jz6z8oQIf+jHLJ7itu9e6jBHLJVKgL3//s6Tw=;
- b=Yco9FrosMKMjfRBzA4TAPFNbt67xPAX2V9ijEFSCYZdV/5jfgaFwd7EODLofV+xbNv
- iWLkmpq0hJTmYxsGR6Zy7/BVxo04+neV+IIWZ0/44it4ytkzSOHis2axB4PTsIBe8GWF
- 6f1CDZj/+wASYvJzkWR6LpO/VGvk2TVqAr8m6smHBDdGrVdU7Wm3Z+bCRWhFL+e7eA33
- ss9KOlKFD2tSBE4Jze1q96ntvQxGpDZepWaVGm5UMxTLEKXhSlUYbMWe0ZMZAXkH6FZY
- IXi8zmzX1B9ZF+5iPyoTMag6jc1Ij4h1SZ0uvCcI/cSp5cd/GDkJl67D9PxsTXQwBa2s
- Bdew==
-X-Gm-Message-State: AC+VfDxbIO3vkyg50e22vvpc0u+11LBY2I9AU7rdnQSw/bte132Exv39
- hOWFKRhEgqgG84MVRe4lPxzMeh/Xdbzf7UjtIGOqSPka
-X-Google-Smtp-Source: ACHHUZ7Ht9JI/WzM1lW6p4YMm4GkSvHQ33Y8/KszrbnNZfO1h8GqLT6boCawkDtI3KQiOZbddJ9gdQFHBbAkUGca5V0=
-X-Received: by 2002:a05:6402:31f3:b0:514:9eae:b0a7 with SMTP id
- dy19-20020a05640231f300b005149eaeb0a7mr4751625edb.17.1686595305951; Mon, 12
- Jun 2023 11:41:45 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id foXOXASANsDL for <buildroot@lists.busybox.net>;
+ Mon, 12 Jun 2023 18:55:32 +0000 (UTC)
+X-Greylist: delayed 00:07:06 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD0E04020B
+Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CD0E04020B
+ for <buildroot@buildroot.org>; Mon, 12 Jun 2023 18:55:31 +0000 (UTC)
+Received: from [192.168.50.162] ([146.241.109.39])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 8maUq1BYfJMjG8maUqe8Fq; Mon, 12 Jun 2023 20:48:22 +0200
+Message-ID: <4a07bfe4-9fdc-f4f5-c720-f191c2812383@benettiengineering.com>
+Date: Mon, 12 Jun 2023 20:48:22 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To: Indrek Kruusa <indrek.kruusa@gmail.com>
 References: <CA+fTLhgfd1TXsc106CVJWzMPKiFE2BtPW6wieF8MxhoUik=Zcg@mail.gmail.com>
  <ff7312fd-f85f-373e-2b0e-3e3d003b84ad@benettiengineering.com>
-In-Reply-To: <ff7312fd-f85f-373e-2b0e-3e3d003b84ad@benettiengineering.com>
-From: Indrek Kruusa <indrek.kruusa@gmail.com>
-Date: Mon, 12 Jun 2023 21:41:35 +0300
-Message-ID: <CA+fTLhixvdP2-A111eJQ-cne41VGnmQ5zn0jmUyEE9ZkS=931A@mail.gmail.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1686595306; x=1689187306;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=qIYZF/Jz6z8oQIf+jHLJ7itu9e6jBHLJVKgL3//s6Tw=;
- b=Mcr+sGxJ46ZTzM8KP5ia3HZBfmkysmlk4Y2T1JsaBVKSCsooYZtHX6DEWC0hCsh+fx
- rzEWQ4zP8eVNvtyuVU523w4ESSL1ULJUrwKH4x+EeG4HxdPvAdHTL5k75mF5jqUJzQ4U
- kHJcelL6zz2N7i1kPAm4175NN63XOTtiMhrE/AE/vorgez4QBxy7b18OSofbsGL5kPNr
- cTAxnOW0rNWDM0jPIRkkNYg0ITQBEzwSDcOhlpaZ8DK1CBUPXwJwlZY14y187jeT7cDv
- lZX+dQ5VbMKKnI+XtaxuauQe30TsbiNu7iXosfIQF9WJRtYHlF2v79eUdoaZfy54sTj0
- UINg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Mcr+sGxJ
+ <CA+fTLhixvdP2-A111eJQ-cne41VGnmQ5zn0jmUyEE9ZkS=931A@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <CA+fTLhixvdP2-A111eJQ-cne41VGnmQ5zn0jmUyEE9ZkS=931A@mail.gmail.com>
+X-CMAE-Envelope: MS4xfE0txNhHY5c02PhYW0ScuOgwA2ADbl+wy/Fvo1S53e+6DDOFOWHjDo6vrRhJ9TBZA+wZ9kOaBBCLCD2U2s1URosbAf7W5Tr6YOPhdXXtU0OLg6+VFeES
+ 1z/G7j3s/gvCDLd0Z31FDvsi9YWMgYmtmE4gQnFdUg5bB5hSAxFLPxScpGCObaIaa7KHh8anqhWcWSWdPXt6fMgyhU5DE4SMqsyL1ycur+y8pUfcE/9kXgG/
+ AvuwBhrHXzigyEPF6OCYej1LBVdijw7yjzm0Z+Moms8=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1686595702; bh=aig9tey8clDf3Y9wi3RqG39+V+nijQgu5cF8i2j4dzE=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=Z6sQaKLd0qiX86Ih4oMifRcqGt5yYHtH0wLE8lGthskNx2SWMqTWuhZqm1ABTg6/X
+ qwVV7SKitR0ilPUlmzpR4r+hrFob4a+K0F13xmQAKMC9aJvwGzh6187jRtCWQWLEgL
+ uxqYvYso8uHxNiZ4+77p/je5X4tcg6mDs7KLu/gYMrX7w21j/fHAbq3NVJFhZCP45o
+ yNe10S5PYNqRpkIQOHub3Mgzlxkyra1YODU1l15sqc7Tk2G3+E60tWwwPaD80pagqX
+ TsHDatvFaHD96cBAudrGWdr5r1t8t2GAZuOxEfCbT2RyRMGgANtGkC8SmBm/Y8EBSW
+ uC6KSOXoo4zSw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=Z6sQaKLd
 Subject: Re: [Buildroot] package/rtl8189fs: question about the debug mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -92,131 +79,48 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============1269397267304042654=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1269397267304042654==
-Content-Type: multipart/alternative; boundary="00000000000017553005fdf312b6"
-
---00000000000017553005fdf312b6
-Content-Type: text/plain; charset="UTF-8"
-
-Hi Giulio!
-Thanks for the fast response! Sure, I will test this patch as soon as I can
-and will let you know! Thanks again!
-
-Indrek
-
-
-E, 12. juuni 2023 19:54 Giulio Benetti <
-giulio.benetti@benettiengineering.com> kirjutas:
-
-> Hi Indrek,
->
-> On 12/06/23 17:24, Indrek Kruusa wrote:
-> > Hi!
-> > When building rtl8189fs driver in buildroot currently then it runs in
-> > debug mode (original Makefile line 91: CONFIG_RTW_DEBUG = y). It's
-> > really verbose (at least 5 rows per second) and basically it renders the
-> > serial console useless.
-> > I would like to turn off the debug mode in a new board config (still
-> > preparing a patch for this). But then I wonder how other users are
-> > living with it. Maybe it should be patched on package level and not on
-> > board level?
->
-> I think that I can send a patch for this that en/disable
-> CONFIG_RTW_DEBUG depending on BR2_ENABLE_RUNTIME_DEBUG.
->
-> I see it like a consistent solution and I've just sent a patch for this:
->
-> https://patchwork.ozlabs.org/project/buildroot/patch/20230612165344.3829304-1-giulio.benetti@benettiengineering.com/
->
-> But there is also another solution to this by passing to kernel options
-> the log level or even at runtime, take a look here:
->
-> https://github.com/ulli-kroll/rtl8814au/blob/master/Document/How_to_set_driver_debug_log_level.pdf
->
-> I haven't tested it but it should work.
->
-> Let me know.
->
-> Best regards
-> --
-> Giulio Benetti
-> CEO&CTO@Benetti Engineering sas
->
-
---00000000000017553005fdf312b6
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto">Hi Giulio!<div dir=3D"auto">Thanks for the fast response!=
- Sure, I will test this patch as soon as I can and will let you know! Thank=
-s again!</div><div dir=3D"auto"><br></div><div dir=3D"auto">Indrek</div><di=
-v dir=3D"auto"><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"l=
-tr" class=3D"gmail_attr">E, 12. juuni 2023 19:54 Giulio Benetti &lt;<a href=
-=3D"mailto:giulio.benetti@benettiengineering.com">giulio.benetti@benettieng=
-ineering.com</a>&gt; kirjutas:<br></div><blockquote class=3D"gmail_quote" s=
-tyle=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi I=
-ndrek,<br>
-<br>
-On 12/06/23 17:24, Indrek Kruusa wrote:<br>
-&gt; Hi!<br>
-&gt; When building rtl8189fs driver in buildroot currently then it runs in =
-<br>
-&gt; debug mode (original Makefile line 91:=C2=A0CONFIG_RTW_DEBUG =3D y). I=
-t&#39;s <br>
-&gt; really verbose (at least 5 rows per second) and basically=C2=A0it rend=
-ers the <br>
-&gt; serial console useless.<br>
-&gt; I would like to turn off the debug mode in a new board config (still <=
-br>
-&gt; preparing a patch for this). But then I wonder how other users are <br=
->
-&gt; living with it. Maybe it should be patched on package level and not on=
- <br>
-&gt; board level?<br>
-<br>
-I think that I can send a patch for this that en/disable<br>
-CONFIG_RTW_DEBUG depending on BR2_ENABLE_RUNTIME_DEBUG.<br>
-<br>
-I see it like a consistent solution and I&#39;ve just sent a patch for this=
-:<br>
-<a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/20230612165=
-344.3829304-1-giulio.benetti@benettiengineering.com/" rel=3D"noreferrer nor=
-eferrer" target=3D"_blank">https://patchwork.ozlabs.org/project/buildroot/p=
-atch/20230612165344.3829304-1-giulio.benetti@benettiengineering.com/</a><br=
->
-<br>
-But there is also another solution to this by passing to kernel options<br>
-the log level or even at runtime, take a look here:<br>
-<a href=3D"https://github.com/ulli-kroll/rtl8814au/blob/master/Document/How=
-_to_set_driver_debug_log_level.pdf" rel=3D"noreferrer noreferrer" target=3D=
-"_blank">https://github.com/ulli-kroll/rtl8814au/blob/master/Document/How_t=
-o_set_driver_debug_log_level.pdf</a><br>
-<br>
-I haven&#39;t tested it but it should work.<br>
-<br>
-Let me know.<br>
-<br>
-Best regards<br>
--- <br>
-Giulio Benetti<br>
-CEO&amp;CTO@Benetti Engineering sas<br>
-</blockquote></div>
-
---00000000000017553005fdf312b6--
-
---===============1269397267304042654==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1269397267304042654==--
+T24gMTIvMDYvMjMgMjA6NDEsIEluZHJlayBLcnV1c2Egd3JvdGU6Cj4gSGkgR2l1bGlvIQo+IFRo
+YW5rcyBmb3IgdGhlIGZhc3QgcmVzcG9uc2UhIFN1cmUsIEkgd2lsbCB0ZXN0IHRoaXMgcGF0Y2gg
+YXMgc29vbiBhcyBJIAo+IGNhbiBhbmQgd2lsbCBsZXQgeW91IGtub3chIFRoYW5rcyBhZ2FpbiEK
+Ck9rLiBpZiBpdCB3b3JrcyBwbGVhc2UgYW5zd2VyIHRvIHRoZSBwYXRjaCB3aXRoIHlvdXI6ClRl
+c3RlZC1ieToKYWZ0ZXIgbXkgU2lnbmVkLW9mZi1ieToKClRoYW5rIHlvdQpCZXN0IHJlZ2FyZHMK
+LS0gCkdpdWxpbyBCZW5ldHRpCkNFTyZDVE9AQmVuZXR0aSBFbmdpbmVlcmluZyBzYXMKCj4gSW5k
+cmVrCj4gCj4gCj4gRSwgMTIuIGp1dW5pIDIwMjMgMTk6NTQgR2l1bGlvIEJlbmV0dGkgCj4gPGdp
+dWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20gCj4gPG1haWx0bzpnaXVsaW8uYmVu
+ZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPj4ga2lyanV0YXM6Cj4gCj4gICAgIEhpIEluZHJl
+aywKPiAKPiAgICAgT24gMTIvMDYvMjMgMTc6MjQsIEluZHJlayBLcnV1c2Egd3JvdGU6Cj4gICAg
+ICA+IEhpIQo+ICAgICAgPiBXaGVuIGJ1aWxkaW5nIHJ0bDgxODlmcyBkcml2ZXIgaW4gYnVpbGRy
+b290IGN1cnJlbnRseSB0aGVuIGl0Cj4gICAgIHJ1bnMgaW4KPiAgICAgID4gZGVidWcgbW9kZSAo
+b3JpZ2luYWwgTWFrZWZpbGUgbGluZSA5MTrCoENPTkZJR19SVFdfREVCVUcgPSB5KS4gSXQncwo+
+ICAgICAgPiByZWFsbHkgdmVyYm9zZSAoYXQgbGVhc3QgNSByb3dzIHBlciBzZWNvbmQpIGFuZCBi
+YXNpY2FsbHnCoGl0Cj4gICAgIHJlbmRlcnMgdGhlCj4gICAgICA+IHNlcmlhbCBjb25zb2xlIHVz
+ZWxlc3MuCj4gICAgICA+IEkgd291bGQgbGlrZSB0byB0dXJuIG9mZiB0aGUgZGVidWcgbW9kZSBp
+biBhIG5ldyBib2FyZCBjb25maWcgKHN0aWxsCj4gICAgICA+IHByZXBhcmluZyBhIHBhdGNoIGZv
+ciB0aGlzKS4gQnV0IHRoZW4gSSB3b25kZXIgaG93IG90aGVyIHVzZXJzIGFyZQo+ICAgICAgPiBs
+aXZpbmcgd2l0aCBpdC4gTWF5YmUgaXQgc2hvdWxkIGJlIHBhdGNoZWQgb24gcGFja2FnZSBsZXZl
+bCBhbmQKPiAgICAgbm90IG9uCj4gICAgICA+IGJvYXJkIGxldmVsPwo+IAo+ICAgICBJIHRoaW5r
+IHRoYXQgSSBjYW4gc2VuZCBhIHBhdGNoIGZvciB0aGlzIHRoYXQgZW4vZGlzYWJsZQo+ICAgICBD
+T05GSUdfUlRXX0RFQlVHIGRlcGVuZGluZyBvbiBCUjJfRU5BQkxFX1JVTlRJTUVfREVCVUcuCj4g
+Cj4gICAgIEkgc2VlIGl0IGxpa2UgYSBjb25zaXN0ZW50IHNvbHV0aW9uIGFuZCBJJ3ZlIGp1c3Qg
+c2VudCBhIHBhdGNoIGZvciB0aGlzOgo+ICAgICBodHRwczovL3BhdGNod29yay5vemxhYnMub3Jn
+L3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjMwNjEyMTY1MzQ0LjM4MjkzMDQtMS1naXVsaW8u
+YmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tLyA8aHR0cHM6Ly9wYXRjaHdvcmsub3psYWJz
+Lm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIzMDYxMjE2NTM0NC4zODI5MzA0LTEtZ2l1
+bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbS8+Cj4gCj4gICAgIEJ1dCB0aGVyZSBp
+cyBhbHNvIGFub3RoZXIgc29sdXRpb24gdG8gdGhpcyBieSBwYXNzaW5nIHRvIGtlcm5lbCBvcHRp
+b25zCj4gICAgIHRoZSBsb2cgbGV2ZWwgb3IgZXZlbiBhdCBydW50aW1lLCB0YWtlIGEgbG9vayBo
+ZXJlOgo+ICAgICBodHRwczovL2dpdGh1Yi5jb20vdWxsaS1rcm9sbC9ydGw4ODE0YXUvYmxvYi9t
+YXN0ZXIvRG9jdW1lbnQvSG93X3RvX3NldF9kcml2ZXJfZGVidWdfbG9nX2xldmVsLnBkZiA8aHR0
+cHM6Ly9naXRodWIuY29tL3VsbGkta3JvbGwvcnRsODgxNGF1L2Jsb2IvbWFzdGVyL0RvY3VtZW50
+L0hvd190b19zZXRfZHJpdmVyX2RlYnVnX2xvZ19sZXZlbC5wZGY+Cj4gCj4gICAgIEkgaGF2ZW4n
+dCB0ZXN0ZWQgaXQgYnV0IGl0IHNob3VsZCB3b3JrLgo+IAo+ICAgICBMZXQgbWUga25vdy4KPiAK
+PiAgICAgQmVzdCByZWdhcmRzCj4gICAgIC0tIAo+ICAgICBHaXVsaW8gQmVuZXR0aQo+ICAgICBD
+RU8mQ1RPQEJlbmV0dGkgRW5naW5lZXJpbmcgc2FzCj4gCgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
