@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77E53C7EE2E
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 20:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0072AC7EE43
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 20:22:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25E2740B6F;
-	Mon, 12 Jun 2023 20:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25E2740B6F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E87C40420;
+	Mon, 12 Jun 2023 20:22:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E87C40420
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id reFIfGIjkK-J; Mon, 12 Jun 2023 20:22:39 +0000 (UTC)
+	with ESMTP id o3Iwy3Gz2Ksf; Mon, 12 Jun 2023 20:22:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58F1F405A9;
-	Mon, 12 Jun 2023 20:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58F1F405A9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C1841BF95C
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA91240B98;
+	Mon, 12 Jun 2023 20:22:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA91240B98
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DD771BF95D
  for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 20:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25BA182183
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DFB2414E4
  for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 20:22:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25BA182183
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DFB2414E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f9A0uF0EvhBm for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kT2ofePHpT5K for <buildroot@lists.busybox.net>;
  Mon, 12 Jun 2023 20:22:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F333C81FD4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A485414DE
  for <buildroot@buildroot.org>; Mon, 12 Jun 2023 20:22:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F333C81FD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A485414DE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E124C82844; Mon, 12 Jun 2023 20:22:22 +0000 (UTC)
+ id EB28982847; Mon, 12 Jun 2023 20:22:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jun 2023 22:20:40 +0200
+Date: Mon, 12 Jun 2023 22:21:50 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: a2c82a768eb26459991d7c2b7867554dffdc9208
-X-Git-Newrev: de1dc331afd14766dceabdeac48119a45b572509
+X-Git-Oldrev: de1dc331afd14766dceabdeac48119a45b572509
+X-Git-Newrev: 52d5a88247817fb1a3cb2841ec6627c2876018ec
 X-Patchwork-Hint: ignore
-Message-Id: <20230612202222.E124C82844@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/php: bump version
- to 8.2.6
+Message-Id: <20230612202222.EB28982847@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] uclibc: fix static builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +62,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de1dc331afd14766dceabdeac48119a45b572509
+commit: https://git.buildroot.net/buildroot/commit/?id=52d5a88247817fb1a3cb2841ec6627c2876018ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.2.6
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7b52d2817c935314136170645a90a9e8cb47dd03)
+(cherry picked from commit 3f5a9d5cb9b519c7c1d7cc295430292a0976734c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-gettimeofday-fix-static-build.patch       | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 6b1549958f..96e8803cb2 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  800738c359b7f1e67e40c22713d2d90276bc85ba1c21b43d99edd43c254c5f76  php-8.2.5.tar.xz
-+sha256  10b796f0ed45574229851212b30a596a76e70ae365322bcaaaf9c00fa7d58cca  php-8.2.6.tar.xz
- 
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7cebc178fe..981da5b15d 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.2.5
-+PHP_VERSION = 8.2.6
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/uclibc/0001-gettimeofday-fix-static-build.patch b/package/uclibc/0001-gettimeofday-fix-static-build.patch
+new file mode 100644
+index 0000000000..2ef5059f05
+--- /dev/null
++++ b/package/uclibc/0001-gettimeofday-fix-static-build.patch
+@@ -0,0 +1,29 @@
++From b19f8f360970ffd0c1a6ac41e07c66dc39790b16 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Wed, 10 May 2023 08:35:25 +0200
++Subject: [PATCH] gettimeofday: fix static build
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=b19f8f360970ffd0c1a6ac41e07c66dc39790b16
++---
++ libc/sysdeps/linux/common/gettimeofday.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/libc/sysdeps/linux/common/gettimeofday.c b/libc/sysdeps/linux/common/gettimeofday.c
++index e5141088e..12473a8e6 100755
++--- a/libc/sysdeps/linux/common/gettimeofday.c
+++++ b/libc/sysdeps/linux/common/gettimeofday.c
++@@ -9,8 +9,9 @@
++ #include <sys/syscall.h>
++ #include <sys/time.h>
++ 
+++#ifdef SHARED
++ #include "ldso.h"
++-
+++#endif
++ 
++ 
++ #ifdef __VDSO_SUPPORT__
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
