@@ -1,60 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13FDAC7EE2E
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 16:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02C20C7EE2F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 14:45:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE46B84483;
-	Mon, 12 Jun 2023 16:02:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE46B84483
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X7CTsDpa-Fsb; Mon, 12 Jun 2023 16:02:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1814C81B9D;
-	Mon, 12 Jun 2023 16:02:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1814C81B9D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F7DC1BF271
- for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 16:02:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1668415B7
- for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 16:02:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1668415B7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7158040BF0;
+	Mon, 12 Jun 2023 14:45:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7158040BF0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tDd8VFri40sH for <buildroot@lists.busybox.net>;
- Mon, 12 Jun 2023 16:02:29 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9p1WW4xrav5p; Mon, 12 Jun 2023 14:44:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E0A340B08;
+	Mon, 12 Jun 2023 14:44:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E0A340B08
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 47F061BF86B
+ for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 14:44:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1BDF2418D8
+ for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 14:44:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BDF2418D8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E9oTseh5PvB4 for <buildroot@lists.busybox.net>;
+ Mon, 12 Jun 2023 14:44:55 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EC1D415BC
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8EC1D415BC
- for <buildroot@buildroot.org>; Mon, 12 Jun 2023 16:02:29 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout05.t-online.de (Postfix) with SMTP id 7A8FA1BC9A
- for <buildroot@buildroot.org>; Mon, 12 Jun 2023 18:02:06 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([84.161.180.237]) by fwd85.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1q8jzZ-1f9oXJ0; Mon, 12 Jun 2023 18:02:05 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40978)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1q8jzY-0000P9-2v
- for buildroot@buildroot.org; Mon, 12 Jun 2023 18:02:04 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC046418B5
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC046418B5
+ for <buildroot@uclibc.org>; Mon, 12 Jun 2023 14:44:54 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1q8imp-0009Aq-Ud
+ for buildroot@uclibc.org; Mon, 12 Jun 2023 16:44:51 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Mon, 12 Jun 2023 18:02:04 +0200
-Message-Id: <20230612160204.1474380-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1686585725-AFD93DAB-8E5AF67B/0/0 CLEAN NORMAL
-X-TOI-MSGID: d950d0b0-5f13-47bf-b469-61c4c6b7c551
-Subject: [Buildroot] [PATCH 1/1] package/speex: force arm mode instead of
- Thumb mode
+Date: Mon, 12 Jun 2023 16:44:15 +0200
+Message-ID: <pan$50e82$a6989011$af09b958$8f4b943d@ID-313208.user.individual.net>
+References: <20230508160516.1750486145__13816.8369465106$1683561965$gmane$org@busybox.osuosl.org>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [git commit] package/at-spi2-core: bump to version
+ 2.48.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,41 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure:
+Am Mon, 8 May 2023 17:17:47 +0200 schrieb Yann E. MORIN:
 
-/tmp/cclxE0xY.s: Assembler messages:
-/tmp/cclxE0xY.s:118: Error: cannot honor width suffix -- `smlabb r2,r0,r4,r6'
-/tmp/cclxE0xY.s:134: Error: cannot honor width suffix -- `smlabb r9,r2,r2,r3'
-/tmp/cclxE0xY.s:812: Error: cannot honor width suffix -- `smlabb r1,r2,r2,r6'
-/tmp/cclxE0xY.s:1202: Error: cannot honor width suffix -- `smulbb r3,r0,r6'
-/tmp/cclxE0xY.s:2298: Error: cannot honor width suffix -- `smulbb r3,r0,r4'
-/tmp/cclxE0xY.s:3133: Error: cannot honor width suffix -- `smulbb r3,r2,r5'
+> commit: https://git.buildroot.net/buildroot/commit/?
+id=d1757fdfb0010d29f20cd68cb6e16f019e236424
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> diff --git a/package/at-spi2-core/Config.in b/package/at-spi2-core/
+Config.in
+> index f56c5b93c4..2a1b21d375 100644
+> --- a/package/at-spi2-core/Config.in
+> +++ b/package/at-spi2-core/Config.in
+> @@ -1,12 +1,13 @@
+>  config BR2_PACKAGE_AT_SPI2_CORE
+>  	bool "at-spi2-core"
+> -	depends on BR2_PACKAGE_XORG7 # xlib-libxtst
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
+>  	depends on BR2_USE_MMU # glib2
+>  	depends on BR2_USE_WCHAR # glib2
+> +	depends on !BR2_STATIC_LIBS # dlopen()
 
-Fixes:
-http://autobuild.buildroot.net/results/c55/c557ca72832c942f201b4a21f913f74534857cc6/
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/speex/speex.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+this commit lacks propagation of this new dependency to its reverse 
+dependencies leading to build errors:
+http://autobuild.buildroot.net/results/b3b/
+b3ba3533286c8a0cacdc8553f61a868a05797ea8//
 
-diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-index 6d61e93833..0bbcb2bde2 100644
---- a/package/speex/speex.mk
-+++ b/package/speex/speex.mk
-@@ -26,6 +26,10 @@ ifeq ($(BR2_PACKAGE_SPEEX_ARM5E),y)
- SPEEX_CONF_OPTS += --enable-arm5e-asm
- endif
- 
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+SPEEX_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
-+endif
-+
- define SPEEX_LIBTOOL_FIXUP
- 	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(@D)/libtool
- 	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(@D)/libtool
--- 
-2.39.2
+For example:
+
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_AT_SPI2_CORE
+  Depends on [n]: BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y] && 
+BR2_USE_WCHAR [=y] && !BR2_STATIC_LIBS [=y]
+  Selected by [y]:
+  - BR2_PACKAGE_ATKMM2_28 [=y] && BR2_INSTALL_LIBSTDCPP [=y] && 
+BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && 
+BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y]
+
+Regards, Bernd
 
 _______________________________________________
 buildroot mailing list
