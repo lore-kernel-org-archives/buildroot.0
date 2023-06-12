@@ -4,88 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD039C88CB4
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 17:08:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DF95C88CB2
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jun 2023 17:29:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A95F418AA;
-	Mon, 12 Jun 2023 17:08:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A95F418AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAE7D418AD;
+	Mon, 12 Jun 2023 17:29:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAE7D418AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id alCE3ESiqfb7; Mon, 12 Jun 2023 17:08:35 +0000 (UTC)
+	with ESMTP id 8kZ2u542oGoV; Mon, 12 Jun 2023 17:29:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40362415DC;
-	Mon, 12 Jun 2023 17:08:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40362415DC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2703E1BF306
- for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 17:08:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B34C9414DE;
+	Mon, 12 Jun 2023 17:29:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B34C9414DE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3972F1BF306
+ for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 17:29:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3E0A60ACC
- for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 17:08:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3E0A60ACC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 111C4414E4
+ for <buildroot@lists.busybox.net>; Mon, 12 Jun 2023 17:29:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 111C4414E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3rwzjulhDa6t for <buildroot@lists.busybox.net>;
- Mon, 12 Jun 2023 17:08:32 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F6886068B
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3F6886068B
- for <buildroot@buildroot.org>; Mon, 12 Jun 2023 17:08:32 +0000 (UTC)
-Received: by mail-pl1-x634.google.com with SMTP id
- d9443c01a7336-1b3c0c476d1so13886905ad.1
- for <buildroot@buildroot.org>; Mon, 12 Jun 2023 10:08:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686589711; x=1689181711;
- h=content-transfer-encoding:mime-version:user-agent:organization
- :references:in-reply-to:date:cc:to:reply-to:subject:message-id:from
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Axngv4L+rCBqDKgql346fQpTH1rPasehzH12ZMuCl68=;
- b=WM71OxSEt85gn3fJ9Dz7B8gmcX3j78/qA0ajnc5AMbffifWEAp1E3LimBUSVEEFnER
- du8X+hM5KJATL+X4dx+Piu9zvZNNNcrXsLhYdKUJhAn3avWjI0cAkaCTczhH601Li/Pn
- KlMUSQenFbxDM1jCIzDz7znWbwF4p2m5E37+iS1ktsxabpbhRLvQtX7pJBoNiAv9VYrF
- BWG5rVNz7Znx8oUJzOch3+r8yu66Y7Pcnh3Vw4r/he7ztBix9JW7YRX69s/VXhRZFR03
- z89giw+iR/yv+XKii+MAPai223X5W6xJa0Srzmk7XGcnr16C4iO8MeEOca8EE7+PCz5I
- bjGA==
-X-Gm-Message-State: AC+VfDy5rMyvthzxzGpGfP0nUkdt/i9w9E9oP2F5NCBHdxcXM8JeSz0x
- V6ZVMsJ1tGQWlx/U3t/vl7tZ0YXPVbX0VpA3VAfXiw==
-X-Google-Smtp-Source: ACHHUZ6xT3VXgJVNkxjaEhiBw5QfNWyTiwNJ/OpWTtkOZ5v8FY+p13YyXILt5bEZ5pJWcbEsbDTH+g==
-X-Received: by 2002:a17:903:18e:b0:1b0:295b:f192 with SMTP id
- z14-20020a170903018e00b001b0295bf192mr7487700plg.3.1686589710790; 
- Mon, 12 Jun 2023 10:08:30 -0700 (PDT)
-Received: from [10.10.10.151] ([75.164.37.163])
- by smtp.gmail.com with ESMTPSA id
- b16-20020a170903229000b001ab2592ed33sm8497134plh.171.2023.06.12.10.08.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 12 Jun 2023 10:08:30 -0700 (PDT)
-X-Google-Original-From: Kris Bahnsen <kris@embeddedTS.com>
-Message-ID: <6232f4834ed55784e63a925e478b09fbab57b5cc.camel@embeddedTS.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EuJzoo1KVMVN for <buildroot@lists.busybox.net>;
+ Mon, 12 Jun 2023 17:29:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F1D9414D8
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7F1D9414D8
+ for <buildroot@buildroot.org>; Mon, 12 Jun 2023 17:29:30 +0000 (UTC)
+Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
+ by mailout07.t-online.de (Postfix) with SMTP id B1314412DA;
+ Mon, 12 Jun 2023 19:29:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.180.237]) by fwd76.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1q8lM7-14Mpqj0; Mon, 12 Jun 2023 19:29:27 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60138)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q8lM6-00073u-2p;
+ Mon, 12 Jun 2023 19:29:26 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jun 2023 10:08:29 -0700
-In-Reply-To: <bae326459a62944709e8a46f12cc410bd3f80db1.camel@embeddedTS.com>
-References: <20230511173451.2293054-1-kris@embeddedTS.com>
- <bae326459a62944709e8a46f12cc410bd3f80db1.camel@embeddedTS.com>
-Organization: embeddedTS
-User-Agent: Evolution 3.38.3-1+deb11u2 
+Date: Mon, 12 Jun 2023 19:29:25 +0200
+Message-Id: <20230612172926.1814129-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=embeddedts.com; s=google; t=1686589711; x=1689181711;
- h=content-transfer-encoding:mime-version:user-agent:organization
- :references:in-reply-to:date:cc:to:reply-to:subject:message-id:from
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Axngv4L+rCBqDKgql346fQpTH1rPasehzH12ZMuCl68=;
- b=DciWoTcPpgQ88k8625vN6YADIFJiwH2btwb8Yhb6+rZeSx3D8WXKz6SOc9tVi84H2/
- NJyy8RcDQ4NtNnDMOKaWPnKGS9vtr0hFJ0w10jV0piCsazMW5iBryG6iCBTenBVitnYF
- XROBJmzw4a9e9sQf7BvSUQGhkdNaAZnqx0xtY=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=embeddedts.com header.i=@embeddedts.com
- header.a=rsa-sha256 header.s=google header.b=DciWoTcP
-Subject: Re: [Buildroot] [PATCH 1/1] package/linux-firmware: add QCA9377 BT
- firmware
+X-TOI-EXPURGATEID: 150726::1686590967-15FFC3A1-92365078/0/0 CLEAN NORMAL
+X-TOI-MSGID: 68f8dcd1-504e-4b49-9d34-fc8f6ce8ca8b
+Subject: [Buildroot] [PATCH 1/2] package/haproxy: fix build on aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,55 +65,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
-Reply-To: kris@embeddedTS.com
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Mark Featherston <mark@embeddedts.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCAyMDIzLTA1LTI2IGF0IDE2OjI5IC0wNzAwLCBLcmlzIEJhaG5zZW4gd3JvdGU6Ck9u
-IFRodSwgMjAyMy0wNS0xMSBhdCAxMDozNCAtMDcwMCwgS3JpcyBCYWhuc2VuIHZpYSBidWlsZHJv
-b3Qgd3JvdGU6CkRlcGxveSBmaXJtd2FyZSBmaWxlcyBhcyB3ZWxsLgoKU2lnbmVkLW9mZi1ieTog
-S3JpcyBCYWhuc2VuIDxrcmlzQGVtYmVkZGVkVFMuY29tPgoKRm9sbG93aW5nIHVwIHdpdGggdGhp
-cyBwYXRjaCB0byBzZWUgaWYgaWYgdGhlcmUgYXJlIGFueSBvdXRzdGFuZGluZwpxdWVzdGlvbnMK
-b3IgY29uY2VybnMgYW5kIGlmIHRoZXJlIGlzIGEgdGltZWxpbmUgb24gZ2V0dGluZyB0aGlzIG1l
-cmdlZCBpbi4KVGhhbmtzLgoKLUtyaXMKCkl0J3MgYmVlbiBhYm91dCBhIG1vbnRoIHNpbmNlIHRo
-ZSBvcmlnaW5hbCBwYXRjaCB3YXMgc3VibWl0dGVkLiBJZgp0aGVyZSBhcmUgYW55IGlzc3VlcyB3
-aXRoIHRoZSBwYXRjaCBJJ2QgbG92ZSBzb21lIGZlZWRiYWNrLiBPdGhlcndpc2UsCkkgd291bGQg
-bGlrZSB0byBrbm93IGlmIHRoZXJlIGlzIGEgdGltZWxpbmUgb24gZ2V0dGluZyB0aGlzIG1lcmdl
-ZCBpbgphcyB3ZSBhcmUgc3RhbGxlZCB3YWl0aW5nIG9uIHN1cHBvcnQgZm9yIGl0LiBUaGFua3Mu
-CgotS3JpcwoKCj4gLS0tCj4gwqBwYWNrYWdlL2xpbnV4LWZpcm13YXJlL0NvbmZpZy5pbsKgwqDC
-oMKgwqDCoMKgwqAgfCA1ICsrKysrCj4gwqBwYWNrYWdlL2xpbnV4LWZpcm13YXJlL2xpbnV4LWZp
-cm13YXJlLm1rIHwgNiArKysrKysKPiDCoDIgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygr
-KQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpbnV4LWZpcm13YXJlL0NvbmZpZy5pbiBiL3Bh
-Y2thZ2UvbGludXgtCj4gZmlybXdhcmUvQ29uZmlnLmluCj4gaW5kZXggNGI0MTVhN2RhMi4uNGNh
-YjZlNzkzOSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2xpbnV4LWZpcm13YXJlL0NvbmZpZy5pbgo+
-ICsrKyBiL3BhY2thZ2UvbGludXgtZmlybXdhcmUvQ29uZmlnLmluCj4gQEAgLTY5LDYgKzY5LDEx
-IEBAIGNvbmZpZwo+IEJSMl9QQUNLQUdFX0xJTlVYX0ZJUk1XQVJFX1FVQUxDT01NXzYxNzRBX0JU
-Cj4gwqDCoMKgwqDCoMKgwqDCoGhlbHAKPiDCoMKgwqDCoMKgwqDCoMKgwqAgRmlybXdhcmUgZmls
-ZXMgZm9yIFFDQSBSb21lIDYxNzRBIGJsdWV0b290aCBzdXBwb3J0Lgo+IMKgCj4gK2NvbmZpZyBC
-UjJfUEFDS0FHRV9MSU5VWF9GSVJNV0FSRV9RVUFMQ09NTV85Mzc3X0JUCj4gK8KgwqDCoMKgwqDC
-oMKgYm9vbCAiUXVhbGNvbW0gQXRoZXJvcyBRQ0E5Mzc3IEJsdWV0b290aCIKPiArwqDCoMKgwqDC
-oMKgwqBoZWxwCj4gK8KgwqDCoMKgwqDCoMKgwqAgRmlybXdhcmUgZmlsZXMgZm9yIFFDQTkzNzcg
-Ymx1ZXRvb3RoIHN1cHBvcnQuCj4gKwo+IMKgY29uZmlnIEJSMl9QQUNLQUdFX0xJTlVYX0ZJUk1X
-QVJFX0FSMzAxMQo+IMKgwqDCoMKgwqDCoMKgwqBib29sICJRdWFsY29tbSBBdGhlcm9zIDMwMTEi
-Cj4gwqDCoMKgwqDCoMKgwqDCoGhlbHAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saW51eC1maXJt
-d2FyZS9saW51eC1maXJtd2FyZS5tawo+IGIvcGFja2FnZS9saW51eC1maXJtd2FyZS9saW51eC1m
-aXJtd2FyZS5tawo+IGluZGV4IDlkOWQxMmJkNWYuLjk2NzJjN2EwN2YgMTAwNjQ0Cj4gLS0tIGEv
-cGFja2FnZS9saW51eC1maXJtd2FyZS9saW51eC1maXJtd2FyZS5tawo+ICsrKyBiL3BhY2thZ2Uv
-bGludXgtZmlybXdhcmUvbGludXgtZmlybXdhcmUubWsKPiBAQCAtNjUsNiArNjUsMTIgQEAgTElO
-VVhfRklSTVdBUkVfRklMRVMgKz0KPiBxY2EvcmFtcGF0Y2hfdXNiXzAwMDAwMzAyLmJpbiBxY2Ev
-bnZtX3VzYl8wMDAwMDMwMi5iaW4KPiDCoExJTlVYX0ZJUk1XQVJFX0FMTF9MSUNFTlNFX0ZJTEVT
-ICs9IExJQ0VOU0UucWNvbQo+IMKgZW5kaWYKPiDCoAo+ICsjIFF1YWxjb21tIEF0aGVyb3MgUUNB
-OTM3NyBCbHVldG9vdGgKPiAraWZlcSAoJChCUjJfUEFDS0FHRV9MSU5VWF9GSVJNV0FSRV9RVUFM
-Q09NTV85Mzc3X0JUKSx5KQo+ICtMSU5VWF9GSVJNV0FSRV9GSUxFUyArPSBxY2EvcmFtcGF0Y2hf
-MDAyMzAzMDIuYmluCj4gcWNhL252bV8wMDIzMDMwMi5iaW4KPiArTElOVVhfRklSTVdBUkVfQUxM
-X0xJQ0VOU0VfRklMRVMgKz0gTElDRU5TRS5xY29tCj4gK2VuZGlmCj4gKwo+IMKgIyBSZWFsdGVr
-IDg3eHggQmx1ZXRvb3RoCj4gwqBpZmVxICgkKEJSMl9QQUNLQUdFX0xJTlVYX0ZJUk1XQVJFX1JU
-TF84N1hYX0JUKSx5KQo+IMKgTElOVVhfRklSTVdBUkVfRklMRVMgKz0gXAoKCgoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fixes:
+http://autobuild.buildroot.net/results/07c/07ccb8c45c709a4b6ed32aafa33cd04e74174b11/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...mic.h-may-need-compiler.h-on-ARMv8.2.patch | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch
+
+diff --git a/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch b/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch
+new file mode 100644
+index 0000000000..b3b1f732ab
+--- /dev/null
++++ b/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch
+@@ -0,0 +1,36 @@
++From 5ab3c61932af7619518169da744ba6346f060405 Mon Sep 17 00:00:00 2001
++From: Willy Tarreau <w@1wt.eu>
++Date: Thu, 8 Dec 2022 08:32:57 +0100
++Subject: [PATCH] BUILD: atomic: atomic.h may need compiler.h on ARMv8.2-a
++
++We get a build error in ncbuf.c when building for ARMv8.2-a because ncbuf
++has minimal includes and among them bug.h which includes atomic.h. Atomic.h
++may use "forceinline" without including compiler.h, hence the build error.
++It was verified that adding it doesn't inflate the total headers.
++
++Since all other C files include api.h which already covers this, there's
++no real need to bapkport this. The issue was already there in 2.3 though.
++
++Upstream: https://git.haproxy.org/?p=haproxy.git;a=commitdiff;h=5ab3c61932af7619518169da744ba6346f060405#patch1
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ include/haproxy/atomic.h |    2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/include/haproxy/atomic.h b/include/haproxy/atomic.h
++index f60be95..7e3c826 100644
++--- a/include/haproxy/atomic.h
+++++ b/include/haproxy/atomic.h
++@@ -23,6 +23,8 @@
++ #ifndef _HAPROXY_ATOMIC_H
++ #define _HAPROXY_ATOMIC_H
++ 
+++#include <haproxy/compiler.h>
+++
++ /* A few notes for the macros and functions here:
++  *  - this file is painful to edit, most operations exist in 3 variants,
++  *    no-thread, threads with gcc<4.7, threads with gcc>=4.7. Be careful when
++-- 
++1.7.10.4
++
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
