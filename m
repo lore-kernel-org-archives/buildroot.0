@@ -4,64 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8542C7EE2E
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 10:50:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73573C7EE29
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 10:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8700860EFA;
-	Tue, 13 Jun 2023 10:50:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8700860EFA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0425660C0A;
+	Tue, 13 Jun 2023 10:51:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0425660C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 27wFbop4v8Rl; Tue, 13 Jun 2023 10:50:53 +0000 (UTC)
+	with ESMTP id xi10Vr15KGg0; Tue, 13 Jun 2023 10:51:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB31C6103A;
-	Tue, 13 Jun 2023 10:50:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB31C6103A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5CAE81BF95E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CFBA60F97;
+	Tue, 13 Jun 2023 10:51:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CFBA60F97
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AA59A1BF2BE
  for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 10:50:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 366F740223
+ by smtp3.osuosl.org (Postfix) with ESMTP id 90AFF60FCD
  for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 10:50:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 366F740223
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90AFF60FCD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M8MGKThweexq for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 10:50:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ry1l28uKAUpf for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 10:50:26 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76DCD400FB
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76DCD400FB
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 10:50:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EC8260F00
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6EC8260F00
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 10:50:25 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue108
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1MTREY-1qYHg60RbA-00Tj1c; Tue, 13
- Jun 2023 12:50:18 +0200
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1MOzGc-1qTrqC3jmW-00PLIO; Tue, 13
+ Jun 2023 12:50:21 +0200
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jun 2023 12:50:12 +0200
-Message-Id: <20230613105015.739870-2-laurent@vivier.eu>
+Date: Tue, 13 Jun 2023 12:50:15 +0200
+Message-Id: <20230613105015.739870-5-laurent@vivier.eu>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230613105015.739870-1-laurent@vivier.eu>
 References: <20230613105015.739870-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Hosc+mGs+9jCSaDsA8fZdvV0yEeSr5hV0K5VHprSJPMmOuivED9
- EnKbqww/r9V/oCdPrzgbR4vlWL9D/q8CJYGKHofJYoCIz3MHQ7NxXVermXtHcyAkljZThrC
- xy0LWI8zfoMppZzW7HTzEO/W7xJ89/v6Z0KkaC1JPs6U5UPb2uCoam6+u4ZCifUzUES6Zg/
- ckcRZhDecfoOJelAAzK1A==
-UI-OutboundReport: notjunk:1;M01:P0:8MTDNwZyJnY=;7aVU0y2JzXaEBCBudQ1GK/bBDz6
- PDELnmp+pnRHadK5D+mVb0ZdvB7zijYkH7C4f+gi+LWy6Ykw3jPMbzfUE/u+5xHUsbD1b9O3v
- Yam5cL9VdtDPi6o/eitbLkTXHRqKtdzl0CtzuBVWqf5D/hppjmw/RsTFEj33U/9/rh+CBp1aN
- pJQOZ8RSSi4f9/AfvEW1JKQG/LBCoxE6d1EQQOO1Mjdpy5CaylGrCrpdS93UMyRPwhjsDrydH
- OKFBMSClDQmaJ9FVEaAIp66DKCUJPpFqeMUrQUk+6mYyIsCFwJ2UnaKvr3dpLOlZkO111y7n5
- Wq8uI/xa450rRj4UpMMTZNQMIeo2y0V7b+6kPq/1UvzfS+LUcwgcV//Zro4y9JlIQgBYaiOEh
- N2ElqLegMd6jq7GOf0bjFZvuaseIiMx0Hg8BHEuuwa9ZTt0lzwAQ3hQhR0DZaY9lBOzofdsz2
- dxAQvobCMDHn96/VY/U3IjpBw8pOlEkjvN/XulGk+PBAKBBoIsh5yizr8ou1pbwpgdic9AxvG
- K//KXhniP5uA6f6Xhj/KWXG5o5vSoX8ehWtTlm/ZrlLnS8HWR5C/x91GnxGCvcm3AU6eCWK4w
- HJpl5hC+xktFS01a0yCk6E0HHhtI5SXwfL+REYVUZhDviO5N/oURTPMhV7oS5cSS5q/I6xPnK
- PSzjE9W9LOfWkub8zGF36dmRZBPElfRKi5y4YeNNXA==
-Subject: [Buildroot] [PATCH v14 1/4] petitboot: add pb-discover daemon
+X-Provags-ID: V03:K1:pyGIZPzaEdQbvrPVReUxmbYMW3Wn/52TjGPzdiD3XWuwSUWZlpE
+ VlFJWcivSplfrfWzagPb7g2KTjEaN4bPodGKSEbQr+W0dGsX34CYeL//M6sLM0Pq7NgxQef
+ YVIXHdH9qi8HA7TOWa3rCiPTk8GsaALci8V489Cj8Nq3EM/0N/FOyyDthwzu38ZWFlFNcc0
+ u8q0zzISoGhJmGra64lZQ==
+UI-OutboundReport: notjunk:1;M01:P0:tXDo1wHk5Pk=;EYk+et6Eqybk6Lynrzsg1aZ00kf
+ PmcL77HmgCBXuT1pluXmtrvSdNSg8oLEs96w+LpkvITw4xum5XHSErSdzP0AwD/gOsuH8Xf13
+ 5szxMW+SRwzQ8ANm5U4w6uf9nG4V0OhyE0MQQ+xU5Jw0EXsg/dC0eBO9kSWPO8E9o4bD0Eci7
+ HUsJn33/QWfwX2pchk7Az++8GuVwjiHAWgXVZtSfT3U1wlog2N9Pc8RjDdOTQh7n5OO+GtiOu
+ Zik9nK9EW/EOzV+JwFNcp+r98K/AUbuSYqt+9PSQ2Os+p/erqQ74cTH0JQS5ieDVWkST+48qM
+ pT+g3YDkPSW1h8+wI+b+XoWo2j5twYS6YWFgtFjEieUkjuCu5mxOlgDZ5LMOqzi4zMn2z6wJe
+ 3LrFufWUBo9evh3m99fu4BBI+zH4XZMqPzXMjWd5hr268V5cCHHuAHg2kuuu7v4AnhSdu/wRy
+ GwZAJ5VTOlh3Eh2ZBFmWWAxWUZyhoqH/SpkW03riLWwyz/R+q5KwkgiwcoNKKg7/EexPsPzim
+ mlRKxejqoYeAOlrK4n8iFBA5ZLoYFvL4iaNVuA9tp33TvtJFuoEuqMm8HvE4eSqi0L7y0CoOo
+ z4TgUJeZHllkpS6nWuEh9mBmsyBVx6bQfgDduOmgMQ459WpzWM7vN1EQs1tN71EUnJFLE7xYu
+ /cPB9Adw6q1Rr9d4+LXJpHJb/a9lPINyo/XX7k7OvQ==
+Subject: [Buildroot] [PATCH v14 4/4] support/scripts/boot-qemu-image.py:
+ manage petitboot interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,48 +78,51 @@ Cc: Thomas Huth <huth@tuxfamily.org>, Laurent Vivier <laurent@vivier.eu>,
  =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogTGF1cmVudCBWaXZpZXIgPGxhdXJlbnRAdml2aWVyLmV1PgpSZXZpZXdl
-ZC1ieTogQ8OpZHJpYyBMZSBHb2F0ZXIgPGNsZ0BrYW9kLm9yZz4KLS0tCiBwYWNrYWdlL3BldGl0
-Ym9vdC9TMTVwYi1kaXNjb3ZlciB8IDU0ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-CiBwYWNrYWdlL3BldGl0Ym9vdC9wZXRpdGJvb3QubWsgICB8ICA0ICsrKwogMiBmaWxlcyBjaGFu
-Z2VkLCA1OCBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wZXRpdGJv
-b3QvUzE1cGItZGlzY292ZXIKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3BldGl0Ym9vdC9TMTVwYi1k
-aXNjb3ZlciBiL3BhY2thZ2UvcGV0aXRib290L1MxNXBiLWRpc2NvdmVyCm5ldyBmaWxlIG1vZGUg
-MTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAwMC4uODMzMDVlZDllYThhCi0tLSAvZGV2L251bGwKKysr
-IGIvcGFja2FnZS9wZXRpdGJvb3QvUzE1cGItZGlzY292ZXIKQEAgLTAsMCArMSw1NCBAQAorIyEv
-YmluL3NoCisKK0RBRU1PTj0icGItZGlzY292ZXIiCitQSURGSUxFPSIvdmFyL3J1bi8kREFFTU9O
-LnBpZCIKK0xPR0ZJTEU9Ii92YXIvbG9nLyREQUVNT04ubG9nIgorCitQQl9ESVNDT1ZFUl9BUkdT
-PSItbCAkTE9HRklMRSIKKworaWYgWyAiJChwYi1jb25maWcgZGVidWcpIiA9ICJlbmFibGVkIiBd
-IDsgdGhlbgorCVBCX0RJU0NPVkVSX0FSR1M9IiRQQl9ESVNDT1ZFUl9BUkdTIC0tdmVyYm9zZSIK
-K2ZpCisKK3N0YXJ0KCkgeworCXByaW50ZiAnU3RhcnRpbmcgJXM6ICcgIiREQUVNT04iCisJIyBz
-aGVsbGNoZWNrIGRpc2FibGU9U0MyMDg2ICMgd2UgbmVlZCB0aGUgd29yZCBzcGxpdHRpbmcKKwlz
-dGFydC1zdG9wLWRhZW1vbiAtUyAtcSAtYiAtcCAiJFBJREZJTEUiIC14ICIvdXNyL3NiaW4vJERB
-RU1PTiIgXAorCQktLSAkUEJfRElTQ09WRVJfQVJHUworCXN0YXR1cz0kPworCWlmIFsgIiRzdGF0
-dXMiIC1lcSAwIF07IHRoZW4KKwkJZWNobyAiT0siCisJZWxzZQorCQllY2hvICJGQUlMIgorCWZp
-CisJcmV0dXJuICIkc3RhdHVzIgorfQorCitzdG9wKCkgeworCXByaW50ZiAnU3RvcHBpbmcgJXM6
-ICcgIiREQUVNT04iCisJc3RhcnQtc3RvcC1kYWVtb24gLUsgLXEgLXAgIiRQSURGSUxFIgorCXN0
-YXR1cz0kPworCWlmIFsgIiRzdGF0dXMiIC1lcSAwIF07IHRoZW4KKwkJZWNobyAiT0siCisJZWxz
-ZQorCQllY2hvICJGQUlMIgorCWZpCisJcmV0dXJuICIkc3RhdHVzIgorfQorCityZXN0YXJ0KCkg
-eworCXN0b3AKKwlzbGVlcCAxCisJc3RhcnQKK30KKworY2FzZSAiJDEiIGluCisJc3RhcnR8c3Rv
-cHxyZXN0YXJ0KQorCQkiJDEiOzsKKwlyZWxvYWQpCisJCXJlc3RhcnQ7OworCSopCisJCWVjaG8g
-IlVzYWdlOiAkMCB7c3RhcnR8c3RvcHxyZXN0YXJ0fHJlbG9hZH0iCisJCWV4aXQgMQorCQk7Owor
-ZXNhYwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9wZXRpdGJvb3QvcGV0aXRib290Lm1rIGIvcGFja2Fn
-ZS9wZXRpdGJvb3QvcGV0aXRib290Lm1rCmluZGV4IGE3OThlN2NhNjE0Zi4uNGQ1NmI3MzkzOGU3
-IDEwMDY0NAotLS0gYS9wYWNrYWdlL3BldGl0Ym9vdC9wZXRpdGJvb3QubWsKKysrIGIvcGFja2Fn
-ZS9wZXRpdGJvb3QvcGV0aXRib290Lm1rCkBAIC01Myw2ICs1MywxMCBAQCBkZWZpbmUgUEVUSVRC
-T09UX1BPU1RfSU5TVEFMTAogCQkkKFRBUkdFVF9ESVIpL2V0Yy9wZXRpdGJvb3QvYm9vdC5kLzAx
-LWNyZWF0ZS1kZWZhdWx0LWR0YgogCSQoSU5TVEFMTCkgLUQgLW0gMDc1NSAkKEBEKS91dGlscy9o
-b29rcy85MC1zb3J0LWR0YiBcCiAJCSQoVEFSR0VUX0RJUikvZXRjL3BldGl0Ym9vdC9ib290LmQv
-OTAtc29ydC1kdGIKKwkkKElOU1RBTEwpIC1tIDA3NTUgLUQgJChQRVRJVEJPT1RfUEtHRElSKS9T
-MTVwYi1kaXNjb3ZlciBcCisJCSQoVEFSR0VUX0RJUikvZXRjL2luaXQuZC9TMTVwYi1kaXNjb3Zl
-cgorCWxuIC1zZiAvdXNyL3NiaW4vcGItdWRoY3BjIFwKKwkJJChUQVJHRVRfRElSKS91c3Ivc2hh
-cmUvdWRoY3BjL2RlZmF1bHQuc2NyaXB0LmQvCiBlbmRlZgogCiBQRVRJVEJPT1RfUE9TVF9JTlNU
-QUxMX1RBUkdFVF9IT09LUyArPSBQRVRJVEJPT1RfUE9TVF9JTlNUQUxMCi0tIAoyLjQwLjEKCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Petitboot doesn't start a shell but a GUI.
+Manage the menu to switch to the shell.
+
+Enable the test for qemu_m68K_virt.
+
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+---
+ support/scripts/boot-qemu-image.py | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
+index ba50ea69ee9a..c94b7a5c969d 100755
+--- a/support/scripts/boot-qemu-image.py
++++ b/support/scripts/boot-qemu-image.py
+@@ -36,7 +36,7 @@ def main():
+     time.sleep(1)
+ 
+     try:
+-        child.expect(["buildroot login:"], timeout=600)
++        idx = child.expect(["buildroot login:", "Exit to shell"], timeout=600)
+     except pexpect.EOF as e:
+         # Some emulations require a fork of qemu-system, which may be
+         # missing on the system, and is not provided by Buildroot.
+@@ -55,7 +55,11 @@ def main():
+         print("System did not boot in time, exiting.")
+         sys.exit(1)
+ 
+-    child.sendline("root\r")
++    if idx == 0:
++        child.sendline("root\r")
++    elif idx == 1:
++        time.sleep(1)
++        child.sendline("\r")
+ 
+     try:
+         child.expect(["# "], timeout=600)
+-- 
+2.40.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
