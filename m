@@ -4,63 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EA70C7EE2E
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 10:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A52CC7EE29
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 10:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6755460EFA;
-	Tue, 13 Jun 2023 10:50:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6755460EFA
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0478610E7;
+	Tue, 13 Jun 2023 10:50:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0478610E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sq43PoxFf1MU; Tue, 13 Jun 2023 10:50:28 +0000 (UTC)
+	with ESMTP id Bl_oxSGiL0AY; Tue, 13 Jun 2023 10:50:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7567660FCD;
-	Tue, 13 Jun 2023 10:50:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7567660FCD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 07ABB1BF2BE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14B6560F00;
+	Tue, 13 Jun 2023 10:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14B6560F00
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 48A131BF2BE
  for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 10:50:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D3A31410AF
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 10:50:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3A31410AF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F15D8211F
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 10:50:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F15D8211F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T89uGxFwk6OG for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KZABB4yT2ucr for <buildroot@lists.busybox.net>;
  Tue, 13 Jun 2023 10:50:24 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19B5C409F2
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 19B5C409F2
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 10:50:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AB678211A
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5AB678211A
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 10:50:24 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue108
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1M6UVr-1qBVVg0eIT-006zdF; Tue, 13
- Jun 2023 12:50:17 +0200
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1M5fQq-1qBml72GOQ-007GTu; Tue, 13
+ Jun 2023 12:50:19 +0200
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jun 2023 12:50:11 +0200
-Message-Id: <20230613105015.739870-1-laurent@vivier.eu>
+Date: Tue, 13 Jun 2023 12:50:13 +0200
+Message-Id: <20230613105015.739870-3-laurent@vivier.eu>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230613105015.739870-1-laurent@vivier.eu>
+References: <20230613105015.739870-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:pwIZbOmYezaLydBqH131GjoV43qdYa6zR1dkfc8hj9CO8GO36IR
- Mp4h8ogogDlqtrw9KmESAqBh+IRztg+vy6VNaqGGZIfZ788+IU7eLUM1p2WJMOEyGIPccT+
- ykXTaqy8UseGwu9B6HLKS5xi7HUf3+UTf/z/NMDG9IBYrNSO9KEKDdiFf5ijbNjziPHYY3J
- SAVwsnkJqXRe1ijcClETQ==
-UI-OutboundReport: notjunk:1;M01:P0:+ZRWZPYgrsM=;A1iBDb0A9aeJRR6+5ECKtULtUc0
- Qt6O7Y9lrSGXhCkLaRdIHbWBPN8E8vSX3AlAdGCw7RIhwMNCNUrmW2VrZRmmbp/naH7SDZCyZ
- e9dReHcRH9iq97/yTJfdkKTlrH9gU+JSoBeKGsE0EPBKyxO11ay/+4t2d63Ni+3mMAg+lp12E
- 4ECqsguY7yNqc2YcXQJmpKJcC4VhOf57E9yVxuDHMMuSzB9IfSOQXLmZS1d+GOPAtTWsb1kLb
- Vn+ykhmAzHJg3/LYgH6cfAmYUVSitVMmrkqibn92e/U3e8GRMgz6I+byUSLlAg/6shdalAL85
- fNFROMpEvDACJEDIqqUVpxXKnjZ+WkefNjU5FFlkpqLzB0JjTKwJpfrbrfWMpcE4eHHjzcatS
- QlRhYyhCOSBPwySo4D9VpTJKhQ84Th8YlQb3NvqFn9MmV8OTBolopqyf3ucRARfJdhTO6Hs0n
- bLm4M3N1sBuT0am5Lx9/gHx2413GSNnOvhrYjZB0Rrk7Dc9epg1ly4dJWCRe05pObbJ3uISYc
- sgn8p7jCA2MgNJIkyRcNql4rJR9cpSk3m7glSh6Z3HHGkHIKrhwKh17uhr9F5V5Xj2HbpQBmB
- EtEFIAkrLFMonRNRrTy+Do8bYTJFQbrWGT6gBsy0ZqRGTVD68eCcWFhuwLNuTVov2YzYkbqLf
- WXnXiK8t8dge+UqUI7Q/1nzHZx0Ebi38y5HEkT1PPg==
-Subject: [Buildroot] [PATCH v14 0/4] package: add petitboot to use with
- qemu-system-m68k
+X-Provags-ID: V03:K1:BZFalR0Z7oAtzF4LOXyHNIBCHeUT5uMZFTsePN8yWLxayuqGvQV
+ 9qOfWW+6ukmL1E9yybCB25Qpc7m2SSEcPf2MaLiw3YhQcopykv8QIsDcOD+3svheJdlGnah
+ 7w+CdbJ4zzGZ629IB14ERkAm1LhZCRGx+uiz3zb4aWEqt166rGhc9czocB04H4VU4Pa3ZAg
+ DrJslKzSRNT1GNYZu+hJA==
+UI-OutboundReport: notjunk:1;M01:P0:CDzrYDP/N7g=;kiQisjwUkRBvN8KEdw9KOxKiCZC
+ bNoCsrOAgAZbJFi/bzggSRdnuxM4hy3rVycgHkNekIJM6TLFov+Gy07TkTsRk1vwtFwy5aF5L
+ +kw0u7Vo9ee6lb209EZ2f/gHt5Em+c8AplmO5tHgBC3ttO4dCDvbogSiaAiwYhR60/KOMPnIL
+ c8q58ZElp16wkXZMrkg4GHICRJkDmnYMZo9sFeVwweJrJAE+F0L3kk551jRrL5vnZAY+liU3Y
+ 7IUml+6G2/zjKcMiE/qbwb8C7kVATvmbc5DK4jUHVEHvE/V2bHwxrV/x9M6CxCIu1ze6VcN/j
+ BVkDmeSHbMUtcvuVVi7RP70laH/KvSLFQFSPyvyvcQHYNTmZTPP1RaFuQflcFxvw12cf5mPI9
+ ytJgbliI0zCi9+vVzQmt8WQnY0NXnyfJ4UdAZco8nSuCJFHPNLlpUXL+y64Je8LFqDcU6aSmF
+ m3JiQIxBgBsp3ZUc8q6p7z0ZO8aQBrJCU/snWpsruPExU2k8A8NiyT9/d8zD1fOacczW7eWF1
+ 9SJ69FFfDJWSvXZgxjfG1B4+g3GTIYn3KFHlKQsjYEnTI4mmsxr8rmKChPX7d8RJGjcOY7Vug
+ ESUloeoDWFOBFvjN+mo05cxAHG5zrGLv/k2R1H2GSePPTpHS2D6TcnWiOVBq7plsGVZIwjyMX
+ 4mJxiZKARWdAqL382ZbrryyilZgkxNPT6uNDUfJLcg==
+Subject: [Buildroot] [PATCH v14 2/4] petitboot: start petitboot on all tty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,65 +77,71 @@ Cc: Thomas Huth <huth@tuxfamily.org>, Laurent Vivier <laurent@vivier.eu>,
  =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cWVtdS1zeXN0ZW0tbTY4ayBoYXMgaW50cm9kdWNlZCBpbiB2Ni4wIGEgbmV3IHB1cmUgdmlydHVh
-bCBtYWNoaW5lCnRoYXQgaXMgbm93IHN1cHBvcnRlZCBieSBsaW51eCB2NS4xOS4KClRoZSBnb2Fs
-IG9mIHRoaXMgc2VyaWVzIGlzIHRvIHByb3ZpZGUgcGV0aXRib290IGFzIGFuIGVtYmVkZGVkIGJv
-b3Rsb2FkZXIKZm9yIGl0IChsaWtlIGl0IGlzIGZvciB0aGUgSUJNIFBPV0VSIG1hY2hpbmUpLgoK
-WW91IGNhbiB0ZXN0IGl0IHdpdGg6CgogIHFlbXUtc3lzdGVtLW02OGsgLU0gdmlydCAta2VybmVs
-IGltYWdlcy92bWxpbnV4IFwKICAgICAgICAgICAgICAgICAgIC1pbml0cmQgaW1hZ2VzL3Jvb3Rm
-cy5jcGlvLnh6IFwKICAgICAgICAgICAgICAgICAgIC1hcHBlbmQgImNvbnNvbGU9dHR5R0YwIiAt
-LW5vZ3JhcGhpYwoKU2lnbmVkLW9mZi1ieTogTGF1cmVudCBWaXZpZXIgPGxhdXJlbnRAdml2aWVy
-LmV1PgoKdjE0OgogIC0gcmViYXNlCiAgLSBhZGQgQ8OpZHJpYydzIFJiCiAgLSBtb3ZlIGNvbmZp
-Z3VyYXRpb24gY2hhbmdlIGZyb20gcGF0Y2ggNCB0byBwYXRjaCAzCiAgLSByZW1vdmUgY3VzdG9t
-IGtlcm5lbAogIC0gQ0k6IGh0dHBzOi8vZ2l0bGFiLmNvbS9sYXVyZW50X3Zpdmllci9idWlsZHJv
-b3QvLS9waXBlbGluZXMvODk4MTAwMDU3CiAgLSBDSTogaHR0cHM6Ly9naXRsYWIuY29tL2xhdXJl
-bnRfdml2aWVyL2J1aWxkcm9vdC8tL3BpcGVsaW5lcy84OTgxMDAyMzYKCnYxMzoKICAtIHJlYmFz
-ZQogIC0gQ0k6IGh0dHBzOi8vZ2l0bGFiLmNvbS9sYXVyZW50X3Zpdmllci9idWlsZHJvb3QvLS9w
-aXBlbGluZXMvODkzNDE2NzQxCgp2MTI6CiAgLSByZWJhc2UKICAtIGZpeCBzaGVsbGNoZWNrIHdh
-cm5pbmcgKFVwc3RyZWFtOiBhbmQgc2hlbGwgc3ludGF4IGVycm9yKQoKdjExOgogLSByZWJhc2Ug
-b24gdG9wIG9mIHBldGl0Ym9vdCBtZXJnZWQgcGFja2FnZQogLSBhZGQgcGItZGlzY292ZXIgZGFl
-bW9uCiAtIHN0YXJ0IHBldGl0Ym9vdCBvbiBhbGwgdHR5LCBkaXNhYmxlIGdlbmVyaWMgZ2V0dHkK
-IC0gZml4IGtleGVjIGJ1aWxkIG9uIG02OGsgd2l0aCB1Y2xpYmMKIC0gdXNlIHBvd2Vyb2ZmIGlu
-IHRoZSB0ZXN0IHNjcmlwdCAoYXMgd2UgaGF2ZSBpbml0IG5vdykKIC0gcmVtb3ZlIFRob21hcycg
-UmIsIGFzIHRoZXJlIHdlcmUgc29tZSBjaGFuZ2VzCiAtIENJOiBodHRwczovL2dpdGxhYi5jb20v
-bGF1cmVudF92aXZpZXIvYnVpbGRyb290Ly0vcGlwZWxpbmVzLzg0NDkxNzM2OAoKdjEwOgogIC0g
-c2V0IFBFVElUQk9PVF9MSUNFTlNFIHRvIEdQTC0yLjAKCnY5OgogIC0gcmVtb3ZlIGRlcGVuZGVu
-Y3kgb24gQlIyX1BBQ0tBR0VfUFMzX1VUSUxTCiAgLSBBZGQgVGhvbWFzJyBSYgogIC0gcmViYXNl
-Cgp2ODoKICAtIHVzZSBsaW51eC5mcmFnbWVudCByYXRoZXIgdGhhbiBsaW51eC5jb25maWcKICAt
-IHJlYmFzZQoKdjc6CiAgLSBzZXQgQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RP
-TV81XzE5PXkKICAtIGZpeCBlcnJvcnMgcmVwb3J0ZWQgYnkgY2hlY2stcGFja2FnZQogIC0gYWRk
-IGdpdGxhYiB0ZXN0aW5nIChDw6lkcmljKQogIC0gdXBkYXRlIGJvb3QtcWVtdS1pbWFnZS5weSB0
-byBzdXBwb3J0IHBldGl0Ym9vdAoKdjY6CiAgLSByZWJhc2UKCnY1OgogIC0gcmVtb3ZlIEJSMl9D
-Q0FDSEVfRElSLCBCUjJfUEFDS0FHRV9EVEMgYW5kIEJSMl9QQUNLQUdFX0RUQ19QUk9HUkFNUwoK
-djQ6CiAgLSBhZGRyZXNzIFRob21hcycgY29tbWVudHMKICAtIHJlbW92ZSBwZXRpdGJvb3QtbXRk
-IGNvbmZpZyBhcyBsaWJmbGFzaCBpcyBub3QgYXZhaWxhYmxlCgp2MzogdjI6IHYxOgogIC0gZmly
-c3QgdmVyc2lvbiwgSSBtZXNzZWQgdXAgd2l0aCBsaXN0IHN1YnNjcmlwdGlvbiBhbmQgZ2l0LXB1
-Ymxpc2guLi4KCkxhdXJlbnQgVml2aWVyICg0KToKICBwZXRpdGJvb3Q6IGFkZCBwYi1kaXNjb3Zl
-ciBkYWVtb24KICBwZXRpdGJvb3Q6IHN0YXJ0IHBldGl0Ym9vdCBvbiBhbGwgdHR5CiAgYm9hcmQv
-cWVtdS9tNjhrLXZpcnQ6IEFkZCB2aXJ0LW02OGsgbGludXggY29uZmlnCiAgc3VwcG9ydC9zY3Jp
-cHRzL2Jvb3QtcWVtdS1pbWFnZS5weTogbWFuYWdlIHBldGl0Ym9vdCBpbnRlcmZhY2UKCiBERVZF
-TE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICsKIGJvYXJkL3Fl
-bXUvbTY4ay12aXJ0L2xpbnV4LmZyYWdtZW50ICAgICAgICAgIHwgMjEgKysrKysrKysKIGJvYXJk
-L3FlbXUvbTY4ay12aXJ0L3JlYWRtZS50eHQgICAgICAgICAgICAgIHwgIDUgKysKIGNvbmZpZ3Mv
-cWVtdV9tNjhrX3ZpcnRfcGV0aXRib290X2RlZmNvbmZpZyAgIHwgMjYgKysrKysrKysrKwogcGFj
-a2FnZS9wZXRpdGJvb3QvUzE1cGItZGlzY292ZXIgICAgICAgICAgICAgfCA1NCArKysrKysrKysr
-KysrKysrKysrKwogcGFja2FnZS9wZXRpdGJvb3QvcGV0aXRib290LWNvbnNvbGUtdWkucnVsZXMg
-fCAgNSArKwogcGFja2FnZS9wZXRpdGJvb3QvcGV0aXRib290Lm1rICAgICAgICAgICAgICAgfCAg
-OCArKysKIHBhY2thZ2UvcGV0aXRib290L3N5c2N0bC5jb25mICAgICAgICAgICAgICAgIHwgIDEg
-Kwogc3VwcG9ydC9zY3JpcHRzL2Jvb3QtcWVtdS1pbWFnZS5weSAgICAgICAgICAgfCAgOCArKy0K
-IHN5c3RlbS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIDEw
-IGZpbGVzIGNoYW5nZWQsIDEyOSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQogY3JlYXRl
-IG1vZGUgMTAwNjQ0IGJvYXJkL3FlbXUvbTY4ay12aXJ0L2xpbnV4LmZyYWdtZW50CiBjcmVhdGUg
-bW9kZSAxMDA2NDQgYm9hcmQvcWVtdS9tNjhrLXZpcnQvcmVhZG1lLnR4dAogY3JlYXRlIG1vZGUg
-MTAwNjQ0IGNvbmZpZ3MvcWVtdV9tNjhrX3ZpcnRfcGV0aXRib290X2RlZmNvbmZpZwogY3JlYXRl
-IG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGV0aXRib290L1MxNXBiLWRpc2NvdmVyCiBjcmVhdGUgbW9k
-ZSAxMDA2NDQgcGFja2FnZS9wZXRpdGJvb3QvcGV0aXRib290LWNvbnNvbGUtdWkucnVsZXMKIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3BldGl0Ym9vdC9zeXNjdGwuY29uZgoKLS0gCjIuNDAu
-MQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+---
+ package/petitboot/petitboot-console-ui.rules | 5 +++++
+ package/petitboot/petitboot.mk               | 4 ++++
+ package/petitboot/sysctl.conf                | 1 +
+ system/Config.in                             | 2 +-
+ 4 files changed, 11 insertions(+), 1 deletion(-)
+ create mode 100644 package/petitboot/petitboot-console-ui.rules
+ create mode 100644 package/petitboot/sysctl.conf
+
+diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
+new file mode 100644
+index 000000000000..ceeada256f2b
+--- /dev/null
++++ b/package/petitboot/petitboot-console-ui.rules
+@@ -0,0 +1,5 @@
++# spawn a petitboot UI on common user-visible interface devices
++SUBSYSTEM=="tty", KERNEL=="ttyGF*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
++SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
++SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
++SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/getty --detach -- -n -i $name 0 linux"
+diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+index 4d56b73938e7..e74a5ff623ea 100644
+--- a/package/petitboot/petitboot.mk
++++ b/package/petitboot/petitboot.mk
+@@ -55,6 +55,10 @@ define PETITBOOT_POST_INSTALL
+ 		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
+ 	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
+ 		$(TARGET_DIR)/etc/init.d/S15pb-discover
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/petitboot-console-ui.rules
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/sysctl.conf \
++		$(TARGET_DIR)/etc/sysctl.conf
+ 	ln -sf /usr/sbin/pb-udhcpc \
+ 		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
+ endef
+diff --git a/package/petitboot/sysctl.conf b/package/petitboot/sysctl.conf
+new file mode 100644
+index 000000000000..02ab8e3275b5
+--- /dev/null
++++ b/package/petitboot/sysctl.conf
+@@ -0,0 +1 @@
++kernel.printk = 1 1 1 1
+diff --git a/system/Config.in b/system/Config.in
+index 1ca7690ea3ba..786ec9a1c6b3 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -375,7 +375,7 @@ config BR2_SYSTEM_BIN_SH
+ 
+ menuconfig BR2_TARGET_GENERIC_GETTY
+ 	bool "Run a getty (login prompt) after boot"
+-	default y
++	default y         if !BR2_PACKAGE_PETITBOOT
+ 
+ if BR2_TARGET_GENERIC_GETTY
+ config BR2_TARGET_GENERIC_GETTY_PORT
+-- 
+2.40.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
