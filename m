@@ -4,56 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AC54C7EE29
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:53:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84812C7EE2E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A9122416E9;
-	Tue, 13 Jun 2023 12:53:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9122416E9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A65B41707;
+	Tue, 13 Jun 2023 12:53:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A65B41707
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zs7nvW0c9jJD; Tue, 13 Jun 2023 12:53:15 +0000 (UTC)
+	with ESMTP id g2C6EegsUn5b; Tue, 13 Jun 2023 12:53:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3DEA41692;
-	Tue, 13 Jun 2023 12:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3DEA41692
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F29481BF352
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:53:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 580EC40BD3;
+	Tue, 13 Jun 2023 12:53:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 580EC40BD3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D1461BF352
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC70641692
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:53:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC70641692
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA55140129
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:53:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA55140129
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yPZ3gO26WvO0 for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 12:53:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GSXdqobfvjCh for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 12:53:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 020C240BD3
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 020C240BD3
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 12:53:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EA9D400D3
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8EA9D400D3
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 12:53:15 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 58AFE1C0018;
- Tue, 13 Jun 2023 12:53:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 728BF240017;
+ Tue, 13 Jun 2023 12:53:13 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q93WE-004NSG-HQ; Tue, 13 Jun 2023 14:53:06 +0200
+ id 1q93WK-004NSU-L6; Tue, 13 Jun 2023 14:53:12 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Adam Duskett <aduskett@gmail.com>
 References: <20230412222602.1975782-1-aduskett@gmail.com>
-Date: Tue, 13 Jun 2023 14:53:06 +0200
-In-Reply-To: <20230412222602.1975782-1-aduskett@gmail.com> (Adam Duskett's
- message of "Wed, 12 Apr 2023 15:26:00 -0700")
-Message-ID: <87edmfwmkt.fsf@48ers.dk>
+ <20230412222602.1975782-2-aduskett@gmail.com>
+Date: Tue, 13 Jun 2023 14:53:12 +0200
+In-Reply-To: <20230412222602.1975782-2-aduskett@gmail.com> (Adam Duskett's
+ message of "Wed, 12 Apr 2023 15:26:01 -0700")
+Message-ID: <87a5x3wmkn.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/3] package/libnftnl: bump to version 1.2.5
+Subject: Re: [Buildroot] [PATCH 2/3] package/nftables: bump to version 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,7 +74,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
- > Also: Switch to tar.xz as the package is not distributed as a .bz2 any longer.
+ > Other changes:
+ >   - Switch to tar.xz as the package is not distributed as a .bz2 any longer.
+ >   - Update the sha256sum of the license file, as it has been updated to
+ >     include the following text:
+ >     "Original author of nftables distributed the code under the terms of the
+ >      GPL version 2 *only*. New code though is moving to GPL version 2 or any
+ >      later which is the preferred license for this project these days."
+ >     The author has also changed from Patrick McHardy <kaber@trash.net> to
+ >     Pablo Neira Ayuso <pablo@netfilter.org>
+
  > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
 Committed to 2023.02.x, thanks.
