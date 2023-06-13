@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F030EB64DA
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:53:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F222EB64D7
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:54:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEB164187B;
-	Tue, 13 Jun 2023 21:53:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEB164187B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EB7B40863;
+	Tue, 13 Jun 2023 21:54:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EB7B40863
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ptM69cGYouQm; Tue, 13 Jun 2023 21:53:55 +0000 (UTC)
+	with ESMTP id NyyXjiZz92Rg; Tue, 13 Jun 2023 21:54:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EF554186B;
-	Tue, 13 Jun 2023 21:53:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EF554186B
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA8C8403C8;
+	Tue, 13 Jun 2023 21:54:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA8C8403C8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2E1961BF2A6
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:52:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2A1EA1BF2A6
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08069400FD
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08069400FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 03C8940AB4
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03C8940AB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n0-d-f1Zy_u8 for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 21:51:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CE7440AB4
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 21:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CE7440AB4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C02382D95; Tue, 13 Jun 2023 21:51:58 +0000 (UTC)
+ with ESMTP id t3EEL-TjwLLZ for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 21:54:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94E8D400FD
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94E8D400FD
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 21:54:30 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DC2EC1C0004;
+ Tue, 13 Jun 2023 21:54:28 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1q9By8-004tSR-4B; Tue, 13 Jun 2023 23:54:28 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jun 2023 23:46:45 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 32b856cbd48ff59d4014ecbaf87a94336181e6db
-X-Git-Newrev: 0240980c52f13734750bc6e5a4d8004a3d3b2028
-X-Patchwork-Hint: ignore
-Message-Id: <20230613215158.8C02382D95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/webkitgtk: fix
- GCC version in comment
+References: <20230612192648.859014-1-peter@korsgaard.com>
+Date: Tue, 13 Jun 2023 23:54:28 +0200
+In-Reply-To: <20230612192648.859014-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 12 Jun 2023 21:26:47 +0200")
+Message-ID: <87wn07t4dn.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/bootgen: add patch to fix builds on
+ machines with modern flex versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,39 +65,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Neal Frager <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0240980c52f13734750bc6e5a4d8004a3d3b2028
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Commit 4c7fcbbe75de5c535e8d5dd7182900b6d09e2b03 should have set it to GCC 8.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/293/2936d9b054269b7055e66ab5a7f7c1f7f4926d48/
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fd5afab7b643997e89e1804de686a3935f8dd724)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webkitgtk/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Bootgen embeds an old version of flex, but uses the system include syntax
+ > (#include <>) to reference it, causing conflicts on systems with the
+ > development headers for a modern flex version installed, leading to build
+ > issues like:
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 976341093e..23c0bf41db 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -21,7 +21,7 @@ comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
- 		!BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 
+ > ../bisonflex/cmdoptions.yy.cpp: In member function 'virtual int CO::FlexScanner::yylex()':
+ > ../bisonflex/cmdoptions.yy.cpp:1362:18: error: no match for
+ > 'operator=' (operand types are 'std::istream' {aka
+ > 'std::basic_istream<char>'} and 'std::istream*' {aka
+ > 'std::basic_istream<char>*'})
+
+ > Fix it by using normal local includes (#include "") instead.
+
+ > Notice: This was already fixed on master, but the cmdoptions.yy.cpp and
+ > reginit.yy.cpp hunks were accidently dropped when the changes were squashed
+ > for the 2023.1 release.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
