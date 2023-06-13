@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB622C7EE2E
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD36C77B7A
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:36:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36777416D0;
-	Tue, 13 Jun 2023 12:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36777416D0
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3A70416D0;
+	Tue, 13 Jun 2023 12:36:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3A70416D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YWNBprx06vJC; Tue, 13 Jun 2023 12:20:53 +0000 (UTC)
+	with ESMTP id tgVrGiuRbMSg; Tue, 13 Jun 2023 12:36:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FFB940BC8;
-	Tue, 13 Jun 2023 12:20:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FFB940BC8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 31D581BF352
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:20:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D6EE40BA3;
+	Tue, 13 Jun 2023 12:36:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D6EE40BA3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 901C71BF352
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:36:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B194610B7
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B194610B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A24940BA3
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:36:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A24940BA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LOpT4q__8YcH for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 12:20:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4xU91UIWgmlu for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 12:36:41 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E2886108F
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9E2886108F
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 12:20:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7406A40116
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7406A40116
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 12:36:41 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4EE8D1BF20D;
- Tue, 13 Jun 2023 12:20:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DA55E24000E;
+ Tue, 13 Jun 2023 12:36:37 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q930u-004Lll-FD; Tue, 13 Jun 2023 14:20:44 +0200
+ id 1q93GH-004MfC-2r; Tue, 13 Jun 2023 14:36:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: unixmania@gmail.com
-References: <20230322231453.551305-1-unixmania@gmail.com>
-Date: Tue, 13 Jun 2023 14:20:44 +0200
-In-Reply-To: <20230322231453.551305-1-unixmania@gmail.com>
- (unixmania@gmail.com's message of "Wed, 22 Mar 2023 20:14:53 -0300")
-Message-ID: <877cs7y2n7.fsf@48ers.dk>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230506212531.365446-1-yann.morin.1998@free.fr>
+Date: Tue, 13 Jun 2023 14:36:37 +0200
+In-Reply-To: <20230506212531.365446-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 6 May 2023 23:25:31 +0200")
+Message-ID: <87352vy1wq.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/qemu: do not build the guest agent
- for the host
+Subject: Re: [Buildroot] [PATCH] utils/check-package: check ignored files
+ exist
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,18 +66,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > From: Carlos Santos <unixmania@gmail.com>
- > It does not make sense to build it for the host.
+ > When an ignored file is removed (e.g. a package patch is no longer
+ > needed after a version bump), the corresponding entry in the ignore list
+ > is no longer needed.
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ > However, we currently only validate that an ignored *test* still fails,
+ > not that a ignore files is now missing.
+
+ > Add a new test to check-package that does that check, and add a
+ > test-case for that check.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Committed to 2023.02.x, thanks.
 
