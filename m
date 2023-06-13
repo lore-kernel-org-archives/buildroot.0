@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F222EB64D7
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 006D8EB64D7
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EB7B40863;
-	Tue, 13 Jun 2023 21:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EB7B40863
+	by smtp4.osuosl.org (Postfix) with ESMTP id 717094028F;
+	Tue, 13 Jun 2023 21:54:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 717094028F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NyyXjiZz92Rg; Tue, 13 Jun 2023 21:54:34 +0000 (UTC)
+	with ESMTP id lEbCucb0jxUw; Tue, 13 Jun 2023 21:54:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA8C8403C8;
-	Tue, 13 Jun 2023 21:54:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA8C8403C8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2A1EA1BF2A6
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCC00403C8;
+	Tue, 13 Jun 2023 21:54:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCC00403C8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 62B701BF2A6
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03C8940AB4
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03C8940AB4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C0A360A9F
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C0A360A9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t3EEL-TjwLLZ for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 21:54:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M9uqBtM2qa6L for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 21:54:43 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94E8D400FD
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 94E8D400FD
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 21:54:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE6F060A89
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AE6F060A89
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 21:54:42 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DC2EC1C0004;
- Tue, 13 Jun 2023 21:54:28 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5FEEFFF803;
+ Tue, 13 Jun 2023 21:54:39 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q9By8-004tSR-4B; Tue, 13 Jun 2023 23:54:28 +0200
+ id 1q9ByI-004tSc-IB; Tue, 13 Jun 2023 23:54:38 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230612192648.859014-1-peter@korsgaard.com>
-Date: Tue, 13 Jun 2023 23:54:28 +0200
-In-Reply-To: <20230612192648.859014-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 12 Jun 2023 21:26:47 +0200")
-Message-ID: <87wn07t4dn.fsf@48ers.dk>
+References: <20230613072806.999946-1-peter@korsgaard.com>
+Date: Tue, 13 Jun 2023 23:54:38 +0200
+In-Reply-To: <20230613072806.999946-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 13 Jun 2023 09:28:05 +0200")
+Message-ID: <87sfavt4dd.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/bootgen: add patch to fix builds on
- machines with modern flex versions
+Subject: Re: [Buildroot] [PATCH] package/cups: security bump to version 2.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +65,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Neal Frager <neal.frager@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-
- > Fixes:
- > http://autobuild.buildroot.net/results/293/2936d9b054269b7055e66ab5a7f7c1f7f4926d48/
-
- > Bootgen embeds an old version of flex, but uses the system include syntax
- > (#include <>) to reference it, causing conflicts on systems with the
- > development headers for a modern flex version installed, leading to build
- > issues like:
-
- > ../bisonflex/cmdoptions.yy.cpp: In member function 'virtual int CO::FlexScanner::yylex()':
- > ../bisonflex/cmdoptions.yy.cpp:1362:18: error: no match for
- > 'operator=' (operand types are 'std::istream' {aka
- > 'std::basic_istream<char>'} and 'std::istream*' {aka
- > 'std::basic_istream<char>*'})
-
- > Fix it by using normal local includes (#include "") instead.
-
- > Notice: This was already fixed on master, but the cmdoptions.yy.cpp and
- > reginit.yy.cpp hunks were accidently dropped when the changes were squashed
- > for the 2023.1 release.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlBldGVyIiA9PSBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IHdy
+aXRlczoKCiA+IEZpeGVzIHRoZSBmb2xsb3dpbmcgc2VjdXJpdHkgaXNzdWVzOgogPiAtIENWRS0y
+MDIzLTMyMzI0OiBIZWFwIGJ1ZmZlciBvdmVyZmxvdyBpbiBjdXBzZAogPiAgIGh0dHBzOi8vZ2l0
+aHViLmNvbS9PcGVuUHJpbnRpbmcvY3Vwcy9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtY3hjNi13
+Mmc3LTY5cDcKCiA+IEFuZCBhIG51bWJlciBvZiBvdGhlciBmaXhlcywgc2VlIHRoZSByZWxlYXNl
+IG5vdGVzIGZvciBkZXRhaWxzOgogPiBodHRwczovL2dpdGh1Yi5jb20vT3BlblByaW50aW5nL2N1
+cHMvcmVsZWFzZXMvdGFnL3YyLjQuMwoKID4gSW4gYWRkaXRpb24sIDIuNC40IGZpeGVzIGEgc2Vn
+ZmF1bHQgcmVncmVzc2lvbiBpbiAyLjQuMzoKID4gaHR0cHM6Ly9naXRodWIuY29tL09wZW5Qcmlu
+dGluZy9jdXBzL3JlbGVhc2VzL3RhZy92Mi40LjQKCiA+IFVwZGF0ZSBOT1RJQ0UgaGFzaCBmb3Ig
+YSBjaGFuZ2UgaW4gY29weXJpZ2h0IHllYXJzOgogPiAtQ29weXJpZ2h0IMKpIDIwMjAtMjAyMiBi
+eSBPcGVuUHJpbnRpbmcKID4gK0NvcHlyaWdodCDCqSAyMDIwLTIwMjMgYnkgT3BlblByaW50aW5n
+CgogPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+
+CgpDb21taXR0ZWQsIHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
