@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 006D8EB64D7
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72DCEEB64D7
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 717094028F;
-	Tue, 13 Jun 2023 21:54:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 717094028F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D6D14097F;
+	Tue, 13 Jun 2023 21:55:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D6D14097F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lEbCucb0jxUw; Tue, 13 Jun 2023 21:54:49 +0000 (UTC)
+	with ESMTP id oOPmYXBvCseh; Tue, 13 Jun 2023 21:55:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCC00403C8;
-	Tue, 13 Jun 2023 21:54:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCC00403C8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 62B701BF2A6
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50F53417B8;
+	Tue, 13 Jun 2023 21:55:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50F53417B8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BBEA1BF95E
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:55:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C0A360A9F
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C0A360A9F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1333841827
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1333841827
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M9uqBtM2qa6L for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 21:54:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE6F060A89
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AE6F060A89
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 21:54:42 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5FEEFFF803;
- Tue, 13 Jun 2023 21:54:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1q9ByI-004tSc-IB; Tue, 13 Jun 2023 23:54:38 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hf-oUZqbzTfe for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 21:54:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 146E84097F
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 21:54:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 146E84097F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F28AA82DE8; Tue, 13 Jun 2023 21:54:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230613072806.999946-1-peter@korsgaard.com>
-Date: Tue, 13 Jun 2023 23:54:38 +0200
-In-Reply-To: <20230613072806.999946-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 13 Jun 2023 09:28:05 +0200")
-Message-ID: <87sfavt4dd.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/cups: security bump to version 2.4.4
+Date: Tue, 13 Jun 2023 23:53:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8ea4f3b549512d7f25696aece1b3db029aa427b8
+X-Git-Newrev: bf7b627174e1bbf82d59574cd2c64c930a0df976
+X-Patchwork-Hint: ignore
+Message-Id: <20230613215457.F28AA82DE8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bootgen: add patch to fix builds
+ on machines with modern flex versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,26 +57,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlBldGVyIiA9PSBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IHdy
-aXRlczoKCiA+IEZpeGVzIHRoZSBmb2xsb3dpbmcgc2VjdXJpdHkgaXNzdWVzOgogPiAtIENWRS0y
-MDIzLTMyMzI0OiBIZWFwIGJ1ZmZlciBvdmVyZmxvdyBpbiBjdXBzZAogPiAgIGh0dHBzOi8vZ2l0
-aHViLmNvbS9PcGVuUHJpbnRpbmcvY3Vwcy9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtY3hjNi13
-Mmc3LTY5cDcKCiA+IEFuZCBhIG51bWJlciBvZiBvdGhlciBmaXhlcywgc2VlIHRoZSByZWxlYXNl
-IG5vdGVzIGZvciBkZXRhaWxzOgogPiBodHRwczovL2dpdGh1Yi5jb20vT3BlblByaW50aW5nL2N1
-cHMvcmVsZWFzZXMvdGFnL3YyLjQuMwoKID4gSW4gYWRkaXRpb24sIDIuNC40IGZpeGVzIGEgc2Vn
-ZmF1bHQgcmVncmVzc2lvbiBpbiAyLjQuMzoKID4gaHR0cHM6Ly9naXRodWIuY29tL09wZW5Qcmlu
-dGluZy9jdXBzL3JlbGVhc2VzL3RhZy92Mi40LjQKCiA+IFVwZGF0ZSBOT1RJQ0UgaGFzaCBmb3Ig
-YSBjaGFuZ2UgaW4gY29weXJpZ2h0IHllYXJzOgogPiAtQ29weXJpZ2h0IMKpIDIwMjAtMjAyMiBi
-eSBPcGVuUHJpbnRpbmcKID4gK0NvcHlyaWdodCDCqSAyMDIwLTIwMjMgYnkgT3BlblByaW50aW5n
-CgogPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+
-CgpDb21taXR0ZWQsIHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=bf7b627174e1bbf82d59574cd2c64c930a0df976
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+http://autobuild.buildroot.net/results/293/2936d9b054269b7055e66ab5a7f7c1f7f4926d48/
+
+Bootgen embeds an old version of flex, but uses the system include syntax
+(#include <>) to reference it, causing conflicts on systems with the
+development headers for a modern flex version installed, leading to build
+issues like:
+
+../bisonflex/cmdoptions.yy.cpp: In member function 'virtual int CO::FlexScanner::yylex()':
+../bisonflex/cmdoptions.yy.cpp:1362:18: error: no match for 'operator=' (operand types are 'std::istream' {aka 'std::basic_istream<char>'} and 'std::istream*' {aka 'std::basic_istream<char>*'})
+
+Fix it by using normal local includes (#include "") instead.
+
+Notice: This was already fixed on master, but the cmdoptions.yy.cpp and
+reginit.yy.cpp hunks were accidentally dropped when the changes were
+squashed for the 2023.1 release.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...lds-on-machines-with-modern-flex-versions.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+
+diff --git a/package/bootgen/0001-Refix-builds-on-machines-with-modern-flex-versions.patch b/package/bootgen/0001-Refix-builds-on-machines-with-modern-flex-versions.patch
+new file mode 100644
+index 0000000000..b13dd2b03b
+--- /dev/null
++++ b/package/bootgen/0001-Refix-builds-on-machines-with-modern-flex-versions.patch
+@@ -0,0 +1,69 @@
++From 29a4e487527d109f517fc47a7c284b7732b27a10 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 12 Jun 2023 21:04:25 +0200
++Subject: [PATCH] Refix builds on machines with modern flex versions
++
++Bootgen embeds an old version of flex, but uses the system include syntax
++(#include <>) to reference it, causing conflicts on systems with the
++development headers for a modern flex version installed, leading to build
++issues like:
++
++../bisonflex/cmdoptions.yy.cpp: In member function 'virtual int CO::FlexScanner::yylex()':
++../bisonflex/cmdoptions.yy.cpp:1362:18: error: no match for 'operator=' (operand types are 'std::istream' {aka 'std::basic_istream<char>'} and 'std::istream*' {aka 'std::basic_istream<char>*'})
++
++http://autobuild.buildroot.net/results/293/2936d9b054269b7055e66ab5a7f7c1f7f4926d48/build-end.log
++
++Fix it by using normal local #include statements by:
++
++sed -i 's/<FlexLexer.h>/"FlexLexer.h"/g' *
++
++Notice: This was already fixed on master with:
++https://github.com/Xilinx/bootgen/pull/20
++
++Notice: The patch was not applied, instead a different patch with the same
++content was applied to master:
++https://github.com/Xilinx/bootgen/commit/af4f7083ea92931a07e47995eb2bc2a348c577ed
++
++This patch was not applied to the xlnx_rel_v2023.1 branch, instead most
++of the content was included in:
++https://github.com/Xilinx/bootgen/commit/bfba91b2c84160dc203ff09f0e930d82ed06a83a
++
++But the cmdoptions.yy.cpp and reginit.yy.cpp hunks were accidently dropped:
++https://github.com/Xilinx/bootgen/commit/bfba91b2c84160dc203ff09f0e930d82ed06a83a#diff-e0287adb420dbecc112acdf7d4a1efba8ea6cbf06401e4e8679b8ffd22a091d8
++
++Upstream: https://github.com/Xilinx/bootgen/pull/24
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ cmdoptions.yy.cpp | 2 +-
++ reginit.yy.cpp    | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/cmdoptions.yy.cpp b/cmdoptions.yy.cpp
++index 38fed35..4e940ab 100644
++--- a/cmdoptions.yy.cpp
+++++ b/cmdoptions.yy.cpp
++@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
++ 
++ #define yytext_ptr yytext
++ 
++-#include <FlexLexer.h>
+++#include "FlexLexer.h"
++ 
++ int yyFlexLexer::yywrap() { return 1; }
++ int yyFlexLexer::yylex()
++diff --git a/reginit.yy.cpp b/reginit.yy.cpp
++index d830734..dede473 100644
++--- a/reginit.yy.cpp
+++++ b/reginit.yy.cpp
++@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
++ 
++ #define yytext_ptr yytext
++ 
++-#include <FlexLexer.h>
+++#include "FlexLexer.h"
++ 
++ int yyFlexLexer::yywrap() { return 1; }
++ int yyFlexLexer::yylex()
++-- 
++2.30.2
++
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
