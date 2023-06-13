@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72DCEEB64D7
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E2E8EB64D7
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D6D14097F;
-	Tue, 13 Jun 2023 21:55:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D6D14097F
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB16041778;
+	Tue, 13 Jun 2023 21:55:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB16041778
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oOPmYXBvCseh; Tue, 13 Jun 2023 21:55:27 +0000 (UTC)
+	with ESMTP id N-B7crM_c9uh; Tue, 13 Jun 2023 21:55:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50F53417B8;
-	Tue, 13 Jun 2023 21:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50F53417B8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4BBEA1BF95E
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:55:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 380C9417EF;
+	Tue, 13 Jun 2023 21:55:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 380C9417EF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3460A1BF2A6
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1333841827
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:55:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1333841827
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B0E240BF8
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:54:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B0E240BF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hf-oUZqbzTfe for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 21:54:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eb2SBVAq0NDt for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 21:54:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 146E84097F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18AC140BC2
  for <buildroot@buildroot.org>; Tue, 13 Jun 2023 21:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 146E84097F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18AC140BC2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F28AA82DE8; Tue, 13 Jun 2023 21:54:57 +0000 (UTC)
+ id 0667482DEB; Tue, 13 Jun 2023 21:54:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jun 2023 23:53:28 +0200
+Date: Tue, 13 Jun 2023 23:54:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8ea4f3b549512d7f25696aece1b3db029aa427b8
-X-Git-Newrev: bf7b627174e1bbf82d59574cd2c64c930a0df976
+X-Git-Oldrev: bf7b627174e1bbf82d59574cd2c64c930a0df976
+X-Git-Newrev: 38bef5fbc8c609241bb0fbcde310f5eb296537ae
 X-Patchwork-Hint: ignore
-Message-Id: <20230613215457.F28AA82DE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bootgen: add patch to fix builds
- on machines with modern flex versions
+Message-Id: <20230613215458.0667482DEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cups: security bump to version
+ 2.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,114 +58,71 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8538445698915233532=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf7b627174e1bbf82d59574cd2c64c930a0df976
+--===============8538445698915233532==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=38bef5fbc8c609241bb0fbcde310f5eb296537ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/293/2936d9b054269b7055e66ab5a7f7c1f7f4926d48/
+Fixes the following security issues:
 
-Bootgen embeds an old version of flex, but uses the system include syntax
-(#include <>) to reference it, causing conflicts on systems with the
-development headers for a modern flex version installed, leading to build
-issues like:
+- CVE-2023-32324: Heap buffer overflow in cupsd
+  https://github.com/OpenPrinting/cups/security/advisories/GHSA-cxc6-w2g7-69p7
 
-../bisonflex/cmdoptions.yy.cpp: In member function 'virtual int CO::FlexScanner::yylex()':
-../bisonflex/cmdoptions.yy.cpp:1362:18: error: no match for 'operator=' (operand types are 'std::istream' {aka 'std::basic_istream<char>'} and 'std::istream*' {aka 'std::basic_istream<char>*'})
+And a number of other fixes, see the release notes for details:
+https://github.com/OpenPrinting/cups/releases/tag/v2.4.3
 
-Fix it by using normal local includes (#include "") instead.
+In addition, 2.4.4 fixes a segfault regression in 2.4.3:
+https://github.com/OpenPrinting/cups/releases/tag/v2.4.4
 
-Notice: This was already fixed on master, but the cmdoptions.yy.cpp and
-reginit.yy.cpp hunks were accidentally dropped when the changes were
-squashed for the 2023.1 release.
+Update NOTICE hash for a change in copyright years:
+-Copyright © 2020-2022 by OpenPrinting
++Copyright © 2020-2023 by OpenPrinting
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...lds-on-machines-with-modern-flex-versions.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ package/cups/cups.hash | 4 ++--
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bootgen/0001-Refix-builds-on-machines-with-modern-flex-versions.patch b/package/bootgen/0001-Refix-builds-on-machines-with-modern-flex-versions.patch
-new file mode 100644
-index 0000000000..b13dd2b03b
---- /dev/null
-+++ b/package/bootgen/0001-Refix-builds-on-machines-with-modern-flex-versions.patch
-@@ -0,0 +1,69 @@
-+From 29a4e487527d109f517fc47a7c284b7732b27a10 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 12 Jun 2023 21:04:25 +0200
-+Subject: [PATCH] Refix builds on machines with modern flex versions
-+
-+Bootgen embeds an old version of flex, but uses the system include syntax
-+(#include <>) to reference it, causing conflicts on systems with the
-+development headers for a modern flex version installed, leading to build
-+issues like:
-+
-+../bisonflex/cmdoptions.yy.cpp: In member function 'virtual int CO::FlexScanner::yylex()':
-+../bisonflex/cmdoptions.yy.cpp:1362:18: error: no match for 'operator=' (operand types are 'std::istream' {aka 'std::basic_istream<char>'} and 'std::istream*' {aka 'std::basic_istream<char>*'})
-+
-+http://autobuild.buildroot.net/results/293/2936d9b054269b7055e66ab5a7f7c1f7f4926d48/build-end.log
-+
-+Fix it by using normal local #include statements by:
-+
-+sed -i 's/<FlexLexer.h>/"FlexLexer.h"/g' *
-+
-+Notice: This was already fixed on master with:
-+https://github.com/Xilinx/bootgen/pull/20
-+
-+Notice: The patch was not applied, instead a different patch with the same
-+content was applied to master:
-+https://github.com/Xilinx/bootgen/commit/af4f7083ea92931a07e47995eb2bc2a348c577ed
-+
-+This patch was not applied to the xlnx_rel_v2023.1 branch, instead most
-+of the content was included in:
-+https://github.com/Xilinx/bootgen/commit/bfba91b2c84160dc203ff09f0e930d82ed06a83a
-+
-+But the cmdoptions.yy.cpp and reginit.yy.cpp hunks were accidently dropped:
-+https://github.com/Xilinx/bootgen/commit/bfba91b2c84160dc203ff09f0e930d82ed06a83a#diff-e0287adb420dbecc112acdf7d4a1efba8ea6cbf06401e4e8679b8ffd22a091d8
-+
-+Upstream: https://github.com/Xilinx/bootgen/pull/24
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cmdoptions.yy.cpp | 2 +-
-+ reginit.yy.cpp    | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/cmdoptions.yy.cpp b/cmdoptions.yy.cpp
-+index 38fed35..4e940ab 100644
-+--- a/cmdoptions.yy.cpp
-++++ b/cmdoptions.yy.cpp
-+@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
-+ 
-+ #define yytext_ptr yytext
-+ 
-+-#include <FlexLexer.h>
-++#include "FlexLexer.h"
-+ 
-+ int yyFlexLexer::yywrap() { return 1; }
-+ int yyFlexLexer::yylex()
-+diff --git a/reginit.yy.cpp b/reginit.yy.cpp
-+index d830734..dede473 100644
-+--- a/reginit.yy.cpp
-++++ b/reginit.yy.cpp
-+@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
-+ 
-+ #define yytext_ptr yytext
-+ 
-+-#include <FlexLexer.h>
-++#include "FlexLexer.h"
-+ 
-+ int yyFlexLexer::yywrap() { return 1; }
-+ int yyFlexLexer::yylex()
-+-- 
-+2.30.2
-+
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index ba220e903e..cc6fe25446 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  f03ccb40b087d1e30940a40e0141dcbba263f39974c20eb9f2521066c9c6c908  cups-2.4.2-source.tar.gz
++sha256  209259e8fe8df9112af49f4e5765f50dad6da1f869296de41d6eaab1b98003cb  cups-2.4.4-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+-sha256  7a7bd639e3a8457ae40b0dcfb74ea3cc6a8132b06c726142e993625d33eb6de5  NOTICE
++sha256  5320b6e3c252423e4153eb2dd63e57e3b630afb21139f44e43b02d85fe33e279  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index fed2aa809f..7bbea9a218 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUPS_VERSION = 2.4.2
++CUPS_VERSION = 2.4.4
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+
+--===============8538445698915233532==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8538445698915233532==--
