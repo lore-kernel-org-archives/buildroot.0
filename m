@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E68FAC7EE2E
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 672DEC7EE29
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:38:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91A1A416E5;
-	Tue, 13 Jun 2023 12:37:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91A1A416E5
+	by smtp2.osuosl.org (Postfix) with ESMTP id F41B0416EC;
+	Tue, 13 Jun 2023 12:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F41B0416EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MDqmYn9fCSvF; Tue, 13 Jun 2023 12:37:50 +0000 (UTC)
+	with ESMTP id jcaV9djR0yk4; Tue, 13 Jun 2023 12:38:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C168A40BA3;
-	Tue, 13 Jun 2023 12:37:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C168A40BA3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 851331BF352
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:37:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4023F416E7;
+	Tue, 13 Jun 2023 12:38:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4023F416E7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 54C871BF352
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:38:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C07D40BA3
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:37:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C07D40BA3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A2D6405AE
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:38:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A2D6405AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OrLKIcVLhaDj for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 12:37:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cbs8tu7OK184 for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 12:38:22 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DA1F40116
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6DA1F40116
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 12:37:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 534C040542
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 534C040542
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 12:38:22 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 15388C0006;
- Tue, 13 Jun 2023 12:37:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7016A1BF207;
+ Tue, 13 Jun 2023 12:38:20 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q93HK-004MhE-8R; Tue, 13 Jun 2023 14:37:42 +0200
+ id 1q93Hv-004Mk4-ID; Tue, 13 Jun 2023 14:38:19 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20230506214618.373562-1-yann.morin.1998@free.fr>
-Date: Tue, 13 Jun 2023 14:37:42 +0200
-In-Reply-To: <20230506214618.373562-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 6 May 2023 23:46:18 +0200")
-Message-ID: <87y1knwnah.fsf@48ers.dk>
+To: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+References: <20230426104102.1211757-1-luca.ceresoli@bootlin.com>
+Date: Tue, 13 Jun 2023 14:38:19 +0200
+In-Reply-To: <20230426104102.1211757-1-luca.ceresoli@bootlin.com> (Luca
+ Ceresoli via buildroot's message of "Wed, 26 Apr 2023 12:41:02 +0200")
+Message-ID: <87ttvbwn9g.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] utils/docker-run: make it work in
- workdirs/woktrees
+Subject: Re: [Buildroot] [PATCH] boot/uboot: document that the zynqmp pmufw
+ can be in ELF format
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,39 +66,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Neal Frager <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Luca" == Luca Ceresoli via buildroot <buildroot@buildroot.org> writes:
 
- > It is quite customary to use a single repository with multiple workdirs,
- > one for each active branch, with either the aging 'git new-workdir' or
- > the more recent 'git worktree'.
+ > This feature was added in commit d07e6b7071cf ("boot/uboot/uboot.mk: add
+ > pmufw.elf support"), document it in kconfig.
 
- > However, in a workdir/worktree, most entries in .git/ are only symlinks
- > to the actual files in the main repository.
-
- > Currently, utils/docker-run only bind-mounts the current working copy.
- > If that is a workdir/worktree, then it is going to be missing the actual
- > git data, resulting in errors like:
-
- >     $ ./utils/docker-run make check-package
- >     fatal: not a git repository (or any parent up to mount point [....]/buildroot)
- >     Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
- >     No files to check style
- >     make: *** [Makefile:1257: check-package] Error 1
-
- > So, we also bind-mount the actual git directory. If that is a subdir
- > of the current working copy, then it is already mounted and thus the
- > bind-mount is superfluous but harmless; for simplicity, we mount it
- > unconditionally.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+ > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
 Committed to 2023.02.x, thanks.
 
