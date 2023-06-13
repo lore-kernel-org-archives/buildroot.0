@@ -4,48 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C7B0EB64D0
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 16:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C3EBEB64D8
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 16:46:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9630A409C8;
-	Tue, 13 Jun 2023 16:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9630A409C8
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7F4140396;
+	Tue, 13 Jun 2023 16:46:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7F4140396
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D3G4Csyg0ugg; Tue, 13 Jun 2023 16:46:25 +0000 (UTC)
+	with ESMTP id ofKid6NeeFdb; Tue, 13 Jun 2023 16:46:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6AFF540396;
-	Tue, 13 Jun 2023 16:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AFF540396
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A95B21BF95E
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 16:46:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 82337416E2;
+	Tue, 13 Jun 2023 16:46:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82337416E2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 148791BF95E
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 16:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9072240396
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 16:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9072240396
+ by smtp4.osuosl.org (Postfix) with ESMTP id DEB49409A8
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 16:46:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEB49409A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ehwu38dehndY for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 16:46:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CD7E400BF
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 16:46:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CD7E400BF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 282C382AF2; Tue, 13 Jun 2023 16:46:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4MDN2eFOqrp2 for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 16:46:31 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CB3B409A5
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8CB3B409A5
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 16:46:31 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2C9EC1BF208;
+ Tue, 13 Jun 2023 16:46:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1q97A1-004eyQ-Rh; Tue, 13 Jun 2023 18:46:25 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 13 Jun 2023 18:40:17 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: bcddc639d08716f285ceb24a735ce4f918d28352
-X-Git-Newrev: f3ba4a27285912d6e7bc040ca96b54391f090024
-X-Patchwork-Hint: ignore
-Message-Id: <20230613164621.282C382AF2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] utils/docker-run: make it
- work in workdirs/woktrees
+To: Baruch Siach <baruch@tkos.co.il>
+References: <20230506214618.373562-1-yann.morin.1998@free.fr>
+ <87y1knwnah.fsf@48ers.dk> <87sfavqyc8.fsf@tarshish>
+Date: Tue, 13 Jun 2023 18:46:25 +0200
+In-Reply-To: <87sfavqyc8.fsf@tarshish> (Baruch Siach's message of "Tue, 13 Jun
+ 2023 16:33:57 +0300")
+Message-ID: <875y7rwbry.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] utils/docker-run: make it work in
+ workdirs/woktrees
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,66 +68,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3ba4a27285912d6e7bc040ca96b54391f090024
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-It is quite customary to use a single repository with multiple workdirs,
-one for each active branch, with either the aging 'git new-workdir' or
-the more recent 'git worktree'.
+ > Hi Peter,
+ > On Tue, Jun 13 2023, Peter Korsgaard wrote:
+ >>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+ >> 
+ >> > It is quite customary to use a single repository with multiple workdirs,
+ >> > one for each active branch, with either the aging 'git new-workdir' or
+ >> > the more recent 'git worktree'.
+ >> 
+ >> > However, in a workdir/worktree, most entries in .git/ are only symlinks
+ >> > to the actual files in the main repository.
+ >> 
+ >> > Currently, utils/docker-run only bind-mounts the current working copy.
+ >> > If that is a workdir/worktree, then it is going to be missing the actual
+ >> > git data, resulting in errors like:
+ >> 
+ >> >     $ ./utils/docker-run make check-package
+ >> >     fatal: not a git repository (or any parent up to mount point [....]/buildroot)
+ >> >     Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+ >> >     No files to check style
+ >> >     make: *** [Makefile:1257: check-package] Error 1
+ >> 
+ >> > So, we also bind-mount the actual git directory. If that is a subdir
+ >> > of the current working copy, then it is already mounted and thus the
+ >> > bind-mount is superfluous but harmless; for simplicity, we mount it
+ >> > unconditionally.
+ >> 
+ >> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ >> > Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+ >> 
+ >> Committed to 2023.02.x, thanks.
 
-However, in a workdir/worktree, most entries in .git/ are only symlinks
-to the actual files in the main repository.
+ > Not in 2023.02.x branch as of commit bcddc639d.
 
-Currently, utils/docker-run only bind-mounts the current working copy.
-If that is a workdir/worktree, then it is going to be missing the actual
-git data, resulting in errors like:
+Ups, fixed now - Thanks.
 
-    $ ./utils/docker-run make check-package
-    fatal: not a git repository (or any parent up to mount point [....]/buildroot)
-    Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
-    No files to check style
-    make: *** [Makefile:1257: check-package] Error 1
-
-So, we also bind-mount the actual git directory. If that is a subdir
-of the current working copy, then it is already mounted and thus the
-bind-mount is superfluous but harmless; for simplicity, we mount it
-unconditionally.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-(cherry picked from commit 791c163b2f9f07d4c02b18eabd9b195918e1c603)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- utils/docker-run | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/utils/docker-run b/utils/docker-run
-index 135a1451b6..17c587a484 100755
---- a/utils/docker-run
-+++ b/utils/docker-run
-@@ -2,6 +2,8 @@
- set -o errexit -o pipefail
- DIR=$(dirname "${0}")
- MAIN_DIR=$(readlink -f "${DIR}/..")
-+# GIT_DIR to support workdirs/worktrees
-+GIT_DIR="$(dirname "$(realpath "${MAIN_DIR}/.git/config")")"
- # shellcheck disable=SC2016
- IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
-         sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
-@@ -11,6 +13,7 @@ declare -a docker_opts=(
-     --rm
-     --user "$(id -u):$(id -g)"
-     --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}"
-+    --mount "type=bind,src=${GIT_DIR},dst=${GIT_DIR}"
-     --workdir "${MAIN_DIR}"
- )
- if tty -s; then
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
