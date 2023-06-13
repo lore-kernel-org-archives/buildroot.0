@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDFBAEB64D7
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 208A5EB64D7
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 21:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86F734098F;
-	Tue, 13 Jun 2023 21:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86F734098F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FA06416B1;
+	Tue, 13 Jun 2023 21:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FA06416B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bes5lZ0QPkMi; Tue, 13 Jun 2023 21:52:17 +0000 (UTC)
+	with ESMTP id PUFUKpfXnHF3; Tue, 13 Jun 2023 21:52:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7FFC416B1;
-	Tue, 13 Jun 2023 21:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7FFC416B1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E3EC01BF95E
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:51:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB141416F5;
+	Tue, 13 Jun 2023 21:52:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB141416F5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CD0AB1BF2A6
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:52:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9369409AC
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1C8960A9F
  for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 21:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9369409AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1C8960A9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g0L14Tsj8H_X for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4HfReyWiBnZJ for <buildroot@lists.busybox.net>;
  Tue, 13 Jun 2023 21:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C9F44097F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84338610EE
  for <buildroot@buildroot.org>; Tue, 13 Jun 2023 21:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C9F44097F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84338610EE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4605882D51; Tue, 13 Jun 2023 21:51:58 +0000 (UTC)
+ id 6BE5882D9E; Tue, 13 Jun 2023 21:51:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jun 2023 23:31:50 +0200
+Date: Tue, 13 Jun 2023 23:44:28 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: f3ba4a27285912d6e7bc040ca96b54391f090024
-X-Git-Newrev: 98e72152960472723f7e041615ec54c0c8d25a02
+X-Git-Oldrev: 4f676aa2bc239c62fc91619a4fe2f36f7b62f674
+X-Git-Newrev: 703937a6937045056f35118746378d1f251ad851
 X-Patchwork-Hint: ignore
-Message-Id: <20230613215158.4605882D51@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/sdl2_mixer: bump
- version to 2.6.3
+Message-Id: <20230613215158.6BE5882D9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] DEVELOPERS: Update email
+ address for Damien Le Moal
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98e72152960472723f7e041615ec54c0c8d25a02
+commit: https://git.buildroot.net/buildroot/commit/?id=703937a6937045056f35118746378d1f251ad851
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b1b8d5bf1b6468725a420fcaffa042303200ece6)
+Change my email address to dlemoal@kernel.org.
+
+Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7e655f81d43c0776567c1fc6d3815cc3b63e93a0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2_mixer/sdl2_mixer.hash | 2 +-
- package/sdl2_mixer/sdl2_mixer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sdl2_mixer/sdl2_mixer.hash b/package/sdl2_mixer/sdl2_mixer.hash
-index f3bab151f2..98c5fda6af 100644
---- a/package/sdl2_mixer/sdl2_mixer.hash
-+++ b/package/sdl2_mixer/sdl2_mixer.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b4cf5a382c061cd75081cf246c2aa2f9df8db04bdda8dcdc6b6cca55bede2419  SDL2_mixer-2.0.4.tar.gz
-+sha256  7a6ba86a478648ce617e3a5e9277181bc67f7ce9876605eea6affd4a0d6eea8f  SDL2_mixer-2.6.3.tar.gz
- sha256  113727180e7956cb9718b03b41da85b63ea54743a33047071a623bf672895a10  COPYING.txt
-diff --git a/package/sdl2_mixer/sdl2_mixer.mk b/package/sdl2_mixer/sdl2_mixer.mk
-index f349b8ca80..425380bf5d 100644
---- a/package/sdl2_mixer/sdl2_mixer.mk
-+++ b/package/sdl2_mixer/sdl2_mixer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5421f76bd9..03182c847a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -662,7 +662,7 @@ N:	Damien Lanson <damien@kal-host.com>
+ F:	package/libvdpau/
+ F:	package/log4cpp/
  
--SDL2_MIXER_VERSION = 2.0.4
-+SDL2_MIXER_VERSION = 2.6.3
- SDL2_MIXER_SOURCE = SDL2_mixer-$(SDL2_MIXER_VERSION).tar.gz
- SDL2_MIXER_SITE = http://www.libsdl.org/projects/SDL_mixer/release
- SDL2_MIXER_LICENSE = Zlib
+-N:	Damien Le Moal <damien.lemoal@wdc.com>
++N:	Damien Le Moal <dlemoal@kernel.org>
+ F:	package/python-kflash/
+ F:	board/canaan/
+ F:	configs/canaan_kd233_defconfig
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
