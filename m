@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F1BC7EE29
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2575C88CB4
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:42:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C74AE416D0;
-	Tue, 13 Jun 2023 12:42:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C74AE416D0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 932ED4170D;
+	Tue, 13 Jun 2023 12:42:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 932ED4170D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SOT-YlcPGOX1; Tue, 13 Jun 2023 12:42:18 +0000 (UTC)
+	with ESMTP id 6fFzmRPsIT5h; Tue, 13 Jun 2023 12:42:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 11DA9416FE;
-	Tue, 13 Jun 2023 12:42:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11DA9416FE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 05C311BF95E
+	by smtp2.osuosl.org (Postfix) with ESMTP id A5CAA41705;
+	Tue, 13 Jun 2023 12:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5CAA41705
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 381931BF352
  for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:42:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFDCB4155F
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:42:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFDCB4155F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 127BD81F86
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 127BD81F86
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uaK5nV8LD309 for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 12:42:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xrmCDeBSop6B for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 12:42:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED3F54154A
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD79581E4F
  for <buildroot@buildroot.org>; Tue, 13 Jun 2023 12:42:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED3F54154A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD79581E4F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D7240828CC; Tue, 13 Jun 2023 12:42:01 +0000 (UTC)
+ id CBE73828C7; Tue, 13 Jun 2023 12:42:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jun 2023 14:38:04 +0200
+Date: Tue, 13 Jun 2023 14:35:52 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: a23eee38f7139559dbf24f6826670b23e3e2e497
-X-Git-Newrev: 6b293cf0aba93174bd3a9ec8c714a2be8475b610
+X-Git-Oldrev: 54b9f2e4a39a8dc89a1a9390a86aa3f8f864a057
+X-Git-Newrev: a23eee38f7139559dbf24f6826670b23e3e2e497
 X-Patchwork-Hint: ignore
-Message-Id: <20230613124201.D7240828CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] boot/uboot: document that
- the zynqmp pmufw can be in ELF format
+Message-Id: <20230613124201.CBE73828C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] utils/check-package:
+ check ignored files exist
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b293cf0aba93174bd3a9ec8c714a2be8475b610
+commit: https://git.buildroot.net/buildroot/commit/?id=a23eee38f7139559dbf24f6826670b23e3e2e497
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This feature was added in commit d07e6b7071cf ("boot/uboot/uboot.mk: add
-pmufw.elf support"), document it in kconfig.
+When an ignored file is removed (e.g. a package patch is no longer
+needed after a version bump), the corresponding entry in the ignore list
+is no longer needed.
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+However, we currently only validate that an ignored *test* still fails,
+not that a ignore files is now missing.
+
+Add a new test to check-package that does that check, and add a
+test-case for that check.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e1e30504164700e9dc7d0bce9d1b4f546923c9c2)
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+(cherry picked from commit 5eac4f81eb1cfaf6bd8d07a5d78a48de28ae8e4c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ utils/check-package                      |  4 ++++
+ utils/checkpackagelib/lib_ignore.py      | 14 ++++++++++++++
+ utils/checkpackagelib/test_lib_ignore.py | 18 ++++++++++++++++++
+ 3 files changed, 36 insertions(+)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index f5c20f5168..085397d03d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -492,6 +492,8 @@ config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
- 	  (e.g. http://...), and it will be downloaded and used from
- 	  the download directory.
+diff --git a/utils/check-package b/utils/check-package
+index 5974781104..00121b3296 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -11,6 +11,7 @@ import sys
+ import checkpackagelib.base
+ import checkpackagelib.lib_config
+ import checkpackagelib.lib_hash
++import checkpackagelib.lib_ignore
+ import checkpackagelib.lib_mk
+ import checkpackagelib.lib_patch
+ import checkpackagelib.lib_shellscript
+@@ -104,6 +105,7 @@ def get_lib_from_filetype(fname):
  
-+	  The PMU firmware binary can be either in ELF or BIN format.
+ CONFIG_IN_FILENAME = re.compile(r"Config\.\S*$")
+ DO_CHECK_INTREE = re.compile(r"|".join([
++    r".checkpackageignore",
+     r"Config.in",
+     r"arch/",
+     r"boot/",
+@@ -136,6 +138,8 @@ def get_lib_from_filename(fname):
+         if os.path.basename(fname) == "external.mk" and \
+            os.path.exists(fname[:-2] + "desc"):
+             return None
++    if fname == ".checkpackageignore":
++        return checkpackagelib.lib_ignore
+     if CONFIG_IN_FILENAME.search(fname):
+         return checkpackagelib.lib_config
+     if fname.endswith(".hash"):
+diff --git a/utils/checkpackagelib/lib_ignore.py b/utils/checkpackagelib/lib_ignore.py
+new file mode 100644
+index 0000000000..f3698fc3b4
+--- /dev/null
++++ b/utils/checkpackagelib/lib_ignore.py
+@@ -0,0 +1,14 @@
++# See utils/checkpackagelib/readme.txt before editing this file.
 +
- 	  If empty, the generated boot.bin will not contain a PMU
- 	  firmware.
- 
++import os
++
++from checkpackagelib.base import _CheckFunction
++
++
++class IgnoreMissingFile(_CheckFunction):
++    def check_line(self, lineno, text):
++        fields = text.split()
++        if not os.path.exists(fields[0]):
++            return ["{}:{}: ignored file {} is missing"
++                    .format(self.filename, lineno, fields[0]),
++                    text]
+diff --git a/utils/checkpackagelib/test_lib_ignore.py b/utils/checkpackagelib/test_lib_ignore.py
+new file mode 100644
+index 0000000000..6cd856d669
+--- /dev/null
++++ b/utils/checkpackagelib/test_lib_ignore.py
+@@ -0,0 +1,18 @@
++import pytest
++import checkpackagelib.test_util as util
++import checkpackagelib.lib_ignore as m
++
++
++IgnoreMissingFile = [
++    ('missing ignored file',
++     '.checkpackageignore',
++     'this-file-does-not-exist SomeTest',
++     [['.checkpackageignore:1: ignored file this-file-does-not-exist is missing',
++       'this-file-does-not-exist SomeTest']]),
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,string,expected', IgnoreMissingFile)
++def test_IgnoreMissingFile(testname, filename, string, expected):
++    warnings = util.check_file(m.IgnoreMissingFile, filename, string)
++    assert warnings == expected
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
