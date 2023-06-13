@@ -1,51 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3203C7EE29
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 12:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96BCBEB64D0
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jun 2023 13:33:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4987E41719;
-	Tue, 13 Jun 2023 12:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4987E41719
+	by smtp3.osuosl.org (Postfix) with ESMTP id 289DC61148;
+	Tue, 13 Jun 2023 13:33:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 289DC61148
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 566UfCzSWaiY; Tue, 13 Jun 2023 12:55:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YBFzfjyqSxwu; Tue, 13 Jun 2023 13:33:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 778C341726;
-	Tue, 13 Jun 2023 12:55:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 778C341726
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B33461126;
+	Tue, 13 Jun 2023 13:33:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B33461126
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6CC0C1BF352
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:54:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 26BC01BF2FA
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 13:33:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 403504088A
- for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 12:54:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 403504088A
+ by smtp4.osuosl.org (Postfix) with ESMTP id F305540952
+ for <buildroot@lists.busybox.net>; Tue, 13 Jun 2023 13:33:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F305540952
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5SN9_y2AJdff for <buildroot@lists.busybox.net>;
- Tue, 13 Jun 2023 12:54:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEEA94089A
- for <buildroot@buildroot.org>; Tue, 13 Jun 2023 12:54:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEEA94089A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD4EB82927; Tue, 13 Jun 2023 12:54:51 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id ezmqk2z7YyV2 for <buildroot@lists.busybox.net>;
+ Tue, 13 Jun 2023 13:33:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C1B140993
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6C1B140993
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 13:33:53 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-30fcda210cfso405162f8f.3
+ for <buildroot@buildroot.org>; Tue, 13 Jun 2023 06:33:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1686663231; x=1689255231;
+ h=content-transfer-encoding:in-reply-to:references:to:from
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=JJpcd0Jfjp5a+8TJWBKhiaQTikxTlvqqEHkzYCHhbEk=;
+ b=VmxJhVWsZCKbXPaCr9DahKK9YmW/V+ySuT0MQbLrsO4ZdNeEouXGe7NnGCrr4hfLEO
+ EzKCAU9N5wg2bfyP8VX34J0nUkzK2tiwMeJY+rWpH90/4ZlhyjkZYGsa1CxDEnCt/Ctg
+ ahqYUwSjG7FFHWUc573Pse4gng0LMevm/qOaxDO89rcF53FUVPcDMKTphDwzE9AOlVAr
+ g/QKBEODwXtjZrjUErstQprwCc3uwL72wL+jefZSDdZpuH4SJ1dYc3g4UZhZPgKXyj2w
+ rWQ4//jqJpYX6TnHHbcueG1u6yHVhSP0RF13md0x4ZSFLSNAGwltDdlGFncVM8naIv16
+ zkQA==
+X-Gm-Message-State: AC+VfDwZr+R92oP98dZ+hT+wKBSJ5PMoMCEHmLV2efJ1tq2J68etxzE+
+ HTjBLb2Lz3fYvdBroSgwYYJv0MMH3V7+gw==
+X-Google-Smtp-Source: ACHHUZ7oAaAflVxdjuYE98mgHVPs9LufMK0puOghXtHF7oH7Y7OR9PwCbSAPuroARXmDb/Dd/NSqGA==
+X-Received: by 2002:a05:6000:6:b0:30f:bb0c:d19d with SMTP id
+ h6-20020a056000000600b0030fbb0cd19dmr5504517wrx.64.1686663231083; 
+ Tue, 13 Jun 2023 06:33:51 -0700 (PDT)
+Received: from [10.0.0.120] (static-90-255-244-241.vodafonexdsl.co.uk.
+ [90.255.244.241]) by smtp.gmail.com with ESMTPSA id
+ m4-20020a056000180400b0030633152664sm15357864wrh.87.2023.06.13.06.33.50
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 13 Jun 2023 06:33:50 -0700 (PDT)
+Message-ID: <c2a04c94-d9fd-0d34-68bf-c34c140102c1@gmail.com>
+Date: Tue, 13 Jun 2023 14:33:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+From: Nick Betteridge <lists.nick.betteridge@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jun 2023 14:52:07 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 89c2a12022c4fa05500414044bd71421dc731cee
-X-Git-Newrev: bcddc639d08716f285ceb24a735ce4f918d28352
-X-Patchwork-Hint: ignore
-Message-Id: <20230613125451.DD4EB82927@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/nftables: bump to
- version 1.0.7
+References: <e928ab82-fa17-3168-59c0-0a298b049115@gmail.com>
+In-Reply-To: <e928ab82-fa17-3168-59c0-0a298b049115@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1686663231; x=1689255231;
+ h=content-transfer-encoding:in-reply-to:references:to:from
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=JJpcd0Jfjp5a+8TJWBKhiaQTikxTlvqqEHkzYCHhbEk=;
+ b=p+DmStKttVuXD3uka7/v7IdlssrnrEhvxWdp2gXo7x4waguS0qE330B6TPzeeUUAJP
+ UBz2FlvLuT6v+nBbuRX6h2nvMT8dzV0/bzMDRRDutiRVnQ4EQJN63db4xdUJN3u/2Epb
+ X82bww4h8BKlOKXfjvd9xiRvBGePnqukqdHnyWolfQYv3XDnrUySYOmwtpEWd+gy62xI
+ IfUtjGofEyvoeH/SbKszK1WPEZO8vJ2Z22qZiFFouGqn/q1XWIsgJISFasWTGvlgVkNm
+ uV4b+0C008JdYV0O05CDGOTwFjWiKRz/JEbOnJS37uvBLOxsZG8ZfN5BKANq17pbvffj
+ Fh6A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=p+DmStKt
+Subject: Re: [Buildroot] rpi4 - building but 'Firmware not found' error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,59 +100,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcddc639d08716f285ceb24a735ce4f918d28352
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+Sincere apologies - duff sd card
 
-Other changes:
-  - Switch to tar.xz as the package is not distributed as a .bz2 any longer.
-  - Update the sha256sum of the license file, as it has been updated to
-    include the following text:
-    "Original author of nftables distributed the code under the terms of the
-     GPL version 2 *only*. New code though is moving to GPL version 2 or any
-     later which is the preferred license for this project these days."
-    The author has also changed from Patrick McHardy <kaber@trash.net> to
-    Pablo Neira Ayuso <pablo@netfilter.org>
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d1b8e723fd1805f2de6b6401438a13db6e249fa4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nftables/nftables.hash | 4 ++--
- package/nftables/nftables.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
-index 5e5134b61d..7e1e856229 100644
---- a/package/nftables/nftables.hash
-+++ b/package/nftables/nftables.hash
-@@ -1,3 +1,3 @@
- # From https://netfilter.org/projects/nftables/downloads.html
--sha256  8d1b4b18393af43698d10baa25d2b9b6397969beecac7816c35dd0714e4de50a  nftables-1.0.5.tar.bz2
--sha256  c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e  COPYING
-+sha256  c12ac941fff9adaedf17367d5ce213789b98a0d314277bc22b3d71e10891f412  nftables-1.0.7.tar.xz
-+sha256  4ee1e51baf5f3166712fa0c3e01338c7257e50ddef245d28bb14ad68f6070ba5  COPYING
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 9d60736d7f..b0a14bd429 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--NFTABLES_VERSION = 1.0.5
--NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
-+NFTABLES_VERSION = 1.0.7
-+NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.xz
- NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
- NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- NFTABLES_LICENSE = GPL-2.0
+On 13/06/2023 12:11, Nick Betteridge wrote:
+> Hello!
+>
+> I have a problem using buildroot for rpi4b - using buildroot 2023.05 
+> and raspberrypi4_64_defconfig - I manage to complete the build and 
+> generate the image but when booting the device it complains of 
+> 'Firmware not found'.
+>
+> I left all of the options in menuconfig as default - could anyone 
+> possibly tell me if I need to alter anything to get the device to boot.
+>
+> Thanks in advance,
+>
+> Nick
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
