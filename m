@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96E98EB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:53:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA63EB64DB
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3558541C21;
-	Wed, 14 Jun 2023 11:53:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3558541C21
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3870E41B86;
+	Wed, 14 Jun 2023 11:53:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3870E41B86
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id skOIxQnu84DQ; Wed, 14 Jun 2023 11:53:42 +0000 (UTC)
+	with ESMTP id GRGM1K5y-1uP; Wed, 14 Jun 2023 11:53:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C81A0403B8;
-	Wed, 14 Jun 2023 11:53:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C81A0403B8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 075771BF969
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49B4241B8C;
+	Wed, 14 Jun 2023 11:53:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49B4241B8C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 233961BF97A
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E10F961259
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E10F961259
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AAC241584
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AAC241584
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sidS1Fa0_fI9 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1CHLJc7ns-YA for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 04BDD61238
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27ABF4159F
  for <buildroot@buildroot.org>; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04BDD61238
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27ABF4159F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E371A83668; Wed, 14 Jun 2023 11:53:09 +0000 (UTC)
+ id 16C1C83666; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 12:26:34 +0200
+Date: Wed, 14 Jun 2023 13:44:36 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 0d1bc9caa92f792ab6f83645acd261bd65deb6de
-X-Git-Newrev: 30e241390f65e9eab6f1dbcb0f7de9bd63b71166
+X-Git-Oldrev: 1ffa895fb0d72fd723acb668306f361c3a6058b7
+X-Git-Newrev: d0dcbfed161cf7e0ad2647a721c73f5ec6e7495a
 X-Patchwork-Hint: ignore
-Message-Id: <20230614115309.E371A83668@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python-ipython:
- add missing dependencies
+Message-Id: <20230614115310.16C1C83666@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/mpd: update to
+ version 0.23.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30e241390f65e9eab6f1dbcb0f7de9bd63b71166
+commit: https://git.buildroot.net/buildroot/commit/?id=d0dcbfed161cf7e0ad2647a721c73f5ec6e7495a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-As reported [1], the test TestIPythonPy3 fail since it was updated
-to 8.6.0 release just after 2022.11.
+- Bug fixes in input, archive/zzip, database/simple, decoder,
+  output/pipewire, process termination
+- determine systemd unit directories via pkg-config
+- support libfmt 10
 
-  ModuleNotFoundError: No module named 'stack_data'
+Change log:
+	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.13/NEWS
 
-Indeed there is no such python3-stack-data in Buildroot.
-For example, Fedora packaging added python3-stack-data while updating
-to ipython 8.0.1.
+Commit:
+	https://github.com/MusicPlayerDaemon/MPD/commit/9027e5c
 
-With python-stack-data added, the test TestIPythonPy3 still fail
-with:
+Tested on:
+	i386 (build, run)
+	Aarch64 (build, run)
 
-  ModuleNotFoundError: No module named 'sqlite3'
-
-Since ipython 8 sqlite3 fallback imports has been removed [2].
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819089
-
-[1] http://lists.busybox.net/pipermail/buildroot/2023-May/668086.html
-[2] https://github.com/ipython/ipython/commit/7a0bdabecfa745b60c3a711e1da2df378687e746
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8d93c999a39344bb3b73a21490cc4e0122ef5923)
+(cherry picked from commit 502dcf46af1be88a4ac5973efc9f8eb95c461bf6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ipython/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-ipython/Config.in b/package/python-ipython/Config.in
-index 3de49ae574..c217efcfd1 100644
---- a/package/python-ipython/Config.in
-+++ b/package/python-ipython/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_IPYTHON
- 	bool "python-ipython"
-+	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
- 	select BR2_PACKAGE_PYTHON_BACKCALL # runtime
- 	select BR2_PACKAGE_PYTHON_DECORATOR # runtime
- 	select BR2_PACKAGE_PYTHON_JEDI # runtime
-@@ -7,6 +8,7 @@ config BR2_PACKAGE_PYTHON_IPYTHON
- 	select BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT # runtime
- 	select BR2_PACKAGE_PYTHON_PYGMENTS  # runtime
- 	select BR2_PACKAGE_PYTHON_PEXPECT # runtime
-+	select BR2_PACKAGE_PYTHON_STACK_DATA # runtime
- 	select BR2_PACKAGE_PYTHON_TRAITLETS  # runtime
- 	help
- 	  IPython is a command shell for interactive computing in
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 2521238f64..8683b02e3b 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  b7fca62284ecc25a681ea6a07abc49200af5353be42cb5a31e3173be9d8702e7  mpd-0.23.12.tar.xz
++sha256  a96b01e6fbbb7e8ab25eb7c15d5c811c62eb19b76d143a802f51674791f1d519  mpd-0.23.13.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6c25c9b46f..d73072a439 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).12
++MPD_VERSION = $(MPD_VERSION_MAJOR).13
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
