@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B279EB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D094EB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C61B41A43;
-	Wed, 14 Jun 2023 11:56:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C61B41A43
+	by smtp4.osuosl.org (Postfix) with ESMTP id A156C41C6C;
+	Wed, 14 Jun 2023 11:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A156C41C6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QXHVysvCq8z7; Wed, 14 Jun 2023 11:56:19 +0000 (UTC)
+	with ESMTP id Iz8ZgPZbESND; Wed, 14 Jun 2023 11:56:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A603941D94;
-	Wed, 14 Jun 2023 11:56:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A603941D94
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 417461BF2CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39AF341DB5;
+	Wed, 14 Jun 2023 11:56:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39AF341DB5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 53E291BF966
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D36C861241
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA2DE832E6
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D36C861241
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA2DE832E6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hzzGCS_tOfAT for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p9w-IqNbtj-M for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A1FF61244
- for <buildroot@buildroot.org>; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A1FF61244
+ by smtp1.osuosl.org (Postfix) with ESMTP id E0003831CA
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 11:53:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0003831CA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 289C883628; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
+ id CD5358363F; Wed, 14 Jun 2023 11:53:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 13:47:44 +0200
+Date: Wed, 14 Jun 2023 12:26:12 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: bceba1ab30a055abd3a3e6ef24771e7c555e9c63
-X-Git-Newrev: b81ac67a1c0b70bffc8de2a7a940ea95558b9b9d
+X-Git-Oldrev: 310d23040aef9b0f85878310b5ed4d989c2e6777
+X-Git-Newrev: 776a6e293f338bdfd2beb4b424f5d34762250d91
 X-Patchwork-Hint: ignore
-Message-Id: <20230614115310.289C883628@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/minidlna: bump
- version to 1.3.3
+Message-Id: <20230614115309.CD5358363F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python-asttokens:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b81ac67a1c0b70bffc8de2a7a940ea95558b9b9d
+commit: https://git.buildroot.net/buildroot/commit/?id=776a6e293f338bdfd2beb4b424f5d34762250d91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Release notes:
-https://sourceforge.net/p/minidlna/git/ci/master/tree/NEWS
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Peter: fix alphabetical ordering]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4ba8a13d7bbfcdfce85f6a38ec4f5df291f25c7b)
+(cherry picked from commit aa5c233c36bcc8fd51c84f7776c1b3a2875a3d98)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minidlna/minidlna.hash | 6 +++---
- package/minidlna/minidlna.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                              |  1 +
+ package/python-asttokens/Config.in             |  7 +++++++
+ package/python-asttokens/python-asttokens.hash |  5 +++++
+ package/python-asttokens/python-asttokens.mk   | 16 ++++++++++++++++
+ 4 files changed, 29 insertions(+)
 
-diff --git a/package/minidlna/minidlna.hash b/package/minidlna/minidlna.hash
-index e55e5473d3..b78dd5b4dd 100644
---- a/package/minidlna/minidlna.hash
-+++ b/package/minidlna/minidlna.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/minidlna/files/minidlna/1.3.2/
--sha1  71750adadc34490d52f0b9a930c2731a47f9772d  minidlna-1.3.2.tar.gz
-+# From https://sourceforge.net/projects/minidlna/files/minidlna/1.3.3/
-+sha1  2d42028d2ca5ae04affdb96cb414314867e179ea  minidlna-1.3.3.tar.gz
- # Locally computed
--sha256  222ce45a1a60c3ce3de17527955d38e5ff7a4592d61db39577e6bf88e0ae1cb0  minidlna-1.3.2.tar.gz
-+sha256  39026c6d4a139b9180192d1c37225aa3376fdf4f1a74d7debbdbb693d996afa4  minidlna-1.3.3.tar.gz
- sha256  79146b7f558e56510b9a714ff75318c05ab93aeccfd6597497b9bce212cf92ea  COPYING
- sha256  94876d7886116e176e702b4902bd9f19731a6883db5f229ac2a7058a22aa6529  LICENCE.miniupnpd
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 6ca72d9240..1609695ebf 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MINIDLNA_VERSION = 1.3.2
-+MINIDLNA_VERSION = 1.3.3
- MINIDLNA_SITE = https://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
- MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
- MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+diff --git a/package/Config.in b/package/Config.in
+index 440c8e92ff..a452699a47 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -967,6 +967,7 @@ menu "External python modules"
+ 	source "package/python-arrow/Config.in"
+ 	source "package/python-asgiref/Config.in"
+ 	source "package/python-asn1crypto/Config.in"
++	source "package/python-asttokens/Config.in"
+ 	source "package/python-async-generator/Config.in"
+ 	source "package/python-async-lru/Config.in"
+ 	source "package/python-async-timeout/Config.in"
+diff --git a/package/python-asttokens/Config.in b/package/python-asttokens/Config.in
+new file mode 100644
+index 0000000000..2732b8124b
+--- /dev/null
++++ b/package/python-asttokens/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ASTTOKENS
++	bool "python-asttokens"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	help
++	  Annotate AST trees with source code positions.
++
++	  https://github.com/gristlabs/asttokens
+diff --git a/package/python-asttokens/python-asttokens.hash b/package/python-asttokens/python-asttokens.hash
+new file mode 100644
+index 0000000000..6529e4db41
+--- /dev/null
++++ b/package/python-asttokens/python-asttokens.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/asttokens/json
++md5  a9ae6ae0f85398e511bcb9ec87695eed  asttokens-2.2.1.tar.gz
++sha256  4622110b2a6f30b77e1473affaa97e711bc2f07d3f10848420ff1898edbe94f3  asttokens-2.2.1.tar.gz
++# Locally computed sha256 checksums
++sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/python-asttokens/python-asttokens.mk b/package/python-asttokens/python-asttokens.mk
+new file mode 100644
+index 0000000000..8a8ce1ddd9
+--- /dev/null
++++ b/package/python-asttokens/python-asttokens.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python-asttokens
++#
++################################################################################
++
++PYTHON_ASTTOKENS_VERSION = 2.2.1
++PYTHON_ASTTOKENS_SOURCE = asttokens-$(PYTHON_ASTTOKENS_VERSION).tar.gz
++PYTHON_ASTTOKENS_SITE = https://files.pythonhosted.org/packages/c8/e3/b0b4f32162621126fbdaba636c152c6b6baec486c99f48686e66343d638f
++PYTHON_ASTTOKENS_SETUP_TYPE = setuptools
++PYTHON_ASTTOKENS_LICENSE = Apache-2.0
++PYTHON_ASTTOKENS_LICENSE_FILES = LICENSE
++
++PYTHON_ASTTOKENS_DEPENDENCIES = host-python-setuptools-scm
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
