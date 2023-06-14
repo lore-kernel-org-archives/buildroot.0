@@ -4,56 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EEF7EB64D8
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C23BCEB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B0BA16135F;
-	Wed, 14 Jun 2023 14:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0BA16135F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6767E6133C;
+	Wed, 14 Jun 2023 14:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6767E6133C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B0806G01z35O; Wed, 14 Jun 2023 14:53:26 +0000 (UTC)
+	with ESMTP id CknCvH8C3Ypa; Wed, 14 Jun 2023 14:53:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4BA96133B;
-	Wed, 14 Jun 2023 14:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4BA96133B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 61D381BF2B7
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:53:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9690761342;
+	Wed, 14 Jun 2023 14:53:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9690761342
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 178F51BF2B7
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:53:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43FFC41518
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:53:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43FFC41518
+ by smtp4.osuosl.org (Postfix) with ESMTP id F17FB402C0
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:53:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F17FB402C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zlcChNE-zOeB for <buildroot@lists.busybox.net>;
- Wed, 14 Jun 2023 14:53:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 93rK2ir8JUzC for <buildroot@lists.busybox.net>;
+ Wed, 14 Jun 2023 14:53:38 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D350400F1
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D350400F1
- for <buildroot@buildroot.org>; Wed, 14 Jun 2023 14:53:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5BA640137
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A5BA640137
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 14:53:37 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A151B40004;
- Wed, 14 Jun 2023 14:53:13 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A4EC520015;
+ Wed, 14 Jun 2023 14:53:34 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1q9Rs0-008ANg-Vm; Wed, 14 Jun 2023 16:53:13 +0200
+ id 1q9RsM-008AOG-0N; Wed, 14 Jun 2023 16:53:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20230607171708.595774-1-bernd.kuhls@t-online.de>
-Date: Wed, 14 Jun 2023 16:53:12 +0200
-In-Reply-To: <20230607171708.595774-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 7 Jun 2023 19:17:08 +0200")
-Message-ID: <87zg52m6xz.fsf@48ers.dk>
+To: Romain Naour <romain.naour@gmail.com>
+References: <20230605095607.332091-1-romain.naour@gmail.com>
+ <20230605095607.332091-2-romain.naour@gmail.com>
+Date: Wed, 14 Jun 2023 16:53:33 +0200
+In-Reply-To: <20230605095607.332091-2-romain.naour@gmail.com> (Romain Naour's
+ message of "Mon, 5 Jun 2023 11:56:07 +0200")
+Message-ID: <87v8fqm6xe.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdeflate: force arm mode
- instead of Thumb mode
+Subject: Re: [Buildroot] [PATCH 2/2] package/libjxl: requires host-cmake >=
+ 3.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +67,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Fix the following build failure:
- > /tmp/ccGKQdKj.s: Assembler messages:
- > /tmp/ccGKQdKj.s:199: Error: invalid constant (7) after fixup
- > /tmp/ccGKQdKj.s:327: Error: invalid constant (0) after fixup
- > /tmp/ccGKQdKj.s:338: Error: invalid constant (1) after fixup
- > /tmp/ccGKQdKj.s:345: Error: invalid constant (20) after fixup
- > /tmp/ccGKQdKj.s:354: Error: invalid constant (20) after fixup
- > /tmp/ccGKQdKj.s:372: Error: invalid constant (20) after fixup
- > /tmp/ccGKQdKj.s:528: Error: invalid constant (3f) after fixup
- > /tmp/ccGKQdKj.s:531: Error: invalid constant (3f) after fixup
- > /tmp/ccGKQdKj.s:202: Error: invalid constant (20000) after fixup
- > /tmp/ccGKQdKj.s:482: Error: invalid constant (20000) after fixup
- > /tmp/ccGKQdKj.s:549: Error: invalid constant (20000) after fixup
+ > libjxl requires cmake 3.19 since version v0.7 due to the
+ > new behavior of cmake [1].
+
+ > -- Configuring done
+ > CMake Error at cmake/FindLCMS2.cmake:40 (add_library):
+ >   INTERFACE_LIBRARY targets may only have whitelisted properties.  The
+ >   property "INCLUDE_DIRECTORIES" is not allowed.
+ > Call Stack (most recent call first):
+ >   third_party/CMakeLists.txt:114 (find_package)
+
+ > The portability issue has already been reported upstream [2].
 
  > Fixes:
- > http://autobuild.buildroot.net/results/0103d64a4a6a9b0a708bfb77bf1714edc7acc714/
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819095
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > [1] https://gitlab.kitware.com/cmake/cmake/-/commit/afb998704e67d3d3ce5b24c112cb06e770fca78d
+ > [2] https://github.com/libjxl/libjxl/issues/1425
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Julien Olivain <ju.o@free.fr>
 
 Committed to 2023.02.x, thanks.
 
