@@ -1,72 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AF40EB64D8
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 06:21:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40771EB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 09:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 842EB417B6;
-	Wed, 14 Jun 2023 06:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 842EB417B6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C4736113C;
+	Wed, 14 Jun 2023 09:11:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C4736113C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wlUrt_2crNZK; Wed, 14 Jun 2023 09:11:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 623A96111E;
+	Wed, 14 Jun 2023 09:11:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 623A96111E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 58BCA1BF860
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 09:11:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 398CF41885
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 09:11:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 398CF41885
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PjFN0v72JzO6; Wed, 14 Jun 2023 06:21:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 585B641734;
-	Wed, 14 Jun 2023 06:21:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 585B641734
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DDC371BF863
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 06:21:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C421540640
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 06:21:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C421540640
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jb8X-MqXITYz for <buildroot@lists.busybox.net>;
- Wed, 14 Jun 2023 06:21:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F341405D0
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2F341405D0
- for <buildroot@buildroot.org>; Wed, 14 Jun 2023 06:21:38 +0000 (UTC)
-Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
- (mreue107 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1M6VNX-1qBDhF204n-006zgy; Wed, 14 Jun 2023 08:21:32 +0200
-Message-ID: <7031315e-4906-206e-8afc-f21784b4f822@vivier.eu>
-Date: Wed, 14 Jun 2023 08:21:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: fr
-To: Joel Stanley <joel@jms.id.au>
-References: <20230613105015.739870-1-laurent@vivier.eu>
- <20230613105015.739870-5-laurent@vivier.eu>
- <CACPK8XfZL3j9AP-hkz3mNLW=6Ryy5TMo+o95DJNZ_vWBJxE2DQ@mail.gmail.com>
-From: Laurent Vivier <laurent@vivier.eu>
-In-Reply-To: <CACPK8XfZL3j9AP-hkz3mNLW=6Ryy5TMo+o95DJNZ_vWBJxE2DQ@mail.gmail.com>
-X-Provags-ID: V03:K1:pmGXZ5cfmmnkTZy00vuZ100JZXAbX3S4/nVJclvlzrJ0+zq7BZ+
- /XtfwiXSmjlkuLwpQ/oRzTMPKllR9V6e/ps+Ot3zLQoRP8QhCewWJ8txMfVhkH0mPhPUKTL
- 2ux/xoYyqE8aGw2mob3R1hE9YICm5kWkGdqClzBmOyM9/kXEu8CtWDmUUjbHRvr3u5Q8pzf
- cdNlXzuSM3o4yJjTt1meg==
-UI-OutboundReport: notjunk:1;M01:P0:Mw5KCPl3cSE=;Bn22EQ10Tr/Skabh+CjNCNcaoLz
- sqKvnCcwfsBYJ8u0cnwwWrtoxJwYmwXu7EXxsKYzJReLbt8a3uE3y0MyVCs2TFyzHKZOXtSsG
- TEGLZxP9xr+dfIvzDsECqQa1pZj7ehKXWvm/cRFaMrFeHS5/sAtFBFzpOG8mVx686Cl3Ukcvk
- 0AW8Lt963KuDXUcgBP+ULa51ScB54kKkES8o1uwZ6AE4iJkhQwDpcjE4SLinzcmYVbLDVbTKN
- BjnHyFpgj6Gb0WidnDiSeEPaAfWOS25WfBbuGS6+g9ceLovYc4gZsaxhrXdehkh3NWS/wby50
- G3QU9tfItOHN8sCIHOozs+E5NLlOuL39LfzTkqLiLDsPIiiP4ukPgNABWtKbHDUBvnlkEqzs1
- 5B8GF+mCs3iFHst7z6mrYp5tV1idiusG3w5RM6cAQeDhAqErDkCoVpdhlR8gPmS8ENfK+xXD5
- Khp8YM845lJKHYdJ5Gz4E6yNRuisl/tYOP00pZzHH05ETxaL2vyxoIVn29KPaiX8SpbHFqEx6
- hNaLU9JCoIr2nv/4BtAXjKKY54bNh+y/Nxyd2A9Sd/fTjtzjRz2QmQEerVA0D/blIYOR+2YPO
- 9+LDV0E6ICauQBRqBIOvFp8U/MaTALUutoQeJ38blYKhHB3p8N9d2ITW5WraM1OaUKw82/swH
- 4bkXXYMrVlxGE4uVQTl2IjQnVRgp2JI+vkijDUF/pg==
-Subject: Re: [Buildroot] [PATCH v14 4/4] support/scripts/boot-qemu-image.py:
- manage petitboot interface
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sh7xUTVbWG9v for <buildroot@lists.busybox.net>;
+ Wed, 14 Jun 2023 09:11:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97F7941868
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 09:11:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97F7941868
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 83B9283536; Wed, 14 Jun 2023 09:11:45 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 14 Jun 2023 11:06:45 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 8391404e2304ee976ad4e654cf6f17c76854f9bf
+X-Git-Newrev: 942b715a851a3321398d14372708d0f96182e0fe
+X-Patchwork-Hint: ignore
+Message-Id: <20230614091145.83B9283536@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/busybox: fix
+ busybox lineedit signal handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,47 +57,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
- =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgMTQvMDYvMjAyMyDDoCAwNDowNSwgSm9lbCBTdGFubGV5IGEgw6ljcml0wqA6Cj4gT24gVHVl
-LCAxMyBKdW4gMjAyMyBhdCAxMDo1MSwgTGF1cmVudCBWaXZpZXIgPGxhdXJlbnRAdml2aWVyLmV1
-PiB3cm90ZToKPj4KPj4gUGV0aXRib290IGRvZXNuJ3Qgc3RhcnQgYSBzaGVsbCBidXQgYSBHVUku
-Cj4+IE1hbmFnZSB0aGUgbWVudSB0byBzd2l0Y2ggdG8gdGhlIHNoZWxsLgo+Pgo+PiBFbmFibGUg
-dGhlIHRlc3QgZm9yIHFlbXVfbTY4S192aXJ0Lgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBMYXVyZW50
-IFZpdmllciA8bGF1cmVudEB2aXZpZXIuZXU+Cj4+IC0tLQo+PiAgIHN1cHBvcnQvc2NyaXB0cy9i
-b290LXFlbXUtaW1hZ2UucHkgfCA4ICsrKysrKy0tCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDYgaW5z
-ZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPj4KPj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvc2Ny
-aXB0cy9ib290LXFlbXUtaW1hZ2UucHkgYi9zdXBwb3J0L3NjcmlwdHMvYm9vdC1xZW11LWltYWdl
-LnB5Cj4+IGluZGV4IGJhNTBlYTY5ZWU5YS4uYzk0YjdhNWM5NjlkIDEwMDc1NQo+PiAtLS0gYS9z
-dXBwb3J0L3NjcmlwdHMvYm9vdC1xZW11LWltYWdlLnB5Cj4+ICsrKyBiL3N1cHBvcnQvc2NyaXB0
-cy9ib290LXFlbXUtaW1hZ2UucHkKPj4gQEAgLTM2LDcgKzM2LDcgQEAgZGVmIG1haW4oKToKPj4g
-ICAgICAgdGltZS5zbGVlcCgxKQo+Pgo+PiAgICAgICB0cnk6Cj4+IC0gICAgICAgIGNoaWxkLmV4
-cGVjdChbImJ1aWxkcm9vdCBsb2dpbjoiXSwgdGltZW91dD02MDApCj4+ICsgICAgICAgIGlkeCA9
-IGNoaWxkLmV4cGVjdChbImJ1aWxkcm9vdCBsb2dpbjoiLCAiRXhpdCB0byBzaGVsbCJdLCB0aW1l
-b3V0PTYwMCkKPiAKPiBXaGF0J3MgaWR4IGdvaW5nIHRvIGNvbnRhaW4gaW4gdGhlIHBldGl0Ym9v
-dCB2cyBnZXR0eSBjYXNlcz8KCnNlZSBodHRwczovL3BleHBlY3QucmVhZHRoZWRvY3MuaW8vZW4v
-c3RhYmxlL2FwaS9wZXhwZWN0Lmh0bWwjcGV4cGVjdC5zcGF3bi5leHBlY3QKCiJUaGlzIHJldHVy
-bnMgdGhlIGluZGV4IGludG8gdGhlIHBhdHRlcm4gbGlzdC4iCgoiYnVpbGRyb290IGxvZ2luOiIg
-LT4gaWR4ID0gMAoiRXhpdCB0byBzaGVsbCIgLT4gaWR4ID0gMQoKVGhhbmtzLApMYXVyZW50Cgo+
-IAo+PiAgICAgICBleGNlcHQgcGV4cGVjdC5FT0YgYXMgZToKPj4gICAgICAgICAgICMgU29tZSBl
-bXVsYXRpb25zIHJlcXVpcmUgYSBmb3JrIG9mIHFlbXUtc3lzdGVtLCB3aGljaCBtYXkgYmUKPj4g
-ICAgICAgICAgICMgbWlzc2luZyBvbiB0aGUgc3lzdGVtLCBhbmQgaXMgbm90IHByb3ZpZGVkIGJ5
-IEJ1aWxkcm9vdC4KPj4gQEAgLTU1LDcgKzU1LDExIEBAIGRlZiBtYWluKCk6Cj4+ICAgICAgICAg
-ICBwcmludCgiU3lzdGVtIGRpZCBub3QgYm9vdCBpbiB0aW1lLCBleGl0aW5nLiIpCj4+ICAgICAg
-ICAgICBzeXMuZXhpdCgxKQo+Pgo+PiAtICAgIGNoaWxkLnNlbmRsaW5lKCJyb290XHIiKQo+PiAr
-ICAgIGlmIGlkeCA9PSAwOgo+PiArICAgICAgICBjaGlsZC5zZW5kbGluZSgicm9vdFxyIikKPj4g
-KyAgICBlbGlmIGlkeCA9PSAxOgo+PiArICAgICAgICB0aW1lLnNsZWVwKDEpCj4+ICsgICAgICAg
-IGNoaWxkLnNlbmRsaW5lKCJcciIpCj4+Cj4+ICAgICAgIHRyeToKPj4gICAgICAgICAgIGNoaWxk
-LmV4cGVjdChbIiMgIl0sIHRpbWVvdXQ9NjAwKQo+PiAtLQo+PiAyLjQwLjEKPj4KPj4gX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gYnVpbGRyb290IG1h
-aWxpbmcgbGlzdAo+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+PiBodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=942b715a851a3321398d14372708d0f96182e0fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+
+Since the Busybox version bump to 1.36.0 the TestS6 fails during the
+test teardown.
+
+Backport an upstream patch fixing signal handling (SIGWINCH), see [1].
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819388
+
+[1] https://bugs.busybox.net/show_bug.cgi?id=15256
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Peter: use upstream commit as-is]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b6ce18b5ac78474611cdea07b887f4f83bc78648)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...IGWINCH-and-SIGCHLD-in-hush-interrupting-.patch | 103 +++++++++++++++++++++
+ 1 file changed, 103 insertions(+)
+
+diff --git a/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch b/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch
+new file mode 100644
+index 0000000000..8ebb487ec6
+--- /dev/null
++++ b/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch
+@@ -0,0 +1,103 @@
++From 93e0898c663a533082b5f3c2e7dcce93ec47076d Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Thu, 26 Jan 2023 12:56:33 +0100
++Subject: [PATCH] shell: fix SIGWINCH and SIGCHLD (in hush) interrupting line
++ input, closes 15256
++
++function                                             old     new   delta
++record_pending_signo                                  32      63     +31
++lineedit_read_key                                    231     224      -7
++------------------------------------------------------------------------------
++(add/remove: 0/0 grow/shrink: 1/1 up/down: 31/-7)              Total: 24 bytes
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Upstream: https://git.busybox.net/busybox/commit/?id=93e0898c663a533082b5f3c2e7dcce93ec47076d
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ libbb/lineedit.c | 17 ++++++++++-------
++ shell/ash.c      |  3 ++-
++ shell/hush.c     | 10 ++++++++--
++ 3 files changed, 20 insertions(+), 10 deletions(-)
++
++diff --git a/libbb/lineedit.c b/libbb/lineedit.c
++index d6b2e76ff..b942f540a 100644
++--- a/libbb/lineedit.c
+++++ b/libbb/lineedit.c
++@@ -2180,7 +2180,8 @@ static int lineedit_read_key(char *read_key_buffer, int timeout)
++ 		 * "\xff\n",pause,"ls\n" invalid and thus won't lose "ls".
++ 		 *
++ 		 * If LI_INTERRUPTIBLE, return -1 if got EINTR in poll()
++-		 * inside read_key, or if bb_got_signal != 0 (IOW: if signal
+++		 * inside read_key and bb_got_signal became != 0,
+++		 * or if bb_got_signal != 0 (IOW: if signal
++ 		 * arrived before poll() is reached).
++ 		 *
++ 		 * Note: read_key sets errno to 0 on success.
++@@ -2197,14 +2198,16 @@ static int lineedit_read_key(char *read_key_buffer, int timeout)
++ 			IF_FEATURE_EDITING_WINCH(S.ok_to_redraw = 0;)
++ 			if (errno != EINTR)
++ 				break;
+++			/* It was EINTR. Repeat read_key() unless... */
++ 			if (state->flags & LI_INTERRUPTIBLE) {
++-				/* LI_INTERRUPTIBLE bails out on EINTR,
++-				 * but nothing really guarantees that bb_got_signal
++-				 * is nonzero. Follow the least surprise principle:
+++				/* LI_INTERRUPTIBLE bails out on EINTR
+++				 * if bb_got_signal became nonzero.
+++				 * (It may stay zero: for example, our SIGWINCH
+++				 * handler does not set it. This is used for signals
+++				 * which should not interrupt line editing).
++ 				 */
++-				if (bb_got_signal == 0)
++-					bb_got_signal = 255;
++-				goto ret;
+++				if (bb_got_signal != 0)
+++					goto ret; /* will return -1 */
++ 			}
++ 		}
++ 
++diff --git a/shell/ash.c b/shell/ash.c
++index 18ccc1329..5f8c8ea19 100644
++--- a/shell/ash.c
+++++ b/shell/ash.c
++@@ -10821,7 +10821,8 @@ preadfd(void)
++  again:
++ 		/* For shell, LI_INTERRUPTIBLE is set:
++ 		 * read_line_input will abort on either
++-		 * getting EINTR in poll(), or if it sees bb_got_signal != 0
+++		 * getting EINTR in poll() and bb_got_signal became != 0,
+++		 * or if it sees bb_got_signal != 0
++ 		 * (IOW: if signal arrives before poll() is reached).
++ 		 * Interactive testcases:
++ 		 * (while kill -INT $$; do sleep 1; done) &
++diff --git a/shell/hush.c b/shell/hush.c
++index d111f0cc5..f064b8fd2 100644
++--- a/shell/hush.c
+++++ b/shell/hush.c
++@@ -1946,7 +1946,12 @@ static void record_pending_signo(int sig)
++ {
++ 	sigaddset(&G.pending_set, sig);
++ #if ENABLE_FEATURE_EDITING
++-	bb_got_signal = sig; /* for read_line_input: "we got a signal" */
+++	if (sig != SIGCHLD
+++	 || (G_traps && G_traps[SIGCHLD] && G_traps[SIGCHLD][0])
+++	 /* ^^^ if SIGCHLD, interrupt line reading only if it has a trap */
+++	) {
+++		bb_got_signal = sig; /* for read_line_input: "we got a signal" */
+++	}
++ #endif
++ #if ENABLE_HUSH_FAST
++ 	if (sig == SIGCHLD) {
++@@ -2669,7 +2674,8 @@ static int get_user_input(struct in_str *i)
++ 		} else {
++ 			/* For shell, LI_INTERRUPTIBLE is set:
++ 			 * read_line_input will abort on either
++-			 * getting EINTR in poll(), or if it sees bb_got_signal != 0
+++			 * getting EINTR in poll() and bb_got_signal became != 0,
+++			 * or if it sees bb_got_signal != 0
++ 			 * (IOW: if signal arrives before poll() is reached).
++ 			 * Interactive testcases:
++ 			 * (while kill -INT $$; do sleep 1; done) &
++-- 
++2.30.2
++
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
