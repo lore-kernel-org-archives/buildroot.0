@@ -1,62 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C3DCEB64D8
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:50:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF168EB64DB
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C4F8C83A42;
-	Wed, 14 Jun 2023 14:50:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4F8C83A42
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZnuvV2gRlXwJ; Wed, 14 Jun 2023 14:50:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCCD783A3C;
-	Wed, 14 Jun 2023 14:50:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCCD783A3C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F44A1BF2B7
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:50:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18055612F0
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:50:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18055612F0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CD3761321;
+	Wed, 14 Jun 2023 14:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CD3761321
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1w44eH--QGC5 for <buildroot@lists.busybox.net>;
- Wed, 14 Jun 2023 14:50:47 +0000 (UTC)
-X-Greylist: delayed 00:08:41 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79CE6612CA
-Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 79CE6612CA
- for <buildroot@buildroot.org>; Wed, 14 Jun 2023 14:50:47 +0000 (UTC)
-Received: from eos.home.n621.de (localhost [127.0.0.1])
- by nyx.n621.de (Postfix) with ESMTP id 55711E003F8;
- Wed, 14 Jun 2023 16:42:03 +0200 (CEST)
-From: Florian Larysch <fl@n621.de>
-To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 16:42:02 +0200
-Message-Id: <20230614144202.21459-1-fl@n621.de>
-X-Mailer: git-send-email 2.40.1
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id F_FXs3jWcK8y; Wed, 14 Jun 2023 14:53:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BF6D6131D;
+	Wed, 14 Jun 2023 14:53:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BF6D6131D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EE9081BF2B7
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:52:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D56B441518
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:52:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D56B441518
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IuXpNoxY2aD8 for <buildroot@lists.busybox.net>;
+ Wed, 14 Jun 2023 14:52:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4E02400F1
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B4E02400F1
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 14:52:57 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9C98040003;
+ Wed, 14 Jun 2023 14:52:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1q9Rrh-008AN3-S6; Wed, 14 Jun 2023 16:52:53 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20230607173514.1070338-1-bernd.kuhls@t-online.de>
+Date: Wed, 14 Jun 2023 16:52:53 +0200
+In-Reply-To: <20230607173514.1070338-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 7 Jun 2023 19:35:14 +0200")
+Message-ID: <874jnanliy.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=n621.de; s=dkim; t=1686753723;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=4nSdpsIZYs9HcmViGzeL5tH975sF631RPkuigbvmivY=;
- b=SQZfI6IsC1tyHvgjtNPrgz0SJqO1GhOFTB7mZEy/m6Dw6yMZRWiJ+AV4nNOrIolrQqBTuI
- WkaVs6cLvxjTnk+x2HLSkOUyZqxgcSqjMuAXfosd/sif985MSQXp8x3hFZwg/1UfGSapR5
- JFdZQcd2MN6xvY5HSXdaNnrdwob99sQ=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=n621.de header.i=@n621.de
- header.a=rsa-sha256 header.s=dkim header.b=SQZfI6Is
-Subject: [Buildroot] [PATCH 1/1] linux: make kconfig depend on host-make
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: Fix GCC 12 -Og
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,46 +64,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Florian Larysch <fl@n621.de>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 0b9efc991f ("linux: use BR2_MAKE") switched LINUX_MAKE to
-$(BR2_MAKE). However, this also implicitly sets LINUX_KCONFIG_MAKE.
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Thus, when host-make is being used in a build that has
-PER_PACKAGE_DIRECTORIES enabled, the dotconfig step will try to use the
-make instance from the host directory, but since it is not listed in
-LINUX_KCONFIG_DEPENDENCIES, it won't be available yet at that point in
-time.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/316451459139e250ba2d0c7b554606fd97eebd9a/
 
-Add an explicit dependency to LINUX_KCONFIG_DEPENDENCIES to have it
-copied over early enough.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Florian Larysch <fl@n621.de>
----
- linux/linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Committed to 2023.02.x, thanks.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index cc36b5251d..1c4fe45ac9 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -88,7 +88,8 @@ LINUX_DEPENDENCIES += \
- # only if the host does not have them.
- LINUX_KCONFIG_DEPENDENCIES = \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
--	$(BR2_FLEX_HOST_DEPENDENCY)
-+	$(BR2_FLEX_HOST_DEPENDENCY) \
-+	$(BR2_MAKE_HOST_DEPENDENCY)
- 
- # Starting with 4.18, the kconfig in the kernel calls the
- # cross-compiler to check its capabilities. So we need the
 -- 
-2.40.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
