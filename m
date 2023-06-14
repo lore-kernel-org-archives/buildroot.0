@@ -4,48 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F6C9EB64D8
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:55:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97B6AEB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 15:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45A576132E;
-	Wed, 14 Jun 2023 14:55:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45A576132E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A4E160E5F;
+	Wed, 14 Jun 2023 15:26:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A4E160E5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4wcc2jFJwIHy; Wed, 14 Jun 2023 14:55:10 +0000 (UTC)
+	with ESMTP id mCWQGNkpsncv; Wed, 14 Jun 2023 15:26:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36E176134B;
-	Wed, 14 Jun 2023 14:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E176134B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D29BE1BF2B7
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C98B61341;
+	Wed, 14 Jun 2023 15:26:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C98B61341
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF9151BF303
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 15:26:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4B9041795
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4B9041795
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86D5A41B1B
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 15:26:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86D5A41B1B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Be99EQVeuF-2 for <buildroot@lists.busybox.net>;
- Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1BF44178C
- for <buildroot@buildroot.org>; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1BF44178C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8955B836F6; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f_OLZXq6LBDd for <buildroot@lists.busybox.net>;
+ Wed, 14 Jun 2023 15:26:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C701E41AEF
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C701E41AEF
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 15:26:38 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3f8ca80e889so7705805e9.3
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 08:26:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1686756396; x=1689348396;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ssAl043Vsbmi3SO4Kn0fEiOPc+tZjseJPfMYahZSGgM=;
+ b=fhKy6UwKyyr8+QYUfYGkX9s1FzBzhhPeenLvVUoLKdoUdMKDmcfCVua0ZntSpq0Egn
+ jLtPk9432P/LHHkoN3x5f1hIgq9wCgfqkgJowsGfO4YfWh0lg63TncoC6dQxo+9gYuH7
+ /4reKAZE6D5xzPv3AzPG9rZhs14tKOmH1rmc3/11jDxfVQqzEGciiavM65nB5jP8JzBR
+ c+0MlogR9PSqciGX0OvdoKOOcLbcx8dLKd5HsysmXA5wKUKYXymNByxy9a+S9iSQj1bt
+ C+o1nlFamXoEpjIdJJnv/vFw2KbeMYEGZoBU+/wOMpJyLznbigiHE77nOkn8DFygFuZo
+ q7pw==
+X-Gm-Message-State: AC+VfDzvnCgaFU1QH/HHXcmh4cdRpxBQo+d+rLX09IaHGPSH7FO5SoF6
+ kHVZQERrpz1mFREJbBNqJ04xxyRALWbxmK+47xw=
+X-Google-Smtp-Source: ACHHUZ78qHV0tXoscDtmxCIrHk9VBo6WE9k1igHwnfAVkghX72aaRmkq618sftpUU5F0a143YaybqA==
+X-Received: by 2002:a05:600c:2212:b0:3f4:23b9:eed2 with SMTP id
+ z18-20020a05600c221200b003f423b9eed2mr12155214wml.38.1686756396585; 
+ Wed, 14 Jun 2023 08:26:36 -0700 (PDT)
+Received: from P-NTS-Evian.nantes.intranet
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ u26-20020a05600c211a00b003f42314832fsm17745721wml.18.2023.06.14.08.26.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 14 Jun 2023 08:26:36 -0700 (PDT)
+From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 16:51:12 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 4956d620df14156baba1ef98610d5887612c254d
-X-Git-Newrev: a6d7d40579cdefaa965fc283dfa96fc645029d82
-X-Patchwork-Hint: ignore
-Message-Id: <20230614145426.8955B836F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] support/dependencies:
- introduce BR2_HOST_CMAKE_AT_LEAST
+Date: Wed, 14 Jun 2023 17:26:34 +0200
+Message-Id: <20230614152634.23608-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1686756396; x=1689348396;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ssAl043Vsbmi3SO4Kn0fEiOPc+tZjseJPfMYahZSGgM=;
+ b=up2z049sEQ50iYxWzumXjNhZaRHz0m3ZSk2/yg9423pXCPDj1FkaaJ/Ievp/crCDKZ
+ IdEGgELpAfGi5fEJLzRkqdPrrazII0Bb6Lbd3Jr9tsVRVsD4sot4s7Fj/43g3rP7NonG
+ /tNifklmObLiLAeSY8zqT7IiPEhjvOMkEYeoq0uNiI5yW8S47RhsnZT4/dcQLqBOExal
+ fVPGEtsa3QM0yMAyqVHRPkMcNkiCxSSGarn+U77la1TMDUg52Ip3hMep88KfuwIQN5fB
+ sJbGN9ZD1vrD01Ycn7F3OqSzYal72cGvj2DKcMV8VCUjTm0jZTlQK92RhVjaM3hdGuw4
+ 0/Fw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
+ header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
+ header.s=20221208 header.b=up2z049s
+Subject: [Buildroot] [RFC] package/qemu: fix build on mips* and powerpc*
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,139 +96,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6d7d40579cdefaa965fc283dfa96fc645029d82
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+linux/mman.h define MAP_SYNC (0x0) as legacy / undefined architecture
+specific flags to be ignored by mmap handling code [1].
 
-Some packages (e.g. libjxl) requires a quite recent cmake version,
-that is not yet available in most distributions, especially those
-LTS versions.
+But MAP_SYNC may be undef by musl toolchain arch/<arch>/bits/mman.h
+header [2] when targets (mips*, powerpc*) are not using
+asm-generic/mman.h to have MAP_SYNC defined.
 
-Currently, when we bump the minimum cmake version we require, it gets
-bumped for all packages, regardless of their own minimum required
-version, which means that a given configuration will trigger the
-build of our host-cmake even if the packages that require it are not
-enabled and those that are would be content with the system-provided
-cmake.
+Fixes:
+http://autobuild.buildroot.org/results/dbd/dbdba73b0adeaeebb97da146e7df6c2cd0b48422
+http://autobuild.buildroot.org/results/287/287b4e8e77914a6181cab2b632b7e3412c3b781b
 
-Since host-cmake can take quite some time to build, this can get a
-bit annoying to pay the price of a host-cmake build that would
-otherwise not be needed.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=b6fb293f2497a9841d94f6b57bd2bb2cd222da43
+[2] https://git.musl-libc.org/cgit/musl/commit/?id=9b57db3f958d9adc3b1c7371b5c6723aaee448b7
 
-Some packages even use an alternative build system when available
-since they requires a more recent version of cmake than the our
-minimum cmake version
-(wpewebkit use Ninja: 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd).
-
-We introduce config options that packages can select to indicate
-what minimal cmake version they require, and use that version as the
-required minimal version required by the current configuration [0].
-
-We would like to ensure that the currently selected minimum cmake
-version is indeed lower (or equal) to the cmake version we package,
-but that is not possible: dependencies.mk is parsed before we parse
-packages, so we do not yet know the cmake version we have, and we
-can't invert the parsing order as we need to know the required
-dependencies before we parse packages (so that we can build their
-dependency rules in Makefile). So we can only add comments in both
-places, that refer to the other location.
-
-[0] note that this is yet not optimal, as in such a case, host-cmake
-would be in the dependency chain of all cmake-based packages, even
-for those packages that do not require it. The optimum would be for
-each package to gain such a dependency on an as-needed basis, but
-this is by far more complex to achieve, and would only speed up
-cases where a single package is built from scratch (e.g. with:
-make clean; make foo), which is not worth optimising (yet?)
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Julien Olivain <ju.o@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 53beb8fc1a4f3ba20ea6c856b4ec8506570f17c1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/cmake/Config.in.host             | 27 +++++++++++++++++++++++++++
- package/cmake/cmake.mk                   |  1 +
- support/dependencies/check-host-cmake.mk | 12 +++++++-----
- 3 files changed, 35 insertions(+), 5 deletions(-)
+I believe it may be a musl toolchain issue when MAP_SYNC is undef from musl's
+bits/mman.h header. I'm not sure that qemu (upstream) should handle this issue
+from util/mmap-alloc.c.
+---
+ ...-alloc-fix-build-on-mips-and-powerpc.patch | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/qemu/0003-util-mmap-alloc-fix-build-on-mips-and-powerpc.patch
 
-diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
-index b2e210ee2c..5de076537b 100644
---- a/package/cmake/Config.in.host
-+++ b/package/cmake/Config.in.host
-@@ -9,3 +9,30 @@ config BR2_PACKAGE_HOST_CMAKE
- 	  the compiler environment of your choice.
- 
- 	  http://www.cmake.org/
+diff --git a/package/qemu/0003-util-mmap-alloc-fix-build-on-mips-and-powerpc.patch b/package/qemu/0003-util-mmap-alloc-fix-build-on-mips-and-powerpc.patch
+new file mode 100644
+index 0000000000..528ba3dc78
+--- /dev/null
++++ b/package/qemu/0003-util-mmap-alloc-fix-build-on-mips-and-powerpc.patch
+@@ -0,0 +1,52 @@
++From e244dbccc229c9973b900f1ca4b8c3b61f5305b4 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Tue, 13 Jun 2023 23:27:07 +0200
++Subject: [PATCH] util/mmap-alloc: fix build on mips* and powerpc*
 +
-+# The minimum system cmake version we expect if 3.18 as provided by
-+# Debian bullseye, that we use in our reference build docker image.
-+config BR2_HOST_CMAKE_AT_LEAST_3_19
-+	bool
++linux/mman.h define MAP_SYNC (0x0) as legacy / undefined architecture
++specific flags to be ignored by mmap handling code [1].
 +
-+config BR2_HOST_CMAKE_AT_LEAST_3_20
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_3_19
++But MAP_SYNC may be undef by musl toolchain arch/<arch>/bits/mman.h
++header [2] when targets (mips*, powerpc*) are not using
++asm-generic/mman.h to have MAP_SYNC defined.
 +
-+config BR2_HOST_CMAKE_AT_LEAST_3_21
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_3_20
++Fixes:
++http://autobuild.buildroot.org/results/dbd/dbdba73b0adeaeebb97da146e7df6c2cd0b48422
++http://autobuild.buildroot.org/results/287/287b4e8e77914a6181cab2b632b7e3412c3b781b
 +
-+config BR2_HOST_CMAKE_AT_LEAST_3_22
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_3_21
++[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=b6fb293f2497a9841d94f6b57bd2bb2cd222da43
++[2] https://git.musl-libc.org/cgit/musl/commit/?id=9b57db3f958d9adc3b1c7371b5c6723aaee448b7
 +
-+# This order guarantees that the highest version is set, as kconfig
-+# stops affecting a value on the first matching default.
-+config BR2_HOST_CMAKE_AT_LEAST
-+	string
-+	default "3.22"	if BR2_HOST_CMAKE_AT_LEAST_3_22
-+	default "3.21"	if BR2_HOST_CMAKE_AT_LEAST_3_21
-+	default "3.20"	if BR2_HOST_CMAKE_AT_LEAST_3_20
-+	default "3.19"	if BR2_HOST_CMAKE_AT_LEAST_3_19
-+	default "3.18"
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 053658fad6..56c92e53e9 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
- CMAKE_VERSION_MAJOR = 3.22
- CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 5760e4ded1..e367690319 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -1,9 +1,11 @@
--# Set this to either 3.18 or higher, depending on the highest minimum
--# version required by any of the packages bundled in Buildroot. If a
--# package is bumped or a new one added, and it requires a higher
--# version, our cmake infra will catch it and build its own.
-+# The cmake minimum version is set to either 3.18 or higher,
-+# depending on the highest minimum version required by any
-+# of the packages bundled in Buildroot. If a package is
-+# bumped or a new one added, and it requires a higher
-+# cmake version than the one provided by the host, our
-+# cmake infra will catch it and build its own.
- #
--BR2_CMAKE_VERSION_MIN = 3.18
-+BR2_CMAKE_VERSION_MIN = $(BR2_HOST_CMAKE_AT_LEAST)
- 
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
++Upstream: not submitted
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++I believe it may be a musl toolchain issue when MAP_SYNC is undef from musl's
++bits/mman.h header. I'm not sure that qemu (upstream) should handle this issue
++from util/mmap-alloc.c.
++---
++ util/mmap-alloc.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/util/mmap-alloc.c b/util/mmap-alloc.c
++index 5ed7d29183..a3994b8610 100644
++--- a/util/mmap-alloc.c
+++++ b/util/mmap-alloc.c
++@@ -25,6 +25,14 @@
++ 
++ #define HUGETLBFS_MAGIC       0x958458f6
++ 
+++/* MAP_SYNC may be undef by musl toolchain arch/<arch>/bits/mman.h
+++ * header when targets (mips*, powerpc*) are not using
+++ * asm-generic/mman.h to have MAP_SYNC defined.
+++ */
+++#ifndef MAP_SYNC
+++#define MAP_SYNC 0x0
+++#endif
+++
++ #ifdef CONFIG_LINUX
++ #include <sys/vfs.h>
++ #endif
++-- 
++2.40.1
++
+-- 
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
