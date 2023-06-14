@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2FE6EB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 09:25:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57E3DEB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 09:25:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89652611E8;
-	Wed, 14 Jun 2023 09:25:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89652611E8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 035FE612B8;
+	Wed, 14 Jun 2023 09:25:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 035FE612B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PbJdN3DeMuFD; Wed, 14 Jun 2023 09:25:21 +0000 (UTC)
+	with ESMTP id 6ZzuU33kIxOD; Wed, 14 Jun 2023 09:25:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B84361214;
-	Wed, 14 Jun 2023 09:25:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B84361214
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB82A6125C;
+	Wed, 14 Jun 2023 09:25:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB82A6125C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 985B71BF860
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 09:23:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 145011BF860
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 09:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27D5041758
+ by smtp2.osuosl.org (Postfix) with ESMTP id 520B441754
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 09:23:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27D5041758
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 520B441754
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NyCmUcEa1UUe for <buildroot@lists.busybox.net>;
+ with ESMTP id z4ZQxDBFCREW for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 09:23:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 543FD41754
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A30441744
  for <buildroot@buildroot.org>; Wed, 14 Jun 2023 09:23:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 543FD41754
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A30441744
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 422DD83583; Wed, 14 Jun 2023 09:23:54 +0000 (UTC)
+ id 38AC58349A; Wed, 14 Jun 2023 09:23:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 11:18:33 +0200
+Date: Wed, 14 Jun 2023 11:15:49 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: b30617a79ba8722961d396fa551b5469e1761b8e
-X-Git-Newrev: a26b7d84d29ce777cec035f1fb3c02ecdcafa173
+X-Git-Oldrev: 017794abd6c9eec1a4f3d08d1d4fd03501828d79
+X-Git-Newrev: b30617a79ba8722961d396fa551b5469e1761b8e
 X-Patchwork-Hint: ignore
-Message-Id: <20230614092354.422DD83583@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gcc: bump to
- version 12.3
+Message-Id: <20230614092354.38AC58349A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libopenssl:
+ security bump to version 1.1.1u
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,148 +63,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a26b7d84d29ce777cec035f1fb3c02ecdcafa173
+commit: https://git.buildroot.net/buildroot/commit/?id=b30617a79ba8722961d396fa551b5469e1761b8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Remove upstream patch.
+fix CVE-2023-2650  Possible DoS translating ASN.1 object identifiers
 
-See announce:
-https://gcc.gnu.org/pipermail/gcc-announce/2023/000176.html
-
-Runtime tested:
-https://gitlab.com/kubu93/buildroot/-/pipelines/882178578
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0a623d4955a0c62037710aca545abc10b41153d6)
+(cherry picked from commit 2bcfcec50285659c9921e8457fc893c8195e32a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/12.2.0/0002-fix-condvar.patch          | 82 ----------------------
- ...disable-split-stack-for-non-thread-builds.patch |  0
- package/gcc/Config.in.host                         |  2 +-
- package/gcc/gcc.hash                               |  4 +-
- 4 files changed, 3 insertions(+), 85 deletions(-)
+ .../0003-Introduce-the-OPENSSL_NO_MADVISE-to-disable-call-to-.patch   | 2 +-
+ .../0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch   | 2 +-
+ .../0007-Fixup-support-for-io_pgetevents_time64-syscall.patch         | 2 +-
+ package/libopenssl/libopenssl.hash                                    | 4 ++--
+ package/libopenssl/libopenssl.mk                                      | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/gcc/12.2.0/0002-fix-condvar.patch b/package/gcc/12.2.0/0002-fix-condvar.patch
-deleted file mode 100644
-index 5044942e9f..0000000000
---- a/package/gcc/12.2.0/0002-fix-condvar.patch
-+++ /dev/null
-@@ -1,82 +0,0 @@
--From ee4af2ed0b7322884ec4ff537564683c3749b813 Mon Sep 17 00:00:00 2001
--From: Jonathan Wakely <jwakely@redhat.com>
--Date: Thu, 22 Dec 2022 09:56:47 +0000
--Subject: [PATCH] libstdc++: Avoid recursion in __nothrow_wait_cv::wait
-- [PR105730]
--
--The commit r12-5877-g9e18a25331fa25 removed the incorrect
--noexcept-specifier from std::condition_variable::wait and gave the new
--symbol version @@GLIBCXX_3.4.30. It also redefined the original symbol
--std::condition_variable::wait(unique_lock<mutex>&)@GLIBCXX_3.4.11 as an
--alias for a new symbol, __gnu_cxx::__nothrow_wait_cv::wait, which still
--has the incorrect noexcept guarantee. That __nothrow_wait_cv::wait is
--just a wrapper around the real condition_variable::wait which adds
--noexcept and so terminates on a __forced_unwind exception.
--
--This doesn't work on uclibc, possibly due to a dynamic linker bug. When
--__nothrow_wait_cv::wait calls the condition_variable::wait function it
--binds to the alias symbol, which means it just calls itself recursively
--until the stack overflows.
--
--This change avoids the possibility of a recursive call by changing the
--__nothrow_wait_cv::wait function so that instead of calling
--condition_variable::wait it re-implements it. This requires accessing
--the private _M_cond member of condition_variable, so we need to use the
--trick of instantiating a template with the member-pointer of the private
--member.
--
--libstdc++-v3/ChangeLog:
--
--	PR libstdc++/105730
--	* src/c++11/compatibility-condvar.cc (__nothrow_wait_cv::wait):
--	Access private data member of base class and call its wait
--	member.
--
--Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-----
-- .../src/c++11/compatibility-condvar.cc        | 22 ++++++++++++++++++-
-- 1 file changed, 21 insertions(+), 1 deletion(-)
--
--diff --git a/libstdc++-v3/src/c++11/compatibility-condvar.cc b/libstdc++-v3/src/c++11/compatibility-condvar.cc
--index e3a8b8403ca..3cef3bc0714 100644
----- a/libstdc++-v3/src/c++11/compatibility-condvar.cc
--+++ b/libstdc++-v3/src/c++11/compatibility-condvar.cc
--@@ -67,6 +67,24 @@ _GLIBCXX_END_NAMESPACE_VERSION
--     && defined(_GLIBCXX_HAVE_SYMVER_SYMBOL_RENAMING_RUNTIME_SUPPORT)
-- namespace __gnu_cxx _GLIBCXX_VISIBILITY(default)
-- {
--+namespace
--+{
--+  // Pointer-to-member for private std::condition_variable::_M_cond member.
--+  std::__condvar std::condition_variable::* __base_member;
--+
--+  template<std::__condvar std::condition_variable::*X>
--+    struct cracker
--+    { static std::__condvar std::condition_variable::* value; };
--+
--+  // Initializer for this static member also initializes __base_member.
--+  template<std::__condvar std::condition_variable::*X>
--+    std::__condvar std::condition_variable::*
--+      cracker<X>::value = __base_member = X;
--+
--+  // Explicit instantiation is allowed to access the private member.
--+  template class cracker<&std::condition_variable::_M_cond>;
--+}
--+
-- struct __nothrow_wait_cv : std::condition_variable
-- {
--   void wait(std::unique_lock<std::mutex>&) noexcept;
--@@ -76,7 +94,9 @@ __attribute__((used))
-- void
-- __nothrow_wait_cv::wait(std::unique_lock<std::mutex>& lock) noexcept
-- {
---  this->condition_variable::wait(lock);
--+  // In theory this could be simply this->std::condition_variable::wait(lock)
--+  // but with uclibc that binds to the @GLIBCXX_3.4.11 symbol, see PR 105730.
--+  (this->*__base_member).wait(*lock.mutex());
-- }
-- } // namespace __gnu_cxx
-- 
---- 
--2.31.1
--
-diff --git a/package/gcc/12.2.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch
-similarity index 100%
-rename from package/gcc/12.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index cd1b9fa46d..dca1579319 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -88,7 +88,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "10.4.0"    if BR2_GCC_VERSION_10_X
- 	default "11.3.0"    if BR2_GCC_VERSION_11_X
--	default "12.2.0"    if BR2_GCC_VERSION_12_X
-+	default "12.3.0"    if BR2_GCC_VERSION_12_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
+diff --git a/package/libopenssl/0003-Introduce-the-OPENSSL_NO_MADVISE-to-disable-call-to-.patch b/package/libopenssl/0003-Introduce-the-OPENSSL_NO_MADVISE-to-disable-call-to-.patch
+index c51a3cd684..ef40b0353a 100644
+--- a/package/libopenssl/0003-Introduce-the-OPENSSL_NO_MADVISE-to-disable-call-to-.patch
++++ b/package/libopenssl/0003-Introduce-the-OPENSSL_NO_MADVISE-to-disable-call-to-.patch
+@@ -13,7 +13,7 @@ diff --git a/crypto/mem_sec.c b/crypto/mem_sec.c
+ index 9e0f670..32c7282 100644
+ --- a/crypto/mem_sec.c
+ +++ b/crypto/mem_sec.c
+-@@ -485,7 +485,7 @@ static int sh_init(size_t size, int minsize)
++@@ -491,7 +491,7 @@ static int sh_init(size_t size, int minsize)
+      if (mlock(sh.arena, sh.arena_size) < 0)
+          ret = 2;
+  #endif
+diff --git a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+index b5070ad74c..9f34e1f5fb 100644
+--- a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
++++ b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+@@ -21,7 +21,7 @@ diff --git a/Configure b/Configure
+ index 5a699836f3..f9152b1702 100755
+ --- a/Configure
+ +++ b/Configure
+-@@ -1417,6 +1417,10 @@ my %predefined_CXX = $config{CXX}
++@@ -1424,6 +1424,10 @@ my %predefined_CXX = $config{CXX}
+      ? compiler_predefined($config{CROSS_COMPILE}.$config{CXX})
+      : ();
+  
+diff --git a/package/libopenssl/0007-Fixup-support-for-io_pgetevents_time64-syscall.patch b/package/libopenssl/0007-Fixup-support-for-io_pgetevents_time64-syscall.patch
+index 4313eecd6d..7b003e4836 100644
+--- a/package/libopenssl/0007-Fixup-support-for-io_pgetevents_time64-syscall.patch
++++ b/package/libopenssl/0007-Fixup-support-for-io_pgetevents_time64-syscall.patch
+@@ -23,7 +23,7 @@ diff --git a/engines/e_afalg.c b/engines/e_afalg.c
+ index 9480d7c24b..4e9d67db2d 100644
+ --- a/engines/e_afalg.c
+ +++ b/engines/e_afalg.c
+-@@ -124,27 +124,56 @@ static ossl_inline int io_read(aio_context_t ctx, long n, struct iocb **iocb)
++@@ -121,27 +121,56 @@ static ossl_inline int io_read(aio_context_t ctx, long n, struct iocb **iocb)
+      return syscall(__NR_io_submit, ctx, n, iocb);
+  }
+  
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index ebc56b11dd..708926de80 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1t.tar.gz.sha256
+-sha256  8dee9b24bdb1dcbf0c3d1e9b02fb8f6bf22165e807f45adeb7c9677536859d3b  openssl-1.1.1t.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1u.tar.gz.sha256
++sha256  e2f8d84b523eecd06c7be7626830370300fbcc15386bf5142d72758f6963ebc6  openssl-1.1.1u.tar.gz
  
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 666124fa6d..9082d25b78 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-11.3.0/sha512.sum
- sha512  f0be5ad705c73b84477128a69c047f57dd47002f375eb60e1e842e08cf2009a509e92152bca345823926d550b7395ae6d4de7db51d1ee371c2dc37313881fca7  gcc-11.3.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.2.0/sha512.sum
--sha512  e9e857bd81bf7a370307d6848c81b2f5403db8c7b5207f54bce3f3faac3bde63445684092c2bc1a2427cddb6f7746496d9fbbef05fbbd77f2810b2998f1f9173  gcc-12.2.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.3.0/sha512.sum
-+sha512  8fb799dfa2e5de5284edf8f821e3d40c2781e4c570f5adfdb1ca0671fcae3fb7f794ea783e80f01ec7bfbf912ca508e478bd749b2755c2c14e4055648146c204  gcc-12.3.0.tar.xz
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 6e84f06175..178979f43b 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Locally calculated (fetched from Github)
- sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
+-LIBOPENSSL_VERSION = 1.1.1t
++LIBOPENSSL_VERSION = 1.1.1u
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
