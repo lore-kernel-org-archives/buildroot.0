@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D094EB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 405DEEB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A156C41C6C;
-	Wed, 14 Jun 2023 11:56:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A156C41C6C
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFBED41C4E;
+	Wed, 14 Jun 2023 11:56:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFBED41C4E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Iz8ZgPZbESND; Wed, 14 Jun 2023 11:56:33 +0000 (UTC)
+	with ESMTP id ruT3mUBMhaR7; Wed, 14 Jun 2023 11:56:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39AF341DB5;
-	Wed, 14 Jun 2023 11:56:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39AF341DB5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 53E291BF966
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79BE041D79;
+	Wed, 14 Jun 2023 11:56:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79BE041D79
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 52FF31BF2CA
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA2DE832E6
+ by smtp3.osuosl.org (Postfix) with ESMTP id E92266124C
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA2DE832E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E92266124C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p9w-IqNbtj-M for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sv67uiCW-_I2 for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E0003831CA
- for <buildroot@buildroot.org>; Wed, 14 Jun 2023 11:53:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0003831CA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4567B6124A
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4567B6124A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD5358363F; Wed, 14 Jun 2023 11:53:09 +0000 (UTC)
+ id 4386D83628; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 12:26:12 +0200
+Date: Wed, 14 Jun 2023 13:50:51 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 310d23040aef9b0f85878310b5ed4d989c2e6777
-X-Git-Newrev: 776a6e293f338bdfd2beb4b424f5d34762250d91
+X-Git-Oldrev: 74d8b44ee05c8c1d87edd47deb3a054c01aad54a
+X-Git-Newrev: 20b899f38a9e8bdda11aa865167188d3d78ce89c
 X-Patchwork-Hint: ignore
-Message-Id: <20230614115309.CD5358363F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python-asttokens:
- new package
+Message-Id: <20230614115310.4386D83628@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] support/testing:
+ test_clang: update to the next LTS kernel (4.19.x)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,79 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=776a6e293f338bdfd2beb4b424f5d34762250d91
+commit: https://git.buildroot.net/buildroot/commit/?id=20b899f38a9e8bdda11aa865167188d3d78ce89c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Peter: fix alphabetical ordering]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit aa5c233c36bcc8fd51c84f7776c1b3a2875a3d98)
+The kernel 4.16.7 curently used by the test doesn't build with host
+bison (GNU Bison 3.7.5) probably due a missing fix [1] in 4.16.x branch.
+
+Since kernel 4.16 is EOL, bump to the next LTS kernel (4.19.x) in order
+to ease backport to previous Buildroot releases.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4114986744
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=d59fbbd09d5d6bdf4ea1f0b4090d175e081ff421
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 1c54f2170b32da05dbec8b410de3a5cba916c9e9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                              |  1 +
- package/python-asttokens/Config.in             |  7 +++++++
- package/python-asttokens/python-asttokens.hash |  5 +++++
- package/python-asttokens/python-asttokens.mk   | 16 ++++++++++++++++
- 4 files changed, 29 insertions(+)
+ support/testing/tests/package/test_clang.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 440c8e92ff..a452699a47 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -967,6 +967,7 @@ menu "External python modules"
- 	source "package/python-arrow/Config.in"
- 	source "package/python-asgiref/Config.in"
- 	source "package/python-asn1crypto/Config.in"
-+	source "package/python-asttokens/Config.in"
- 	source "package/python-async-generator/Config.in"
- 	source "package/python-async-lru/Config.in"
- 	source "package/python-async-timeout/Config.in"
-diff --git a/package/python-asttokens/Config.in b/package/python-asttokens/Config.in
-new file mode 100644
-index 0000000000..2732b8124b
---- /dev/null
-+++ b/package/python-asttokens/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_ASTTOKENS
-+	bool "python-asttokens"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Annotate AST trees with source code positions.
-+
-+	  https://github.com/gristlabs/asttokens
-diff --git a/package/python-asttokens/python-asttokens.hash b/package/python-asttokens/python-asttokens.hash
-new file mode 100644
-index 0000000000..6529e4db41
---- /dev/null
-+++ b/package/python-asttokens/python-asttokens.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/asttokens/json
-+md5  a9ae6ae0f85398e511bcb9ec87695eed  asttokens-2.2.1.tar.gz
-+sha256  4622110b2a6f30b77e1473affaa97e711bc2f07d3f10848420ff1898edbe94f3  asttokens-2.2.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/python-asttokens/python-asttokens.mk b/package/python-asttokens/python-asttokens.mk
-new file mode 100644
-index 0000000000..8a8ce1ddd9
---- /dev/null
-+++ b/package/python-asttokens/python-asttokens.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-asttokens
-+#
-+################################################################################
-+
-+PYTHON_ASTTOKENS_VERSION = 2.2.1
-+PYTHON_ASTTOKENS_SOURCE = asttokens-$(PYTHON_ASTTOKENS_VERSION).tar.gz
-+PYTHON_ASTTOKENS_SITE = https://files.pythonhosted.org/packages/c8/e3/b0b4f32162621126fbdaba636c152c6b6baec486c99f48686e66343d638f
-+PYTHON_ASTTOKENS_SETUP_TYPE = setuptools
-+PYTHON_ASTTOKENS_LICENSE = Apache-2.0
-+PYTHON_ASTTOKENS_LICENSE_FILES = LICENSE
-+
-+PYTHON_ASTTOKENS_DEPENDENCIES = host-python-setuptools-scm
-+
-+$(eval $(python-package))
+diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
+index df3990c6be..f36faa059a 100644
+--- a/support/testing/tests/package/test_clang.py
++++ b/support/testing/tests/package/test_clang.py
+@@ -14,7 +14,7 @@ class TestClangCompilerRT(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.283"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
