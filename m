@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 405DEEB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C942EB64D8
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 13:33:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFBED41C4E;
-	Wed, 14 Jun 2023 11:56:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFBED41C4E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B309A41723;
+	Wed, 14 Jun 2023 13:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B309A41723
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ruT3mUBMhaR7; Wed, 14 Jun 2023 11:56:47 +0000 (UTC)
+	with ESMTP id 9dQpY7x6nCzv; Wed, 14 Jun 2023 13:33:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79BE041D79;
-	Wed, 14 Jun 2023 11:56:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79BE041D79
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 52FF31BF2CA
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 831B2405A7;
+	Wed, 14 Jun 2023 13:33:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 831B2405A7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B9B431BF2BA
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 13:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E92266124C
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E92266124C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93495813C4
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 13:33:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93495813C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sv67uiCW-_I2 for <buildroot@lists.busybox.net>;
- Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4567B6124A
- for <buildroot@buildroot.org>; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4567B6124A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4386D83628; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8Y8j9FdezJYu for <buildroot@lists.busybox.net>;
+ Wed, 14 Jun 2023 13:33:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FC0680EE3
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1FC0680EE3
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 13:33:39 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DD0CFE0005;
+ Wed, 14 Jun 2023 13:33:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1q9Qcy-00872E-5c; Wed, 14 Jun 2023 15:33:36 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 13:50:51 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 74d8b44ee05c8c1d87edd47deb3a054c01aad54a
-X-Git-Newrev: 20b899f38a9e8bdda11aa865167188d3d78ce89c
-X-Patchwork-Hint: ignore
-Message-Id: <20230614115310.4386D83628@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] support/testing:
- test_clang: update to the next LTS kernel (4.19.x)
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20230516194855.1548486-1-bernd.kuhls@t-online.de>
+Date: Wed, 14 Jun 2023 15:33:36 +0200
+In-Reply-To: <20230516194855.1548486-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 16 May 2023 21:48:53 +0200")
+Message-ID: <87jzw6p3rj.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/vdr: Fix patch for uclibc
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,47 +65,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20b899f38a9e8bdda11aa865167188d3d78ce89c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-The kernel 4.16.7 curently used by the test doesn't build with host
-bison (GNU Bison 3.7.5) probably due a missing fix [1] in 4.16.x branch.
+ > uClibc-ng 1.0.42 added support for getloadavg:
+ > https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=ad3a130dad88ad7a59dcd965b0cf9bd0d713595e
 
-Since kernel 4.16 is EOL, bump to the next LTS kernel (4.19.x) in order
-to ease backport to previous Buildroot releases.
+ > leading to build errors of the vdr package:
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4114986744
+ > skinlcars.c:1105:12: error: 'int getloadavg(double*, int)' was declared 'extern' and later 'static' [-fpermissive]
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=d59fbbd09d5d6bdf4ea1f0b4090d175e081ff421
+ > since its version bump in buildroot:
+ > https://git.busybox.net/buildroot/commit/?id=61ae6add9e5d4761536fa4ff24150d5f8f82a61d
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 1c54f2170b32da05dbec8b410de3a5cba916c9e9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/testing/tests/package/test_clang.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d3a/d3a65044fabdafa1b6d75a508eae006a2cfebdc0/
 
-diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
-index df3990c6be..f36faa059a 100644
---- a/support/testing/tests/package/test_clang.py
-+++ b/support/testing/tests/package/test_clang.py
-@@ -14,7 +14,7 @@ class TestClangCompilerRT(infra.basetest.BRTest):
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.283"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > I do not know whether all external toolchains were already updated to
+ > uClibc-ng >= 1.0.42 so I fixed the patch instead of removing it.
+ > Due to uClibc-ng providing getloadavg() sending 0001-getloadavg.patch
+ > makes no sense imho.
+
+Committed to 2023.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
