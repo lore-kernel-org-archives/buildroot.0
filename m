@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E538C001DC
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 09:24:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF1B6EB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 09:24:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCF1F60BD8;
-	Wed, 14 Jun 2023 09:24:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCF1F60BD8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83F93611E1;
+	Wed, 14 Jun 2023 09:24:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83F93611E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UPR6MPZ8zi1R; Wed, 14 Jun 2023 09:24:40 +0000 (UTC)
+	with ESMTP id vCCE4JJSIpk3; Wed, 14 Jun 2023 09:24:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1D04611E1;
-	Wed, 14 Jun 2023 09:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1D04611E1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4E1DC1BF860
+	by smtp3.osuosl.org (Postfix) with ESMTP id 231326125C;
+	Wed, 14 Jun 2023 09:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 231326125C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 845861BF860
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 09:23:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4EE4F41757
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 09:23:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EE4F41757
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C0BE6121E
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 09:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C0BE6121E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vrkwIg0dlf9w for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 68cdlBhS06Oa for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 09:23:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70C7D41758
+ by smtp3.osuosl.org (Postfix) with ESMTP id 678526117F
  for <buildroot@buildroot.org>; Wed, 14 Jun 2023 09:23:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70C7D41758
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 678526117F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 602668349A; Wed, 14 Jun 2023 09:23:54 +0000 (UTC)
+ id 5585783584; Wed, 14 Jun 2023 09:23:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 11:22:26 +0200
+Date: Wed, 14 Jun 2023 11:22:17 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 268152267ee62ffc91e8a4daf1eb03667c1f44ca
-X-Git-Newrev: 0afd81fbf53d2cfb5aa491f601d2581143fed5e9
+X-Git-Oldrev: 75b55ffc466b0114c5fc0edaa6c2e322baedf64b
+X-Git-Newrev: 268152267ee62ffc91e8a4daf1eb03667c1f44ca
 X-Patchwork-Hint: ignore
-Message-Id: <20230614092354.602668349A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/earlyoom: restore
- missing startup message in the init script
+Message-Id: <20230614092354.5585783584@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/earlyoom: fix
+ daemon executable path in the init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0afd81fbf53d2cfb5aa491f601d2581143fed5e9
+commit: https://git.buildroot.net/buildroot/commit/?id=268152267ee62ffc91e8a4daf1eb03667c1f44ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-'/etc/init.d/S02earlyoom start' simply prints 'OK' instead of
-'Starting earlyoom: OK' because of a typo in the printf function call.
+earlyoom.mk file explicitly sets 'PREFIX=/usr', and the init script
+fails to start earlyoom because of a nonexistent executable path:
+
+  # /etc/init.d/S02earlyoom start
+  start-stop-daemon: unable to stat /bin/earlyoom (No such file or directory)
+  FAIL
 
 Signed-off-by: Sergey Bobrenok <SIBobrenok@sberdevices.ru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 281a80dc934d3e8d8e780b04276cfe38b4bea9d5)
+(cherry picked from commit b2fb3a7e2a06c10092280081e45b2b8841add5d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/earlyoom/S02earlyoom | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/earlyoom/S02earlyoom b/package/earlyoom/S02earlyoom
-index 35624f3c72..ac1734109e 100644
+index c02495af90..35624f3c72 100644
 --- a/package/earlyoom/S02earlyoom
 +++ b/package/earlyoom/S02earlyoom
-@@ -8,7 +8,7 @@ EARLYOOM_ARGS=""
- [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+@@ -9,7 +9,7 @@ EARLYOOM_ARGS=""
  
  start() {
--	printf() 'Starting %s: ' "$DAEMON"
-+	printf 'Starting %s: ' "$DAEMON"
- 	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
+ 	printf() 'Starting %s: ' "$DAEMON"
+-	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/bin/$DAEMON" \
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
  	       -- $EARLYOOM_ARGS
  	status=$?
+ 	if [ "$status" -eq 0 ]; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
