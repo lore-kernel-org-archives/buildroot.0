@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDAEDEB64D8
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:54:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A56FEB64D8
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8ADA761343;
-	Wed, 14 Jun 2023 14:54:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ADA761343
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAC0D6137D;
+	Wed, 14 Jun 2023 14:54:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAC0D6137D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5NsctJQzKJzu; Wed, 14 Jun 2023 14:54:30 +0000 (UTC)
+	with ESMTP id FWr2Nck_22np; Wed, 14 Jun 2023 14:54:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD01C612CA;
-	Wed, 14 Jun 2023 14:54:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD01C612CA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AB09F1BF2B7
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF32161375;
+	Wed, 14 Jun 2023 14:54:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF32161375
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AE5521BF966
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 845E4817A4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87EF0417D6
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 845E4817A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87EF0417D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dJ_mGtt6DVXJ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2jjw44LaB-Vr for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9A6A8174D
+ by smtp2.osuosl.org (Postfix) with ESMTP id B26DA41795
  for <buildroot@buildroot.org>; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9A6A8174D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B26DA41795
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95677836F7; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
+ id 9FB99836FC; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 16:51:25 +0200
+Date: Wed, 14 Jun 2023 16:51:46 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: a6d7d40579cdefaa965fc283dfa96fc645029d82
-X-Git-Newrev: 5fab4b32bbdaec13c94daaf53591e6190cce4851
+X-Git-Oldrev: 5fab4b32bbdaec13c94daaf53591e6190cce4851
+X-Git-Newrev: 17289b98e1f72b3ed148f60472edbd8e0f63d4ec
 X-Patchwork-Hint: ignore
-Message-Id: <20230614145426.95677836F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libjxl: requires
- host-cmake >= 3.19
+Message-Id: <20230614145426.9FB99836FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libdeflate: force
+ arm mode instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fab4b32bbdaec13c94daaf53591e6190cce4851
+commit: https://git.buildroot.net/buildroot/commit/?id=17289b98e1f72b3ed148f60472edbd8e0f63d4ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-libjxl requires cmake 3.19 since version v0.7 due to the
-new behavior of cmake [1].
+Fix the following build failure:
 
--- Configuring done
-CMake Error at cmake/FindLCMS2.cmake:40 (add_library):
-  INTERFACE_LIBRARY targets may only have whitelisted properties.  The
-  property "INCLUDE_DIRECTORIES" is not allowed.
-Call Stack (most recent call first):
-  third_party/CMakeLists.txt:114 (find_package)
-
-The portability issue has already been reported upstream [2].
+/tmp/ccGKQdKj.s: Assembler messages:
+/tmp/ccGKQdKj.s:199: Error: invalid constant (7) after fixup
+/tmp/ccGKQdKj.s:327: Error: invalid constant (0) after fixup
+/tmp/ccGKQdKj.s:338: Error: invalid constant (1) after fixup
+/tmp/ccGKQdKj.s:345: Error: invalid constant (20) after fixup
+/tmp/ccGKQdKj.s:354: Error: invalid constant (20) after fixup
+/tmp/ccGKQdKj.s:372: Error: invalid constant (20) after fixup
+/tmp/ccGKQdKj.s:528: Error: invalid constant (3f) after fixup
+/tmp/ccGKQdKj.s:531: Error: invalid constant (3f) after fixup
+/tmp/ccGKQdKj.s:202: Error: invalid constant (20000) after fixup
+/tmp/ccGKQdKj.s:482: Error: invalid constant (20000) after fixup
+/tmp/ccGKQdKj.s:549: Error: invalid constant (20000) after fixup
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4322819095
+http://autobuild.buildroot.net/results/0103d64a4a6a9b0a708bfb77bf1714edc7acc714/
 
-[1] https://gitlab.kitware.com/cmake/cmake/-/commit/afb998704e67d3d3ce5b24c112cb06e770fca78d
-[2] https://github.com/libjxl/libjxl/issues/1425
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a4fec34ba231b78ea24a6480c31aa45132b40784)
+(cherry picked from commit 62200879d49c085b120f37ce31d9123ebcc5895a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjxl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libdeflate/libdeflate.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/libjxl/Config.in b/package/libjxl/Config.in
-index da04b89f9b..923560298f 100644
---- a/package/libjxl/Config.in
-+++ b/package/libjxl/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBJXL
- 	# libjxl fail to link statically due to libatomic issue
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_81426
-+	select BR2_HOST_CMAKE_AT_LEAST_3_19
- 	select BR2_PACKAGE_BROTLI
- 	select BR2_PACKAGE_HIGHWAY
- 	select BR2_PACKAGE_LCMS2
+diff --git a/package/libdeflate/libdeflate.mk b/package/libdeflate/libdeflate.mk
+index 67e97c6e5e..c09a033325 100644
+--- a/package/libdeflate/libdeflate.mk
++++ b/package/libdeflate/libdeflate.mk
+@@ -9,8 +9,17 @@ LIBDEFLATE_SITE = $(call github,ebiggers,libdeflate,v$(LIBDEFLATE_VERSION))
+ LIBDEFLATE_LICENSE = MIT
+ LIBDEFLATE_LICENSE_FILES = COPYING
+ LIBDEFLATE_INSTALL_STAGING = YES
++
++LIBDEFLATE_CFLAGS = -D_DEFAULT_SOURCE
++
++# Thumb build is broken, build in ARM mode, since all architectures
++# that support Thumb1 also support ARM.
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++LIBDEFLATE_CFLAGS += -marm
++endif
++
+ LIBDEFLATE_CONF_OPTS = \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -D_DEFAULT_SOURCE"
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(LIBDEFLATE_CFLAGS)"
+ 
+ ifeq ($(BR2_SHARED_LIBS),y)
+ LIBDEFLATE_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
