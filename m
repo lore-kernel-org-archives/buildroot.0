@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E77FEB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:55:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E3AAEB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 11:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3067541B66;
-	Wed, 14 Jun 2023 11:55:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3067541B66
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF3D641B7E;
+	Wed, 14 Jun 2023 11:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF3D641B7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ywk7vQ-4XKaE; Wed, 14 Jun 2023 11:55:06 +0000 (UTC)
+	with ESMTP id M6M1RlMYPDsa; Wed, 14 Jun 2023 11:55:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0634B41D94;
-	Wed, 14 Jun 2023 11:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0634B41D94
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D09831BF2CA
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6454841C6C;
+	Wed, 14 Jun 2023 11:55:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6454841C6C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C21F1BF2CA
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 310454195F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BCCF61238
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 11:53:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 310454195F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BCCF61238
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gFK4Rf12WON0 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ycZORq-KERyc for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F5A141BF0
- for <buildroot@buildroot.org>; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F5A141BF0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B5BC6123E
+ for <buildroot@buildroot.org>; Wed, 14 Jun 2023 11:53:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B5BC6123E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0DB598363F; Wed, 14 Jun 2023 11:53:10 +0000 (UTC)
+ id EEBED83628; Wed, 14 Jun 2023 11:53:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 13:44:03 +0200
+Date: Wed, 14 Jun 2023 13:41:43 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: cc8e88480aae2096271d22c98d23342057b1d527
-X-Git-Newrev: 1ffa895fb0d72fd723acb668306f361c3a6058b7
+X-Git-Oldrev: 30e241390f65e9eab6f1dbcb0f7de9bd63b71166
+X-Git-Newrev: bf9fab41ac548b0bbeacc987c90c42a9d2501ebe
 X-Patchwork-Hint: ignore
-Message-Id: <20230614115310.0DB598363F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/containerd: bump
- version to v1.6.21
+Message-Id: <20230614115309.EEBED83628@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/openjdk{-bin}:
+ bump versions to 11.0.18+10 and 17.0.6+10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ffa895fb0d72fd723acb668306f361c3a6058b7
+commit: https://git.buildroot.net/buildroot/commit/?id=bf9fab41ac548b0bbeacc987c90c42a9d2501ebe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-https://github.com/containerd/containerd/releases/tag/v1.6.21
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bab89b35f018a332c7d42ed6e6cb8d72fdeac4b2)
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit cc0d6bdd66e477ee0e3de0538e37d49bdfd7a9e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openjdk-bin/openjdk-bin.hash                 |  8 ++++----
+ package/openjdk-bin/openjdk-bin.mk                   |  4 ++--
+ ...01-Add-ARCv2-ISA-processors-support-to-Zero.patch | 20 ++++++++++----------
+ package/openjdk/openjdk.hash                         |  4 ++--
+ package/openjdk/openjdk.mk                           |  4 ++--
+ 5 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 65a87f25fa..345a7b16ff 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  819086ccdca44cfc5f108e226c7a9294d8fad3eb32031a621623da80dedbfb11  containerd-1.6.20.tar.gz
-+sha256  9452e95455d03a00d78ae0587595d0c18555bae7912068269efa25a724efe713  containerd-1.6.21.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index bc1dd58611..83489a3abf 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 4d3942125f..241ca34a04 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,10 +1,10 @@
+ # https://github.com/adoptium/temurin17-binaries/releases
+-sha256  288f34e3ba8a4838605636485d0365ce23e57d5f2f68997ac4c2e4c01967cd48  OpenJDK17U-jdk_x64_linux_hotspot_17.0.2_8.tar.gz
+-sha256  302caf29f73481b2b914ba2b89705036010c65eb9bc8d7712b27d6e9bedf6200  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.2_8.tar.gz
++sha256  a0b1b9dd809d51a438f5fa08918f9aca7b2135721097f0858cf29f77a35d4289  OpenJDK17U-jdk_x64_linux_hotspot_17.0.6_10.tar.gz
++sha256  9e0e88bbd9fa662567d0c1e22d469268c68ac078e9e5fe5a7244f56fec71f55f  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.6_10.tar.gz
  
--CONTAINERD_VERSION = 1.6.20
-+CONTAINERD_VERSION = 1.6.21
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+ # From https://github.com/adoptium/temurin11-binaries/releases
+-sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
+-sha256  79572f5172c6a040591d34632f98a20ed148702bbce2f57649e8ac01c0d2e3db  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.14.1_1.tar.gz
++sha256  4a29efda1d702b8ff38e554cf932051f40ec70006caed5c4857a8cbc7a0b7db7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.18_10.tar.gz
++sha256  04d5eeff6a6449bcdca0f52cd97bafd43ce09d40ef1e73fa0e1add63bea4a9c8  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.18_10.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 608a0bc3ac..c3eb0b05e6 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -6,10 +6,10 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.2_8
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.6_10
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.18_10
+ endif
+ 
+ ifeq ($(HOSTARCH),x86_64)
+diff --git a/package/openjdk/17.0.1+12/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.6+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+similarity index 83%
+rename from package/openjdk/17.0.1+12/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+rename to package/openjdk/17.0.6+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+index 1ef523a419..dfd3b07bea 100644
+--- a/package/openjdk/17.0.1+12/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
++++ b/package/openjdk/17.0.6+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+@@ -23,8 +23,8 @@ diff --git a/make/autoconf/libraries.m4 b/make/autoconf/libraries.m4
+ index 5120918aed2..f7a99955874 100644
+ --- a/make/autoconf/libraries.m4
+ +++ b/make/autoconf/libraries.m4
+-@@ -122,6 +122,14 @@ AC_DEFUN_ONCE([LIB_SETUP_LIBRARIES],
+-     BASIC_JVM_LIBS="$BASIC_JVM_LIBS -lpthread"
++@@ -146,6 +146,14 @@ AC_DEFUN_ONCE([LIB_SETUP_LIBRARIES],
++     fi
+    fi
+  
+ +  # Libatomic library
+@@ -55,7 +55,7 @@ index c0f2446dbd7..dc416ece885 100644
+      arm*)
+        VAR_CPU=arm
+        VAR_CPU_ARCH=arm
+-@@ -478,6 +484,8 @@ AC_DEFUN([PLATFORM_SETUP_LEGACY_VARS_HELPER],
++@@ -563,6 +569,8 @@ AC_DEFUN([PLATFORM_SETUP_LEGACY_VARS_HELPER],
+      HOTSPOT_$1_CPU_DEFINE=PPC64
+  
+    # The cpu defines below are for zero, we don't support them directly.
+@@ -68,7 +68,7 @@ diff --git a/src/hotspot/os/linux/os_linux.cpp b/src/hotspot/os/linux/os_linux.c
+ index b08caf4d5d3..2bf084895ba 100644
+ --- a/src/hotspot/os/linux/os_linux.cpp
+ +++ b/src/hotspot/os/linux/os_linux.cpp
+-@@ -1858,6 +1858,9 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
++@@ -1674,6 +1674,9 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
+  #ifndef EM_AARCH64
+    #define EM_AARCH64    183               /* ARM AARCH64 */
+  #endif
+@@ -78,7 +78,7 @@ index b08caf4d5d3..2bf084895ba 100644
+  #ifndef EM_RISCV
+    #define EM_RISCV      243               /* RISC-V */
+  #endif
+-@@ -1879,6 +1882,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
++@@ -1698,6 +1701,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
+      {EM_SH,          EM_SH,      ELFCLASS32, ELFDATA2MSB, (char*)"SuperH BE"},
+  #endif
+      {EM_ARM,         EM_ARM,     ELFCLASS32, ELFDATA2LSB, (char*)"ARM"},
+@@ -86,7 +86,7 @@ index b08caf4d5d3..2bf084895ba 100644
+      // we only support 64 bit z architecture
+      {EM_S390,        EM_S390,    ELFCLASS64, ELFDATA2MSB, (char*)"IBM System/390"},
+      {EM_ALPHA,       EM_ALPHA,   ELFCLASS64, ELFDATA2LSB, (char*)"Alpha"},
+-@@ -1906,6 +1910,8 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
++@@ -1726,6 +1730,8 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
+    static  Elf32_Half running_arch_code=EM_PPC;
+  #elif  (defined AARCH64)
+    static  Elf32_Half running_arch_code=EM_AARCH64;
+@@ -95,12 +95,12 @@ index b08caf4d5d3..2bf084895ba 100644
+  #elif  (defined ARM)
+    static  Elf32_Half running_arch_code=EM_ARM;
+  #elif  (defined S390)
+-@@ -1926,7 +1932,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
+-   static  Elf32_Half running_arch_code=EM_RISCV;
++@@ -1748,7 +1754,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
++   static  Elf32_Half running_arch_code=EM_LOONGARCH;
+  #else
+      #error Method os::dll_load requires that one of following is defined:\
+--        AARCH64, ALPHA, ARM, AMD64, IA32, IA64, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
+-+        AARCH64, ALPHA, ARC, ARM, AMD64, IA32, IA64, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
++-        AARCH64, ALPHA, ARM, AMD64, IA32, IA64, LOONGARCH, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
+++        AARCH64, ALPHA, ARC ARM, AMD64, IA32, IA64, LOONGARCH, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
+  #endif
+  
+    // Identify compatibility class for VM's architecture and library's architecture
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index 293787792d..0a67e7a3ec 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2fdd23261526362d4aaf58323441d4c31d29de2e374ba94bbf2727a00adc0ea7  openjdk-17.0.2+8.tar.gz
+-sha256  0e859cc03378439023e17ee82aecee5a52265fb38906a8bebf16027aa2b2bcf5  openjdk-11.0.14.1+1.tar.gz
++sha256  331bad1f80e98761eb9692863146fec647db573db5a5efa5b9bd6326d53a3472  openjdk-17.0.6+10.tar.gz
++sha256  04af71fc7adda41a49861870f9ec0ac0f059c2cf9393ce32995ea8ef4279a1b1  openjdk-11.0.18+10.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 42d52d57c4..0fe506bbfd 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -6,10 +6,10 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ OPENJDK_VERSION_MAJOR = 17
+-OPENJDK_VERSION_MINOR = 0.2+8
++OPENJDK_VERSION_MINOR = 0.6+10
+ else
+ OPENJDK_VERSION_MAJOR = 11
+-OPENJDK_VERSION_MINOR = 0.14.1+1
++OPENJDK_VERSION_MINOR = 0.18+10
+ endif
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
