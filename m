@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51F20EB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:54:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F6C9EB64D8
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:55:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 056A9612CA;
-	Wed, 14 Jun 2023 14:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 056A9612CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45A576132E;
+	Wed, 14 Jun 2023 14:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45A576132E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nxml9Tszm7Nq; Wed, 14 Jun 2023 14:54:57 +0000 (UTC)
+	with ESMTP id 4wcc2jFJwIHy; Wed, 14 Jun 2023 14:55:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF90561346;
-	Wed, 14 Jun 2023 14:54:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF90561346
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DB7771BF969
- for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36E176134B;
+	Wed, 14 Jun 2023 14:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E176134B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D29BE1BF2B7
+ for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B43C840221
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4B9041795
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B43C840221
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4B9041795
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HTrR9ea76ycv for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Be99EQVeuF-2 for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BEC6740205
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1BF44178C
  for <buildroot@buildroot.org>; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEC6740205
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1BF44178C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AAB3683700; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
+ id 8955B836F6; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 16:52:10 +0200
+Date: Wed, 14 Jun 2023 16:51:12 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 17289b98e1f72b3ed148f60472edbd8e0f63d4ec
-X-Git-Newrev: 4fa90a2f6dd39ab18ff4da103fac44bb3ddec531
+X-Git-Oldrev: 4956d620df14156baba1ef98610d5887612c254d
+X-Git-Newrev: a6d7d40579cdefaa965fc283dfa96fc645029d82
 X-Patchwork-Hint: ignore
-Message-Id: <20230614145426.AAB3683700@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/php: Fix GCC 12
- -Og
+Message-Id: <20230614145426.8955B836F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] support/dependencies:
+ introduce BR2_HOST_CMAKE_AT_LEAST
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,120 +63,133 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fa90a2f6dd39ab18ff4da103fac44bb3ddec531
+commit: https://git.buildroot.net/buildroot/commit/?id=a6d7d40579cdefaa965fc283dfa96fc645029d82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/316451459139e250ba2d0c7b554606fd97eebd9a/
+Some packages (e.g. libjxl) requires a quite recent cmake version,
+that is not yet available in most distributions, especially those
+LTS versions.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Currently, when we bump the minimum cmake version we require, it gets
+bumped for all packages, regardless of their own minimum required
+version, which means that a given configuration will trigger the
+build of our host-cmake even if the packages that require it are not
+enabled and those that are would be content with the system-provided
+cmake.
+
+Since host-cmake can take quite some time to build, this can get a
+bit annoying to pay the price of a host-cmake build that would
+otherwise not be needed.
+
+Some packages even use an alternative build system when available
+since they requires a more recent version of cmake than the our
+minimum cmake version
+(wpewebkit use Ninja: 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd).
+
+We introduce config options that packages can select to indicate
+what minimal cmake version they require, and use that version as the
+required minimal version required by the current configuration [0].
+
+We would like to ensure that the currently selected minimum cmake
+version is indeed lower (or equal) to the cmake version we package,
+but that is not possible: dependencies.mk is parsed before we parse
+packages, so we do not yet know the cmake version we have, and we
+can't invert the parsing order as we need to know the required
+dependencies before we parse packages (so that we can build their
+dependency rules in Makefile). So we can only add comments in both
+places, that refer to the other location.
+
+[0] note that this is yet not optimal, as in such a case, host-cmake
+would be in the dependency chain of all cmake-based packages, even
+for those packages that do not require it. The optimum would be for
+each package to gain such a dependency on an as-needed basis, but
+this is by far more complex to achieve, and would only speed up
+cases where a single package is built from scratch (e.g. with:
+make clean; make foo), which is not worth optimising (yet?)
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 29e79c1f54407d0bb6cd9a3a27c65a4cbe3ccdcd)
+(cherry picked from commit 53beb8fc1a4f3ba20ea6c856b4ec8506570f17c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/0006-xxhash-h-Fix-GCC-12-Og.patch | 94 +++++++++++++++++++++++++++
- 1 file changed, 94 insertions(+)
+ package/cmake/Config.in.host             | 27 +++++++++++++++++++++++++++
+ package/cmake/cmake.mk                   |  1 +
+ support/dependencies/check-host-cmake.mk | 12 +++++++-----
+ 3 files changed, 35 insertions(+), 5 deletions(-)
 
-diff --git a/package/php/0006-xxhash-h-Fix-GCC-12-Og.patch b/package/php/0006-xxhash-h-Fix-GCC-12-Og.patch
-new file mode 100644
-index 0000000000..9b5b9966cd
---- /dev/null
-+++ b/package/php/0006-xxhash-h-Fix-GCC-12-Og.patch
-@@ -0,0 +1,94 @@
-+From adcb38b1ffa8e401293e5028ee5af586fd304e00 Mon Sep 17 00:00:00 2001
-+From: Mingli Yu <mingli.yu@windriver.com>
-+Date: Wed, 12 Apr 2023 13:33:07 +0800
-+Subject: [PATCH] xxhash.h: Fix GCC 12 -Og
+diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+index b2e210ee2c..5de076537b 100644
+--- a/package/cmake/Config.in.host
++++ b/package/cmake/Config.in.host
+@@ -9,3 +9,30 @@ config BR2_PACKAGE_HOST_CMAKE
+ 	  the compiler environment of your choice.
+ 
+ 	  http://www.cmake.org/
 +
-+Change whether to inline XXH3_hashLong_withSecret to a config option
++# The minimum system cmake version we expect if 3.18 as provided by
++# Debian bullseye, that we use in our reference build docker image.
++config BR2_HOST_CMAKE_AT_LEAST_3_19
++	bool
 +
-+Ref: https://github.com/Cyan4973/xxHash/commit/ace22bddc7a366a5dd8a71e8b8247694530684ec
++config BR2_HOST_CMAKE_AT_LEAST_3_20
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_19
 +
-+Signed-off-by: Mingli Yu <mingli.yu@windriver.com>
++config BR2_HOST_CMAKE_AT_LEAST_3_21
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_20
 +
-+Closes GH-11062.
++config BR2_HOST_CMAKE_AT_LEAST_3_22
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_21
 +
-+Upstream: https://github.com/php/php-src/commit/adcb38b1ffa8e401293e5028ee5af586fd304e00
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ ext/hash/xxhash/xxhash.h | 35 +++++++++++++++++++++++++++++++++--
-+ 1 file changed, 33 insertions(+), 2 deletions(-)
-+
-+diff --git a/ext/hash/xxhash/xxhash.h b/ext/hash/xxhash/xxhash.h
-+index b5bd286496c7..8e816c0584eb 100644
-+--- a/ext/hash/xxhash/xxhash.h
-++++ b/ext/hash/xxhash/xxhash.h
-+@@ -1375,6 +1375,23 @@ XXH3_128bits_reset_withSecretandSeed(XXH3_state_t* statePtr,
-+  */
-+ #  define XXH_NO_INLINE_HINTS 0
-+ 
-++/*!
-++ * @def XXH3_INLINE_SECRET
-++ * @brief Determines whether to inline the XXH3 withSecret code.
-++ *
-++ * When the secret size is known, the compiler can improve the performance
-++ * of XXH3_64bits_withSecret() and XXH3_128bits_withSecret().
-++ *
-++ * However, if the secret size is not known, it doesn't have any benefit. This
-++ * happens when xxHash is compiled into a global symbol. Therefore, if
-++ * @ref XXH_INLINE_ALL is *not* defined, this will be defined to 0.
-++ *
-++ * Additionally, this defaults to 0 on GCC 12+, which has an issue with function pointers
-++ * that are *sometimes* force inline on -Og, and it is impossible to automatically
-++ * detect this optimization level.
-++ */
-++#  define XXH3_INLINE_SECRET 0
-++
-+ /*!
-+  * @def XXH32_ENDJMP
-+  * @brief Whether to use a jump for `XXH32_finalize`.
-+@@ -1439,6 +1456,15 @@ XXH3_128bits_reset_withSecretandSeed(XXH3_state_t* statePtr,
-+ #  endif
-+ #endif
-+ 
-++#ifndef XXH3_INLINE_SECRET
-++#  if (defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 12) \
-++     || !defined(XXH_INLINE_ALL)
-++#    define XXH3_INLINE_SECRET 0
-++#  else
-++#    define XXH3_INLINE_SECRET 1
-++#  endif
-++#endif
-++
-+ #ifndef XXH32_ENDJMP
-+ /* generally preferable for performance */
-+ #  define XXH32_ENDJMP 0
-+@@ -1515,6 +1541,11 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size)
-+ #  define XXH_NO_INLINE static
-+ #endif
-+ 
-++#if XXH3_INLINE_SECRET
-++#  define XXH3_WITH_SECRET_INLINE XXH_FORCE_INLINE
-++#else
-++#  define XXH3_WITH_SECRET_INLINE XXH_NO_INLINE
-++#endif
-+ 
-+ 
-+ /* *************************************
-+@@ -4465,7 +4496,7 @@ XXH3_hashLong_64b_internal(const void* XXH_RESTRICT input, size_t len,
-+  * so that the compiler can properly optimize the vectorized loop.
-+  * This makes a big performance difference for "medium" keys (<1 KB) when using AVX instruction set.
-+  */
-+-XXH_FORCE_INLINE XXH64_hash_t
-++XXH3_WITH_SECRET_INLINE XXH64_hash_t
-+ XXH3_hashLong_64b_withSecret(const void* XXH_RESTRICT input, size_t len,
-+                              XXH64_hash_t seed64, const xxh_u8* XXH_RESTRICT secret, size_t secretLen)
-+ {
-+@@ -5263,7 +5294,7 @@ XXH3_hashLong_128b_default(const void* XXH_RESTRICT input, size_t len,
-+  * It's important for performance to pass @secretLen (when it's static)
-+  * to the compiler, so that it can properly optimize the vectorized loop.
-+  */
-+-XXH_FORCE_INLINE XXH128_hash_t
-++XXH3_WITH_SECRET_INLINE XXH128_hash_t
-+ XXH3_hashLong_128b_withSecret(const void* XXH_RESTRICT input, size_t len,
-+                               XXH64_hash_t seed64,
-+                               const void* XXH_RESTRICT secret, size_t secretLen)
++# This order guarantees that the highest version is set, as kconfig
++# stops affecting a value on the first matching default.
++config BR2_HOST_CMAKE_AT_LEAST
++	string
++	default "3.22"	if BR2_HOST_CMAKE_AT_LEAST_3_22
++	default "3.21"	if BR2_HOST_CMAKE_AT_LEAST_3_21
++	default "3.20"	if BR2_HOST_CMAKE_AT_LEAST_3_20
++	default "3.19"	if BR2_HOST_CMAKE_AT_LEAST_3_19
++	default "3.18"
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 053658fad6..56c92e53e9 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+ CMAKE_VERSION_MAJOR = 3.22
+ CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+index 5760e4ded1..e367690319 100644
+--- a/support/dependencies/check-host-cmake.mk
++++ b/support/dependencies/check-host-cmake.mk
+@@ -1,9 +1,11 @@
+-# Set this to either 3.18 or higher, depending on the highest minimum
+-# version required by any of the packages bundled in Buildroot. If a
+-# package is bumped or a new one added, and it requires a higher
+-# version, our cmake infra will catch it and build its own.
++# The cmake minimum version is set to either 3.18 or higher,
++# depending on the highest minimum version required by any
++# of the packages bundled in Buildroot. If a package is
++# bumped or a new one added, and it requires a higher
++# cmake version than the one provided by the host, our
++# cmake infra will catch it and build its own.
+ #
+-BR2_CMAKE_VERSION_MIN = 3.18
++BR2_CMAKE_VERSION_MIN = $(BR2_HOST_CMAKE_AT_LEAST)
+ 
+ BR2_CMAKE_CANDIDATES ?= cmake cmake3
+ BR2_CMAKE ?= $(call suitable-host-package,cmake,\
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
