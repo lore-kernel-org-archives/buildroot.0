@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37E44EB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 13:53:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63AFEC001E0
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 13:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF04A83A49;
-	Wed, 14 Jun 2023 13:53:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF04A83A49
+	by smtp1.osuosl.org (Postfix) with ESMTP id 100FB83A6C;
+	Wed, 14 Jun 2023 13:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 100FB83A6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NyLvKIyCF-10; Wed, 14 Jun 2023 13:53:05 +0000 (UTC)
+	with ESMTP id AhkI5FqFMPCM; Wed, 14 Jun 2023 13:53:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E96B78399E;
-	Wed, 14 Jun 2023 13:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E96B78399E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0FAD31BF969
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B27883A64;
+	Wed, 14 Jun 2023 13:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B27883A64
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 10FDF1BF97A
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 13:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDAF760E43
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC39D839E0
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 13:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDAF760E43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC39D839E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4nRbAPe-pOcP for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5JfC_1lDfb2l for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 13:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E89760A67
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05A84839BF
  for <buildroot@buildroot.org>; Wed, 14 Jun 2023 13:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E89760A67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05A84839BF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0940C83685; Wed, 14 Jun 2023 13:52:35 +0000 (UTC)
+ id E6F7F836BF; Wed, 14 Jun 2023 13:52:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 15:48:30 +0200
+Date: Wed, 14 Jun 2023 15:45:39 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ac08c880a57423ea5eb7301ee1311d5e1ca4e751
-X-Git-Newrev: 737a68f384771600561792960502f0f5ac242fa7
+X-Git-Oldrev: e6c1cb257e0a32f5d0dcb2014f10a1689983fe5a
+X-Git-Newrev: d934ce827caa3e1696acdd56277cca347cd73fbd
 X-Patchwork-Hint: ignore
-Message-Id: <20230614135235.0940C83685@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] board/zynq: fix
- shellcheck issues
+Message-Id: <20230614135234.E6F7F836BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ support/testing/infra/emulator.py: fix typo in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=737a68f384771600561792960502f0f5ac242fa7
+commit: https://git.buildroot.net/buildroot/commit/?id=d934ce827caa3e1696acdd56277cca347cd73fbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This patch cleans up board/zynq shellcheck issues.
+Artefact (British) and Artifact (American) are both valid spelling
+but ARTIFACTS_URL is used in the emulator code.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-[Peter: use ${} for variables, quotes around entire word]
+Surprisingly, the url actually use "artefacts"
+
+  http://autobuild.buildroot.net/artefacts
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7db2ab3041150ee382a257c6c7ce686f9ba24ce9)
+(cherry picked from commit e0e64e9edeafd6467d20d211463ad28b20705503)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/zynq/post-build.sh | 4 ++--
- board/zynq/post-image.sh | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ support/testing/infra/emulator.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/zynq/post-build.sh b/board/zynq/post-build.sh
-index 9fd8bbf2c8..810fe99879 100755
---- a/board/zynq/post-build.sh
-+++ b/board/zynq/post-build.sh
-@@ -3,6 +3,6 @@
- # genimage will need to find the extlinux.conf
- # in the binaries directory
- 
--BOARD_DIR="$(dirname $0)"
-+BOARD_DIR="$(dirname "$0")"
- 
--install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux.conf
-+install -m 0644 -D "${BOARD_DIR}/extlinux.conf" "${BINARIES_DIR}/extlinux.conf"
-diff --git a/board/zynq/post-image.sh b/board/zynq/post-image.sh
-index ac74286cf6..627c8ac41a 100755
---- a/board/zynq/post-image.sh
-+++ b/board/zynq/post-image.sh
-@@ -6,10 +6,10 @@
- 
- FIRST_DT=$(sed -n \
-            's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9\-]*\).*"$/\1/p' \
--           ${BR2_CONFIG})
-+           "${BR2_CONFIG}")
- 
--[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
-+[ -z "${FIRST_DT}" ] || ln -fs "${FIRST_DT}.dtb" "${BINARIES_DIR}/system.dtb"
- 
--BOARD_DIR="$(dirname $0)"
-+BOARD_DIR="$(dirname "$0")"
- 
--support/scripts/genimage.sh -c $BOARD_DIR/genimage.cfg
-+support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 53876f828c..02cf486128 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -20,7 +20,7 @@ class Emulator(object):
+     #
+     # kernel: path to the kernel image, or the special string
+     # 'builtin'. 'builtin' means a pre-built kernel image will be
+-    # downloaded from ARTEFACTS_URL and suitable options are
++    # downloaded from ARTIFACTS_URL and suitable options are
+     # automatically passed to qemu and added to the kernel cmdline. So
+     # far only armv5, armv7 and i386 builtin kernels are available.
+     # If None, then no kernel is used, and we assume a bootable device
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
