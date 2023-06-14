@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A56FEB64D8
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:54:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51F20EB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jun 2023 14:54:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAC0D6137D;
-	Wed, 14 Jun 2023 14:54:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAC0D6137D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 056A9612CA;
+	Wed, 14 Jun 2023 14:54:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 056A9612CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FWr2Nck_22np; Wed, 14 Jun 2023 14:54:43 +0000 (UTC)
+	with ESMTP id nxml9Tszm7Nq; Wed, 14 Jun 2023 14:54:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF32161375;
-	Wed, 14 Jun 2023 14:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF32161375
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AE5521BF966
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF90561346;
+	Wed, 14 Jun 2023 14:54:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF90561346
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DB7771BF969
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87EF0417D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id B43C840221
  for <buildroot@lists.busybox.net>; Wed, 14 Jun 2023 14:54:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87EF0417D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B43C840221
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2jjw44LaB-Vr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HTrR9ea76ycv for <buildroot@lists.busybox.net>;
  Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B26DA41795
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEC6740205
  for <buildroot@buildroot.org>; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B26DA41795
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEC6740205
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FB99836FC; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
+ id AAB3683700; Wed, 14 Jun 2023 14:54:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jun 2023 16:51:46 +0200
+Date: Wed, 14 Jun 2023 16:52:10 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 5fab4b32bbdaec13c94daaf53591e6190cce4851
-X-Git-Newrev: 17289b98e1f72b3ed148f60472edbd8e0f63d4ec
+X-Git-Oldrev: 17289b98e1f72b3ed148f60472edbd8e0f63d4ec
+X-Git-Newrev: 4fa90a2f6dd39ab18ff4da103fac44bb3ddec531
 X-Patchwork-Hint: ignore
-Message-Id: <20230614145426.9FB99836FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libdeflate: force
- arm mode instead of Thumb mode
+Message-Id: <20230614145426.AAB3683700@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/php: Fix GCC 12
+ -Og
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17289b98e1f72b3ed148f60472edbd8e0f63d4ec
+commit: https://git.buildroot.net/buildroot/commit/?id=4fa90a2f6dd39ab18ff4da103fac44bb3ddec531
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fix the following build failure:
-
-/tmp/ccGKQdKj.s: Assembler messages:
-/tmp/ccGKQdKj.s:199: Error: invalid constant (7) after fixup
-/tmp/ccGKQdKj.s:327: Error: invalid constant (0) after fixup
-/tmp/ccGKQdKj.s:338: Error: invalid constant (1) after fixup
-/tmp/ccGKQdKj.s:345: Error: invalid constant (20) after fixup
-/tmp/ccGKQdKj.s:354: Error: invalid constant (20) after fixup
-/tmp/ccGKQdKj.s:372: Error: invalid constant (20) after fixup
-/tmp/ccGKQdKj.s:528: Error: invalid constant (3f) after fixup
-/tmp/ccGKQdKj.s:531: Error: invalid constant (3f) after fixup
-/tmp/ccGKQdKj.s:202: Error: invalid constant (20000) after fixup
-/tmp/ccGKQdKj.s:482: Error: invalid constant (20000) after fixup
-/tmp/ccGKQdKj.s:549: Error: invalid constant (20000) after fixup
-
 Fixes:
-http://autobuild.buildroot.net/results/0103d64a4a6a9b0a708bfb77bf1714edc7acc714/
+http://autobuild.buildroot.net/results/316451459139e250ba2d0c7b554606fd97eebd9a/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 62200879d49c085b120f37ce31d9123ebcc5895a)
+(cherry picked from commit 29e79c1f54407d0bb6cd9a3a27c65a4cbe3ccdcd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdeflate/libdeflate.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/php/0006-xxhash-h-Fix-GCC-12-Og.patch | 94 +++++++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
 
-diff --git a/package/libdeflate/libdeflate.mk b/package/libdeflate/libdeflate.mk
-index 67e97c6e5e..c09a033325 100644
---- a/package/libdeflate/libdeflate.mk
-+++ b/package/libdeflate/libdeflate.mk
-@@ -9,8 +9,17 @@ LIBDEFLATE_SITE = $(call github,ebiggers,libdeflate,v$(LIBDEFLATE_VERSION))
- LIBDEFLATE_LICENSE = MIT
- LIBDEFLATE_LICENSE_FILES = COPYING
- LIBDEFLATE_INSTALL_STAGING = YES
+diff --git a/package/php/0006-xxhash-h-Fix-GCC-12-Og.patch b/package/php/0006-xxhash-h-Fix-GCC-12-Og.patch
+new file mode 100644
+index 0000000000..9b5b9966cd
+--- /dev/null
++++ b/package/php/0006-xxhash-h-Fix-GCC-12-Og.patch
+@@ -0,0 +1,94 @@
++From adcb38b1ffa8e401293e5028ee5af586fd304e00 Mon Sep 17 00:00:00 2001
++From: Mingli Yu <mingli.yu@windriver.com>
++Date: Wed, 12 Apr 2023 13:33:07 +0800
++Subject: [PATCH] xxhash.h: Fix GCC 12 -Og
 +
-+LIBDEFLATE_CFLAGS = -D_DEFAULT_SOURCE
++Change whether to inline XXH3_hashLong_withSecret to a config option
 +
-+# Thumb build is broken, build in ARM mode, since all architectures
-+# that support Thumb1 also support ARM.
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+LIBDEFLATE_CFLAGS += -marm
-+endif
++Ref: https://github.com/Cyan4973/xxHash/commit/ace22bddc7a366a5dd8a71e8b8247694530684ec
 +
- LIBDEFLATE_CONF_OPTS = \
--	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -D_DEFAULT_SOURCE"
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(LIBDEFLATE_CFLAGS)"
- 
- ifeq ($(BR2_SHARED_LIBS),y)
- LIBDEFLATE_CONF_OPTS += \
++Signed-off-by: Mingli Yu <mingli.yu@windriver.com>
++
++Closes GH-11062.
++
++Upstream: https://github.com/php/php-src/commit/adcb38b1ffa8e401293e5028ee5af586fd304e00
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ ext/hash/xxhash/xxhash.h | 35 +++++++++++++++++++++++++++++++++--
++ 1 file changed, 33 insertions(+), 2 deletions(-)
++
++diff --git a/ext/hash/xxhash/xxhash.h b/ext/hash/xxhash/xxhash.h
++index b5bd286496c7..8e816c0584eb 100644
++--- a/ext/hash/xxhash/xxhash.h
+++++ b/ext/hash/xxhash/xxhash.h
++@@ -1375,6 +1375,23 @@ XXH3_128bits_reset_withSecretandSeed(XXH3_state_t* statePtr,
++  */
++ #  define XXH_NO_INLINE_HINTS 0
++ 
+++/*!
+++ * @def XXH3_INLINE_SECRET
+++ * @brief Determines whether to inline the XXH3 withSecret code.
+++ *
+++ * When the secret size is known, the compiler can improve the performance
+++ * of XXH3_64bits_withSecret() and XXH3_128bits_withSecret().
+++ *
+++ * However, if the secret size is not known, it doesn't have any benefit. This
+++ * happens when xxHash is compiled into a global symbol. Therefore, if
+++ * @ref XXH_INLINE_ALL is *not* defined, this will be defined to 0.
+++ *
+++ * Additionally, this defaults to 0 on GCC 12+, which has an issue with function pointers
+++ * that are *sometimes* force inline on -Og, and it is impossible to automatically
+++ * detect this optimization level.
+++ */
+++#  define XXH3_INLINE_SECRET 0
+++
++ /*!
++  * @def XXH32_ENDJMP
++  * @brief Whether to use a jump for `XXH32_finalize`.
++@@ -1439,6 +1456,15 @@ XXH3_128bits_reset_withSecretandSeed(XXH3_state_t* statePtr,
++ #  endif
++ #endif
++ 
+++#ifndef XXH3_INLINE_SECRET
+++#  if (defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 12) \
+++     || !defined(XXH_INLINE_ALL)
+++#    define XXH3_INLINE_SECRET 0
+++#  else
+++#    define XXH3_INLINE_SECRET 1
+++#  endif
+++#endif
+++
++ #ifndef XXH32_ENDJMP
++ /* generally preferable for performance */
++ #  define XXH32_ENDJMP 0
++@@ -1515,6 +1541,11 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size)
++ #  define XXH_NO_INLINE static
++ #endif
++ 
+++#if XXH3_INLINE_SECRET
+++#  define XXH3_WITH_SECRET_INLINE XXH_FORCE_INLINE
+++#else
+++#  define XXH3_WITH_SECRET_INLINE XXH_NO_INLINE
+++#endif
++ 
++ 
++ /* *************************************
++@@ -4465,7 +4496,7 @@ XXH3_hashLong_64b_internal(const void* XXH_RESTRICT input, size_t len,
++  * so that the compiler can properly optimize the vectorized loop.
++  * This makes a big performance difference for "medium" keys (<1 KB) when using AVX instruction set.
++  */
++-XXH_FORCE_INLINE XXH64_hash_t
+++XXH3_WITH_SECRET_INLINE XXH64_hash_t
++ XXH3_hashLong_64b_withSecret(const void* XXH_RESTRICT input, size_t len,
++                              XXH64_hash_t seed64, const xxh_u8* XXH_RESTRICT secret, size_t secretLen)
++ {
++@@ -5263,7 +5294,7 @@ XXH3_hashLong_128b_default(const void* XXH_RESTRICT input, size_t len,
++  * It's important for performance to pass @secretLen (when it's static)
++  * to the compiler, so that it can properly optimize the vectorized loop.
++  */
++-XXH_FORCE_INLINE XXH128_hash_t
+++XXH3_WITH_SECRET_INLINE XXH128_hash_t
++ XXH3_hashLong_128b_withSecret(const void* XXH_RESTRICT input, size_t len,
++                               XXH64_hash_t seed64,
++                               const void* XXH_RESTRICT secret, size_t secretLen)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
