@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52D86EB64DA
-	for <buildroot@archiver.kernel.org>; Thu, 15 Jun 2023 13:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64A45EB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 15 Jun 2023 13:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D72D440A15;
-	Thu, 15 Jun 2023 13:43:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D72D440A15
+	by smtp2.osuosl.org (Postfix) with ESMTP id 014EB40A38;
+	Thu, 15 Jun 2023 13:44:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 014EB40A38
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m_crgMeXnVkJ; Thu, 15 Jun 2023 13:43:57 +0000 (UTC)
+	with ESMTP id hETqtursEZRp; Thu, 15 Jun 2023 13:44:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C9CF6405F9;
-	Thu, 15 Jun 2023 13:43:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9CF6405F9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0AA581BF30B
- for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 13:43:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E46B0400D8;
+	Thu, 15 Jun 2023 13:44:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E46B0400D8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C32721BF30B
+ for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 13:43:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D65028148A
- for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 13:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D65028148A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CB7B60A47
+ for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 13:43:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CB7B60A47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YffnAhMRNl4N for <buildroot@lists.busybox.net>;
- Thu, 15 Jun 2023 13:43:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zhyiqmHreuVl for <buildroot@lists.busybox.net>;
+ Thu, 15 Jun 2023 13:43:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD07481455
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD07481455
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 13:43:45 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-30fceb009faso633172f8f.0
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 06:43:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D22E607C7
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4D22E607C7
+ for <buildroot@buildroot.org>; Thu, 15 Jun 2023 13:43:47 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3f8cc04c287so18456415e9.0
+ for <buildroot@buildroot.org>; Thu, 15 Jun 2023 06:43:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686836623; x=1689428623;
+ d=1e100.net; s=20221208; t=1686836625; x=1689428625;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Xllk+C/pcIt8GTftmEj8nvgMpWsx8lBgAIEK97jj1BQ=;
- b=QV7ltHhqF6pkJaBZQM7sBkRmIGZayMS9FWN4lsnHAbFCy40iDhzqdrVVq2lkubrgVp
- acu1fbwYO0ybcQDXccRQAS3XDCPymwx/ZgW2fHxvH/g3rwC4GBHHE6KN7JcIGGc4jWaY
- XwAFwpvvyKlVGOdlKjFCIXzrSMCWeDX+JEhN0ibEx4ywjfjC9BheTmT8lel9xsaiHR10
- UfvjfVhe2pKe20Vh8B+6OZ8gzIA4NUgAm95lQs5NSsU+XOeIQZTD9dYRRRKrUn2LK9Mp
- 3lkZMgM5WDl1Rfsr4/9TiqgeL4hrtOU/k/dfaEWGybsteU+801VO5eVJsTHBia03sfy0
- Mv2Q==
-X-Gm-Message-State: AC+VfDyZdFLhN4PSsCDZBVDNG7KNwwh8jEL8f/OAlf4NbrmX/x38MRbl
- WXGJwjqcE7DxEXQV1B2vJZPtaFZ7VaPOC8RCOao=
-X-Google-Smtp-Source: ACHHUZ5LiN28vXzh/8NAi8QYLR9gyvoRWszAr4R8fyNN66f84QNgrLIXYvXXm7o9VI0SY3g/qz0/9g==
-X-Received: by 2002:adf:dcc1:0:b0:30a:a193:3987 with SMTP id
- x1-20020adfdcc1000000b0030aa1933987mr4368501wrm.30.1686836623594; 
- Thu, 15 Jun 2023 06:43:43 -0700 (PDT)
+ bh=cWVMeiRKx5OIPUf32fq4Q7XiE3Jnb/qn/vozlAUlyy8=;
+ b=i8CivYOeH1QkAkCREaDTxep5kA0wZqs8epozAVxiFLQML+5MBy7bvS8C44XYVCSkVW
+ bKEb+5vvR2WOSw8s/HVsFZbV1nvnSjRoMX4Aqv0pL19U4jCrTysz8Ev0SVlXiOzq/sEq
+ uaBoC58oDLWqbECN/9QI6aCsODNj5LdeHrKYNvYoFeW+xqr8aU0vOc79+CnjaeoyT+0J
+ w9AL9Z97sfVuBVQm0e0KHjYGHouegT5LOUQD5qq3fvvCf8ergW7yjlOYT0+7DiDyEwrA
+ XFreUu2h9CpmCNZBSLKqKIeUwIoSyvrYC28otw2Zbiemk57jCALqjezj9zPvmsooXtqa
+ OAdA==
+X-Gm-Message-State: AC+VfDzaxYsr7QoQcgz62EgB1ikODbId3Fa6IzpbgcL5SQ7V6AL9WewW
+ xi2DhkUkcXy1HKG88mi3vCUJpOdrMuAdI6Ve6wk=
+X-Google-Smtp-Source: ACHHUZ71c9+mSVOCnDmvEU8k/o/8MhgJyFsPhHS9hyoOF9auJzbsQLa1/FILQpnfOFMlj5ZKUyGdyg==
+X-Received: by 2002:a05:6000:109:b0:309:43a2:8e9f with SMTP id
+ o9-20020a056000010900b0030943a28e9fmr11614174wrx.27.1686836625019; 
+ Thu, 15 Jun 2023 06:43:45 -0700 (PDT)
 Received: from localhost.localdomain ([2001:861:5384:6b50:31f3:6562:63d2:17f])
  by smtp.gmail.com with ESMTPSA id
- m11-20020a5d6a0b000000b0030b5d203e7esm21129602wru.97.2023.06.15.06.43.42
+ m11-20020a5d6a0b000000b0030b5d203e7esm21129602wru.97.2023.06.15.06.43.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Jun 2023 06:43:42 -0700 (PDT)
+ Thu, 15 Jun 2023 06:43:44 -0700 (PDT)
 From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Thu, 15 Jun 2023 15:43:05 +0200
-Message-Id: <20230615134315.494330-2-sebastian.weyer@smile.fr>
+Date: Thu, 15 Jun 2023 15:43:06 +0200
+Message-Id: <20230615134315.494330-3-sebastian.weyer@smile.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230615134315.494330-1-sebastian.weyer@smile.fr>
 References: <20230615134315.494330-1-sebastian.weyer@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1686836623; x=1689428623;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1686836625; x=1689428625;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Xllk+C/pcIt8GTftmEj8nvgMpWsx8lBgAIEK97jj1BQ=;
- b=ki0jGHbtfWDZaS9xIJ7ZmCFJPTVP/ApbqkD0shg3eMBGjhLwH8CbZ0xB5LnAwUQ8Ot
- 92Vcq0oHutWxKhCK8no25qsnYr4Ra8XFuU1/uJjzGF6X93RVag3j926F8L0WlPbK6ujQ
- IFrTPMu7Z04RWkrHXkMCF7F6YKnbno76VgOdCSd0+ZbaTM6OXE1czkrIp7HGP6eOTOvE
- lXyq0MY5bfFbnYUbDRuR0jQAvilcgFgtJPnV8vXF9W5+XiUgISFBGXOQFMr0VlHgbMDr
- HBt6h1K4wu4ZJDO9XaY5eaByNyGCuYOY0aGO22npQoJMEjJYQ9FdRLBgHSrUxSuEjvaL
- cWVQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=cWVMeiRKx5OIPUf32fq4Q7XiE3Jnb/qn/vozlAUlyy8=;
+ b=2gXOIGfD1W+wEA+aa4kH+pkZeFSm8WaUh085uTCMzOvb74/UWaVPbY77sPcf+qVyhW
+ pdiUHqBhHyWuGeu19yxNWu/7KqqqBO6dbBHoaCbYkGFRfn253S8/wIT/h5GYlw2LKGj4
+ H7GMw0KZji1mt0wgVyr9lDM4R5BOJ8DwQ/6EjJ/yrfOHHiszF2YGWNz8jMu5sfRgU2IO
+ FrHee+xLM5RsrEoXsnIf92QgBPqLkOgUtDBBtyggDHehLSgObjXygxmIdqHNFAppjWlA
+ 8mUgB6KuupxHmi22+h2Ry3ZvidRNGrtKKBYpfTZKwcaenJreSt4IYe9WurvigpuBl3OA
+ AYjw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
  header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=ki0jGHbt
-Subject: [Buildroot] [PATCH v4 01/10] package/llvm-project: new group for
- llvm packages
+ header.s=20221208 header.b=2gXOIGfD
+Subject: [Buildroot] [PATCH v4 02/10] package/llvm: move to llvm-project
+ folder
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,8 +99,10 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lang Daniel <d.lang@abatec.at>, Romain Naour <romain.naour@smile.fr>,
- Sebastian Weyer <sebastian.weyer@smile.fr>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Sebastian Weyer <sebastian.weyer@smile.fr>, Lang Daniel <d.lang@abatec.at>,
+ Romain Naour <romain.naour@smile.fr>, Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -108,40 +110,101 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Lang Daniel <d.lang@abatec.at>
 
-To make updating easier in the future, group all llvm projects in
-one subfolder and define some variables for all of them.
-
-Introduce LLVM_PROJECT_VERSION_MAJOR to be used by the clang package
-in a followup change.
+To make updating easier, move llvm into the llvm-project folder
+and use the defined information.
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 ---
-v3: Add LLVM_PROJECT_VERSION_MAJOR
----
- package/llvm-project/llvm-project.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
- create mode 100644 package/llvm-project/llvm-project.mk
+ DEVELOPERS                                                  | 6 +++---
+ package/Config.in                                           | 2 +-
+ .../llvm/0001-nfc-Fix-missing-include.patch                 | 0
+ package/{ => llvm-project}/llvm/Config.in                   | 0
+ package/{ => llvm-project}/llvm/llvm.hash                   | 0
+ package/{ => llvm-project}/llvm/llvm.mk                     | 5 ++---
+ 6 files changed, 6 insertions(+), 7 deletions(-)
+ rename package/{ => llvm-project}/llvm/0001-nfc-Fix-missing-include.patch (100%)
+ rename package/{ => llvm-project}/llvm/Config.in (100%)
+ rename package/{ => llvm-project}/llvm/llvm.hash (100%)
+ rename package/{ => llvm-project}/llvm/llvm.mk (98%)
 
-diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
-new file mode 100644
-index 0000000000..747a6f5647
---- /dev/null
-+++ b/package/llvm-project/llvm-project.mk
-@@ -0,0 +1,11 @@
-+################################################################################
-+#
-+# llvm-project
-+#
-+################################################################################
-+
-+LLVM_PROJECT_VERSION_MAJOR = 11
-+LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.0
-+LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
-+
-+include $(sort $(wildcard package/llvm-project/*/*.mk))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 56316201af..c4273c5f85 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1639,7 +1639,7 @@ F:	package/earlyoom/
+ F:	package/gconf/
+ F:	package/libnss/
+ F:	package/lld/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ F:	package/python-cython/
+ F:	package/python-pycups/
+ F:	package/python-raven/
+@@ -2538,7 +2538,7 @@ F:	package/libgta/
+ F:	package/libiec61850/
+ F:	package/libspatialindex/
+ F:	package/linux-syscall-support/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ F:	package/lugaru/
+ F:	package/mcelog/
+ F:	package/mesa3d/
+@@ -2949,7 +2949,7 @@ N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+ F:	package/clang/
+ F:	package/clinfo/
+ F:	package/libclc/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ 
+ N:	Vanya Sergeev <vsergeev@gmail.com>
+ F:	package/lua-periphery/
+diff --git a/package/Config.in b/package/Config.in
+index bff090a661..dffffc195b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2128,7 +2128,7 @@ comment "linux-pam plugins"
+ 	source "package/libpam-tacplus/Config.in"
+ endif
+ 	source "package/liquid-dsp/Config.in"
+-	source "package/llvm/Config.in"
++	source "package/llvm-project/llvm/Config.in"
+ 	source "package/lttng-libust/Config.in"
+ 	source "package/matio/Config.in"
+ 	source "package/mpc/Config.in"
+diff --git a/package/llvm/0001-nfc-Fix-missing-include.patch b/package/llvm-project/llvm/0001-nfc-Fix-missing-include.patch
+similarity index 100%
+rename from package/llvm/0001-nfc-Fix-missing-include.patch
+rename to package/llvm-project/llvm/0001-nfc-Fix-missing-include.patch
+diff --git a/package/llvm/Config.in b/package/llvm-project/llvm/Config.in
+similarity index 100%
+rename from package/llvm/Config.in
+rename to package/llvm-project/llvm/Config.in
+diff --git a/package/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
+similarity index 100%
+rename from package/llvm/llvm.hash
+rename to package/llvm-project/llvm/llvm.hash
+diff --git a/package/llvm/llvm.mk b/package/llvm-project/llvm/llvm.mk
+similarity index 98%
+rename from package/llvm/llvm.mk
+rename to package/llvm-project/llvm/llvm.mk
+index 977c0a08c2..1adad17b16 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm-project/llvm/llvm.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-# LLVM, Clang and lld should be version bumped together
+-LLVM_VERSION = 11.1.0
+-LLVM_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_VERSION)
++LLVM_VERSION = $(LLVM_PROJECT_VERSION)
++LLVM_SITE = $(LLVM_PROJECT_SITE)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = Apache-2.0 with exceptions
+ LLVM_LICENSE_FILES = LICENSE.TXT
 -- 
 2.34.1
 
