@@ -4,84 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BC91EB64D9
-	for <buildroot@archiver.kernel.org>; Thu, 15 Jun 2023 15:42:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3985EB64D9
+	for <buildroot@archiver.kernel.org>; Thu, 15 Jun 2023 16:22:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACFF88340C;
-	Thu, 15 Jun 2023 15:42:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACFF88340C
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE92B84086;
+	Thu, 15 Jun 2023 16:22:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE92B84086
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W-zr3sslFBuX; Thu, 15 Jun 2023 15:42:47 +0000 (UTC)
+	with ESMTP id MqjnOI3Wpifm; Thu, 15 Jun 2023 16:22:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 002A681F50;
-	Thu, 15 Jun 2023 15:42:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 002A681F50
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F0E31BF296
- for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 15:42:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 354598402F;
+	Thu, 15 Jun 2023 16:22:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 354598402F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 985191BF23B
+ for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 16:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1864A81E4B
- for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 15:42:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1864A81E4B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 720EE61465
+ for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 16:22:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 720EE61465
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9j86NgnnNbjv for <buildroot@lists.busybox.net>;
- Thu, 15 Jun 2023 15:42:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C20C8322E
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8C20C8322E
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 15:42:42 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id
- 4fb4d7f45d1cf-51878f8e541so4252130a12.3
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 08:42:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686843760; x=1689435760;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=B+/ZHqJ7hB/GgBVSBVBlW8jwpZlGQ7GFZOUm4BvodEo=;
- b=Rz4pECUhgxn6UTL/uWeG8ag7S1/DKBeUV19BNi4+FSTkTH9g9PC9azEWLmHgZheWpA
- E2H8r+hmhEHKOGDWTMpL4T4ITbLGUt1KieZst7tpfeaXxDPYR6xKnwENBK/beW7SG5zR
- RUGqKhqRd/QGG+cxW7hQoQ9eKz96Pmkzs6/h5RFKhEmu0V4nAkTeQm5HN6kARfXuL6nO
- c63LTVPBMb22rubj8aemTmU1fmALD65d115iLD4aUYw3TbAxUBocVZ4+E1AfuAHzgKOg
- EetUx7Xl2tJutb6D1MVuxoHmxiwwysHxFhbBfVr+qSfyZhds1RWVnII4ZlbN3kDK+zlq
- bSug==
-X-Gm-Message-State: AC+VfDzHj8kS2fBoQF87j389z601lpvnlMetodxXLcUi05gVD9IvzAA2
- THHqBCKfYGgOI38YYpRcvwXovVvPTsUh/T71CI3OMb5VvH3i6Q==
-X-Google-Smtp-Source: ACHHUZ7QNQIoNZdCBEHqagcDa3i/SVg5JH9B6VdkmC8wg429dOFDYQTCOHEbVrAIn4EICEyZFwexRHmLTGRFDe2w3PQ=
-X-Received: by 2002:a50:fe84:0:b0:518:4ac0:d975 with SMTP id
- d4-20020a50fe84000000b005184ac0d975mr6641705edt.3.1686843760620; Thu, 15 Jun
- 2023 08:42:40 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WIbSucoE7hEQ for <buildroot@lists.busybox.net>;
+ Thu, 15 Jun 2023 16:22:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 731E16145F
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 731E16145F
+ for <buildroot@buildroot.org>; Thu, 15 Jun 2023 16:22:12 +0000 (UTC)
+Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
+ by mailout06.t-online.de (Postfix) with SMTP id AB48928448;
+ Thu, 15 Jun 2023 18:20:53 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.188.179]) by fwd89.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1q9piP-1XQFF30; Thu, 15 Jun 2023 18:20:53 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58196)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1q9piP-0001gy-0X;
+ Thu, 15 Jun 2023 18:20:53 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Thu, 15 Jun 2023 18:20:49 +0200
+Message-Id: <20230615162049.72408-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230612165344.3829304-1-giulio.benetti@benettiengineering.com>
- <CA+fTLhis7aZyd5WyhAqvFGCYRNLw+HvSBXqU3X2JW2AccQ==2A@mail.gmail.com>
-In-Reply-To: <CA+fTLhis7aZyd5WyhAqvFGCYRNLw+HvSBXqU3X2JW2AccQ==2A@mail.gmail.com>
-From: Indrek Kruusa <indrek.kruusa@gmail.com>
-Date: Thu, 15 Jun 2023 18:42:29 +0300
-Message-ID: <CA+fTLhj9KDPM8hfi50puztUKpXftEJT5K38EBavgTGaOuY0=+w@mail.gmail.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1686843760; x=1689435760;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=B+/ZHqJ7hB/GgBVSBVBlW8jwpZlGQ7GFZOUm4BvodEo=;
- b=c0aIC8CyvcmyKkX2zs34aYvuomU9mBcerqiBTzZ26S5t582aAS0cDOMZqR943nX+lN
- GE7w20hdhWRHi+5+PYOgA/soaAx0wWdQMjcGxGUi/WprjEkXQBXDTQlJ6joRcdcFNdsD
- TdIxS/1yjOVltiXJ4rN/vtD/NKWajDy8GpG2vmuw0Gls6MaNEO/pjD4CgexmoF6KUEdX
- 0Cs9O/SUu73tsnb+YuNIxyB9rpUO+rKMdg7NfGfun0IGcJRr/G8lvZvusQH1ziAlcJGT
- rttAFbLQMYKWU9il7LBdhj0WFXBkj03PRFtkFEsl5Hx6QpUCMaLoVM+hctjHcC7LEGux
- 8ltw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=c0aIC8Cy
-Subject: Re: [Buildroot] [PATCH] package/rtl8189fs: en/disable runtime debug
- according to BR2_ENABLE_RUNTIME_DEBUG
+X-TOI-EXPURGATEID: 150726::1686846053-FA7EF283-1A483AFB/0/0 CLEAN NORMAL
+X-TOI-MSGID: bda31b41-52a5-4629-9f72-77748545ac87
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Update email address for Bernd
+ Kuhls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,35 +66,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd@kuhls.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-S29udGFrdCBJbmRyZWsgS3J1dXNhICg8aW5kcmVrLmtydXVzYUBnbWFpbC5jb20+KSBraXJqdXRh
-cyBrdXVww6RldmFsCk4sIDE1LiBqdXVuaSAyMDIzIGtlbGwgMTg6Mjg6Cj4KPiBLb250YWt0IEdp
-dWxpbyBCZW5ldHRpICg8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4pCj4g
-a2lyanV0YXMga3V1cMOkZXZhbCBFLCAxMi4ganV1bmkgMjAyMyBrZWxsIDE5OjUzOgo+ID4KPgo+
-IFllcywgdGhpcyBwYXRjaCB0dXJucyBvZmYgdGhlIGRlYnVnIG1vZGUgZm9yIHJ0bDgxODlmcy4K
-Pgo+ID4gU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0
-dGllbmdpbmVlcmluZy5jb20+Cj4KPiBUZXN0ZWQtYnk6IEluZHJlayBLcnV1c2EgPGluZHJlay5r
-cnV1c2FAZ21haWwuY29tPgo+CgpPaCwgdGhlIHRlc3RpbmcgaXMgaW5jb21wbGV0ZSB3aXRob3V0
-IHR1cm5pbmcgb24KQlIyX0VOQUJMRV9SVU5USU1FX0RFQlVHIGFsc28uIFllcywgdHVybmluZyBp
-dCBvbiB3b3JrcyBhcyBleHBlY3RlZAp0b28uCgpJbmRyZWsKCj4gVGhhbmtzLAo+IEluZHJlawo+
-Cj4gPgo+ID4gLS0tCj4gPiAgcGFja2FnZS9ydGw4MTg5ZnMvcnRsODE4OWZzLm1rIHwgNCArKysr
-Cj4gPiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQo+ID4KPiA+IGRpZmYgLS1naXQg
-YS9wYWNrYWdlL3J0bDgxODlmcy9ydGw4MTg5ZnMubWsgYi9wYWNrYWdlL3J0bDgxODlmcy9ydGw4
-MTg5ZnMubWsKPiA+IGluZGV4IGRkMzVhMTY2ZTUuLjZiMDU4NTA3M2IgMTAwNjQ0Cj4gPiAtLS0g
-YS9wYWNrYWdlL3J0bDgxODlmcy9ydGw4MTg5ZnMubWsKPiA+ICsrKyBiL3BhY2thZ2UvcnRsODE4
-OWZzL3J0bDgxODlmcy5tawo+ID4gQEAgLTEzLDYgKzEzLDEwIEBAIFJUTDgxODlGU19NT0RVTEVf
-TUFLRV9PUFRTID0gXAo+ID4gICAgICAgICBLVkVSPSQoTElOVVhfVkVSU0lPTl9QUk9CRUQpIFwK
-PiA+ICAgICAgICAgS1NSQz0kKExJTlVYX0RJUikKPiA+Cj4gPiAraWZlcSAoJChCUjJfRU5BQkxF
-X1JVTlRJTUVfREVCVUcpLCkKPiA+ICtSVEw4MTg5RlNfTU9EVUxFX01BS0VfT1BUUyArPSBDT05G
-SUdfUlRXX0RFQlVHPW4KPiA+ICtlbmRpZgo+ID4gKwo+ID4gIGRlZmluZSBSVEw4MTg5RlNfTElO
-VVhfQ09ORklHX0ZJWFVQUwo+ID4gICAgICAgICAkKGNhbGwgS0NPTkZJR19FTkFCTEVfT1BULENP
-TkZJR19XSVJFTEVTUykKPiA+ICAgICAgICAgJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05G
-SUdfQ0ZHODAyMTEpCj4gPiAtLQo+ID4gMi4zNC4xCj4gPgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7aa5980df7..78b5abbb21 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -311,7 +311,7 @@ F:	package/taskd/
+ N:	Benjamin Kamath <kamath.ben@gmail.com>
+ F:	package/lapack/
+ 
+-N:	Bernd Kuhls <bernd.kuhls@t-online.de>
++N:	Bernd Kuhls <bernd@kuhls.net>
+ F:	package/alsa-lib/
+ F:	package/alsa-utils/
+ F:	package/apache/
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
