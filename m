@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5B9BEB64D9
-	for <buildroot@archiver.kernel.org>; Thu, 15 Jun 2023 16:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 026A5EB64D9
+	for <buildroot@archiver.kernel.org>; Thu, 15 Jun 2023 18:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2350461462;
-	Thu, 15 Jun 2023 16:49:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2350461462
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E0CA6146F;
+	Thu, 15 Jun 2023 18:06:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E0CA6146F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oe4N_OdE1RUl; Thu, 15 Jun 2023 16:49:47 +0000 (UTC)
+	with ESMTP id PvjDAV9V2GfT; Thu, 15 Jun 2023 18:06:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49CD36145C;
-	Thu, 15 Jun 2023 16:49:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49CD36145C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3E8EE1BF23B
- for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 16:49:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2DF96146B;
+	Thu, 15 Jun 2023 18:06:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2DF96146B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6925B1BF293
+ for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 18:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2335241F0F
- for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 16:49:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2335241F0F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 428FE61469
+ for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 18:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 428FE61469
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gt2ZP-DYyvvW for <buildroot@lists.busybox.net>;
- Thu, 15 Jun 2023 16:49:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4mgVyZERcBSj for <buildroot@lists.busybox.net>;
+ Thu, 15 Jun 2023 18:06:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A686641B9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 990B161468
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A686641B9B
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 16:49:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 990B161468
+ for <buildroot@buildroot.org>; Thu, 15 Jun 2023 18:06:14 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bcb3.dip0.t-ipconnect.de [84.161.188.179])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ED616A4C0796
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 18:49:39 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58088)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 04658A4C043B
+ for <buildroot@buildroot.org>; Thu, 15 Jun 2023 20:06:11 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47208)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1q9qAF-0006kS-2E
- for buildroot@buildroot.org; Thu, 15 Jun 2023 18:49:39 +0200
+ (envelope-from <bernd@kuhls.net>) id 1q9rMI-000321-2L
+ for buildroot@buildroot.org; Thu, 15 Jun 2023 20:06:10 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 15 Jun 2023 18:49:39 +0200
-Message-Id: <20230615164939.1159230-1-bernd@kuhls.net>
+Date: Thu, 15 Jun 2023 20:06:10 +0200
+Message-Id: <20230615180610.625793-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1686847779;
- bh=4oouAcY6c3ptYbRrPdZFi9D8KWmtkQs7Cme6lfDztLA=;
+ s=kas202306131828; t=1686852371;
+ bh=qGBOB5St8ay9Sy/MWWvL48SIDshLOfVb1V8a1xaR2Cw=;
  h=From:To:Subject:Date:From;
- b=TbJWIow3XRMUAxa0IsMDCUag29buqnue3We0CPC6JSYgr9Nh+Kg0b9dd0wYiT/IIu
- zrZLaDrlCS6p6Kj5zI2Bs2rasjAG2uXWF/fasN4EqKW9ONqMwUJ6uuuOldCEpiqt/E
- 8ryexoVn4gDdUgNuScz2IwRWR/tUXSBOmqG7zzCXHF9m4vJWKJewQ2Ci4F4OWH75EH
- vWQxbZV01+uvKB6L84g8Ho56JwfiHoxH0ZATlqESUqREG2NuqX7gbc/A0dnZ+YNTzL
- sRaz14leC7htKQmmZ+0+TLNc4vPmooa23DSsFigcgGtpNCtDbX70CIxFjM50foO+6p
- mi4D1CdJ5a1lQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=lUI4heFmKOp5mFHo0LZMkl3GF6Kwlgo0vnwoKroWKOSIyESurPlZe/P+pP/w+w5ww
+ E0q2gOJirhY7NciPeES6G99Q0ZLyh/3Lzno6q8qWE4t1HpH4ShAgO9vQt7kcEmlptT
+ hYH/D6gHpiNynfgnTBvbIGqvCgY9T8HNHGkrBRTBNobV+Zd3k9O3ULyIQU5Sue1jLS
+ GzNsGOz2BVmf7gunJOoJds9phpqfsclRNxhx5uMOWyEHikEH6OpCgP/AqHrGhdArKE
+ 8sGKmGvJzCEMabXmFpINGBbU+5xR7f+9aD7s2rCyQPwSotoRTjUhq2vLkVPpfRz877
+ MupkGbiVECTIg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=TbJWIow3
-Subject: [Buildroot] [PATCH 1/1] package/ccache: bump version to 4.8.2
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=lUI4heFm
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: security bump
+ version to 1.8.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,37 +81,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://ccache.dev/releasenotes.html
+Fixes CVE-2023-3138:
+https://lists.x.org/archives/xorg-announce/2023-June/003406.html
+
+Release notes:
+https://lists.x.org/archives/xorg-announce/2023-June/003407.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 9b11f026ec..2b6cd65a74 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  df0c64d15d3efaf0b4f6837dd6b1467e40eeaaa807db25ce79c3a08a46a84e36  ccache-4.7.4.tar.xz
-+sha256  3d3fb3f888a5b16c4fa7ee5214cca76348afd6130e8443de5f6f2424f2076a49  ccache-4.8.2.tar.xz
- sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
- sha256  56cf64f68b7b8150300acd79899941615523ea5c56c120e92f5b175b7cc78e3c  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 6b7d57b40c..ac4bc4aba5 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index 4fbec783d6..f443d947a4 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-June/003398.html
+-sha256  e362c6f03c793171becd1ce2078c64789504c7d7ff48ee40a76ff76b59f6b561  libX11-1.8.5.tar.xz
+-sha512  5274f6073ead119c8f915d302f1e2bf9579f88d28a2a2d084a4be2050b14fb605efe91099c89ba55aeb7ad36ae0ecbd519b0808be0e29f56367d5dd8faa063d3  libX11-1.8.5.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-June/003407.html
++sha256  59535b7cc6989ba806a022f7e8533b28c4397b9d86e9d07b6df0c0703fa25cc9  libX11-1.8.6.tar.xz
++sha512  b94a578003078a42cea43d80fae2c54a3aaa30f706088bb3546331e9abfc180131cafb37887117abcc5b6116992e299974981eef96ecfcf883cc8a1aba4d1ade  libX11-1.8.6.tar.xz
+ # Locally computed
+ sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 5177e3a1e0..75199f1a3d 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CCACHE_VERSION = 4.7.4
-+CCACHE_VERSION = 4.8.2
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+-XLIB_LIBX11_VERSION = 1.8.5
++XLIB_LIBX11_VERSION = 1.8.6
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
 -- 
 2.39.2
 
