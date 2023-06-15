@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD81AEB64D9
-	for <buildroot@archiver.kernel.org>; Thu, 15 Jun 2023 13:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A21AEB64D9
+	for <buildroot@archiver.kernel.org>; Thu, 15 Jun 2023 13:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 770BF4157C;
-	Thu, 15 Jun 2023 13:44:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 770BF4157C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E9EC40B8A;
+	Thu, 15 Jun 2023 13:45:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E9EC40B8A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DkX07VOSApvB; Thu, 15 Jun 2023 13:44:48 +0000 (UTC)
+	with ESMTP id FNvEHVZhuf9n; Thu, 15 Jun 2023 13:45:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7659E41918;
-	Thu, 15 Jun 2023 13:44:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7659E41918
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8ECED1BF30B
- for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 13:43:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FD6A4059E;
+	Thu, 15 Jun 2023 13:45:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FD6A4059E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EFBB41BF30B
+ for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 13:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66E9B40562
- for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 13:43:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66E9B40562
+ by smtp3.osuosl.org (Postfix) with ESMTP id C9C4C60A47
+ for <buildroot@lists.busybox.net>; Thu, 15 Jun 2023 13:43:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9C4C60A47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vFmoDPEw0dpp for <buildroot@lists.busybox.net>;
- Thu, 15 Jun 2023 13:43:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hkNPfDO6pm7U for <buildroot@lists.busybox.net>;
+ Thu, 15 Jun 2023 13:43:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A5A5404A5
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4A5A5404A5
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 13:43:51 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-30fcde6a73cso2512600f8f.2
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 06:43:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D238607C7
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8D238607C7
+ for <buildroot@buildroot.org>; Thu, 15 Jun 2023 13:43:52 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-30fcde6a73cso2512633f8f.2
+ for <buildroot@buildroot.org>; Thu, 15 Jun 2023 06:43:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1686836629; x=1689428629;
+ d=1e100.net; s=20221208; t=1686836630; x=1689428630;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=4NvvCOIh8MOd4rXPwRPJSIgykycYbHam7H0PELcnYIU=;
- b=lE/OSyTa6jUEKSahjEdETHPl9XkYmI7FFIv9r1bg6HnkkqWK6kMivzCizUbv6rqg2V
- 6AnzXIF8Orq6XMFCFWAUdRdE7Hs1JosNwMGytxkYSJmfEXAsdFwkf/SNII/9IGSKBvSf
- 5MAZ6mWBBCq09VYMmgSsm2wIgHXfiS9DkPfpShCO4MbvMI491FYSwTQdBdGd8DDtsrpj
- eN7AvVmIt9JJ6UElKcRsSvLwe8qX5wmmOATj1UrMR04Lknjn5pzj0IdgOJcUlTgoeIkB
- ZH1hZTCYrn028mrnAsomxSndaaz10rM4r//DaVOa4ZYRK8JMNxQ7rA1sTpAnVLsXFhGT
- qmbg==
-X-Gm-Message-State: AC+VfDxsgwzmjgGhf86rBaAroiVj1nZtVFuRV8Vc8L9MAGKy05ZMRNOn
- Rb9yXhB53flEUnxxy1XBgfx36HslTVirR3Y0U3Q=
-X-Google-Smtp-Source: ACHHUZ4fBrziyX7HFtc29VIKJSFjjcEJztDOmlP3fvaNyvESQhXP3Ne/73/BUzKWPXrlzbI8ZJh66Q==
-X-Received: by 2002:a5d:6e89:0:b0:2f9:c2ab:e1de with SMTP id
- k9-20020a5d6e89000000b002f9c2abe1demr10687105wrz.14.1686836629106; 
- Thu, 15 Jun 2023 06:43:49 -0700 (PDT)
+ bh=qa3LgdE4JPqEG3p7GMjC3H2C0Ax9UD165HHsMRqfPAA=;
+ b=huQ1jiL+DQObyk1nU52TosvR0qJXIQa5NWEijziDA/9HXR57/HakJnOgI/GX/6zw9H
+ WOtig92Pv2cP1C7iGZ70pPgNMVEoX6YhrdodzqUK/U+dbd++ofl2TY8HauoYxeuUSZWC
+ avUWOUA9bmCwTKiAbltIWhxAXq4ba9F9M0nrMpqQ04Lrvtv8o73XPtu9VBy/fk7NpinD
+ LMmQcBELOXG+SS8qRzlDjvZDmb28aTKBkhoPTKUydZ/pizT9L/XYwLdvPVCr4X1UUaOD
+ jXMWqAZ+UwbJu43C+QgP5e2DzbQeUxp0SCABiI99JnC0luviKmBtr9JybaJ2BModL148
+ 9ceA==
+X-Gm-Message-State: AC+VfDzr1jzHiHTzvBLK7fozm2iEf5XaMBUiZuSlht+20aphTpdysYEl
+ Zqw51yfVMszs1761COjpB3o871mYcpZDYqEafo8=
+X-Google-Smtp-Source: ACHHUZ5tByHJ4KSlF4iNIjwjBsw2nuLNjvS5YyoIgdg8rFcYMQltbFqUoW+PNtT4f+34ZTA9W1R4DA==
+X-Received: by 2002:adf:f1c3:0:b0:30a:d7a7:3db4 with SMTP id
+ z3-20020adff1c3000000b0030ad7a73db4mr9188883wro.12.1686836630473; 
+ Thu, 15 Jun 2023 06:43:50 -0700 (PDT)
 Received: from localhost.localdomain ([2001:861:5384:6b50:31f3:6562:63d2:17f])
  by smtp.gmail.com with ESMTPSA id
- m11-20020a5d6a0b000000b0030b5d203e7esm21129602wru.97.2023.06.15.06.43.48
+ m11-20020a5d6a0b000000b0030b5d203e7esm21129602wru.97.2023.06.15.06.43.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Jun 2023 06:43:48 -0700 (PDT)
+ Thu, 15 Jun 2023 06:43:50 -0700 (PDT)
 From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Thu, 15 Jun 2023 15:43:09 +0200
-Message-Id: <20230615134315.494330-6-sebastian.weyer@smile.fr>
+Date: Thu, 15 Jun 2023 15:43:10 +0200
+Message-Id: <20230615134315.494330-7-sebastian.weyer@smile.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230615134315.494330-1-sebastian.weyer@smile.fr>
 References: <20230615134315.494330-1-sebastian.weyer@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1686836629; x=1689428629;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1686836630; x=1689428630;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=4NvvCOIh8MOd4rXPwRPJSIgykycYbHam7H0PELcnYIU=;
- b=msT+DFQPl+8w9yBMldynuuPek8veuv6A8loWsga2n22J/tQKSgZBrK7rvTNOuBPHzO
- 3s6RQvBWHdAM9Uk+0GKeYeHm8wSy6zMwjm3oA9wilhAYKe3emAfV1fs6RzMzy5DhWcdf
- DjXfLGCDxgf3ASz8WvVimv3RiiZ/1dblj3hMaDelNGrV6yi/12EcBWccVu95aiSxq57p
- iwxlVlTNMt9KDVt4JuWH2CURsLJvj0XBwiSlawwDkxQCc/8xZSMcW166mG2yLW06M4ql
- FC9gscjgAoasWk608PAho/sB03/j0wrnLy27sFM6sHZu8DnsamlXmLLq0X/HiWQv8pna
- blPQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=qa3LgdE4JPqEG3p7GMjC3H2C0Ax9UD165HHsMRqfPAA=;
+ b=ETFNuD2VppthkX/efWlZgfze83v37A4BQTB5EQ6t1LxTUG5YrOdjAOIzUGZ48UTyn6
+ RTrwacsQ5b0eECeXmVDPdgFhwOMzhuKuSZ3bZKYBDGYk3WYc3ka9Snzg+rm6rWGIIW80
+ YfUrYqdM3dB0EY+xJnbe33G7WusuZqMkVCqYsWzYZxi+A7zvv6Gw3qUrhn06RhbMG4G1
+ 1aldh9rZDMBHev3XIIEtd0mCh6w2q5Tgy3gwalhTs0YM9beUL+ZeZLWdhCz3MlLjRIjC
+ 7FauGXQIBgZDqKqJvtRc6PzulddYOsxZv1IlAl4GWqze3O5ujWLBzvSYe2x/ugRph+rN
+ pgLw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
  header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=msT+DFQP
-Subject: [Buildroot] [PATCH v4 05/10] package/compiler-rt: move to
- llvm-project subfolder
+ header.s=20221208 header.b=ETFNuD2V
+Subject: [Buildroot] [PATCH v4 06/10] package/libclc: move to llvm-project
+ subfolder
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,7 +100,9 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Lang Daniel <d.lang@abatec.at>, Romain Naour <romain.naour@smile.fr>,
- Sebastian Weyer <sebastian.weyer@smile.fr>
+ Romain Naour <romain.naour@gmail.com>,
+ Sebastian Weyer <sebastian.weyer@smile.fr>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -108,79 +110,111 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Lang Daniel <d.lang@abatec.at>
 
-To make version bumping easier, move compiler-rt to a new llvm-project
-subfolder and specify site and version for the project.
+To make version bumping easier, move libclc to a new llvm-project subfolder
+and specify site for the project. Since the version of libclc is more
+recent than the version specified in LLVM_PROJECT_VERSION, don't change
+it for now until a later update.
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 ---
-v4:
-    - change inaccuracy in commit message (move llvm -> move compiler-rt)
-    - remove change in DEVELOPERS file because the person removed their
-      name from the file
+v4: change inaccuracies in commit message
+    - move llvm -> move libclc
+    - libclc version is not specified through LLVM_PROJECT_VERSION since
+      it is already at version 13.0.1 as opposed to version 11.1.0
 
-v3: move compiler-rt entry in package/Config.in
+v3: move libclc before llvm 15.0.3 version bump commit
+    move libclc entry in package/Config.in
 ---
- package/Config.in                                       | 2 +-
- package/{ => llvm-project}/compiler-rt/Config.in        | 0
- package/{ => llvm-project}/compiler-rt/compiler-rt.hash | 0
- package/{ => llvm-project}/compiler-rt/compiler-rt.mk   | 6 ++----
- 4 files changed, 3 insertions(+), 5 deletions(-)
- rename package/{ => llvm-project}/compiler-rt/Config.in (100%)
- rename package/{ => llvm-project}/compiler-rt/compiler-rt.hash (100%)
- rename package/{ => llvm-project}/compiler-rt/compiler-rt.mk (85%)
+ DEVELOPERS                                                    | 4 ++--
+ package/Config.in                                             | 2 +-
+ .../libclc/0001-support-out-of-tree-build.patch               | 0
+ package/{ => llvm-project}/libclc/Config.in                   | 0
+ package/{ => llvm-project}/libclc/libclc.hash                 | 0
+ package/{ => llvm-project}/libclc/libclc.mk                   | 2 +-
+ 6 files changed, 4 insertions(+), 4 deletions(-)
+ rename package/{ => llvm-project}/libclc/0001-support-out-of-tree-build.patch (100%)
+ rename package/{ => llvm-project}/libclc/Config.in (100%)
+ rename package/{ => llvm-project}/libclc/libclc.hash (100%)
+ rename package/{ => llvm-project}/libclc/libclc.mk (93%)
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1fb8295a7a..48907a5cd8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2532,12 +2532,12 @@ F:	package/irrlicht/
+ F:	package/liblinear/
+ F:	package/lensfun/
+ F:	package/libbpf/
+-F:	package/libclc/
+ F:	package/libgta/
+ F:	package/libiec61850/
+ F:	package/libspatialindex/
+ F:	package/linux-syscall-support/
+ F:	package/llvm-project/clang/
++F:	package/llvm-project/libclc/
+ F:	package/llvm-project/llvm/
+ F:	package/lugaru/
+ F:	package/mcelog/
+@@ -2947,8 +2947,8 @@ F:	package/tinyssh/
+ 
+ N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+ F:	package/clinfo/
+-F:	package/libclc/
+ F:	package/llvm-project/clang/
++F:	package/llvm-project/libclc/
+ F:	package/llvm-project/llvm/
+ 
+ N:	Vanya Sergeev <vsergeev@gmail.com>
 diff --git a/package/Config.in b/package/Config.in
-index 7f2f045c87..17343a8e86 100644
+index 17343a8e86..42cf0b170e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2024,7 +2024,6 @@ menu "Other"
- 	source "package/cctz/Config.in"
- 	source "package/cereal/Config.in"
- 	source "package/cmocka/Config.in"
--	source "package/compiler-rt/Config.in"
- 	source "package/cppcms/Config.in"
- 	source "package/cracklib/Config.in"
- 	source "package/dawgdic/Config.in"
-@@ -2128,6 +2127,7 @@ comment "linux-pam plugins"
- endif
+@@ -2065,7 +2065,6 @@ menu "Other"
+ 	source "package/libcap/Config.in"
+ 	source "package/libcap-ng/Config.in"
+ 	source "package/libcgroup/Config.in"
+-	source "package/libclc/Config.in"
+ 	source "package/libcofi/Config.in"
+ 	source "package/libcorrect/Config.in"
+ 	source "package/libcrossguid/Config.in"
+@@ -2128,6 +2127,7 @@ endif
  	source "package/liquid-dsp/Config.in"
  	source "package/llvm-project/clang/Config.in"
-+	source "package/llvm-project/compiler-rt/Config.in"
+ 	source "package/llvm-project/compiler-rt/Config.in"
++	source "package/llvm-project/libclc/Config.in"
  	source "package/llvm-project/llvm/Config.in"
  	source "package/lttng-libust/Config.in"
  	source "package/matio/Config.in"
-diff --git a/package/compiler-rt/Config.in b/package/llvm-project/compiler-rt/Config.in
+diff --git a/package/libclc/0001-support-out-of-tree-build.patch b/package/llvm-project/libclc/0001-support-out-of-tree-build.patch
 similarity index 100%
-rename from package/compiler-rt/Config.in
-rename to package/llvm-project/compiler-rt/Config.in
-diff --git a/package/compiler-rt/compiler-rt.hash b/package/llvm-project/compiler-rt/compiler-rt.hash
+rename from package/libclc/0001-support-out-of-tree-build.patch
+rename to package/llvm-project/libclc/0001-support-out-of-tree-build.patch
+diff --git a/package/libclc/Config.in b/package/llvm-project/libclc/Config.in
 similarity index 100%
-rename from package/compiler-rt/compiler-rt.hash
-rename to package/llvm-project/compiler-rt/compiler-rt.hash
-diff --git a/package/compiler-rt/compiler-rt.mk b/package/llvm-project/compiler-rt/compiler-rt.mk
-similarity index 85%
-rename from package/compiler-rt/compiler-rt.mk
-rename to package/llvm-project/compiler-rt/compiler-rt.mk
-index c8ea86e899..84add60801 100644
---- a/package/compiler-rt/compiler-rt.mk
-+++ b/package/llvm-project/compiler-rt/compiler-rt.mk
-@@ -4,11 +4,9 @@
- #
+rename from package/libclc/Config.in
+rename to package/llvm-project/libclc/Config.in
+diff --git a/package/libclc/libclc.hash b/package/llvm-project/libclc/libclc.hash
+similarity index 100%
+rename from package/libclc/libclc.hash
+rename to package/llvm-project/libclc/libclc.hash
+diff --git a/package/libclc/libclc.mk b/package/llvm-project/libclc/libclc.mk
+similarity index 93%
+rename from package/libclc/libclc.mk
+rename to package/llvm-project/libclc/libclc.mk
+index 5d246cf4f8..406adfdb53 100644
+--- a/package/libclc/libclc.mk
++++ b/package/llvm-project/libclc/libclc.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
--# tied to the version of those tools
--COMPILER_RT_VERSION = 11.1.0
-+COMPILER_RT_VERSION = $(LLVM_PROJECT_VERSION)
- COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
--COMPILER_RT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(COMPILER_RT_VERSION)
-+COMPILER_RT_SITE = $(LLVM_PROJECT_SITE)
- COMPILER_RT_LICENSE = NCSA MIT
- COMPILER_RT_LICENSE_FILES = LICENSE.TXT
- COMPILER_RT_DEPENDENCIES = host-clang llvm
+ LIBCLC_VERSION = 13.0.1
+-LIBCLC_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LIBCLC_VERSION)
++LIBCLC_SITE = $(LLVM_PROJECT_SITE)
+ LIBCLC_SOURCE = libclc-$(LIBCLC_VERSION).src.tar.xz
+ LIBCLC_LICENSE = Apache-2.0 with exceptions or MIT
+ LIBCLC_LICENSE_FILES = LICENSE.TXT
 -- 
 2.34.1
 
