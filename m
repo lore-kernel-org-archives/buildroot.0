@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F8D1EB64D7
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 08:30:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 180B4EB64DB
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 08:30:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0559B610B4;
-	Fri, 16 Jun 2023 08:30:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0559B610B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id C403B60B3C;
+	Fri, 16 Jun 2023 08:30:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C403B60B3C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1zNOLll5_CSI; Fri, 16 Jun 2023 08:30:31 +0000 (UTC)
+	with ESMTP id oOguK7mQDK0y; Fri, 16 Jun 2023 08:30:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 386346148C;
-	Fri, 16 Jun 2023 08:30:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 386346148C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7580C1BF5E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3E346113D;
+	Fri, 16 Jun 2023 08:30:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3E346113D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C30BC1BF5E6
  for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 08:30:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F4C283A56
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BF6841F12
  for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 08:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F4C283A56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BF6841F12
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n8uHCYFGX2-F for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6kPkCHWH0Jun for <buildroot@lists.busybox.net>;
  Fri, 16 Jun 2023 08:30:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7109F81E26
+ by smtp4.osuosl.org (Postfix) with ESMTP id 533CA41F17
  for <buildroot@buildroot.org>; Fri, 16 Jun 2023 08:30:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7109F81E26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 533CA41F17
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5FAF6839EE; Fri, 16 Jun 2023 08:30:15 +0000 (UTC)
+ id 3E3BB839E6; Fri, 16 Jun 2023 08:30:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Jun 2023 10:29:49 +0200
+Date: Fri, 16 Jun 2023 10:27:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1dcabece6fb8755c7a2786bde8cc75040bc3fbcb
-X-Git-Newrev: 8d0c8f0c6805c100ab01c6ce9d9e9d46560f864c
+X-Git-Oldrev: 0adcc6d693d97b57586d04955bd68613d78578c3
+X-Git-Newrev: 89585576728ebf9362394ae6e26df595098f8bbc
 X-Patchwork-Hint: ignore
-Message-Id: <20230616083015.5FAF6839EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openvpn: bump version to 2.6.5
+Message-Id: <20230616083015.3E3BB839E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: security bump
+ version to 1.8.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d0c8f0c6805c100ab01c6ce9d9e9d46560f864c
+commit: https://git.buildroot.net/buildroot/commit/?id=89585576728ebf9362394ae6e26df595098f8bbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
-https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+Fixes CVE-2023-3138:
+https://lists.x.org/archives/xorg-announce/2023-June/003406.html
+
+Release notes:
+https://lists.x.org/archives/xorg-announce/2023-June/003407.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 8078b41157..16bffb7e57 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  371a2a323a99a79299b9b4caa4a31bc7b2cdff63236e68d429f3ee50e75f3dd4  openvpn-2.6.4.tar.gz
-+sha256  e34efdb9a3789a760cfc91d57349dfb1e31da169c98c06cb490c6a8a015638e2  openvpn-2.6.5.tar.gz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 920677e170..7c2506870e 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index ed68164d5f..f443d947a4 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-February/003318.html
+-sha256  c9a287a5aefa9804ce3cfafcf516fe96ed3f7e8e45c0e2ee59e84c86757df518  libX11-1.8.4.tar.xz
+-sha512  3150a47498b0cb012482ee02efeaae16d9e736288f2b3f917be912e1613d56ad6b4ab180de8820305deb2b95dfd993633f43a65344d75979d6b86bdf110cb63e  libX11-1.8.4.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-June/003407.html
++sha256  59535b7cc6989ba806a022f7e8533b28c4397b9d86e9d07b6df0c0703fa25cc9  libX11-1.8.6.tar.xz
++sha512  b94a578003078a42cea43d80fae2c54a3aaa30f706088bb3546331e9abfc180131cafb37887117abcc5b6116992e299974981eef96ecfcf883cc8a1aba4d1ade  libX11-1.8.6.tar.xz
+ # Locally computed
+ sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index add16f49db..75199f1a3d 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.6.4
-+OPENVPN_VERSION = 2.6.5
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
- OPENVPN_LICENSE = GPL-2.0
+-XLIB_LIBX11_VERSION = 1.8.4
++XLIB_LIBX11_VERSION = 1.8.6
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
