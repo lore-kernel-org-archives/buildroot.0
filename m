@@ -4,59 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81FFBEB64D7
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 09:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E580FEB64D8
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 09:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3557983F72;
-	Fri, 16 Jun 2023 09:31:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3557983F72
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9068883F9A;
+	Fri, 16 Jun 2023 09:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9068883F9A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tYdrCHX1EjEd; Fri, 16 Jun 2023 09:31:08 +0000 (UTC)
+	with ESMTP id Y-2luhJnptYz; Fri, 16 Jun 2023 09:31:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69E1C83F07;
-	Fri, 16 Jun 2023 09:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69E1C83F07
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 90CBA1BF2F6
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 09:31:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07F6683EDC;
+	Fri, 16 Jun 2023 09:31:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07F6683EDC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 23E8C1BF2F6
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 09:31:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 691F741558
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 09:31:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 691F741558
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1F5B40181
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 09:31:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1F5B40181
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6DX-PCzQ5I8I for <buildroot@lists.busybox.net>;
- Fri, 16 Jun 2023 09:31:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7E4C40970
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C7E4C40970
- for <buildroot@buildroot.org>; Fri, 16 Jun 2023 09:31:02 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C5CA0240010;
- Fri, 16 Jun 2023 09:31:00 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qA5nH-00FI0m-Ue; Fri, 16 Jun 2023 11:30:59 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GPTuqT3QYrp8 for <buildroot@lists.busybox.net>;
+ Fri, 16 Jun 2023 09:31:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B1EE403FF
+ for <buildroot@buildroot.org>; Fri, 16 Jun 2023 09:31:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B1EE403FF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 29BF083A35; Fri, 16 Jun 2023 09:31:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230616060421.3606283-1-peter@korsgaard.com>
- <87ilbnlsjf.fsf@48ers.dk>
-Date: Fri, 16 Jun 2023 11:30:59 +0200
-In-Reply-To: <87ilbnlsjf.fsf@48ers.dk> (Peter Korsgaard's message of "Fri, 16
- Jun 2023 10:28:52 +0200")
-Message-ID: <871qibkb3g.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-docker: needs
- python-packaging after bump to 6.0.1
+Date: Fri, 16 Jun 2023 11:29:20 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 255441793c902d6392b4eb42a77b6970c4f42a27
+X-Git-Newrev: 6e89b3838638f0f2852b3a028849255236c3c1ec
+X-Patchwork-Hint: ignore
+Message-Id: <20230616093116.29BF083A35@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] DEVELOPERS: Update email
+ address for Bernd Kuhls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,35 +57,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: james.hilliard1@gmail.com, Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6e89b3838638f0f2852b3a028849255236c3c1ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- >> Commit d680db0ba77dab (package/python-docker: bump to version 6.0.1) forgot
- >> to add the new dependency on python-packaging, leading to runtime errors:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8ef7b2069dd6462508c3c61373fe2802761c4d63)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >> import docker
- >> File "/usr/lib/python3.11/site-packages/docker/__init__.py", line 2, in <module>
- >> File "/usr/lib/python3.11/site-packages/docker/api/__init__.py", line 2, in <module>
- >> File "/usr/lib/python3.11/site-packages/docker/api/client.py", line 10, in <module>
- >> File "/usr/lib/python3.11/site-packages/docker/auth.py", line 7, in <module>
- >> File "/usr/lib/python3.11/site-packages/docker/utils/__init__.py", line 3, in <module>
- >> File "/usr/lib/python3.11/site-packages/docker/utils/decorators.py", line 4, in <module>
- >> File "/usr/lib/python3.11/site-packages/docker/utils/utils.py", line 9, in <module>
- >> ModuleNotFoundError: No module named 'packaging'
-
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
- > Committed, thanks.
-
-Committed to 2023.02.x and 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7aa5980df7..78b5abbb21 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -311,7 +311,7 @@ F:	package/taskd/
+ N:	Benjamin Kamath <kamath.ben@gmail.com>
+ F:	package/lapack/
+ 
+-N:	Bernd Kuhls <bernd.kuhls@t-online.de>
++N:	Bernd Kuhls <bernd@kuhls.net>
+ F:	package/alsa-lib/
+ F:	package/alsa-utils/
+ F:	package/apache/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
