@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCBE9EB64D7
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 08:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81435EB64D7
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 08:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BE0E6149D;
-	Fri, 16 Jun 2023 08:31:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BE0E6149D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C0C360F4C;
+	Fri, 16 Jun 2023 08:33:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C0C360F4C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tfoXA-nz0rKl; Fri, 16 Jun 2023 08:31:09 +0000 (UTC)
+	with ESMTP id xyaagMV5p3ZU; Fri, 16 Jun 2023 08:33:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE84E61482;
-	Fri, 16 Jun 2023 08:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE84E61482
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 85AD61BF5E6
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 08:30:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6394F60A47;
+	Fri, 16 Jun 2023 08:33:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6394F60A47
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 02E8F1BF5E6
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 08:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44EA440472
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 08:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44EA440472
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFF5460A47
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 08:33:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF5460A47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K9CoyddNbhZo for <buildroot@lists.busybox.net>;
- Fri, 16 Jun 2023 08:30:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BFEC405BF
- for <buildroot@buildroot.org>; Fri, 16 Jun 2023 08:30:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BFEC405BF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56C1D839E9; Fri, 16 Jun 2023 08:30:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5pLcQEeWdP_A for <buildroot@lists.busybox.net>;
+ Fri, 16 Jun 2023 08:33:37 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7FAA605EE
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C7FAA605EE
+ for <buildroot@buildroot.org>; Fri, 16 Jun 2023 08:33:36 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A0AF2C0011;
+ Fri, 16 Jun 2023 08:33:34 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qA4th-00FFJm-Sp; Fri, 16 Jun 2023 10:33:33 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Jun 2023 10:28:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1db3f0f84449843476c2887d2ea09323c66f33a4
-X-Git-Newrev: 1dcabece6fb8755c7a2786bde8cc75040bc3fbcb
-X-Patchwork-Hint: ignore
-Message-Id: <20230616083015.56C1D839E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-docker: needs
- python-packaging after bump to 6.0.1
+References: <20230613072806.999946-1-peter@korsgaard.com>
+Date: Fri, 16 Jun 2023 10:33:33 +0200
+In-Reply-To: <20230613072806.999946-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 13 Jun 2023 09:28:05 +0200")
+Message-ID: <87v8fnkdr6.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/cups: security bump to version 2.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +65,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dcabece6fb8755c7a2786bde8cc75040bc3fbcb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit d680db0ba77dab (package/python-docker: bump to version 6.0.1) forgot
-to add the new dependency on python-packaging, leading to runtime errors:
-
-  import docker
-    File "/usr/lib/python3.11/site-packages/docker/__init__.py", line 2, in <module>
-    File "/usr/lib/python3.11/site-packages/docker/api/__init__.py", line 2, in <module>
-    File "/usr/lib/python3.11/site-packages/docker/api/client.py", line 10, in <module>
-    File "/usr/lib/python3.11/site-packages/docker/auth.py", line 7, in <module>
-    File "/usr/lib/python3.11/site-packages/docker/utils/__init__.py", line 3, in <module>
-    File "/usr/lib/python3.11/site-packages/docker/utils/decorators.py", line 4, in <module>
-    File "/usr/lib/python3.11/site-packages/docker/utils/utils.py", line 9, in <module>
-  ModuleNotFoundError: No module named 'packaging'
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-docker/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
-index b2296f42eb..ae5a7a5181 100644
---- a/package/python-docker/Config.in
-+++ b/package/python-docker/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_DOCKER
- 	bool "python-docker"
- 	# docker-engine may be running on another host, so no other dependency
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
-+	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT # runtime
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlBldGVyIiA9PSBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IHdy
+aXRlczoKCiA+IEZpeGVzIHRoZSBmb2xsb3dpbmcgc2VjdXJpdHkgaXNzdWVzOgogPiAtIENWRS0y
+MDIzLTMyMzI0OiBIZWFwIGJ1ZmZlciBvdmVyZmxvdyBpbiBjdXBzZAogPiAgIGh0dHBzOi8vZ2l0
+aHViLmNvbS9PcGVuUHJpbnRpbmcvY3Vwcy9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtY3hjNi13
+Mmc3LTY5cDcKCiA+IEFuZCBhIG51bWJlciBvZiBvdGhlciBmaXhlcywgc2VlIHRoZSByZWxlYXNl
+IG5vdGVzIGZvciBkZXRhaWxzOgogPiBodHRwczovL2dpdGh1Yi5jb20vT3BlblByaW50aW5nL2N1
+cHMvcmVsZWFzZXMvdGFnL3YyLjQuMwoKID4gSW4gYWRkaXRpb24sIDIuNC40IGZpeGVzIGEgc2Vn
+ZmF1bHQgcmVncmVzc2lvbiBpbiAyLjQuMzoKID4gaHR0cHM6Ly9naXRodWIuY29tL09wZW5Qcmlu
+dGluZy9jdXBzL3JlbGVhc2VzL3RhZy92Mi40LjQKCiA+IFVwZGF0ZSBOT1RJQ0UgaGFzaCBmb3Ig
+YSBjaGFuZ2UgaW4gY29weXJpZ2h0IHllYXJzOgogPiAtQ29weXJpZ2h0IMKpIDIwMjAtMjAyMiBi
+eSBPcGVuUHJpbnRpbmcKID4gK0NvcHlyaWdodCDCqSAyMDIwLTIwMjMgYnkgT3BlblByaW50aW5n
+CgogPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+
+CgpDb21taXR0ZWQgdG8gMjAyMy4wMi54IGFuZCAyMDIzLjA1LngsIHRoYW5rcy4KCi0tIApCeWUs
+IFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
