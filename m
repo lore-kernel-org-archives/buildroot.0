@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 680C6EB64D9
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 00:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76789EB64D9
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 00:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 152AD42053;
-	Fri, 16 Jun 2023 00:25:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 152AD42053
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17C07415F5;
+	Fri, 16 Jun 2023 00:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17C07415F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BnQslJRfkY5O; Fri, 16 Jun 2023 00:25:28 +0000 (UTC)
+	with ESMTP id s3IEeTy2y-17; Fri, 16 Jun 2023 00:25:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FE4241FC6;
-	Fri, 16 Jun 2023 00:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FE4241FC6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F196B1BF286
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 00:24:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1213041FEC;
+	Fri, 16 Jun 2023 00:25:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1213041FEC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AAFC21BF286
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 00:24:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D29C360B89
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 00:24:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D29C360B89
+ by smtp2.osuosl.org (Postfix) with ESMTP id 84F8A4031D
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 00:24:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84F8A4031D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oOLRW33vJFbR for <buildroot@lists.busybox.net>;
- Fri, 16 Jun 2023 00:24:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h1qWjgeQ7A0X for <buildroot@lists.busybox.net>;
+ Fri, 16 Jun 2023 00:24:18 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2A1A60B7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C334400B8
 Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D2A1A60B7C
- for <buildroot@buildroot.org>; Fri, 16 Jun 2023 00:24:14 +0000 (UTC)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35G0ODdT039837
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 19:24:13 -0500
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
- by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35G0ODsi054007
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL)
- for <buildroot@buildroot.org>; Thu, 15 Jun 2023 19:24:13 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7C334400B8
+ for <buildroot@buildroot.org>; Fri, 16 Jun 2023 00:24:18 +0000 (UTC)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+ by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35G0ODjY039831;
+ Thu, 15 Jun 2023 19:24:13 -0500
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+ by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35G0ODkW004874
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Thu, 15 Jun 2023 19:24:13 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
  Jun 2023 19:24:13 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Thu, 15 Jun 2023 19:24:13 -0500
 Received: from dasso.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
- by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35G0OCSI015831;
+ by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35G0OCSD015831;
  Thu, 15 Jun 2023 19:24:13 -0500
 To: <buildroot@buildroot.org>
-Date: Thu, 15 Jun 2023 19:23:58 -0500
-Message-ID: <20230616002359.4139814-10-dannenberg@ti.com>
+Date: Thu, 15 Jun 2023 19:23:53 -0500
+Message-ID: <20230616002359.4139814-5-dannenberg@ti.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230616002359.4139814-1-dannenberg@ti.com>
 References: <20230616002359.4139814-1-dannenberg@ti.com>
@@ -63,16 +63,15 @@ MIME-Version: 1.0
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=ti.com; s=ti-com-17Q1; t=1686875053;
- bh=BQo7PHUMPV2F5X7AQkRHBXhMTUiX6KzzDMu9Kmp+Eng=;
+ bh=MlG+gg5WzFQvAvHl9mP8iu5k2gprkEKtexxwYer7whI=;
  h=From:To:CC:Subject:Date:In-Reply-To:References;
- b=oRHO/a+h6UOnwZtIF6U1DXzAtlQ/6JYJYd6nKYUzlSoE30j/DN46f5LU02W37f6ON
- EYvQnsyuOXtBI/XoFQEO4T/DAT5q3lwaJnD520IXM4watpHe0C5iKKoqPO2KUMJH+C
- No5DtZkx13S6yXB2CO+T6dRVVtFCED8/qxMtwZYo=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=oRHO/a+h
-Subject: [Buildroot] [PATCH v8 09/10] package/ti-rogue-um: new package
+ b=A1XXSJZcjC29owwl/Qlbn8/xQTApav7piSL51mKRN2/bzJt14ydeiaPl31ixhH2XW
+ tA7rmD9bxk52K4PBW3P2EcRzg92Cq6YgtAetPyDbVs6YsVuGS0D+xVN6m9Yk2RWCDF
+ 743xk3h91+DeJ9ureLRxX7uEVw9CHTYwU5AoUToQ=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=A1XXSJZc
+Subject: [Buildroot] [PATCH v8 04/10] board/ti/am64x_sk: add new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,994 +85,106 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
 Reply-To: Andreas Dannenberg <dannenberg@ti.com>
-Cc: Andreas Dannenberg <dannenberg@ti.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bryan
+ Brattlof <bb@ti.com>, Andrew Davis <afd@ti.com>, Julien Olivain <ju.o@free.fr>,
+ Xuanhao Shi <x-shi@ti.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Anand Gadiyar <gadiyar@ti.com>, Romain Naour <romain.naour@gmail.com>, Andreas
+ Dannenberg <dannenberg@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package adds the userspace libraries for the Rogue graphics
-accelerator of the following Texas Instruments SoCs: AM62, J721E,
-J721S2, and J784S4.
-
-Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
----
- package/Config.in                             |   1 +
- .../0001-all-drop-the-init-script.patch       | 832 ++++++++++++++++++
- package/ti-rogue-um/Config.in                 |  52 ++
- package/ti-rogue-um/ti-rogue-um.hash          |   3 +
- package/ti-rogue-um/ti-rogue-um.mk            |  38 +
- 5 files changed, 926 insertions(+)
- create mode 100644 package/ti-rogue-um/0001-all-drop-the-init-script.patch
- create mode 100644 package/ti-rogue-um/Config.in
- create mode 100644 package/ti-rogue-um/ti-rogue-um.hash
- create mode 100644 package/ti-rogue-um/ti-rogue-um.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 96ef0d72de..0bff1135aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -614,6 +614,7 @@ endmenu
- 	source "package/targetcli-fb/Config.in"
- 	source "package/ti-gfx/Config.in"
- 	source "package/ti-rogue-km/Config.in"
-+	source "package/ti-rogue-um/Config.in"
- 	source "package/ti-sgx-demos/Config.in"
- 	source "package/ti-sgx-km/Config.in"
- 	source "package/ti-sgx-um/Config.in"
-diff --git a/package/ti-rogue-um/0001-all-drop-the-init-script.patch b/package/ti-rogue-um/0001-all-drop-the-init-script.patch
-new file mode 100644
-index 0000000000..4f3dd1cbb1
---- /dev/null
-+++ b/package/ti-rogue-um/0001-all-drop-the-init-script.patch
-@@ -0,0 +1,832 @@
-+From 99e0da8a1c08818c59680f726e11a84b26daf29f Mon Sep 17 00:00:00 2001
-+From: Randolph Sapp <rs@ti.com>
-+Date: Thu, 25 May 2023 18:59:26 -0500
-+Subject: [PATCH] all: drop the init script
-+
-+Nobody should be using this anymore. It's sysVinit and it's just a fancy
-+wrapper around modprobe anyway. We'll be dropping it from our build
-+tools soon.
-+
-+Signed-off-by: Randolph Sapp <rs@ti.com>
-+---
-+ .../wayland/release/etc/init.d/rc.pvr         | 196 ------------------
-+ .../wayland/release/etc/init.d/rc.pvr         | 196 ------------------
-+ .../wayland/release/etc/init.d/rc.pvr         | 196 ------------------
-+ .../wayland/release/etc/init.d/rc.pvr         | 196 ------------------
-+ 4 files changed, 784 deletions(-)
-+ delete mode 100755 targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
-+ delete mode 100755 targetfs/j721e_linux/wayland/release/etc/init.d/rc.pvr
-+ delete mode 100755 targetfs/j721s2_linux/wayland/release/etc/init.d/rc.pvr
-+ delete mode 100755 targetfs/j784s4_linux/wayland/release/etc/init.d/rc.pvr
-+
-+diff --git a/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr b/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
-+deleted file mode 100755
-+index 428cd86..0000000
-+--- a/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
-++++ /dev/null
-+@@ -1,196 +0,0 @@
-+-#!/bin/bash
-+-############################################################################ ###
-+-#@Copyright     Copyright (c) Imagination Technologies Ltd. All Rights Reserved
-+-#@License       MIT
-+-# The contents of this file are subject to the MIT license as set out below.
-+-#
-+-# Permission is hereby granted, free of charge, to any person obtaining a copy
-+-# of this software and associated documentation files (the "Software"), to deal
-+-# in the Software without restriction, including without limitation the rights
-+-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+-# copies of the Software, and to permit persons to whom the Software is
-+-# furnished to do so, subject to the following conditions:
-+-#
-+-# The above copyright notice and this permission notice shall be included in
-+-# all copies or substantial portions of the Software.
-+-#
-+-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-+-# THE SOFTWARE.
-+-#### ###########################################################################
-+-
-+-# Auto-generated for am62_linux from rogueddk_1.15@6133109
-+-#
-+-
-+-load_pvr()
-+-{
-+-	load_modules_exit_status=0
-+-
-+-	# Load the PVR Services module.
-+-	#
-+-	
-+-	if [ -n "$PVR_SRVKM_PARAMS" ] && ! /sbin/modprobe -q pvrsrvkm --dry-run --first-time; then
-+-		echo "Cannot set parameters for pvrsrvkm. Module already loaded."
-+-		some_modules_already_loaded=1
-+-		readonly load_modules_exit_status=1
-+-	elif ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS; then
-+-		echo "Module pvrsrvkm failed to load. Retrying."
-+-		if [ -z $depmod_has_been_run ]; then
-+-			if [ -e /sbin/depmod ]; then
-+-				echo "Running /sbin/depmod"
-+-				/sbin/depmod && depmod_has_been_run=1
-+-			fi
-+-		fi
-+-		if ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS ; then return; fi
-+-	fi
-+-
-+-	# Reload udev rules
-+-	#
-+-	if [ -e /sbin/udevadm ]; then
-+-		/sbin/udevadm control --reload-rules
-+-	fi
-+-
-+-	# Load 3rd party module(s).
-+-	#
-+-		
-+-	if [ -z "$PVR_LOAD_MODULES_ONLY" ]; then
-+-		# Create the directory for the Wayland socket.
-+-		#
-+-		if [ -z "$XDG_RUNTIME_DIR" ]; then
-+-			export XDG_RUNTIME_DIR=/tmp/wayland
-+-		fi
-+-		if [ ! -e $XDG_RUNTIME_DIR ]; then
-+-			mkdir $XDG_RUNTIME_DIR && chmod 0700 $XDG_RUNTIME_DIR
-+-		fi
-+-
-+-		# If PDumping, enable software rendering for Weston to ensure that
-+-		# pdump doesn't capture any output from Weston itself.
-+-		#
-+-		if pgrep -x pdump > /dev/null 2>&1; then
-+-				export GBM_ALWAYS_SOFTWARE=1
-+-				export LIBGL_ALWAYS_SOFTWARE=1
-+-		fi
-+-
-+-		# Try to work out the device node for the display controller.
-+-		#
-+-		for dev in /dev/dri/card*; do
-+-			dev_major=$(($(stat -c '0x%t' "$dev")))
-+-			dev_minor=$(($(stat -c '0x%T' "$dev")))
-+-			sys_path=$(readlink -f /sys/dev/char/$dev_major\:$dev_minor)
-+-
-+-			while [ -e "$sys_path" -a "$sys_path" != "/sys" ]; do
-+-				if [ ! -e "${sys_path}/driver" ]; then
-+-					sys_path="$(dirname "$sys_path")"
-+-					continue
-+-				fi
-+-
-+-				module="$(basename "$(readlink -f "$sys_path/driver/module")")"
-+-				if [ "$module" = "DISPLAY_CONTROLLER" ]; then
-+-					drm_card="$(basename "$dev")"
-+-				fi
-+-				break
-+-			done
-+-
-+-			if [ -n "$drm_card" ]; then
-+-				break
-+-			fi
-+-		done
-+-
-+-		if [ -e "${XDG_RUNTIME_DIR}/weston.pgid" ]; then
-+-			echo "Weston is already running. If this is not the case run:"
-+-			echo "$ sudo rm ${XDG_RUNTIME_DIR}/weston.pgid"
-+-			echo
-+-		else
-+-			# Get a TTY for Weston to use.
-+-			#
-+-			if [ -x "$(which openvt)" ] && [ -e "/sys/class/tty/tty0/active" ]; then
-+-				openvt -s -l && read unused_tty < /sys/class/tty/tty0/active
-+-			fi
-+-
-+-			# Launch Weston.
-+-			#
-+-			if [ -n "$drm_card" ]; then
-+-				if [ -n "$unused_tty" ]; then
-+-					ps -p $$ -o pgid= > "${XDG_RUNTIME_DIR}/weston.pgid"
-+-					/usr/bin/weston --backend=drm-backend.so --drm-device="$drm_card" --tty="${unused_tty//[!0-9]}" --idle-time=0  &
-+-				else
-+-					last_tty_path="$(ls /dev/tty[1-9][0-9] | sort -V |tail -n 1)"
-+-
-+-					echo "To start Weston run (specifying a tty within the given range):"
-+-					echo "$ sudo /usr/bin/weston --backend=drm-backend.so --drm-device=$drm_card --tty=<8..${last_tty_path//[!0-9]}> --idle-time=0 &"
-+-					echo
-+-				fi
-+-			else
-+-				echo "Couldn't start Weston automatically."
-+-			fi
-+-		fi
-+-	fi
-+-
-+-	if [ -n "$some_modules_already_loaded" ]; then
-+-		echo
-+-		echo "Could not set parameters for some modules."
-+-		echo "To fix this ensure automatic loading of those modules is disabled and restart the driver."
-+-		echo "See the platform guide for more details."
-+-	else
-+-		echo "Loaded PowerVR consumer services."
-+-	fi
-+-
-+-	return $load_modules_exit_status;
-+-}
-+-
-+-unload_pvr()
-+-{
-+-	if [ -z "$XDG_RUNTIME_DIR" ]; then
-+-		XDG_RUNTIME_DIR=/tmp/wayland
-+-	fi
-+-
-+-	# Stop Weston.
-+-	#
-+-	if [ -f "${XDG_RUNTIME_DIR}/weston.pgid" ]; then
-+-		read WESTON_PGID < "${XDG_RUNTIME_DIR}/weston.pgid" && [ -n "$WESTON_PGID" ] && WESTON_PID=$(pgrep -g $WESTON_PGID -x weston) && [ -n "$WESTON_PID" ] && kill $WESTON_PID && while [ -e /proc/$WESTON_PID ] ; do sleep 1; done
-+-		rm "${XDG_RUNTIME_DIR}/weston.pgid"
-+-	elif pgrep -x weston > /dev/null; then
-+-		echo "Warning: Found one of more instances of Weston running."
-+-		echo "         This may prevent the driver from being unloaded."
-+-	fi
-+-
-+-	# Unload 3rd party module(s).
-+-	#
-+-		
-+-	# Unload the PVR Services module.
-+-	#
-+-	if /sbin/modprobe -r pvrsrvkm; then :; else return 1; fi
-+-
-+-	echo "Unloaded PowerVR consumer services."
-+-	return 0;
-+-}
-+-
-+-# Deal with the type of invocation we get.
-+-#
-+-case "$1" in
-+-start)
-+-	load_pvr
-+-	;;
-+-stop)
-+-	if ! unload_pvr; then
-+-		echo "Couldn't unload modules" >&2;
-+-		exit 1
-+-	fi
-+-	;;
-+-reload|restart)
-+-	if unload_pvr; then
-+-		load_pvr
-+-	else
-+-		echo "Couldn't unload modules" >&2;
-+-		exit 1
-+-	fi
-+-	;;
-+-*)
-+-	echo "$0: unknown argument $1." >&2;
-+-	;;
-+-esac
-+-
-+diff --git a/targetfs/j721e_linux/wayland/release/etc/init.d/rc.pvr b/targetfs/j721e_linux/wayland/release/etc/init.d/rc.pvr
-+deleted file mode 100755
-+index c3cae31..0000000
-+--- a/targetfs/j721e_linux/wayland/release/etc/init.d/rc.pvr
-++++ /dev/null
-+@@ -1,196 +0,0 @@
-+-#!/bin/bash
-+-############################################################################ ###
-+-#@Copyright     Copyright (c) Imagination Technologies Ltd. All Rights Reserved
-+-#@License       MIT
-+-# The contents of this file are subject to the MIT license as set out below.
-+-#
-+-# Permission is hereby granted, free of charge, to any person obtaining a copy
-+-# of this software and associated documentation files (the "Software"), to deal
-+-# in the Software without restriction, including without limitation the rights
-+-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+-# copies of the Software, and to permit persons to whom the Software is
-+-# furnished to do so, subject to the following conditions:
-+-#
-+-# The above copyright notice and this permission notice shall be included in
-+-# all copies or substantial portions of the Software.
-+-#
-+-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-+-# THE SOFTWARE.
-+-#### ###########################################################################
-+-
-+-# Auto-generated for j721e_linux from rogueddk_1.15@6133109
-+-#
-+-
-+-load_pvr()
-+-{
-+-	load_modules_exit_status=0
-+-
-+-	# Load the PVR Services module.
-+-	#
-+-	
-+-	if [ -n "$PVR_SRVKM_PARAMS" ] && ! /sbin/modprobe -q pvrsrvkm --dry-run --first-time; then
-+-		echo "Cannot set parameters for pvrsrvkm. Module already loaded."
-+-		some_modules_already_loaded=1
-+-		readonly load_modules_exit_status=1
-+-	elif ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS; then
-+-		echo "Module pvrsrvkm failed to load. Retrying."
-+-		if [ -z $depmod_has_been_run ]; then
-+-			if [ -e /sbin/depmod ]; then
-+-				echo "Running /sbin/depmod"
-+-				/sbin/depmod && depmod_has_been_run=1
-+-			fi
-+-		fi
-+-		if ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS ; then return; fi
-+-	fi
-+-
-+-	# Reload udev rules
-+-	#
-+-	if [ -e /sbin/udevadm ]; then
-+-		/sbin/udevadm control --reload-rules
-+-	fi
-+-
-+-	# Load 3rd party module(s).
-+-	#
-+-		
-+-	if [ -z "$PVR_LOAD_MODULES_ONLY" ]; then
-+-		# Create the directory for the Wayland socket.
-+-		#
-+-		if [ -z "$XDG_RUNTIME_DIR" ]; then
-+-			export XDG_RUNTIME_DIR=/tmp/wayland
-+-		fi
-+-		if [ ! -e $XDG_RUNTIME_DIR ]; then
-+-			mkdir $XDG_RUNTIME_DIR && chmod 0700 $XDG_RUNTIME_DIR
-+-		fi
-+-
-+-		# If PDumping, enable software rendering for Weston to ensure that
-+-		# pdump doesn't capture any output from Weston itself.
-+-		#
-+-		if pgrep -x pdump > /dev/null 2>&1; then
-+-				export GBM_ALWAYS_SOFTWARE=1
-+-				export LIBGL_ALWAYS_SOFTWARE=1
-+-		fi
-+-
-+-		# Try to work out the device node for the display controller.
-+-		#
-+-		for dev in /dev/dri/card*; do
-+-			dev_major=$(($(stat -c '0x%t' "$dev")))
-+-			dev_minor=$(($(stat -c '0x%T' "$dev")))
-+-			sys_path=$(readlink -f /sys/dev/char/$dev_major\:$dev_minor)
-+-
-+-			while [ -e "$sys_path" -a "$sys_path" != "/sys" ]; do
-+-				if [ ! -e "${sys_path}/driver" ]; then
-+-					sys_path="$(dirname "$sys_path")"
-+-					continue
-+-				fi
-+-
-+-				module="$(basename "$(readlink -f "$sys_path/driver/module")")"
-+-				if [ "$module" = "DISPLAY_CONTROLLER" ]; then
-+-					drm_card="$(basename "$dev")"
-+-				fi
-+-				break
-+-			done
-+-
-+-			if [ -n "$drm_card" ]; then
-+-				break
-+-			fi
-+-		done
-+-
-+-		if [ -e "${XDG_RUNTIME_DIR}/weston.pgid" ]; then
-+-			echo "Weston is already running. If this is not the case run:"
-+-			echo "$ sudo rm ${XDG_RUNTIME_DIR}/weston.pgid"
-+-			echo
-+-		else
-+-			# Get a TTY for Weston to use.
-+-			#
-+-			if [ -x "$(which openvt)" ] && [ -e "/sys/class/tty/tty0/active" ]; then
-+-				openvt -s -l && read unused_tty < /sys/class/tty/tty0/active
-+-			fi
-+-
-+-			# Launch Weston.
-+-			#
-+-			if [ -n "$drm_card" ]; then
-+-				if [ -n "$unused_tty" ]; then
-+-					ps -p $$ -o pgid= > "${XDG_RUNTIME_DIR}/weston.pgid"
-+-					/usr/bin/weston --backend=drm-backend.so --drm-device="$drm_card" --tty="${unused_tty//[!0-9]}" --idle-time=0  &
-+-				else
-+-					last_tty_path="$(ls /dev/tty[1-9][0-9] | sort -V |tail -n 1)"
-+-
-+-					echo "To start Weston run (specifying a tty within the given range):"
-+-					echo "$ sudo /usr/bin/weston --backend=drm-backend.so --drm-device=$drm_card --tty=<8..${last_tty_path//[!0-9]}> --idle-time=0 &"
-+-					echo
-+-				fi
-+-			else
-+-				echo "Couldn't start Weston automatically."
-+-			fi
-+-		fi
-+-	fi
-+-
-+-	if [ -n "$some_modules_already_loaded" ]; then
-+-		echo
-+-		echo "Could not set parameters for some modules."
-+-		echo "To fix this ensure automatic loading of those modules is disabled and restart the driver."
-+-		echo "See the platform guide for more details."
-+-	else
-+-		echo "Loaded PowerVR consumer services."
-+-	fi
-+-
-+-	return $load_modules_exit_status;
-+-}
-+-
-+-unload_pvr()
-+-{
-+-	if [ -z "$XDG_RUNTIME_DIR" ]; then
-+-		XDG_RUNTIME_DIR=/tmp/wayland
-+-	fi
-+-
-+-	# Stop Weston.
-+-	#
-+-	if [ -f "${XDG_RUNTIME_DIR}/weston.pgid" ]; then
-+-		read WESTON_PGID < "${XDG_RUNTIME_DIR}/weston.pgid" && [ -n "$WESTON_PGID" ] && WESTON_PID=$(pgrep -g $WESTON_PGID -x weston) && [ -n "$WESTON_PID" ] && kill $WESTON_PID && while [ -e /proc/$WESTON_PID ] ; do sleep 1; done
-+-		rm "${XDG_RUNTIME_DIR}/weston.pgid"
-+-	elif pgrep -x weston > /dev/null; then
-+-		echo "Warning: Found one of more instances of Weston running."
-+-		echo "         This may prevent the driver from being unloaded."
-+-	fi
-+-
-+-	# Unload 3rd party module(s).
-+-	#
-+-		
-+-	# Unload the PVR Services module.
-+-	#
-+-	if /sbin/modprobe -r pvrsrvkm; then :; else return 1; fi
-+-
-+-	echo "Unloaded PowerVR consumer services."
-+-	return 0;
-+-}
-+-
-+-# Deal with the type of invocation we get.
-+-#
-+-case "$1" in
-+-start)
-+-	load_pvr
-+-	;;
-+-stop)
-+-	if ! unload_pvr; then
-+-		echo "Couldn't unload modules" >&2;
-+-		exit 1
-+-	fi
-+-	;;
-+-reload|restart)
-+-	if unload_pvr; then
-+-		load_pvr
-+-	else
-+-		echo "Couldn't unload modules" >&2;
-+-		exit 1
-+-	fi
-+-	;;
-+-*)
-+-	echo "$0: unknown argument $1." >&2;
-+-	;;
-+-esac
-+-
-+diff --git a/targetfs/j721s2_linux/wayland/release/etc/init.d/rc.pvr b/targetfs/j721s2_linux/wayland/release/etc/init.d/rc.pvr
-+deleted file mode 100755
-+index 08190a9..0000000
-+--- a/targetfs/j721s2_linux/wayland/release/etc/init.d/rc.pvr
-++++ /dev/null
-+@@ -1,196 +0,0 @@
-+-#!/bin/bash
-+-############################################################################ ###
-+-#@Copyright     Copyright (c) Imagination Technologies Ltd. All Rights Reserved
-+-#@License       MIT
-+-# The contents of this file are subject to the MIT license as set out below.
-+-#
-+-# Permission is hereby granted, free of charge, to any person obtaining a copy
-+-# of this software and associated documentation files (the "Software"), to deal
-+-# in the Software without restriction, including without limitation the rights
-+-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+-# copies of the Software, and to permit persons to whom the Software is
-+-# furnished to do so, subject to the following conditions:
-+-#
-+-# The above copyright notice and this permission notice shall be included in
-+-# all copies or substantial portions of the Software.
-+-#
-+-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-+-# THE SOFTWARE.
-+-#### ###########################################################################
-+-
-+-# Auto-generated for j721s2_linux from rogueddk_1.15@6133109
-+-#
-+-
-+-load_pvr()
-+-{
-+-	load_modules_exit_status=0
-+-
-+-	# Load the PVR Services module.
-+-	#
-+-	
-+-	if [ -n "$PVR_SRVKM_PARAMS" ] && ! /sbin/modprobe -q pvrsrvkm --dry-run --first-time; then
-+-		echo "Cannot set parameters for pvrsrvkm. Module already loaded."
-+-		some_modules_already_loaded=1
-+-		readonly load_modules_exit_status=1
-+-	elif ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS; then
-+-		echo "Module pvrsrvkm failed to load. Retrying."
-+-		if [ -z $depmod_has_been_run ]; then
-+-			if [ -e /sbin/depmod ]; then
-+-				echo "Running /sbin/depmod"
-+-				/sbin/depmod && depmod_has_been_run=1
-+-			fi
-+-		fi
-+-		if ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS ; then return; fi
-+-	fi
-+-
-+-	# Reload udev rules
-+-	#
-+-	if [ -e /sbin/udevadm ]; then
-+-		/sbin/udevadm control --reload-rules
-+-	fi
-+-
-+-	# Load 3rd party module(s).
-+-	#
-+-		
-+-	if [ -z "$PVR_LOAD_MODULES_ONLY" ]; then
-+-		# Create the directory for the Wayland socket.
-+-		#
-+-		if [ -z "$XDG_RUNTIME_DIR" ]; then
-+-			export XDG_RUNTIME_DIR=/tmp/wayland
-+-		fi
-+-		if [ ! -e $XDG_RUNTIME_DIR ]; then
-+-			mkdir $XDG_RUNTIME_DIR && chmod 0700 $XDG_RUNTIME_DIR
-+-		fi
-+-
-+-		# If PDumping, enable software rendering for Weston to ensure that
-+-		# pdump doesn't capture any output from Weston itself.
-+-		#
-+-		if pgrep -x pdump > /dev/null 2>&1; then
-+-				export GBM_ALWAYS_SOFTWARE=1
-+-				export LIBGL_ALWAYS_SOFTWARE=1
-+-		fi
-+-
-+-		# Try to work out the device node for the display controller.
-+-		#
-+-		for dev in /dev/dri/card*; do
-+-			dev_major=$(($(stat -c '0x%t' "$dev")))
-+-			dev_minor=$(($(stat -c '0x%T' "$dev")))
-+-			sys_path=$(readlink -f /sys/dev/char/$dev_major\:$dev_minor)
-+-
-+-			while [ -e "$sys_path" -a "$sys_path" != "/sys" ]; do
-+-				if [ ! -e "${sys_path}/driver" ]; then
-+-					sys_path="$(dirname "$sys_path")"
-+-					continue
-+-				fi
-+-
-+-				module="$(basename "$(readlink -f "$sys_path/driver/module")")"
-+-				if [ "$module" = "DISPLAY_CONTROLLER" ]; then
-+-					drm_card="$(basename "$dev")"
-+-				fi
-+-				break
-+-			done
-+-
-+-			if [ -n "$drm_card" ]; then
-+-				break
-+-			fi
-+-		done
-+-
-+-		if [ -e "${XDG_RUNTIME_DIR}/weston.pgid" ]; then
-+-			echo "Weston is already running. If this is not the case run:"
-+-			echo "$ sudo rm ${XDG_RUNTIME_DIR}/weston.pgid"
-+-			echo
-+-		else
-+-			# Get a TTY for Weston to use.
-+-			#
-+-			if [ -x "$(which openvt)" ] && [ -e "/sys/class/tty/tty0/active" ]; then
-+-				openvt -s -l && read unused_tty < /sys/class/tty/tty0/active
-+-			fi
-+-
-+-			# Launch Weston.
-+-			#
-+-			if [ -n "$drm_card" ]; then
-+-				if [ -n "$unused_tty" ]; then
-+-					ps -p $$ -o pgid= > "${XDG_RUNTIME_DIR}/weston.pgid"
-+-					/usr/bin/weston --backend=drm-backend.so --drm-device="$drm_card" --tty="${unused_tty//[!0-9]}" --idle-time=0  &
-+-				else
-+-					last_tty_path="$(ls /dev/tty[1-9][0-9] | sort -V |tail -n 1)"
-+-
-+-					echo "To start Weston run (specifying a tty within the given range):"
-+-					echo "$ sudo /usr/bin/weston --backend=drm-backend.so --drm-device=$drm_card --tty=<8..${last_tty_path//[!0-9]}> --idle-time=0 &"
-+-					echo
-+-				fi
-+-			else
-+-				echo "Couldn't start Weston automatically."
-+-			fi
-+-		fi
-+-	fi
-+-
-+-	if [ -n "$some_modules_already_loaded" ]; then
-+-		echo
-+-		echo "Could not set parameters for some modules."
-+-		echo "To fix this ensure automatic loading of those modules is disabled and restart the driver."
-+-		echo "See the platform guide for more details."
-+-	else
-+-		echo "Loaded PowerVR consumer services."
-+-	fi
-+-
-+-	return $load_modules_exit_status;
-+-}
-+-
-+-unload_pvr()
-+-{
-+-	if [ -z "$XDG_RUNTIME_DIR" ]; then
-+-		XDG_RUNTIME_DIR=/tmp/wayland
-+-	fi
-+-
-+-	# Stop Weston.
-+-	#
-+-	if [ -f "${XDG_RUNTIME_DIR}/weston.pgid" ]; then
-+-		read WESTON_PGID < "${XDG_RUNTIME_DIR}/weston.pgid" && [ -n "$WESTON_PGID" ] && WESTON_PID=$(pgrep -g $WESTON_PGID -x weston) && [ -n "$WESTON_PID" ] && kill $WESTON_PID && while [ -e /proc/$WESTON_PID ] ; do sleep 1; done
-+-		rm "${XDG_RUNTIME_DIR}/weston.pgid"
-+-	elif pgrep -x weston > /dev/null; then
-+-		echo "Warning: Found one of more instances of Weston running."
-+-		echo "         This may prevent the driver from being unloaded."
-+-	fi
-+-
-+-	# Unload 3rd party module(s).
-+-	#
-+-		
-+-	# Unload the PVR Services module.
-+-	#
-+-	if /sbin/modprobe -r pvrsrvkm; then :; else return 1; fi
-+-
-+-	echo "Unloaded PowerVR consumer services."
-+-	return 0;
-+-}
-+-
-+-# Deal with the type of invocation we get.
-+-#
-+-case "$1" in
-+-start)
-+-	load_pvr
-+-	;;
-+-stop)
-+-	if ! unload_pvr; then
-+-		echo "Couldn't unload modules" >&2;
-+-		exit 1
-+-	fi
-+-	;;
-+-reload|restart)
-+-	if unload_pvr; then
-+-		load_pvr
-+-	else
-+-		echo "Couldn't unload modules" >&2;
-+-		exit 1
-+-	fi
-+-	;;
-+-*)
-+-	echo "$0: unknown argument $1." >&2;
-+-	;;
-+-esac
-+-
-+diff --git a/targetfs/j784s4_linux/wayland/release/etc/init.d/rc.pvr b/targetfs/j784s4_linux/wayland/release/etc/init.d/rc.pvr
-+deleted file mode 100755
-+index 5770d72..0000000
-+--- a/targetfs/j784s4_linux/wayland/release/etc/init.d/rc.pvr
-++++ /dev/null
-+@@ -1,196 +0,0 @@
-+-#!/bin/bash
-+-############################################################################ ###
-+-#@Copyright     Copyright (c) Imagination Technologies Ltd. All Rights Reserved
-+-#@License       MIT
-+-# The contents of this file are subject to the MIT license as set out below.
-+-#
-+-# Permission is hereby granted, free of charge, to any person obtaining a copy
-+-# of this software and associated documentation files (the "Software"), to deal
-+-# in the Software without restriction, including without limitation the rights
-+-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+-# copies of the Software, and to permit persons to whom the Software is
-+-# furnished to do so, subject to the following conditions:
-+-#
-+-# The above copyright notice and this permission notice shall be included in
-+-# all copies or substantial portions of the Software.
-+-#
-+-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-+-# THE SOFTWARE.
-+-#### ###########################################################################
-+-
-+-# Auto-generated for j784s4_linux from rogueddk_1.15@6133109
-+-#
-+-
-+-load_pvr()
-+-{
-+-	load_modules_exit_status=0
-+-
-+-	# Load the PVR Services module.
-+-	#
-+-	
-+-	if [ -n "$PVR_SRVKM_PARAMS" ] && ! /sbin/modprobe -q pvrsrvkm --dry-run --first-time; then
-+-		echo "Cannot set parameters for pvrsrvkm. Module already loaded."
-+-		some_modules_already_loaded=1
-+-		readonly load_modules_exit_status=1
-+-	elif ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS; then
-+-		echo "Module pvrsrvkm failed to load. Retrying."
-+-		if [ -z $depmod_has_been_run ]; then
-+-			if [ -e /sbin/depmod ]; then
-+-				echo "Running /sbin/depmod"
-+-				/sbin/depmod && depmod_has_been_run=1
-+-			fi
-+-		fi
-+-		if ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS ; then return; fi
-+-	fi
-+-
-+-	# Reload udev rules
-+-	#
-+-	if [ -e /sbin/udevadm ]; then
-+-		/sbin/udevadm control --reload-rules
-+-	fi
-+-
-+-	# Load 3rd party module(s).
-+-	#
-+-		
-+-	if [ -z "$PVR_LOAD_MODULES_ONLY" ]; then
-+-		# Create the directory for the Wayland socket.
-+-		#
-+-		if [ -z "$XDG_RUNTIME_DIR" ]; then
-+-			export XDG_RUNTIME_DIR=/tmp/wayland
-+-		fi
-+-		if [ ! -e $XDG_RUNTIME_DIR ]; then
-+-			mkdir $XDG_RUNTIME_DIR && chmod 0700 $XDG_RUNTIME_DIR
-+-		fi
-+-
-+-		# If PDumping, enable software rendering for Weston to ensure that
-+-		# pdump doesn't capture any output from Weston itself.
-+-		#
-+-		if pgrep -x pdump > /dev/null 2>&1; then
-+-				export GBM_ALWAYS_SOFTWARE=1
-+-				export LIBGL_ALWAYS_SOFTWARE=1
-+-		fi
-+-
-+-		# Try to work out the device node for the display controller.
-+-		#
-+-		for dev in /dev/dri/card*; do
-+-			dev_major=$(($(stat -c '0x%t' "$dev")))
-+-			dev_minor=$(($(stat -c '0x%T' "$dev")))
-+-			sys_path=$(readlink -f /sys/dev/char/$dev_major\:$dev_minor)
-+-
-+-			while [ -e "$sys_path" -a "$sys_path" != "/sys" ]; do
-+-				if [ ! -e "${sys_path}/driver" ]; then
-+-					sys_path="$(dirname "$sys_path")"
-+-					continue
-+-				fi
-+-
-+-				module="$(basename "$(readlink -f "$sys_path/driver/module")")"
-+-				if [ "$module" = "DISPLAY_CONTROLLER" ]; then
-+-					drm_card="$(basename "$dev")"
-+-				fi
-+-				break
-+-			done
-+-
-+-			if [ -n "$drm_card" ]; then
-+-				break
-+-			fi
-+-		done
-+-
-+-		if [ -e "${XDG_RUNTIME_DIR}/weston.pgid" ]; then
-+-			echo "Weston is already running. If this is not the case run:"
-+-			echo "$ sudo rm ${XDG_RUNTIME_DIR}/weston.pgid"
-+-			echo
-+-		else
-+-			# Get a TTY for Weston to use.
-+-			#
-+-			if [ -x "$(which openvt)" ] && [ -e "/sys/class/tty/tty0/active" ]; then
-+-				openvt -s -l && read unused_tty < /sys/class/tty/tty0/active
-+-			fi
-+-
-+-			# Launch Weston.
-+-			#
-+-			if [ -n "$drm_card" ]; then
-+-				if [ -n "$unused_tty" ]; then
-+-					ps -p $$ -o pgid= > "${XDG_RUNTIME_DIR}/weston.pgid"
-+-					/usr/bin/weston --backend=drm-backend.so --drm-device="$drm_card" --tty="${unused_tty//[!0-9]}" --idle-time=0  &
-+-				else
-+-					last_tty_path="$(ls /dev/tty[1-9][0-9] | sort -V |tail -n 1)"
-+-
-+-					echo "To start Weston run (specifying a tty within the given range):"
-+-					echo "$ sudo /usr/bin/weston --backend=drm-backend.so --drm-device=$drm_card --tty=<8..${last_tty_path//[!0-9]}> --idle-time=0 &"
-+-					echo
-+-				fi
-+-			else
-+-				echo "Couldn't start Weston automatically."
-+-			fi
-+-		fi
-+-	fi
-+-
-+-	if [ -n "$some_modules_already_loaded" ]; then
-+-		echo
-+-		echo "Could not set parameters for some modules."
-+-		echo "To fix this ensure automatic loading of those modules is disabled and restart the driver."
-+-		echo "See the platform guide for more details."
-+-	else
-+-		echo "Loaded PowerVR consumer services."
-+-	fi
-+-
-+-	return $load_modules_exit_status;
-+-}
-+-
-+-unload_pvr()
-+-{
-+-	if [ -z "$XDG_RUNTIME_DIR" ]; then
-+-		XDG_RUNTIME_DIR=/tmp/wayland
-+-	fi
-+-
-+-	# Stop Weston.
-+-	#
-+-	if [ -f "${XDG_RUNTIME_DIR}/weston.pgid" ]; then
-+-		read WESTON_PGID < "${XDG_RUNTIME_DIR}/weston.pgid" && [ -n "$WESTON_PGID" ] && WESTON_PID=$(pgrep -g $WESTON_PGID -x weston) && [ -n "$WESTON_PID" ] && kill $WESTON_PID && while [ -e /proc/$WESTON_PID ] ; do sleep 1; done
-+-		rm "${XDG_RUNTIME_DIR}/weston.pgid"
-+-	elif pgrep -x weston > /dev/null; then
-+-		echo "Warning: Found one of more instances of Weston running."
-+-		echo "         This may prevent the driver from being unloaded."
-+-	fi
-+-
-+-	# Unload 3rd party module(s).
-+-	#
-+-		
-+-	# Unload the PVR Services module.
-+-	#
-+-	if /sbin/modprobe -r pvrsrvkm; then :; else return 1; fi
-+-
-+-	echo "Unloaded PowerVR consumer services."
-+-	return 0;
-+-}
-+-
-+-# Deal with the type of invocation we get.
-+-#
-+-case "$1" in
-+-start)
-+-	load_pvr
-+-	;;
-+-stop)
-+-	if ! unload_pvr; then
-+-		echo "Couldn't unload modules" >&2;
-+-		exit 1
-+-	fi
-+-	;;
-+-reload|restart)
-+-	if unload_pvr; then
-+-		load_pvr
-+-	else
-+-		echo "Couldn't unload modules" >&2;
-+-		exit 1
-+-	fi
-+-	;;
-+-*)
-+-	echo "$0: unknown argument $1." >&2;
-+-	;;
-+-esac
-+-
-+-- 
-+2.34.1
-+
-diff --git a/package/ti-rogue-um/Config.in b/package/ti-rogue-um/Config.in
-new file mode 100644
-index 0000000000..15257858c2
---- /dev/null
-+++ b/package/ti-rogue-um/Config.in
-@@ -0,0 +1,52 @@
-+comment "ti-rogue-um needs udev and a glibc toolchain w/ threads"
-+	depends on BR2_aarch64
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_TI_ROGUE_UM
-+	bool "ti-rogue-um"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	# pre-built binaries
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_aarch64
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGBM
-+	select BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_HAS_POWERVR
-+	select BR2_PACKAGE_LIBFFI
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	select BR2_PACKAGE_TI_ROGUE_KM if BR2_LINUX_KERNEL
-+	help
-+	  Graphics libraries for TI SoCs with Rogue GPU.
-+	  This package supports AM62, J721E, J721S2, and J784S4
-+	  SoCs only.
-+
-+	  https://git.ti.com/cgit/graphics/ti-img-rogue-umlibs
-+
-+if BR2_PACKAGE_TI_ROGUE_UM
-+
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "ti-rogue-um"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGBM
-+	default "ti-rogue-um"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "ti-rogue-um"
-+
-+config BR2_PACKAGE_PROVIDES_POWERVR
-+	default "ti-rogue-um"
-+
-+config BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT
-+	string "UM driver target product"
-+	default "am62_linux"
-+	help
-+	  Select target product to be used for UM libraries. This needs to
-+	  match one of the SoC-specific folders within the root/targetfs
-+	  folder of the ti-img-rogue-umlibs Git repository.
-+
-+endif
-diff --git a/package/ti-rogue-um/ti-rogue-um.hash b/package/ti-rogue-um/ti-rogue-um.hash
-new file mode 100644
-index 0000000000..a41bf33145
---- /dev/null
-+++ b/package/ti-rogue-um/ti-rogue-um.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  2e1bd1a5ab0ad2db1b9164d028a94f8f9d20743131f337a817fd1c8f9ddd4cbe  ti-rogue-um-5977e82b96028f783d39c7219f016c1faf8dc5f5-br1.tar.gz
-+sha256  37507b462edf97b59717d2d144daaac85fbca6080c3602b5128e446e97f9ad47  LICENSE
-diff --git a/package/ti-rogue-um/ti-rogue-um.mk b/package/ti-rogue-um/ti-rogue-um.mk
-new file mode 100644
-index 0000000000..fa29638fa7
---- /dev/null
-+++ b/package/ti-rogue-um/ti-rogue-um.mk
-@@ -0,0 +1,38 @@
-+################################################################################
-+#
-+# ti-rogue-um
-+#
-+################################################################################
-+
-+# This corresponds to SDK 08.06.00
-+TI_ROGUE_UM_VERSION = 5977e82b96028f783d39c7219f016c1faf8dc5f5
-+TI_ROGUE_UM_SITE = https://git.ti.com/git/graphics/ti-img-rogue-umlibs.git
-+TI_ROGUE_UM_SITE_METHOD = git
-+TI_ROGUE_UM_LICENSE = TI TSPA License
-+TI_ROGUE_UM_LICENSE_FILES = LICENSE
-+TI_ROGUE_UM_INSTALL_STAGING = YES
-+TI_ROGUE_UM_PROVIDES = libegl libgbm libgles powervr
-+
-+# ti-rogue-um is a egl/gles provider only if libdrm is installed
-+TI_ROGUE_UM_DEPENDENCIES = libdrm wayland
-+
-+PVR_BUILD = "release"
-+PVR_WS = "wayland"
-+
-+define TI_ROGUE_UM_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		DESTDIR=$(STAGING_DIR) \
-+		TARGET_PRODUCT=$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT) \
-+		BUILD=$(PVR_BUILD) WINDOW_SYSTEM=$(PVR_WS) \
-+		install
-+endef
-+
-+define TI_ROGUE_UM_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) \
-+		TARGET_PRODUCT=$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT) \
-+		BUILD=$(PVR_BUILD) WINDOW_SYSTEM=$(PVR_WS) \
-+		install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTogWHVhbmhhbyBTaGkgPHgtc2hpQHRpLmNvbT4KCkFkZHMgc3VwcG9ydCBmb3IgVEkncyBT
+Sy1BTTY0IGJvYXJkIGJ5IGludHJvZHVjaW5nIHRoZQphbTY0eF9za19kZWZjb25maWcgZmlsZSBh
+bmQgcmVsYXRlZCBzdXBwb3J0IGZpbGVzLgoKTW9yZSBpbmZvcm1hdGlvbiBhYm91dCB0aGUgYm9h
+cmQgY2FuIGJlIGZvdW5kIGF0OgpodHRwczovL3d3dy50aS5jb20vdG9vbC9TSy1BTTY0CgpTaWdu
+ZWQtb2ZmLWJ5OiBYdWFuaGFvIFNoaSA8eC1zaGlAdGkuY29tPgpTaWduZWQtb2ZmLWJ5OiBBbmFu
+ZCBHYWRpeWFyIDxnYWRpeWFyQHRpLmNvbT4KU2lnbmVkLW9mZi1ieTogQW5kcmVhcyBEYW5uZW5i
+ZXJnIDxkYW5uZW5iZXJnQHRpLmNvbT4KUmV2aWV3ZWQtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVs
+aW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgpBY2tlZC1ieTogQW5kcmV3IERhdmlz
+IDxhZmRAdGkuY29tPgpUZXN0ZWQtYnk6IEJyeWFuIEJyYXR0bG9mIDxiYkB0aS5jb20+CkNjOiBS
+b21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+ClJldmlld2VkLWJ5OiBGcmFuY29p
+cyBQZXJyYWQgPGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZz4KUmV2aWV3ZWQtYnk6IEp1bGllbiBP
+bGl2YWluIDxqdS5vQGZyZWUuZnI+Ci0tLQogREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAg
+IHwgIDQgKysrKwogYm9hcmQvdGkvYW02NHhfc2svZ2VuaW1hZ2UuY2ZnIHwgMjcgKysrKysrKysr
+KysrKysrKysrKysrCiBib2FyZC90aS9hbTY0eF9zay9yZWFkbWUudHh0ICAgfCAyNiArKysrKysr
+KysrKysrKysrKysrKwogY29uZmlncy9hbTY0eF9za19kZWZjb25maWcgICAgIHwgNDQgKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKwogNCBmaWxlcyBjaGFuZ2VkLCAxMDEgaW5zZXJ0
+aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjR4X3NrL2dlbmltYWdlLmNm
+ZwogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjR4X3NrL3JlYWRtZS50eHQKIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBjb25maWdzL2FtNjR4X3NrX2RlZmNvbmZpZwoKZGlmZiAtLWdpdCBhL0RF
+VkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDRkM2UzYjE1NmEuLjY0ODUwNjFkNGQgMTAwNjQ0
+Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAtMTI5LDggKzEyOSwxMCBAQCBG
+OglwYWNrYWdlL2xpYnhtbHJwYy8KIEY6CXBhY2thZ2UvcHl0aG9uLWRvY29wdC8KIAogTjoJQW5h
+bmQgR2FkaXlhciA8Z2FkaXlhckB0aS5jb20+CitGOglib2FyZC90aS9hbTY0eF9zay8KIEY6CWJv
+b3QvdGktazMtaW1hZ2UtZ2VuLwogRjoJYm9vdC90aS1rMy1yNS1sb2FkZXIvCitGOgljb25maWdz
+L2FtNjR4X3NrX2RlZmNvbmZpZwogCiBOOglBbmRyw6kgWndpbmcgPG5lcnZAZGF3bmNyb3cuZGU+
+CiBGOglwYWNrYWdlL2xpYmtyYjUvCkBAIC0zMDIxLDggKzMwMjMsMTAgQEAgTjoJV29qY2llY2gg
+Tml6acWEc2tpIDxuaXppYWtAc3BveC5vcmc+CiBGOglwYWNrYWdlL2Z3dXAvCiAKIE46CVh1YW5o
+YW8gU2hpIDxYMTUwMDAxNzdAZ21haWwuY29tPgorRjoJYm9hcmQvdGkvYW02NHhfc2svCiBGOgli
+b290L3RpLWszLWltYWdlLWdlbi8KIEY6CWJvb3QvdGktazMtcjUtbG9hZGVyLworRjoJY29uZmln
+cy9hbTY0eF9za19kZWZjb25maWcKIAogTjoJWWFpciBCZW4gQXZyYWhhbSA8eWFpcmJhQHByb3Rv
+bm1haWwuY29tPgogRjoJcGFja2FnZS9jYXN5bmMvCmRpZmYgLS1naXQgYS9ib2FyZC90aS9hbTY0
+eF9zay9nZW5pbWFnZS5jZmcgYi9ib2FyZC90aS9hbTY0eF9zay9nZW5pbWFnZS5jZmcKbmV3IGZp
+bGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uMjYzMDRmZTk4ZgotLS0gL2Rldi9udWxs
+CisrKyBiL2JvYXJkL3RpL2FtNjR4X3NrL2dlbmltYWdlLmNmZwpAQCAtMCwwICsxLDI3IEBACitp
+bWFnZSBib290LnZmYXQgeworCXZmYXQgeworCQlmaWxlcyA9IHsKKwkJCSJ0aWJvb3QzLmJpbiIs
+CisJCQkidGlzcGwuYmluIiwKKwkJCSJ1LWJvb3QuaW1nIiwKKwkJfQorCX0KKworCXNpemUgPSAx
+Nk0KK30KKworaW1hZ2Ugc2RjYXJkLmltZyB7CisJaGRpbWFnZSB7CisJfQorCisJcGFydGl0aW9u
+IHUtYm9vdCB7CisJCXBhcnRpdGlvbi10eXBlID0gMHhDCisJCWJvb3RhYmxlID0gInRydWUiCisJ
+CWltYWdlID0gImJvb3QudmZhdCIKKwl9CisKKwlwYXJ0aXRpb24gcm9vdGZzIHsKKwkJcGFydGl0
+aW9uLXR5cGUgPSAweDgzCisJCWltYWdlID0gInJvb3Rmcy5leHQ0IgorCX0KK30KZGlmZiAtLWdp
+dCBhL2JvYXJkL3RpL2FtNjR4X3NrL3JlYWRtZS50eHQgYi9ib2FyZC90aS9hbTY0eF9zay9yZWFk
+bWUudHh0Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmZlODNjNjc1ZjUK
+LS0tIC9kZXYvbnVsbAorKysgYi9ib2FyZC90aS9hbTY0eF9zay9yZWFkbWUudHh0CkBAIC0wLDAg
+KzEsMjYgQEAKK1RleGFzIEluc3R1bWVudHMgU0stQU02NCBUZXN0IGFuZCBEZXZlbG9wbWVudCBC
+b2FyZAorCitEZXNjcmlwdGlvbgorPT09PT09PT09PT0KK1RoaXMgY29uZmlndXJhdGlvbiB3aWxs
+IGJ1aWxkIGEgY29tcGxldGUgaW1hZ2UgZm9yIHRoZSBUSSBTSy1BTTY0IGJvYXJkLgorCitIb3cg
+dG8gQnVpbGQKKz09PT09PT09PT09PQorU2VsZWN0IHRoZSBkZWZhdWx0IGNvbmZpZ3VyYXRpb24g
+Zm9yIHRoZSB0YXJnZXQ6CiskIG1ha2UgYW02NHhfc2tfZGVmY29uZmlnCisKK09wdGlvbmFsOiBt
+b2RpZnkgdGhlIGNvbmZpZ3VyYXRpb246CiskIG1ha2UgbWVudWNvbmZpZworCitCdWlsZDoKKyQg
+bWFrZQorCitUbyBjb3B5IHRoZSByZXN1bHRpbWcgb3V0cHV0IGltYWdlIGZpbGUgdG8gYW4gU0Qg
+Y2FyZCB1c2UgZGQ6CiskIGRkIGlmPW91dHB1dC9pbWFnZXMvc2RjYXJkLmltZyBvZj0vZGV2L3Nk
+WCBicz0xTQorCitIb3cgdG8gUnVuCis9PT09PT09PT09CitJbnNlcnQgdGhlIFNEIGNhcmQgaW50
+byB0aGUgU0stQU02MiBib2FyZCwgYW5kIHBvd2VyIGl0IHVwIHRocm91Z2gKK3RoZSBVU0IgVHlw
+ZS1DIGNvbm5lY3Rvci4gVGhlIHN5c3RlbSBzaG91bGQgY29tZSB1cC4gWW91IGNhbiB1c2UKK2Eg
+bWljcm8tVVNCIGNhYmxlIHRvIGNvbm5lY3QgdG8gdGhlIGNvbm5lY3RvciBsYWJlbGVkIERFQlVH
+IENPTlNPTEUKK3RvIGNvbW11bmljYXRlIHdpdGggdGhlIGJvYXJkLgpkaWZmIC0tZ2l0IGEvY29u
+Zmlncy9hbTY0eF9za19kZWZjb25maWcgYi9jb25maWdzL2FtNjR4X3NrX2RlZmNvbmZpZwpuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4zOGIxODMzMWY3Ci0tLSAvZGV2L251
+bGwKKysrIGIvY29uZmlncy9hbTY0eF9za19kZWZjb25maWcKQEAgLTAsMCArMSw0NCBAQAorQlIy
+X2FhcmNoNjQ9eQorQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0ic3VwcG9ydC9zY3JpcHRz
+L2dlbmltYWdlLnNoIgorQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSItYyBib2FyZC90aS9h
+bTY0eF9zay9nZW5pbWFnZS5jZmciCitCUjJfTElOVVhfS0VSTkVMPXkKK0JSMl9MSU5VWF9LRVJO
+RUxfVVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9eQorQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQUE9S
+VD15CitCUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0idGkvazMtYW02NDItc2siCitC
+UjJfTElOVVhfS0VSTkVMX0lOU1RBTExfVEFSR0VUPXkKK0JSMl9QQUNLQUdFX0xJTlVYX0ZJUk1X
+QVJFPXkKK0JSMl9QQUNLQUdFX0xJTlVYX0ZJUk1XQVJFX1RJX1dMMThYWD15CitCUjJfVEFSR0VU
+X1JPT1RGU19FWFQyPXkKK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15CitCUjJfVEFSR0VUX1JP
+T1RGU19FWFQyX1NJWkU9IjEyME0iCitCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFPXkK
+K0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT049eQorQlIyX1RB
+UkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTl9WQUxVRT0idjIuNy4wIgor
+QlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0iazMiCitCUjJfVEFSR0VU
+X0FSTV9UUlVTVEVEX0ZJUk1XQVJFX1RBUkdFVF9CT0FSRD0ibGl0ZSIKK0JSMl9UQVJHRVRfQVJN
+X1RSVVNURURfRklSTVdBUkVfQkwzMl9PUFRFRT15CitCUjJfVEFSR0VUX09QVEVFX09TPXkKK0JS
+Ml9UQVJHRVRfT1BURUVfT1NfUExBVEZPUk09ImszIgorQlIyX1RBUkdFVF9USV9LM19JTUFHRV9H
+RU49eQorQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fRldfVFlQRV9USVNDST15CitCUjJfVEFS
+R0VUX1RJX0szX0lNQUdFX0dFTl9TT0M9ImFtNjR4IgorQlIyX1RBUkdFVF9USV9LM19JTUFHRV9H
+RU5fU09DX1RZUEU9ImdwIgorQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fQ09ORklHPSJldm0i
+CitCUjJfVEFSR0VUX1RJX0szX1I1X0xPQURFUj15CitCUjJfVEFSR0VUX1RJX0szX1I1X0xPQURF
+Ul9CT0FSRF9ERUZDT05GSUc9ImFtNjR4X2V2bV9yNSIKK0JSMl9UQVJHRVRfVUJPT1Q9eQorQlIy
+X1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NPTkZJRz15CitCUjJfVEFSR0VUX1VCT09UX0NV
+U1RPTV9WRVJTSU9OPXkKK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjIw
+MjIuMTAiCitCUjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJRz0iYW02NHhfZXZtX2E1MyIK
+K0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDPXkKK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfT1BF
+TlNTTD15CitCUjJfVEFSR0VUX1VCT09UX05FRURTX0FURl9CTDMxPXkKKyMgQlIyX1RBUkdFVF9V
+Qk9PVF9GT1JNQVRfQklOIGlzIG5vdCBzZXQKK0JSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0lNRz15
+CitCUjJfVEFSR0VUX1VCT09UX1NQTD15CitCUjJfVEFSR0VUX1VCT09UX1NQTF9OQU1FPSJ0aXNw
+bC5iaW4iCitCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9NQUtFT1BUUz0iVEVFPSQoQklOQVJJRVNf
+RElSKS90ZWUtcGFnZXJfdjIuYmluIgorQlIyX1BBQ0tBR0VfSE9TVF9ET1NGU1RPT0xTPXkKK0JS
+Ml9QQUNLQUdFX0hPU1RfR0VOSU1BR0U9eQorQlIyX1BBQ0tBR0VfSE9TVF9NVE9PTFM9eQotLSAK
+Mi4zNC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
