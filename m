@@ -4,73 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E9AEB64DA
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 00:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D874EB64D9
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 00:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 050FB4191E;
-	Fri, 16 Jun 2023 00:25:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 050FB4191E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94C7042048;
+	Fri, 16 Jun 2023 00:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94C7042048
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8Mi4As_ew90O; Fri, 16 Jun 2023 00:25:00 +0000 (UTC)
+	with ESMTP id sE_gjxzqq6Tb; Fri, 16 Jun 2023 00:25:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F10694203D;
-	Fri, 16 Jun 2023 00:24:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F10694203D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C67F1BF97E
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 00:24:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CFB741FEC;
+	Fri, 16 Jun 2023 00:25:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CFB741FEC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E3DC1BF286
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 00:24:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74078415F5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71D34400B8
  for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 00:24:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74078415F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71D34400B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PRUSsZNnXfzh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OosG3K4bTSu7 for <buildroot@lists.busybox.net>;
  Fri, 16 Jun 2023 00:24:14 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3384B4150F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40EB34031D
 Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3384B4150F
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 40EB34031D
  for <buildroot@buildroot.org>; Fri, 16 Jun 2023 00:24:14 +0000 (UTC)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35G0ODQL039823
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35G0ODR0039827
  for <buildroot@buildroot.org>; Thu, 15 Jun 2023 19:24:13 -0500
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
- by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35G0ODUE004870
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35G0OD6K053993
  (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL)
  for <buildroot@buildroot.org>; Thu, 15 Jun 2023 19:24:13 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
  Jun 2023 19:24:12 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Thu, 15 Jun 2023 19:24:12 -0500
 Received: from dasso.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
- by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35G0OCS9015831;
+ by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35G0OCSA015831;
  Thu, 15 Jun 2023 19:24:12 -0500
 To: <buildroot@buildroot.org>
-Date: Thu, 15 Jun 2023 19:23:49 -0500
-Message-ID: <20230616002359.4139814-1-dannenberg@ti.com>
+Date: Thu, 15 Jun 2023 19:23:50 -0500
+Message-ID: <20230616002359.4139814-2-dannenberg@ti.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230616002359.4139814-1-dannenberg@ti.com>
+References: <20230616002359.4139814-1-dannenberg@ti.com>
 MIME-Version: 1.0
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=ti.com; s=ti-com-17Q1; t=1686875053;
- bh=0hbLqM7YCBjAzDT4o+l/uWpvRcCmDM32TUh3/KYAV8Q=;
- h=From:To:CC:Subject:Date;
- b=oDXztSLHgv0lo/1UpiowUqm1rhFdRN0kaV/0wyVr8T8YY7R4LF5/7alGnIjfY9zTB
- qKqWmA3K7NlTpVDl1YkYtI8r4LxJ3M5YbKg9zxGbNEV5OBEKbxh1K3bMQ8i98Z049D
- 1tqgiAs8P8q6/s3jXtb0m20HLXkZ/+Qe9jeruKCA=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=oDXztSLH
-Subject: [Buildroot] [PATCH v8 00/10] add support for TI's AM64x and AM62x
- boards
+ bh=8u1RQa7hWsryZ0VxdDwSreCDKuANomoUaeCVYR/Uh5g=;
+ h=From:To:CC:Subject:Date:In-Reply-To:References;
+ b=ysuo09qU3nD2CZIyP0iK50NkGBMpZeDJYwYFF5xdI0R9HM7841WICqL47zaTbBL5+
+ hLu4V4TZv+QuHrFHnAOn6EBbO6AvJ2WMQginYmohuIYBT3PcU/fuN+oUm1IwhYNg6T
+ 3KDyW8rZkb2E5siGbrTjyILqRol8+M918KfEZBKs=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=ysuo09qU
+Subject: [Buildroot] [PATCH v8 01/10] boot/ti-k3-r5-loader: allow for full
+ build source customization
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,198 +88,153 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
 Reply-To: Andreas Dannenberg <dannenberg@ti.com>
 Cc: Andreas Dannenberg <dannenberg@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBzZXJpZXMgaW50cm9kdWNlcyBzdXBwb3J0IGZvciBUSSdzIEFNNjR4IGFuZCBBTTYyeCBT
-SyBib2FyZHMuCgpUaGUgc2VyaWVzIHdhcyBwcmV2aW91c2x5IHNlbnQgb3V0IGJ5IFh1YW5oYW8g
-aW4gQXVndXN0IDIwMjIgYW5kIHdhcwpyZXZpZXdlZCBieSBHaXVsaW8gQmVuZXR0aSB1cCB0byB2
-NSAoVGhhbmtzISkuIEl0IHdhcyB0aGVuIHBpY2tlZCB1cCBieQpBbmFuZCB3aG8gc3VibWl0dGVk
-IHY1IHRocm91Z2ggdjcgYmVmb3JlIHdvcmsgc3RhbGxlZCBsYXRlIDIwMjIuCgpJJ3ZlIHNpbmNl
-IHRha2VuIHRoaXMgb3ZlciBmcm9tIEFuYW5kIHRvIGRyaXZlIHRoaXMgZnVydGhlciBkdWUgdG8g
-c29tZQpjdXN0b21lciByZXF1ZXN0cyB3ZSBoYWQgaGVyZSBhdCBUSSAod2hpY2ggbGVkIHRvIHRo
-ZSBjcmVhdGlvbiBvZiBhCnRlbXBvcmFyeSBFMkUgRkFRIGRvY3VtZW50IFsxXSB0byBlbmFibGUg
-aW50ZXJlc3RlZCBwYXJ0aWVzKSwgYW5kIEkKd291bGQgbGlrZSB0byBjb250cmlidXRlIHRob3Nl
-IHJlY2VudCBjaGFuZ2VzIHRvIHVwc3RyZWFtLCBiZWNhdXNlIHRoYXQKaXMgd2hlcmUgdGhlIGFj
-dHVhbCBzb2x1dGlvbiBzaG91bGQgcmVzaWRlLgoKVGhpcyB2OCBzZXJpZXMgbWFrZXMgc29tZSBt
-YWpvciBjaGFuZ2VzL2FkZGl0aW9ucyBvbiB0b3Agb2YgdGhlIGV4aXN0aW5nCnY3IHNlcmllcyB0
-byB0YWtlIGludG8gYWNjb3VudCB0aGUgcG9wdWxhcml0eSBvZiBBTTYyIChzbyBzdXBwb3J0IGlz
-Cm5lZWRlZCwgaW5jbHVkaW5nIGdyYXBoaWNzKSBhcyB3ZWxsIGFzICJIaWdoIFNlY3VyaXR5IiBk
-ZXZpY2UgdmFyaWFudHMsCnNvbWV0aGluZyBKdWxpZW4gT2xpdmFpbiBjYW1lIGFjcm9zcyBqdXN0
-IGEgZmV3IGRheXMgYWdvLiBJdCBhbHNvIGlzCnNldHVwIHRvIGJlIGEgY3VycmVudCBUSSBTREsg
-djguNiBbMl1bM10gcHJvZHVjdGlvbiBiYXNlbGluZS1lcXVpdmFsZW50CmluIHRlcm1zIG9mIFUt
-Qm9vdC9LZXJuZWwvT1BURUUvQVRGIHNvdXJjZXMgYXMgd2VsbCBhcyBhbGwgdGhlIGRpZmZlcmVu
-dApvdGhlciBkZXZpY2UgZmlybXdhcmVzIGFuZCB0b29scyAoVElGUywgRE0sIEszIEltYWdlIEdl
-biwgR1BVIGRyaXZlcikKdGhhdCBhcmUgcGFydCBvZiB0aGUgb2ZmaWNpYWwgVEkgU0RLLCB0aGlz
-IHdheSBlc3RhYmxpc2hpbmcgYSBrbm93bgpsZXZlbCBvZiBxdWFsaXR5IGFuZCBmZWF0dXJlLWNv
-bXBsZXRlbmVzcy4gU2luY2UgdGhvc2UgZGlmZmVyZW50CmNvbXBvbmVudHMgYWxzbyBoYXZlIGRl
-cGVuZGVuY2llcyBvbiBlYWNoIG90aGVyIGFuZCBjYW5ub3QgYmUgcmFuZG9tbHkKY29tYmluZWQs
-IHRoZSB2OC42IGJhc2VsaW5lIGFwcHJvYWNoIEkndmUgY2hvc2VuIGFsc28gaGFzIHNvbWUgcHJh
-Y3RpY2FsCnJlYXNvbnMuIFNlZSBjaGFuZ2UgbG9nIGJlbG93IGZvciB0aGUgZGV0YWlscy4KCkZ1
-cnRoZXJtb3JlLCB0aGUgc2VyaWVzIGFkZHJlc3NlcyBtb3N0IHJldmlldyBjb21tZW50cyBmb3Ig
-djcuIEhvd2V2ZXIKc2luY2UgdGhlIHNjb3BlIGhhcyBzb21ld2hhdCBldm9sdmVkIGFuZCBJIHJl
-d29ya2VkIHRoaW5ncyBxdWl0ZSBhIGJpdCwKcGxlYXNlIHRha2UgdGhlIHRpbWUgdG8gbG9vayBh
-dCB0aGUgYWxyZWFkeSBtdWNoLXJldmlld2VkIHBhdGNoZXMKJ2Jvb3QvdGktazMtaW1hZ2UtZ2Vu
-OiBhZGQgbmV3IHBhY2thZ2UnIGFuZCAnYm9hcmQvdGkvYW02NHhfc2s6IGFkZCBuZXcKYm9hcmQn
-IGEgYml0IG1vcmUgY2xvc2VseSBhZ2Fpbi4gSSBkaWQgY2Fycnkgb3ZlciBwcmV2aW91cyBjb21t
-aXQgdGFncwpkZXNwaXRlIHRoZSBjaGFuZ2VzIEkgbWFkZSwgcGxlYXNlIGFjY2VwdCBteSBhcG9s
-b2dpZXMgaWYgeW91IHRoaW5rIHRoaXMKd2FzIG5vdCBhcHByb3ByaWF0ZSBiZWNhdXNlIG9mIHRo
-ZSBleHRyYSBjaGFuZ2VzIEkgaW50cm9kdWNlZCBhbmQgbGV0IG1lCmtub3cuIEknbSBjZXJ0YWlu
-bHkgbW90aXZhdGVkIG5vdyB0aGF0IHRoZSBkZXZlbG9wbWVudCBpcyBhY3RpdmUgYWdhaW4KdG8g
-Y29udGludWUgd29ya2luZyB0aGlzIHdpdGggYWxsIG9mIHlvdSB1bnRpbCB0aGluZ3MgYXJlIGlu
-IGdvb2Qgc2hhcGUuCgpBcyBmb3IgZnV0dXJlIHBsYW5zIGJleW9uZCB0aGlzIHNlcmllcywgaGVy
-ZSdzIHdoYXQgSSBoYWQgaW4gbWluZDoKCjEpIE1pZ3JhdGlvbiB0byBUSSBTREsgdjkueCBiYXNl
-bGluZSBlcXVpdmFsZW50LCBvbmNlIGF2YWlsYWJsZS4gVGhpcwogICB3aWxsIGJyaW5nIG5ld2Vy
-IFUtQm9vdCAyMDIzLjA0LCBLZXJuZWwgdjYuMSwgYW5kIG1hdGNoaW5nIEdGWCBkcml2ZXJzLgog
-ICBUaGlzIHNob3VsZCBhbHNvIGVsaW1pbmF0ZSB0aGUgbmVlZCBmb3IgdGhlIGJvb3QvdGktazMt
-aW1hZ2UtZ2VuIHBhY2thZ2UKICAgYXMgdGhvc2UgdGFza3Mgd2lsbCB0aGVuIGJlIHRha2VuIGNh
-cmUgb2YgYnkgVS1Cb290L0Jpbm1hbiBtb3ZpbmcKICAgZm9yd2FyZC4gVGhpcyBtaWdyYXRpb24g
-d2lsbCBhbHNvIGltcHJvdmUgdGhlIGF1dGhlbnRpY2F0ZWQgYm9vdAogICBmbG93LgoKMikgTWln
-cmF0aW9uIHRvIGZ1bGx5LXVwc3RyZWFtIFUtQm9vdCwgS2VybmVsLCBhbmQgR0ZYIGRyaXZlciBz
-b3VyY2VzCiAgIG9uY2UgdGhlIG9wZW4tc291cmNlIEdGWCBkcml2ZXIgaXMgYXZhaWxhYmxlICh3
-b3JrIGluIHByb2dyZXNzKSB3aGljaAogICB3aWxsIGVsaW1pbmF0ZSB0aGUgaGFyZCBkZXBlbmRl
-bmN5IG9uIHRoZSBLZXJuZWwgdmVyc2lvbiB3ZSBoYXZlIGF0IHRoZQogICBtb21lbnQuCgoKQ2hh
-bmdlcyBpbiB2ODoKLSBleHRlbmRlZCB0byBhbHNvIGluY2x1ZGUgQU02MiBkZXZpY2VzIChzb21l
-d2hhdCBzaW1pbGFyIGRldmljZSBhcwogIEFNNjQsIGJ1dCB3aXRoIGdyYXBoaWNzKQotIGFkZGVk
-IElNRyBSb2d1ZSBncmFwaGljcyBkcml2ZXIgS00vVU0gcGFja2FnZXMgc3VwcG9ydGluZyBBTTYy
-CiAgYW5kIG90aGVyIFRJIEszIHBsYXRmb3JtIGRldmljZXMKLSB1c2VzIFUtQm9vdC9LZXJuZWwv
-QVRGL09QVEVFIGFuZCB2YXJpb3VzIGRldmljZSBmaXJtd2FyZXMgZnJvbQogIFRJJ3MgUHJvY2Vz
-c29yIFNESyBMaW51eCB2OC42IFsyXVszXSB0byBhY2hpZXZlIGEgc2ltaWxhciBsZXZlbAogIG9m
-IGJhc2ljIHBsYXRmb3JtIGZlYXR1cmUtY29tcGxldGVuZXNzIGFuZCBxdWFsaXR5IGFzIHRoZSBv
-ZmZpY2lhbCBTREsKLSBzdXBwb3J0cyBTSy1BTTYyQiB3aXRoIEFNNjIgSFMtRlMgYW5kIFNLLUFN
-NjRCIHdpdGggQU02NCBIUy1GUwogIEhpZ2ggU2VjdXJpdHkgZGV2aWNlIHZhcmlhbnRzIGJ5IGRl
-ZmF1bHQuIFRoZSBzd2l0Y2ggdG8gSFMtRlMKICBkZXZpY2VzIHdhcyBtYWRlIHRocm91Z2ggZm9s
-bG93LW9uIGNvbW1pdCB0byBkb2N1bWVudCBpbiB0aGUgR2l0CiAgaGlzdG9yeSBob3cgdGhpcyBp
-cyBkb25lIChhbHNvIGFsbG93aW5nIHNvbWVib2R5IHRvIHVucm9sbCBpdAogIGZvciBhIHF1aWNr
-IHRlc3Qgb24gYSBHUCBkZXZpY2UpLiBOb3RlIHRoYXQgdGhpcyByZXF1aXJlcyB0aGUKICBUSV9T
-RUNVUkVfREVWX1BLRyBlbnZpcm9ubWVudGFsIHZhcmlhYmxlIHRvIGJlIGRlZmluZWQgYXQgYnVp
-bGQKICB0aW1lIHBvaW50aW5nIHRvIGEgdmFsaWQgY29yZS1zZWNkZXYtazMgZm9sZGVyIGxvY2F0
-aW9uLAogIG90aGVyd2lzZSB0aGUgYnVpbGQgd2lsbCBmYWlsLgotIGV4dGVuZGVkIHRpLWszLXI1
-LWxvYWRlciBwYWNrYWdlIHRvIGFsbG93IGZvciBmdWxsIGJ1aWxkIHNvdXJjZQogIGN1c3RvbWl6
-YXRpb24KLSBleHRlbmRlZCB0aGUgdGktazMtaW1hZ2UtZ2VuIHBhY2thZ2UgdG8gYWNjb21tb2Rh
-dGUgdGhlIGRpZmZlcmVudAogIGNsYXNzZXMgb2YgZGV2aWNlIGZpcm13YXJlIHR5cGVzIHVzZWQg
-b24gVEkgSzMgU29DIGxpa2UgQU02MiAoVElGUykKICB2cy4gQU02NCAoVElTQ0kpLiBXaXRoIHRo
-aXMgc3VwcG9ydCBhbnkgVEkgSzMgZGV2aWNlIGluY2x1ZGluZyBBTTY1LAogIEFNNjgsIEFNNjks
-IEo3MjFFIGV0Yy4gc2hvdWxkIG5vdyBiZSBlbmFibGVkIGJ5IHRoaXMgcGFja2FnZS4KLSBleHRl
-bmRlZCB0aGUgdWJvb3QgcGFja2FnZSB0byBhbGxvdyBidWlsZGluZyBhIERldmljZSBNYW5hZ2Vy
-IChETSkKICBmaXJtd2FyZSBpbnRvIHRoZSBVLUJvb3QgU1BMIGltYWdlIGFzIHJlcXVpcmVkIG9u
-IGNlcnRhaW4gVEkgSzMgU29DcwogIGxpa2UgQU02MiwgQU02MkEsIGV0Yy4KLSBpbmNvcnBvcmF0
-ZWQgVGhvbWFzIFBldGF6em9uaSdzIGZlZWRiYWNrIGludG8gazMtaW1hZ2UtZ2VuLiBBbHNvCiAg
-dGhpcyBwYWNrYWdlIG5vIGxvbmdlciBkb3dubG9hZHMgc3R1ZmYgZHVyaW5nIGJ1aWxkICh1Z2gh
-ISksIHRoYW5rcwogIHRvIGNoYW5nZXMgYXMgcHJvcG9zZWQgYnkgRnJhbsOnb2lzIFBlcnJhZC4K
-LSBpbmNvcnBvcmF0ZWQgc29tZSBjbGVhbnVwIGZlZWRiYWNrIG9uIGszLWltYWdlLWdlbiBmcm9t
-IEp1bGllbgogIE9saXZhaW4gc3VjaCBhcyBtaXNzaW5nIGhhc2ggb24gTElDRU5TRSBmaWxlIGFu
-ZCBhIGxhdGVyIGltYWdlCiAgR2VuZXJhdG9yIEdpdCB0YWcgaXMgbm93IHVzZWQgKHRoYXQgaXMg
-bWF0Y2hpbmcgdGhlIFRJU0RLIHY4LjYKICBiYXNlbGluZSBlcXVpdmFsZW50IHRoYXQgaXMgYmVp
-bmcgaW1wbGVtZW50ZWQpLgotIGltcHJvdmVkIHdvcmRpbmcvZGVzY3JpcHRpb25zIGluIHRoZSAn
-Ym9hcmQvdGkvYW02NHhfc2s6IGFkZCBuZXcKICBib2FyZCcgY29tbWl0IGFzIHN1Z2dlc3RlZCBi
-eSBUaG9tYXMgUGV0YXp6b25pLiBEaWQgbm90IG1ha2UgdGhlCiAgY2hhbmdlIHJlZ2FyZGluZyBl
-eHBsaWNpdGx5IHNwZWNpZnlpbmcgdGhlIENvcnRleC1BNTMgY29yZSBhcyBpdAogIHNlZW1zIHRv
-IGJlIGltcGxpZWQgYW5kIGlzIG5vdCBlbWl0dGVkIGJ5ICdtYWtlIHNhdmVkZWZjb25maWcnLgog
-IEFsc28gdXNpbmcgYSBmaXhlZCB2ZXJzaW9uIG9mIE9QVEVFIGFzIHBlciBUSSBTREsgdjguNiBi
-YXNlbGluZQogIGFkZHJlc3NlcyBUaG9tYXMnIHRoZSBkZXNpcmUgdG8gYnVpbGQgd2l0aCBhIGtu
-b3duLWdvb2QgdmVyc2lvbi4KCkNoYW5nZXMgaW4gdjc6Ci0gY2hhbmdlcyBwZXIgRnJhbsOnb2lz
-IFBlcnJhZCdzIHJldmlldyBjb21tZW50cwoKQ2hhbmdlcyBpbiB2NjoKLSByZWJhc2VkIHRvIGxh
-dGVzdCBuZXh0IGJyYW5jaCBhbmQgcmV0ZXN0ZWQKLSB1cGRhdGVkIHUtYm9vdCBhbmQga2VybmVs
-IHRvIGxhdGVzdCByZWxlYXNlZCB2ZXJzaW9ucyBhcyBvZiB0b2RheQpGcm9tIEFuZHJldydzIGNv
-bW1lbnRzOgotIGFkZGVkIGEgbmV3IFNPQ19UWVBFIG9wdGlvbiBmb3IgazMtaW1hZ2UtZ2VuLCBh
-cyByZXF1ZXN0ZWQgYnkgQW5kcmV3CiAgRGF2aXMgaW4gYSByZXZpZXcgY29tbWVudC4KRnJvbSBS
-b21haW4ncyBjb21tZW50czoKLSB1c2UgImlmIiBpbnN0ZWFkIG9mICJkZXBlbmRzIG9uIiBmb3Ig
-c3ViLW9wdGlvbnMKLSBtb3ZlIFRJIEszIFI1IExvYWRlciBkZWZjb25maWcgc2VsZWN0aW9uIHRv
-IEtjb25maWcKLSB1c2UgJChIT1NUX0RJUikgaW5zdGVhZCBvZiAkKEhPU1RfQVJNX0dOVV9UT09M
-Q0hBSU5fSU5TVEFMTF9ESVIpCi0gUmV0YWluIFh1YW5oYW8ncyBnbWFpbCBJRCBpbiB0aGUgTUFJ
-TlRBSU5FUnMgZmlsZSwgYnV0IGRyb3AgaGlzIFRJCiAgZW1haWwgZnJvbSBDQyBsaXN0IGFzIGl0
-IHdpbGwgYmUgaW5hY3RpdmUgdGlsbCBoZSByZWpvaW5zIFRJCi0gQWRkIGEgcGxhaW4tdGV4dCBs
-aWNlbnNlIGZpbGUgaW50byB0aGUgazMtaW1hZ2UtZ2VuIHJlcG9zaXRvcnkgYW5kIHVzZQogIGl0
-IGluc3RlYWQgb2YgdGhlIEhUTUwgbWFuaWZlc3QgZmlsZS4gQ29uZmlybWVkIHRoYXQgdGhpcyBp
-cyBzdGlsbAogIEJTRC0zLUNsYXVzZSBsaWNlbnNlLgotIEFkZCBjb21tZW50cyBpbiB0aGUgdGkt
-azMtaW1hZ2UtZ2VuLm1rIGZpbGUgZm9yIGEgY291cGxlIG9mIG9wdGlvbnMKCkNoYW5nZXMgaW4g
-djU6Ci0gTm9uZSAocmVzdWJtaXNzaW9uIG9mIFh1YW5oYW8ncyBzZXJpZXMpCgpDaGFuZ2VzIGlu
-IHY0OgotIHJlYmFzZWQgdG8gbGF0ZXN0IG1hc3RlciBhbmQgcmV0ZXN0ZWQKLSBkcm9wcGVkIE9Q
-VEVFIENVU1RPTSogb3B0aW9ucyBhcyB3ZSBkb24ndCBuZWVkIHRoZW0uCgpDaGFuZ2VzIGluIHYz
-OgotIEZpeCBib290L3RpLWszLXI1LWxvYWRlciBwYWNrYWdlJ3MgYnVpbGQgb3B0aW9ucyBhbmQg
-ZGVwZW5kZW5jaWVzLgotIEZpeCBib290L3RpLWszLWltYWdlLWdlbiBwYWNrYWdlJ3MgY29uZmln
-Ci0gQWRkIG1vcmUgZGV0YWlscyBpbiBib2FyZC90aS9hbTY0eF9zaydzIHJlYWRtZQotIFRyaW0g
-Y29uZmlncy9hbTY0eF9zaydzIHRvb2xjaGFpbiBvcHRpb25zIGFuZCAKICBmaXggdWJvb3QgYW5k
-IGdlbmltYWdlIGRlcGVuZGVuY2llcy4KLSBSZW1vdmUgYm9hcmQvdGkvYW02Mnhfc2sgYW5kIGNv
-bmZpZ3MvYW02Mnhfc2sgZm9yIG5vdyBkdWUgdG8gc29tZQogIGZpcm13YXJlIGRlcGVuZGVuY3kg
-cHJvYmxlbXMuIFdpbGwgYmUgYWRkZWQgYmFjayBpbiB0aGUgZnV0dXJlLgoKQ2hhbmdlcyBpbiB2
-MjoKLSBSZXZlcnQgYXJtLWdudS10b29sY2hhaW4gYmFjayB0byB2ZXJzaW9uIDEwLnggZHVlIHRv
-IGEgYnVnLgogIFdoZW4gdGhlIHByZS1wYWNrYWdlZCBHQ0Mgd2FzIGJ1aWx0LCBpdCBjb3VsZCBi
-ZSB0YXJnZXRpbmcKICBhIG5ld2VyIHg4Nl82NCBhcmNoaXRlY3R1cmUgdGhhbiB0aGUgcHJvY2Vz
-c29yIGJlaW5nIHVzZWQuCi0gQWRkIGJvb3QvdGktazMtcjUtbG9hZGVyIHBhY2thZ2UgdGhhdCBi
-dWlsZHMgYSBzZXBhcmF0ZSBVLUJvb3QKICBmb3IgdGhlIFI1IGNvcmVzIG9uIFRJJ3MgSzMgZGV2
-aWNlcy4KLSBBZGQgYm9vdC90aS1rMy1pbWFnZS1nZW4gcGFja2FnZSB0aGF0IGJ1aWxkcyB0aGUg
-ZnVsbCBib290IGJpbmFyeQogIHRpYm9vdDMuYmluIGZyb20gdGhlIHNwbCBidWlsdCBmcm9tIHRp
-LWszLXI1LWxvYWRlci4KLSBBZGQgYm9hcmQvdGkgZGlyZWN0b3J5IHRvIGluY2x1ZGUgc2RjYXJk
-IGNvbmZpZyBhbmQgYm9hcmQgaW5mb3JtYXRpb24KICBmb3IgQU02NHhfc2sgYW5kIEFNNjJ4X3Nr
-IGJvYXJkcy4KLSBBZGQgdGhlIEJ1aWxkcm9vdCBkZWZjb25maWdzIGZvciBBTTY0eF9zayBhbmQg
-QU02Mnhfc2suCi0gQWRkIHRvIERFVkVMT1BFUlMgbGlzdC4KClsxXSBodHRwczovL2UyZS50aS5j
-b20vc3VwcG9ydC9wcm9jZXNzb3JzLWdyb3VwL3Byb2Nlc3NvcnMvZi9wcm9jZXNzb3JzLWZvcnVt
-LzEyMjY4MTUvZmFxLWJ1aWxkcm9vdC1zdXBwb3J0LWZvci1zaXRhcmEtYW02MngtYW02MmF4LWFt
-NjR4LWRldmljZXMKWzJdIGh0dHBzOi8vd3d3LnRpLmNvbS90b29sL2Rvd25sb2FkL1BST0NFU1NP
-Ui1TREstTElOVVgtQU02NFgvMDguMDYuMDAuNDIKWzNdIGh0dHBzOi8vd3d3LnRpLmNvbS90b29s
-L2Rvd25sb2FkL1BST0NFU1NPUi1TREstTElOVVgtQU02MlgvMDguMDYuMDAuNDIKCgpBbmRyZWFz
-IERhbm5lbmJlcmcgKDcpOgogIGJvb3QvdGktazMtcjUtbG9hZGVyOiBhbGxvdyBmb3IgZnVsbCBi
-dWlsZCBzb3VyY2UgY3VzdG9taXphdGlvbgogIGJvb3QvdWJvb3Q6IGFkZCBzdXBwb3J0IGZvciBi
-dWlsZGluZyB0aGUgVEkgSzMgRE0gaW50byBVLUJvb3QKICBib2FyZC90aS9hbTYyeF9za3xhbTY0
-eF9zazogc3dpdGNoIHRvIFRJIFNESyB2OC42IHNvdXJjZXMKICBib2FyZC90aS9hbTYyeF9za3xh
-bTY0eF9zazogc3dpdGNoIHRvIEhTLUZTIGRldmljZSB2YXJpYW50cwogIHBhY2thZ2UvdGktcm9n
-dWUta206IG5ldyBwYWNrYWdlCiAgcGFja2FnZS90aS1yb2d1ZS11bTogbmV3IHBhY2thZ2UKICBj
-b25maWdzL2FtNjJ4X3NrX2RlZmNvbmZpZzogZW5hYmxlIElNRyBSb2d1ZSBncmFwaGljcyBkcml2
-ZXIKClh1YW5oYW8gU2hpICgzKToKICBib290L3RpLWszLWltYWdlLWdlbjogbmV3IHBhY2thZ2UK
-ICBib2FyZC90aS9hbTY0eF9zazogYWRkIG5ldyBib2FyZAogIGJvYXJkL3RpL2FtNjJ4X3NrOiBh
-ZGQgbmV3IGJvYXJkCgogREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIHwgICAxMCArCiBib2FyZC90aS9hbTYyeF9zay9nZW5pbWFnZS5jZmcgICAgICAgICAgICAg
-ICAgfCAgIDI3ICsKIGJvYXJkL3RpL2FtNjJ4X3NrL3JlYWRtZS50eHQgICAgICAgICAgICAgICAg
-ICB8ICAgNDIgKwogLi4uL3RpL2FtNjJ4X3NrL3RpX3Nka19hcm02NF9kZWJ1Z19kZWZjb25maWcg
-IHwgMTk5MSArKysrKysrKysrKysrKysrKwogLi4uL2FtNjJ4X3NrL3RpX3Nka19hcm02NF9yZWxl
-YXNlX2RlZmNvbmZpZyAgIHwgMTg5NCArKysrKysrKysrKysrKysrCiBib2FyZC90aS9hbTY0eF9z
-ay9nZW5pbWFnZS5jZmcgICAgICAgICAgICAgICAgfCAgIDI3ICsKIGJvYXJkL3RpL2FtNjR4X3Nr
-L3JlYWRtZS50eHQgICAgICAgICAgICAgICAgICB8ICAgNDIgKwogLi4uL3RpL2FtNjR4X3NrL3Rp
-X3Nka19hcm02NF9kZWJ1Z19kZWZjb25maWcgIHwgMTk5MSArKysrKysrKysrKysrKysrKwogLi4u
-L2FtNjR4X3NrL3RpX3Nka19hcm02NF9yZWxlYXNlX2RlZmNvbmZpZyAgIHwgMTg5NCArKysrKysr
-KysrKysrKysrCiBib290L0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAgICAxICsKIGJvb3QvdGktazMtaW1hZ2UtZ2VuL0NvbmZpZy5pbiAgICAgICAgICAgICAgICB8
-ICAgNTUgKwogYm9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLmhhc2ggICAgIHwg
-ICAyMyArCiBib290L3RpLWszLWltYWdlLWdlbi90aS1rMy1pbWFnZS1nZW4ubWsgICAgICAgfCAg
-IDcxICsKIGJvb3QvdGktazMtcjUtbG9hZGVyL0NvbmZpZy5pbiAgICAgICAgICAgICAgICB8ICAg
-NjUgKy0KIGJvb3QvdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5tayAgICAgICB8ICAg
-MjggKy0KIGJvb3QvdWJvb3QvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAg
-MTcgKwogYm9vdC91Ym9vdC91Ym9vdC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAx
-NiArCiBjb25maWdzL2FtNjJ4X3NrX2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgICAgfCAgIDU2
-ICsKIGNvbmZpZ3MvYW02NHhfc2tfZGVmY29uZmlnICAgICAgICAgICAgICAgICAgICB8ICAgNTMg
-KwogcGFja2FnZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgMiAr
-CiBwYWNrYWdlL3RpLXJvZ3VlLWttL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgfCAgIDI4ICsK
-IHBhY2thZ2UvdGktcm9ndWUta20vdGktcm9ndWUta20uaGFzaCAgICAgICAgICB8ICAgIDMgKwog
-cGFja2FnZS90aS1yb2d1ZS1rbS90aS1yb2d1ZS1rbS5tayAgICAgICAgICAgIHwgICAzNyArCiAu
-Li4vMDAwMS1hbGwtZHJvcC10aGUtaW5pdC1zY3JpcHQucGF0Y2ggICAgICAgfCAgODMyICsrKysr
-KysKIHBhY2thZ2UvdGktcm9ndWUtdW0vQ29uZmlnLmluICAgICAgICAgICAgICAgICB8ICAgNTIg
-KwogcGFja2FnZS90aS1yb2d1ZS11bS90aS1yb2d1ZS11bS5oYXNoICAgICAgICAgIHwgICAgMyAr
-CiBwYWNrYWdlL3RpLXJvZ3VlLXVtL3RpLXJvZ3VlLXVtLm1rICAgICAgICAgICAgfCAgIDM4ICsK
-IDI3IGZpbGVzIGNoYW5nZWQsIDkyOTQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC90aS9hbTYyeF9zay9nZW5pbWFnZS5jZmcKIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBib2FyZC90aS9hbTYyeF9zay9yZWFkbWUudHh0CiBjcmVhdGUgbW9kZSAxMDA2
-NDQgYm9hcmQvdGkvYW02Mnhfc2svdGlfc2RrX2FybTY0X2RlYnVnX2RlZmNvbmZpZwogY3JlYXRl
-IG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjJ4X3NrL3RpX3Nka19hcm02NF9yZWxlYXNlX2RlZmNv
-bmZpZwogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjR4X3NrL2dlbmltYWdlLmNmZwog
-Y3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjR4X3NrL3JlYWRtZS50eHQKIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBib2FyZC90aS9hbTY0eF9zay90aV9zZGtfYXJtNjRfZGVidWdfZGVmY29uZmln
-CiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvdGkvYW02NHhfc2svdGlfc2RrX2FybTY0X3JlbGVh
-c2VfZGVmY29uZmlnCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC90aS1rMy1pbWFnZS1nZW4vQ29u
-ZmlnLmluCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1h
-Z2UtZ2VuLmhhc2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib290L3RpLWszLWltYWdlLWdlbi90aS1r
-My1pbWFnZS1nZW4ubWsKIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2FtNjJ4X3NrX2RlZmNv
-bmZpZwogY3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZpZ3MvYW02NHhfc2tfZGVmY29uZmlnCiBjcmVh
-dGUgbW9kZSAxMDA2NDQgcGFja2FnZS90aS1yb2d1ZS1rbS9Db25maWcuaW4KIGNyZWF0ZSBtb2Rl
-IDEwMDY0NCBwYWNrYWdlL3RpLXJvZ3VlLWttL3RpLXJvZ3VlLWttLmhhc2gKIGNyZWF0ZSBtb2Rl
-IDEwMDY0NCBwYWNrYWdlL3RpLXJvZ3VlLWttL3RpLXJvZ3VlLWttLm1rCiBjcmVhdGUgbW9kZSAx
-MDA2NDQgcGFja2FnZS90aS1yb2d1ZS11bS8wMDAxLWFsbC1kcm9wLXRoZS1pbml0LXNjcmlwdC5w
-YXRjaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvdGktcm9ndWUtdW0vQ29uZmlnLmluCiBj
-cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS90aS1yb2d1ZS11bS90aS1yb2d1ZS11bS5oYXNoCiBj
-cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS90aS1yb2d1ZS11bS90aS1yb2d1ZS11bS5tawoKLS0g
-CjIuMzQuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+The TI K3 R5 loader package essentially is a wrapper to build a special
+version of U-boot SPL used as part of a multi-stage boot flow on TI K3
+devices, and as such needs full flexibility as to specifying the U-Boot
+sources used for the build. To accomodate this, add the same options as
+already available in the regular U-Boot package. For most use cases, the
+same source settings (repo URL, versions, etc.) should be used for both
+ti-k3-r5-loader and uboot packages.
+
+Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
+---
+ boot/ti-k3-r5-loader/Config.in          | 65 +++++++++++++++++++++++--
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 28 ++++++++++-
+ 2 files changed, 89 insertions(+), 4 deletions(-)
+
+diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
+index 10602c8df3..2419babe70 100644
+--- a/boot/ti-k3-r5-loader/Config.in
++++ b/boot/ti-k3-r5-loader/Config.in
+@@ -1,14 +1,73 @@
+ config BR2_TARGET_TI_K3_R5_LOADER
+-	bool "ti-k3-r5-loader"
++	bool "TI K3 R5 Loader"
+ 	depends on BR2_aarch64
+ 	help
+-	  Separate U-Boot build for R5 cores on TI's k3 boards.
++	  Separate U-Boot SPL build for R5 core on TI's K3 processors.
+ 	  Usually used to build tiboot3.bin with k3-image-gen.
+ 
+ if BR2_TARGET_TI_K3_R5_LOADER
+ 
+ choice
+-	prompt "Configuration"
++	prompt "U-Boot Version"
++	help
++	  Select the specific U-Boot version you want to use to build the
++	  initial SPL running on the R5 core. Note that for most use cases
++	  you'd want to use the exact same configuration here as it is used
++	  to build the main U-Boot package.
++
++config BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
++	bool "2022.10"
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION
++	bool "Custom version"
++	help
++	  This option allows to use a specific official versions
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL
++	bool "Custom tarball"
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_GIT
++	bool "Custom Git repository"
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_HG
++	bool "Custom Mercurial repository"
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_SVN
++	bool "Custom Subversion repository"
++
++endchoice
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE
++	string "U-Boot version"
++	depends on BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL_LOCATION
++	string "URL of custom U-Boot tarball"
++	depends on BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL
++
++if BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_GIT || BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_HG || BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_SVN
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by
++	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
++
++endif
++
++config BR2_TARGET_TI_K3_R5_LOADER_VERSION
++	string
++	default "2022.10"	if BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
++	default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE \
++		if BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION
++	default "custom"	if BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL
++	default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_VERSION \
++		if BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_GIT || BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_HG || BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_SVN
++choice
++	prompt "U-Boot Configuration"
+ 	default BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG
+ 
+ config BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG
+diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+index afa309aa98..fe403a5c44 100644
+--- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
++++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+@@ -2,11 +2,37 @@
+ #
+ # ti-k3-r5-loader
+ #
++# The ti-k3-r5 loader package should really be built from the same U-Boot
++# sources as the uboot package itself, so for most users so all LOADER_SITE /
++# LOADER_SOURCE type definitions should be set the same for both packages.
++# However it still makes sense to keep the ti-k3-r5-loader package somewhat
++# separated and independent from the uboot package to allow for special use
++# cases such as Falcon boot (which would skip the uboot package completely).
++#
+ ################################################################################
+ 
+-TI_K3_R5_LOADER_VERSION = 2022.10
++TI_K3_R5_LOADER_VERSION = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_VERSION))
++
++ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL),y)
++# Handle custom U-Boot tarballs as specified by the configuration
++TI_K3_R5_LOADER_TARBALL = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL_LOCATION))
++TI_K3_R5_LOADER_SITE = $(patsubst %/,%,$(dir $(TI_K3_R5_LOADER_TARBALL)))
++TI_K3_R5_LOADER_SOURCE = $(notdir $(TI_K3_R5_LOADER_TARBALL))
++else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_GIT),y)
++TI_K3_R5_LOADER_SITE = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_URL))
++TI_K3_R5_LOADER_SITE_METHOD = git
++else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_HG),y)
++TI_K3_R5_LOADER_SITE = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_URL))
++TI_K3_R5_LOADER_SITE_METHOD = hg
++else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_SVN),y)
++TI_K3_R5_LOADER_SITE = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_URL))
++TI_K3_R5_LOADER_SITE_METHOD = svn
++else
++# Handle stable official U-Boot versions
+ TI_K3_R5_LOADER_SITE = https://ftp.denx.de/pub/u-boot
+ TI_K3_R5_LOADER_SOURCE = u-boot-$(TI_K3_R5_LOADER_VERSION).tar.bz2
++endif
++
+ TI_K3_R5_LOADER_LICENSE = GPL-2.0+
+ TI_K3_R5_LOADER_LICENSE_FILES = Licenses/gpl-2.0.txt
+ TI_K3_R5_LOADER_CPE_ID_VENDOR = denx
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
