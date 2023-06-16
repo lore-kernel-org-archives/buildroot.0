@@ -1,80 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28DD3EB64D7
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 12:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55C5CEB64D7
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jun 2023 12:47:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F0D161497;
-	Fri, 16 Jun 2023 12:02:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F0D161497
+	by smtp4.osuosl.org (Postfix) with ESMTP id C785E42110;
+	Fri, 16 Jun 2023 12:47:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C785E42110
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IzWEybl8n7uj; Fri, 16 Jun 2023 12:47:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD5B841E6D;
+	Fri, 16 Jun 2023 12:47:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD5B841E6D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C2BF1BF39A
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 12:47:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E55EB614AA
+ for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 12:47:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E55EB614AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NQoBrwclWTj3; Fri, 16 Jun 2023 12:02:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DB6A6149D;
-	Fri, 16 Jun 2023 12:02:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DB6A6149D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ECC721BF3A9
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 12:02:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5D2440186
- for <buildroot@lists.busybox.net>; Fri, 16 Jun 2023 12:02:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5D2440186
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QVooTDLDtzk8 for <buildroot@lists.busybox.net>;
- Fri, 16 Jun 2023 12:02:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D0454011A
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3D0454011A
- for <buildroot@buildroot.org>; Fri, 16 Jun 2023 12:02:32 +0000 (UTC)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35GC2VQT078276;
- Fri, 16 Jun 2023 07:02:31 -0500
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
- by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35GC2V1b044876
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Fri, 16 Jun 2023 07:02:31 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 16
- Jun 2023 07:02:31 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 16 Jun 2023 07:02:30 -0500
-Received: from dasso (ileaxei01-snat2.itg.ti.com [10.180.69.6])
- by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35GC2U39122966;
- Fri, 16 Jun 2023 07:02:31 -0500
-Date: Fri, 16 Jun 2023 07:02:30 -0500
-To: =?utf-8?B?RnJhbsOnb2lz?= Perrad <francois.perrad@gadz.org>
-Message-ID: <20230616120230.a4z5dfr4kzsz7i6u@dasso>
-References: <20230616002359.4139814-1-dannenberg@ti.com>
- <20230616002359.4139814-8-dannenberg@ti.com>
- <CAAE6iEWfhb46NsbC+4E9p24Dzcz_edGLxegJtQu4mFMp_yfBdQ@mail.gmail.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mz7EkU6qg4Zk for <buildroot@lists.busybox.net>;
+ Fri, 16 Jun 2023 12:47:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E19661497
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
+ [IPv6:2a00:1450:4864:20::235])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0E19661497
+ for <buildroot@buildroot.org>; Fri, 16 Jun 2023 12:46:59 +0000 (UTC)
+Received: by mail-lj1-x235.google.com with SMTP id
+ 38308e7fff4ca-2b4274f7640so23260541fa.0
+ for <buildroot@buildroot.org>; Fri, 16 Jun 2023 05:46:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1686919617; x=1689511617;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=HqvqB1O4n9zjnK/NdD8oFBsqxWAkb0uc7WH+5m7Dvng=;
+ b=DnSHVfL0LTYY1pFmf2s/OIi/V9UJJnxjNrF+ruzqu+bxZ6yKZDHyinCBhLrrAWdrdl
+ /9FJ4oUnxTmDqxCP+sTndFDXVeuIhdKev4qonBX1WtWc2IqT7w2fsXN9tmKVsnzu7Kve
+ JRku1Q41mtqw3NcuZLaYLjWpvNIwPR/g+NvZ+pPw/XHB5Xwys4GQYCrBbrdH+4orJ6Vl
+ JPeCM0M7QuTj79OZjmeeeJLPb1TpDQ/O5nB5TKL/8jttFHxmXM9yQ6jUv065+UTGfjbY
+ aucg/g/XPtlCf7E1E6MBwm1WoXOFW4r45gisCFcrL8ZZOsM+uuQscrT2+UD7GDM2Db9L
+ IHqg==
+X-Gm-Message-State: AC+VfDxDfbM1bS25XksBLnGlmcLgVqPcYfL3aJZO6DNxjm6i6DuWVu23
+ BL3nSCipo54tHGjmSNVpXT3c5G1f1p4xiG14YjmuWYIUmiE=
+X-Google-Smtp-Source: ACHHUZ6BWivNwIzDKR+B4G2LCDlr6ktDLR6WCsJ4Ea9voHhA5dRacZcX7jpYIBhjQvZKiRBtB5g7aST32W3ndAA8usg=
+X-Received: by 2002:a2e:6814:0:b0:2b3:4663:74d5 with SMTP id
+ c20-20020a2e6814000000b002b3466374d5mr681546lja.10.1686919617064; Fri, 16 Jun
+ 2023 05:46:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAAE6iEWfhb46NsbC+4E9p24Dzcz_edGLxegJtQu4mFMp_yfBdQ@mail.gmail.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+From: bignesh lenka <bigneshlenka20@gmail.com>
+Date: Fri, 16 Jun 2023 18:16:44 +0530
+Message-ID: <CA+XYDRsCC9oXebc15HH5HT9=A5f0yj7cUr=TT_sdaBEr9qG_Eg@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1686916951;
- bh=mt5gePwRHGnQt/o430X1J+hVss6qq99RhRKhjvsXLC0=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=GdQW0HZ4JG9495rZ9Kwi2frztIEdD2LqapRXDSFJP/2O54L0OVPppCKuHa6icT2w5
- rPdlgagWtPEV5sIELFcc2LwinePKJsagBuQbquwES2l2SEHzIRp+BXCmopqWqaLz3h
- 2F+E5NzxYZR+eDLwSMlPu1VRGU8QLb1ZgQb30Y20=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=GdQW0HZ4
-Subject: Re: [Buildroot] [PATCH v8 07/10] board/ti/am62x_sk|am64x_sk: switch
- to HS-FS device variants
+ d=gmail.com; s=20221208; t=1686919617; x=1689511617;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=HqvqB1O4n9zjnK/NdD8oFBsqxWAkb0uc7WH+5m7Dvng=;
+ b=JbBIofEfkbGJkRKHHO+H7yzuW5DEpZDQ5nl8d3Jo7NF6ZzmqfzPZCLOSqjtyKYkgG6
+ yeq41NX6KTgmytWzBGmRSTTuaZcv4rpxbkq4hkj5wVphBKowcPrtkSuCuFfnb/QOClGI
+ pvc5kV/J/LfRl9mF07GuLz6PMTsCScNmTUFhEHMn7zSG7RmwgjY3ZbveQ7WpKbxlOJ/+
+ WCoAnNpzgbf7b4NIF2V98dI2IfSC2wS+hZ4gXy1uDbXCCIx/hjT06ToMsVwiHRFZj1nq
+ d/TQA4A5P+Yai4Dm08TkxksBArpFnH1zFg1gQNg3MWHuiH927FANH1QroulXgMxdUcdG
+ fLoA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=JbBIofEf
+Subject: [Buildroot] Request for information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,187 +87,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
-Reply-To: Andreas Dannenberg <dannenberg@ti.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============3885984108760759215=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fran=E7ois,
+--===============3885984108760759215==
+Content-Type: multipart/alternative; boundary="0000000000008a333005fe3e947d"
 
-On Fri, Jun 16, 2023 at 01:15:04PM +0200, Fran=E7ois Perrad wrote:
-> Le ven. 16 juin 2023 =E0 02:38, Andreas Dannenberg via buildroot <
-> buildroot@buildroot.org> a =E9crit :
-> =
+--0000000000008a333005fe3e947d
+Content-Type: text/plain; charset="UTF-8"
 
-> > Current starter kits for AM62x (called SK-AM62B, see [1]) and AM64x
-> > (called SK-AM64B, see [2]) both contain High Security - Field Securable
-> > (HS-FS) device variants, and those are really the recommended production
-> > device variants and boards TI will provide moving forward. Hence, switch
-> > the defconfigs for those boards over to accommodate those now-shipping
-> > device variants and boards.
-> >
-> > [1] https://www.ti.com/tool/SK-AM62B
-> > [2] https://www.ti.com/tool/SK-AM64B
-> >
-> > Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
-> > ---
-> >  board/ti/am62x_sk/readme.txt | 16 ++++++++++++++++
-> >  board/ti/am64x_sk/readme.txt | 16 ++++++++++++++++
-> >  configs/am62x_sk_defconfig   |  2 +-
-> >  configs/am64x_sk_defconfig   |  4 ++--
-> >  4 files changed, 35 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/board/ti/am62x_sk/readme.txt b/board/ti/am62x_sk/readme.txt
-> > index ccbb24896b..9c7c8818af 100644
-> > --- a/board/ti/am62x_sk/readme.txt
-> > +++ b/board/ti/am62x_sk/readme.txt
-> > @@ -12,6 +12,22 @@ $ make am62x_sk_defconfig
-> >  Optional: modify the configuration:
-> >  $ make menuconfig
-> >
-> > +Required setup step for High Security HS-FS and HS-SE SoC variants:
-> > +
-> > +To allow the image signing process for various firmware artifacts to
-> > +work the build process for HS-FS and HS-SE device variants is using
-> > +an external 'core-secdev-k3' package which can be obtained from
-> > +https://git.ti.com/cgit/security-development-tools/core-secdev-k3.
-> > +To prepare building for those device variants create a local copy of
-> > +the 'core-secdev-k3' and export its location through the
-> > +TI_SECURE_DEV_PKG environmental variable. Use the package as-is for
-> > +HS-FS device variants such as populated on the SK-AM64B board, or
-> > +customize this package with your private signing keys when using a
-> > +HS-SE device variant.
-> > +
-> > +$ git clone
-> > https://git.ti.com/git/security-development-tools/core-secdev-k3.git
-> > +$ export TI_SECURE_DEV_PKG=3D$PWD/core-secdev-k3
-> >
-> =
+Respected sir/madam,
 
-> core-secdev-k3 could be a host package and an optional dependency of uboot
-> or atf
+I am software engineer, working for a startup called besquare technologies.
+Here we are using buildroot for learning as well as developing new
+applications.
 
-Good suggestion, I thought about same but wasn't quite sure how to set
-this up, but I'll look into this based on your below starting point. It
-would cover HS-FS device variants ("High Security - Field Securable"),
-which is 90% of the use case, and 100% of the initial use case (somebody
-getting a board, evaluating), all when the custom keys were not yet
-programmed into the SOC (which is what turns the device into a HS-SE
-device, at which time custom signing keys will need to be provided as
-part of core-secdev-k3).
+I as an enthusiast wanted to know when we build an environment for a
+specific hardware from where and how the kernel is getting downloaded to
+the output directory.
 
-Can a host package easily export/share and ENV variable
-(TI_SECURE_DEV_PKG)?
+Hope you reply to my query as soon as possible
 
-This will be needed not only by ti-k3-image-gen but also by uboot and
-potentially other packages in the future.
+Thank you
 
-Regards, Andreas
+Best regards,
+Bignesh lenka
 
-> =
+--0000000000008a333005fe3e947d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> #########################################################################=
-#######
-> #
-> # ti-core-secdev-k3
-> #
-> #########################################################################=
-#######
-> =
+<div dir=3D"ltr">Respected sir/madam,<div><br></div><div>I am software engi=
+neer, working for a startup called besquare technologies. Here we are using=
+ buildroot=C2=A0for learning as well as developing new applications.=C2=A0<=
+br><br></div><div>I as an enthusiast=C2=A0wanted to know when we build an e=
+nvironment=C2=A0for a specific hardware from where and how the kernel is ge=
+tting downloaded to the output directory.<br><br></div><div>Hope you reply =
+to my query as=C2=A0soon as possible<br><br></div><div>Thank you<br><br></d=
+iv><div>Best regards,</div><div>Bignesh lenka</div></div>
 
-> TI_CORE_SECDEV_K3_VERSION =3D 08.06.00.007
-> TI_CORE_SECDEV_K3_SITE =3D
-> https://git.ti.com/cgit/security-development-tools/core-secdev-k3/snapshot
-> TI_CORE_SECDEV_K3_SOURCE =3D
-> core-secdev-k3-$(TI_CORE_SECDEV_K3_VERSION).tar.gz
-> =
+--0000000000008a333005fe3e947d--
 
-> TI_SECURE_DEV_PKG=3D$(BUILD_DIR)/ti-core-secdev-k3-$(TI_CORE_SECDEV_K3_VE=
-RSION)
-> =
+--===============3885984108760759215==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> $(eval $(host-generic-package))
-> =
-
-> Fran=E7ois
-> =
-
-> =
-
-> =
-
-> > +
-> >  Build:
-> >  $ make
-> >
-> > diff --git a/board/ti/am64x_sk/readme.txt b/board/ti/am64x_sk/readme.txt
-> > index fe83c675f5..51d0312726 100644
-> > --- a/board/ti/am64x_sk/readme.txt
-> > +++ b/board/ti/am64x_sk/readme.txt
-> > @@ -12,6 +12,22 @@ $ make am64x_sk_defconfig
-> >  Optional: modify the configuration:
-> >  $ make menuconfig
-> >
-> > +Required setup step for High Security HS-FS and HS-SE SoC variants:
-> > +
-> > +To allow the image signing process for various firmware artifacts to
-> > +work the build process for HS-FS and HS-SE device variants is using
-> > +an external 'core-secdev-k3' package which can be obtained from
-> > +https://git.ti.com/cgit/security-development-tools/core-secdev-k3.
-> > +To prepare building for those device variants create a local copy of
-> > +the 'core-secdev-k3' and export its location through the
-> > +TI_SECURE_DEV_PKG environmental variable. Use the package as-is for
-> > +HS-FS device variants such as populated on the SK-AM64B board, or
-> > +customize this package with your private signing keys when using a
-> > +HS-SE device variant.
-> > +
-> > +$ git clone
-> > https://git.ti.com/git/security-development-tools/core-secdev-k3.git
-> > +$ export TI_SECURE_DEV_PKG=3D$PWD/core-secdev-k3
-> > +
-> >  Build:
-> >  $ make
-> >
-> > diff --git a/configs/am62x_sk_defconfig b/configs/am62x_sk_defconfig
-> > index 2d05ddd96b..033101b735 100644
-> > --- a/configs/am62x_sk_defconfig
-> > +++ b/configs/am62x_sk_defconfig
-> > @@ -28,7 +28,7 @@ BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=3Dy
-> >  BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3"
-> >  BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
-> >  BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D"am62x"
-> > -BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"gp"
-> > +BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"hs-fs"
-> >  BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG=3D"evm"
-> >  BR2_TARGET_TI_K3_R5_LOADER=3Dy
-> >  BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL=3Dy
-> > diff --git a/configs/am64x_sk_defconfig b/configs/am64x_sk_defconfig
-> > index a26e38a043..096dd77f6a 100644
-> > --- a/configs/am64x_sk_defconfig
-> > +++ b/configs/am64x_sk_defconfig
-> > @@ -28,8 +28,8 @@ BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=3Dy
-> >  BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3"
-> >  BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
-> >  BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE_TISCI=3Dy
-> > -BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D"am64x"
-> > -BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"gp"
-> > +BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D"am64x_sr2"
-> > +BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"hs-fs"
-> >  BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG=3D"evm"
-> >  BR2_TARGET_TI_K3_R5_LOADER=3Dy
-> >  BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL=3Dy
-> > --
-> > 2.34.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> >
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3885984108760759215==--
