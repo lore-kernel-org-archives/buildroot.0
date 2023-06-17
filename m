@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24411EB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 17 Jun 2023 16:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BD8EC0015E
+	for <buildroot@archiver.kernel.org>; Sat, 17 Jun 2023 16:55:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6AE260D62;
-	Sat, 17 Jun 2023 16:55:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6AE260D62
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20FCC611BC;
+	Sat, 17 Jun 2023 16:55:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20FCC611BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L1d5VXWe3mVg; Sat, 17 Jun 2023 16:55:05 +0000 (UTC)
+	with ESMTP id roy0YjBNMr0t; Sat, 17 Jun 2023 16:55:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED90761141;
-	Sat, 17 Jun 2023 16:55:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED90761141
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E195A1BF297
- for <buildroot@lists.busybox.net>; Sat, 17 Jun 2023 16:55:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F03C611A2;
+	Sat, 17 Jun 2023 16:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F03C611A2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 261631BF865
+ for <buildroot@lists.busybox.net>; Sat, 17 Jun 2023 16:55:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB82A40B6B
- for <buildroot@lists.busybox.net>; Sat, 17 Jun 2023 16:55:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB82A40B6B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BB74417B9
+ for <buildroot@lists.busybox.net>; Sat, 17 Jun 2023 16:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BB74417B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wAGOfUIuqH5G for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h-Hzckt_PuyL for <buildroot@lists.busybox.net>;
  Sat, 17 Jun 2023 16:55:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBDAD405C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2B09417A7
  for <buildroot@buildroot.org>; Sat, 17 Jun 2023 16:54:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBDAD405C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2B09417A7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D817F839A1; Sat, 17 Jun 2023 16:54:59 +0000 (UTC)
+ id DFF27839BD; Sat, 17 Jun 2023 16:54:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Jun 2023 18:52:53 +0200
+Date: Sat, 17 Jun 2023 18:53:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ba9de70c2838d5f916dab36c6affa235e4ac970c
-X-Git-Newrev: 0bb63c6f5adc07532da494d1118dd7b6f061fb00
+X-Git-Oldrev: 0bb63c6f5adc07532da494d1118dd7b6f061fb00
+X-Git-Newrev: 7bee0f837999fce6f9b3483c40a706f34be8a3b5
 X-Patchwork-Hint: ignore
-Message-Id: <20230617165459.D817F839A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add python-docker test
+Message-Id: <20230617165459.DFF27839BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luaposix: bump to version 36.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,85 +62,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bb63c6f5adc07532da494d1118dd7b6f061fb00
+commit: https://git.buildroot.net/buildroot/commit/?id=7bee0f837999fce6f9b3483c40a706f34be8a3b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Python-docker needs a working docker setup to do anything useful, so add it
-to the existing docker_compose (which tests docker and docker-compose)
-rather than adding a completely new test.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/sample_python_docker.py | 12 ++++++++++++
- support/testing/tests/package/test_docker_compose.py  | 10 +++++++++-
- 2 files changed, 21 insertions(+), 1 deletion(-)
+ package/luaposix/luaposix.hash | 2 +-
+ package/luaposix/luaposix.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_docker.py b/support/testing/tests/package/sample_python_docker.py
-new file mode 100644
-index 0000000000..a69097b412
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_docker.py
-@@ -0,0 +1,12 @@
-+import docker
-+
-+client = docker.from_env()
-+info = client.info()
-+images = client.images.list()
-+
-+assert len(images) > 0
-+
-+print('Version:', info['ServerVersion'])
-+print('Images:')
-+for i in images:
-+    print(i.tags[0])
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 38b669fc6d..16027c9c3a 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -4,6 +4,8 @@ import infra.basetest
+diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
+index 2d54a6901e..d54395c29b 100644
+--- a/package/luaposix/luaposix.hash
++++ b/package/luaposix/luaposix.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7944c2b4fbcef0667d407302740d87645325e751fd8d819f2b253c5d9ad0d497  luaposix-36.1.tar.gz
++sha256  44e5087cd3c47058f9934b90c0017e4cf870b71619f99707dd433074622debb1  luaposix-36.2.1.tar.gz
+ sha256  ea0fdaae50b0d31a81c2c99f4354264783c71043fd40522feaa40eecc069599b  LICENSE
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index d17c8188b5..d09a1bcd1d 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
- class TestDockerCompose(infra.basetest.BRTest):
-+    scripts = ["conf/docker-compose.yml",
-+               "tests/package/sample_python_docker.py"]
-     config = \
-         """
-         BR2_x86_64=y
-@@ -18,6 +20,8 @@ class TestDockerCompose(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DOCKER=y
-         BR2_PACKAGE_CA_CERTIFICATES=y
-         BR2_PACKAGE_DOCKER_CLI=y
-         BR2_PACKAGE_DOCKER_COMPOSE=y
-@@ -27,7 +31,7 @@ class TestDockerCompose(infra.basetest.BRTest):
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """.format(
-             infra.filepath("tests/package/copy-sample-script-to-target.sh"),
--            infra.filepath("conf/docker-compose.yml"),
-+            " ".join([infra.filepath(i) for i in scripts]),
-             infra.filepath("conf/docker-compose-kernel.config"))
- 
-     def wait_for_dockerd(self):
-@@ -46,6 +50,9 @@ class TestDockerCompose(infra.basetest.BRTest):
-         self.assertRunOk('wget -q -O /tmp/busybox http://127.0.0.1/busybox', 120)
-         self.assertRunOk('cmp /bin/busybox /tmp/busybox', 120)
- 
-+    def python_docker_test(self):
-+        self.assertRunOk('python3 ./sample_python_docker.py', 120)
-+
-     def test_run(self):
-         kernel = os.path.join(self.builddir, "images", "bzImage")
-         rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
-@@ -62,3 +69,4 @@ class TestDockerCompose(infra.basetest.BRTest):
-         self.wait_for_dockerd()
-         self.docker_test()
-         self.docker_compose_test()
-+        self.python_docker_test()
+-LUAPOSIX_VERSION = 36.1
++LUAPOSIX_VERSION = 36.2.1
+ LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
