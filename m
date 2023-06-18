@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B66F2EB64D8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:20:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E19FEB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66B034048F;
-	Sun, 18 Jun 2023 11:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66B034048F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B7B6405CF;
+	Sun, 18 Jun 2023 11:20:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B7B6405CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vMvzcp75eHzn; Sun, 18 Jun 2023 11:20:32 +0000 (UTC)
+	with ESMTP id C2kcJy3r0yr8; Sun, 18 Jun 2023 11:20:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A7E6B405BA;
-	Sun, 18 Jun 2023 11:20:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7E6B405BA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 204B21BF5AE
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:19:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 465A3405AB;
+	Sun, 18 Jun 2023 11:20:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 465A3405AB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EE2DB1BF5AE
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE18A81E1F
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:19:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE18A81E1F
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3E4141687
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:20:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3E4141687
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WgaDMl1j_iMr for <buildroot@lists.busybox.net>;
- Sun, 18 Jun 2023 11:19:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OCC-EW1Jr09I for <buildroot@lists.busybox.net>;
+ Sun, 18 Jun 2023 11:20:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0951C81E1D
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0951C81E1D
- for <buildroot@buildroot.org>; Sun, 18 Jun 2023 11:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E640541606
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E640541606
+ for <buildroot@buildroot.org>; Sun, 18 Jun 2023 11:20:19 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CA1C9240002;
- Sun, 18 Jun 2023 11:19:51 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F064D40004;
+ Sun, 18 Jun 2023 11:20:17 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qAqRi-000gdp-FL; Sun, 18 Jun 2023 13:19:50 +0200
+ id 1qAqS9-000geY-6G; Sun, 18 Jun 2023 13:20:17 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20230608185931.3518078-1-bernd.kuhls@t-online.de>
- <20230608185931.3518078-2-bernd.kuhls@t-online.de>
-Date: Sun, 18 Jun 2023 13:19:50 +0200
-In-Reply-To: <20230608185931.3518078-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 8 Jun 2023 20:59:31 +0200")
-Message-ID: <87a5wxj9ux.fsf@48ers.dk>
+References: <20230608185255.3505647-1-bernd.kuhls@t-online.de>
+ <20230608185255.3505647-4-bernd.kuhls@t-online.de>
+ <87ilblj9vq.fsf@48ers.dk>
+Date: Sun, 18 Jun 2023 13:20:17 +0200
+In-Reply-To: <87ilblj9vq.fsf@48ers.dk> (Peter Korsgaard's message of "Sun, 18
+ Jun 2023 13:19:21 +0200")
+Message-ID: <875y7lj9u6.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/libxslt: bump to version 1.1.38
+Subject: Re: [Buildroot] [PATCH 4/4] package/libgpgme: bump to version 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,21 +67,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> Added upstream sha1 & sha256 hashes.
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Release notes:
- > https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.38.news
+ > Committed to 2023.02.x, thanks.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
+Sorry, to master naturally.
 
 -- 
 Bye, Peter Korsgaard
