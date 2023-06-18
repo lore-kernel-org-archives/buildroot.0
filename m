@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D584EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1469EEB64D8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:47:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28619405C4;
-	Sun, 18 Jun 2023 11:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28619405C4
+	by smtp2.osuosl.org (Postfix) with ESMTP id B697F404C1;
+	Sun, 18 Jun 2023 11:47:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B697F404C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n6kxqnIrjWLP; Sun, 18 Jun 2023 11:47:18 +0000 (UTC)
+	with ESMTP id 0Wywj5jReGgs; Sun, 18 Jun 2023 11:47:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A42C40540;
-	Sun, 18 Jun 2023 11:47:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A42C40540
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0DB9A1BF86C
+	by smtp2.osuosl.org (Postfix) with ESMTP id E889F4056A;
+	Sun, 18 Jun 2023 11:47:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E889F4056A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EBD581BF5AE
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E97F60FCC
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBB5D81452
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E97F60FCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBB5D81452
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V1da451z15hb for <buildroot@lists.busybox.net>;
- Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0HrGT9-SWwU6 for <buildroot@lists.busybox.net>;
+ Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC04E60F34
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05DA581ED2
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC04E60F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05DA581ED2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A56C183BAF; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
+ id EB41E83BB1; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 13:28:39 +0200
+Date: Sun, 18 Jun 2023 13:35:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf0cf882ee76c13356f818e1c2ae19b9de3d1ffb
-X-Git-Newrev: 34c2252e8c280d1d0bbdff2fed27c9c936f6f8c4
+X-Git-Oldrev: 5db037e1e544bfe18aa077ddf9a6c894bd308922
+X-Git-Newrev: 043d0e6f6ca0e99ab36bf845a56a416850d70fb1
 X-Patchwork-Hint: ignore
-Message-Id: <20230618114558.A56C183BAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/leafpad: bump version to 0.8.19
+Message-Id: <20230618114558.EB41E83BB1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgtk3: bump to version 3.24.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34c2252e8c280d1d0bbdff2fed27c9c936f6f8c4
+commit: https://git.buildroot.net/buildroot/commit/?id=043d0e6f6ca0e99ab36bf845a56a416850d70fb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/tarot231/leafpad/blob/main/ChangeLog
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/leafpad/leafpad.hash | 2 +-
- package/leafpad/leafpad.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/leafpad/leafpad.hash b/package/leafpad/leafpad.hash
-index e21c07ad2c..4f6e68f0a2 100644
---- a/package/leafpad/leafpad.hash
-+++ b/package/leafpad/leafpad.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  959d22ae07f22803bc66ff40d373a854532a6e4732680bf8a96a3fbcb9f80a2c  leafpad-0.8.18.1.tar.gz
-+sha256  07d3f712f4dbd0a33251fd1dee14e21afdc9f92090fc768c11ab0ac556adbe97  leafpad-0.8.19.tar.gz
- # Locally computed
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
-index c6c28d12e8..608fa37be4 100644
---- a/package/leafpad/leafpad.mk
-+++ b/package/leafpad/leafpad.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 22c37bf605..4d6c210c62 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.37.sha256sum
+-sha256  6745f0b4c053794151fd0f0e2474b077cccff5f83e9dd1bf3d39fe9fe5fb7f57  gtk+-3.24.37.tar.xz
++# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.38.sha256sum
++sha256  ce11decf018b25bdd8505544a4f87242854ec88be054d9ade5f3a20444dd8ee7  gtk+-3.24.38.tar.xz
+ 
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 8291b8d356..6655a0d097 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LEAFPAD_VERSION = 0.8.18.1
-+LEAFPAD_VERSION = 0.8.19
- LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
- LEAFPAD_DEPENDENCIES = libgtk2 host-intltool
- LEAFPAD_LICENSE = GPL-2.0+
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).37
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).38
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
