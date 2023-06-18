@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52B69EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC1EBEB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E6D60404DF;
-	Sun, 18 Jun 2023 11:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6D60404DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 970E340320;
+	Sun, 18 Jun 2023 11:21:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 970E340320
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vcuQQyR-LQXL; Sun, 18 Jun 2023 11:21:11 +0000 (UTC)
+	with ESMTP id 9IhoPKLwNKWR; Sun, 18 Jun 2023 11:21:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FB4E40597;
-	Sun, 18 Jun 2023 11:21:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FB4E40597
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5EB3F1BF86B
+	by smtp2.osuosl.org (Postfix) with ESMTP id C95C24054E;
+	Sun, 18 Jun 2023 11:21:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C95C24054E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CE851BF5AE
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:20:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45E6F40534
+ by smtp4.osuosl.org (Postfix) with ESMTP id 653A941693
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:20:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45E6F40534
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 653A941693
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zNEIvFSvvRJh for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CSeSnQn7MgRr for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 11:20:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F3CE405AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6612F41606
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 11:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F3CE405AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6612F41606
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DA1883BA8; Sun, 18 Jun 2023 11:20:54 +0000 (UTC)
+ id 541B883BA6; Sun, 18 Jun 2023 11:20:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 13:15:59 +0200
+Date: Sun, 18 Jun 2023 13:15:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bfffbd7ed871332d2300684afd1c177e0209ca92
-X-Git-Newrev: 9440d72ca9b95be2214a51d092ba59d0653f6148
+X-Git-Oldrev: af9a5bd7bc98200f3f4ca64692f93b10e6cfb05b
+X-Git-Newrev: bfffbd7ed871332d2300684afd1c177e0209ca92
 X-Patchwork-Hint: ignore
-Message-Id: <20230618112054.5DA1883BA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgcrypt: bump to version 1.10.2
+Message-Id: <20230618112054.541B883BA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnupg2: bump version to 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,48 +62,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9440d72ca9b95be2214a51d092ba59d0653f6148
+commit: https://git.buildroot.net/buildroot/commit/?id=bfffbd7ed871332d2300684afd1c177e0209ca92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS;h=c9a239615f8070427a96688b1be40a81e59e9b8a;hb=1c5cbacf3d88dded5063e959ee68678ff7d0fa56
+Added sha256 hash provided by upstream.
 
-Added upstream sha1 & sha256 hashes.
+Release notes:
+https://lists.gnupg.org/pipermail/gnupg-announce/2023q2/000479.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgcrypt/libgcrypt.hash | 8 ++++----
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gnupg2/gnupg2.hash | 10 ++++------
+ package/gnupg2/gnupg2.mk   |  2 +-
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 96f5e6b76c..cfbf9eaf17 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,5 +1,5 @@
--# Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.1.tar.bz2.sig
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index baee824104..aa71881f41 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,5 @@
+-# From  https://lists.gnupg.org/pipermail/gnupg-announce/2023q2/000478.html
+-sha1  d7d021101361a5e1166a6c0cc1731276e7134547  gnupg-2.4.1.tar.bz2
+-# Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.1.tar.bz2.sig
 -# using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  ef14ae546b0084cd84259f61a55e07a38c3b53afc0f546bffcef2f01baffe9de  libgcrypt-1.10.1.tar.bz2
+-sha256  76b71e5aeb443bfd910ce9cbc8281b617c8341687afb67bae455877972b59de8  gnupg-2.4.1.tar.bz2
 +# From https://www.gnupg.org/download/integrity_check.html
-+sha1  0b9555960d84a09ea14e52360808f2e02e9c12d2  libgcrypt-1.10.2.tar.bz2
-+sha256  3b9c02a004b68c256add99701de00b383accccf37177e0d6c58289664cce0c03  libgcrypt-1.10.2.tar.bz2
++sha1  3efd495a94dc81fd0ea8788bef6c69d1f13cedd7  gnupg-2.4.2.tar.bz2
++sha256  97eb47df8ae5a3ff744f868005a090da5ab45cb48ee9836dbf5ee739a4e5cf49  gnupg-2.4.2.tar.bz2
 +# Locally calculated
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 9232debb3a..4fffe5360e 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index f7c7ae847c..760af3b05e 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.10.1
-+LIBGCRYPT_VERSION = 1.10.2
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-GNUPG2_VERSION = 2.4.1
++GNUPG2_VERSION = 2.4.2
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
