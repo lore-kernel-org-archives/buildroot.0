@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47431EB64D8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:13:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC994EB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:13:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7EC960FE6;
-	Sun, 18 Jun 2023 13:13:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7EC960FE6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6303760746;
+	Sun, 18 Jun 2023 13:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6303760746
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uLp8mMl4RClx; Sun, 18 Jun 2023 13:13:20 +0000 (UTC)
+	with ESMTP id CVCne4Iby9Jh; Sun, 18 Jun 2023 13:13:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C9DF6079D;
-	Sun, 18 Jun 2023 13:13:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C9DF6079D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 07BE81BF59E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80EDE611A0;
+	Sun, 18 Jun 2023 13:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80EDE611A0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 107F01BF86B
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5ED781E72
+ by smtp2.osuosl.org (Postfix) with ESMTP id DED4340363
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:13:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5ED781E72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DED4340363
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id niGWNDLOjBpX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bU1u44Fi-QSL for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 13:13:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 178CF81E71
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21C07400FB
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 13:13:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 178CF81E71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21C07400FB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 05CEF83D3C; Sun, 18 Jun 2023 13:13:14 +0000 (UTC)
+ id 0E6BD83D61; Sun, 18 Jun 2023 13:13:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 15:11:06 +0200
+Date: Sun, 18 Jun 2023 15:11:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 962b1a702356595919e3b28dff7eb876d00c69e7
-X-Git-Newrev: 20e92185133eba97b11bc323c54747eb2ec8f598
+X-Git-Oldrev: 20e92185133eba97b11bc323c54747eb2ec8f598
+X-Git-Newrev: 78c9982d71a5a31e6b635d9f97acbce3ca447beb
 X-Patchwork-Hint: ignore
-Message-Id: <20230618131314.05CEF83D3C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pygments: bump to version
- 2.15.1
+Message-Id: <20230618131314.0E6BD83D61@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydyf: bump to version 0.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20e92185133eba97b11bc323c54747eb2ec8f598
+commit: https://git.buildroot.net/buildroot/commit/?id=78c9982d71a5a31e6b635d9f97acbce3ca447beb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-pygments/python-pygments.hash | 4 ++--
- package/python-pygments/python-pygments.mk   | 4 ++--
+ package/python-pydyf/python-pydyf.hash | 4 ++--
+ package/python-pydyf/python-pydyf.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
-index f7396cb3d6..9714fd2ea0 100644
---- a/package/python-pygments/python-pygments.hash
-+++ b/package/python-pygments/python-pygments.hash
+diff --git a/package/python-pydyf/python-pydyf.hash b/package/python-pydyf/python-pydyf.hash
+index 1b37e90e73..c01270be50 100644
+--- a/package/python-pydyf/python-pydyf.hash
++++ b/package/python-pydyf/python-pydyf.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pygments/json
--md5  447be4afb076c8325a7dc659aff5b931  Pygments-2.14.0.tar.gz
--sha256  b3ed06a9e8ac9a9aae5a6f5dbe78a8a58655d17b43b93c078f094ddc476ae297  Pygments-2.14.0.tar.gz
-+md5  e40631bb812bbd15954027c23b23013a  Pygments-2.15.1.tar.gz
-+sha256  8ace4d3c1dd481894b2005f560ead0f9f19ee64fe983366be1a21e171d12775c  Pygments-2.15.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pydyf/json
+-md5  6b2a02162a3f4be9464d7b4043953d33  pydyf-0.5.0.tar.gz
+-sha256  51e751ae1504037c1fc1f4815119137b011802cd5f6c3539db066c455b14a7e1  pydyf-0.5.0.tar.gz
++md5  6f06b2c08717e25f17de043a02b71062  pydyf-0.6.0.tar.gz
++sha256  b44a38855d7e47b740b3cd31ab63a2f5b9b2793931d50b0ccaed3bb7b86912fc  pydyf-0.6.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17  LICENSE
-diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
-index 9c4f0be6c8..f151f0061b 100644
---- a/package/python-pygments/python-pygments.mk
-+++ b/package/python-pygments/python-pygments.mk
+ sha256  75461e438973e1ba0f93a7de9e3fe5b2f49e1ab49251d392878a9cdae8ce7e47  LICENSE
+diff --git a/package/python-pydyf/python-pydyf.mk b/package/python-pydyf/python-pydyf.mk
+index 6327a3efe2..8d8cf56889 100644
+--- a/package/python-pydyf/python-pydyf.mk
++++ b/package/python-pydyf/python-pydyf.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYGMENTS_VERSION = 2.14.0
-+PYTHON_PYGMENTS_VERSION = 2.15.1
- PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
--PYTHON_PYGMENTS_SITE = https://files.pythonhosted.org/packages/da/6a/c427c06913204e24de28de5300d3f0e809933f376e0b7df95194b2bb3f71
-+PYTHON_PYGMENTS_SITE = https://files.pythonhosted.org/packages/89/6b/2114e54b290824197006e41be3f9bbe1a26e9c39d1f5fa20a6d62945a0b3
- PYTHON_PYGMENTS_LICENSE = BSD-2-Clause
- PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
- PYTHON_PYGMENTS_CPE_ID_VENDOR = pygments
+-PYTHON_PYDYF_VERSION = 0.5.0
++PYTHON_PYDYF_VERSION = 0.6.0
+ PYTHON_PYDYF_SOURCE = pydyf-$(PYTHON_PYDYF_VERSION).tar.gz
+-PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/f4/4c/6d31b36a46714d8206b8ca84b8dc9aaf42093415b1f50471538552abe501
++PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/9d/c5/d5e4536968c36c0838459b5c482b9228e9aae839847837623d0d04576ba0
+ PYTHON_PYDYF_SETUP_TYPE = flit
+ PYTHON_PYDYF_LICENSE = BSD-3-Clause
+ PYTHON_PYDYF_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
