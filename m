@@ -4,65 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C993EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 19:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 086B3EB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 19:29:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0E9240471;
-	Sun, 18 Jun 2023 19:18:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0E9240471
+	by smtp2.osuosl.org (Postfix) with ESMTP id A287D40465;
+	Sun, 18 Jun 2023 19:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A287D40465
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pjyH2dNbBaTs; Sun, 18 Jun 2023 19:18:22 +0000 (UTC)
+	with ESMTP id xTkFRf7VpgTn; Sun, 18 Jun 2023 19:29:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E973E40465;
-	Sun, 18 Jun 2023 19:18:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E973E40465
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB61140471;
+	Sun, 18 Jun 2023 19:29:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB61140471
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6442E1BF316
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 19:18:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5FFA71BF316
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 19:29:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7DA3661151
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 19:18:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DA3661151
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38EB6607AA
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 19:29:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38EB6607AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WO10t73PRGFm for <buildroot@lists.busybox.net>;
- Sun, 18 Jun 2023 19:18:17 +0000 (UTC)
+ with ESMTP id 08sXtAtCRyPR for <buildroot@lists.busybox.net>;
+ Sun, 18 Jun 2023 19:29:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEB0D61150
- for <buildroot@uclibc.org>; Sun, 18 Jun 2023 19:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEB0D61150
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EBE660777
+ for <buildroot@uclibc.org>; Sun, 18 Jun 2023 19:29:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EBE660777
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id AB21382718; Sun, 18 Jun 2023 19:18:17 +0000 (UTC)
+ id 5C09884154; Sun, 18 Jun 2023 19:29:25 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 18 Jun 2023 19:18:17 +0000
+Date: Sun, 18 Jun 2023 19:29:25 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2023.05
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stsp2@yandex.ru
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15643-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution cc bug_status
+Message-ID: <bug-15643-163-Q9bPEImzp8@https.bugs.busybox.net/>
+In-Reply-To: <bug-15643-163@https.bugs.busybox.net/>
+References: <bug-15643-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15643] New: ERROR: No hash found for
- linux-6.3.8.tar.xz
+Subject: [Buildroot] [Bug 15643] ERROR: No hash found for linux-6.3.8.tar.xz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,23 +80,23 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15643
 
-            Bug ID: 15643
-           Summary: ERROR: No hash found for linux-6.3.8.tar.xz
-           Product: buildroot
-           Version: 2023.05
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: stsp2@yandex.ru
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Updated buildroot from git today, and
-got this error. What does it mean?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+                 CC|                            |yann.morin.1998@free.fr
+             Status|NEW                         |RESOLVED
+
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+stsp, All,
+
+Thanks for the report. We believe the issue has just been fixed with:
+
+https://gitlab.com/buildroot.org/buildroot/-/commit/d4a96ee46e3656b95151ab8e27d3fd3407e4633a
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
