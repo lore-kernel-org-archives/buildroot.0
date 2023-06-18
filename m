@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5804EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 18:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9FE3EB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 18:31:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A627560087;
-	Sun, 18 Jun 2023 18:31:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A627560087
+	by smtp3.osuosl.org (Postfix) with ESMTP id 602A161149;
+	Sun, 18 Jun 2023 18:31:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 602A161149
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EpQWrVo20fTA; Sun, 18 Jun 2023 18:31:16 +0000 (UTC)
+	with ESMTP id iJPwVmr8Copq; Sun, 18 Jun 2023 18:31:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8DAB60B70;
-	Sun, 18 Jun 2023 18:31:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8DAB60B70
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 80C391BF59B
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 18:31:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E18560F77;
+	Sun, 18 Jun 2023 18:31:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E18560F77
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 265AF1BF59B
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 18:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5836F400F2
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 18:31:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5836F400F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B5EA414E4
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 18:31:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B5EA414E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tI5OdQDkwNf5 for <buildroot@lists.busybox.net>;
- Sun, 18 Jun 2023 18:31:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hHP7UkfDTn2W for <buildroot@lists.busybox.net>;
+ Sun, 18 Jun 2023 18:31:24 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 250D1400DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6500414D8
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 250D1400DA
- for <buildroot@buildroot.org>; Sun, 18 Jun 2023 18:31:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D6500414D8
+ for <buildroot@buildroot.org>; Sun, 18 Jun 2023 18:31:23 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0f96.dip0.t-ipconnect.de [91.58.15.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id BB6BEA4C01BD;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 99210A4C00DD;
  Sun, 18 Jun 2023 20:31:05 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:54440)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qAxB3-0000ZL-1R;
+ (envelope-from <bernd@kuhls.net>) id 1qAxB3-0000ZL-1H;
  Sun, 18 Jun 2023 20:31:05 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 20:31:05 +0200
-Message-Id: <20230618183105.2474342-2-bernd@kuhls.net>
+Date: Sun, 18 Jun 2023 20:31:04 +0200
+Message-Id: <20230618183105.2474342-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230618183105.2474342-1-bernd@kuhls.net>
-References: <20230618183105.2474342-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: --
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1687113065;
- bh=WxpQhi+vFRDFlJVx2EMM5KO29sIr9emh9oUu/T3Zflk=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=L9yY03ih/06+qJ6G/qlrmwUfv+7LWklgKSFLPM+X9JbvpfupKFlufqZ3+QP7NZ9qi
- W6HIN/TAb9kDa3Pv/0pwbgAx1zsTSTLBAFejBGWqrNwq9odX9hgeYOGMrLZ0YVAl7+
- ZfjtUQ9CYA5mt3oqGwhZq5y+G8ogdOMkYCqrdHcSbGOfoqJpldpP+xYJ8726lB+5h1
- WIrYc40bcZA7TbuX/8ntDxgsGOcjy5Rts5cGadJlE0aiIddQgQEzYUaurNpHEZcfoL
- 4LUMD5Bp1HkcnCJwBD+CvkWNsxf75nw76Wef83rerWKDD5Lzmr/y3BSLLhGwNhHPby
- Qcn9rHSsuqmOA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=vuahN0BmVTurmLdiBRb6fwLgdwBFN92tW1Ga+kElVXE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bmU/CqD09uMW7wZTRrrIV8XdWLsm5v7qJSGLRUCuC1rMmTy8pg7Ayw7yHgl3lVYwN
+ WTfrtGLKaWxnnBktYOnq6YKuGLXI3dbfsMasi1tNV/8fv0WkwpqA0qaYtFDSVBkwn+
+ 3JhQcZ4G2l6x7C0/IVBbORZQPbODSATXgowDVhMgDnME7FOjh+zsY6ngCh3b2GVz5W
+ BJOxBhNvD7Uw3OBCgzZnS4Uutu+KPC5WBBjAtMp4SLqwVxR/9NyvNERcU/mCnzK9DM
+ 0Mpq71kZrLtO7POIoEKQbDfHa6rcIezxu7AjgU7w9l/L+U20Ynl4LaOgbKcWb32yr7
+ 7mPpTIFVo8qww==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=L9yY03ih
-Subject: [Buildroot] [PATCH v2 2/2] package/libdisplay-info: new package
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=bmU/CqD0
+Subject: [Buildroot] [PATCH 1/2] package/pkg-meson.mk: disable staticpic on
+ Coldfire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,96 +77,43 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TmVlZGVkIGZvciB1cGNvbWluZyBLb2RpIHZlcnNpb24gMjEuMC1PbWVnYS4KRGVwZW5kcyBvbiB0
-aGUgcHJldmlvdXMgcGF0Y2ggdG8gZml4IGJ1aWxkIGVycm9yIG9uIENvbGRmaXJlLgoKU2lnbmVk
-LW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLS0tCnYyOiBhZGQgdXBzdHJl
-YW0gY29tbWl0IFVSTCB0byBwYXRjaCAoWWFubikKICAgIG1vdmVkIENvbGRmaXJlIGZpeCB0byBw
-a2ctbWVzb24ubWsgKFlhbm4pCgogREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHwgIDEgKwogLi4uMDAwMS1kaXNwbGF5aWQuYy1JbmNsdWRlLXN5cy10eXBlcy5oLnBh
-dGNoIHwgMzYgKysrKysrKysrKysrKysrKysrKwogcGFja2FnZS9saWJkaXNwbGF5LWluZm8vQ29u
-ZmlnLmluICAgICAgICAgICAgIHwgIDggKysrKysKIHBhY2thZ2UvbGliZGlzcGxheS1pbmZvL2xp
-YmRpc3BsYXktaW5mby5oYXNoICB8ICAzICsrCiBwYWNrYWdlL2xpYmRpc3BsYXktaW5mby9saWJk
-aXNwbGF5LWluZm8ubWsgICAgfCAxOCArKysrKysrKysrCiA2IGZpbGVzIGNoYW5nZWQsIDY3IGlu
-c2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpYmRpc3BsYXktaW5mby8w
-MDAxLWRpc3BsYXlpZC5jLUluY2x1ZGUtc3lzLXR5cGVzLmgucGF0Y2gKIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBwYWNrYWdlL2xpYmRpc3BsYXktaW5mby9Db25maWcuaW4KIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL2xpYmRpc3BsYXktaW5mby9saWJkaXNwbGF5LWluZm8uaGFzaAogY3JlYXRlIG1v
-ZGUgMTAwNjQ0IHBhY2thZ2UvbGliZGlzcGxheS1pbmZvL2xpYmRpc3BsYXktaW5mby5tawoKZGlm
-ZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDY5NGRmZTBiZGQuLjliNTli
-YmM1NGIgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAtMzY0LDYg
-KzM2NCw3IEBAIEY6CXBhY2thZ2UvbGliYmx1cmF5LwogRjoJcGFja2FnZS9saWJicm9hZHZvaWNl
-LwogRjoJcGFja2FnZS9saWJjZGlvLwogRjoJcGFja2FnZS9saWJjZWMvCitGOglwYWNrYWdlL2xp
-YmRpc3BsYXktaW5mby8KIEY6CXBhY2thZ2UvbGliY29kZWMyLwogRjoJcGFja2FnZS9saWJjcm9z
-c2d1aWQvCiBGOglwYWNrYWdlL2xpYmRlZmxhdGUvCmRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZp
-Zy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCmluZGV4IGJmZjA5MGE2NjEuLjIxNjQ5NTY0NmQgMTAw
-NjQ0Ci0tLSBhL3BhY2thZ2UvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvQ29uZmlnLmluCkBAIC0x
-NjgwLDYgKzE2ODAsNyBAQCBtZW51ICJIYXJkd2FyZSBoYW5kbGluZyIKIAlzb3VyY2UgInBhY2th
-Z2UvbGliYXRhc21hcnQvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9saWJibG9ja2Rldi9D
-b25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL2xpYmNlYy9Db25maWcuaW4iCisJc291cmNlICJw
-YWNrYWdlL2xpYmRpc3BsYXktaW5mby9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL2xpYmZy
-ZWVmYXJlL0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvbGliZnRkaS9Db25maWcuaW4iCiAJ
-c291cmNlICJwYWNrYWdlL2xpYmZ0ZGkxL0NvbmZpZy5pbiIKZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-bGliZGlzcGxheS1pbmZvLzAwMDEtZGlzcGxheWlkLmMtSW5jbHVkZS1zeXMtdHlwZXMuaC5wYXRj
-aCBiL3BhY2thZ2UvbGliZGlzcGxheS1pbmZvLzAwMDEtZGlzcGxheWlkLmMtSW5jbHVkZS1zeXMt
-dHlwZXMuaC5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4zZmE1
-N2VlMTBkCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9saWJkaXNwbGF5LWluZm8vMDAwMS1k
-aXNwbGF5aWQuYy1JbmNsdWRlLXN5cy10eXBlcy5oLnBhdGNoCkBAIC0wLDAgKzEsMzYgQEAKK0Zy
-b20gNjQ4YzFjYjY2YjU3MWIwMzc5NzZiNjEzNjM2NTRmMzk0NDhmNWZhYyBNb24gU2VwIDE3IDAw
-OjAwOjAwIDIwMDEKK0Zyb206IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+CitEYXRlOiBT
-dW4sIDcgTWF5IDIwMjMgMTQ6MTQ6NDggKzAyMDAKK1N1YmplY3Q6IFtQQVRDSF0gZGlzcGxheWlk
-LmM6IEluY2x1ZGUgc3lzL3R5cGVzLmgKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6
-IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhi
-aXQKKworRml4ZXMgYnVpbGQgZXJyb3IKKy4uL2Rpc3BsYXlpZC5jOjM3NzoxMDogZXJyb3I6IOKA
-mHNzaXplX3TigJkgdW5kZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRoaXMgZnVuY3Rpb24pOyBkaWQg
-eW91IG1lYW4g4oCYc2l6ZV904oCZPworCitzZWVuIHdpdGg6CithcmMtbGludXgtZ2NjLmJyX3Jl
-YWwgKEJ1aWxkcm9vdCAyMDIxLjExLTQ0MjgtZzZiNjc0MWIpIDEwLjIuMAorCitVcHN0cmVhbTog
-aHR0cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL2VtZXJzaW9uL2xpYmRpc3BsYXktaW5mby8t
-L2NvbW1pdC81Yzk4MDFhNzVmMjgxNTc5MGFkMWVkNTUwMGNlYzI3MjhhMzZjNmVjCisKK1NpZ25l
-ZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+CistLS0KKyBkaXNwbGF5aWQu
-YyB8IDEgKworIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQorCitkaWZmIC0tZ2l0IGEv
-ZGlzcGxheWlkLmMgYi9kaXNwbGF5aWQuYworaW5kZXggMzk4NzcyYi4uZjE3NDljNiAxMDA2NDQK
-Ky0tLSBhL2Rpc3BsYXlpZC5jCisrKysgYi9kaXNwbGF5aWQuYworQEAgLTMsNiArMyw3IEBACisg
-I2luY2x1ZGUgPGludHR5cGVzLmg+CisgI2luY2x1ZGUgPHN0ZGxpYi5oPgorICNpbmNsdWRlIDxz
-dHJpbmcuaD4KKysjaW5jbHVkZSA8c3lzL3R5cGVzLmg+CisgCisgI2luY2x1ZGUgImJpdHMuaCIK
-KyAjaW5jbHVkZSAiZGlzcGxheWlkLmgiCistLSAKKzIuMzkuMgorCmRpZmYgLS1naXQgYS9wYWNr
-YWdlL2xpYmRpc3BsYXktaW5mby9Db25maWcuaW4gYi9wYWNrYWdlL2xpYmRpc3BsYXktaW5mby9D
-b25maWcuaW4KbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYjgzNjNlZDYx
-YgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGliZGlzcGxheS1pbmZvL0NvbmZpZy5pbgpA
-QCAtMCwwICsxLDggQEAKK2NvbmZpZyBCUjJfUEFDS0FHRV9MSUJESVNQTEFZX0lORk8KKwlib29s
-ICJsaWJkaXNwbGF5LWluZm8iCisJc2VsZWN0IEJSMl9QQUNLQUdFX0hXREFUQQorCXNlbGVjdCBC
-UjJfUEFDS0FHRV9IV0RBVEFfUE5QX0lEUworCWhlbHAKKwkgIEVESUQgYW5kIERpc3BsYXlJRCBs
-aWJyYXJ5LgorCisJICBodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcvZW1lcnNpb24vbGli
-ZGlzcGxheS1pbmZvCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmRpc3BsYXktaW5mby9saWJkaXNw
-bGF5LWluZm8uaGFzaCBiL3BhY2thZ2UvbGliZGlzcGxheS1pbmZvL2xpYmRpc3BsYXktaW5mby5o
-YXNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmEwODI5NDc5YTgKLS0t
-IC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL2xpYmRpc3BsYXktaW5mby9saWJkaXNwbGF5LWluZm8u
-aGFzaApAQCAtMCwwICsxLDMgQEAKKyMgTG9jYWxseSBjb21wdXRlZAorc2hhMjU2ICA1MWNkYjAz
-NjI4ODJjYTJhZjYyNTMyYWI0ZDk1ZTYwZDgxZTk4OTBiMzM5MjY0NzE5ZmQ1NWY4ZTM5NDVkNjk1
-ICBsaWJkaXNwbGF5LWluZm8tMC4xLjEudGFyLmJ6Mgorc2hhMjU2ICAxNWIzOTYyNDRlNTg4MzBj
-NTYxNGI5Mzk0ZjRkZWNjZmU2ODQ5NzBjZDUwN2YyOTkzODNhYjU3YWQzMzllZWRkICBMSUNFTlNF
-CmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmRpc3BsYXktaW5mby9saWJkaXNwbGF5LWluZm8ubWsg
-Yi9wYWNrYWdlL2xpYmRpc3BsYXktaW5mby9saWJkaXNwbGF5LWluZm8ubWsKbmV3IGZpbGUgbW9k
-ZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uMjZhNmE5YTRkOQotLS0gL2Rldi9udWxsCisrKyBi
-L3BhY2thZ2UvbGliZGlzcGxheS1pbmZvL2xpYmRpc3BsYXktaW5mby5tawpAQCAtMCwwICsxLDE4
-IEBACisjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIworIworIyBsaWJkaXNwbGF5LWluZm8KKyMKKyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjCisKK0xJQkRJU1BMQVlfSU5GT19WRVJTSU9OID0gMC4xLjEK
-K0xJQkRJU1BMQVlfSU5GT19TT1VSQ0UgPSBsaWJkaXNwbGF5LWluZm8tJChMSUJESVNQTEFZX0lO
-Rk9fVkVSU0lPTikudGFyLmJ6MgorTElCRElTUExBWV9JTkZPX1NJVEUgPSBodHRwczovL2dpdGxh
-Yi5mcmVlZGVza3RvcC5vcmcvZW1lcnNpb24vbGliZGlzcGxheS1pbmZvLy0vYXJjaGl2ZS8kKExJ
-QkRJU1BMQVlfSU5GT19WRVJTSU9OKQorTElCRElTUExBWV9JTkZPX0xJQ0VOU0UgPSBNSVQKK0xJ
-QkRJU1BMQVlfSU5GT19MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQorTElCRElTUExBWV9JTkZPX0lO
-U1RBTExfU1RBR0lORyA9IFlFUworTElCRElTUExBWV9JTkZPX0RFUEVOREVOQ0lFUyA9IGh3ZGF0
-YQorCisjIHdvcmthcm91bmQgZm9yIHN0YXRpY19hc3NlcnQgb24gdWNsaWJjLW5nIDwgMS4wLjQy
-CitMSUJESVNQTEFZX0lORk9fQ0ZMQUdTICs9ICQoVEFSR0VUX0NGTEFHUykgLURzdGF0aWNfYXNz
-ZXJ0PV9TdGF0aWNfYXNzZXJ0CisKKyQoZXZhbCAkKG1lc29uLXBhY2thZ2UpKQotLSAKMi4zOS4y
-CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Fixes build error in the upcoming libdisplay-info package:
+"Tried to convert PC relative branch to absolute jump" as described
+here: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101971#c11
+
+Since this issue not only occurs with this package, see
+https://git.busybox.net/buildroot/commit/?id=2a48a6ee9d6b81c804182ff0ad6e0f7c850f6839
+we add the configure option to pkg-meson.mk.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+Suggested by Yann:
+https://lists.buildroot.org/pipermail/buildroot/2023-June/669138.html
+
+ package/pkg-meson.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 4aa6e44afa..65cabf23ba 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -156,6 +156,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		-Db_pie=false \
++		-Db_staticpic=$(if $(BR2_m68k_cf),false,true) \
+ 		-Dstrip=false \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+ 		-Dbuild.cmake_prefix_path=$$(HOST_DIR)/lib/cmake \
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
