@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C733AEB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49B5EEB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:46:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 68875403B8;
-	Sun, 18 Jun 2023 11:46:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68875403B8
+	by smtp2.osuosl.org (Postfix) with ESMTP id DEFBA4054B;
+	Sun, 18 Jun 2023 11:46:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEFBA4054B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MSIKhD-iGA4G; Sun, 18 Jun 2023 11:46:02 +0000 (UTC)
+	with ESMTP id fIlsKCpMnwQn; Sun, 18 Jun 2023 11:46:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99FEF404A1;
-	Sun, 18 Jun 2023 11:46:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99FEF404A1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 691E41BF5AE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E04C4056A;
+	Sun, 18 Jun 2023 11:46:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E04C4056A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F1B51BF86B
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E70281EDF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7761A60FCB
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E70281EDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7761A60FCB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SbZgay5Gd0VE for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bwfDCK4uGqOy for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 842E581458
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2BCA60B35
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 842E581458
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2BCA60B35
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7231183BAF; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
+ id 8FD2383BB2; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 13:23:05 +0200
+Date: Sun, 18 Jun 2023 13:27:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11adbe4135f8433867bfde53e790769c6e35ade7
-X-Git-Newrev: 3e096ca6c914a4999467d7fc4d04172c1de63637
+X-Git-Oldrev: ed4792aaec66c963ca780b256c6c9f487a432c6b
+X-Git-Newrev: 479eb1b2dba323eef70a8f82223e6f17b909b781
 X-Patchwork-Hint: ignore
-Message-Id: <20230618114558.7231183BAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/meson: bump to version 1.1.1
+Message-Id: <20230618114558.8FD2383BB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-nextpvr: bump version to
+ 20.4.2-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e096ca6c914a4999467d7fc4d04172c1de63637
+commit: https://git.buildroot.net/buildroot/commit/?id=479eb1b2dba323eef70a8f82223e6f17b909b781
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 6993b756ae..cb36b674fa 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/1.0.0/meson-1.0.0.tar.gz.asc
--sha256  aa50a4ba4557c25e7d48446abfde857957dcdf58385fffbe670ba0e8efacce05  meson-1.0.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/1.1.1/meson-1.1.1.tar.gz.asc
-+sha256  d04b541f97ca439fb82fab7d0d480988be4bd4e62563a5ca35fadb5400727b1c  meson-1.1.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index e417d8d627..503aca8c25 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index b89320d9c0..9ef0d4e758 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bad9e7dd4f67348015f8fc477e0c4c8447e00dbd38b9f6548d1ce04f0845b1fd  kodi-pvr-nextpvr-20.4.1-Nexus.tar.gz
++sha256  1ce85447426ddf6d443a5e3444145a2d3af65ce73d9fb583e42cd8afc9d599a5  kodi-pvr-nextpvr-20.4.2-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index 7b11407954..2629cd9147 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESON_VERSION = 1.0.0
-+MESON_VERSION = 1.1.1
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-KODI_PVR_NEXTPVR_VERSION = 20.4.1-Nexus
++KODI_PVR_NEXTPVR_VERSION = 20.4.2-Nexus
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
