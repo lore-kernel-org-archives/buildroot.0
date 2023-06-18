@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB758EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8032BEB64D8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:18:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 974BF610C4;
-	Sun, 18 Jun 2023 13:18:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 974BF610C4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27AA061246;
+	Sun, 18 Jun 2023 13:18:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27AA061246
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8ZdkBB9ubcFf; Sun, 18 Jun 2023 13:18:37 +0000 (UTC)
+	with ESMTP id YIjVu4KDCI4O; Sun, 18 Jun 2023 13:18:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD382610B7;
-	Sun, 18 Jun 2023 13:18:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD382610B7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D234D1BF59E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61BB6610B7;
+	Sun, 18 Jun 2023 13:18:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61BB6610B7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EAA6D1BF86B
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC9BB813B9
+ by smtp3.osuosl.org (Postfix) with ESMTP id C53DD61249
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:18:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC9BB813B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C53DD61249
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bGVQl-yQKYMj for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wps5E6AykwrZ for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 13:18:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1F67813AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDABF610BD
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 13:18:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1F67813AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDABF610BD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A190283E5C; Sun, 18 Jun 2023 13:18:33 +0000 (UTC)
+ id ABAD083EF4; Sun, 18 Jun 2023 13:18:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 15:17:20 +0200
+Date: Sun, 18 Jun 2023 15:17:43 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9aa45c0f892a129cc56f57fd0c9dffbe0af3b4fb
-X-Git-Newrev: da7db0d5537516e867c3b4049da1484bd3e37e4a
+X-Git-Oldrev: da7db0d5537516e867c3b4049da1484bd3e37e4a
+X-Git-Newrev: 374c6be2695056701c15b81fc40375c1237b3537
 X-Patchwork-Hint: ignore
-Message-Id: <20230618131833.A190283E5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-installer: bump to version
- 0.7.0
+Message-Id: <20230618131833.ABAD083EF4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-flit-core: bump to version
+ 3.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da7db0d5537516e867c3b4049da1484bd3e37e4a
+commit: https://git.buildroot.net/buildroot/commit/?id=374c6be2695056701c15b81fc40375c1237b3537
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-installer/python-installer.hash | 4 ++--
- package/python-installer/python-installer.mk   | 4 ++--
+ package/python-flit-core/python-flit-core.hash | 4 ++--
+ package/python-flit-core/python-flit-core.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-installer/python-installer.hash b/package/python-installer/python-installer.hash
-index 97d455b87c..577b23a7ab 100644
---- a/package/python-installer/python-installer.hash
-+++ b/package/python-installer/python-installer.hash
+diff --git a/package/python-flit-core/python-flit-core.hash b/package/python-flit-core/python-flit-core.hash
+index f63a64ed1b..4d4907f5dc 100644
+--- a/package/python-flit-core/python-flit-core.hash
++++ b/package/python-flit-core/python-flit-core.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/installer/json
--md5  ac5fee994b04f228c151306f5ad96b04  installer-0.6.0.tar.gz
--sha256  f3bd36cd261b440a88a1190b1becca0578fee90b4b62decc796932fdd5ae8839  installer-0.6.0.tar.gz
-+md5  d961d1105c9270049528b1167ed021bc  installer-0.7.0.tar.gz
-+sha256  a26d3e3116289bb08216e0d0f7d925fcef0b0194eedfa0c944bcaaa106c4b631  installer-0.7.0.tar.gz
- # Locally computed sha256 checksums
- sha256  37b8b9f2569892fa54406383d431169dbb2115980d78b7efba6eeae5664c484f  LICENSE
-diff --git a/package/python-installer/python-installer.mk b/package/python-installer/python-installer.mk
-index 3430e46b51..094a918090 100644
---- a/package/python-installer/python-installer.mk
-+++ b/package/python-installer/python-installer.mk
+ # md5, sha256 from https://pypi.org/pypi/flit_core/json
+-md5  7c41da13273f7787709a24f74e0f5a99  flit_core-3.8.0.tar.gz
+-sha256  b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3  flit_core-3.8.0.tar.gz
++md5  3bc52f1952b9a78361114147da63c35b  flit_core-3.9.0.tar.gz
++sha256  72ad266176c4a3fcfab5f2930d76896059851240570ce9a98733b658cb786eba  flit_core-3.9.0.tar.gz
+ # Locally computed
+ sha256  35b4f1dec512e617077fd6980dbb43ef8c2887adc5d0185edb4c04da175dd816  LICENSE
+diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
+index f96191ade6..ea887a0258 100644
+--- a/package/python-flit-core/python-flit-core.mk
++++ b/package/python-flit-core/python-flit-core.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_INSTALLER_VERSION = 0.6.0
-+PYTHON_INSTALLER_VERSION = 0.7.0
- PYTHON_INSTALLER_SOURCE = installer-$(PYTHON_INSTALLER_VERSION).tar.gz
--PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/c9/ab/a9141dc175ec7b620fffe7e0295251a7b6a0ffb4325d64aeb128dff8c698
-+PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/05/18/ceeb4e3ab3aa54495775775b38ae42b10a92f42ce42dfa44da684289b8c8
- PYTHON_INSTALLER_LICENSE = MIT
- PYTHON_INSTALLER_LICENSE_FILES = LICENSE
- PYTHON_INSTALLER_SETUP_TYPE = flit-bootstrap
+-PYTHON_FLIT_CORE_VERSION = 3.8.0
++PYTHON_FLIT_CORE_VERSION = 3.9.0
+ PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
+-PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/10/e5/be08751d07b30889af130cec20955c987a74380a10058e6e8856e4010afc
++PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/c4/e6/c1ac50fe3eebb38a155155711e6e864e254ce4b6e17fe2429b4c4d5b9e80
+ PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
+ PYTHON_FLIT_CORE_LICENSE_FILES = LICENSE
+ PYTHON_FLIT_CORE_SETUP_TYPE = flit-bootstrap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
