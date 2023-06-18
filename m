@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15D66EB64D8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:46:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C736EB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CEF240363;
-	Sun, 18 Jun 2023 11:46:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CEF240363
+	by smtp2.osuosl.org (Postfix) with ESMTP id 490EA404B4;
+	Sun, 18 Jun 2023 11:46:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 490EA404B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 71aqsaAiTZQs; Sun, 18 Jun 2023 11:46:27 +0000 (UTC)
+	with ESMTP id aaCJ7KN-c8lI; Sun, 18 Jun 2023 11:46:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FE12404B4;
-	Sun, 18 Jun 2023 11:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FE12404B4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CCC841BF5AE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47AEC40588;
+	Sun, 18 Jun 2023 11:46:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47AEC40588
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D3E4F1BF86C
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B229F4169E
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE8A4403B8
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B229F4169E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE8A4403B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id azBej2g9Sutv for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WVIBroS0xBwe for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9870041693
+ by smtp2.osuosl.org (Postfix) with ESMTP id C41FC4012E
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9870041693
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C41FC4012E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8584883BB1; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
+ id B1E0083A1F; Sun, 18 Jun 2023 11:45:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 13:26:44 +0200
+Date: Sun, 18 Jun 2023 13:28:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e096ca6c914a4999467d7fc4d04172c1de63637
-X-Git-Newrev: ed4792aaec66c963ca780b256c6c9f487a432c6b
+X-Git-Oldrev: 34c2252e8c280d1d0bbdff2fed27c9c936f6f8c4
+X-Git-Newrev: c136b777dfd8cff836a6483d9b7b6131c746acd3
 X-Patchwork-Hint: ignore
-Message-Id: <20230618114558.8584883BB1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{14,
- 19}.x / 5.{4, 10, 15}.x / 6.{1, 3}.x series
+Message-Id: <20230618114558.B1E0083A1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/less: bump version to 633
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +62,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed4792aaec66c963ca780b256c6c9f487a432c6b
+commit: https://git.buildroot.net/buildroot/commit/?id=c136b777dfd8cff836a6483d9b7b6131c746acd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed patch which is included in this version.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...rlink-on-invalid-embedded-escape-sequence.patch | 27 ----------------------
+ package/less/less.hash                             |  4 ++--
+ package/less/less.mk                               |  5 +---
+ 4 files changed, 3 insertions(+), 34 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b4d32f6ea3..69bf91bbf9 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 5e1fec9e97..29d816956a 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -685,7 +685,6 @@ package/lcdproc/0001-LCDd.conf.patch Upstream
+ package/lcdproc/0002-Add-missing-ioctl-header.patch Upstream
+ package/lcdproc/0003-Fixcompilation-with-GCC-10-x.patch Upstream
+ package/leafnode2/0001-cross_makefile.patch Upstream
+-package/less/0001-End-OSC8-hyperlink-on-invalid-embedded-escape-sequence.patch Upstream
+ package/let-me-create/0001-fix-build-with-musl-C-library.patch Upstream
+ package/leveldb/0001-Fix-compilation-with-g-4.8.2.patch Upstream
+ package/leveldb/0002-CMake-install-libmemenv.a.patch Upstream
+diff --git a/package/less/0001-End-OSC8-hyperlink-on-invalid-embedded-escape-sequence.patch b/package/less/0001-End-OSC8-hyperlink-on-invalid-embedded-escape-sequence.patch
+deleted file mode 100644
+index 233f949e24..0000000000
+--- a/package/less/0001-End-OSC8-hyperlink-on-invalid-embedded-escape-sequence.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From a78e1351113cef564d790a730d657a321624d79c Mon Sep 17 00:00:00 2001
+-From: Mark Nudelman <markn@greenwoodsoftware.com>
+-Date: Fri, 7 Oct 2022 19:25:46 -0700
+-Subject: [PATCH] End OSC8 hyperlink on invalid embedded escape sequence.
+-
+-[Retrieved from:
+-https://github.com/gwsw/less/commit/a78e1351113cef564d790a730d657a321624d79c]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- line.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/line.c b/line.c
+-index 236c49ae..cba7bdd1 100644
+---- a/line.c
+-+++ b/line.c
+-@@ -633,8 +633,8 @@ ansi_step(pansi, ch)
+- 		/* Hyperlink ends with \7 or ESC-backslash. */
+- 		if (ch == '\7')
+- 			return ANSI_END;
+--		if (pansi->prev_esc && ch == '\\')
+--			return ANSI_END;
+-+		if (pansi->prev_esc)
+-+            return (ch == '\\') ? ANSI_END : ANSI_ERR;
+- 		pansi->prev_esc = (ch == ESC);
+- 		return ANSI_MID;
+- 	}
+diff --git a/package/less/less.hash b/package/less/less.hash
+index 19be26cae0..8018c9fab1 100644
+--- a/package/less/less.hash
++++ b/package/less/less.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # using DSA key F153A7C833235259
+-# https://www.greenwoodsoftware.com/less/less-608.sig
+-sha256  a69abe2e0a126777e021d3b73aa3222e1b261f10e64624d41ec079685a6ac209  less-608.tar.gz
++# https://www.greenwoodsoftware.com/less/less-633.sig
++sha256  2f201d64b828b88af36dfe6cfdba3e0819ece2e446ebe6224813209aaefed04f  less-633.tar.gz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/less/less.mk b/package/less/less.mk
+index dfbd411863..91ce08f4f0 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -4,16 +4,13 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.3.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.3.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 18ede2d60f..20e67fc4d1 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  7a6a1f0dfa0bf7f45f9d4a7b409315cf32267850adab4db033a17de0320a24ef  linux-6.3.6.tar.xz
--sha256  7c88b7a09ba2b9e47b78eba2b32b1db6a4d89636f7ddd586545f9671a2521a6c  linux-6.1.32.tar.xz
-+sha256  fe369743996c522a7b473e99dcf8f88847bd5cc88546fd3b7a41d9fe5a5b97a9  linux-6.3.7.tar.xz
-+sha256  b87d6ba8ea7328e8007a7ea9171d1aa0d540d95eacfcab09578e0a3b623dd2cd  linux-6.1.33.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  1b076860779235e90519e867c1ec78c7a34d1125d8fdba787ff495c7c14f1214  linux-5.15.115.tar.xz
--sha256  de8ec58929460e3a14c1b0502f4a449f24c988a7a4a03ff04a82fb2d665fe9f6  linux-5.10.182.tar.xz
--sha256  9607881878fbd21e0dec4e8192b0f6352d17fd74c3ec23ffe6b0a24093efb1a4  linux-5.4.245.tar.xz
-+sha256  f617c9d1bb5326cc93495938f43eb8cb9aea9d2f451e5a99bce2893f296e179a  linux-5.15.116.tar.xz
-+sha256  409497c635caf49614de21950ec091eb621a5d5fe1f63fc418ef68ac38b56119  linux-5.10.183.tar.xz
-+sha256  0938790a858fd0af6aa6b27a3bdf4c5d4a46aba60e6178156980d58bef7ed9ea  linux-5.4.246.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  7fb9ee20c7e52f9be6d9f501e8498a22f4b364abfde136143749a77e597fd03e  linux-4.19.284.tar.xz
--sha256  ac8318f1c1d387e23ccfa760ec042943372df23e3c4e2408177fb5a3f6488f76  linux-4.14.316.tar.xz
-+sha256  aaa1775359c7a066ec70852ea2709fe7e7109517b7d895f34e237132db8edc16  linux-4.19.285.tar.xz
-+sha256  8cf28f5aae6f77fa718861c415d646a189a7f9493ef0ccb461575a092af03c30  linux-4.14.317.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f9a164d78d..00ec22d606 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -396,13 +396,13 @@ endchoice
+-LESS_VERSION = 608
++LESS_VERSION = 633
+ LESS_SITE = http://www.greenwoodsoftware.com/less
+ LESS_LICENSE = GPL-3.0+
+ LESS_LICENSE_FILES = COPYING
+ LESS_CPE_ID_VENDOR = gnu
+ LESS_DEPENDENCIES = ncurses
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.316"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.284"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.245"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.182"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.115"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.32"	if BR2_KERNEL_HEADERS_6_1
--	default "6.3.6"		if BR2_KERNEL_HEADERS_6_3
-+	default "4.14.317"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.285"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.246"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.183"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.116"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.33"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.3.7"		if BR2_KERNEL_HEADERS_6_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-# 0001-End-OSC8-hyperlink-on-invalid-embedded-escape-sequence.patch
+-LESS_IGNORE_CVES += CVE-2022-46663
+-
+ define LESS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(@D)/less $(TARGET_DIR)/usr/bin/less
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
