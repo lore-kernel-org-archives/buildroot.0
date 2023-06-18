@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DD89EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:31:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AC69EB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:31:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC4E960FCA;
-	Sun, 18 Jun 2023 13:31:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC4E960FCA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C32660A7B;
+	Sun, 18 Jun 2023 13:31:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C32660A7B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VvsCWwiknfV6; Sun, 18 Jun 2023 13:31:34 +0000 (UTC)
+	with ESMTP id exjE7gOJscGD; Sun, 18 Jun 2023 13:31:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3C5260FCB;
-	Sun, 18 Jun 2023 13:31:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3C5260FCB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 167B91BF59E
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:31:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E12260F97;
+	Sun, 18 Jun 2023 13:31:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E12260F97
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D4B31BF59E
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:31:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1DFF403AE
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:31:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1DFF403AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB8E781E9B
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:31:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB8E781E9B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FCM5yzWCjZ5p for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SNab1HCsg0Zc for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 13:31:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D9D5403AC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 35A2381E9A
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 13:31:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D9D5403AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35A2381E9A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C69783FD4; Sun, 18 Jun 2023 13:31:26 +0000 (UTC)
+ id 232F483FD2; Sun, 18 Jun 2023 13:31:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 15:30:33 +0200
+Date: Sun, 18 Jun 2023 15:28:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7faf0389fd6a999f877b037e1bbbd1b04c36fa49
-X-Git-Newrev: d7a7d93be42b022a7444e9ff48f3cb588f310a69
+X-Git-Oldrev: 049adbb6073f3f8b08c04df231565f8661f29c16
+X-Git-Newrev: 7faf0389fd6a999f877b037e1bbbd1b04c36fa49
 X-Patchwork-Hint: ignore
-Message-Id: <20230618133126.2C69783FD4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/inadyn: update description,
- how to enable HTTPS support
+Message-Id: <20230618133126.232F483FD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/inadyn: bump to v2.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,36 +63,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7a7d93be42b022a7444e9ff48f3cb588f310a69
+commit: https://git.buildroot.net/buildroot/commit/?id=7faf0389fd6a999f877b037e1bbbd1b04c36fa49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Upstream ChageLog, summary:
+
+ - Add wildcard support for Cloudflare
+ - New DDNS providers from DD-WRT;
+     - goip.de
+     - myonlineportal.net
+     - desec.io (a.k.a. dedyn.io)
+     - domaindiscount24.com
+     - dy.fi
+     - do.de (Domain-Offensive)
+     - Domopoli.de
+     - inwx
+     - It's DNS
+     - Joker.com
+     - all-inkl.com
+     - core-networks.de
+     - dnsever.com
+     - dnshome.de
+     - dnsmadeeasy.com
+     - dnsmax.com
+     - schokokeks.org
+     - variomedia.de
+     - udmedia.de
+     - moniker.com
+     - dyndns.it
+     - infomaniak.com
+     - oray.com
+     - simply.com
+     - mydns.jp
+     - myonlineportal.net
+     - namecheap.com
+     - regfish.de
+     - twodns.de
+ - Support for updating both ipv4 and ipv6 address for same provider
+ - Add new command line options -L and -S NAME to list supported
+   providers and their respective details
+ - Add 'success' as a valid generic response to DNS update
+ - Fix use after free in logger at inadyn exit
+ - Use dynv6 'auto' IP only if we have not detected an address
+ - Replace unstable api.ipify.org with http://ifconfig.me
+ - Fix default checkip server for dnsexit.com
+ - Fix easydns response code problem
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/inadyn/Config.in | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ package/inadyn/inadyn.hash | 2 +-
+ package/inadyn/inadyn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
-index 3589823da4..63b2d9ad5f 100644
---- a/package/inadyn/Config.in
-+++ b/package/inadyn/Config.in
-@@ -4,9 +4,13 @@ config BR2_PACKAGE_INADYN
- 	depends on !BR2_STATIC_LIBS # dlopen()
- 	select BR2_PACKAGE_LIBCONFUSE
- 	help
--	  INADYN is a free DynDNS client. It gives the possibility
--	  to have your own fixed hostname registered on the internet,
--	  although your IP might be changing.
-+	  In-a-Dyn is Dynamic DNS (DDNS) client with HTTPS support used
-+	  to automate the task of keeping your Internet name in sync
-+	  with your public (DHCP/PPPoE) IP address.  It can also be used
-+	  when you have backup connections to the Internet.
-+
-+	  For HTTPS support you need to select one of the libraries:
-+	  OpenSSL, GnuTLS, or mbed TLS (PolarSSL).
+diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
+index 2c0995babf..94af9f87b7 100644
+--- a/package/inadyn/inadyn.hash
++++ b/package/inadyn/inadyn.hash
+@@ -1,5 +1,5 @@
+ # Upstream .sha256 from GitHub
+-sha256  1727b6aae6727f99eba584e46950369d7b259d2ef09e5bc02566e9c3c1d6daf6  inadyn-2.10.0.tar.gz
++sha256  9ddac7b6b0a1ed372c6cb5afaec6bea927ab539db02c8536dd10d73bd1d37c95  inadyn-2.11.0.tar.gz
  
- 	  https://github.com/troglobit/inadyn
+ # Locally computed
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 5a24c1eced..3e346fd769 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-INADYN_VERSION = 2.10.0
++INADYN_VERSION = 2.11.0
+ INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
+ INADYN_LICENSE = GPL-2.0+
+ INADYN_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
