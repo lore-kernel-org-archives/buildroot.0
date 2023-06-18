@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB3F6EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E56FEB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A51E61135;
-	Sun, 18 Jun 2023 13:27:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A51E61135
+	by smtp3.osuosl.org (Postfix) with ESMTP id D38F061035;
+	Sun, 18 Jun 2023 13:28:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D38F061035
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UsUAWBBdt5Zt; Sun, 18 Jun 2023 13:27:57 +0000 (UTC)
+	with ESMTP id dqPGfsCq7vRn; Sun, 18 Jun 2023 13:28:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FE8D6110C;
-	Sun, 18 Jun 2023 13:27:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FE8D6110C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A49091BF59E
+	by smtp3.osuosl.org (Postfix) with ESMTP id F265D60F97;
+	Sun, 18 Jun 2023 13:28:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F265D60F97
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D14F21BF86B
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:27:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BCDE403AC
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAF8660A99
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:27:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BCDE403AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAF8660A99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9lEm2Of2frNX for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1e4JiycgFAHc for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 13:27:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A85E5400FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id A4EE461101
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 13:27:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A85E5400FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4EE461101
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9335183E4D; Sun, 18 Jun 2023 13:27:54 +0000 (UTC)
+ id 87DEC83F6A; Sun, 18 Jun 2023 13:27:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 15:27:02 +0200
+Date: Sun, 18 Jun 2023 15:26:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eee958dcc4b5474a1dc1c8536e54ae3b335ffa86
-X-Git-Newrev: 049adbb6073f3f8b08c04df231565f8661f29c16
+X-Git-Oldrev: 374c6be2695056701c15b81fc40375c1237b3537
+X-Git-Newrev: eee958dcc4b5474a1dc1c8536e54ae3b335ffa86
 X-Patchwork-Hint: ignore
-Message-Id: <20230618132754.9335183E4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zxing-cpp: bump to version 2.0.0
+Message-Id: <20230618132754.87DEC83F6A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cython: bump to version
+ 0.29.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=049adbb6073f3f8b08c04df231565f8661f29c16
+commit: https://git.buildroot.net/buildroot/commit/?id=eee958dcc4b5474a1dc1c8536e54ae3b335ffa86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/zxing-cpp/zxing-cpp.hash | 2 +-
- package/zxing-cpp/zxing-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/zxing-cpp/zxing-cpp.hash b/package/zxing-cpp/zxing-cpp.hash
-index 5457ede44a..4018e95fde 100644
---- a/package/zxing-cpp/zxing-cpp.hash
-+++ b/package/zxing-cpp/zxing-cpp.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  126767bb56f8a1f25ae84d233db2e9b9be50d71f5776092d0e170ca0f0ed1862  zxing-cpp-1.4.0.tar.gz
-+sha256  12b76b7005c30d34265fc20356d340da179b0b4d43d2c1b35bcca86776069f76  zxing-cpp-2.0.0.tar.gz
- 
- # License files
- sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
-diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
-index 1051376808..b11814d114 100644
---- a/package/zxing-cpp/zxing-cpp.mk
-+++ b/package/zxing-cpp/zxing-cpp.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index e7e86264d2..dc75d098d3 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5  bd42c555cb2298b8a94fa8de7ee679ba  Cython-0.29.33.tar.gz
+-sha256  5040764c4a4d2ce964a395da24f0d1ae58144995dab92c6b96f44c3f4d72286a  Cython-0.29.33.tar.gz
++md5  138dba31e20e178b431a2e403154f906  Cython-0.29.35.tar.gz
++sha256  6e381fa0bf08b3c26ec2f616b19ae852c06f5750f4290118bf986b6f85c8c527  Cython-0.29.35.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index b11d75b33d..145e804bd7 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ZXING_CPP_VERSION = 1.4.0
-+ZXING_CPP_VERSION = 2.0.0
- ZXING_CPP_SITE = $(call github,zxing-cpp,zxing-cpp,v$(ZXING_CPP_VERSION))
- ZXING_CPP_LICENSE = Apache-2.0
- ZXING_CPP_LICENSE_FILES = LICENSE
+-PYTHON_CYTHON_VERSION = 0.29.33
++PYTHON_CYTHON_VERSION = 0.29.35
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/dc/f6/e8e302f9942cbebede88b1a0c33d0be3a738c3ac37abae87254d58ffc51c
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/da/a0/298340fb8412574a0b00a0d9856aa27e7038da429b9e31d6825173d1e6bd
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
