@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77175EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 14:52:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDE33EB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 16:19:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE10B414FA;
-	Sun, 18 Jun 2023 14:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE10B414FA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3913B405E9;
+	Sun, 18 Jun 2023 16:19:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3913B405E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yDJu1mVifVkn; Sun, 18 Jun 2023 14:52:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tuI72mZ8G0Vy; Sun, 18 Jun 2023 16:19:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7FA164091C;
-	Sun, 18 Jun 2023 14:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FA164091C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8912F1BF281
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 14:52:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 66388404A1;
+	Sun, 18 Jun 2023 16:19:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66388404A1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A78E81BF5A2
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 16:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56E7A4150F
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 14:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56E7A4150F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8105D607E1
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 16:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8105D607E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FK0YMIYB4FHr for <buildroot@lists.busybox.net>;
- Sun, 18 Jun 2023 14:52:45 +0000 (UTC)
-X-Greylist: delayed 00:07:52 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91FCE40905
-Received: from forward200b.mail.yandex.net (forward200b.mail.yandex.net
- [IPv6:2a02:6b8:c02:900:1:45:d181:d200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 91FCE40905
- for <buildroot@buildroot.org>; Sun, 18 Jun 2023 14:52:44 +0000 (UTC)
-Received: from forward100c.mail.yandex.net (forward100c.mail.yandex.net
- [IPv6:2a02:6b8:c03:500:1:45:d181:d100])
- by forward200b.mail.yandex.net (Yandex) with ESMTP id EFE5F665FE
- for <buildroot@buildroot.org>; Sun, 18 Jun 2023 17:44:46 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-37.myt.yp-c.yandex.net
- (mail-nwsmtp-smtp-production-main-37.myt.yp-c.yandex.net
- [IPv6:2a02:6b8:c12:601e:0:640:1bb:0])
- by forward100c.mail.yandex.net (Yandex) with ESMTP id 254FB6009F
- for <buildroot@buildroot.org>; Sun, 18 Jun 2023 17:44:38 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-37.myt.yp-c.yandex.net
- (smtp/Yandex) with ESMTPSA id aigqBVXDXKo0-kN9Ab2Yw; 
- Sun, 18 Jun 2023 17:44:37 +0300
-X-Yandex-Fwd: 1
-From: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?=
- <leo@yuriev.ru>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4JYoCYlsB4Hh for <buildroot@lists.busybox.net>;
+ Sun, 18 Jun 2023 16:19:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E6DF606A9
+ for <buildroot@buildroot.org>; Sun, 18 Jun 2023 16:19:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E6DF606A9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5A73783FFE; Sun, 18 Jun 2023 16:19:53 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 17:44:24 +0300
-Message-Id: <20230618144425.105081-1-leo@yuriev.ru>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yuriev.ru; s=mail; t=1687099477; 
- bh=XKNX1snJVWi3L4/o1XWxIni9JwFb08wBfNf7dfiD9DA=;
- h=Message-Id:Date:Cc:Subject:To:From;
- b=t7eJ0IUByDqePh78oDaL5FSbxU/DEDxU0+FGe87l5OmMEFq9N977W9TJMV3oUXH6o
- Astt+zcHt3pl56gL5qp5r3LGU2kB9q/MpgO9Kfsv/pnPufkfz7Y5Ll981SHtzFjFmj
- KSYZs3wWjQ5nbWIOGEjwZYoKLEcAUwr1p0ixwexs=
-X-Mailman-Original-Authentication-Results: mail-nwsmtp-smtp-production-main-37.myt.yp-c.yandex.net;
- dkim=pass header.i=@yuriev.ru
-Subject: [Buildroot] [PATCH] package/libmdbx: bump version to 0.12.7 "Artek"
+Date: Sun, 18 Jun 2023 18:10:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d7a7d93be42b022a7444e9ff48f3cb588f310a69
+X-Git-Newrev: f36c57728aa43df2355db731d90712a5a29cc501
+X-Patchwork-Hint: ignore
+Message-Id: <20230618161953.5A73783FFE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hwdata: install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,45 +56,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C?=
- =?UTF-8?q?=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?= <leo@yuriev.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBpcyBidWdmaXggcmVsZWFzZSBvZiBzdGFibGUgbGlibWRieCBicmFuY2gsCm9uIHRoZSBk
-YXkgb2YgaW50ZXJuYXRpb25hbCBjaGlsZHJlbidzIGNhbXAgwqtBcnRla8K7LgoKSXQgaXMgcmVh
-c29uYWJsZSB0byBiYWNrcG9ydCB0aGlzIHBhdGNoIHRvIGFsbCBhcHBsaWNhYmxlIHJlbGVhc2Vz
-L2JyYW5jaGVzIG9mIEJ1aWxkcm9vdC4KClRoZSBtb3N0IHNpZ25pZmljYW50IGZpeGVzIG9mIHYw
-LjEyLjc6CiAtIGFkZGVkIHdvcmthcm91bmQgZm9yIGJ1aWxkIGlzc3VlcyB3aXRoIG1vZGVybiBH
-Q0MgdXNpbmcgYC1tMzIgLWFyY2g9aTY4NiAtT2Zhc3RgLgogLSBmaXhlZCB0aGUgY2F1c2Ugb2Yg
-dGhlIGZhbHNlLXBvc2l0aXZlIHdhcm5pbmcgb2YgbW9kZXJuIEdDQyBpbiB0aGUgQysrIEFQSS4K
-IC0gcmVmaW5lZCBEQiBvcGVuaW5nIGluICJyZWNvdmVyeSIgbW9kZSBhbmQgc3dpdGNoaW5nIHRv
-IGEgZ2l2ZW4gbWV0YS1wYWdlLgoKVGhlIGNvbXBsZXRlIENoYW5nZUxvZzogaHR0cHM6Ly9naXRm
-bGljLnJ1L3Byb2plY3QvZXJ0aGluay9saWJtZGJ4L2Jsb2I/ZmlsZT1DaGFuZ2VMb2cubWQKClNp
-Z25lZC1vZmYtYnk6INCb0LXQvtC90LjQtCDQrtGA0YzQtdCyIChMZW9uaWQgWXVyaWV2KSA8bGVv
-QHl1cmlldi5ydT4KLS0tCiBwYWNrYWdlL2xpYm1kYngvbGlibWRieC5oYXNoIHwgMiArLQogcGFj
-a2FnZS9saWJtZGJ4L2xpYm1kYngubWsgICB8IDIgKy0KIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNl
-cnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlibWRieC9s
-aWJtZGJ4Lmhhc2ggYi9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5oYXNoCmluZGV4IDdhNWIxOTk1
-MmUuLjBmNTkwOGNmMzggMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lmhhc2gK
-KysrIGIvcGFja2FnZS9saWJtZGJ4L2xpYm1kYnguaGFzaApAQCAtMSw1ICsxLDUgQEAKICMgSGFz
-aGVzIGZyb206IGh0dHBzOi8vbGlibWRieC5kcWRrZmEucnUvcmVsZWFzZS9TSEEyNTZTVU1TCi1z
-aGEyNTYgIDljM2FiYWFmOTA3OWE5NTE4YmI3MTU1NzM0ODE3YTJlMjg2ZmZmZWE0NmY3Y2MwODI1
-ZGZiZDFjZjkxNzQwNzUgIGxpYm1kYngtYW1hbGdhbWF0ZWQtMC4xMi41LnRhci54egorc2hhMjU2
-ICBlMTUwNTQxYzJiMDc1NThiOTYxZTc1NGU4ZTkxNzFiZjFhYTk3NGM4ZTkzNmY2MmJkMzc1NjA2
-ZjdkNTUwNjY3ICBsaWJtZGJ4LWFtYWxnYW1hdGVkLTAuMTIuNy50YXIueHoKIAogIyBMb2NhbGx5
-IGNhbGN1bGF0ZWQKIHNoYTI1NiAgMzEwZmUyNWM4NThhOTUxNWZjOGM4ZDdkMWYyNGE2N2M5NDk2
-Zjg0YTkxZTBhMGU0MWVhOTk3NWIxMzcxZTU2OSAgTElDRU5TRQpkaWZmIC0tZ2l0IGEvcGFja2Fn
-ZS9saWJtZGJ4L2xpYm1kYngubWsgYi9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5tawppbmRleCAw
-YzZjOWJjYjlmLi44NGI1ODYzMmI2IDEwMDY0NAotLS0gYS9wYWNrYWdlL2xpYm1kYngvbGlibWRi
-eC5taworKysgYi9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5tawpAQCAtNCw3ICs0LDcgQEAKICMK
-ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLUxJQk1EQlhfVkVSU0lPTiA9IDAuMTIuNQorTElC
-TURCWF9WRVJTSU9OID0gMC4xMi43CiBMSUJNREJYX1NPVVJDRSA9IGxpYm1kYngtYW1hbGdhbWF0
-ZWQtJChMSUJNREJYX1ZFUlNJT04pLnRhci54egogTElCTURCWF9TSVRFID0gaHR0cHM6Ly9saWJt
-ZGJ4LmRxZGtmYS5ydS9yZWxlYXNlCiBMSUJNREJYX1NVUFBPUlRTX0lOX1NPVVJDRV9CVUlMRCA9
-IE5PCi0tIAoyLjQwLjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=f36c57728aa43df2355db731d90712a5a29cc501
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+hwdata provides a .pc file, which other packages can look up to find the
+location where hwdata files are, and use them at build time.
+
+This is the case for the upcoming libdisplay-info package, which
+requires the hwdata's PNP IDs at build time.
+
+However, installing the .pc file is not enough. Indeed, meson (which
+libdisplay-info uses) will look for the corresponding data files in
+datadir, which it locates relative to the sysroot, which is our staging.
+
+So, we also need to install the hwdata files in staging.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/hwdata/hwdata.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index a7dd84f62c..cac6b80185 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -8,6 +8,7 @@ HWDATA_VERSION = 0.371
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
++HWDATA_INSTALL_STAGING = YES
+ 
+ HWDATA_FILES = \
+ 	$(if $(BR2_PACKAGE_HWDATA_IAB_OUI_TXT),iab.txt oui.txt) \
+@@ -15,7 +16,22 @@ HWDATA_FILES = \
+ 	$(if $(BR2_PACKAGE_HWDATA_PNP_IDS),pnp.ids) \
+ 	$(if $(BR2_PACKAGE_HWDATA_USB_IDS),usb.ids)
+ 
++define HWDATA_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
++endef
++
++define HWDATA_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) hwdata.pc
++endef
++
+ ifneq ($(strip $(HWDATA_FILES)),)
++define HWDATA_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/hwdata.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/hwdata.pc
++	$(INSTALL) -d -m 755 $(STAGING_DIR)/usr/share/hwdata
++	$(INSTALL) -m 644 -t $(STAGING_DIR)/usr/share/hwdata \
++		$(addprefix $(@D)/,$(HWDATA_FILES))
++endef
+ define HWDATA_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/hwdata
+ 	$(INSTALL) -m 644 -t $(TARGET_DIR)/usr/share/hwdata \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
