@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8593EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E9A5EB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 606ED401A3;
-	Sun, 18 Jun 2023 11:49:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 606ED401A3
+	by smtp2.osuosl.org (Postfix) with ESMTP id D18AC4047D;
+	Sun, 18 Jun 2023 11:50:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D18AC4047D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3-nBOn-Zr1DH; Sun, 18 Jun 2023 11:49:50 +0000 (UTC)
+	with ESMTP id uGj4ANJTL7p3; Sun, 18 Jun 2023 11:50:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46A29405BA;
-	Sun, 18 Jun 2023 11:49:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46A29405BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0E6E40629;
+	Sun, 18 Jun 2023 11:50:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0E6E40629
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E80471BF5AE
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:46:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 04E6A1BF5AE
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:46:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 253C260B35
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5815560F8F
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:46:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 253C260B35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5815560F8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yqwCB-H4f_WA for <buildroot@lists.busybox.net>;
+ with ESMTP id BmcddODnamxX for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2ADC260FA7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B2D260FB8
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ADC260FA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B2D260FB8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 278CC83BAF; Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
+ id 3960A83BB1; Sun, 18 Jun 2023 11:45:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 13:40:59 +0200
+Date: Sun, 18 Jun 2023 13:43:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1116fd46a477c58472e98b797dc67c96020883e1
-X-Git-Newrev: b7b11d7e94e316632fcc8ec49831e7b372cc055a
+X-Git-Oldrev: c3c4b6356e866cc2d34075869e2e957b57ad2616
+X-Git-Newrev: 39ffadd6ae8c472e083c431a957ec575c1cebce2
 X-Patchwork-Hint: ignore
-Message-Id: <20230618114559.278CC83BAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3: security bump version to
- 3.11.4
+Message-Id: <20230618114559.3960A83BB1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jhead: security bump to version
+ 3.08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,118 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7b11d7e94e316632fcc8ec49831e7b372cc055a
+commit: https://git.buildroot.net/buildroot/commit/?id=39ffadd6ae8c472e083c431a957ec575c1cebce2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rebased two patches.
+Fixes the following security issue:
 
-Changelog:
-https://docs.python.org/release/3.11.4/whatsnew/changelog.html#python-3-11-4
+- CVE-2022-41751: Jhead 3.06.0.1 allows attackers to execute arbitrary OS
+  commands by placing them in a JPEG filename and then using the
+  regeneration -rgt50 option.
 
-Fixes the following security problems:
+Update readme.txt hash after a minor tweak of the text:
+https://github.com/Matthias-Wandel/jhead/commit/a0eed69daa6ad4b824eb81fb6e3be95de3f783c2
 
-- gh-99889: Fixed a security in flaw in uu.decode() that could allow for
-  directory traversal based on the input if no out_file was specified.
-
-- gh-104049: Do not expose the local on-disk location in directory
-  indexes   produced by http.client.SimpleHTTPRequestHandler.
-
-- gh-102153: urllib.parse.urlsplit() now strips leading C0 control and
-  space characters following the specification for URLs defined by WHATWG
-  in response to CVE-2023-24329. Patch by Illia Volochii.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../python3/0012-Add-an-option-to-disable-lib2to3.patch   |  8 +++++---
- .../0014-Add-an-option-to-disable-the-tk-module.patch     | 15 +++++++++------
- package/python3/python3.hash                              |  2 +-
- package/python3/python3.mk                                |  2 +-
- 4 files changed, 16 insertions(+), 11 deletions(-)
+ package/jhead/jhead.hash | 4 ++--
+ package/jhead/jhead.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python3/0012-Add-an-option-to-disable-lib2to3.patch b/package/python3/0012-Add-an-option-to-disable-lib2to3.patch
-index 0085d5a63f..228b86a90b 100644
---- a/package/python3/0012-Add-an-option-to-disable-lib2to3.patch
-+++ b/package/python3/0012-Add-an-option-to-disable-lib2to3.patch
-@@ -12,6 +12,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- [ Adam Duskett: ported to Python 3.10.0 ]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[ Bernd Kuhls: ported to Python 3.11.4]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  Makefile.pre.in | 17 ++++++++++++-----
-  configure.ac    |  6 ++++++
-@@ -48,9 +50,9 @@ index 403380e181..f5d0573067 100644
- -		lib2to3/tests/data \
- -		lib2to3/tests/data/fixers \
- -		lib2to3/tests/data/fixers/myfixes \
-- 		test test/audiodata \
-- 		test/capath test/cjkencodings \
-- 		test/data test/decimaltestdata \
-+ 		test \
-+ 		test/audiodata \
-+ 		test/capath \
- @@ -2013,6 +2010,14 @@ ifeq (@PYDOC@,yes)
-  LIBSUBDIRS += pydoc_data
-  endif
-diff --git a/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
-index 04f7e34435..b89e1d27bc 100644
---- a/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
-+++ b/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
-@@ -9,6 +9,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- [ Adam Duskett: ported to Python 3.10.0 ]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[ Bernd Kuhls: ported to Python 3.11.4]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  Makefile.pre.in | 10 +++++++---
-  configure.ac    |  9 +++++++++
-@@ -26,14 +28,15 @@ index 9f4cdf14cf..4f83911200 100644
-  		tomllib \
-  		turtledemo \
-  		unittest \
--@@ -2001,8 +2000,6 @@ TESTSUBDIRS=	ctypes/test \
-- 		test/tracedmodules \
-- 		test/xmltestdata test/xmltestdata/c14n-20 \
-+@@ -2038,9 +2038,6 @@
-+ 		test/xmltestdata \
-+ 		test/xmltestdata/c14n-20 \
-  		test/ziptestdata \
---		tkinter/test tkinter/test/test_tkinter \
-+-		tkinter/test \
-+-		tkinter/test/test_tkinter \
- -		tkinter/test/test_ttk \
-- 		unittest/test unittest/test/testmock
-- 
-+ 		unittest/test \
-+ 		unittest/test/testmock
-  ifeq (@PYDOC@,yes)
- @@ -2021,6 +2018,13 @@ ifeq (@SQLITE3@,yes)
-  LIBSUBDIRS += sqlite3
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index b04ee7fa2c..6c43e01a44 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
+diff --git a/package/jhead/jhead.hash b/package/jhead/jhead.hash
+index bd9c8560d5..1fe856198d 100644
+--- a/package/jhead/jhead.hash
++++ b/package/jhead/jhead.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  8a5db99c961a7ecf27c75956189c9602c968751f11dbeae2b900dbff1c085b5e  Python-3.11.3.tar.xz
-+sha256  2f0e409df2ab57aa9fc4cbddfb976af44e4e55bf6f619eee6bc5c2297264a7f6  Python-3.11.4.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index ece5cad93e..bdb7cfd22f 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated from download (no sig, hash)
+-sha256  5c5258c3d7a840bf831e22174e4a24cb1de3baf442f7cb73d5ab31b4ae0b0058  jhead-3.06.0.1.tar.gz
+-sha256  8b709512c737fc0c1e1024800b9a44c54d14ab02132c636a66c3ac66955c3e95  readme.txt
++sha256  999a81b489c7b2a7264118f194359ecf4c1b714996a2790ff6d5d2f3940f1e9f  jhead-3.08.tar.gz
++sha256  b3971a74d00c834bc7f112d8a0027b25663fd1637a21381a3e5df4bd2b614dff  readme.txt
+diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
+index a206e2fe34..f07739bc21 100644
+--- a/package/jhead/jhead.mk
++++ b/package/jhead/jhead.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.11
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-JHEAD_VERSION = 3.06.0.1
++JHEAD_VERSION = 3.08
+ JHEAD_SITE = $(call github,Matthias-Wandel,jhead,$(JHEAD_VERSION))
+ JHEAD_LICENSE = Public Domain
+ JHEAD_LICENSE_FILES = readme.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
