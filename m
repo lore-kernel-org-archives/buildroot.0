@@ -4,66 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0C65EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27B5BEB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:43:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FA25607E1;
-	Sun, 18 Jun 2023 13:34:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FA25607E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3451607D0;
+	Sun, 18 Jun 2023 13:43:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3451607D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jNFGelepLRXZ; Sun, 18 Jun 2023 13:34:16 +0000 (UTC)
+	with ESMTP id Q4HuEMqYR_fI; Sun, 18 Jun 2023 13:43:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A675C60777;
-	Sun, 18 Jun 2023 13:34:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A675C60777
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73916607E1;
+	Sun, 18 Jun 2023 13:43:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73916607E1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A8F671BF59E
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:34:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3201D1BF59E
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82D2F404A1
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:34:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82D2F404A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04C7340116
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04C7340116
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UU6bVHNs9w4S for <buildroot@lists.busybox.net>;
- Sun, 18 Jun 2023 13:34:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04ACD40492
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 04ACD40492
- for <buildroot@buildroot.org>; Sun, 18 Jun 2023 13:34:12 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0f96.dip0.t-ipconnect.de [91.58.15.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6F1B6A4C0328
- for <buildroot@buildroot.org>; Sun, 18 Jun 2023 15:34:10 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39050)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qAsXi-00086X-0a
- for buildroot@buildroot.org; Sun, 18 Jun 2023 15:34:10 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 15:34:10 +0200
-Message-Id: <20230618133410.3204138-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id 0w06jSFXfL84 for <buildroot@lists.busybox.net>;
+ Sun, 18 Jun 2023 13:43:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FC54400FB
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9FC54400FB
+ for <buildroot@buildroot.org>; Sun, 18 Jun 2023 13:43:10 +0000 (UTC)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35IDh9qT018817;
+ Sun, 18 Jun 2023 08:43:09 -0500
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35IDh9vL104505
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Sun, 18 Jun 2023 08:43:09 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sun, 18
+ Jun 2023 08:43:08 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sun, 18 Jun 2023 08:43:09 -0500
+Received: from dasso (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+ by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35IDh8YK023500;
+ Sun, 18 Jun 2023 08:43:08 -0500
+Date: Sun, 18 Jun 2023 08:43:08 -0500
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20230618134308.p3ehslp5s2j36dqi@dasso>
+References: <20230616002359.4139814-1-dannenberg@ti.com>
+ <20230616002359.4139814-8-dannenberg@ti.com>
+ <CAAE6iEWfhb46NsbC+4E9p24Dzcz_edGLxegJtQu4mFMp_yfBdQ@mail.gmail.com>
+ <20230616120230.a4z5dfr4kzsz7i6u@dasso>
+ <CAAE6iEW6xS1gqy2sbu_QeUU6W7KWvimkwn-j9nUeFjjSX8L+9Q@mail.gmail.com>
+ <20230616221311.xlthgoct6lpko5kq@dasso>
+ <02ac14ea-c3c9-9763-83ac-4a83efd534b3@mind.be>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+Content-Disposition: inline
+In-Reply-To: <02ac14ea-c3c9-9763-83ac-4a83efd534b3@mind.be>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1687095250;
- bh=OZV97p2UVqv9dkzqKd0K6Euj5I/IrjS2vY+vu1PBGp8=;
- h=From:To:Subject:Date:From;
- b=f8e8D30iSv9YuseyZNew3RHaU6G9GfIIyaWdS9hL8ew/ygkRsgqv/TCKtAoaFbF5K
- suei1Rdmy/bVnYycNKIiwFNWm/zjPJzLaUHmpcWhp4UpkgKjzGkZEx5zeGteUeKKQC
- AxGBT6/mNZlHn9/yQ4MhlDYfiPvhP5jFNhbRQX0QLv/QAlK1ybRwYjDl6wRinKeFde
- Z6IQ7vgymYd4JVimXWCIU4qB13TDu9zxxqbP1oyp6JXOV8iMa7UogmZMBztDRKUfYO
- UWSujmtZGURUBPVbkc+yb1x3bRYCJwgiOkC8obIDlVwd3WWUNs4Yc8BGefOysjUifZ
- rgDdo4/C93X6g==
+ d=ti.com; s=ti-com-17Q1; t=1687095789;
+ bh=0N4IUQVi/xnbFZk6CquZm/HNuUNFL19aea9K34wj7RM=;
+ h=Date:From:To:CC:Subject:References:In-Reply-To;
+ b=Vtgd5gc2DEOcfSTbGQ46fiIHyzmNx8QBDfC0Zpr/mptiPNj8NbN6IzokWufAFe5eN
+ rSmujwAxgxqR7gnUshbn8uLkJaO+bK5sd484kmKIvkMFY6LkhQhyzHFBv9LZK+jfXM
+ dL3xFtySnBIs/iIavYx0WgXAUwI9Ly0Jn2Hp7JX0=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=f8e8D30i
-Subject: [Buildroot] [PATCH 1/1] linux: fix kernel hashes
+ dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=Vtgd5gc2
+Subject: Re: [Buildroot] [PATCH v8 07/10] board/ti/am62x_sk|am64x_sk: switch
+ to HS-FS device variants
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,49 +90,346 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
+Reply-To: Andreas Dannenberg <dannenberg@ti.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes commit which added hashes for wrong files:
-https://git.busybox.net/buildroot/commit/?id=88108f9793f5824fa058b878974f234ebe834325
+Hi Arnout,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Sorry!
+On Sun, Jun 18, 2023 at 02:27:52PM +0200, Arnout Vandecappelle wrote:
+> =
 
- linux/linux.hash | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+> =
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index ee510f836d..d90f6cb2a3 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  927ba93d3da556c8e30b2640aa3f19c3c3cda66c655754e0798024020e2981b4  patch-6.3.8.xz
--sha256  84c638ee9a36e30ef879e2944c5adfc2523a5a1553951b40e8cf4d873426d90a  patch-6.1.33.xz
-+sha256  4323d421250e2e444c35d36f4aa8ddb56591dedc25c68d359d19c4ef9dd20955  linux-6.3.8.tar.xz
-+sha256  b26f7cbcbf8031efc49f11f236f372fc34a4fd5fc6ad3151b893d1aa038ed603  linux-6.1.34.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  c8c39191dc89ccb8f0fd05e4b06c9bcc77672156bdc64fe445d2109c116a3432  patch-5.15.117.xz
--sha256  1bde9f3d8bace93e634ca0841fca14fcbd7b6d53cf877ee3e7f18778bf842455  patch-5.10.184.xz
--sha256  5e627d9086f539e65c91f6e5c59c8bb66b59f9d369173dc0ccb14f70795d1876  patch-5.4.247.xz
-+sha256  a9a8331f3c0e004b40a41f30d688b53bf85405597ac41c2c89be7f4fbcf7239f  linux-5.15.117.tar.xz
-+sha256  77a9bebc1d1fa057212a3ac62c2a0784aafcdef149032df8898ebc9ed3c62908  linux-5.10.184.tar.xz
-+sha256  33010d4f02314dd4eb51ab5d09f49ce970f2cfefe9f2133a2e085cac5dfffed7  linux-5.4.247.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  663669feee6ad4814704bf6dcc89ebbf64e1862f4dc231bc6327e33acea99823  patch-4.19.286.xz
--sha256  faa5db19c03aaa96417c2c3e76fbc10886d25b9f26179ff653e3c29f6707840f  patch-4.14.318.xz
-+sha256  47841504f334b24fe411270954423202ed84e21251edf5a61d40bde59051089d  linux-4.19.286.tar.xz
-+sha256  c63a327e799b8a30ca96167f66100d4d7788338ac0a8cf5fc492c97e303211bc  linux-4.14.318.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
--- 
-2.39.2
+> On 17/06/2023 00:13, Andreas Dannenberg via buildroot wrote:
+> > Hi Fran=E7ois,
+> > =
 
+> > On Fri, Jun 16, 2023 at 06:40:35PM +0200, Fran=E7ois Perrad wrote:
+> > > Le ven. 16 juin 2023 =E0 14:05, Andreas Dannenberg <dannenberg@ti.com=
+> a
+> > > =E9crit :
+> > > =
+
+> > > > Hi Fran=E7ois,
+> > > > =
+
+> > > > On Fri, Jun 16, 2023 at 01:15:04PM +0200, Fran=E7ois Perrad wrote:
+> [snip]
+> > > > > =
+
+> > > > > core-secdev-k3 could be a host package and an optional dependency=
+ of
+> > > > uboot
+> > > > > or atf
+> > > > =
+
+> > > > Good suggestion, I thought about same but wasn't quite sure how to =
+set
+> > > > this up, but I'll look into this based on your below starting point=
+. It
+> > > > would cover HS-FS device variants ("High Security - Field Securable=
+"),
+> > > > which is 90% of the use case, and 100% of the initial use case (som=
+ebody
+> > > > getting a board, evaluating), all when the custom keys were not yet
+> > > > programmed into the SOC (which is what turns the device into a HS-SE
+> > > > device, at which time custom signing keys will need to be provided =
+as
+> > > > part of core-secdev-k3).
+> > > > =
+
+> > > > Can a host package easily export/share and ENV variable
+> > > > (TI_SECURE_DEV_PKG)?
+> > > > =
+
+> > > > =
+
+> > > yes (we are in a Makefile fragment):
+> > > export
+> > > TI_SECURE_DEV_PKG=3D$(BUILD_DIR)/ti-core-secdev-k3-$(TI_CORE_SECDEV_K=
+3_VERSION)
+> > > =
+
+> > > when a package needed it, just add :
+> > > FOO_DEPENDENCIES +=3D host-ti-core-secdev-k3
+> > > =
+
+> > > Fran=E7ois
+> > =
+
+> > Good point, using the make construct for 'export' should work, and in
+> > fact it does. Just tried it out. Was able to largely carry over what you
+> > came up with (thanks again!!). One change I had to made was to add a
+> > 'host-' prefix to the line exporting the ti-core-secdev-k3 package
+> > location. Below is my Makefile fragment. Will make this part of PATCH
+> > v9 series I intent to send out next week (want to give it a few more da=
+ys
+> > to allow folks to add feedback).
+> > =
+
+> > =
+
+> > --- /dev/null
+> > +++ b/package/ti-core-secdev-k3/ti-core-secdev-k3.mk
+> > @@ -0,0 +1,21 @@
+> > +######################################################################=
+##########
+> > +#
+> > +## ti-core-secdev-k3
+> > +#
+> > +######################################################################=
+###########
+> > +
+> > +TI_CORE_SECDEV_K3_VERSION =3D 08.06.00.007
+> > +TI_CORE_SECDEV_K3_SITE =3D https://git.ti.com/cgit/security-developmen=
+t-tools/core-secdev-k3/snapshot
+> > +TI_CORE_SECDEV_K3_LICENSE =3D TI TSPA License
+> > +TI_CORE_SECDEV_K3_LICENSE_FILES =3D manifest/k3-secdev-0.2-manifest.ht=
+ml
+> > +TI_CORE_SECDEV_K3_SOURCE =3D core-secdev-k3-$(TI_CORE_SECDEV_K3_VERSIO=
+N).tar.gz
+> > +
+> > +# To allow the image signing process for various firmware artifacts to=
+ work the
+> > +# build process for TI K3 platform HS-FS and HS-SE device variants is =
+using the
+> > +# 'core-secdev-k3' tool provided by TI. Its location must be made avai=
+lable to
+> > +# the build process by exporting it through the use of an environmental
+> > +# variable. From there on, other packages like ti-k3-r5-loader will pi=
+ck up the
+> > +# signing tools and keys that are provided in this package.
+> > +export TI_SECURE_DEV_PKG =3D $(BUILD_DIR)/host-ti-core-secdev-k3-$(TI_=
+CORE_SECDEV_K3_VERSION)
+> =
+
+>  I didn't follow the entire discussion; however, be aware that this export
+> applies globally, i.e. _all_ packages will have TI_SECURE_DEV_PKG in their
+> environment. IIUC, this is exactly what you want because you want the
+> environment variable to be available to e.g. ti-k3-r5-loader. But it's al=
+so
+> going to be in the environment of busybox, libcurl, and all completely
+> unrelated packages. Worse, it's going to be in the environment even if
+> you're not using ti-core-secdev-k3 at all!
+> =
+
+>  Therefore, I'm not in favour of this export. I think it's better to just
+> set the variable here, without exporting, and then in every package that
+> actually needs it, include it explicitly in the build commands. E.g.
+> =
+
+> define TI_K3_R5_LOADER_BUILD_CMDS
+>         $(TARGET_CONFIGURE_OPTS) TI_SECURE_DEV_PKG=3D$(TI_SECURE_DEV_PKG)=
+ \
+> 		$(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
+> endef
+
+Ok, makes sense to minimize polluting the global environment. Will
+update this accordingly. It'll also better allow to find 'users' of this
+in the Buildroot source tree by grepping for that variable, which is
+always a nice thing to be able to do to understand how things work together.
+ =
+
+>  Note that you'll already need the explicit dependency in the packages us=
+ing
+> ti-core-secdev-k3, so I don't think it's a problem to add the environment
+> variable explicitly as well.
+
+Actually there is no unconditional hard dependency of anything on
+ti-core-secdev-k3, as the use of this package is optional in some cases,
+such as when building for General Purpose ("GP") device variants which
+always have secure boot  disabled. Or in case of High Security -
+Security Enforcing ("HS-SE") devices the user must provide their _own_
+package containing _their_ private keys for signing purposes, probably
+not something to be done by storing them in a package. I'll see that I
+can set it up such that the ti-core-secdev-k3 Buildroot package is used
+if enabled, but the user can override this by providing their own
+TI_SECURE_DEV_PKG env variable through their shell environment, in which
+case their "private" tool is used from their build system (instead of
+what the Buildroot package contributes).
+
+I'll see I can model this appropriately and explain in more detail as
+part of PATCH v9. I'll probably also make the SoC type selection
+(BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE, see "[PATCH v8 02/10]
+boot/ti-k3-image-gen: new package") via multiple-choice Kconfig options
+(as it was suggested earlier actually).
+
+Thanks!
+
+--
+Andreas Dannenberg
+Texas Instruments Inc
+
+> =
+
+>  Regards,
+>  Arnout
+> =
+
+> > +
+> > +$(eval $(host-generic-package))
+> > =
+
+> > =
+
+> > --
+> > Andreas Dannenberg
+> > Texas Instruments Inc
+> > =
+
+> > =
+
+> > =
+
+> > > =
+
+> > > > This will be needed not only by ti-k3-image-gen but also by uboot a=
+nd
+> > > > potentially other packages in the future.
+> > > > =
+
+> > > > Regards, Andreas
+> > > > =
+
+> > > > > =
+
+> > > > > =
+
+> > > > ###################################################################=
+#############
+> > > > > #
+> > > > > # ti-core-secdev-k3
+> > > > > #
+> > > > > =
+
+> > > > ###################################################################=
+#############
+> > > > > =
+
+> > > > > TI_CORE_SECDEV_K3_VERSION =3D 08.06.00.007
+> > > > > TI_CORE_SECDEV_K3_SITE =3D
+> > > > > =
+
+> > > > https://git.ti.com/cgit/security-development-tools/core-secdev-k3/s=
+napshot
+> > > > > TI_CORE_SECDEV_K3_SOURCE =3D
+> > > > > core-secdev-k3-$(TI_CORE_SECDEV_K3_VERSION).tar.gz
+> > > > > =
+
+> > > > > =
+
+> > > > TI_SECURE_DEV_PKG=3D$(BUILD_DIR)/ti-core-secdev-k3-$(TI_CORE_SECDEV=
+_K3_VERSION)
+> > > > > =
+
+> > > > > $(eval $(host-generic-package))
+> > > > > =
+
+> > > > > Fran=E7ois
+> > > > > =
+
+> > > > > =
+
+> > > > > =
+
+> > > > > > +
+> > > > > >   Build:
+> > > > > >   $ make
+> > > > > > =
+
+> > > > > > diff --git a/board/ti/am64x_sk/readme.txt
+> > > > b/board/ti/am64x_sk/readme.txt
+> > > > > > index fe83c675f5..51d0312726 100644
+> > > > > > --- a/board/ti/am64x_sk/readme.txt
+> > > > > > +++ b/board/ti/am64x_sk/readme.txt
+> > > > > > @@ -12,6 +12,22 @@ $ make am64x_sk_defconfig
+> > > > > >   Optional: modify the configuration:
+> > > > > >   $ make menuconfig
+> > > > > > =
+
+> > > > > > +Required setup step for High Security HS-FS and HS-SE SoC vari=
+ants:
+> > > > > > +
+> > > > > > +To allow the image signing process for various firmware artifa=
+cts to
+> > > > > > +work the build process for HS-FS and HS-SE device variants is =
+using
+> > > > > > +an external 'core-secdev-k3' package which can be obtained from
+> > > > > > +https://git.ti.com/cgit/security-development-tools/core-secdev=
+-k3.
+> > > > > > +To prepare building for those device variants create a local c=
+opy of
+> > > > > > +the 'core-secdev-k3' and export its location through the
+> > > > > > +TI_SECURE_DEV_PKG environmental variable. Use the package as-i=
+s for
+> > > > > > +HS-FS device variants such as populated on the SK-AM64B board,=
+ or
+> > > > > > +customize this package with your private signing keys when usi=
+ng a
+> > > > > > +HS-SE device variant.
+> > > > > > +
+> > > > > > +$ git clone
+> > > > > > https://git.ti.com/git/security-development-tools/core-secdev-k=
+3.git
+> > > > > > +$ export TI_SECURE_DEV_PKG=3D$PWD/core-secdev-k3
+> > > > > > +
+> > > > > >   Build:
+> > > > > >   $ make
+> > > > > > =
+
+> > > > > > diff --git a/configs/am62x_sk_defconfig b/configs/am62x_sk_defc=
+onfig
+> > > > > > index 2d05ddd96b..033101b735 100644
+> > > > > > --- a/configs/am62x_sk_defconfig
+> > > > > > +++ b/configs/am62x_sk_defconfig
+> > > > > > @@ -28,7 +28,7 @@ BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=
+=3Dy
+> > > > > >   BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3"
+> > > > > >   BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
+> > > > > >   BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D"am62x"
+> > > > > > -BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"gp"
+> > > > > > +BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"hs-fs"
+> > > > > >   BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG=3D"evm"
+> > > > > >   BR2_TARGET_TI_K3_R5_LOADER=3Dy
+> > > > > >   BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL=3Dy
+> > > > > > diff --git a/configs/am64x_sk_defconfig b/configs/am64x_sk_defc=
+onfig
+> > > > > > index a26e38a043..096dd77f6a 100644
+> > > > > > --- a/configs/am64x_sk_defconfig
+> > > > > > +++ b/configs/am64x_sk_defconfig
+> > > > > > @@ -28,8 +28,8 @@ BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=
+=3Dy
+> > > > > >   BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3"
+> > > > > >   BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
+> > > > > >   BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE_TISCI=3Dy
+> > > > > > -BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D"am64x"
+> > > > > > -BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"gp"
+> > > > > > +BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D"am64x_sr2"
+> > > > > > +BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"hs-fs"
+> > > > > >   BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG=3D"evm"
+> > > > > >   BR2_TARGET_TI_K3_R5_LOADER=3Dy
+> > > > > >   BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL=3Dy
+> > > > > > --
+> > > > > > 2.34.1
+> > > > > > =
+
+> > > > > > _______________________________________________
+> > > > > > buildroot mailing list
+> > > > > > buildroot@buildroot.org
+> > > > > > https://lists.buildroot.org/mailman/listinfo/buildroot
+> > > > > > =
+
+> > > > =
+
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
