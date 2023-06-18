@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F434EB64D7
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:21:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A2A4EB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 11:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38695408AF;
-	Sun, 18 Jun 2023 11:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38695408AF
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC563408CF;
+	Sun, 18 Jun 2023 11:21:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC563408CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HsY_YeJnsxhi; Sun, 18 Jun 2023 11:21:36 +0000 (UTC)
+	with ESMTP id BunrOTGitZi3; Sun, 18 Jun 2023 11:21:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 594FB4054E;
-	Sun, 18 Jun 2023 11:21:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 594FB4054E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 110AD1BF5AE
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2A57405AB;
+	Sun, 18 Jun 2023 11:21:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2A57405AB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D74F91BF5AE
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6949A40534
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD5EB41606
  for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 11:20:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6949A40534
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD5EB41606
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3gIeJjc3wlGH for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TnhcolaPAV51 for <buildroot@lists.busybox.net>;
  Sun, 18 Jun 2023 11:20:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B545405D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94F0741687
  for <buildroot@buildroot.org>; Sun, 18 Jun 2023 11:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B545405D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94F0741687
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B25483BAD; Sun, 18 Jun 2023 11:20:54 +0000 (UTC)
+ id 848D983BA6; Sun, 18 Jun 2023 11:20:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 13:16:27 +0200
+Date: Sun, 18 Jun 2023 13:17:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13f3b8e124c4978cc21e780d68219ccdb20b73e5
-X-Git-Newrev: dfe1ca7872a45bcdc825ff0900d7fd929097a635
+X-Git-Oldrev: dfe1ca7872a45bcdc825ff0900d7fd929097a635
+X-Git-Newrev: 6794f14d485dbfd93ef167ba46d24e7095003729
 X-Patchwork-Hint: ignore
-Message-Id: <20230618112054.7B25483BAD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxml2: bump version to 2.11.4
+Message-Id: <20230618112054.848D983BA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxslt: bump to version 1.1.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfe1ca7872a45bcdc825ff0900d7fd929097a635
+commit: https://git.buildroot.net/buildroot/commit/?id=6794f14d485dbfd93ef167ba46d24e7095003729
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.0.news
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.1.news
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.2.news
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.3.news
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.4.news
+https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.38.news
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
+ package/libxslt/libxslt.hash | 4 ++--
+ package/libxslt/libxslt.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 37030bdfaa..f3650c5ec5 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.4.sha256sum
--sha256  ed0c91c5845008f1936739e4eee2035531c1c94742c6541f44ee66d885948d45  libxml2-2.10.4.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.4.sha256sum
-+sha256  737e1d7f8ab3f139729ca13a2494fd17bf30ddb4b7a427cf336252cab57f57f7  libxml2-2.11.4.tar.xz
- # License files, locally calculated
- sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index cf26a36cc4..9f7774f719 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
+diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
+index c771e1fd7e..458c1388d3 100644
+--- a/package/libxslt/libxslt.hash
++++ b/package/libxslt/libxslt.hash
+@@ -1,5 +1,5 @@
+-# from https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.37.sha256sum
+-sha256  3a4b27dc8027ccd6146725950336f1ec520928f320f144eb5fa7990ae6123ab4  libxslt-1.1.37.tar.xz
++# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.38.sha256sum
++sha256  1f32450425819a09acaff2ab7a5a7f8a2ec7956e505d7beeb45e843d0e1ecab1  libxslt-1.1.38.tar.xz
+ 
+ # Hash for license file:
+ sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  COPYING
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 95b0325c94..ec066fbfa2 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXML2_VERSION_MAJOR = 2.10
-+LIBXML2_VERSION_MAJOR = 2.11
- LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
+-LIBXSLT_VERSION = 1.1.37
++LIBXSLT_VERSION = 1.1.38
+ LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
+ LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
+ LIBXSLT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
