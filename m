@@ -4,47 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65841EB64D8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:17:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABD9AEB64D7
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jun 2023 13:18:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07F49611EA;
-	Sun, 18 Jun 2023 13:17:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07F49611EA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6444B611C9;
+	Sun, 18 Jun 2023 13:18:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6444B611C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8hz__bFo_uhP; Sun, 18 Jun 2023 13:17:34 +0000 (UTC)
+	with ESMTP id 8kLQrz4T9nsF; Sun, 18 Jun 2023 13:18:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B23461212;
-	Sun, 18 Jun 2023 13:17:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B23461212
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9B5A11BF59E
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:17:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9ABB8610FA;
+	Sun, 18 Jun 2023 13:18:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ABB8610FA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 04BF41BF59E
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 748B481E46
- for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:17:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 748B481E46
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF474610FA
+ for <buildroot@lists.busybox.net>; Sun, 18 Jun 2023 13:18:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF474610FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 99dzIc5kCcF1 for <buildroot@lists.busybox.net>;
- Sun, 18 Jun 2023 13:17:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2E7A81E3E
- for <buildroot@buildroot.org>; Sun, 18 Jun 2023 13:17:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2E7A81E3E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C2DE83DA6; Sun, 18 Jun 2023 13:17:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 18 Jun 2023 15:15:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c97e81251d977223620348aba8aa5fcd93dc9b02
-X-Git-Newrev: 9aa45c0f892a129cc56f57fd0c9dffbe0af3b4fb
-X-Patchwork-Hint: ignore
-Message-Id: <20230618131719.9C2DE83DA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pillow: bump to version
- 9.5.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4hi2_8ZE_feq for <buildroot@lists.busybox.net>;
+ Sun, 18 Jun 2023 13:18:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEE8F605A3
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CEE8F605A3
+ for <buildroot@buildroot.org>; Sun, 18 Jun 2023 13:18:08 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-519608ddbf7so2646465a12.2
+ for <buildroot@buildroot.org>; Sun, 18 Jun 2023 06:18:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1687094287; x=1689686287;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=y+BxuGHN6lokPReT/kn40VxQX8dhPyXMDo6YxvEMAeQ=;
+ b=fN9ebX63+HX9xIfU9nduEmYsDUsY9AVNYdAn9Zsok2+hOA3C5Uwwop3RmS8IlSoNfX
+ YnxSsXiPfXjdyXVVoys9m7LOMLT2rp1+JiDek2c+wHnw4vlOqFIZyFeelRY0gFDu++Go
+ CPsmBukqRWdlXUhSaWf8JlrxX+K1lNrRM+n4HRIvG2fXjt7KAGPnPmFZurm7lTsnZEvB
+ 4KODmxeS0Tl95LU136afrUYvA6J7WByoSkyfvKVnDyP/azgQ2blZKu8rhoFwNyQpq/Ti
+ rjYK1VihVhkKIL0++VdBBTGv+/NISXkVfY+/V/r9MSvU4saO2LqCBBCUuskUGjwMK0i5
+ jD5w==
+X-Gm-Message-State: AC+VfDxzKxfIB5OqRcd42Kbv+f3IH70BiwxugudH57jiG6J7Q3U7MYUi
+ tntxuvX29/oFzttMu5bWSvTk4g==
+X-Google-Smtp-Source: ACHHUZ5w62yGEi7EWB5fOkfqtSRu/NroFeXZrJer5C9h01CaErVN+A52GqMf4wJ7XvsdtfVh0goybw==
+X-Received: by 2002:a17:906:7312:b0:96a:3119:ac0 with SMTP id
+ di18-20020a170906731200b0096a31190ac0mr5317637ejc.69.1687094287001; 
+ Sun, 18 Jun 2023 06:18:07 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ n25-20020a170906379900b00977cc473b41sm13499924ejc.142.2023.06.18.06.18.06
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 18 Jun 2023 06:18:06 -0700 (PDT)
+Message-ID: <9d1ab6fa-2d10-d17b-bcf1-47e90dd7eab4@mind.be>
+Date: Sun, 18 Jun 2023 15:18:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20230605080911.2027474-1-james.hilliard1@gmail.com>
+In-Reply-To: <20230605080911.2027474-1-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1687094287; x=1689686287;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=y+BxuGHN6lokPReT/kn40VxQX8dhPyXMDo6YxvEMAeQ=;
+ b=OYEHvPCGLL7XwCtbs38jP2zvi/N3M7MeDoT6gKiyY5QezJol39FgZKQQzaXsNEDJ70
+ CZZa2b7cHI2IBTM1IpXVS0MtRI7S9yE6SyY9UOsrZHawKtZ/19F9tRYhFugg/2JtppLf
+ l0C1mnRajuVGQqCRF9JkZRh6Iuj1SAZFsR287SvPgUcz3AK8FSO7LCJIU1CZDUA26J1k
+ 9bxbBLdXvpIppm+3/ogxaGdjw5qI2WgmKkKvZbCNzXSPVRslHTC+83hfSirZvL2Vi+Rj
+ afdaGVuiXQFPL7whzD4ftu5OBzuklEk9uD2e0F/A2BSG7RV+smnAB4oUpjTSB2aUFcxt
+ Iiqw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=OYEHvPCG
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-installer: bump to
+ version 0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,54 +103,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aa45c0f892a129cc56f57fd0c9dffbe0af3b4fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to wording update:
-https://github.com/python-pillow/Pillow/commit/997932bc93c778919fe22f4838ef0929482fe520
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/python-pillow/python-pillow.hash | 6 +++---
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On 05/06/2023 10:09, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index d514bdfe56..43bb824b6a 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  ee6e9a6c729ed9e9a78ccd3f6e9d7143  Pillow-9.4.0.tar.gz
--sha256  a1c2d7780448eb93fbcc3789bf3916aa5720d942e37945f4056680317f1cd23e  Pillow-9.4.0.tar.gz
-+md5  ed80942ad1ade1aab0fcf3790d0be3ec  Pillow-9.5.0.tar.gz
-+sha256  bf548479d336726d7a0eceb6e767e179fbde37833ae42794602631a070d630f1  Pillow-9.5.0.tar.gz
- 
- # Locally computed sha256 checksums
--sha256  4e1755595052d843e2f350c930759f945ecf707bf812883948d181016b12dd0f  LICENSE
-+sha256  0fdb68ffb39062553be40be4e6eaea9700b4f5e870a720ae86b8925d67613ddd  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index c02968610f..b69d329cde 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 9.4.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/bc/07/830784e061fb94d67649f3e438ff63cfb902dec6d48ac75aeaaac7c7c30e
-+PYTHON_PILLOW_VERSION = 9.5.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/00/d5/4903f310765e0ff2b8e91ffe55031ac6af77d982f0156061e20a4d1a8b2d
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/python-installer/python-installer.hash | 4 ++--
+>   package/python-installer/python-installer.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-installer/python-installer.hash b/package/python-installer/python-installer.hash
+> index 97d455b87c..577b23a7ab 100644
+> --- a/package/python-installer/python-installer.hash
+> +++ b/package/python-installer/python-installer.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/installer/json
+> -md5  ac5fee994b04f228c151306f5ad96b04  installer-0.6.0.tar.gz
+> -sha256  f3bd36cd261b440a88a1190b1becca0578fee90b4b62decc796932fdd5ae8839  installer-0.6.0.tar.gz
+> +md5  d961d1105c9270049528b1167ed021bc  installer-0.7.0.tar.gz
+> +sha256  a26d3e3116289bb08216e0d0f7d925fcef0b0194eedfa0c944bcaaa106c4b631  installer-0.7.0.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  37b8b9f2569892fa54406383d431169dbb2115980d78b7efba6eeae5664c484f  LICENSE
+> diff --git a/package/python-installer/python-installer.mk b/package/python-installer/python-installer.mk
+> index 3430e46b51..094a918090 100644
+> --- a/package/python-installer/python-installer.mk
+> +++ b/package/python-installer/python-installer.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_INSTALLER_VERSION = 0.6.0
+> +PYTHON_INSTALLER_VERSION = 0.7.0
+>   PYTHON_INSTALLER_SOURCE = installer-$(PYTHON_INSTALLER_VERSION).tar.gz
+> -PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/c9/ab/a9141dc175ec7b620fffe7e0295251a7b6a0ffb4325d64aeb128dff8c698
+> +PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/05/18/ceeb4e3ab3aa54495775775b38ae42b10a92f42ce42dfa44da684289b8c8
+>   PYTHON_INSTALLER_LICENSE = MIT
+>   PYTHON_INSTALLER_LICENSE_FILES = LICENSE
+>   PYTHON_INSTALLER_SETUP_TYPE = flit-bootstrap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
