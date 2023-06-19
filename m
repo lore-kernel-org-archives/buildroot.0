@@ -4,93 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45DB8EB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jun 2023 20:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CBBAEB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jun 2023 20:24:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2BED404E0;
-	Mon, 19 Jun 2023 20:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2BED404E0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31AC440164;
+	Mon, 19 Jun 2023 20:24:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31AC440164
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rc5mQ_b06w_g; Mon, 19 Jun 2023 20:22:36 +0000 (UTC)
+	with ESMTP id CbwgGRaglBWv; Mon, 19 Jun 2023 20:24:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED944402A8;
-	Mon, 19 Jun 2023 20:22:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED944402A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42607401F3;
+	Mon, 19 Jun 2023 20:24:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42607401F3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C95A71BF2CF
- for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 20:22:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 913441BF2CF
+ for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 20:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9A1D81A29
- for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 20:22:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9A1D81A29
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6060381815
+ for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 20:24:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6060381815
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iJonKyZzZZUe for <buildroot@lists.busybox.net>;
- Mon, 19 Jun 2023 20:22:32 +0000 (UTC)
+ with ESMTP id clM_7wV-0HMM for <buildroot@lists.busybox.net>;
+ Mon, 19 Jun 2023 20:24:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8557781A24
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
- [IPv6:2a00:1450:4864:20::12b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8557781A24
- for <buildroot@buildroot.org>; Mon, 19 Jun 2023 20:22:32 +0000 (UTC)
-Received: by mail-lf1-x12b.google.com with SMTP id
- 2adb3069b0e04-4f875b267d9so1278633e87.1
- for <buildroot@buildroot.org>; Mon, 19 Jun 2023 13:22:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFBC38144A
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EFBC38144A
+ for <buildroot@buildroot.org>; Mon, 19 Jun 2023 20:24:49 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-983f499fc81so469910266b.3
+ for <buildroot@buildroot.org>; Mon, 19 Jun 2023 13:24:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687206150; x=1689798150;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=LzloFNidd3sti4UkHXrTIMIUWHeXzO1TQ+lfVII4nEc=;
- b=I/pb5bZiCagm7olM+/Cik6Il7n5z+MfNTrgO/bRxY2Cyyl0rmviaGjeSrtkX6VWE58
- aB68i7ePcHU2in3YLq7GIgUfYFvbfnjguZtZx4kMLJ4xQr91P8HhB9pLp5W1Z1Yrco0/
- mym3lD/Zrr+uEWTq3qTCLgEOzbdsQ3R6MgdmOA47aboH9B/Sw7rTDoYnR79vZwV3rvbf
- XAX9y9Fx2EgQMHPnIFakTtPPQDgCnqDZPNLQiSJPlyo3k8TENeaCA7TGaUQMg9e/LU4j
- X5Qx7WSWmpqV1JjdARV9mCsvSI9PIztUYSbEIz9S/78S1rmvvMaCn4A+bVeRH0EIb0Cj
- uC/g==
-X-Gm-Message-State: AC+VfDzENugb5LtYv/i0aCIFalsd/Hh/BAtkPAFEU9l5WlXh+XE8fixK
- TsAKo/pOkJKzzgXDWGf139VZhQ==
-X-Google-Smtp-Source: ACHHUZ6Dk1aB/DBpDd7/kwqxoPzYr1p6t6eM+1UsFhjlNbUmRhT9Sz95ofbPn9R1r2iGVrepwCBXjg==
-X-Received: by 2002:a2e:95c4:0:b0:2b4:6a20:f12d with SMTP id
- y4-20020a2e95c4000000b002b46a20f12dmr4075598ljh.43.1687206150083; 
- Mon, 19 Jun 2023 13:22:30 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- gu1-20020a170906f28100b009829a5ae8b3sm157154ejb.64.2023.06.19.13.22.28
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 19 Jun 2023 13:22:29 -0700 (PDT)
-Message-ID: <b1725f8f-7d1e-4d6e-a307-f1ac83081f54@mind.be>
-Date: Mon, 19 Jun 2023 22:22:26 +0200
+ d=1e100.net; s=20221208; t=1687206288; x=1689798288;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8D9O++tztJ2CLUIUyv65RnTxWsXl3cx+vETPOW6blBI=;
+ b=eZTW0j+59a1vm/bJ1dTI3GeequoOIDhlIJtI43JQJpf/G7fkbJuyktSFpsknK7UyMX
+ Yk2hwV/uYaUTLYJyad1zhXkxcQ2a5gh+bOAOoGmbwl6NY/WYL+Kn3+EquS2hiikL+3IA
+ lf2XvR5gfNOrSRagGQEPZXZevZO/KiLVIcXePKSet3dM0Ed2v0Yy99USoafVfGg2UEWW
+ aRxhGXBFufnwxVoBt00q/ziSjptiAXOwQH/FNOylfUOdsbFQt0+YU3zGYLmcvCTpMpJ6
+ pE74yLBcIKpMLMZttitA05kT6uupXaJi6MWEMQxFwwv5c3yhTTT+DvfP6IHM7vczJQgC
+ 1DXA==
+X-Gm-Message-State: AC+VfDx/0TI5h8hwIxtLWLLzusrYNajmMuM8I02Dxf/UC/McRTY4DYFh
+ YO4qPAHKdk3SEQLFC0l15wvMtg5pev0Peeed4mk=
+X-Google-Smtp-Source: ACHHUZ6/WziSFMfIywePFyIKtSL9YW55kSd6rrv981hjVJF90ZrzPSa/EbHUT1pHpmgN+AUbaE3I1mDZ5tmsxakSAWQ=
+X-Received: by 2002:a17:907:5ca:b0:97b:6c24:8d2b with SMTP id
+ wg10-20020a17090705ca00b0097b6c248d2bmr9137702ejb.55.1687206287995; Mon, 19
+ Jun 2023 13:24:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-GB
-To: Laurent Vivier <laurent@vivier.eu>, buildroot@buildroot.org
-References: <20230613105015.739870-1-laurent@vivier.eu>
- <20230613105015.739870-4-laurent@vivier.eu>
-In-Reply-To: <20230613105015.739870-4-laurent@vivier.eu>
+References: <20230611175142.5235-1-bernd.kuhls@t-online.de>
+ <7bbe9b12-46bc-70d2-38a7-f76f5f8118c5@benettiengineering.com>
+In-Reply-To: <7bbe9b12-46bc-70d2-38a7-f76f5f8118c5@benettiengineering.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 19 Jun 2023 22:24:36 +0200
+Message-ID: <CAB1t1CyZAsjPHZtPA9VKd+n7nmYYBgXSvYN-j1WAyw561Z0JFw@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1687206150; x=1689798150;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=LzloFNidd3sti4UkHXrTIMIUWHeXzO1TQ+lfVII4nEc=;
- b=R6CEXPGg2jHcsm/cq80r9WfV8Mzb5Yf7drWzpQlZaeRv97rGSb5Q+8hox01hiCOYzf
- EZMbJ8qqXqUaCr7TbCtK+iyWGFfQCpW8rBYBd30mUdYFNB3hfJES7rky8a+2P4BaygzS
- bwri6bQmItrZ5bexYobzZuTegnNoO5YCP0NpDQwkMisczCNMiOuuTb5VCoZkPVdQd6Vh
- ZfWtFCzW8Jnf3rr7VBkoe2oJu9nmEjfJGFCpXg3yMuJ0vvRuJHycjH6QIedNVxJs3z47
- uyjfpF2M1iPI+3UKrKX0awVpLOy2bYZo9b8w0WF9mqlYaExAq6bS/ZtjDPBpeMkKcyJI
- ZeuA==
+ d=gmail.com; s=20221208; t=1687206288; x=1689798288;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=8D9O++tztJ2CLUIUyv65RnTxWsXl3cx+vETPOW6blBI=;
+ b=iwGLE0NvjvukQT1Bz8HTxl5PEPHMRSWosxtttAULGx/t1NwBUHZ6KX4fImLiR3PnD/
+ e660IQ7GjcTkcNNxXHXDHXmDJhxrkE2iDQ6XkWlCEduHRwbZWBAgM1AMCwvcctXStmba
+ 0x7ZqRFkPzoq1oC9xqBGvseQ78oyVSgbvdl7Tl4cJiqfUdEIHEu0xLrWclNhVwZxvVkb
+ UTwsIbURuImI6RI75XOxdg8jbiCqoxxk4arFvMI7RYt14QrvuTYCdY1b3wkJpyKdjmBt
+ lwy6o6pDSbep1Ttgz4wfMCCMDZaWw6LkT1T49t52Y2xXzcaaeddLaoqNfZueFp3eNgRD
+ l3uw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=R6CEXPGg
-Subject: Re: [Buildroot] [PATCH v14 3/4] board/qemu/m68k-virt: Add virt-m68k
- linux config
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=iwGLE0Nv
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/nfs-utils: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,86 +91,241 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
- =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============4544490592858033611=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxMy8wNi8yMDIzIDEyOjUwLCBMYXVyZW50IFZpdmllciB3cm90ZToKPiBCdWlsZCBhIDUu
-MTkgKGZpcnN0IHZlcnNpb24gd2l0aCB0aGUgbTY4ayB2aXJ0IG1hY2hpbmUpIGtlcm5lbAo+IGZv
-ciAicWVtdS1zeXN0ZW0tbTY4ayAtTSB2aXJ0IiBtYWNoaW5lLgo+IAo+IFNpZ25lZC1vZmYtYnk6
-IExhdXJlbnQgVml2aWVyIDxsYXVyZW50QHZpdmllci5ldT4KPiBSZXZpZXdlZC1ieTogQ8OpZHJp
-YyBMZSBHb2F0ZXIgPGNsZ0BrYW9kLm9yZz4KPiAtLS0KPiAgIERFVkVMT1BFUlMgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICB8ICAyICsrCj4gICBib2FyZC9xZW11L202OGstdmlydC9s
-aW51eC5mcmFnbWVudCAgICAgICAgfCAyMSArKysrKysrKysrKysrKysrKwo+ICAgYm9hcmQvcWVt
-dS9tNjhrLXZpcnQvcmVhZG1lLnR4dCAgICAgICAgICAgIHwgIDUgKysrKysKPiAgIGNvbmZpZ3Mv
-cWVtdV9tNjhrX3ZpcnRfcGV0aXRib290X2RlZmNvbmZpZyB8IDI2ICsrKysrKysrKysrKysrKysr
-KysrKysKPiAgIDQgZmlsZXMgY2hhbmdlZCwgNTQgaW5zZXJ0aW9ucygrKQo+ICAgY3JlYXRlIG1v
-ZGUgMTAwNjQ0IGJvYXJkL3FlbXUvbTY4ay12aXJ0L2xpbnV4LmZyYWdtZW50Cj4gICBjcmVhdGUg
-bW9kZSAxMDA2NDQgYm9hcmQvcWVtdS9tNjhrLXZpcnQvcmVhZG1lLnR4dAo+ICAgY3JlYXRlIG1v
-ZGUgMTAwNjQ0IGNvbmZpZ3MvcWVtdV9tNjhrX3ZpcnRfcGV0aXRib290X2RlZmNvbmZpZwo+IAo+
-IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IDdhYTU5ODBkZjdm
-My4uODA0YTRjZDJjMWQ2IDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9ERVZFTE9Q
-RVJTCj4gQEAgLTE4MjAsNiArMTgyMCw4IEBAIEY6CXBhY2thZ2Uvb3Blbi1sbGRwLwo+ICAgCj4g
-ICBOOglMYXVyZW50IFZpdmllciA8bGF1cmVudEB2aXZpZXIuZXU+Cj4gICBGOglwYWNrYWdlL3Bl
-dGl0Ym9vdC8KPiArRjoJYm9hcmQvcWVtdS9tNjhrLXZpcnQvCj4gK0Y6CWNvbmZpZ3MvcWVtdV9t
-NjhrX3ZpcnRfcGV0aXRib290X2RlZmNvbmZpZwo+ICAgCj4gICBOOglMZWUgSm9uZXMgPGxlZS5q
-b25lc0BsaW5hcm8ub3JnPgo+ICAgRjoJYm9vdC9hZmJvb3Qtc3RtMzIvCj4gZGlmZiAtLWdpdCBh
-L2JvYXJkL3FlbXUvbTY4ay12aXJ0L2xpbnV4LmZyYWdtZW50IGIvYm9hcmQvcWVtdS9tNjhrLXZp
-cnQvbGludXguZnJhZ21lbnQKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAw
-MDAwMC4uNDk0MTY5ODI2MDFjCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL3FlbXUvbTY4
-ay12aXJ0L2xpbnV4LmZyYWdtZW50Cj4gQEAgLTAsMCArMSwyMSBAQAo+ICtDT05GSUdfQkxLX0RF
-Vl9JTklUUkQ9eQo+ICtDT05GSUdfS0VYRUM9eQo+ICtDT05GSUdfQk9PVElORk9fUFJPQz15Cj4g
-K0NPTkZJR19ERVZUTVBGU19NT1VOVD15Cj4gK0NPTkZJR19NRD15CgogIFdoeSBpcyBMVk0vUkFJ
-RCBuZWVkZWQ/IFdlJ3JlIGp1c3QgYm9vdGluZyBhbiBpbml0cmQuLi4KCj4gK0NPTkZJR19NRF9M
-SU5FQVI9eQo+ICtDT05GSUdfTURfTVVMVElQQVRIPXkKPiArQ09ORklHX01EX0ZBVUxUWT15Cj4g
-K0NPTkZJR19CTEtfREVWX0RNPXkKCiAgU2FtZSBxdWVzdGlvbiwgd2h5IGlzIGRldmljZSBtYXBw
-ZXIgbmVlZGVkPyBBbmQgcGFydGljdWxhcmx5IGFsbCB0aG9zZSBleG90aWMgCnRhcmdldHMuLi4K
-Cj4gK0NPTkZJR19ETV9VTlNUUklQRUQ9eQo+ICtDT05GSUdfRE1fQ1JZUFQ9eQo+ICtDT05GSUdf
-RE1fU05BUFNIT1Q9eQo+ICtDT05GSUdfRE1fVEhJTl9QUk9WSVNJT05JTkc9eQo+ICtDT05GSUdf
-RE1fQ0FDSEU9eQo+ICtDT05GSUdfRE1fV1JJVEVDQUNIRT15Cj4gK0NPTkZJR19ETV9FQlM9eQo+
-ICtDT05GSUdfRE1fRVJBPXkKPiArQ09ORklHX0RNX0NMT05FPXkKPiArQ09ORklHX0RNX01JUlJP
-Uj15Cj4gK0NPTkZJR19ETV9SQUlEPXkKPiArQ09ORklHX0RNX1pFUk89eQo+IGRpZmYgLS1naXQg
-YS9ib2FyZC9xZW11L202OGstdmlydC9yZWFkbWUudHh0IGIvYm9hcmQvcWVtdS9tNjhrLXZpcnQv
-cmVhZG1lLnR4dAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMDAwLi43
-MTRiNzRjNzBlYTEKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvcWVtdS9tNjhrLXZpcnQv
-cmVhZG1lLnR4dAo+IEBAIC0wLDAgKzEsNSBAQAo+ICtSdW4gdGhlIGVtdWxhdGlvbiB3aXRoOgo+
-ICsKPiArIHFlbXUtc3lzdGVtLW02OGsgLU0gdmlydCAta2VybmVsIG91dHB1dC9pbWFnZXMvdm1s
-aW51eCAtaW5pdHJkIG91dHB1dC9pbWFnZXMvcm9vdGZzLmNwaW8ueHogLWFwcGVuZCAiY29uc29s
-ZT10dHlHRjAiIC0tbm9ncmFwaGljICMgcWVtdV9tNjhrX3ZpcnRfcGV0aXRib290X2RlZmNvbmZp
-Zwo+ICsKPiArVGhlIHBldGlib290IG1lbnUgd2lsbCBhcHBlYXIgaW4gdGhlIHRlcm1pbmFsIHdo
-ZXJlIFFFTVUgaGFzIGJlZW4gc3RhcnRlZC4KPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X202
-OGtfdmlydF9wZXRpdGJvb3RfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X202OGtfdmlydF9wZXRp
-dGJvb3RfZGVmY29uZmlnCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAw
-MDAuLjE4ODkwYjFhNmZjMQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9jb25maWdzL3FlbXVfbTY4
-a192aXJ0X3BldGl0Ym9vdF9kZWZjb25maWcKPiBAQCAtMCwwICsxLDI2IEBACj4gK0JSMl9tNjhr
-PXkKPiArQlIyX1RPT0xDSEFJTl9CVUlMRFJPT1RfV0NIQVI9eQo+ICtCUjJfQ0NBQ0hFPXkKPiAr
-QlIyX1JFTFJPX05PTkU9eQoKICBXaHkgaXMgdGhpcyBuZWVkZWQ/IFBsZWFzZSBleHBsYWluIGlu
-IHRoZSBjb21taXQgbWVzc2FnZS4KCj4gK0JSMl9UQVJHRVRfR0VORVJJQ19JU1NVRT0iV2VsY29t
-ZSB0byBQZXRpdGJvb3QiCj4gK0JSMl9ST09URlNfREVWSUNFX0NSRUFUSU9OX0RZTkFNSUNfRVVE
-RVY9eQo+ICtCUjJfUk9PVEZTX01FUkdFRF9VU1I9eQoKICBXaHkgaXMgdGhpcyBuZWVkZWQ/Cgo+
-ICtCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2gi
-Cj4gK0JSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiArQlIy
-X0xJTlVYX0tFUk5FTD15CgogIFBsZWFzZSB1c2UgYSBzcGVjaWZpYyBrZXJuZWwgdmVyc2lvbiAo
-bGlrZSBpcyBkb25lIGZvciB0aGUgb3RoZXIgcWVtdSAKZGVmY29uZmlncykuIEl0IHdvdWxkIEJU
-VyBiZSBuaWNlIHRvIHVzZSB0aGUgc3RydWN0dXJlZCBhbmQgY29tbWVudGVkIGZvcm1hdCAKbGlr
-ZSBvbiB0aGUgb3RoZXIgcWVtdSBkZWZjb25maWdzLgoKPiArQlIyX0xJTlVYX0tFUk5FTF9ERUZD
-T05GSUc9InZpcnQiCj4gK0JSMl9MSU5VWF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJi
-b2FyZC9xZW11L202OGstdmlydC9saW51eC5mcmFnbWVudCIKPiArQlIyX0xJTlVYX0tFUk5FTF9Y
-Wj15Cj4gK0JSMl9QQUNLQUdFX0JVU1lCT1hfU0hPV19PVEhFUlM9eQo+ICtCUjJfUEFDS0FHRV9L
-RVhFQz15CgogIFRoaXMgaXMgc2VsZWN0ZWQgYXV0b21hdGljYWxseSBieSBwZXRpdGJvb3QuCgo+
-ICtCUjJfUEFDS0FHRV9LRVhFQ19aTElCPXkKCiAgV2h5IGlzIHRoaXMgbmVlZGVkPwoKPiArQlIy
-X1BBQ0tBR0VfRVRIVE9PTD15Cj4gK0JSMl9QQUNLQUdFX05FVF9UT09MUz15Cj4gK0JSMl9QQUNL
-QUdFX05FVENBVD15Cj4gK0JSMl9QQUNLQUdFX1JTWU5DPXkKCiAgV2h5IGFyZSB0aGUgZm91ciBh
-Ym92ZSBuZWVkZWQ/CgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+ICtCUjJfUEFDS0FHRV9QRVRJVEJP
-T1Q9eQo+ICtCUjJfVEFSR0VUX1JPT1RGU19DUElPPXkKPiArQlIyX1RBUkdFVF9ST09URlNfQ1BJ
-T19YWj15Cj4gKyMgaG9zdC1xZW11IGZvciBnaXRsYWIgdGVzdGluZwo+ICtCUjJfUEFDS0FHRV9I
-T1NUX1FFTVU9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX1FFTVVfU1lTVEVNX01PREU9eQpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============4544490592858033611==
+Content-Type: multipart/alternative; boundary="0000000000007578f305fe81532a"
+
+--0000000000007578f305fe81532a
+Content-Type: text/plain; charset="UTF-8"
+
+On Sunday, 11 June 2023, Giulio Benetti <
+giulio.benetti@benettiengineering.com> wrote:
+
+> On 11/06/23 19:51, Bernd Kuhls wrote:
+>
+>> Fixes:
+>>
+>> http://autobuild.buildroot.net/results/f17/f17a554c86f0b24327b49fdc75612cc133f129ed/
+>>
+>> f9dc4bab9f4576eed3a22ca7517bfc88d9812c34 bumped nfs-utils to version
+>> 2.6.3 which includes the addition of the two files patched here.
+>>
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>>
+>
+> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>
+>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+
+Fixes: f9dc4bab9f ("package/nfs-utils: bump to version 2.6.3")
+
+Thanks!
+
+Kind regards,
+Petr
+Petr
+
+
+
+> Best regards
+> --
+> Giulio Benetti
+> CEO&CTO@Benetti Engineering sas
+>
+> ---
+>> v2: added upstream URL
+>>
+>>   ...-guard-dlfcn.h-include-with-HAVE_DLF.patch | 44 +++++++++++++++++++
+>>   1 file changed, 44 insertions(+)
+>>   create mode 100644
+>> package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
+>>
+>> diff --git
+>> a/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
+>> b/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
+>> new file mode 100644
+>> index 0000000000..5ffb15d86d
+>> --- /dev/null
+>> +++
+>> b/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
+>> @@ -0,0 +1,44 @@
+>> +From 274e4d212c30183242e48b639889865819f3ac33 Mon Sep 17 00:00:00 2001
+>> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> +Date: Sun, 11 Jun 2023 08:57:11 +0200
+>> +Subject: [PATCH] support/reexport: guard dlfcn.h include with
+>> HAVE_DLFCN_H
+>> +
+>> +Upstream: https://marc.info/?l=linux-nfs&m=168650558019402&w=2
+>> +
+>> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> +---
+>> + support/reexport/fsidd.c    | 2 ++
+>> + support/reexport/reexport.c | 2 ++
+>> + 2 files changed, 4 insertions(+)
+>> +
+>> +diff --git a/support/reexport/fsidd.c b/support/reexport/fsidd.c
+>> +index 37649d06..d4b245e8 100644
+>> +--- a/support/reexport/fsidd.c
+>> ++++ b/support/reexport/fsidd.c
+>> +@@ -3,7 +3,9 @@
+>> + #endif
+>> +
+>> + #include <assert.h>
+>> ++#ifdef HAVE_DLFCN_H
+>> + #include <dlfcn.h>
+>> ++#endif
+>> + #include <event2/event.h>
+>> + #include <limits.h>
+>> + #include <stdint.h>
+>> +diff --git a/support/reexport/reexport.c b/support/reexport/reexport.c
+>> +index d597a2f7..d9a700af 100644
+>> +--- a/support/reexport/reexport.c
+>> ++++ b/support/reexport/reexport.c
+>> +@@ -2,7 +2,9 @@
+>> + #include <config.h>
+>> + #endif
+>> +
+>> ++#ifdef HAVE_DLFCN_H
+>> + #include <dlfcn.h>
+>> ++#endif
+>> + #include <stdint.h>
+>> + #include <stdio.h>
+>> + #include <sys/random.h>
+>> +--
+>> +2.39.2
+>> +
+>>
+>
+>
+
+--0000000000007578f305fe81532a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><br>On Sunday, 11 June 2023, Giulio Benetti &lt;<a hre=
+f=3D"mailto:giulio.benetti@benettiengineering.com" target=3D"_blank">giulio=
+.benetti@benettiengineering.com</a>&gt; wrote:<br><blockquote class=3D"gmai=
+l_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left=
+:1ex">On 11/06/23 19:51, Bernd Kuhls wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+Fixes:<br>
+<a href=3D"http://autobuild.buildroot.net/results/f17/f17a554c86f0b24327b49=
+fdc75612cc133f129ed/" target=3D"_blank">http://autobuild.buildroot.net/resu=
+lts/f17/f17a554c86f0b24327b49fdc75612cc133f129ed/</a><br>
+<br>
+f9dc4bab9f4576eed3a22ca7517bfc88d9812c34 bumped nfs-utils to version<br>
+2.6.3 which includes the addition of the two files patched here.<br>
+<br>
+Signed-off-by: Bernd Kuhls &lt;<a href=3D"mailto:bernd.kuhls@t-online.de" t=
+arget=3D"_blank">bernd.kuhls@t-online.de</a>&gt;<br>
+</blockquote>
+<br>
+Reviewed-by: Giulio Benetti &lt;<a href=3D"mailto:giulio.benetti@benettieng=
+ineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a>&g=
+t;<br>
+<br></blockquote><div><br></div><div>Reviewed-by: Petr Vorel &lt;<a href=3D=
+"mailto:petr.vorel@gmail.com" target=3D"_blank">petr.vorel@gmail.com</a>&gt=
+;</div><div><br></div><div>Fixes: f9dc4bab9f (&quot;package/nfs-utils: bump=
+ to version 2.6.3&quot;)<br><br></div><div>Thanks!</div><div><br></div><div=
+>Kind regards,</div><div>Petr</div></div><div>Petr</div><div><br></div><div=
+>=C2=A0<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
+0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+Best regards<br>
+-- <br>
+Giulio Benetti<br>
+CEO&amp;CTO@Benetti Engineering sas<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">
+---<br>
+v2: added upstream URL<br>
+<br>
+=C2=A0 ...-guard-dlfcn.h-include-with-HAVE_DLF.patch | 44 +++++++++++++++++=
+++<br>
+=C2=A0 1 file changed, 44 insertions(+)<br>
+=C2=A0 create mode 100644 package/nfs-utils/0002-support-reexport-guard-dlf=
+cn.h-include-with-HAVE_DLF.patch<br>
+<br>
+diff --git a/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-=
+with-HAVE_DLF.patch b/package/nfs-utils/0002-support-reexport-guard-dlfcn.h=
+-include-with-HAVE_DLF.patch<br>
+new file mode 100644<br>
+index 0000000000..5ffb15d86d<br>
+--- /dev/null<br>
++++ b/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HA=
+VE_DLF.patch<br>
+@@ -0,0 +1,44 @@<br>
++From 274e4d212c30183242e48b639889865819f3ac33 Mon Sep 17 00:00:00 2001<br>
++From: Bernd Kuhls &lt;<a href=3D"mailto:bernd.kuhls@t-online.de" target=3D=
+"_blank">bernd.kuhls@t-online.de</a>&gt;<br>
++Date: Sun, 11 Jun 2023 08:57:11 +0200<br>
++Subject: [PATCH] support/reexport: guard dlfcn.h include with HAVE_DLFCN_H=
+<br>
++<br>
++Upstream: <a href=3D"https://marc.info/?l=3Dlinux-nfs&amp;m=3D168650558019=
+402&amp;w=3D2" target=3D"_blank">https://marc.info/?l=3Dlinux-nfs&amp;m=3D1=
+68650558019402&amp;w=3D2</a><br>
++<br>
++Signed-off-by: Bernd Kuhls &lt;<a href=3D"mailto:bernd.kuhls@t-online.de" =
+target=3D"_blank">bernd.kuhls@t-online.de</a>&gt;<br>
++---<br>
++ support/reexport/fsidd.c=C2=A0 =C2=A0 | 2 ++<br>
++ support/reexport/reexport.c | 2 ++<br>
++ 2 files changed, 4 insertions(+)<br>
++<br>
++diff --git a/support/reexport/fsidd.c b/support/reexport/fsidd.c<br>
++index 37649d06..d4b245e8 100644<br>
++--- a/support/reexport/fsidd.c<br>
+++++ b/support/reexport/fsidd.c<br>
++@@ -3,7 +3,9 @@<br>
++ #endif<br>
++<br>
++ #include &lt;assert.h&gt;<br>
+++#ifdef HAVE_DLFCN_H<br>
++ #include &lt;dlfcn.h&gt;<br>
+++#endif<br>
++ #include &lt;event2/event.h&gt;<br>
++ #include &lt;limits.h&gt;<br>
++ #include &lt;stdint.h&gt;<br>
++diff --git a/support/reexport/reexport.c b/support/reexport/reexport.c<br>
++index d597a2f7..d9a700af 100644<br>
++--- a/support/reexport/reexport.c<br>
+++++ b/support/reexport/reexport.c<br>
++@@ -2,7 +2,9 @@<br>
++ #include &lt;config.h&gt;<br>
++ #endif<br>
++<br>
+++#ifdef HAVE_DLFCN_H<br>
++ #include &lt;dlfcn.h&gt;<br>
+++#endif<br>
++ #include &lt;stdint.h&gt;<br>
++ #include &lt;stdio.h&gt;<br>
++ #include &lt;sys/random.h&gt;<br>
++--<br>
++2.39.2<br>
++<br>
+</blockquote>
+<br>
+</blockquote>
+
+--0000000000007578f305fe81532a--
+
+--===============4544490592858033611==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4544490592858033611==--
