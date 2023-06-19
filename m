@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8EFFEB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jun 2023 19:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 765EAEB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jun 2023 19:37:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 846C5401F3;
-	Mon, 19 Jun 2023 19:37:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 846C5401F3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 20852405ED;
+	Mon, 19 Jun 2023 19:37:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20852405ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 864MXjziCSvG; Mon, 19 Jun 2023 19:37:34 +0000 (UTC)
+	with ESMTP id wZMFnGzGhdOV; Mon, 19 Jun 2023 19:37:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A15494157A;
-	Mon, 19 Jun 2023 19:37:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A15494157A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3711B1BF947
+	by smtp2.osuosl.org (Postfix) with ESMTP id 342C541583;
+	Mon, 19 Jun 2023 19:37:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 342C541583
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 602351BF2E4
  for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 19:37:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 10FB761274
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45DA4410BE
  for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 19:37:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10FB761274
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45DA4410BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x-kIr9-9KTSK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QwkSIELYtart for <buildroot@lists.busybox.net>;
  Mon, 19 Jun 2023 19:37:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 250C26070A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D700410A3
  for <buildroot@buildroot.org>; Mon, 19 Jun 2023 19:37:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 250C26070A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D700410A3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 12497842BE; Mon, 19 Jun 2023 19:37:06 +0000 (UTC)
+ id 1AF9E842C1; Mon, 19 Jun 2023 19:37:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Jun 2023 21:36:39 +0200
+Date: Mon, 19 Jun 2023 21:36:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6508581652ce4cc9c98cd23601ce3a5fc3e8e2c6
-X-Git-Newrev: fa1d011a05c526c06b27edd388378e255b2f055c
+X-Git-Oldrev: fa1d011a05c526c06b27edd388378e255b2f055c
+X-Git-Newrev: 0afcfe5a48bd0cb33b1431bb92a5b43ba1109270
 X-Patchwork-Hint: ignore
-Message-Id: <20230619193706.12497842BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- version 4.1.9
+Message-Id: <20230619193706.1AF9E842C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/c-ares: security bump to version
+ 1.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,55 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa1d011a05c526c06b27edd388378e255b2f055c
+commit: https://git.buildroot.net/buildroot/commit/?id=0afcfe5a48bd0cb33b1431bb92a5b43ba1109270
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following security issues:
 
-- CVE-2023-31047: Potential bypass of validation when uploading multiple
-  files using one form field
-
-https://www.djangoproject.com/weblog/2023/may/03/security-releases/
-
-In addition, 4.1.8 fixed a bug related to secrets rotation:
-https://docs.djangoproject.com/en/4.2/releases/4.1.8/
+- CVE-2023-32067: High.  0-byte UDP payload causes Denial of Service
+- CVE-2023-31147 Moderate.  Insufficient randomness in generation of DNS
+  query IDs
+- CVE-2023-31130.  Moderate.  Buffer Underwrite in ares_inet_net_pton()
+- CVE-2023-31124.  Low.  AutoTools does not set CARES_RANDOM_FILE during
+  cross compilation
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index cb03b33bfe..922f468a67 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index edf891674b..3e1573f2cf 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  626f96c63ddfab24bab90d80c87a7aad  Django-4.1.7.tar.gz
--sha256  44f714b81c5f190d9d2ddad01a532fe502fa01c4cb8faf1d081f4264ed15dcd8  Django-4.1.7.tar.gz
-+md5  1a6f4e5318e3272deaa9cfd61e252fab  Django-4.1.9.tar.gz
-+sha256  e9f074a84930662104871bfcea55c3c180c50a0a47739db82435deae6cbaf032  Django-4.1.9.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index e8c91cf51f..fa58f65797 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+ # Locally calculated after checking pgp signature
+-sha256  bfceba37e23fd531293829002cac0401ef49a6dc55923f7f92236585b7ad1dd3  c-ares-1.19.0.tar.gz
++sha256  321700399b72ed0e037d0074c629e7741f6b2ec2dda92956abe3e9671d3e268e  c-ares-1.19.1.tar.gz
+ 
+ # Hash for license file
+ sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 4332fc6919..46b8acd673 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 4.1.7
-+PYTHON_DJANGO_VERSION = 4.1.9
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/9f/a7/07939866241b7e8f8d3bf164b7d6ad428163723e29dd472700f8ab0e5fd5
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/11/ea/8b514434c57c3bef89a475b75f74d768471d8e1bc61f4e5c79daeae9b5ef
- 
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
+-C_ARES_VERSION = 1.19.0
++C_ARES_VERSION = 1.19.1
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
