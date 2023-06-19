@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D140AEB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jun 2023 17:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E938AEB64DA
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jun 2023 17:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4708B6122A;
-	Mon, 19 Jun 2023 17:05:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4708B6122A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75939611C9;
+	Mon, 19 Jun 2023 17:20:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75939611C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fEPY3CvsY0kH; Mon, 19 Jun 2023 17:04:59 +0000 (UTC)
+	with ESMTP id 2DpInMsjh1W5; Mon, 19 Jun 2023 17:20:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86D7A60E1B;
-	Mon, 19 Jun 2023 17:04:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86D7A60E1B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7E8871BF34D
- for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 17:04:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 860A360E53;
+	Mon, 19 Jun 2023 17:20:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 860A360E53
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ACAC31BF34D
+ for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 17:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5842681886
- for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 17:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5842681886
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86CAF404C9
+ for <buildroot@lists.busybox.net>; Mon, 19 Jun 2023 17:20:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86CAF404C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BHqpnhWC0um6 for <buildroot@lists.busybox.net>;
- Mon, 19 Jun 2023 17:04:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q4zIEFMhUMeR for <buildroot@lists.busybox.net>;
+ Mon, 19 Jun 2023 17:20:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6127781852
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFB1940490
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6127781852
- for <buildroot@buildroot.org>; Mon, 19 Jun 2023 17:04:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EFB1940490
+ for <buildroot@buildroot.org>; Mon, 19 Jun 2023 17:20:48 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0f96.dip0.t-ipconnect.de [91.58.15.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0936FA4C06CF
- for <buildroot@buildroot.org>; Mon, 19 Jun 2023 19:04:48 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37900)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C1AFCA4C06CF;
+ Mon, 19 Jun 2023 19:20:46 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53570)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qBIIy-0003if-0e
- for buildroot@buildroot.org; Mon, 19 Jun 2023 19:04:47 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qBIYY-0006Wo-1I;
+ Mon, 19 Jun 2023 19:20:46 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 19 Jun 2023 19:04:40 +0200
-Message-Id: <20230619170440.727597-1-bernd@kuhls.net>
+Date: Mon, 19 Jun 2023 19:20:46 +0200
+Message-Id: <20230619172046.744739-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1687194288;
- bh=QQYPEgWF+NjGr4/+FDF4cHcEg7NSJVJeCpzH5herm3Q=;
- h=From:To:Subject:Date:From;
- b=ZNY/Rj8nskLcXvjhP/LzKpxLUkmBWBr8sGwyRjCxcyTUMNCmgBivq3IXB5bWTM/mg
- NsTMnxI/SGa8k5HEmZnBSF8vbGGnVniS6+OPDcjXqkhcq73b5VOkmr6cfTjOwkpuVy
- qSnlc5HxzMPfPh17CxdngoMuw8NbfWYj0BWH4NDDxM27AQW/Im0NXPDNLgCIYFPeBX
- aLf9ZD9lsKpHtffvtA9E985mC6ME5euW9yh6ADfc2WsiLvS11NLMJ0pDAqetVdYVas
- HlTH3e2NSheUUQLouMQe2lwJ8/Xds5kU4l3NQ3KYGYaaG1qTdvRQqv6L/63hKb/hmt
- 6mHjvDsK0Ao4g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202306131828; t=1687195246;
+ bh=j0WWbXloBePzOWjKHBiuqtjzBPChZ57eOsnspJRf+kE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=UKAxRFdfOQ9mjWAko2m/M1Pb8pOveU8laJmkNsmRSAUQh9yXl0td+I1DVXBuJ0mxN
+ 4ZCPEPlgZMLN9UyiKUeRbMlqm7nnG7ZxIejCw68UHD3YRePslz3hp4z67LEG4pc5Yv
+ S6EDD8Dp65L8NQli/w/OJvLEg9cyfLksg9RxoavJ8qZnMMXd5KnbQbxjvr4clhsWkG
+ YRJgzkaI8kDLJEVydlHN8Nvezrt3qxPv9npr5x1j8XhY8Nwm9tJMpDDmTXnJbHHKjg
+ 4uHJ0d+dnTMpqHE4TT2DJ3q23atXBkuo61OO423r0Uk0ATRoybZACu0cW0q8Hg6pNS
+ frnBunLWRlo3w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=ZNY/Rj8n
-Subject: [Buildroot] [PATCH 1/1] package/ccache: fix license hash
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=UKAxRFdf
+Subject: [Buildroot] [PATCH 1/1] package/check: switch to cmake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,34 +75,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 1db3f0f84449843476c2887d2ea09323c66f33a4 failed to
-update the license hash which is needed due to various commits in 2023
-updating package versions and copyright year:
-https://github.com/ccache/ccache/commits/master/LICENSE.adoc
+The autoconf-build system fails to properly detect vsnprintf
+
+    checking for vsnprintf... yes
+    checking whether vsnprintf is C99 compliant... no
+
+which leads to a build error
+
+    snprintf.c:495:1: error: inlining failed in call to 'always_inline'
+     'rpl_vsnprintf.localalias': function not inlinable
+
+Building with cmake fixes the problem:
+
+-- Looking for vsnprintf
+-- Looking for vsnprintf - found
 
 Fixes:
-http://autobuild.buildroot.net/results/41b/41b3427e30b6e44352fc78b27360fdadf9e46393/
+http://autobuild.buildroot.net/results/e55/e5562513226de902dae642526165b1555a540144/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ccache/ccache.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/check/check.mk | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 2b6cd65a74..736122e0ab 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
- sha256  3d3fb3f888a5b16c4fa7ee5214cca76348afd6130e8443de5f6f2424f2076a49  ccache-4.8.2.tar.xz
- sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
--sha256  56cf64f68b7b8150300acd79899941615523ea5c56c120e92f5b175b7cc78e3c  LICENSE.adoc
-+sha256  55ce274f2b898dad70d3695ab13f82656fd455bd8fb6d1c85d6f7c453bef0b2e  LICENSE.adoc
+diff --git a/package/check/check.mk b/package/check/check.mk
+index ccffd08ee3..d3977154df 100644
+--- a/package/check/check.mk
++++ b/package/check/check.mk
+@@ -10,12 +10,6 @@ CHECK_INSTALL_STAGING = YES
+ CHECK_DEPENDENCIES = host-pkgconf
+ CHECK_LICENSE = LGPL-2.1+
+ CHECK_LICENSE_FILES = COPYING.LESSER
+-CHECK_CONF_OPTS = --disable-build-docs
++CHECK_CONF_OPTS = -DBUILD_TESTING=OFF -DINSTALL_CHECKMK=OFF
+ 
+-# Having checkmk in the target makes no sense
+-define CHECK_REMOVE_CHECKMK
+-	rm -f $(TARGET_DIR)/usr/bin/checkmk
+-endef
+-CHECK_POST_INSTALL_TARGET_HOOKS += CHECK_REMOVE_CHECKMK
+-
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
 2.39.2
 
