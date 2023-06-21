@@ -1,98 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69861EB64D8
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jun 2023 09:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EF46EB64D7
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jun 2023 13:45:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9C7860FE9;
-	Wed, 21 Jun 2023 09:57:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9C7860FE9
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MzBBVe7j22Vo; Wed, 21 Jun 2023 09:57:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCBA860ABE;
-	Wed, 21 Jun 2023 09:57:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCBA860ABE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A2EA1BF4E5
- for <buildroot@lists.busybox.net>; Wed, 21 Jun 2023 09:57:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00D5E401CA
- for <buildroot@lists.busybox.net>; Wed, 21 Jun 2023 09:57:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00D5E401CA
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC4DC4011A;
+	Wed, 21 Jun 2023 13:45:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC4DC4011A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ove9XaPcq6Cs for <buildroot@lists.busybox.net>;
- Wed, 21 Jun 2023 09:57:34 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bqq3ZU1fR5e5; Wed, 21 Jun 2023 13:45:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67B4240C22;
+	Wed, 21 Jun 2023 13:45:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67B4240C22
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E65AC1BF2B9
+ for <buildroot@lists.busybox.net>; Wed, 21 Jun 2023 13:45:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF2D2613D8
+ for <buildroot@lists.busybox.net>; Wed, 21 Jun 2023 13:45:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF2D2613D8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u_LlUcbVj7Yg for <buildroot@lists.busybox.net>;
+ Wed, 21 Jun 2023 13:45:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4171F40181
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4171F40181
- for <buildroot@buildroot.org>; Wed, 21 Jun 2023 09:57:34 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-3113da5260dso3062058f8f.2
- for <buildroot@buildroot.org>; Wed, 21 Jun 2023 02:57:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3CBE60E09
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F3CBE60E09
+ for <buildroot@buildroot.org>; Wed, 21 Jun 2023 13:45:22 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-3090d3e9c92so6802508f8f.2
+ for <buildroot@buildroot.org>; Wed, 21 Jun 2023 06:45:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687341452; x=1689933452;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=tdUDyg2QRIsRuRG6WPxUUGRBR9iTQchOf/YW+/YsSVM=;
- b=LWx/DK+lIXgDvAm91/XDS60OuvLKlnwTkpd6sG0yXIKBujuPWGzDPfdGv+nxbBo9UR
- TuC0Nqv8UchwPX4P9S5534Oidk3B4wU+1KZ3P64rwcVRQRmMEEhc+M0gdqE2kCJpLsuH
- 0lQz31/FjkOSjT+zvtb/WJSaFOL+RY7KmYewN4bvUBaE1ckKHxAx8q74oUn1AQCcUEhE
- iRhKWew5/WWEksZLgZL41Wzy0CxhmADdhuUwPiGRirkYSZ1EbQIHrEjbT4F8ltA5GW03
- /2MEuR1wKwKUATfkbFJUnaAKyOJcRt6bo2rk9aCxaPIiTOosZ9E4OjZXKxj6Ot18Pjxv
- iqRQ==
-X-Gm-Message-State: AC+VfDx6aoicnAjECGp3VwjjJjihia+N7FauZft4ee3Su2u/Dj7vNJ87
- gMtQpvjsmdDE+DvHSkAK2kmEQw==
-X-Google-Smtp-Source: ACHHUZ7B4b6SHxvKtY8VVglSIispBXBAaWWnHeeEjhMO1jeuX+VlcuesLA6HBKQ5IrpLMW5YSi8erQ==
-X-Received: by 2002:a5d:534a:0:b0:307:904b:29e1 with SMTP id
- t10-20020a5d534a000000b00307904b29e1mr10570724wrv.20.1687341452268; 
- Wed, 21 Jun 2023 02:57:32 -0700 (PDT)
-Received: from [10.5.2.165]
+ d=1e100.net; s=20221208; t=1687355121; x=1689947121;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=zXvpiCS41xwgRpvkRKHwde/OLhMjX/w6Ucb2+RHU2rg=;
+ b=Xx7e/mz7aqiX1VV40rAwbpvb0Q8cQ498wfVlGAl5ULiQwm2XCoyQBOk17leZPtTK42
+ subn3/74+c9+K849Q0pxinCAhNSzT3x93RJDFxaohWaIixMXwJrKkyomk1Y8RnkIYCIY
+ 7VD5zSSn8xp0FzEM+SBgfZ0AdUNGcrMF9HSRhRsAv/OxD1KhkH5g6ez6eoEukm4eoStB
+ MfBgfLJJL/k03UHADCZuFbTRUoCtjo+S12xTC45+u7qKlGvb+J9fv1Ho1EwL1V3yePkm
+ dNkLlM9Av/dk897eiLD0AGxvaj99p0Far+hVQQK0wdvKyYRIpQ3b9ROZezKzL3Kt/iBc
+ dtlw==
+X-Gm-Message-State: AC+VfDymBGZN4ZgrgXOn9V0YkJ6iv5u2IIV19P5zhgCq/P83pGlM3YQ0
+ o2sIZf4ctz4EPnHbMzVqg9qH3f10Xsy6OnmMmkw=
+X-Google-Smtp-Source: ACHHUZ57IX2osPtBfLBhiFBrfYCwavXjQfUOeLdaHzk3S7qvsLsRkdaZY4LmRiiWdKRC8qocpDJX4w==
+X-Received: by 2002:adf:dc84:0:b0:30e:59a2:3d70 with SMTP id
+ r4-20020adfdc84000000b0030e59a23d70mr14765541wrj.43.1687355120531; 
+ Wed, 21 Jun 2023 06:45:20 -0700 (PDT)
+Received: from P-NTS-Evian.nantes.intranet
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- z11-20020a5d4c8b000000b0030c4d8930b1sm4000918wrs.91.2023.06.21.02.57.31
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 21 Jun 2023 02:57:31 -0700 (PDT)
-Message-ID: <1a3add30-eff5-9dfa-c4d9-3ca9122a6f08@smile.fr>
-Date: Wed, 21 Jun 2023 11:57:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-To: Arnout Vandecappelle <arnout@mind.be>,
- James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20230605070859.1877231-1-james.hilliard1@gmail.com>
- <0fc72d11-35b2-b6a2-8028-89c3093567a5@mind.be>
-Content-Language: fr, en-US
+ k10-20020adff5ca000000b0030ae87bd3e3sm4560641wrp.18.2023.06.21.06.45.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 21 Jun 2023 06:45:20 -0700 (PDT)
 From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <0fc72d11-35b2-b6a2-8028-89c3093567a5@mind.be>
+To: buildroot@buildroot.org
+Date: Wed, 21 Jun 2023 15:45:18 +0200
+Message-ID: <20230621134518.304689-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1687341452; x=1689933452;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=tdUDyg2QRIsRuRG6WPxUUGRBR9iTQchOf/YW+/YsSVM=;
- b=WBvI52JI7H8tRrmXk4r8+Sc/Wl93W4EwReMMuQohy1nul0glz6QIcF0IflWgwZr/5i
- elNAYuuFqE1qbJ5lAaN3HujCnGmIGpq2p9HDQDfDjp/IBZ+0FQ9cn3LT4sV9GzzP14HS
- JczT4336uL4Vi4HO86q7CH2NRhYgLJJ5L4NufoaTWpYmC0sj222/unP3g4JAty5xGCBj
- X0NgAKdiLEZbW3F5Ikg30EV2TenoJuLy+1KSoK1DkmKnZ9fLHI+c2R079Yyw43RH+g7d
- YqvsdSxiac0FKOemWReLUkmcgIFGaxCbB5BJvtl4VwMXYW17gcJMnGig/Wmc7sd63Ypl
- pSbg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1687355121; x=1689947121;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=zXvpiCS41xwgRpvkRKHwde/OLhMjX/w6Ucb2+RHU2rg=;
+ b=VzgvCqsfo1SS5j3bQ4Y4BAEl5zx23uo+bTfGre+1hkfz11Ho+KJ8SOeNzJ/jURs/PQ
+ O5F8PP870Flknktuk7hoymHhb3N5yPbfLO3iM5TNWXu5vXlTTYqVgoxOWt8dUFS/HRAg
+ RNXtOyfzjq/QXzYZ2B/T5kO+MOmzQ1lmwaNzT/dBQf09Z4+n17ULG8BR5PDj77vGR8Ck
+ xOp8RMKFGj5hyJ10UCfs5LOZHqVSnqFcEIqoP0CLu9uXn5UnRSzKbo9SHvOWWat3IroT
+ 1236vAOBcnzRqLQE9mVbSzcTO9MPzTOYR/PEEZPzDNbgArORXJmkuoYyu2/fwLLA0i9u
+ nrrQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
  header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=WBvI52JI
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-setuptools: bump to
- version 67.8.0
+ header.s=20221208 header.b=VzgvCqsf
+Subject: [Buildroot] [PATCH] python-gpiozero: migrate to setup.cfg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,83 +96,899 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@smile.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsIEFybm91dCwgQWxsLAoKTGUgMTgvMDYvMjAyMyDDoCAxNTowMiwgQXJub3V0
-IFZhbmRlY2FwcGVsbGUgdmlhIGJ1aWxkcm9vdCBhIMOpY3JpdMKgOgo+IAo+IAo+IE9uIDA1LzA2
-LzIwMjMgMDk6MDgsIEphbWVzIEhpbGxpYXJkIHdyb3RlOgo+PiBMaWNlbnNlIGhhc2ggY2hhbmdl
-ZCBkdWUgdG8gbmFtZSByZW1vdmFsOgo+PiBodHRwczovL2dpdGh1Yi5jb20vcHlwYS9zZXR1cHRv
-b2xzL2NvbW1pdC81OTU3ZDU4MjY2ZTQ3OWYxMjRiMzFmMzBlNDMyMmU3OThmZGYzODZiCgpTaW5j
-ZSB0aGlzIGNvbW1pdCwgb25lIG9mIHRoZSBweXRob24gdGVzdCBmYWlsIChUZXN0UHl0aG9uUHkz
-R3Bpb3plcm8gWzFdKToKCiAgRmlsZQoiL2J1aWxkcy9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC90
-ZXN0LW91dHB1dC9UZXN0UHl0aG9uUHkzR3Bpb3plcm8vaG9zdC9saWIvcHl0aG9uMy4xMS9zaXRl
-LXBhY2thZ2VzL3BrZ19yZXNvdXJjZXMvX19pbml0X18ucHkiLApsaW5lIDg2OCwgaW4gX3Jlc29s
-dmVfZGlzdAogICAgcmFpc2UgRGlzdHJpYnV0aW9uTm90Rm91bmQocmVxLCByZXF1aXJlcnMpCnBr
-Z19yZXNvdXJjZXMuRGlzdHJpYnV0aW9uTm90Rm91bmQ6IFRoZSAnY29sb3J6ZXJvJyBkaXN0cmli
-dXRpb24gd2FzIG5vdCBmb3VuZAphbmQgaXMgcmVxdWlyZWQgYnkgdGhlIGFwcGxpY2F0aW9uCgpC
-dXQgaWYgeW91IGxvb2sgY2xvc2VyIGluIHRoZSBidWlsZCBsb2csIHlvdSB3aWxsIG5vdGljZSBu
-ZXcgc2V0dXB0b29sIHdhcm5pbmc6CgpbLi4uXXN5c3Jvb3QvdXNyL2xpYi9weXRob24zLjExL2Rp
-c3R1dGlscy9jbWQucHk6NjI6ClNldHVwdG9vbHNEZXByZWNhdGlvbldhcm5pbmc6IHNldHVwLnB5
-IGluc3RhbGwgaXMgZGVwcmVjYXRlZC4KISEKKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioKICAgICAg
-ICBQbGVhc2UgYXZvaWQgcnVubmluZyBgYHNldHVwLnB5YGAgZGlyZWN0bHkuCiAgICAgICAgSW5z
-dGVhZCwgdXNlIHB5cGEvYnVpbGQsIHB5cGEvaW5zdGFsbGVyLCBweXBhL2J1aWxkIG9yCiAgICAg
-ICAgb3RoZXIgc3RhbmRhcmRzLWJhc2VkIHRvb2xzLgoKICAgICAgICBTZWUgaHR0cHM6Ly9ibG9n
-LmdhbnNzbGUuaW8vYXJ0aWNsZXMvMjAyMS8xMC9zZXR1cC1weS1kZXByZWNhdGVkLmh0bWwKZm9y
-IGRldGFpbHMuCgoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKgoKU28sIGl0IG1lYW5zIHRoYXQgdGhl
-IHBhY2thZ2UgaW5mcmFzdHJ1Y3R1cmUgZm9yIHB5dGhvbiB1c2UgYSBkZXByZWNhdGVkIGluc3Rh
-bGwKbWV0aG9kLiBJJ20gbm90IHN1cmUgd2h5IHRoaXMgaXNzdWUgYXBwZWFyIG9ubHkgd2l0aCBw
-eXRob24tcGlvemVybyBidXQgaXQgc2VlbXMKdGhhdCB3ZSBuZWVkIHRvIHVwZGF0ZSB0aGUgcHl0
-aG9uIGluZnJhc3RydWN0dXJlLgoKQ2FuIHlvdSBoYXZlIGEgbG9vaz8KClsxXSBodHRwczovL2dp
-dGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzQ1MDU5Nzc5MDYKWzJdCmh0
-dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2Jsb2IvMjAyMy4wNS54
-L3BhY2thZ2UvcGtnLXB5dGhvbi5tayNMMTk1CgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKPj4KPj4g
-U2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+
-Cj4gCj4gwqBBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgo+IAo+IMKgUmVnYXJkcywKPiDCoEFy
-bm91dAo+IAo+PiAtLS0KPj4gwqAgcGFja2FnZS9weXRob24tc2V0dXB0b29scy9weXRob24tc2V0
-dXB0b29scy5oYXNoIHwgNiArKystLS0KPj4gwqAgcGFja2FnZS9weXRob24tc2V0dXB0b29scy9w
-eXRob24tc2V0dXB0b29scy5ta8KgwqAgfCA0ICsrLS0KPj4gwqAgMiBmaWxlcyBjaGFuZ2VkLCA1
-IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdl
-L3B5dGhvbi1zZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLmhhc2gKPj4gYi9wYWNrYWdlL3B5
-dGhvbi1zZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLmhhc2gKPj4gaW5kZXggNzZhZDFiYTFj
-ZS4uYmUxMzA2MzcyOCAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9weXRob24tc2V0dXB0b29scy9w
-eXRob24tc2V0dXB0b29scy5oYXNoCj4+ICsrKyBiL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMv
-cHl0aG9uLXNldHVwdG9vbHMuaGFzaAo+PiBAQCAtMSw0ICsxLDQgQEAKPj4gwqAgIyBGcm9tIGh0
-dHBzOi8vcHlwaS5vcmcvcHlwaS9zZXR1cHRvb2xzL2pzb24KPj4gLW1kNcKgIDFmZDhiZDA0YjBi
-ZWQ5NWFkNmM4MWYwM2IxYzA4MGJjwqAgc2V0dXB0b29scy02NS42LjMudGFyLmd6Cj4+IC1zaGEy
-NTbCoCBhNzYyMDc1N2JmOTg0YjU4ZGVhZjMyZmM4YTQ1NzdhOWJiYzA4NTBjZjkyYzIwZTFjZTQx
-YzM4YzE5ZTVmYjc1wqAKPj4gc2V0dXB0b29scy02NS42LjMudGFyLmd6Cj4+IC1zaGEyNTbCoCBk
-YjNmMDI0NmIxZjkyNzhmMTU4NDViOTlmZWM0NzhiOGI1MDZlYjc2NDg3OTkzNzIyZjhjNmUyNTQy
-ODVmYWY4wqAKPj4gTElDRU5TRQo+PiArbWQ1wqAgNjI4YWIxYWU3ZDE0MTg1ZTVlNTM2NzQwZWEz
-MWI1Y2XCoCBzZXR1cHRvb2xzLTY3LjguMC50YXIuZ3oKPj4gK3NoYTI1NsKgIDYyNjQyMzU4YWRj
-NzdmZmE4NzIzM2JjNGQyMzU0YzRiMjY4MmQyMTQwNDhmNTAwOTY0ZGJlNzYwY2NlZGYxMDLCoAo+
-PiBzZXR1cHRvb2xzLTY3LjguMC50YXIuZ3oKPj4gK3NoYTI1NsKgIDg2ZGEwZjAxYWVhZTQ2MzQ4
-YTNjM2Q0NjUxOTVkYzFjZWNjZGU3OWY3OWU4Nzc2OWE2NGI4ZGEwNGIyYTQ3NDHCoAo+PiBMSUNF
-TlNFCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzL3B5dGhvbi1zZXR1
-cHRvb2xzLm1rCj4+IGIvcGFja2FnZS9weXRob24tc2V0dXB0b29scy9weXRob24tc2V0dXB0b29s
-cy5tawo+PiBpbmRleCAyMjZlZjJiNDc5Li42ZDEwMTcyY2RjIDEwMDY0NAo+PiAtLS0gYS9wYWNr
-YWdlL3B5dGhvbi1zZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLm1rCj4+ICsrKyBiL3BhY2th
-Z2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsKPj4gQEAgLTQsOSArNCw5
-IEBACj4+IMKgICMKPj4gwqAKPj4gIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPj4gwqAgLVBZVEhP
-Tl9TRVRVUFRPT0xTX1ZFUlNJT04gPSA2NS42LjMKPj4gK1BZVEhPTl9TRVRVUFRPT0xTX1ZFUlNJ
-T04gPSA2Ny44LjAKPj4gwqAgUFlUSE9OX1NFVFVQVE9PTFNfU09VUkNFID0gc2V0dXB0b29scy0k
-KFBZVEhPTl9TRVRVUFRPT0xTX1ZFUlNJT04pLnRhci5nego+PiAtUFlUSE9OX1NFVFVQVE9PTFNf
-U0lURSA9Cj4+IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy9iNi8yMS9j
-YjlhOGQwYjJjODU5N2M4M2ZjZThlOWMwMjg4NGJjZTNkNDk1MWU0MWU4MDdmYzM1NzkxYzZiMjNk
-OWEKPj4gK1BZVEhPTl9TRVRVUFRPT0xTX1NJVEUgPQo+PiBodHRwczovL2ZpbGVzLnB5dGhvbmhv
-c3RlZC5vcmcvcGFja2FnZXMvMDMvMjAvNjMwNzgzNTcxZTc2ZTVmYTVmM2U5ZjI5Mzk4Y2EzYWNl
-Mzc3MjA3YjgxOTZiNTRlMGZmZGYwOWYxMmMxCj4+IMKgIFBZVEhPTl9TRVRVUFRPT0xTX0xJQ0VO
-U0UgPSBNSVQKPj4gwqAgUFlUSE9OX1NFVFVQVE9PTFNfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UK
-Pj4gwqAgUFlUSE9OX1NFVFVQVE9PTFNfQ1BFX0lEX1ZFTkRPUiA9IHB5dGhvbgo+IF9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxp
-bmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+setup.cfg seems to be mandatory since (at least) setuptools 67.8.0
+otherwise gpiozero dependencies are not properly detected
+
+File "/builds/buildroot.org/buildroot/test-output/TestPythonPy3Gpiozero/host/lib/python3.11/site-packages/pkg_resources/__init__.py",
+line 868, in _resolve_dist
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'colorzero' distribution was not found and is required by the application
+
+See:
+http://lists.busybox.net/pipermail/buildroot/2023-June/669207.html
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4505977906
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+---
+ .../0001-Migrate-to-setup.cfg.patch           | 855 ++++++++++++++++++
+ 1 file changed, 855 insertions(+)
+ create mode 100644 package/python-gpiozero/0001-Migrate-to-setup.cfg.patch
+
+diff --git a/package/python-gpiozero/0001-Migrate-to-setup.cfg.patch b/package/python-gpiozero/0001-Migrate-to-setup.cfg.patch
+new file mode 100644
+index 0000000000..090bcbc4a3
+--- /dev/null
++++ b/package/python-gpiozero/0001-Migrate-to-setup.cfg.patch
+@@ -0,0 +1,855 @@
++From d56ca0ee4fde7fa4ad82a532f9ea387f9f33d389 Mon Sep 17 00:00:00 2001
++From: Dave Jones <dave@waveform.org.uk>
++Date: Tue, 16 Mar 2021 17:52:49 +0000
++Subject: [PATCH] Migrate to setup.cfg
++
++(cherry picked from commit b167bef82c3bf2739707f062b35fcabbb9cc11ad)
++
++setup.cfg seems to be mandatory since (at least) setuptools 67.8.0
++otherwise gpiozero dependencies are not properly detected
++
++File "/builds/buildroot.org/buildroot/test-output/TestPythonPy3Gpiozero/host/lib/python3.11/site-packages/pkg_resources/__init__.py",
++line 868, in _resolve_dist
++    raise DistributionNotFound(req, requirers)
++pkg_resources.DistributionNotFound: The 'colorzero' distribution was not found
++and is required by the application
++
++Upstream: https://github.com/gpiozero/gpiozero/commit/b167bef82c3bf2739707f062b35fcabbb9cc11ad
++
++See:
++http://lists.busybox.net/pipermail/buildroot/2023-June/669207.html
++
++[Romain: rebase on 1.6.2]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ MANIFEST.in    |   4 --
++ Makefile       |  88 +++++---------------------------
++ copyrights     |  56 +++++++++++---------
++ copyrights.cfg |  11 ----
++ coverage.cfg   |  18 -------
++ docs/conf.py   |  99 +++++++++++++++--------------------
++ setup.cfg      |  98 +++++++++++++++++++++++++++++++++++
++ setup.py       | 136 +++++--------------------------------------------
++ 8 files changed, 196 insertions(+), 314 deletions(-)
++ delete mode 100644 MANIFEST.in
++ delete mode 100644 copyrights.cfg
++ delete mode 100644 coverage.cfg
++ create mode 100644 setup.cfg
++
++diff --git a/MANIFEST.in b/MANIFEST.in
++deleted file mode 100644
++index bb562ea..0000000
++--- a/MANIFEST.in
+++++ /dev/null
++@@ -1,4 +0,0 @@
++-include README.rst
++-recursive-include gpiozero/fonts *.txt
++-recursive-include tests *.py
++-include LICENSE.rst
++diff --git a/Makefile b/Makefile
++index c9ddd90..264a73c 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -4,44 +4,18 @@
++ PYTHON=python
++ PIP=pip
++ PYTEST=py.test
++-COVERAGE=coverage
++ TWINE=twine
++ PYFLAGS=
++ DEST_DIR=/
++ 
++-# Horrid hack to ensure setuptools is installed in our python environment. This
++-# is necessary with Python 3.3's venvs which don't install it by default.
++-ifeq ($(shell python -c "import setuptools" 2>&1),)
++-SETUPTOOLS:=
++-else
++-SETUPTOOLS:=$(shell wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | $(PYTHON))
++-endif
++-
++ # Calculate the base names of the distribution, the location of all source,
++ # documentation, packaging, icon, and executable script files
++ NAME:=$(shell $(PYTHON) $(PYFLAGS) setup.py --name)
++ VER:=$(shell $(PYTHON) $(PYFLAGS) setup.py --version)
++-ifeq ($(shell lsb_release -si),Ubuntu)
++-DEB_SUFFIX:=ubuntu1
++-else
++-DEB_SUFFIX:=
++-endif
++-DEB_ARCH:=$(shell dpkg --print-architecture)
++ PYVER:=$(shell $(PYTHON) $(PYFLAGS) -c "import sys; print('py%d.%d' % sys.version_info[:2])")
++ PY_SOURCES:=$(shell \
++ 	$(PYTHON) $(PYFLAGS) setup.py egg_info >/dev/null 2>&1 && \
++ 	grep -v "\.egg-info" $(NAME).egg-info/SOURCES.txt)
++-DEB_SOURCES:=debian/changelog \
++-	debian/control \
++-	debian/copyright \
++-	debian/rules \
++-	debian/docs \
++-	$(wildcard debian/*.init) \
++-	$(wildcard debian/*.default) \
++-	$(wildcard debian/*.manpages) \
++-	$(wildcard debian/*.docs) \
++-	$(wildcard debian/*.doc-base) \
++-	$(wildcard debian/*.desktop)
++ DOC_SOURCES:=docs/conf.py \
++ 	$(wildcard docs/*.png) \
++ 	$(wildcard docs/*.svg) \
++@@ -56,17 +30,6 @@ SUBDIRS:=
++ DIST_WHEEL=dist/$(NAME)-$(VER)-py2.py3-none-any.whl
++ DIST_TAR=dist/$(NAME)-$(VER).tar.gz
++ DIST_ZIP=dist/$(NAME)-$(VER).zip
++-DIST_DEB=dist/python-$(NAME)_$(VER)$(DEB_SUFFIX)_all.deb \
++-	dist/python3-$(NAME)_$(VER)$(DEB_SUFFIX)_all.deb \
++-	dist/python-$(NAME)-doc_$(VER)$(DEB_SUFFIX)_all.deb \
++-	dist/$(NAME)_$(VER)$(DEB_SUFFIX)_$(DEB_ARCH).build \
++-	dist/$(NAME)_$(VER)$(DEB_SUFFIX)_$(DEB_ARCH).buildinfo \
++-	dist/$(NAME)_$(VER)$(DEB_SUFFIX)_$(DEB_ARCH).changes
++-DIST_DSC=dist/$(NAME)_$(VER)$(DEB_SUFFIX).tar.xz \
++-	dist/$(NAME)_$(VER)$(DEB_SUFFIX).dsc \
++-	dist/$(NAME)_$(VER)$(DEB_SUFFIX)_source.build \
++-	dist/$(NAME)_$(VER)$(DEB_SUFFIX)_source.buildinfo \
++-	dist/$(NAME)_$(VER)$(DEB_SUFFIX)_source.changes
++ 
++ 
++ # Default target
++@@ -76,10 +39,9 @@ all:
++ 	@echo "make test - Run tests"
++ 	@echo "make doc - Generate HTML and PDF documentation"
++ 	@echo "make source - Create source package"
++-	@echo "make egg - Generate a PyPI egg package"
+++	@echo "make wheel - Generate a PyPI wheel package"
++ 	@echo "make zip - Generate a source zip package"
++ 	@echo "make tar - Generate a source tar package"
++-	@echo "make deb - Generate Debian packages"
++ 	@echo "make dist - Generate all packages"
++ 	@echo "make clean - Get rid of all generated files"
++ 	@echo "make release - Create and tag a new release"
++@@ -102,9 +64,7 @@ zip: $(DIST_ZIP)
++ 
++ tar: $(DIST_TAR)
++ 
++-deb: $(DIST_DEB) $(DIST_DSC)
++-
++-dist: $(DIST_WHEEL) $(DIST_DEB) $(DIST_DSC) $(DIST_TAR) $(DIST_ZIP)
+++dist: $(DIST_WHEEL) $(DIST_TAR) $(DIST_ZIP)
++ 
++ develop: 
++ 	@# These have to be done separately to avoid a cockup...
++@@ -113,18 +73,17 @@ develop:
++ 	$(PIP) install -e .[doc,test]
++ 
++ test:
++-	$(COVERAGE) run --rcfile coverage.cfg -m $(PYTEST) tests -v -r sx
++-	$(COVERAGE) report --rcfile coverage.cfg
+++	$(PYTEST) tests
++ 
++ clean:
++-	dh_clean
++-	rm -fr dist/ $(NAME).egg-info/ tags
+++	rm -fr dist/ build/ .pytest_cache/ .mypy_cache/ $(NAME).egg-info/ tags .coverage
++ 	for dir in $(SUBDIRS); do \
++ 		$(MAKE) -C $$dir clean; \
++ 	done
+++	find $(CURDIR) -name "*.pyc" -delete
++ 
++ tags: $(PY_SOURCES)
++-	ctags -R --exclude="build/*" --exclude="debian/*" --exclude="docs/*" --languages="Python"
+++	ctags -R --exclude="build/*" --exclude="docs/*" --languages="Python"
++ 
++ $(SUBDIRS):
++ 	$(MAKE) -C $@
++@@ -138,37 +97,14 @@ $(DIST_ZIP): $(PY_SOURCES) $(SUBDIRS)
++ $(DIST_WHEEL): $(PY_SOURCES) $(SUBDIRS)
++ 	$(PYTHON) $(PYFLAGS) setup.py bdist_wheel --universal
++ 
++-$(DIST_DEB): $(PY_SOURCES) $(SUBDIRS) $(DEB_SOURCES) $(DIST_TAR)
++-	cp $(DIST_TAR) ../$(NAME)_$(VER).orig.tar.gz
++-	debuild -b
++-	mkdir -p dist/
++-	for f in $(DIST_DEB); do cp ../$${f##*/} dist/; done
++-
++-$(DIST_DSC): $(PY_SOURCES) $(SUBDIRS) $(DEB_SOURCES) $(DIST_TAR)
++-	cp $(DIST_TAR) ../$(NAME)_$(VER).orig.tar.gz
++-	debuild -S
++-	mkdir -p dist/
++-	for f in $(DIST_DSC); do cp ../$${f##*/} dist/; done
++-
++-copyrights: $(PY_SOURCES) $(DOC_SOURCES)
++-	./copyrights
++-
++-changelog: $(PY_SOURCES) $(DOC_SOURCES) $(DEB_SOURCES)
+++release:
++ 	$(MAKE) clean
++-	# ensure there are no current uncommitted changes
++ 	test -z "$(shell git status --porcelain)"
++-	# update the debian changelog with new release information
++-	dch --newversion $(VER)$(DEB_SUFFIX)
++-	# commit the changes and add a new tag
++-	git commit debian/changelog -m "Updated changelog for release $(VER)"
++-
++-release: $(DIST_DEB) $(DIST_DSC) $(DIST_TAR) $(DIST_WHEEL)
++ 	git tag -s v$(VER) -m "Release v$(VER)"
++-	git push --tags
++-	# build a source archive and upload to PyPI
+++	git push origin v$(VER)
+++
+++upload: $(DIST_TAR) $(DIST_WHEEL)
+++	$(TWINE) check $(DIST_TAR) $(DIST_WHEEL)
++ 	$(TWINE) upload $(DIST_TAR) $(DIST_WHEEL)
++-	# build the deb source archive and upload to Raspbian
++-	dput raspberrypi dist/$(NAME)_$(VER)$(DEB_SUFFIX)_source.changes
++-	dput raspberrypi dist/$(NAME)_$(VER)$(DEB_SUFFIX)_$(DEB_ARCH).changes
++ 
++-.PHONY: all install develop test doc source egg wheel zip tar deb dist clean tags release upload $(SUBDIRS)
+++.PHONY: all install develop test doc source wheel zip tar dist clean tags release upload $(SUBDIRS)
++diff --git a/copyrights b/copyrights
++index b709fc8..2f14e78 100755
++--- a/copyrights
+++++ b/copyrights
++@@ -6,10 +6,13 @@ derives the authorship and copyright years information from the git history
++ of the project; hence, this script must be run within a git repository.
++ """
++ 
+++from __future__ import annotations
+++
++ import os
++ import sys
++ assert sys.version_info >= (3, 6), 'Script requires Python 3.6+'
++ import tempfile
+++import typing as t
++ from argparse import ArgumentParser, Namespace
++ from configparser import ConfigParser
++ from operator import attrgetter
++@@ -18,14 +21,13 @@ from datetime import datetime
++ from subprocess import Popen, PIPE, DEVNULL
++ from pathlib import Path
++ from fnmatch import fnmatch
++-from typing import NamedTuple, Iterator, List, Tuple, Set, Union, Optional
++ 
++ 
++ SPDX_PREFIX = 'SPDX-License-Identifier:'
++ COPYRIGHT_PREFIX = 'Copyright (c)'
++ 
++ 
++-def main(args: List[str] = None):
+++def main(args: t.List[str] = None):
++     if args is None:
++         args = sys.argv[1:]
++     config = get_config(args)
++@@ -41,7 +43,7 @@ def main(args: List[str] = None):
++                     target.write(chunk)
++ 
++ 
++-def get_config(args: List[str]) -> Namespace:
+++def get_config(args: t.List[str]) -> Namespace:
++     config = ConfigParser(
++         defaults={
++             'include': '**/*',
++@@ -52,10 +54,10 @@ def get_config(args: List[str]) -> Namespace:
++             'spdx_prefix': SPDX_PREFIX,
++             'copy_prefix': COPYRIGHT_PREFIX,
++         },
++-        delimiters=('=',), default_section='settings',
+++        delimiters=('=',), default_section='copyrights:settings',
++         empty_lines_in_values=False, interpolation=None,
++         converters={'list': lambda s: s.strip().splitlines() })
++-    config.read('copyrights.cfg')
+++    config.read('setup.cfg')
++     sect = config[config.default_section]
++ 
++     parser = ArgumentParser(description=__doc__)
++@@ -113,10 +115,10 @@ def get_config(args: List[str]) -> Namespace:
++     return ns
++ 
++ 
++-class Copyright(NamedTuple):
+++class Copyright(t.NamedTuple):
++     author: str
++     email:  str
++-    years:  Set[int]
+++    years:  t.Set[int]
++ 
++     def __str__(self):
++         if len(self.years) > 1:
++@@ -126,8 +128,8 @@ class Copyright(NamedTuple):
++         return f'{years} {self.author} <{self.email}>'
++ 
++ 
++-def get_copyrights(include: Set[str], exclude: Set[str])\
++-        -> Iterator[Tuple[Path, List[Copyright]]]:
+++def get_copyrights(include: t.Set[str], exclude: t.Set[str])\
+++        -> t.Iterator[t.Tuple[Path, t.Container[Copyright]]]:
++     sorted_blame = sorted(
++         get_contributions(include, exclude),
++         key=lambda c: (c.path, c.author, c.email)
++@@ -147,15 +149,15 @@ def get_copyrights(include: Set[str], exclude: Set[str])\
++         yield path, copyrights
++ 
++ 
++-class Contribution(NamedTuple):
+++class Contribution(t.NamedTuple):
++     author: str
++     email:  str
++     year:   int
++     path:   Path
++ 
++ 
++-def get_contributions(include: Set[str], exclude: Set[str])\
++-        -> Iterator[Contribution]:
+++def get_contributions(include: t.Set[str], exclude: t.Set[str])\
+++        -> t.Iterator[Contribution]:
++     for path in get_source_paths(include, exclude):
++         blame = Popen(
++             ['git', 'blame', '--line-porcelain', 'HEAD', '--', str(path)],
++@@ -186,7 +188,8 @@ def get_contributions(include: Set[str], exclude: Set[str])\
++         assert blame.returncode == 0
++ 
++ 
++-def get_source_paths(include: Set[str], exclude: Set[str]) -> Iterator[Path]:
+++def get_source_paths(include: t.Set[str], exclude: t.Set[str])\
+++        -> t.Iterator[Path]:
++     ls_tree = Popen(
++         ['git', 'ls-tree', '-r', '--name-only', 'HEAD'],
++         stdout=PIPE, stderr=DEVNULL, universal_newlines=True)
++@@ -203,9 +206,9 @@ def get_source_paths(include: Set[str], exclude: Set[str]) -> Iterator[Path]:
++     assert ls_tree.returncode == 0
++ 
++ 
++-class License(NamedTuple):
++-    ident: Optional[str]
++-    text:  List[str]
+++class License(t.NamedTuple):
+++    ident: t.Optional[str]
+++    text:  t.List[str]
++ 
++ 
++ def get_license(path: Path, *, spdx_prefix: str = SPDX_PREFIX) -> License:
++@@ -253,20 +256,26 @@ class CopyWriter:
++         '.sql': '--',
++     }
++ 
++-    def __init__(self, license='LICENSE.txt', preamble=(),
++-                 spdx_prefix=SPDX_PREFIX, copy_prefix=COPYRIGHT_PREFIX):
+++    def __init__(self, license: Path=Path('LICENSE.txt'),
+++                 preamble: t.List[str]=None,
+++                 spdx_prefix: str=SPDX_PREFIX,
+++                 copy_prefix: str=COPYRIGHT_PREFIX):
+++        if preamble is None:
+++            preamble = []
++         self.license = get_license(license, spdx_prefix=spdx_prefix)
++         self.preamble = preamble
++         self.spdx_prefix = spdx_prefix
++         self.copy_prefix = copy_prefix
++ 
++     @classmethod
++-    def from_config(cls, config):
+++    def from_config(cls, config: Namespace) -> CopyWriter:
++         return cls(
++             config.license, config.preamble,
++             config.spdx_prefix, config.copy_prefix)
++ 
++-    def transform(self, source, copyrights, *, comment_prefix=None):
+++    def transform(self, source: t.TextIO,
+++                  copyrights: t.List[Copyright], *,
+++                  comment_prefix: str=None) -> t.Iterator[str]:
++         if comment_prefix is None:
++             comment_prefix = self.COMMENTS[Path(source.name).suffix]
++         license_start = self.license.text[0]
++@@ -279,7 +288,7 @@ class CopyWriter:
++                     yield line
++                     empty = False
++                 elif linenum < 3 and (
++-                        'set fileencoding=' in line or '-*- coding:' in line):
+++                        'fileencoding=' in line or '-*- coding:' in line):
++                     yield line
++                     empty = False
++                 elif line.rstrip() == comment_prefix:
++@@ -313,7 +322,8 @@ class CopyWriter:
++             elif state == 'body':
++                 yield line
++ 
++-    def _generate_header(self, copyrights, comment_prefix, empty):
+++    def _generate_header(self, copyrights: t.Iterable[Copyright],
+++                         comment_prefix: str, empty: bool) -> t.Iterator[str]:
++         if not empty:
++             yield comment_prefix + '\n'
++         for line in self.preamble:
++@@ -356,7 +366,7 @@ class AtomicReplaceFile:
++         If ``None`` (the default), the temporary file will be opened in binary
++         mode. Otherwise, this specifies the encoding to use with text mode.
++     """
++-    def __init__(self, path: Union[str, Path], encoding: str = None):
+++    def __init__(self, path: t.Union[str, Path], encoding: str = None):
++         if isinstance(path, str):
++             path = Path(path)
++         self._path = path
++diff --git a/copyrights.cfg b/copyrights.cfg
++deleted file mode 100644
++index de68dbe..0000000
++--- a/copyrights.cfg
+++++ /dev/null
++@@ -1,11 +0,0 @@
++-[settings]
++-include=
++-  **/*.py
++-  **/*.rst
++-exclude=
++-  docs/examples/*.py
++-  docs/license.rst
++-license=LICENSE.rst
++-preamble=
++-  GPIO Zero: a library for controlling the Raspberry Pi's GPIO pins
++-strip-preamble=no
++diff --git a/coverage.cfg b/coverage.cfg
++deleted file mode 100644
++index e3f3349..0000000
++--- a/coverage.cfg
+++++ /dev/null
++@@ -1,18 +0,0 @@
++-[run]
++-branch = True
++-include = gpiozero/*
++-;omit = */bar.py,*/baz.py
++-
++-[report]
++-ignore_errors = True
++-show_missing = True
++-exclude_lines =
++-    pragma: no cover
++-    assert False
++-    raise AssertionError
++-    raise NotImplementedError
++-    pass
++-    if __name__ == .__main__.:
++-
++-[html]
++-directory = coverage
++diff --git a/docs/conf.py b/docs/conf.py
++index 998ae91..626ae29 100644
++--- a/docs/conf.py
+++++ b/docs/conf.py
++@@ -11,62 +11,34 @@
++ 
++ import sys
++ import os
+++from pathlib import Path
++ from datetime import datetime
++-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
++-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
++-import setup as _setup
++-
++-# Mock out certain modules while building documentation
++-class Mock(object):
++-    __all__ = []
++-
++-    def __init__(self, *args, **kw):
++-        pass
++-
++-    def __call__(self, *args, **kw):
++-        return Mock()
++-
++-    def __mul__(self, other):
++-        return Mock()
++-
++-    def __and__(self, other):
++-        return Mock()
+++from setuptools.config import read_configuration
++ 
++-    def __bool__(self):
++-        return False
++-
++-    def __nonzero__(self):
++-        return False
++-
++-    @classmethod
++-    def __getattr__(cls, name):
++-        if name in ('__file__', '__path__'):
++-            return '/dev/null'
++-        else:
++-            return Mock()
++-
++-sys.modules['RPi'] = Mock()
++-sys.modules['RPi.GPIO'] = sys.modules['RPi'].GPIO
++-sys.modules['lgpio'] = Mock()
++-sys.modules['RPIO'] = Mock()
++-sys.modules['RPIO.PWM'] = sys.modules['RPIO'].PWM
++-sys.modules['RPIO.Exceptions'] = sys.modules['RPIO'].Exceptions
++-sys.modules['pigpio'] = Mock()
++-sys.modules['w1thermsensor'] = Mock()
++-sys.modules['spidev'] = Mock()
++-sys.modules['colorzero'] = Mock()
+++on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+++config = read_configuration(str(Path(__file__).parent / '..' / 'setup.cfg'))
+++info = config['metadata']
++ 
++ # -- General configuration ------------------------------------------------
++ 
++ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.intersphinx']
+++if on_rtd:
+++    needs_sphinx = '1.4.0'
+++    extensions.append('sphinx.ext.imgmath')
+++    imgmath_image_format = 'svg'
+++    tags.add('rtd')
+++else:
+++    extensions.append('sphinx.ext.mathjax')
+++    mathjax_path = '/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_HTML'
+++
++ templates_path = ['_templates']
++ source_suffix = '.rst'
++ #source_encoding = 'utf-8-sig'
++ master_doc = 'index'
++-project = 'GPIO Zero'
++-copyright = '2015-%s %s' % (datetime.now().year, _setup.__author__)
++-version = _setup.__version__
++-release = _setup.__version__
+++project = info['name']
+++copyright = '2015-{now:%Y} {info[author]}'.format(now=datetime.now(), info=info)
+++version = info['version']
+++#release = None
++ #language = None
++ #today_fmt = '%B %d, %Y'
++ exclude_patterns = ['_build']
++@@ -82,6 +54,15 @@ pygments_style = 'sphinx'
++ # -- Autodoc configuration ------------------------------------------------
++ 
++ autodoc_member_order = 'groupwise'
+++autodoc_mock_imports = [
+++    'RPi',
+++    'lgpio',
+++    'RPIO',
+++    'pigpio',
+++    'w1thermsensor',
+++    'spidev',
+++    'colorzero',
+++]
++ 
++ # -- Intersphinx configuration --------------------------------------------
++ 
++@@ -94,7 +75,7 @@ intersphinx_mapping = {
++ # -- Options for HTML output ----------------------------------------------
++ 
++ html_theme = 'sphinx_rtd_theme'
++-html_title = '%s %s Documentation' % (project, version)
+++html_title = '{info[name]} {info[version]} Documentation'.format(info=info)
++ #html_theme_path = []
++ #html_short_title = None
++ #html_logo = None
++@@ -112,7 +93,7 @@ html_static_path = ['_static']
++ #html_show_copyright = True
++ #html_use_opensearch = ''
++ #html_file_suffix = None
++-htmlhelp_basename = '%sdoc' % _setup.__project__
+++htmlhelp_basename = '{info[name]}doc'.format(info=info)
++ 
++ # Hack to make wide tables work properly in RTD
++ # See https://github.com/snide/sphinx_rtd_theme/issues/117 for details
++@@ -131,12 +112,12 @@ latex_elements = {
++ 
++ latex_documents = [
++     (
++-        'index',                       # source start file
++-        '%s.tex' % _setup.__project__, # target filename
++-        '%s Documentation' % project,  # title
++-        _setup.__author__,             # author
++-        'manual',                      # documentclass
++-        True,                          # documents ref'd from toctree only
+++        'index',            # source start file
+++        project + '.tex',   # target filename
+++        html_title,         # title
+++        info['author'],     # author
+++        'manual',           # documentclass
+++        True,               # documents ref'd from toctree only
++         ),
++ ]
++ 
++@@ -149,11 +130,11 @@ latex_show_urls = 'footnote'
++ 
++ # -- Options for epub output ----------------------------------------------
++ 
++-epub_basename = _setup.__project__
+++epub_basename = project
++ #epub_theme = 'epub'
++ #epub_title = html_title
++-epub_author = _setup.__author__
++-epub_identifier = 'https://gpiozero.readthedocs.io/'
+++epub_author = info['author']
+++epub_identifier = 'https://{info[name]}.readthedocs.io/'.format(info=info)
++ #epub_tocdepth = 3
++ epub_show_urls = 'no'
++ #epub_use_index = True
++@@ -161,8 +142,8 @@ epub_show_urls = 'no'
++ # -- Options for manual page output ---------------------------------------
++ 
++ man_pages = [
++-    ('cli_pinout',  'pinout',      'GPIO Zero pinout tool',       [_setup.__author__], 1),
++-    ('remote_gpio', 'remote-gpio', 'GPIO Zero remote GPIO guide', [_setup.__author__], 7),
+++    ('cli_pinout',  'pinout',      'GPIO Zero pinout tool',       [info['author']], 1),
+++    ('remote_gpio', 'remote-gpio', 'GPIO Zero remote GPIO guide', [info['author']], 7),
++ ]
++ 
++ man_show_urls = True
++diff --git a/setup.cfg b/setup.cfg
++new file mode 100644
++index 0000000..db0cfa4
++--- /dev/null
+++++ b/setup.cfg
++@@ -0,0 +1,98 @@
+++[metadata]
+++name = gpiozero
+++version = 1.6.2
+++description = A simple interface to GPIO devices with Raspberry Pi
+++long_description = file:README.rst
+++author = Ben Nuttall
+++author_email = ben@bennuttall.com
+++url = https://gpiozero.readthedocs.io/
+++project_urls =
+++    Documentation = https://gpiozero.readthedocs.io/
+++    Source Code = https://github.com/gpiozero/gpiozero
+++    Issue Tracker = https://github.com/gpiozero/gpiozero/issues
+++keywords = raspberrypi gpio
+++license = BSD-3-Clause
+++classifiers =
+++    Development Status :: 5 - Production/Stable
+++    Intended Audience :: Education
+++    Intended Audience :: Developers
+++    Topic :: Education
+++    Topic :: System :: Hardware
+++    License :: OSI Approved :: BSD License
+++    Programming Language :: Python :: 2
+++    Programming Language :: Python :: 2.7
+++    Programming Language :: Python :: 3
+++    Programming Language :: Python :: 3.5
+++    Programming Language :: Python :: 3.6
+++    Programming Language :: Python :: 3.7
+++    Programming Language :: Python :: 3.8
+++    Programming Language :: Python :: 3.9
+++    Programming Language :: Python :: Implementation :: PyPy
+++
+++[options]
+++packages = find:
+++install_requires =
+++    colorzero
+++
+++[options.package_data]
+++gpiozero =
+++    fonts/*.txt
+++
+++[options.extras_require]
+++test =
+++    pytest
+++    pytest-cov
+++doc =
+++    sphinx
+++    sphinx-rtd-theme
+++
+++[options.entry_points]
+++console_scripts =
+++    pinout = gpiozerocli.pinout:main
+++gpiozero_pin_factories =
+++    pigpio  = gpiozero.pins.pigpio:PiGPIOFactory
+++    lgpio   = gpiozero.pins.lgpio:LGPIOFactory
+++    rpigpio = gpiozero.pins.rpigpio:RPiGPIOFactory
+++    rpio    = gpiozero.pins.rpio:RPIOFactory
+++    native  = gpiozero.pins.native:NativeFactory
+++    mock    = gpiozero.pins.mock:MockFactory
+++    PiGPIOPin  = gpiozero.pins.pigpio:PiGPIOFactory
+++    RPiGPIOPin = gpiozero.pins.rpigpio:RPiGPIOFactory
+++    RPIOPin    = gpiozero.pins.rpio:RPIOFactory
+++    NativePin  = gpiozero.pins.native:NativeFactory
+++gpiozero_mock_pin_classes =
+++    mockpin          = gpiozero.pins.mock:MockPin
+++    mockpwmpin       = gpiozero.pins.mock:MockPWMPin
+++    mockchargingpin  = gpiozero.pins.mock:MockChargingPin
+++    mocktriggerpin   = gpiozero.pins.mock:MockTriggerPin
+++
+++[tools:pytest]
+++addopts = -rsx --cov --tb=short
+++testpaths = tests
+++
+++[coverage:run]
+++source = gpiozero
+++branch = true
+++
+++[coverage:report]
+++ignore_errors = true
+++show_missing = true
+++exclude_lines =
+++    pragma: no cover
+++    assert False
+++    raise AssertionError
+++    raise NotImplementedError
+++    pass
+++    if __name__ == .__main__.:
+++
+++[copyrights:settings]
+++include =
+++  **/*.py
+++  **/*.rst
+++exclude =
+++  docs/examples/*.py
+++  docs/license.rst
+++license = LICENSE.rst
+++preamble =
+++  GPIO Zero: a library for controlling the Raspberry Pi's GPIO pins
+++strip-preamble = false
++diff --git a/setup.py b/setup.py
++index 621398a..fc644b6 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -1,139 +1,29 @@
++-"A simple interface to GPIO devices with Raspberry Pi."
+++from __future__ import (
+++    unicode_literals,
+++    absolute_import,
+++)
+++str = type('')
++ 
++ import io
++ import os
++-import sys
++ import errno
++-from setuptools import setup, find_packages
+++from setuptools import setup, config
++ 
++-if sys.version_info[0] == 2:
++-    if not sys.version_info >= (2, 7):
++-        raise ValueError('This package requires Python 2.7 or above')
++-elif sys.version_info[0] == 3:
++-    if not sys.version_info >= (3, 2):
++-        raise ValueError('This package requires Python 3.2 or above')
++-else:
++-    raise ValueError('Unrecognized major version of Python')
++-
++-HERE = os.path.abspath(os.path.dirname(__file__))
++-
++-# Workaround <http://www.eby-sarna.com/pipermail/peak/2010-May/003357.html>
++-try:
++-    import multiprocessing
++-except ImportError:
++-    pass
++-
++-__project__      = 'gpiozero'
++-__version__      = '1.6.2'
++-__author__       = 'Ben Nuttall'
++-__author_email__ = 'ben@bennuttall.com'
++-__url__          = 'https://github.com/gpiozero/gpiozero'
++-__platforms__    = 'ALL'
++-
++-__classifiers__ = [
++-    "Development Status :: 5 - Production/Stable",
++-    "Intended Audience :: Education",
++-    "Intended Audience :: Developers",
++-    "Topic :: Education",
++-    "Topic :: System :: Hardware",
++-    "License :: OSI Approved :: BSD License",
++-    "Programming Language :: Python :: 2",
++-    "Programming Language :: Python :: 2.7",
++-    "Programming Language :: Python :: 3",
++-    "Programming Language :: Python :: 3.5",
++-    "Programming Language :: Python :: 3.6",
++-    "Programming Language :: Python :: 3.7",
++-    "Programming Language :: Python :: 3.8",
++-    "Programming Language :: Python :: 3.9",
++-    "Programming Language :: Python :: Implementation :: PyPy",
++-]
++-
++-__keywords__ = [
++-    'raspberrypi',
++-    'gpio',
++-]
++-
++-__requires__ = [
++-    'colorzero',
++-]
++-
++-__extra_requires__ = {
++-    'doc':   ['sphinx', 'sphinx_rtd_theme'],
++-    'test':  ['pytest', 'coverage', 'mock'],
++-}
++-
++-if sys.version_info[:2] == (3, 2):
++-    # Particular versions are required for Python 3.2 compatibility
++-    __extra_requires__['doc'].extend([
++-        'Jinja2<2.7',
++-        'MarkupSafe<0.16',
++-        ])
++-    __extra_requires__['test'][0] = 'pytest<3.0dev'
++-    __extra_requires__['test'][1] = 'coverage<4.0dev'
++-elif sys.version_info[:2] == (3, 3):
++-    __extra_requires__['test'][0] = 'pytest<3.3dev'
++-elif sys.version_info[:2] == (3, 4):
++-    __extra_requires__['test'][0] = 'pytest<5.0dev'
+++cfg = config.read_configuration(
+++    os.path.join(os.path.dirname(__file__), 'setup.cfg'))
++ 
++ try:
++     # If we're executing on a Raspberry Pi, install all GPIO libraries for
++     # testing (except RPIO which doesn't work on the multi-core models yet)
++     with io.open('/proc/device-tree/model', 'r') as f:
++         if f.read().startswith('Raspberry Pi'):
++-            __extra_requires__['test'].append('RPi.GPIO')
++-            __extra_requires__['test'].append('pigpio')
+++            cfg['options']['extras_require']['test'].append('RPI.GPIO')
+++            cfg['options']['extras_require']['test'].append('pigpio')
++ except IOError as e:
++     if e.errno != errno.ENOENT:
++         raise
++ 
++-__entry_points__ = {
++-    'gpiozero_pin_factories': [
++-        'pigpio  = gpiozero.pins.pigpio:PiGPIOFactory',
++-        'lgpio   = gpiozero.pins.lgpio:LGPIOFactory',
++-        'rpigpio = gpiozero.pins.rpigpio:RPiGPIOFactory',
++-        'rpio    = gpiozero.pins.rpio:RPIOFactory',
++-        'native  = gpiozero.pins.native:NativeFactory',
++-        'mock    = gpiozero.pins.mock:MockFactory',
++-        # Backwards compatible names
++-        'PiGPIOPin  = gpiozero.pins.pigpio:PiGPIOFactory',
++-        'RPiGPIOPin = gpiozero.pins.rpigpio:RPiGPIOFactory',
++-        'RPIOPin    = gpiozero.pins.rpio:RPIOFactory',
++-        'NativePin  = gpiozero.pins.native:NativeFactory',
++-    ],
++-    'gpiozero_mock_pin_classes': [
++-        'mockpin          = gpiozero.pins.mock:MockPin',
++-        'mockpwmpin       = gpiozero.pins.mock:MockPWMPin',
++-        'mockchargingpin  = gpiozero.pins.mock:MockChargingPin',
++-        'mocktriggerpin   = gpiozero.pins.mock:MockTriggerPin',
++-    ],
++-    'console_scripts': [
++-        'pinout = gpiozerocli.pinout:main',
++-    ]
++-}
++-
++-
++-def main():
++-    import io
++-    with io.open(os.path.join(HERE, 'README.rst'), 'r') as readme:
++-        setup(
++-            name                 = __project__,
++-            version              = __version__,
++-            description          = __doc__,
++-            long_description     = readme.read(),
++-            classifiers          = __classifiers__,
++-            author               = __author__,
++-            author_email         = __author_email__,
++-            url                  = __url__,
++-            license              = 'BSD-3-Clause',
++-            keywords             = __keywords__,
++-            packages             = find_packages(),
++-            include_package_data = True,
++-            platforms            = __platforms__,
++-            install_requires     = __requires__,
++-            extras_require       = __extra_requires__,
++-            entry_points         = __entry_points__,
++-        )
++-
+++opts = cfg['metadata']
+++opts.update(cfg['options'])
++ 
++-if __name__ == '__main__':
++-    main()
+++setup(**opts)
++-- 
++2.41.0
++
+-- 
+2.41.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
