@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F10EEB64D8
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 16:32:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E9C8EB64D8
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 16:38:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8460242108;
-	Thu, 22 Jun 2023 16:32:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8460242108
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDF6542068;
+	Thu, 22 Jun 2023 16:38:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDF6542068
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jI4P5Ri9jJij; Thu, 22 Jun 2023 16:32:45 +0000 (UTC)
+	with ESMTP id KwApjPSEpt64; Thu, 22 Jun 2023 16:38:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1776A42112;
-	Thu, 22 Jun 2023 16:32:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1776A42112
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F9821BF484
- for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:32:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DB6D41DF1;
+	Thu, 22 Jun 2023 16:38:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DB6D41DF1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B17341BF484
+ for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3683960B90
- for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:32:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3683960B90
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B1DE820D0
+ for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:38:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B1DE820D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ajdOy4H16e3I for <buildroot@lists.busybox.net>;
- Thu, 22 Jun 2023 16:32:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uWYhZ6Fpifsm for <buildroot@lists.busybox.net>;
+ Thu, 22 Jun 2023 16:38:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C2BD60B2F
- for <buildroot@uclibc.org>; Thu, 22 Jun 2023 16:32:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C2BD60B2F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A28B481F97
+ for <buildroot@uclibc.org>; Thu, 22 Jun 2023 16:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A28B481F97
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 17FC783ACF; Thu, 22 Jun 2023 16:32:42 +0000 (UTC)
+ id 8F27D841BE; Thu, 22 Jun 2023 16:38:44 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 22 Jun 2023 16:32:41 +0000
+Date: Thu, 22 Jun 2023 16:38:44 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
@@ -57,12 +57,12 @@ X-Bugzilla-Flags:
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
  target_milestone
-Message-ID: <bug-15658-163@https.bugs.busybox.net/>
+Message-ID: <bug-15661-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15658] New: hifive_unleashed_defconfig: Linker
- errors in opensbi-0.9
+Subject: [Buildroot] [Bug 15661] New: mx53loco_defconfig: Dependency on
+ OpenSSL missing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,11 +79,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15658
+https://bugs.busybox.net/show_bug.cgi?id=15661
 
-            Bug ID: 15658
-           Summary: hifive_unleashed_defconfig: Linker errors in
-                    opensbi-0.9
+            Bug ID: 15661
+           Summary: mx53loco_defconfig: Dependency on OpenSSL missing
            Product: buildroot
            Version: unspecified
           Hardware: All
@@ -97,78 +96,38 @@ https://bugs.busybox.net/show_bug.cgi?id=15658
                 CC: buildroot@uclibc.org
   Target Milestone: ---
 
+Hi!
+
 As of c765ac9c02dbddd53cf6813cf59c8f265b043caf, I see this build error:
 
-[build 2023-06-20 03:57:13]  ELF       platform/generic/firmware/fw_dynamic.elf
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/build/platform/generic/lib/libplatsbi.a(sbi_init.o):
-in function `sbi_init':
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/lib/sbi/sbi_init.c:385:
-undefined reference to `__stack_chk_guard'
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/build/platform/generic/lib/libplatsbi.a(sbi_ipi.o):
-in function `sbi_ipi_send_many':
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/lib/sbi/sbi_ipi.c:78:
-undefined reference to `__stack_chk_guard'
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/lib/sbi/sbi_ipi.c:92:
-undefined reference to `__stack_chk_fail'
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/build/platform/generic/lib/libplatsbi.a(sbi_tlb.o):
-in function `sbi_tlb_process':
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/lib/sbi/sbi_tlb.c:213:
-undefined reference to `__stack_chk_guard'
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/lib/sbi/sbi_tlb.c:220:
-undefined reference to `__stack_chk_fail'
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/build/platform/generic/lib/libplatsbi.a(sbi_tlb.o):
-in function `sbi_tlb_update':
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/lib/sbi/sbi_tlb.c:308:
-undefined reference to `__stack_chk_guard'
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/build/platform/generic/lib/libplatsbi.a(sbi_tlb.o):
-in function `sbi_tlb_process_count':
-
-
-[...]
-
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/lib/utils/libfdt/fdt_wip.c:81:
-undefined reference to `__stack_chk_guard'
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/host/lib/gcc/riscv64-buildroot-linux-gnu/11.3.0/../../../../riscv64-buildroot-linux-gnu/bin/ld:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/build/platform/generic/lib/libplatsbi.a(fdt_wip.o):
-in function `fdt_nop_region_':
-[build 2023-06-20 03:57:13]
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/lib/utils/libfdt/fdt_wip.c:55:
-undefined reference to `__stack_chk_fail'
-[build 2023-06-20 03:57:13] collect2: error: ld returned 1 exit status
-[build 2023-06-20 03:57:13] make[1]: *** [Makefile:351:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/build/platform/generic/firmware/fw_dynamic.elf]
-Error 1
-[build 2023-06-20 03:57:13] make[1]: Leaving directory
-'/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9'
-[build 2023-06-20 03:57:13] make: *** [package/pkg-generic.mk:293:
-/var/lib/laminar/run/buildroot-hifive_unleashed_defconfig/5/buildroot/output/build/opensbi-0.9/.stamp_built]
+[build 2023-06-20 19:29:26]   /usr/bin/gcc -O2 -isystem
+/var/lib/laminar/run/buildroot-mx53loco_defconfig/5/buildroot/output/host/include
+-Wp,-MD,tools/.aisimage.o.d -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer 
+ -std=gnu11   -DCONFIG_FIT_SIGNATURE -DCONFIG_FIT_SIGNATURE_MAX_SIZE=0xffffffff
+-DCONFIG_FIT_CIPHER -include ./include/compiler.h -idirafterinclude
+-idirafter./arch/arm/include -I./scripts/dtc/libfdt -I./tools -DUSE_HOSTCC
+-D__KERNEL_STRICT_NAMES -D_GNU_SOURCE  -c -o tools/aisimage.o tools/aisimage.c
+[build 2023-06-20 19:29:27] In file included from tools/imagetool.h:24,
+[build 2023-06-20 19:29:27]                  from tools/aisimage.c:7:
+[build 2023-06-20 19:29:27] include/image.h:1383:12: fatal error:
+openssl/evp.h: No such file or directory
+[build 2023-06-20 19:29:27]  1383 | #  include <openssl/evp.h>
+[build 2023-06-20 19:29:27]       |            ^~~~~~~~~~~~~~~
+[build 2023-06-20 19:29:27] compilation terminated.
+[build 2023-06-20 19:29:27] make[2]: *** [scripts/Makefile.host:112:
+tools/aisimage.o] Error 1
+[build 2023-06-20 19:29:27] make[1]: *** [Makefile:1871: tools] Error 2
+[build 2023-06-20 19:29:27] make[1]: Leaving directory
+'/var/lib/laminar/run/buildroot-mx53loco_defconfig/5/buildroot/output/build/uboot-2023.01'
+[build 2023-06-20 19:29:27] make: *** [package/pkg-generic.mk:293:
+/var/lib/laminar/run/buildroot-mx53loco_defconfig/5/buildroot/output/build/uboot-2023.01/.stamp_built]
 Error 2
 
 
-(Build log at
-http://toolchain.lug-owl.de/laminar/jobs/buildroot-hifive_unleashed_defconfig/5
-)
+(Full build log at
+http://toolchain.lug-owl.de/laminar/jobs/buildroot-mx53loco_defconfig/5)
+
+I guess it's just a dependency missing here.
 
 -- 
 You are receiving this mail because:
