@@ -4,86 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEF33EB64D8
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 16:50:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4369CEB64D8
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 16:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C35841F8A;
-	Thu, 22 Jun 2023 16:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C35841F8A
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3B4742112;
+	Thu, 22 Jun 2023 16:55:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3B4742112
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qouUPftHSUPa; Thu, 22 Jun 2023 16:50:03 +0000 (UTC)
+	with ESMTP id A1KXiZTD6Qag; Thu, 22 Jun 2023 16:55:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4309541F73;
-	Thu, 22 Jun 2023 16:50:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4309541F73
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1CCD91BF484
- for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:50:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 884E6420F8;
+	Thu, 22 Jun 2023 16:55:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 884E6420F8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C02F1BF484
+ for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 036A1405F9
- for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:50:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 036A1405F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 734C941F81
+ for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:55:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 734C941F81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d6i8ETJCnPz5 for <buildroot@lists.busybox.net>;
- Thu, 22 Jun 2023 16:49:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E9E2401C2
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com
- [IPv6:2607:f8b0:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4E9E2401C2
- for <buildroot@buildroot.org>; Thu, 22 Jun 2023 16:49:59 +0000 (UTC)
-Received: by mail-ot1-x336.google.com with SMTP id
- 46e09a7af769-6b5e4178817so190088a34.0
- for <buildroot@buildroot.org>; Thu, 22 Jun 2023 09:49:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687452598; x=1690044598;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=NiLp7ZJ+36jJr+nPAXU5O5UyYcxlH1a3eNA0lL8TN7U=;
- b=azaIL+/JLt3ehnDid2i7T3lKqRfAuRjofQtnGAzq3MVpmvpbqTVqgJzbNuCmsfsSev
- SFVRED7mUutJTdiSGS8mOD6vvWv7vT3YcDQ7iAvMJ1dfab5bYlxSpjt0HMt1Z6sY8sLG
- QWSiOGbfSQn12lYmyvvqiufuCkBZc2TH0Nr8h9NxaJY3o8bmtoSnGHxCC36llLP3MuAE
- bwQT/n9YrVO/cxdQsljE5Pz9Hrxt0X7sAeIWc+UacJoXmk3jaAPtSpcnXV6Pu3PF4Tb6
- jYde1cYOXrs/36c/YXQC38IJy5i+JDE0uAI9+VwE7kCbD74v7IXQC5vKifn/mveMBD16
- FAXQ==
-X-Gm-Message-State: AC+VfDyS/2rjuMA8Z9Ep1KB1WvCTOVo8nSlevbgYiDlRgAxE2BIjtZ/4
- PcHsHmMmu11y1f6JbahxelerYFwks3JLng==
-X-Google-Smtp-Source: ACHHUZ779mmYbjImFFqm53X7pXihXqBi+LEq8Dl4ON5PpQug9BQRfU0wUSRcgB62WgCOUKnn5iaBKQ==
-X-Received: by 2002:a9d:5387:0:b0:6b4:57ad:3d19 with SMTP id
- w7-20020a9d5387000000b006b457ad3d19mr13506348otg.2.1687452597692; 
- Thu, 22 Jun 2023 09:49:57 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:e70b:1e40:f2b3:8a14])
- by smtp.gmail.com with ESMTPSA id
- l3-20020a9d6a83000000b006ab241d8c42sm2983877otq.17.2023.06.22.09.49.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Jun 2023 09:49:57 -0700 (PDT)
-From: Fabio Estevam <festevam@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7sNDv9m6Yisv for <buildroot@lists.busybox.net>;
+ Thu, 22 Jun 2023 16:55:26 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5FE3420F8
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A5FE3420F8
+ for <buildroot@buildroot.org>; Thu, 22 Jun 2023 16:55:25 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([62.216.208.160]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MUXtS-1qcfrm2Prs-00QRPE; Thu, 22 Jun 2023 18:55:22 +0200
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Thu, 22 Jun 2023 13:49:51 -0300
-Message-Id: <20230622164951.1213353-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu, 22 Jun 2023 18:55:21 +0200
+Message-ID: <20230622165522.16397-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1687452598; x=1690044598;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=NiLp7ZJ+36jJr+nPAXU5O5UyYcxlH1a3eNA0lL8TN7U=;
- b=r0h9+V3Xb1kDgRzAHka/qbnzpVbmDPEN3wbsCVzQQsB7VumGrMVknY0z9K7c/xzrW+
- RQxuHl4V7Y2iQeMnX3Niu4W/zEFgkh/eTOLQ524KQfj010u2RwimBCvonMq9HRQVvejU
- qvaNXUOtjEsoLGoOWkKTO6XoexV10dtX9v5w9vZpy5w/sPIYXWVWfl4+xHwvlwCNPqWa
- V4VLlVGLohCAZHbIjGYFmxOiwkmzdpjSdK3/SYFKEElQNB3wTlUhiocnenB+okGq46qx
- oj+Rfq7mxAOPsf0u2uPryghHmNYaf6dfLvQLssmLdzbQMcGENK2PoIkOsPf17FnN9HfQ
- JJWQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=r0h9+V3X
-Subject: [Buildroot] [PATCH] configs/mx53loco: select
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+X-Provags-ID: V03:K1:9OwWnnQMJXouOMcbupa2FOYyF0PzPglfvpnn6OB5AFlDl2UOh0Q
+ YBEimZkgUZ5AzHSvB4e/3T5FYLQwDfuokfeFNgiMUZkGvSMbnosxw3WZWsJ4RljR8J6vJf7
+ V+PiRCLrIuqbiDbYS5xbJe92Dgo+7aeTViYrnkM4N89nLvmEUqcF/fUyon+zK2UlND32ojf
+ LPw/z0PccHMBnCzE7Dp4Q==
+UI-OutboundReport: notjunk:1;M01:P0:Ou3uhVgkCc4=;d+h8aiTqx0qnUcq8NmzsEdXHzut
+ ovTsafe6V9jpulzvL/cNZqWbVPZ5IyvP1AgI4X6pJP+CYCNequKTY81oUPKoRXVOpBYREpxeI
+ 5TecEN0pbuIRA5wRBxtEsvlUebq1Gh0p64kmNNUHksvga9J38nTjEQnFEHpAr5HbxziSHboAb
+ B8QySe3z81q4dbiUv6C9gZF5reT/0MG9wv1uEu/dWFMS3NjW5O+EOxixvmB5XlVYZHcHe7+e9
+ QiQ+2bvK81Xr57KJLPp52EREQM8yfQj/7Tk6jNlQ3SyXi4sa9Gcpy1TkdXSBCTB1RZPYVGJE0
+ dBCMxZ7HrDwZ3R3zwCTv87pNuvtQ75eJzf1GctVGp1LP3gkkOPU4wMR96sJaJk7dRL+1aOXfS
+ oG6m7HcswvsqM+euoggr1Uu2gNPc8qW2NIuQrQOj+qMWV1lzDPKd+ez4/57iZhl/pjUE3s8j1
+ 22DBCYsoJljocKM8CrZnUM8YIuQUfcVeSgBLAfNp9S4jNbZ/blOK/cUUl6/c6ue501UYoZoWr
+ 6i3hBfo9YdFoc2myNZu4x5r+UJySnoEeLw4iYOaFIOr+mN8vfX5peglvz2w3LxjMrKsK6Zcxh
+ rhR6VcVtL+jyU0CY0b97k9R+uaXRZayTn05Cz1ROGp2FBLZ7H/5LipjmM25nVS9+E7C88+hHU
+ 7fES43FTOQGX2rzhp69d62gbDU5gg+xKbfvCnv6bQM5v5uDc9m5WDKv3uR0uce5RocANO8d29
+ f1BEp9JmnwcRKcoU5CU4WLDji0t5LiAKreJHggCgt3KBV+8zS/agB7yZ/syPkNGRqrO4pvIAo
+ VlmKu6NW9gVFU304H/X2ZNpoRTBTLwltCqIPG4KYYt8dEtHbUi1P58/chZJZSrbM2ZWxg/LTe
+ 9hkmF+hY1teET5+ciaAmEKh00lEw1uGKbSzwYsaNcDCfQBztTOAXuoUP+kEhcxefUK5qH66dp
+ MNgicw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; 
+ s=s31663417; t=1687452922; x=1688057722; i=ps.report@gmx.net;
+ bh=bXz62+aPyytgHRt0/1LPqifnLsKrriHpxcZ4bHKY578=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=nxJtyLHD5w2pT0vaIgOvEmez2vjiaE3dt/BTkNv37wcO+8tGYomRPvl+IEjTXnlAFQhYlAb
+ CNSD+wEhR8RB4o2Q43Jeduk6kkOzTckK9eed58iMfJAStsF9YEchdKtFrWE3iv/gDAFfxlcWg
+ 1y4aKL9792tqFY6z/bHbO9bbtX0RBoTRtMzZWu9MRXqLv5PB/G3yaoqfxwwDy66ddhnSobwuv
+ I+qYneP9w3jsXMCA9P8cF/ymATYp9pXRTwW13fELQ4W2ykbCSxtOmtXTMDr3o0eUa/0mru9QV
+ HImY6pcgGhLgdKNtgOCluxRUOJBZ12EMxFO60Se6oN3p5u6xYILA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=nxJtyLHD
+Subject: [Buildroot] [PATCH v1 1/2] package/libubox: bump version to 75a3b87
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,37 +89,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabio Estevam <festevam@gmail.com>, Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Select  BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following
-build error:
+Changelog:
 
-include/image.h:1383:12: fatal error: openssl/evp.h: No such file or directory
+  - be3dc7223a6d uloop: avoid integer overflow in tv_diff
+  - 123e976f3d01 uloop: restore return type of uloop_timeout_remaining
+  - 334415738150 uloop: add uloop_timeout_remaining64
+  - c87d3e1fb67d lua/uloop: use uloop_timeout_remaining64
+  - c86a894ec63d uloop: deprecate uloop_timeout_remaining
+  - cce5e351278b vlist: define vlist_for_each_element_safe
+  - f2d6752901f2 blob: clear buf->head when freeing a buffer
+  - 45210ce14136 list.h: add container_of_safe macro
+  - cfa372ff8aed blobmsg: implicitly reserve space for 0-terminator in string buf alloc
+  - d2223ef9da71 blobmsg: work around false positive gcc -Warray-bounds warnings
+  - ea56013409d5 jshn.sh: add json_add_fields function for adding multiple fields at once
+  - b09b316aeaf6 blobmsg: add blobmsg_parse_attr function
+  - eac92a4d5d82 blobmsg: add blobmsg_parse_array_attr
+  - ef5e8e38bd38 usock: fix poll return code check
+  - 6fc29d1c4292 jshn.sh: Add pretty-printing to json_dump
+  - 5893cf78da40 blobmsg: Don't do at run-time what can be done at compile-time
+  - 362951a2d96e uloop: fix uloop_run_timeout
+  - 75a3b870cace uloop: add support for integrating with a different event loop
 
-Reported-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- configs/mx53loco_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/libubox/libubox.hash | 2 +-
+ package/libubox/libubox.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 212a032d84aa..d03c7d0916e8 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -24,6 +24,7 @@ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
+index 2775427485..48b6432f5d 100644
+--- a/package/libubox/libubox.hash
++++ b/package/libubox/libubox.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  54f65299439dab4be8f203588bcefd9b60052ae87d12c6d012f6278a2a111b4e  libubox-d716ac4bc4236031d4c3cc1ed362b502e20e3787-br1.tar.gz
++sha256  b06311e7d857583303e9256f58787857944572012fbfd4a5d83e92e0e684f654  libubox-75a3b870cace1171faf57bd55e5a9a2f1564f757-br1.tar.gz
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 90ba57a883..d6da078c7b 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Kernel
- BR2_LINUX_KERNEL=y
+-LIBUBOX_VERSION = d716ac4bc4236031d4c3cc1ed362b502e20e3787
++LIBUBOX_VERSION = 75a3b870cace1171faf57bd55e5a9a2f1564f757
+ LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
+ LIBUBOX_SITE_METHOD = git
+ LIBUBOX_LICENSE = ISC, BSD-3-Clause
 -- 
-2.34.1
+2.41.0
 
 _______________________________________________
 buildroot mailing list
