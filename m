@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAF51EB64D8
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 16:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD15BEB64D8
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 16:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FF9242070;
-	Thu, 22 Jun 2023 16:02:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FF9242070
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D1C4423FE;
+	Thu, 22 Jun 2023 16:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D1C4423FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O0Z8yr1p5ApY; Thu, 22 Jun 2023 16:02:37 +0000 (UTC)
+	with ESMTP id GcdpUYQFEHSm; Thu, 22 Jun 2023 16:02:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E1A5423E5;
-	Thu, 22 Jun 2023 16:02:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E1A5423E5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 33DE61BF97A
+	by smtp4.osuosl.org (Postfix) with ESMTP id E551342052;
+	Thu, 22 Jun 2023 16:02:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E551342052
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FD4B1BF97D
  for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:02:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B64C403A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0BA0360F1E
  for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:02:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B64C403A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BA0360F1E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yj1cl1mnDXRo for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oy0X3E5hXDNz for <buildroot@lists.busybox.net>;
  Thu, 22 Jun 2023 16:02:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02F7B40296
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 404D360F15
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 02F7B40296
- for <buildroot@buildroot.org>; Thu, 22 Jun 2023 16:02:18 +0000 (UTC)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35MG2Ik2063927
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 404D360F15
+ for <buildroot@buildroot.org>; Thu, 22 Jun 2023 16:02:19 +0000 (UTC)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35MG2Ihs063936
  for <buildroot@buildroot.org>; Thu, 22 Jun 2023 11:02:18 -0500
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
- by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35MG2Ixn022559
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+ by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35MG2IPh115097
  (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL)
  for <buildroot@buildroot.org>; Thu, 22 Jun 2023 11:02:18 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 22
  Jun 2023 11:02:17 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Thu, 22 Jun 2023 11:02:17 -0500
 Received: from dasso.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
- by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35MG2Gj4107613;
+ by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35MG2Gj6107613;
  Thu, 22 Jun 2023 11:02:17 -0500
 To: <buildroot@buildroot.org>
-Date: Thu, 22 Jun 2023 11:02:10 -0500
-Message-ID: <20230622160212.2063472-10-dannenberg@ti.com>
+Date: Thu, 22 Jun 2023 11:02:12 -0500
+Message-ID: <20230622160212.2063472-12-dannenberg@ti.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230622160212.2063472-1-dannenberg@ti.com>
 References: <20230622160212.2063472-1-dannenberg@ti.com>
@@ -63,16 +63,17 @@ MIME-Version: 1.0
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=ti.com; s=ti-com-17Q1; t=1687449738;
- bh=cMAIRTgVfJskxae8wEoCJaOQKE1934Nwu0Ev1eww74c=;
+ bh=f2nxCxkOk9IKlhVQMgixejbx35QhbcNxvewWObbEfNo=;
  h=From:To:CC:Subject:Date:In-Reply-To:References;
- b=E9xWwy+A7+uucoEH7QbGLoIPxU60ERIX/dZ6s468ik3YdmKZi3g5JS2Ir2ESudEw5
- 9ro8NJStkoZr8VcH9XD8/dH9w1Bw4ZsnFr/5fWDuoYMYCSSiq/UUgoJPRJQsi57a5n
- 3HNwZSq5DZr5TuavX3wRSwhwyRYpKxNxHiheZVwA=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=XizURK82FIUhG8U+UqtweZ1lLyADRunbqD3xN4c0octw6qjCqhxCiglKLRxPAsr8i
+ BQXJtroUgfDXdS5Hc7//Lv5cp2D54exYDkK6VP31DVeCMwtFGGVGTFEzwQ1O8/ztlK
+ TPA72bn/F+qsOhE5V1l7IFBL3YJsaopy2OjoEGUM=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=E9xWwy+A
-Subject: [Buildroot] [PATCH v9 09/11] package/ti-rogue-km: new package
+ header.s=ti-com-17Q1 header.b=XizURK82
+Subject: [Buildroot] [PATCH v9 11/11] configs/am62x_sk_defconfig: enable IMG
+ Rogue graphics driver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,119 +93,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package adds the kernel module for the Rogue graphics
-accelerator of the following Texas Instuments SoCs: AM62,
-J721E, J721S2, and J784S4.
+Enable the IMG Rogue graphics driver for use on SK-AM62 by enabling the
+ti-rogue-um package containing the usermode libraries, which in turn
+will enable the ti-rogue-km package with the Kernel driver. Furthermore
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is enabled for automatic Kernel
+module loading to allow loading the graphics driver (and others) during
+startup.
+
+With this configuration a simple graphics test can be performed on the
+target platform by running 'rgx_triangle_test -pxfmt argb8888' from the
+commandline, showing rotating triangles on an HDMI-connected monitor.
+
+Based on this basic graphics enablement, the Buildroot-included Weston
+and Chocolate Doom packages can now be enabled and run successfully.
+However since extending/adding features is heavily use-case dependent
+this task is left to follow-on commits or user-derived custom configs
+for now.
 
 Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
 ---
- package/Config.in                    |  1 +
- package/ti-rogue-km/Config.in        | 28 +++++++++++++++++++++
- package/ti-rogue-km/ti-rogue-km.hash |  3 +++
- package/ti-rogue-km/ti-rogue-km.mk   | 37 ++++++++++++++++++++++++++++
- 4 files changed, 69 insertions(+)
- create mode 100644 package/ti-rogue-km/Config.in
- create mode 100644 package/ti-rogue-km/ti-rogue-km.hash
- create mode 100644 package/ti-rogue-km/ti-rogue-km.mk
+ configs/am62x_sk_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index bff090a661..96ef0d72de 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -613,6 +613,7 @@ endmenu
- 	source "package/sysstat/Config.in"
- 	source "package/targetcli-fb/Config.in"
- 	source "package/ti-gfx/Config.in"
-+	source "package/ti-rogue-km/Config.in"
- 	source "package/ti-sgx-demos/Config.in"
- 	source "package/ti-sgx-km/Config.in"
- 	source "package/ti-sgx-um/Config.in"
-diff --git a/package/ti-rogue-km/Config.in b/package/ti-rogue-km/Config.in
-new file mode 100644
-index 0000000000..b1565929d5
---- /dev/null
-+++ b/package/ti-rogue-km/Config.in
-@@ -0,0 +1,28 @@
-+comment "ti-rogue-km needs a Linux kernel to be built"
-+	depends on BR2_aarch64
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_TI_ROGUE_KM
-+	bool "ti-rogue-km"
-+	depends on BR2_LINUX_KERNEL && BR2_aarch64
-+	select BR2_LINUX_NEEDS_MODULES
-+	help
-+	  Kernel modules for TI SoCs with Rogue GPU.
-+	  This package supports AM62, J721E, J721S2, and J784S4
-+	  SoCs only.
-+
-+	  Note: it needs a TI specific kernel to build properly.
-+
-+	  https://git.ti.com/cgit/graphics/ti-img-rogue-driver
-+
-+if BR2_PACKAGE_TI_ROGUE_KM
-+
-+config BR2_TARGET_TI_ROGUE_KM_TARGET_PRODUCT
-+	string "KM driver target product"
-+	default "am62_linux"
-+	help
-+	  Select target product to be used for KM driver. This needs to
-+	  match one of the SoC-specific folders within the build/linux
-+	  folder of the ti-img-rogue-driver Git repository.
-+
-+endif
-diff --git a/package/ti-rogue-km/ti-rogue-km.hash b/package/ti-rogue-km/ti-rogue-km.hash
-new file mode 100644
-index 0000000000..4a08efbb98
---- /dev/null
-+++ b/package/ti-rogue-km/ti-rogue-km.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  ef50124b3e79fb1d28d3a2b4135032505abbb5c6b337b24a9bed7223d521dcc1  ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2-br1.tar.gz
-+sha256  c878f4e43e468329d3dcf4db09054e94472bfeee9f8ab2d69a122b978e9f773e  README
-diff --git a/package/ti-rogue-km/ti-rogue-km.mk b/package/ti-rogue-km/ti-rogue-km.mk
-new file mode 100644
-index 0000000000..7b0a595c71
---- /dev/null
-+++ b/package/ti-rogue-km/ti-rogue-km.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# ti-rogue-km
-+#
-+################################################################################
-+
-+# This corresponds to SDK 08.06.00
-+TI_ROGUE_KM_VERSION = 1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2
-+TI_ROGUE_KM_SITE = https://git.ti.com/git/graphics/ti-img-rogue-driver.git
-+TI_ROGUE_KM_SITE_METHOD = git
-+TI_ROGUE_KM_LICENSE = MIT or GPL-2.0
-+TI_ROGUE_KM_LICENSE_FILES = README
-+
-+TI_ROGUE_KM_DEPENDENCIES = linux
-+
-+PVR_BUILD = "release"
-+PVR_WS = "wayland"
-+
-+TI_ROGUE_KM_MAKE_OPTS = \
-+	$(LINUX_MAKE_FLAGS) \
-+	KERNELDIR=$(LINUX_DIR) \
-+	BUILD=$(PVR_BUILD) \
-+	PVR_BUILD_DIR=$(BR2_TARGET_TI_ROGUE_KM_TARGET_PRODUCT) \
-+	WINDOW_SYSTEM=$(PVR_WS)
-+
-+define TI_ROGUE_KM_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TI_ROGUE_KM_MAKE_OPTS)
-+endef
-+
-+define TI_ROGUE_KM_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR) \
-+		M=$(@D)/binary_$(BR2_TARGET_TI_ROGUE_KM_TARGET_PRODUCT)_$(PVR_WS)_$(PVR_BUILD)/target_aarch64/kbuild \
-+		INSTALL_MOD_PATH=$(TARGET_DIR) \
-+		modules_install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/configs/am62x_sk_defconfig b/configs/am62x_sk_defconfig
+index 17855bc743..9dbc6adbf2 100644
+--- a/configs/am62x_sk_defconfig
++++ b/configs/am62x_sk_defconfig
+@@ -1,5 +1,6 @@
+ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ti/am62x_sk/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+@@ -12,6 +13,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-sk"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+ BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=y
++BR2_PACKAGE_TI_ROGUE_UM=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
 -- 
 2.34.1
 
