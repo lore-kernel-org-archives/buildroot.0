@@ -1,85 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA322EB64D8
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 16:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 755F1EB64D8
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 17:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BB7D42127;
-	Thu, 22 Jun 2023 16:55:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BB7D42127
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5mOidRhmwYAe; Thu, 22 Jun 2023 16:55:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2484741F81;
-	Thu, 22 Jun 2023 16:55:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2484741F81
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B81661BF97A
- for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:55:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9ECCE83B89
- for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 16:55:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ECCE83B89
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A63B83BAC;
+	Thu, 22 Jun 2023 17:18:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A63B83BAC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0pNKYLhjWbZR for <buildroot@lists.busybox.net>;
- Thu, 22 Jun 2023 16:55:26 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ME1-0Wnxcbup; Thu, 22 Jun 2023 17:18:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B87583B11;
+	Thu, 22 Jun 2023 17:18:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B87583B11
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FB311BF4DA
+ for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 17:18:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECEA7405F4
+ for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 17:18:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECEA7405F4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M67cnaqRJdVc for <buildroot@lists.busybox.net>;
+ Thu, 22 Jun 2023 17:18:15 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E476383A89
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E476383A89
- for <buildroot@buildroot.org>; Thu, 22 Jun 2023 16:55:25 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.208.160]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MbAh0-1pfVg23Q0u-00bbSS; Thu, 22 Jun 2023 18:55:22 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Thu, 22 Jun 2023 18:55:22 +0200
-Message-ID: <20230622165522.16397-2-ps.report@gmx.net>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230622165522.16397-1-ps.report@gmx.net>
-References: <20230622165522.16397-1-ps.report@gmx.net>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95CA7401C2
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 95CA7401C2
+ for <buildroot@buildroot.org>; Thu, 22 Jun 2023 17:18:13 +0000 (UTC)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+ by mx.sberdevices.ru (Postfix) with ESMTP id 8672C5FD12;
+ Thu, 22 Jun 2023 20:18:09 +0300 (MSK)
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru
+ [172.16.192.107]) by mx.sberdevices.ru (Postfix) with ESMTP;
+ Thu, 22 Jun 2023 20:18:06 +0300 (MSK)
+Date: Thu, 22 Jun 2023 20:18:06 +0300
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, "Yann E . MORIN"
+ <yann.morin.1998@free.fr>, Herve Codina <herve.codina@bootlin.com>, Peter
+ Korsgaard <peter@korsgaard.com>, <buildroot@buildroot.org>
+Message-ID: <20230622171806.vywakqz7q7ezqnrv@CAB-WSD-L081021>
+References: <20230609113415.13856-1-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:5YWbiHoPs3jWUhnjAv8HVddmryeQ3LHTrA3aJEohvgeTL8fh8Pg
- L7ZlB4NzwJuFb3y+i787cKzIYGvZpyqMXn+A60yqj0CU7UfZwb9VKfyx6sPDP2dyFa++FTF
- zH3mVs4uYDOZTjJmrtVtawtyhNRnavkyuFaeC25DhkgRWQvZtYz4h4ykLzQjdnbKyBJvQnT
- lh4CS6+9jp/ATsHSUIN6g==
-UI-OutboundReport: notjunk:1;M01:P0:XKMr4AmCMsk=;OLs0hBFtRkuOOd4I8VBfBJb4u1j
- XZgr1bRn31ZHSuW5lLvLuEWHI/tEeI/33RgJegL0F90jR3sThip7LfuyYWBsnO6lxHEOmP+X0
- YWHSugXy5bzmP6jyMlzneaU8UfcqlA21k/avTtCP6/ayMScsNakybditC6KGzLKjXK6TEKYDp
- NhctuFcwmyhgI3zIpwPKXEx4WuZn2Eu3odPjROTuKTgmfLDOoNVZSz4yOoVoQsu8G7zInTcJS
- PbvXUjYr/h1Myv/B3xg6LSujm8ZmxtvIo/YMOvjqtM3vnOrv8szGbbzx2LQ/EzFx/PW+6dlrz
- KhLAbr9bRrlMPiYuU9aJmh++ruPKBHvpvSxg9iL8uJ1Z7XH8oEtOuX4cOCVZ6XhmWsrhqY2rS
- Z6rZQhQko4OuEu6shZfYuiH0CwEtLkz/3Uzp09xVsVBAu8gahBIPwtHUSIc++VOELchnmDtld
- Qh5u+qhgnNBI6Q8jHRIrHY376rwBzv/dx9fvOXuHeOt+cd6WDD84v3tghag5Igz/NfbBugtmV
- CQYrfrKEBObC+qYPKgV8ycMGmoGfCTUf8dr57KaUIBTa6wcKNxp0b9VbdEBnSpiaMPk1Xn9w2
- FfwjXoN4mDoKLpcJsLukoOKkHBNIj1TN08IV4kUOUHGp2tVYvqQDLDqJS7ekD8BZKnBbsCbuI
- yiv10XY+Wk5RPD46OrTxvYytsN+xYJCfe8Xe7EvShmGt1vMW97npgzXQMX/cOUaZZ5LmyAWKl
- nIpfMPyQjX80+a0XKnLB8DgryIBelIv+cmXjCIzmnCCq4Q2sHj3B3YhbZnKWA+RPF7qXEdTIG
- 8bsORk8f+Fm9Z4Wtwvb2UFrAqbT2zD8Hd2mxizxuo/5R+vPkUSLd1J7aDl/8ZPYadB/98jsFD
- ZlLTUT80118c4JEZyY9uqL5vJC87fvnlBt9gf57dPLKE0pkYlq43BTyPqw59HMZYfVzq1FOD8
- HwY2yckQ1PACqt/eevZbNtcHFtI=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1687452923; x=1688057723; i=ps.report@gmx.net;
- bh=wuDl/Z/ICcKnsqHdRvvrvH3AJtL7nYbgl2xBEuaqkBE=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=cB3HVKae2tFIewIj2yTp38KQTiPGHwRiA3nxhxXbQx9qFZwA87N3AWF31TSyff3tvpuTla0
- R6FNdqt49/u/x00WShDormhI1HyvmpaQ2vu7e3FXQl7lH9OlEJdy2MThzgTvzUftS1jhMc7SO
- 3rojiFFibXC9DwfHKerfK9ors84+xLL5ntI/t+x8zkhf5TAMTiTA8lervBV/hJzHc2N1iRRA1
- FT40h3haMscsH33inFtyUjMuGDVjtO+j6AYSU38n56xfpVBIGedIhxY9jiljp0EIuf8WuMgIv
- 3tODT85nwBG2tS8fpINtEkDqXNN/OEkzD3c5tS9A3LHBg0K5cntw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=cB3HVKae
-Subject: [Buildroot] [PATCH v1 2/2] package/ubus: bump version to f787c97
+Content-Disposition: inline
+In-Reply-To: <20230609113415.13856-1-ddrokosov@sberdevices.ru>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
+ bases: 2023/06/22 14:26:00 #21556046
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sberdevices.ru; s=mail; t=1687454289;
+ bh=EV+UQw1j5slApDzwmwirAkRI4qIYYb1RFDfT1MpoFk4=;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+ b=GpwKAzhVKzmdBed7Gyq+akr5XqPAc8z0fQR53/+77HnIc35xlXcVYEiTwafOzZglP
+ wIp06JUkHxln/ys8+052EZP2ZHnTTrr6zLjtSG2xAz23E5yGzo+yTeaVUS+xPZztg2
+ 0ZunXdhjbMq1+Q+o9gWTBMdiEcU2T6x1iZb0/pdX6orwHwI/XvDKDDNexK6QFBfXMX
+ lbm96vyyg48x4JVXo6qaowWa8v+FjB1CXXjsmC+QGP8TXalhU3rHt4svwlnGI7KFkk
+ qsP++vU3bUehtb0Dg9o2L0STrsgcCcZU0InyvJkP069KNiGosXIE8m1DOvhiE6sxLj
+ 7S7rbFJ3uYrfA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
+ header.a=rsa-sha256 header.s=mail header.b=GpwKAzhV
+Subject: Re: [Buildroot] [PATCH v1] package/linux-tools: introduce linux mm
+ tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,53 +88,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
+From: Dmitry Rokosov via buildroot <buildroot@buildroot.org>
+Reply-To: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc: kernel@sberdevices.ru, rockosov@gmail.com, sdfw_system_team@sberdevices.ru
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
+Hello,
 
-  - 66baa44b8dee libubus: introduce new status messages
-  - b3cd5ab4c010 cli: use UBUS_STATUS_PARSE_ERROR
-  - 584f56a23314 cli: improve error logging for call command
-  - 2f793a4eb063 lua: add optional path filter to objects() method
-  - 2bebf93cd334 ubusd: handle invoke on event object without data
-  - 9913aa61de73 ubusd: add lookup command queuing support
-  - f787c97b3489 libubus: add missing uloop_fd_delete call in ubus_shutdown
+Add Peter Korsgaard and move "buildroot" mailing list from Cc.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/ubus/ubus.hash | 2 +-
- package/ubus/ubus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Could you please take a look at this patchset? I believe that linux-mm
+tools are helpful for investigating kernel memory distribution in
+embedded systems.
 
-diff --git a/package/ubus/ubus.hash b/package/ubus/ubus.hash
-index 2b7181e5d2..faa2e2626e 100644
---- a/package/ubus/ubus.hash
-+++ b/package/ubus/ubus.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  275d184006f2f60c9b0172d8fd0ccc8952f182960c0d3d0945be640873c1bef6  ubus-a72457b61df045d3c499a6211362b751710590d7-br1.tar.gz
-+sha256  e3022aa3cf6c38a4d3c0d798d9a9c7069ada063a0a5fe6894b466b71b17ce9cc  ubus-f787c97b34894a38b15599886cacbca01271684f-br1.tar.gz
- sha256  a3caa6c0e90c87b7c97c2ac3d0c0d416082ef777215faec2e9b24ea6e68f6988  ubusd_acl.h
-diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
-index fa856fb36a..1f9891411a 100644
---- a/package/ubus/ubus.mk
-+++ b/package/ubus/ubus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBUS_VERSION = a72457b61df045d3c499a6211362b751710590d7
-+UBUS_VERSION = f787c97b34894a38b15599886cacbca01271684f
- UBUS_SITE = https://git.openwrt.org/project/ubus.git
- UBUS_SITE_METHOD = git
- 
+On Fri, Jun 09, 2023 at 02:34:15PM +0300, Dmitry Rokosov wrote:
+> This toolset was designed to facilitate the testing, monitoring, and
+> tracing of various things with virtual memory, pages, and slab objects.
+> It is an invaluable resource for identifying and analyzing
+> memory-related issues, such as leaks and bottlenecks, and can greatly
+> enhance one's understanding of memory utilization within a system.
+> 
+> The mm toolset includes:
+>     - page_owner_sort: userspace helper to sort the output of
+>       /sys/kernel/debug/page_owner, which helps to know who allocates
+>       the page from kernel context
+>     - slabinfo: the tool which gets reports about slabs, for example
+>       show empty slabs, modify of slab debug options at runtime, display
+>       all information about a slabcache
+>     - page-types: a handy tool for querying page flags
+> 
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  package/linux-tools/Config.in           | 18 ++++++++
+>  package/linux-tools/linux-tool-mm.mk.in | 59 +++++++++++++++++++++++++
+>  2 files changed, 77 insertions(+)
+>  create mode 100644 package/linux-tools/linux-tool-mm.mk.in
+> 
+> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+> index 880ad08f0f1c..3ecc45574b82 100644
+> --- a/package/linux-tools/Config.in
+> +++ b/package/linux-tools/Config.in
+> @@ -171,4 +171,22 @@ config BR2_PACKAGE_LINUX_TOOLS_HV_VSS_DAEMON
+>  
+>  endif # BR2_PACKAGE_LINUX_TOOLS_HV
+>  
+> +config BR2_PACKAGE_LINUX_TOOLS_MM
+> +	bool "mm"
+> +	select BR2_PACKAGE_LINUX_TOOLS
+> +	help
+> +	  mm is a toolset for testing/monitoring/tracing vm/pages/slabs objects.
+> +
+> +	  - page_owner_sort: userspace helper to sort the output of
+> +	  /sys/kernel/debug/page_owner, which helps to know who allocates
+> +	  the page from kernel context
+> +
+> +	  - slabinfo: the tool which gets reports about slabs, for example
+> +	  show empty slabs, modify of slab debug options at runtime, display
+> +	  all information about a slabcache
+> +
+> +	  - page-types: a handy tool for querying page flags
+> +
+> +	  These tools are available only from kernel version 3.4.
+> +
+>  endmenu
+> diff --git a/package/linux-tools/linux-tool-mm.mk.in b/package/linux-tools/linux-tool-mm.mk.in
+> new file mode 100644
+> index 000000000000..a59f1c46ff97
+> --- /dev/null
+> +++ b/package/linux-tools/linux-tool-mm.mk.in
+> @@ -0,0 +1,59 @@
+> +################################################################################
+> +#
+> +# mm
+> +#
+> +################################################################################
+> +
+> +LINUX_TOOLS += mm
+> +
+> +MM_MAKE_OPTS = $(LINUX_MAKE_FLAGS) CC="$(TARGET_CC)"
+> +
+> +KVER = $(shell echo $(LINUX_VERSION_PROBED))
+> +KVER_MAJOR = $(word 1,$(subst ., ,$(KVER)))
+> +KVER_MINOR = $(word 2,$(subst ., ,$(KVER)))
+> +
+> +# For the first time tools/vm was introduced in the 3.4 kernel version
+> +KVER_MAJOR_MIN = 3
+> +KVER_MINOR_MIN = 4
+> +
+> +# Starting from 6.3 kernel version mm tools are located at tools/mm folder
+> +# instead of tools/vm
+> +KVER_MAJOR_MM = 6
+> +KVER_MINOR_MM = 3
+> +
+> +define MM_BUILD_CMDS
+> +	$(Q)if [ $(KVER_MAJOR) -lt $(KVER_MAJOR_MIN) ] || \
+> +		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MIN) -a \
+> +		  $(KVER_MINOR) -lt $(KVER_MINOR_MIN) ]; then \
+> +		echo -n "Your kernel version $(KVER_MAJOR).$(KVER_MINOR) is "; \
+> +		echo "too old and doesn't have the mm tools." ; \
+> +		echo -n "At least $(KVER_MAJOR_MIN).$(KVER_MINOR_MIN) "; \
+> +		echo "kernel must be used." ; \
+> +		exit 1 ; \
+> +	fi
+> +
+> +	$(Q)if [ $(KVER_MAJOR) -gt $(KVER_MAJOR_MM) ] || \
+> +		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MM) -a \
+> +		  $(KVER_MINOR) -ge $(KVER_MINOR_MM) ]; then \
+> +		MM=mm; \
+> +	else \
+> +		MM=vm; \
+> +	fi; \
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> +		$(MM_MAKE_OPTS) $${MM}
+> +endef
+> +
+> +define MM_INSTALL_TARGET_CMDS
+> +	$(Q)if [ $(KVER_MAJOR) -gt $(KVER_MAJOR_MM) ] || \
+> +		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MM) -a \
+> +		  $(KVER_MINOR) -ge $(KVER_MINOR_MM) ]; then \
+> +		MM=mm; \
+> +	else \
+> +		MM=vm; \
+> +	fi; \
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> +		$(MM_MAKE_OPTS) \
+> +		INSTALL_ROOT=$(TARGET_DIR) \
+> +		DESTDIR=$(TARGET_DIR) \
+> +		$${MM}_install
+> +endef
+> -- 
+> 2.36.0
+> 
+
 -- 
-2.41.0
-
+Thank you,
+Dmitry
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
