@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64AF2EB64D8
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 05:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09D2CEB64D8
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jun 2023 05:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 185B083B3C;
-	Thu, 22 Jun 2023 05:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 185B083B3C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9825983A8C;
+	Thu, 22 Jun 2023 05:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9825983A8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s5FAzLE5vBJa; Thu, 22 Jun 2023 05:27:40 +0000 (UTC)
+	with ESMTP id uXhQpPXOZWh5; Thu, 22 Jun 2023 05:36:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F82A83B38;
-	Thu, 22 Jun 2023 05:27:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F82A83B38
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 375381BF288
- for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 05:27:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1AF083A8F;
+	Thu, 22 Jun 2023 05:36:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1AF083A8F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9238F1BF288
+ for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 05:36:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E9D540164
- for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 05:27:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E9D540164
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C03383A5F
+ for <buildroot@lists.busybox.net>; Thu, 22 Jun 2023 05:36:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C03383A5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id auk8sPG7mnYp for <buildroot@lists.busybox.net>;
- Thu, 22 Jun 2023 05:27:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3JX3i_qAH-7b for <buildroot@lists.busybox.net>;
+ Thu, 22 Jun 2023 05:36:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3A52400CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7506783A8C
 Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D3A52400CC
- for <buildroot@buildroot.org>; Thu, 22 Jun 2023 05:27:35 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (27)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7506783A8C
+ for <buildroot@buildroot.org>; Thu, 22 Jun 2023 05:36:25 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (21)
 Received: from zm.lan (pub-44.182.29.194.multiplay.pl [194.29.182.44])
- by server220076.nazwa.pl (Postfix) with ESMTP id B85F41BBDCB;
- Thu, 22 Jun 2023 07:27:33 +0200 (CEST)
+ by server220076.nazwa.pl (Postfix) with ESMTP id 0470A1BC0C6;
+ Thu, 22 Jun 2023 07:36:22 +0200 (CEST)
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
 To: buildroot@buildroot.org
-Date: Thu, 22 Jun 2023 07:27:31 +0200
-Message-Id: <20230622052731.3216143-1-m.niestroj@grinn-global.com>
+Date: Thu, 22 Jun 2023 07:36:17 +0200
+Message-Id: <20230622053618.3230837-1-m.niestroj@grinn-global.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-packaging: bump to version 23.1
+Subject: [Buildroot] [PATCH 1/2] package/python-dbus-fast: drop
+ python-async-timeout dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +65,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+async-timeout dependency was dropped upstream for Python 3.11 (see [1]).
+
+[1] https://github.com/Bluetooth-Devices/dbus-fast/commit/1b5c9e1cb94d19925776d91196cf1b657264c494
+
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/python-packaging/python-packaging.hash | 4 ++--
- package/python-packaging/python-packaging.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-dbus-fast/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/python-packaging/python-packaging.hash b/package/python-packaging/python-packaging.hash
-index e10c11904b..0e339ea573 100644
---- a/package/python-packaging/python-packaging.hash
-+++ b/package/python-packaging/python-packaging.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/packaging/json
--md5  806414ea4c6f17b029a7911b622062e8  packaging-22.0.tar.gz
--sha256  2198ec20bd4c017b8f9717e00f0c8714076fc2fd93816750ab48e2c41de2cfd3  packaging-22.0.tar.gz
-+md5  f7d5c39c6f92cc2dfa1293ba8f6c097c  packaging-23.1.tar.gz
-+sha256  a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f  packaging-23.1.tar.gz
- # Locally computed sha256 checksums
- sha256  cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48  LICENSE
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.APACHE
-diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
-index c9190ccfee..aac4d76ee2 100644
---- a/package/python-packaging/python-packaging.mk
-+++ b/package/python-packaging/python-packaging.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PACKAGING_VERSION = 22.0
-+PYTHON_PACKAGING_VERSION = 23.1
- PYTHON_PACKAGING_SOURCE = packaging-$(PYTHON_PACKAGING_VERSION).tar.gz
--PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/6b/f7/c240d7654ddd2d2f3f328d8468d4f1f876865f6b9038b146bec0a6737c65
-+PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/b9/6c/7c6658d258d7971c5eb0d9b69fa9265879ec9a9158031206d47800ae2213
- PYTHON_PACKAGING_SETUP_TYPE = flit
- PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
- PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+diff --git a/package/python-dbus-fast/Config.in b/package/python-dbus-fast/Config.in
+index c9562fecfa..b7168106d7 100644
+--- a/package/python-dbus-fast/Config.in
++++ b/package/python-dbus-fast/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_DBUS_FAST
+ 	bool "python-dbus-fast"
+ 	select BR2_PACKAGE_HOST_PYTHON_CYTHON
+ 	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
+-	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
+ 	help
+ 	  A faster version of dbus-next, a DBus library for Python with
+ 	  asyncio support.
 -- 
 2.40.1
 
