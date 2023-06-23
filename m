@@ -4,78 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1E4CEB64D7
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jun 2023 14:53:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8005DEB64D7
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jun 2023 14:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2109E60F32;
-	Fri, 23 Jun 2023 14:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2109E60F32
+	by smtp3.osuosl.org (Postfix) with ESMTP id 107AC60BC1;
+	Fri, 23 Jun 2023 14:59:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 107AC60BC1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oB4YVkdD97xq; Fri, 23 Jun 2023 14:53:56 +0000 (UTC)
+	with ESMTP id 9kq6NExKS0pC; Fri, 23 Jun 2023 14:59:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1CC360F36;
-	Fri, 23 Jun 2023 14:53:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1CC360F36
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4A5731BF399
- for <buildroot@lists.busybox.net>; Fri, 23 Jun 2023 14:53:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B0F860F32;
+	Fri, 23 Jun 2023 14:59:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B0F860F32
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EAF9B1BF21A
+ for <buildroot@lists.busybox.net>; Fri, 23 Jun 2023 14:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 010C041BEA
- for <buildroot@lists.busybox.net>; Fri, 23 Jun 2023 14:53:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 010C041BEA
+ by smtp2.osuosl.org (Postfix) with ESMTP id C50E740570
+ for <buildroot@lists.busybox.net>; Fri, 23 Jun 2023 14:59:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C50E740570
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gx37-F7Y_E5t for <buildroot@lists.busybox.net>;
- Fri, 23 Jun 2023 14:53:51 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABF994191C
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ABF994191C
- for <buildroot@buildroot.org>; Fri, 23 Jun 2023 14:53:51 +0000 (UTC)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35NEroeh107408;
- Fri, 23 Jun 2023 09:53:50 -0500
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
- by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35NEroew096139
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vxTU4zCyCdZ1 for <buildroot@lists.busybox.net>;
+ Fri, 23 Jun 2023 14:59:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CB4840116
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8CB4840116
+ for <buildroot@buildroot.org>; Fri, 23 Jun 2023 14:59:46 +0000 (UTC)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35NExjf4105616;
+ Fri, 23 Jun 2023 09:59:45 -0500
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+ by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35NExjil067748
  (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Fri, 23 Jun 2023 09:53:50 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Fri, 23 Jun 2023 09:59:45 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 23
- Jun 2023 09:53:50 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2023 09:59:45 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 23 Jun 2023 09:53:50 -0500
-Received: from dasso (ileaxei01-snat2.itg.ti.com [10.180.69.6])
- by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35NEro65001979;
- Fri, 23 Jun 2023 09:53:50 -0500
-Date: Fri, 23 Jun 2023 09:53:50 -0500
-To: Patrick Oppenlander <patrick.oppenlander@gmail.com>
-Message-ID: <20230623145350.265zxot3uvidzur5@dasso>
+ Frontend Transport; Fri, 23 Jun 2023 09:59:45 -0500
+Received: from dasso (ileaxei01-snat.itg.ti.com [10.180.69.5])
+ by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35NExjBn007027;
+ Fri, 23 Jun 2023 09:59:45 -0500
+Date: Fri, 23 Jun 2023 09:59:45 -0500
+To: =?utf-8?B?RnJhbsOnb2lz?= Perrad <francois.perrad@gadz.org>
+Message-ID: <20230623145945.kvxhcdbf2kycdyk5@dasso>
 References: <20230622160212.2063472-1-dannenberg@ti.com>
- <20230622160212.2063472-8-dannenberg@ti.com>
- <CAEg67Gn7OeVDCwthzRTBdKj=QeYFku1JT3t=Rm9hUf59k52+4A@mail.gmail.com>
+ <20230622160212.2063472-11-dannenberg@ti.com>
+ <CAAE6iEVbgKo4FS7ofh_GbOi=tUDafp0sHkcthHskqaduiPb8zQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <CAEg67Gn7OeVDCwthzRTBdKj=QeYFku1JT3t=Rm9hUf59k52+4A@mail.gmail.com>
+In-Reply-To: <CAAE6iEVbgKo4FS7ofh_GbOi=tUDafp0sHkcthHskqaduiPb8zQ@mail.gmail.com>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1687532030;
- bh=LDTxGQfpoMXD1o3tNENm+Bi8TmTJSxPEA0U9cib512g=;
+ d=ti.com; s=ti-com-17Q1; t=1687532385;
+ bh=F5dUft4LznM/0b0oMWzYwMCS5+9Z8sw/x57HviIZdyU=;
  h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=cjcmzstYeK4d7MAUFv4RLEDMDNWO8CUU81hcIjWvrfaBxj6wM7T2d4MlfcRtgpNri
- 0bfFGXM5G7zo/5A5i+2tvhi353XolxigzvLCLJEhBlmRnZudECUJMDvtAxU2oDtCnt
- nq7SRKFiPKDEOXgo9x1YfWkn5j7ShvMWeg5Qw7yM=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=cjcmzstY
-Subject: Re: [Buildroot] [PATCH v9 07/11] package/ti-core-secdev-k3: new
- package
+ b=DqSAgkC58mE7mcdd/3qQn6keezaISpCWnBn1sYJnk3CleQFsA9QHjPAOxvREwOip1
+ XyOduRuzWmJ1ys9yaYmLJS86ofg1DOYtDTZmJHOJFKQJ0aoJ5DuQc5nvOlVyVepKcz
+ kRpmHpFA4HHxdwsuYfUaomdJNOjJ/fgKAFQo/ahU=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=DqSAgkC5
+Subject: Re: [Buildroot] [PATCH v9 10/11] package/ti-rogue-um: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,220 +88,268 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
 Reply-To: Andreas Dannenberg <dannenberg@ti.com>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUGF0cmljaywKdGhhbmtzIGZvciB0aGUgZmVlZGJhY2suIENvbW1lbnRzIGlubGluZWQuLi4K
-Ck9uIEZyaSwgSnVuIDIzLCAyMDIzIGF0IDAxOjQ4OjMwUE0gKzEwMDAsIFBhdHJpY2sgT3BwZW5s
-YW5kZXIgd3JvdGU6Cj4gT24gRnJpLCBKdW4gMjMsIDIwMjMgYXQgMjowNuKAr0FNIEFuZHJlYXMg
-RGFubmVuYmVyZyB2aWEgYnVpbGRyb290Cj4gPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPiB3cm90
-ZToKPiA+Cj4gPiBUaGUgdGktY29yZS1zZWNkZXYtazMgcGFja2FnZSBpcyB1c2VkIHRvIHByb3Zp
-ZGUgYmluYXJ5IGltYWdlIHNpZ25pbmcKPiA+IHRvb2xzIGFuZCBrZXlzIHRvIHRoZSBidWlsZCBw
-cm9jZXNzIG5lZWRlZCB0byBidWlsZCBib290IGFydGlmYWN0cyBmb3IKPiA+IHRoZSBzZWN1cmUg
-Ym9vdCBmbG93IG9uIFRJIEszIHBsYXRmb3JtICJIaWdoIFNlY3VyaXR5IiBTb0NzIChkZXZpY2UK
-PiA+IHZhcmlhbnRzICJIUy1GUyIgYW5kICJIUy1TRSIpLiBUaGlzIHBhY2thZ2UgaXMgbm90IG5l
-ZWRlZCBidWlsZGluZyBmb3IKPiA+ICJHZW5lcmFsIFB1cnBvc2UiICgiR1AiKSBTb0MgdmFyaWFu
-dHMuCj4gPgo+ID4gVGhpcyBjb21taXQgYWxzbyB1cGRhdGVzIHRoZSB0aS1rMy1pbWFnZS1nZW4s
-IHRpLWszLXI1LWxvYWRlciwgYW5kIHVib290Cj4gPiBwYWNrYWdlcyB3aGljaCBhcmUgYWxsIHVz
-ZWQgYXMgcGFydCBvZiB0aGUgYm9vdCBmbG93IG9mIFRJIEszIHBsYXRmb3JtCj4gPiBkZXZpY2Vz
-IHRvIG1ha2UgdXNlIG9mIHRoZSB0aS1jb3JlLXNlY2Rldi1rMyBwYWNrYWdlIGlmIGVuYWJsZWQu
-Cj4gPgo+ID4gTm90ZSB0aGF0IGFsdGhvdWdoIHRoZSB1c2Ugb2YgdGhlIHVuZGVybHlpbmcgJ2Nv
-cmUtc2VjZGV2LWszJyB0b29sCj4gPiBwcm92aWRlZCBieSBUSSBpcyByZXF1aXJlZCB0byBnZW5l
-cmF0ZSBib290YWJsZSBpbWFnZXMgZm9yIEhTLUZTIGFuZAo+ID4gSFMtU0UgZGV2aWNlIHZhcmlh
-bnRzLCB0aGUgdXNlIG9mIHRoaXMgQnVpbGRyb290IHBhY2thZ2UgaXRzZWxmIHNob3VsZAo+ID4g
-cmVtYWluIG9wdGlvbmFsLCBoZW5jZSBubyBoYXJkIGRlcGVuZGVuY2llcyBhcmUgYmVpbmcgZXN0
-YWJsaXNoZWQuIFRoZQo+ID4gcmVhc29uIGlzIHRoYXQgYSB1c2VyIG9mdGVuIHdhbnRzIHRvIHBy
-b3ZpZGUgdGhlaXIgb3duIHNpZ25pbmcgdG9vbAo+ID4gdGhyb3VnaCB0aGUgdXNlIG9mIHRoZSBU
-SV9TRUNVUkVfREVWX1BLRyBlbnZpcm9ubWVudGFsIHZhcmlhYmxlIHNldAo+ID4gb3V0c2lkZSBC
-dWlsZHJvb3Qgb24gdGhlaXIgc3BlY2lmaWMgYnVpbGQgbWFjaGluZSwgZXNwZWNpYWxseSBmb3Ig
-SFMtU0UKPiA+IGRldmljZSB2YXJpYW50cyB3aGVyZSB0aGUgc2lnbmluZyB0b29sIHdvdWxkIGNv
-bnRhaW4gdGhlIHVzZXIncyBwcml2YXRlCj4gPiBrZXlzLgo+ID4KPiA+IGh0dHBzOi8vZ2l0LnRp
-LmNvbS9jZ2l0L3NlY3VyaXR5LWRldmVsb3BtZW50LXRvb2xzL2NvcmUtc2VjZGV2LWszCj4gPgo+
-ID4gU2lnbmVkLW9mZi1ieTogQW5kcmVhcyBEYW5uZW5iZXJnIDxkYW5uZW5iZXJnQHRpLmNvbT4K
-PiA+IC0tLQo+ID4gIGJvb3QvdGktazMtaW1hZ2UtZ2VuL3RpLWszLWltYWdlLWdlbi5tayAgICAg
-ICB8IDEwICsrKysrKwo+ID4gIGJvb3QvdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5t
-ayAgICAgICB8IDEwICsrKysrKwo+ID4gIGJvb3QvdWJvb3QvdWJvb3QubWsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICB8IDEwICsrKysrKwo+ID4gIHBhY2thZ2UvQ29uZmlnLmluLmhvc3QgICAg
-ICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiA+ICBwYWNrYWdlL3RpLWNvcmUtc2VjZGV2LWsz
-L0NvbmZpZy5pbi5ob3N0ICAgICAgfCAxMSArKysrKysrCj4gPiAgLi4uL3RpLWNvcmUtc2VjZGV2
-LWszL3RpLWNvcmUtc2VjZGV2LWszLmhhc2ggIHwgIDMgKysKPiA+ICAuLi4vdGktY29yZS1zZWNk
-ZXYtazMvdGktY29yZS1zZWNkZXYtazMubWsgICAgfCAzMSArKysrKysrKysrKysrKysrKysrCj4g
-PiAgNyBmaWxlcyBjaGFuZ2VkLCA3NiBpbnNlcnRpb25zKCspCj4gPiAgY3JlYXRlIG1vZGUgMTAw
-NjQ0IHBhY2thZ2UvdGktY29yZS1zZWNkZXYtazMvQ29uZmlnLmluLmhvc3QKPiA+ICBjcmVhdGUg
-bW9kZSAxMDA2NDQgcGFja2FnZS90aS1jb3JlLXNlY2Rldi1rMy90aS1jb3JlLXNlY2Rldi1rMy5o
-YXNoCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvdGktY29yZS1zZWNkZXYtazMvdGkt
-Y29yZS1zZWNkZXYtazMubWsKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvYm9vdC90aS1rMy1pbWFnZS1n
-ZW4vdGktazMtaW1hZ2UtZ2VuLm1rIGIvYm9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2Ut
-Z2VuLm1rCj4gPiBpbmRleCBiNjI0ZjkzNzcxLi41NzIwMmQ2OTE4IDEwMDY0NAo+ID4gLS0tIGEv
-Ym9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLm1rCj4gPiArKysgYi9ib290L3Rp
-LWszLWltYWdlLWdlbi90aS1rMy1pbWFnZS1nZW4ubWsKPiA+IEBAIC03MCw2ICs3MCwxNiBAQCBU
-SV9LM19JTUFHRV9HRU5fTUFLRV9PUFRTID0gXAo+ID4gICAgICAgICBPPSQoQEQpL3RtcCBcCj4g
-PiAgICAgICAgIEJJTl9ESVI9JChARCkKPiA+Cj4gPiAraWZuZXEgKCQoVElfQ09SRV9TRUNERVZf
-SzNfSU5TVEFMTF9ESVIpLCkKPiA+ICsjIE9ubHkgc2V0IFRJX1NFQ1VSRV9ERVZfUEtHIG1ha2Ug
-b3B0aW9uIGlmIG5vdCBhbHJlYWR5IGRlZmluZWQgaW4gdGhlCj4gPiArIyBlbnZpcm9ubWVudCwg
-dGh1cyBhbGxvd2luZyB0aGUgdXNlciB0byB1bmNvbmRpdGlvbmFsbHkgb3ZlcnJpZGUgdGhpcwo+
-ID4gKyMgc2V0dGluZyB3aXRoIGEgY3VzdG9tIGxvY2F0aW9uIG9uIHRoZWlyIGJ1aWxkIG1hY2hp
-bmUgY29udGFpbmluZyB0aGVpcgo+ID4gKyMgcHJpdmF0ZSBrZXlzLCBldGMuCj4gPiAraWZlcSAo
-JChUSV9TRUNVUkVfREVWX1BLRyksKQo+ID4gK1RJX0szX0lNQUdFX0dFTl9NQUtFX09QVFMgKz0g
-VElfU0VDVVJFX0RFVl9QS0c9JChUSV9DT1JFX1NFQ0RFVl9LM19JTlNUQUxMX0RJUikKPiA+ICtl
-bmRpZgo+ID4gK2VuZGlmCj4gPiArCj4gPiAgZGVmaW5lIFRJX0szX0lNQUdFX0dFTl9CVUlMRF9D
-TURTCj4gPiAgICAgICAgICQoVElfSzNfSU1BR0VfR0VOX01BS0UpIC1DICQoQEQpICQoVElfSzNf
-SU1BR0VfR0VOX01BS0VfT1BUUykKPiA+ICBlbmRlZgo+ID4gZGlmZiAtLWdpdCBhL2Jvb3QvdGkt
-azMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5tayBiL2Jvb3QvdGktazMtcjUtbG9hZGVyL3Rp
-LWszLXI1LWxvYWRlci5tawo+ID4gaW5kZXggMzQxODg4NjIzZS4uODMxMWUxYjQwMSAxMDA2NDQK
-PiA+IC0tLSBhL2Jvb3QvdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5tawo+ID4gKysr
-IGIvYm9vdC90aS1rMy1yNS1sb2FkZXIvdGktazMtcjUtbG9hZGVyLm1rCj4gPiBAQCAtNjcsNiAr
-NjcsMTYgQEAgVElfSzNfUjVfTE9BREVSX01BS0VfT1BUUyA9IFwKPiA+ICAgICAgICAgSE9TVEND
-PSIkKEhPU1RDQykgJChzdWJzdCAtSS8sLWlzeXN0ZW0gLywkKHN1YnN0IC1JIC8sLWlzeXN0ZW0g
-LywkKEhPU1RfQ0ZMQUdTKSkpIiBcCj4gPiAgICAgICAgIEhPU1RMREZMQUdTPSIkKEhPU1RfTERG
-TEFHUykiCj4gPgo+ID4gK2lmbmVxICgkKFRJX0NPUkVfU0VDREVWX0szX0lOU1RBTExfRElSKSwp
-Cj4gPiArIyBPbmx5IHNldCBUSV9TRUNVUkVfREVWX1BLRyBtYWtlIG9wdGlvbiBpZiBub3QgYWxy
-ZWFkeSBkZWZpbmVkIGluIHRoZQo+ID4gKyMgZW52aXJvbm1lbnQsIHRodXMgYWxsb3dpbmcgdGhl
-IHVzZXIgdG8gdW5jb25kaXRpb25hbGx5IG92ZXJyaWRlIHRoaXMKPiA+ICsjIHNldHRpbmcgd2l0
-aCBhIGN1c3RvbSBsb2NhdGlvbiBvbiB0aGVpciBidWlsZCBtYWNoaW5lIGNvbnRhaW5pbmcgdGhl
-aXIKPiA+ICsjIHByaXZhdGUga2V5cywgZXRjLgo+ID4gK2lmZXEgKCQoVElfU0VDVVJFX0RFVl9Q
-S0cpLCkKPiA+ICtUSV9LM19SNV9MT0FERVJfTUFLRV9PUFRTICs9IFRJX1NFQ1VSRV9ERVZfUEtH
-PSQoVElfQ09SRV9TRUNERVZfSzNfSU5TVEFMTF9ESVIpCj4gPiArZW5kaWYKPiA+ICtlbmRpZgo+
-ID4gKwo+ID4gIGRlZmluZSBUSV9LM19SNV9MT0FERVJfQlVJTERfQ01EUwo+ID4gICAgICAgICAk
-KFRBUkdFVF9DT05GSUdVUkVfT1BUUykgJChUSV9LM19SNV9MT0FERVJfTUFLRSkgLUMgJChARCkg
-JChUSV9LM19SNV9MT0FERVJfTUFLRV9PUFRTKQo+ID4gIGVuZGVmCj4gPiBkaWZmIC0tZ2l0IGEv
-Ym9vdC91Ym9vdC91Ym9vdC5tayBiL2Jvb3QvdWJvb3QvdWJvb3QubWsKPiA+IGluZGV4IDQ4YWY2
-OWJkMjYuLjQ3MmZlYzg2MTkgMTAwNjQ0Cj4gPiAtLS0gYS9ib290L3Vib290L3Vib290Lm1rCj4g
-PiArKysgYi9ib290L3Vib290L3Vib290Lm1rCj4gPiBAQCAtMTg0LDYgKzE4NCwxNiBAQCBVQk9P
-VF9ERVBFTkRFTkNJRVMgKz0gb3B0ZWUtb3MKPiA+ICBVQk9PVF9NQUtFX09QVFMgKz0gVEVFPSQo
-QklOQVJJRVNfRElSKS90ZWUuZWxmCj4gPiAgZW5kaWYKPiA+Cj4gPiAraWZuZXEgKCQoVElfQ09S
-RV9TRUNERVZfSzNfSU5TVEFMTF9ESVIpLCkKPiA+ICsjIE9ubHkgc2V0IFRJX1NFQ1VSRV9ERVZf
-UEtHIG1ha2Ugb3B0aW9uIGlmIG5vdCBhbHJlYWR5IGRlZmluZWQgaW4gdGhlCj4gPiArIyBlbnZp
-cm9ubWVudCwgdGh1cyBhbGxvd2luZyB0aGUgdXNlciB0byB1bmNvbmRpdGlvbmFsbHkgb3ZlcnJp
-ZGUgdGhpcwo+ID4gKyMgc2V0dGluZyB3aXRoIGEgY3VzdG9tIGxvY2F0aW9uIG9uIHRoZWlyIGJ1
-aWxkIG1hY2hpbmUgY29udGFpbmluZyB0aGVpcgo+ID4gKyMgcHJpdmF0ZSBrZXlzLCBldGMuCj4g
-PiAraWZlcSAoJChUSV9TRUNVUkVfREVWX1BLRyksKQo+ID4gK1VCT09UX01BS0VfT1BUUyArPSBU
-SV9TRUNVUkVfREVWX1BLRz0kKFRJX0NPUkVfU0VDREVWX0szX0lOU1RBTExfRElSKQo+ID4gK2Vu
-ZGlmCj4gPiArZW5kaWYKPiA+ICsKPiA+ICBpZmVxICgkKEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNf
-VElfSzNfRE0pLHkpCj4gPiAgIyBDdXJyZW50bHkgc3VwcG9ydHMgdGhlIEZXIGZyb20gR2l0IHRh
-ZyAwOC4wNi4wMC4wMDYgYnkgZGVmYXVsdAo+ID4gIFRJX0szX0RNX1ZFUlNJT04gPSAzNDAxOTQ4
-MDBhNTgxYmFmOTc2MzYwMzg2ZGZjN2I1YWNhYjhkOTQ4Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2Fn
-ZS9Db25maWcuaW4uaG9zdCBiL3BhY2thZ2UvQ29uZmlnLmluLmhvc3QKPiA+IGluZGV4IGRjYWRi
-ZmRmYzEuLmVlZDM5YTQxMDIgMTAwNjQ0Cj4gPiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbi5ob3N0
-Cj4gPiArKysgYi9wYWNrYWdlL0NvbmZpZy5pbi5ob3N0Cj4gPiBAQCAtMTAzLDYgKzEwMyw3IEBA
-IG1lbnUgIkhvc3QgdXRpbGl0aWVzIgo+ID4gICAgICAgICBzb3VyY2UgInBhY2thZ2Uvc3lzdGVt
-ZC9Db25maWcuaW4uaG9zdCIKPiA+ICAgICAgICAgc291cmNlICJwYWNrYWdlL3RlZ3JhcmNtL0Nv
-bmZpZy5pbi5ob3N0Igo+ID4gICAgICAgICBzb3VyY2UgInBhY2thZ2UvdGktY2d0LXBydS9Db25m
-aWcuaW4uaG9zdCIKPiA+ICsgICAgICAgc291cmNlICJwYWNrYWdlL3RpLWNvcmUtc2VjZGV2LWsz
-L0NvbmZpZy5pbi5ob3N0Igo+ID4gICAgICAgICBzb3VyY2UgInBhY2thZ2UvdWJvb3QtdG9vbHMv
-Q29uZmlnLmluLmhvc3QiCj4gPiAgICAgICAgIHNvdXJjZSAicGFja2FnZS91dGlsLWxpbnV4L0Nv
-bmZpZy5pbi5ob3N0Igo+ID4gICAgICAgICBzb3VyY2UgInBhY2thZ2UvdXRwX2NvbS9Db25maWcu
-aW4uaG9zdCIKPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3RpLWNvcmUtc2VjZGV2LWszL0NvbmZp
-Zy5pbi5ob3N0IGIvcGFja2FnZS90aS1jb3JlLXNlY2Rldi1rMy9Db25maWcuaW4uaG9zdAo+ID4g
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwMDAuLjM2NDYxOWQ4MjQKPiA+
-IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL3BhY2thZ2UvdGktY29yZS1zZWNkZXYtazMvQ29uZmln
-LmluLmhvc3QKPiA+IEBAIC0wLDAgKzEsMTEgQEAKPiA+ICtjb25maWcgQlIyX1BBQ0tBR0VfSE9T
-VF9USV9DT1JFX1NFQ0RFVl9LMwo+ID4gKyAgICAgICBib29sICJob3N0IHRpLWNvcmUtc2VjZGV2
-LWszIgo+ID4gKyAgICAgICBoZWxwCj4gPiArICAgICAgICAgdGktY29yZS1zZWNkZXYtazMgaXMg
-dXNlZCB0byBwcm92aWRlIGJpbmFyeSBpbWFnZSBzaWduaW5nCj4gPiArICAgICAgICAgdG9vbHMg
-YW5kIGtleXMgdG8gdGhlIGJ1aWxkIHByb2Nlc3MgbmVlZGVkIHRvIGJ1aWxkIGJvb3QKPiA+ICsg
-ICAgICAgICBhcnRpZmFjdHMgZm9yIHRoZSBzZWN1cmUgYm9vdCBmbG93IG9uIFRJIEszIHBsYXRm
-b3JtCj4gPiArICAgICAgICAgIkhpZ2ggU2VjdXJpdHkiIFNvQ3MgKGRldmljZSB2YXJpYW50cyAi
-SFMtRlMiIGFuZCAiSFMtU0UiKS4KPiA+ICsgICAgICAgICBUaGlzIHBhY2thZ2UgaXMgbm90IG5l
-ZWRlZCBidWlsZGluZyBmb3IgIkdlbmVyYWwgUHVycG9zZSIKPiA+ICsgICAgICAgICAoIkdQIikg
-U29DIHZhcmlhbnRzLgo+ID4gKwo+ID4gKyAgICAgICAgIGh0dHBzOi8vZ2l0LnRpLmNvbS9jZ2l0
-L3NlY3VyaXR5LWRldmVsb3BtZW50LXRvb2xzL2NvcmUtc2VjZGV2LWszCj4gPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS90aS1jb3JlLXNlY2Rldi1rMy90aS1jb3JlLXNlY2Rldi1rMy5oYXNoIGIvcGFj
-a2FnZS90aS1jb3JlLXNlY2Rldi1rMy90aS1jb3JlLXNlY2Rldi1rMy5oYXNoCj4gPiBuZXcgZmls
-ZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAwMC4uNTI2ZWQyOTUxNAo+ID4gLS0tIC9k
-ZXYvbnVsbAo+ID4gKysrIGIvcGFja2FnZS90aS1jb3JlLXNlY2Rldi1rMy90aS1jb3JlLXNlY2Rl
-di1rMy5oYXNoCj4gPiBAQCAtMCwwICsxLDMgQEAKPiA+ICsjIExvY2FsbHkgY2FsY3VsYXRlZAo+
-ID4gK3NoYTI1NiAgZWI2MzdlZDU0MjA0YjY0ZTk4YWUwNzA3MGUwZjJlYmQzNmVlZDIyOGVjYzEw
-OGRhZTBlN2JlNmUzOGVkZGU3NCAgY29yZS1zZWNkZXYtazMtMDguMDYuMDAuMDA3LnRhci5nego+
-ID4gK3NoYTI1NiAgM2U1Y2Y0ZjVhYjlmMDMzM2Y0NmNkNjhmYWJlZGUzZjIxZTU1ZGUxYTllM2M2
-YWQ2NzNmMjQxZjQ1MTRkODM2OSAgbWFuaWZlc3QvazMtc2VjZGV2LTAuMi1tYW5pZmVzdC5odG1s
-Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS90aS1jb3JlLXNlY2Rldi1rMy90aS1jb3JlLXNlY2Rl
-di1rMy5tayBiL3BhY2thZ2UvdGktY29yZS1zZWNkZXYtazMvdGktY29yZS1zZWNkZXYtazMubWsK
-PiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwMDAwMDAwMDAwLi5jMzg4YWYyODY1
-Cj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9wYWNrYWdlL3RpLWNvcmUtc2VjZGV2LWszL3Rp
-LWNvcmUtc2VjZGV2LWszLm1rCj4gPiBAQCAtMCwwICsxLDMxIEBACj4gPiArIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMKPiA+ICsjCj4gPiArIyB0aS1jb3JlLXNlY2Rldi1rMwo+ID4gKyMKPiA+ICsj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ID4gKwo+ID4gK1RJX0NPUkVfU0VDREVWX0szX1ZFUlNJ
-T04gPSAwOC4wNi4wMC4wMDcKPiA+ICtUSV9DT1JFX1NFQ0RFVl9LM19TSVRFID0gaHR0cHM6Ly9n
-aXQudGkuY29tL2NnaXQvc2VjdXJpdHktZGV2ZWxvcG1lbnQtdG9vbHMvY29yZS1zZWNkZXYtazMv
-c25hcHNob3QKPiA+ICtUSV9DT1JFX1NFQ0RFVl9LM19MSUNFTlNFID0gVEkgVFNQQSBMaWNlbnNl
-Cj4gPiArVElfQ09SRV9TRUNERVZfSzNfTElDRU5TRV9GSUxFUyA9IG1hbmlmZXN0L2szLXNlY2Rl
-di0wLjItbWFuaWZlc3QuaHRtbAo+ID4gK1RJX0NPUkVfU0VDREVWX0szX1NPVVJDRSA9IGNvcmUt
-c2VjZGV2LWszLSQoVElfQ09SRV9TRUNERVZfSzNfVkVSU0lPTikudGFyLmd6Cj4gCj4gSGkgQW5k
-cmVhcywKPiAKPiBXb3VsZCBpdCBtYWtlIHNlbnNlIHRvIHN1cHBvcnQgdXNlciBjdXN0b21pc2F0
-aW9uIG9mIHRoaXMgdmlhIEtjb25maWcKPiBpbnN0ZWFkIG9mIHVzaW5nIHRoZSBtYWdpYyBUSV9T
-RUNVUkVfREVWX1BLRyBlbnZpcm9ubWVudCB2YXJpYWJsZT8KPiAKPiBJJ20gc2xpZ2h0bHkgY29u
-ZnVzZWQgYWJvdXQgaG93IHRoaXMgaXMgaW50ZW5kZWQgdG8gd29yay4KPiBjb3JlLXNlY2Rldi1r
-MyBjb250YWlucyBib3RoIGluZnJhc3RydWN0dXJlIChzY3JpcHRzKSBhbmQgZGF0YSAoa2V5cykK
-PiB0byBzZWN1cmUgdGhlIGltYWdlLiBJdCBsb29rcyBsaWtlIHNvbWVvbmUgdHJpZWQgdG8gc3Bs
-aXQgdGhlc2UKPiBjb25jZXJucyBieSBzdXBwb3J0aW5nIGN1c3RvbWlzYXRpb24gb2YgdGhlIGtl
-eSBsb2NhdGlvbi4KPiBzZWN1cmUtYmluYXJ5LWltYWdlLnNoIGV4cGVjdHMgVElfU0VDVVJFX0RF
-Vl9QS0cgdG8gcG9pbnQgdG8gc29tZXRoaW5nCj4gY29udGFpbmluZyBrZXlzL2N1c3RNcGsucGVt
-LCBidXQgdGhlIHJlc3Qgb2YgdGhlIHByb2Nlc3MgZXhwZWN0cwo+IFRJX1NFQ1VSRV9ERVZfUEtH
-IHRvIHBvaW50IHRvIHNvbWV0aGluZyBjb250YWluaW5nIHNjcmlwdHMgdG8gc2VjdXJlCj4gdGhl
-IGJpbmFyeSBibG9icy4KPiAKPiBJdCB3b3VsZCBtYWtlIG1vcmUgc2Vuc2UgdG8gbWUgdG8gc3Vw
-cG9ydCBvdmVycmlkaW5nIGp1c3QgdGhlIGtleSwKPiByYXRoZXIgdGhhbiBoYXZpbmcgdG8gZHVw
-bGljYXRlIGFsbCB0aGUgc2NyaXB0cyB0b28uCj4gCj4gQ291bGQgd2Ugc3VwcG9ydCBjb25maWd1
-cmluZyB0aGUgbG9jYXRpb24gb2YgdGhlIGN1c3RNcGsucGVtIGtleSBhbmQKPiBoYXZlIHRoZSBi
-dWlsZCBwcm9jZXNzIHJlcGxhY2UgdGhlIGRlZmF1bHQga2V5IGluCj4gYnVpbGQvaG9zdC10aS1j
-b3JlLXNlY2Rldi1rMy0wOC4wNi4wMC4wMDcva2V5cz8KCldlbGwsIHRoaXMgaXMgaG93IHRoZSAi
-VEkgc2VjdXJlIGRldiBwYWNrYWdlIiBoYXMgYmVlbiBmb3IgdGhlIGxhc3QgMTArCnllYXJzLCBh
-bmQgdGhhdCdzIGhvdyBpdCdzIGJlaW5nIHVzZWQgYnkgMTAwJSBvZiBvdXIgY3VzdG9tZXJzIHRv
-ZGF5CmRvaW5nIExpbnV4IGltYWdlIGJ1aWxkcy4gSXQncyBoYXJkLXdpcmVkIGludG8gWW9jdG8g
-YnVpbGRzLCBldmVuIHRoZQpvZmZpY2lhbCBVLUJvb3QgdHJlZS4uLgoKaHR0cHM6Ly9zb3VyY2Uu
-ZGVueC5kZS91LWJvb3QvdS1ib290Ly0vYmxvYi9tYXN0ZXIvZG9jL1JFQURNRS50aS1zZWN1cmUK
-CkkgYWdyZWUgaW1wcm92ZW1lbnRzIGNvdWxkIGJlIG1hZGUgZm9yIGV4YW1wbGUgdG8gcG9pbnQg
-dG8ganVzdCBhCnByaXZhdGUga2V5IHZpYSBLY29uZmlnIGJ1dCB0aGlzIHdvdWxkIGFsc28gY3Jl
-YXRlIGFuIGluY29uc2lzdGVuY3kgd2l0aAphbGwgc29sdXRpb25zIGN1cnJlbnRseSBpbiBwcm9k
-dWN0aW9uLCBhbmQgd2l0aCB3aGF0IGZvbGtzIGFyZSB1c2VkIHRvLAphbmQgZ28gYWdhaW5zdCBl
-bmFibGluZyBhbiBlYXNpZXIgYW5kIG1vcmUgc2VhbWxlc3MgInN3aXRjaCIgZnJvbSBZb2N0bwpm
-b3IgZXhhbXBsZSwgd2hpY2ggaXMgd2hhdCBJJ2QgbGlrZSBwZW9wbGUgdG8gZG8uCgpUaGlzIGRv
-ZXNuJ3Qgc2F5IGl0IHNob3VsZCBub3Qgb3IgbmV2ZXIgYmUgaW1wcm92ZWQsIGJ1dCBJIHRoaW5r
-IHN1Y2gKY2hhbmdlcyBjb3VsZCBiZSBtYW5hZ2VkIG1vcmUgc21vb3RobHkgYnkgZXN0YWJsaXNo
-aW5nIGEga25vd24gYmFzZWxpbmUKZmlyc3QgKHdoaWNoIGlzIHdoYXQgdGhpcyBlbnRpcmUgc2Vy
-aWVzIGludGVuZHMgdG8gZG8sIGJhc2VkIG9uIGEKY29tcGFyYWJsZSB2YXJpYW50IG9mIHRoZSBv
-ZmZpY2lhbCBUSSBwcm9kdWN0aW9uIFNESyksIGFuZCB0aGVuIG92ZXIKdGltZSBpbXByb3ZlIHRo
-aW5ncywgYWxzbyBhcyBZb2N0bywgVS1Cb290LCBhbmQgb3RoZXIgcHJvamVjdHMgZXZvbHZlCih0
-aGVyZSdzIGNvbnN0YW50IGRldmVsb3BtZW50IG9uIHRob3NlIGluY2x1ZGluZyBvbiB0aGUgc2Vj
-dXJpdHkgZnJvbnQsCnNvIHdoYXQgd2UgaGF2ZSBoZXJlIHdpbGwgbm90IGJlIHRoZSAiZm9yZXZl
-ciBzb2x1dGlvbikuCiAKPiBJcyB0aGVyZSBhIHJlYXNvbiB3aHkgYSBjdXN0b21lciBpcyBleHBl
-Y3RlZCB0byByZXBsYWNlIChvciwgbW9yZQo+IGxpa2VseSwgZHVwbGljYXRlKSB0aGUgc2NyaXB0
-cyByYXRoZXIgdGhhbiBqdXN0IHN1cHBseSBhIGtleT8KClRoZSBrZXkgaXMgdGhlIG1vc3Qgb2J2
-aW91cyB0aGluZywgYnV0IG9mdGVuIGN1c3RvbWVycyBhbHNvIHdhbnQgdG8KY3VzdG9taXplIHRo
-ZSBjZXJ0aWZpY2F0ZSB0byBhZGQgYWRkaXRpb25hbCBpdGVtcyBmb3IgZXhhbXBsZSB0byBjb250
-cm9sCmNlcnRhaW4gZGV2aWNlIGZlYXR1cmVzIHN1Y2ggYXMgd2hldGhlciBKVEFHIHNob3VsZCBi
-ZSBsb2NrZWQgb3IKdW5sb2NrZWQsIGV0Yy4sIGFsbCB0aGluZ3Mgbm90IHJlYWRpbHkgY29udHJv
-bGxhYmxlIHRocm91Z2ggc29tZSBrbm9icwpidXQgbmVlZGluZyB0byBiZSBkb25lIHRocm91Z2gg
-Y3VzdG9taXphdGlvbiBvZiBzcmlwdHMgLyB0ZW1wbGF0ZXMuCgoKLS0KQW5kcmVhcyBEYW5uZW5i
-ZXJnClRleGFzIEluc3RydW1lbnRzIEluYwoKCj4gCj4gUGF0cmljawo+IAo+ID4gKyMgVG8gYWxs
-b3cgdGhlIGltYWdlIHNpZ25pbmcgcHJvY2VzcyBmb3IgdmFyaW91cyBmaXJtd2FyZSBhcnRpZmFj
-dHMgdG8gd29yayB0aGUKPiA+ICsjIGJ1aWxkIHByb2Nlc3MgZm9yIFRJIEszIHBsYXRmb3JtIEhT
-LUZTIGFuZCBIUy1TRSBkZXZpY2UgdmFyaWFudHMgaXMgdXNpbmcgdGhlCj4gPiArIyAnY29yZS1z
-ZWNkZXYtazMnIHRvb2wgcHJvdmlkZWQgYnkgVEkuIEl0cyBsb2NhdGlvbiBtdXN0IGJlIG1hZGUg
-YXZhaWxhYmxlIHRvCj4gPiArIyB0aGUgYnVpbGQgcHJvY2VzcyBvZiBkZXBlbmRlbnQgcGFja2Fn
-ZXMgYnkgZXhwb3J0aW5nIGl0IHRocm91Z2ggdGhlIHVzZSBvZiBhbgo+ID4gKyMgZW52aXJvbm1l
-bnRhbCB2YXJpYWJsZS4gSW4gb3JkZXIgdG8gbm90IHBvbGx1dGUgdGhlIGdsb2JhbCBCdWlsZHJv
-b3QKPiA+ICsjIGVudmlyb25tZW50IGxldCdzIHJlY29yZCB0aGUgcGFja2FnZSdzIGxvY2F0aW9u
-IGFuZCB0aGVuIGRlZmluZSB0aGUgYWN0dWFsCj4gPiArIyBlbnZpcm9ubWVudGFsIHZhcmlhYmxl
-IG5lZWRlZCBmb3IgdGhlIGJ1aWxkIG9ubHkgaW4gdGhlIHBhY2thZ2VzIHRoYXQgbmVlZCBpdC4K
-PiA+ICtUSV9DT1JFX1NFQ0RFVl9LM19JTlNUQUxMX0RJUiA9ICQoSE9TVF9ESVIpL29wdC90aS1j
-b3JlLXNlY2Rldi1rMwo+ID4gKwo+ID4gK2RlZmluZSBIT1NUX1RJX0NPUkVfU0VDREVWX0szX0lO
-U1RBTExfQ01EUwo+ID4gKyAgICAgICBta2RpciAtcCAkKFRJX0NPUkVfU0VDREVWX0szX0lOU1RB
-TExfRElSKS9rZXlzCj4gPiArICAgICAgIGNwIC1kcGZyICQoQEQpL2tleXMvKiAkKFRJX0NPUkVf
-U0VDREVWX0szX0lOU1RBTExfRElSKS9rZXlzCj4gPiArICAgICAgIG1rZGlyIC1wICQoVElfQ09S
-RV9TRUNERVZfSzNfSU5TVEFMTF9ESVIpL3NjcmlwdHMKPiA+ICsgICAgICAgY3AgLWRwZnIgJChA
-RCkvc2NyaXB0cy8qICQoVElfQ09SRV9TRUNERVZfSzNfSU5TVEFMTF9ESVIpL3NjcmlwdHMKPiA+
-ICsgICAgICAgbWtkaXIgLXAgJChUSV9DT1JFX1NFQ0RFVl9LM19JTlNUQUxMX0RJUikvdGVtcGxh
-dGVzCj4gPiArICAgICAgIGNwIC1kcGZyICQoQEQpL3NjcmlwdHMvKiAkKFRJX0NPUkVfU0VDREVW
-X0szX0lOU1RBTExfRElSKS90ZW1wbGF0ZXMKPiA+ICtlbmRlZgo+ID4gKwo+ID4gKyQoZXZhbCAk
-KGhvc3QtZ2VuZXJpYy1wYWNrYWdlKSkKPiA+IC0tCj4gPiAyLjM0LjEKPiA+Cj4gPiBfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4gYnVpbGRyb290IG1h
-aWxpbmcgbGlzdAo+ID4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiA+IGh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
-aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Fran=E7ois,
+
+On Fri, Jun 23, 2023 at 09:30:39AM +0200, Fran=E7ois Perrad wrote:
+> Le jeu. 22 juin 2023 =E0 18:07, Andreas Dannenberg via buildroot <
+> buildroot@buildroot.org> a =E9crit :
+> =
+
+> > This package adds the userspace libraries for the Rogue graphics
+> > accelerator of the following Texas Instruments SoCs: AM62, J721E,
+> > J721S2, and J784S4.
+> >
+> > Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
+> > ---
+> >  package/Config.in                             |   1 +
+> >  .../0001-all-drop-the-init-script.patch       | 832 ++++++++++++++++++
+> >  package/ti-rogue-um/Config.in                 |  52 ++
+> >  package/ti-rogue-um/ti-rogue-um.hash          |   3 +
+> >  package/ti-rogue-um/ti-rogue-um.mk            |  38 +
+> >  5 files changed, 926 insertions(+)
+> >  create mode 100644 package/ti-rogue-um/0001-all-drop-the-init-script.p=
+atch
+> >  create mode 100644 package/ti-rogue-um/Config.in
+> >  create mode 100644 package/ti-rogue-um/ti-rogue-um.hash
+> >  create mode 100644 package/ti-rogue-um/ti-rogue-um.mk
+> >
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 96ef0d72de..0bff1135aa 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -614,6 +614,7 @@ endmenu
+> >         source "package/targetcli-fb/Config.in"
+> >         source "package/ti-gfx/Config.in"
+> >         source "package/ti-rogue-km/Config.in"
+> > +       source "package/ti-rogue-um/Config.in"
+> >         source "package/ti-sgx-demos/Config.in"
+> >         source "package/ti-sgx-km/Config.in"
+> >         source "package/ti-sgx-um/Config.in"
+> > diff --git a/package/ti-rogue-um/0001-all-drop-the-init-script.patch
+> > b/package/ti-rogue-um/0001-all-drop-the-init-script.patch
+> > new file mode 100644
+> > index 0000000000..4f3dd1cbb1
+> > --- /dev/null
+> > +++ b/package/ti-rogue-um/0001-all-drop-the-init-script.patch
+> > @@ -0,0 +1,832 @@
+> > +From 99e0da8a1c08818c59680f726e11a84b26daf29f Mon Sep 17 00:00:00 2001
+> > +From: Randolph Sapp <rs@ti.com>
+> > +Date: Thu, 25 May 2023 18:59:26 -0500
+> > +Subject: [PATCH] all: drop the init script
+> > +
+> > +Nobody should be using this anymore. It's sysVinit and it's just a fan=
+cy
+> > +wrapper around modprobe anyway. We'll be dropping it from our build
+> > +tools soon.
+> > +
+> > +Signed-off-by: Randolph Sapp <rs@ti.com>
+> > +---
+> > + .../wayland/release/etc/init.d/rc.pvr         | 196 ------------------
+> > + .../wayland/release/etc/init.d/rc.pvr         | 196 ------------------
+> > + .../wayland/release/etc/init.d/rc.pvr         | 196 ------------------
+> > + .../wayland/release/etc/init.d/rc.pvr         | 196 ------------------
+> > + 4 files changed, 784 deletions(-)
+> > + delete mode 100755 targetfs/am62_linux/wayland/release/etc/init.d/rc.=
+pvr
+> > + delete mode 100755 targetfs/j721e_linux/wayland/release/etc/init.d/rc=
+.pvr
+> > + delete mode 100755
+> > targetfs/j721s2_linux/wayland/release/etc/init.d/rc.pvr
+> > + delete mode 100755
+> > targetfs/j784s4_linux/wayland/release/etc/init.d/rc.pvr
+> > +
+> > +diff --git a/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
+> > b/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
+> > +deleted file mode 100755
+> > +index 428cd86..0000000
+> > +--- a/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
+> > ++++ /dev/null
+> > +2.34.1
+> > +
+> > diff --git a/package/ti-rogue-um/Config.in b/package/ti-rogue-um/Config=
+.in
+> > new file mode 100644
+> > index 0000000000..15257858c2
+> > --- /dev/null
+> > +++ b/package/ti-rogue-um/Config.in
+> > @@ -0,0 +1,52 @@
+> > +comment "ti-rogue-um needs udev and a glibc toolchain w/ threads"
+> > +       depends on BR2_aarch64
+> > +       depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC \
+> > +               || !BR2_TOOLCHAIN_HAS_THREADS
+> > +
+> > +config BR2_PACKAGE_TI_ROGUE_UM
+> > +       bool "ti-rogue-um"
+> > +       depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+> > +       depends on BR2_PACKAGE_HAS_UDEV
+> > +       # pre-built binaries
+> > +       depends on BR2_TOOLCHAIN_USES_GLIBC
+> > +       depends on BR2_aarch64
+> > +       select BR2_PACKAGE_LIBDRM
+> > +       select BR2_PACKAGE_HAS_LIBEGL
+> > +       select BR2_PACKAGE_HAS_LIBGBM
+> > +       select BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
+> > +       select BR2_PACKAGE_HAS_LIBGLES
+> > +       select BR2_PACKAGE_HAS_POWERVR
+> > +       select BR2_PACKAGE_LIBFFI
+> > +       select BR2_PACKAGE_WAYLAND
+> > +       select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+> > +       select BR2_PACKAGE_TI_ROGUE_KM if BR2_LINUX_KERNEL
+> > +       help
+> > +         Graphics libraries for TI SoCs with Rogue GPU.
+> > +         This package supports AM62, J721E, J721S2, and J784S4
+> > +         SoCs only.
+> > +
+> > +         https://git.ti.com/cgit/graphics/ti-img-rogue-umlibs
+> > +
+> > +if BR2_PACKAGE_TI_ROGUE_UM
+> > +
+> > +config BR2_PACKAGE_PROVIDES_LIBEGL
+> > +       default "ti-rogue-um"
+> > +
+> > +config BR2_PACKAGE_PROVIDES_LIBGBM
+> > +       default "ti-rogue-um"
+> > +
+> > +config BR2_PACKAGE_PROVIDES_LIBGLES
+> > +       default "ti-rogue-um"
+> > +
+> > +config BR2_PACKAGE_PROVIDES_POWERVR
+> > +       default "ti-rogue-um"
+> > +
+> > +config BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT
+> > +       string "UM driver target product"
+> > +       default "am62_linux"
+> > +       help
+> > +         Select target product to be used for UM libraries. This needs=
+ to
+> > +         match one of the SoC-specific folders within the root/targetfs
+> > +         folder of the ti-img-rogue-umlibs Git repository.
+> > +
+> > +endif
+> > diff --git a/package/ti-rogue-um/ti-rogue-um.hash
+> > b/package/ti-rogue-um/ti-rogue-um.hash
+> > new file mode 100644
+> > index 0000000000..a41bf33145
+> > --- /dev/null
+> > +++ b/package/ti-rogue-um/ti-rogue-um.hash
+> > @@ -0,0 +1,3 @@
+> > +# Locally calculated
+> > +sha256  2e1bd1a5ab0ad2db1b9164d028a94f8f9d20743131f337a817fd1c8f9ddd4c=
+be
+> > ti-rogue-um-5977e82b96028f783d39c7219f016c1faf8dc5f5-br1.tar.gz
+> > +sha256  37507b462edf97b59717d2d144daaac85fbca6080c3602b5128e446e97f9ad=
+47
+> > LICENSE
+> > diff --git a/package/ti-rogue-um/ti-rogue-um.mk b/package/ti-rogue-um/
+> > ti-rogue-um.mk
+> > new file mode 100644
+> > index 0000000000..fa29638fa7
+> > --- /dev/null
+> > +++ b/package/ti-rogue-um/ti-rogue-um.mk
+> > @@ -0,0 +1,38 @@
+> >
+> > +######################################################################=
+##########
+> > +#
+> > +# ti-rogue-um
+> > +#
+> >
+> > +######################################################################=
+##########
+> > +
+> > +# This corresponds to SDK 08.06.00
+> > +TI_ROGUE_UM_VERSION =3D 5977e82b96028f783d39c7219f016c1faf8dc5f5
+> > +TI_ROGUE_UM_SITE =3D
+> > https://git.ti.com/git/graphics/ti-img-rogue-umlibs.git
+> > +TI_ROGUE_UM_SITE_METHOD =3D git
+> > +TI_ROGUE_UM_LICENSE =3D TI TSPA License
+> > +TI_ROGUE_UM_LICENSE_FILES =3D LICENSE
+> > +TI_ROGUE_UM_INSTALL_STAGING =3D YES
+> > +TI_ROGUE_UM_PROVIDES =3D libegl libgbm libgles powervr
+> > +
+> > +# ti-rogue-um is a egl/gles provider only if libdrm is installed
+> > +TI_ROGUE_UM_DEPENDENCIES =3D libdrm wayland
+> >
+> =
+
+> useless built dependencies (nothing is built, blobs are copied), runtime
+> dependencies in Config.in are enough.
+
+Understood, will fix it. Btw this was a carry-over from
+package/ti-sgx-um/ti-sgx-um.mk which I used to model this new package
+after, so opportunity for improvement there as well...
+ =
+
+> +
+> > +PVR_BUILD =3D "release"
+> > +PVR_WS =3D "wayland"
+> > +
+> >
+> =
+
+> TI_ROGUE_UM_MAKE_OPTS =3D \
+>       TARGET_PRODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT) \
+>       BUILD=3Drelease \
+>       WINDOW_SYSTEM=3Dwayland
+> =
+
+> define TI_ROGUE_UM_INSTALL_STAGING_CMDS
+>      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+>           $(TI_ROGUE_UM_MAKE_OPTS) \
+>           DESTDIR=3D$(STAGING_DIR) \
+>           install
+> endef
+> by this way, all variables are prefixed by TI_ROGUE_UM_.
+
+Good idea, will factor-out the make options. Thanks for taking the time
+to review & improve this patch.
+
+--
+Andreas Dannenberg
+Texas Instruments Inc
+
+
+
+> =
+
+> Fran=E7ois
+> =
+
+> =
+
+> > +define TI_ROGUE_UM_INSTALL_STAGING_CMDS
+> > +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> > +               DESTDIR=3D$(STAGING_DIR) \
+> > +               TARGET_PRODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUC=
+T) \
+> > +               BUILD=3D$(PVR_BUILD) WINDOW_SYSTEM=3D$(PVR_WS) \
+> > +               install
+> > +endef
+> > +
+> > +define TI_ROGUE_UM_INSTALL_TARGET_CMDS
+> > +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> > +               DESTDIR=3D$(TARGET_DIR) \
+> > +               TARGET_PRODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUC=
+T) \
+> > +               BUILD=3D$(PVR_BUILD) WINDOW_SYSTEM=3D$(PVR_WS) \
+> > +               install
+> > +endef
+> > +
+> > +$(eval $(generic-package))
+> > --
+> > 2.34.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+> >
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
