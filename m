@@ -4,68 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2196EB64DC
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 14:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E01B2EB64DA
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 14:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87D1860B05;
-	Sat, 24 Jun 2023 14:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87D1860B05
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F7B960A61;
+	Sat, 24 Jun 2023 14:04:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F7B960A61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1GGyL9mhlmO5; Sat, 24 Jun 2023 14:03:13 +0000 (UTC)
+	with ESMTP id 5yQKT3zKILw3; Sat, 24 Jun 2023 14:04:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6680060B2B;
-	Sat, 24 Jun 2023 14:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6680060B2B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D84B1BF31F
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 14:03:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 140CD607B5;
+	Sat, 24 Jun 2023 14:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 140CD607B5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 39E691BF3E0
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 14:04:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6288581F53
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 14:03:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6288581F53
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13339607B5
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 14:04:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13339607B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 19Boa5sGOv3C for <buildroot@lists.busybox.net>;
- Sat, 24 Jun 2023 14:03:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 364CA81F4F
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 364CA81F4F
- for <buildroot@buildroot.org>; Sat, 24 Jun 2023 14:03:08 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:d5f8:72e0:30f9:5d41])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id B1C56B0051E;
- Sat, 24 Jun 2023 16:03:00 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 24 Jun 2023 16:03:00 +0200
-Date: Sat, 24 Jun 2023 16:03:00 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230624140300.GP24952@scaer>
-References: <20230624081007.19409-1-ps.report@gmx.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230624081007.19409-1-ps.report@gmx.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1687615384;
- bh=/rMYFOSKfswyzikoYqSrM2E5StaBy8XaeNovFbJoyWo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uoNFn+L6nOVjdvd9U6F4ekSfNovRnqTfb8HmBHQ3BODxfXHD5rR1da5Vxd51IDIWu
- 591gFRNqYcNa0pyteSG5b36YID8qdDDgVcmBWEZBDtJKpYX650ovNch4FyVFZgjUmb
- fV9WqEfA1b3fKFOn5BLM6/79JnwAHMD1kKE8cF+b1o7sGeaY3TMEBeEDPMB2l+2uV9
- yX1jNpAUmLDIkrPJCez/+XYF3wzAy8N/mRkcvHxr7h1vLbPUVuWOLUdmS2jijsZONN
- Rsrzw0p7VjAolptXBuk6zBaiZcbAN5+DwJ3GeRMoEDLdMNKNXS4FIWSwjw0mkc3xeR
- EnE/SbI1hdhWA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uoNFn+L6
-Subject: Re: [Buildroot] [PATCH v1] package/mesa3d: fix
- 002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zRhSYT8k-3gT for <buildroot@lists.busybox.net>;
+ Sat, 24 Jun 2023 14:04:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A72D606C0
+ for <buildroot@buildroot.org>; Sat, 24 Jun 2023 14:04:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A72D606C0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 07A38844F7; Sat, 24 Jun 2023 14:04:49 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 24 Jun 2023 16:04:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: da19c18af2d531b63b6d54f02dc2f16785756e66
+X-Git-Newrev: 840b5527466502f02b86c95f9bf95557d35c8571
+X-Patchwork-Hint: ignore
+Message-Id: <20230624140449.07A38844F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dahdi-linux: fix build with kernel
+ >= 6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,130 +57,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=840b5527466502f02b86c95f9bf95557d35c8571
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-06-24 10:10 +0200, Peter Seiderer spake thusly:
-> Update 002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch to
-> fix an syntax error introduced by commit 'package/{mesa3d, mesa3d-headers}:
-> bump version to 23.1.0' ([1])
-> 
-> Fixes:
-> 
->   .../build/mesa3d-23.1.2/src/gallium/drivers/vc4/meson.build:87:76: ERROR:
->   Trying to compare values of different types (UserFeatureOption, str) using !=.
->   This was deprecated and undefined behavior previously and is as of 0.60.0 a hard error.
-> 
-> [1] https://git.buildroot.net/buildroot/commit/?id=e6203db11ed40122a2d9f29012db5683a7eb10d0
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
+http://autobuild.buildroot.net/results/2bb/2bb8a38b12cb3a7650162f1f7f65b56b20711d64/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...005-drivers-dahdi-fix-build-with-clang-16.patch | 106 +++++++++++++++++++++
+ 1 file changed, 106 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...tion-to-disable-optional-neon-suppor.patch | 22 ++++++++++---------
->  1 file changed, 12 insertions(+), 10 deletions(-)
-> 
-> diff --git a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-> index a5564fcf3a..430bd3b4b9 100644
-> --- a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-> +++ b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-> @@ -1,4 +1,4 @@
-> -From e3b47c1b84964c62b3e1fa782f1ffa4be0ae62f9 Mon Sep 17 00:00:00 2001
-> +From f719e942dde0a46a9ff0080001cb3466012ffcc0 Mon Sep 17 00:00:00 2001
->  From: Peter Seiderer <ps.report@gmx.net>
->  Date: Mon, 9 Mar 2020 13:01:14 +0100
->  Subject: [PATCH] vc4: add meson option to disable optional neon support
-> @@ -11,6 +11,8 @@ Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
->  Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->  [rebased for 20.2.0, 20.3.0, 21.1.0 & 23.1.0]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +[fix syntax error after previous rebases]
->  ---
->   meson_options.txt                    | 7 +++++++
->   src/gallium/drivers/vc4/meson.build  | 4 ++--
-> @@ -18,25 +20,25 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->   3 files changed, 11 insertions(+), 4 deletions(-)
->  
->  diff --git a/meson_options.txt b/meson_options.txt
-> -index a39596a6f19..0f6b6c62b55 100644
-> +index 8e0bf2a..1cf0e07 100644
->  --- a/meson_options.txt
->  +++ b/meson_options.txt
-> -@@ -117,6 +117,13 @@
-> +@@ -116,6 +116,13 @@ option(
-> +   description : 'enable gallium va frontend.',
->   )
->   
-> - option(
-> ++option(
->  +  'gallium-vc4-neon',
->  +  type : 'feature',
->  +  deprecated: {'true': 'enabled', 'false': 'disabled'},
->  +  description : 'enable gallium vc4 optional neon support.',
->  +)
->  +
-> -+option(
-> + option(
->     'va-libs-path',
->     type : 'string',
-> -   value : '',
->  diff --git a/src/gallium/drivers/vc4/meson.build b/src/gallium/drivers/vc4/meson.build
-> -index 5ce5af5f6b4..e3f7d8d62ae 100644
-> +index 84da951..7f950de 100644
->  --- a/src/gallium/drivers/vc4/meson.build
->  +++ b/src/gallium/drivers/vc4/meson.build
->  @@ -84,7 +84,7 @@ files_libvc4 = files(
-> @@ -44,7 +46,7 @@ index 5ce5af5f6b4..e3f7d8d62ae 100644
->   
->   libvc4_neon = []
->  -if host_machine.cpu_family() == 'arm'
-> -+if host_machine.cpu_family() == 'arm' and get_option('gallium-vc4-neon') != 'disabled'
-> ++if host_machine.cpu_family() == 'arm' and not get_option('gallium-vc4-neon').disabled()
->     libvc4_neon = static_library(
->       'vc4_neon',
->       'vc4_tiling_lt_neon.c',
-> @@ -58,7 +60,7 @@ index 5ce5af5f6b4..e3f7d8d62ae 100644
->   
->   if dep_simpenrose.found()
->  diff --git a/src/gallium/drivers/vc4/vc4_tiling.h b/src/gallium/drivers/vc4/vc4_tiling.h
-> -index 66767e7f1f8..7446f1c3d0c 100644
-> +index 5afe329..919b299 100644
->  --- a/src/gallium/drivers/vc4/vc4_tiling.h
->  +++ b/src/gallium/drivers/vc4/vc4_tiling.h
->  @@ -89,7 +89,7 @@ vc4_load_lt_image(void *dst, uint32_t dst_stride,
-> @@ -80,5 +82,5 @@ index 66767e7f1f8..7446f1c3d0c 100644
->                   vc4_store_lt_image_neon(dst, dst_stride, src, src_stride,
->                                           cpp, box);
->  -- 
-> -2.25.1
-> +2.41.0
->  
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dahdi-linux/0005-drivers-dahdi-fix-build-with-clang-16.patch b/package/dahdi-linux/0005-drivers-dahdi-fix-build-with-clang-16.patch
+new file mode 100644
+index 0000000000..535e1628c9
+--- /dev/null
++++ b/package/dahdi-linux/0005-drivers-dahdi-fix-build-with-clang-16.patch
+@@ -0,0 +1,106 @@
++From d51c10dae5a06709983b929fc6f9fb18eec41951 Mon Sep 17 00:00:00 2001
++From: Brahmajit Das <brahmajit.xyz@gmail.com>
++Date: Thu, 22 Jun 2023 15:52:18 +0000
++Subject: [PATCH] drivers/dahdi: fix build with clang-16
++
++clang-16 enables -Werror=incompatible-pointer-types (along with buch of
++other warnings) by default, thus resulting in errors such as:
++
++/var/tmp/portage/net-misc/dahdi-3.2.0/work/dahdi-linux-3.2.0/drivers/dahdi/dahdi-sysfs.c:272:20: error: incompatible function
++      pointer types initializing 'int (*)(const struct device *, struct kobj_uevent_env *)' with an expression of type
++      'int (struct device *, struct kobj_uevent_env *)' [-Wincompatible-function-pointer-types]
++        .uevent         = span_uevent,
++                          ^~~~~~~~~~~
++/var/tmp/portage/net-misc/dahdi-3.2.0/work/dahdi-linux-3.2.0/drivers/dahdi/dahdi-sysfs.c:709:20: error: incompatible function
++      pointer types initializing 'int (*)(const struct device *, struct kobj_uevent_env *)' with an expression of type
++      'int (struct device *, struct kobj_uevent_env *)' [-Wincompatible-function-pointer-types]
++        .uevent         = device_uevent,
++                          ^~~~~~~~~~~~~
++2 errors generated.
++
++This is due the change in bus_type strcut made in upstream commit
++https://github.com/torvalds/linux/commit/2a81ada32f0e584fc0c943e0d3a8c9f4fae411d6.
++Where they make uevent take a const *, as the strcut should not be
++modifying the device that is passed into it.
++
++This patch modifes some of the fucntions parameter types, making dahdi
++possible to be built with clang-16.
++
++Bug: https://bugs.gentoo.org/906179
++Signed-off-by: Brahmajit Das <brahmajit.xyz@gmail.com>
++
++Upstream: https://github.com/asterisk/dahdi-linux/pull/21
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ drivers/dahdi/dahdi-sysfs.c    | 8 ++++----
++ drivers/dahdi/wctc4xxp/base.c  | 2 +-
++ drivers/dahdi/xpp/xbus-sysfs.c | 2 +-
++ 3 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/drivers/dahdi/dahdi-sysfs.c b/drivers/dahdi/dahdi-sysfs.c
++index ca29ddba..0c5bd982 100644
++--- a/drivers/dahdi/dahdi-sysfs.c
+++++ b/drivers/dahdi/dahdi-sysfs.c
++@@ -47,7 +47,7 @@ static int span_match(struct device *dev, struct device_driver *driver)
++ 	return 1;
++ }
++ 
++-static inline struct dahdi_span *dev_to_span(struct device *dev)
+++static inline struct dahdi_span *dev_to_span(const struct device *dev)
++ {
++ 	return dev_get_drvdata(dev);
++ }
++@@ -68,7 +68,7 @@ static inline struct dahdi_span *dev_to_span(struct device *dev)
++ 			return err;				\
++ 	} while (0)
++ 
++-static int span_uevent(struct device *dev, struct kobj_uevent_env *kenv)
+++static int span_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
++ {
++ 	struct dahdi_span *span;
++ 
++@@ -415,7 +415,7 @@ static struct {
++ 	unsigned int clean_chardev:1;
++ } should_cleanup;
++ 
++-static inline struct dahdi_device *to_ddev(struct device *dev)
+++static inline struct dahdi_device *to_ddev(const struct device *dev)
++ {
++ 	return container_of(dev, struct dahdi_device, dev);
++ }
++@@ -438,7 +438,7 @@ static inline struct dahdi_device *to_ddev(struct device *dev)
++ 			return err;				\
++ 	} while (0)
++ 
++-static int device_uevent(struct device *dev, struct kobj_uevent_env *kenv)
+++static int device_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
++ {
++ 	struct dahdi_device *ddev;
++ 
++diff --git a/drivers/dahdi/wctc4xxp/base.c b/drivers/dahdi/wctc4xxp/base.c
++index ec6fc436..db70ea7e 100644
++--- a/drivers/dahdi/wctc4xxp/base.c
+++++ b/drivers/dahdi/wctc4xxp/base.c
++@@ -643,7 +643,7 @@ wctc4xxp_net_register(struct wcdte *wc)
++ 		return -ENOMEM;
++ 	priv = netdev_priv(netdev);
++ 	priv->wc = wc;
++-	memcpy(netdev->dev_addr, our_mac, sizeof(our_mac));
+++	memcpy((void *)netdev->dev_addr, our_mac, sizeof(our_mac));
++ 
++ #	ifdef HAVE_NET_DEVICE_OPS
++ 	netdev->netdev_ops = &wctc4xxp_netdev_ops;
++diff --git a/drivers/dahdi/xpp/xbus-sysfs.c b/drivers/dahdi/xpp/xbus-sysfs.c
++index d8c11dc3..29ad3619 100644
++--- a/drivers/dahdi/xpp/xbus-sysfs.c
+++++ b/drivers/dahdi/xpp/xbus-sysfs.c
++@@ -418,7 +418,7 @@ static int astribank_match(struct device *dev, struct device_driver *driver)
++ 			return err;				\
++ 	} while (0)
++ 
++-static int astribank_uevent(struct device *dev, struct kobj_uevent_env *kenv)
+++static int astribank_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
++ {
++ 	xbus_t *xbus;
++ 	extern char *initdir;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
