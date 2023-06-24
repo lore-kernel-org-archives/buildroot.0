@@ -4,82 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8699CEB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 07:31:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E077EB64DA
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 07:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C47F44173C;
-	Sat, 24 Jun 2023 07:31:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C47F44173C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77E66401BB;
+	Sat, 24 Jun 2023 07:43:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77E66401BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r4297Q6f2Zmc; Sat, 24 Jun 2023 07:31:32 +0000 (UTC)
+	with ESMTP id 4jNJmtl87x0F; Sat, 24 Jun 2023 07:43:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE46E417CA;
-	Sat, 24 Jun 2023 07:31:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE46E417CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A5214139E;
+	Sat, 24 Jun 2023 07:43:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A5214139E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BB20D1BF2C8
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 07:31:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3B4171BF2C8
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 07:43:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 944A482043
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 07:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 944A482043
+ by smtp1.osuosl.org (Postfix) with ESMTP id 10EAD81451
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 07:43:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10EAD81451
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hIHVJQEr1Cwb for <buildroot@lists.busybox.net>;
- Sat, 24 Jun 2023 07:31:29 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA6F682031
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA6F682031
- for <buildroot@buildroot.org>; Sat, 24 Jun 2023 07:31:28 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.208.189]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McH9Y-1peipu3cT6-00chAS; Sat, 24
- Jun 2023 09:30:38 +0200
-Date: Sat, 24 Jun 2023 09:30:37 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Hasan Karaman <hk@hasankaraman.dev>
-Message-ID: <20230624093037.1501a619@gmx.net>
-In-Reply-To: <9bdad434-d2a1-0988-8d17-3cd2f23448c2@hasankaraman.dev>
-References: <9bdad434-d2a1-0988-8d17-3cd2f23448c2@hasankaraman.dev>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+ with ESMTP id EmlSvA8GCG2k for <buildroot@lists.busybox.net>;
+ Sat, 24 Jun 2023 07:43:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACB1B813F3
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ACB1B813F3
+ for <buildroot@buildroot.org>; Sat, 24 Jun 2023 07:43:50 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3EC1EA4C00B2;
+ Sat, 24 Jun 2023 09:43:45 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57444)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qCxvq-0005Gl-1x;
+ Sat, 24 Jun 2023 09:43:44 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sat, 24 Jun 2023 09:43:42 +0200
+Message-Id: <20230624074342.393015-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:EBPbMF0IPVwHZNDA03HHTN0299xVeaW8rgjsvUw3tQoDgO9P5fd
- jpwB9H+1PFcH97fEfGpNzwmyDVORmqoYuUIe9askVFgVA4c+OhcUTY7OId635IOtZVe0OqL
- 0yGyGoN61rXxay9fTmwDDLB2sw1fAFG+sR3hiUh5pzBzGX9AkjtskrxXK0PlL0HEqx3kx7t
- EPckpEtdmD0T2BhFy8Ufg==
-UI-OutboundReport: notjunk:1;M01:P0:e4C01G6Gdxg=;zNHve7O/+WXUPrXW2ovnPd6/41s
- idKdZbh+/zN/ZyfapdWGnAn9HtlrLoWjWNqOXslBjNB+wdH3mTo9OaqbRhiUW1utDRU6poBEx
- S1h3QGthll9fq6dq9qWA7K2b2dEaukoRAovg3ewbKNu8Qf6z4yRJSfS3Pr2Og8FA/jHWNIqxT
- e2zr04yCXo3lacmfEASRX3tuFDE1tS3DaWcMVmxMGRYhAo2OWbHaZiuMR9V9GcKDLOWqBh79T
- zSYBwmdl+9cUADLMW9KBTBNA072TRScGbPjZUSsvL/Dsan1s61RNwXulWoss2S6ZIpN/feaCQ
- eJZKNzAodAlPnsU7HbOUvKcuKs5dGyta1Ogzl9MOarPIW6JfJWNjaub8r1DiF+X136vHXuFe2
- qRU41NGbLX2Jj3PW9/nXIYI27oKQPTF3UHu5sNoXT3SyKiBqWfNeTfoCvYbQ+qaSfvrcwYLYO
- 3W4HAlUqSPAj9YUIvZ7gyBlXe/2ahCKsA7Ol+AFJfuBMqfhfDQ5QOq3zps2PuRePK/Rnfuwvi
- DxDg3Dn8zmhFhXwKHvWOsK74EHnHVj2iil91PYbdzyWYHfE8kZWP7xyFZTay0ox2YhBfGX0T0
- lPudMxl8n3iVe//+k/vrpH2+6ufbHBvMjt8XjA59roWDnFwFEMY4irbsbKe7CV3/Ihat4Jr90
- pv80G5kZ1Bep6EY0XGDOJXfgpZ0sAmOiytAi8+1PZonf5Cv/ZPl7b+cJDuoR9cyjVMTcp9KRG
- w/XbIavsBH1ferLLbVnDWNpJFrnNP3DEu7QBEOXVlYpk+TvMc95nU/m1UVNlNw0bP7WeTbbPX
- VMC6SEVAOCULyjXKBqoYQpnHutVoGfa9wdcw549BHbkoG9JluFCpzk83HEXB0g8dFNrmZNNkN
- RXlA8H36b5EIxVzOwkA5m8dqw6G5AGPnl2DAMLzh9DF8zqbFZPbOWrYUGS6EtjuZU/u5oURkc
- aybCAD7+Je7I8/7mR1G2AE4HW8I=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1687591839; x=1688196639; i=ps.report@gmx.net;
- bh=RyLLjCoQgDpvqrrOxU1tw3LVRFSyOK25nUj7p2SJ7o8=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=sEPB23J2M4MUTNGAMjt9OLrskIv8qP7MMWQGgw+Fz2MEz1eF+fDf5y5qCjATwLrTnS32Q5S
- cem2b0QRLR4DkeZAwTxI/vETlYeBTu5VtlrvZYXXoMIwhHLl41OsrzlfLu3kWIFr6/soAfGzg
- ZhhZexzxhA8H1x0/DIYL76ANiBSzWleuy/xOYw3NQcTw6fTLwGn3qJSEpNaAVauGGa/igAMWp
- UgdnrfEqDdrm872I08lV3gbSuP6HV2fa9mTjX3XyCqJTEcIMkpdBpkPBSJNokhqvG/Z3j7vUx
- KvMophqMByXXw1l/kfpu7wCC8SWyGoP4sM/xhebGRmVzjevPhmLw==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1687592625;
+ bh=vtW3QXtjl1kR5SGhhH9AbY7zwDQYqH9BNPAUWASBCrk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=zxqd80HB1Nnp/KKP+x67Xxy0eHRbsrDsv+fnWuo2D+PKxrzPptHLGNwjDfqLnna+s
+ zyEN7KhzG9z3PQ574xwbd6OhT739bIGz/jXB9MohY6S9fhF6S8x1Qq+Ulq4JLRItKX
+ 0NjpXRO0aDtZ7ySfsd6iuYKhppnBc0wGI9DAx7gfCn/3dsXp9Q6tjeg1q49w7pv6KB
+ yvYPXXXFybXaduHPK5UCwTMWYcDccCWS4bYK/ZK3Cr1Nw7ok35OhpE48s+loeTMby4
+ NxmO09jBygfcpeayNOZsAFwPlqaiQEVXoujY/WXkZjR2fBiCgEbezsoLVgDQzSrELx
+ 2Lz3A0qvZ7kKw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=sEPB23J2
-Subject: Re: [Buildroot] FBTFT extension does not work out of the box
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=zxqd80HB
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 23.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,47 +76,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Hasan,
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-June/000723.html
 
-On Fri, 23 Jun 2023 21:22:50 +0300, Hasan Karaman <hk@hasankaraman.dev> wrote:
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-> What I do is:
->
-> make orangepi_zero_defconfig
->
-> make menuconfig
->
-> Kernel > Linux Kernel Extensions > FB TFT Drivers
->
-> https://github.com/notro/fbtft cannot be compiled with mainline kernel.
-> So I use my modified version of fbtft driver:
->
-> https://github.com/grizzlei/fbtft
->
-> And when I replace
-> buildoot/output/build/linux-6.1.14/drivers/video/fbdev/fbtft with my
-> code, this time i get compilation errors caused by CONFIG_FB_DEFERRED_IO
-> macro not being defined. Does FBTFT support depend on other features?
->
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index f7b0ecfd52..a89ab984a8 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 23.1.2
++MESA3D_HEADERS_VERSION = 23.1.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 80272b70d6..71583d5f67 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+ # From https://lists.freedesktop.org/archives/mesa-announce/2023-June/000722.html
+-sha256  60b1f3adb1561830c158bf3c68508943674fb9d69f384c3c7289694385ab5c7e  mesa-23.1.2.tar.xz
+-sha512  728e79720d950b0f39fa55c21dff7caed3650e88dff52a2f3e70540a049f1baf78178e62e5d6b1e59c76f6555ab0be3f0043cfbddd4745c0a742ccef2f5774d4  mesa-23.1.2.tar.xz
++sha256  2f6d7381bc10fbd2d6263ad1022785b8b511046c1a904162f8f7da18eea8aed9  mesa-23.1.3.tar.xz
++sha512  44f0658138ef99dcede5e4c33d5733af836283f05b031b07f3f8b3bc03b301bc7ab9dc15248829cf3dfc423f2da8935b372b25df8b9ef15a511ba16ccd913959  mesa-23.1.3.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e4b03b65bb..24a0ecfe1c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 23.1.2
++MESA3D_VERSION = 23.1.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.39.2
 
-Maybe do not use the out of tree version, use the kernel mainline one
-(drivers/staging/fbtft) as stated here [1]:
-
-	2015-01-19
-	The FBTFT drivers are now in the Linux kernel staging tree:
-	https://git.kernel.org/cgit/linux/kernel/git/gregkh/staging.git/tree/drivers/staging/fbtft?h=staging-testing
-	Development in this github repo has ceased.
-
-Regards,
-Peter
-
-[1] https://github.com/notro/fbtft/commit/855b2908380e8ca996768bf94cb4d8573690bc30
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
