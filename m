@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63328EB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 13:25:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 421E5EB64DA
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 13:26:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3F1D606C6;
-	Sat, 24 Jun 2023 13:24:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3F1D606C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA58F60736;
+	Sat, 24 Jun 2023 13:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA58F60736
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CtKa4YDHrylv; Sat, 24 Jun 2023 13:24:58 +0000 (UTC)
+	with ESMTP id 3xSAT-zkTFGF; Sat, 24 Jun 2023 13:26:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 705BC60736;
-	Sat, 24 Jun 2023 13:24:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 705BC60736
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0DD751BF31F
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 13:24:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 825116073E;
+	Sat, 24 Jun 2023 13:26:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 825116073E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 608D01BF31F
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 13:25:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E8287607F1
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 13:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8287607F1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A19881FA3
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 13:25:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A19881FA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I87EUs9A2r0H for <buildroot@lists.busybox.net>;
- Sat, 24 Jun 2023 13:24:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 737E660736
- for <buildroot@buildroot.org>; Sat, 24 Jun 2023 13:24:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 737E660736
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B98D84077; Sat, 24 Jun 2023 13:24:53 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 24 Jun 2023 15:19:47 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5206492d6a749191fc9395479438a35007417cc2
-X-Git-Newrev: c02707a34226c15426b9cac35aefda7d7e9b0125
-X-Patchwork-Hint: ignore
-Message-Id: <20230624132453.5B98D84077@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opensc: bump version to 0.23.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id il4WMtYKcYj0 for <buildroot@lists.busybox.net>;
+ Sat, 24 Jun 2023 13:25:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59F1D81FA2
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 59F1D81FA2
+ for <buildroot@buildroot.org>; Sat, 24 Jun 2023 13:25:56 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:d5f8:72e0:30f9:5d41])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 04E86B0055A;
+ Sat, 24 Jun 2023 15:25:49 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 24 Jun 2023 15:25:49 +0200
+Date: Sat, 24 Jun 2023 15:25:49 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230624132549.GL24952@scaer>
+References: <20230624085050.2927814-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230624085050.2927814-1-bernd@kuhls.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1687613153;
+ bh=YLmgcsL3VQOyrncTikLC/NCO2y6iOxERixLmY1wvBrM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Z77cST2WPjR1zruVkn5UPzfY2bb/+AiIDEHwpGNbMEh7Ma6fhbVZmQBFAEgBqhATn
+ zeAKAL+3bk7WR+j3rEw8ZGBnWTjggk4QAnEURkiZSikRyaY/cDzT9eddCZi4Cf2oTn
+ k26+fwtG5rAZk+zjEQjBslfRs4iVaFDu62he8jNR3jzJmiIEBlm0iUfUUlXnE0ota9
+ fTKSBbdJZLr348HTDm5eXlk2IIF8UHZ6BwpSM8W5L2vXoUKfwTjieYViTaNMQfe86s
+ fLRW4hAfaUgzoTGu6/LJiGz66hy99mKqLEnxL4umapKm/Aa8AS8cb6i0duAjL4YDGT
+ NnQL6yTpL9Zyw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Z77cST2W
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/opensc: bump version to
+ 0.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,502 +77,306 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5096510536251515652=="
+Cc: =?utf-8?B?Sm9zw6k=?= Pekkarinen <jose.pekkarinen@unikie.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5096510536251515652==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c02707a34226c15426b9cac35aefda7d7e9b0125
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-    https://github.com/OpenSC/OpenSC/blob/master/NEWS
-
-Also carry two patches from upstream to fix build against newer
-LibreSSL. Those patches can't be backported to pre-0.23.0 versions,
-though.
-
-Fixes:
-    http://autobuild.buildroot.net/results/913/91318abb98146dd967115ed6233949daa60d8bba/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[yann.morin.1998@free.fr: squash LibreSSL fixes together with bump]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .checkpackageignore                                |   2 -
- .../0001-Fix-maybe-uninitialized-errors.patch      |  82 ----------
- ...1-fixed-compatibility-with-LibreSSL-3.5.0.patch |  54 +++++++
- ...1-fixed-compatibility-with-LibreSSL-3.7.0.patch |  28 ++++
- .../0002-added-compatibility-with-LibreSSL.patch   | 173 ---------------------
- .../0003-Fix-build-with-libressl-3.5.0.patch       |  47 ------
- package/opensc/opensc.hash                         |   2 +-
- package/opensc/opensc.mk                           |   2 +-
- 8 files changed, 84 insertions(+), 306 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index c78168e5ea..4a40bc7fcc 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1136,8 +1136,6 @@ package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch Upstre
- package/openrc/0004-init.d-agetty-start-agetty-after-all-sevices.patch Upstream
- package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch Upstream
- package/openrc/0006-Also-create-run-lock-subsys-directory.patch Upstream
--package/opensc/0002-added-compatibility-with-LibreSSL.patch Upstream
--package/opensc/0003-Fix-build-with-libressl-3.5.0.patch Upstream
- package/openssh/S50sshd EmptyLastLine Indent Variables
- package/openswan/0001-lib-libopenswan-constants.c-workaround-missing-ns_t_.patch Upstream
- package/opentyrian/0001-Move-definitions-that-don-t-need-to-be-exposed-from-opl-h-to-opl-c.patch Upstream
-diff --git a/package/opensc/0001-Fix-maybe-uninitialized-errors.patch b/package/opensc/0001-Fix-maybe-uninitialized-errors.patch
-deleted file mode 100644
-index 671d92c150..0000000000
---- a/package/opensc/0001-Fix-maybe-uninitialized-errors.patch
-+++ /dev/null
-@@ -1,82 +0,0 @@
--From bcb39d6f4d2dee6beb035cb2f3618174ec1cb2b0 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
--Date: Fri, 10 Dec 2021 13:54:26 +0200
--Subject: [PATCH] Fix maybe uninitialized errors
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
--Upstream: https://github.com/OpenSC/OpenSC/commit/05ec8c7fe785a2b9aeaac1164adb349df42b7f80
-----
-- src/libopensc/pkcs15-coolkey.c  | 12 ++++++------
-- src/pkcs15init/pkcs15-asepcos.c |  2 +-
-- src/tools/opensc-explorer.c     |  2 +-
-- 3 files changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/src/libopensc/pkcs15-coolkey.c b/src/libopensc/pkcs15-coolkey.c
--index 586475dd..15684cef 100644
----- a/src/libopensc/pkcs15-coolkey.c
--+++ b/src/libopensc/pkcs15-coolkey.c
--@@ -147,9 +147,9 @@ coolkey_find_matching_cert(sc_card_t *card, sc_cardctl_coolkey_object_t *in_obj,
-- static int
-- coolkey_get_attribute_ulong(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE type, CK_ULONG *value)
-- {
---	const u8 *val;
---	size_t val_len;
---	u8 data_type;
--+	const u8 *val = NULL;
--+	size_t val_len = 0;
--+	u8 data_type = 0;
-- 	int r;
-- 
-- 	r  = coolkey_get_attribute(card, obj, type, &val, &val_len, &data_type);
--@@ -168,8 +168,8 @@ static int
-- coolkey_get_attribute_boolean(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE attr_type)
-- {
-- 	int r;
---	const u8 *val;
---	size_t val_len;
--+	const u8 *val = NULL;
--+	size_t val_len = 0;
-- 
-- 	r = coolkey_get_attribute(card, obj, attr_type, &val, &val_len, NULL);
-- 	if (r < 0) {
--@@ -186,7 +186,7 @@ static int
-- coolkey_get_attribute_bytes(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE type, u8 *data, size_t *data_len, size_t max_data_len)
-- {
-- 	const u8 *val;
---	size_t val_len;
--+	size_t val_len = 0;
-- 	int r;
-- 
-- 	r = coolkey_get_attribute(card, obj, type, &val, &val_len, NULL);
--diff --git a/src/pkcs15init/pkcs15-asepcos.c b/src/pkcs15init/pkcs15-asepcos.c
--index d7122012..bc0efb5c 100644
----- a/src/pkcs15init/pkcs15-asepcos.c
--+++ b/src/pkcs15init/pkcs15-asepcos.c
--@@ -221,7 +221,7 @@ static int asepcos_do_store_pin(sc_profile_t *profile, sc_card_t *card,
-- {
-- 	sc_file_t *nfile = NULL;
-- 	u8  buf[64], sbuf[64], *p = buf, *q = sbuf;
---	int r, akn;
--+	int r, akn = 0;
-- 
-- 	if (auth_info->auth_type != SC_PKCS15_PIN_AUTH_TYPE_PIN)
-- 		return SC_ERROR_OBJECT_NOT_VALID;
--diff --git a/src/tools/opensc-explorer.c b/src/tools/opensc-explorer.c
--index 9ec4daa1..04efdf8f 100644
----- a/src/tools/opensc-explorer.c
--+++ b/src/tools/opensc-explorer.c
--@@ -2472,7 +2472,7 @@ int main(int argc, char *argv[])
-- 		char *line;
-- 		int cargc;
-- 		char *cargv[260];
---		int multiple;
--+		int multiple = 0;
-- 		struct command *cmd;
-- 		char prompt[3*SC_MAX_PATH_STRING_SIZE];
-- 
---- 
--2.25.1
--
-diff --git a/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch b/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
-new file mode 100644
-index 0000000000..0daf75d5ba
---- /dev/null
-+++ b/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
-@@ -0,0 +1,54 @@
-+From da01e5fab9be9865db1aac203e574e0edbfd6584 Mon Sep 17 00:00:00 2001
-+From: Frank Morgner <frankmorgner@gmail.com>
-+Date: Wed, 14 Dec 2022 09:31:29 +0100
-+Subject: [PATCH] fixed compatibility with LibreSSL >= 3.5.0
-+
-+fixes https://github.com/OpenSC/OpenSC/issues/2664
-+
-+Upstream: https://github.com/OpenSC/OpenSC/commit/da01e5fab9be9865db1aac203e574e0edbfd6584
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/libopensc/card-iasecc.c    | 12 +-----------
-+ src/libopensc/sc-ossl-compat.h |  1 +
-+ 2 files changed, 2 insertions(+), 11 deletions(-)
-+
-+diff --git a/src/libopensc/card-iasecc.c b/src/libopensc/card-iasecc.c
-+index 480c1cf87b..1347ed2393 100644
-+--- a/src/libopensc/card-iasecc.c
-++++ b/src/libopensc/card-iasecc.c
-+@@ -38,21 +38,11 @@
-+ #include <openssl/pkcs12.h>
-+ #include <openssl/x509v3.h>
-+ 
-+-/*
-+- * OpenSSL-3.0.0 does not allow access to the SHA data
-+- * so this driver can not produces signatures
-+- * OpenSSL 1.1.1 uses EVP_MD_CTX_md_data
-+- * LibreSSL
-+- */
-+-
-+-#if defined(LIBRESSL_VERSION_NUMBER)
-+-# define  EVP_MD_CTX_md_data(x)  (x->md_data)
-+-#endif
-+-
-+ #include "internal.h"
-+ #include "asn1.h"
-+ #include "cardctl.h"
-+ #include "opensc.h"
-++#include "sc-ossl-compat.h"
-+ /* #include "sm.h" */
-+ #include "pkcs15.h"
-+ /* #include "hash-strings.h" */
-+diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
-+index da53ca8cee..8c0f96701c 100644
-+--- a/src/libopensc/sc-ossl-compat.h
-++++ b/src/libopensc/sc-ossl-compat.h
-+@@ -42,6 +42,7 @@ extern "C" {
-+ #define X509_get_extension_flags(x)	(x->ex_flags)
-+ #define X509_get_key_usage(x)		(x->ex_kusage)
-+ #define X509_get_extended_key_usage(x)	(x->ex_xkusage)
-++#define EVP_MD_CTX_md_data(x)          (x->md_data)
-+ #endif
-+ 
-+ #if defined(LIBRESSL_VERSION_NUMBER)
-diff --git a/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.7.0.patch b/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.7.0.patch
-new file mode 100644
-index 0000000000..6bbbea6ce6
---- /dev/null
-+++ b/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.7.0.patch
-@@ -0,0 +1,28 @@
-+From 98ad0f93b0a7673cdce82e1b3faa7dc314c64dd6 Mon Sep 17 00:00:00 2001
-+From: Frank Morgner <frankmorgner@gmail.com>
-+Date: Fri, 16 Dec 2022 11:56:28 +0100
-+Subject: [PATCH] fixed compatibility with LibreSSL 3.7.0
-+
-+Upstream: https://github.com/OpenSC/OpenSC/commit/98ad0f93b0a7673cdce82e1b3faa7dc314c64dd6
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/libopensc/sc-ossl-compat.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
-+index 8c0f96701c..4425da93f3 100644
-+--- a/src/libopensc/sc-ossl-compat.h
-++++ b/src/libopensc/sc-ossl-compat.h
-+@@ -54,9 +54,11 @@ extern "C" {
-+ #define EVP_sha3_256()                          (NULL)
-+ #define EVP_sha3_384()                          (NULL)
-+ #define EVP_sha3_512()                          (NULL)
-++#if LIBRESSL_VERSION_NUMBER < 0x3070000fL
-+ #define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
-+ #define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
-+ #endif
-++#endif
-+ 
-+ /* OpenSSL 1.1.1 has FIPS_mode function */
-+ #if OPENSSL_VERSION_NUMBER >= 0x30000000L
-diff --git a/package/opensc/0002-added-compatibility-with-LibreSSL.patch b/package/opensc/0002-added-compatibility-with-LibreSSL.patch
-deleted file mode 100644
-index 86a17448f8..0000000000
---- a/package/opensc/0002-added-compatibility-with-LibreSSL.patch
-+++ /dev/null
-@@ -1,173 +0,0 @@
--From 302ad70471efa279b033d4d5511d979ec5d965fe Mon Sep 17 00:00:00 2001
--From: Frank Morgner <frankmorgner@gmail.com>
--Date: Thu, 20 Jan 2022 17:01:46 +0100
--Subject: [PATCH] added compatibility with LibreSSL
--
--[Retrieved (and backported) from:
--https://github.com/OpenSC/OpenSC/commit/302ad70471efa279b033d4d5511d979ec5d965fe]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/libopensc/sc-ossl-compat.h             |  7 +++++++
-- src/tests/p11test/p11test_case_common.c    | 14 ++++++++++++++
-- src/tests/p11test/p11test_case_ec_derive.c |  4 ++++
-- src/tests/p11test/p11test_case_readonly.c  |  9 +++++++--
-- 4 files changed, 32 insertions(+), 2 deletions(-)
--
--diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
--index f885f85bb9..ec694ad48d 100644
----- a/src/libopensc/sc-ossl-compat.h
--+++ b/src/libopensc/sc-ossl-compat.h
--@@ -105,6 +105,13 @@ extern "C" {
-- /* workaround unused value warning for a macro that does nothing */
-- #if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x20700000L
-- #define OPENSSL_malloc_init()
--+#define FIPS_mode()                             (0)
--+#define EVP_sha3_224()                          (NULL)
--+#define EVP_sha3_256()                          (NULL)
--+#define EVP_sha3_384()                          (NULL)
--+#define EVP_sha3_512()                          (NULL)
--+#define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
--+#define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
-- #endif
-- 
-- #if OPENSSL_VERSION_NUMBER >= 0x30000000L
--diff --git a/src/tests/p11test/p11test_case_common.c b/src/tests/p11test/p11test_case_common.c
--index e432f8f4ed..f091dbcc10 100644
----- a/src/tests/p11test/p11test_case_common.c
--+++ b/src/tests/p11test/p11test_case_common.c
--@@ -164,6 +164,7 @@ add_supported_mechs(test_cert_t *o)
-- 			o->mechs[0].result_flags = 0;
-- 			o->mechs[0].usage_flags = CKF_SIGN | CKF_VERIFY;
-- 		}
--+#ifdef EVP_PKEY_ED25519
-- 	} else if (o->type == EVP_PKEY_ED25519) {
-- 		if (token.num_ed_mechs > 0 ) {
-- 			o->num_mechs = token.num_ed_mechs;
--@@ -184,6 +185,8 @@ add_supported_mechs(test_cert_t *o)
-- 			o->mechs[0].result_flags = 0;
-- 			o->mechs[0].usage_flags = CKF_SIGN | CKF_VERIFY;
-- 		}
--+#endif
--+#ifdef EVP_PKEY_X25519
-- 	} else if (o->type == EVP_PKEY_X25519) {
-- 		if (token.num_montgomery_mechs > 0 ) {
-- 			o->num_mechs = token.num_montgomery_mechs;
--@@ -204,6 +207,7 @@ add_supported_mechs(test_cert_t *o)
-- 			o->mechs[0].result_flags = 0;
-- 			o->mechs[0].usage_flags = CKF_DERIVE;
-- 		}
--+#endif
-- 	}
-- }
-- 
--@@ -601,6 +605,7 @@ int callback_public_keys(test_certs_t *objects,
-- 		a = template[6].pValue;
-- 		if (d2i_ASN1_PRINTABLESTRING(&curve, &a, (long)template[6].ulValueLen) != NULL) {
-- 			switch (o->key_type) {
--+#ifdef EVP_PKEY_ED25519
-- 			case CKK_EC_EDWARDS:
-- 				if (strcmp((char *)curve->data, "edwards25519")) {
-- 					debug_print(" [WARN %s ] Unknown curve name. "
--@@ -608,6 +613,8 @@ int callback_public_keys(test_certs_t *objects,
-- 				}
-- 				evp_type = EVP_PKEY_ED25519;
-- 				break;
--+#endif
--+#ifdef EVP_PKEY_X25519
-- 			case CKK_EC_MONTGOMERY:
-- 				if (strcmp((char *)curve->data, "curve25519")) {
-- 					debug_print(" [WARN %s ] Unknown curve name. "
--@@ -615,16 +622,20 @@ int callback_public_keys(test_certs_t *objects,
-- 				}
-- 				evp_type = EVP_PKEY_X25519;
-- 				break;
--+#endif
-- 			default:
-- 				debug_print(" [WARN %s ] Unknown key type %lu", o->id_str, o->key_type);
-- 				return -1;
-- 			}
-- 			ASN1_PRINTABLESTRING_free(curve);
-- 		} else if (d2i_ASN1_OBJECT(&obj, &a, (long)template[6].ulValueLen) != NULL) {
--+#if defined(EVP_PKEY_ED25519) || defined (EVP_PKEY_X25519)
-- 			int nid = OBJ_obj2nid(obj);
--+#endif
-- 			ASN1_OBJECT_free(obj);
-- 
-- 			switch (o->key_type) {
--+#ifdef EVP_PKEY_ED25519
-- 			case CKK_EC_EDWARDS:
-- 				if (nid != NID_ED25519) {
-- 					debug_print(" [WARN %s ] Unknown OID. "
--@@ -632,6 +643,8 @@ int callback_public_keys(test_certs_t *objects,
-- 				}
-- 				evp_type = EVP_PKEY_ED25519;
-- 				break;
--+#endif
--+#ifdef EVP_PKEY_X25519
-- 			case CKK_EC_MONTGOMERY:
-- 				if (nid != NID_X25519) {
-- 					debug_print(" [WARN %s ] Unknown OID. "
--@@ -639,6 +652,7 @@ int callback_public_keys(test_certs_t *objects,
-- 				}
-- 				evp_type = EVP_PKEY_X25519;
-- 				break;
--+#endif
-- 			default:
-- 				debug_print(" [WARN %s ] Unknown key type %lu", o->id_str, o->key_type);
-- 				return -1;
--diff --git a/src/tests/p11test/p11test_case_ec_derive.c b/src/tests/p11test/p11test_case_ec_derive.c
--index 9f13b3e9d6..f7a5f92f9e 100644
----- a/src/tests/p11test/p11test_case_ec_derive.c
--+++ b/src/tests/p11test/p11test_case_ec_derive.c
--@@ -89,6 +89,7 @@ pkcs11_derive(test_cert_t *o, token_info_t * info,
-- 
-- int test_derive_x25519(test_cert_t *o, token_info_t *info, test_mech_t *mech)
-- {
--+#ifdef EVP_PKEY_X25519
-- 	unsigned char *secret = NULL, *pkcs11_secret = NULL;
-- 	EVP_PKEY_CTX *pctx = NULL;
-- 	EVP_PKEY *pkey = NULL; /* This is peer key */
--@@ -210,6 +211,9 @@ int test_derive_x25519(test_cert_t *o, token_info_t *info, test_mech_t *mech)
-- 	free(secret);
-- 	free(pkcs11_secret);
-- 	return 1;
--+#else
--+	return 0;
--+#endif
-- }
-- 
-- int test_derive(test_cert_t *o, token_info_t *info, test_mech_t *mech)
--diff --git a/src/tests/p11test/p11test_case_readonly.c b/src/tests/p11test/p11test_case_readonly.c
--index 624bd6a54d..2aefdc7a70 100644
----- a/src/tests/p11test/p11test_case_readonly.c
--+++ b/src/tests/p11test/p11test_case_readonly.c
--@@ -522,6 +522,7 @@ int verify_message_openssl(test_cert_t *o, token_info_t *info, CK_BYTE *message,
-- 				rv, ERR_error_string(ERR_peek_last_error(), NULL));
-- 			return -1;
-- 		}
--+#ifdef EVP_PKEY_ED25519
-- 	} else if (o->type == EVP_PKEY_ED25519) {
-- 		/* need to be created even though we do not do any MD */
-- 		EVP_MD_CTX *ctx = EVP_MD_CTX_create();
--@@ -547,7 +548,7 @@ int verify_message_openssl(test_cert_t *o, token_info_t *info, CK_BYTE *message,
-- 			EVP_MD_CTX_free(ctx);
-- 			return -1;
-- 		}
---
--+#endif
-- 	} else {
-- 		fprintf(stderr, " [ KEY %s ] Unknown type. Not verifying\n", o->id_str);
-- 	}
--@@ -641,7 +642,11 @@ int sign_verify_test(test_cert_t *o, token_info_t *info, test_mech_t *mech,
-- 		return 0;
-- 	}
-- 
---	if (o->type != EVP_PK_EC && o->type != EVP_PK_RSA && o->type != EVP_PKEY_ED25519) {
--+	if (o->type != EVP_PK_EC && o->type != EVP_PK_RSA
--+#ifdef EVP_PKEY_ED25519
--+			&& o->type != EVP_PKEY_ED25519
--+#endif
--+			) {
-- 		debug_print(" [SKIP %s ] Skip non-RSA and non-EC key", o->id_str);
-- 		return 0;
-- 	}
-diff --git a/package/opensc/0003-Fix-build-with-libressl-3.5.0.patch b/package/opensc/0003-Fix-build-with-libressl-3.5.0.patch
-deleted file mode 100644
-index 1d262362d6..0000000000
---- a/package/opensc/0003-Fix-build-with-libressl-3.5.0.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From d13059d1ec2bbb8fe7068db0d66d521daa4b71ce Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 13 Aug 2022 14:27:22 +0200
--Subject: [PATCH] Fix build with libressl >= 3.5.0
--
--libressl added back FIPS_mode since version 3.5.0 and
--https://github.com/libressl-portable/openbsd/commit/a97eabc90d7647e374c1c6da686aeec63c49ff14
--
--libressl provides X509_get_extension_flags since version 3.5.0 and
--https://github.com/libressl-portable/openbsd/commit/3180723224c1b2c7856a110b8213e4966995d7e0
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/OpenSC/OpenSC/pull/2593 &
-- https://github.com/OpenSC/OpenSC/pull/2595 (merged)]
-----
-- src/libopensc/sc-ossl-compat.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
--index f0d55279..2c42794c 100644
----- a/src/libopensc/sc-ossl-compat.h
--+++ b/src/libopensc/sc-ossl-compat.h
--@@ -86,9 +86,11 @@ extern "C" {
-- #if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-- #define RSA_PKCS1_OpenSSL		RSA_PKCS1_SSLeay
-- 
--+#if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L
-- #define X509_get_extension_flags(x)	(x->ex_flags)
-- #define X509_get_key_usage(x)		(x->ex_kusage)
-- #define X509_get_extended_key_usage(x)	(x->ex_xkusage)
--+#endif
-- #if !defined(LIBRESSL_VERSION_NUMBER) || LIBRESSL_VERSION_NUMBER < 0x2050300fL
-- #define X509_up_ref(cert)		CRYPTO_add(&cert->references, 1, CRYPTO_LOCK_X509)
-- #endif
--@@ -104,7 +106,9 @@ extern "C" {
-- /* workaround unused value warning for a macro that does nothing */
-- #if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x20700000L
-- #define OPENSSL_malloc_init()
--+#if LIBRESSL_VERSION_NUMBER < 0x30500000L
-- #define FIPS_mode()                             (0)
--+#endif
-- #define EVP_sha3_224()                          (NULL)
-- #define EVP_sha3_256()                          (NULL)
-- #define EVP_sha3_384()                          (NULL)
---- 
--2.35.1
--
-diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
-index 517cfe503a..e8e675667e 100644
---- a/package/opensc/opensc.hash
-+++ b/package/opensc/opensc.hash
-@@ -1,5 +1,5 @@
- # Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
--sha256  8d4e5347195ebea332be585df61dcc470331c26969e4b0447c851fb0844c7186  opensc-0.22.0.tar.gz
-+sha256  a4844a6ea03a522ecf35e49659716dacb6be03f7c010a1a583aaf3eb915ed2e0  opensc-0.23.0.tar.gz
- 
- # Computed locally
- sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
-diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
-index f9e2f5083e..253b6b26f8 100644
---- a/package/opensc/opensc.mk
-+++ b/package/opensc/opensc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSC_VERSION = 0.22.0
-+OPENSC_VERSION = 0.23.0
- OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
- OPENSC_LICENSE = LGPL-2.1+
- OPENSC_LICENSE_FILES = COPYING
-
---===============5096510536251515652==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5096510536251515652==--
+QmVybmQsIEFsbCwKCk9uIDIwMjMtMDYtMjQgMTA6NTAgKzAyMDAsIEJlcm5kIEt1aGxzIHNwYWtl
+IHRodXNseToKPiBSZWxlYXNlIG5vdGVzOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0MvT3Bl
+blNDL2Jsb2IvbWFzdGVyL05FV1MKPiAKPiBTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8YmVy
+bmRAa3VobHMubmV0PgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCj4gLS0tCj4gdjI6IG5v
+IGNoYW5nZXMsIGFkZGVkIGEgTGlicmVTU0wgcGF0Y2ggdG8gdGhpcyBzZXJpZXMKCkkndmUgc3F1
+YXNoZWQgdGhlIExpYnJlU1NMIGZpeGVkIHRvZ2V0aGVyIHdpdGggdGhlIGJ1bXAsIGFzIHRoZSBw
+YXRjaGVzCmNhbid0IGJlIGFwcGxpZWQgdG8gcHJlLTAuMjMgYW55d2F5LCBzbyB3ZSBjYW4ndCBj
+YXJyeSB0aGVtIGluIG91cnQKc3RhYmxlIGJyYW5jaGVzLi4uCgpSZWdhcmRzLApZYW5uIEUuIE1P
+UklOLgoKPiAgLmNoZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+ICAyIC0KPiAgLi4uLzAwMDEtRml4LW1heWJlLXVuaW5pdGlhbGl6ZWQtZXJyb3JzLnBhdGNoIHwg
+IDgyIC0tLS0tLS0tLQo+ICAuLi4wMi1hZGRlZC1jb21wYXRpYmlsaXR5LXdpdGgtTGlicmVTU0wu
+cGF0Y2ggfCAxNzMgLS0tLS0tLS0tLS0tLS0tLS0tCj4gIC4uLi8wMDAzLUZpeC1idWlsZC13aXRo
+LWxpYnJlc3NsLTMuNS4wLnBhdGNoICB8ICA0NyAtLS0tLQo+ICBwYWNrYWdlL29wZW5zYy9vcGVu
+c2MuaGFzaCAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAgcGFja2FnZS9vcGVuc2Mvb3Bl
+bnNjLm1rICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstCj4gIDYgZmlsZXMgY2hhbmdlZCwg
+MiBpbnNlcnRpb25zKCspLCAzMDYgZGVsZXRpb25zKC0pCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBw
+YWNrYWdlL29wZW5zYy8wMDAxLUZpeC1tYXliZS11bmluaXRpYWxpemVkLWVycm9ycy5wYXRjaAo+
+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9vcGVuc2MvMDAwMi1hZGRlZC1jb21wYXRpYmls
+aXR5LXdpdGgtTGlicmVTU0wucGF0Y2gKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvb3Bl
+bnNjLzAwMDMtRml4LWJ1aWxkLXdpdGgtbGlicmVzc2wtMy41LjAucGF0Y2gKPiAKPiBkaWZmIC0t
+Z2l0IGEvLmNoZWNrcGFja2FnZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25vcmUKPiBpbmRleCAw
+NzQwODg5M2NlLi44OGM2OWYzYWQ2IDEwMDY0NAo+IC0tLSBhLy5jaGVja3BhY2thZ2VpZ25vcmUK
+PiArKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCj4gQEAgLTExMzYsOCArMTEzNiw2IEBAIHBhY2th
+Z2Uvb3BlbnJjLzAwMDMtaW5pdC5kLWFnZXR0eS1yZXBsYWNlLXNiaW4tYWdldHR5LWJ5LXNiaW4t
+Z2V0dHkucGF0Y2ggVXBzdHJlCj4gIHBhY2thZ2Uvb3BlbnJjLzAwMDQtaW5pdC5kLWFnZXR0eS1z
+dGFydC1hZ2V0dHktYWZ0ZXItYWxsLXNldmljZXMucGF0Y2ggVXBzdHJlYW0KPiAgcGFja2FnZS9v
+cGVucmMvMDAwNS1ydW5sZXZlbHMtZG8tbm90LWFkZC1hZ2V0dHkudHR5LTEtNi1pZi1NS1NZU1ZJ
+TklULXllLnBhdGNoIFVwc3RyZWFtCj4gIHBhY2thZ2Uvb3BlbnJjLzAwMDYtQWxzby1jcmVhdGUt
+cnVuLWxvY2stc3Vic3lzLWRpcmVjdG9yeS5wYXRjaCBVcHN0cmVhbQo+IC1wYWNrYWdlL29wZW5z
+Yy8wMDAyLWFkZGVkLWNvbXBhdGliaWxpdHktd2l0aC1MaWJyZVNTTC5wYXRjaCBVcHN0cmVhbQo+
+IC1wYWNrYWdlL29wZW5zYy8wMDAzLUZpeC1idWlsZC13aXRoLWxpYnJlc3NsLTMuNS4wLnBhdGNo
+IFVwc3RyZWFtCj4gIHBhY2thZ2Uvb3BlbnNzaC9TNTBzc2hkIEVtcHR5TGFzdExpbmUgSW5kZW50
+IFZhcmlhYmxlcwo+ICBwYWNrYWdlL29wZW5zd2FuLzAwMDEtbGliLWxpYm9wZW5zd2FuLWNvbnN0
+YW50cy5jLXdvcmthcm91bmQtbWlzc2luZy1uc190Xy5wYXRjaCBVcHN0cmVhbQo+ICBwYWNrYWdl
+L29wZW50eXJpYW4vMDAwMS1Nb3ZlLWRlZmluaXRpb25zLXRoYXQtZG9uLXQtbmVlZC10by1iZS1l
+eHBvc2VkLWZyb20tb3BsLWgtdG8tb3BsLWMucGF0Y2ggVXBzdHJlYW0KPiBkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9vcGVuc2MvMDAwMS1GaXgtbWF5YmUtdW5pbml0aWFsaXplZC1lcnJvcnMucGF0Y2gg
+Yi9wYWNrYWdlL29wZW5zYy8wMDAxLUZpeC1tYXliZS11bmluaXRpYWxpemVkLWVycm9ycy5wYXRj
+aAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDY3MWQ5MmMxNTAuLjAwMDAwMDAw
+MDAKPiAtLS0gYS9wYWNrYWdlL29wZW5zYy8wMDAxLUZpeC1tYXliZS11bmluaXRpYWxpemVkLWVy
+cm9ycy5wYXRjaAo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSw4MiArMCwwIEBACj4gLUZyb20gYmNi
+MzlkNmY0ZDJkZWU2YmViMDM1Y2IyZjM2MTgxNzRlYzFjYjJiMCBNb24gU2VwIDE3IDAwOjAwOjAw
+IDIwMDEKPiAtRnJvbTogPT9VVEYtOD9xP0pvcz1DMz1BOT0yMFBla2thcmluZW4/PSA8am9zZS5w
+ZWtrYXJpbmVuQHVuaWtpZS5jb20+Cj4gLURhdGU6IEZyaSwgMTAgRGVjIDIwMjEgMTM6NTQ6MjYg
+KzAyMDAKPiAtU3ViamVjdDogW1BBVENIXSBGaXggbWF5YmUgdW5pbml0aWFsaXplZCBlcnJvcnMK
+PiAtTUlNRS1WZXJzaW9uOiAxLjAKPiAtQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0
+PVVURi04Cj4gLUNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKPiAtCj4gLVNpZ25lZC1v
+ZmYtYnk6IEpvc8OpIFBla2thcmluZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPgo+IC1V
+cHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQy9PcGVuU0MvY29tbWl0LzA1ZWM4Yzdm
+ZTc4NWEyYjlhZWFhYzExNjRhZGIzNDlkZjQyYjdmODAKPiAtLS0tCj4gLSBzcmMvbGlib3BlbnNj
+L3BrY3MxNS1jb29sa2V5LmMgIHwgMTIgKysrKysrLS0tLS0tCj4gLSBzcmMvcGtjczE1aW5pdC9w
+a2NzMTUtYXNlcGNvcy5jIHwgIDIgKy0KPiAtIHNyYy90b29scy9vcGVuc2MtZXhwbG9yZXIuYyAg
+ICAgfCAgMiArLQo+IC0gMyBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDggZGVsZXRp
+b25zKC0pCj4gLQo+IC1kaWZmIC0tZ2l0IGEvc3JjL2xpYm9wZW5zYy9wa2NzMTUtY29vbGtleS5j
+IGIvc3JjL2xpYm9wZW5zYy9wa2NzMTUtY29vbGtleS5jCj4gLWluZGV4IDU4NjQ3NWRkLi4xNTY4
+NGNlZiAxMDA2NDQKPiAtLS0tIGEvc3JjL2xpYm9wZW5zYy9wa2NzMTUtY29vbGtleS5jCj4gLSsr
+KyBiL3NyYy9saWJvcGVuc2MvcGtjczE1LWNvb2xrZXkuYwo+IC1AQCAtMTQ3LDkgKzE0Nyw5IEBA
+IGNvb2xrZXlfZmluZF9tYXRjaGluZ19jZXJ0KHNjX2NhcmRfdCAqY2FyZCwgc2NfY2FyZGN0bF9j
+b29sa2V5X29iamVjdF90ICppbl9vYmosCj4gLSBzdGF0aWMgaW50Cj4gLSBjb29sa2V5X2dldF9h
+dHRyaWJ1dGVfdWxvbmcoc2NfY2FyZF90ICpjYXJkLCBzY19jYXJkY3RsX2Nvb2xrZXlfb2JqZWN0
+X3QgKm9iaiwgQ0tfQVRUUklCVVRFX1RZUEUgdHlwZSwgQ0tfVUxPTkcgKnZhbHVlKQo+IC0gewo+
+IC0tCWNvbnN0IHU4ICp2YWw7Cj4gLS0Jc2l6ZV90IHZhbF9sZW47Cj4gLS0JdTggZGF0YV90eXBl
+Owo+IC0rCWNvbnN0IHU4ICp2YWwgPSBOVUxMOwo+IC0rCXNpemVfdCB2YWxfbGVuID0gMDsKPiAt
+Kwl1OCBkYXRhX3R5cGUgPSAwOwo+IC0gCWludCByOwo+IC0gCj4gLSAJciAgPSBjb29sa2V5X2dl
+dF9hdHRyaWJ1dGUoY2FyZCwgb2JqLCB0eXBlLCAmdmFsLCAmdmFsX2xlbiwgJmRhdGFfdHlwZSk7
+Cj4gLUBAIC0xNjgsOCArMTY4LDggQEAgc3RhdGljIGludAo+IC0gY29vbGtleV9nZXRfYXR0cmli
+dXRlX2Jvb2xlYW4oc2NfY2FyZF90ICpjYXJkLCBzY19jYXJkY3RsX2Nvb2xrZXlfb2JqZWN0X3Qg
+Km9iaiwgQ0tfQVRUUklCVVRFX1RZUEUgYXR0cl90eXBlKQo+IC0gewo+IC0gCWludCByOwo+IC0t
+CWNvbnN0IHU4ICp2YWw7Cj4gLS0Jc2l6ZV90IHZhbF9sZW47Cj4gLSsJY29uc3QgdTggKnZhbCA9
+IE5VTEw7Cj4gLSsJc2l6ZV90IHZhbF9sZW4gPSAwOwo+IC0gCj4gLSAJciA9IGNvb2xrZXlfZ2V0
+X2F0dHJpYnV0ZShjYXJkLCBvYmosIGF0dHJfdHlwZSwgJnZhbCwgJnZhbF9sZW4sIE5VTEwpOwo+
+IC0gCWlmIChyIDwgMCkgewo+IC1AQCAtMTg2LDcgKzE4Niw3IEBAIHN0YXRpYyBpbnQKPiAtIGNv
+b2xrZXlfZ2V0X2F0dHJpYnV0ZV9ieXRlcyhzY19jYXJkX3QgKmNhcmQsIHNjX2NhcmRjdGxfY29v
+bGtleV9vYmplY3RfdCAqb2JqLCBDS19BVFRSSUJVVEVfVFlQRSB0eXBlLCB1OCAqZGF0YSwgc2l6
+ZV90ICpkYXRhX2xlbiwgc2l6ZV90IG1heF9kYXRhX2xlbikKPiAtIHsKPiAtIAljb25zdCB1OCAq
+dmFsOwo+IC0tCXNpemVfdCB2YWxfbGVuOwo+IC0rCXNpemVfdCB2YWxfbGVuID0gMDsKPiAtIAlp
+bnQgcjsKPiAtIAo+IC0gCXIgPSBjb29sa2V5X2dldF9hdHRyaWJ1dGUoY2FyZCwgb2JqLCB0eXBl
+LCAmdmFsLCAmdmFsX2xlbiwgTlVMTCk7Cj4gLWRpZmYgLS1naXQgYS9zcmMvcGtjczE1aW5pdC9w
+a2NzMTUtYXNlcGNvcy5jIGIvc3JjL3BrY3MxNWluaXQvcGtjczE1LWFzZXBjb3MuYwo+IC1pbmRl
+eCBkNzEyMjAxMi4uYmMwZWZiNWMgMTAwNjQ0Cj4gLS0tLSBhL3NyYy9wa2NzMTVpbml0L3BrY3Mx
+NS1hc2VwY29zLmMKPiAtKysrIGIvc3JjL3BrY3MxNWluaXQvcGtjczE1LWFzZXBjb3MuYwo+IC1A
+QCAtMjIxLDcgKzIyMSw3IEBAIHN0YXRpYyBpbnQgYXNlcGNvc19kb19zdG9yZV9waW4oc2NfcHJv
+ZmlsZV90ICpwcm9maWxlLCBzY19jYXJkX3QgKmNhcmQsCj4gLSB7Cj4gLSAJc2NfZmlsZV90ICpu
+ZmlsZSA9IE5VTEw7Cj4gLSAJdTggIGJ1Zls2NF0sIHNidWZbNjRdLCAqcCA9IGJ1ZiwgKnEgPSBz
+YnVmOwo+IC0tCWludCByLCBha247Cj4gLSsJaW50IHIsIGFrbiA9IDA7Cj4gLSAKPiAtIAlpZiAo
+YXV0aF9pbmZvLT5hdXRoX3R5cGUgIT0gU0NfUEtDUzE1X1BJTl9BVVRIX1RZUEVfUElOKQo+IC0g
+CQlyZXR1cm4gU0NfRVJST1JfT0JKRUNUX05PVF9WQUxJRDsKPiAtZGlmZiAtLWdpdCBhL3NyYy90
+b29scy9vcGVuc2MtZXhwbG9yZXIuYyBiL3NyYy90b29scy9vcGVuc2MtZXhwbG9yZXIuYwo+IC1p
+bmRleCA5ZWM0ZGFhMS4uMDRlZmRmOGYgMTAwNjQ0Cj4gLS0tLSBhL3NyYy90b29scy9vcGVuc2Mt
+ZXhwbG9yZXIuYwo+IC0rKysgYi9zcmMvdG9vbHMvb3BlbnNjLWV4cGxvcmVyLmMKPiAtQEAgLTI0
+NzIsNyArMjQ3Miw3IEBAIGludCBtYWluKGludCBhcmdjLCBjaGFyICphcmd2W10pCj4gLSAJCWNo
+YXIgKmxpbmU7Cj4gLSAJCWludCBjYXJnYzsKPiAtIAkJY2hhciAqY2FyZ3ZbMjYwXTsKPiAtLQkJ
+aW50IG11bHRpcGxlOwo+IC0rCQlpbnQgbXVsdGlwbGUgPSAwOwo+IC0gCQlzdHJ1Y3QgY29tbWFu
+ZCAqY21kOwo+IC0gCQljaGFyIHByb21wdFszKlNDX01BWF9QQVRIX1NUUklOR19TSVpFXTsKPiAt
+IAo+IC0tLSAKPiAtMi4yNS4xCj4gLQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL29wZW5zYy8wMDAy
+LWFkZGVkLWNvbXBhdGliaWxpdHktd2l0aC1MaWJyZVNTTC5wYXRjaCBiL3BhY2thZ2Uvb3BlbnNj
+LzAwMDItYWRkZWQtY29tcGF0aWJpbGl0eS13aXRoLUxpYnJlU1NMLnBhdGNoCj4gZGVsZXRlZCBm
+aWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggODZhMTc0NDhmOC4uMDAwMDAwMDAwMAo+IC0tLSBhL3Bh
+Y2thZ2Uvb3BlbnNjLzAwMDItYWRkZWQtY29tcGF0aWJpbGl0eS13aXRoLUxpYnJlU1NMLnBhdGNo
+Cj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDE3MyArMCwwIEBACj4gLUZyb20gMzAyYWQ3MDQ3MWVm
+YTI3OWIwMzNkNGQ1NTExZDk3OWVjNWQ5NjVmZSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAt
+RnJvbTogRnJhbmsgTW9yZ25lciA8ZnJhbmttb3JnbmVyQGdtYWlsLmNvbT4KPiAtRGF0ZTogVGh1
+LCAyMCBKYW4gMjAyMiAxNzowMTo0NiArMDEwMAo+IC1TdWJqZWN0OiBbUEFUQ0hdIGFkZGVkIGNv
+bXBhdGliaWxpdHkgd2l0aCBMaWJyZVNTTAo+IC0KPiAtW1JldHJpZXZlZCAoYW5kIGJhY2twb3J0
+ZWQpIGZyb206Cj4gLWh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0MvT3BlblNDL2NvbW1pdC8zMDJh
+ZDcwNDcxZWZhMjc5YjAzM2Q0ZDU1MTFkOTc5ZWM1ZDk2NWZlXQo+IC1TaWduZWQtb2ZmLWJ5OiBG
+YWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiAtLS0tCj4gLSBz
+cmMvbGlib3BlbnNjL3NjLW9zc2wtY29tcGF0LmggICAgICAgICAgICAgfCAgNyArKysrKysrCj4g
+LSBzcmMvdGVzdHMvcDExdGVzdC9wMTF0ZXN0X2Nhc2VfY29tbW9uLmMgICAgfCAxNCArKysrKysr
+KysrKysrKwo+IC0gc3JjL3Rlc3RzL3AxMXRlc3QvcDExdGVzdF9jYXNlX2VjX2Rlcml2ZS5jIHwg
+IDQgKysrKwo+IC0gc3JjL3Rlc3RzL3AxMXRlc3QvcDExdGVzdF9jYXNlX3JlYWRvbmx5LmMgIHwg
+IDkgKysrKysrKy0tCj4gLSA0IGZpbGVzIGNoYW5nZWQsIDMyIGluc2VydGlvbnMoKyksIDIgZGVs
+ZXRpb25zKC0pCj4gLQo+IC1kaWZmIC0tZ2l0IGEvc3JjL2xpYm9wZW5zYy9zYy1vc3NsLWNvbXBh
+dC5oIGIvc3JjL2xpYm9wZW5zYy9zYy1vc3NsLWNvbXBhdC5oCj4gLWluZGV4IGY4ODVmODViYjku
+LmVjNjk0YWQ0OGQgMTAwNjQ0Cj4gLS0tLSBhL3NyYy9saWJvcGVuc2Mvc2Mtb3NzbC1jb21wYXQu
+aAo+IC0rKysgYi9zcmMvbGlib3BlbnNjL3NjLW9zc2wtY29tcGF0LmgKPiAtQEAgLTEwNSw2ICsx
+MDUsMTMgQEAgZXh0ZXJuICJDIiB7Cj4gLSAvKiB3b3JrYXJvdW5kIHVudXNlZCB2YWx1ZSB3YXJu
+aW5nIGZvciBhIG1hY3JvIHRoYXQgZG9lcyBub3RoaW5nICovCj4gLSAjaWYgZGVmaW5lZChMSUJS
+RVNTTF9WRVJTSU9OX05VTUJFUikgJiYgTElCUkVTU0xfVkVSU0lPTl9OVU1CRVIgPj0gMHgyMDcw
+MDAwMEwKPiAtICNkZWZpbmUgT1BFTlNTTF9tYWxsb2NfaW5pdCgpCj4gLSsjZGVmaW5lIEZJUFNf
+bW9kZSgpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoMCkKPiAtKyNkZWZpbmUgRVZQX3No
+YTNfMjI0KCkgICAgICAgICAgICAgICAgICAgICAgICAgIChOVUxMKQo+IC0rI2RlZmluZSBFVlBf
+c2hhM18yNTYoKSAgICAgICAgICAgICAgICAgICAgICAgICAgKE5VTEwpCj4gLSsjZGVmaW5lIEVW
+UF9zaGEzXzM4NCgpICAgICAgICAgICAgICAgICAgICAgICAgICAoTlVMTCkKPiAtKyNkZWZpbmUg
+RVZQX3NoYTNfNTEyKCkgICAgICAgICAgICAgICAgICAgICAgICAgIChOVUxMKQo+IC0rI2RlZmlu
+ZSBFVlBfUEtFWV9uZXdfcmF3X3B1YmxpY19rZXkodCwgZSwgcCwgbCkgKE5VTEwpCj4gLSsjZGVm
+aW5lIEVWUF9QS0VZX2dldF9yYXdfcHVibGljX2tleShwLCBwdSwgbCkgICAoMCkKPiAtICNlbmRp
+Zgo+IC0gCj4gLSAjaWYgT1BFTlNTTF9WRVJTSU9OX05VTUJFUiA+PSAweDMwMDAwMDAwTAo+IC1k
+aWZmIC0tZ2l0IGEvc3JjL3Rlc3RzL3AxMXRlc3QvcDExdGVzdF9jYXNlX2NvbW1vbi5jIGIvc3Jj
+L3Rlc3RzL3AxMXRlc3QvcDExdGVzdF9jYXNlX2NvbW1vbi5jCj4gLWluZGV4IGU0MzJmOGY0ZWQu
+LmYwOTFkYmNjMTAgMTAwNjQ0Cj4gLS0tLSBhL3NyYy90ZXN0cy9wMTF0ZXN0L3AxMXRlc3RfY2Fz
+ZV9jb21tb24uYwo+IC0rKysgYi9zcmMvdGVzdHMvcDExdGVzdC9wMTF0ZXN0X2Nhc2VfY29tbW9u
+LmMKPiAtQEAgLTE2NCw2ICsxNjQsNyBAQCBhZGRfc3VwcG9ydGVkX21lY2hzKHRlc3RfY2VydF90
+ICpvKQo+IC0gCQkJby0+bWVjaHNbMF0ucmVzdWx0X2ZsYWdzID0gMDsKPiAtIAkJCW8tPm1lY2hz
+WzBdLnVzYWdlX2ZsYWdzID0gQ0tGX1NJR04gfCBDS0ZfVkVSSUZZOwo+IC0gCQl9Cj4gLSsjaWZk
+ZWYgRVZQX1BLRVlfRUQyNTUxOQo+IC0gCX0gZWxzZSBpZiAoby0+dHlwZSA9PSBFVlBfUEtFWV9F
+RDI1NTE5KSB7Cj4gLSAJCWlmICh0b2tlbi5udW1fZWRfbWVjaHMgPiAwICkgewo+IC0gCQkJby0+
+bnVtX21lY2hzID0gdG9rZW4ubnVtX2VkX21lY2hzOwo+IC1AQCAtMTg0LDYgKzE4NSw4IEBAIGFk
+ZF9zdXBwb3J0ZWRfbWVjaHModGVzdF9jZXJ0X3QgKm8pCj4gLSAJCQlvLT5tZWNoc1swXS5yZXN1
+bHRfZmxhZ3MgPSAwOwo+IC0gCQkJby0+bWVjaHNbMF0udXNhZ2VfZmxhZ3MgPSBDS0ZfU0lHTiB8
+IENLRl9WRVJJRlk7Cj4gLSAJCX0KPiAtKyNlbmRpZgo+IC0rI2lmZGVmIEVWUF9QS0VZX1gyNTUx
+OQo+IC0gCX0gZWxzZSBpZiAoby0+dHlwZSA9PSBFVlBfUEtFWV9YMjU1MTkpIHsKPiAtIAkJaWYg
+KHRva2VuLm51bV9tb250Z29tZXJ5X21lY2hzID4gMCApIHsKPiAtIAkJCW8tPm51bV9tZWNocyA9
+IHRva2VuLm51bV9tb250Z29tZXJ5X21lY2hzOwo+IC1AQCAtMjA0LDYgKzIwNyw3IEBAIGFkZF9z
+dXBwb3J0ZWRfbWVjaHModGVzdF9jZXJ0X3QgKm8pCj4gLSAJCQlvLT5tZWNoc1swXS5yZXN1bHRf
+ZmxhZ3MgPSAwOwo+IC0gCQkJby0+bWVjaHNbMF0udXNhZ2VfZmxhZ3MgPSBDS0ZfREVSSVZFOwo+
+IC0gCQl9Cj4gLSsjZW5kaWYKPiAtIAl9Cj4gLSB9Cj4gLSAKPiAtQEAgLTYwMSw2ICs2MDUsNyBA
+QCBpbnQgY2FsbGJhY2tfcHVibGljX2tleXModGVzdF9jZXJ0c190ICpvYmplY3RzLAo+IC0gCQlh
+ID0gdGVtcGxhdGVbNl0ucFZhbHVlOwo+IC0gCQlpZiAoZDJpX0FTTjFfUFJJTlRBQkxFU1RSSU5H
+KCZjdXJ2ZSwgJmEsIChsb25nKXRlbXBsYXRlWzZdLnVsVmFsdWVMZW4pICE9IE5VTEwpIHsKPiAt
+IAkJCXN3aXRjaCAoby0+a2V5X3R5cGUpIHsKPiAtKyNpZmRlZiBFVlBfUEtFWV9FRDI1NTE5Cj4g
+LSAJCQljYXNlIENLS19FQ19FRFdBUkRTOgo+IC0gCQkJCWlmIChzdHJjbXAoKGNoYXIgKiljdXJ2
+ZS0+ZGF0YSwgImVkd2FyZHMyNTUxOSIpKSB7Cj4gLSAJCQkJCWRlYnVnX3ByaW50KCIgW1dBUk4g
+JXMgXSBVbmtub3duIGN1cnZlIG5hbWUuICIKPiAtQEAgLTYwOCw2ICs2MTMsOCBAQCBpbnQgY2Fs
+bGJhY2tfcHVibGljX2tleXModGVzdF9jZXJ0c190ICpvYmplY3RzLAo+IC0gCQkJCX0KPiAtIAkJ
+CQlldnBfdHlwZSA9IEVWUF9QS0VZX0VEMjU1MTk7Cj4gLSAJCQkJYnJlYWs7Cj4gLSsjZW5kaWYK
+PiAtKyNpZmRlZiBFVlBfUEtFWV9YMjU1MTkKPiAtIAkJCWNhc2UgQ0tLX0VDX01PTlRHT01FUlk6
+Cj4gLSAJCQkJaWYgKHN0cmNtcCgoY2hhciAqKWN1cnZlLT5kYXRhLCAiY3VydmUyNTUxOSIpKSB7
+Cj4gLSAJCQkJCWRlYnVnX3ByaW50KCIgW1dBUk4gJXMgXSBVbmtub3duIGN1cnZlIG5hbWUuICIK
+PiAtQEAgLTYxNSwxNiArNjIyLDIwIEBAIGludCBjYWxsYmFja19wdWJsaWNfa2V5cyh0ZXN0X2Nl
+cnRzX3QgKm9iamVjdHMsCj4gLSAJCQkJfQo+IC0gCQkJCWV2cF90eXBlID0gRVZQX1BLRVlfWDI1
+NTE5Owo+IC0gCQkJCWJyZWFrOwo+IC0rI2VuZGlmCj4gLSAJCQlkZWZhdWx0Ogo+IC0gCQkJCWRl
+YnVnX3ByaW50KCIgW1dBUk4gJXMgXSBVbmtub3duIGtleSB0eXBlICVsdSIsIG8tPmlkX3N0ciwg
+by0+a2V5X3R5cGUpOwo+IC0gCQkJCXJldHVybiAtMTsKPiAtIAkJCX0KPiAtIAkJCUFTTjFfUFJJ
+TlRBQkxFU1RSSU5HX2ZyZWUoY3VydmUpOwo+IC0gCQl9IGVsc2UgaWYgKGQyaV9BU04xX09CSkVD
+VCgmb2JqLCAmYSwgKGxvbmcpdGVtcGxhdGVbNl0udWxWYWx1ZUxlbikgIT0gTlVMTCkgewo+IC0r
+I2lmIGRlZmluZWQoRVZQX1BLRVlfRUQyNTUxOSkgfHwgZGVmaW5lZCAoRVZQX1BLRVlfWDI1NTE5
+KQo+IC0gCQkJaW50IG5pZCA9IE9CSl9vYmoybmlkKG9iaik7Cj4gLSsjZW5kaWYKPiAtIAkJCUFT
+TjFfT0JKRUNUX2ZyZWUob2JqKTsKPiAtIAo+IC0gCQkJc3dpdGNoIChvLT5rZXlfdHlwZSkgewo+
+IC0rI2lmZGVmIEVWUF9QS0VZX0VEMjU1MTkKPiAtIAkJCWNhc2UgQ0tLX0VDX0VEV0FSRFM6Cj4g
+LSAJCQkJaWYgKG5pZCAhPSBOSURfRUQyNTUxOSkgewo+IC0gCQkJCQlkZWJ1Z19wcmludCgiIFtX
+QVJOICVzIF0gVW5rbm93biBPSUQuICIKPiAtQEAgLTYzMiw2ICs2NDMsOCBAQCBpbnQgY2FsbGJh
+Y2tfcHVibGljX2tleXModGVzdF9jZXJ0c190ICpvYmplY3RzLAo+IC0gCQkJCX0KPiAtIAkJCQll
+dnBfdHlwZSA9IEVWUF9QS0VZX0VEMjU1MTk7Cj4gLSAJCQkJYnJlYWs7Cj4gLSsjZW5kaWYKPiAt
+KyNpZmRlZiBFVlBfUEtFWV9YMjU1MTkKPiAtIAkJCWNhc2UgQ0tLX0VDX01PTlRHT01FUlk6Cj4g
+LSAJCQkJaWYgKG5pZCAhPSBOSURfWDI1NTE5KSB7Cj4gLSAJCQkJCWRlYnVnX3ByaW50KCIgW1dB
+Uk4gJXMgXSBVbmtub3duIE9JRC4gIgo+IC1AQCAtNjM5LDYgKzY1Miw3IEBAIGludCBjYWxsYmFj
+a19wdWJsaWNfa2V5cyh0ZXN0X2NlcnRzX3QgKm9iamVjdHMsCj4gLSAJCQkJfQo+IC0gCQkJCWV2
+cF90eXBlID0gRVZQX1BLRVlfWDI1NTE5Owo+IC0gCQkJCWJyZWFrOwo+IC0rI2VuZGlmCj4gLSAJ
+CQlkZWZhdWx0Ogo+IC0gCQkJCWRlYnVnX3ByaW50KCIgW1dBUk4gJXMgXSBVbmtub3duIGtleSB0
+eXBlICVsdSIsIG8tPmlkX3N0ciwgby0+a2V5X3R5cGUpOwo+IC0gCQkJCXJldHVybiAtMTsKPiAt
+ZGlmZiAtLWdpdCBhL3NyYy90ZXN0cy9wMTF0ZXN0L3AxMXRlc3RfY2FzZV9lY19kZXJpdmUuYyBi
+L3NyYy90ZXN0cy9wMTF0ZXN0L3AxMXRlc3RfY2FzZV9lY19kZXJpdmUuYwo+IC1pbmRleCA5ZjEz
+YjNlOWQ2Li5mN2E1ZjkyZjllIDEwMDY0NAo+IC0tLS0gYS9zcmMvdGVzdHMvcDExdGVzdC9wMTF0
+ZXN0X2Nhc2VfZWNfZGVyaXZlLmMKPiAtKysrIGIvc3JjL3Rlc3RzL3AxMXRlc3QvcDExdGVzdF9j
+YXNlX2VjX2Rlcml2ZS5jCj4gLUBAIC04OSw2ICs4OSw3IEBAIHBrY3MxMV9kZXJpdmUodGVzdF9j
+ZXJ0X3QgKm8sIHRva2VuX2luZm9fdCAqIGluZm8sCj4gLSAKPiAtIGludCB0ZXN0X2Rlcml2ZV94
+MjU1MTkodGVzdF9jZXJ0X3QgKm8sIHRva2VuX2luZm9fdCAqaW5mbywgdGVzdF9tZWNoX3QgKm1l
+Y2gpCj4gLSB7Cj4gLSsjaWZkZWYgRVZQX1BLRVlfWDI1NTE5Cj4gLSAJdW5zaWduZWQgY2hhciAq
+c2VjcmV0ID0gTlVMTCwgKnBrY3MxMV9zZWNyZXQgPSBOVUxMOwo+IC0gCUVWUF9QS0VZX0NUWCAq
+cGN0eCA9IE5VTEw7Cj4gLSAJRVZQX1BLRVkgKnBrZXkgPSBOVUxMOyAvKiBUaGlzIGlzIHBlZXIg
+a2V5ICovCj4gLUBAIC0yMTAsNiArMjExLDkgQEAgaW50IHRlc3RfZGVyaXZlX3gyNTUxOSh0ZXN0
+X2NlcnRfdCAqbywgdG9rZW5faW5mb190ICppbmZvLCB0ZXN0X21lY2hfdCAqbWVjaCkKPiAtIAlm
+cmVlKHNlY3JldCk7Cj4gLSAJZnJlZShwa2NzMTFfc2VjcmV0KTsKPiAtIAlyZXR1cm4gMTsKPiAt
+KyNlbHNlCj4gLSsJcmV0dXJuIDA7Cj4gLSsjZW5kaWYKPiAtIH0KPiAtIAo+IC0gaW50IHRlc3Rf
+ZGVyaXZlKHRlc3RfY2VydF90ICpvLCB0b2tlbl9pbmZvX3QgKmluZm8sIHRlc3RfbWVjaF90ICpt
+ZWNoKQo+IC1kaWZmIC0tZ2l0IGEvc3JjL3Rlc3RzL3AxMXRlc3QvcDExdGVzdF9jYXNlX3JlYWRv
+bmx5LmMgYi9zcmMvdGVzdHMvcDExdGVzdC9wMTF0ZXN0X2Nhc2VfcmVhZG9ubHkuYwo+IC1pbmRl
+eCA2MjRiZDZhNTRkLi4yYWVmZGM3YTcwIDEwMDY0NAo+IC0tLS0gYS9zcmMvdGVzdHMvcDExdGVz
+dC9wMTF0ZXN0X2Nhc2VfcmVhZG9ubHkuYwo+IC0rKysgYi9zcmMvdGVzdHMvcDExdGVzdC9wMTF0
+ZXN0X2Nhc2VfcmVhZG9ubHkuYwo+IC1AQCAtNTIyLDYgKzUyMiw3IEBAIGludCB2ZXJpZnlfbWVz
+c2FnZV9vcGVuc3NsKHRlc3RfY2VydF90ICpvLCB0b2tlbl9pbmZvX3QgKmluZm8sIENLX0JZVEUg
+Km1lc3NhZ2UsCj4gLSAJCQkJcnYsIEVSUl9lcnJvcl9zdHJpbmcoRVJSX3BlZWtfbGFzdF9lcnJv
+cigpLCBOVUxMKSk7Cj4gLSAJCQlyZXR1cm4gLTE7Cj4gLSAJCX0KPiAtKyNpZmRlZiBFVlBfUEtF
+WV9FRDI1NTE5Cj4gLSAJfSBlbHNlIGlmIChvLT50eXBlID09IEVWUF9QS0VZX0VEMjU1MTkpIHsK
+PiAtIAkJLyogbmVlZCB0byBiZSBjcmVhdGVkIGV2ZW4gdGhvdWdoIHdlIGRvIG5vdCBkbyBhbnkg
+TUQgKi8KPiAtIAkJRVZQX01EX0NUWCAqY3R4ID0gRVZQX01EX0NUWF9jcmVhdGUoKTsKPiAtQEAg
+LTU0Nyw3ICs1NDgsNyBAQCBpbnQgdmVyaWZ5X21lc3NhZ2Vfb3BlbnNzbCh0ZXN0X2NlcnRfdCAq
+bywgdG9rZW5faW5mb190ICppbmZvLCBDS19CWVRFICptZXNzYWdlLAo+IC0gCQkJRVZQX01EX0NU
+WF9mcmVlKGN0eCk7Cj4gLSAJCQlyZXR1cm4gLTE7Cj4gLSAJCX0KPiAtLQo+IC0rI2VuZGlmCj4g
+LSAJfSBlbHNlIHsKPiAtIAkJZnByaW50ZihzdGRlcnIsICIgWyBLRVkgJXMgXSBVbmtub3duIHR5
+cGUuIE5vdCB2ZXJpZnlpbmdcbiIsIG8tPmlkX3N0cik7Cj4gLSAJfQo+IC1AQCAtNjQxLDcgKzY0
+MiwxMSBAQCBpbnQgc2lnbl92ZXJpZnlfdGVzdCh0ZXN0X2NlcnRfdCAqbywgdG9rZW5faW5mb190
+ICppbmZvLCB0ZXN0X21lY2hfdCAqbWVjaCwKPiAtIAkJcmV0dXJuIDA7Cj4gLSAJfQo+IC0gCj4g
+LS0JaWYgKG8tPnR5cGUgIT0gRVZQX1BLX0VDICYmIG8tPnR5cGUgIT0gRVZQX1BLX1JTQSAmJiBv
+LT50eXBlICE9IEVWUF9QS0VZX0VEMjU1MTkpIHsKPiAtKwlpZiAoby0+dHlwZSAhPSBFVlBfUEtf
+RUMgJiYgby0+dHlwZSAhPSBFVlBfUEtfUlNBCj4gLSsjaWZkZWYgRVZQX1BLRVlfRUQyNTUxOQo+
+IC0rCQkJJiYgby0+dHlwZSAhPSBFVlBfUEtFWV9FRDI1NTE5Cj4gLSsjZW5kaWYKPiAtKwkJCSkg
+ewo+IC0gCQlkZWJ1Z19wcmludCgiIFtTS0lQICVzIF0gU2tpcCBub24tUlNBIGFuZCBub24tRUMg
+a2V5Iiwgby0+aWRfc3RyKTsKPiAtIAkJcmV0dXJuIDA7Cj4gLSAJfQo+IGRpZmYgLS1naXQgYS9w
+YWNrYWdlL29wZW5zYy8wMDAzLUZpeC1idWlsZC13aXRoLWxpYnJlc3NsLTMuNS4wLnBhdGNoIGIv
+cGFja2FnZS9vcGVuc2MvMDAwMy1GaXgtYnVpbGQtd2l0aC1saWJyZXNzbC0zLjUuMC5wYXRjaAo+
+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDFkMjYyMzYyZDYuLjAwMDAwMDAwMDAK
+PiAtLS0gYS9wYWNrYWdlL29wZW5zYy8wMDAzLUZpeC1idWlsZC13aXRoLWxpYnJlc3NsLTMuNS4w
+LnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDQ3ICswLDAgQEAKPiAtRnJvbSBkMTMwNTlk
+MWVjMmJiYjhmZTcwNjhkYjBkNjZkNTIxZGFhNGI3MWNlIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAw
+MQo+IC1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4K
+PiAtRGF0ZTogU2F0LCAxMyBBdWcgMjAyMiAxNDoyNzoyMiArMDIwMAo+IC1TdWJqZWN0OiBbUEFU
+Q0hdIEZpeCBidWlsZCB3aXRoIGxpYnJlc3NsID49IDMuNS4wCj4gLQo+IC1saWJyZXNzbCBhZGRl
+ZCBiYWNrIEZJUFNfbW9kZSBzaW5jZSB2ZXJzaW9uIDMuNS4wIGFuZAo+IC1odHRwczovL2dpdGh1
+Yi5jb20vbGlicmVzc2wtcG9ydGFibGUvb3BlbmJzZC9jb21taXQvYTk3ZWFiYzkwZDc2NDdlMzc0
+YzFjNmRhNjg2YWVlYzYzYzQ5ZmYxNAo+IC0KPiAtbGlicmVzc2wgcHJvdmlkZXMgWDUwOV9nZXRf
+ZXh0ZW5zaW9uX2ZsYWdzIHNpbmNlIHZlcnNpb24gMy41LjAgYW5kCj4gLWh0dHBzOi8vZ2l0aHVi
+LmNvbS9saWJyZXNzbC1wb3J0YWJsZS9vcGVuYnNkL2NvbW1pdC8zMTgwNzIzMjI0YzFiMmM3ODU2
+YTExMGI4MjEzZTQ5NjY5OTVkN2UwCj4gLQo+IC1TaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRh
+aW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiAtW1Vwc3RyZWFtIHN0YXR1czogaHR0
+cHM6Ly9naXRodWIuY29tL09wZW5TQy9PcGVuU0MvcHVsbC8yNTkzICYKPiAtIGh0dHBzOi8vZ2l0
+aHViLmNvbS9PcGVuU0MvT3BlblNDL3B1bGwvMjU5NSAobWVyZ2VkKV0KPiAtLS0tCj4gLSBzcmMv
+bGlib3BlbnNjL3NjLW9zc2wtY29tcGF0LmggfCA0ICsrKysKPiAtIDEgZmlsZSBjaGFuZ2VkLCA0
+IGluc2VydGlvbnMoKykKPiAtCj4gLWRpZmYgLS1naXQgYS9zcmMvbGlib3BlbnNjL3NjLW9zc2wt
+Y29tcGF0LmggYi9zcmMvbGlib3BlbnNjL3NjLW9zc2wtY29tcGF0LmgKPiAtaW5kZXggZjBkNTUy
+NzkuLjJjNDI3OTRjIDEwMDY0NAo+IC0tLS0gYS9zcmMvbGlib3BlbnNjL3NjLW9zc2wtY29tcGF0
+LmgKPiAtKysrIGIvc3JjL2xpYm9wZW5zYy9zYy1vc3NsLWNvbXBhdC5oCj4gLUBAIC04Niw5ICs4
+NiwxMSBAQCBleHRlcm4gIkMiIHsKPiAtICNpZiBPUEVOU1NMX1ZFUlNJT05fTlVNQkVSIDwgMHgx
+MDEwMDAwMEwgfHwgZGVmaW5lZChMSUJSRVNTTF9WRVJTSU9OX05VTUJFUikKPiAtICNkZWZpbmUg
+UlNBX1BLQ1MxX09wZW5TU0wJCVJTQV9QS0NTMV9TU0xlYXkKPiAtIAo+IC0rI2lmIGRlZmluZWQo
+TElCUkVTU0xfVkVSU0lPTl9OVU1CRVIpICYmIExJQlJFU1NMX1ZFUlNJT05fTlVNQkVSIDwgMHgz
+MDUwMDAwMEwKPiAtICNkZWZpbmUgWDUwOV9nZXRfZXh0ZW5zaW9uX2ZsYWdzKHgpCSh4LT5leF9m
+bGFncykKPiAtICNkZWZpbmUgWDUwOV9nZXRfa2V5X3VzYWdlKHgpCQkoeC0+ZXhfa3VzYWdlKQo+
+IC0gI2RlZmluZSBYNTA5X2dldF9leHRlbmRlZF9rZXlfdXNhZ2UoeCkJKHgtPmV4X3hrdXNhZ2Up
+Cj4gLSsjZW5kaWYKPiAtICNpZiAhZGVmaW5lZChMSUJSRVNTTF9WRVJTSU9OX05VTUJFUikgfHwg
+TElCUkVTU0xfVkVSU0lPTl9OVU1CRVIgPCAweDIwNTAzMDBmTAo+IC0gI2RlZmluZSBYNTA5X3Vw
+X3JlZihjZXJ0KQkJQ1JZUFRPX2FkZCgmY2VydC0+cmVmZXJlbmNlcywgMSwgQ1JZUFRPX0xPQ0tf
+WDUwOSkKPiAtICNlbmRpZgo+IC1AQCAtMTA0LDcgKzEwNiw5IEBAIGV4dGVybiAiQyIgewo+IC0g
+Lyogd29ya2Fyb3VuZCB1bnVzZWQgdmFsdWUgd2FybmluZyBmb3IgYSBtYWNybyB0aGF0IGRvZXMg
+bm90aGluZyAqLwo+IC0gI2lmIGRlZmluZWQoTElCUkVTU0xfVkVSU0lPTl9OVU1CRVIpICYmIExJ
+QlJFU1NMX1ZFUlNJT05fTlVNQkVSID49IDB4MjA3MDAwMDBMCj4gLSAjZGVmaW5lIE9QRU5TU0xf
+bWFsbG9jX2luaXQoKQo+IC0rI2lmIExJQlJFU1NMX1ZFUlNJT05fTlVNQkVSIDwgMHgzMDUwMDAw
+MEwKPiAtICNkZWZpbmUgRklQU19tb2RlKCkgICAgICAgICAgICAgICAgICAgICAgICAgICAgICgw
+KQo+IC0rI2VuZGlmCj4gLSAjZGVmaW5lIEVWUF9zaGEzXzIyNCgpICAgICAgICAgICAgICAgICAg
+ICAgICAgICAoTlVMTCkKPiAtICNkZWZpbmUgRVZQX3NoYTNfMjU2KCkgICAgICAgICAgICAgICAg
+ICAgICAgICAgIChOVUxMKQo+IC0gI2RlZmluZSBFVlBfc2hhM18zODQoKSAgICAgICAgICAgICAg
+ICAgICAgICAgICAgKE5VTEwpCj4gLS0tIAo+IC0yLjM1LjEKPiAtCj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2Uvb3BlbnNjL29wZW5zYy5oYXNoIGIvcGFja2FnZS9vcGVuc2Mvb3BlbnNjLmhhc2gKPiBp
+bmRleCA1MTdjZmU1MDNhLi5lOGU2NzU2NjdlIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvb3BlbnNj
+L29wZW5zYy5oYXNoCj4gKysrIGIvcGFja2FnZS9vcGVuc2Mvb3BlbnNjLmhhc2gKPiBAQCAtMSw1
+ICsxLDUgQEAKPiAgIyBDb21wdXRlZCBsb2NhbGx5IGZyb20gaHR0cHM6Ly9odHRwczovL2dpdGh1
+Yi5jb20vT3BlblNDL09wZW5TQy9yZWxlYXNlcy8KPiAtc2hhMjU2ICA4ZDRlNTM0NzE5NWViZWEz
+MzJiZTU4NWRmNjFkY2M0NzAzMzFjMjY5NjllNGIwNDQ3Yzg1MWZiMDg0NGM3MTg2ICBvcGVuc2Mt
+MC4yMi4wLnRhci5nego+ICtzaGEyNTYgIGE0ODQ0YTZlYTAzYTUyMmVjZjM1ZTQ5NjU5NzE2ZGFj
+YjZiZTAzZjdjMDEwYTFhNTgzYWFmM2ViOTE1ZWQyZTAgIG9wZW5zYy0wLjIzLjAudGFyLmd6Cj4g
+IAo+ICAjIENvbXB1dGVkIGxvY2FsbHkKPiAgc2hhMjU2ICAzNzZiNTRkNGM1ZjRhYTk5NDIxODIz
+ZmE0ZGE5M2UzYWI3MzA5NmZjZTI0MDBlODk4NTg2MzJhYTdkYTI0YTE0ICBDT1BZSU5HCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2Uvb3BlbnNjL29wZW5zYy5tayBiL3BhY2thZ2Uvb3BlbnNjL29wZW5z
+Yy5tawo+IGluZGV4IGY5ZTJmNTA4M2UuLjI1M2I2YjI2ZjggMTAwNjQ0Cj4gLS0tIGEvcGFja2Fn
+ZS9vcGVuc2Mvb3BlbnNjLm1rCj4gKysrIGIvcGFja2FnZS9vcGVuc2Mvb3BlbnNjLm1rCj4gQEAg
+LTQsNyArNCw3IEBACj4gICMKPiAgIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgCj4gLU9QRU5T
+Q19WRVJTSU9OID0gMC4yMi4wCj4gK09QRU5TQ19WRVJTSU9OID0gMC4yMy4wCj4gIE9QRU5TQ19T
+SVRFID0gaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQy9PcGVuU0MvcmVsZWFzZXMvZG93bmxvYWQv
+JChPUEVOU0NfVkVSU0lPTikKPiAgT1BFTlNDX0xJQ0VOU0UgPSBMR1BMLTIuMSsKPiAgT1BFTlND
+X0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCj4gLS0gCj4gMi4zOS4yCj4gCj4gX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBs
+aXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0t
+LS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0t
+Lgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJC
+T04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBE
+ZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1
+NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUv
+ICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8
+IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0t
+LS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
