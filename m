@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D049EB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 22:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C453EB64DA
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 22:27:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D085740B42;
-	Sat, 24 Jun 2023 22:00:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D085740B42
+	by smtp2.osuosl.org (Postfix) with ESMTP id C284C40B67;
+	Sat, 24 Jun 2023 22:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C284C40B67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l8MesZPIak8R; Sat, 24 Jun 2023 22:00:41 +0000 (UTC)
+	with ESMTP id r9bJWLfCsVKQ; Sat, 24 Jun 2023 22:27:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F271D40AB0;
-	Sat, 24 Jun 2023 22:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F271D40AB0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0C45C1BF3FC
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 22:00:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EACDB40B78;
+	Sat, 24 Jun 2023 22:27:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EACDB40B78
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C5CD1BF3EE
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 22:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA36040AB0
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 22:00:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA36040AB0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32C1060DDF
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 22:27:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32C1060DDF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aCQwpaDxw6F9 for <buildroot@lists.busybox.net>;
- Sat, 24 Jun 2023 22:00:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bDle0DbcLUcq for <buildroot@lists.busybox.net>;
+ Sat, 24 Jun 2023 22:27:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35152405ED
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 35152405ED
- for <buildroot@buildroot.org>; Sat, 24 Jun 2023 22:00:38 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id
- e9e14a558f8ab-3427426f2ddso7953655ab.3
- for <buildroot@buildroot.org>; Sat, 24 Jun 2023 15:00:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36617607CA
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 36617607CA
+ for <buildroot@buildroot.org>; Sat, 24 Jun 2023 22:27:12 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id
+ e9e14a558f8ab-34574eb05f4so3632235ab.0
+ for <buildroot@buildroot.org>; Sat, 24 Jun 2023 15:27:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687644037; x=1690236037;
+ d=1e100.net; s=20221208; t=1687645631; x=1690237631;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=y5jFK0qIFzd1jm8F3g/BuhQD5CfM8Z5KwhWeFqbmOBg=;
- b=K+CP7pHBH/tADzloyCBpkzNrLFX7dGPc8DqbKUfInUAyP+zlsaMMky/xjJDacShy8B
- BvaCoALchTI0NgbYNRbOuEbMqnSj0ixBDGwHv9PZa9fjGDzUpml9A6Z94IPBFL2AD6ku
- J899BIURDcC9+N/uQUCuhYUCQFobFzncrzs+IDh7VaOxuCc4JGuKb8aLYIiKGtOlWaAt
- R0q2RXlVME71eiY5MEZ45f5vnjIvr4SYtnkkgc0X0MLLNpPPQPoLrG260PCTLItRbuip
- 4M28oXuE3E/nR1HtSuTFVlyQizgyFowZB6uzc9MQ57tTVJcpnCwBan5VF0VhwonWE5ui
- rkzQ==
-X-Gm-Message-State: AC+VfDxLITOl5olN9X7YfmxLxy+n02xIhnI3PIb5HymLQW8SWA0qV1ZT
- gvernot9ct/xrr0DlqJcyoKNTne1xSU=
-X-Google-Smtp-Source: ACHHUZ4IYEFPmJ6zsqiaqgexFqCAnT3lr/aQ9fMfn1eFPZPq1GwpA2jsAbU7vRgV58J/GphhZwXA7A==
-X-Received: by 2002:a05:6e02:142:b0:340:8557:4a3d with SMTP id
- j2-20020a056e02014200b0034085574a3dmr19900857ilr.22.1687644036974; 
- Sat, 24 Jun 2023 15:00:36 -0700 (PDT)
+ bh=Cg0jiOqjAUnUnDGHv/KIYiMRe392x2gD4VhgwJ+Dml8=;
+ b=iUZ3ZK2X334A4wpB11PpSus87oEDt1SauI1dtU8WZ0AsdjFncynfnLhipbE9OHeVrY
+ BEysvqW++WUmleO9lbpJCB1qJCIBF2HDAhNtTQzDE8gWA8Q17DJPrlbOfI5hMd9bvAsW
+ tNdxDJyEUbPW0f2n7k/U4ITNgM6zZQr1RebrJxCUZ4mFycQYAVlObmZqkZleVp7cAQ5E
+ FBO8m/5h22fRrZV1wOCQbKVALKIRhomO0hT3a8XWbn4Hz7AIrVf2aJDj1cundtUmFLrS
+ uLAJYfn4qbbv5zNMfDBwRWJyOU3rUBL98N1QvqCFpGpBVakOaiP9YKCyO9qGKNBp3bkX
+ exUA==
+X-Gm-Message-State: AC+VfDzBqm+SBimmUmDN0Zaui3gEuzRcMiqBXiQsuTj07LRC0hhGLkbo
+ F9XiPpRaWXQgRsuUbFIquOr350Hjb2g=
+X-Google-Smtp-Source: ACHHUZ4G8FFPwYR8IJL1HbfLue04tnmfmDx31GlU7t5hT1sWyJO6J6Pr4dgWkM5NtIwbAR7SVDtT2Q==
+X-Received: by 2002:a92:cbcf:0:b0:32c:9c5e:900c with SMTP id
+ s15-20020a92cbcf000000b0032c9c5e900cmr4299799ilq.8.1687645631045; 
+ Sat, 24 Jun 2023 15:27:11 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-17.hlrn.qwest.net.
  [71.218.252.17]) by smtp.gmail.com with ESMTPSA id
- v10-20020a92d24a000000b0034202d05fadsm805384ilg.72.2023.06.24.15.00.36
+ b1-20020a92c841000000b003423bfdd0ccsm830023ilq.37.2023.06.24.15.27.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Jun 2023 15:00:36 -0700 (PDT)
+ Sat, 24 Jun 2023 15:27:10 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jun 2023 16:00:30 -0600
-Message-Id: <20230624220030.492587-1-james.hilliard1@gmail.com>
+Date: Sat, 24 Jun 2023 16:27:04 -0600
+Message-Id: <20230624222705.606301-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1687644037; x=1690236037;
+ d=gmail.com; s=20221208; t=1687645631; x=1690237631;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=y5jFK0qIFzd1jm8F3g/BuhQD5CfM8Z5KwhWeFqbmOBg=;
- b=kRJ6BD0ueXkriocFZ7HhHcNpz9OQi7TEZ/LTQpgnNGgi/X7IWjaP+cuw0v6XomdNMu
- jimlltyv9oJivghOxjhtL/3WVls2lQgiHMT3wYM9cgVqm5fqb52YMDmdOj4dnk8ZNvKS
- 6bCg6V/8M/cdpJO6jgJJrAdGFKtqcKwnQ2B44X9R4IHpn4eWmL96rsLxUBCo2OW649yI
- CdUyAuJ8aOG8k1SoebZVPcBnH55f/k60kkOsGPjEekQQB0q/DT0g01R+Nie5vBxHLWRi
- vfg9tJP1cKgbMfLJcP3Dr3wKpGnx34I1Xk+sMhQr+IO+fW4MaeZAWhHLE1BQVtsoDzz3
- +vOg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Cg0jiOqjAUnUnDGHv/KIYiMRe392x2gD4VhgwJ+Dml8=;
+ b=l/TsC9dg5Rtk+2fCJfgQQj3J0jYF6D8Rhd6S9rUbfXMOX4xYRg4Clk7/scvBTJm5Fk
+ 9qh2ihHCT8lRyjMBhr8952vXVbDMxHfTG4tYo6J35oU5/ciKjfEBTtfotDAdLeqkzRLE
+ rBg5D+/ja36q9rYiMLqEPCAHQF4yuT/zwi8j4QfSGFhPvtZ7c0dUh1mxT1vy7JZubhk2
+ qPOvqvKFztRVpEgzfjKwOppWLUh/UIRT7X4jrTMNxbHBPztu+hgskDUtbPj3ztD5DJDR
+ U/hGnBWGyM2yntOsebykFCtsHr29NXWRHGDLA6PDmZbBPDg8CSWGF82ETQAOqwnc/H/J
+ hO3g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=kRJ6BD0u
-Subject: [Buildroot] [PATCH 1/1] package/pkg-python.mk: switch back to local
- setuptools distutils
+ header.a=rsa-sha256 header.s=20221208 header.b=l/TsC9dg
+Subject: [Buildroot] [PATCH v2 1/2] package/python-wheel: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,85 +94,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We overrode the default in 4386bbdf0895dbb35e02c25f42603bae9af64451 to
-work around target shebang bug, as this issue no longer appears to be
-present lets revert back to the local version as this is what will be
-use in the future when distutils is removed from the python stdlib.
-
-Tested with:
-$ support/testing/run-tests -d dl -o output_folder -k tests.package.test_ipython.TestIPythonPy3
-15:43:26 TestIPythonPy3                           Starting
-15:43:27 TestIPythonPy3                           Building
-15:49:35 TestIPythonPy3                           Building done
-Downloading to /home/buildroot/buildroot/dl/tmp_iyk_fn6
-Renaming from /home/buildroot/buildroot/dl/tmp_iyk_fn6 to /home/buildroot/buildroot/dl/kernel-versatile-5.10.7
-Downloading to /home/buildroot/buildroot/dl/tmpokk23l2z
-Renaming from /home/buildroot/buildroot/dl/tmpokk23l2z to /home/buildroot/buildroot/dl/versatile-pb-5.10.7.dtb
-15:50:04 TestIPythonPy3                           Cleaning up
-.
-----------------------------------------------------------------------
-Ran 1 test in 398.709s
-
-OK
-
-$ head -n 1 output_folder/TestIPythonPy3/target/usr/bin/ipython
-#!/usr/bin/python
+This will be required for upcoming setuptools pep517 support.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/pkg-python.mk | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ package/python-wheel/python-wheel.hash |  5 +++++
+ package/python-wheel/python-wheel.mk   | 14 ++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 package/python-wheel/python-wheel.hash
+ create mode 100644 package/python-wheel/python-wheel.mk
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index c15a168f60..fcb8fa0a99 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -55,8 +55,7 @@ HOST_PKG_PYTHON_ENV = \
- # Target distutils-based packages
- PKG_PYTHON_DISTUTILS_ENV = \
- 	$(PKG_PYTHON_ENV) \
--	LDSHARED="$(TARGET_CROSS)gcc -shared" \
--	SETUPTOOLS_USE_DISTUTILS=stdlib \
-+	LDSHARED="$(TARGET_CROSS)gcc -shared"
- 
- PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
- 	--executable=/usr/bin/python
-@@ -75,16 +74,14 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
- 
- # Host distutils-based packages
- HOST_PKG_PYTHON_DISTUTILS_ENV = \
--	$(HOST_PKG_PYTHON_ENV) \
--	SETUPTOOLS_USE_DISTUTILS=stdlib
-+	$(HOST_PKG_PYTHON_ENV)
- 
- HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
- 	--prefix=$(HOST_DIR)
- 
- # Target setuptools-based packages
- PKG_PYTHON_SETUPTOOLS_ENV = \
--	$(PKG_PYTHON_ENV) \
--	SETUPTOOLS_USE_DISTUTILS=stdlib
-+	$(PKG_PYTHON_ENV)
- 
- PKG_PYTHON_SETUPTOOLS_CMD = \
- 	$(if $(wildcard $($(PKG)_BUILDDIR)/setup.py),setup.py,-c 'from setuptools import setup;setup()')
-@@ -105,8 +102,7 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
- 
- # Host setuptools-based packages
- HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
--	$(HOST_PKG_PYTHON_ENV) \
--	SETUPTOOLS_USE_DISTUTILS=stdlib
-+	$(HOST_PKG_PYTHON_ENV)
- 
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
- 	--prefix=$(HOST_DIR) \
+diff --git a/package/python-wheel/python-wheel.hash b/package/python-wheel/python-wheel.hash
+new file mode 100644
+index 0000000000..377a85c8fd
+--- /dev/null
++++ b/package/python-wheel/python-wheel.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/wheel/json
++md5  ec5004c46d1905da98bb5bc1a10ddd21  wheel-0.40.0.tar.gz
++sha256  cd1196f3faee2b31968d626e1731c94f99cbdb67cf5a46e4f5656cbee7738873  wheel-0.40.0.tar.gz
++# Locally computed sha256 checksums
++sha256  30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654  LICENSE.txt
+diff --git a/package/python-wheel/python-wheel.mk b/package/python-wheel/python-wheel.mk
+new file mode 100644
+index 0000000000..159598fd1e
+--- /dev/null
++++ b/package/python-wheel/python-wheel.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-wheel
++#
++################################################################################
++
++PYTHON_WHEEL_VERSION = 0.40.0
++PYTHON_WHEEL_SOURCE = wheel-$(PYTHON_WHEEL_VERSION).tar.gz
++PYTHON_WHEEL_SITE = https://files.pythonhosted.org/packages/fc/ef/0335f7217dd1e8096a9e8383e1d472aa14717878ffe07c4772e68b6e8735
++PYTHON_WHEEL_SETUP_TYPE = flit
++PYTHON_WHEEL_LICENSE = MIT
++PYTHON_WHEEL_LICENSE_FILES = LICENSE.txt
++
++$(eval $(host-python-package))
 -- 
 2.34.1
 
