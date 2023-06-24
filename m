@@ -4,66 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D59BBEB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 15:21:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6211EB64DA
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 15:21:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69BE2611C2;
-	Sat, 24 Jun 2023 15:21:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69BE2611C2
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1DC0611BD;
+	Sat, 24 Jun 2023 15:21:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1DC0611BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KWCghnlevLU2; Sat, 24 Jun 2023 15:21:28 +0000 (UTC)
+	with ESMTP id CQNRtB29jl7Y; Sat, 24 Jun 2023 15:21:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F85A611BC;
-	Sat, 24 Jun 2023 15:21:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F85A611BC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9329E1BF420
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 15:21:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1952A611CE;
+	Sat, 24 Jun 2023 15:21:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1952A611CE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AF5651BF420
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 15:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 79B3C81F4A
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 15:21:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79B3C81F4A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88044611CE
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 15:21:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88044611CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kqmZjHX671cX for <buildroot@lists.busybox.net>;
- Sat, 24 Jun 2023 15:21:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vfHkEAhV8eJS for <buildroot@lists.busybox.net>;
+ Sat, 24 Jun 2023 15:21:37 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4D6881F47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B85D611BC
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A4D6881F47
- for <buildroot@buildroot.org>; Sat, 24 Jun 2023 15:21:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0B85D611BC
+ for <buildroot@buildroot.org>; Sat, 24 Jun 2023 15:21:35 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5E257A4C00C7
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 75EF3A4C0780
  for <buildroot@buildroot.org>; Sat, 24 Jun 2023 17:21:20 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55244)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qD54i-0000Hx-0K
+ (envelope-from <bernd@kuhls.net>) id 1qD54i-0000Hx-0U
  for buildroot@buildroot.org; Sat, 24 Jun 2023 17:21:20 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jun 2023 17:21:19 +0200
-Message-Id: <20230624152120.2879074-1-bernd@kuhls.net>
+Date: Sat, 24 Jun 2023 17:21:20 +0200
+Message-Id: <20230624152120.2879074-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230624152120.2879074-1-bernd@kuhls.net>
+References: <20230624152120.2879074-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1687620080;
- bh=l0pQnPbI26K/f3uvUqkGwTzH3L3mdFSRPASv0DX/9mY=;
- h=From:To:Subject:Date:From;
- b=J2thsPICmXQud6g08wBi44CEONscs5lk/s4ZKxvWYgsVc/tX9EHe0YnOQAKcpmmAf
- NEy235T1Od0WSZXyTHFAZAaNqNKMbj3AOeUYQ6jm7h4vogLm5r9BVbyjtNsXtHuTi3
- 9fhAO4WkppvuqADFLQGScfWiXSZUABz9DXdCE2uSFsIEt/OoBSHAhDj0vle0hveCAM
- lwJcoQsqf9pNtcpCOMvapRp9R8jMbk/SfQQc9oP0CIUPCKuiLu+jP9/ZQc+MzCG/+N
- LsrieBYqHTr3jbhPA4F58greedmiV/F4CnGQmIrHRC4l5vGduJ8TnebHP7N6zv/gSE
- yzG8g+fMn1ohw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=xufJU7eEucO26TE5vMRHhTxMaC6IFUd0KPExTYZVLNg=;
+ h=From:To:Subject:Date:In-Reply-To:References:From;
+ b=izPDGtiBEBJYgO039D6loUQOekcyIX7dm18+bc9Y/ldoNfbnlypxUsOcfb/e2Q8xn
+ 6SN2Q1Yp9NuM6DR7dL4rVQ6r85bR6j9xojBQF0VjmAlHFbbEX287z1kTr18Kc3UHDP
+ xJGMl1b/rke9wf/wq0binyKF3ksc6KmTWo0ykzK7JbRzj5wfAAScApbaXEh1z+ZQUJ
+ RtBstgT3T8XjQrhPYL0RJ6b28KHitI3bk/u71szs6YgJd7OLndMdNHOX+1XDWwBzLk
+ Hu/j6XOKWnoadbNX++uKXQNQvQfZSka62Naj5a/RVmbJWCKZVqd5X/2dcEdJt2jfYJ
+ gmPQLfGGbuxAg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=J2thsPIC
-Subject: [Buildroot] [PATCH 1/2] package/ell: bump version to 0.57
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=izPDGtiB
+Subject: [Buildroot] [PATCH 2/2] package/iwd: bump version to 2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,38 +83,41 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Changelog:
-https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog
+
+Depends on ell >= 0.57:
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/configure.ac?id=464f5c25db8150dc8cea21042a5bac09a8880edc
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index c0f1731676..dd4722480c 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index 1647f93d9e..4eea644842 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
 @@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
--sha256  58eb8b2b64087f7479d5db6a830a0656c536d93e5f11d4c9a4443ce8760a1b63  ell-0.56.tar.xz
-+sha256  7603928ee584b758ca27c67e4dc513049a09b038d7d28459a9440f8443c91018  ell-0.57.tar.xz
+ # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
+-sha256  b0506d797a8bfb88f3c3eeea5e49dcf4ee8e6cef118f57c118e587eeb377ac64  iwd-2.3.tar.xz
++sha256  f7ac93aeef672604f5b5194ca038035ae222925be392c4345873c9742f477797  iwd-2.6.tar.xz
  
  # License files
  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index 994b0e19f0..08deb62abe 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index c54031b102..f20427114b 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELL_VERSION = 0.56
-+ELL_VERSION = 0.57
- ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
- ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
- ELL_LICENSE = LGPL-2.1+
+-IWD_VERSION = 2.3
++IWD_VERSION = 2.6
+ IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
+ IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+ IWD_LICENSE = LGPL-2.1+
 -- 
 2.39.2
 
