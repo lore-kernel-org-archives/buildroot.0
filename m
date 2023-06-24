@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42266EB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 13:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5965FEB64DA
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jun 2023 13:40:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E23F260B05;
-	Sat, 24 Jun 2023 13:34:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E23F260B05
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF4AB60AD5;
+	Sat, 24 Jun 2023 13:40:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF4AB60AD5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WsJmtUlO-M4l; Sat, 24 Jun 2023 13:34:41 +0000 (UTC)
+	with ESMTP id 31ct7vayMepV; Sat, 24 Jun 2023 13:40:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 176B5607CE;
-	Sat, 24 Jun 2023 13:34:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 176B5607CE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16AFC607F6;
+	Sat, 24 Jun 2023 13:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16AFC607F6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D8B351BF31F
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 13:34:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B77191BF31F
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 13:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEFC6607CE
- for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 13:34:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEFC6607CE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9DC83607F6
+ for <buildroot@lists.busybox.net>; Sat, 24 Jun 2023 13:40:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DC83607F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SgIn1CxFXDyQ for <buildroot@lists.busybox.net>;
- Sat, 24 Jun 2023 13:34:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FDB9607AA
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4FDB9607AA
- for <buildroot@buildroot.org>; Sat, 24 Jun 2023 13:34:36 +0000 (UTC)
+ with ESMTP id NHx9mVElflfV for <buildroot@lists.busybox.net>;
+ Sat, 24 Jun 2023 13:40:43 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CD96607CE
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8CD96607CE
+ for <buildroot@buildroot.org>; Sat, 24 Jun 2023 13:40:43 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:d5f8:72e0:30f9:5d41])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4790BB0053E;
- Sat, 24 Jun 2023 15:34:31 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 298D9B005A4;
+ Sat, 24 Jun 2023 15:40:38 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 24 Jun 2023 15:34:30 +0200
-Date: Sat, 24 Jun 2023 15:34:30 +0200
+ Sat, 24 Jun 2023 15:40:37 +0200
+Date: Sat, 24 Jun 2023 15:40:37 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230624133430.GM24952@scaer>
-References: <20230624082953.2537472-1-bernd@kuhls.net>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230624134037.GN24952@scaer>
+References: <20230610070628.228669-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230624082953.2537472-1-bernd@kuhls.net>
+In-Reply-To: <20230610070628.228669-1-bernd.kuhls@t-online.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1687613673;
- bh=b0TjVxO0FqkWOyQFf+A/crbP9Tsxa2//qPKdGgwX94g=;
+ d=free.fr; s=smtp-20201208; t=1687614040;
+ bh=48EBvEDeC0Vj0zJsEBhAtkd9QohCMHdn+m1zNFfm08c=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MN3z6XUhESBpH4Vmcwy7MX8+PfMIVLDruAExAIlhq8MUkVLjlPOu9r9F+ezbVsfP+
- 4ZxpPhUE4ykjaEKp48MG/p5HIJyCa78GojUSX2qOM1LCyCpelm4GxOxzYMkp6IL+Qq
- mIuVQPeVZja+Qx5pn1MckXvgPPUj44QbhwHy58k0P3Bvd0br8uxiRDfTRpzzroXcqG
- 42fdJBvnmGEUMblXyj/3dWKqUy94DSmquR4SKL/YagqqAFlC3SHYlNQrWvBMq/wuZo
- 0jqcZvjZONLUIzVBnYKuPvZ782tiS6WZ6uTSCIMX9zr4niMQPgseGolqrtL6OX2Fmk
- TmTwlV2wP8wwg==
+ b=CwrasSDN9pZUi+shQxfKbPRpohjjfh6EARLnlnjqrFPvq9fmar5r9nWqJZRcWB5+x
+ /hbsHJCM2QGs4ir6sXVrZNsVyS6asNguKDs8cigzVrtHny0o8rP9FklATEFoxLIseB
+ NGaQ2jNDS1teVzhsQLOP7UP8M+98U359VHdaEQ+ElO0XCJPGuiz9q8hZ2SzAwKGa6t
+ AW5nmAwEIk6+Y5uFBaIpLXSEmWUtwiFLvdTAmu5QR9UvpJHns9u0wutTp5k1C0vgss
+ G3uh7/J2Cpqoyu5vcGHt2kAz2VlHnPhtK+IA2MWna6cVCi8giPhRVvTwyN1TRVSWJ3
+ 8YLJS40H1Laeg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MN3z6XUh
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: fix build error with
- flatbuffers 23.x
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CwrasSDN
+Subject: Re: [Buildroot] [PATCH 1/1] package/heimdal: Use perl module JSON,
+ part of core, instead of JSON:PP package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,85 +83,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+Bernd, A;;,
 
-On 2023-06-24 10:29 +0200, Bernd Kuhls spake thusly:
-> Fixes build error with defconfig
+On 2023-06-10 09:06 +0200, Bernd Kuhls spake thusly:
+> Fixes:
+> http://autobuild.buildroot.net/results/48b/48b52d205150e30e522b40d1c7b51f339ae8b0db/
 > 
-> BR2_x86_64=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_MESA3D_OPENGL_ES=y
-> BR2_PACKAGE_PYTHON3=y
-> BR2_PACKAGE_PYTHON3_PY_ONLY=y
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...JSON-part-of-core-instead-of-JSON-PP.patch | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 package/heimdal/0001-Use-perl-module-JSON-part-of-core-instead-of-JSON-PP.patch
 > 
-> caused by bumping flatbuffers to version >= 23.x in commit
-> 3d1ee7d624b71009ff61d4fa5ed860c52eb89b47
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> diff --git a/package/heimdal/0001-Use-perl-module-JSON-part-of-core-instead-of-JSON-PP.patch b/package/heimdal/0001-Use-perl-module-JSON-part-of-core-instead-of-JSON-PP.patch
+> new file mode 100644
+> index 0000000000..a7d8777a78
+> --- /dev/null
+> +++ b/package/heimdal/0001-Use-perl-module-JSON-part-of-core-instead-of-JSON-PP.patch
+> @@ -0,0 +1,54 @@
+> +From f77b0d16ace70d93c018241e25826611f3124604 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sat, 10 Jun 2023 09:00:24 +0200
+> +Subject: [PATCH] Use perl module JSON, part of core, instead of
+> + JSON:PP package
+> +
+> +Ported from
+> +https://github.com/openwrt/packages/blob/master/net/samba4/patches/105-perl-json-pp.patch
+> +
+> +Upstream: Not applicable
 
-Applied to master, thanks.
+When a patch is not applicable upstream, this must be motivated.
+
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + cf/make-proto.pl | 4 ++--
+> + configure.ac     | 1 -
+> + 2 files changed, 2 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/cf/make-proto.pl b/cf/make-proto.pl
+> +index 36a040ce6..4af21916b 100644
+> +--- a/cf/make-proto.pl
+> ++++ b/cf/make-proto.pl
+> +@@ -4,7 +4,7 @@
+> + use Getopt::Std;
+> + use File::Compare;
+> + 
+> +-use JSON;
+> ++use JSON::PP
+
+I don't understand this change in relation to the commit title: the
+change switches over from using JSON to using JSON::PP, but the title
+says we are doing the opposite...
+
+Would you care to clarify, please?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  ...fer-Remove-forward-declararion-of-Fl.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
-> 
-> diff --git a/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch b/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
-> new file mode 100644
-> index 0000000000..87df0e4c9a
-> --- /dev/null
-> +++ b/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
-> @@ -0,0 +1,42 @@
-> +From 07d8c98a0a65e005b85ef70e06eb1b9bbe7f764c Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Markus=20H=C3=A4rer?= <markus.haerer@gmx.net>
-> +Date: Sun, 28 May 2023 00:49:40 +0200
-> +Subject: [PATCH] SavestateFlatBuffer: Remove forward declararion of
-> + FlatBufferBuilder
-> +
-> +This caused a compiler error with recent faltbuffers because the type changed:
-> +
-> +In file included from xbmc/cores/RetroPlayer/savestates/SavestateDatabase.cpp:12:
-> +xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h:19:7: error: definition of type 'FlatBufferBuilder' conflicts with type alias of the same name
-> +class FlatBufferBuilder;
-> +      ^
-> +/usr/include/flatbuffers/flatbuffer_builder.h:1414:7: note: 'FlatBufferBuilder' declared here
-> +using FlatBufferBuilder = FlatBufferBuilderImpl<false>;
-> +      ^
-> +1 error generated.
-> +
-> +(cherry picked from commit 351184d7e4e3edc447d04a297769eb41a477ba68)
-> +
-> +Upstream: https://github.com/xbmc/xbmc/commit/07d8c98a0a65e005b85ef70e06eb1b9bbe7f764c
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h | 5 -----
-> + 1 file changed, 5 deletions(-)
-> +
-> +diff --git a/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h b/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
-> +index cb93e6bbc2e12..fa42a9bad7034 100644
-> +--- a/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
-> ++++ b/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
-> +@@ -14,11 +14,6 @@
+> + my $comment = 0;
+> + my $doxygen = 0;
+> +@@ -70,7 +70,7 @@ if($opt_x) {
+> +     my $EXP;
+> +     local $/;
+> +     open(EXP, '<', $opt_x) || die "open ${opt_x}";
+> +-    my $obj = JSON->new->utf8->decode(<EXP>);
+> ++    my $obj = JSON::PP->new->utf8->decode(<EXP>);
+> +     close $EXP;
 > + 
-> + #include <flatbuffers/flatbuffers.h>
+> +     foreach my $x (keys %$obj) {
+> +diff --git a/configure.ac b/configure.ac
+> +index b946dfff4..c08cb24dc 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -56,7 +56,6 @@ if ! test -f "$srcdir/lib/asn1/der-protos.h" ||
+> +     AC_KRB_PROG_PERL
+> +     AC_KRB_PERL_MOD(Getopt::Std)
+> +     AC_KRB_PERL_MOD(File::Compare)
+> +-    AC_KRB_PERL_MOD(JSON)
+> + fi
 > + 
-> +-namespace flatbuffers
-> +-{
-> +-class FlatBufferBuilder;
-> +-}
-> +-
-> + namespace KODI
-> + {
-> + namespace RETRO
+> + AC_KRB_PROG_YACC
+> +-- 
+> +2.39.2
+> +
 > -- 
 > 2.39.2
 > 
