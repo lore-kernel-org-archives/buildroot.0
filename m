@@ -1,74 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 994B1EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 10:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F41EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 12:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED64E81C6F;
-	Sun, 25 Jun 2023 10:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED64E81C6F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IRWoUUyi5LV2; Sun, 25 Jun 2023 10:15:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC34F81B72;
-	Sun, 25 Jun 2023 10:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC34F81B72
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 743721BF310
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 10:15:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A9BB60D80
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 10:15:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A9BB60D80
+	by smtp3.osuosl.org (Postfix) with ESMTP id A755660B9D;
+	Sun, 25 Jun 2023 12:33:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A755660B9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 52yEQGRlJQ2o for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 10:15:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD575608D8
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD575608D8
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 10:15:14 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:36ab:e848:bc86:4439])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id D1C39B0056B;
- Sun, 25 Jun 2023 12:15:07 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 25 Jun 2023 12:15:07 +0200
-Date: Sun, 25 Jun 2023 12:15:07 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?B?RnJhbsOnb2lz?= Perrad <francois.perrad@gadz.org>
-Message-ID: <20230625101507.GK24952@scaer>
-References: <20230622160212.2063472-1-dannenberg@ti.com>
- <20230622160212.2063472-11-dannenberg@ti.com>
- <CAAE6iEVbgKo4FS7ofh_GbOi=tUDafp0sHkcthHskqaduiPb8zQ@mail.gmail.com>
- <20230623145945.kvxhcdbf2kycdyk5@dasso>
- <CAAE6iEX1eomAE5_qr55=JKgRZWM-iZ+dmO+Ti_vQ94VuxZBe6Q@mail.gmail.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AKH1rZ9csiJ0; Sun, 25 Jun 2023 12:33:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C49CF607AA;
+	Sun, 25 Jun 2023 12:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C49CF607AA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E69E71BF870
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 12:33:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA5C440489
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 12:33:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA5C440489
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rZrxQHUELNmx for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 12:33:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23317400BA
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 23317400BA
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 12:33:30 +0000 (UTC)
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout01.mail.de (Postfix) with ESMTP id 1B42EA0582
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 14:33:28 +0200 (CEST)
+Received: from smtp03.mail.de (smtp03.bt.mail.de [10.0.121.213])
+ by postfix01.mail.de (Postfix) with ESMTP id 00E908014F
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 14:33:28 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp03.mail.de (Postfix) with ESMTPSA id C4FAFA0253
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 14:33:27 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Sun, 25 Jun 2023 14:33:26 +0200
+Message-ID: <5686076.DvuYhMxLoT@kilian-aisec>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAAE6iEX1eomAE5_qr55=JKgRZWM-iZ+dmO+Ti_vQ94VuxZBe6Q@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 2647
+X-purgate-ID: 154282::1687696407-C3715647-11B7D8BA/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1687688112;
- bh=dLrxHDCz2FXSTv5qndmcRHVB1lgxuG+kU4BUjJ82nes=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DgRQbwsj+5kg68gYgcs03C8oEAKHU0vArTWobW9YhNW5WCyMMTV11t1oTjYAX7nPs
- l1uZTawvMwsuKTrsUnprEMetWT+t9HPM9Eok0PX8C2aqkTFgwXu20fS7eCqfZBIp8M
- VUzr0lLT5pRr2tXMhdYNVKcDxHZ3z/y2N/5OUzmdb+Q9uKewgFcGS8MYXv1r0mD5xo
- 6bkEWfDZsxfdz9TZtU4/iRZw8yxVLGdno9AOMbOnmDC7Z/ddPzk6zYws0FluyZTAyx
- /qIgieb2RFN3onXx5MtJM5FXyTKHuUEkR2g3Ezrias+WMgvJQYtAfNYB6kl+fkJOqh
- BR16m+I3xxTrg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DgRQbwsj
-Subject: Re: [Buildroot] [PATCH v9 10/11] package/ti-rogue-um: new package
+ d=mail.de; s=mailde202009; t=1687696408;
+ bh=yBeR890aDJfupuBvNKB5rM7aC3GBSVy3MuMyB+QUdKQ=;
+ h=From:To:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=1PVvPLc9+KirGs23AHm656yqX7qe6VRgfhwnplrMk2CDtUSoJA2trzN5D4WfKnNH9
+ nrKyamFpxes3IIJS0Ptl2B7FIlvfZEAZOzduZF1KZ87nbzkgRIG2dfcDdWgv0cVuLt
+ 4J18MQnOGZ+yyG0ds6WAatbM15nvUFFDVGNlgeezkbako7UGZBCIlfcn98iEwXt+AZ
+ 4dkjzJwj31LmLqIxrrxvjEjkfjKLYCD/vlN/eh1OQMP+b11qb9IiwPZHP/XfwF973f
+ sB1P1t11rlYHEGh9T1MqfKX6EufVZVN4eC4MeTriZKpaaQybKE0YWprfAzkicMINM/
+ RGOgitmcWxawA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key)
+ header.d=mail.de header.i=@mail.de header.a=rsa-sha256 header.s=mailde202009
+ header.b=1PVvPLc9
+Subject: [Buildroot] Problem: Setting Uboot custom version does not apply
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,101 +87,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Dannenberg <dannenberg@ti.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJhbsOnb2lzLCBBbGwsCgpPbiAyMDIzLTA2LTI1IDA3OjM3ICswMjAwLCBGcmFuw6dvaXMgUGVy
-cmFkIHNwYWtlIHRodXNseToKPiBMZcKgdmVuLiAyMyBqdWluIDIwMjMgw6DCoDE2OjU5LCBBbmRy
-ZWFzIERhbm5lbmJlcmcgPCBbMV1kYW5uZW5iZXJnQHRpLmNvbT4gYSDDqWNyaXTCoDoKPiAgIE9u
-IEZyaSwgSnVuIDIzLCAyMDIzIGF0IDA5OjMwOjM5QU0gKzAyMDAsIEZyYW7Dp29pcyBQZXJyYWQg
-d3JvdGU6Cj4gICA+IExlIGpldS4gMjIganVpbiAyMDIzIMOgIDE4OjA3LCBBbmRyZWFzIERhbm5l
-bmJlcmcgdmlhIGJ1aWxkcm9vdCA8Cj4gICA+IFsyXWJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPiBh
-IMOpY3JpdCA6ClstLVNOSVAtLV0KCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvdGktcm9ndWUtdW0v
-MDAwMS1hbGwtZHJvcC10aGUtaW5pdC1zY3JpcHQucGF0Y2ggYi9wYWNrYWdlL3RpLXJvZ3VlLXVt
-LzAwMDEtYWxsLWRyb3AtdGhlLWluaXQtc2NyaXB0LnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2
-NDQKPiBpbmRleCAwMDAwMDAwMDAwLi40ZjNkZDFjYmIxCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBi
-L3BhY2thZ2UvdGktcm9ndWUtdW0vMDAwMS1hbGwtZHJvcC10aGUtaW5pdC1zY3JpcHQucGF0Y2gK
-PiBAQCAtMCwwICsxLDgzMiBAQCAKPiArRnJvbSA5OWUwZGE4YTFjMDg4MThjNTk2ODBmNzI2ZTEx
-YTg0YjI2ZGFmMjlmIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBSYW5kb2xwaCBT
-YXBwIDxyc0B0aS5jb20+Cj4gK0RhdGU6IFRodSwgMjUgTWF5IDIwMjMgMTg6NTk6MjYgLTA1MDAK
-PiArU3ViamVjdDogW1BBVENIXSBhbGw6IGRyb3AgdGhlIGluaXQgc2NyaXB0Cj4gKwo+ICtOb2Jv
-ZHkgc2hvdWxkIGJlIHVzaW5nIHRoaXMgYW55bW9yZS4gSXQncyBzeXNWaW5pdCBhbmQgaXQncyBq
-dXN0IGEgZmFuY3kKPiArd3JhcHBlciBhcm91bmQgbW9kcHJvYmUgYW55d2F5LiBXZSdsbCBiZSBk
-cm9wcGluZyBpdCBmcm9tIG91ciBidWlsZAo+ICt0b29scyBzb29uLgoKT0ssIG1ha2VzIHNlbnNl
-LiBCdXQgdGhpcyBpcyBhIGJpZyBwYXRjaCwgYW5kIGl0IGFkZHMgc29tZSBub2lzZS4gSSdkCnN1
-Z2dlc3QganVzdCBhZGRpbmc6CgogICAgIyBVc3VhbGx5IGZyb3duZWQgdXBvbiwgYnV0IG11Y2gg
-bXVjaCBzbWFsbGVyIHRoYW4gYSBwYXRjaCB0byByZW1vdmUKICAgICMgdGhlbTsgYW55d2F5LCB1
-cHN0cmVhbSBpcyBnb2luZyB0byBnZXQgcmlkIG9mIHRoZW0gaW4gYSBmdXR1cmUKICAgICMgcmVs
-ZWFzZS4KICAgIGRlZmluZSBUSV9JTUdfUk9HVUVfVU1MSUJTX0NMRUFOVVAKICAgICAgICAkKFEp
-cm0gLXJmICQoQEQpL3RhcmdldGZzLyovd2F5bGFuZC9yZWxlYXNlL2V0Yy9pbml0LmQvCiAgICBl
-bmRlZgogICAgVElfSU1HX1JPR1VFX1VNTElCU19QT1NUX0VYVFJBQ1RfSE9PS1MgKz0gVElfSU1H
-X1JPR1VFX1VNTElCU19DTEVBTlVQCgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBi
-L3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggOTZlZjBkNzJkZS4uMGJmZjExMzVhYSAxMDA2NDQK
-PiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4gQEAg
-LTYxNCw2ICs2MTQsNyBAQCAgZW5kbWVudQo+ICAJc291cmNlICJwYWNrYWdlL3RhcmdldGNsaS1m
-Yi9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvdGktZ2Z4L0NvbmZpZy5pbiIKPiAgCXNv
-dXJjZSAicGFja2FnZS90aS1yb2d1ZS1rbS9Db25maWcuaW4iCj4gKwlzb3VyY2UgInBhY2thZ2Uv
-dGktcm9ndWUtdW0vQ29uZmlnLmluIgoKV2UgcHJlZmVyIHRoYXQgdGhlIHBhY2thZ2UgbmFtZSBp
-biBCdWlsZHJvb3QgbWF0Y2hlcyB0aGUgdXBzdHJlYW0KcGFja2FnZSBuYW1lLCBpLmUuIHRpLWlt
-Zy1yb2d1ZS11bWxpYnMgaGVyZS4KCkkgbWlzc2VkIHRoYXQgaW4gdGhlIGRyaXZlciBwYWNrYWdl
-LCB3aGljaCBzaG91bGQgYmUgbmFtZWQgYXMgdXBzdHJlYW0sCmkuZS4gdGktaW1nLXJvZ3VlLWRy
-aXZlciwgcmF0aGVyIHRoYW4gdGktcm9ndWUta20uCgpbLS1TTklQLS1dCj4gICA+ID4gK2NvbmZp
-ZyBCUjJfUEFDS0FHRV9USV9ST0dVRV9VTQo+ICAgPiA+ICvCoCDCoCDCoCDCoGJvb2wgInRpLXJv
-Z3VlLXVtIgo+ICAgPiA+ICvCoCDCoCDCoCDCoGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNf
-VEhSRUFEUyAjIGxpYmRybQo+ICAgPiA+ICvCoCDCoCDCoCDCoGRlcGVuZHMgb24gQlIyX1BBQ0tB
-R0VfSEFTX1VERVYKPiAgID4gPiArwqAgwqAgwqAgwqAjIHByZS1idWlsdCBiaW5hcmllcwo+ICAg
-PiA+ICvCoCDCoCDCoCDCoGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDCj4gICA+
-ID4gK8KgIMKgIMKgIMKgZGVwZW5kcyBvbiBCUjJfYWFyY2g2NAoKSWYgd2UgZ28gYXMgSSBzdWdn
-ZXN0ZWQgaW4gdGhlIHJldmlldyBvZiBhIHByZXZpb3VzIHBhdGNoLCB0aGVuIHdlIGNvdWxkCmhp
-ZGUgYXdheSB0aGF0IHBhY2thZ2UgZm9yIFNvQyB0aGF0IGhhdmUgbm8gdXNlcmxhbmQgbGlzLiBJ
-bmRlZWQsIEkgY2FuCnNlZSBpbiB0aGUgc291cmNlIHRyZWUgdGhhdCB3ZSBvbmx5IGhhdmU6Cgog
-ICAgJCB0cmVlIC1kIC1MIDEgdGFyZ2V0ZnMvCiAgICB0YXJnZXRmcy8KICAgIOKUnOKUgOKUgCBh
-bTYyX2xpbnV4CiAgICDilJzilIDilIAgajcyMWVfbGludXgKICAgIOKUnOKUgOKUgCBqNzIxczJf
-bGludXgKICAgIOKUlOKUgOKUgCBqNzg0czRfbGludXgKClNvIHRoZSBhbTYyYXgsIGFtNjR4LCBh
-bmQgYW02NXgsIHRoYXQgYXJlIHJlZmVyZW5jZWQgaW4gdGhlIG90aGVyCnBhdGNoZXMsIGRvIG5v
-dCBoYXZlIHVzZXIgbGlicyBoZXJlLCBzbyB0aGUgcGFja2FnZSBzaG91bGQgbm90IGJlCnNlbGVj
-dGVkIGZvciB0aG9zZSBTb0NzLgoKaS5lLjoKCiAgICBjb25maWcgQlIyX1BBQ0tBR0VfVElfSU1H
-X1JPR1VFX1VNTElCU19TT0NfU1VQUE9SVFMKICAgICAgICBib29sCiAgICAgICAgZGVmYXVsdCB5
-IGlmIEJSMl9UQVJHRVRfVElfSzNfSU1BR0VfR0VOX1NPQ19BTTYyWAogICAgICAgIGRlZmF1bHQg
-eSBpZiBCUjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9TT0NfSjcyMUUKICAgICAgICBkZWZhdWx0
-IHkgaWYgQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fU09DX0o3MjFTMgogICAgICAgIGRlZmF1
-bHQgeSBpZiBCUjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9TT0NfSjc4NFM0CgogICAgY29uZmln
-IEJSMl9QQUNLQUdFX1RJX0lNR19ST0dVRV9VTUxJQlMKICAgICAgICBib29sICJ0aS1pbWctcm9n
-dWUtdW1saWJzIgogICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfVElfSU1HX1JPR1VFX1VN
-TElCU19TT0NfU1VQUE9SVFMKCk9mIGNvdXJzZSwgdGhpcyByYWlzZXMgdGhlIGlzc3VlIHRoYXQg
-QlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fU09DXyoKYXJlIG5vIGxvbmdlciBzcGVjaWZpYyB0
-byB0aS1rMy1pbWFnZS1nZW4sIGJ1dCBhcmUgc2hhcmVkIHdpdGggYSBmZXcKcGFja2FnZXMuCgpJ
-biB3aGljaCBjYXNlIGl0IG1heSBtYWtlIHNlbnNlIHRvIGhhdmUgdGhvc2UgbW92ZWQgdG8gYSBj
-b21tb24KQ29uZmlnLmluLCBsaWtlIGlzIGRvbmUgZm9yIHRoZSBmcmVlc2NhbGUtaW14IHN0dWZm
-LgoKSS5lLiBhZGQgYSBuZXcgQlIyX1BBQ0tBR0VfVElfQU02WFggb3B0aW9uLCBhbmQgdGhlIFNv
-QyBzZWxlY3Rpb24gY2FuIGJlCm1vdmVkIHRoZXJlLCB3aXRoIGFsbCBjb21tb24gb3B0aW9ucywg
-YW5kIHBhY2thZ2VzICh0aS1rMy1pbWFnZS1nZW4sCnRpLWNvcmUtc2VjZGV2LWszLCBldGMuLi4p
-IGNhbiBhbGwgZGVwZW5kIG9uIHRoYXQgb3B0aW9uOyBwYWNrYWdlcyBpbgpwYWNrYWdlLyBjYW4g
-YmUgbWFkZSB0byBhcHBlYXIgaW4gYSAiVEkgQU02eHgiIHN1Yi1tZW51LCBhbmQgcGFja2FnZXMg
-aW4KYm9vdC8gY2FuIGp1c3QgZGVwZW5kIG9uIGl0IHRvby4KCj4gICA+ID4gK8KgIMKgIMKgIMKg
-c2VsZWN0IEJSMl9QQUNLQUdFX0xJQkRSTQo+ICAgPiA+ICvCoCDCoCDCoCDCoHNlbGVjdCBCUjJf
-UEFDS0FHRV9IQVNfTElCRUdMCj4gICA+ID4gK8KgIMKgIMKgIMKgc2VsZWN0IEJSMl9QQUNLQUdF
-X0hBU19MSUJHQk0KPiAgID4gPiArwqAgwqAgwqAgwqBzZWxlY3QgQlIyX1BBQ0tBR0VfTElCR0JN
-X0hBU19GRUFUVVJFX0RNQV9CVUYKPiAgID4gPiArwqAgwqAgwqAgwqBzZWxlY3QgQlIyX1BBQ0tB
-R0VfSEFTX0xJQkdMRVMKPiAgID4gPiArwqAgwqAgwqAgwqBzZWxlY3QgQlIyX1BBQ0tBR0VfSEFT
-X1BPV0VSVlIKPiAgID4gPiArwqAgwqAgwqAgwqBzZWxlY3QgQlIyX1BBQ0tBR0VfTElCRkZJCj4g
-QlIyX1BBQ0tBR0VfTElCRkZJIGlzIHVzZWxlc3MgKGFscmVhZHkgc2VsZWN0ZWQgYnkgdGhlIHBh
-Y2thZ2Ugd2F5bGFuZCkuCj4gRnJhbsOnb2lzLgoKSXQgd291bGQgaGF2ZSBiZWVuIE9LIHRvIHNl
-bGVjdCBpdCBoZXJlIGlmIGEgbGlicmFyeSBmcm9tCnRpLWltZy1yb2d1ZS11bWxpYnMgaGFkIGEg
-ZGlyZWN0IGRlcGVuZGVuY3kgdG8gbGliZmZpLCB3aGljaCBpcyBub3QgdGhlCmNhc2UsIHNvIHNl
-bGVjdGluZyBoZXJlIGlzIGluZGVlZCBub3QgYXBwcm9wcmlhdGUuCgpSZWdhcmRzLApZYW5uIEUu
-IE1PUklOLgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
-LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwg
-UmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5
-OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdO
-ICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0t
-LS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0
-cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAg
-diAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0t
-LV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hello,
+
+I am having issues using the custom uboot version feature: When setting a 
+custom uboot version value and a particular uboot defconfig, buildroot seems to 
+NOT apply the uboot defconfig properly, i.e. there is no .config in the uboot 
+build folder. This is the error I get (further below my settings):
+
+
+>>> uboot 2023.07-rc4 Patching
+for p in  ; do if test -d $p ; then PATH=/home/zinnecker/buildroot-test/
+buildroot/output/host/bin:$PATH support/scripts/apply-patches.sh  /home/
+zinnecker/buildroot-test/buildroot/output/build/uboot-2023.07-rc4 $p \*.patch 
+|| exit 1 ; els
+e PATH=/home/zinnecker/buildroot-test/buildroot/output/host/bin:$PATH support/
+scripts/apply-patches.sh  /home/zinnecker/buildroot-test/buildroot/output/
+build/uboot-2023.07-rc4 `dirname $p` `basename $p` || exit 1; fi done
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  YACC    scripts/kconfig/zconf.tab.c
+  LEX     scripts/kconfig/zconf.lex.c
+  HOSTCC  scripts/kconfig/zconf.tab.o
+  HOSTLD  scripts/kconfig/conf
+scripts/kconfig/conf  --syncconfig Kconfig
+***
+*** Configuration file ".config" not found!
+***
+*** Please run some configurator (e.g. "make oldconfig" or
+*** "make menuconfig" or "make xconfig").
+***
+make[5]: *** [scripts/kconfig/Makefile:75: syncconfig] Error 1
+make[4]: *** [Makefile:576: syncconfig] Error 2
+make[3]: *** No rule to make target 'include/config/auto.conf', needed by 
+'include/config/uboot.release'.  Stop.
+make[2]: *** [Makefile:558: __build_one_by_one] Error 2
+make[1]: *** [boot/uboot/uboot.mk:553: /home/zinnecker/buildroot-test/
+buildroot/output/build/uboot-2023.07-rc4/.stamp_dotconfig] Error 2
+make: *** [Makefile:82: _all] Error 2
+
+
+What I did: I want to use a fairly new uboot ("2023.07-rc4") because it 
+features a defconfig for a particular board ("rock5b-rk3588_defconfig"). I 
+therefore use the following settings in my buildroot board defconfig / .config:
+
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07-rc4"
+BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
+
+The particular version of uboot features the particular defconfig. Also, with 
+theses settings the uboot version 2023.07-rc4 is downloaded and the rock5b-
+rk3588_defconfig is present in buildroot/output/build/uboot-2023.07-rc4/
+configs/. However, as said previously, it seems like the rock5b-rk3588_defconfig 
+is not applied. I don't know whether I am doing something wrong here, or 
+whether it is a bug. I appreciate all help.
+
+Best regards,
+Kilian
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
