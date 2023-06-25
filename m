@@ -4,93 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1915EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 20:04:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAA78EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 20:37:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B23881971;
-	Sun, 25 Jun 2023 20:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B23881971
+	by smtp1.osuosl.org (Postfix) with ESMTP id 162A481F24;
+	Sun, 25 Jun 2023 20:37:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 162A481F24
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2N6M-zMuxyou; Sun, 25 Jun 2023 20:04:12 +0000 (UTC)
+	with ESMTP id UidurobHHUtX; Sun, 25 Jun 2023 20:37:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFF09818A1;
-	Sun, 25 Jun 2023 20:04:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFF09818A1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 79AB41BF3A4
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 20:04:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FEB581EE1;
+	Sun, 25 Jun 2023 20:37:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FEB581EE1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0DE6D1BF3F0
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 20:37:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 531D0818A1
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 20:04:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 531D0818A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA22F60C24
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 20:37:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA22F60C24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mak9FqqZWE6p for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 20:04:09 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB808817FD
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB808817FD
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 20:04:08 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-51d7e8dd118so2461652a12.1
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 13:04:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687723447; x=1690315447;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=mEYNfZpAPt4ilicN2P4HNTyZIMc+UGpMbD4k8Dtrqv0=;
- b=XDV75c2YUHoZp0ZCerynySDQw5xrXRr6wQFm3Ufhy37eomcTwks8SEU7+Q63dxl7zy
- HtURVg9WUY5Fp7elHZyFRvkPfDxLAsMQhEOdxQUXrJNIBIUOwyZR8RK910wiR78pDztz
- igvT3hrXKBjWVWjzPeo/FQiYvdJNOT98xdtzeOgJPlrk/OlPgAAYb6g3aot86dkzkV9/
- i+9qCVgSt7/akiTptILDArQLrgM3EFz3B7WrdVBxIhp97wnUJVQuOdG7ssU/m//nlHaz
- FnySByFEH94+BYUiFcaSUrRKVC+hA3Iu7sDIOZeWX/5XB7B+Ux3+MMnXIqD2fdKugT44
- RCMg==
-X-Gm-Message-State: AC+VfDx+Eg6DM8YJy0rE6s9tGBgDyit0rOQ6ZQ9IqUESQDFe8ruhVXcS
- AY9lrEgICvdkeM7lcpTf9R0WuCeJFv2y3t8jPhQ=
-X-Google-Smtp-Source: ACHHUZ6QDE6YWMg/ysTHJImdl3S4NtXaDMPn9SV0LKpDUF17Wdd9tAg4lUGctZA1gf2EwzMTTm9fXg==
-X-Received: by 2002:a17:907:7ea1:b0:98e:886:f27f with SMTP id
- qb33-20020a1709077ea100b0098e0886f27fmr4101054ejc.20.1687723446874; 
- Sun, 25 Jun 2023 13:04:06 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- pj4-20020a170906d78400b009885a03467csm2400087ejb.31.2023.06.25.13.04.05
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 25 Jun 2023 13:04:06 -0700 (PDT)
-Message-ID: <a1ac8c67-837c-e5f9-8d2b-6ba37c822214@mind.be>
-Date: Sun, 25 Jun 2023 22:04:04 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hSkZRtJhxvam for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 20:37:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41FEA60C06
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 41FEA60C06
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 20:37:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F21FA1C0004;
+ Sun, 25 Jun 2023 20:37:37 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qDWUL-007E2t-5c; Sun, 25 Jun 2023 22:37:37 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun, 25 Jun 2023 22:37:35 +0200
+Message-Id: <20230625203736.1722233-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-GB
-To: Charles Hardin <ckhardin@gmail.com>, buildroot@buildroot.org
-References: <20230620173813.4590-1-ckhardin@gmail.com>
- <20230620173813.4590-2-ckhardin@gmail.com>
-In-Reply-To: <20230620173813.4590-2-ckhardin@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1687723447; x=1690315447;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=mEYNfZpAPt4ilicN2P4HNTyZIMc+UGpMbD4k8Dtrqv0=;
- b=GV58Y/wNTz65RN/zXRZ7sZ7nNq2x03C7Cuy7zu5lk9In555dxoKNMWyaSMTNmI4wBI
- GtbC+IpfgPlGPb9oF6O1C4EOq++lh8HTvrw2o5lLAZxhl9L1ZV6e8EAUCToEksviUAsC
- uPiJKOM8Tfrjx6E4sylRDowFC7CE6pye6QQi6weOVrE65l7GvD9kclbkWBtl3bAdCNY1
- uv2dcvk39RQbaQ5i0RMleXfcrlAzDS6rney8vxR5hThXNaJxwM3Ni9Y2OqUsC0+SXFb3
- x+qwxj5G68pPLgKol14lZQDfjoa9gug8JVVN3oaF4j66Up2OhTL5ktqcjNIII7sxfsSE
- n56A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GV58Y/wN
-Subject: Re: [Buildroot] [PATCH 2/2] package/alsa-plugins: require
- libsamplerate for the plugins
+Subject: [Buildroot] [PATCH] package/tiff: security bump to version 4.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,94 +59,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fixes the following security issues:
 
+- CVE-2023-1916: A flaw was found in tiffcrop, a program distributed by the
+  libtiff package.  A specially crafted tiff file can lead to an
+  out-of-bounds read in the extractImageSection function in
+  tools/tiffcrop.c, resulting in a denial of service and limited information
+  disclosure.  This issue affects libtiff versions 4.x.
 
-On 20/06/2023 19:38, Charles Hardin wrote:
-> During the execution of the alsa plugins on a test application,
-> the library would not function without samplerate being enabled
-> and present. So, this is a patch to just include the samplerate
-> since the latest versions seem to require it for the plugins to
-> work.
+- CVE-2023-25434: libtiff 4.5.0 is vulnerable to Buffer Overflow via
+  extractContigSamplesBytes() at /libtiff/tools/tiffcrop.c:3215.
 
-  It doesn't sound unreasonable that some plugins require samplerate, but it 
-seems unlikely that none of them work without libsamplerate...
+- CVE-2023-26965: loadImage() in tools/tiffcrop.c in LibTIFF through 4.5.0
+  has a heap-based use after free via a crafted TIFF image
 
+Drop the now upstream
+0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch.
 
-> There might be another fix instead of this patch, but this got
-> the sound to play for the bluez alsa stack as expected.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...rect-simple-copy-paste-error-Fix-488.patch | 28 -------------------
+ package/tiff/tiff.hash                        |  2 +-
+ package/tiff/tiff.mk                          |  5 +---
+ 3 files changed, 2 insertions(+), 33 deletions(-)
+ delete mode 100644 package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
 
-  If it's just for bluez, then it sounds more logical to do it in bluez-alsa?
+diff --git a/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch b/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
+deleted file mode 100644
+index 73c0d10ffc..0000000000
+--- a/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 97d65859bc29ee334012e9c73022d8a8e55ed586 Mon Sep 17 00:00:00 2001
+-From: Su Laus <sulau@freenet.de>
+-Date: Sat, 21 Jan 2023 15:58:10 +0000
+-Subject: [PATCH] tiffcrop: Correct simple copy paste error. Fix #488.
+-
+-[Retrieved from:
+-https://gitlab.com/libtiff/libtiff/-/commit/97d65859bc29ee334012e9c73022d8a8e55ed586]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- tools/tiffcrop.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/tools/tiffcrop.c b/tools/tiffcrop.c
+-index 14fa18da..7db69883 100644
+---- a/tools/tiffcrop.c
+-+++ b/tools/tiffcrop.c
+-@@ -8591,7 +8591,7 @@ static int processCropSelections(struct image_data *image,
+-                     cropsize + NUM_BUFF_OVERSIZE_BYTES);
+-             else
+-             {
+--                prev_cropsize = seg_buffs[0].size;
+-+                prev_cropsize = seg_buffs[i].size;
+-                 if (prev_cropsize < cropsize)
+-                 {
+-                     next_buff = _TIFFrealloc(
+--- 
+-GitLab
+-
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+index 73732892a5..0fa503a02a 100644
+--- a/package/tiff/tiff.hash
++++ b/package/tiff/tiff.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c7a1d9296649233979fa3eacffef3fa024d73d05d589cb622727b5b08c423464  tiff-4.5.0.tar.gz
++sha256  d7f38b6788e4a8f5da7940c5ac9424f494d8a79eba53d555f4a507167dca5e2b  tiff-4.5.1.tar.gz
+ sha256  0780558a8bfba0af1160ec1ff11ade4f41c0d7deafd6ecfc796b492a788e380d  LICENSE.md
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index f9754a4b49..0006f461a0 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIFF_VERSION = 4.5.0
++TIFF_VERSION = 4.5.1
+ TIFF_SITE = http://download.osgeo.org/libtiff
+ TIFF_LICENSE = tiff license
+ TIFF_LICENSE_FILES = LICENSE.md
+@@ -12,9 +12,6 @@ TIFF_CPE_ID_VENDOR = libtiff
+ TIFF_CPE_ID_PRODUCT = libtiff
+ TIFF_INSTALL_STAGING = YES
+ 
+-# 0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
+-TIFF_IGNORE_CVES += CVE-2022-48281
+-
+ # webp has a (optional) dependency on tiff, so we can't have webp
+ # support in tiff, or that would create a circular dependency.
+ TIFF_CONF_OPTS = \
+-- 
+2.30.2
 
-  Regards,
-  Arnout
-
-> 
-> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
-> ---
->   package/alsa-plugins/Config.in       |  1 +
->   package/alsa-plugins/alsa-plugins.mk | 22 ++++++----------------
->   2 files changed, 7 insertions(+), 16 deletions(-)
-> 
-> diff --git a/package/alsa-plugins/Config.in b/package/alsa-plugins/Config.in
-> index ee0fb4c1d5..e85ff218dd 100644
-> --- a/package/alsa-plugins/Config.in
-> +++ b/package/alsa-plugins/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_ALSA_PLUGINS
->   	bool "alsa-plugins"
->   	depends on BR2_PACKAGE_ALSA_LIB
->   	select BR2_PACKAGE_ALSA_LIB_HWDEP
-> +	select BR2_PACKAGE_LIBSAMPLERATE
->   	help
->   	  Advanced Linux Sound Architecture Plugins
->   
-> diff --git a/package/alsa-plugins/alsa-plugins.mk b/package/alsa-plugins/alsa-plugins.mk
-> index d23a81c5ee..8046720297 100644
-> --- a/package/alsa-plugins/alsa-plugins.mk
-> +++ b/package/alsa-plugins/alsa-plugins.mk
-> @@ -7,30 +7,20 @@
->   ALSA_PLUGINS_VERSION = 1.2.7.1
->   ALSA_PLUGINS_SOURCE = alsa-plugins-$(ALSA_PLUGINS_VERSION).tar.bz2
->   ALSA_PLUGINS_SITE = https://www.alsa-project.org/files/pub/plugins
-> -ALSA_PLUGINS_LICENSE = LGPL-2.1+
-> -ALSA_PLUGINS_LICENSE_FILES = COPYING
-> -ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib
-> +ALSA_PLUGINS_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (samplerate)
-> +ALSA_PLUGINS_LICENSE_FILES = COPYING COPYING.GPL
-> +ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib libsamplerate
->   
->   ALSA_PLUGINS_CONF_OPTS = \
-> +	--enable-samplerate \
->   	--disable-jack \
->   	--disable-usbstream \
->   	--disable-pulseaudio \
-> -	--disable-libav \
-> -	--disable-maemo-plugin \
-> -	--disable-maemo-resource-manager \
-> -	--with-speex=no
-> +	--disable-avcodec \
-> +	--with-speex=builtin
->   
->   ifeq ($(BR2_PACKAGE_ALSA_UTILS),y)
->   ALSA_PLUGINS_DEPENDENCIES += alsa-utils
->   endif
->   
-> -ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-> -ALSA_PLUGINS_CONF_OPTS += --enable-samplerate
-> -ALSA_PLUGINS_DEPENDENCIES += libsamplerate
-> -ALSA_PLUGINS_LICENSE += , GPL-2.0+ (samplerate plugin)
-> -ALSA_PLUGINS_LICENSE_FILES += COPYING.GPL
-> -else
-> -ALSA_PLUGINS_CONF_OPTS += --disable-samplerate
-> -endif
-> -
->   $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
