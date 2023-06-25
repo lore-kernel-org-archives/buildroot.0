@@ -1,70 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13FB2EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 16:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE229EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 17:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3D78404A0;
-	Sun, 25 Jun 2023 16:53:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3D78404A0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58F1D81DE3;
+	Sun, 25 Jun 2023 17:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58F1D81DE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ABEopEwqxmHk; Sun, 25 Jun 2023 16:53:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7Krm6m6FWGe6; Sun, 25 Jun 2023 17:51:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F07114016D;
-	Sun, 25 Jun 2023 16:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F07114016D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EE4D31BF3A8
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 16:53:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 858528196E;
+	Sun, 25 Jun 2023 17:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 858528196E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 786BC1BF3BF
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 17:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D50AD607C0
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 16:53:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D50AD607C0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5EE8C8196E
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 17:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EE8C8196E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tJUlyviIIV-h for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 16:53:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0Do0t5JF3FJA for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 17:51:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6495860758
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6495860758
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 16:53:45 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D3580A4C0333
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 18:53:40 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58216)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qDSzc-0002L6-1U
- for buildroot@buildroot.org; Sun, 25 Jun 2023 18:53:40 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E21A4818AC
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E21A4818AC
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 17:51:54 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::225])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id A6C00CF68C
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 17:47:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9FBB31C0004;
+ Sun, 25 Jun 2023 17:47:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qDTpN-0075A3-Bm; Sun, 25 Jun 2023 19:47:09 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 18:53:40 +0200
-Message-Id: <20230625165340.306760-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sun, 25 Jun 2023 19:47:06 +0200
+Message-Id: <20230625174707.1688088-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1687712020;
- bh=bk8wt9Ksi1a3UEaYEFDHcEXgXAtISSgMs+gsNBY0Ro4=;
- h=From:To:Subject:Date:From;
- b=S0JQd9BOrzBhlvAKmO8cTyhSOnkfLislWf3zgACwTRj4wrv99t9RxkUOmuCNF6DHv
- MMuzfxRqikleHDBUOQCVQJo8545YCSZWVnF/6R5YLnEPrxZkexpxMLKdwbuSiWlx0q
- 2gOVK1eWV3bplhKhtYK4I4qPe4KbMsxyDHSnIX4bagRCYC4txH/gPxvs0k9+QUYX8x
- CO7AbrVyGuq3cb5bMKcRxy/DkM1TW7CHkG8igiLGFEiuZF2eHMqhSLx/ejlh+ezS1i
- SjTCwpuurH273nejORsNS7RuVqmtNW7o7HRrhdnlILR63OvUivEXcka9zOJRdvSU/S
- 29hCTCNjEadng==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=S0JQd9BO
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xorgproto: bump version to
- 2023.2
+Subject: [Buildroot] [PATCH] package/dbus: security bump to version 1.2.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,44 +66,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-June/003408.html
+Fixes the following security issues:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+- CVE-2023-34969: Fix an assertion failure in dbus-daemon when a privileged
+  Monitoring connection (dbus-monitor, busctl monitor, gdbus monitor or
+  similar) is active, and a message from the bus driver cannot be delivered
+  to a client connection due to <deny> rules or outgoing message quota.
+  This is a denial of service if triggered maliciously by a local attacker.
+
+- Fix an incorrect assertion that could be used to crash dbus-daemon or
+  other users of DBusServer prior to authentication, if libdbus was compiled
+  with assertions enabled.
+
+For details, see the NEWS file:
+https://gitlab.freedesktop.org/dbus/dbus/blob/dbus-1.12/NEWS
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xorgproto/xorgproto.hash | 6 +++---
- package/x11r7/xorgproto/xorgproto.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
-index 10655f9dd1..37ad9c7c04 100644
---- a/package/x11r7/xorgproto/xorgproto.hash
-+++ b/package/x11r7/xorgproto/xorgproto.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-June/003404.html
--sha256  6545e41aceba43c13497ac8084dad5db6deef580a5ea7d0bd7872cfd1be72a13  xorgproto-2023.1.tar.xz
--sha512  342128ca2e9a6806a7ff33f426434bee29626a13a592b9544654a010cb7be208b0862e3cd063773a0003ca0ec7d48361cfcc384fe207efe9ecb6ec3f2b8e7d56  xorgproto-2023.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-June/003408.html
-+sha256  b61fbc7db82b14ce2dc705ab590efc32b9ad800037113d1973811781d5118c2c  xorgproto-2023.2.tar.xz
-+sha512  af0a8c8094fc6a490a886a8c048175762b6334798f2e48b6f6e19a7bb39ddbef05fa1237c4e9d9f1d870d24f5ca7a7c463044c41ceebd108f8ab0816677a582d  xorgproto-2023.2.tar.xz
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 17c70004ba..0e48d4dafd 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.24.tar.gz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.28.tar.gz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256  bc42d196c1756ac520d61bf3ccd6f42013617def45dd1e591a6091abf51dca38  dbus-1.12.24.tar.gz
++sha256  9da1e3f2b73f75eec0a9e4509d64be43909d1f2853fe809528a0a53984d76420  dbus-1.12.28.tar.gz
  
- # Locally computed
- sha256  aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
-diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
-index 899f505f1c..f6e5a5a434 100644
---- a/package/x11r7/xorgproto/xorgproto.mk
-+++ b/package/x11r7/xorgproto/xorgproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Locally calculated
+ sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index b3a79c431d..99d2c4301c 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -6,7 +6,7 @@
  
--XORGPROTO_VERSION = 2023.1
-+XORGPROTO_VERSION = 2023.2
- XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.xz
- XORGPROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
- XORGPROTO_LICENSE = MIT
+ # When updating dbus, check if there are changes in session.conf and
+ # system.conf, and update the versions in the dbus-broker package accordingly.
+-DBUS_VERSION = 1.12.24
++DBUS_VERSION = 1.12.28
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 -- 
-2.39.2
+2.30.2
 
 _______________________________________________
 buildroot mailing list
