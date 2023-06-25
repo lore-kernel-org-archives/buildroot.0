@@ -4,91 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EEF6EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 19:14:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F5F7EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 19:14:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E9766112A;
-	Sun, 25 Jun 2023 19:14:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E9766112A
+	by smtp3.osuosl.org (Postfix) with ESMTP id D47D660F25;
+	Sun, 25 Jun 2023 19:14:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D47D660F25
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k2Rt9Mh7bDgL; Sun, 25 Jun 2023 19:14:08 +0000 (UTC)
+	with ESMTP id Ths8PcC5_4oZ; Sun, 25 Jun 2023 19:14:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7FE9460F20;
-	Sun, 25 Jun 2023 19:14:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FE9460F20
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7471C1BF3A4
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:14:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DD4260B16;
+	Sun, 25 Jun 2023 19:14:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DD4260B16
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E27671BF3A4
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:14:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CF3640912
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:14:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CF3640912
+ by smtp2.osuosl.org (Postfix) with ESMTP id C90D3400DD
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:14:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C90D3400DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id exskPQYSVpKq for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 19:14:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08833408F1
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 08833408F1
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 19:14:02 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id
- a640c23a62f3a-98d34f1e54fso235828666b.2
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 12:14:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687720441; x=1690312441;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=zZVrM1cK0khlCcquWqgyf5SJrlDX37rGPZZwvOZA5Qk=;
- b=FtIZqF//NL5d9EdkMamdX1Cbfjhjt9Fe4QylfdVuUpB7aqYWpQ2I5RvcwUrTgt1bsj
- svd6T2NjYgUsQol8RWGw4GLF5M1f1RMHB+El/3WpAaOzkUXtkZVUZlx3F5yx8ksDkyjb
- ObJsy23Y1ahRXB3VQsPAAaVpEXoiITvoW/c50oLiFKgGUI7nYV+MVStdw4ZYyqFqPD+W
- i17Hg0KOsmUQiJ5irm8LrcYjziaJCEFMrsYGA+HxEeVjsb3G4n4cFJEmuJWvx1+gvEqm
- W08SzyP3iesQt4z1sRrnBPm5/SNfEptKwfDJ+hrCpljs4WaF9QWQZQs+ndY/BIuieKgj
- ZjiQ==
-X-Gm-Message-State: AC+VfDz9ziICFhByam2gsmcrxBnf/4+ERalZejdzRNlxrZ2qWK/Njyg8
- 6XaEYM05bG9A6r7qjTZem1kLJw==
-X-Google-Smtp-Source: ACHHUZ7zk/YEHgayIbVlGj1Ci4e57xLuQYp4kkWljHFUjAGdkFHheVE+lX875cki+JyczLEy7Cu89g==
-X-Received: by 2002:a17:907:26cc:b0:987:498a:87f6 with SMTP id
- bp12-20020a17090726cc00b00987498a87f6mr17180706ejc.34.1687720441171; 
- Sun, 25 Jun 2023 12:14:01 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- a18-20020a1709063a5200b00988f168811bsm2352302ejf.135.2023.06.25.12.14.00
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 25 Jun 2023 12:14:00 -0700 (PDT)
-Message-ID: <55b8b3af-ec9f-a87e-e480-b816e8702212@mind.be>
-Date: Sun, 25 Jun 2023 21:13:58 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L6QO91V7hunF for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 19:14:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E718400C8
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4E718400C8
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 19:14:32 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6BDE960003;
+ Sun, 25 Jun 2023 19:14:28 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qDVBr-00779G-BW; Sun, 25 Jun 2023 21:14:27 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20230622160212.2063472-1-dannenberg@ti.com>
+ <20230622160212.2063472-7-dannenberg@ti.com>
+ <20230625135435.GC589277@scaer>
+ <bd293d20-a3c8-d76d-e711-75daaa5ec136@mind.be>
+ <875y7bpnwk.fsf@48ers.dk>
+ <1383cf3a-fa81-75b7-1e3f-45a82ebb4c7d@mind.be>
+Date: Sun, 25 Jun 2023 21:14:27 +0200
+In-Reply-To: <1383cf3a-fa81-75b7-1e3f-45a82ebb4c7d@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 25 Jun 2023 20:59:01 +0200")
+Message-ID: <87v8fbnylo.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-GB
-To: Marcin Niestroj <m.niestroj@grinn-global.com>, buildroot@buildroot.org
-References: <20230622050531.2904810-1-m.niestroj@grinn-global.com>
-In-Reply-To: <20230622050531.2904810-1-m.niestroj@grinn-global.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1687720441; x=1690312441;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=zZVrM1cK0khlCcquWqgyf5SJrlDX37rGPZZwvOZA5Qk=;
- b=EAWsOYR51M1gb4ex31N6UDE1aQIJoNnjoWNRUcd/VuUxwfCOA2qDN1eAx0IvUufbuW
- ldFuk/ZlnDhpJWdoCkFRr0umM09chfimCaecujcVaRhRAcOaV/gDHltJdI1/m0p59Cfz
- lSXVaNwkgpGdyQU0YnsCJsZOvRdIr6E7Dg6nPLlXnBVyuDal4Sgbsa573sAAKwCtVMJD
- KGFdO5kv/SNuuzrdwm0yRnGZQ1XdwZ4DhGMiDLs0WWDvP3tAoYurNHTtV9C7CwpTsK4c
- HMccEnKZbhMiHwN3Vm7Nq0Jhle4ewR2EwVqcs5Rdlk0oJz9zd6f+rUejZc8yS8uXCTOs
- /eWA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=EAWsOYR5
-Subject: Re: [Buildroot] [PATCH] package/python-xmodem: bump to version 0.4.7
+Subject: Re: [Buildroot] [PATCH v9 06/11] board/ti/am62x_sk|am64x_sk: switch
+ to TI SDK v8.6 sources
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,65 +74,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Andreas Dannenberg <dannenberg@ti.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+
+Hi,
+
+ >> Correct, but given the poor quality of most vendor kernels, using a
+ >> board with mainline is typically a lot nicer (if the IP blocks you care
+ >> about are supported naturally).
+
+ >  I'm not sure that you can claim most vendor kernels are poor
+ >  quality. At least NXP and Microchip have decent vendor
+ > kernels. Conversely, when vendor kernels are horrible, mainline is
+ > often not super usable either (because, of course, those vendors don't
+ > invest in upstreaming either).
+
+Sure, not all vendor kernels are equal, but vendor drivers are often
+written by people not very familiar with the subsystem, so things get
+handled in "odd ways", and as they have not been submitted upstream they
+don't get any review feedback to clean it up. The vendor kernels of high
+quality is typically the ones where the vendor developers interact with
+mainline (so their drivers get reviewed by the subsystem maintainers).
+E.G. for the Microchip and NXP cases, the basics are anyway in mainline,
+so it is normal that the identical parts in the vendor kernel also looks
+sensible.
+
+I am not aware of any situations where the mainline kernel is of lower
+quality than the vendor kernel. It will often have less features, but the
+support that is there is often cleaner.
 
 
-On 22/06/2023 07:05, Marcin Niestroj wrote:
-> Right now there is a LICENSE file included in the package, so use it for
-> license validation.
-> 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+ >> Same about the support, E.G. we had issues with various vendor
+ >> kernels/bootloaders breaking with newer toolchain versions.
+ >> 
+ >> >  That said, I think for each board we should look at what the vendor
+ >> >  kernel really brings. If everything, including GPU, is working with
+ >> > the upstream kernel, it doesn't make sense to use the vendor kernel. I
+ >> > don't know if that's the case in this specific situation.
+ >> >  Yann, Peter, Romain, Thomas, what do you think?
 
-  Applied to master, thanks.
+ >> Agreed. I would in general say go for mainline, unless there is no
+ >> decent support in mainline. I would not necessarily think that GPU
+ >> support is a requirement, but at least the things used by the defconfig
+ >> (E.G. storage, serial, network).
 
-  Regards,
-  Arnout
+ >  That's exactly the opposite of what I was saying, so not agreed I guess :-)
 
-> ---
->   package/python-xmodem/python-xmodem.hash | 8 ++++----
->   package/python-xmodem/python-xmodem.mk   | 6 +++---
->   2 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/python-xmodem/python-xmodem.hash b/package/python-xmodem/python-xmodem.hash
-> index 33ddfeb595..65a9b6afda 100644
-> --- a/package/python-xmodem/python-xmodem.hash
-> +++ b/package/python-xmodem/python-xmodem.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/xmodem/json
-> -md5  f876cb35caf276b61990377710a3b4c4  xmodem-0.4.6.tar.gz
-> -sha256  089737298f5738eabc43f2519efdc80b402693768f16383f7013b9e6f8f279d7  xmodem-0.4.6.tar.gz
-> -# locally calculated
-> -sha256  5ddb38acab95bb77e1e92e22830e358082d879d2dd59ba05577c47791edaa78e  PKG-INFO
-> +md5  0a21c269cb4d3995d13a2615c24fed0a  xmodem-0.4.7.tar.gz
-> +sha256  2f1068aa8676f0d1d112498b5786c4f8ea4f89d8f25d07d3a0f293cd21db1c35  xmodem-0.4.7.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  e317b0ce19724327a41e09def456579b80a7b82f9bceb2ba6933eba406f78d88  LICENSE
-> diff --git a/package/python-xmodem/python-xmodem.mk b/package/python-xmodem/python-xmodem.mk
-> index 739c6154d7..d7040f7245 100644
-> --- a/package/python-xmodem/python-xmodem.mk
-> +++ b/package/python-xmodem/python-xmodem.mk
-> @@ -4,11 +4,11 @@
->   #
->   ################################################################################
->   
-> -PYTHON_XMODEM_VERSION = 0.4.6
-> +PYTHON_XMODEM_VERSION = 0.4.7
->   PYTHON_XMODEM_SOURCE = xmodem-$(PYTHON_XMODEM_VERSION).tar.gz
-> -PYTHON_XMODEM_SITE = https://files.pythonhosted.org/packages/29/5d/a20d7957f207fc4c4c143881ca7b9617ab7700c153012372ef0a934c7710
-> +PYTHON_XMODEM_SITE = https://files.pythonhosted.org/packages/3d/17/fd6668a09afdc46c22990172b6f65e07dfb5bcf38960d063a7a887ca926d
->   PYTHON_XMODEM_SETUP_TYPE = setuptools
->   PYTHON_XMODEM_LICENSE = MIT
-> -PYTHON_XMODEM_LICENSE_FILES = PKG-INFO
-> +PYTHON_XMODEM_LICENSE_FILES = LICENSE
->   
->   $(eval $(python-package))
+I guess it is a question of glass half full vs half empty. You wrote
+".. we should look at what the vendor kernel really brings. If
+everything, including GPU, is working with the upsteam kernel, it
+doesn't make sense to use the vendor kernel", which I agreed with,
+EXCEPT that I think the cutoff point should be lower than "everything
+supported", but just if mainline is suitable for booting a Buildroot
+defconfig, E.G. working serial/storage/network.
+
+But like usual, this is largely up to the person contributing the
+defconfig.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
