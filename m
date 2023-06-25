@@ -1,50 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E01D5EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 14:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FAF2EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 14:31:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9634B81D46;
-	Sun, 25 Jun 2023 14:09:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9634B81D46
+	by smtp4.osuosl.org (Postfix) with ESMTP id D76294098B;
+	Sun, 25 Jun 2023 14:31:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D76294098B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hBFer1LFHRue; Sun, 25 Jun 2023 14:09:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id koi6M-mrOFQJ; Sun, 25 Jun 2023 14:31:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDB8C8177C;
-	Sun, 25 Jun 2023 14:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDB8C8177C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3FFFB1BF909
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 14:09:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D396640955;
+	Sun, 25 Jun 2023 14:31:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D396640955
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B7EF1BF3BD
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 14:31:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A2A360B45
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 14:09:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A2A360B45
+ by smtp4.osuosl.org (Postfix) with ESMTP id E83F440955
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 14:31:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E83F440955
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vxpzAPyNZbQh for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 14:08:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA63260B83
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 14:08:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA63260B83
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C8D8584AC2; Sun, 25 Jun 2023 14:08:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 15:58:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e0ae89957ecdb262eb4928a8a86c218436f61406
-X-Git-Newrev: 15886f2761e358a884d6a70bc30889bc69742c5f
-X-Patchwork-Hint: ignore
-Message-Id: <20230625140857.C8D8584AC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools: migrate to
- pep517 build backend
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1tAnuVktWzjW for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 14:31:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02E1D40104
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 02E1D40104
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 14:31:26 +0000 (UTC)
+Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
+ by shout02.mail.de (Postfix) with ESMTP id A5C27A0481;
+ Sun, 25 Jun 2023 16:31:24 +0200 (CEST)
+Received: from smtp03.mail.de (smtp03.bt.mail.de [10.0.121.213])
+ by postfix02.mail.de (Postfix) with ESMTP id 8B1C8A03C1;
+ Sun, 25 Jun 2023 16:31:24 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp03.mail.de (Postfix) with ESMTPSA id 500AEA013C;
+ Sun, 25 Jun 2023 16:31:23 +0200 (CEST)
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Date: Sun, 25 Jun 2023 16:31:22 +0200
+Message-ID: <13292600.uLZWGnKmhe@kilian-aisec>
+In-Reply-To: <20230625130227.GL24952@scaer>
+References: <5686076.DvuYhMxLoT@kilian-aisec> <20230625130227.GL24952@scaer>
+MIME-Version: 1.0
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 1346
+X-purgate-ID: 154282::1687703484-B97F8647-2DAC0C95/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1687703484;
+ bh=DGEPJmGYDL9tWdePk43K2LqeyJ/6IJiTkkt3Z+XB+qk=;
+ h=From:To:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=oA0kDk+dbSVPjZQQZqWtK3fq/nSTtv8z86WeQAOSIqiD/R2W1TRcZcDIP2Myh+FAH
+ sU5qGyoamY4Q5HGfQXTd20TCwYxKY43heBEIezPQoJik6KpW++XJ4t1qsdYqoudvuz
+ Fco1sKsoq+nmiIkD4zSIleRx5zfuMNClis0t/rOi/eB6IkaYFSqvFIYAbao6B6fBvX
+ i/dy2YawIFpojLmpbccoJOEdxPrvbV7A/rGJ36K9I5xwjogC0EcGewevWAFRiVqoDM
+ TLVQPG3aUDB/SYM+YQnOpF2lo7uvbp/3FD1kTodJipMoLqGJSTq2H2qfUIoKYjqydl
+ JGfheSL6wC8sw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key)
+ header.d=mail.de header.i=@mail.de header.a=rsa-sha256 header.s=mailde202009
+ header.b=oA0kDk+d
+Subject: Re: [Buildroot] Problem: Setting Uboot custom version does not
+ apply defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,55 +89,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15886f2761e358a884d6a70bc30889bc69742c5f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Yann,
 
-Now that all dependencies of host-python-setuptools no longer
-use setuptools as a build backend we can now migrate setuptools
-itself to the pep517 build backend.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/pkg-python.mk                          | 2 +-
- package/python-setuptools/python-setuptools.mk | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index fcb8fa0a99..85374ae8bb 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -233,7 +233,7 @@ endif # ($(4),target)
- # interpreter (both host and target).
- #
- ifeq ($$($(2)_SETUP_TYPE),setuptools)
--$(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
-+$(2)_DEPENDENCIES += host-python-setuptools
- else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
- $(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
- ifeq ($$($(2)_SETUP_TYPE),flit)
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 2674947162..d957930455 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -11,7 +11,8 @@ PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
- PYTHON_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
--PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
-+PYTHON_SETUPTOOLS_SETUP_TYPE = pep517
-+HOST_PYTHON_SETUPTOOLS_DEPENDENCIES = host-python-wheel
+thanks for your answer.
  
- $(eval $(python-package))
- $(eval $(host-python-package))
+>
+> Looks like it is working as expected here, with this defconfig:
+> 
+>     BR2_aarch64=y
+>     BR2_cortex_a76_a55=y
+>     BR2_TOOLCHAIN_EXTERNAL=y
+>     BR2_TARGET_UBOOT=y
+>     BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>     BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>     BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07-rc4"
+>     BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
+>     BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+>     BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+>
+Thanks, it does work now! I was missing the openssl dependency and had some 
+other uboot settings, which I removed. However, I don't understand what 
+exactly then went wrong, such that the uboot .config was not present ... well, 
+it does work now :)
+
+>
+> Note that the build fails much later, because it can't find
+> rockchip-tpl.bin; see tools/binman/missing-blob-help for some hint on
+> how to fix that.
+> 
+
+Yes! Some ATF binaries are missing, which are provided by Rockchip as binary 
+blobs. I am currently trying to prepare a buildroot package for those, such 
+that the needed binaries are present for uboot at build. There is already a 
+discussion about it, see email with the subject "Interested in board support 
+for Radxa Rock 5b" on the buildroot mailing list.
+
+Best regards and thanks alot,
+Kilian
+
+
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
