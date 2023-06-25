@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40BC0EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 13:54:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFC80EB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 13:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DEBB581E4F;
-	Sun, 25 Jun 2023 13:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEBB581E4F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65E8781ED8;
+	Sun, 25 Jun 2023 13:54:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65E8781ED8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uq8_DcCzZ9nd; Sun, 25 Jun 2023 13:54:26 +0000 (UTC)
+	with ESMTP id 3ql4tp6OwgRz; Sun, 25 Jun 2023 13:54:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A0AE81E3E;
-	Sun, 25 Jun 2023 13:54:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A0AE81E3E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF7CE1BF3BA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94AF681E40;
+	Sun, 25 Jun 2023 13:54:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94AF681E40
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B3D451BF909
  for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:54:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 91AC740932
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BC2560B6C
  for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:54:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91AC740932
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BC2560B6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M6UXXjJ1IHEA for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SbAyI3OOD77m for <buildroot@lists.busybox.net>;
  Sun, 25 Jun 2023 13:54:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 81ACB4092D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D02660B16
  for <buildroot@buildroot.org>; Sun, 25 Jun 2023 13:54:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81ACB4092D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D02660B16
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F8CD845ED; Sun, 25 Jun 2023 13:54:15 +0000 (UTC)
+ id 7975B849F3; Sun, 25 Jun 2023 13:54:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 15:34:29 +0200
+Date: Sun, 25 Jun 2023 15:34:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8436a33d0fe95678152fcf7f1f8451fdff675ccb
-X-Git-Newrev: 0eb4ac98a3a29201ebc80c4356b4519639344e2a
+X-Git-Oldrev: 0eb4ac98a3a29201ebc80c4356b4519639344e2a
+X-Git-Newrev: 4d6fe4ae3e3ad0f5a0c9289f1e4c78070c05ef56
 X-Patchwork-Hint: ignore
-Message-Id: <20230625135415.6F8CD845ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ell: bump version to 0.57
+Message-Id: <20230625135415.7975B849F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iwd: bump version to 2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0eb4ac98a3a29201ebc80c4356b4519639344e2a
+commit: https://git.buildroot.net/buildroot/commit/?id=4d6fe4ae3e3ad0f5a0c9289f1e4c78070c05ef56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changelog:
-https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog
+
+Depends on ell >= 0.57:
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/configure.ac?id=464f5c25db8150dc8cea21042a5bac09a8880edc
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index c0f1731676..dd4722480c 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index 1647f93d9e..4eea644842 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
 @@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
--sha256  58eb8b2b64087f7479d5db6a830a0656c536d93e5f11d4c9a4443ce8760a1b63  ell-0.56.tar.xz
-+sha256  7603928ee584b758ca27c67e4dc513049a09b038d7d28459a9440f8443c91018  ell-0.57.tar.xz
+ # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
+-sha256  b0506d797a8bfb88f3c3eeea5e49dcf4ee8e6cef118f57c118e587eeb377ac64  iwd-2.3.tar.xz
++sha256  f7ac93aeef672604f5b5194ca038035ae222925be392c4345873c9742f477797  iwd-2.6.tar.xz
  
  # License files
  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index 994b0e19f0..08deb62abe 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index c54031b102..f20427114b 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELL_VERSION = 0.56
-+ELL_VERSION = 0.57
- ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
- ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
- ELL_LICENSE = LGPL-2.1+
+-IWD_VERSION = 2.3
++IWD_VERSION = 2.6
+ IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
+ IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+ IWD_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
