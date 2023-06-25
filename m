@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24AC6EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 15:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBA9BEB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 15:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B27924150C;
-	Sun, 25 Jun 2023 15:02:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B27924150C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 811BA40297;
+	Sun, 25 Jun 2023 15:03:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 811BA40297
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1dMduTMtR4MT; Sun, 25 Jun 2023 15:02:51 +0000 (UTC)
+	with ESMTP id fLcXpU-G4dL0; Sun, 25 Jun 2023 15:03:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C2E5415F1;
-	Sun, 25 Jun 2023 15:02:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C2E5415F1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 03D621BF3BD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D1C0416C4;
+	Sun, 25 Jun 2023 15:03:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D1C0416C4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1466E1BF909
  for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E28B409A1
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E28B409A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75EAF81C46
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75EAF81C46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FS9tVQmBuenk for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bgo123xHBqcK for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 15:01:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C72FA40998
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0CEC81CDB
  for <buildroot@buildroot.org>; Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C72FA40998
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0CEC81CDB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3DBA84AD3; Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
+ id E14C084AD3; Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 16:40:50 +0200
+Date: Sun, 25 Jun 2023 16:43:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db45cc593e66598b4d345dd348b0bfe2b388b557
-X-Git-Newrev: 6f722cf6dbbf23850da7b10e1d94e156ff5419d7
+X-Git-Oldrev: 247f17f9af35037c766b0f34deebcf01646d2b22
+X-Git-Newrev: ecffe389a27c35cd2044f9dfea1b4d3ef20aeacf
 X-Patchwork-Hint: ignore
-Message-Id: <20230625150109.B3DBA84AD3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-i128:
- bump version to 1.4.1
+Message-Id: <20230625150109.E14C084AD3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libdmx: bump version to
+ 1.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,53 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f722cf6dbbf23850da7b10e1d94e156ff5419d7
+commit: https://git.buildroot.net/buildroot/commit/?id=ecffe389a27c35cd2044f9dfea1b4d3ef20aeacf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-May/003395.html
+https://lists.x.org/archives/xorg-announce/2023-June/003403.html
 
 Switched tarball to xz and _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- .../x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash    | 8 +++-----
- package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk  | 6 +++---
+ package/x11r7/xlib_libdmx/xlib_libdmx.hash | 8 +++-----
+ package/x11r7/xlib_libdmx/xlib_libdmx.mk   | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
-index 96bd42ac36..c17d3086a1 100644
---- a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
-+++ b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
+diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.hash b/package/x11r7/xlib_libdmx/xlib_libdmx.hash
+index e9d8616ba4..8a4b13099e 100644
+--- a/package/x11r7/xlib_libdmx/xlib_libdmx.hash
++++ b/package/x11r7/xlib_libdmx/xlib_libdmx.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-December/002932.html
--md5  a980f1b8532ccfe81932580bc4e0f2a0  xf86-video-i128-1.4.0.tar.bz2
--sha1  56d5b897b2695222c13e59d2ade74620a99e1011  xf86-video-i128-1.4.0.tar.bz2
--sha256  8f2c0a6bf5a169dad3fc07c6dd4537b492d0e44489e4a1297311e617c3bed0ea  xf86-video-i128-1.4.0.tar.bz2
--sha512  d58baee3f20b3ad2ece6853da0ff20a6d54b984c6e3289bad2715cc003b277a0b44d20ded25cfc116400468df552390bdb5d80fbd3fb60861488ee5d027664b2  xf86-video-i128-1.4.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-May/003395.html
-+sha256  7064b513ffe33efa040577c4d355ce2c76ed218989ab38feb8972750d5acbc46  xf86-video-i128-1.4.1.tar.xz
-+sha512  ec6b4dd9092292b5aabff7cf477090fe62c89944d251689817ac8114a65672f85880b719a442f4c742d63dc2d6c61ec315e53da5b5c625074d1aa0b9ace8e865  xf86-video-i128-1.4.1.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2018-May/002894.html
+-md5  d2f1f0ec68ac3932dd7f1d9aa0a7a11c  libdmx-1.1.4.tar.bz2
+-sha1  499e2540ca0e94ca858037865243c3c60908fd94  libdmx-1.1.4.tar.bz2
+-sha256  253f90005d134fa7a209fbcbc5a3024335367c930adf0f3203e754cf32747243  libdmx-1.1.4.tar.bz2
+-sha512  77aba6cadfd17db0cc7e1bc26f14d908223a0fdb135d46f86c3be34e3bc7e2f843f08d4d0ef773357e83b17122bffe56a0442d12908378c05a22177b10ae10e9  libdmx-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-June/003403.html
++sha256  35a4e26a8b0b2b4fe36441dca463645c3fa52d282ac3520501a38ea942cbf74f  libdmx-1.1.5.tar.xz
++sha512  55df45a06bddbf19e0253362853e2f979d736ba1f1fdec5d392c0f6c0dc72684e7b8df0f0a99ac96ce9d9d59bc6c25146086b18c054b4dbe6be9aa3166f23464  libdmx-1.1.5.tar.xz
  # Locally computed
- sha256  7677424d79633dbf255a81bd4e05dd621931b89997af33c31522269ec2ed391e  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
-index e44deaf621..266678105c 100644
---- a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
-+++ b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
+ sha256  819e8dcd3dd2a44850c350331aa492230f86bccb0983dd739dec5ba36d7d2b8e  COPYING
+diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.mk b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
+index 429595b5d7..9aaf81eb6f 100644
+--- a/package/x11r7/xlib_libdmx/xlib_libdmx.mk
++++ b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_I128_VERSION = 1.4.0
--XDRIVER_XF86_VIDEO_I128_SOURCE = xf86-video-i128-$(XDRIVER_XF86_VIDEO_I128_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_I128_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_I128_VERSION = 1.4.1
-+XDRIVER_XF86_VIDEO_I128_SOURCE = xf86-video-i128-$(XDRIVER_XF86_VIDEO_I128_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_I128_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_I128_LICENSE = MIT
- XDRIVER_XF86_VIDEO_I128_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_I128_DEPENDENCIES = xserver_xorg-server xorgproto
+-XLIB_LIBDMX_VERSION = 1.1.4
+-XLIB_LIBDMX_SOURCE = libdmx-$(XLIB_LIBDMX_VERSION).tar.bz2
+-XLIB_LIBDMX_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBDMX_VERSION = 1.1.5
++XLIB_LIBDMX_SOURCE = libdmx-$(XLIB_LIBDMX_VERSION).tar.xz
++XLIB_LIBDMX_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBDMX_LICENSE = MIT
+ XLIB_LIBDMX_LICENSE_FILES = COPYING
+ XLIB_LIBDMX_CPE_ID_VENDOR = x
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
