@@ -1,69 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42822EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 17:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E77C2EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 18:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0C4681DFE;
-	Sun, 25 Jun 2023 17:57:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0C4681DFE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57E2260AFD;
+	Sun, 25 Jun 2023 18:59:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57E2260AFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a84fO-AqBtiZ; Sun, 25 Jun 2023 17:57:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id riE9Qu-e-pq0; Sun, 25 Jun 2023 18:59:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2323781E21;
-	Sun, 25 Jun 2023 17:57:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2323781E21
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B09381BF3BF
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 17:57:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8530160AD8;
+	Sun, 25 Jun 2023 18:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8530160AD8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 485E21BF27C
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 18:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A08040190
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 17:57:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A08040190
+ by smtp4.osuosl.org (Postfix) with ESMTP id 201244109B
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 18:59:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 201244109B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2krDYQVr3Rdh for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 17:57:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A985E4015E
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A985E4015E
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 17:57:24 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 17F08A4C00B7;
- Sun, 25 Jun 2023 19:57:07 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59624)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qDTz0-000529-2Q;
- Sun, 25 Jun 2023 19:57:06 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 19:57:05 +0200
-Message-Id: <20230625175706.319901-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X__NwCaKhZ0P for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 18:59:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8400409F1
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8400409F1
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 18:59:06 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-98377c5d53eso304792666b.0
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 11:59:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1687719544; x=1690311544;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=kPotePjW9k3mZJ5zRz3NIv5qu9+gpd3/Azc4cGJy65I=;
+ b=B8CvQ/+CPt2khckQEabJAMjX6LuESYLy9tcaGxlbli2uD1rCKykxzLgjp5QXG1LB0b
+ xZs4e4cqrrW0q3NOM4DJQ+z/1cfkZ/LAAPXwtIuLcq9CbIGCO+OPNxcEnCTaqYquwYyV
+ 5LfbAStYrPQdAo67hS9YYReKZMfS6u4Rqgg4aZXZUgApzxnku8H6Po9BVIezWvYh3L41
+ aSX1x3zmqlD9LPYPW3adKFQ57sIBGnZOcGhHAsouIX8/GAiCSQgpk7s8zPTaxU0r2xD0
+ j7P/Z4UD1/c6Tsf+Oa+qggJ1tKXJv33EC5V9eQTlyKi/tN9oxMB6LN8a4OrBZjKFX8wg
+ VqDg==
+X-Gm-Message-State: AC+VfDzijt4Gx13OPQmCspRAayw5tHMtXTB3dkTyklVKYUdQrWIltw9W
+ 8DIF3lw8JkvRV1u3SOQ6fyfnnw==
+X-Google-Smtp-Source: ACHHUZ5bNi6cNzaY4WhrrWetZqhl8TQWc/MIPcRylYPCSzWZ/mAKfMvo56I6MehDgfP1+smFCM2enQ==
+X-Received: by 2002:a17:907:1c19:b0:973:e5d9:d6ff with SMTP id
+ nc25-20020a1709071c1900b00973e5d9d6ffmr25103497ejc.66.1687719544397; 
+ Sun, 25 Jun 2023 11:59:04 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ p21-20020a170906499500b0097404f4a124sm2370947eju.2.2023.06.25.11.59.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 25 Jun 2023 11:59:03 -0700 (PDT)
+Message-ID: <1383cf3a-fa81-75b7-1e3f-45a82ebb4c7d@mind.be>
+Date: Sun, 25 Jun 2023 20:59:01 +0200
 MIME-Version: 1.0
-X-Spamd-Bar: +
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-GB
+To: Peter Korsgaard <peter@korsgaard.com>
+References: <20230622160212.2063472-1-dannenberg@ti.com>
+ <20230622160212.2063472-7-dannenberg@ti.com> <20230625135435.GC589277@scaer>
+ <bd293d20-a3c8-d76d-e711-75daaa5ec136@mind.be> <875y7bpnwk.fsf@48ers.dk>
+In-Reply-To: <875y7bpnwk.fsf@48ers.dk>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1687715827;
- bh=Ki0SdWOn0FyPU/pWRl5YftTmtffcEqz0z5IN/bjYIYk=;
- h=From:To:Cc:Subject:Date:From;
- b=tPzNqzvqj1aC7ycdSCacL+RLu4ivntZEXJMHy2VqrWbMnUS2xddsVAThMAtA9+qWu
- ROSqTnWZftglp7WLCEWy8bqg9e/JyOktFt759aiiLK5HLAgDHMFVpjHB9rlyPUD//V
- aWWRfPjnJN2hoEh5T7yLHCE68Lg09dhlR5jPbrqQGtE4fdmvQ/Nl+SQiuFReQkPtes
- t3njACIFpTHNHZrVWOs+61n9+getklNbHeTbvTFHqSZL2+6yTotNzBcvn9xE22JKkE
- UiYCHLzoJGBfIyOUNB9m2b+8rchyDxS8GTubcxPXclOudI3i7+tDHimhdMx1tH2zve
- pQY9HEKrKy8tg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=tPzNqzvq
-Subject: [Buildroot] [PATCH 1/2] package/quickjs: disable on microblaze
+ d=mind.be; s=google; t=1687719544; x=1690311544;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=kPotePjW9k3mZJ5zRz3NIv5qu9+gpd3/Azc4cGJy65I=;
+ b=Nh/so52QXkHUKaPKAhXTxu/Jwo87FY++ZVwtENSKmuyJAQuAg7bPgb1P59770HP0Ar
+ eRm8Xy1IlCjKP3WQsAtg936ZLwaKsA4cW0vLC0tvTP1DGVBPwPjCa1T6uQNfcxyil9f3
+ gdekRCmIUghMTVC9xv/fH4yd+Cc3Z1k4m7BCER5UNkgeTC5/JkrFR0m8qh7UB3utRi5a
+ 8yDiaElnPgY2NwhUjpOrCWQP1nQghnuVvKO7587whEf9onvTBhvWwbA32PVcydCib13y
+ fZyWvC5TPbtiE2Vs09sg6KZzBZvvZ/GlxPHbGJCdHh9l+D0cUCoa0yommbdYYoWOuXNm
+ 1uHA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Nh/so52Q
+Subject: Re: [Buildroot] [PATCH v9 06/11] board/ti/am62x_sk|am64x_sk: switch
+ to TI SDK v8.6 sources
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,44 +103,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Andreas Dannenberg <dannenberg@ti.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-quickjs unconditionally uses FE_{DOWN,UP}WARD and so fails to build on
-microblaze since its addition in commit
-5d50793659acb95050c110d5fc05399df20ce30b
 
-Fixes:
-http://autobuild.buildroot.net/results/3b1/3b1b1f91998bfdec65f3e6fb8931df9c8871b953/
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/quickjs/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+On 25/06/2023 17:22, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>   >>> * TI Linux Kernel v5.10
+>   >> So this means going from a 6.3 kernel back to a 5.10 (the current
+>   >> latest
+>   >> if 6.3, which is what is used in the defconfigs from the two previous
+>   >> patches). That's a bit unfortunate.
+>   >> Do you have plans to update to a more recent kernel in the (near)
+>   >> future? Can't we keep using 6.3 anyway?
+> 
+>   >  We don't actually have a clear policy on whether to use upstream or
+>   >  vendor kernels for the defconfigs. We have a few boards with both,
+>   > but IMHO that's not a great approach either.
+> 
+>   >  Personally, I think it makes sense to focus on vendor kernels for the
+>   >  defconfigs. Using upstream is generally easy, you just have to find
+>   > the appropriate device tree. But for the vendor kernel, you have to
+>   > find the repository, which branch is "current", and often also make
+>   > sure you sync up with U-Boot and OP-TEE etc. versions. @Andreas don't
+>   > take this as law, though, it's just personal opinion.
+> 
+> Correct, but given the poor quality of most vendor kernels, using a
+> board with mainline is typically a lot nicer (if the IP blocks you care
+> about are supported naturally).
 
-diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
-index dc466241ba..292dba86d0 100644
---- a/package/quickjs/Config.in
-+++ b/package/quickjs/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_QUICKJS
- 	bool "quickjs"
-+	depends on !BR2_microblaze # fenv.h lacks FE_{DOWN,UP}WARD
- 	depends on !BR2_nios2 # fenv.h lacks FE_{DOWN,UP}WARD on nios2
- 	depends on !BR2_STATIC_LIBS
- 	# No way to check for fenv support.
-@@ -15,6 +16,7 @@ config BR2_PACKAGE_QUICKJS
- 	  https://bellard.org/quickjs/
- 
- comment "quickjs needs a glibc or musl toolchain w/ gcc >= 4.9, host gcc >= 4.9, dynamic library"
-+	depends on !BR2_microblaze
- 	depends on !BR2_nios2
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC || \
--- 
-2.39.2
+  I'm not sure that you can claim most vendor kernels are poor quality. At least 
+NXP and Microchip have decent vendor kernels. Conversely, when vendor kernels 
+are horrible, mainline is often not super usable either (because, of course, 
+those vendors don't invest in upstreaming either).
+
+
+> Same about the support, E.G. we had issues with various vendor
+> kernels/bootloaders breaking with newer toolchain versions.
+> 
+> 
+>   >  That said, I think for each board we should look at what the vendor
+>   >  kernel really brings. If everything, including GPU, is working with
+>   > the upstream kernel, it doesn't make sense to use the vendor kernel. I
+>   > don't know if that's the case in this specific situation.
+> 
+>   >  Yann, Peter, Romain, Thomas, what do you think?
+> 
+> Agreed. I would in general say go for mainline, unless there is no
+> decent support in mainline. I would not necessarily think that GPU
+> support is a requirement, but at least the things used by the defconfig
+> (E.G. storage, serial, network).
+
+  That's exactly the opposite of what I was saying, so not agreed I guess :-)
+
+  Regards,
+  Arnout
 
 _______________________________________________
 buildroot mailing list
