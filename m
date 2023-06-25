@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07D63EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 13:21:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DE7AEB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 13:26:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7913C60BD8;
-	Sun, 25 Jun 2023 13:21:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7913C60BD8
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE4A460BFE;
+	Sun, 25 Jun 2023 13:26:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE4A460BFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qu6lkpcCTo2O; Sun, 25 Jun 2023 13:21:30 +0000 (UTC)
+	with ESMTP id Ezr7LAophpmo; Sun, 25 Jun 2023 13:26:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9202360BFE;
-	Sun, 25 Jun 2023 13:21:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9202360BFE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 204661BF3BA
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:21:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1E3260BD8;
+	Sun, 25 Jun 2023 13:26:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E3260BD8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EE30D1BF3BA
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:26:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06B8240102
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:21:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06B8240102
+ by smtp1.osuosl.org (Postfix) with ESMTP id D509081B17
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:26:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D509081B17
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e-jfcZ71v8wk for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 13:21:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FqmwC67IKb7h for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 13:26:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABABC400BA
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ABABC400BA
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 13:21:25 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-3f9bece8e19so37800245e9.1
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 06:21:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCD4A81AAB
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DCD4A81AAB
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 13:26:38 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-991b7a4d2e8so8137066b.1
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 06:26:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687699283; x=1690291283;
+ d=1e100.net; s=20221208; t=1687699597; x=1690291597;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Pfk+1JfHNEJXoFGmsnxK/JYxA23C1H0DufQMraksCg0=;
- b=VH0nISY7TZSRE8n9y9q8emakv4LU3zfouYQuFBKJ5yWUFxciTrNv7ejbZYUtFmGW0q
- RZsasY/jRYROup8RtKXVB74OJq0xFndq8ttaXzQOwyyBawF3jHRSCyb17xqJSlQQETXT
- ESx1n3UaJ44ECUqOFaNrIvHJOYREh/DSrYUfjPp6dViGhLAgMIh5/TB9CSviU2b8nPWX
- iN7rqqb7WLLny4f0VgyWZqFDHTqGkLJB/AGqNVq9xFvEQDU/h0V1tptJYFuL2+KKH+I9
- tnHVSQ6EEfeCBc5pgytE+adFU60kptyEPFbv5penekkR1K/OhbR3Xm1W71Zpg6qtIOQo
- 8pOQ==
-X-Gm-Message-State: AC+VfDyblujtPU7Tez4zs/S9JCEB1p4tKrNYUeTxtW7lTxmQ3J2PkvEB
- w7IZ/GYwa+gHJydEBhY9lnOnXQ==
-X-Google-Smtp-Source: ACHHUZ6Mp+c2htXG8np9qUpZm06DVHrXEmHg+VuKiKZhK+tsc7xY9EeWp1HC6EeSEFyakTvlByS5jA==
-X-Received: by 2002:adf:ee0c:0:b0:313:eef1:7e0f with SMTP id
- y12-20020adfee0c000000b00313eef17e0fmr1367857wrn.55.1687699283551; 
- Sun, 25 Jun 2023 06:21:23 -0700 (PDT)
+ bh=uxltnLBCEG5yIPg7lAAHH9L28cllEM703XnGNSmyokc=;
+ b=BDMHxo5K8yE4oFqozF/jktiF3sb4FbbEBq2pQIv4yZCWhFQCwM35Shcz5RER8qUvV2
+ kznaZ4upxY4DgB26i86HHb0etzTfFi83SHdK/jh2v0Egg0Qy22eCudHut3El8xzJylYS
+ LsPwWFbI8VktWfA2yhZNoOj70081venRI2TPTnJGrT5TVBie3QYj2JJjJ3S/FDlkhHVq
+ tuG6tepm9/CnQ8rS20TyVMmmvqUeB1AjrLgqkxgCbQygVyJ2KeO+ZH+z1EuP5RmNdzHv
+ fBr5t4sNc6bJnTo0ekq+F4IKT7mJGIzwvtNdyFwikXhbk4xkKlvPs0zHVjVDsEEUhUwa
+ IMTg==
+X-Gm-Message-State: AC+VfDwRlRMbqV8RLiCjxilRbIP/R0qU1jkaRbTYc1bHwodWT1ZdV6Il
+ yFEndBGtZbiF09ab7yqrxw4g/A==
+X-Google-Smtp-Source: ACHHUZ42+K0bUC4vJser8DWLC8Y695enoCt2m0B/YvznS+A6PhvsYPMDj09GS0U8Sy4xKlVIqxqbOA==
+X-Received: by 2002:a17:907:16a1:b0:988:d1d5:cd5b with SMTP id
+ hc33-20020a17090716a100b00988d1d5cd5bmr17301375ejc.75.1687699596979; 
+ Sun, 25 Jun 2023 06:26:36 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- p2-20020adfe602000000b00307c8d6b4a0sm4571347wrm.26.2023.06.25.06.21.22
+ us3-20020a170906bfc300b00991bba473e2sm27750ejb.85.2023.06.25.06.26.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 25 Jun 2023 06:21:22 -0700 (PDT)
-Message-ID: <3c0e66a6-4ce2-f4d4-92b6-7b112190051e@mind.be>
-Date: Sun, 25 Jun 2023 15:21:21 +0200
+ Sun, 25 Jun 2023 06:26:36 -0700 (PDT)
+Message-ID: <700d3a40-9e91-40fe-1b89-8852c005b2a8@mind.be>
+Date: Sun, 25 Jun 2023 15:26:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
@@ -73,25 +73,27 @@ Content-Language: en-GB
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Andreas Dannenberg <dannenberg@ti.com>
 References: <20230622160212.2063472-1-dannenberg@ti.com>
- <20230622160212.2063472-2-dannenberg@ti.com> <20230624212331.GE24952@scaer>
-In-Reply-To: <20230624212331.GE24952@scaer>
+ <20230622160212.2063472-8-dannenberg@ti.com>
+ <CAEg67Gn7OeVDCwthzRTBdKj=QeYFku1JT3t=Rm9hUf59k52+4A@mail.gmail.com>
+ <20230623145350.265zxot3uvidzur5@dasso> <20230625075550.GI24952@scaer>
+In-Reply-To: <20230625075550.GI24952@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1687699283; x=1690291283;
+ d=mind.be; s=google; t=1687699597; x=1690291597;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=Pfk+1JfHNEJXoFGmsnxK/JYxA23C1H0DufQMraksCg0=;
- b=E6TZ/T1it4oLwsiyPNwFSfvsEUwLkiuig71KGKU1rigLA8nqkyQxywQFdv0kcWJIHV
- /LBCTzubzM4kZJL5F3tAYWM+F7F9S1Llt6nzFdx4sQdq2/DFwqjP6UVqir28BjGwfOoy
- ooeSMbo7Nj6ymRG9TAD4VlidsP5sUDd9zsBcnToz9jV8FFIH4jX4JhG3OTTUjlvrKjGs
- +ExQ2qq/8v6IuMnuCF7UWKzA7qQGjk3qDj8v0EhcBAW7YXLSh0b08uaC0jkr6gW35bVP
- nHYrdATDCt3pBAtK49eceBhFKq+qFRA4RO1ymtF9Co8kfSih1eTGbOfu389ASQlKxu20
- tARw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=uxltnLBCEG5yIPg7lAAHH9L28cllEM703XnGNSmyokc=;
+ b=WUGNsusR1IbEVxBMK3UdbYPtmdstoIJ8o+cH9sDTNY3HgmDXS++WmgYHAJULD1gfTh
+ QmmgCDSls9QrYd4nsjJJWwRE1mMIczKDfnIQUJX2+d3xUc0bwQnFCeyAP2h1qeEVFSAv
+ XBxyPe8bpgmqjbEL+2mO5A3GKj0hCpC0gxAz/82LQonCCWoKUNXy3bDL02wXiruMWAhv
+ 9dktIsepSo/jORcZaFpaDPXCQIdG3tXZ0Zua0C29RopEy/qAgsZXxt/Ko35yQ7N4o8nL
+ SGaRIDeurKqQZ5NmRxRUqPay1wZ53CMIvpdaqXnlnqxP9FLmOQQoJ0FVKPETkXjdyI3z
+ 9thQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=E6TZ/T1i
-Subject: Re: [Buildroot] [PATCH v9 01/11] boot/ti-k3-r5-loader: allow for
- full build source customization
+ header.a=rsa-sha256 header.s=google header.b=WUGNsusR
+Subject: Re: [Buildroot] [PATCH v9 07/11] package/ti-core-secdev-k3: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,7 +107,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: buildroot@buildroot.org
+Cc: Patrick Oppenlander <patrick.oppenlander@gmail.com>,
+ buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -113,137 +116,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/06/2023 23:23, Yann E. MORIN wrote:
-> Andreas, All,
+On 25/06/2023 09:55, Yann E. MORIN wrote:
+> Andreas, Patrick, All,
 > 
-> On 2023-06-22 11:02 -0500, Andreas Dannenberg via buildroot spake thusly:
->> The TI K3 R5 loader package essentially is a wrapper to build a special
->> version of U-boot SPL used as part of a multi-stage boot flow on TI K3
->> devices, and as such needs full flexibility as to specifying the U-Boot
->> sources used for the build. To accomodate this, add the same options as
->> already available in the regular U-Boot package. For most use cases, the
->> same source settings (repo URL, versions, etc.) should be used for both
->> ti-k3-r5-loader and uboot packages.
+> On 2023-06-23 09:53 -0500, Andreas Dannenberg via buildroot spake thusly:
+>> On Fri, Jun 23, 2023 at 01:48:30PM +1000, Patrick Oppenlander wrote:
+> [--SNIP--]
+>>>> diff --git a/package/ti-core-secdev-k3/ti-core-secdev-k3.mk b/package/ti-core-secdev-k3/ti-core-secdev-k3.mk
+>>>> new file mode 100644
+>>>> index 0000000000..c388af2865
+>>>> --- /dev/null
+>>>> +++ b/package/ti-core-secdev-k3/ti-core-secdev-k3.mk
+>>>> @@ -0,0 +1,31 @@
+>>>> +################################################################################
+>>>> +#
+>>>> +# ti-core-secdev-k3
+>>>> +#
+>>>> +################################################################################
+>>>> +
+>>>> +TI_CORE_SECDEV_K3_VERSION = 08.06.00.007
 > 
-> Currently, there is no dependency ("depends on" or "select") between
-> uboot and ti-k3-r5-loader; yet, your phrasing seems to imply that it
-> does not make sense to build ti-k3-r5-loader without building uboot.
+> I see this version present (either used or referenced) in multiple
+> packages. Would it be possible, and would it make sense to share a
+> it in a single location?
+> 
+> This is going to be a bit tricky, because the variable must be set
+> _before_ any package that uses it gets parsed. WE usually ensure this by
+> having all packages in a common directory (like the Qt5 stuff in
+> package/qt5/), but here we have packages in package/ and in boot/, so I
+> can see a little issue...
 
-  That's not what I read in that paragraph. I think it means that the same 
-source should be used as U-Boot. It's just a separate package because, AFAIU, it 
-may use a different .config.
-
-  If that is true, and I'm not missing anything else, then the situation 
-actually looks quite similar to barebox-aux. With the difference that for Falcon 
-boot you want to have only "u-boot-aux" and not the full u-boot. So, if what I'm 
-saying is true, then perhaps it's better to approach it the same way as in barebox?
-
-  At the very minimum, I think there should be a "same version as U-Boot" 
-option, which is the default (if U-Boot is enabled). There's a bit the 
-unfortunate aspect that this package becomes before U-Boot in the menu, but 
-let's assume people typically start from a defconfig.
+  Well, package/ is parsed before boot/ is, so the order is implicitly 
+guaranteed. It's a bit meh to rely on that though.
 
   Regards,
   Arnout
 
-> 
-> Then, in the comment below, you add a note about "Falcon boot (which
-> would skip the uboot package completely)".
-> 
-> So, I'm a bit curious here: what should the user do when uboot is not
-> enabled, if we instruct it to use the same version?
-> 
->> Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
->> ---
->>   boot/ti-k3-r5-loader/Config.in          | 65 +++++++++++++++++++++++--
->>   boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 32 +++++++++++-
->>   2 files changed, 93 insertions(+), 4 deletions(-)
->>
->> diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
->> index 10602c8df3..2419babe70 100644
->> --- a/boot/ti-k3-r5-loader/Config.in
->> +++ b/boot/ti-k3-r5-loader/Config.in
->> @@ -1,14 +1,73 @@
->>   config BR2_TARGET_TI_K3_R5_LOADER
->> -	bool "ti-k3-r5-loader"
->> +	bool "TI K3 R5 Loader"
-> 
-> Our prompts always match the package name in Buildroot, i.e. the
-> directory name. In this case, ti-k3-r5-loader is exactly that and we
-> want to keep that.
-> 
->>   	depends on BR2_aarch64
->>   	help
->> -	  Separate U-Boot build for R5 cores on TI's k3 boards.
->> +	  Separate U-Boot SPL build for R5 core on TI's K3 processors.
->>   	  Usually used to build tiboot3.bin with k3-image-gen.
->>   
->>   if BR2_TARGET_TI_K3_R5_LOADER
->>   
->>   choice
->> -	prompt "Configuration"
->> +	prompt "U-Boot Version"
-> 
-> It is a bit confusing tho see "U-Boot version" in the "ti-k3-r5-loader"
-> package. I know it is really just a uboot being compiled, but still this
-> is confusing. I'd keep ti-k3-r5-loader in the prompts. I could be
-> convinced for the middle ground "ti-k3-r5-loader U-Boot version" if you
-> really want to have U-Boot there.
-> 
-> Since you want the defaults to be the same as uboot, you can do that:
-> 
->      choice
->          bool "U-Boot version"
->          default BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION if BR2_TARGET_UBOOT_LATEST_VERSION
->          default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION if BR2_TARGET_UBOOT_CUSTOM_VERSION
->          default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL if BR2_TARGET_UBOOT_CUSTOM_TARBALL
->          default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_GIT if BR2_TARGET_UBOOT_CUSTOM_GIT
->          default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_HG if BR2_TARGET_UBOOT_CUSTOM_HG
->          default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_SVN if BR2_TARGET_UBOOT_CUSTOM_SVN
->          default BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION  # Fallback if uboot not enabled
-> 
->      ...
->      endchoice
-> 
->      config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE
->          string "U-Boot version"
->          default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
->          depends on BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION
-> 
->      config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL_LOCATION
->          string "URL of custom U-Boot tarball"
->          default BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
->          depends on BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL
-> 
-> ... and so on, you get the gist.
-> 
-> [--SNIP--]
->> +	prompt "U-Boot Configuration"
-> 
-> Same comment as for the version prompt.
-> 
-> [--SNIP--]
->> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
->> index afa309aa98..341888623e 100644
->> --- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
->> +++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
->> @@ -2,11 +2,41 @@
->>   #
->>   # ti-k3-r5-loader
->>   #
->> +# The ti-k3-r5 loader package should really be built from the same U-Boot
->> +# sources as the uboot package itself, so for most users so all LOADER_SITE /
->> +# LOADER_SOURCE type definitions should be set the same for both packages.
->> +# However it still makes sense to keep the ti-k3-r5-loader package somewhat
->> +# separated and independent from the uboot package to allow for special use
->> +# cases such as Falcon boot (which would skip the uboot package completely).
-> 
-> Do you mean that uboot would not be built at all, or that the uboot
-> binary would not be loaded at runtime?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
