@@ -4,71 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 245A8C001B0
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 19:37:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E264FEB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 19:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B48F361244;
-	Sun, 25 Jun 2023 19:37:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B48F361244
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A4F86125C;
+	Sun, 25 Jun 2023 19:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A4F86125C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2C1jQhPAS9Ly; Sun, 25 Jun 2023 19:37:02 +0000 (UTC)
+	with ESMTP id nTKajRa9j-fL; Sun, 25 Jun 2023 19:37:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D766C6125C;
-	Sun, 25 Jun 2023 19:37:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D766C6125C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 815C9612A7;
+	Sun, 25 Jun 2023 19:37:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 815C9612A7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B14001BF3A4
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:37:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3E3461BF3A4
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:37:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 891AB413A3
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:37:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 891AB413A3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 167A1413A3
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:37:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 167A1413A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 56XrZvq5YL4A for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 19:36:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71839411C6
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 71839411C6
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 19:36:57 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:6779:b2ef:a941:20a5])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 7FB812003F3;
- Sun, 25 Jun 2023 21:36:48 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 25 Jun 2023 21:36:48 +0200
-Date: Sun, 25 Jun 2023 21:36:48 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20230625193648.GA646621@scaer>
-References: <20230622160212.2063472-1-dannenberg@ti.com>
- <20230622160212.2063472-7-dannenberg@ti.com>
- <20230625135435.GC589277@scaer>
- <bd293d20-a3c8-d76d-e711-75daaa5ec136@mind.be>
+ with ESMTP id p7nlupGl_N26 for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 19:37:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 098E7411C6
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 098E7411C6
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 19:37:08 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-98e1c6a687fso74353366b.1
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 12:37:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1687721827; x=1690313827;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=pSEKAsYbH6i4GKXRHUaufshH/NvK8EIRdzbNz5fTAZU=;
+ b=dVJS57L4/KbNzW/jDP1vuAobVl/IpM6AqWzvc+qKUcMQLO1cQvoCCQawsKh7sOCSgc
+ yumf/kyxD7Hnfn4BL5yPMOM9AJ99oE3zfeGLjaJXqi6Ixyby08cvrfKT9C05IHKSt7ah
+ x87mdwZHMfA78WgmqiLp5YEJyo/CLcdo3HtWtRl416iG7chiG9yNuY9yejtkFpdHYOC8
+ JI5Y9+JeQaB+tv6e6UhTdr9PPhdvi42mas4heVtxJ3FzyeDsVJJNvPp91Ef4juSZaxhg
+ yggFXuxvqnl+kzmz2wks0Bc/aURcv10HZQuKGDPfSM9lyfVflvswHmvMgbet/rqOKDVZ
+ P+/Q==
+X-Gm-Message-State: AC+VfDyHUyi0Vq97saxbPTUfrQfS0336ZKEvedgJraV6FKGbiCI4KFjH
+ yiqFHWrrSkiACoIZhoeOABjIQw==
+X-Google-Smtp-Source: ACHHUZ4APZQfeaUeo/YGZXri25/X6YHsmxhWCiGOfvmNTwihNEvje7alU3QcxGjsA5oHTp+h20a9MA==
+X-Received: by 2002:a17:907:2d11:b0:988:8a02:4560 with SMTP id
+ gs17-20020a1709072d1100b009888a024560mr15777917ejc.44.1687721827005; 
+ Sun, 25 Jun 2023 12:37:07 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ w10-20020a17090633ca00b00988b57d5146sm2375802eja.5.2023.06.25.12.37.06
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 25 Jun 2023 12:37:06 -0700 (PDT)
+Message-ID: <80a331c8-4bf1-5c27-558d-f98bb28f601e@mind.be>
+Date: Sun, 25 Jun 2023 21:37:04 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <bd293d20-a3c8-d76d-e711-75daaa5ec136@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1687721814;
- bh=qfvEaUGWnnkRhh4Lcu9VIk32bU4cLF1EmBiTu8YIc/g=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Vn++FbEK6gJJpx078gD4WUQA0OvhM/jUK3bwfwwA1ak2RxDWdNhpVJcXPmb7yIIqo
- CiEa73DEfJ77ilFiYvTtdZgJ7Nup5g07lo99tGFRx5dqOZA//c8fb2TyYWosDnKQs7
- 769ta0rEXzlfLVieGUH9vh5B3+9pd5fCboTiqonuxFYNKx8kpK9/td22b9n8hKmPDw
- kAAoDHVGoscPH8k3MdeXCYZzgGwCooMhVfDft5yCv9WnZEOrz6Ps7UXZYXwglJdCKx
- ew+jitp3Sh4WOMf2yHYxNFloBzDfeDfgJUIU60TDXTnhXTN0lZoQIlvPQgP32XPVoz
- C7lfi6KVhFGBQ==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-GB
+To: Oleg Lyovin <ovlevin@sberdevices.ru>, buildroot@buildroot.org
+References: <20230625124848.1423168-2-ovlevin@sberdevices.ru>
+ <20230625165121.2112986-1-ovlevin@sberdevices.ru>
+In-Reply-To: <20230625165121.2112986-1-ovlevin@sberdevices.ru>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1687721827; x=1690313827;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=pSEKAsYbH6i4GKXRHUaufshH/NvK8EIRdzbNz5fTAZU=;
+ b=TUigBP82kQA2DpHGw74UUoU6afPIfMJzHAxC/M0y1GwxcYFW1ZT4yRIJyhfoKbvwqc
+ qzaKVZAEwkKgkQyu7SqfSTFjwTvU/r1z5BHGuqhhPeCP0+veWZlMG8MGIauGwxhJ6Wm7
+ u1q9W/gTDwVG46keiVSh783cC56j54jIfJvhVfHf5vWdTuxeEddE8UynQUh8+f7/4HXt
+ Zb28CZ9imfY5/m1PCWSX71Qck9v/JJ/r9VSUHESc7CPOT2qfwYmOUcOJQA2Vo6pp5t21
+ NzrpFP79xJ5RtjWfrLleXwN+I22cWkqpmC+BbAKFBlD/nLhJUiNlE7X/XqvsDxf8NiGD
+ /Flw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Vn++FbEK
-Subject: Re: [Buildroot] [PATCH v9 06/11] board/ti/am62x_sk|am64x_sk: switch
- to TI SDK v8.6 sources
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=TUigBP82
+Subject: Re: [Buildroot] [PATCH v2] package/libcgroup: allow to build with
+ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,89 +102,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Andreas Dannenberg <dannenberg@ti.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: olegartys@gmail.com, sdfw_system_team@sberdevices.ru
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, Andreas, All,
 
-On 2023-06-25 16:33 +0200, Arnout Vandecappelle via buildroot spake thusly:
+
+On 25/06/2023 18:51, Oleg Lyovin via buildroot wrote:
+> libcgroup depends on fts API which is missing in musl libc
+> and provided by musl-fts package.
 > 
+> This patch makes libcgroup dependent on musl-fts for
+> non-glibc configurations.
 > 
-> On 25/06/2023 15:54, Yann E. MORIN wrote:
-> >Andreas, All,
-> >
-> >On 2023-06-22 11:02 -0500, Andreas Dannenberg via buildroot spake thusly:
-> >>Switch the following projects to using the same Git source repos and
-> >>commit IDs that are used to build the TI SDK v8.6 for AM62x and AM64x
-> >>devices to establish a baseline for comparable functionality:
-> >>
-> >>* TI Linux Kernel v5.10
-> >
-> >So this means going from a 6.3 kernel back to a 5.10 (the current latest
-> >if 6.3, which is what is used in the defconfigs from the two previous
-> >patches). That's a bit unfortunate.
-> >
-> >Do you have plans to update to a more recent kernel in the (near)
-> >future? Can't we keep using 6.3 anyway?
+> Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
+
+  Applied to master, thanks. The subject line now should be "allow to build with 
+musl and uClibc", so I changed that :-)
+
+  Regards,
+  Arnout
+
 > 
->  We don't actually have a clear policy on whether to use upstream or vendor
-> kernels for the defconfigs. We have a few boards with both, but IMHO that's
-> not a great approach either.
+> ---
+> Changes v1 -> v2:
+>    - remove glibc dependency: checked that libcgroup can be built in all
+>      the configurations: glibc, musl, uClibc, but requires musl-fts
+>      for the last two.
+>      (suggested by Arnout)
+>    - remove LDFLAGS modification: it seems that autoconf
+>      automatically searches for a library that provides 'fts_open'.
+>      (suggested by Yann)
+>    - changed commit-msg (suggsted by Arnout)
+>      and rebased onto 'master' branch
 > 
->  Personally, I think it makes sense to focus on vendor kernels for the
-> defconfigs. Using upstream is generally easy, you just have to find the
-> appropriate device tree. But for the vendor kernel, you have to find the
-> repository, which branch is "current", and often also make sure you sync up
-> with U-Boot and OP-TEE etc. versions. @Andreas don't take this as law,
-> though, it's just personal opinion.
+> glibc, musl and uClibc builds are approved by 'test-pkg' script:
+>        bootlin-armv5-uclibc [1/3]: OK
+>        bootlin-armv7-glibc [2/3]: OK
+>        bootlin-x86-64-musl [3/3]: OK
 > 
->  That said, I think for each board we should look at what the vendor kernel
-> really brings. If everything, including GPU, is working with the upstream
-> kernel, it doesn't make sense to use the vendor kernel. I don't know if
-> that's the case in this specific situation.
+> Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
+> ---
+>   package/libcgroup/Config.in    | 7 +++----
+>   package/libcgroup/libcgroup.mk | 4 ++++
+>   2 files changed, 7 insertions(+), 4 deletions(-)
 > 
->  Yann, Peter, Romain, Thomas, what do you think?
-
-My position is that we should use upstream as much as possible, and
-switch to a fork only when that is needed.
-
-Now, what "it is needed" means is very hazy. Lack of serial, storage,
-network upstream certainly means it is not suitable. Lack of support for
-some obscure IP block that no one uses or even knows of, is certainly
-not a blocker. Then there is the wide gray range of peripherals (GPU, hw
-crypto accels, etc...) that some may see as critical while others might
-not care about.
-
-So I guess the rule is: deviating from upstream should be dully
-motivated, not just "get in sync with Yocto/OE" or whatev'.
-
-What prompted my initial comment above, is that the series introduces
-two defconfigs that use the upstream kernel, i.e. 6.3 as of now, but
-then this patch dwindles back to use the 5.10-vendor. So, the question
-is really, indeed: why use the 5.10-vendor tree when the 6.3-upstream
-seems to work?
-
-Or put in other words: does the 6.3-upstream actually works, as
-introduced in the previous patches?
-
-I.e. if we do not apply this patch, does the am62x_sk_defconfig and the
-am64x_sk_defconfig work?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> diff --git a/package/libcgroup/Config.in b/package/libcgroup/Config.in
+> index 03efa71e6b..546b5f3560 100644
+> --- a/package/libcgroup/Config.in
+> +++ b/package/libcgroup/Config.in
+> @@ -1,8 +1,7 @@
+>   config BR2_PACKAGE_LIBCGROUP
+>   	bool "libcgroup"
+>   	depends on BR2_INSTALL_LIBSTDCPP
+> -	# libcgroup uses <fts.h> which is not included by default in uClibc
+> -	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+>   	help
+>   	  libcgroup is a library that abstracts the control
+>   	  group file system in Linux.
+> @@ -18,5 +17,5 @@ config BR2_PACKAGE_LIBCGROUP_TOOLS
+>   
+>   endif
+>   
+> -comment "libcgroup needs a glibc toolchain w/ C++"
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC
+> +comment "libcgroup needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> \ No newline at end of file
+> diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+> index fb0b646c51..e3de48c561 100644
+> --- a/package/libcgroup/libcgroup.mk
+> +++ b/package/libcgroup/libcgroup.mk
+> @@ -36,4 +36,8 @@ else
+>   LIBCGROUP_CONF_OPTS += --disable-pam
+>   endif
+>   
+> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+> +LIBCGROUP_DEPENDENCIES += musl-fts
+> +endif
+> +
+>   $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
