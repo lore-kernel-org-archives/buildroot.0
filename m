@@ -4,47 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E4C5EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 19:26:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67345EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 19:27:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDD6A612A1;
-	Sun, 25 Jun 2023 19:26:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDD6A612A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17C0261299;
+	Sun, 25 Jun 2023 19:27:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17C0261299
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TN74TloGKXze; Sun, 25 Jun 2023 19:26:24 +0000 (UTC)
+	with ESMTP id GcvsrGi9gBxv; Sun, 25 Jun 2023 19:27:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3E2B60BCD;
-	Sun, 25 Jun 2023 19:26:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3E2B60BCD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1910B1BF3A4
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:26:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5183660F25;
+	Sun, 25 Jun 2023 19:27:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5183660F25
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A39E01BF3A4
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:26:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E6ADD60BCD
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6ADD60BCD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A410400DD
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:26:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A410400DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jqn9cjVQW7Iw for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 19:26:20 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 008E86070A
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 19:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 008E86070A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D571E84CA1; Sun, 25 Jun 2023 19:26:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 21:24:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: afbc2f47fb0bd820e5a98e14c2271f016b9fdce4
-X-Git-Newrev: 52ae2a4e1d10da4ea46bc730db69a40d79eb835a
-X-Patchwork-Hint: ignore
-Message-Id: <20230625192619.D571E84CA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus: security bump to version
- 1.2.28
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2pcqreJ4178X for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 19:26:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32FE0400C8
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 32FE0400C8
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 19:26:56 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-98377c5d53eso306960066b.0
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 12:26:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1687721215; x=1690313215;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=IzHyMgcuTy6EdGRcSNSKgvXVmk7wVppokz4G4x5Ocxs=;
+ b=aA8FrpPMVV3VVxkZfVs2PXWbEnHJ5oXkCW7gTWD9+nCB8p33KlyDv68q0+AUICApH8
+ Dogs0hbhFoX26RElCCKuYUF8lozsHBB0yWA5qSl6NeVxs0dFJE1wiBBrB7wzQdFRkeIq
+ doiubYYUd/ZqUoZuNvMvjNXBNdbfVsDd8P73b32BY4mNr3rPA2y7sXSBo6uUzE5uLdzT
+ MQ49OPxIWc4PUtyUYFer5MX036cP8O2epxyK5QaVm7iDPifBp1KH9AsmePgdQoSh5DDa
+ PCFP++a5VCDMd6Nvm/Etvx89hbJSnuoshO2fcyyXuN1s8KQBBReL1HRn5Re4MNISw/7s
+ dxwA==
+X-Gm-Message-State: AC+VfDxGGLIQnGuIOfa9pkXT7oZxYg54BenvmTnCNhK0vqZECZBGczm1
+ D5wrubXctjoFARewwMlEBXZiYj1Vm/plNKzajrU=
+X-Google-Smtp-Source: ACHHUZ69WohuW+ar4bd8YsIw7PEN3V2fWtEBubNRiLjmfead3guSU/Z/7i+vH1d2cDOljTW0tKFMnw==
+X-Received: by 2002:a17:907:1ca8:b0:973:d076:67ab with SMTP id
+ nb40-20020a1709071ca800b00973d07667abmr24973000ejc.42.1687721215095; 
+ Sun, 25 Jun 2023 12:26:55 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ ci8-20020a170906c34800b00982d0563b11sm2384927ejb.197.2023.06.25.12.26.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 25 Jun 2023 12:26:54 -0700 (PDT)
+Message-ID: <3f4b279d-1421-7940-1693-11aa1f8e4586@mind.be>
+Date: Sun, 25 Jun 2023 21:26:52 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-GB
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20230625144833.296862-1-bernd@kuhls.net>
+In-Reply-To: <20230625144833.296862-1-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1687721215; x=1690313215;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=IzHyMgcuTy6EdGRcSNSKgvXVmk7wVppokz4G4x5Ocxs=;
+ b=Px2XhBoK9K+jfnciP2ICMQLsoxtZwZ9j8nR81fVTmK7U+NaYd9oLvtXr/Q3DfC9Vrc
+ q5k8q7YqM9Sa+mVg1zeBuQMfAHM73aVckD4u3DDT+70e34ZOLtRqdc/IRzGH2dXcB9M7
+ iNs8Gl+QU2Nm7ZMPjixrBWf6J/EINQ+wATM+kTRRbf3Ve3aBxFyMaEgdLpuLela8azz+
+ FAXAdeo0wFFVx4xVoL/KpJrMF8M4iiKJ+dFK09HE+UOYJuAORYTzoyXRADWXx2pv0obZ
+ XosdFa11aFWmIYpJI9yfAt5E/eY3UzN9Ue3eL2dRF5jskcJpghqnb2J9erpw7e0eoWjm
+ yTtg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Px2XhBoK
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version
+ to 20.3.10-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,64 +103,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52ae2a4e1d10da4ea46bc730db69a40d79eb835a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
 
-- CVE-2023-34969: Fix an assertion failure in dbus-daemon when a privileged
-  Monitoring connection (dbus-monitor, busctl monitor, gdbus monitor or
-  similar) is active, and a message from the bus driver cannot be delivered
-  to a client connection due to <deny> rules or outgoing message quota.
-  This is a denial of service if triggered maliciously by a local attacker.
+On 25/06/2023 16:48, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>   package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+>   package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> index 87df4f7de0..9939c6f73b 100644
+> --- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> +++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  451d4e4dbdca71c9bd31d3d11528db4759b93c323476e5e881f617fa3eadc600  kodi-pvr-zattoo-20.3.8-Nexus.tar.gz
+> +sha256  68aa0a3af4f10396c866b0da225928033d0bbf980b8884c944dd1829e013435d  kodi-pvr-zattoo-20.3.10-Nexus.tar.gz
+>   sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+> diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+> index ed3c96f3e8..53153f8f59 100644
+> --- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+> +++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -KODI_PVR_ZATTOO_VERSION = 20.3.8-Nexus
 
-- Fix an incorrect assertion that could be used to crash dbus-daemon or
-  other users of DBusServer prior to authentication, if libdbus was compiled
-  with assertions enabled.
+  We have 20.3.7... What did you base on?
 
-For details, see the NEWS file:
-https://gitlab.freedesktop.org/dbus/dbus/blob/dbus-1.12/NEWS
+  Regards,
+  Arnout
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 17c70004ba..0e48d4dafd 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.24.tar.gz.asc
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.28.tar.gz.asc
- # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
--sha256  bc42d196c1756ac520d61bf3ccd6f42013617def45dd1e591a6091abf51dca38  dbus-1.12.24.tar.gz
-+sha256  9da1e3f2b73f75eec0a9e4509d64be43909d1f2853fe809528a0a53984d76420  dbus-1.12.28.tar.gz
- 
- # Locally calculated
- sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index b3a79c431d..99d2c4301c 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -6,7 +6,7 @@
- 
- # When updating dbus, check if there are changes in session.conf and
- # system.conf, and update the versions in the dbus-broker package accordingly.
--DBUS_VERSION = 1.12.24
-+DBUS_VERSION = 1.12.28
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+> +KODI_PVR_ZATTOO_VERSION = 20.3.10-Nexus
+>   KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+>   KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+>   KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
