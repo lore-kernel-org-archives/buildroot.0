@@ -4,92 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8033EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 13:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A7F6EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 13:44:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72CBA813DD;
-	Sun, 25 Jun 2023 13:44:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72CBA813DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12721817FD;
+	Sun, 25 Jun 2023 13:44:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12721817FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NBe1l36vEJIo; Sun, 25 Jun 2023 13:44:14 +0000 (UTC)
+	with ESMTP id DWwml80-W-pu; Sun, 25 Jun 2023 13:44:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98821812FE;
-	Sun, 25 Jun 2023 13:44:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98821812FE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F3E531BF3BA
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:43:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E18081A9C;
+	Sun, 25 Jun 2023 13:44:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E18081A9C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F8641BF909
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:44:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB532813BC
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:43:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB532813BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05926606EB
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:44:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05926606EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I4lcm0IXU4jp for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 13:43:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id spg4V92gaqut for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 13:44:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 689E181324
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 689E181324
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 13:43:56 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-9786fc23505so184460866b.2
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 06:43:56 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F010E607E3
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F010E607E3
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 13:44:07 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-51d9865b848so203475a12.1
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 06:44:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687700634; x=1690292634;
+ d=1e100.net; s=20221208; t=1687700646; x=1690292646;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=zkTt5X3gtMhPxbkl8WihJNP+4V73Uw8RRuO6mL0JEGo=;
- b=jbwV3ykPmlPmjTcwJCgehF/wrojuENlaM0nmxGPsbP19a3kKeWvcB6fE4IHh1uoeyH
- Ihq90eauo+0RTVTTn1U3OQJ7aJ+r9LWb64Ybg8o/g267Qjm9113Y+M5yrPJ0KKt45anw
- 3TI494W1VCVBm8n2HrRoAMFIx/4PaY4bElKq4FiVJx4LyViZsGaCNCS85gLIa5MXKbyX
- LTq7SX7Gdnn/EC2YYOkB76QUfw6euyjzpAewBSeOqw3UgE+qn2L2aokmkf80XSU2PCIq
- IZsmd6GPOho04uBaO53aM93A1c9YIslgrCqZCM0Na0LQIe7fLvrn62zgjO5PU7ggwpuN
- SgGQ==
-X-Gm-Message-State: AC+VfDxNt52CXDe38EDfW7pRuXB3zZAmArlrQoi6u0BdqXHVx5wt+Y8l
- MQ54tSCoFmTN6Yj8jZTjOuK66j8QuQ9NPWch6GU=
-X-Google-Smtp-Source: ACHHUZ4fhzIAjuUPxvv/kMF8l5slfTJZotyR7WhFt6x1fOFXkLa6UAm7gCmUWg9MzhCeTZza/akEzg==
-X-Received: by 2002:a17:907:3688:b0:96a:2acf:61e1 with SMTP id
- bi8-20020a170907368800b0096a2acf61e1mr22411572ejc.64.1687700634387; 
- Sun, 25 Jun 2023 06:43:54 -0700 (PDT)
+ bh=35375S8CQY75j3ykE9eO8+Uzu3sX+Zkj19NyZWZGCmM=;
+ b=dXcd9xS7ayvrmdgTOIzyRmjuN0w8x5p0VBPRsTq7HHzzMcI4CYS79iSMRSbFisPxqj
+ z9itBIVk7zsIrSkJXgg1OtSNNE+KlOwsnAyYHniDNVnDcER+KrNrmIIy9vc9QHeKmudJ
+ 8GxB/x9UAQNf1iY5zQcvfo7Db4rutAYwU9r9lMcq1TGkuP57d6+dKv9mlMeQEGxF4DdM
+ Ti/GL6jPUeCDg+Sq5dk0kW/i2kIb/N7lCz5dxB4W7R1udY9qnngi+/3CHXtKLzqwr8p0
+ faaFujG7nBD+WfpFWDYumTZj71xkfJkdNaRPOdagJCtR5ZP1o5IzcyMZsGxMKC7dsFEU
+ nlUA==
+X-Gm-Message-State: AC+VfDzkx3Y5yumLCxeV6Mrf/UCoBzOfIOLu/P2YhGdmh21fdnML9Xl1
+ QgzRgyPBNcTjW3UtRujH8FHAIA==
+X-Google-Smtp-Source: ACHHUZ7MtMA8d11E/YwgJYj8CaL8FE1ragDwD1j4DPddxA4laP2vaalf/SHgaZelR/ame7jkcyDfsw==
+X-Received: by 2002:a17:907:d0f:b0:94e:e30e:7245 with SMTP id
+ gn15-20020a1709070d0f00b0094ee30e7245mr25724648ejc.8.1687700646163; 
+ Sun, 25 Jun 2023 06:44:06 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- bm4-20020a170906c04400b0094f07545d40sm2071930ejb.220.2023.06.25.06.43.53
+ br7-20020a170906d14700b009893b06e9e3sm2100345ejb.225.2023.06.25.06.44.05
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 25 Jun 2023 06:43:53 -0700 (PDT)
-Message-ID: <525a5146-85ab-cf4b-1dec-9dc50e5bafe7@mind.be>
-Date: Sun, 25 Jun 2023 15:43:50 +0200
+ Sun, 25 Jun 2023 06:44:05 -0700 (PDT)
+Message-ID: <4b9e8301-d817-8878-c70e-f0eb91c47126@mind.be>
+Date: Sun, 25 Jun 2023 15:44:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
 Content-Language: en-GB
 To: Marcin Niestroj <m.niestroj@grinn-global.com>, buildroot@buildroot.org
-References: <20230622052703.3215005-1-m.niestroj@grinn-global.com>
-In-Reply-To: <20230622052703.3215005-1-m.niestroj@grinn-global.com>
+References: <20230622061441.3801984-1-m.niestroj@grinn-global.com>
+In-Reply-To: <20230622061441.3801984-1-m.niestroj@grinn-global.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1687700634; x=1690292634;
+ d=mind.be; s=google; t=1687700646; x=1690292646;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=zkTt5X3gtMhPxbkl8WihJNP+4V73Uw8RRuO6mL0JEGo=;
- b=GosD7luJdEuFO7RTCvs0/4WoiCo3JloI9npcD+IxnhKQOWCDnF5jvMkptuAjKRXfx5
- O+x3XQPAdgk6VD85C9AopsrMq9ji2kJK84gTt5IsNzXgHV7iEu4+64oVNuivYEdoDWMa
- 4eIzI9dkxqIHmyWact34Rn4USSgeX/BLudSAgFFiA1nmneuWFoNf4rm32Z9S12uVzKeH
- MXFJyG49peEMQVGsaG3jX/VY008NYV+iX3320EDPGE8xyeou26i3+XDx9bSD/RZaZNoV
- y/qjJ6qQiE5tXN0vSO4hgq0Q/DQCOGKwvH12P23R1glGFc6zXVFIFfweJT5GjH8/bM1e
- /gYw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=35375S8CQY75j3ykE9eO8+Uzu3sX+Zkj19NyZWZGCmM=;
+ b=BdodQ8LxftSEFFivZSAYjVNMDU+5kuij3xPtOcmXBEJNkyLnoqYoyxECCWSOAbkeni
+ /AQpQr+RmOV+I844ly01tJX3DqC3jc1Qe0Lp984ihaM8u/xPcltmMqXCVLGusXmderSq
+ EqGo0hI8vRil4LmBtBNTDNWw/zlCTTM6f5k7QG5bTEFqeC4QBKfeyovHTsg9KlOlEPOk
+ RlJPDx7H5NzOnibej3lNSXKLIywo1BS1e9Mbh1rkFAKOo2HTmywibdPBiJhz9UhC7Bw0
+ WlW+hTz0vHfL8ImZJKvNLS64o8tpxoC8adCFjB0Fvh5BnYQfqSxCdEyJq4BCPf00oANP
+ Fgxw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GosD7luJ
-Subject: Re: [Buildroot] [PATCH] package/python-typing-extensions: bump to
- version 4.6.3
+ header.a=rsa-sha256 header.s=google header.b=BdodQ8Lx
+Subject: Re: [Buildroot] [PATCH] package/python-pytest: bump to version 7.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,11 +110,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 22/06/2023 07:27, Marcin Niestroj wrote:
-> License file was synced with CPython project (see [1]).
-> 
-> [1] https://github.com/python/typing_extensions/commit/bb75d261196aa6f520d1b80b373891c860ebb71b
-> 
+On 22/06/2023 08:14, Marcin Niestroj wrote:
 > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
   Applied to master, thanks.
@@ -124,39 +119,38 @@ On 22/06/2023 07:27, Marcin Niestroj wrote:
   Arnout
 
 > ---
->   .../python-typing-extensions/python-typing-extensions.hash  | 6 +++---
->   .../python-typing-extensions/python-typing-extensions.mk    | 4 ++--
->   2 files changed, 5 insertions(+), 5 deletions(-)
+>   package/python-pytest/python-pytest.hash | 4 ++--
+>   package/python-pytest/python-pytest.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
-> index 249bb63a42..f9d1de5e28 100644
-> --- a/package/python-typing-extensions/python-typing-extensions.hash
-> +++ b/package/python-typing-extensions/python-typing-extensions.hash
+> diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
+> index 2ae1e61ed4..c648a85c04 100644
+> --- a/package/python-pytest/python-pytest.hash
+> +++ b/package/python-pytest/python-pytest.hash
 > @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/typing_extensions/json
-> -md5  5cfcb56ea6fc4972c3600c0030f4d136  typing_extensions-4.4.0.tar.gz
-> -sha256  1511434bb92bf8dd198c12b1cc812e800d4181cfcb867674e0f8279cc93087aa  typing_extensions-4.4.0.tar.gz
-> +md5  111a7d37292a241811502bd1b64032be  typing_extensions-4.6.3.tar.gz
-> +sha256  d91d5919357fe7f681a9f2b5b4cb2a5f1ef0a1e9f59c4d8ff0d3491e05c0ffd5  typing_extensions-4.6.3.tar.gz
->   # Locally computed sha256 checksums
-> -sha256  c7afb65e755707b9fb90487389a176d3ed3d0031d5131afde45c23715ff5e891  LICENSE
-> +sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-> diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
-> index fd7d0bd93a..2c07846154 100644
-> --- a/package/python-typing-extensions/python-typing-extensions.mk
-> +++ b/package/python-typing-extensions/python-typing-extensions.mk
+>   # md5, sha256 from https://pypi.org/pypi/pytest/json
+> -md5  49decbade40109f9c6970df60c22a230  pytest-7.2.0.tar.gz
+> -sha256  c4014eb40e10f11f355ad4e3c2fb2c6c6d1919c73f3b5a433de4708202cade59  pytest-7.2.0.tar.gz
+> +md5  67e2aa27bb98e5af13b45a1b2e67b144  pytest-7.3.2.tar.gz
+> +sha256  ee990a3cc55ba808b80795a79944756f315c67c12b56abd3ac993a7b8c17030b  pytest-7.3.2.tar.gz
+>   # Locally computer sha256
+>   sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
+> diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
+> index 1794582dd3..27277163d2 100644
+> --- a/package/python-pytest/python-pytest.mk
+> +++ b/package/python-pytest/python-pytest.mk
 > @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_TYPING_EXTENSIONS_VERSION = 4.4.0
-> +PYTHON_TYPING_EXTENSIONS_VERSION = 4.6.3
->   PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
-> -PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/e3/a7/8f4e456ef0adac43f452efc2d0e4b242ab831297f1bac60ac815d37eb9cf
-> +PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/42/56/cfaa7a5281734dadc842f3a22e50447c675a1c5a5b9f6ad8a07b467bffe7
->   PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
->   PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
->   PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
+> -PYTHON_PYTEST_VERSION = 7.2.0
+> +PYTHON_PYTEST_VERSION = 7.3.2
+>   PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
+> -PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/0b/21/055f39bf8861580b43f845f9e8270c7786fe629b2f8562ff09007132e2e7
+> +PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/58/2a/07c65fdc40846ecb8a9dcda2c38fcb5a06a3e39d08d4a4960916431951cb
+>   PYTHON_PYTEST_SETUP_TYPE = setuptools
+>   PYTHON_PYTEST_LICENSE = MIT
+>   PYTHON_PYTEST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
