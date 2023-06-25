@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2285EEB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 15:02:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24AC6EB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 15:02:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA7BE41609;
-	Sun, 25 Jun 2023 15:02:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA7BE41609
+	by smtp4.osuosl.org (Postfix) with ESMTP id B27924150C;
+	Sun, 25 Jun 2023 15:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B27924150C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K8IWfmzR4NZY; Sun, 25 Jun 2023 15:02:37 +0000 (UTC)
+	with ESMTP id 1dMduTMtR4MT; Sun, 25 Jun 2023 15:02:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 544F041607;
-	Sun, 25 Jun 2023 15:02:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 544F041607
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2E72C1BF947
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C2E5415F1;
+	Sun, 25 Jun 2023 15:02:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C2E5415F1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 03D621BF3BD
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0228B404FF
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0228B404FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E28B409A1
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E28B409A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s4vn_7BDNA4k for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 15:01:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FS9tVQmBuenk for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7DDA40412
+ by smtp4.osuosl.org (Postfix) with ESMTP id C72FA40998
  for <buildroot@buildroot.org>; Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7DDA40412
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C72FA40998
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6B7584ABB; Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
+ id B3DBA84AD3; Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 16:43:36 +0200
+Date: Sun, 25 Jun 2023 16:40:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f4319f892b7a7559a4e2eef733eb1673ed8a7108
-X-Git-Newrev: 247f17f9af35037c766b0f34deebcf01646d2b22
+X-Git-Oldrev: db45cc593e66598b4d345dd348b0bfe2b388b557
+X-Git-Newrev: 6f722cf6dbbf23850da7b10e1d94e156ff5419d7
 X-Patchwork-Hint: ignore
-Message-Id: <20230625150109.D6B7584ABB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xrdb: bump version to
- 1.2.2
+Message-Id: <20230625150109.B3DBA84AD3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-i128:
+ bump version to 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,49 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=247f17f9af35037c766b0f34deebcf01646d2b22
+commit: https://git.buildroot.net/buildroot/commit/?id=6f722cf6dbbf23850da7b10e1d94e156ff5419d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-June/003401html
+https://lists.x.org/archives/xorg-announce/2023-May/003395.html
 
-Switched tarball to xz.
+Switched tarball to xz and _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/x11r7/xapp_xrdb/xapp_xrdb.hash | 6 +++---
- package/x11r7/xapp_xrdb/xapp_xrdb.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash    | 8 +++-----
+ package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk  | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.hash b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
-index 606fd26060..d8b56bf2c8 100644
---- a/package/x11r7/xapp_xrdb/xapp_xrdb.hash
-+++ b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-August/003107.html
--sha256  4f5d031c214ffb88a42ae7528492abde1178f5146351ceb3c05f3b8d5abee8b4  xrdb-1.2.1.tar.bz2
--sha512  d88135cdfea8536523dfb986249ee42761d5363c936352f12f55b4d0c849f21236f7d74d39869c5ec5b549019d6ed89d9096cde4b3c2b4816c2778a8e370b5c9  xrdb-1.2.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-June/003401.html
-+sha256  31f5fcab231b38f255b00b066cf7ea3b496df712c9eb2d0d50c670b63e5033f4  xrdb-1.2.2.tar.xz
-+sha512  c8a6fc94e270e9cb5602e055150553de103d545298285157ecd8924f163a10ebeb9acfff56d1fafbf48d339809c76340213792478cdf3270012d3cd05486001c  xrdb-1.2.2.tar.xz
+diff --git a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
+index 96bd42ac36..c17d3086a1 100644
+--- a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
++++ b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-December/002932.html
+-md5  a980f1b8532ccfe81932580bc4e0f2a0  xf86-video-i128-1.4.0.tar.bz2
+-sha1  56d5b897b2695222c13e59d2ade74620a99e1011  xf86-video-i128-1.4.0.tar.bz2
+-sha256  8f2c0a6bf5a169dad3fc07c6dd4537b492d0e44489e4a1297311e617c3bed0ea  xf86-video-i128-1.4.0.tar.bz2
+-sha512  d58baee3f20b3ad2ece6853da0ff20a6d54b984c6e3289bad2715cc003b277a0b44d20ded25cfc116400468df552390bdb5d80fbd3fb60861488ee5d027664b2  xf86-video-i128-1.4.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-May/003395.html
++sha256  7064b513ffe33efa040577c4d355ce2c76ed218989ab38feb8972750d5acbc46  xf86-video-i128-1.4.1.tar.xz
++sha512  ec6b4dd9092292b5aabff7cf477090fe62c89944d251689817ac8114a65672f85880b719a442f4c742d63dc2d6c61ec315e53da5b5c625074d1aa0b9ace8e865  xf86-video-i128-1.4.1.tar.xz
  # Locally computed
- sha256  ca1b3e2f9f37c35876b69a9c1c5a7860fae59b7ba87a1d2dc541b722e29b1ecc  COPYING
-diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.mk b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
-index 4f9860d25a..769c5a06f4 100644
---- a/package/x11r7/xapp_xrdb/xapp_xrdb.mk
-+++ b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
-@@ -4,8 +4,8 @@
+ sha256  7677424d79633dbf255a81bd4e05dd621931b89997af33c31522269ec2ed391e  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
+index e44deaf621..266678105c 100644
+--- a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
++++ b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XRDB_VERSION = 1.2.1
--XAPP_XRDB_SOURCE = xrdb-$(XAPP_XRDB_VERSION).tar.bz2
-+XAPP_XRDB_VERSION = 1.2.2
-+XAPP_XRDB_SOURCE = xrdb-$(XAPP_XRDB_VERSION).tar.xz
- XAPP_XRDB_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XRDB_LICENSE = MIT
- XAPP_XRDB_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_I128_VERSION = 1.4.0
+-XDRIVER_XF86_VIDEO_I128_SOURCE = xf86-video-i128-$(XDRIVER_XF86_VIDEO_I128_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_I128_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_I128_VERSION = 1.4.1
++XDRIVER_XF86_VIDEO_I128_SOURCE = xf86-video-i128-$(XDRIVER_XF86_VIDEO_I128_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_I128_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_I128_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_I128_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_I128_DEPENDENCIES = xserver_xorg-server xorgproto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
