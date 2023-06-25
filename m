@@ -4,92 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1389EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 19:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1915EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 20:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D25F81E56;
-	Sun, 25 Jun 2023 19:58:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D25F81E56
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B23881971;
+	Sun, 25 Jun 2023 20:04:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B23881971
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oCj7nxE1NZO7; Sun, 25 Jun 2023 19:58:15 +0000 (UTC)
+	with ESMTP id 2N6M-zMuxyou; Sun, 25 Jun 2023 20:04:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86D7781340;
-	Sun, 25 Jun 2023 19:58:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86D7781340
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 275FB1BF3A4
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:58:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFF09818A1;
+	Sun, 25 Jun 2023 20:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFF09818A1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 79AB41BF3A4
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 20:04:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DF2D40159
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 19:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DF2D40159
+ by smtp1.osuosl.org (Postfix) with ESMTP id 531D0818A1
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 20:04:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 531D0818A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NnGT55cngQl7 for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 19:58:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mak9FqqZWE6p for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 20:04:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B00AD400C8
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B00AD400C8
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 19:58:00 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-3090d3e9c92so3887307f8f.2
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 12:58:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB808817FD
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EB808817FD
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 20:04:08 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id
+ 4fb4d7f45d1cf-51d7e8dd118so2461652a12.1
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 13:04:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687723079; x=1690315079;
+ d=1e100.net; s=20221208; t=1687723447; x=1690315447;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=zARi9OIhl0xV6B0q0lHg5XanrsqN5+sCfBQqBOPkWzY=;
- b=R6ImxqP6qdfU7AtdLbG8yU5AziGZTr7o9vQCH+WYUHksczptusg06b5AVaLpDJgnAa
- 5OyOUm5L3IEws+1pd7QgMk2rwNakKMiPkAkc1sWYsurzplUVa39R5rrIXmXHzHS5YKeV
- 28Awdi8fWxumZc6E/X8TZXbm5ySD1TXixzu244VfxO8+YvY9ESGZYyP+W3Hn1LF0khkv
- zqVv35txmjWFIyQnbc0aB1sNUeuMT3JxCcZTyAhVqIwgiCrU+BD/EfDeBWinleYnjsA8
- swVP/8YiO/Xa4NYKI4NWU5JYPRZVLwOs0QqBESz9laNz8M2VwwCrisUh2CjfsMuI2TA0
- ae6A==
-X-Gm-Message-State: AC+VfDzpBecD3tPf5pwb6+9pWS3lVoyRIszbxJMMzH85n7kBmWqJatab
- r2cWgcnL1mj3RxUXTwtky//Z4/yzTwOYmXCsJic=
-X-Google-Smtp-Source: ACHHUZ4Kzw3Pxnpq5J4GBj+hraDevVyu/fGuePEmQY+fyzvFHF/bXKxRcXMAjCIiE3NK8dEfWDMrng==
-X-Received: by 2002:a5d:453b:0:b0:313:e897:67ef with SMTP id
- j27-20020a5d453b000000b00313e89767efmr4878653wra.47.1687723078836; 
- Sun, 25 Jun 2023 12:57:58 -0700 (PDT)
+ bh=mEYNfZpAPt4ilicN2P4HNTyZIMc+UGpMbD4k8Dtrqv0=;
+ b=XDV75c2YUHoZp0ZCerynySDQw5xrXRr6wQFm3Ufhy37eomcTwks8SEU7+Q63dxl7zy
+ HtURVg9WUY5Fp7elHZyFRvkPfDxLAsMQhEOdxQUXrJNIBIUOwyZR8RK910wiR78pDztz
+ igvT3hrXKBjWVWjzPeo/FQiYvdJNOT98xdtzeOgJPlrk/OlPgAAYb6g3aot86dkzkV9/
+ i+9qCVgSt7/akiTptILDArQLrgM3EFz3B7WrdVBxIhp97wnUJVQuOdG7ssU/m//nlHaz
+ FnySByFEH94+BYUiFcaSUrRKVC+hA3Iu7sDIOZeWX/5XB7B+Ux3+MMnXIqD2fdKugT44
+ RCMg==
+X-Gm-Message-State: AC+VfDx+Eg6DM8YJy0rE6s9tGBgDyit0rOQ6ZQ9IqUESQDFe8ruhVXcS
+ AY9lrEgICvdkeM7lcpTf9R0WuCeJFv2y3t8jPhQ=
+X-Google-Smtp-Source: ACHHUZ6QDE6YWMg/ysTHJImdl3S4NtXaDMPn9SV0LKpDUF17Wdd9tAg4lUGctZA1gf2EwzMTTm9fXg==
+X-Received: by 2002:a17:907:7ea1:b0:98e:886:f27f with SMTP id
+ qb33-20020a1709077ea100b0098e0886f27fmr4101054ejc.20.1687723446874; 
+ Sun, 25 Jun 2023 13:04:06 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- w13-20020a170906130d00b009821ad6ad8fsm2401686ejb.71.2023.06.25.12.57.57
+ pj4-20020a170906d78400b009885a03467csm2400087ejb.31.2023.06.25.13.04.05
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 25 Jun 2023 12:57:58 -0700 (PDT)
-Message-ID: <43466a26-b5d6-e314-b04c-cabe06cd8f24@mind.be>
-Date: Sun, 25 Jun 2023 21:57:56 +0200
+ Sun, 25 Jun 2023 13:04:06 -0700 (PDT)
+Message-ID: <a1ac8c67-837c-e5f9-8d2b-6ba37c822214@mind.be>
+Date: Sun, 25 Jun 2023 22:04:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
 Content-Language: en-GB
 To: Charles Hardin <ckhardin@gmail.com>, buildroot@buildroot.org
 References: <20230620173813.4590-1-ckhardin@gmail.com>
-In-Reply-To: <20230620173813.4590-1-ckhardin@gmail.com>
+ <20230620173813.4590-2-ckhardin@gmail.com>
+In-Reply-To: <20230620173813.4590-2-ckhardin@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1687723079; x=1690315079;
+ d=mind.be; s=google; t=1687723447; x=1690315447;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=zARi9OIhl0xV6B0q0lHg5XanrsqN5+sCfBQqBOPkWzY=;
- b=MJXUYfhDgIAv/dusIKt1Lf8eJNFuer63EZsif4Gb8Gx7oydI/MysOTWvNJZgo0ZDuH
- EHrs21NFETtTSVli/RnCGjxMp9Kh9x8NtpqN9/nk2zycjauLW5UIOkg9/OkBc5CzLyZb
- K9Etp7qkUd1y1VraLXZXvmw+eHP78OWELWiyvkw/g56iuLGh1NR8w3mzfixIBgHcwnix
- mTNwq8VjHpbxfW78yUabuw8j5D/myFxtLZFy7eX7GEmLN2Au5FaSuNCYlLO8RWN+yuDL
- FgAeb9pfkMZUONN+DRf4+OaWb6ZAXK18VLqrnSZRW5hzJjnc228PhdnpGPTqOPhyuSM1
- UKdQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=mEYNfZpAPt4ilicN2P4HNTyZIMc+UGpMbD4k8Dtrqv0=;
+ b=GV58Y/wNTz65RN/zXRZ7sZ7nNq2x03C7Cuy7zu5lk9In555dxoKNMWyaSMTNmI4wBI
+ GtbC+IpfgPlGPb9oF6O1C4EOq++lh8HTvrw2o5lLAZxhl9L1ZV6e8EAUCToEksviUAsC
+ uPiJKOM8Tfrjx6E4sylRDowFC7CE6pye6QQi6weOVrE65l7GvD9kclbkWBtl3bAdCNY1
+ uv2dcvk39RQbaQ5i0RMleXfcrlAzDS6rney8vxR5hThXNaJxwM3Ni9Y2OqUsC0+SXFb3
+ x+qwxj5G68pPLgKol14lZQDfjoa9gug8JVVN3oaF4j66Up2OhTL5ktqcjNIII7sxfsSE
+ n56A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MJXUYfhD
-Subject: Re: [Buildroot] [PATCH 1/2] package/alsa-plugins: fix dependencies
- for the alsa plugin package
+ header.a=rsa-sha256 header.s=google header.b=GV58Y/wN
+Subject: Re: [Buildroot] [PATCH 2/2] package/alsa-plugins: require
+ libsamplerate for the plugins
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,56 +112,84 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 20/06/2023 19:38, Charles Hardin wrote:
-> The alsa-utils will remove and create the /usr/share/alsa dir
-> as a whole and since the alsa plugins needs to add config into
-> this same directory it should come after those install steps.
-> 
-> Also, the bluez alsa needs the plugins installed to find them
-> during the configuration phases - so, interlock the plugins
-> when configured.
-> 
-> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+> During the execution of the alsa plugins on a test application,
+> the library would not function without samplerate being enabled
+> and present. So, this is a patch to just include the samplerate
+> since the latest versions seem to require it for the plugins to
+> work.
 
-  Applied to master, thanks.
+  It doesn't sound unreasonable that some plugins require samplerate, but it 
+seems unlikely that none of them work without libsamplerate...
+
+
+> There might be another fix instead of this patch, but this got
+> the sound to play for the bluez alsa stack as expected.
+
+  If it's just for bluez, then it sounds more logical to do it in bluez-alsa?
 
   Regards,
   Arnout
 
-> ---
->   package/alsa-plugins/alsa-plugins.mk | 4 ++++
->   package/bluez-alsa/bluez-alsa.mk     | 4 ++++
->   2 files changed, 8 insertions(+)
 > 
+> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+> ---
+>   package/alsa-plugins/Config.in       |  1 +
+>   package/alsa-plugins/alsa-plugins.mk | 22 ++++++----------------
+>   2 files changed, 7 insertions(+), 16 deletions(-)
+> 
+> diff --git a/package/alsa-plugins/Config.in b/package/alsa-plugins/Config.in
+> index ee0fb4c1d5..e85ff218dd 100644
+> --- a/package/alsa-plugins/Config.in
+> +++ b/package/alsa-plugins/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_ALSA_PLUGINS
+>   	bool "alsa-plugins"
+>   	depends on BR2_PACKAGE_ALSA_LIB
+>   	select BR2_PACKAGE_ALSA_LIB_HWDEP
+> +	select BR2_PACKAGE_LIBSAMPLERATE
+>   	help
+>   	  Advanced Linux Sound Architecture Plugins
+>   
 > diff --git a/package/alsa-plugins/alsa-plugins.mk b/package/alsa-plugins/alsa-plugins.mk
-> index 5728ebfe37..d23a81c5ee 100644
+> index d23a81c5ee..8046720297 100644
 > --- a/package/alsa-plugins/alsa-plugins.mk
 > +++ b/package/alsa-plugins/alsa-plugins.mk
-> @@ -20,6 +20,10 @@ ALSA_PLUGINS_CONF_OPTS = \
->   	--disable-maemo-resource-manager \
->   	--with-speex=no
+> @@ -7,30 +7,20 @@
+>   ALSA_PLUGINS_VERSION = 1.2.7.1
+>   ALSA_PLUGINS_SOURCE = alsa-plugins-$(ALSA_PLUGINS_VERSION).tar.bz2
+>   ALSA_PLUGINS_SITE = https://www.alsa-project.org/files/pub/plugins
+> -ALSA_PLUGINS_LICENSE = LGPL-2.1+
+> -ALSA_PLUGINS_LICENSE_FILES = COPYING
+> -ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib
+> +ALSA_PLUGINS_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (samplerate)
+> +ALSA_PLUGINS_LICENSE_FILES = COPYING COPYING.GPL
+> +ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib libsamplerate
 >   
-> +ifeq ($(BR2_PACKAGE_ALSA_UTILS),y)
-> +ALSA_PLUGINS_DEPENDENCIES += alsa-utils
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
->   ALSA_PLUGINS_CONF_OPTS += --enable-samplerate
->   ALSA_PLUGINS_DEPENDENCIES += libsamplerate
-> diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
-> index 83dfce6177..649810b0ad 100644
-> --- a/package/bluez-alsa/bluez-alsa.mk
-> +++ b/package/bluez-alsa/bluez-alsa.mk
-> @@ -20,6 +20,10 @@ BLUEZ_ALSA_CONF_OPTS = \
->   	--with-alsaplugindir=/usr/lib/alsa-lib \
->   	--with-alsaconfdir=/etc/alsa/conf.d
+>   ALSA_PLUGINS_CONF_OPTS = \
+> +	--enable-samplerate \
+>   	--disable-jack \
+>   	--disable-usbstream \
+>   	--disable-pulseaudio \
+> -	--disable-libav \
+> -	--disable-maemo-plugin \
+> -	--disable-maemo-resource-manager \
+> -	--with-speex=no
+> +	--disable-avcodec \
+> +	--with-speex=builtin
 >   
-> +ifeq ($(BR2_PACKAGE_ALSA_PLUGINS),y)
-> +BLUEZ_ALSA_DEPENDENCIES += alsa-plugins
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_FDK_AAC),y)
->   BLUEZ_ALSA_DEPENDENCIES += fdk-aac
->   BLUEZ_ALSA_CONF_OPTS += --enable-aac
+>   ifeq ($(BR2_PACKAGE_ALSA_UTILS),y)
+>   ALSA_PLUGINS_DEPENDENCIES += alsa-utils
+>   endif
+>   
+> -ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
+> -ALSA_PLUGINS_CONF_OPTS += --enable-samplerate
+> -ALSA_PLUGINS_DEPENDENCIES += libsamplerate
+> -ALSA_PLUGINS_LICENSE += , GPL-2.0+ (samplerate plugin)
+> -ALSA_PLUGINS_LICENSE_FILES += COPYING.GPL
+> -else
+> -ALSA_PLUGINS_CONF_OPTS += --disable-samplerate
+> -endif
+> -
+>   $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
