@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D454EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 13:54:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C399BEB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 13:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCD6781E7A;
-	Sun, 25 Jun 2023 13:54:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCD6781E7A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BEB281E3D;
+	Sun, 25 Jun 2023 13:55:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BEB281E3D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vgUNOWrgs_cv; Sun, 25 Jun 2023 13:54:51 +0000 (UTC)
+	with ESMTP id kTTJ3IcwqSbV; Sun, 25 Jun 2023 13:55:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AD2F81E3F;
-	Sun, 25 Jun 2023 13:54:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AD2F81E3F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C4CDA1BF947
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:54:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A03F081EE9;
+	Sun, 25 Jun 2023 13:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A03F081EE9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FF381BF3BA
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:54:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E9EA81E51
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB8F24094C
  for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 13:54:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E9EA81E51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB8F24094C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mv8LktbRwZTc for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1XZV7oxd7fAw for <buildroot@lists.busybox.net>;
  Sun, 25 Jun 2023 13:54:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9FDBE81E4A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7ADE840926
  for <buildroot@buildroot.org>; Sun, 25 Jun 2023 13:54:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FDBE81E4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7ADE840926
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EAA684A09; Sun, 25 Jun 2023 13:54:15 +0000 (UTC)
+ id 659D8849D1; Sun, 25 Jun 2023 13:54:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 15:39:49 +0200
+Date: Sun, 25 Jun 2023 15:33:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39fef045414b5dde70401d197033eb8cf15e3099
-X-Git-Newrev: 592b66b30a13813b09ec2672bc8ba7b941a9f2f3
+X-Git-Oldrev: c4eb3544a0fb8023678f35556a9a359d806cac4a
+X-Git-Newrev: 8436a33d0fe95678152fcf7f1f8451fdff675ccb
 X-Patchwork-Hint: ignore
-Message-Id: <20230625135415.8EAA684A09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pytest: bump to version
- 7.3.2
+Message-Id: <20230625135415.659D8849D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcgroup: bump to version 2.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=592b66b30a13813b09ec2672bc8ba7b941a9f2f3
+commit: https://git.buildroot.net/buildroot/commit/?id=8436a33d0fe95678152fcf7f1f8451fdff675ccb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+https://github.com/libcgroup/libcgroup/releases/tag/v2.0.3
+
+Also remove redundant LIBCGROUP_SOURCE definition, since there's no
+longer an uploaded bz2 archive.
+
+Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-pytest/python-pytest.hash | 4 ++--
- package/python-pytest/python-pytest.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libcgroup/libcgroup.hash | 4 ++--
+ package/libcgroup/libcgroup.mk   | 3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
-index 2ae1e61ed4..c648a85c04 100644
---- a/package/python-pytest/python-pytest.hash
-+++ b/package/python-pytest/python-pytest.hash
+diff --git a/package/libcgroup/libcgroup.hash b/package/libcgroup/libcgroup.hash
+index 70671212ef..65b98d94e2 100644
+--- a/package/libcgroup/libcgroup.hash
++++ b/package/libcgroup/libcgroup.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest/json
--md5  49decbade40109f9c6970df60c22a230  pytest-7.2.0.tar.gz
--sha256  c4014eb40e10f11f355ad4e3c2fb2c6c6d1919c73f3b5a433de4708202cade59  pytest-7.2.0.tar.gz
-+md5  67e2aa27bb98e5af13b45a1b2e67b144  pytest-7.3.2.tar.gz
-+sha256  ee990a3cc55ba808b80795a79944756f315c67c12b56abd3ac993a7b8c17030b  pytest-7.3.2.tar.gz
- # Locally computer sha256
- sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-index 1794582dd3..27277163d2 100644
---- a/package/python-pytest/python-pytest.mk
-+++ b/package/python-pytest/python-pytest.mk
-@@ -4,9 +4,9 @@
+-# From https://github.com/libcgroup/libcgroup/releases/download/v0.42.2/libcgroup-0.42.2.tar.bz2.sha256
+-sha256  18939381324d418e11be4f5fdca37b01652c18917bfaf1f6b0c505f157e18d07  libcgroup-0.42.2.tar.bz2
++# From https://github.com/libcgroup/libcgroup/releases/download/v2.0.3/libcgroup-2.0.3.tar.gz.sha256
++sha256  b29b5704de3d0fadf199fe4e17eeeaecba7f0dd1b85569c96eec37c7672e3026  libcgroup-2.0.3.tar.gz
+ 
+ # Hash for license file
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+index 156b066162..fb0b646c51 100644
+--- a/package/libcgroup/libcgroup.mk
++++ b/package/libcgroup/libcgroup.mk
+@@ -4,8 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYTEST_VERSION = 7.2.0
-+PYTHON_PYTEST_VERSION = 7.3.2
- PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
--PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/0b/21/055f39bf8861580b43f845f9e8270c7786fe629b2f8562ff09007132e2e7
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/58/2a/07c65fdc40846ecb8a9dcda2c38fcb5a06a3e39d08d4a4960916431951cb
- PYTHON_PYTEST_SETUP_TYPE = setuptools
- PYTHON_PYTEST_LICENSE = MIT
- PYTHON_PYTEST_LICENSE_FILES = LICENSE
+-LIBCGROUP_VERSION = 0.42.2
+-LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
++LIBCGROUP_VERSION = 2.0.3
+ LIBCGROUP_SITE = https://github.com/libcgroup/libcgroup/releases/download/v$(LIBCGROUP_VERSION)
+ LIBCGROUP_LICENSE = LGPL-2.1
+ LIBCGROUP_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
