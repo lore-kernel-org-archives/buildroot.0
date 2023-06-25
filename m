@@ -4,47 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F20EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 15:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D20DAEB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 15:22:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AD4E416CA;
-	Sun, 25 Jun 2023 15:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AD4E416CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52566409EB;
+	Sun, 25 Jun 2023 15:22:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52566409EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yt5TI_ucLXqa; Sun, 25 Jun 2023 15:03:35 +0000 (UTC)
+	with ESMTP id ofFc12IUn0gP; Sun, 25 Jun 2023 15:22:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A32840932;
-	Sun, 25 Jun 2023 15:03:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A32840932
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 24BAA1BF909
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13D17409E2;
+	Sun, 25 Jun 2023 15:22:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13D17409E2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B14141BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:22:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DEA6081CDB
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEA6081CDB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95F48409E2
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 15:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95F48409E2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vaHcnfKNx8Qi for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 15:01:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E229B81CA0
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E229B81CA0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CDCDD84AE9; Sun, 25 Jun 2023 15:01:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 25 Jun 2023 16:43:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50da44aa0cede1466264011a94fdd80f5c345043
-X-Git-Newrev: f4319f892b7a7559a4e2eef733eb1673ed8a7108
-X-Patchwork-Hint: ignore
-Message-Id: <20230625150109.CDCDD84AE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xwd: bump version to
- 1.0.9
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pMVKnd_Zs6YH for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 15:22:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BD47409C0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3BD47409C0
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 15:22:40 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D309520004;
+ Sun, 25 Jun 2023 15:22:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qDRZT-006svl-Ra; Sun, 25 Jun 2023 17:22:35 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20230622160212.2063472-1-dannenberg@ti.com>
+ <20230622160212.2063472-7-dannenberg@ti.com>
+ <20230625135435.GC589277@scaer>
+ <bd293d20-a3c8-d76d-e711-75daaa5ec136@mind.be>
+Date: Sun, 25 Jun 2023 17:22:35 +0200
+In-Reply-To: <bd293d20-a3c8-d76d-e711-75daaa5ec136@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 25 Jun 2023 16:33:04 +0200")
+Message-ID: <875y7bpnwk.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v9 06/11] board/ti/am62x_sk|am64x_sk: switch
+ to TI SDK v8.6 sources
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,57 +72,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Andreas Dannenberg <dannenberg@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4319f892b7a7559a4e2eef733eb1673ed8a7108
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-June/003400.html
+Hi,
 
-Switched tarball to xz.
+ >>> * TI Linux Kernel v5.10
+ >> So this means going from a 6.3 kernel back to a 5.10 (the current
+ >> latest
+ >> if 6.3, which is what is used in the defconfigs from the two previous
+ >> patches). That's a bit unfortunate.
+ >> Do you have plans to update to a more recent kernel in the (near)
+ >> future? Can't we keep using 6.3 anyway?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/x11r7/xapp_xwd/xapp_xwd.hash | 6 +++---
- package/x11r7/xapp_xwd/xapp_xwd.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ >  We don't actually have a clear policy on whether to use upstream or
+ >  vendor kernels for the defconfigs. We have a few boards with both,
+ > but IMHO that's not a great approach either.
 
-diff --git a/package/x11r7/xapp_xwd/xapp_xwd.hash b/package/x11r7/xapp_xwd/xapp_xwd.hash
-index 7595286499..cc81b05ce5 100644
---- a/package/x11r7/xapp_xwd/xapp_xwd.hash
-+++ b/package/x11r7/xapp_xwd/xapp_xwd.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-August/003102.html
--sha256  fbaa2b34163714fe7be22b60920ea4683f63b355babb1781aec2e452a033031b  xwd-1.0.8.tar.bz2
--sha512  d2aaf42c60d20c4b09f4947d3702058dbfad4633b2c5c8ea62e8897fc9ced1ab3417ce99255a223286d21a731f543019470737e3074f1bc68033b4eb47bc773e  xwd-1.0.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-June/003400.html
-+sha256  dc121b84947eb4a3d1131bff1e9844cfa2124d95b47b35f9932340fa931fbd3f  xwd-1.0.9.tar.xz
-+sha512  ae59661b05160f5658920fd79031b6b8548cb7bbfc734194edb0acef5c95f76b210ca4443e9506fc1a0cb9df47ee7c22948502971afe578b44c75aa2a1138d56  xwd-1.0.9.tar.xz
- # Locally computed
- sha256  7cfda56afd92a1ecd2f23bd0064e01b5141053390d854785504adfe2c0fbd946  COPYING
-diff --git a/package/x11r7/xapp_xwd/xapp_xwd.mk b/package/x11r7/xapp_xwd/xapp_xwd.mk
-index 1c5bd50166..8960aaffdb 100644
---- a/package/x11r7/xapp_xwd/xapp_xwd.mk
-+++ b/package/x11r7/xapp_xwd/xapp_xwd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XAPP_XWD_VERSION = 1.0.8
--XAPP_XWD_SOURCE = xwd-$(XAPP_XWD_VERSION).tar.bz2
-+XAPP_XWD_VERSION = 1.0.9
-+XAPP_XWD_SOURCE = xwd-$(XAPP_XWD_VERSION).tar.xz
- XAPP_XWD_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XWD_LICENSE = MIT
- XAPP_XWD_LICENSE_FILES = COPYING
+ >  Personally, I think it makes sense to focus on vendor kernels for the
+ >  defconfigs. Using upstream is generally easy, you just have to find
+ > the appropriate device tree. But for the vendor kernel, you have to
+ > find the repository, which branch is "current", and often also make
+ > sure you sync up with U-Boot and OP-TEE etc. versions. @Andreas don't
+ > take this as law, though, it's just personal opinion.
+
+Correct, but given the poor quality of most vendor kernels, using a
+board with mainline is typically a lot nicer (if the IP blocks you care
+about are supported naturally).
+
+Same about the support, E.G. we had issues with various vendor
+kernels/bootloaders breaking with newer toolchain versions.
+
+
+ >  That said, I think for each board we should look at what the vendor
+ >  kernel really brings. If everything, including GPU, is working with
+ > the upstream kernel, it doesn't make sense to use the vendor kernel. I
+ > don't know if that's the case in this specific situation.
+
+ >  Yann, Peter, Romain, Thomas, what do you think?
+
+Agreed. I would in general say go for mainline, unless there is no
+decent support in mainline. I would not necessarily think that GPU
+support is a requirement, but at least the things used by the defconfig
+(E.G. storage, serial, network).
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
