@@ -4,84 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83476EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 05:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0456EB64DC
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 05:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE5DA60A89;
-	Sun, 25 Jun 2023 05:38:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE5DA60A89
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B56F60E43;
+	Sun, 25 Jun 2023 05:42:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B56F60E43
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4APsX-aVY5Ew; Sun, 25 Jun 2023 05:38:19 +0000 (UTC)
+	with ESMTP id uK82fDwADabm; Sun, 25 Jun 2023 05:42:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5511560E43;
-	Sun, 25 Jun 2023 05:38:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5511560E43
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21E8C1BF409
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 05:38:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5527611AD;
+	Sun, 25 Jun 2023 05:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5527611AD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 720F41BF409
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 05:42:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EBC294062B
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 05:38:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBC294062B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 469A2611AD
+ for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 05:42:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 469A2611AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kR5X9rY_i-vo for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 05:38:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MtgxGYy0yR_V for <buildroot@lists.busybox.net>;
+ Sun, 25 Jun 2023 05:42:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57BC94021E
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com
- [IPv6:2607:f8b0:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 57BC94021E
- for <buildroot@buildroot.org>; Sun, 25 Jun 2023 05:38:14 +0000 (UTC)
-Received: by mail-pf1-x42c.google.com with SMTP id
- d2e1a72fcca58-6726d5d92afso186864b3a.1
- for <buildroot@buildroot.org>; Sat, 24 Jun 2023 22:38:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D07BE60E43
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
+ [IPv6:2607:f8b0:4864:20::102a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D07BE60E43
+ for <buildroot@buildroot.org>; Sun, 25 Jun 2023 05:42:07 +0000 (UTC)
+Received: by mail-pj1-x102a.google.com with SMTP id
+ 98e67ed59e1d1-25ec175b86bso1554845a91.1
+ for <buildroot@buildroot.org>; Sat, 24 Jun 2023 22:42:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687671494; x=1690263494;
+ d=1e100.net; s=20221208; t=1687671727; x=1690263727;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=5OoqgQe40Q757S/8PqD12VDW1Xw7MfjfiaPTd4hLuls=;
- b=buAPRq5DJfn3tP91lT8rctdjZuG9dPcqJcZT6JHueBAHnOBEEavrCOgJ1cJxR5o5HS
- MoGmftRUqP+bC5dBC36DcAq0h4vUFMh3k6la/+rheGfaRxfaCXTz++RPnCZp1HyNc9nY
- zvBiGo3r/zNd/RgcQsrefhXIYXH/e94zER1Nch9OH2yuszN81DV5GspAkULvE9k4vr8l
- DceH0jzrb5nL3+Duvn8MpIASX9+HenJXGsW7sVQE+jvbvM4fZoHpiFumR2UeW1jIOErX
- o6Aqettbl4UqyYtjzUPDR9rX/uDiwK1XRQoZAwtOj3EdrYyD1dtqOuHOF1DvDAXXa7Q9
- RvBA==
-X-Gm-Message-State: AC+VfDwyHplha3NZoJKjXR8FQrfwpltC4KODHkw58JtIZiYqJVWoW56i
- A9fB/E+9XnZNsZSiux44lwXFjRHP1coRg0mwub00A3CIsz4SJ6Yl+C0=
-X-Google-Smtp-Source: ACHHUZ5/J6jxo/3SML5mHBx16h9XfNknC/LYEKDPw1Kn44Klqp/ezyLUqwcl5Q8VHNiMHEE6uYRmSQbrB9YlulvMnF0=
-X-Received: by 2002:a17:903:22c8:b0:1b1:1168:656b with SMTP id
- y8-20020a17090322c800b001b11168656bmr4930334plg.26.1687671493506; Sat, 24 Jun
- 2023 22:38:13 -0700 (PDT)
+ bh=WX1p+27XeJSMWICzR5G8ltxhH2BZE1WHbyfdutZVYh8=;
+ b=gbSsCLLKdNfiETFdF1QQAiP7v9bR0yIkUGYuWrKxp4hiuDr+NC5RffiQpuDdPeqkPz
+ +12Fe/viSqVgiQXKzcZmadVWHjrkFK3LnEh8JeuYgJf+t76d8sSsr7vUi9bs6CK3E05a
+ B0k8XpAmMP58l0hsk14z8KtmqXp0EcmzOFMt3rpGKao/kNc8NbiGZff2Us87W2mA5b6Y
+ SFtoMGnW3Sgf4kiTM3FDk6mgdOlK0pf3EyIiecDQ0yeSsLzkS71tPfn7+/Pj1DPfAdhd
+ PALcuXXSXcMdf/YGpMWsYi8v9GnFhitBullRWIjigH/Xl1V/tu8PVi1qCstRdBKq2iT+
+ PNhQ==
+X-Gm-Message-State: AC+VfDxqxDmlzcS0rlgrCC46i2GZZOGvic7pRvPn7y1oHH7XL5kt9uxN
+ GUkg03M6LxZHR4H7e64yLtfcA/UAeXfqRRHOVaQQRsD5FiY88LYDXu+RrA==
+X-Google-Smtp-Source: ACHHUZ4iOLv1n7/yhQRVzSPQi/gVIQl8WO5ChtMYUC/cec557Ms1ivZJSXwWzTwYIiMCJshD1uB6KDvIAayf6vDA8i0=
+X-Received: by 2002:a17:90a:e60d:b0:25e:8326:488e with SMTP id
+ j13-20020a17090ae60d00b0025e8326488emr25661297pjy.17.1687671727089; Sat, 24
+ Jun 2023 22:42:07 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230622160212.2063472-1-dannenberg@ti.com>
- <20230622160212.2063472-11-dannenberg@ti.com>
- <CAAE6iEVbgKo4FS7ofh_GbOi=tUDafp0sHkcthHskqaduiPb8zQ@mail.gmail.com>
- <20230623145945.kvxhcdbf2kycdyk5@dasso>
-In-Reply-To: <20230623145945.kvxhcdbf2kycdyk5@dasso>
+ <20230622160212.2063472-5-dannenberg@ti.com>
+In-Reply-To: <20230622160212.2063472-5-dannenberg@ti.com>
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 25 Jun 2023 07:37:41 +0200
-Message-ID: <CAAE6iEX1eomAE5_qr55=JKgRZWM-iZ+dmO+Ti_vQ94VuxZBe6Q@mail.gmail.com>
+Date: Sun, 25 Jun 2023 07:41:34 +0200
+Message-ID: <CAAE6iEVMhPKkBHADmRc8dCJN0xtuuoUXpPK_jrmdRCKHjmBF8A@mail.gmail.com>
 To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1687671494; x=1690263494;
+ d=gadz.org; s=google; t=1687671727; x=1690263727;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=5OoqgQe40Q757S/8PqD12VDW1Xw7MfjfiaPTd4hLuls=;
- b=ZWzFZwLtHXnLWrW2wv76+KPASSFcJwyq3Zqk86rCZPE5JlqsjIq1KbSz3sbyf2e6bU
- PXq1XLZViFq5VF4o9W9BTN/YT+7ujqr265dE61DyRhdeX8J1/JZiY3dZHswIL0xWnIEP
- yJKnybqsVSdMepUvgUaFK3AYg6PYRpwA2+5ygGzj44ZP4neGF8Rm8n7X39mrBYfo3rCS
- XoZpwd5gelxkJt7M5Y/K/OSgY/lgGn+svAhNE3CApiLFr1LmLNmVHqpUE2lMK+mJU7C5
- WvlnuAx4idAOIi6O+7PNITVfyskvr+8JFBvmvxR1b1FQK8ALGvG0CnDZujFb776sBsHs
- N/Dw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=WX1p+27XeJSMWICzR5G8ltxhH2BZE1WHbyfdutZVYh8=;
+ b=mfauKojyBUoIlNDou8Q4avgBPHCGNGLINB5FYTdEvw5uQ37zHhLeNWmegq74GGOzgp
+ +aot2Xu1YmIPXcNAHT0dKLSrRcpXTgCIamNiOshJoog6YljePBEhxpv8G1IuLK5jFSMP
+ Yo4p9Fb+koCf8U11+5kAEYK9yZBnp9QU4cMxh+8QhRF/6MAMFsXq0th2JJkP+GRIk+wL
+ 3JYKtYo0Aau/6pRewbobtmTDEHziIclfCPckdyGZ5ILcMTDupdl0jRedl8V3bJNkKNEh
+ 2GayurHgjAqFqXKbc1HAOcpprYzVyvaRDCqiQFQIsVuJyjNaeN49DCcmM6dn6MXvXOpq
+ mDaA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=ZWzFZwLt
-Subject: Re: [Buildroot] [PATCH v9 10/11] package/ti-rogue-um: new package
+ header.a=rsa-sha256 header.s=google header.b=mfauKojy
+Subject: Re: [Buildroot] [PATCH v9 04/11] board/ti/am64x_sk: add new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,626 +91,442 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Dannenberg <dannenberg@ti.com>
-Content-Type: multipart/mixed; boundary="===============1475736708994817284=="
+Cc: Bryan Brattlof <bb@ti.com>, Andrew Davis <afd@ti.com>,
+ Julien Olivain <ju.o@free.fr>, Xuanhao Shi <x-shi@ti.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Anand Gadiyar <gadiyar@ti.com>, Romain Naour <romain.naour@gmail.com>,
+ Andreas Dannenberg <dannenberg@ti.com>
+Content-Type: multipart/mixed; boundary="===============7812940407111725149=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1475736708994817284==
-Content-Type: multipart/alternative; boundary="000000000000de4ac405feeda3aa"
+--===============7812940407111725149==
+Content-Type: multipart/alternative; boundary="000000000000ca8ac205feedb114"
 
---000000000000de4ac405feeda3aa
+--000000000000ca8ac205feedb114
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Le ven. 23 juin 2023 =C3=A0 16:59, Andreas Dannenberg <dannenberg@ti.com> a
+Le jeu. 22 juin 2023 =C3=A0 19:39, Andreas Dannenberg <dannenberg@ti.com> a
 =C3=A9crit :
 
-> Hi Fran=C3=A7ois,
+> From: Xuanhao Shi <x-shi@ti.com>
 >
-> On Fri, Jun 23, 2023 at 09:30:39AM +0200, Fran=C3=A7ois Perrad wrote:
-> > Le jeu. 22 juin 2023 =C3=A0 18:07, Andreas Dannenberg via buildroot <
-> > buildroot@buildroot.org> a =C3=A9crit :
-> >
-> > > This package adds the userspace libraries for the Rogue graphics
-> > > accelerator of the following Texas Instruments SoCs: AM62, J721E,
-> > > J721S2, and J784S4.
-> > >
-> > > Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
-> > > ---
-> > >  package/Config.in                             |   1 +
-> > >  .../0001-all-drop-the-init-script.patch       | 832 ++++++++++++++++=
-++
-> > >  package/ti-rogue-um/Config.in                 |  52 ++
-> > >  package/ti-rogue-um/ti-rogue-um.hash          |   3 +
-> > >  package/ti-rogue-um/ti-rogue-um.mk            |  38 +
-> > >  5 files changed, 926 insertions(+)
-> > >  create mode 100644
-> package/ti-rogue-um/0001-all-drop-the-init-script.patch
-> > >  create mode 100644 package/ti-rogue-um/Config.in
-> > >  create mode 100644 package/ti-rogue-um/ti-rogue-um.hash
-> > >  create mode 100644 package/ti-rogue-um/ti-rogue-um.mk
-> > >
-> > > diff --git a/package/Config.in b/package/Config.in
-> > > index 96ef0d72de..0bff1135aa 100644
-> > > --- a/package/Config.in
-> > > +++ b/package/Config.in
-> > > @@ -614,6 +614,7 @@ endmenu
-> > >         source "package/targetcli-fb/Config.in"
-> > >         source "package/ti-gfx/Config.in"
-> > >         source "package/ti-rogue-km/Config.in"
-> > > +       source "package/ti-rogue-um/Config.in"
-> > >         source "package/ti-sgx-demos/Config.in"
-> > >         source "package/ti-sgx-km/Config.in"
-> > >         source "package/ti-sgx-um/Config.in"
-> > > diff --git a/package/ti-rogue-um/0001-all-drop-the-init-script.patch
-> > > b/package/ti-rogue-um/0001-all-drop-the-init-script.patch
-> > > new file mode 100644
-> > > index 0000000000..4f3dd1cbb1
-> > > --- /dev/null
-> > > +++ b/package/ti-rogue-um/0001-all-drop-the-init-script.patch
-> > > @@ -0,0 +1,832 @@
-> > > +From 99e0da8a1c08818c59680f726e11a84b26daf29f Mon Sep 17 00:00:00 20=
-01
-> > > +From: Randolph Sapp <rs@ti.com>
-> > > +Date: Thu, 25 May 2023 18:59:26 -0500
-> > > +Subject: [PATCH] all: drop the init script
-> > > +
-> > > +Nobody should be using this anymore. It's sysVinit and it's just a
-> fancy
-> > > +wrapper around modprobe anyway. We'll be dropping it from our build
-> > > +tools soon.
-> > > +
-> > > +Signed-off-by: Randolph Sapp <rs@ti.com>
-> > > +---
-> > > + .../wayland/release/etc/init.d/rc.pvr         | 196
-> ------------------
-> > > + .../wayland/release/etc/init.d/rc.pvr         | 196
-> ------------------
-> > > + .../wayland/release/etc/init.d/rc.pvr         | 196
-> ------------------
-> > > + .../wayland/release/etc/init.d/rc.pvr         | 196
-> ------------------
-> > > + 4 files changed, 784 deletions(-)
-> > > + delete mode 100755
-> targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
-> > > + delete mode 100755
-> targetfs/j721e_linux/wayland/release/etc/init.d/rc.pvr
-> > > + delete mode 100755
-> > > targetfs/j721s2_linux/wayland/release/etc/init.d/rc.pvr
-> > > + delete mode 100755
-> > > targetfs/j784s4_linux/wayland/release/etc/init.d/rc.pvr
-> > > +
-> > > +diff --git a/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
-> > > b/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
-> > > +deleted file mode 100755
-> > > +index 428cd86..0000000
-> > > +--- a/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr
-> > > ++++ /dev/null
-> > > +2.34.1
-> > > +
-> > > diff --git a/package/ti-rogue-um/Config.in
-> b/package/ti-rogue-um/Config.in
-> > > new file mode 100644
-> > > index 0000000000..15257858c2
-> > > --- /dev/null
-> > > +++ b/package/ti-rogue-um/Config.in
-> > > @@ -0,0 +1,52 @@
-> > > +comment "ti-rogue-um needs udev and a glibc toolchain w/ threads"
-> > > +       depends on BR2_aarch64
-> > > +       depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC=
- \
-> > > +               || !BR2_TOOLCHAIN_HAS_THREADS
-> > > +
-> > > +config BR2_PACKAGE_TI_ROGUE_UM
-> > > +       bool "ti-rogue-um"
-> > > +       depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-> > > +       depends on BR2_PACKAGE_HAS_UDEV
-> > > +       # pre-built binaries
-> > > +       depends on BR2_TOOLCHAIN_USES_GLIBC
-> > > +       depends on BR2_aarch64
-> > > +       select BR2_PACKAGE_LIBDRM
-> > > +       select BR2_PACKAGE_HAS_LIBEGL
-> > > +       select BR2_PACKAGE_HAS_LIBGBM
-> > > +       select BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
-> > > +       select BR2_PACKAGE_HAS_LIBGLES
-> > > +       select BR2_PACKAGE_HAS_POWERVR
-> > > +       select BR2_PACKAGE_LIBFFI
+> Adds support for TI's SK-AM64 board by introducing the
+> am64x_sk_defconfig file and related support files.
+>
+> More information about the board can be found at:
+> https://www.ti.com/tool/SK-AM64
+>
+> Signed-off-by: Xuanhao Shi <x-shi@ti.com>
+> Signed-off-by: Anand Gadiyar <gadiyar@ti.com>
+> Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
+> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Acked-by: Andrew Davis <afd@ti.com>
+> Tested-by: Bryan Brattlof <bb@ti.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Reviewed-by: Francois Perrad <francois.perrad@gadz.org>
+> Reviewed-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  DEVELOPERS                     |  4 ++++
+>  board/ti/am64x_sk/genimage.cfg | 27 +++++++++++++++++++++
+>  board/ti/am64x_sk/readme.txt   | 26 ++++++++++++++++++++
+>  configs/am64x_sk_defconfig     | 44 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 101 insertions(+)
+>  create mode 100644 board/ti/am64x_sk/genimage.cfg
+>  create mode 100644 board/ti/am64x_sk/readme.txt
+>  create mode 100644 configs/am64x_sk_defconfig
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 7ed9f040cc..a4d729983b 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -129,8 +129,10 @@ F: package/libxmlrpc/
+>  F:     package/python-docopt/
+>
+>  N:     Anand Gadiyar <gadiyar@ti.com>
+> +F:     board/ti/am64x_sk/
+>  F:     boot/ti-k3-image-gen/
+>  F:     boot/ti-k3-r5-loader/
+> +F:     configs/am64x_sk_defconfig
+>
+>  N:     Andr=C3=A9 Zwing <nerv@dawncrow.de>
+>  F:     package/libkrb5/
+> @@ -3021,8 +3023,10 @@ N:       Wojciech Nizi=C5=84ski <niziak@spox.org>
+>  F:     package/fwup/
+>
+>  N:     Xuanhao Shi <X15000177@gmail.com>
+> +F:     board/ti/am64x_sk/
+>  F:     boot/ti-k3-image-gen/
+>  F:     boot/ti-k3-r5-loader/
+> +F:     configs/am64x_sk_defconfig
+>
+>  N:     Yair Ben Avraham <yairba@protonmail.com>
+>  F:     package/casync/
+> diff --git a/board/ti/am64x_sk/genimage.cfg
+> b/board/ti/am64x_sk/genimage.cfg
+> new file mode 100644
+> index 0000000000..26304fe98f
+> --- /dev/null
+> +++ b/board/ti/am64x_sk/genimage.cfg
+> @@ -0,0 +1,27 @@
+> +image boot.vfat {
+> +       vfat {
+> +               files =3D {
+> +                       "tiboot3.bin",
+> +                       "tispl.bin",
+> +                       "u-boot.img",
+> +               }
+> +       }
+> +
+> +       size =3D 16M
+> +}
+> +
+> +image sdcard.img {
+> +       hdimage {
+> +       }
+> +
+> +       partition u-boot {
+> +               partition-type =3D 0xC
+> +               bootable =3D "true"
+> +               image =3D "boot.vfat"
+> +       }
+> +
+> +       partition rootfs {
+> +               partition-type =3D 0x83
+> +               image =3D "rootfs.ext4"
+> +       }
+> +}
+> diff --git a/board/ti/am64x_sk/readme.txt b/board/ti/am64x_sk/readme.txt
+> new file mode 100644
+> index 0000000000..fe83c675f5
+> --- /dev/null
+> +++ b/board/ti/am64x_sk/readme.txt
+> @@ -0,0 +1,26 @@
+> +Texas Instuments SK-AM64 Test and Development Board
+> +
+> +Description
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +This configuration will build a complete image for the TI SK-AM64 board.
+> +
+> +How to Build
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Select the default configuration for the target:
+> +$ make am64x_sk_defconfig
+> +
+> +Optional: modify the configuration:
+> +$ make menuconfig
+> +
+> +Build:
+> +$ make
+> +
+> +To copy the resultimg output image file to an SD card use dd:
+> +$ dd if=3Doutput/images/sdcard.img of=3D/dev/sdX bs=3D1M
+> +
+> +How to Run
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Insert the SD card into the SK-AM62 board, and power it up through
+> +the USB Type-C connector. The system should come up. You can use
+> +a micro-USB cable to connect to the connector labeled DEBUG CONSOLE
+> +to communicate with the board.
+> diff --git a/configs/am64x_sk_defconfig b/configs/am64x_sk_defconfig
+> new file mode 100644
+> index 0000000000..411b3d5b0f
+> --- /dev/null
+> +++ b/configs/am64x_sk_defconfig
+> @@ -0,0 +1,44 @@
+> +BR2_aarch64=3Dy
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS=3D"-c board/ti/am64x_sk/genimage.cfg"
+> +BR2_LINUX_KERNEL=3Dy
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=3Dy
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"ti/k3-am642-sk"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy
 >
 
-BR2_PACKAGE_LIBFFI is useless (already selected by the package wayland).
-
-Fran=C3=A7ois.
-
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy  is missing at least at the end of
+the serie.
 
 
-> > > +       select BR2_PACKAGE_WAYLAND
-> > > +       select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-> > > +       select BR2_PACKAGE_TI_ROGUE_KM if BR2_LINUX_KERNEL
-> > > +       help
-> > > +         Graphics libraries for TI SoCs with Rogue GPU.
-> > > +         This package supports AM62, J721E, J721S2, and J784S4
-> > > +         SoCs only.
-> > > +
-> > > +         https://git.ti.com/cgit/graphics/ti-img-rogue-umlibs
-> > > +
-> > > +if BR2_PACKAGE_TI_ROGUE_UM
-> > > +
-> > > +config BR2_PACKAGE_PROVIDES_LIBEGL
-> > > +       default "ti-rogue-um"
-> > > +
-> > > +config BR2_PACKAGE_PROVIDES_LIBGBM
-> > > +       default "ti-rogue-um"
-> > > +
-> > > +config BR2_PACKAGE_PROVIDES_LIBGLES
-> > > +       default "ti-rogue-um"
-> > > +
-> > > +config BR2_PACKAGE_PROVIDES_POWERVR
-> > > +       default "ti-rogue-um"
-> > > +
-> > > +config BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT
-> > > +       string "UM driver target product"
-> > > +       default "am62_linux"
-> > > +       help
-> > > +         Select target product to be used for UM libraries. This
-> needs to
-> > > +         match one of the SoC-specific folders within the
-> root/targetfs
-> > > +         folder of the ti-img-rogue-umlibs Git repository.
-> > > +
-> > > +endif
-> > > diff --git a/package/ti-rogue-um/ti-rogue-um.hash
-> > > b/package/ti-rogue-um/ti-rogue-um.hash
-> > > new file mode 100644
-> > > index 0000000000..a41bf33145
-> > > --- /dev/null
-> > > +++ b/package/ti-rogue-um/ti-rogue-um.hash
-> > > @@ -0,0 +1,3 @@
-> > > +# Locally calculated
-> > > +sha256
-> 2e1bd1a5ab0ad2db1b9164d028a94f8f9d20743131f337a817fd1c8f9ddd4cbe
-> > > ti-rogue-um-5977e82b96028f783d39c7219f016c1faf8dc5f5-br1.tar.gz
-> > > +sha256
-> 37507b462edf97b59717d2d144daaac85fbca6080c3602b5128e446e97f9ad47
-> > > LICENSE
-> > > diff --git a/package/ti-rogue-um/ti-rogue-um.mk b/package/ti-rogue-um=
-/
-> > > ti-rogue-um.mk
-> > > new file mode 100644
-> > > index 0000000000..fa29638fa7
-> > > --- /dev/null
-> > > +++ b/package/ti-rogue-um/ti-rogue-um.mk
-> > > @@ -0,0 +1,38 @@
-> > >
-> > >
-> +########################################################################=
-########
-> > > +#
-> > > +# ti-rogue-um
-> > > +#
-> > >
-> > >
-> +########################################################################=
-########
-> > > +
-> > > +# This corresponds to SDK 08.06.00
-> > > +TI_ROGUE_UM_VERSION =3D 5977e82b96028f783d39c7219f016c1faf8dc5f5
-> > > +TI_ROGUE_UM_SITE =3D
-> > > https://git.ti.com/git/graphics/ti-img-rogue-umlibs.git
-> > > +TI_ROGUE_UM_SITE_METHOD =3D git
-> > > +TI_ROGUE_UM_LICENSE =3D TI TSPA License
-> > > +TI_ROGUE_UM_LICENSE_FILES =3D LICENSE
-> > > +TI_ROGUE_UM_INSTALL_STAGING =3D YES
-> > > +TI_ROGUE_UM_PROVIDES =3D libegl libgbm libgles powervr
-> > > +
-> > > +# ti-rogue-um is a egl/gles provider only if libdrm is installed
-> > > +TI_ROGUE_UM_DEPENDENCIES =3D libdrm wayland
-> > >
-> >
-> > useless built dependencies (nothing is built, blobs are copied), runtim=
-e
-> > dependencies in Config.in are enough.
+> +BR2_PACKAGE_LINUX_FIRMWARE=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=3Dy
+> +BR2_TARGET_ROOTFS_EXT2=3Dy
+> +BR2_TARGET_ROOTFS_EXT2_4=3Dy
+> +BR2_TARGET_ROOTFS_EXT2_SIZE=3D"120M"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=3Dy
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=3D"v2.7.0"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D"k3"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD=3D"lite"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=3Dy
+> +BR2_TARGET_OPTEE_OS=3Dy
+> +BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3"
+> +BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
+> +BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE_TISCI=3Dy
+> +BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D"am64x"
+> +BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE_GP=3Dy
+> +BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG=3D"evm"
+> +BR2_TARGET_TI_K3_R5_LOADER=3Dy
+> +BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG=3D"am64x_evm_r5"
+> +BR2_TARGET_UBOOT=3Dy
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D"2022.10"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D"am64x_evm_a53"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=3Dy
 >
-> Understood, will fix it. Btw this was a carry-over from
-> package/ti-sgx-um/ti-sgx-um.mk which I used to model this new package
-> after, so opportunity for improvement there as well...
->
-> > +
-> > > +PVR_BUILD =3D "release"
-> > > +PVR_WS =3D "wayland"
-> > > +
-> > >
-> >
-> > TI_ROGUE_UM_MAKE_OPTS =3D \
-> >       TARGET_PRODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT) \
-> >       BUILD=3Drelease \
-> >       WINDOW_SYSTEM=3Dwayland
-> >
-> > define TI_ROGUE_UM_INSTALL_STAGING_CMDS
-> >      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> >           $(TI_ROGUE_UM_MAKE_OPTS) \
-> >           DESTDIR=3D$(STAGING_DIR) \
-> >           install
-> > endef
-> > by this way, all variables are prefixed by TI_ROGUE_UM_.
->
-> Good idea, will factor-out the make options. Thanks for taking the time
-> to review & improve this patch.
->
+
+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=3Dy  is missing at least at the end of the
+serie.
+
+Fran=C3=A7ois
+
+
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=3Dy
+> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> +BR2_TARGET_UBOOT_FORMAT_IMG=3Dy
+> +BR2_TARGET_UBOOT_SPL=3Dy
+> +BR2_TARGET_UBOOT_SPL_NAME=3D"tispl.bin"
+> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS=3D"TEE=3D$(BINARIES_DIR)/tee-pager_v2.b=
+in"
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
+> +BR2_PACKAGE_HOST_GENIMAGE=3Dy
+> +BR2_PACKAGE_HOST_MTOOLS=3Dy
 > --
-> Andreas Dannenberg
-> Texas Instruments Inc
+> 2.34.1
 >
->
->
-> >
-> > Fran=C3=A7ois
-> >
-> >
-> > > +define TI_ROGUE_UM_INSTALL_STAGING_CMDS
-> > > +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> > > +               DESTDIR=3D$(STAGING_DIR) \
-> > > +
->  TARGET_PRODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT) \
-> > > +               BUILD=3D$(PVR_BUILD) WINDOW_SYSTEM=3D$(PVR_WS) \
-> > > +               install
-> > > +endef
-> > > +
-> > > +define TI_ROGUE_UM_INSTALL_TARGET_CMDS
-> > > +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> > > +               DESTDIR=3D$(TARGET_DIR) \
-> > > +
->  TARGET_PRODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT) \
-> > > +               BUILD=3D$(PVR_BUILD) WINDOW_SYSTEM=3D$(PVR_WS) \
-> > > +               install
-> > > +endef
-> > > +
-> > > +$(eval $(generic-package))
-> > > --
-> > > 2.34.1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot@buildroot.org
-> > > https://lists.buildroot.org/mailman/listinfo/buildroot
-> > >
 >
 
---000000000000de4ac405feeda3aa
+--000000000000ca8ac205feedb114
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0ven. 23 juin 2023 =C3=A0=C2=
-=A016:59, Andreas Dannenberg &lt;<a href=3D"mailto:dannenberg@ti.com">danne=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 22 juin 2023 =C3=A0=C2=
+=A019:39, Andreas Dannenberg &lt;<a href=3D"mailto:dannenberg@ti.com">danne=
 nberg@ti.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmai=
 l_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,20=
-4,204);padding-left:1ex">Hi Fran=C3=A7ois,<br>
+4,204);padding-left:1ex">From: Xuanhao Shi &lt;<a href=3D"mailto:x-shi@ti.c=
+om" target=3D"_blank">x-shi@ti.com</a>&gt;<br>
 <br>
-On Fri, Jun 23, 2023 at 09:30:39AM +0200, Fran=C3=A7ois Perrad wrote:<br>
-&gt; Le jeu. 22 juin 2023 =C3=A0 18:07, Andreas Dannenberg via buildroot &l=
+Adds support for TI&#39;s SK-AM64 board by introducing the<br>
+am64x_sk_defconfig file and related support files.<br>
+<br>
+More information about the board can be found at:<br>
+<a href=3D"https://www.ti.com/tool/SK-AM64" rel=3D"noreferrer" target=3D"_b=
+lank">https://www.ti.com/tool/SK-AM64</a><br>
+<br>
+Signed-off-by: Xuanhao Shi &lt;<a href=3D"mailto:x-shi@ti.com" target=3D"_b=
+lank">x-shi@ti.com</a>&gt;<br>
+Signed-off-by: Anand Gadiyar &lt;<a href=3D"mailto:gadiyar@ti.com" target=
+=3D"_blank">gadiyar@ti.com</a>&gt;<br>
+Signed-off-by: Andreas Dannenberg &lt;<a href=3D"mailto:dannenberg@ti.com" =
+target=3D"_blank">dannenberg@ti.com</a>&gt;<br>
+Reviewed-by: Giulio Benetti &lt;<a href=3D"mailto:giulio.benetti@benettieng=
+ineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a>&g=
 t;<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a>&gt; a =C3=A9crit :<br>
-&gt; <br>
-&gt; &gt; This package adds the userspace libraries for the Rogue graphics<=
+Acked-by: Andrew Davis &lt;<a href=3D"mailto:afd@ti.com" target=3D"_blank">=
+afd@ti.com</a>&gt;<br>
+Tested-by: Bryan Brattlof &lt;<a href=3D"mailto:bb@ti.com" target=3D"_blank=
+">bb@ti.com</a>&gt;<br>
+Cc: Romain Naour &lt;<a href=3D"mailto:romain.naour@gmail.com" target=3D"_b=
+lank">romain.naour@gmail.com</a>&gt;<br>
+Reviewed-by: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org=
+" target=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
+Reviewed-by: Julien Olivain &lt;<a href=3D"mailto:ju.o@free.fr" target=3D"_=
+blank">ju.o@free.fr</a>&gt;<br>
+---<br>
+=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0|=C2=A0 4 ++++<br>
+=C2=A0board/ti/am64x_sk/genimage.cfg | 27 +++++++++++++++++++++<br>
+=C2=A0board/ti/am64x_sk/readme.txt=C2=A0 =C2=A0| 26 ++++++++++++++++++++<br=
+>
+=C2=A0configs/am64x_sk_defconfig=C2=A0 =C2=A0 =C2=A0| 44 ++++++++++++++++++=
+++++++++++++++++<br>
+=C2=A04 files changed, 101 insertions(+)<br>
+=C2=A0create mode 100644 board/ti/am64x_sk/genimage.cfg<br>
+=C2=A0create mode 100644 board/ti/am64x_sk/readme.txt<br>
+=C2=A0create mode 100644 configs/am64x_sk_defconfig<br>
+<br>
+diff --git a/DEVELOPERS b/DEVELOPERS<br>
+index 7ed9f040cc..a4d729983b 100644<br>
+--- a/DEVELOPERS<br>
++++ b/DEVELOPERS<br>
+@@ -129,8 +129,10 @@ F: package/libxmlrpc/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/python-docopt/<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Anand Gadiyar &lt;<a href=3D"mailto:gadiyar@ti.=
+com" target=3D"_blank">gadiyar@ti.com</a>&gt;<br>
++F:=C2=A0 =C2=A0 =C2=A0board/ti/am64x_sk/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-image-gen/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-r5-loader/<br>
++F:=C2=A0 =C2=A0 =C2=A0configs/am64x_sk_defconfig<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Andr=C3=A9 Zwing &lt;<a href=3D"mailto:nerv@daw=
+ncrow.de" target=3D"_blank">nerv@dawncrow.de</a>&gt;<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/libkrb5/<br>
+@@ -3021,8 +3023,10 @@ N:=C2=A0 =C2=A0 =C2=A0 =C2=A0Wojciech Nizi=C5=84ski =
+&lt;<a href=3D"mailto:niziak@spox.org" target=3D"_blank">niziak@spox.org</a=
+>&gt;<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/fwup/<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Xuanhao Shi &lt;<a href=3D"mailto:X15000177@gma=
+il.com" target=3D"_blank">X15000177@gmail.com</a>&gt;<br>
++F:=C2=A0 =C2=A0 =C2=A0board/ti/am64x_sk/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-image-gen/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-r5-loader/<br>
++F:=C2=A0 =C2=A0 =C2=A0configs/am64x_sk_defconfig<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Yair Ben Avraham &lt;<a href=3D"mailto:yairba@p=
+rotonmail.com" target=3D"_blank">yairba@protonmail.com</a>&gt;<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/casync/<br>
+diff --git a/board/ti/am64x_sk/genimage.cfg b/board/ti/am64x_sk/genimage.cf=
+g<br>
+new file mode 100644<br>
+index 0000000000..26304fe98f<br>
+--- /dev/null<br>
++++ b/board/ti/am64x_sk/genimage.cfg<br>
+@@ -0,0 +1,27 @@<br>
++image boot.vfat {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0vfat {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0files =3D {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0&quot;tiboot3.bin&quot;,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0&quot;tispl.bin&quot;,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0&quot;u-boot.img&quot;,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size =3D 16M<br>
++}<br>
++<br>
++image sdcard.img {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0hdimage {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0partition u-boot {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0partition-type =3D =
+0xC<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0bootable =3D &quot;=
+true&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0image =3D &quot;boo=
+t.vfat&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0partition rootfs {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0partition-type =3D =
+0x83<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0image =3D &quot;roo=
+tfs.ext4&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++}<br>
+diff --git a/board/ti/am64x_sk/readme.txt b/board/ti/am64x_sk/readme.txt<br=
+>
+new file mode 100644<br>
+index 0000000000..fe83c675f5<br>
+--- /dev/null<br>
++++ b/board/ti/am64x_sk/readme.txt<br>
+@@ -0,0 +1,26 @@<br>
++Texas Instuments SK-AM64 Test and Development Board<br>
++<br>
++Description<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++This configuration will build a complete image for the TI SK-AM64 board.<b=
+r>
++<br>
++How to Build<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++Select the default configuration for the target:<br>
++$ make am64x_sk_defconfig<br>
++<br>
++Optional: modify the configuration:<br>
++$ make menuconfig<br>
++<br>
++Build:<br>
++$ make<br>
++<br>
++To copy the resultimg output image file to an SD card use dd:<br>
++$ dd if=3Doutput/images/sdcard.img of=3D/dev/sdX bs=3D1M<br>
++<br>
++How to Run<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++Insert the SD card into the SK-AM62 board, and power it up through<br>
++the USB Type-C connector. The system should come up. You can use<br>
++a micro-USB cable to connect to the connector labeled DEBUG CONSOLE<br>
++to communicate with the board.<br>
+diff --git a/configs/am64x_sk_defconfig b/configs/am64x_sk_defconfig<br>
+new file mode 100644<br>
+index 0000000000..411b3d5b0f<br>
+--- /dev/null<br>
++++ b/configs/am64x_sk_defconfig<br>
+@@ -0,0 +1,44 @@<br>
++BR2_aarch64=3Dy<br>
++BR2_ROOTFS_POST_IMAGE_SCRIPT=3D&quot;support/scripts/genimage.sh&quot;<br>
++BR2_ROOTFS_POST_SCRIPT_ARGS=3D&quot;-c board/ti/am64x_sk/genimage.cfg&quot=
+;<br>
++BR2_LINUX_KERNEL=3Dy<br>
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=3Dy<br>
++BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy<br>
++BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D&quot;ti/k3-am642-sk&quot;<br>
++BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy<br></blockquote><div><br></div><div>BR=
+2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy =C2=A0is missing at least at the end =
+of the serie.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" s=
+tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
+ding-left:1ex">
++BR2_PACKAGE_LINUX_FIRMWARE=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2_4=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2_SIZE=3D&quot;120M&quot;<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=3Dy<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=3D&quot;v2.7.0&quot;<=
 br>
-&gt; &gt; accelerator of the following Texas Instruments SoCs: AM62, J721E,=
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D&quot;k3&quot;<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD=3D&quot;lite&quot;<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=3Dy<br>
++BR2_TARGET_OPTEE_OS=3Dy<br>
++BR2_TARGET_OPTEE_OS_PLATFORM=3D&quot;k3&quot;<br>
++BR2_TARGET_TI_K3_IMAGE_GEN=3Dy<br>
++BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE_TISCI=3Dy<br>
++BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D&quot;am64x&quot;<br>
++BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE_GP=3Dy<br>
++BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG=3D&quot;evm&quot;<br>
++BR2_TARGET_TI_K3_R5_LOADER=3Dy<br>
++BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG=3D&quot;am64x_evm_r5&quot;<br>
++BR2_TARGET_UBOOT=3Dy<br>
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy<br>
++BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy<br>
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D&quot;2022.10&quot;<br>
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D&quot;am64x_evm_a53&quot;<br>
++BR2_TARGET_UBOOT_NEEDS_DTC=3Dy<br></blockquote><div><br></div><div>BR2_TAR=
+GET_UBOOT_NEEDS_PYLIBFDT=3Dy =C2=A0is missing at least at the end of the se=
+rie.</div><div><br></div><div>Fran=C3=A7ois<br></div><div>=C2=A0<br></div><=
+blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-l=
+eft:1px solid rgb(204,204,204);padding-left:1ex">
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy<br>
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=3Dy<br>
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set<br>
++BR2_TARGET_UBOOT_FORMAT_IMG=3Dy<br>
++BR2_TARGET_UBOOT_SPL=3Dy<br>
++BR2_TARGET_UBOOT_SPL_NAME=3D&quot;tispl.bin&quot;<br>
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS=3D&quot;TEE=3D$(BINARIES_DIR)/tee-pager_v=
+2.bin&quot;<br>
++BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy<br>
++BR2_PACKAGE_HOST_GENIMAGE=3Dy<br>
++BR2_PACKAGE_HOST_MTOOLS=3Dy<br>
+-- <br>
+2.34.1<br>
 <br>
-&gt; &gt; J721S2, and J784S4.<br>
-&gt; &gt;<br>
-&gt; &gt; Signed-off-by: Andreas Dannenberg &lt;<a href=3D"mailto:dannenber=
-g@ti.com" target=3D"_blank">dannenberg@ti.com</a>&gt;<br>
-&gt; &gt; ---<br>
-&gt; &gt;=C2=A0 package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=
-=A01 +<br>
-&gt; &gt;=C2=A0 .../0001-all-drop-the-init-script.patch=C2=A0 =C2=A0 =C2=A0=
- =C2=A0| 832 ++++++++++++++++++<br>
-&gt; &gt;=C2=A0 package/ti-rogue-um/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 52 ++<br>
-&gt; &gt;=C2=A0 package/ti-rogue-um/ti-rogue-um.hash=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 |=C2=A0 =C2=A03 +<br>
-&gt; &gt;=C2=A0 package/ti-rogue-um/<a href=3D"http://ti-rogue-um.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-rogue-um.mk</a>=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 |=C2=A0 38 +<br>
-&gt; &gt;=C2=A0 5 files changed, 926 insertions(+)<br>
-&gt; &gt;=C2=A0 create mode 100644 package/ti-rogue-um/0001-all-drop-the-in=
-it-script.patch<br>
-&gt; &gt;=C2=A0 create mode 100644 package/ti-rogue-um/Config.in<br>
-&gt; &gt;=C2=A0 create mode 100644 package/ti-rogue-um/ti-rogue-um.hash<br>
-&gt; &gt;=C2=A0 create mode 100644 package/ti-rogue-um/<a href=3D"http://ti=
--rogue-um.mk" rel=3D"noreferrer" target=3D"_blank">ti-rogue-um.mk</a><br>
-&gt; &gt;<br>
-&gt; &gt; diff --git a/package/Config.in b/package/Config.in<br>
-&gt; &gt; index 96ef0d72de..0bff1135aa 100644<br>
-&gt; &gt; --- a/package/Config.in<br>
-&gt; &gt; +++ b/package/Config.in<br>
-&gt; &gt; @@ -614,6 +614,7 @@ endmenu<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/targetcli-f=
-b/Config.in&quot;<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/ti-gfx/Conf=
-ig.in&quot;<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/ti-rogue-km=
-/Config.in&quot;<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/ti-rogue-um/Conf=
-ig.in&quot;<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/ti-sgx-demo=
-s/Config.in&quot;<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/ti-sgx-km/C=
-onfig.in&quot;<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/ti-sgx-um/C=
-onfig.in&quot;<br>
-&gt; &gt; diff --git a/package/ti-rogue-um/0001-all-drop-the-init-script.pa=
-tch<br>
-&gt; &gt; b/package/ti-rogue-um/0001-all-drop-the-init-script.patch<br>
-&gt; &gt; new file mode 100644<br>
-&gt; &gt; index 0000000000..4f3dd1cbb1<br>
-&gt; &gt; --- /dev/null<br>
-&gt; &gt; +++ b/package/ti-rogue-um/0001-all-drop-the-init-script.patch<br>
-&gt; &gt; @@ -0,0 +1,832 @@<br>
-&gt; &gt; +From 99e0da8a1c08818c59680f726e11a84b26daf29f Mon Sep 17 00:00:0=
-0 2001<br>
-&gt; &gt; +From: Randolph Sapp &lt;<a href=3D"mailto:rs@ti.com" target=3D"_=
-blank">rs@ti.com</a>&gt;<br>
-&gt; &gt; +Date: Thu, 25 May 2023 18:59:26 -0500<br>
-&gt; &gt; +Subject: [PATCH] all: drop the init script<br>
-&gt; &gt; +<br>
-&gt; &gt; +Nobody should be using this anymore. It&#39;s sysVinit and it&#3=
-9;s just a fancy<br>
-&gt; &gt; +wrapper around modprobe anyway. We&#39;ll be dropping it from ou=
-r build<br>
-&gt; &gt; +tools soon.<br>
-&gt; &gt; +<br>
-&gt; &gt; +Signed-off-by: Randolph Sapp &lt;<a href=3D"mailto:rs@ti.com" ta=
-rget=3D"_blank">rs@ti.com</a>&gt;<br>
-&gt; &gt; +---<br>
-&gt; &gt; + .../wayland/release/etc/init.d/rc.pvr=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0| 196 ------------------<br>
-&gt; &gt; + .../wayland/release/etc/init.d/rc.pvr=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0| 196 ------------------<br>
-&gt; &gt; + .../wayland/release/etc/init.d/rc.pvr=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0| 196 ------------------<br>
-&gt; &gt; + .../wayland/release/etc/init.d/rc.pvr=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0| 196 ------------------<br>
-&gt; &gt; + 4 files changed, 784 deletions(-)<br>
-&gt; &gt; + delete mode 100755 targetfs/am62_linux/wayland/release/etc/init=
-.d/rc.pvr<br>
-&gt; &gt; + delete mode 100755 targetfs/j721e_linux/wayland/release/etc/ini=
-t.d/rc.pvr<br>
-&gt; &gt; + delete mode 100755<br>
-&gt; &gt; targetfs/j721s2_linux/wayland/release/etc/init.d/rc.pvr<br>
-&gt; &gt; + delete mode 100755<br>
-&gt; &gt; targetfs/j784s4_linux/wayland/release/etc/init.d/rc.pvr<br>
-&gt; &gt; +<br>
-&gt; &gt; +diff --git a/targetfs/am62_linux/wayland/release/etc/init.d/rc.p=
-vr<br>
-&gt; &gt; b/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr<br>
-&gt; &gt; +deleted file mode 100755<br>
-&gt; &gt; +index 428cd86..0000000<br>
-&gt; &gt; +--- a/targetfs/am62_linux/wayland/release/etc/init.d/rc.pvr<br>
-&gt; &gt; ++++ /dev/null<br>
-&gt; &gt; +2.34.1<br>
-&gt; &gt; +<br>
-&gt; &gt; diff --git a/package/ti-rogue-um/Config.in b/package/ti-rogue-um/=
-Config.in<br>
-&gt; &gt; new file mode 100644<br>
-&gt; &gt; index 0000000000..15257858c2<br>
-&gt; &gt; --- /dev/null<br>
-&gt; &gt; +++ b/package/ti-rogue-um/Config.in<br>
-&gt; &gt; @@ -0,0 +1,52 @@<br>
-&gt; &gt; +comment &quot;ti-rogue-um needs udev and a glibc toolchain w/ th=
-reads&quot;<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_aarch64<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_PACKAGE_HAS_UDEV || !=
-BR2_TOOLCHAIN_USES_GLIBC \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|| !BR2_T=
-OOLCHAIN_HAS_THREADS<br>
-&gt; &gt; +<br>
-&gt; &gt; +config BR2_PACKAGE_TI_ROGUE_UM<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;ti-rogue-um&quot;<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_THREADS =
-# libdrm<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_HAS_UDEV<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0# pre-built binaries<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_USES_GLIBC<b=
-r>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_aarch64<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBDRM<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HAS_LIBEGL<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HAS_LIBGBM<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBGBM_HAS_FEATURE=
-_DMA_BUF<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HAS_LIBGLES<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HAS_POWERVR<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBFFI<br></blockq=
-uote><div><br></div><div>BR2_PACKAGE_LIBFFI is useless (already selected by=
- the package wayland).<br></div><div><br></div><div>Fran=C3=A7ois.</div><di=
-v><br></div><div>=C2=A0<br></div><blockquote class=3D"gmail_quote" style=3D=
-"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-le=
-ft:1ex">
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_WAYLAND<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HAS_LIBEGL_WAYLAND=
-<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_TI_ROGUE_KM if BR2=
-_LINUX_KERNEL<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Graphics libraries for TI SoCs=
- with Rogue GPU.<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0This package supports AM62, J7=
-21E, J721S2, and J784S4<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0SoCs only.<br>
-&gt; &gt; +<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://git.ti.com/=
-cgit/graphics/ti-img-rogue-umlibs" rel=3D"noreferrer" target=3D"_blank">htt=
-ps://git.ti.com/cgit/graphics/ti-img-rogue-umlibs</a><br>
-&gt; &gt; +<br>
-&gt; &gt; +if BR2_PACKAGE_TI_ROGUE_UM<br>
-&gt; &gt; +<br>
-&gt; &gt; +config BR2_PACKAGE_PROVIDES_LIBEGL<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0default &quot;ti-rogue-um&quot;<br>
-&gt; &gt; +<br>
-&gt; &gt; +config BR2_PACKAGE_PROVIDES_LIBGBM<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0default &quot;ti-rogue-um&quot;<br>
-&gt; &gt; +<br>
-&gt; &gt; +config BR2_PACKAGE_PROVIDES_LIBGLES<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0default &quot;ti-rogue-um&quot;<br>
-&gt; &gt; +<br>
-&gt; &gt; +config BR2_PACKAGE_PROVIDES_POWERVR<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0default &quot;ti-rogue-um&quot;<br>
-&gt; &gt; +<br>
-&gt; &gt; +config BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0string &quot;UM driver target product=
-&quot;<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0default &quot;am62_linux&quot;<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Select target product to be us=
-ed for UM libraries. This needs to<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0match one of the SoC-specific =
-folders within the root/targetfs<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0folder of the ti-img-rogue-uml=
-ibs Git repository.<br>
-&gt; &gt; +<br>
-&gt; &gt; +endif<br>
-&gt; &gt; diff --git a/package/ti-rogue-um/ti-rogue-um.hash<br>
-&gt; &gt; b/package/ti-rogue-um/ti-rogue-um.hash<br>
-&gt; &gt; new file mode 100644<br>
-&gt; &gt; index 0000000000..a41bf33145<br>
-&gt; &gt; --- /dev/null<br>
-&gt; &gt; +++ b/package/ti-rogue-um/ti-rogue-um.hash<br>
-&gt; &gt; @@ -0,0 +1,3 @@<br>
-&gt; &gt; +# Locally calculated<br>
-&gt; &gt; +sha256=C2=A0 2e1bd1a5ab0ad2db1b9164d028a94f8f9d20743131f337a817f=
-d1c8f9ddd4cbe<br>
-&gt; &gt; ti-rogue-um-5977e82b96028f783d39c7219f016c1faf8dc5f5-br1.tar.gz<b=
-r>
-&gt; &gt; +sha256=C2=A0 37507b462edf97b59717d2d144daaac85fbca6080c3602b5128=
-e446e97f9ad47<br>
-&gt; &gt; LICENSE<br>
-&gt; &gt; diff --git a/package/ti-rogue-um/<a href=3D"http://ti-rogue-um.mk=
-" rel=3D"noreferrer" target=3D"_blank">ti-rogue-um.mk</a> b/package/ti-rogu=
-e-um/<br>
-&gt; &gt; <a href=3D"http://ti-rogue-um.mk" rel=3D"noreferrer" target=3D"_b=
-lank">ti-rogue-um.mk</a><br>
-&gt; &gt; new file mode 100644<br>
-&gt; &gt; index 0000000000..fa29638fa7<br>
-&gt; &gt; --- /dev/null<br>
-&gt; &gt; +++ b/package/ti-rogue-um/<a href=3D"http://ti-rogue-um.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-rogue-um.mk</a><br>
-&gt; &gt; @@ -0,0 +1,38 @@<br>
-&gt; &gt;<br>
-&gt; &gt; +################################################################=
-################<br>
-&gt; &gt; +#<br>
-&gt; &gt; +# ti-rogue-um<br>
-&gt; &gt; +#<br>
-&gt; &gt;<br>
-&gt; &gt; +################################################################=
-################<br>
-&gt; &gt; +<br>
-&gt; &gt; +# This corresponds to SDK 08.06.00<br>
-&gt; &gt; +TI_ROGUE_UM_VERSION =3D 5977e82b96028f783d39c7219f016c1faf8dc5f5=
-<br>
-&gt; &gt; +TI_ROGUE_UM_SITE =3D<br>
-&gt; &gt; <a href=3D"https://git.ti.com/git/graphics/ti-img-rogue-umlibs.gi=
-t" rel=3D"noreferrer" target=3D"_blank">https://git.ti.com/git/graphics/ti-=
-img-rogue-umlibs.git</a><br>
-&gt; &gt; +TI_ROGUE_UM_SITE_METHOD =3D git<br>
-&gt; &gt; +TI_ROGUE_UM_LICENSE =3D TI TSPA License<br>
-&gt; &gt; +TI_ROGUE_UM_LICENSE_FILES =3D LICENSE<br>
-&gt; &gt; +TI_ROGUE_UM_INSTALL_STAGING =3D YES<br>
-&gt; &gt; +TI_ROGUE_UM_PROVIDES =3D libegl libgbm libgles powervr<br>
-&gt; &gt; +<br>
-&gt; &gt; +# ti-rogue-um is a egl/gles provider only if libdrm is installed=
-<br>
-&gt; &gt; +TI_ROGUE_UM_DEPENDENCIES =3D libdrm wayland<br>
-&gt; &gt;<br>
-&gt; <br>
-&gt; useless built dependencies (nothing is built, blobs are copied), runti=
-me<br>
-&gt; dependencies in Config.in are enough.<br>
-<br>
-Understood, will fix it. Btw this was a carry-over from<br>
-package/ti-sgx-um/<a href=3D"http://ti-sgx-um.mk" rel=3D"noreferrer" target=
-=3D"_blank">ti-sgx-um.mk</a> which I used to model this new package<br>
-after, so opportunity for improvement there as well...<br>
-<br>
-&gt; +<br>
-&gt; &gt; +PVR_BUILD =3D &quot;release&quot;<br>
-&gt; &gt; +PVR_WS =3D &quot;wayland&quot;<br>
-&gt; &gt; +<br>
-&gt; &gt;<br>
-&gt; <br>
-&gt; TI_ROGUE_UM_MAKE_OPTS =3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0TARGET_PRODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TA=
-RGET_PRODUCT) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0BUILD=3Drelease \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0WINDOW_SYSTEM=3Dwayland<br>
-&gt; <br>
-&gt; define TI_ROGUE_UM_INSTALL_STAGING_CMDS<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TI_ROGUE_UM_MAKE_OPTS) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0DESTDIR=3D$(STAGING_DIR) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0install<br>
-&gt; endef<br>
-&gt; by this way, all variables are prefixed by TI_ROGUE_UM_.<br>
-<br>
-Good idea, will factor-out the make options. Thanks for taking the time<br>
-to review &amp; improve this patch.<br>
-<br>
---<br>
-Andreas Dannenberg<br>
-Texas Instruments Inc<br>
-<br>
-<br>
-<br>
-&gt; <br>
-&gt; Fran=C3=A7ois<br>
-&gt; <br>
-&gt; <br>
-&gt; &gt; +define TI_ROGUE_UM_INSTALL_STAGING_CMDS<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \=
-<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0DESTDIR=
-=3D$(STAGING_DIR) \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0TARGET_PR=
-ODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT) \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0BUILD=3D$=
-(PVR_BUILD) WINDOW_SYSTEM=3D$(PVR_WS) \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0install<b=
-r>
-&gt; &gt; +endef<br>
-&gt; &gt; +<br>
-&gt; &gt; +define TI_ROGUE_UM_INSTALL_TARGET_CMDS<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \=
-<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0DESTDIR=
-=3D$(TARGET_DIR) \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0TARGET_PR=
-ODUCT=3D$(BR2_TARGET_TI_ROGUE_UM_TARGET_PRODUCT) \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0BUILD=3D$=
-(PVR_BUILD) WINDOW_SYSTEM=3D$(PVR_WS) \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0install<b=
-r>
-&gt; &gt; +endef<br>
-&gt; &gt; +<br>
-&gt; &gt; +$(eval $(generic-package))<br>
-&gt; &gt; --<br>
-&gt; &gt; 2.34.1<br>
-&gt; &gt;<br>
-&gt; &gt; _______________________________________________<br>
-&gt; &gt; buildroot mailing list<br>
-&gt; &gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buil=
-droot@buildroot.org</a><br>
-&gt; &gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot=
-" rel=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/=
-listinfo/buildroot</a><br>
-&gt; &gt;<br>
 </blockquote></div></div>
 
---000000000000de4ac405feeda3aa--
+--000000000000ca8ac205feedb114--
 
---===============1475736708994817284==
+--===============7812940407111725149==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -723,4 +537,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1475736708994817284==--
+--===============7812940407111725149==--
