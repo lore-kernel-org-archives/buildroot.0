@@ -1,72 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9603EB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F0B6EB64D7
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74D45415A9;
-	Mon, 26 Jun 2023 17:13:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74D45415A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA89C60E58;
+	Mon, 26 Jun 2023 17:21:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA89C60E58
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NFYicCAXwMFc; Mon, 26 Jun 2023 17:13:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tcpxuxgk6c6q; Mon, 26 Jun 2023 17:21:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A6BD3415B1;
-	Mon, 26 Jun 2023 17:13:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6BD3415B1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2DC8D1BF37B
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:13:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6E0A60D5F;
+	Mon, 26 Jun 2023 17:21:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6E0A60D5F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 92D401BF37B
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:21:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0733B415B8
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0733B415B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A8D1401C2
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:21:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A8D1401C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3DLwH6wg1Ofk for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 17:13:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mztDMN4ReAfz for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 17:21:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC62E415B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18DA540199
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AC62E415B1
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 17:13:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 18DA540199
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 17:21:19 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:88cf:b268:1dd:7043])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 51A992003F3;
- Mon, 26 Jun 2023 19:12:58 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 7F9C420058D;
+ Mon, 26 Jun 2023 19:21:09 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 26 Jun 2023 19:12:58 +0200
-Date: Mon, 26 Jun 2023 19:12:58 +0200
+ Mon, 26 Jun 2023 19:21:09 +0200
+Date: Mon, 26 Jun 2023 19:21:09 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Bin Meng <bmeng.cn@gmail.com>
-Message-ID: <20230626171258.GF646621@scaer>
+Message-ID: <20230626172109.GG646621@scaer>
 References: <20230626160030.93063-1-bmeng.cn@gmail.com>
- <20230626160030.93063-10-bmeng.cn@gmail.com>
+ <20230626160030.93063-11-bmeng.cn@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230626160030.93063-10-bmeng.cn@gmail.com>
+In-Reply-To: <20230626160030.93063-11-bmeng.cn@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1687799583;
- bh=ZCtsdAg/IbyX0FLQ2Vspny287mgJgVmbZH7oMnedXHg=;
+ d=free.fr; s=smtp-20201208; t=1687800075;
+ bh=Plud8miSFCzcLUNd8Gu+RrDGsxqYJXMhD1rVQpBFQDg=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gkjCMLoYgry7w86DberB/VcrAI4f5l7qR1AGuDjZMM+co1UwH8tQHSQpscPKkndpI
- GtemSG5MMssc1OkkdmwiAuqiZCbSvji43dZzYseeSRDPd6ZoTtcmTJqY++sBUVLWGQ
- I7Y93W0teEFUQOZI+fOOnmfko7pBtvz84I/Cp1ZSMpOsNE/ldgkeXLIENoX53cvBCy
- cih/fWk/MGD7L8DTDE561iJfqIBfu1MJ4ZkGKZReoWt4WzH6uEGoQfaEGUJ/dZT5iC
- mi/YAwUkrAJ376DO9DinCoA35AGtHN/Vf/sDHTuFz1M015bUvbuWHOsSlKy+1XMVtj
- Ht8LkCpeA602g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=N3McWans8dqtLskp4zb3qRzjVlOLHGLqrKgL6Hbhjn6YfvQ0DtQTEPevqoiKg0Dtn
+ nUZOr27/C405pX17C2LRAZ4xU8OGkno2CqpVpIdFdZBgDivqIloLDuPjHOyWBNzkDf
+ EoFEJwrA8vvBwHyAhBfH5eTpweNqj5z/wG7pDKR1m0UEjv3p507MroPjOSGdo1q8Np
+ 2CE95K9/b1hggPgchXuh1vzqkPr/fMgNJbZphUrWMSzIbVDaa5kFiA49vBMgB2cGDm
+ PHJwbru4xIKRIbT/GY3+jO+iwDN3e6Z/ZVMlBDdevFZbs26zDc0X6QHBKSIUeQN8Y6
+ Cgl4/IIbhbGkA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gkjCMLoY
-Subject: Re: [Buildroot] [PATCH 09/10] board/sifive: hifive-unleashed:
- Update rootfs offset
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=N3McWans
+Subject: Re: [Buildroot] [PATCH 10/10] board/sifive: hifive-unleashed:
+ Include QEMU instructions in readme.txt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,11 +90,16 @@ Bin, All,
 On 2023-06-27 00:00 +0800, Bin Meng spake thusly:
 > From: Bin Meng <bmeng@tinylab.org>
 > 
-> As the rootfs size is set to 60M, let's put it right on the 4M offset
-> in the SD card, so that the generated sdcard.img can be exactly 64M.
+> The upstream QEMU 'sifive_u' machine supports running upstream U-Boot
+> for the SiFive HiFive Unleashed board out of the box.
+> 
+> Add the QEMU instructions for testing in readme.txt.
 
-As much I like power-of-two numbers, is there a technical reason to hit
-exactly 64MiB?
+Ah, is the 64MiB SDcard required to be bootable under qemu?
+
+I.e. is it the same issue as fixed by 6f9e83f5f74d (support/testing:
+test_ubi: reduce the rootfs.ubi size to 64M to match the Qemu emulated
+flash device)?
 
 Regards,
 Yann E. MORIN.
@@ -102,21 +107,34 @@ Yann E. MORIN.
 > Signed-off-by: Bin Meng <bmeng@tinylab.org>
 > ---
 > 
->  board/sifive/hifive-unleashed/genimage_sdcard.cfg | 1 +
->  1 file changed, 1 insertion(+)
+>  board/sifive/hifive-unleashed/readme.txt | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> diff --git a/board/sifive/hifive-unleashed/genimage_sdcard.cfg b/board/sifive/hifive-unleashed/genimage_sdcard.cfg
-> index 079ac5ed26..99e3525a8c 100644
-> --- a/board/sifive/hifive-unleashed/genimage_sdcard.cfg
-> +++ b/board/sifive/hifive-unleashed/genimage_sdcard.cfg
-> @@ -17,6 +17,7 @@ image sdcard.img {
+> diff --git a/board/sifive/hifive-unleashed/readme.txt b/board/sifive/hifive-unleashed/readme.txt
+> index 3263913e9c..e9ccb26fa6 100644
+> --- a/board/sifive/hifive-unleashed/readme.txt
+> +++ b/board/sifive/hifive-unleashed/readme.txt
+> @@ -113,3 +113,20 @@ Booting the SPI flash on the board
 >  
->  	partition rootfs {
->  		image = "rootfs.ext4"
-> +		offset = 4076K
->  		partition-type-uuid = 0fc63daf-8483-4772-8e79-3d69d8477de4
->  		bootable = true
->  	}
+>  Make sure that the all DIP switches are set to the off position for
+>  default boot mode (MSEL mode = 0110) to boot from SPI flash.
+> +
+> +Testing under QEMU
+> +==================
+> +
+> +The SD card image can be tested using QEMU:
+> +
+> +$ qemu-system-riscv64 -M sifive_u,msel=11 -smp 5 -m 8G \
+> +    -display none -serial stdio -nic user \
+> +    -bios output/images/u-boot-spl.bin \
+> +    -drive file=output/images/sdcard.img,if=sd
+> +
+> +The SPI flash image can be tested with a slightly different command:
+> +
+> +$ qemu-system-riscv64 -M sifive_u,msel=6 -smp 5 -m 8G \
+> +    -display none -serial stdio -nic user \
+> +    -bios output/images/u-boot-spl.bin \
+> +    -drive file=output/images/spi-nor.img,if=mtd
 > -- 
 > 2.34.1
 > 
