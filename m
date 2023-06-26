@@ -4,65 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28694EB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 16:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFF3EEB64D7
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:04:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B23E641590;
-	Mon, 26 Jun 2023 16:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B23E641590
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4984C4159D;
+	Mon, 26 Jun 2023 17:04:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4984C4159D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FDBj-7EQRdWH; Mon, 26 Jun 2023 16:21:10 +0000 (UTC)
+	with ESMTP id 2Z19WRFG0m_d; Mon, 26 Jun 2023 17:04:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E577140A6C;
-	Mon, 26 Jun 2023 16:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E577140A6C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 437F41BF37E
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:21:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 713A240476;
+	Mon, 26 Jun 2023 17:04:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 713A240476
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C7761BF37B
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EDE46137C
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:21:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EDE46137C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 724CB815CF
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 724CB815CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KEdGiUcUvzGq for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 16:21:07 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA59661324
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AA59661324
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 16:21:06 +0000 (UTC)
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id D5A82E0007;
- Mon, 26 Jun 2023 16:21:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 26 Jun 2023 18:20:57 +0200
-Message-Id: <20230626162057.562236-1-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ckEFAtnq8WIj for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 17:04:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B06CB815AB
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B06CB815AB
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 17:04:26 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:88cf:b268:1dd:7043])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id AFA8420039F;
+ Mon, 26 Jun 2023 19:04:18 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 26 Jun 2023 19:04:18 +0200
+Date: Mon, 26 Jun 2023 19:04:18 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bin Meng <bmeng.cn@gmail.com>
+Message-ID: <20230626170418.GD646621@scaer>
+References: <20230626160030.93063-1-bmeng.cn@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1687796465;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=0GIiMcCbdJBy3PQBY/xPtIUYE4lJ4rf3K+k5uTwz9Ho=;
- b=QNkkJv8jW6IdKbSopj9FeF2NHjuyTi4+0jZfmWUDBCOTJhJsbmQH6OnpfoZmjYPqBpJt4s
- 6Yo26uXICqJW9/Jj4u69fsb/QELBXvBzB2QDYtCpQhq69H+C2E7WBJarSEU+eGWbqq++dh
- Hii74pUbJBO849aOBpFSvHlMAoXq5WZqR6wbBLnIB1VUkPceDm5bEVNbD5x0zVhDqRbo5s
- gcwlqqMbxK0AsAqyHVUgt6Q+6T3R4bNZToaqhAFX8NlldEMkBhDC/CL0baG+D5Ube3Go1s
- Y08+K8Ag0WhtjlBL0DIAqaZIlvx6MrnoNFrXs2qxB0g8vuFL0XwjsR85vsQLWA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QNkkJv8j
-Subject: [Buildroot] [PATCH] package/agentpp: fix build error due to type
- mismatch
+Content-Disposition: inline
+In-Reply-To: <20230626160030.93063-1-bmeng.cn@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1687799063;
+ bh=4nz0yMTqjZS19mMFARPV9q6+6N20gL/7NLpI2miGTK4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=uRuSexRjfMAZ62RvDZtCCa7UaaTLgTgbaXkBDNuOH/s7NoXcfkr6yYSdPoPz4+ySA
+ SNw3rWGWAB2G5K+UT4QHGGwtpqasdyyNPQwrKiNsWgYIBTjD7Rchjs/oT8G3EQyqUc
+ MSCNZLIhJr/LSH/xJVG8QCsI5NSb9wKAw9oEkY6cjlMOUjJH5UkHffrTPuPKnAkHfv
+ oFq4t8G1v/qATQkSZNGBuvx8HQdbbyvCqXpckbKiaNlBOqWGKaw5dI2thd43bdXNYo
+ mLkrYQ7uPHPmJ3ZBzSjwrkfT0rMyfcFhH2XeqOVi+8lIbI7q0EMSe0ZnfV2cN8o+by
+ irUfuiTBprWpA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uRuSexRj
+Subject: Re: [Buildroot] [PATCH 00/10] riscv: Various fixes and small
+ enhancements
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,91 +77,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Alistair Francis <alistair.francis@wdc.com>,
+ Jan-Benedict Glaw <jbglaw@lug-owl.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This was supposedly fixed by commit 5f06ecf5e151 ("package/agentpp:
-security bump to version 4.6.0") but has kept happening so far.
+Bin, All,
 
-No public place for contributions, thus this patch has been sent to private
-e-mail.
+On 2023-06-27 00:00 +0800, Bin Meng spake thusly:
+> A bug report [1] was filed recently against HiFive Unleashed board that
+> it did not build. Although I could not reproduce the build failure, it
+> does make sense to upgrade the OpenSBI version for this board, as
+> discussed in the bug report.
+> 
+> Now OpenSBI version is bumped up to 1.3 in this series for all RISC-V
+> boards. For HiFive Unleashed board I decided to use the latest U-Boot
+> release as well, which requires some new changes.
+> 
+> The Kconfig options of RISC-V boards have been cleaned up. Instructions
+> of using QEMU to test the HiFive Unleashed board images are added.
+> 
+> [1] https://bugs.busybox.net/show_bug.cgi?id=15658
+> 
+> 
+> Bin Meng (10):
+>   configs/hifive_unleashed: Update to use OpenSBI 1.2
+>   configs/hifive_unleashed: Update to use U-Boot v2023.04
+>   configs/hifive_unleashed: Enable BR2_RISCV_ISA_CUSTOM_RVA explicitly
+>   configs/beaglev_defconfig: Enable BR2_RISCV_ISA_CUSTOM_RVA explicitly
+>   arch/Config.in.riscv: Remove BR2_RISCV_ISA_CUSTOM_RVA from
+>     BR2_riscv_custom
 
-Fixes:
-  http://autobuild.buildroot.net/results/e8abd6bdc62a028955915706b03d72239786c703/
-  http://autobuild.buildroot.net/results/24441fb679fbf5f913c9b6431c98aec596ead587/
+I've applied the first fice patches to master.
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- ...mpx-fix-const-nonconst-type-mismatch.patch | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/agentpp/0001-Snmpx-fix-const-nonconst-type-mismatch.patch
+>   configs: riscv: Drop BR2_TARGET_OPENSBI_CUSTOM_VERSION
 
-diff --git a/package/agentpp/0001-Snmpx-fix-const-nonconst-type-mismatch.patch b/package/agentpp/0001-Snmpx-fix-const-nonconst-type-mismatch.patch
-new file mode 100644
-index 000000000000..52c7ca965343
---- /dev/null
-+++ b/package/agentpp/0001-Snmpx-fix-const-nonconst-type-mismatch.patch
-@@ -0,0 +1,51 @@
-+From 7e541e6dba8d4976bbb490838a09b569f38b047d Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-+Date: Mon, 26 Jun 2023 17:45:00 +0200
-+Subject: [PATCH] Snmpx: fix const/nonconst type mismatch
-+
-+Fixes build failure:
-+
-+  snmp_pp_ext.cpp:1176:28: error: binding reference of type 'Snmp_pp::Pdu&' to 'const Snmp_pp::Pdu' discards qualifiers
-+   1176 |     status = snmpmsg.load( pdu, community, version);
-+        |                            ^~~
-+
-+Fixes:
-+  http://autobuild.buildroot.net/results/e8abd6bdc62a028955915706b03d72239786c703/
-+  http://autobuild.buildroot.net/results/24441fb679fbf5f913c9b6431c98aec596ead587/
-+
-+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-+[Upstream status: sent to katz.agentpp.com@magenta.de and support@agentpp.com]
-+---
-+ include/agent_pp/snmp_pp_ext.h | 2 +-
-+ src/snmp_pp_ext.cpp            | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/include/agent_pp/snmp_pp_ext.h b/include/agent_pp/snmp_pp_ext.h
-+index 7c5a6783ee70..d8a46060db98 100644
-+--- a/include/agent_pp/snmp_pp_ext.h
-++++ b/include/agent_pp/snmp_pp_ext.h
-+@@ -807,7 +807,7 @@ public:
-+ 	 *   SNMP_CLASS_SUCCESS on success and SNMP_CLASS_ERROR,
-+ 	 *   SNMP_CLASS_TL_FAILED on failure.
-+ 	 */
-+-        int send (Pdux const &, NS_SNMP UdpAddress const &, NS_SNMP snmp_version, NS_SNMP OctetStr const &);
-++        int send (Pdux &, NS_SNMP UdpAddress const &, NS_SNMP snmp_version, NS_SNMP OctetStr const &);
-+ #endif
-+ 
-+ 	/**
-+diff --git a/src/snmp_pp_ext.cpp b/src/snmp_pp_ext.cpp
-+index 54a29ec8ea28..b61cbf056246 100644
-+--- a/src/snmp_pp_ext.cpp
-++++ b/src/snmp_pp_ext.cpp
-+@@ -1203,7 +1203,7 @@ int Snmpx::send (Pdux &pdu, SnmpTarget* target)
-+ 
-+ #else  // _SNMPv3 is not defined
-+ 
-+-int Snmpx::send (Pdux  const &pdu,
-++int Snmpx::send (Pdux  &pdu,
-+ 		 UdpAddress  const &udp_address,
-+ 		 snmp_version version,
-+ 		 OctetStr  const &community)
-+-- 
-+2.34.1
-+
+I'll reply to that one realy soon...
+
+>   boot/opensbi: Config.in: Cosmetic style fix
+>   boot/opensbi: Bump to version 1.3
+
+I've applied those two to master too.
+
+>   board/sifive: hifive-unleashed: Update rootfs offset
+>   board/sifive: hifive-unleashed: Include QEMU instructions in
+>     readme.txt
+
+I'll handle those two very soon.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> 
+>  arch/Config.in.riscv                            |  1 -
+>  .../sifive/hifive-unleashed/genimage_sdcard.cfg |  1 +
+>  board/sifive/hifive-unleashed/readme.txt        | 17 +++++++++++++++++
+>  boot/opensbi/Config.in                          |  6 +++---
+>  boot/opensbi/opensbi.hash                       |  2 +-
+>  configs/beaglev_defconfig                       |  1 +
+>  configs/hifive_unleashed_defconfig              | 10 +++++-----
+>  configs/nezha_defconfig                         |  2 --
+>  configs/qemu_riscv32_virt_defconfig             |  2 --
+>  configs/qemu_riscv64_virt_defconfig             |  2 --
+>  configs/sipeed_lichee_rv_defconfig              |  2 --
+>  configs/sipeed_lichee_rv_dock_defconfig         |  2 --
+>  configs/spike_riscv64_defconfig                 |  2 --
+>  13 files changed, 28 insertions(+), 22 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
