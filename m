@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E22AAEB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 07:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6454EB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 07:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E51340CBF;
-	Mon, 26 Jun 2023 07:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E51340CBF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1EC7540525;
+	Mon, 26 Jun 2023 07:05:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EC7540525
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UVEoDiwR60qu; Mon, 26 Jun 2023 07:05:37 +0000 (UTC)
+	with ESMTP id A4puTJkDCRQl; Mon, 26 Jun 2023 07:05:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B404B41142;
-	Mon, 26 Jun 2023 07:05:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B404B41142
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1FFAB1BF94D
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 07:05:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39E9D41171;
+	Mon, 26 Jun 2023 07:05:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39E9D41171
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A55E71BF390
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 07:05:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE64D81DEE
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 07:05:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE64D81DEE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F66E60BC7
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 07:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F66E60BC7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6mUlB6Ms-QuW for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 07:05:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0AD1381DE4
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 07:05:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AD1381DE4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E53ED8406C; Mon, 26 Jun 2023 07:05:33 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xVrAEKQ-EiC3 for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 07:05:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D9A060B8A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1D9A060B8A
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 07:05:41 +0000 (UTC)
+Received: from bricolage.. (unknown
+ [IPv6:2a01:e0a:c7e:7060:468a:5bff:fe9a:3c4d])
+ by smtp1-g21.free.fr (Postfix) with ESMTP id C6F80B00535;
+ Mon, 26 Jun 2023 09:05:37 +0200 (CEST)
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jun 2023 09:05:17 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ae444e380da0f9c2c15f2d39c9ae90d757fb325
-X-Git-Newrev: cb496970c0c7117f9f00d8495e234871f2bae4c1
-X-Patchwork-Hint: ignore
-Message-Id: <20230626070533.E53ED8406C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tiff: security bump to version
- 4.5.1
+Date: Mon, 26 Jun 2023 09:05:35 +0200
+Message-Id: <20230626070536.311268-1-gwenj@trabucayre.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v2 1/2] package/gnuradio: fix build with
+ python-pybind > 2.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,118 +58,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb496970c0c7117f9f00d8495e234871f2bae4c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Fixes the following security issues:
+Since commit 0e82c360942907f5a2f379e64e0d211aaff80774 (and since release
+2.10.1), a new variable called PYBIND11_PYTHONLIBS_OVERWRITE was introduced
+and set to ON by default.
 
-- CVE-2023-1916: A flaw was found in tiffcrop, a program distributed by the
-  libtiff package.  A specially crafted tiff file can lead to an
-  out-of-bounds read in the extractImageSection function in
-  tools/tiffcrop.c, resulting in a denial of service and limited information
-  disclosure.  This issue affects libtiff versions 4.x.
+According to comment before this option:
+"Overwrite cached values read from Python library (classic search). Turn off if
+cross-compiling and manually setting these values."
 
-- CVE-2023-25434: libtiff 4.5.0 is vulnerable to Buffer Overflow via
-  extractContigSamplesBytes() at /libtiff/tools/tiffcrop.c:3215.
+In buildroot's context this option must be disabled to keep variables
+provided by buildroot and lib/app.
 
-- CVE-2023-26965: loadImage() in tools/tiffcrop.c in LibTIFF through 4.5.0
-  has a heap-based use after free via a crafted TIFF image
+This issue affect branches: master, next and tags 2023.02.x, 2023.05.
 
-Drop the now upstream
-0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch.
+Fix:
+- http://autobuild.buildroot.net/results/7423df5db5237d94bb49e32698828d4fe470e39b/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- .checkpackageignore                                |  1 -
- ...p-Correct-simple-copy-paste-error-Fix-488.patch | 28 ----------------------
- package/tiff/tiff.hash                             |  2 +-
- package/tiff/tiff.mk                               |  5 +---
- 4 files changed, 2 insertions(+), 34 deletions(-)
+Changes v1 -> v2:
+- move PYBIND11_PYTHONLIBS_OVERWRITE option to python support section
+---
+ package/gnuradio/gnuradio.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2e5c833156..dadc8e0978 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1503,7 +1503,6 @@ package/ti-gfx/esrev.sh Shellcheck
- package/ti-sgx-um/0001-Makefile-do-not-install-init-script.patch Upstream
- package/ti-sgx-um/S80ti-sgx Variables
- package/ti-utils/0001-plt.h-fix-build-with-gcc-10.patch Upstream
--package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch Upstream
- package/tinyalsa/0001-include-time.h-before-asound.h.patch Upstream
- package/tinycbor/0001-Makefile-add-DISABLE_WERROR.patch Upstream
- package/tinycompress/0001-wave-add-time.h-missing-header-inclusion.patch Upstream
-diff --git a/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch b/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
-deleted file mode 100644
-index 73c0d10ffc..0000000000
---- a/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 97d65859bc29ee334012e9c73022d8a8e55ed586 Mon Sep 17 00:00:00 2001
--From: Su Laus <sulau@freenet.de>
--Date: Sat, 21 Jan 2023 15:58:10 +0000
--Subject: [PATCH] tiffcrop: Correct simple copy paste error. Fix #488.
--
--[Retrieved from:
--https://gitlab.com/libtiff/libtiff/-/commit/97d65859bc29ee334012e9c73022d8a8e55ed586]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- tools/tiffcrop.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tools/tiffcrop.c b/tools/tiffcrop.c
--index 14fa18da..7db69883 100644
----- a/tools/tiffcrop.c
--+++ b/tools/tiffcrop.c
--@@ -8591,7 +8591,7 @@ static int processCropSelections(struct image_data *image,
--                     cropsize + NUM_BUFF_OVERSIZE_BYTES);
--             else
--             {
---                prev_cropsize = seg_buffs[0].size;
--+                prev_cropsize = seg_buffs[i].size;
--                 if (prev_cropsize < cropsize)
--                 {
--                     next_buff = _TIFFrealloc(
---- 
--GitLab
--
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 73732892a5..0fa503a02a 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c7a1d9296649233979fa3eacffef3fa024d73d05d589cb622727b5b08c423464  tiff-4.5.0.tar.gz
-+sha256  d7f38b6788e4a8f5da7940c5ac9424f494d8a79eba53d555f4a507167dca5e2b  tiff-4.5.1.tar.gz
- sha256  0780558a8bfba0af1160ec1ff11ade4f41c0d7deafd6ecfc796b492a788e380d  LICENSE.md
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index f9754a4b49..0006f461a0 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TIFF_VERSION = 4.5.0
-+TIFF_VERSION = 4.5.1
- TIFF_SITE = http://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
- TIFF_LICENSE_FILES = LICENSE.md
-@@ -12,9 +12,6 @@ TIFF_CPE_ID_VENDOR = libtiff
- TIFF_CPE_ID_PRODUCT = libtiff
- TIFF_INSTALL_STAGING = YES
- 
--# 0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
--TIFF_IGNORE_CVES += CVE-2022-48281
--
- # webp has a (optional) dependency on tiff, so we can't have webp
- # support in tiff, or that would create a circular dependency.
- TIFF_CONF_OPTS = \
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index d9218b533d..1453b78493 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -116,6 +116,9 @@ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+ GNURADIO_DEPENDENCIES += python3 python-pybind \
+ 	host-python-numpy host-python-packaging
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
++# mandatory to avoid pybind11 to overwrite variables provided
++# by gnuradio and buildroot
++GNURADIO_CONF_OPTS += -DPYBIND11_PYTHONLIBS_OVERWRITE=OFF
+ # mandatory to install python modules in site-packages and to use
+ # correct path for python libraries
+ GNURADIO_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
+-- 
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
