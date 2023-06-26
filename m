@@ -4,96 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEFF6EB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 18:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16204EB64DD
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 18:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D2C5418DA;
-	Mon, 26 Jun 2023 18:23:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D2C5418DA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87BA2418FC;
+	Mon, 26 Jun 2023 18:25:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87BA2418FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CfH7K4e6LkXV; Mon, 26 Jun 2023 18:23:16 +0000 (UTC)
+	with ESMTP id vOnMTmpQYSqP; Mon, 26 Jun 2023 18:25:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27927410D2;
-	Mon, 26 Jun 2023 18:23:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27927410D2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D40A41BF378
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:23:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 578FE418F6;
+	Mon, 26 Jun 2023 18:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 578FE418F6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B52011BF378
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD828405F5
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:23:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD828405F5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99AE2418F3
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:25:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99AE2418F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k5eDoN9md1NB for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 18:23:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Di8-Ap3UX20c for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 18:24:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A0B24046A
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
- [IPv6:2a00:1450:4864:20::230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9A0B24046A
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 18:23:12 +0000 (UTC)
-Received: by mail-lj1-x230.google.com with SMTP id
- 38308e7fff4ca-2b6a0d91e80so20869721fa.3
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 11:23:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EA3D418F2
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com
+ [IPv6:2001:4860:4864:20::2c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4EA3D418F2
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 18:24:59 +0000 (UTC)
+Received: by mail-oa1-x2c.google.com with SMTP id
+ 586e51a60fabf-1b058bf19ddso176093fac.1
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 11:24:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687803790; x=1690395790;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=D+eMrFVRpj99Coz306V3+5D7Btcv8mG/iJNmeV8RpEw=;
- b=bVnCrQsg+0MRsSbUdC95yysa/SMqFN+a2PkNCXBN/ck+8FfkzvLY7I07sbI/hPlOJ4
- TdbXoiVqjcBuLPmvhrJcvGLFnet3FTebhZm3bN7MpwixMOkJCclF5ctVy6D5KwDgqjIU
- MWL4k/PQKfBjl1tLoaM/bzqjAXEHjKQOuCOGuW+SxN1/8K83kH1RZJjK1RZwIDPOk0Sp
- dNr+kUZtBaRlz/1o2mYj68iRdS1h47B0j4CUnVEyK4ORR6xBXKjL76G93BiycYGhfxEd
- CRdqGxXrIqwZl4cgHSIuG2Z80ApGc48KoIivBaubE+xhggkg0tpP+SPqsGdqahGd7Kzj
- Kt7g==
-X-Gm-Message-State: AC+VfDxR3o9QXZrcQmvwO6cQ62Slb6raAjznzSlEw623kod0HVjIxAfw
- l+DiDIkcXQOIMCd+IrL2EjTx6LFb3QgluTOOZp8=
-X-Google-Smtp-Source: ACHHUZ7/b7JU+P6IaR8BLO9pmDaTX3aHgYDnTqRGaGptvl7sFjhLMnbWSDdKMbyDY3RrWeiGSqf4Mg==
-X-Received: by 2002:a2e:888b:0:b0:2b5:80e0:f18e with SMTP id
- k11-20020a2e888b000000b002b580e0f18emr11472474lji.3.1687803789983; 
- Mon, 26 Jun 2023 11:23:09 -0700 (PDT)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com.
- [209.85.128.43]) by smtp.gmail.com with ESMTPSA id
- b18-20020aa7d492000000b0051da4b5bc8fsm283991edr.20.2023.06.26.11.23.09
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 26 Jun 2023 11:23:09 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id
- 5b1f17b1804b1-3fa7512e599so45761875e9.2
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 11:23:09 -0700 (PDT)
-X-Received: by 2002:a7b:ca57:0:b0:3f9:b4a0:6062 with SMTP id
- m23-20020a7bca57000000b003f9b4a06062mr15910236wml.24.1687803788742; Mon, 26
- Jun 2023 11:23:08 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1687803898; x=1690395898;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=jncmDHtW54Olqi0K1ioREXsz7Sv5GqWhA83S3HlFWZQ=;
+ b=knDR2ywv1EDue92tLaQPS2H0WkYQxOpcSYxeNPNNnOxxhB+8N0nSIVnFnUK6Oh3WwZ
+ eTuJQkuViuUjf9nSXINP4JNtBWAkPgbAh8NsGdlWW+CwRSISGXnPNkzmRCicFHATPr51
+ y2BHFPhFyRk0iSikCxcvoXa6kL+utf3kY11aNSY7PtKweK7+vEFb0/9kd4unJvy94sBc
+ pC7O7gGsSwxvPfMUETLPvQOWG0QKz2btmnbo/n7U+YaI5tKfrGXwJVocn9RZevYFlHnn
+ nXp9hQVqgs8fPavXSi22rzfhB4qLFjm5FAlibRJCTj4SnjtLpjTqZ3zfh6JVxU+OH9Xq
+ WuzA==
+X-Gm-Message-State: AC+VfDzVhHbV1SB5kr8Jw8WywWHD8xfsqxAnx6nhJVNatqZHYgIreg7u
+ UeE2Vq4ba4HvL+OdO6r0fVzrQUNHDHI=
+X-Google-Smtp-Source: ACHHUZ4RJc35PoOJDEJCYRXvxoLoKzkz9i8hikyxC6+Y5eiUeuiv3ruxc411UAk0L2L1Uh/DIaoUTg==
+X-Received: by 2002:a92:d0ca:0:b0:345:8abb:5b2f with SMTP id
+ y10-20020a92d0ca000000b003458abb5b2fmr5371268ila.12.1687803336934; 
+ Mon, 26 Jun 2023 11:15:36 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-252-17.hlrn.qwest.net.
+ [71.218.252.17]) by smtp.gmail.com with ESMTPSA id
+ z24-20020a029f18000000b004269bbd4586sm1867653jal.77.2023.06.26.11.15.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 26 Jun 2023 11:15:36 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 26 Jun 2023 12:15:27 -0600
+Message-Id: <20230626181531.2312002-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230606214556.174086-1-christian@aperture.us>
- <CADXxVSJN_s=UkATganO9Bdghec=fPuAdoLZAx2-V3M33UKd_Dw@mail.gmail.com>
-In-Reply-To: <CADXxVSJN_s=UkATganO9Bdghec=fPuAdoLZAx2-V3M33UKd_Dw@mail.gmail.com>
-Date: Mon, 26 Jun 2023 11:22:57 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2pw8ZpZ43AeO3XVZ5ea4JhEN4TWbpErHYgCWL1Gv+JTqQ@mail.gmail.com>
-Message-ID: <CA+h8R2pw8ZpZ43AeO3XVZ5ea4JhEN4TWbpErHYgCWL1Gv+JTqQ@mail.gmail.com>
-To: Bryce Johnson <bryce@redpinelabs.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1687803790; x=1690395790;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=D+eMrFVRpj99Coz306V3+5D7Btcv8mG/iJNmeV8RpEw=;
- b=qQATk2HO6Y+1yuIcP1NaFFBKkaxUVbn63FVQGlAfEos7SZuJshzMEjVclu0wCOMfV3
- D2b1kQqQJQ47Ubbum+L0mpZrkXpJ/RYS7XYhpEWGUYmFHufSw7/9/pbFc/JvqWpiNJys
- v7U337liEountqKqXQFTR9y/nQpHZP46hcttOZYpI2/lyJA3kG+SvKc8fu2jJdJPZguX
- 1XEHFI0I4srIaeFBjczHvmbboZf5kO+RzzqS0CPmvBiuGTawDxy2Kx0kAfENutwPN0zb
- 96QoXTb2/h7fxDKDVmbJS/02IF+LKLbAZYU52F86Lgo9jpLQPsWrfzZDFSfTLnoJ0BC9
- ea2w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=qQATk2HO
-Subject: Re: [Buildroot] [PATCH v6 1/3] package/go-bootstrap: split into two
- stages: go1.4 and go1.19.10
+ d=gmail.com; s=20221208; t=1687803898; x=1690395898;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=jncmDHtW54Olqi0K1ioREXsz7Sv5GqWhA83S3HlFWZQ=;
+ b=S+uw1zx+XhWi2NnMqgLtY6CbGBhnAhCLDZ60zBQXV0iv5/Tv14R7t5pVJyIxLPzkrZ
+ 3oU/hvVBB3OCNu2HHQb3oXU8cUq4/4wLAKC/60DNo0ahbRTJwv09QkchB0l7EejsXDOO
+ pKU87IIG26vnqefd9la1POXlsFA8by7ovqXDZwNwvVgSmw0l7EsULtSYlQkLS6arfDMW
+ JkZEYfz/EpHhV2xpQGJOUR53QE5jj3UQhtK+K0cKWNEsGNTneoZ2Blyib5Bi1fZ8miHP
+ zNhZngHxMoCqwGc+zZkiVqYfBUcRW45qnCoP08g3fdUcAEd46yOWDNIesvwEEo7CQuOv
+ 5iCg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=S+uw1zx+
+Subject: [Buildroot] [PATCH 1/5] package/python-numpy: bump to version 1.25.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,34 +94,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Gustavo Heinz <gustavo@gsthnz.com>, Michael Rommel <rommel@layer-7.net>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>,
+ Guillaume William Brs <guillaume.bressaix@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxsLAoKT24gTW9uLCBKdW4gMjYsIDIwMjMgYXQgMTE6MTjigK9BTSBCcnljZSBKb2huc29uIDxi
-cnljZUByZWRwaW5lbGFicy5jb20+IHdyb3RlOgo+Cj4gQ2hyaXN0aWFuLAo+IEkgbmVlZGVkIHRv
-IGFkZCBIT1NUX0dPX0JPT1RTVFJBUF9TVEFHRTFfREVQRU5ERU5DSUVTPXRvb2xjaGFpbiAgIHdp
-dGgKPiBwZXIgcGFja2FnZSBidWlsZCBvcHRpb24gdG8gZ2V0IHRoZSBidWlsZCB3b3JraW5nLgo+
-Cj4gQnJ5Y2UKClRoYW5rcyBmb3IgdGhlIHRpcCwgSSBoYWQgZHJvcHBlZCB0aGlzIGJlY2F1c2Ug
-b2YgYSBwcmV2aW91cyBQUiByZXZpZXcKYnkgVGhvbWFzOgoKaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvYnVpbGRyb290LzIwMjMwMzEyMjI1ODA2LjBiZjRiMGZkQHdpbmRzdXJmLwoKQ291bGQgeW91
-IHByb3ZpZGUgdGhlIGVycm9yIHlvdSBzZWUgd2hlbiB0b29sY2hhaW4gZGVwZW5kZW5jeSBpc24n
-dCB0aGVyZT8KClRob21hczogQ291bGQgeW91IHBsZWFzZSBoYXZlIGFub3RoZXIgbG9vayBhdCB0
-aGlzIC0gdG9vbGNoYWluIGlzCnJlcXVpcmVkIGZvciBIT1NUQ0NfTk9DQ0FDSEUgZm9yIHdoYXRl
-dmVyIHJlYXNvbi4KCj4gPiAgLSBEcm9wcGVkIGRlcGVuZGVuY3kgb24gdG9vbGNoYWluIGluIGdv
-LWJvb3RzdHJhcC1zdGFnZTEKPiA+ICAtIERyb3BwZWQgdXBkYXRpbmcgc291cmNlcyB0aW1lc3Rh
-bXBzIGluIGdvLWJvb3RzdHJhcC1zdGFnZXsxLDJ9Cj4gPiAgLSBVcGRhdGUgZ28tYm9vdHN0cmFw
-LXN0YWdlMiB0byAxLjE5LjcKPiA+ICAtIERyb3AgdGhlc2UgY29tbWVudHMgYW5kIG1vdmUgdG8g
-c2VwYXJhdGUgcGF0Y2g6Cj4gPiAgICAtIEZpeCB0eXBvIGluIGNvbW1lbnRzLgo+ID4gICAgLSBB
-ZGp1c3RlZCBjb21tZW50IGJ1aWx0IGluIC0+IGJ1aWx0LWluLgo+ID4gICAgLSBBZGp1c3QgY29t
-bWVudHMgcmVsYXRpbmcgdG8gY29weWluZyBzcmMvIHRvIGhvc3QvCj4gPiAgICAtIERyb3BwZWQg
-b3V0ZGF0ZWQgY29tbWVudCByZWZlcnJpbmcgdG8gaXNzdWUgMjc3NS4KPiA+ICAtIFRoYW5rcyBU
-aG9tYXMgZm9yIHRoZSByZXZpZXcuCgpUaGFua3MsCkNocmlzdGlhbgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
-aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Migrate to meson package infrastructure.
+
+License has changed due to date update:
+https://github.com/numpy/numpy/commit/c1ffdbc0c29d48ece717acb5bfbf811c935b41f6
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-numpy/python-numpy.hash |  6 ++---
+ package/python-numpy/python-numpy.mk   | 31 ++++++++++++--------------
+ 2 files changed, 17 insertions(+), 20 deletions(-)
+
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index 9ac9280c78..6629cebbce 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,7 +1,7 @@
+-# Copied from https://github.com/numpy/numpy/releases/tag/v1.23.5
+-sha256  1b1766d6f397c18153d40015ddfc79ddb715cabadc04d2d228d4e5a8bc4ded1a  numpy-1.23.5.tar.gz
++# Copied from https://github.com/numpy/numpy/releases/tag/v1.25.0
++sha256  f1accae9a28dc3cda46a91de86acf69de0d1b5f4edd44a9b0c3ceb8036dfff19  numpy-1.25.0.tar.gz
+ # License files, locally calculated
+-sha256  0f88787955e7131224f53a8c3f3e859dc502408e3a539a4dcf61fb7888b5b984  LICENSE.txt
++sha256  1034d3bd61783f3b5e7ec3e7ca818f4da4135132323a0ef99f4c0edb3c7f6bd2  LICENSE.txt
+ sha256  c27d0a8026bdb8876562b720ab24d1688e3827a89f6083cd6e7e8caa9584aba3  numpy/core/src/multiarray/dragon4.c
+ sha256  fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec  numpy/core/include/numpy/libdivide/LICENSE.txt
+ sha256  a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55  numpy/linalg/lapack_lite/LICENSE.txt
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 812bfdae4a..ad64a0cc6b 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_NUMPY_VERSION = 1.23.5
++PYTHON_NUMPY_VERSION = 1.25.0
+ PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+ PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+ PYTHON_NUMPY_LICENSE = BSD-3-Clause, MIT, Zlib
+@@ -15,30 +15,27 @@ PYTHON_NUMPY_LICENSE_FILES = \
+ 	numpy/linalg/lapack_lite/LICENSE.txt \
+ 	tools/npy_tempita/license.txt
+ 
+-PYTHON_NUMPY_SETUP_TYPE = setuptools
+-PYTHON_NUMPY_DEPENDENCIES = host-python-cython
++PYTHON_NUMPY_DEPENDENCIES = host-python-cython python3
+ HOST_PYTHON_NUMPY_DEPENDENCIES = host-python-cython
+ 
++PYTHON_NUMPY_CONF_ENV += \
++	_PYTHON_SYSCONFIGDATA_NAME=$(PKG_PYTHON_SYSCONFIGDATA_NAME) \
++	PYTHONPATH=$(PYTHON3_PATH)
++
+ ifeq ($(BR2_PACKAGE_LAPACK),y)
+ PYTHON_NUMPY_DEPENDENCIES += lapack
++PYTHON_NUMPY_CONF_OPTS = -Dlapack=lapack
+ else
+-PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
++PYTHON_NUMPY_CONF_OPTS = -Dlapack=""
+ endif
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+-PYTHON_NUMPY_BUILD_OPTS = --fcompiler=gnu95
+-PYTHON_NUMPY_ENV += F90=$(TARGET_FC)
++ifeq ($(BR2_PACKAGE_OPENBLAS),y)
++PYTHON_NUMPY_DEPENDENCIES += openblas
++PYTHON_NUMPY_CONF_OPTS += -Dblas=openblas
+ else
+-PYTHON_NUMPY_BUILD_OPTS = --fcompiler=None
++PYTHON_NUMPY_CONF_OPTS += -Dblas=""
+ endif
+ 
+-define PYTHON_NUMPY_CONFIGURE_CMDS
+-	-rm -f $(@D)/site.cfg
+-	echo "[DEFAULT]" >> $(@D)/site.cfg
+-	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
+-	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+-endef
+-
+ # Fixup the npymath.ini prefix path with actual target staging area where
+ # numpy core was built. Without this, target builds using numpy distutils
+ # extensions like python-scipy, python-numba cannot find -lnpymath since
+@@ -55,5 +52,5 @@ PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FIL
+ # in the staging area.
+ PYTHON_NUMPY_INSTALL_STAGING = YES
+ 
+-$(eval $(python-package))
+-$(eval $(host-python-package))
++$(eval $(meson-package))
++$(eval $(host-meson-package))
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
