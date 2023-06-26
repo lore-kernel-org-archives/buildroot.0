@@ -1,72 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F0B6EB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B56EB64D7
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 18:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA89C60E58;
-	Mon, 26 Jun 2023 17:21:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA89C60E58
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB837418CA;
+	Mon, 26 Jun 2023 18:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB837418CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tcpxuxgk6c6q; Mon, 26 Jun 2023 17:21:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sWFptRmu1LHE; Mon, 26 Jun 2023 18:15:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6E0A60D5F;
-	Mon, 26 Jun 2023 17:21:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6E0A60D5F
+	by smtp4.osuosl.org (Postfix) with ESMTP id B62A0418B8;
+	Mon, 26 Jun 2023 18:15:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B62A0418B8
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 92D401BF37B
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:21:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 841C31BF378
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:15:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A8D1401C2
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:21:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A8D1401C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C4F2418B8
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:15:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C4F2418B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mztDMN4ReAfz for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 17:21:19 +0000 (UTC)
+ with ESMTP id 8skSRTwqAJKd for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 18:15:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18DA540199
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 18DA540199
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 17:21:19 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:88cf:b268:1dd:7043])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 7F9C420058D;
- Mon, 26 Jun 2023 19:21:09 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 26 Jun 2023 19:21:09 +0200
-Date: Mon, 26 Jun 2023 19:21:09 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bin Meng <bmeng.cn@gmail.com>
-Message-ID: <20230626172109.GG646621@scaer>
-References: <20230626160030.93063-1-bmeng.cn@gmail.com>
- <20230626160030.93063-11-bmeng.cn@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38F55409DB
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 38F55409DB
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 18:15:39 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-78363328c04so34450739f.0
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 11:15:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1687803338; x=1690395338;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=OzXiTnPswNqVW1u/Y3v1fYxXD5MmCnYhYJ4kfQ+oD7s=;
+ b=GE87jy+f6PmEgAxNFDB4qr3VzQT/Bg8cFidc1Hjtr5eDjEE67HYnni8t+fsAmEaKNT
+ 9RPd+LynB7iRjbv8xrz5FLbFd/xpUy6zbiHCWMbDpFqIM4nyBuDXCXPhJ3BMTwRnyXwE
+ 4P//ZfqxZGREB7bOZU+Oz+LkmNgvXZ+v1srHUU1UmCs51eRHPZQfPKE/Z6k+/FHIFTPB
+ O1MHug7/RvQRUbntwz+LuxZH3z6IhdiiqzOUSBe5olUaXGNVcqenKCe3citKR7j7DWer
+ EdQHWkQuyC+iDDUfbpRAnxKILowxdlBuBT9m7uLrJCFxrP2rNTuUY8E95rxolEXW/QWH
+ FyKw==
+X-Gm-Message-State: AC+VfDwc0cEgX8BHZbY6N1W7HUSmoSWMpi1OsR3BhcaLSXTOujugylE2
+ 410gq9j1dL216P0S0KdMqvvihlKG+Js=
+X-Google-Smtp-Source: ACHHUZ7HCPyxDqBR3fdPtpdN7nYxysybBw+pAFWiPbvgqqSq+o2VuC+HY0zd5hpskUz//PnsKSgdrw==
+X-Received: by 2002:a05:6602:2206:b0:783:36d7:342a with SMTP id
+ n6-20020a056602220600b0078336d7342amr8359259ion.1.1687803337891; 
+ Mon, 26 Jun 2023 11:15:37 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-252-17.hlrn.qwest.net.
+ [71.218.252.17]) by smtp.gmail.com with ESMTPSA id
+ z24-20020a029f18000000b004269bbd4586sm1867653jal.77.2023.06.26.11.15.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 26 Jun 2023 11:15:37 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 26 Jun 2023 12:15:28 -0600
+Message-Id: <20230626181531.2312002-2-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230626181531.2312002-1-james.hilliard1@gmail.com>
+References: <20230626181531.2312002-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230626160030.93063-11-bmeng.cn@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1687800075;
- bh=Plud8miSFCzcLUNd8Gu+RrDGsxqYJXMhD1rVQpBFQDg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=N3McWans8dqtLskp4zb3qRzjVlOLHGLqrKgL6Hbhjn6YfvQ0DtQTEPevqoiKg0Dtn
- nUZOr27/C405pX17C2LRAZ4xU8OGkno2CqpVpIdFdZBgDivqIloLDuPjHOyWBNzkDf
- EoFEJwrA8vvBwHyAhBfH5eTpweNqj5z/wG7pDKR1m0UEjv3p507MroPjOSGdo1q8Np
- 2CE95K9/b1hggPgchXuh1vzqkPr/fMgNJbZphUrWMSzIbVDaa5kFiA49vBMgB2cGDm
- PHJwbru4xIKRIbT/GY3+jO+iwDN3e6Z/ZVMlBDdevFZbs26zDc0X6QHBKSIUeQN8Y6
- Cgl4/IIbhbGkA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1687803338; x=1690395338;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=OzXiTnPswNqVW1u/Y3v1fYxXD5MmCnYhYJ4kfQ+oD7s=;
+ b=GqAFSSrh1wyGTaWJvaHXmNql/IxC7bcsJVp++3SqSUsPd4ek9ei7ZCzP/jnI734fyq
+ mhHp/gJ7TV9LKMG22wbuvSGWCTrc3JpR9kFd/7evA4mqKKc+OqKnsDDTruKcI62xBJy6
+ UDitpgORNpZzXLo7sLAbbW1P1D5P36n0FHBB1N/quc8RdBEcBka+6NwdbkIR4/F5ibBH
+ EpKTex0Bdu3yAPaGWwcfISQkt28iXXWwmenG5XMGh6KOW7GZHfVO2Kxwacmgq1d/KqPF
+ /2HppNaEi4pJ90GwPvO435xNXGvZ1/Le7vSkguIhTpsEZQutWazfpCVk/Pl56sjzqyfk
+ VYxQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=N3McWans
-Subject: Re: [Buildroot] [PATCH 10/10] board/sifive: hifive-unleashed:
- Include QEMU instructions in readme.txt
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=GqAFSSrh
+Subject: [Buildroot] [PATCH 2/5] package/python-pythran: bump to version
+ 0.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,78 +98,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bin Meng <bmeng@tinylab.org>, Alistair Francis <alistair.francis@wdc.com>,
- Jan-Benedict Glaw <jbglaw@lug-owl.de>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Gustavo Heinz <gustavo@gsthnz.com>, Michael Rommel <rommel@layer-7.net>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>,
+ Guillaume William Brs <guillaume.bressaix@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bin, All,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-pythran/python-pythran.hash | 4 ++--
+ package/python-pythran/python-pythran.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2023-06-27 00:00 +0800, Bin Meng spake thusly:
-> From: Bin Meng <bmeng@tinylab.org>
-> 
-> The upstream QEMU 'sifive_u' machine supports running upstream U-Boot
-> for the SiFive HiFive Unleashed board out of the box.
-> 
-> Add the QEMU instructions for testing in readme.txt.
-
-Ah, is the 64MiB SDcard required to be bootable under qemu?
-
-I.e. is it the same issue as fixed by 6f9e83f5f74d (support/testing:
-test_ubi: reduce the rootfs.ubi size to 64M to match the Qemu emulated
-flash device)?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Bin Meng <bmeng@tinylab.org>
-> ---
-> 
->  board/sifive/hifive-unleashed/readme.txt | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/board/sifive/hifive-unleashed/readme.txt b/board/sifive/hifive-unleashed/readme.txt
-> index 3263913e9c..e9ccb26fa6 100644
-> --- a/board/sifive/hifive-unleashed/readme.txt
-> +++ b/board/sifive/hifive-unleashed/readme.txt
-> @@ -113,3 +113,20 @@ Booting the SPI flash on the board
->  
->  Make sure that the all DIP switches are set to the off position for
->  default boot mode (MSEL mode = 0110) to boot from SPI flash.
-> +
-> +Testing under QEMU
-> +==================
-> +
-> +The SD card image can be tested using QEMU:
-> +
-> +$ qemu-system-riscv64 -M sifive_u,msel=11 -smp 5 -m 8G \
-> +    -display none -serial stdio -nic user \
-> +    -bios output/images/u-boot-spl.bin \
-> +    -drive file=output/images/sdcard.img,if=sd
-> +
-> +The SPI flash image can be tested with a slightly different command:
-> +
-> +$ qemu-system-riscv64 -M sifive_u,msel=6 -smp 5 -m 8G \
-> +    -display none -serial stdio -nic user \
-> +    -bios output/images/u-boot-spl.bin \
-> +    -drive file=output/images/spi-nor.img,if=mtd
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/python-pythran/python-pythran.hash b/package/python-pythran/python-pythran.hash
+index 08348a5ccf..2dfc445b2f 100644
+--- a/package/python-pythran/python-pythran.hash
++++ b/package/python-pythran/python-pythran.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pythran/json
+-md5  d2961ece35b4b9f44a84ef31df1b21ff  pythran-0.12.0.tar.gz
+-sha256  eff3dd0d3eebe57372f0d14f82985525e9bcdfb5b1d1010e1932cf9207060f9f  pythran-0.12.0.tar.gz
++md5  3090288af50566af75cb058d1878aaad  pythran-0.13.1.tar.gz
++sha256  8aad08162f010e5425a7b254dd68d83311b430bb29f9252dce2eff3ba39497dd  pythran-0.13.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0be9f14c66a9a3cb66d5263a6495437862ce0c9cdf60d4a6c36d1e51b1244c6e  LICENSE
+ sha256  e1c0ed0a99e4462016d79d835f1f479b78c4d4a07fe66598e97f449503ffd178  docs/LICENSE.rst
+diff --git a/package/python-pythran/python-pythran.mk b/package/python-pythran/python-pythran.mk
+index 0d946be28a..25735ad95a 100644
+--- a/package/python-pythran/python-pythran.mk
++++ b/package/python-pythran/python-pythran.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYTHRAN_VERSION = 0.12.0
++PYTHON_PYTHRAN_VERSION = 0.13.1
+ PYTHON_PYTHRAN_SOURCE = pythran-$(PYTHON_PYTHRAN_VERSION).tar.gz
+-PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/99/e0/ed0e81de05cfa4ecbcbceec6603d175387d8bc7a6332cbfd155d09958ccf
++PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/8d/d8/b27e8dc3f3a03dcd317d40d9df0ae07ebbd85444585973ceba07716934d0
+ PYTHON_PYTHRAN_SETUP_TYPE = setuptools
+ PYTHON_PYTHRAN_LICENSE = BSD-3-Clause
+ PYTHON_PYTHRAN_LICENSE_FILES = LICENSE docs/LICENSE.rst
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
