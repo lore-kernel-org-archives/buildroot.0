@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E5E2EB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 16:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE807EB64D7
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 16:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91DE141944;
-	Mon, 26 Jun 2023 16:00:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91DE141944
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D9B141902;
+	Mon, 26 Jun 2023 16:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D9B141902
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IvsLeLlk-zc5; Mon, 26 Jun 2023 16:00:56 +0000 (UTC)
+	with ESMTP id E-FlW-vClBDN; Mon, 26 Jun 2023 16:01:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15F9A419C3;
-	Mon, 26 Jun 2023 16:00:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15F9A419C3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2B5531BF3D0
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:00:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D573E41A49;
+	Mon, 26 Jun 2023 16:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D573E41A49
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 573591BF3D0
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:00:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11A1E820AF
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:00:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11A1E820AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 311E940493
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:00:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 311E940493
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id chNeSsDrp9XC for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 16:00:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v2lIvfwMz15C for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 16:00:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E067F820A2
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
- [IPv6:2607:f8b0:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E067F820A2
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 16:00:41 +0000 (UTC)
-Received: by mail-pl1-x629.google.com with SMTP id
- d9443c01a7336-1b8033987baso7801535ad.0
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 09:00:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56D55401A4
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
+ [IPv6:2607:f8b0:4864:20::62f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 56D55401A4
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 16:00:45 +0000 (UTC)
+Received: by mail-pl1-x62f.google.com with SMTP id
+ d9443c01a7336-1b809354a15so5588835ad.1
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 09:00:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687795241; x=1690387241;
+ d=1e100.net; s=20221208; t=1687795245; x=1690387245;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=oz13VbMiJesfMrEtHGYOrmLjvyBfykWJisBT9skRSAM=;
- b=lsOjikzQ9W4koWC30yCsU+7J5UcOuWuadflibwO4LUD9DYkxinA1Ya7+iEPG+4PdUQ
- rLSowpxMOKI09mAcOMAVuBDqKNArQISnW2OemTiJLrXoesTJi7+kYFhDGtpMtUJ2LXvV
- DWHkhW7h8pjMbFCrFA04nC8AjBJ7TYTRgBvd5UiuPMcFtFdpjtv14sCibBOl6elIJ7j8
- 0jAhvwORj/bBI+Am2pGpGEPDwoBSmTxZl8ZzYEibWTd4zHUQdnmOjcFqgWtoMM8Tty62
- yG8kTsiVsGnRrxvQxWKDqWawtDhaI5bKbLKHMWSy+XeW0ZiguTtQsRgp7FpC7FStxDBW
- YkuQ==
-X-Gm-Message-State: AC+VfDz2M14LbEYqS+Q3TA0sxjejeVg2J/VVF28WgBjpNiUqcoV7r4ou
- uYeqv/dFtoj2zVT99Yr/XACghxdmef2gpg==
-X-Google-Smtp-Source: ACHHUZ7Q50kAHeqhpHZ6rCpobb0APALi/rEM1K7sMmAQXf4w32nNWJiXUeloseoCpA2TKVXbRDm7iQ==
-X-Received: by 2002:a17:902:d491:b0:1b7:c09d:3f7a with SMTP id
- c17-20020a170902d49100b001b7c09d3f7amr10228494plg.11.1687795240898; 
- Mon, 26 Jun 2023 09:00:40 -0700 (PDT)
+ bh=5fxuFIDWhfg7llbIxoyHaoQqGTfwJRrUaQIttoGM6H4=;
+ b=AVbbEjkZWYWrsqY+kz5dqI4KG3dq+KmqNOSI9kMwHrX4WRlZETiLJffmDFfGpXFGbU
+ oO5sEOdufCzvE5JkIUTdBQoLv3esTCP77A2/rCc00jKwYhiN5RVP1nRr0WvVSp2nAeoT
+ eVYrpPnMVOqE6XHZLoGwXKCvwCf9bAnnejILQfAwZu/sHqiS+brHiP0/swu9/Xxe+mSo
+ hCbs+5EX1MgxrhS3Xw0szUYotpCQYqYDhrwSzQRnw7TnfdTrLQt70Y8pffh1n7TxAbU2
+ N+nm/sdO2FHS/5ceYIPp5C22dg27xQ6buTfjBaXcVz6j9hMDT1BgJn3pp1XakUez7NUg
+ vlOw==
+X-Gm-Message-State: AC+VfDz6Q8fATnGUVjo8Gfk/tGgFyzPBdua5X4ueCNThAaMnwjs8g9Gq
+ QndY2u2CojDxcHPAmzXL7jURGd2o3BZTvg==
+X-Google-Smtp-Source: ACHHUZ5yC7R3I/yJdP85DhxGF6oIfiPbPrQb8NR7ZR/vJNqk/SuMrL19O4l1jHsGwSQRC4yodGnz0g==
+X-Received: by 2002:a17:903:2301:b0:1b6:b245:2429 with SMTP id
+ d1-20020a170903230100b001b6b2452429mr3850602plh.32.1687795244643; 
+ Mon, 26 Jun 2023 09:00:44 -0700 (PDT)
 Received: from ubuntu.. ([149.28.154.72]) by smtp.gmail.com with ESMTPSA id
- x3-20020a1709027c0300b001ab1b7bae5asm4352343pll.184.2023.06.26.09.00.37
+ x3-20020a1709027c0300b001ab1b7bae5asm4352343pll.184.2023.06.26.09.00.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Jun 2023 09:00:40 -0700 (PDT)
+ Mon, 26 Jun 2023 09:00:44 -0700 (PDT)
 From: Bin Meng <bmeng.cn@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 27 Jun 2023 00:00:21 +0800
-Message-Id: <20230626160030.93063-2-bmeng.cn@gmail.com>
+Date: Tue, 27 Jun 2023 00:00:22 +0800
+Message-Id: <20230626160030.93063-3-bmeng.cn@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230626160030.93063-1-bmeng.cn@gmail.com>
 References: <20230626160030.93063-1-bmeng.cn@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1687795241; x=1690387241;
+ d=gmail.com; s=20221208; t=1687795245; x=1690387245;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=oz13VbMiJesfMrEtHGYOrmLjvyBfykWJisBT9skRSAM=;
- b=SnJwRYe61K/xPqIuzJRTYq0keJZKACB66dVTGwqRCxfvdWQ+W5hk7RZNs1QmUKVTXB
- YQnAo0LPmV+zza5iLiUN4SVDeCZbcCQLOTFEnnRL9dt/p9erFaUXus6CS9qMXxa5Yjmg
- 0v5JM9Eum9ijYU/CUC/tZra1u9WeKT00E1WMtghW/LJtFbAa5pO05TwsoaigKMv87eeb
- VhER6JiTQF6l1+jq4AXke2iNiZgUiZqcENZoqQq9uhkc6mHKe9CZLDbjihVmkqNURP4w
- EUh8xGyK/FbUrcC+TWEvzj1tKhHfJY1BxNot5iG4fzPv0uNo0lOlHyh9fst4MZsSdE7G
- 1Mgw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=5fxuFIDWhfg7llbIxoyHaoQqGTfwJRrUaQIttoGM6H4=;
+ b=b0Lkuuu3ZHMNvCoIFMlDNKB7P/YicE5vl+7DzUVA+4cPjN7xSlRcqf1TkohPElJ7qc
+ d6RpgOG0hpE+TuMR7buhA055FE0jreFr5vP2BuiLak7e8F6yQKRGJysP+XOGrhjytK23
+ NQqi11ulYlx05T2wOxngZbwtnGhq98bjOT1Nalpfpe8zJo+9OzgvX6RBiKL+fohcO4N4
+ hl3AA98yD44HUWc7Kq/oJ+OwZcRRy3uskhzCBxzC50BHxlilOTrr1QNpVwnr/SArWnZG
+ KAHIwFbIbw6VtLWCbvgJAM9+3GiiFvMlkJP7hOtWf+SQAhtEj9lnfnztdgYGSs46NZiS
+ 6WRg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=SnJwRYe6
-Subject: [Buildroot] [PATCH 01/10] configs/hifive_unleashed: Update to use
- OpenSBI 1.2
+ header.a=rsa-sha256 header.s=20221208 header.b=b0Lkuuu3
+Subject: [Buildroot] [PATCH 02/10] configs/hifive_unleashed: Update to use
+ U-Boot v2023.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,29 +106,47 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Bin Meng <bmeng@tinylab.org>
 
-Since the rest of RISC-V boards have been switched to use OpenSBI
-1.2, let's update hifive_unleashed to use OpenSBI 1.2 too.
+With upstream commit ae2d9506a36c ("riscv: sifive: Rename fu540 board to unleashed")
+in U-Boot v2021.07 release, the defconfig for SiFive Unleashed board
+has been changed to sifive_unleashed_defconfig.
 
-Resolves: https://bugs.busybox.net/show_bug.cgi?id=15658
+Also newer U-Boot has deprecated the usage of SPL_FIT_GENERATOR
+to generate u-boot.itb hence there is no 'u-boot.itb' target in
+the U-Boot Makefile anymore. Instead binman is used to assemble
+the u-boot.itb image.
+
+We will need to switch to BR2_TARGET_UBOOT_FORMAT_CUSTOM for
+installing u-boot.itb.
+
+Switch over to use the latest U-Boot v2023.04 release.
+
 Signed-off-by: Bin Meng <bmeng@tinylab.org>
 ---
 
- configs/hifive_unleashed_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/hifive_unleashed_defconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
-index 2b6ee6c08e..0440b14ba5 100644
+index 0440b14ba5..35cb3558f9 100644
 --- a/configs/hifive_unleashed_defconfig
 +++ b/configs/hifive_unleashed_defconfig
-@@ -38,7 +38,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- # Bootloader
- BR2_TARGET_OPENSBI=y
- BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
--BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="0.9"
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
+@@ -42,12 +42,13 @@ BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
  BR2_TARGET_OPENSBI_PLAT="generic"
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sifive_fu540"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sifive_unleashed"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
+-BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+ BR2_TARGET_UBOOT_SPL=y
+ 
+ # Host tools
 -- 
 2.34.1
 
