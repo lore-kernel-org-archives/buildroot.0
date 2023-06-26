@@ -1,67 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA0F0EB64DC
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jun 2023 22:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E71BEB64D7
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 04:32:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56F6F402D2;
-	Sun, 25 Jun 2023 22:23:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56F6F402D2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4478082012;
+	Mon, 26 Jun 2023 04:32:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4478082012
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i2lap2zAhu-W; Sun, 25 Jun 2023 22:23:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AZfxDqLeqUkA; Mon, 26 Jun 2023 04:32:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E38840238;
-	Sun, 25 Jun 2023 22:23:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E38840238
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CCD51BF3D2
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 22:23:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87CB481FA1;
+	Mon, 26 Jun 2023 04:32:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87CB481FA1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D2A11BF393
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 04:32:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 335D160C24
- for <buildroot@lists.busybox.net>; Sun, 25 Jun 2023 22:23:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 335D160C24
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA9DB40385
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 04:32:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9DB40385
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TuTEQ_LWfL24 for <buildroot@lists.busybox.net>;
- Sun, 25 Jun 2023 22:23:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5ir0TmJJ2uhZ for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 04:32:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 680E5605E0
- for <buildroot@uclibc.org>; Sun, 25 Jun 2023 22:23:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 680E5605E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C076400D2
+ for <buildroot@uclibc.org>; Mon, 26 Jun 2023 04:32:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C076400D2
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 537C7825F9; Sun, 25 Jun 2023 22:23:26 +0000 (UTC)
+ id 1A83083AEB; Mon, 26 Jun 2023 04:32:00 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 25 Jun 2023 22:23:25 +0000
+Date: Mon, 26 Jun 2023 04:31:59 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Outdated package
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: educarbnog2@yahoo.com.br
+X-Bugzilla-Who: br015@umbiko.net
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15667-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15667-163-lw4zaFbuC1@https.bugs.busybox.net/>
+In-Reply-To: <bug-15667-163@https.bugs.busybox.net/>
+References: <bug-15667-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15667] New: Missing files pc_x86_64_bios_defconfig
+Subject: [Buildroot] [Bug 15667] Missing files pc_x86_64_bios_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,31 +80,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15667
 
-            Bug ID: 15667
-           Summary: Missing files pc_x86_64_bios_defconfig
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: educarbnog2@yahoo.com.br
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
-
-Dear
-
-I'm using Buildroot for a project using the pc_x86_64_bios_defconfig card, but
-when copying the project it ends up generating an error in the compilation,
-because two files are not present. They are libelf.h and gelf.h. My doubt is
-where can I find these files and how to insert them in Buildroot?
-
-I'm using Linux Ubuntu 22.04.2 LTS
-
-Yours sincerely
+--- Comment #1 from Andreas Ziegler <br015@umbiko.net> ---
+Activate Kernel -> needs host libelf. This seems to be an omission in the
+defconfig.
 
 -- 
 You are receiving this mail because:
