@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 144AAEB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:04:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F61AEB64DA
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EEA6415BA;
-	Mon, 26 Jun 2023 17:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EEA6415BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06293415D6;
+	Mon, 26 Jun 2023 17:05:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06293415D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wU9NAK_lEAUB; Mon, 26 Jun 2023 17:04:47 +0000 (UTC)
+	with ESMTP id 18gNcEqUZ4NB; Mon, 26 Jun 2023 17:05:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D8F46415B8;
-	Mon, 26 Jun 2023 17:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8F46415B8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E66481BF37B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 444564159A;
+	Mon, 26 Jun 2023 17:04:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 444564159A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E9ED11BF951
  for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CADF860E4C
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF39F418EE
  for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CADF860E4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF39F418EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ehOfWpPYAi2s for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id klJNFEVNpGTp for <buildroot@lists.busybox.net>;
  Mon, 26 Jun 2023 17:04:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C7F1960B16
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF28E418E0
  for <buildroot@buildroot.org>; Mon, 26 Jun 2023 17:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7F1960B16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF28E418E0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B053A84AD2; Mon, 26 Jun 2023 17:04:44 +0000 (UTC)
+ id BBDB284AC1; Mon, 26 Jun 2023 17:04:44 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jun 2023 19:02:03 +0200
+Date: Mon, 26 Jun 2023 19:02:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 311f04cee483fbb967ca132476094ed0e7903ee3
-X-Git-Newrev: 3a4ce27f562b1d8f56e3ed256f035c1ee60301ec
+X-Git-Oldrev: 3a4ce27f562b1d8f56e3ed256f035c1ee60301ec
+X-Git-Newrev: 5c85830a6b694fd91dc9d6477c3fb94351e99b6b
 X-Patchwork-Hint: ignore
-Message-Id: <20230626170444.B053A84AD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/beaglev_defconfig: Enable
- BR2_RISCV_ISA_CUSTOM_RVA explicitly
+Message-Id: <20230626170444.BBDB284AC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/Config.in.riscv: Remove
+ BR2_RISCV_ISA_CUSTOM_RVA from BR2_riscv_custom
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a4ce27f562b1d8f56e3ed256f035c1ee60301ec
+commit: https://git.buildroot.net/buildroot/commit/?id=5c85830a6b694fd91dc9d6477c3fb94351e99b6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_RISCV_ISA_CUSTOM_RVA is currently not explicitly listed as it is
-selected by BR2_riscv_custom. This looks confusing. Let's enable it.
+BR2_riscv_custom should only contain the basic I extension. The A
+extension should be optional and selected by board configs.
 
 Signed-off-by: Bin Meng <bmeng@tinylab.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/beaglev_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/Config.in.riscv | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
-index 79af8c2ece..42c732b973 100644
---- a/configs/beaglev_defconfig
-+++ b/configs/beaglev_defconfig
-@@ -1,6 +1,7 @@
- BR2_riscv=y
- BR2_riscv_custom=y
- BR2_RISCV_ISA_CUSTOM_RVM=y
-+BR2_RISCV_ISA_CUSTOM_RVA=y
- BR2_RISCV_ISA_CUSTOM_RVF=y
- BR2_RISCV_ISA_CUSTOM_RVD=y
- BR2_RISCV_ISA_CUSTOM_RVC=y
+diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+index b5e84389e0..853e8deb06 100644
+--- a/arch/Config.in.riscv
++++ b/arch/Config.in.riscv
+@@ -35,7 +35,6 @@ config BR2_riscv_g
+ config BR2_riscv_custom
+ 	bool "Custom architecture"
+ 	select BR2_RISCV_ISA_RVI
+-	select BR2_RISCV_ISA_CUSTOM_RVA
+ 
+ endchoice
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
