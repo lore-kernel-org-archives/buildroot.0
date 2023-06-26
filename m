@@ -4,89 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B56EB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 18:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0915EB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 18:15:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB837418CA;
-	Mon, 26 Jun 2023 18:15:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB837418CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF457418A8;
+	Mon, 26 Jun 2023 18:15:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF457418A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sWFptRmu1LHE; Mon, 26 Jun 2023 18:15:43 +0000 (UTC)
+	with ESMTP id crikCNxbGkNc; Mon, 26 Jun 2023 18:15:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B62A0418B8;
-	Mon, 26 Jun 2023 18:15:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B62A0418B8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AF72418B4;
+	Mon, 26 Jun 2023 18:15:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AF72418B4
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 841C31BF378
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:15:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BEC331BF378
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:15:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C4F2418B8
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:15:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C4F2418B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id A343B418B8
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 18:15:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A343B418B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8skSRTwqAJKd for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 18:15:39 +0000 (UTC)
+ with ESMTP id Ho7YP3hu_QK8 for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 18:15:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38F55409DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E934418B4
 Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
  [IPv6:2607:f8b0:4864:20::d32])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 38F55409DB
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 18:15:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3E934418B4
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 18:15:40 +0000 (UTC)
 Received: by mail-io1-xd32.google.com with SMTP id
- ca18e2360f4ac-78363328c04so34450739f.0
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 11:15:39 -0700 (PDT)
+ ca18e2360f4ac-76c64da0e46so169130339f.0
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 11:15:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687803338; x=1690395338;
+ d=1e100.net; s=20221208; t=1687803339; x=1690395339;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=OzXiTnPswNqVW1u/Y3v1fYxXD5MmCnYhYJ4kfQ+oD7s=;
- b=GE87jy+f6PmEgAxNFDB4qr3VzQT/Bg8cFidc1Hjtr5eDjEE67HYnni8t+fsAmEaKNT
- 9RPd+LynB7iRjbv8xrz5FLbFd/xpUy6zbiHCWMbDpFqIM4nyBuDXCXPhJ3BMTwRnyXwE
- 4P//ZfqxZGREB7bOZU+Oz+LkmNgvXZ+v1srHUU1UmCs51eRHPZQfPKE/Z6k+/FHIFTPB
- O1MHug7/RvQRUbntwz+LuxZH3z6IhdiiqzOUSBe5olUaXGNVcqenKCe3citKR7j7DWer
- EdQHWkQuyC+iDDUfbpRAnxKILowxdlBuBT9m7uLrJCFxrP2rNTuUY8E95rxolEXW/QWH
- FyKw==
-X-Gm-Message-State: AC+VfDwc0cEgX8BHZbY6N1W7HUSmoSWMpi1OsR3BhcaLSXTOujugylE2
- 410gq9j1dL216P0S0KdMqvvihlKG+Js=
-X-Google-Smtp-Source: ACHHUZ7HCPyxDqBR3fdPtpdN7nYxysybBw+pAFWiPbvgqqSq+o2VuC+HY0zd5hpskUz//PnsKSgdrw==
-X-Received: by 2002:a05:6602:2206:b0:783:36d7:342a with SMTP id
- n6-20020a056602220600b0078336d7342amr8359259ion.1.1687803337891; 
- Mon, 26 Jun 2023 11:15:37 -0700 (PDT)
+ bh=fbPodvK/RMv7UwrIfETYD4QuVirjUz7S9fYn/lQRTYQ=;
+ b=QJvW23G09B3H9M4LBwfSL9rRbIQvohOFu2cLvDai+cNIwgEtjbNhXhYO0z0KopsriT
+ Qym7kQ0mCr1oucRBRGh9fA2PZjkV964i8ozJrllgKUp3nyX60QtvDf6qTn0eXtEflV4F
+ 0YMS9djp/8vtqFDXL/jl5bnte5kA5ts6kJlShhnCtN270MIx32HyYLbtv/wHVsixfQdA
+ ox17Mg0RxLPpE9vEuyFvtsY6EfTciKIB/Jf0HwhVnP1uP9AMRJHqdLP2P6XvvSvxJbkd
+ WVlAs6W24ck3Zl8BL5PKTC9pnWqlvQsJpTNxgrnLD5xVqTnn40DPnP+JHSEw5JwlD0is
+ 5OUA==
+X-Gm-Message-State: AC+VfDwJ40X9cXYgsR4x8iPkv8KaDN2a58SyeZmr3w2kydNK9VXL4W+g
+ MZVv4uYfhUnQ0m/e+kDzHud203x8Vpk=
+X-Google-Smtp-Source: ACHHUZ5NNohciNlJyUxvfl+GA3qH0R1WYi+om+vq32xjHp9JVO1r1epAQV05/td/gaUjeK3rE4JNRQ==
+X-Received: by 2002:a05:6602:14:b0:783:63d6:4c5 with SMTP id
+ b20-20020a056602001400b0078363d604c5mr2196913ioa.12.1687803339211; 
+ Mon, 26 Jun 2023 11:15:39 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-17.hlrn.qwest.net.
  [71.218.252.17]) by smtp.gmail.com with ESMTPSA id
- z24-20020a029f18000000b004269bbd4586sm1867653jal.77.2023.06.26.11.15.37
+ z24-20020a029f18000000b004269bbd4586sm1867653jal.77.2023.06.26.11.15.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Jun 2023 11:15:37 -0700 (PDT)
+ Mon, 26 Jun 2023 11:15:38 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jun 2023 12:15:28 -0600
-Message-Id: <20230626181531.2312002-2-james.hilliard1@gmail.com>
+Date: Mon, 26 Jun 2023 12:15:30 -0600
+Message-Id: <20230626181531.2312002-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230626181531.2312002-1-james.hilliard1@gmail.com>
 References: <20230626181531.2312002-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1687803338; x=1690395338;
+ d=gmail.com; s=20221208; t=1687803339; x=1690395339;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=OzXiTnPswNqVW1u/Y3v1fYxXD5MmCnYhYJ4kfQ+oD7s=;
- b=GqAFSSrh1wyGTaWJvaHXmNql/IxC7bcsJVp++3SqSUsPd4ek9ei7ZCzP/jnI734fyq
- mhHp/gJ7TV9LKMG22wbuvSGWCTrc3JpR9kFd/7evA4mqKKc+OqKnsDDTruKcI62xBJy6
- UDitpgORNpZzXLo7sLAbbW1P1D5P36n0FHBB1N/quc8RdBEcBka+6NwdbkIR4/F5ibBH
- EpKTex0Bdu3yAPaGWwcfISQkt28iXXWwmenG5XMGh6KOW7GZHfVO2Kxwacmgq1d/KqPF
- /2HppNaEi4pJ90GwPvO435xNXGvZ1/Le7vSkguIhTpsEZQutWazfpCVk/Pl56sjzqyfk
- VYxQ==
+ bh=fbPodvK/RMv7UwrIfETYD4QuVirjUz7S9fYn/lQRTYQ=;
+ b=RGIwze8emyI0Stzn0wP0rGH4iB30jeO6hIgRZGwQOcbU7jK88O+U6wSAYzzW28CQH4
+ ls5CVdxQ3ErwQE7Bxpsf6vFXiy+EQRj4u3yewR16+lPF9Gidg74F1c/Ilf2HnANfw63B
+ 3mS6V1mbNAZhC98WqJrMzPbRP0UXyVKyLeRt+AhKplSnk9AS8Dnh75SINNg9gKp2jfWu
+ EllHKHrq/qu8+TMJuSftnRiCLJFwJX2UrWbLyA7NQFcMz2IoN4onvDs7cGZyYx0ggvLS
+ ZWRPbIBqZgHxXdJckaB6WEckTMkgDOyrJS7I+bNx3b7MqiUA2QYx5JQbhv8qZjKvAxK+
+ Z0xw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=GqAFSSrh
-Subject: [Buildroot] [PATCH 2/5] package/python-pythran: bump to version
- 0.13.1
+ header.a=rsa-sha256 header.s=20221208 header.b=RGIwze8e
+Subject: [Buildroot] [PATCH 4/5] package/python-scipy: bump to version 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,41 +112,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Migrate to meson package infrastructure.
+
+Add new openblas dependency.
+
+License hash changed due to date update:
+https://github.com/scipy/scipy/commit/d3f0aea40f64e478085b6478a9fe55ca8a75b087
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pythran/python-pythran.hash | 4 ++--
- package/python-pythran/python-pythran.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-scipy/Config.in         |  3 +++
+ package/python-scipy/python-scipy.hash |  5 ++--
+ package/python-scipy/python-scipy.mk   | 37 +++++++++-----------------
+ 3 files changed, 18 insertions(+), 27 deletions(-)
 
-diff --git a/package/python-pythran/python-pythran.hash b/package/python-pythran/python-pythran.hash
-index 08348a5ccf..2dfc445b2f 100644
---- a/package/python-pythran/python-pythran.hash
-+++ b/package/python-pythran/python-pythran.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pythran/json
--md5  d2961ece35b4b9f44a84ef31df1b21ff  pythran-0.12.0.tar.gz
--sha256  eff3dd0d3eebe57372f0d14f82985525e9bcdfb5b1d1010e1932cf9207060f9f  pythran-0.12.0.tar.gz
-+md5  3090288af50566af75cb058d1878aaad  pythran-0.13.1.tar.gz
-+sha256  8aad08162f010e5425a7b254dd68d83311b430bb29f9252dce2eff3ba39497dd  pythran-0.13.1.tar.gz
- # Locally computed sha256 checksums
- sha256  0be9f14c66a9a3cb66d5263a6495437862ce0c9cdf60d4a6c36d1e51b1244c6e  LICENSE
- sha256  e1c0ed0a99e4462016d79d835f1f479b78c4d4a07fe66598e97f449503ffd178  docs/LICENSE.rst
-diff --git a/package/python-pythran/python-pythran.mk b/package/python-pythran/python-pythran.mk
-index 0d946be28a..25735ad95a 100644
---- a/package/python-pythran/python-pythran.mk
-+++ b/package/python-pythran/python-pythran.mk
+diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
+index 229b5997ad..0a4acb9699 100644
+--- a/package/python-scipy/Config.in
++++ b/package/python-scipy/Config.in
+@@ -2,10 +2,12 @@ config BR2_PACKAGE_PYTHON_SCIPY
+ 	bool "python-scipy"
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
+ 	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS # lapack
++	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS # openblas
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+ 	depends on BR2_TOOLCHAIN_HAS_FORTRAN # lapack
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LAPACK
++	select BR2_PACKAGE_OPENBLAS
+ 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime scipy::io
+ 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+ 	select BR2_PACKAGE_PYTHON_PYBIND
+@@ -20,6 +22,7 @@ config BR2_PACKAGE_PYTHON_SCIPY
+ comment "python-scipy needs toolchain w/ fortran and c++ and glibc or musl"
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_FORTRAN || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
+ 		(!BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL)
+diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
+index 0274679c43..9634771139 100644
+--- a/package/python-scipy/python-scipy.hash
++++ b/package/python-scipy/python-scipy.hash
+@@ -1,7 +1,6 @@
+ # Locally generated
+-sha256  0140dd24d14ce194fdb3df496c2190f0896ca84ac98bf5d69c3b3fb7bde1a1e9  scipy-1.8.1.tar.xz
+-sha256  96599f8ec69a2cc609265eed13fc75090aacb28742260e55ce623788a33da19c  LICENSE.txt
+-sha256  37e64a498894ac7c3b070023e3689e954a8ecf8a23b90968d09a455f1b4f7b35  scipy/linalg/src/lapack_deprecations/LICENSE
++sha256  f9b0248cb9d08eead44cde47cbf6339f1e9aa0dfde28f5fb27950743e317bd5d  scipy-1.11.0.tar.gz
++sha256  5517022426a56179540ee6eace15fd723ef8fdb83b2900fed2152dd2e2f972a2  LICENSE.txt
+ sha256  606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
+ sha256  3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
+ sha256  f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/_dsolve/SuperLU/License.txt
+diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
+index a8c23c6c88..3010cfbd54 100644
+--- a/package/python-scipy/python-scipy.mk
++++ b/package/python-scipy/python-scipy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTHRAN_VERSION = 0.12.0
-+PYTHON_PYTHRAN_VERSION = 0.13.1
- PYTHON_PYTHRAN_SOURCE = pythran-$(PYTHON_PYTHRAN_VERSION).tar.gz
--PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/99/e0/ed0e81de05cfa4ecbcbceec6603d175387d8bc7a6332cbfd155d09958ccf
-+PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/8d/d8/b27e8dc3f3a03dcd317d40d9df0ae07ebbd85444585973ceba07716934d0
- PYTHON_PYTHRAN_SETUP_TYPE = setuptools
- PYTHON_PYTHRAN_LICENSE = BSD-3-Clause
- PYTHON_PYTHRAN_LICENSE_FILES = LICENSE docs/LICENSE.rst
+-PYTHON_SCIPY_VERSION = 1.8.1
+-PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.xz
+-PYTHON_SCIPY_SITE = https://github.com/scipy/scipy/releases/download/v$(PYTHON_SCIPY_VERSION)
++PYTHON_SCIPY_VERSION = 1.11.0
++PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
++PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/fa/d0/724c8204f87b6f807e3e67de32b8b4922d579154a448ce94e89129064bf1
+ PYTHON_SCIPY_LICENSE = \
+ 	BSD-3-Clause, \
+ 	BSD-2-Clause, \
+@@ -16,7 +16,6 @@ PYTHON_SCIPY_LICENSE = \
+ 	Qhull
+ PYTHON_SCIPY_LICENSE_FILES = \
+ 	LICENSE.txt \
+-	scipy/linalg/src/lapack_deprecations/LICENSE \
+ 	scipy/ndimage/LICENSE.txt \
+ 	scipy/optimize/tnc/LICENSE \
+ 	scipy/sparse/linalg/_dsolve/SuperLU/License.txt \
+@@ -25,34 +24,24 @@ PYTHON_SCIPY_LICENSE_FILES = \
+ PYTHON_SCIPY_CPE_ID_VENDOR = scipy
+ PYTHON_SCIPY_CPE_ID_PRODUCT = scipy
+ PYTHON_SCIPY_DEPENDENCIES += \
++	host-python-cython \
+ 	host-python-numpy \
+ 	host-python-pythran \
+ 	zlib \
+ 	lapack \
++	openblas \
++	python3 \
+ 	python-numpy \
+ 	python-pybind
+ PYTHON_SCIPY_INSTALL_STAGING = YES
+ 
+-PYTHON_SCIPY_SETUP_TYPE = setuptools
+-PYTHON_SCIPY_BUILD_OPTS = config_fc --fcompiler=gnu95
++PYTHON_SCIPY_CONF_ENV += \
++	_PYTHON_SYSCONFIGDATA_NAME=$(PKG_PYTHON_SYSCONFIGDATA_NAME) \
++	PYTHONPATH=$(PYTHON3_PATH)
+ 
+-PYTHON_SCIPY_LDFLAGS = $(TARGET_LDFLAGS) -shared \
+-	-L$(PYTHON3_PATH)/site-packages/numpy/core/lib
+-# -lnpyrandom localization
+-PYTHON_SCIPY_LDFLAGS += \
+-	-L$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/random/lib
++PYTHON_SCIPY_CONF_OPTS = -Dblas=openblas -Dlapack=lapack
+ 
+-PYTHON_SCIPY_ENV = \
+-	F90=$(TARGET_FC) \
+-	LDFLAGS="$(PYTHON_SCIPY_LDFLAGS)"
++PYTHON_SCIPY_MESON_EXTRA_PROPERTIES = \
++	numpy-include-dir='$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include'
+ 
+-# Provide system configuration options to numpy distutils extensions, telling
+-# to find all include files and libraries in staging directory.
+-define PYTHON_SCIPY_CONFIGURE_CMDS
+-	-rm -f $(@D)/site.cfg
+-	echo "[DEFAULT]" >> $(@D)/site.cfg
+-	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
+-	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+-endef
+-
+-$(eval $(python-package))
++$(eval $(meson-package))
 -- 
 2.34.1
 
