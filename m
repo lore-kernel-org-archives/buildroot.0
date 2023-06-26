@@ -4,80 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDB4CEB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 16:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8D2EB64D7
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 16:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90D0341B8A;
-	Mon, 26 Jun 2023 16:03:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90D0341B8A
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBB87408C2;
+	Mon, 26 Jun 2023 16:12:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBB87408C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DyLPuGcls_Jz; Mon, 26 Jun 2023 16:03:34 +0000 (UTC)
+	with ESMTP id wMJ29j0lYZiC; Mon, 26 Jun 2023 16:12:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AF6E4049A;
-	Mon, 26 Jun 2023 16:03:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AF6E4049A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 251231BF951
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:01:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7AD741909;
+	Mon, 26 Jun 2023 16:12:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7AD741909
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D82521BF37E
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F21316137C
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:01:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F21316137C
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE57782214
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 16:12:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE57782214
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wBIIoMXCyn5F for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 16:01:21 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5648061324
-Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5648061324
- for <buildroot@buildroot.org>; Mon, 26 Jun 2023 16:01:21 +0000 (UTC)
-Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout02.mail.de (Postfix) with ESMTP id 3B3BCA0426;
- Mon, 26 Jun 2023 18:01:19 +0200 (CEST)
-Received: from smtp04.mail.de (smtp04.bt.mail.de [10.0.121.214])
- by postfix01.mail.de (Postfix) with ESMTP id 237C5802C6;
- Mon, 26 Jun 2023 18:01:19 +0200 (CEST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (No client certificate requested)
- by smtp04.mail.de (Postfix) with ESMTPSA id A268FC0058;
- Mon, 26 Jun 2023 18:01:18 +0200 (CEST)
-To: buildroot@buildroot.org, giulio.benetti@benettiengineering.com
-Date: Mon, 26 Jun 2023 18:01:18 +0200
-Message-ID: <2685852.mvXUDI8C0e@kilian-aisec>
-In-Reply-To: <67b3c17a-25b9-1d6f-ee15-86340819c4a9@benettiengineering.com>
-References: <12221308.O9o76ZdvQC@kilian-aisec>
- <5942184.lOV4Wx5bFT@kilian-aisec>
- <67b3c17a-25b9-1d6f-ee15-86340819c4a9@benettiengineering.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PMyQ4gHDLYtx for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 16:12:23 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39A09821A4
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 39A09821A4
+ for <buildroot@buildroot.org>; Mon, 26 Jun 2023 16:12:22 +0000 (UTC)
+X-GND-Sasl: luca.ceresoli@bootlin.com
+X-GND-Sasl: luca.ceresoli@bootlin.com
+X-GND-Sasl: luca.ceresoli@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E12E1E0004;
+ Mon, 26 Jun 2023 16:12:19 +0000 (UTC)
+Date: Mon, 26 Jun 2023 18:12:18 +0200
+To: katz.agentpp.com@magenta.de, support@agentpp.com
+Message-ID: <20230626181218.7676f022@booty>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 4001
-X-purgate-ID: 154282::1687795278-FCFFDC09-7123B36A/0/0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1687795279;
- bh=65HdamAGUJfpwSBNX0o644qLpQDhahV9xdpdGUa/4yw=;
- h=From:To:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=Q27kJYaDzTNWBtSpAYJ0ex4fSDgs/vAzfEiJ0grkrXhWrgDT7gMPlNRNpZ4i9/9qw
- vFmNTkLXZrpy3q2lz+ijnfwoTns09NvC0RoIX7tNITOZFJyNEwXNlJ/JCDXT27yQ6w
- aUH/4UPbcjWtgqRMOhETBHviuIdU+zemL3EOoa07hRXnXUX1U/nOozIv3mfOAsjlVc
- MEvw0PGeeO/9794ES8kyTwmW2n31WCgvmheEKfTEsZ8E/CgaQrdt/jKQgviVNJk3A8
- tYvMPgKNAbMP1nNs39Jb5CEzm/VA9eaBaNd6425qyhgx8lX+w7+NTOguXnoFAGZLR6
- UcfOvVj+mNaeg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=Q27kJYaD
-Subject: Re: [Buildroot] Interested in board support for Radxa Rock 5b
+Content-Type: multipart/mixed; boundary="MP_/meQXZhCehgb5DrDx8dWg/wP"
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1687795940;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+ bh=BMphv92QGI0hLywQJRF0K7QzrcdgzhSlkItHZHYo804=;
+ b=WRLES4L/ejWKprpwXYBNAOzH5JtmL/1/ZF+4SVj2ejakBsVlQu/aICwDFYHimz1bt/p4S+
+ 6iIJCc7DcS678e6LdpiRqqIbIpRMesnhjvQBB9D/KlZ3xwWrTSAgzb+dBl1OZLKziKBx6K
+ gYHVhWVJNgGKcTAN8AR0Qv1DWoSgCx9rldilteRFJPN9lgBjpM72YR0owBBjhz4MqbF+wk
+ 7TJcCZXUguRou/f35ZeQN4ing2Ol3nGGtSwNsI5YLWDUOo0/i/541Re7EJ5NLsM6Zzeyfm
+ uGf01MUTU4uG0GScMf2/q7ADGDG1MhQuRrpygeqItoBpxgEI9IBNjyXKE5iT0Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WRLES4L/
+Subject: [Buildroot] Agent++ 4.6.0: const/nonconst type mismatch build
+ failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,131 +75,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
+--MP_/meQXZhCehgb5DrDx8dWg/wP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-I am a little bit stuck at the moment. This is my defconfig so far:
+Hello AGENT++ developers,
 
-BR2_aarch64=y
-BR2_cortex_a76_a55=y
-BR2_KERNEL_HEADERS_5_10=y
-BR2_DL_DIR="$(BASE_DIR)/../../buildroot.dl"
-BR2_TARGET_GENERIC_HOSTNAME="rock5b"
-BR2_TARGET_GENERIC_ISSUE="Welcome to the rock5b board"
-BR2_SYSTEM_DHCP="eth0"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/radxa/kernel.git"
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52f51a2b5ba178f331af62260d2da86d7472c14b"
-BR2_LINUX_KERNEL_DEFCONFIG="rockchip_linux"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3588-rock-5b"
-BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
-BR2_PACKAGE_AVAHI=y
-BR2_PACKAGE_AVAHI_DAEMON=y
-BR2_PACKAGE_OPENSSH=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07-rc4"
-BR2_PACKAGE_ROCKCHIP_RKBIN=y
-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_DTC=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+the automatic testing infrastructure of the Buildroot embedded Linux
+build system is reporting a build failure in AGENT++:
 
+snmp_pp_ext.cpp:1217:26: error: binding reference of type 'Snmp_pp::Pdu&' to 'const Snmp_pp::Pdu' discards qualifiers
+ 1217 |   status = snmpmsg.load( pdu, community, version);
+      |                          ^~~
 
-This already properly checks out the uboot version and the Rock 5B uboot 
-defconfig.
-Next I want to properly setup the package for the rkbin repository (containing 
-the Rockchip blobs). I therefore created the folder package/rockchip-rkbin and 
-added an entry to package/Config.in:
+This is due to a mismatch between the SNMP++ APIs and AGENT++.
 
-diff --git a/package/Config.in b/package/Config.in
-index ad438667d2..ccdec3b49d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -580,6 +580,7 @@ endmenu
-        source "package/read-edid/Config.in"
-        source "package/rng-tools/Config.in"
-        source "package/rockchip-mali/Config.in"
-+       source "package/rockchip-rkbin/Config.in"
-        source "package/rpi-userland/Config.in"
-        source "package/rs485conf/Config.in"
-        source "package/rtc-tools/Config.in"
+This failure is happening since several months and was happening also
+with version 4.5.4.
 
+Here you can find info, including logs, about some of the failed builds:
 
-I also added a package/rockchip-rkbin/Config.in:
+  http://autobuild.buildroot.net/results/e8abd6bdc62a028955915706b03d72239786c703/
+  http://autobuild.buildroot.net/results/24441fb679fbf5f913c9b6431c98aec596ead587/
+  http://autobuild.buildroot.net/results/d7347b8b3953596b66da6ca6d85f084fb427934c/
 
+I have prepared a patch against AGENT++ 4.6.0 that fixes the problem
+according to my tests, please find it attached.
 
-config BR2_PACKAGE_ROCKCHIP_RKBIN
-        bool "Rockchip RKBIN binary blobs"
-        depends on BR2_arm || BR2_aarch64
-        help
-          Those packages provide binary blobs for the Rockchip RK
-          SoCs.
-
-if BR2_PACKAGE_ROCKCHIP_RKBIN
-choice
-        prompt "Rockchip RK platform"
-
-config BR2_PACKAGE_ROCKCHIP_RK_PLATFORM_RK3588
-        bool "rk3588"
-endchoice
-
-config BR2_PACKAGE_ROCKCHIP_RK_PLATFORM
-        string
-        default "RK3588" if BR2_PACKAGE_ROCKCHIP_RK_PLATFORM_RK3588
-endif
-
-However, I am struggling a bit with the makefile package/rockchip-rkbin/
-rockchip-rkbin.mk. It currently has (uncomplete) contents:
-
-################################################################################
-#
-# firmware-rk
-#
-################################################################################
-
-FIRMWARE_RKBIN_VERSION = d6ccfe401ca84a98ca3b85c12b9554a1a43a166c
-FIRMWARE_RKBIN_SITE = https://github.com/rockchip-linux/rkbin.git
-FIRMWARE_RKBIN_SITE_METHOD = git
-
-FIRMWARE_RKBIN_INSTALL_IMAGES = YES
-FIRMWARE_RKBIN_INSTALL_STAGING = YES
-FIRMWARE_RKBIN_INSTALL_TARGET = YES
-
-$(eval $(generic-package))
-
-
-Of course this is not yet sufficient. However, I am struggling with the makefile. 
-As a first step, I only want buildroot to download the repository. However, if 
-I execute "make rockchip-rkbin-dirclean" followed by "make rockchip-rkbin-
-rebuild", it only creates an (almost) empty output/build/rockchip-rkbin 
-folder, only containing stamp files. Also no rockchip-rkbin folder gets created 
-in my buildroot.dl download folder. It looks like buildroot does not download 
-the rockchip-linux/rkbin.git repository at all. Do you have a suggestion, what 
-I might be doing wrong here? Do I have to implement some hooks in order for 
-the git to be downloaded?
+It would be great to have this fixed in the next mainline release of
+AGENT++!
 
 Best regards,
-Kilian
+Luca Ceresoli
 
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--MP_/meQXZhCehgb5DrDx8dWg/wP
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=0001-Snmpx-fix-const-nonconst-type-mismatch.patch
+
+From 7e541e6dba8d4976bbb490838a09b569f38b047d Mon Sep 17 00:00:00 2001
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Mon, 26 Jun 2023 17:45:00 +0200
+Subject: [PATCH] Snmpx: fix const/nonconst type mismatch
+
+Fixes build failure:
+
+  snmp_pp_ext.cpp:1176:28: error: binding reference of type 'Snmp_pp::Pdu&' to 'const Snmp_pp::Pdu' discards qualifiers
+   1176 |     status = snmpmsg.load( pdu, community, version);
+        |                            ^~~
+
+Fixes:
+  http://autobuild.buildroot.net/results/e8abd6bdc62a028955915706b03d72239786c703/
+  http://autobuild.buildroot.net/results/24441fb679fbf5f913c9b6431c98aec596ead587/
+
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+ include/agent_pp/snmp_pp_ext.h | 2 +-
+ src/snmp_pp_ext.cpp            | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/agent_pp/snmp_pp_ext.h b/include/agent_pp/snmp_pp_ext.h
+index 7c5a6783ee70..d8a46060db98 100644
+--- a/include/agent_pp/snmp_pp_ext.h
++++ b/include/agent_pp/snmp_pp_ext.h
+@@ -807,7 +807,7 @@ public:
+ 	 *   SNMP_CLASS_SUCCESS on success and SNMP_CLASS_ERROR,
+ 	 *   SNMP_CLASS_TL_FAILED on failure.
+ 	 */
+-        int send (Pdux const &, NS_SNMP UdpAddress const &, NS_SNMP snmp_version, NS_SNMP OctetStr const &);
++        int send (Pdux &, NS_SNMP UdpAddress const &, NS_SNMP snmp_version, NS_SNMP OctetStr const &);
+ #endif
+ 
+ 	/**
+diff --git a/src/snmp_pp_ext.cpp b/src/snmp_pp_ext.cpp
+index 54a29ec8ea28..b61cbf056246 100644
+--- a/src/snmp_pp_ext.cpp
++++ b/src/snmp_pp_ext.cpp
+@@ -1203,7 +1203,7 @@ int Snmpx::send (Pdux &pdu, SnmpTarget* target)
+ 
+ #else  // _SNMPv3 is not defined
+ 
+-int Snmpx::send (Pdux  const &pdu,
++int Snmpx::send (Pdux  &pdu,
+ 		 UdpAddress  const &udp_address,
+ 		 snmp_version version,
+ 		 OctetStr  const &community)
+-- 
+2.34.1
+
+
+--MP_/meQXZhCehgb5DrDx8dWg/wP
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--MP_/meQXZhCehgb5DrDx8dWg/wP--
