@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1A03EB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C5DEEB64DA
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66E1B41697;
-	Mon, 26 Jun 2023 17:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66E1B41697
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0AB5E40476;
+	Mon, 26 Jun 2023 17:05:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AB5E40476
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id URsn9JGU97IM; Mon, 26 Jun 2023 17:05:37 +0000 (UTC)
+	with ESMTP id cmDdpZUkHUoJ; Mon, 26 Jun 2023 17:05:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADFA7415B0;
-	Mon, 26 Jun 2023 17:05:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADFA7415B0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 143051BF966
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F52B4169C;
+	Mon, 26 Jun 2023 17:05:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F52B4169C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E9A621BF37B
  for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CAE21415BA
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB00B60FB7
  for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAE21415BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB00B60FB7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5_rTvWH7IXZU for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 17:04:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W7Hff0z8xrAg for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 17:04:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4D154159A
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF88460D5F
  for <buildroot@buildroot.org>; Mon, 26 Jun 2023 17:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4D154159A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF88460D5F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EEF084AC1; Mon, 26 Jun 2023 17:04:44 +0000 (UTC)
+ id CD4DA84B95; Mon, 26 Jun 2023 17:04:44 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jun 2023 19:01:45 +0200
+Date: Mon, 26 Jun 2023 19:02:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cb496970c0c7117f9f00d8495e234871f2bae4c1
-X-Git-Newrev: 02f6d77fbda975d01e16da0b4a031776bc1a94d2
+X-Git-Oldrev: 59c4515e92c17c807587f27fff5ce175c39d8cf2
+X-Git-Newrev: 39f1812e47518806248e753f8fa80c8ef732822b
 X-Patchwork-Hint: ignore
-Message-Id: <20230626170444.8EEF084AC1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/hifive_unleashed: Update to use
- OpenSBI 1.2
+Message-Id: <20230626170444.CD4DA84B95@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/opensbi: Bump to version 1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +62,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02f6d77fbda975d01e16da0b4a031776bc1a94d2
+commit: https://git.buildroot.net/buildroot/commit/?id=39f1812e47518806248e753f8fa80c8ef732822b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the rest of RISC-V boards have been switched to use OpenSBI
-1.2, let's update hifive_unleashed to use OpenSBI 1.2 too.
-
-Resolves: https://bugs.busybox.net/show_bug.cgi?id=15658
 Signed-off-by: Bin Meng <bmeng@tinylab.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/hifive_unleashed_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/opensbi/Config.in    | 4 ++--
+ boot/opensbi/opensbi.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
-index 2b6ee6c08e..0440b14ba5 100644
---- a/configs/hifive_unleashed_defconfig
-+++ b/configs/hifive_unleashed_defconfig
-@@ -38,7 +38,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- # Bootloader
- BR2_TARGET_OPENSBI=y
- BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
--BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="0.9"
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
- BR2_TARGET_OPENSBI_PLAT="generic"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+index 99c4989479..de2f0aae20 100644
+--- a/boot/opensbi/Config.in
++++ b/boot/opensbi/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	  Select the specific OpenSBI version you want to use
+ 
+ config BR2_TARGET_OPENSBI_LATEST_VERSION
+-	bool "1.2"
++	bool "1.3"
+ 
+ config BR2_TARGET_OPENSBI_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -57,7 +57,7 @@ endif
+ 
+ config BR2_TARGET_OPENSBI_VERSION
+ 	string
+-	default "1.2" if BR2_TARGET_OPENSBI_LATEST_VERSION
++	default "1.3" if BR2_TARGET_OPENSBI_LATEST_VERSION
+ 	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
+ 	default "custom" if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
+diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+index dbc77e856f..980fb141dc 100644
+--- a/boot/opensbi/opensbi.hash
++++ b/boot/opensbi/opensbi.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  8fcbce598a73acc2c7f7d5607d46b9d5107d3ecbede8f68f42631dcfc25ef2b2  opensbi-1.2.tar.gz
++sha256  2c0501eb3475f463b15f5b8531996f64604ea49e0e3ed040ecbd1fc27ecd8c5c  opensbi-1.3.tar.gz
+ sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
