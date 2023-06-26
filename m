@@ -1,67 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E71BEB64D7
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 04:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A93BCEB64D7
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jun 2023 17:23:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4478082012;
-	Mon, 26 Jun 2023 04:32:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4478082012
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28E2C61324;
+	Mon, 26 Jun 2023 17:23:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28E2C61324
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AZfxDqLeqUkA; Mon, 26 Jun 2023 04:32:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7qtYR6L-7lZa; Mon, 26 Jun 2023 17:23:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87CB481FA1;
-	Mon, 26 Jun 2023 04:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87CB481FA1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 744CC60D95;
+	Mon, 26 Jun 2023 17:23:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 744CC60D95
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D2A11BF393
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 04:32:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 009D11BF37B
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:23:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA9DB40385
- for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 04:32:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9DB40385
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE15D40B53
+ for <buildroot@lists.busybox.net>; Mon, 26 Jun 2023 17:23:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE15D40B53
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5ir0TmJJ2uhZ for <buildroot@lists.busybox.net>;
- Mon, 26 Jun 2023 04:32:00 +0000 (UTC)
+ with ESMTP id AOr5fhdjL1ar for <buildroot@lists.busybox.net>;
+ Mon, 26 Jun 2023 17:23:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C076400D2
- for <buildroot@uclibc.org>; Mon, 26 Jun 2023 04:32:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C076400D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1338B402C3
+ for <buildroot@uclibc.org>; Mon, 26 Jun 2023 17:23:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1338B402C3
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 1A83083AEB; Mon, 26 Jun 2023 04:32:00 +0000 (UTC)
+ id 017B284AD2; Mon, 26 Jun 2023 17:23:11 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 26 Jun 2023 04:31:59 +0000
+Date: Mon, 26 Jun 2023 17:23:10 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Outdated package
+X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: br015@umbiko.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15667-163-lw4zaFbuC1@https.bugs.busybox.net/>
-In-Reply-To: <bug-15667-163@https.bugs.busybox.net/>
-References: <bug-15667-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-15658-163-4MCKVADP0F@https.bugs.busybox.net/>
+In-Reply-To: <bug-15658-163@https.bugs.busybox.net/>
+References: <bug-15658-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15667] Missing files pc_x86_64_bios_defconfig
+Subject: [Buildroot] [Bug 15658] hifive_unleashed_defconfig: Linker errors
+ in opensbi-0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,11 +79,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15667
+https://bugs.busybox.net/show_bug.cgi?id=15658
 
---- Comment #1 from Andreas Ziegler <br015@umbiko.net> ---
-Activate Kernel -> needs host libelf. This seems to be an omission in the
-defconfig.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |RESOLVED
+         Resolution|---                         |FIXED
+
+--- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Jan-Benedict, All,
+
+Thanks for the report. We believe it has now ben fixed by commit 02f6d77fbd
+(configs/hifive_unleashed: Update to use OpenSBI 1.2).
+
+If the issue still persists, do not hesitate to reopen.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
