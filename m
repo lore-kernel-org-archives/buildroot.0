@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4EAFEB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 15:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBB2AEB64DD
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 17:49:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5683583312;
-	Tue, 27 Jun 2023 15:27:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5683583312
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DFC140A95;
+	Tue, 27 Jun 2023 17:49:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DFC140A95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1QncGMJf9WPf; Tue, 27 Jun 2023 15:27:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3Nlt4oPzxXl1; Tue, 27 Jun 2023 17:49:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A91A983281;
-	Tue, 27 Jun 2023 15:27:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A91A983281
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 20D261BF860
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 15:27:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84BB540B60;
+	Tue, 27 Jun 2023 17:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84BB540B60
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D50091BF355
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 17:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED0E441993
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 15:27:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED0E441993
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB4B240B60
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 17:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB4B240B60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pS0WfBMqSxPk for <buildroot@lists.busybox.net>;
- Tue, 27 Jun 2023 15:27:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3O4wHmLK82ZK for <buildroot@lists.busybox.net>;
+ Tue, 27 Jun 2023 17:49:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16B8341895
- for <buildroot@uclibc.org>; Tue, 27 Jun 2023 15:27:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16B8341895
+ by smtp2.osuosl.org (Postfix) with ESMTP id 927FE40A95
+ for <buildroot@uclibc.org>; Tue, 27 Jun 2023 17:49:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 927FE40A95
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 04B2685B9E; Tue, 27 Jun 2023 15:27:44 +0000 (UTC)
+ id 7D59E85B9E; Tue, 27 Jun 2023 17:49:25 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 27 Jun 2023 15:27:44 +0000
+Date: Tue, 27 Jun 2023 17:49:25 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2023.05
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stsp2@yandex.ru
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15665-163-bIYkiISPvR@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-15665-163-hE1GATold7@https.bugs.busybox.net/>
 In-Reply-To: <bug-15665-163@https.bugs.busybox.net/>
 References: <bug-15665-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -80,10 +80,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15665
 
---- Comment #5 from stsp <stsp2@yandex.ru> ---
-Is there a similar trick to enable
-native readlink? busybox's readlink
-is not suitable.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
+
+--- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+stsp, All,
+
+> Is there a similar trick to enable native readlink?
+
+readlink is from coreutils.
+
+Since this report is about adding a new package, I'm closing it. Discussion
+about development of new features is to be had on the mailing list.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
