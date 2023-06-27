@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28DD1EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 05:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA29EEB64D9
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 05:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB047416ED;
-	Tue, 27 Jun 2023 05:44:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB047416ED
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63738416CC;
+	Tue, 27 Jun 2023 05:45:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63738416CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zpykxyMnlu3f; Tue, 27 Jun 2023 05:44:50 +0000 (UTC)
+	with ESMTP id RPGO7qNIVIHZ; Tue, 27 Jun 2023 05:45:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10C5B416FB;
-	Tue, 27 Jun 2023 05:44:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10C5B416FB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 867011BF313
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83151416B9;
+	Tue, 27 Jun 2023 05:45:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83151416B9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A23881BF95D
  for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 509BE81287
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07DEF409C3
  for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:43:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 509BE81287
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07DEF409C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DqgjC5YFou-u for <buildroot@lists.busybox.net>;
- Tue, 27 Jun 2023 05:43:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uLwvLQRB4A-H for <buildroot@lists.busybox.net>;
+ Tue, 27 Jun 2023 05:43:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5E5581279
- for <buildroot@buildroot.org>; Tue, 27 Jun 2023 05:43:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5E5581279
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01EA6409B4
+ for <buildroot@buildroot.org>; Tue, 27 Jun 2023 05:43:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01EA6409B4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2B40856A8; Tue, 27 Jun 2023 05:43:56 +0000 (UTC)
+ id E3A97856A8; Tue, 27 Jun 2023 05:43:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 27 Jun 2023 07:37:35 +0200
+Date: Tue, 27 Jun 2023 07:42:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39f1812e47518806248e753f8fa80c8ef732822b
-X-Git-Newrev: 199301a6d59af20f6a7bb6da0d22bffb64baaea4
+X-Git-Oldrev: 5ec83ecb12a52874b13a0ec171a3971ae2d2b6e1
+X-Git-Newrev: 401d1a0b0d2ef3acb934cc21110791207a979695
 X-Patchwork-Hint: ignore
-Message-Id: <20230627054356.B2B40856A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dav1d: bump version to 1.2.1
+Message-Id: <20230627054356.E3A97856A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/alsa-utils: bump version to 1.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=199301a6d59af20f6a7bb6da0d22bffb64baaea4
+commit: https://git.buildroot.net/buildroot/commit/?id=401d1a0b0d2ef3acb934cc21110791207a979695
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
+Changelog:
+https://www.alsa-project.org/wiki/Changes_v1.2.8_v1.2.9#alsa-utils
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dav1d/dav1d.hash | 4 ++--
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/alsa-utils/alsa-utils.hash | 2 +-
+ package/alsa-utils/alsa-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index 1af699dbe3..68757060bf 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
-@@ -1,4 +1,4 @@
--# From https://download.videolan.org/pub/videolan/dav1d/1.2.0/dav1d-1.2.0.tar.xz.sha256
--sha256  231bed8bc1bb28a41d88da6b4c2c118de84b92e5f1d67caffa1b7f81aaea8c6e  dav1d-1.2.0.tar.xz
-+# From https://download.videolan.org/pub/videolan/dav1d/1.2.1/dav1d-1.2.1.tar.xz.sha256
-+sha256  4e33eb61ec54c768a16da0cf8fa0928b4c4593f5f804a3c887d4a21c318340b2  dav1d-1.2.1.tar.xz
- # Locally computed
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index f8d4464cd4..670a81d1c8 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index 66c04d261f..44cd928e45 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e140fa604c351f36bd72167c8860c69d81b964ae6ab53992d6434dde38e9333c  alsa-utils-1.2.8.tar.bz2
++sha256  e7623d4525595f92e11ce25ee9a97f2040a14c6e4dcd027aa96e06cbce7817bd  alsa-utils-1.2.9.tar.bz2
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 8c43f58b76..20fe65afe6 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DAV1D_VERSION = 1.2.0
-+DAV1D_VERSION = 1.2.1
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
- DAV1D_SITE = https://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+-ALSA_UTILS_VERSION = 1.2.8
++ALSA_UTILS_VERSION = 1.2.9
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = https://www.alsa-project.org/files/pub/utils
+ ALSA_UTILS_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
