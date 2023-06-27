@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03343EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 05:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D0B9EB64D9
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 05:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 891F9416C3;
-	Tue, 27 Jun 2023 05:41:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 891F9416C3
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB613416AF;
+	Tue, 27 Jun 2023 05:41:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB613416AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vx4Kog5d8dJm; Tue, 27 Jun 2023 05:41:04 +0000 (UTC)
+	with ESMTP id NWehXonri41W; Tue, 27 Jun 2023 05:41:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7F4F416A5;
-	Tue, 27 Jun 2023 05:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7F4F416A5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CBFB4169E;
+	Tue, 27 Jun 2023 05:41:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CBFB4169E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 685521BF313
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:40:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 642471BF313
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E259418C2
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:40:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E259418C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C67F418C2
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:41:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C67F418C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id csAD8EDd8Iht for <buildroot@lists.busybox.net>;
- Tue, 27 Jun 2023 05:40:47 +0000 (UTC)
+ with ESMTP id wRRLhCmA-n-5 for <buildroot@lists.busybox.net>;
+ Tue, 27 Jun 2023 05:41:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75EFC408C2
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 75EFC408C2
- for <buildroot@buildroot.org>; Tue, 27 Jun 2023 05:40:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4C60408C2
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B4C60408C2
+ for <buildroot@buildroot.org>; Tue, 27 Jun 2023 05:41:14 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E7FD7FF804;
- Tue, 27 Jun 2023 05:40:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 049B624000A;
+ Tue, 27 Jun 2023 05:41:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qE1RV-008rCT-4Z; Tue, 27 Jun 2023 07:40:45 +0200
+ id 1qE1Rt-008rE0-7v; Tue, 27 Jun 2023 07:41:09 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20230606181850.531983-1-bernd.kuhls@t-online.de>
-Date: Tue, 27 Jun 2023 07:40:45 +0200
-In-Reply-To: <20230606181850.531983-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 6 Jun 2023 20:18:50 +0200")
-Message-ID: <87y1k5zcma.fsf@48ers.dk>
+References: <20230606175849.420138-1-bernd.kuhls@t-online.de>
+Date: Tue, 27 Jun 2023 07:41:09 +0200
+In-Reply-To: <20230606175849.420138-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 6 Jun 2023 19:58:49 +0200")
+Message-ID: <87ttutzclm.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/xmrig: bump version to
- 6.19.3
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/libva-utils: bump version
+ to 2.18.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
