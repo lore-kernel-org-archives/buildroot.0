@@ -1,84 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C71D2EB64D9
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 07:28:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CECDCEB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 10:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 447DF820E0;
-	Tue, 27 Jun 2023 07:28:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 447DF820E0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CCA041B8F;
+	Tue, 27 Jun 2023 10:25:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CCA041B8F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id blEt6uOCInBC; Tue, 27 Jun 2023 10:25:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CC5341B92;
+	Tue, 27 Jun 2023 10:25:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CC5341B92
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 079B51BF2B3
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 10:25:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D49C982121
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 10:25:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D49C982121
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cZ3XykotDytw; Tue, 27 Jun 2023 07:28:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D40E82090;
-	Tue, 27 Jun 2023 07:28:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D40E82090
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C15FE1BF2B8
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 07:28:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9ADDB60C15
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 07:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ADDB60C15
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qoxyf-DMyfIs for <buildroot@lists.busybox.net>;
- Tue, 27 Jun 2023 07:28:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5478A60C01
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5478A60C01
- for <buildroot@buildroot.org>; Tue, 27 Jun 2023 07:28:11 +0000 (UTC)
-Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
- by shout01.mail.de (Postfix) with ESMTP id 62AE2A0388;
- Tue, 27 Jun 2023 09:28:09 +0200 (CEST)
-Received: from smtp04.mail.de (smtp04.bt.mail.de [10.0.121.214])
- by postfix02.mail.de (Postfix) with ESMTP id 45E83A03C2;
- Tue, 27 Jun 2023 09:28:09 +0200 (CEST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (No client certificate requested)
- by smtp04.mail.de (Postfix) with ESMTPSA id A3544C004F;
- Tue, 27 Jun 2023 09:28:08 +0200 (CEST)
-To: buildroot@buildroot.org, giulio.benetti@benettiengineering.com,
- Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Jun 2023 09:28:08 +0200
-Message-ID: <12234290.O9o76ZdvQC@kilian-aisec>
-In-Reply-To: <898ad257-a549-95e2-44ae-898a9db5c4b8@mind.be>
-References: <12221308.O9o76ZdvQC@kilian-aisec>
- <2685852.mvXUDI8C0e@kilian-aisec>
- <898ad257-a549-95e2-44ae-898a9db5c4b8@mind.be>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gV6XpDXewblK for <buildroot@lists.busybox.net>;
+ Tue, 27 Jun 2023 10:25:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B7258210A
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B7258210A
+ for <buildroot@buildroot.org>; Tue, 27 Jun 2023 10:25:12 +0000 (UTC)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+ by mx.sberdevices.ru (Postfix) with ESMTP id DC1515FD59;
+ Tue, 27 Jun 2023 13:25:09 +0300 (MSK)
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru
+ [172.16.192.107]) by mx.sberdevices.ru (Postfix) with ESMTP;
+ Tue, 27 Jun 2023 13:24:58 +0300 (MSK)
+Date: Tue, 27 Jun 2023 13:24:56 +0300
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20230627102456.ias6peqvoxxzjyik@CAB-WSD-L081021>
+References: <20230609113415.13856-1-ddrokosov@sberdevices.ru>
+ <20230622171806.vywakqz7q7ezqnrv@CAB-WSD-L081021>
+ <20230626121237.4z7alvantlkjc7ha@CAB-WSD-L081021>
+ <20230626154719.GC646621@scaer>
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 3776
-X-purgate-ID: 154282::1687850889-B4FFDC09-3BE72EA5/0/0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1687850889;
- bh=djkF/WKciFNP+OIvnSX9T67eZKMqnpH5dqdirbzqgvw=;
- h=From:To:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=I4XbVe29PZpuf1U9vi4K1bTPP8gCVKdxFOXEfeuAplc3p7f6d7Dm0btra9FGS/FnL
- KlgDOs+iWbk6qvC0UR7bUcQPc6gHS+Yhf8Z5kyWXLVpf3A8k/R2cUBPtgwgcbiDeuF
- Igze/fPq20qYJMzt0Fcw+78FuW58F1o5tytbJn/R9OeTXKXnH7IIwMg5s83b08zUgc
- kJ/3yn/vp88j8cfgUk13EiUEOkvoRoKOu45gI8yfvGew+hDUKag4VsANDlY5emH4sP
- x6Ph6pgZaDLC1KsivNnm1cavqfASrF3lexpgynmaSssYtNylB9Dku579BMiTdJxT9E
- hhbsrD9UVDrAA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=I4XbVe29
-Subject: Re: [Buildroot] Interested in board support for Radxa Rock 5b
+Content-Disposition: inline
+In-Reply-To: <20230626154719.GC646621@scaer>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
+ bases: 2023/06/27 02:11:00 #21585463
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sberdevices.ru; s=mail; t=1687861509;
+ bh=amLEnPXDNm8g9wWUniZLEngPa9ZrDAA/NEPVb1hA/Os=;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+ b=iYhbGjI+WBHKk+Ii1XAfxdnBiw79JW5PxIVnfUdQPm+hT4vvDX0Gfyt23GOIqroji
+ GwcNqEDj/FNEeyLptO3Dn42AD1O2yvnjD2HqjVZL1K5q1XmaADrh6qDv3+L8IKiLIS
+ O6H1TcqdiT6ipj3p7Y9ujQLCt+rp3QZkvc0wAX6z3YfaDLDfc+hC7V5f7IW9URxloG
+ 9AZvYbSiEkGICbAciGQhmNWVHIrKFYXcQruqfFOUxRQtRU1SclrwuP9thmY7CgJ+x1
+ pw9ruByrkFO5qptecb4kyRVfWQpdb0uVJlBWfNKgr3zb+Cd84bp6dVMBADsT4dF+82
+ pvaUCaasfLjNQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
+ header.a=rsa-sha256 header.s=mail header.b=iYhbGjI+
+Subject: Re: [Buildroot] [PATCH v1] package/linux-tools: introduce linux mm
+ tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,126 +89,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+From: Dmitry Rokosov via buildroot <buildroot@buildroot.org>
+Reply-To: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc: Herve Codina <herve.codina@bootlin.com>, sdfw_system_team@sberdevices.ru,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ kernel@sberdevices.ru, rockosov@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Arnout,
+Hello Yann,
 
->   All the variables have to be ROCKCHIP_RKBIN_ otherwise they don't get
-> used.
+On Mon, Jun 26, 2023 at 05:47:19PM +0200, Yann E. MORIN wrote:
+> Dmitry, All,
+> 
+> On 2023-06-26 15:12 +0300, Dmitry Rokosov spake thusly:
+> > Please take a look into this patchset. I appreciate any feedback.
+> 
+> Don't be impatient. Your patch has been pending for about two seeks now.
+> We have 495 pending patches: https://patchwork.ozlabs.org/project/buildroot/list/
+> some of witch are so much older...
+> 
+> Yes, I know it can be frustrating. For various reasons, we've been a bit
+> less active than usual the past few months, but we'll eventually get to
+> it...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
-thanks alot! I actually knew that the names should match from reading the 
-documentation, however for some reason I still got i wrong. Maybe because I 
-was taking the firmware-imx makefile as basis and didn't take enough care ...
+Thank you so much for the detailed reply! I wasn't aware of the backlog,
+and I apologize for any misunderstanding caused by my eagerness. I fully
+understand the situation now, so please don't worry - I'm happy to wait
+my turn. Thank you for your hard work in maintaining buildroot!
 
+> > On Thu, Jun 22, 2023 at 08:18:06PM +0300, Dmitry Rokosov wrote:
+> > > Hello,
+> > > 
+> > > Add Peter Korsgaard and move "buildroot" mailing list from Cc.
+> > > 
+> > > Could you please take a look at this patchset? I believe that linux-mm
+> > > tools are helpful for investigating kernel memory distribution in
+> > > embedded systems.
+> > > 
+> > > On Fri, Jun 09, 2023 at 02:34:15PM +0300, Dmitry Rokosov wrote:
+> > > > This toolset was designed to facilitate the testing, monitoring, and
+> > > > tracing of various things with virtual memory, pages, and slab objects.
+> > > > It is an invaluable resource for identifying and analyzing
+> > > > memory-related issues, such as leaks and bottlenecks, and can greatly
+> > > > enhance one's understanding of memory utilization within a system.
+> > > > 
+> > > > The mm toolset includes:
+> > > >     - page_owner_sort: userspace helper to sort the output of
+> > > >       /sys/kernel/debug/page_owner, which helps to know who allocates
+> > > >       the page from kernel context
+> > > >     - slabinfo: the tool which gets reports about slabs, for example
+> > > >       show empty slabs, modify of slab debug options at runtime, display
+> > > >       all information about a slabcache
+> > > >     - page-types: a handy tool for querying page flags
+> > > > 
+> > > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > > > ---
+> > > >  package/linux-tools/Config.in           | 18 ++++++++
+> > > >  package/linux-tools/linux-tool-mm.mk.in | 59 +++++++++++++++++++++++++
+> > > >  2 files changed, 77 insertions(+)
+> > > >  create mode 100644 package/linux-tools/linux-tool-mm.mk.in
+> > > > 
+> > > > diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+> > > > index 880ad08f0f1c..3ecc45574b82 100644
+> > > > --- a/package/linux-tools/Config.in
+> > > > +++ b/package/linux-tools/Config.in
+> > > > @@ -171,4 +171,22 @@ config BR2_PACKAGE_LINUX_TOOLS_HV_VSS_DAEMON
+> > > >  
+> > > >  endif # BR2_PACKAGE_LINUX_TOOLS_HV
+> > > >  
+> > > > +config BR2_PACKAGE_LINUX_TOOLS_MM
+> > > > +	bool "mm"
+> > > > +	select BR2_PACKAGE_LINUX_TOOLS
+> > > > +	help
+> > > > +	  mm is a toolset for testing/monitoring/tracing vm/pages/slabs objects.
+> > > > +
+> > > > +	  - page_owner_sort: userspace helper to sort the output of
+> > > > +	  /sys/kernel/debug/page_owner, which helps to know who allocates
+> > > > +	  the page from kernel context
+> > > > +
+> > > > +	  - slabinfo: the tool which gets reports about slabs, for example
+> > > > +	  show empty slabs, modify of slab debug options at runtime, display
+> > > > +	  all information about a slabcache
+> > > > +
+> > > > +	  - page-types: a handy tool for querying page flags
+> > > > +
+> > > > +	  These tools are available only from kernel version 3.4.
+> > > > +
+> > > >  endmenu
+> > > > diff --git a/package/linux-tools/linux-tool-mm.mk.in b/package/linux-tools/linux-tool-mm.mk.in
+> > > > new file mode 100644
+> > > > index 000000000000..a59f1c46ff97
+> > > > --- /dev/null
+> > > > +++ b/package/linux-tools/linux-tool-mm.mk.in
+> > > > @@ -0,0 +1,59 @@
+> > > > +################################################################################
+> > > > +#
+> > > > +# mm
+> > > > +#
+> > > > +################################################################################
+> > > > +
+> > > > +LINUX_TOOLS += mm
+> > > > +
+> > > > +MM_MAKE_OPTS = $(LINUX_MAKE_FLAGS) CC="$(TARGET_CC)"
+> > > > +
+> > > > +KVER = $(shell echo $(LINUX_VERSION_PROBED))
+> > > > +KVER_MAJOR = $(word 1,$(subst ., ,$(KVER)))
+> > > > +KVER_MINOR = $(word 2,$(subst ., ,$(KVER)))
+> > > > +
+> > > > +# For the first time tools/vm was introduced in the 3.4 kernel version
+> > > > +KVER_MAJOR_MIN = 3
+> > > > +KVER_MINOR_MIN = 4
+> > > > +
+> > > > +# Starting from 6.3 kernel version mm tools are located at tools/mm folder
+> > > > +# instead of tools/vm
+> > > > +KVER_MAJOR_MM = 6
+> > > > +KVER_MINOR_MM = 3
+> > > > +
+> > > > +define MM_BUILD_CMDS
+> > > > +	$(Q)if [ $(KVER_MAJOR) -lt $(KVER_MAJOR_MIN) ] || \
+> > > > +		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MIN) -a \
+> > > > +		  $(KVER_MINOR) -lt $(KVER_MINOR_MIN) ]; then \
+> > > > +		echo -n "Your kernel version $(KVER_MAJOR).$(KVER_MINOR) is "; \
+> > > > +		echo "too old and doesn't have the mm tools." ; \
+> > > > +		echo -n "At least $(KVER_MAJOR_MIN).$(KVER_MINOR_MIN) "; \
+> > > > +		echo "kernel must be used." ; \
+> > > > +		exit 1 ; \
+> > > > +	fi
+> > > > +
+> > > > +	$(Q)if [ $(KVER_MAJOR) -gt $(KVER_MAJOR_MM) ] || \
+> > > > +		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MM) -a \
+> > > > +		  $(KVER_MINOR) -ge $(KVER_MINOR_MM) ]; then \
+> > > > +		MM=mm; \
+> > > > +	else \
+> > > > +		MM=vm; \
+> > > > +	fi; \
+> > > > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> > > > +		$(MM_MAKE_OPTS) $${MM}
+> > > > +endef
+> > > > +
+> > > > +define MM_INSTALL_TARGET_CMDS
+> > > > +	$(Q)if [ $(KVER_MAJOR) -gt $(KVER_MAJOR_MM) ] || \
+> > > > +		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MM) -a \
+> > > > +		  $(KVER_MINOR) -ge $(KVER_MINOR_MM) ]; then \
+> > > > +		MM=mm; \
+> > > > +	else \
+> > > > +		MM=vm; \
+> > > > +	fi; \
+> > > > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> > > > +		$(MM_MAKE_OPTS) \
+> > > > +		INSTALL_ROOT=$(TARGET_DIR) \
+> > > > +		DESTDIR=$(TARGET_DIR) \
+> > > > +		$${MM}_install
+> > > > +endef
+> > > > -- 
+> > > > 2.36.0
+> > > > 
+> > > 
+> > > -- 
+> > > Thank you,
+> > > Dmitry
+> > 
+> > -- 
+> > Thank you,
+> > Dmitry
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 
-Thanks to your help I now got it working, that the rkbin is properly 
-downloaded. I implemented the makefile such, that the needed binaries are 
-copied into $(BINARIES_DIR), i.e., buildroot/output/images. I don't know, 
-whether this is best practise? I also adjusted the uboot settings in the 
-buildroot board defconfig, so that uboot uses the binaries from rkbin. Building 
-uboot works now, when manually running "make rockchip-rkbin-dirclean rockchip-
-rkbin-rebuild" and afterwards "make uboot-dirclean uboot-rebuild". I could not 
-test it any further yet.
-
-Here are my uboot relevant defconfig settings:
-
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07-rc4"
-BR2_PACKAGE_ROCKCHIP_RKBIN=y
-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="BL31=$(BINARIES_DIR)/rk3588_bl31_v1.38.elf 
-ROCKCHIP_TPL=$(BINARIES_DIR)/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.11.bin"
-BR2_PACKAGE_ROCKCHIP_RKBIN=y
-
-
-And here patches to add the rockchip-rkbin package:
-
-
-diff --git a/package/Config.in b/package/Config.in
-index ad438667d2..ccdec3b49d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -580,6 +580,7 @@ endmenu
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rockchip-mali/Config.in"
-+	source "package/rockchip-rkbin/Config.in"
- 	source "package/rpi-userland/Config.in"
- 	source "package/rs485conf/Config.in"
- 	source "package/rtc-tools/Config.in"
-diff --git a/package/rockchip-rkbin/Config.in b/package/rockchip-rkbin/Config.in
-new file mode 100644
-index 0000000000..be106a6bb0
---- /dev/null
-+++ b/package/rockchip-rkbin/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_ROCKCHIP_RKBIN
-+	bool "Rockchip RKBIN binary blobs"
-+	depends on BR2_arm || BR2_aarch64
-+	help
-+	  Those packages provide binary blobs for the Rockchip RK
-+          SoCs.
-+
-+if BR2_PACKAGE_ROCKCHIP_RKBIN
-+choice
-+	prompt "Rockchip RK platform"
-+
-+config BR2_PACKAGE_ROCKCHIP_RKBIN_PLATFORM_RK3588
-+	bool "rk3588"
-+endchoice
-+
-+config BR2_PACKAGE_ROCKCHIP_RKBIN_PLATFORM
-+	string
-+	default "RK3588" if BR2_PACKAGE_ROCKCHIP_RKBIN_PLATFORM_RK3588
-+
-+endif
-diff --git a/package/rockchip-rkbin/rockchip-rkbin.mk b/package/rockchip-rkbin/
-rockchip-rkbin.mk
-new file mode 100644
-index 0000000000..5bdc5607ce
---- /dev/null
-+++ b/package/rockchip-rkbin/rockchip-rkbin.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# firmware-rk
-+#
-+################################################################################
-+
-+
-+ROCKCHIP_RKBIN_VERSION = d6ccfe401ca84a98ca3b85c12b9554a1a43a166c
-+ROCKCHIP_RKBIN_SITE = https://github.com/rockchip-linux/rkbin.git
-+ROCKCHIP_RKBIN_SITE_METHOD = git
-+
-+ROCKCHIP_RKBIN_INSTALL_STAGING = YES
-+
-+define ROCKCHIP_RKBIN_INSTALL_STAGING_CMDS
-+	cp $(@D)/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.11.bin $
-(BINARIES_DIR)/
-+	cp $(@D)/bin/rk35/rk3588_bl31_v1.38.elf $(BINARIES_DIR)/
-+endef
-+
-+$(eval $(generic-package))
-
-
-I guess I should no setup uboot such, that rockchip-rkbin becomes an optional 
-dependency and then set the corresponding option in the buildroot rock5b 
-defconfig?
-
-Best regards,
-Kilian
-
-
+-- 
+Thank you,
+Dmitry
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
