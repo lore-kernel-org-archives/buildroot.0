@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81B8FEB64D9
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 17:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60A97EB64D9
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 20:02:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F10534055F;
-	Tue, 27 Jun 2023 17:53:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F10534055F
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFEF98230B;
+	Tue, 27 Jun 2023 20:02:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFEF98230B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TzsIMQZfWZjc; Tue, 27 Jun 2023 17:53:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mTckGb79ylk0; Tue, 27 Jun 2023 20:02:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4BCC440518;
-	Tue, 27 Jun 2023 17:53:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BCC440518
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D35F822CA;
+	Tue, 27 Jun 2023 20:02:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D35F822CA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DEE5B1BF355
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 17:53:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D71A51BF3EE
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 20:02:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5E918140F
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 17:53:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5E918140F
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD8EA822CA
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 20:02:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD8EA822CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C9LzgE6dBo5U for <buildroot@lists.busybox.net>;
- Tue, 27 Jun 2023 17:53:52 +0000 (UTC)
+ with ESMTP id eYCFa1urEW09 for <buildroot@lists.busybox.net>;
+ Tue, 27 Jun 2023 20:02:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26C9F813D6
- for <buildroot@uclibc.org>; Tue, 27 Jun 2023 17:53:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26C9F813D6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 786E382222
+ for <buildroot@uclibc.org>; Tue, 27 Jun 2023 20:02:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 786E382222
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 159E585B9E; Tue, 27 Jun 2023 17:53:52 +0000 (UTC)
+ id 6399685BA2; Tue, 27 Jun 2023 20:02:38 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 27 Jun 2023 17:53:51 +0000
+Date: Tue, 27 Jun 2023 20:02:38 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2023.05
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stsp2@yandex.ru
+X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution
-Message-ID: <bug-15665-163-Tj3dhCNbye@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-15665-163-tDHcbQKJsy@https.bugs.busybox.net/>
 In-Reply-To: <bug-15665-163@https.bugs.busybox.net/>
 References: <bug-15665-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -80,18 +80,23 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15665
 
-stsp <stsp2@yandex.ru> changed:
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         Resolution|INVALID                     |FIXED
+                 CC|yann.morin.1998@free.fr     |
 
---- Comment #7 from stsp <stsp2@yandex.ru> ---
-But isn't working out the dependencies
-is a fundamental part of adding the package?
-I was asking about readlink and mkfs
-exactly because xfstests-dev uses them and
-is unsatisfied with the ones from busybox.
+--- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+stsp, All,
+
+> But isn't working out the dependencies is a fundamental part of adding
+> the package?
+
+Yes, but discussion about adding a new package, and about the issues while
+doing so, are to be discussed on the mailing list, not in the bug tracker.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
