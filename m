@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0F21EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 05:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DE6CEB64D9
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jun 2023 05:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D310416C9;
-	Tue, 27 Jun 2023 05:44:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D310416C9
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8EC34168E;
+	Tue, 27 Jun 2023 05:44:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8EC34168E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qQ1gvndSyfcY; Tue, 27 Jun 2023 05:44:12 +0000 (UTC)
+	with ESMTP id KcPuntG4eaZl; Tue, 27 Jun 2023 05:44:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96325416B9;
-	Tue, 27 Jun 2023 05:44:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96325416B9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C76651BF95D
- for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:43:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 042DF416E7;
+	Tue, 27 Jun 2023 05:44:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 042DF416E7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 20BFD1BF313
+ for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1BEB812C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDC8E409A4
  for <buildroot@lists.busybox.net>; Tue, 27 Jun 2023 05:43:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1BEB812C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDC8E409A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Etyn_-7e7moa for <buildroot@lists.busybox.net>;
- Tue, 27 Jun 2023 05:43:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q5wADGBX1XEg for <buildroot@lists.busybox.net>;
+ Tue, 27 Jun 2023 05:43:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E085D81287
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1761409AD
  for <buildroot@buildroot.org>; Tue, 27 Jun 2023 05:43:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E085D81287
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1761409AD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CF651856C8; Tue, 27 Jun 2023 05:43:56 +0000 (UTC)
+ id BEB43856A9; Tue, 27 Jun 2023 05:43:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 27 Jun 2023 07:41:04 +0200
+Date: Tue, 27 Jun 2023 07:40:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8863384dff263356237a3a0e793076bbc7223252
-X-Git-Newrev: 0bdfbefbf5e390f2f9cc962b544fc8099f8c5d11
+X-Git-Oldrev: 199301a6d59af20f6a7bb6da0d22bffb64baaea4
+X-Git-Newrev: de6c233a4e79b6e6e7d889740a0ded57c1fb7e39
 X-Patchwork-Hint: ignore
-Message-Id: <20230627054356.CF651856C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libva-utils: bump version to 2.18.2
+Message-Id: <20230627054356.BEB43856A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.42.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bdfbefbf5e390f2f9cc962b544fc8099f8c5d11
+commit: https://git.buildroot.net/buildroot/commit/?id=de6c233a4e79b6e6e7d889740a0ded57c1fb7e39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes: https://sqlite.org/releaselog/3_42_0.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libva-utils/libva-utils.hash | 2 +-
- package/libva-utils/libva-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 9b1d9cb210..3cde9cd284 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index a7b56cf25d..39758f2b43 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  724a54524d9156967d3508f294ce5c45d94cb8f7326537c24ee7fcf59e70de91  libva-utils-2.18.1.tar.gz
-+sha256  c4c0555c96ca678f9ac47fbb56f0ae56ca39fd50fe3553bae5cb13117bfcb406  libva-utils-2.18.2.tar.gz
- sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index 9e6ee3c878..38d46a08c9 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -4,7 +4,7 @@
+-sha256  e98c100dd1da4e30fa460761dab7c0b91a50b785e167f8c57acc46514fae9499  sqlite-autoconf-3410200.tar.gz
++sha256  7abcfd161c6e2742ca5c6c0895d1f853c940f203304a0b49da4e1eca5d088ca6  sqlite-autoconf-3420000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 6c01426658..1576d6a3e1 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBVA_UTILS_VERSION = 2.18.1
-+LIBVA_UTILS_VERSION = 2.18.2
- LIBVA_UTILS_SITE = $(call github,intel,libva-utils,$(LIBVA_UTILS_VERSION))
- LIBVA_UTILS_LICENSE = MIT
- LIBVA_UTILS_LICENSE_FILES = COPYING
+-SQLITE_VERSION = 3.41.2
+-SQLITE_TAR_VERSION = 3410200
++SQLITE_VERSION = 3.42.0
++SQLITE_TAR_VERSION = 3420000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2023
+ SQLITE_LICENSE = Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
