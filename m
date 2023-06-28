@@ -4,97 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56A0AEB64D7
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jun 2023 10:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BF7CEB64D7
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jun 2023 14:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9831B4011A;
-	Wed, 28 Jun 2023 10:10:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9831B4011A
+	by smtp4.osuosl.org (Postfix) with ESMTP id D38B841581;
+	Wed, 28 Jun 2023 14:41:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D38B841581
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lmZD2G3bhgi0; Wed, 28 Jun 2023 10:10:43 +0000 (UTC)
+	with ESMTP id 95C3bEh5rbe5; Wed, 28 Jun 2023 14:41:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 128CE4011F;
-	Wed, 28 Jun 2023 10:10:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 128CE4011F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 393F71BF2F0
- for <buildroot@lists.busybox.net>; Wed, 28 Jun 2023 10:10:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 957CC41734;
+	Wed, 28 Jun 2023 14:41:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 957CC41734
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C5221BF2CC
+ for <buildroot@lists.busybox.net>; Wed, 28 Jun 2023 14:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E6ED4011F
- for <buildroot@lists.busybox.net>; Wed, 28 Jun 2023 10:10:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E6ED4011F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25EED40320
+ for <buildroot@lists.busybox.net>; Wed, 28 Jun 2023 14:41:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25EED40320
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mCrxw-HOl-iq for <buildroot@lists.busybox.net>;
- Wed, 28 Jun 2023 10:10:38 +0000 (UTC)
-X-Greylist: delayed 00:05:58 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 771CC4011A
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de
- [85.215.255.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 771CC4011A
- for <buildroot@buildroot.org>; Wed, 28 Jun 2023 10:10:36 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; t=1687946309; cv=none;
- d=strato.com; s=strato-dkim-0002;
- b=Hsyms7sMVGovn2/M0K071LCT3MorORp5TbojGUesuA9aUHH7tQ+g8J2CvgT+UmxzFD
- jVAYAPuWORdp4fFe6djx11E4EoNcm6c3u2R5NKYzmrs/5GdxmVRs+TwXT0hS+QAnXUNe
- /2Tk0DmaEu7Jw8NuaDWemzweevevg/3Nyf7EbmTBWKMOp2aVEcq99SZKdIP2HgmeJZVh
- 3oTCd8fiSr47U5ejssB7F25WVF26lLuhKqOhgTjS9Cu3w+mkOQO89XP7vKJWT9BPs/lN
- OOrsZS/wJ6/st2XxsXQszr3xF6aoDxAh4/nejFL6aTZKvXh22zSmMknGQFkHx5sOsHMj
- cNNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687946309;
- s=strato-dkim-0002; d=strato.com;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=1lwDvvb3GZTwdfBXg9nHko0aJ4+I3Q4YJNdHV1nTM70=;
- b=oPmPrmrUfqHUVvpTpP1903+zbpfaFPNNOgakNfyT0c6hx+Yk4AKiBk0XgU+h/acmBy
- HewJwmScPm7A2azLr4KqT9jmVBb0sFtmyGsuHXqg4vSmGmO3CCif1nqNhdTysZaEud2n
- oS2Uxm8S3bQrX/RBLSH4aVgNm/dVgxDor3mMZL+STSJm69Ls2hGUV/ARf9matcon9Uv0
- 9oJLQZMjQhk2onYPmfGsYcEdARgdrD9Y169L4dtWOu8juyVhqsKsX8pMe6caYSKB8j6x
- PGhUpSEpCNPaT8XFYPcOHSReT9Oi3qV7/B9Isp77MVUOj6gXMRU/Np39gZzrZcV8ZK+p
- C4lw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-X-RZG-AUTH: ":IHkAYkmvNfSwjg/qSc4u8zZOVaURsoXe3UH2mQA0KglxDI1B7BeEcdPLARTmoNSwY8PK6ePqLwYCwAs="
-Received: from debian-test.local.in-circuit.de
- by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
- with ESMTPSA id 628e34z5S9wTlAc
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
- (Client did not present a certificate) for <buildroot@buildroot.org>;
- Wed, 28 Jun 2023 11:58:29 +0200 (CEST)
-From: Ludwig Kormann <ludwig.kormann@ict42.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RGri0UTWsjT1 for <buildroot@lists.busybox.net>;
+ Wed, 28 Jun 2023 14:41:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57063400FE
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 57063400FE
+ for <buildroot@buildroot.org>; Wed, 28 Jun 2023 14:41:22 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 40C32A4C0740;
+ Wed, 28 Jun 2023 16:41:19 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49382)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qEWMA-0002vF-3C;
+ Wed, 28 Jun 2023 16:41:19 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jun 2023 11:58:25 +0200
-Message-Id: <20230628095825.905451-1-ludwig.kormann@ict42.de>
-X-Mailer: git-send-email 2.30.2
+Date: Wed, 28 Jun 2023 16:41:16 +0200
+Message-Id: <20230628144118.463876-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- t=1687946309; 
- s=strato-dkim-0002; d=ict42.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=1lwDvvb3GZTwdfBXg9nHko0aJ4+I3Q4YJNdHV1nTM70=;
- b=BDaFyenDD3Psk1AmSNjLKS1mWMtPwhFx7FW+UOnA0Ffgjn8+jwOLSCrHJBbgNJzvTW
- FzbR/1uLErNRkfAVsTamR4AFC/EwKH5pnow/lFyXuWZaM47z6rS+NE1fZnPOqkpZorYV
- Py312wezD+Qgw3gDc6XdUd2pkrwqHdOgsPNj6/zkDklXZaLrfYlAHajcHYYm8sxNORPl
- w8UuZh18o6wPPavzmzUx06hRCsEr+xKDi85jGq6QrcacDpZ+OYRwPVwHtG7jeJAxtw6k
- +Ns7xFcAxJ3FzudGKHNmQzcpQgkNoGZRcrKBgG+1Sc8mzF5qgZ1kt6OwqU5V6MgDWV+N
- jOFA==
-X-Mailman-Original-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- t=1687946309; 
- s=strato-dkim-0003; d=ict42.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=1lwDvvb3GZTwdfBXg9nHko0aJ4+I3Q4YJNdHV1nTM70=;
- b=0nY6WTyBudeh4uVZhjpFD8/Xe/2k8IDua5+nHXxHpkqgFgstUhpiL98TsaERh0VdMr
- /grV8rpdK1kW9vgP8uDg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=ict42.de header.i=@ict42.de
- header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=BDaFyenD; 
- dkim=pass header.d=ict42.de header.i=@ict42.de header.a=ed25519-sha256
- header.s=strato-dkim-0003 header.b=0nY6WTyB
-Subject: [Buildroot] [PATCH v2 1/1] configs/icnova-a20-adb4006: new defconfig
+ d=kuhls.net; 
+ s=kas202306131828; t=1687963279;
+ bh=oivIO8tkOpf9jWx7J8pIqKEB/6Jml+Jg15Y0SHE62mI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=cmbxQDVmvkNA3T6Upx6WCqWIhbLRXtRGfy25lJqevMMvv2/44TJWUGKFOp4JZxLpM
+ yb6i92j5ZWYlcLnI4ZHxSQMc9z/cRUt7hTyCK0KRd9EMSVEZzyGXDMLjVR5i+RoN1v
+ LzEqlbV8pg47JpgnF9oucMt1jeoS7x7Co54Q38vYmOa9qWoXI4mhfKkRoK3r5tRX6B
+ PkrdtXfz7xDXTrOwULgv44vD8RPoAH+bRIq+75gmZHCjiQ7MmWnTM6ksj2dPYU/41r
+ LlpVoL9YDpw8mW5LsLmF1afv03gUzzSLaIDGq26ha8olyAikNyTaJesL/7MIAVNILj
+ JDngt9y+J9q3w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=cmbxQDVm
+Subject: [Buildroot] [PATCH 1/3] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 3}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,450 +76,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a defconfig for ICnova A20 SomPi compute module on ADB4006
-development board with Allwinner A20 chip and 512MB/1GB RAM.
-
-Board support package includes the following components:
-- mainline Linux kernel 6.1.35
-- mainline U-Boot 2023.04
-- custom dts & uboot defconfig
-- default packages from buildoot
-
-https://wiki.in-circuit.de/index.php5?title=ICnova_ADB4006
-https://wiki.in-circuit.de/index.php5?title=ICnova_A20_SODIMM
-
-changes in v2:
-- rebase on 2023.05
-- get dts reviewed on the linux mailing list and
-scheduled for kernel 6.5 [1]
-- uboot defconfig upstreaming in progress [2]
-
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
-commit de2bdfb7f79d5c655eb056d459e02be2c7f13c8b
-
-[2]
-https://lists.denx.de/pipermail/u-boot/2023-May/518688.html
-
-Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- DEVELOPERS                                    |   4 +
- board/in-circuit/icnova-a20-adb4006/boot.cmd  |   5 +
- .../icnova-a20-adb4006/genimage.cfg           |  38 +++++
- .../icnova-a20-adb4006/linux.fragment         |   1 +
- .../icnova-a20-adb4006/post-image.sh          |  16 ++
- .../sun7i-a20-icnova-a20-adb4006.dts          | 137 ++++++++++++++++++
- ...n7i-a20-icnova-a20-adb4006_uboot_defconfig |  20 +++
- .../sun7i-a20-icnova-a20.dtsi                 |  62 ++++++++
- configs/icnova-a20-adb4006_defconfig          |  49 +++++++
- 9 files changed, 332 insertions(+)
- create mode 100644 board/in-circuit/icnova-a20-adb4006/boot.cmd
- create mode 100644 board/in-circuit/icnova-a20-adb4006/genimage.cfg
- create mode 100644 board/in-circuit/icnova-a20-adb4006/linux.fragment
- create mode 100755 board/in-circuit/icnova-a20-adb4006/post-image.sh
- create mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
- create mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
- create mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
- create mode 100644 configs/icnova-a20-adb4006_defconfig
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7aa5980df7..0da222bce1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1908,6 +1908,10 @@ F:	package/python-simplejson/
- F:	package/python-versiontools/
- F:	package/wilc-firmware/
+diff --git a/linux/Config.in b/linux/Config.in
+index 315af971db..fba0e1244b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
-+N:	Ludwig Kormann <ludwig.kormann@ict42.de>
-+F:	board/in-circuit/
-+F:	configs/icnova*
-+
- N:	Maeva Manuel <maeva.manuel@oss.nxp.com>
- F:	board/freescale/imx8qmmek/
- F:	configs/freescale_imx8qmmek_defconfig
-diff --git a/board/in-circuit/icnova-a20-adb4006/boot.cmd b/board/in-circuit/icnova-a20-adb4006/boot.cmd
-new file mode 100644
-index 0000000000..93d32a5e5f
---- /dev/null
-+++ b/board/in-circuit/icnova-a20-adb4006/boot.cmd
-@@ -0,0 +1,5 @@
-+setenv fdt_high ffffffff
-+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-+fatload mmc 0 $kernel_addr_r zImage
-+fatload mmc 0 $fdt_addr_r sun7i-a20-icnova-a20-adb4006.dtb
-+bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/in-circuit/icnova-a20-adb4006/genimage.cfg b/board/in-circuit/icnova-a20-adb4006/genimage.cfg
-new file mode 100644
-index 0000000000..4975d679be
---- /dev/null
-+++ b/board/in-circuit/icnova-a20-adb4006/genimage.cfg
-@@ -0,0 +1,38 @@
-+# Minimal SD card image for the ICnova A20 SomPi on ADB4006
-+# Based in the Cubieboard2 genimage.cfg
-+
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"sun7i-a20-icnova-a20-adb4006.dtb",
-+			"boot.scr"
-+		}
-+	}
-+
-+	size = 10M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+		size = 1016K # 1MB - 8KB
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/in-circuit/icnova-a20-adb4006/linux.fragment b/board/in-circuit/icnova-a20-adb4006/linux.fragment
-new file mode 100644
-index 0000000000..1c99df12e6
---- /dev/null
-+++ b/board/in-circuit/icnova-a20-adb4006/linux.fragment
-@@ -0,0 +1 @@
-+CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE=y
-diff --git a/board/in-circuit/icnova-a20-adb4006/post-image.sh b/board/in-circuit/icnova-a20-adb4006/post-image.sh
-new file mode 100755
-index 0000000000..9cca1b1789
---- /dev/null
-+++ b/board/in-circuit/icnova-a20-adb4006/post-image.sh
-@@ -0,0 +1,16 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                           \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+exit $?
-diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
-new file mode 100644
-index 0000000000..577ead1d02
---- /dev/null
-+++ b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// Copyright (C) 2023 In-Circuit GmbH
-+
-+/dts-v1/;
-+
-+#include "sun7i-a20-icnova-a20.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	model = "In-Circuit ICnova A20 ADB4006";
-+	compatible = "incircuit,icnova-a20-adb4006", "incircuit,icnova-a20",
-+		     "allwinner,sun7i-a20";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	hdmi-connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_con_in: endpoint {
-+				remote-endpoint = <&hdmi_out_con>;
-+			};
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			function = LED_FUNCTION_POWER;
-+			color = <LED_COLOR_ID_YELLOW>;
-+			gpios = <&pio 7 21 GPIO_ACTIVE_HIGH>; /* PH21 */
-+			default-state = "on";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_HEARTBEAT;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&pio 7 20 GPIO_ACTIVE_HIGH>; /* PH20 */
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+};
-+
-+&ahci {
-+	target-supply = <&reg_ahci_5v>;
-+	status = "okay";
-+};
-+
-+&codec {
-+	status = "okay";
-+};
-+
-+&de {
-+	status = "okay";
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&hdmi {
-+	status = "okay";
-+};
-+
-+&hdmi_out {
-+	hdmi_out_con: endpoint {
-+		remote-endpoint = <&hdmi_con_in>;
-+	};
-+};
-+
-+&mmc0 {
-+	vmmc-supply = <&reg_vcc3v3>;
-+	bus-width = <4>;
-+	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
-+	status = "okay";
-+};
-+
-+&ohci0 {
-+	status = "okay";
-+};
-+
-+&ohci1 {
-+	status = "okay";
-+};
-+
-+&otg_sram {
-+	status = "okay";
-+};
-+
-+&reg_ahci_5v {
-+	status = "okay";
-+};
-+
-+&ac_power_supply {
-+	status = "okay";
-+};
-+
-+&reg_usb1_vbus {
-+	status = "okay";
-+};
-+
-+&reg_usb2_vbus {
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pb_pins>;
-+	status = "okay";
-+};
-+
-+&usb_otg {
-+	dr_mode = "otg";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	usb0_id_det-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
-+	usb0_vbus_det-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
-+	usb1_vbus-supply = <&reg_usb1_vbus>;
-+	usb2_vbus-supply = <&reg_usb2_vbus>;
-+	status = "okay";
-+};
-diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
-new file mode 100644
-index 0000000000..f70ffe45ab
---- /dev/null
-+++ b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
-@@ -0,0 +1,20 @@
-+CONFIG_ARM=y
-+CONFIG_ARCH_SUNXI=y
-+CONFIG_DEFAULT_DEVICE_TREE="sun7i-a20-icnova-a20-adb4006"
-+CONFIG_SPL=y
-+CONFIG_MACH_SUN7I=y
-+CONFIG_DRAM_CLK=384
-+CONFIG_AHCI=y
-+# CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
-+CONFIG_SPL_I2C=y
-+CONFIG_SCSI_AHCI=y
-+CONFIG_SYS_I2C_MVTWSI=y
-+CONFIG_SYS_I2C_SLAVE=0x7f
-+CONFIG_SYS_I2C_SPEED=400000
-+CONFIG_ETH_DESIGNWARE=y
-+CONFIG_MII=y
-+CONFIG_SUN7I_GMAC=y
-+CONFIG_AXP_ALDO4_VOLT=2800
-+CONFIG_SCSI=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_OHCI_HCD=y
-diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
-new file mode 100644
-index 0000000000..46616c6bc8
---- /dev/null
-+++ b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// Copyright (C) 2023 In-Circuit GmbH
-+
-+#include "sun7i-a20.dtsi"
-+#include "sunxi-common-regulators.dtsi"
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&cpu0 {
-+	cpu-supply = <&reg_dcdc2>;
-+};
-+
-+&gmac {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&gmac_mii_pins>;
-+	phy-handle = <&phy1>;
-+	phy-mode = "mii";
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	axp209: pmic@34 {
-+		reg = <0x34>;
-+		interrupt-parent = <&nmi_intc>;
-+		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
-+
-+&gmac_mdio {
-+	phy1: ethernet-phy@1 {
-+		reg = <1>;
-+	};
-+};
-+
-+#include "axp209.dtsi"
-+
-+&reg_dcdc2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1000000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-cpu";
-+};
-+
-+&reg_dcdc3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1000000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-int-dll";
-+};
-+
-+&reg_ldo1 {
-+	regulator-name = "vdd-rtc";
-+};
-+
-+&reg_ldo2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "avcc";
-+};
-diff --git a/configs/icnova-a20-adb4006_defconfig b/configs/icnova-a20-adb4006_defconfig
-new file mode 100644
-index 0000000000..09468ac9da
---- /dev/null
-+++ b/configs/icnova-a20-adb4006_defconfig
-@@ -0,0 +1,49 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+
-+# Linux headers same as kernel, a 6.1 LTS series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="ICnova A20 ADB4006"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to ICnova A20 ADB4006!"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/in-circuit/icnova-a20-adb4006/post-image.sh"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.35"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/in-circuit/icnova-a20-adb4006/linux.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+
-+# Bootloaders
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts"
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/in-circuit/icnova-a20-adb4006/boot.cmd"
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.3.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.3.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index f49ab52afb..d6371a4906 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  41ecf21399b17ab85163750ba22347d09b54fa099b80b63d0e2ef0066129b13e  linux-6.3.9.tar.xz
+-sha256  be368143bc5d0dc73dd3e8c6191630c1620520379baf6f47c16116b2c0bc26ac  linux-6.1.35.tar.xz
++sha256  e0a9ad8692b2191cbd33db371a780a3fe375de90123a307ecd874c0860cd46e3  linux-6.3.10.tar.xz
++sha256  d8ca0e300f30b9ff70c6e1497c638a1dac1407f45d3655e9c62c6e45a08afe6b  linux-6.1.36.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  4e6bf4dadb04d5d11d1d4cc37c0eabcf33bc333b7dd3dc2143c3099a823eb5b3  linux-5.15.118.tar.xz
+-sha256  280662ec8dc8738cf947ad66e748141abd58cbe3b5ed66b7f2b153222b7c7090  linux-5.10.185.tar.xz
+-sha256  3abed132e76c6575733acba39eaa54f6d8f4b1dc951b0e601a33959743b13e35  linux-5.4.248.tar.xz
++sha256  7aa5a0fd3520947e5599e811d28acdc30e36446c016c7dcee3793e6d1cbecfcf  linux-5.15.119.tar.xz
++sha256  1e60296a135d272bb7ce645f6ae68fbd4ffd1972cb4b82c38c6faa1172481be3  linux-5.10.186.tar.xz
++sha256  dc5458462c6edbe3473fc6dee80fbe0841df7c177fe0546c2f131e5918f5351d  linux-5.4.249.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  286a9b8c75bff7bdf66985e12a3a650b2bd638a776a5a6e93415930855662a73  linux-4.19.287.tar.xz
+-sha256  aca4750f02f4090b753c1445db44dfa90de535eca73a7b0a7aa4453f65ba1ff9  linux-4.14.319.tar.xz
++sha256  33ebd0c445b58c814428558496b65a192410f000096b0e2e6f5d813ecd95e3eb  linux-4.19.288.tar.xz
++sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 10e33a7306..baeabd94db 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -396,13 +396,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.319"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.287"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.248"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.185"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.118"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.35"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.3.9"		if BR2_KERNEL_HEADERS_6_3
++	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.288"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.249"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.186"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.119"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.36"	if BR2_KERNEL_HEADERS_6_1
++	default "6.3.10"	if BR2_KERNEL_HEADERS_6_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.30.2
+2.39.2
 
 _______________________________________________
 buildroot mailing list
