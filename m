@@ -1,69 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90C4DEB64D7
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jun 2023 06:19:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9414EB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jun 2023 07:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E47F4170F;
-	Wed, 28 Jun 2023 06:19:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E47F4170F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4687181E22;
+	Wed, 28 Jun 2023 07:55:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4687181E22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DiCy9KlDEn7C; Wed, 28 Jun 2023 06:19:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DSKmbYBLYnWY; Wed, 28 Jun 2023 07:55:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4239D416A7;
-	Wed, 28 Jun 2023 06:19:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4239D416A7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E2E28177C;
+	Wed, 28 Jun 2023 07:55:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E2E28177C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7F6261BF855
- for <buildroot@lists.busybox.net>; Wed, 28 Jun 2023 06:19:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A4B71BF3C4
+ for <buildroot@lists.busybox.net>; Wed, 28 Jun 2023 07:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64CE44089A
- for <buildroot@lists.busybox.net>; Wed, 28 Jun 2023 06:19:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64CE44089A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F1E6408FE
+ for <buildroot@lists.busybox.net>; Wed, 28 Jun 2023 07:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F1E6408FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YwIQNHfyb_1N for <buildroot@lists.busybox.net>;
- Wed, 28 Jun 2023 06:19:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ECB8404AA
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2ECB8404AA
- for <buildroot@buildroot.org>; Wed, 28 Jun 2023 06:19:42 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 47E5DA4C0103
- for <buildroot@buildroot.org>; Wed, 28 Jun 2023 08:19:40 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44118)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qEOWh-0000TF-3C
- for buildroot@buildroot.org; Wed, 28 Jun 2023 08:19:40 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Wed, 28 Jun 2023 08:19:39 +0200
-Message-Id: <20230628061939.38666-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id 2LTLbAIOLqqy for <buildroot@lists.busybox.net>;
+ Wed, 28 Jun 2023 07:55:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04791408F6
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 04791408F6
+ for <buildroot@buildroot.org>; Wed, 28 Jun 2023 07:55:18 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-313f1085ac2so3039852f8f.1
+ for <buildroot@buildroot.org>; Wed, 28 Jun 2023 00:55:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1687938917; x=1690530917;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=dKZOiTHCS1yx3QlX0Vw+t7bilRT4Mcc6OtZBz1f3qEU=;
+ b=QHoBrOjicF+H6Xqqj92v3XTb/2XCAEivYMuv4bVZvLVFtcx5q6dRJMDY4rRGXX8wEQ
+ VNofL2b2RL8vZLrWYOtzfzCSMP/WmuC1qVjmkdpouT3b30QvlQlWl49E0T9Yz776cHqm
+ sJGrCmjl7qB1oMRARDktgaEwTS8DUz2qnVCiJrT0eEleTAvPJ+wRcLQ3ZTDZEHWChYHc
+ 8ooAvOtxwUUVFy2i3zwn2KdbClE8wK3vTHAJVjtQ/f9AIHa8DInTt4YiRkkY340i/8gB
+ 7+6UlsaMfh0ReDZ8KlwWOjwS0appAomahRho+gFC+csu1oJr7IdsCaz57t0lGUDgJyFH
+ W/wg==
+X-Gm-Message-State: AC+VfDxqQTowg/1H/ZR4GCST/rNqM+cY8KNVjfsXgK7vZWu7fbQf8Sqt
+ yw0/IUgzifn63+xwyAAJGhGhgIE3+bg=
+X-Google-Smtp-Source: ACHHUZ7iye/Qc0BwHkTbORy8v/2Y2wfg4wmxJuiKPWLMFOP0PSzoxkH0a/UH736OIRhwZ0azCd/IEQ==
+X-Received: by 2002:a5d:6351:0:b0:312:754b:bd2 with SMTP id
+ b17-20020a5d6351000000b00312754b0bd2mr19189301wrw.47.1687938916820; 
+ Wed, 28 Jun 2023 00:55:16 -0700 (PDT)
+Received: from p1g2 (aputeaux-652-1-54-113.w83-204.abo.wanadoo.fr.
+ [83.204.213.113]) by smtp.gmail.com with ESMTPSA id
+ d13-20020a5d4f8d000000b003063db8f45bsm12586128wru.23.2023.06.28.00.55.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 28 Jun 2023 00:55:16 -0700 (PDT)
+Date: Wed, 28 Jun 2023 09:55:15 +0200
+From: Gary Bisson <bisson.gary@gmail.com>
+To: Charles Hardin <ckhardin@gmail.com>
+Message-ID: <ZJvnY1izYrShopxk@p1g2>
+References: <20230620170922.3722-1-ckhardin@gmail.com>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+Content-Disposition: inline
+In-Reply-To: <20230620170922.3722-1-ckhardin@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1687933180;
- bh=rgM/dHIyzOpHym1CvxgyqF9Df04Cs71H0lkURy8yyLo=;
- h=From:To:Subject:Date:From;
- b=mZYcn6aybNe1ELIt1jchbpYuTK5OmyBqcyo0oHTKZyoqQiZ4Wi8ZVtvSY1QAIDqE5
- SL8poL3NbVlaSsHvuwHgWwZZ9PLa/jUrQJgcDnscWdPAPqBCHb8wVlaG0un8IgUESk
- NCNf47W82HQrQSN7c7zvbTTMr/6+LUX25+mmOnaXDQtBJxzOWLJNDp4rSdaIAZNn+r
- +JpvrWAWqH8NEoHx5WA/EgQGAP9nh94W8Z3GWqCerJUx0252l6MhEyrSjJ1Uwlv5A1
- MVef4brioFzBExW2qBeFaWTg61EMJqP1TA+d/84ttNFUU5zfWw8Xk/kjU+l318d0eQ
- 6ZeE3pc7KfG9w==
+ d=gmail.com; s=20221208; t=1687938917; x=1690530917;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=dKZOiTHCS1yx3QlX0Vw+t7bilRT4Mcc6OtZBz1f3qEU=;
+ b=iSB+YBIx8HN6TLOg8l4qb3NrbiUAwUTLJYnb14ITO+UVKELY3GOEndn7+n4OUxspK5
+ Y+4/kDJqA3UPXsQc950SNPZra4phTYoW0CvhGo7059Sj/YbfvkHFqPsevCbwlW2z6A0a
+ PndVnKh4+kmFT4LyRrJ6io0YF4kEuROO3AIJdf0bO1F/K279N/KTY7zzEObRSCPu1YuF
+ J0eWybb/zjp8PuwsvOxbXZE1esMPLVIPCX6S6BLemfl5PjnGlk4SkLYlU184G7ooCY7/
+ pvJkT6VFME1byd+ruSucIvKuNk41ESs59O2RNRym6rG7uEBvICoiCz1NRaVibZDnb2fv
+ PXdw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=mZYcn6ay
-Subject: [Buildroot] [PATCH 1/1] package/freetype: bump version to 2.13.1
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=iSB+YBIx
+Subject: Re: [Buildroot] [PATCH 1/1] package/firmware-imx: ensure the linux
+ firmware is installed first
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,50 +97,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Refik Tuzakli <tuzakli.refik@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://sourceforge.net/projects/freetype/files/freetype2/2.13.1/
+Hi Charles,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Tue, Jun 20, 2023 at 10:09:22AM -0700, Charles Hardin wrote:
+> There was imx SDMA firmware in the base linux-firmware package at
+> one time, but the firmware-imx is updated with the latest versions
+> from NXP releases.
+> 
+> This just ensures a dependency is set so that the imx package will
+> always come later in case an overlap occurs again.
+> 
+> Signed-off-by: Chares Hardin <ckhardin@gmail.com>
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 60eb8dbb1d..ea03526c99 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.0/
--sha1  6393c1451c2f1c5f83aed5ea92d280af078e27d9  freetype-2.13.0.tar.xz
--sha256  5ee23abd047636c24b2d43c6625dcafc66661d1aca64dec9e0d05df29592624c  freetype-2.13.0.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.1/
-+sha1  af9b6b754320a0526179f166e3f8cffce78526ca  freetype-2.13.1.tar.xz
-+sha256  ea67e3b019b1104d1667aa274f5dc307d8cbd606b399bc32df308a77f1a564bf  freetype-2.13.1.tar.xz
- 
- # Locally calculated
- sha256  2e3bbb7d7c5c396368dd0853a790ec29ce5b8647163dde42a0493fb0d6556b2b  LICENSE.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 4d7c4cd0d5..c6bc0673f6 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.13.0
-+FREETYPE_VERSION = 2.13.1
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
--- 
-2.39.2
+The above line seems to be here by mistake, please remove.
 
+> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+
+With that line removed:
+Reviewed-by: Gary Bisson <bisson.gary@gmail.com>
+
+Regards,
+Gary
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
