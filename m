@@ -4,71 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B300EB64D9
-	for <buildroot@archiver.kernel.org>; Thu, 29 Jun 2023 05:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0698EB64D9
+	for <buildroot@archiver.kernel.org>; Thu, 29 Jun 2023 05:41:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C45CF60EC4;
-	Thu, 29 Jun 2023 05:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C45CF60EC4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6900D60E44;
+	Thu, 29 Jun 2023 05:41:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6900D60E44
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qz2LUeb4r6wS; Thu, 29 Jun 2023 05:32:07 +0000 (UTC)
+	with ESMTP id ngLs3SGzrVhf; Thu, 29 Jun 2023 05:41:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9FE760E92;
-	Thu, 29 Jun 2023 05:32:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9FE760E92
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0AFA01BF97D
- for <buildroot@lists.busybox.net>; Thu, 29 Jun 2023 05:31:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A31CD60E3F;
+	Thu, 29 Jun 2023 05:41:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A31CD60E3F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A487F1BF3A0
+ for <buildroot@lists.busybox.net>; Thu, 29 Jun 2023 05:41:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D898B8143E
- for <buildroot@lists.busybox.net>; Thu, 29 Jun 2023 05:31:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D898B8143E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7094A60E3F
+ for <buildroot@lists.busybox.net>; Thu, 29 Jun 2023 05:41:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7094A60E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yed78r6-MZRv for <buildroot@lists.busybox.net>;
- Thu, 29 Jun 2023 05:31:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CGTi5-XeYRxE for <buildroot@lists.busybox.net>;
+ Thu, 29 Jun 2023 05:41:17 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4732C81DE2
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4732C81DE2
- for <buildroot@buildroot.org>; Thu, 29 Jun 2023 05:31:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9783760E30
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9783760E30
+ for <buildroot@buildroot.org>; Thu, 29 Jun 2023 05:41:17 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 364DAC03A3
+ for <buildroot@buildroot.org>; Thu, 29 Jun 2023 05:31:39 +0000 (UTC)
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D6AD91C0007;
- Thu, 29 Jun 2023 05:31:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 95B731C0004;
+ Thu, 29 Jun 2023 05:31:32 +0000 (UTC)
 From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
 To: buildroot@buildroot.org
-Date: Thu, 29 Jun 2023 07:31:28 +0200
-Message-Id: <20230629053130.3976-2-jeanmichel.hautbois@yoseli.org>
+Date: Thu, 29 Jun 2023 07:31:27 +0200
+Message-Id: <20230629053130.3976-1-jeanmichel.hautbois@yoseli.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230629053130.3976-1-jeanmichel.hautbois@yoseli.org>
-References: <20230629053130.3976-1-jeanmichel.hautbois@yoseli.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yoseli.org; s=gm1; t=1688016694;
+ d=yoseli.org; s=gm1; t=1688016693;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CMplKyVm+IHk1472WFu+YKhGUJRJS4QIu1p8mI7LYcY=;
- b=lvqLIiqfBcIjIAtiQfGFlUozRKE2OmTWTcC9kNAZdFLBhbA/DdeOC7guATfWDTVDXZKrn+
- +JfESZCd7Gjn/bbPeiwF4udgyptFZsqGiQDvxIJpRkyE1rs5LMuWR5+uCCLLct8i02xM9Q
- iOezM7ZxTuFL0tbgkbQdlsy09zXnCV71BBgCw8Ir8/IErdtGT/EpuzhDO4R2HgP0tSwjBD
- 2a6jLN1mDG3vwAQKxH6zLj5LBbqtx5+Q867hXaRUOgYk9wBelukC2XlQuQnuvt52GO8YMf
- zi9eVK/hXvYP2btfVxC76h2di+gOqz1tbNjmY/5Ly34W6N4fLPp15L1lFBwkSA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding;
+ bh=zXJU4d4KPDk7q/sdjM+al7e3QEF2VqI8orryKjBRqb4=;
+ b=WTWMTJyFDh2F+aSseB4WpDUmM4sNN8aZOGxgvaTVvUPkXOYrmlad+FDQmEQmYWHZ24uz/C
+ xAoQ+Z6x9qUHng93rqSAl4Ttw8UqQxDVZgSNQUyUq9/hSj/U5BzZm2ytqX3K+/GgsaOmoW
+ UGpzZuLheLw85mQJWR1Mhg3QYElPAg9l53KxrtPYOE8xGmV/eytIWq9upaI3BLCj7I75RP
+ rcyJexKoPTisRYqbX2Kr7DMae2iwj6QAn6BWULw9q4kle8oJt/iq/F87MwdPDxApgn4l+L
+ 4vDUfOjJurOX+6hXgc00valPfbloaQblcvzWuuiOK4ictMvS22mRArYrpNABlg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=yoseli.org header.i=@yoseli.org header.a=rsa-sha256
- header.s=gm1 header.b=lvqLIiqf
-Subject: [Buildroot] [PATCH 1/3] arch: add support for mcf54418 Colfdire
+ header.s=gm1 header.b=WTWMTJyF
+Subject: [Buildroot] [PATCH 0/3] Add support for the MCF54418 Coldfire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,52 +89,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The m68k family ony has one Coldfire variant, namely the 5208. Add the
-support for the MCF54418 CPU in the configuration file.
+Hi !
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
----
- arch/Config.in.m68k | 9 +++++++++
- toolchain/Config.in | 1 +
- 2 files changed, 10 insertions(+)
+I have a custom board which uses a MCF54418 and I want it to use an
+upstream buildroot (for all the good reasons ;-)).
+From what I can tell the only Coldfire processor currently supported is
+the MCF5208 which does not have a MMU.
 
-diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
-index 9fd22aaf1e..6aa409b272 100644
---- a/arch/Config.in.m68k
-+++ b/arch/Config.in.m68k
-@@ -33,11 +33,20 @@ config BR2_m68k_cf5208
- 	select BR2_m68k_cf
- 	select BR2_SOFT_FLOAT
- 
-+config BR2_m68k_cf54418
-+	bool "54418"
-+	select BR2_m68k_cf
-+	select BR2_USE_MMU
-+	select BR2_SOFT_FLOAT
- endchoice
- 
- config BR2_GCC_TARGET_CPU
- 	default "68040"		if BR2_m68k_68040
- 	default "5208"		if BR2_m68k_cf5208
-+	default "54455"		if BR2_m68k_cf54418
-+
-+config BR2_GCC_TARGET_ARCH
-+	default "cf"            if BR2_m68k_cf54418
- 
- config BR2_READELF_ARCH_NAME
- 	default "MC68000"
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index ff0eb93017..ec2185cb39 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -95,6 +95,7 @@ config BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_ARM_CPU_ARMV5
- 	depends on !BR2_sparc_v8
- 	depends on !BR2_m68k_cf5208
-+	depends on !BR2_m68k_cf54418
- 
- # GCC uses thunk functions to adjust the 'this' pointer when calling
- # C++ member functions in classes derived with multiple inheritance.
+While trying to add the processor support, I faced an issue during the
+host-gcc build when the MMU configuration is selected, because it makes
+it compile the multilib part.
+
+Sadly, a commit [1] removed the GCC ARCH configuration which was used to
+determine if the architecture is "m68k" or "cf". I have re-introduced
+this configuration here, only for the MCF54418 case for now as I am not
+sure if it is my real issue or not. What I can tell is that when I have
+the BR2_USE_MMU selected, the host-gcc fails and it passes when I add
+the proper architecture.
+
+[1]: eda11417be m68k: remove BR2_GCC_TARGET_ARCH
+
+Jean-Michel Hautbois (3):
+  arch: add support for mcf54418 Colfdire
+  board: add the qemu board support for mcf54418
+  configs: add support for the 54418 qemu defconfig
+
+ arch/Config.in.m68k                   |  9 +++++++++
+ board/qemu/m68k-mcf54418/linux.config | 23 +++++++++++++++++++++++
+ configs/qemu_m68k_mcf54418_defconfig  | 19 +++++++++++++++++++
+ toolchain/Config.in                   |  1 +
+ 4 files changed, 52 insertions(+)
+ create mode 100644 board/qemu/m68k-mcf54418/linux.config
+ create mode 100644 configs/qemu_m68k_mcf54418_defconfig
+
 -- 
 2.39.2
 
