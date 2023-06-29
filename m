@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BC96EB64D9
-	for <buildroot@archiver.kernel.org>; Thu, 29 Jun 2023 05:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B300EB64D9
+	for <buildroot@archiver.kernel.org>; Thu, 29 Jun 2023 05:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DB6660E7C;
-	Thu, 29 Jun 2023 05:31:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DB6660E7C
+	by smtp3.osuosl.org (Postfix) with ESMTP id C45CF60EC4;
+	Thu, 29 Jun 2023 05:32:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C45CF60EC4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EpIZyfCG1UlY; Thu, 29 Jun 2023 05:31:54 +0000 (UTC)
+	with ESMTP id qz2LUeb4r6wS; Thu, 29 Jun 2023 05:32:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8041C60E5B;
-	Thu, 29 Jun 2023 05:31:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8041C60E5B
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9FE760E92;
+	Thu, 29 Jun 2023 05:32:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9FE760E92
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C69661BF3A0
- for <buildroot@lists.busybox.net>; Thu, 29 Jun 2023 05:31:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0AFA01BF97D
+ for <buildroot@lists.busybox.net>; Thu, 29 Jun 2023 05:31:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9DE7C8143E
- for <buildroot@lists.busybox.net>; Thu, 29 Jun 2023 05:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DE7C8143E
+ by smtp1.osuosl.org (Postfix) with ESMTP id D898B8143E
+ for <buildroot@lists.busybox.net>; Thu, 29 Jun 2023 05:31:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D898B8143E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lIJ7K-BWigB0 for <buildroot@lists.busybox.net>;
- Thu, 29 Jun 2023 05:31:39 +0000 (UTC)
+ with ESMTP id yed78r6-MZRv for <buildroot@lists.busybox.net>;
+ Thu, 29 Jun 2023 05:31:38 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C90DA81DE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4732C81DE2
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C90DA81DE8
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4732C81DE2
  for <buildroot@buildroot.org>; Thu, 29 Jun 2023 05:31:38 +0000 (UTC)
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
@@ -42,34 +42,33 @@ X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 570231C0002;
- Thu, 29 Jun 2023 05:31:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D6AD91C0007;
+ Thu, 29 Jun 2023 05:31:33 +0000 (UTC)
 From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
 To: buildroot@buildroot.org
-Date: Thu, 29 Jun 2023 07:31:30 +0200
-Message-Id: <20230629053130.3976-4-jeanmichel.hautbois@yoseli.org>
+Date: Thu, 29 Jun 2023 07:31:28 +0200
+Message-Id: <20230629053130.3976-2-jeanmichel.hautbois@yoseli.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230629053130.3976-1-jeanmichel.hautbois@yoseli.org>
 References: <20230629053130.3976-1-jeanmichel.hautbois@yoseli.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yoseli.org; s=gm1; t=1688016697;
+ d=yoseli.org; s=gm1; t=1688016694;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=P9trVuDnV10z2SJ6MT0EoyfDtdseD7BLvp/NYsLBDmg=;
- b=kl3hpUaD+0XYsf1DI9b3WCxFyiZZloAGw/3NFBYmDGTG2RTkzZNUaY1jhYcjnz5VTyzQnt
- 0kxgufQWLcmiYUmgzakT75+AAeLHrX7g+0DZ3AxwU1sSiLKHph3olsLjLHUdVniUxFBCwa
- g6Kmhu48pDg2XDu2tMq1348+pfRNjAYGYCnE5I6R4VNywcFMWZfRUgOz4yFk08NGtirI18
- bAUUD/gPg+0q7JNj3BTS27xJaAmg/9bO2WS+bhuOSsZHuOsNkEw5Ey0kgyIsuU3Io9QWvy
- xVR9knVMGjJ9FlrGImcrsig2TnG/yoxA1eSxJ5fXfYXK61q+HXtFYX4nSqKFaw==
+ bh=CMplKyVm+IHk1472WFu+YKhGUJRJS4QIu1p8mI7LYcY=;
+ b=lvqLIiqfBcIjIAtiQfGFlUozRKE2OmTWTcC9kNAZdFLBhbA/DdeOC7guATfWDTVDXZKrn+
+ +JfESZCd7Gjn/bbPeiwF4udgyptFZsqGiQDvxIJpRkyE1rs5LMuWR5+uCCLLct8i02xM9Q
+ iOezM7ZxTuFL0tbgkbQdlsy09zXnCV71BBgCw8Ir8/IErdtGT/EpuzhDO4R2HgP0tSwjBD
+ 2a6jLN1mDG3vwAQKxH6zLj5LBbqtx5+Q867hXaRUOgYk9wBelukC2XlQuQnuvt52GO8YMf
+ zi9eVK/hXvYP2btfVxC76h2di+gOqz1tbNjmY/5Ly34W6N4fLPp15L1lFBwkSA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=yoseli.org header.i=@yoseli.org header.a=rsa-sha256
- header.s=gm1 header.b=kl3hpUaD
-Subject: [Buildroot] [PATCH 3/3] configs: add support for the 54418 qemu
- defconfig
+ header.s=gm1 header.b=lvqLIiqf
+Subject: [Buildroot] [PATCH 1/3] arch: add support for mcf54418 Colfdire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,40 +90,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This file is a copy of the qemu_m68k_mcf5208_defconfig as there is not
-so much difference to expect except the CPU value.
+The m68k family ony has one Coldfire variant, namely the 5208. Add the
+support for the MCF54418 CPU in the configuration file.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
 ---
- configs/qemu_m68k_mcf54418_defconfig | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 configs/qemu_m68k_mcf54418_defconfig
+ arch/Config.in.m68k | 9 +++++++++
+ toolchain/Config.in | 1 +
+ 2 files changed, 10 insertions(+)
 
-diff --git a/configs/qemu_m68k_mcf54418_defconfig b/configs/qemu_m68k_mcf54418_defconfig
-new file mode 100644
-index 0000000000..91326e1f3c
---- /dev/null
-+++ b/configs/qemu_m68k_mcf54418_defconfig
-@@ -0,0 +1,19 @@
-+BR2_m68k=y
-+BR2_m68k_cf54418=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PTHREADS=y
-+BR2_STATIC_LIBS=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf54418/linux.config"
-+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index 9fd22aaf1e..6aa409b272 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -33,11 +33,20 @@ config BR2_m68k_cf5208
+ 	select BR2_m68k_cf
+ 	select BR2_SOFT_FLOAT
+ 
++config BR2_m68k_cf54418
++	bool "54418"
++	select BR2_m68k_cf
++	select BR2_USE_MMU
++	select BR2_SOFT_FLOAT
+ endchoice
+ 
+ config BR2_GCC_TARGET_CPU
+ 	default "68040"		if BR2_m68k_68040
+ 	default "5208"		if BR2_m68k_cf5208
++	default "54455"		if BR2_m68k_cf54418
++
++config BR2_GCC_TARGET_ARCH
++	default "cf"            if BR2_m68k_cf54418
+ 
+ config BR2_READELF_ARCH_NAME
+ 	default "MC68000"
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index ff0eb93017..ec2185cb39 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -95,6 +95,7 @@ config BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_ARM_CPU_ARMV5
+ 	depends on !BR2_sparc_v8
+ 	depends on !BR2_m68k_cf5208
++	depends on !BR2_m68k_cf54418
+ 
+ # GCC uses thunk functions to adjust the 'this' pointer when calling
+ # C++ member functions in classes derived with multiple inheritance.
 -- 
 2.39.2
 
