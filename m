@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40E7FEB64DC
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jun 2023 21:27:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30F72EB64DA
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jun 2023 21:27:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A238941F2F;
-	Fri, 30 Jun 2023 21:27:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A238941F2F
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6D7741F48;
+	Fri, 30 Jun 2023 21:27:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6D7741F48
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TiF2CKEl2VZV; Fri, 30 Jun 2023 21:27:22 +0000 (UTC)
+	with ESMTP id kRHZQxyDhJHc; Fri, 30 Jun 2023 21:27:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CF6741F63;
-	Fri, 30 Jun 2023 21:27:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CF6741F63
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50F8841F63;
+	Fri, 30 Jun 2023 21:27:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50F8841F63
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3F6DB1BF844
- for <buildroot@lists.busybox.net>; Fri, 30 Jun 2023 21:27:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7D42B1BF844
+ for <buildroot@lists.busybox.net>; Fri, 30 Jun 2023 21:27:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2441A41F63
- for <buildroot@lists.busybox.net>; Fri, 30 Jun 2023 21:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2441A41F63
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55A09417B2
+ for <buildroot@lists.busybox.net>; Fri, 30 Jun 2023 21:27:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55A09417B2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m3JUvvdNdNKP for <buildroot@lists.busybox.net>;
- Fri, 30 Jun 2023 21:27:07 +0000 (UTC)
+ with ESMTP id 5I220jei4n_0 for <buildroot@lists.busybox.net>;
+ Fri, 30 Jun 2023 21:27:10 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93D8417B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B9F241F48
 Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D93D8417B2
- for <buildroot@buildroot.org>; Fri, 30 Jun 2023 21:27:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0B9F241F48
+ for <buildroot@buildroot.org>; Fri, 30 Jun 2023 21:27:10 +0000 (UTC)
 Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
- by shout02.mail.de (Postfix) with ESMTP id 2DF05A0398
- for <buildroot@buildroot.org>; Fri, 30 Jun 2023 23:27:05 +0200 (CEST)
+ by shout02.mail.de (Postfix) with ESMTP id 814EDA0398
+ for <buildroot@buildroot.org>; Fri, 30 Jun 2023 23:27:08 +0200 (CEST)
 Received: from smtp04.mail.de (smtp04.bt.mail.de [10.0.121.214])
- by postfix02.mail.de (Postfix) with ESMTP id 14A6CA03C2;
- Fri, 30 Jun 2023 23:27:05 +0200 (CEST)
+ by postfix02.mail.de (Postfix) with ESMTP id 676A4A03C2;
+ Fri, 30 Jun 2023 23:27:08 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (No client certificate requested)
- by smtp04.mail.de (Postfix) with ESMTPSA id BDAC8C002F;
- Fri, 30 Jun 2023 23:27:04 +0200 (CEST)
+ by smtp04.mail.de (Postfix) with ESMTPSA id 254F2C002F;
+ Fri, 30 Jun 2023 23:27:08 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Fri, 30 Jun 2023 23:26:53 +0200
-Message-Id: <20230630212654.699657-2-kilian.zinnecker@mail.de>
+Date: Fri, 30 Jun 2023 23:26:54 +0200
+Message-Id: <20230630212654.699657-3-kilian.zinnecker@mail.de>
 In-Reply-To: <20230630212654.699657-1-kilian.zinnecker@mail.de>
 References: <20230630212654.699657-1-kilian.zinnecker@mail.de>
 MIME-Version: 1.0
@@ -60,22 +60,22 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 2347
-X-purgate-ID: 154282::1688160424-FFFFBC09-0BC8096A/0/0
+X-purgate-size: 4700
+X-purgate-ID: 154282::1688160428-FFFFBC09-64660D85/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1688160425;
- bh=JCMKqOFfKKbx46WbrcG2yGWkFCWAX1MmO7rUtTHhEsY=;
+ d=mail.de; s=mailde202009; t=1688160428;
+ bh=LbM1HiRawv2ur2aiykrKkLUuaEfT+dipmzhwWK84nzo=;
  h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
- b=LKP6+0ob7/mqq34NYtaI7roJXbfcB9ZMJkBd0HIx08zkosT1qyBsTlqYnCHqqR5fn
- hMhHJI6gn2TkBcboiKB+us7SNRtFWL0Veg8ZfVAMBldWusIDn8y9QF/arle3jxRYjt
- xiyC7YNszzDhNwd+8cjQkaUeGJDsiy5+4PSmRE+7+XCDfMjJHFhSCEnEicUJtPTh8c
- aUBzp7vUtc2vKEcolzHA3L17l9nXG2HDRJPXKjX9RjoqogkIR/rAvrc1TX1CV0dFyh
- bEo9QReWVmGMjAOgmWBt2OvuQAJdlx9W587vQ4fjeF7a2Pun3LDatIm46zSX6Feh9z
- M6VM/q3E+wKRw==
+ b=7BGtdpuw6ihrUX6fuBBTnRXEAVp6dnDnFlp6TwKaugw9iGg6QY5Iay0WsidnNRllh
+ ZG07EiAYaPtsepXgFluGXYC3jL7L2XL/YJsaIaOmQd/yL7JAllCzbQc9lRt9NXmsEH
+ 0bdaqjYeqoNmIxJ3m1h1kauUeXGiiA2U35uPzcAKGv8NsAJNJidnv71Gdfm9LNZF9L
+ Qv1Zwh9pdh8iCZ4tK3FU31PySwArmZiGgjgMEGI7DeR2SRbry9HwpQ1k3gWiytl77k
+ lwaQDsN4KgrqSgnef64MnXXZgIhWKq8zeKtPOIn9u3jG16Ynq0QzSuhpGN9JQZ8LfN
+ SfGK9KgDOKT0Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=LKP6+0ob
-Subject: [Buildroot] [PATCH 2/3] configs: add defconfig for Radxa Rock 5B
+ header.a=rsa-sha256 header.s=mailde202009 header.b=7BGtdpuw
+Subject: [Buildroot] [PATCH 3/3] board/radxa/rock5b: Add sdcard image scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,68 +95,174 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds the config files needed to build u-boot, kernel and
-rootfs for the Rock 5B.
-
-Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+This patch adds post image scripts, generating an sdcard.img file,
+which can be flashed on an SD card to boot the Radxa Rock 5B.
 ---
- board/radxa/rock5b/linux.fragment |  1 +
- configs/rock5b_defconfig          | 38 +++++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
- create mode 100644 board/radxa/rock5b/linux.fragment
- create mode 100644 configs/rock5b_defconfig
+ board/radxa/rock5b/genimage.cfg   | 36 ++++++++++++++++++++++++
+ board/radxa/rock5b/post-image.sh  | 24 ++++++++++++++++
+ board/radxa/rock5b/rock5b.its     | 46 +++++++++++++++++++++++++++++++
+ board/radxa/rock5b/uboot.fragment |  3 ++
+ configs/rock5b_defconfig          |  3 ++
+ 5 files changed, 112 insertions(+)
+ create mode 100644 board/radxa/rock5b/genimage.cfg
+ create mode 100755 board/radxa/rock5b/post-image.sh
+ create mode 100644 board/radxa/rock5b/rock5b.its
+ create mode 100644 board/radxa/rock5b/uboot.fragment
 
-diff --git a/board/radxa/rock5b/linux.fragment b/board/radxa/rock5b/linux.fragment
+diff --git a/board/radxa/rock5b/genimage.cfg b/board/radxa/rock5b/genimage.cfg
 new file mode 100644
-index 0000000000..811d42a79b
+index 0000000000..88a4f1ee9e
 --- /dev/null
-+++ b/board/radxa/rock5b/linux.fragment
-@@ -0,0 +1 @@
-+CONFIG_R8169=y
++++ b/board/radxa/rock5b/genimage.cfg
+@@ -0,0 +1,36 @@
++# SD card image for Radxa Rock 5b
++
++image boot.vfat {
++	vfat {
++		file image.itb {
++			image = "image.itb"
++		}
++	}
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++		partition-table-type = "hybrid"
++	}
++
++	partition uboot {
++		in-partition-table = "false"
++		image = "u-boot-rockchip.bin"
++		offset = 32K
++		size = 12M
++	}
++
++	partition boot {
++		partition-type = "0xC"
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 64M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		offset = 96M
++	}
++}
+diff --git a/board/radxa/rock5b/post-image.sh b/board/radxa/rock5b/post-image.sh
+new file mode 100755
+index 0000000000..891f52201d
+--- /dev/null
++++ b/board/radxa/rock5b/post-image.sh
+@@ -0,0 +1,24 @@
++#!/usr/bin/env bash
++
++GENIMAGE_CFG="$(dirname $0)/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++# genimage needs u-boot-rockchip.bin
++
++cp output/build/uboot-2023.07-rc4/u-boot-rockchip.bin ${BINARIES_DIR}/
++
++gzip -fk ${BINARIES_DIR}/Image
++cp board/radxa/rock5b/rock5b.its ${BINARIES_DIR}
++(cd $BINARIES_DIR && mkimage -f rock5b.its image.itb)
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
++
++RET=${?}
++exit ${RET}
+diff --git a/board/radxa/rock5b/rock5b.its b/board/radxa/rock5b/rock5b.its
+new file mode 100644
+index 0000000000..d73659a56e
+--- /dev/null
++++ b/board/radxa/rock5b/rock5b.its
+@@ -0,0 +1,46 @@
++/dts-v1/;
++
++/ {
++	description = "Rock 5B FIT Image";
++	#address-cells = <1>;
++
++	images {
++		kernel {
++			description = "Kernel";
++			data = /incbin/("Image.gz");
++			type = "kernel";
++			arch = "arm64";
++			os = "linux";
++			compression = "gzip";
++			load = <0x0a200000>;
++			entry = <0x0a200000>;
++			hash {
++				algo = "sha256";
++			};
++		};
++		fdt {
++			description = "Device Tree";
++			data = /incbin/("rk3588-rock-5b.dtb");
++			type = "flat_dt";
++			arch = "arm64";
++			compression = "none";
++			load = <0x0e000000>;
++			entry = <0x0e000000>;
++			hash {
++				algo = "sha256";
++			};
++		};
++	};
++
++	configurations {
++		default = "standard";
++		standard {
++			description = "Standard Boot";
++			kernel = "kernel";
++			fdt = "fdt";
++			hash {
++				algo = "sha256";
++			};
++		};
++	};
++};
+diff --git a/board/radxa/rock5b/uboot.fragment b/board/radxa/rock5b/uboot.fragment
+new file mode 100644
+index 0000000000..0613e0b772
+--- /dev/null
++++ b/board/radxa/rock5b/uboot.fragment
+@@ -0,0 +1,3 @@
++CONFIG_USE_BOOTARGS=y
++CONFIG_BOOTARGS="root=/dev/mmcblk0p2 rw rootfstype=ext4 clkin_hz=(25000000) earlycon clk_ignore_unused earlyprintk console=ttyS2,1500000n8 rootwait"
++CONFIG_BOOTCOMMAND="fatload mmc 1:1 ${loadaddr} image.itb && bootm ${loadaddr}"
 diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-new file mode 100644
-index 0000000000..157d81b163
---- /dev/null
+index 157d81b163..3c814bf356 100644
+--- a/configs/rock5b_defconfig
 +++ b/configs/rock5b_defconfig
-@@ -0,0 +1,38 @@
-+BR2_aarch64=y
-+BR2_cortex_a76_a55=y
-+BR2_KERNEL_HEADERS_5_10=y
-+BR2_TARGET_GENERIC_HOSTNAME="rock5b"
-+BR2_TARGET_GENERIC_ISSUE="Rock 5b"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_USE_WCHAR
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/radxa/kernel.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52f51a2b5ba178f331af62260d2da86d7472c14b"
-+BR2_LINUX_KERNEL_DEFCONFIG="rockchip_linux"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3588-rock-5b"
-+BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/linux.fragment"
-+BR2_PACKAGE_AVAHI=y
-+BR2_PACKAGE_AVAHI_DAEMON=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07-rc4"
-+BR2_PACKAGE_ROCKCHIP_RKBIN=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="BL31=$(BINARIES_DIR)/rk3588_bl31_v1.38.elf ROCKCHIP_TPL=$(BINARIES_DIR)/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.11.bin"
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_DTC=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+@@ -1,6 +1,8 @@
+ BR2_aarch64=y
+ BR2_cortex_a76_a55=y
+ BR2_KERNEL_HEADERS_5_10=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/radxa/rock5b/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS=""
+ BR2_TARGET_GENERIC_HOSTNAME="rock5b"
+ BR2_TARGET_GENERIC_ISSUE="Rock 5b"
+ BR2_SYSTEM_DHCP="eth0"
+@@ -30,6 +32,7 @@ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="BL31=$(BINARIES_DIR)/rk3588_bl31_v1.38.elf ROCKCHIP_TPL=$(BINARIES_DIR)/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.11.bin"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/uboot.fragment"
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_DTC=y
 -- 
 2.34.1
 
