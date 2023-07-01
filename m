@@ -4,71 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D04DEB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 19:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9677CEB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 19:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E96E060AF8;
-	Sat,  1 Jul 2023 19:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E96E060AF8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4505C60AF8;
+	Sat,  1 Jul 2023 19:55:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4505C60AF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U-BSl-u8jwl2; Sat,  1 Jul 2023 19:55:09 +0000 (UTC)
+	with ESMTP id aYwmuNA_0WVw; Sat,  1 Jul 2023 19:55:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32E2E60AE2;
-	Sat,  1 Jul 2023 19:55:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32E2E60AE2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 995B81BF2BA
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 19:55:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BD5C60AE2;
+	Sat,  1 Jul 2023 19:55:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BD5C60AE2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 31D881BF2BA
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 19:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D43B41711
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 19:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D43B41711
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1590160AE2
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 19:55:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1590160AE2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bcywp87nHBDF for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 19:55:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED9764150E
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ED9764150E
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 19:55:04 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (unknown [217.70.183.200])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 77679C9FB5
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 19:44:22 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A0AA420003;
- Sat,  1 Jul 2023 19:44:16 +0000 (UTC)
-Date: Sat, 1 Jul 2023 21:44:15 +0200
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230701214415.339f69c0@windsurf>
-In-Reply-To: <20230319101420.9440-1-ps.report@gmx.net>
-References: <20230319101420.9440-1-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688240657;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nOzd7jzM7Tl6wGaSCMzKml4T7f+umaXDyXQpZE/b+6s=;
- b=a9H6ShLpXNukmnSEGImJOQN9PfUvE9rRZ8Gba7FCvP9g12nu6AXnkiHNWd8BdAhW8Nygys
- r78tEP5Unpdem/u28chCO9h7CN3E2XzS1B9ofeY8dNW7+Dk+3SE6l+1uyfenOHUdjTgDiX
- W0jDSTcwqeyY8DSXmcEIiTKunq7O2ztWJtN+G3UoZg+RF6GLzUMBafFlfeF4GwUmEjgNS9
- j8Kf/9LRX51V4IH4+1TYf8zShYbL7TCZD//5CLZ2IJEmWBNSV9n6sgOYbZsWAM/exWgTiw
- 9bOQBmCgBZ02OAM7uo8IdFnK4SvjJwra16M3PaKfxrGGKRVLhUR4UfqOVnkHvw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=a9H6ShLp
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/qt6: bump version to 6.4.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aO5uX08BEnpR for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 19:55:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4694F60ABD
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 19:55:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4694F60ABD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2D4D38625D; Sat,  1 Jul 2023 19:55:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Jul 2023 21:55:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e539853fc31a8228a2ad86eca243fd6b4ade0cff
+X-Git-Newrev: 9f55efebdf53c14aa45f33c70fe60b1e0c52d43f
+X-Patchwork-Hint: ignore
+Message-Id: <20230701195542.2D4D38625D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.91
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,35 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 19 Mar 2023 11:14:19 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9f55efebdf53c14aa45f33c70fe60b1e0c52d43f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For details see [1].
-> 
-> [1] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.4.3/release-note.md
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt6/qt6.mk                           | 2 +-
->  package/qt6/qt6base/qt6base.hash             | 4 ++--
->  package/qt6/qt6serialbus/qt6serialbus.hash   | 4 ++--
->  package/qt6/qt6serialport/qt6serialport.hash | 4 ++--
->  4 files changed, 7 insertions(+), 7 deletions(-)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 63a35285d7..5a4fde42b6 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_89_1_RTM/src/SHA256SUMS
+-sha256  3adaedb9e70c3c5f40603bf60a01e336190a6dbe01929d395f16b01fe84a0156  nss-3.89.1.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_91_RTM/src/SHA256SUMS
++sha256  84bd46376df17118c55f6d73d30fd93a0af21296c66e7690471547e5898fc4b3  nss-3.91.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 1253cc5d41..23b17ab459 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.89.1
++LIBNSS_VERSION = 3.91
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
