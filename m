@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DDF3EB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97240EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C9AC60EE1;
-	Sat,  1 Jul 2023 14:08:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C9AC60EE1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CC6360EF2;
+	Sat,  1 Jul 2023 14:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CC6360EF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QH8sIChE_vWO; Sat,  1 Jul 2023 14:08:46 +0000 (UTC)
+	with ESMTP id 66ZDxhd115ME; Sat,  1 Jul 2023 14:09:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8568160E50;
-	Sat,  1 Jul 2023 14:08:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8568160E50
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E57160E64;
+	Sat,  1 Jul 2023 14:09:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E57160E64
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 860BF1BF349
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:08:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 775CF1BF349
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:09:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 525DD60E50
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:08:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 525DD60E50
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E53560E64
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:09:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E53560E64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BxX529wIyAbG for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 14:08:43 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DD5060E3E
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2DD5060E3E
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:08:42 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CBFB860003;
- Sat,  1 Jul 2023 14:08:39 +0000 (UTC)
-Date: Sat, 1 Jul 2023 16:08:38 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230701160838.6c9f133d@windsurf>
-In-Reply-To: <20230628175401.3397394-1-bernd@kuhls.net>
-References: <20230628175401.3397394-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688220520;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=p+NghzdYraVqDbTfdZBXLuqwX10CD+LIU4Ot/6eeNow=;
- b=SDi8omYzN1+wH4ic1F95AI1cHbFuYAcAM/XThi5k3C/1M1JyAnsI1Vbbhz1/VkJLNiqga9
- toJJZRhlYj33ASysuCd22AU2JyOYVs0HdpWfNV3LWB0TJG1RQvpngTrdW7RO1/vdHFym1C
- my5BI4Z+w99PZWoqkzz8QfF5Ujl9HIhJL2LuIZ94wD92xvsSxZfkPhWwjFlkw0pNM41KC+
- 74fEiWKqxpHWRqel2/3i4Ms2VFKhLflt7DHwu4W//9aoaHcGOPKbk8WeHGXDWMbbm4FS5f
- 1L7YswBjYea5fyK6/6XnVtV7DwLggnQOZDzeND1Bzsol+1oBi8I+l7itE39a6g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SDi8omYz
-Subject: Re: [Buildroot] [PATCH 1/1] package/samba4: add optional dependency
- to libunwind
+ with ESMTP id K4xqBmpFCRYN for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 14:09:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 93711600B8
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:09:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93711600B8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 81C4B85C93; Sat,  1 Jul 2023 14:09:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Jul 2023 16:08:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ccb6a80e90fad08150a22566d17e98fe0d465ee0
+X-Git-Newrev: bca9d7e58a23fc8c4a27be7971ace1fc84526d22
+X-Patchwork-Hint: ignore
+Message-Id: <20230701140936.81C4B85C93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/samba4: add optional dependency to
+ libunwind
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,33 +58,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 28 Jun 2023 19:54:01 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bca9d7e58a23fc8c4a27be7971ace1fc84526d22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Upstream added configure options for libunwind in commit
-> https://github.com/samba-team/samba/commit/14feb93d481011765f62614ab49b304e17e4f6fd
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/63c/63c469106e9daa198f77d8da7a5bb123edcce0f7/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/samba4/samba4.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+Upstream added configure options for libunwind in commit
+https://github.com/samba-team/samba/commit/14feb93d481011765f62614ab49b304e17e4f6fd
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/63c/63c469106e9daa198f77d8da7a5bb123edcce0f7/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/samba4/samba4.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 2799dbe2f7..4489c28d2b 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -93,6 +93,13 @@ else
+ SAMBA4_CONF_OPTS += --without-libarchive
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
++SAMBA4_CONF_OPTS += --with-libunwind
++SAMBA4_DEPENDENCIES += libunwind
++else
++SAMBA4_CONF_OPTS += --without-libunwind
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ SAMBA4_CONF_ENV += NCURSES_CONFIG="$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)"
+ SAMBA4_DEPENDENCIES += ncurses
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
