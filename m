@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C1BEEB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:47:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B79EEB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB9FE404D8;
-	Sat,  1 Jul 2023 20:47:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB9FE404D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 595BA40A97;
+	Sat,  1 Jul 2023 20:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 595BA40A97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id igkLTA-r9Y6H; Sat,  1 Jul 2023 20:47:32 +0000 (UTC)
+	with ESMTP id IL-rt8evSIli; Sat,  1 Jul 2023 20:47:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00672405C5;
-	Sat,  1 Jul 2023 20:47:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00672405C5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EFA1F1BF2B7
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:47:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FDA04059D;
+	Sat,  1 Jul 2023 20:47:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FDA04059D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AF0E1BF868
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:47:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C956140465
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:47:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C956140465
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0379C415EF
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:47:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0379C415EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YjQwciDYoaaT for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 20:47:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id brfKA64_muZD for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 20:47:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE14E4010C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D905C415E9
  for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE14E4010C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D905C415E9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC8DC8633E; Sat,  1 Jul 2023 20:47:27 +0000 (UTC)
+ id C41338633C; Sat,  1 Jul 2023 20:47:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 1 Jul 2023 22:45:41 +0200
+Date: Sat, 1 Jul 2023 22:45:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7fde35212c49f0d6e274cbcb6f3f5c871bf13398
-X-Git-Newrev: f43f9c6ea67536e0052cd1974ac2a7a48524c7d4
+X-Git-Oldrev: ce8bf14ff61199c61577ee79f6745616466bc6f7
+X-Git-Newrev: 7fde35212c49f0d6e274cbcb6f3f5c871bf13398
 X-Patchwork-Hint: ignore
-Message-Id: <20230701204727.CC8DC8633E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/haproxy: bump version to 2.6.14
+Message-Id: <20230701204727.C41338633C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/haproxy: fix build on aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f43f9c6ea67536e0052cd1974ac2a7a48524c7d4
+commit: https://git.buildroot.net/buildroot/commit/?id=7fde35212c49f0d6e274cbcb6f3f5c871bf13398
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.haproxy.org/download/2.6/src/CHANGELOG
+Fixes:
+http://autobuild.buildroot.net/results/07c/07ccb8c45c709a4b6ed32aafa33cd04e74174b11/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...c-atomic.h-may-need-compiler.h-on-ARMv8.2.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index f5540ee44a..20048da7ec 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.9.tar.gz.sha256
--sha256  f01a1c5f465dc1b5cd175d0b28b98beb4dfe82b5b5b63ddcc68d1df433641701  haproxy-2.6.9.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.14.tar.gz.sha256
-+sha256  bd3dd9fa60391ca09e1225e1ac3163e45be83c3f54f2fd76a30af289cc6e4fd4  haproxy-2.6.14.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 012c1dfdb6..2b8920efa6 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 2.6
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).9
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+diff --git a/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch b/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch
+new file mode 100644
+index 0000000000..b3b1f732ab
+--- /dev/null
++++ b/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch
+@@ -0,0 +1,36 @@
++From 5ab3c61932af7619518169da744ba6346f060405 Mon Sep 17 00:00:00 2001
++From: Willy Tarreau <w@1wt.eu>
++Date: Thu, 8 Dec 2022 08:32:57 +0100
++Subject: [PATCH] BUILD: atomic: atomic.h may need compiler.h on ARMv8.2-a
++
++We get a build error in ncbuf.c when building for ARMv8.2-a because ncbuf
++has minimal includes and among them bug.h which includes atomic.h. Atomic.h
++may use "forceinline" without including compiler.h, hence the build error.
++It was verified that adding it doesn't inflate the total headers.
++
++Since all other C files include api.h which already covers this, there's
++no real need to bapkport this. The issue was already there in 2.3 though.
++
++Upstream: https://git.haproxy.org/?p=haproxy.git;a=commitdiff;h=5ab3c61932af7619518169da744ba6346f060405#patch1
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ include/haproxy/atomic.h |    2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/include/haproxy/atomic.h b/include/haproxy/atomic.h
++index f60be95..7e3c826 100644
++--- a/include/haproxy/atomic.h
+++++ b/include/haproxy/atomic.h
++@@ -23,6 +23,8 @@
++ #ifndef _HAPROXY_ATOMIC_H
++ #define _HAPROXY_ATOMIC_H
++ 
+++#include <haproxy/compiler.h>
+++
++ /* A few notes for the macros and functions here:
++  *  - this file is painful to edit, most operations exist in 3 variants,
++  *    no-thread, threads with gcc<4.7, threads with gcc>=4.7. Be careful when
++-- 
++1.7.10.4
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
