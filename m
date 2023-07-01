@@ -4,69 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5585C0015E
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D033EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0375B61025;
-	Sat,  1 Jul 2023 14:41:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0375B61025
+	by smtp3.osuosl.org (Postfix) with ESMTP id 354FC6101A;
+	Sat,  1 Jul 2023 14:41:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 354FC6101A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tqZ6I6g1wlMj; Sat,  1 Jul 2023 14:41:29 +0000 (UTC)
+	with ESMTP id Gg6IXeD9TOH1; Sat,  1 Jul 2023 14:41:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D67861044;
-	Sat,  1 Jul 2023 14:41:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D67861044
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 521571BF349
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:41:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 742586103C;
+	Sat,  1 Jul 2023 14:41:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 742586103C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 665C01BF349
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:41:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5747540B34
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:41:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5747540B34
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D9A783BED
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:41:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D9A783BED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UmXT53kwxy3Q for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 14:41:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XWyh8nkZZ5rr for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 14:41:39 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CC3740452
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1CC3740452
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 143A883C0B
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 143A883C0B
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:41:32 +0000 (UTC)
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6B975E0002;
- Sat,  1 Jul 2023 14:41:07 +0000 (UTC)
-Date: Sat, 1 Jul 2023 16:41:06 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230701164106.782a5423@windsurf>
-In-Reply-To: <20230619181458.1596060-1-bernd@kuhls.net>
-References: <20230619181458.1596060-1-bernd@kuhls.net>
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C98A7C0006;
+ Sat,  1 Jul 2023 14:41:29 +0000 (UTC)
+Date: Sat, 1 Jul 2023 16:41:28 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230701164128.266112fc@windsurf>
+In-Reply-To: <20230619181718.456022-1-ju.o@free.fr>
+References: <20230619181718.456022-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688222468;
+ d=bootlin.com; s=gm1; t=1688222490;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=XdmiSQshq1yjeOkfZ82YaEcWXwgK8f4KjBzlkGXQ75A=;
- b=ZlU53L54looUb/gbFquROH1UYsmQH3Ihly8Uch5VainyXapb9qpKG0CNi37wR7C6B8qZgL
- Q/s9lf0bzRBlQhlS4hXUqdJDkF3gCxK+kMpLWHX8SxoFAL1xzopIFmfrMwF/Q7zNOm0rBh
- ExVeut2VWGXgQZBg6Oou09N9jJKxHLZup2LBGyx0DwyglXmSmc/L3wDh1iScskezYDw3FO
- 17FMboWTwNQqWz/Am8yN7jXXyjTbOr3e6n/hA0beNwV8D9myhS+4iLMIJt97nMb7z7ts/X
- PJyvgWDw+xy9d9SyXEVDq55b2bcedIyBFmYuRDooZLjOdEAMA5DjkPY9dcGPaw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=80GwloFffTekGs7KEZntWFO/w8/bu5Sn0Sn148LmZCE=;
+ b=I0On9b0zpk1ZWjaqYWNfQl+1I0tPNl4Hw3V/DyLJW+CsqDhhhbCFevq4RQhc995hEXCydD
+ T2RzlXS1gOx39t2AX+tXpU2LSwVgjUHCcxG7GX3+8au6k23EF6VRDrz1RxHTDcbE+vE/R6
+ 9qXbv8IOLU7n1vQHX4plbKJl6eYocvZGFb4DMDAuEjdJQcaSwJK+wG8E2+0QiWvrI81xnS
+ 6s+XW64ZvWz8F/0pm+lhQjyWoivXqRnGJ0iwWeMpEygk00cLE1A81DvaGvuDeYRl04nygu
+ VWlAzXuW6uksnHoRY+E2mgFjMLjwOlmZA9CvyX9xEbcag5Z0KiyGnACSJu0uxQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZlU53L54
-Subject: Re: [Buildroot] [PATCH 1/2] package/syslog-ng: disable python
- support
+ header.s=gm1 header.b=I0On9b0z
+Subject: Re: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version
+ 2.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,30 +79,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 19 Jun 2023 20:14:57 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Mon, 19 Jun 2023 20:17:18 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> Upstream added a list of python modules declared as runtime dependencies
-> https://github.com/syslog-ng/syslog-ng/commit/f18345d2a16aea1a95d891ebb24a4ace9c652621
-> most of them with fixed (and outdated) versions.
+> For change log since v2.3.2, see:
+> - https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.3
 > 
-> Disable python support for the time being.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/436/436e90bb1f77143b05cb98df78934555bbb7df35/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/syslog-ng/syslog-ng.mk | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
+> Patch tested on branch master at commit d4a96ee with commands:
 
-Both applied, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
