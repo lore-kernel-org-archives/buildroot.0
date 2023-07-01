@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6210EB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 21:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BF3BEB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 21:19:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61CBE8119E;
-	Sat,  1 Jul 2023 21:09:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61CBE8119E
+	by smtp1.osuosl.org (Postfix) with ESMTP id B07A481424;
+	Sat,  1 Jul 2023 21:19:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B07A481424
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jYS0Pl6xXkCR; Sat,  1 Jul 2023 21:09:04 +0000 (UTC)
+	with ESMTP id sZCGad74BPYR; Sat,  1 Jul 2023 21:19:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E988D81FFC;
-	Sat,  1 Jul 2023 21:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E988D81FFC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 34E7F1BF303
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 21:08:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0B82813D4;
+	Sat,  1 Jul 2023 21:19:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0B82813D4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E0721BF303
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 21:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1715681EC3
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 21:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1715681EC3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64BF9402F7
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 21:19:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64BF9402F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qzz5AkIcEgQc for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 21:08:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3CED81EBB
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C3CED81EBB
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 21:08:06 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DFF5940003;
- Sat,  1 Jul 2023 21:08:03 +0000 (UTC)
-Date: Sat, 1 Jul 2023 23:08:03 +0200
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230701230803.474f8570@windsurf>
-In-Reply-To: <20230611131631.806432-1-romain.naour@gmail.com>
-References: <20230611131631.806432-1-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688245684;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Td0o4xnzFZ6bHk0tYtWdwrTDcY2yG4WXMAV/VY0Js+s=;
- b=CKPA4o0+60Z4ui3N+2wKPaHkKfpX2cO4bbHVTun0H4T8sBPuHymr3eZAN9FP1OzQGgIMTy
- La08Adi6p6Ke58SpPRP8F/He99qmuz28MszevzJg1RNwyTdZ0ALIfFiI8R2OP13yq6FgiP
- MHUnrqHE30BbyUGwlnoMpWHnUbnyHF9wcY3/+7VLnXmB8RLQCZSuA/gw6Z2q4WpyEHDEmU
- /IjS2bNpmGwoTX+yfJVPbwYN74qtbhslxA4r+EFbdiDCegxvENFBPG3MEzfBGSG3yF5Ts+
- wwxBd/6B8cnQfSa4UoUwz8KgPpIH2witMJOLbCvJCvloH3fScOKXnWUFuTg0WQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CKPA4o0+
-Subject: Re: [Buildroot] [PATCH 1/5] package/binutils: disable gprofng
- support for each known unsupported version
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2iwcHmsiYevW for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 21:18:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A9264010C
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 21:18:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A9264010C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5774086392; Sat,  1 Jul 2023 21:18:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Jul 2023 23:12:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8a55a0bf8ee78f890f928a3b38c26d45fded25cf
+X-Git-Newrev: b335bd18a07363d53b6dc0faa82e26f068d0ae7b
+X-Patchwork-Hint: ignore
+Message-Id: <20230701211859.5774086392@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/leafnode2: bump version to
+ 2.0.0.alpha202301
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,33 +58,108 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 11 Jun 2023 15:16:27 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b335bd18a07363d53b6dc0faa82e26f068d0ae7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> While adding new binutils version, the gprofng support will
-> no longer only available with one specific version.
-> 
-> Instead disable gprofng explicitely for each binutils
-> version that are know too old to support it.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/binutils/Config.in.host | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+Rebased patch.
 
-Series applied, thanks!
+Updated license hash due to upstream refresh of the license file:
+https://gitlab.com/leafnode-2/leafnode-2/-/commit/37442bbb7dd4f3cfd36f7264b9c3772e09531b5a
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Switched project URLs to gitlab.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/leafnode2/0001-cross_makefile.patch | 10 +++++-----
+ package/leafnode2/Config.in                 |  9 +--------
+ package/leafnode2/leafnode2.hash            |  4 ++--
+ package/leafnode2/leafnode2.mk              |  6 +++---
+ 4 files changed, 11 insertions(+), 18 deletions(-)
+
+diff --git a/package/leafnode2/0001-cross_makefile.patch b/package/leafnode2/0001-cross_makefile.patch
+index b61a8ef3c6..32116446c3 100644
+--- a/package/leafnode2/0001-cross_makefile.patch
++++ b/package/leafnode2/0001-cross_makefile.patch
+@@ -10,11 +10,11 @@ Fix cross-compilation issues
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+-Index: b/Makefile.in
++Index: b/Makefile.am
+ ===================================================================
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -1853,7 +1853,7 @@
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -311,7 +311,7 @@
+  
+  configparam_data.c: $(srcdir)/config.table b_sortnl$(EXEEXT) genconfigparam_data.awk
+  	rm -f config.table.sorted
+@@ -23,7 +23,7 @@ Index: b/Makefile.in
+  	$(AWK) -f $(srcdir)/genconfigparam_data.awk <config.table.sorted >$@ \
+  	|| { rm -f $@ ; false ; }
+  
+-@@ -1868,13 +1868,7 @@
++@@ -326,13 +326,7 @@
+  install-data-hook:
+  	$(INSTALL) -d -m 02770 $(DESTDIR)$(SPOOLDIR)
+  	$(INSTALL) -d -m 02770 $(DESTDIR)$(SPOOLDIR)/leaf.node
+diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
+index e244bdc45b..3700b6fb80 100644
+--- a/package/leafnode2/Config.in
++++ b/package/leafnode2/Config.in
+@@ -7,11 +7,4 @@ config BR2_PACKAGE_LEAFNODE2
+ 	  server designed for small sites with just a few active
+ 	  newsgroups.
+ 
+-	  Leafnode-2 needs inetd, check chapter 14 of the documentation
+-	  at:
+-	  http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta/leafnode-readme.txt
+-
+-	  For example, you can add this line to inetd.conf:
+-	  nntp    stream  tcp     nowait  news    /usr/sbin/leafnode
+-
+-	  http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
++	  https://gitlab.com/leafnode-2/leafnode-2
+diff --git a/package/leafnode2/leafnode2.hash b/package/leafnode2/leafnode2.hash
+index 7dfa7cce8d..d03ea472b1 100644
+--- a/package/leafnode2/leafnode2.hash
++++ b/package/leafnode2/leafnode2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  34eba2cbbb871b724c8d5dd402d1c358aeb21ba426beb5658e155ed0d7461075  leafnode-2.0.0.alpha20140727b.tar.bz2
++sha256  1c74de60c3f91ef6f8a3ec20f0c34a0933658aeac8e3723a5f286c0646319e5c  leafnode2-ce7d3b13fb285c9fb7bffc382ea10fd41e12582d.tar.gz
+ sha256  59d37f745dc5a2d63a51dff344f4ad89f72e76f8c7b7d877f20880d838b1bec9  COPYING
+-sha256  0c92246a9d3636e0aa6a244f6c481639b2e530fbbb25bc048ce7acd83e1fc5f6  COPYING.LGPL
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index e82ca2e1ee..3ed2e20266 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-LEAFNODE2_VERSION = 2.0.0.alpha20140727b
+-LEAFNODE2_SOURCE = leafnode-$(LEAFNODE2_VERSION).tar.bz2
+-LEAFNODE2_SITE = http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
++LEAFNODE2_VERSION = ce7d3b13fb285c9fb7bffc382ea10fd41e12582d
++LEAFNODE2_SITE = $(call gitlab,leafnode-2,leafnode-2,$(LEAFNODE2_VERSION))
+ LEAFNODE2_LICENSE = LGPL-2.1
+ LEAFNODE2_LICENSE_FILES = COPYING COPYING.LGPL
+ LEAFNODE2_DEPENDENCIES = host-pcre pcre
++LEAFNODE2_AUTORECONF = YES
+ 
+ LEAFNODE2_CONF_ENV = \
+ 	PCRECONFIG="$(STAGING_DIR)/usr/bin/pcre-config"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
