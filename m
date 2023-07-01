@@ -4,68 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48C50EB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:00:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3349EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:00:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAE0260ABD;
-	Sat,  1 Jul 2023 20:00:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAE0260ABD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E8B460AE8;
+	Sat,  1 Jul 2023 20:00:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E8B460AE8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xDiarJ7OJUol; Sat,  1 Jul 2023 20:00:29 +0000 (UTC)
+	with ESMTP id wSSk8QErU-8m; Sat,  1 Jul 2023 20:00:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0952D60AE8;
-	Sat,  1 Jul 2023 20:00:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0952D60AE8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 61BCA1BF2BA
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:00:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A0B760BE3;
+	Sat,  1 Jul 2023 20:00:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A0B760BE3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D3B921BF2BA
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3941A41736
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:00:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3941A41736
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD6D6405CE
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:00:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD6D6405CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QCKgzu6HxNnX for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 20:00:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA2C64003B
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AA2C64003B
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:00:24 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDB0240005;
- Sat,  1 Jul 2023 20:00:21 +0000 (UTC)
-Date: Sat, 1 Jul 2023 22:00:20 +0200
-To: "=?UTF-8?B?0JvQtdC+0L3QuNC0INCu0YDRjNC10LI=?= (Leonid Yuriev)"
- <leo@yuriev.ru>
-Message-ID: <20230701220020.2fda6ccd@windsurf>
-In-Reply-To: <20230618144425.105081-1-leo@yuriev.ru>
-References: <20230618144425.105081-1-leo@yuriev.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688241622;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=df1Sm6xcgBmAVhO/1Lu+sn1VBqoFYi50FiIUBSYe/7I=;
- b=Y0WxypIGnM+KBahQqQl8Z6lL0mxtGakFubU8T/mlAFTWofAfYDIYjbVzdL0XMjYN9zAtuJ
- Pqh7y2VsQB0a8psXmAOaKF4sx+HkIOpHDRj3wlYEuMPOWaSEWKJ6LM+ZPlFMd3V7XkHzyv
- v1on9Q9H6HoDvMQo9Vlx4hxtpBtMeScy7FETQaTvk4QLC0myxVsiR+mrlVEocUYPLEgSTC
- NfVcEEpaYgMp9UvcQdKzKPRyduxPTsB/osMKvPWmEI1zc6XeyyE9ErD9UA63M/jLUjKnKj
- RnS8e+VDkLhIOvVfUA3nxPWvt8t+jFV1ozYI9Vq/vreVCKq5c3IAK6QVnvnP1w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Y0WxypIG
-Subject: Re: [Buildroot] [PATCH] package/libmdbx: bump version to 0.12.7
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L86t2WI9DI4p for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 20:00:28 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E621404AF
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:00:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E621404AF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6B3428626D; Sat,  1 Jul 2023 20:00:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Jul 2023 21:57:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9f55efebdf53c14aa45f33c70fe60b1e0c52d43f
+X-Git-Newrev: 86cca91c2498eeb2cd91480de328755f3c32404c
+X-Patchwork-Hint: ignore
+Message-Id: <20230701200028.6B3428626D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.12.7
  "Artek"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -80,30 +58,70 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2445690801857291191=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCAxOCBKdW4gMjAyMyAxNzo0NDoyNCArMDMwMArQm9C10L7QvdC40LQg0K7RgNGM0LXQ
-siAoTGVvbmlkIFl1cmlldikgPGxlb0B5dXJpZXYucnU+IHdyb3RlOgoKPiBUaGlzIGlzIGJ1Z2Zp
-eCByZWxlYXNlIG9mIHN0YWJsZSBsaWJtZGJ4IGJyYW5jaCwKPiBvbiB0aGUgZGF5IG9mIGludGVy
-bmF0aW9uYWwgY2hpbGRyZW4ncyBjYW1wIMKrQXJ0ZWvCuy4KPiAKPiBJdCBpcyByZWFzb25hYmxl
-IHRvIGJhY2twb3J0IHRoaXMgcGF0Y2ggdG8gYWxsIGFwcGxpY2FibGUgcmVsZWFzZXMvYnJhbmNo
-ZXMgb2YgQnVpbGRyb290Lgo+IAo+IFRoZSBtb3N0IHNpZ25pZmljYW50IGZpeGVzIG9mIHYwLjEy
-Ljc6Cj4gIC0gYWRkZWQgd29ya2Fyb3VuZCBmb3IgYnVpbGQgaXNzdWVzIHdpdGggbW9kZXJuIEdD
-QyB1c2luZyBgLW0zMiAtYXJjaD1pNjg2IC1PZmFzdGAuCj4gIC0gZml4ZWQgdGhlIGNhdXNlIG9m
-IHRoZSBmYWxzZS1wb3NpdGl2ZSB3YXJuaW5nIG9mIG1vZGVybiBHQ0MgaW4gdGhlIEMrKyBBUEku
-Cj4gIC0gcmVmaW5lZCBEQiBvcGVuaW5nIGluICJyZWNvdmVyeSIgbW9kZSBhbmQgc3dpdGNoaW5n
-IHRvIGEgZ2l2ZW4gbWV0YS1wYWdlLgo+IAo+IFRoZSBjb21wbGV0ZSBDaGFuZ2VMb2c6IGh0dHBz
-Oi8vZ2l0ZmxpYy5ydS9wcm9qZWN0L2VydGhpbmsvbGlibWRieC9ibG9iP2ZpbGU9Q2hhbmdlTG9n
-Lm1kCj4gCj4gU2lnbmVkLW9mZi1ieTog0JvQtdC+0L3QuNC0INCu0YDRjNC10LIgKExlb25pZCBZ
-dXJpZXYpIDxsZW9AeXVyaWV2LnJ1Pgo+IC0tLQo+ICBwYWNrYWdlL2xpYm1kYngvbGlibWRieC5o
-YXNoIHwgMiArLQo+ICBwYWNrYWdlL2xpYm1kYngvbGlibWRieC5tayAgIHwgMiArLQo+ICAyIGZp
-bGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCkFwcGxpZWQgdG8g
-bWFzdGVyLCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywgQm9vdGxp
-bgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5j
-b20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============2445690801857291191==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=86cca91c2498eeb2cd91480de328755f3c32404c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This is bugfix release of stable libmdbx branch,
+on the day of international children's camp «Artek».
+
+It is reasonable to backport this patch to all applicable releases/branches of Buildroot.
+
+The most significant fixes of v0.12.7:
+ - added workaround for build issues with modern GCC using `-m32 -arch=i686 -Ofast`.
+ - fixed the cause of the false-positive warning of modern GCC in the C++ API.
+ - refined DB opening in "recovery" mode and switching to a given meta-page.
+
+The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
+
+Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmdbx/libmdbx.hash | 2 +-
+ package/libmdbx/libmdbx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index 7a5b19952e..0f5908cf38 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
+-sha256  9c3abaaf9079a9518bb7155734817a2e286fffea46f7cc0825dfbd1cf9174075  libmdbx-amalgamated-0.12.5.tar.xz
++sha256  e150541c2b07558b961e754e8e9171bf1aa974c8e936f62bd375606f7d550667  libmdbx-amalgamated-0.12.7.tar.xz
+ 
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 0c6c9bcb9f..84b58632b6 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMDBX_VERSION = 0.12.5
++LIBMDBX_VERSION = 0.12.7
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
+ LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
+
+--===============2445690801857291191==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2445690801857291191==--
