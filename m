@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97240EB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50485EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:13:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CC6360EF2;
-	Sat,  1 Jul 2023 14:09:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CC6360EF2
+	by smtp3.osuosl.org (Postfix) with ESMTP id F10A060E3E;
+	Sat,  1 Jul 2023 14:13:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F10A060E3E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 66ZDxhd115ME; Sat,  1 Jul 2023 14:09:40 +0000 (UTC)
+	with ESMTP id zPIGY5dN1sHK; Sat,  1 Jul 2023 14:13:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E57160E64;
-	Sat,  1 Jul 2023 14:09:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E57160E64
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 775CF1BF349
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:09:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1742560ABD;
+	Sat,  1 Jul 2023 14:13:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1742560ABD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CFC231BF349
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E53560E64
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:09:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E53560E64
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7A0E4161D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:13:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7A0E4161D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K4xqBmpFCRYN for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 14:09:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2e2Y7ucJkbH2 for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 14:13:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 93711600B8
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:09:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93711600B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6ED8341610
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:13:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ED8341610
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81C4B85C93; Sat,  1 Jul 2023 14:09:36 +0000 (UTC)
+ id 4FC2185DD5; Sat,  1 Jul 2023 14:13:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 1 Jul 2023 16:08:24 +0200
+Date: Sat, 1 Jul 2023 16:09:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ccb6a80e90fad08150a22566d17e98fe0d465ee0
-X-Git-Newrev: bca9d7e58a23fc8c4a27be7971ace1fc84526d22
+X-Git-Oldrev: bca9d7e58a23fc8c4a27be7971ace1fc84526d22
+X-Git-Newrev: 2d9ccbcd109e69e341864c975f593cedb2ec6ae8
 X-Patchwork-Hint: ignore
-Message-Id: <20230701140936.81C4B85C93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: add optional dependency to
- libunwind
+Message-Id: <20230701141350.4FC2185DD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/audit: update musl fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,39 +63,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bca9d7e58a23fc8c4a27be7971ace1fc84526d22
+commit: https://git.buildroot.net/buildroot/commit/?id=2d9ccbcd109e69e341864c975f593cedb2ec6ae8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream added configure options for libunwind in commit
-https://github.com/samba-team/samba/commit/14feb93d481011765f62614ab49b304e17e4f6fd
-
-Fixes:
-http://autobuild.buildroot.net/results/63c/63c469106e9daa198f77d8da7a5bb123edcce0f7/
+Upstream proposed a different fix:
+https://github.com/linux-audit/audit-userspace/pull/311#issuecomment-1609953611
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/samba4/samba4.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ...1-Define-__attribute_malloc__-when-needed.patch | 35 +++++++++++++++++++
+ ...ttribute_malloc__-with-__attribute__-__ma.patch | 39 ----------------------
+ 2 files changed, 35 insertions(+), 39 deletions(-)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 2799dbe2f7..4489c28d2b 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -93,6 +93,13 @@ else
- SAMBA4_CONF_OPTS += --without-libarchive
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+SAMBA4_CONF_OPTS += --with-libunwind
-+SAMBA4_DEPENDENCIES += libunwind
-+else
-+SAMBA4_CONF_OPTS += --without-libunwind
-+endif
+diff --git a/package/audit/0001-Define-__attribute_malloc__-when-needed.patch b/package/audit/0001-Define-__attribute_malloc__-when-needed.patch
+new file mode 100644
+index 0000000000..3dd5359bfc
+--- /dev/null
++++ b/package/audit/0001-Define-__attribute_malloc__-when-needed.patch
+@@ -0,0 +1,35 @@
++From cf93d8579d5cec0b1ba585bd661776f03c2743ba Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Tue, 27 Jun 2023 20:19:13 +0200
++Subject: [PATCH] Define __attribute_malloc__ when needed
 +
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- SAMBA4_CONF_ENV += NCURSES_CONFIG="$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)"
- SAMBA4_DEPENDENCIES += ncurses
++attribute_malloc is not available on musl
++
++auparse.h: In function 'auparse_init':
++auparse.h:54:2: error: expected declaration specifiers before '__attribute_malloc__'
++   54 |  __attribute_malloc__ __attr_dealloc (auparse_destroy, 1);
++
++Upstream: https://github.com/linux-audit/audit-userspace/pull/311
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ auparse/auparse.h | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/auparse/auparse.h b/auparse/auparse.h
++index 95cf256d..5cb7402e 100644
++--- a/auparse/auparse.h
+++++ b/auparse/auparse.h
++@@ -32,6 +32,9 @@
++ # define __attr_dealloc(dealloc, argno)
++ # define __attr_dealloc_free
++ #endif
+++#ifndef __attribute_malloc__
+++#  define __attribute_malloc__
+++#endif
++ 
++ #ifdef __cplusplus
++ extern "C" {
++-- 
++2.39.2
++
+diff --git a/package/audit/0001-Replace-__attribute_malloc__-with-__attribute__-__ma.patch b/package/audit/0001-Replace-__attribute_malloc__-with-__attribute__-__ma.patch
+deleted file mode 100644
+index 1a276ca2df..0000000000
+--- a/package/audit/0001-Replace-__attribute_malloc__-with-__attribute__-__ma.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 79c8d6a2755c9dfa00a5e86378e89a94eef0504d Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Tue, 9 Aug 2022 23:57:03 -0700
+-Subject: [PATCH] Replace __attribute_malloc__ with 
+- __attribute__((__malloc__))
+-
+-__attribute_malloc__ is not available on musl
+-
+-Fixes
+-| ../../git/auparse/auparse.h:54:2: error: expected function body after function declarator
+-|         __attribute_malloc__ __attr_dealloc (auparse_destroy, 1);
+-|         ^
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-
+-Upstream: https://github.com/linux-audit/audit-userspace/pull/311
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+-
+- auparse/auparse.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/auparse/auparse.h b/auparse/auparse.h
+-index 95cf256d..c7dbe5ff 100644
+---- a/auparse/auparse.h
+-+++ b/auparse/auparse.h
+-@@ -51,7 +51,7 @@ typedef void (*auparse_callback_ptr)(auparse_state_t *au,
+- void auparse_destroy(auparse_state_t *au);
+- void auparse_destroy_ext(auparse_state_t *au, auparse_destroy_what_t what);
+- auparse_state_t *auparse_init(ausource_t source, const void *b)
+--	__attribute_malloc__ __attr_dealloc (auparse_destroy, 1);
+-+	__attribute__((__malloc__)) __attr_dealloc (auparse_destroy, 1);
+- int auparse_new_buffer(auparse_state_t *au, const char *data, size_t data_len)
+- 	__attr_access ((__read_only__, 2, 3));
+- int auparse_feed(auparse_state_t *au, const char *data, size_t data_len)
+--- 
+-2.37.1
+-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
