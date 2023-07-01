@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4039CEB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 13:23:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA243EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 13:25:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E65A781186;
-	Sat,  1 Jul 2023 13:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E65A781186
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51E9581E2C;
+	Sat,  1 Jul 2023 13:25:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51E9581E2C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WE7WFFqXiaHp; Sat,  1 Jul 2023 13:23:51 +0000 (UTC)
+	with ESMTP id 1oWccRBHAffp; Sat,  1 Jul 2023 13:25:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB3680F5C;
-	Sat,  1 Jul 2023 13:23:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AB3680F5C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 60A9D1BF616
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 13:23:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9048481DE6;
+	Sat,  1 Jul 2023 13:25:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9048481DE6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EA4441BF616
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 13:25:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38A294161B
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 13:23:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38A294161B
+ by smtp3.osuosl.org (Postfix) with ESMTP id C3C7260D52
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 13:25:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3C7260D52
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jSB-nCZqnAXt for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 13:23:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07ACB41602
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 13:23:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07ACB41602
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8C5C8437B; Sat,  1 Jul 2023 13:23:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 1 Jul 2023 15:23:19 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ce72a74d2163a455c499701b16bc0f4350ad935
-X-Git-Newrev: af87ad197caf434936fe239f2718fd17b60fcb8b
-X-Patchwork-Hint: ignore
-Message-Id: <20230701132347.E8C5C8437B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libssh2: bump version to 1.11.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9H8nKl0kkSpY for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 13:25:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99C4160B89
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 99C4160B89
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 13:25:28 +0000 (UTC)
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A740240008;
+ Sat,  1 Jul 2023 13:24:21 +0000 (UTC)
+Date: Sat, 1 Jul 2023 15:24:21 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230701152421.79262a49@windsurf>
+In-Reply-To: <20230628150309.544293-1-bernd@kuhls.net>
+References: <20230628150309.544293-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1688217923;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=kdmkb4BN4xMropkPQzowE4fF0jMTtlj6FcJ2MKHwuLo=;
+ b=M2APCsTbuGM3VQdNBCzFuXjWowddEgFkGYJWNMlGEHpEB+LMb1Cw8WGONLCygj+SkAL/hk
+ 62PMmPMFd9I6cQkBbyq2AuHQNHT9wrhpiL769Ga8t95scNR/M1Z5hEY1xK4qU0A2IXzU0z
+ 2nRgk0tI59b0ZE71tIClSwsF4O6fcS+FYtO46K8rEEtCLkbL2vQbBArgKzXiaMA+WO87E6
+ VcgfwLcIjpINzQmVPM7xAmKgPY93hD5kV16CJVH42SEPPo5LS3Y6O6v6jlyz3fq/it1phV
+ MEg1FbWugs7sfF47t+wu1G/j/6Ef8lVJ4nwhDsMv7SPkNqzYvNbAFFBZ24KpyA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=M2APCsTb
+Subject: Re: [Buildroot] [PATCH 1/1] package/libssh2: bump version to 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,105 +78,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af87ad197caf434936fe239f2718fd17b60fcb8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 28 Jun 2023 17:03:09 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Changelog:
-https://www.libssh2.org/changes.html
-https://lists.haxx.se/pipermail/libssh2-devel/2023-May/000114.html
+> Changelog:
+> https://www.libssh2.org/changes.html
+> https://lists.haxx.se/pipermail/libssh2-devel/2023-May/000114.html
+> 
+> Removed patch which is included in current release:
+> https://github.com/libssh2/libssh2/commit/b952674f120748174ed2c0fb93e7bd78cf355cac
+> 
+> Updated license hash due to copyright year bump:
+> https://github.com/libssh2/libssh2/commit/1a186f1ead5ab0beca1fcc12aa693c166ef855b8
+> 
+> Switched tarball to .xz
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  .checkpackageignore                           |  1 -
+>  .../0001-Opaque-structs-in-LibreSSL-3-5.patch | 27 -------------------
+>  package/libssh2/libssh2.hash                  |  4 +--
+>  package/libssh2/libssh2.mk                    |  3 ++-
+>  4 files changed, 4 insertions(+), 31 deletions(-)
+>  delete mode 100644 package/libssh2/0001-Opaque-structs-in-LibreSSL-3-5.patch
 
-Removed patch which is included in current release:
-https://github.com/libssh2/libssh2/commit/b952674f120748174ed2c0fb93e7bd78cf355cac
+Applied to master, thanks.
 
-Updated license hash due to copyright year bump:
-https://github.com/libssh2/libssh2/commit/1a186f1ead5ab0beca1fcc12aa693c166ef855b8
-
-Switched tarball to .xz
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                |  1 -
- .../0001-Opaque-structs-in-LibreSSL-3-5.patch      | 27 ----------------------
- package/libssh2/libssh2.hash                       |  4 ++--
- package/libssh2/libssh2.mk                         |  3 ++-
- 4 files changed, 4 insertions(+), 31 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index dadc8e0978..5a7e1e32bc 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -844,7 +844,6 @@ package/libspatialindex/0001-allow-building-static-libs.patch Upstream
- package/libspatialindex/0002-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch Upstream
- package/libsquish/0001-Makefile-add-f-option-for-ln-to-remove-existing-dest.patch Upstream
- package/libsrtp/0001-Remove-compatibility-code-for-legacy-OpenSSL-to-fix-LibreSSL-build.patch Upstream
--package/libssh2/0001-Opaque-structs-in-LibreSSL-3-5.patch Upstream
- package/libsvg/0001-fix-expat-static-declaration.patch Upstream
- package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch Upstream
- package/libsvgtiny/0001-disable-debug-printfs.patch Upstream
-diff --git a/package/libssh2/0001-Opaque-structs-in-LibreSSL-3-5.patch b/package/libssh2/0001-Opaque-structs-in-LibreSSL-3-5.patch
-deleted file mode 100644
-index 2e1fd8871c..0000000000
---- a/package/libssh2/0001-Opaque-structs-in-LibreSSL-3-5.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 7f55a033e5054529e5e69f06725dd02a573329b6 Mon Sep 17 00:00:00 2001
--From: Charlie Li <git@vishwin.info>
--Date: Wed, 2 Mar 2022 19:50:56 -0500
--Subject: [PATCH] Opaque structs in LibreSSL 3.5
--
--[Retrieved (and backported) from:
--https://github.com/libssh2/libssh2/pull/682/commits/7f55a033e5054529e5e69f06725dd02a573329b6]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/openssl.h | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/src/openssl.h b/src/openssl.h
--index 3eef02368..c13542481 100644
----- a/src/openssl.h
--+++ b/src/openssl.h
--@@ -94,8 +94,8 @@
-- #include <openssl/pem.h>
-- #include <openssl/rand.h>
-- 
---#if OPENSSL_VERSION_NUMBER >= 0x10100000L && \
---    !defined(LIBRESSL_VERSION_NUMBER)
--+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)) || \
--+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x30500000L)
-- # define HAVE_OPAQUE_STRUCTS 1
-- #endif
-- 
-diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
-index 7267e85987..b5bc571f86 100644
---- a/package/libssh2/libssh2.hash
-+++ b/package/libssh2/libssh2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51  libssh2-1.10.0.tar.gz
--sha256  859e60d760a3446ecaf777339f1eef98c527aea40714384d24b882a83ffdd23a  COPYING
-+sha256  a488a22625296342ddae862de1d59633e6d446eff8417398e06674a49be3d7c2  libssh2-1.11.0.tar.xz
-+sha256  fda5e2522c58ba1f31c9f2044747616457466f4aebec16ade4af86e3a16a8e02  COPYING
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index cd74784d82..8bedbdffba 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--LIBSSH2_VERSION = 1.10.0
-+LIBSSH2_VERSION = 1.11.0
-+LIBSSH2_SOURCE= libssh2-$(LIBSSH2_VERSION).tar.xz
- LIBSSH2_SITE = https://www.libssh2.org/download
- LIBSSH2_LICENSE = BSD
- LIBSSH2_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
