@@ -4,69 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4427CEB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A29DAEB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A621160E3C;
-	Sat,  1 Jul 2023 14:00:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A621160E3C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27C6560F37;
+	Sat,  1 Jul 2023 14:00:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27C6560F37
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OUoIBYICfBwP; Sat,  1 Jul 2023 14:00:22 +0000 (UTC)
+	with ESMTP id luvG2ZZf6fU0; Sat,  1 Jul 2023 14:00:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5CAD60E15;
-	Sat,  1 Jul 2023 14:00:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5CAD60E15
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54F7660EF2;
+	Sat,  1 Jul 2023 14:00:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54F7660EF2
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2109A1BF616
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:00:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B30E61BF616
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:00:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E64FA40003
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:00:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E64FA40003
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D35B40A73
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:00:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D35B40A73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CTj-c8YblzuE for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 14:00:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA7D940A75
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BA7D940A75
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:00:18 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 666381C000A;
- Sat,  1 Jul 2023 14:00:15 +0000 (UTC)
-Date: Sat, 1 Jul 2023 16:00:14 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230701160014.21c89a3b@windsurf>
-In-Reply-To: <20230628151320.554700-1-bernd@kuhls.net>
-References: <20230628151320.554700-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688220015;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=T/8gll+6fmpTaewWSr+r5JniSHWZlXgPRDeQPeFRjcc=;
- b=O7VyDnCbOB77oUCtI5ijjMcNdykHtbUY48Edy0ZbhhPS8t4uemC5LRUkyOEJYYsGjMTqLL
- n1EVnCEZQ4ixIhQtEzDxmlBA0mr9/+CDHCd53r9PhuNszS55sXq5fxF5H2KoRsJNErr051
- nBjyrUUjoGCNo5SDvxyaW6wfOAA3m3fuv1iDnWM11Zp6Q1S0uiI06o2xh+nnKXQXo7eE3x
- SUma/bmd4G8po6G0Ib37BYI4ijyJqyu0ANVkOiBkxCt43MJVb/pxQJBB2G9vM03P5oa0J6
- vTnj+Z93/8l59n3MsL9XXy0YWDyqSlfQYsDwUYWB8o0+l5OEoOpPMgDXMjp6vA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=O7VyDnCb
-Subject: Re: [Buildroot] [PATCH 1/2] package/libmd: bump version to 1.1.0
+ with ESMTP id fGwBOO-cHbGB for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 14:00:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B938C40003
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:00:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B938C40003
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A311185B77; Sat,  1 Jul 2023 14:00:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Jul 2023 15:23:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: af87ad197caf434936fe239f2718fd17b60fcb8b
+X-Git-Newrev: 1b838496f942e862f6283028cdf3123015d0664d
+X-Patchwork-Hint: ignore
+Message-Id: <20230701140030.A311185B77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmd: bump version to 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,32 +57,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 28 Jun 2023 17:13:19 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1b838496f942e862f6283028cdf3123015d0664d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> https://archive.hadrons.org/software/libmd/libmd-1.1.0.announce
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/libmd/libmd.hash | 5 +++--
->  package/libmd/libmd.mk   | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
+Release notes:
+https://archive.hadrons.org/software/libmd/libmd-1.1.0.announce
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmd/libmd.hash | 5 +++--
+ package/libmd/libmd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libmd/libmd.hash b/package/libmd/libmd.hash
+index 1a3c9d80df..7174b270ae 100644
+--- a/package/libmd/libmd.hash
++++ b/package/libmd/libmd.hash
+@@ -1,5 +1,6 @@
+-# From https://lists.freedesktop.org/archives/libbsd/2021-October/000311.html
+-sha512  731553ecc5e0e1eb228cced8fccd531fe31fb5c7627ca30013d287e1aeb8222959cf7498fbb7414bbabb967b25d4e8b0edd54fc47f6ccf55fc91087db0725ce3  libmd-1.0.4.tar.xz
++# From https://archive.hadrons.org/software/libmd/libmd-1.1.0.announce
++sha256  1bd6aa42275313af3141c7cf2e5b964e8b1fd488025caf2f971f43b00776b332  libmd-1.1.0.tar.xz
++sha512  5d0da3337038e474fae7377bbc646d17214e72dc848a7aadc157f49333ce7b5ac1456e45d13674bd410ea08477c6115fc4282fed6c8e6a0bf63537a418c0df96  libmd-1.1.0.tar.xz
+ 
+ # Hash for license file
+ sha256  4365ef6255ad553fce69dd4bc0e093472c5d0e41b8ea493a545cc926ce171aa6  COPYING
+diff --git a/package/libmd/libmd.mk b/package/libmd/libmd.mk
+index 19a2458982..8bbebc1bf1 100644
+--- a/package/libmd/libmd.mk
++++ b/package/libmd/libmd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMD_VERSION = 1.0.4
++LIBMD_VERSION = 1.1.0
+ LIBMD_SOURCE = libmd-$(LIBMD_VERSION).tar.xz
+ LIBMD_SITE = https://archive.hadrons.org/software/libmd
+ LIBMD_LICENSE = BSD-2-Clause, BSD-3-Clause, Beerware, ISC, Public Domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
