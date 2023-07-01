@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57F15EB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0645EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C807560F5D;
-	Sat,  1 Jul 2023 14:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C807560F5D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0484F60FDD;
+	Sat,  1 Jul 2023 14:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0484F60FDD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id utA4fZZKbJlt; Sat,  1 Jul 2023 14:40:54 +0000 (UTC)
+	with ESMTP id z7MAzkSy8E83; Sat,  1 Jul 2023 14:41:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1951B60B46;
-	Sat,  1 Jul 2023 14:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1951B60B46
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA86660F92;
+	Sat,  1 Jul 2023 14:41:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA86660F92
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9EBFD1BF349
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:40:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 47C771BF349
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7871560F37
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:40:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7871560F37
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E83D60B3C
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E83D60B3C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R8YGQEk5u9Xe for <buildroot@lists.busybox.net>;
+ with ESMTP id SxKGzBRp65Gl for <buildroot@lists.busybox.net>;
  Sat,  1 Jul 2023 14:40:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C84C60B3C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3420C60B46
  for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:40:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C84C60B3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3420C60B46
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1823185FE5; Sat,  1 Jul 2023 14:40:50 +0000 (UTC)
+ id 235BF85FF7; Sat,  1 Jul 2023 14:40:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 1 Jul 2023 16:37:35 +0200
+Date: Sat, 1 Jul 2023 16:37:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d68f6e3042d50139f773950d679a0f83f9bb94c0
-X-Git-Newrev: 227c42b8c3e0fada026e17a2b6e8d0d7a4450a3f
+X-Git-Oldrev: 227c42b8c3e0fada026e17a2b6e8d0d7a4450a3f
+X-Git-Newrev: 9fc0d3a4e7363a69f6bfc013bbdba045cf3e02b9
 X-Patchwork-Hint: ignore
-Message-Id: <20230701144050.1823185FE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/syslog-ng: disable python support
+Message-Id: <20230701144050.235BF85FF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/syslog-ng: bump version to 4.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=227c42b8c3e0fada026e17a2b6e8d0d7a4450a3f
+commit: https://git.buildroot.net/buildroot/commit/?id=9fc0d3a4e7363a69f6bfc013bbdba045cf3e02b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream added a list of python modules declared as runtime dependencies
-https://github.com/syslog-ng/syslog-ng/commit/f18345d2a16aea1a95d891ebb24a4ace9c652621
-most of them with fixed (and outdated) versions.
+Updated upstream URL of patch file.
 
-Disable python support for the time being.
-
-Fixes:
-http://autobuild.buildroot.net/results/436/436e90bb1f77143b05cb98df78934555bbb7df35/
+Release notes:
+https://axoflow.com/axosyslog-release-4-2/
+https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.2.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Reviewed-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/syslog-ng/syslog-ng.mk | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ .checkpackageignore                              | 1 -
+ package/syslog-ng/0001-fix-build-on-uclibc.patch | 3 ++-
+ package/syslog-ng/syslog-ng.conf                 | 2 +-
+ package/syslog-ng/syslog-ng.hash                 | 2 +-
+ package/syslog-ng/syslog-ng.mk                   | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 373711b6bc..847f823ed0 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1476,7 +1476,6 @@ package/suricata/0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+ package/suricata/S99suricata Shellcheck
+ package/swupdate/swupdate.sh Shellcheck
+ package/sylpheed/0001-harden-link-checker-before-accepting-click.patch Upstream
+-package/syslog-ng/0001-fix-build-on-uclibc.patch Upstream
+ package/sysprof/0001-define-NT_GNU_BUILD_ID.patch Upstream
+ package/sysrepo/S51sysrepo-plugind Indent Shellcheck
+ package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch Upstream
+diff --git a/package/syslog-ng/0001-fix-build-on-uclibc.patch b/package/syslog-ng/0001-fix-build-on-uclibc.patch
+index dbb9b66b5c..07c3f0721c 100644
+--- a/package/syslog-ng/0001-fix-build-on-uclibc.patch
++++ b/package/syslog-ng/0001-fix-build-on-uclibc.patch
+@@ -9,8 +9,9 @@ pthread_spin_trylock so check for this function before using it
+ Fixes:
+  - http://autobuild.buildroot.org/results/0a6de11c030a4f39e402917809fc6d33fb463d1b
+ 
++Upstream: https://github.com/buytenh/ivykis/pull/22
++
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/buytenh/ivykis/pull/17]
+ ---
+  configure.ac   | 3 +++
+  src/spinlock.h | 4 ++++
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index f4b74dc8c1..a3cfa8dacf 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+-@version: 4.1
++@version: 4.2
+ 
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index 8ab4d5ac3b..a917331580 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  d7df3cfa32d1a750818d94b8ea582dea54c37226e7b55a88c3d2f3a543d8f20e  syslog-ng-4.1.1.tar.gz
++sha256  092bd17fd47002c988aebdf81d0ed3f3cfd0e82b388d2453bcaa5e67934f4dda  syslog-ng-4.2.0.tar.gz
+ sha256  c75dcbfc17ccf742f12042a370f825a40951085d2352dfc9d07e715dae3ca9bd  COPYING
+ sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
 diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 1c4cec6adb..ecc8eeddce 100644
+index ecc8eeddce..39433185b4 100644
 --- a/package/syslog-ng/syslog-ng.mk
 +++ b/package/syslog-ng/syslog-ng.mk
-@@ -16,7 +16,8 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- # We're patching configure.ac
- SYSLOG_NG_AUTORECONF = YES
- SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
--	--disable-java --disable-java-modules --disable-mongodb
-+	--disable-java --disable-java-modules --disable-mongodb \
-+	--disable-python
- SYSLOG_NG_CFLAGS = $(TARGET_CFLAGS)
+@@ -6,7 +6,7 @@
  
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101915),y)
-@@ -39,15 +40,6 @@ else
- SYSLOG_NG_CONF_OPTS += --disable-linux-caps
- endif
- 
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
--SYSLOG_NG_DEPENDENCIES += python3
--SYSLOG_NG_CONF_OPTS += \
--	--enable-python \
--	--with-python=$(PYTHON3_VERSION_MAJOR)
--else
--SYSLOG_NG_CONF_OPTS += --disable-python
--endif
--
- ifeq ($(BR2_PACKAGE_LIBESMTP),y)
- SYSLOG_NG_DEPENDENCIES += libesmtp
- SYSLOG_NG_CONF_OPTS += --enable-smtp
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 4.1.1
++SYSLOG_NG_VERSION = 4.2.0
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
