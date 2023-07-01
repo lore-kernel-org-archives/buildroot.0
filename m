@@ -4,68 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30BCDEB64DD
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAB0EEB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8DE440AB6;
-	Sat,  1 Jul 2023 20:11:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8DE440AB6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C55940465;
+	Sat,  1 Jul 2023 20:42:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C55940465
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 79ZyXayicjWF; Sat,  1 Jul 2023 20:11:42 +0000 (UTC)
+	with ESMTP id Ebcb_CPHS4jC; Sat,  1 Jul 2023 20:42:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC9A640AB9;
-	Sat,  1 Jul 2023 20:11:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC9A640AB9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21B7F1BF2B7
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:11:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8475F402F7;
+	Sat,  1 Jul 2023 20:42:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8475F402F7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A4AD1BF2B7
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:42:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED8B94174C
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:11:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED8B94174C
+ by smtp3.osuosl.org (Postfix) with ESMTP id D7FB060AF8
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:42:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7FB060AF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rAbCSMWSloPp for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 20:11:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A884C41744
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A884C41744
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:11:35 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C5CD0240002;
- Sat,  1 Jul 2023 20:11:32 +0000 (UTC)
-Date: Sat, 1 Jul 2023 22:11:31 +0200
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230701221131.13e403e0@windsurf>
-In-Reply-To: <20230617154745.875873-1-romain.naour@gmail.com>
-References: <20230617154745.875873-1-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688242293;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=C9s9mdC/6KAL10n60M82OYsY9vgudXm5adwK96TkN4I=;
- b=CPPdKyKOLtC9SjQHcusuAiyNK6cnKTmEGpCoG1hOOxK3SqGFfmvvmyQH52hzRduj48KTKd
- aqd8Pyt+g4e6bUnK3Y7kPkkN5VRqnbNKVp2lX+AIV/b/+FNeyh2Vb4UaKSL1XoQoncCL4f
- 6QDQMqK/yBDqZowUnOkz9Y5qXJC9X7b6rKhFyWttpSCILFy8INeFjxpamcWqg5+dpiunpV
- JnzzGlpWJe63rtk2IRxLd/Oiv6sey6LX9rWtMOgY4VGvtcVgrTx/lgHXAIsV5qFGzCEi35
- 2l8NS8j2oadCNW6Wwk3XOVA4eE8ph2nAD6iEAa6mquLZCFi21uQrK5hIU4Xk4g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CPPdKyKO
-Subject: Re: [Buildroot] [PATCH 1/3] toolchain/toolchain-external: update
- Arm ARM32 toolchain 12.2-rel1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DTZOn4s85-7c for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 20:42:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16ED760AE9
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:42:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16ED760AE9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 03FA186309; Sat,  1 Jul 2023 20:42:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Jul 2023 22:41:35 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0b9877a4b93c5f849c293b1c220490be5ed241ec
+X-Git-Newrev: 0c4c7da2f33cd701f614709e85a097a8751d81a4
+X-Patchwork-Hint: ignore
+Message-Id: <20230701204244.03FA186309@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dnsmasq: improve init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,55 +57,66 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 17 Jun 2023 17:47:43 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0c4c7da2f33cd701f614709e85a097a8751d81a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Updated to gcc 12.2, gdb 12, binutils 2.39, glibc 2.36.
-> 
-> Upstream changed version scheme previously based on the release
-> date (2021.07) to a version scheme based on gcc version (12.2.rel1).
-> 
-> The runtime issue (Illegal instruction on some x86 host) [1] seems to
-> be fixed since it can't be reproduced anymore on the same host.
-> 
-> The x86_64 host variant prebuilt toolchain is built on RHEL7
-> (glibc 2.17) and is likely also be useable on OS versions like
-> RHEL8, Ubuntu 18.04 or later.
-> 
-> The AArch64 host variant prebuilt toolchain is built on Ubuntu 18.04
-> (glibc 2.27) is likely also be useable on OS versions like RHEL8,
-> Ubuntu 18.04 or later.
-> 
-> Use the sha256 hash that is now provided by upsteam.
-> 
-> Tested with qemu_arm_vexpress_defconfig.
-> 
-> [1] https://bugs.linaro.org/show_bug.cgi?id=5825#c19
-> [2] https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> I'm able to reproduce the runtime issue with "Arm ARM 2021.07" on the
-> host testing the Arm ARM32 toolchain 12.2-rel1.
-> ---
->  .../toolchain-external-arm-arm/Config.in              |  8 ++++----
->  .../toolchain-external-arm-arm.hash                   | 11 ++++-------
->  .../toolchain-external-arm-arm.mk                     |  6 +++---
->  3 files changed, 11 insertions(+), 14 deletions(-)
+- Use pidfile for more accurate process match
+- Fix coding style issues to be able to drop a problem reported by
+  check-package on missing variables
 
-Series applied, thanks!
+Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore        | 2 +-
+ package/dnsmasq/S80dnsmasq | 8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 847f823ed0..278b150cb6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -359,7 +359,7 @@ package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
+ package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch Upstream
+ package/dmraid/0001-fix-compilation-under-musl.patch Upstream
+ package/dmraid/S20dmraid Variables
+-package/dnsmasq/S80dnsmasq Shellcheck Variables
++package/dnsmasq/S80dnsmasq Shellcheck
+ package/docker-engine/S60dockerd Indent Shellcheck Variables
+ package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch Upstream
+ package/domoticz/S99domoticz Shellcheck
+diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
+index b052259e87..175daf9d26 100644
+--- a/package/dnsmasq/S80dnsmasq
++++ b/package/dnsmasq/S80dnsmasq
+@@ -1,16 +1,20 @@
+ #!/bin/sh
+ 
++DAEMON="dnsmasq"
++PIDFILE="/var/run/$DAEMON.pid"
++
+ [ -f /etc/dnsmasq.conf ] || exit 0
+ 
+ case "$1" in
+ 	start)
+ 		printf "Starting dnsmasq: "
+-		start-stop-daemon -S -x /usr/sbin/dnsmasq
++		start-stop-daemon -S -p "$PIDFILE" -x "/usr/sbin/$DAEMON" -- \
++			--pid-file="$PIDFILE"
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		printf "Stopping dnsmasq: "
+-		start-stop-daemon -K -q -x /usr/sbin/dnsmasq
++		start-stop-daemon -K -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON"
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart|reload)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
