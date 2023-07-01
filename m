@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B2B2EB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50478EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:07:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C4EF60ABD;
-	Sat,  1 Jul 2023 20:02:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C4EF60ABD
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4BC660ABD;
+	Sat,  1 Jul 2023 20:07:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4BC660ABD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NIigpAzfauZJ; Sat,  1 Jul 2023 20:02:15 +0000 (UTC)
+	with ESMTP id C-JxasKiXS0h; Sat,  1 Jul 2023 20:07:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E02C60AE2;
-	Sat,  1 Jul 2023 20:02:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E02C60AE2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3B1711BF2BA
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:02:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63C4660AF8;
+	Sat,  1 Jul 2023 20:07:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63C4660AF8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EE341BF2B7
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:07:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1503660AE2
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:02:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1503660AE2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0314041748
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:07:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0314041748
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lfKWLDw5nxXo for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 20:02:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QdZOrbEG35ax for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 20:07:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A6A860ABD
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:02:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A6A860ABD
+ by smtp4.osuosl.org (Postfix) with ESMTP id B04C041744
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:07:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B04C041744
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37C5F86277; Sat,  1 Jul 2023 20:02:12 +0000 (UTC)
+ id 9C2B786281; Sat,  1 Jul 2023 20:07:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 1 Jul 2023 22:00:28 +0200
+Date: Sat, 1 Jul 2023 22:01:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86cca91c2498eeb2cd91480de328755f3c32404c
-X-Git-Newrev: 61f5ecc56e2cbd129dcfb1f94fef8e57180a5d45
+X-Git-Oldrev: 61f5ecc56e2cbd129dcfb1f94fef8e57180a5d45
+X-Git-Newrev: 391900aae0f1783a2f2305b18356ae3323a8124c
 X-Patchwork-Hint: ignore
-Message-Id: <20230701200212.37C5F86277@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lightning: bump version to 2.2.2
+Message-Id: <20230701200722.9C2B786281@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/crucible: bump to version
+ 2023.04.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +64,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61f5ecc56e2cbd129dcfb1f94fef8e57180a5d45
+commit: https://git.buildroot.net/buildroot/commit/?id=391900aae0f1783a2f2305b18356ae3323a8124c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.gnu.org/archive/html/lightning/2023-04/msg00004.html
+Bump to version 2023.04.12.
 
-Fixes:
-http://autobuild.buildroot.net/results/c50/c50fa2d861c634eb0800cf551fc4a7e5fa5752bf/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lightning/lightning.hash | 2 +-
- package/lightning/lightning.mk   | 2 +-
+ package/crucible/crucible.hash | 2 +-
+ package/crucible/crucible.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
-index 97b391674c..6f7c24d19c 100644
---- a/package/lightning/lightning.hash
-+++ b/package/lightning/lightning.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  98671681d5684770ccb06a07fa3b8f032a454bdb56eafc18e6fab04459ea3caa  lightning-2.2.1.tar.gz
-+sha256  0aca8242dead17d62117bcfcb078e6a9ea856cc81742813c9e8394bcce73b3e2  lightning-2.2.2.tar.gz
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index 4a8c7e5efd..c23ae9745e 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
+diff --git a/package/crucible/crucible.hash b/package/crucible/crucible.hash
+index d0a2a63fab..256513da6b 100644
+--- a/package/crucible/crucible.hash
++++ b/package/crucible/crucible.hash
+@@ -1,2 +1,2 @@
+-sha256  1229c7d1587a97e9f3d456392e06c7be288bacf6ffb68c940d497bf55edab20b  crucible-2022.05.25.tar.gz
++sha256  bfeaa9b1c8bb95f02d33bd915892e748eb8939fd8b901e1d31d2efa7f7aefcb3  crucible-2023.04.12.tar.gz
+ sha256  d88514630470aec9fa7abdc990a1e0a8751a752321bffa868188c49009d64d59  LICENSE
+diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
+index fdad709dde..dad89b2149 100644
+--- a/package/crucible/crucible.mk
++++ b/package/crucible/crucible.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIGHTNING_VERSION = 2.2.1
-+LIGHTNING_VERSION = 2.2.2
- LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- LIGHTNING_LICENSE = LGPL-3.0+
- LIGHTNING_LICENSE_FILES = COPYING.LESSER
+-CRUCIBLE_VERSION = 2022.05.25
++CRUCIBLE_VERSION = 2023.04.12
+ CRUCIBLE_SITE = $(call github,usbarmory,crucible,v$(CRUCIBLE_VERSION))
+ CRUCIBLE_LICENSE = GPL-3.0
+ CRUCIBLE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
