@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95840EB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC654EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F67860B98;
-	Sat,  1 Jul 2023 14:43:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F67860B98
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FC2F60F5D;
+	Sat,  1 Jul 2023 14:44:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FC2F60F5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9x84jwxR2Rce; Sat,  1 Jul 2023 14:43:42 +0000 (UTC)
+	with ESMTP id AfMqezGUel6F; Sat,  1 Jul 2023 14:43:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8115C60AEC;
-	Sat,  1 Jul 2023 14:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8115C60AEC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8BC831BF349
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:43:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6BEA60F30;
+	Sat,  1 Jul 2023 14:43:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6BEA60F30
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E9491BF349
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 731838122D
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:43:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 731838122D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03733414C0
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:43:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03733414C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kMPtzAF3nmIL for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 14:43:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 833CC811FC
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:43:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 833CC811FC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7348C86095; Sat,  1 Jul 2023 14:43:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 1 Jul 2023 16:41:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2c9b853093f44c45348947783297ed79e40101f2
-X-Git-Newrev: dae54143f596e6e36f4b93b11ae0e66f5f983ed7
-X-Patchwork-Hint: ignore
-Message-Id: <20230701144338.7348C86095@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uuu: bump to version 1.5.104
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YM5Er2tane1N for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 14:43:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEC1E414A2
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AEC1E414A2
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:43:55 +0000 (UTC)
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E2D0B240006;
+ Sat,  1 Jul 2023 14:43:52 +0000 (UTC)
+Date: Sat, 1 Jul 2023 16:43:51 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20230701164351.394d8891@windsurf>
+In-Reply-To: <20230619141707.1011210-1-dario.binacchi@amarulasolutions.com>
+References: <20230619141707.1011210-1-dario.binacchi@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1688222633;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FTsDPpgmnyQx0cSkmMKu2lKgFKAbcLVPZz+Te+ZbGuQ=;
+ b=JSghIxqXlGuywXOLb27aWLiZwPyWvmjg3L7eEI4lcxYwmc+r60KuYtMjo/B8Iv2GBGR3x/
+ RZ1hIrZGrYhwxIghhDRghY1Kw9NUCR/kKL8fRkmBnDAJnVyXgIBExIY8BSQRBYwhPRqL8l
+ x/I9yqOn8U/GoCEUWtXsHR65RvTM6WGyT7mprJ+eRt2d6Q6j/STKdhugQi2H9XVu2/v7ub
+ SRI48S9IbssuMOORl3okYcHApM2m4IziLVxcxYEMPxhs1yHARQqiln8AoiCQ43rC0wmA7f
+ ZA2iQgtE2Rw5ItMgHU+qvSqAn6AN03d8fsF+OS5KKEJtJrxnrqbIRZCBZwfmLg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JSghIxqX
+Subject: Re: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.5.104
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +78,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dae54143f596e6e36f4b93b11ae0e66f5f983ed7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 19 Jun 2023 16:17:07 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-Release notes:
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.104
+> Release notes:
+> https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.104
+> 
+> The changes to README.md are not related to license modifications.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  package/uuu/uuu.hash | 4 ++--
+>  package/uuu/uuu.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-The changes to README.md are not related to license modifications.
+Applied to master, thanks.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/uuu/uuu.hash | 4 ++--
- package/uuu/uuu.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index a5b665620c..a35970c54f 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  e89d3665af499ab71360d948176cf64619b082f8272a994d1fbfc000e67c0f14  uuu_source-1.5.21.tar.gz
-+sha256  f95ef6e5f4feb8b3e8d2c1163c35415263c82ac4ba3a51bcf4e3d59d3eebd063  uuu_source-uuu_1.5.104.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
--sha256  584bfbb18b4c08b872d48b80419dd453307212a144134fb516bd6ddc0700c2e8  README.md
-+sha256  f68fb8c8002c797a14e63f91963ac247034fdfd44275e4f4a3226111cd0423db  README.md
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 1a5f84ce4d..07dd6ce5b3 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--UUU_VERSION = 1.5.21
--UUU_SOURCE = uuu_source-$(UUU_VERSION).tar.gz
-+UUU_VERSION = 1.5.104
-+UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
- UUU_LICENSE_FILES = LICENSE README.md
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
