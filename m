@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9754BEB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:44:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3742BEB64DD
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 20:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BAA0403E9;
-	Sat,  1 Jul 2023 20:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BAA0403E9
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBF9D404AF;
+	Sat,  1 Jul 2023 20:44:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBF9D404AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z--DgKVJdq-M; Sat,  1 Jul 2023 20:44:23 +0000 (UTC)
+	with ESMTP id gZJZY6RF68Th; Sat,  1 Jul 2023 20:44:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E4574010C;
-	Sat,  1 Jul 2023 20:44:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E4574010C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DD1B71BF2B7
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:44:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E790C40A3D;
+	Sat,  1 Jul 2023 20:44:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E790C40A3D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 97BAA1BF2B7
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:44:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADD9381E63
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:44:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADD9381E63
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71A5D40A3D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 20:44:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71A5D40A3D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ME_zWuPYNIy0 for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 20:44:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8354081E60
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8354081E60
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:44:19 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5AC6F1C0002;
- Sat,  1 Jul 2023 20:44:16 +0000 (UTC)
-Date: Sat, 1 Jul 2023 22:44:15 +0200
-To: Konstantin Menyaev via buildroot <buildroot@buildroot.org>
-Message-ID: <20230701224415.31c0c417@windsurf>
-In-Reply-To: <20230616012324.75426-1-KAMenyaev@sberdevices.ru>
-References: <20230616012324.75426-1-KAMenyaev@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688244256;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=EVgSmjnDSgCi0iolnAdLMZpD6Uwa7ykSetCwRO1fu5I=;
- b=gdNPYs/eNAnX3DkX3+Mgz1eR33jKGtNjVSEd6DX45pYnkVF/CDnAsQR0pFEUwSQgkhUcsk
- KTA1wCh77W8qm8SMfdYiVEYBpUxVVyzAdt+am0XmLz75SGVonM/Cu0vTbpryDuw9rMCCy2
- 1+qty9DqAgNk8YadMJb8/HLdHFw0ykfVLGLNMuNF2Hlo7QEbebtIlqMz3GWkRThADk9LQ2
- W+AYYxwZl7VsM9tIyn5g8TgU0T+PaEArCrb+q5LZ5hcPspuhRiH1OsZWbPakRGlWXzqx2H
- lguDSWbUL1XhEPTlNX9UaiF8T9CTo6tVaUve4Okgjbi3jPlQZJ6ShbIx2QcjVA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gdNPYs/e
-Subject: Re: [Buildroot] [PATCH 1/1] package/dnsmasq: provide pidfile along
- with -x flag
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HMgnyppdJ14p for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 20:44:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3E39404AF
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 20:44:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3E39404AF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8FEDB86325; Sat,  1 Jul 2023 20:44:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Jul 2023 22:44:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0c4c7da2f33cd701f614709e85a097a8751d81a4
+X-Git-Newrev: 717762b5f59a821d527fc5c5f307bc6b70c40661
+X-Patchwork-Hint: ignore
+Message-Id: <20230701204437.8FEDB86325@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/nitrogen*: add missing openssl
+ u-boot dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,59 +58,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: KAMenyaev@sberdevices.ru, sdfw_system_team@sberdevices.ru
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Konstantin,
+commit: https://git.buildroot.net/buildroot/commit/?id=717762b5f59a821d527fc5c5f307bc6b70c40661
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your contribution. See below for some feedback.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4519271709
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4519271710
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4519271712
 
-On Fri, 16 Jun 2023 04:23:24 +0300
-Konstantin Menyaev via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/nitrogen6sx_defconfig | 1 +
+ configs/nitrogen6x_defconfig  | 1 +
+ configs/nitrogen7_defconfig   | 1 +
+ 3 files changed, 3 insertions(+)
 
-> From: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
-> 
-> Use pidfile for more accurate process match.
-> Useful in multiple process instances.
-> 
-> Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
-> ---
->  package/dnsmasq/S80dnsmasq | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
-> index b052259e87..b2cd56adef 100644
-> --- a/package/dnsmasq/S80dnsmasq
-> +++ b/package/dnsmasq/S80dnsmasq
-> @@ -1,16 +1,21 @@
->  #!/bin/sh
->  
-> +NAME="dnsmasq"
-> +DAEMON="/usr/sbin/$NAME"
-> +PIDFILE="/var/run/$NAME.pid"
-
-This is not correct, as it doesn't match the coding style documented at
-https://nightly.buildroot.org/#adding-packages-start-script. I've
-therefore changed this to match the expected coding style, which
-allowed to drop the ignored check-package warning from
-.checkpackageignore about "Variables".
-
-See the final commit at:
-
-  https://gitlab.com/buildroot.org/buildroot/-/commit/0c4c7da2f33cd701f614709e85a097a8751d81a4
-
-I hope I didn't mess up the script while doing this.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 967d064f1c..2b12b169a0 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -28,6 +28,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 1cded53765..903d0abd9f 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -27,6 +27,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index d1e81d90fd..718d203319 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -27,6 +27,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
