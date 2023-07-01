@@ -4,68 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D033EB64DC
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6E75EB64DC
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jul 2023 14:42:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 354FC6101A;
-	Sat,  1 Jul 2023 14:41:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 354FC6101A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83DAA61007;
+	Sat,  1 Jul 2023 14:42:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83DAA61007
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gg6IXeD9TOH1; Sat,  1 Jul 2023 14:41:45 +0000 (UTC)
+	with ESMTP id HvZChhQPxR3o; Sat,  1 Jul 2023 14:42:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 742586103C;
-	Sat,  1 Jul 2023 14:41:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 742586103C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 665C01BF349
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:41:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E683C6100C;
+	Sat,  1 Jul 2023 14:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E683C6100C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A39021BF349
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:42:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D9A783BED
- for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:41:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D9A783BED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C36A4189D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jul 2023 14:42:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C36A4189D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XWyh8nkZZ5rr for <buildroot@lists.busybox.net>;
- Sat,  1 Jul 2023 14:41:39 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 143A883C0B
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 143A883C0B
- for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:41:32 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C98A7C0006;
- Sat,  1 Jul 2023 14:41:29 +0000 (UTC)
-Date: Sat, 1 Jul 2023 16:41:28 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230701164128.266112fc@windsurf>
-In-Reply-To: <20230619181718.456022-1-ju.o@free.fr>
-References: <20230619181718.456022-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688222490;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=80GwloFffTekGs7KEZntWFO/w8/bu5Sn0Sn148LmZCE=;
- b=I0On9b0zpk1ZWjaqYWNfQl+1I0tPNl4Hw3V/DyLJW+CsqDhhhbCFevq4RQhc995hEXCydD
- T2RzlXS1gOx39t2AX+tXpU2LSwVgjUHCcxG7GX3+8au6k23EF6VRDrz1RxHTDcbE+vE/R6
- 9qXbv8IOLU7n1vQHX4plbKJl6eYocvZGFb4DMDAuEjdJQcaSwJK+wG8E2+0QiWvrI81xnS
- 6s+XW64ZvWz8F/0pm+lhQjyWoivXqRnGJ0iwWeMpEygk00cLE1A81DvaGvuDeYRl04nygu
- VWlAzXuW6uksnHoRY+E2mgFjMLjwOlmZA9CvyX9xEbcag5Z0KiyGnACSJu0uxQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=I0On9b0z
-Subject: Re: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version
- 2.3.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SLXXAEDbrmN1 for <buildroot@lists.busybox.net>;
+ Sat,  1 Jul 2023 14:42:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F16A41864
+ for <buildroot@buildroot.org>; Sat,  1 Jul 2023 14:42:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F16A41864
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5EEA48600B; Sat,  1 Jul 2023 14:42:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Jul 2023 16:41:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9fc0d3a4e7363a69f6bfc013bbdba045cf3e02b9
+X-Git-Newrev: 2c9b853093f44c45348947783297ed79e40101f2
+X-Patchwork-Hint: ignore
+Message-Id: <20230701144227.5EEA48600B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluidsynth: bump to version 2.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,29 +57,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 19 Jun 2023 20:17:18 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c9b853093f44c45348947783297ed79e40101f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For change log since v2.3.2, see:
-> - https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.3
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch tested on branch master at commit d4a96ee with commands:
+For change log since v2.3.2, see:
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.3
 
-Applied to master, thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 0f8f04d676..382a54abad 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cd610810f30566e28fb98c36501f00446a06fa6bae3dc562c8cd3868fe1c0fc7  fluidsynth-2.3.2.tar.gz
++sha256  321f7d3f72206b2522f30a1cb8ad1936fd4533ffc4d29dd335b1953c9fb371e6  fluidsynth-2.3.3.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 854ed00032..52f8ec489f 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUIDSYNTH_VERSION = 2.3.2
++FLUIDSYNTH_VERSION = 2.3.3
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
