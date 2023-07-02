@@ -1,69 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A82D0EB64D9
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 11:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 195EFEB64D9
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 11:55:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E857408F8;
-	Sun,  2 Jul 2023 11:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E857408F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C2F06059A;
+	Sun,  2 Jul 2023 11:55:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C2F06059A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pWWzoQMW-HQx; Sun,  2 Jul 2023 11:04:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bFZR6jHFfLAU; Sun,  2 Jul 2023 11:55:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1052408B4;
-	Sun,  2 Jul 2023 11:04:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1052408B4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 46EDA1BF5E6
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 11:04:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A75560881;
+	Sun,  2 Jul 2023 11:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A75560881
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F0D91BF5E6
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 11:55:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D704408B4
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 11:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D704408B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3884A60881
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 11:55:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3884A60881
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z_YIdvbjT0k6 for <buildroot@lists.busybox.net>;
- Sun,  2 Jul 2023 11:04:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3AE1408AD
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A3AE1408AD
- for <buildroot@buildroot.org>; Sun,  2 Jul 2023 11:04:50 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DA094A4C01A0;
- Sun,  2 Jul 2023 13:04:47 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49006)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qFusp-0005gh-1g;
- Sun, 02 Jul 2023 13:04:47 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yEir8qRay5FS for <buildroot@lists.busybox.net>;
+ Sun,  2 Jul 2023 11:55:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E6F26059A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6E6F26059A
+ for <buildroot@buildroot.org>; Sun,  2 Jul 2023 11:55:12 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 4408113F846;
+ Sun,  2 Jul 2023 13:55:08 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jul 2023 13:04:47 +0200
-Message-Id: <20230702110447.1877621-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sun,  2 Jul 2023 13:54:43 +0200
+Message-ID: <20230702115443.585493-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1688295887;
- bh=pN6eBciMv6LuwVevKJzfjyE0SmquW4nksGAu3h7J7uE=;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1688298909;
+ bh=osqSvR5qAvF9FVlQ3MmKnUEiV3YEXgbtVtXAtk9zj4k=;
  h=From:To:Cc:Subject:Date:From;
- b=C3rbbjJW8Nt/ybBWBDisf04yct1sDXzdNwVNKA0aPXXcSCniQcT+oili3X7sC0JmL
- ejvDeVXLVb9jt877FZSe6cYXRTJ5BOcEJ173vQ+mjHnJwviy6AKVGtTRkJ4dTf3yPJ
- JwpHIssmvjJDnHYD3jnpnpTXMFKxM0P2HjkTxPlE/eZ6HcWEiFqwNocYFHQWZNWMDe
- UJ/88XdygDp8heOm7pKING43sgkC1aRa602XvrnR0YJaPNW0quBrmePWp6EZ6l5Tjl
- 6Lbj2OmmgRH7ng6iy9Ak1ajkFbkbEIZx9CcyjDMvUXEi60RWvq+4MwU6BcRV2LVOwQ
- IW1+TOdAmUekQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=C3rbbjJW
-Subject: [Buildroot] [PATCH v2 1/1] package/putty: bump version to 0.78
+ b=kk/ge1bGjoORj9z7E3D4poKUhe5YoDvJ5lERphOCNiAAWRwzWb7J7SwXfcI/apXGc
+ RqKF9pwEc5vjXxPZgtG/T2cbOlXZKFjlkUusCTn0hQEzBQPYX+3xj3ydgzx9IeAOzA
+ w+lNwaUHgVYZ29B1a16PHBdpcmeZXz+LO5r/lZUlnD5a1G2Ia7r/U0hiIAyiSUemC9
+ COEJR0xxefnhygE/ew0y3YOOtvQAvMczd920Ad/DvucIqVtf4EKnArReAY0GXqCp0/
+ Wq586wr5kzQAcVims19Fwmg94nyRbmgZbFbL5Otx34Pw3+zf2GUhZVOB6f23mB+QCV
+ MVSMyk3Suh0fw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=kk/ge1bG
+Subject: [Buildroot] [PATCH 1/1] package/xz: bump to version 5.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,143 +71,166 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
+This commit changes the version branch from 5.2.x to 5.4.x. This old
+stable 5.2.x branch is expected to be end-of-life. The package
+site [1] mention:
 
-Removed patch, the patched file does not exist anymore in this release.
+"""
+5.4.3 was released on 2023-05-04. A minor bug fix release 5.2.12 to
+the old stable branch was made on 2023-05-04. This is probably the
+last release in the 5.2.x series.
+"""
 
-Updated license hash due to copyright year bump:
-https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=ce59d8bb4f7a1c6aff677d1431ec84a803a24091
+For a change log since 5.2.10, see [2].
 
-Switched build system to cmake.
+This commit removes the package patch since the new version includes
+alternate workarounds. See comment in [3].
 
-Added optional dependency to libgtk3.
+The COPYING licence file hash has changed. A note about
+Doxygen-generated HTML was added in [4].
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+COPYING.GPLv3 license file hash has also changed, as the file was
+updated (http links changed by https) in [5].
+
+[1] https://tukaani.org/xz/
+[2] https://git.tukaani.org/?p=xz.git;a=blob;f=NEWS;h=7f83c81f61e8e6aa81525e44c072c76205eeb14b;hb=238b4e5458b4bd2cadefb768b8ea7c6b70a191ac
+[3] https://github.com/tukaani-project/xz/pull/32#issuecomment-1438396969
+[4] https://github.com/tukaani-project/xz/commit/f68f4b27f62f53fdac570885a1f4f23367ce6599
+[5] https://github.com/tukaani-project/xz/commit/5a7b930efa7f9849d8da8397e8e5d8638f92be40
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v2: fixed license hash, added optional dependency to libgtk3 (Peter)
+Patch tested on top of branch master at commit b335bd1 with commands:
 
- .checkpackageignore                           |  1 -
- ...1-unix-uxutils.h-fix-build-on-uclibc.patch | 41 -------------------
- package/putty/putty.hash                      | 11 +++--
- package/putty/putty.mk                        | 13 +++---
- 4 files changed, 11 insertions(+), 55 deletions(-)
- delete mode 100644 package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
+    utils/docker-run make check-package
+    ...
+    0 warnings generated
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 7d544a6e61..0c003157d3 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1240,7 +1240,6 @@ package/pulseaudio/S50pulseaudio ConsecutiveEmptyLines EmptyLastLine Indent Vari
- package/pulseview/0001-Replace-obsolete-deprecated-Qt-methods.patch Upstream
- package/pulseview/0002-Fix-broken-build-due-to-C-template-behind-C-linkage.patch Upstream
- package/pulseview/0003-Support-glibmm-2.68.patch Upstream
--package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch Upstream
- package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch Upstream
- package/python-automat/0001-Remove-uneeded-dependency-to-wheel.patch Upstream
- package/python-crossbar/0001-Avoid-intentional-syntax-error.patch Upstream
-diff --git a/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch b/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
+    utils/test-pkg -a -p xz
+    ...
+    45 builds, 0 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ ...0001-Detect-symver-attribute-support.patch | 70 -------------------
+ package/xz/xz.hash                            |  8 +--
+ package/xz/xz.mk                              |  2 +-
+ 3 files changed, 5 insertions(+), 75 deletions(-)
+ delete mode 100644 package/xz/0001-Detect-symver-attribute-support.patch
+
+diff --git a/package/xz/0001-Detect-symver-attribute-support.patch b/package/xz/0001-Detect-symver-attribute-support.patch
 deleted file mode 100644
-index 78cef8b908..0000000000
---- a/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
+index 462fa9d86b..0000000000
+--- a/package/xz/0001-Detect-symver-attribute-support.patch
 +++ /dev/null
-@@ -1,41 +0,0 @@
--From 3f30f3a7e3f07f5ca3cef0f405b02e22a018c6e4 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 9 May 2021 15:22:29 +0200
--Subject: [PATCH] unix/uxutils.h: fix build on uclibc
+@@ -1,70 +0,0 @@
+-From f0e0e8bd08b4d4e7c89a5a3b7d9a3c083f7e5432 Mon Sep 17 00:00:00 2001
+-From: Vincent Fazio <vfazio@gmail.com>
+-Date: Wed, 8 Feb 2023 12:58:37 +0000
+-Subject: [PATCH] Detect symver attribute support
 -
--Build on uclibc is broken since version 0.75 and commit
--65383082bf0c49cec63f4b36001a40bd9b13edf6 because AT_HWCAP2 is used
--even if <sys/auxv.h> is not available:
+-On Microblaze, builds will fail when trying to add symver information
+-because  __attribute__((symver ..)) is not supported even though
+-__has_attribute(__symver__) returns true.
 -
--unix/uxutils.c: In function 'platform_aes_hw_available':
--unix/uxutils.c:13:22: error: 'AT_HWCAP2' undeclared (first use in this function)
--   13 |     return getauxval(AT_HWCAP2) & HWCAP2_AES;
--      |                      ^~~~~~~~~
+-Support for symver needs to be detected via a compile test since
+-__has_attribute can report false positives [0].
 -
--To fix this build failure, include <elf.h>
+-Add a configure compile check for __attribute__((symver ..)) to ensure
+-it is supported and define a variable to advertise support.
 -
--Fixes:
-- - http://autobuild.buildroot.org/results/726f7c5ce13e78ed91e827b872e9d7ccfa13f298
+-[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c1
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: sent to Simon Tatham <anakin@pobox.com>]
+-Upstream: https://github.com/tukaani-project/xz/pull/32
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+-[Peter: patch configure instead of configure.ac so autoreconf isn't
+-triggered at build time]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
-- unix/uxutils.h | 2 ++
-- 1 file changed, 2 insertions(+)
+- configure                   | 15 +++++++++++++++
+- src/liblzma/common/common.h |  2 +-
+- 2 files changed, 16 insertions(+), 1 deletion(-)
 -
--diff --git a/unix/uxutils.h b/unix/uxutils.h
--index c9acff53..b80bf972 100644
----- a/unix/uxutils.h
--+++ b/unix/uxutils.h
--@@ -18,6 +18,8 @@
+-diff --git a/src/liblzma/common/common.h b/src/liblzma/common/common.h
+-index 671d3bc..27b56ee 100644
+---- a/src/liblzma/common/common.h
+-+++ b/src/liblzma/common/common.h
+-@@ -76,7 +76,7 @@
+- // too (which doesn't support __symver__) so use it to detect if __symver__
+- // is available. This should be far more reliable than looking at compiler
+- // version macros as nowadays especially __GNUC__ is defined by many compilers.
+--#	if lzma_has_attribute(__symver__)
+-+#	if defined(HAVE_SYMVER_ATTRIBUTE)
+- #		define LZMA_SYMVER_API(extnamever, type, intname) \
+- 			extern __attribute__((__symver__(extnamever))) \
+- 					LZMA_API(type) intname
+-diff --git a/configure b/configure
+-index ff0eed5..e685b30 100755
+---- a/configure
+-+++ b/configure
+-@@ -16687,6 +16687,21 @@ printf "%s\n" "" >&6; }
 - 
-- #if defined __arm__ || defined __aarch64__
+- printf "%s\n" "#define HAVE_SYMBOL_VERSIONS_LINUX $have_symbol_versions_linux" >>confdefs.h
 - 
--+#include <elf.h>
+-+			OLD_CFLAGS="$CFLAGS"
+-+			CFLAGS="$CFLAGS -Werror"  # we need -Werror to make sure the attribute is not ignored
+-+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-+/* end confdefs.h.  */
+-+__attribute__ ((symver ("test@TEST"))) void foo(void) { }
 -+
-- #ifdef HAVE_SYS_TYPES_H
-- #include <sys/types.h>
-- #endif
+-+_ACEOF
+-+if ac_fn_c_try_compile "$LINENO"
+-+then :
+-+
+-+printf "%s\n" "#define HAVE_SYMVER_ATTRIBUTE 1" >>confdefs.h
+-+
+-+fi
+-+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+-+			CFLAGS="$OLD_CFLAGS"
+- 			;;
+- 		*)
+- 			enable_symbol_versions=generic
 --- 
--2.30.2
+-2.34.1
 -
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 861d45cb76..c691a4f975 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,8 +1,7 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.76/{md5,sha1,sha256,sha512}sums
--md5  9d22f8c56c1eaa1c0af3098438f25908  putty-0.76.tar.gz
--sha1  de09f50aee330eb05ad0cb81b970d0cc8e5c9b25  putty-0.76.tar.gz
--sha256  547cd97a8daa87ef71037fab0773bceb54a8abccb2f825a49ef8eba5e045713f  putty-0.76.tar.gz
--sha512  4576b359593928c6eba923f2d7b66ac0f2cf00e0c217cdbbb124471c3b35feb090e623847bfc507a4ef106cb3067aac47419e241b11dd8bf4ae554061fa93c25  putty-0.76.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.78/{sha1,sha256,sha512}sums
-+sha1  198f01db6bea708e480fb11dd23026eda7b3f49f  putty-0.78.tar.gz
-+sha256  274e01bcac6bd155dfd647b2f18f791b4b17ff313753aa919fcae2e32d34614f  putty-0.78.tar.gz
-+sha512  d7a3e2eabd5f1f65fc0f3f1ee0789c30fbe891b57f63ddeac0b92befcb6aecd4a748f04a21c76ee42d992deb77c2e1a0454a71cc620ef26fbf23af660bd84bb5  putty-0.78.tar.gz
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index 1153e02b4d..0a8a13f1eb 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,9 +1,9 @@
+ # Locally calculated after checking pgp signature
+-# https://tukaani.org/xz/xz-5.2.10.tar.bz2.sig
+-sha256  01b71df61521d9da698ce3c33148bff06a131628ff037398c09482f3a26e5408  xz-5.2.10.tar.bz2
++# https://tukaani.org/xz/xz-5.4.3.tar.gz.sig
++sha256  9243a04598d7a70c1f567a0143a255581ac5c64b140fd55fd5cbc1e00b0e6f90  xz-5.4.3.tar.bz2
  
- # Locally calculated
--sha256  3f3e870dd3d0867d79370b1d433602c60bb91b59de04e5d8f2a149b788530d53  LICENCE
-+sha256  7b10c93f0d582e820a9e6f8c6abbcff54192e41e60644f4d09b96b14fdbc74f8  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index e57a78be96..c591694659 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,18 +4,17 @@
+ # Hash for license files
+-sha256  bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c  COPYING
++sha256  72d7ef9c98be319fd34ce88b45203b36d5936f9c49e82bf3198ffee5e0c7d87e  COPYING
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPLv3
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING.GPLv3
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index 0120d23b85..dcdbe142b6 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PUTTY_VERSION = 0.76
-+PUTTY_VERSION = 0.78
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
- PUTTY_CPE_ID_VENDOR = putty
--PUTTY_CONF_OPTS = --disable-gtktest
-+PUTTY_DEPENDENCIES += host-pkgconf
- 
--ifeq ($(BR2_PACKAGE_LIBGTK2),y)
--PUTTY_CONF_OPTS += --with-gtk=2
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+PUTTY_DEPENDENCIES += libgtk3
-+else ifeq ($(BR2_PACKAGE_LIBGTK2),y)
- PUTTY_DEPENDENCIES += libgtk2
--else
--PUTTY_CONF_OPTS += --without-gtk
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+-XZ_VERSION = 5.2.10
++XZ_VERSION = 5.4.3
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = https://tukaani.org/xz
+ XZ_INSTALL_STAGING = YES
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
