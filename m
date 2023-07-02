@@ -1,68 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32D16EB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 03:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE9BAEB64DA
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 10:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9BA081DE3;
-	Sun,  2 Jul 2023 03:03:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9BA081DE3
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6DA54167B;
+	Sun,  2 Jul 2023 10:26:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6DA54167B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DkzlzqKkKRax; Sun,  2 Jul 2023 03:03:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YcFx3KJVXcPT; Sun,  2 Jul 2023 10:26:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C6A581DFF;
-	Sun,  2 Jul 2023 03:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C6A581DFF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 17B3F1BF370
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 03:03:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F186C41638;
+	Sun,  2 Jul 2023 10:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F186C41638
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 605041BF28F
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 10:26:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4D2481E64
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 03:03:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4D2481E64
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A29460806
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 10:26:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A29460806
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L3a5VJ2hE6gL for <buildroot@lists.busybox.net>;
- Sun,  2 Jul 2023 03:03:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 79E9D81DE3
- for <buildroot@uclibc.org>; Sun,  2 Jul 2023 03:03:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79E9D81DE3
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 672F38639D; Sun,  2 Jul 2023 03:03:19 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5MM6navlxaSM for <buildroot@lists.busybox.net>;
+ Sun,  2 Jul 2023 10:26:11 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07D5D60804
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 07D5D60804
+ for <buildroot@uclibc.org>; Sun,  2 Jul 2023 10:26:10 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qFuHQ-0004bn-I1
+ for buildroot@uclibc.org; Sun, 02 Jul 2023 12:26:08 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Sun, 02 Jul 2023 03:03:19 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Outdated package
-X-Bugzilla-Version: 2023.05
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jeffplays1292@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15673-163-BjSMcL6Ki5@https.bugs.busybox.net/>
-In-Reply-To: <bug-15673-163@https.bugs.busybox.net/>
-References: <bug-15673-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15673] PKGCONF_SITE in pkgconf.mk points to parked
- domain
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Sun, 02 Jul 2023 12:25:54 +0200
+Message-ID: <pan$c3c28$dbc31227$a1fcf6d3$9bb0a82d@ID-313208.user.individual.net>
+References: <20230613202530.612061-1-bernd.kuhls@t-online.de>
+ <20230701230134.6c2314e4__32130.2583602787$1688245321$gmane$org@windsurf>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/python-pyicu: fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,17 +64,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15673
+Am Sat, 1 Jul 2023 23:01:34 +0200 schrieb Thomas Petazzoni via buildroot:
 
---- Comment #2 from jeffplays1292@gmail.com ---
-(In reply to Arnout Vandecappelle from comment #1)
-The archives aren't the same. They are configured with ./autogen.sh on pkgconf
-1.6.3. Also they have different sha256 because github releases uses an internal
-version of gzip.
+> Also, is there some sort of dependency between this patch and the
+> python-pyicu bump at
+> http://patchwork.ozlabs.org/project/buildroot/patch/
+20230611123108.372959-1-bernd.kuhls-
+zqRNUXuvxA0b1SvskN2V4Q@public.gmane.org/
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Hi Thomas,
+
+no.
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
