@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58B3EEB64D9
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 16:48:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D96EEB64D9
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 16:53:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD15C40309;
-	Sun,  2 Jul 2023 16:48:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD15C40309
+	by smtp4.osuosl.org (Postfix) with ESMTP id E98C1408A2;
+	Sun,  2 Jul 2023 16:53:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E98C1408A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q8BMH2Q7qf_h; Sun,  2 Jul 2023 16:48:10 +0000 (UTC)
+	with ESMTP id WCy2NDz53AU3; Sun,  2 Jul 2023 16:53:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C129040235;
-	Sun,  2 Jul 2023 16:48:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C129040235
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AAA841BF280
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 16:48:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE6F24051A;
+	Sun,  2 Jul 2023 16:53:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE6F24051A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 84BC51BF280
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 16:53:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91BE440AEE
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 16:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91BE440AEE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E60660E09
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 16:53:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E60660E09
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id maY5dylG1X6t for <buildroot@lists.busybox.net>;
- Sun,  2 Jul 2023 16:48:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AIlMwCRcg_8z for <buildroot@lists.busybox.net>;
+ Sun,  2 Jul 2023 16:53:24 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83932401B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12BA3606AA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 83932401B2
- for <buildroot@buildroot.org>; Sun,  2 Jul 2023 16:48:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 12BA3606AA
+ for <buildroot@buildroot.org>; Sun,  2 Jul 2023 16:53:23 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A484FA4C00B2;
- Sun,  2 Jul 2023 18:48:05 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38474)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E2350A4C00B2
+ for <buildroot@buildroot.org>; Sun,  2 Jul 2023 18:53:20 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56536)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qG0F3-0006RA-1G;
- Sun, 02 Jul 2023 18:48:05 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qG0K8-0007L0-1y
+ for buildroot@buildroot.org; Sun, 02 Jul 2023 18:53:20 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jul 2023 18:48:05 +0200
-Message-Id: <20230702164805.3469254-1-bernd@kuhls.net>
+Date: Sun,  2 Jul 2023 18:53:20 +0200
+Message-Id: <20230702165320.3480057-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1688316485;
- bh=qpRjk7fn9XLRPPs4ayLB4s8Uuk5eIc5ZRZI8SLpF7FI=;
- h=From:To:Cc:Subject:Date:From;
- b=Wy9/ztwowJeT4mHK1XcfrGhsPb70iR+/YE+kVdK21e1UrrjJxPh1A5dRI9m65WkZq
- MRDqeC+9tl5GY0GOytYV08n9rQ9gqsQG2Tyv8pv4Qd/8ZPr6V1pknTqECpJ8XJ/8NS
- Hl9gGddKPljqzPTdeVpQfcupvAueD3+8D3bnIEwiQ2u67JfGgvTijZ3tG+8HS+Voxg
- gYEsaxLMlDR1gwDuDBqnbVfBgyadLh4TnlR3AV4a3XzB1QPNcJBdB4V8B5w2y5JI+6
- rFojoOSGJWLEhYt73PkrVwNzukbfN/QTfgaFtwq6YW+oaK7dkdcH7YzvBhn9YqmMaI
- sWBttsyw0wPEQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202306131828; t=1688316800;
+ bh=KsLwZBDqTsaUQazCn1BK72Q20A6Nf30fr3YeJsc05aQ=;
+ h=From:To:Subject:Date:From;
+ b=xvS2jz/7H82dwOr/mqby2UQQk3dIiuzHI/cJ9pEiP5FuicwQ1V6cpFBfd6fUHiCYD
+ mn+/YpGa13K0VOQUpu5oyZjtXN2CVs3Tr27OB7ZbfXjK4RWak0q2chVaYBUhJD0mWK
+ vBtQ6y2FPIqrfCDiYVDGEN7eO+hMPig2rA6lLtcm6PqobSbb9pzRWXXX3BodQs5TyQ
+ a7Sa6NPYSYu0/abAZOWGmhxmhQHviONCTuwDNv+Yh/tr95c2gb71JMJSIjdT/l45Nu
+ nbYX8SgCyLhVdkOqBSGBf+Y7pcHeZQ4e0Q6Z8322SYZflsXQ1O/+GzlUv8JlVgnHuN
+ 44dx8BiDMx4oA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=Wy9/ztwo
-Subject: [Buildroot] [PATCH 1/1] package/dos2unix: bump version to 7.5.0
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=xvS2jz/7
+Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: bump version to 1.47.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,50 +75,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David Bachelart <david.bachelart@bbright.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://waterlan.home.xs4all.nl/dos2unix/ChangeLog.txt
+Release notes:
+https://e2fsprogs.sourceforge.net/e2fsprogs-release.html
 
-Updated license hash due to upstream commit which update project URLs
-and copyright year:
-https://sourceforge.net/p/dos2unix/dos2unix/ci/c5acfaf73db3686cf49a46705f00ad8eeb3f7151/
-https://sourceforge.net/p/dos2unix/dos2unix/ci/59510e21846bb9c7c2efdf326dd33d573883f611/
+Removed patch which is included this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/dos2unix/dos2unix.hash | 6 +++---
- package/dos2unix/dos2unix.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                           |  1 -
+ ...-sanity-check-to-extent-manipulation.patch | 59 -------------------
+ package/e2fsprogs/e2fsprogs.hash              |  4 +-
+ package/e2fsprogs/e2fsprogs.mk                |  2 +-
+ 4 files changed, 3 insertions(+), 63 deletions(-)
+ delete mode 100644 package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
 
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index a16c1aecac..032c8ea2d2 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.3.tar.gz.asc
--sha256  b68db41956daf933828423aa30510e00c12d29ef5916e715e8d4e694fe66ca72  dos2unix-7.4.3.tar.gz
--sha256  275ce1371734904b275e83bf760e3e6d2a520614545a3850c9568d1892b940fd  COPYING.txt
-+# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.0.tar.gz.asc
-+sha256  7a3b01d01e214d62c2b3e04c3a92e0ddc728a385566e4c0356efa66fd6eb95af  dos2unix-7.5.0.tar.gz
-+sha256  6009a35c7aaee9888fd4844972c37b84bce22e7407893727c70f4f3560ae3eac  COPYING.txt
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index f16a527f2e..6d1e70cf26 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 75b2ecd434..df2406c16d 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -378,7 +378,6 @@ package/dvblast/0002-fix-int-types.patch Upstream
+ package/dvbsnoop/0001-musl-types-h.patch Upstream
+ package/dvdrw-tools/0001-limits.h.patch Upstream
+ package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch Upstream
+-package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch Upstream
+ package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch Upstream
+ package/earlyoom/S02earlyoom Indent Shellcheck
+ package/ebtables/0001-replace-ebtables-save-perl-script-with-bash.patch Upstream
+diff --git a/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch b/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
+deleted file mode 100644
+index b5299a2a78..0000000000
+--- a/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From ab51d587bb9b229b1fade1afd02e1574c1ba5c76 Mon Sep 17 00:00:00 2001
+-From: Lukas Czerner <lczerner@redhat.com>
+-Date: Thu, 21 Apr 2022 19:31:48 +0200
+-Subject: libext2fs: add sanity check to extent manipulation
+-
+-It is possible to have a corrupted extent tree in such a way that a leaf
+-node contains zero extents in it. Currently if that happens and we try
+-to traverse the tree we can end up accessing wrong data, or possibly
+-even uninitialized memory. Make sure we don't do that.
+-
+-Additionally make sure that we have a sane number of bytes passed to
+-memmove() in ext2fs_extent_delete().
+-
+-Note that e2fsck is currently unable to spot and fix such corruption in
+-pass1.
+-
+-Signed-off-by: Lukas Czerner <lczerner@redhat.com>
+-Reported-by: Nils Bars <nils_bars@t-online.de>
+-Addresses: https://bugzilla.redhat.com/show_bug.cgi?id=2068113
+-Addresses: CVE-2022-1304
+-Addresses-Debian-Bug: #1010263
+-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+-
+-[Retrieved from:
+-https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/commit/?h=maint&id=ab51d587bb9b229b1fade1afd02e1574c1ba5c76]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- lib/ext2fs/extent.c | 8 ++++++++
+- 1 file changed, 8 insertions(+)
+-
+-diff --git a/lib/ext2fs/extent.c b/lib/ext2fs/extent.c
+-index b324c7b0..1a206a16 100644
+---- a/lib/ext2fs/extent.c
+-+++ b/lib/ext2fs/extent.c
+-@@ -495,6 +495,10 @@ retry:
+- 			ext2fs_le16_to_cpu(eh->eh_entries);
+- 		newpath->max_entries = ext2fs_le16_to_cpu(eh->eh_max);
+- 
+-+		/* Make sure there is at least one extent present */
+-+		if (newpath->left <= 0)
+-+			return EXT2_ET_EXTENT_NO_DOWN;
+-+
+- 		if (path->left > 0) {
+- 			ix++;
+- 			newpath->end_blk = ext2fs_le32_to_cpu(ix->ei_block);
+-@@ -1630,6 +1634,10 @@ errcode_t ext2fs_extent_delete(ext2_extent_handle_t handle, int flags)
+- 
+- 	cp = path->curr;
+- 
+-+	/* Sanity check before memmove() */
+-+	if (path->left < 0)
+-+		return EXT2_ET_EXTENT_LEAF_BAD;
+-+
+- 	if (path->left) {
+- 		memmove(cp, cp + sizeof(struct ext3_extent_idx),
+- 			path->left * sizeof(struct ext3_extent_idx));
+--- 
+-cgit 
+-
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 452c8d5689..28a47c15d1 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.46.5/sha256sums.asc
+-sha256  2f16c9176704cf645dc69d5b15ff704ae722d665df38b2ed3cfc249757d8d81e  e2fsprogs-1.46.5.tar.xz
++# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.0/sha256sums.asc
++sha256  144af53f2bbd921cef6f8bea88bb9faddca865da3fbc657cc9b4d2001097d5db  e2fsprogs-1.47.0.tar.xz
+ # Locally calculated
+ sha256  5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256  032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 39c9e07644..75214be8c7 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOS2UNIX_VERSION = 7.4.3
-+DOS2UNIX_VERSION = 7.5.0
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
+-E2FSPROGS_VERSION = 1.46.5
++E2FSPROGS_VERSION = 1.47.0
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
 -- 
 2.39.2
 
