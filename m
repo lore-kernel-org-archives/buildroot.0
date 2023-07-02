@@ -4,66 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69B96EB64D9
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 11:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 007C6EB64D9
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 12:22:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6E5060A61;
-	Sun,  2 Jul 2023 11:56:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6E5060A61
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8504960A80;
+	Sun,  2 Jul 2023 12:22:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8504960A80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KyeYKBQYmR-w; Sun,  2 Jul 2023 11:56:59 +0000 (UTC)
+	with ESMTP id c15kUknQQgyS; Sun,  2 Jul 2023 12:22:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32B6860A71;
-	Sun,  2 Jul 2023 11:56:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32B6860A71
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C9F321BF5E6
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 11:56:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9CCB60A65;
+	Sun,  2 Jul 2023 12:22:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9CCB60A65
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E5401BF48C
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 12:22:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B01CF60A64
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 11:56:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B01CF60A64
+ by smtp1.osuosl.org (Postfix) with ESMTP id 54BB381499
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 12:22:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54BB381499
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tlOOJK03ZJ66 for <buildroot@lists.busybox.net>;
- Sun,  2 Jul 2023 11:56:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jOiJerpSmIpU for <buildroot@lists.busybox.net>;
+ Sun,  2 Jul 2023 12:22:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE39E60A61
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EE39E60A61
- for <buildroot@buildroot.org>; Sun,  2 Jul 2023 11:56:54 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3435DA4C01A0
- for <buildroot@buildroot.org>; Sun,  2 Jul 2023 13:56:52 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39860)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qFvhD-0006Il-3B
- for buildroot@buildroot.org; Sun, 02 Jul 2023 13:56:52 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5420781495
+Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5420781495
+ for <buildroot@buildroot.org>; Sun,  2 Jul 2023 12:22:46 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (14)
+Received: from zm.lan (pub-46.182.29.194.multiplay.pl [194.29.182.46])
+ by server220076.nazwa.pl (Postfix) with ESMTP id 8626B1BBAE7;
+ Sun,  2 Jul 2023 14:22:43 +0200 (CEST)
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jul 2023 13:56:51 +0200
-Message-Id: <20230702115651.2430264-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sun,  2 Jul 2023 14:22:35 +0200
+Message-ID: <20230702122236.1113430-1-m.niestroj@grinn-global.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1688299012;
- bh=YVlUn4w9iTp9CywIw6zOBn7Z0xl2FDEuv5ZC3dBY3es=;
- h=From:To:Subject:Date:From;
- b=lIDUSNbrnCYW0vzGRAf9V8kwr0uo9yL/oK4RS791Tx30M6C3LUSjb59AqWSEvXykB
- yBkSka5rXuscWzo2RbldW92YHCmpAYfHr5RTEpTYErk+eRKAz1HcGCl6E4wOqml5Dn
- ZirDfvTY/bmVotoX0buCJi1xaakcKrUatOMZf7S6ayGUOA6uI7ODXAPYrBu9P5SAB2
- DTTDygbnvBcCe5l/UJF09ahVu4NBIDd09ze3pu/2bJ4dvzs6Pl9qia4Oek5WMIm058
- x2/t6fmDukdNizlfn4ihBXYtTmi1ymRX4KD2HO2sY2h0DYGLMV0TZ7aK15hH5zmF/0
- bXwwmJT+gGbJg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=lIDUSNbr
-Subject: [Buildroot] [PATCH 1/1] package/libssh2: disable rpath
+Subject: [Buildroot] [PATCH] configs/chiliboard: uboot needs openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,47 +57,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bumping libssh2 to 1.11.0 with buildroot commit
-af87ad197caf434936fe239f2718fd17b60fcb8b
-causes build errors with libcurl due to "-R" being added to libssh2.pc.
+Fixes uboot build errors:
 
-Quoting autobuilder build-end.log
+  In file included from tools/imagetool.h:24,
+                   from tools/aisimage.c:7:
+  include/image.h:1383:12: fatal error: openssl/evp.h: No such file or directory
+   1383 | #  include <openssl/evp.h>
+        |
 
-checking for recv... no
-configure: error: Unable to link function recv
-
-Quoting autobuilder libcurl-8.1.2/config.log
-
-arc-buildroot-linux-uclibc-gcc.br_real: error: unrecognized command-line option '-R'
-
-Fixes:
-http://autobuild.buildroot.net/results/78f/78ffda92d51f8abdbcef93f968ace432d0d44979/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/libssh2/libssh2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/grinn_chiliboard_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index 8bedbdffba..a42be46a7a 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -11,7 +11,7 @@ LIBSSH2_LICENSE = BSD
- LIBSSH2_LICENSE_FILES = COPYING
- LIBSSH2_CPE_ID_VENDOR = libssh2
- LIBSSH2_INSTALL_STAGING = YES
--LIBSSH2_CONF_OPTS = --disable-examples-build
-+LIBSSH2_CONF_OPTS = --disable-examples-build --disable-rpath
- 
- ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
- LIBSSH2_DEPENDENCIES += mbedtls
+diff --git a/configs/grinn_chiliboard_defconfig b/configs/grinn_chiliboard_defconfig
+index e7862d1738..a5a8f7a65f 100644
+--- a/configs/grinn_chiliboard_defconfig
++++ b/configs/grinn_chiliboard_defconfig
+@@ -18,6 +18,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="chiliboard"
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
