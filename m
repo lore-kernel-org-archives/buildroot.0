@@ -4,66 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D96EEB64D9
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 16:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B72E6EB64D9
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jul 2023 17:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E98C1408A2;
-	Sun,  2 Jul 2023 16:53:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E98C1408A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C0E0415FB;
+	Sun,  2 Jul 2023 17:02:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C0E0415FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WCy2NDz53AU3; Sun,  2 Jul 2023 16:53:27 +0000 (UTC)
+	with ESMTP id RzArQk5lqjf9; Sun,  2 Jul 2023 17:02:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE6F24051A;
-	Sun,  2 Jul 2023 16:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE6F24051A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 84BC51BF280
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 16:53:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA870415FC;
+	Sun,  2 Jul 2023 17:02:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA870415FC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 589181BF280
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 17:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E60660E09
- for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 16:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E60660E09
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3232C4053D
+ for <buildroot@lists.busybox.net>; Sun,  2 Jul 2023 17:02:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3232C4053D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AIlMwCRcg_8z for <buildroot@lists.busybox.net>;
- Sun,  2 Jul 2023 16:53:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12BA3606AA
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 12BA3606AA
- for <buildroot@buildroot.org>; Sun,  2 Jul 2023 16:53:23 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E2350A4C00B2
- for <buildroot@buildroot.org>; Sun,  2 Jul 2023 18:53:20 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56536)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qG0K8-0007L0-1y
- for buildroot@buildroot.org; Sun, 02 Jul 2023 18:53:20 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pfalegrZpgp9 for <buildroot@lists.busybox.net>;
+ Sun,  2 Jul 2023 17:02:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 682E4401B2
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 682E4401B2
+ for <buildroot@buildroot.org>; Sun,  2 Jul 2023 17:02:42 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 4C61613F8C1;
+ Sun,  2 Jul 2023 19:02:37 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jul 2023 18:53:20 +0200
-Message-Id: <20230702165320.3480057-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sun,  2 Jul 2023 19:02:29 +0200
+Message-ID: <20230702170229.1311461-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1688316800;
- bh=KsLwZBDqTsaUQazCn1BK72Q20A6Nf30fr3YeJsc05aQ=;
- h=From:To:Subject:Date:From;
- b=xvS2jz/7H82dwOr/mqby2UQQk3dIiuzHI/cJ9pEiP5FuicwQ1V6cpFBfd6fUHiCYD
- mn+/YpGa13K0VOQUpu5oyZjtXN2CVs3Tr27OB7ZbfXjK4RWak0q2chVaYBUhJD0mWK
- vBtQ6y2FPIqrfCDiYVDGEN7eO+hMPig2rA6lLtcm6PqobSbb9pzRWXXX3BodQs5TyQ
- a7Sa6NPYSYu0/abAZOWGmhxmhQHviONCTuwDNv+Yh/tr95c2gb71JMJSIjdT/l45Nu
- nbYX8SgCyLhVdkOqBSGBf+Y7pcHeZQ4e0Q6Z8322SYZflsXQ1O/+GzlUv8JlVgnHuN
- 44dx8BiDMx4oA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=xvS2jz/7
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: bump version to 1.47.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1688317359;
+ bh=WwzKPzFPaN7jywz7em8NIWrAJbLQJ6yNVGWDdKyElOA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=J4SjFdEKgxlF/iwcRx7EyyBtDJP9SouiIq81COH4MWMCmF7ZWYrM87sXHnq/WiBq3
+ C9nfQnUpgBtQTSzIvS4rmUWS0TBz2iWIiiY5iXKwFucfsvepu4x0E/R0FQsbwLvCfz
+ mLZ4ljHFKp7XkwQ/8OfqvlAxn6rdW4Orid3AMeovh20ntZPdAQMcXn3oA/LTpwbyXR
+ QVtxgPyqF9e7sY9SrMHV2PfpvVxWhCW4MipOr5OnO8Oq19S/NrF8Hy4j4ARuCJHcrU
+ xNp4Fq11mhCAwKu92lb1QJl0HnepwtB/qZGYTu2jikk/HoqJwiq7WlkUiy/6QA5QC6
+ MxQdV1I94epwA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=J4SjFdEK
+Subject: [Buildroot] [PATCH 1/1] package/xvisor: bump to version 0.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,129 +71,190 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://e2fsprogs.sourceforge.net/e2fsprogs-release.html
+For change log since version 0.3.1, see:
+https://www.xhypervisor.org/index.php?page=news/20230101
+or
+https://github.com/xvisor/xvisor/blob/master/docs/releases/v0.3.2
 
-Removed patch which is included this release.
+This commit also drop the patch, as an equivalent fix, included in this
+version, was made upstream in:
+https://github.com/xvisor/xvisor/commit/eb1d1dd4658c2bab6c49abb7bc51c231dc5cc0bd
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The file .checkpackageignore is also updated to reflect this patch
+removal.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                           |  1 -
- ...-sanity-check-to-extent-manipulation.patch | 59 -------------------
- package/e2fsprogs/e2fsprogs.hash              |  4 +-
- package/e2fsprogs/e2fsprogs.mk                |  2 +-
- 4 files changed, 3 insertions(+), 63 deletions(-)
- delete mode 100644 package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
+ .checkpackageignore                           |   1 -
+ ...psmouse-back.c-fix-build-with-gcc-11.patch | 115 ------------------
+ package/xvisor/xvisor.hash                    |   2 +-
+ package/xvisor/xvisor.mk                      |   2 +-
+ 4 files changed, 2 insertions(+), 118 deletions(-)
+ delete mode 100644 package/xvisor/0001-psmouse-back.c-fix-build-with-gcc-11.patch
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 75b2ecd434..df2406c16d 100644
+index 7d544a6e61..9e29267f77 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -378,7 +378,6 @@ package/dvblast/0002-fix-int-types.patch Upstream
- package/dvbsnoop/0001-musl-types-h.patch Upstream
- package/dvdrw-tools/0001-limits.h.patch Upstream
- package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch Upstream
--package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch Upstream
- package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch Upstream
- package/earlyoom/S02earlyoom Indent Shellcheck
- package/ebtables/0001-replace-ebtables-save-perl-script-with-bash.patch Upstream
-diff --git a/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch b/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
+@@ -1661,7 +1661,6 @@ package/xinetd/0004-configure-rlim_t.patch Upstream
+ package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch Upstream
+ package/xl2tp/xl2tpd TrailingSpace
+ package/xml-security-c/0001-fix-build-with-libressl-3.5.0.patch Upstream
+-package/xvisor/0001-psmouse-back.c-fix-build-with-gcc-11.patch Upstream
+ package/xxhash/0001-fix-man-page-installation.patch Upstream
+ package/xxhash/0002-Makefile-add-dedicated-install-targets.patch Upstream
+ package/xxhash/0003-do-no-longer-depend-on-assert-h-for-XXH_STATIC_ASSERT.patch Upstream
+diff --git a/package/xvisor/0001-psmouse-back.c-fix-build-with-gcc-11.patch b/package/xvisor/0001-psmouse-back.c-fix-build-with-gcc-11.patch
 deleted file mode 100644
-index b5299a2a78..0000000000
---- a/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
+index 1c02f45c9d..0000000000
+--- a/package/xvisor/0001-psmouse-back.c-fix-build-with-gcc-11.patch
 +++ /dev/null
-@@ -1,59 +0,0 @@
--From ab51d587bb9b229b1fade1afd02e1574c1ba5c76 Mon Sep 17 00:00:00 2001
--From: Lukas Czerner <lczerner@redhat.com>
--Date: Thu, 21 Apr 2022 19:31:48 +0200
--Subject: libext2fs: add sanity check to extent manipulation
+@@ -1,115 +0,0 @@
+-From 0e07e82121697d99470a147eadad9a708889c4df Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 2 Sep 2021 18:13:03 +0200
+-Subject: [PATCH] psmouse-back.c: fix build with gcc 11
 -
--It is possible to have a corrupted extent tree in such a way that a leaf
--node contains zero extents in it. Currently if that happens and we try
--to traverse the tree we can end up accessing wrong data, or possibly
--even uninitialized memory. Make sure we don't do that.
+-Fix the following build failures with gcc 11 by defining inline
+-functions as static:
 -
--Additionally make sure that we have a sane number of bytes passed to
--memmove() in ext2fs_extent_delete().
+-/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/11.1.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/buildroot/autobuild/instance-3/output-1/build/xvisor-0.3.0/build/drivers/drivers.o: in function `psmouse_extensions':
+-/home/buildroot/autobuild/instance-3/output-1/build/xvisor-0.3.0/drivers/input/mouse/psmouse-base.c:783: undefined reference to `lifebook_detect'
+-/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/11.1.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/buildroot/autobuild/instance-3/output-1/build/xvisor-0.3.0/drivers/input/mouse/psmouse-base.c:783: undefined reference to `alps_detect'
+-/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/11.1.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/buildroot/autobuild/instance-3/output-1/build/xvisor-0.3.0/drivers/input/mouse/psmouse-base.c:783: undefined reference to `ps2pp_init'
+-/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/11.1.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/buildroot/autobuild/instance-3/output-1/build/xvisor-0.3.0/drivers/input/mouse/psmouse-base.c:783: undefined reference to `trackpoint_detect'
+-/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/11.1.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/buildroot/autobuild/instance-3/output-1/build/xvisor-0.3.0/drivers/input/mouse/psmouse-base.c:783: undefined reference to `fsp_detect'
 -
--Note that e2fsck is currently unable to spot and fix such corruption in
--pass1.
+-Fixes:
+- - http://autobuild.buildroot.org/results/69062b9c80567d135edd48890165e69881cf7295
 -
--Signed-off-by: Lukas Czerner <lczerner@redhat.com>
--Reported-by: Nils Bars <nils_bars@t-online.de>
--Addresses: https://bugzilla.redhat.com/show_bug.cgi?id=2068113
--Addresses: CVE-2022-1304
--Addresses-Debian-Bug: #1010263
--Signed-off-by: Theodore Ts'o <tytso@mit.edu>
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/commit/?h=maint&id=ab51d587bb9b229b1fade1afd02e1574c1ba5c76]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/xvisor/xvisor/pull/139]
 ----
-- lib/ext2fs/extent.c | 8 ++++++++
-- 1 file changed, 8 insertions(+)
+- drivers/input/mouse/alps.h       | 4 ++--
+- drivers/input/mouse/lifebook.h   | 6 +++---
+- drivers/input/mouse/logips2pp.h  | 2 +-
+- drivers/input/mouse/sentelic.h   | 4 ++--
+- drivers/input/mouse/trackpoint.h | 2 +-
+- 5 files changed, 9 insertions(+), 9 deletions(-)
 -
--diff --git a/lib/ext2fs/extent.c b/lib/ext2fs/extent.c
--index b324c7b0..1a206a16 100644
----- a/lib/ext2fs/extent.c
--+++ b/lib/ext2fs/extent.c
--@@ -495,6 +495,10 @@ retry:
-- 			ext2fs_le16_to_cpu(eh->eh_entries);
-- 		newpath->max_entries = ext2fs_le16_to_cpu(eh->eh_max);
-- 
--+		/* Make sure there is at least one extent present */
--+		if (newpath->left <= 0)
--+			return EXT2_ET_EXTENT_NO_DOWN;
--+
-- 		if (path->left > 0) {
-- 			ix++;
-- 			newpath->end_blk = ext2fs_le32_to_cpu(ix->ei_block);
--@@ -1630,6 +1634,10 @@ errcode_t ext2fs_extent_delete(ext2_extent_handle_t handle, int flags)
-- 
-- 	cp = path->curr;
-- 
--+	/* Sanity check before memmove() */
--+	if (path->left < 0)
--+		return EXT2_ET_EXTENT_LEAF_BAD;
--+
-- 	if (path->left) {
-- 		memmove(cp, cp + sizeof(struct ext3_extent_idx),
-- 			path->left * sizeof(struct ext3_extent_idx));
+-diff --git a/drivers/input/mouse/alps.h b/drivers/input/mouse/alps.h
+-index ae1ac354..acc1e89e 100644
+---- a/drivers/input/mouse/alps.h
+-+++ b/drivers/input/mouse/alps.h
+-@@ -51,11 +51,11 @@ struct alps_data {
+- int alps_detect(struct psmouse *psmouse, bool set_properties);
+- int alps_init(struct psmouse *psmouse);
+- #else
+--inline int alps_detect(struct psmouse *psmouse, bool set_properties)
+-+static inline int alps_detect(struct psmouse *psmouse, bool set_properties)
+- {
+- 	return -ENOSYS;
+- }
+--inline int alps_init(struct psmouse *psmouse)
+-+static inline int alps_init(struct psmouse *psmouse)
+- {
+- 	return -ENOSYS;
+- }
+-diff --git a/drivers/input/mouse/lifebook.h b/drivers/input/mouse/lifebook.h
+-index 4c4326c6..0baf02a7 100644
+---- a/drivers/input/mouse/lifebook.h
+-+++ b/drivers/input/mouse/lifebook.h
+-@@ -16,14 +16,14 @@ void lifebook_module_init(void);
+- int lifebook_detect(struct psmouse *psmouse, bool set_properties);
+- int lifebook_init(struct psmouse *psmouse);
+- #else
+--inline void lifebook_module_init(void)
+-+static inline void lifebook_module_init(void)
+- {
+- }
+--inline int lifebook_detect(struct psmouse *psmouse, bool set_properties)
+-+static inline int lifebook_detect(struct psmouse *psmouse, bool set_properties)
+- {
+- 	return -ENOSYS;
+- }
+--inline int lifebook_init(struct psmouse *psmouse)
+-+static inline int lifebook_init(struct psmouse *psmouse)
+- {
+- 	return -ENOSYS;
+- }
+-diff --git a/drivers/input/mouse/logips2pp.h b/drivers/input/mouse/logips2pp.h
+-index 0c186f02..439e9c58 100644
+---- a/drivers/input/mouse/logips2pp.h
+-+++ b/drivers/input/mouse/logips2pp.h
+-@@ -14,7 +14,7 @@
+- #ifdef CONFIG_MOUSE_PS2_LOGIPS2PP
+- int ps2pp_init(struct psmouse *psmouse, bool set_properties);
+- #else
+--inline int ps2pp_init(struct psmouse *psmouse, bool set_properties)
+-+static inline int ps2pp_init(struct psmouse *psmouse, bool set_properties)
+- {
+- 	return -ENOSYS;
+- }
+-diff --git a/drivers/input/mouse/sentelic.h b/drivers/input/mouse/sentelic.h
+-index aa697ece..42df9e3b 100644
+---- a/drivers/input/mouse/sentelic.h
+-+++ b/drivers/input/mouse/sentelic.h
+-@@ -123,11 +123,11 @@ struct fsp_data {
+- extern int fsp_detect(struct psmouse *psmouse, bool set_properties);
+- extern int fsp_init(struct psmouse *psmouse);
+- #else
+--inline int fsp_detect(struct psmouse *psmouse, bool set_properties)
+-+static inline int fsp_detect(struct psmouse *psmouse, bool set_properties)
+- {
+- 	return -ENOSYS;
+- }
+--inline int fsp_init(struct psmouse *psmouse)
+-+static inline int fsp_init(struct psmouse *psmouse)
+- {
+- 	return -ENOSYS;
+- }
+-diff --git a/drivers/input/mouse/trackpoint.h b/drivers/input/mouse/trackpoint.h
+-index e558a709..f14e59c0 100644
+---- a/drivers/input/mouse/trackpoint.h
+-+++ b/drivers/input/mouse/trackpoint.h
+-@@ -145,7 +145,7 @@ struct trackpoint_data
+- #ifdef CONFIG_MOUSE_PS2_TRACKPOINT
+- int trackpoint_detect(struct psmouse *psmouse, bool set_properties);
+- #else
+--inline int trackpoint_detect(struct psmouse *psmouse, bool set_properties)
+-+static inline int trackpoint_detect(struct psmouse *psmouse, bool set_properties)
+- {
+- 	return -ENOSYS;
+- }
 --- 
--cgit 
+-2.32.0
 -
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 452c8d5689..28a47c15d1 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,5 +1,5 @@
--# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.46.5/sha256sums.asc
--sha256  2f16c9176704cf645dc69d5b15ff704ae722d665df38b2ed3cfc249757d8d81e  e2fsprogs-1.46.5.tar.xz
-+# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.0/sha256sums.asc
-+sha256  144af53f2bbd921cef6f8bea88bb9faddca865da3fbc657cc9b4d2001097d5db  e2fsprogs-1.47.0.tar.xz
- # Locally calculated
- sha256  5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256  032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 39c9e07644..75214be8c7 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
+diff --git a/package/xvisor/xvisor.hash b/package/xvisor/xvisor.hash
+index 45b6fec49c..4676db9e8c 100644
+--- a/package/xvisor/xvisor.hash
++++ b/package/xvisor/xvisor.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  b1bb2ca09340e87a2f465c65196892cdd0f59b798794ae69e35d1f883cf9ba49  xvisor-0.3.1.tar.xz
++sha256  fbced0f74b75758d4859d329b86c213bd24662168179ebfb2b02b987a1070215  xvisor-0.3.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
+index d7bb288ea8..eba37be9b7 100644
+--- a/package/xvisor/xvisor.mk
++++ b/package/xvisor/xvisor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--E2FSPROGS_VERSION = 1.46.5
-+E2FSPROGS_VERSION = 1.47.0
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+-XVISOR_VERSION = 0.3.1
++XVISOR_VERSION = 0.3.2
+ XVISOR_SOURCE = xvisor-$(XVISOR_VERSION).tar.xz
+ XVISOR_SITE = http://www.xhypervisor.org/tarball
+ XVISOR_LICENSE = GPL-2.0+
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
