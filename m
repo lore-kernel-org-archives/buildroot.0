@@ -4,84 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5549FC0015E
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 14:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 112E2EB64DC
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 15:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E8238186B;
-	Mon,  3 Jul 2023 14:39:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E8238186B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 609F28203C;
+	Mon,  3 Jul 2023 15:58:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 609F28203C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bXVVjXWNh_WW; Mon,  3 Jul 2023 14:39:40 +0000 (UTC)
+	with ESMTP id gJuo_-FTaQV1; Mon,  3 Jul 2023 15:58:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0BDB8199D;
-	Mon,  3 Jul 2023 14:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0BDB8199D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 093F782040;
+	Mon,  3 Jul 2023 15:58:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 093F782040
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F78A1BF5A9
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 14:39:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BA97B1BF59D
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 15:57:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35AC68199D
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 14:39:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35AC68199D
+ by smtp1.osuosl.org (Postfix) with ESMTP id A18BB82040
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 15:57:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A18BB82040
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2sGTEREU_cQy for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 14:39:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F09378186B
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F09378186B
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 14:39:36 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id
- 4fb4d7f45d1cf-51d805cb33aso5741332a12.3
- for <buildroot@buildroot.org>; Mon, 03 Jul 2023 07:39:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1688395175; x=1690987175;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OjTIxziakMGpcbKRDOhcD7tvB4coI8aZwmeiG0CxFiw=;
- b=FUwnuVItLVdoVVE+Pw5k9+U/gnHRuAHCG56D9CE+OiWH+bTZbRcLvMQl9SlgRYDqZI
- K2wnFHAhX90KiMWrZtPHVlae4PFgpB5Km4v+hwS4KAaSNfcrZZyfWsN+qZS91+zdYF4t
- Tq94uJ8YYvQvQzTg1cJBmbkvLNaeTsBuLYXkL8JqeeJawuyKuAxYoBzjicRJgiyIFGOx
- bQ+lnhj07dHRh7QVznEmx0XWY3XkDzZTDTT7RFc+PghpCViwGENB9iJuNszmb+UPNMB+
- M8F42bBT1DdUQnxEYiidMjJGuFjxYJW8sj0WZ75irXmAvLCeYGlBJdLrqYZcnT+jiv3H
- 7UCA==
-X-Gm-Message-State: ABy/qLaqT02EEoLRwu8fgyCgky5aUN+jy7JheoJPqs3wAIqcKClbEUtu
- BYc1wexziWjxtRzQ/ENHjuuoz1Tgor6RIci6y9Y=
-X-Google-Smtp-Source: APBJJlE7qwdIMMi34uVPo2amvvrUE4sqtZxNzd8elloFCvAtUqcFPMNgtowHi4DpnWMRMAP4jNTo6A==
-X-Received: by 2002:aa7:c989:0:b0:51e:12b:b989 with SMTP id
- c9-20020aa7c989000000b0051e012bb989mr5003965edt.20.1688395174852; 
- Mon, 03 Jul 2023 07:39:34 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-82-58-49-236.retail.telecomitalia.it. [82.58.49.236])
- by smtp.gmail.com with ESMTPSA id
- ca9-20020aa7cd69000000b0051dad094faasm7229141edb.36.2023.07.03.07.39.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Jul 2023 07:39:34 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ with ESMTP id NmfOFYSvgBCj for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 15:57:57 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 538A88203C
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 538A88203C
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 15:57:57 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4AB46A4C00CE
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 17:57:54 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:36824)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qGLw2-0008Gc-0E
+ for buildroot@buildroot.org; Mon, 03 Jul 2023 17:57:54 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon,  3 Jul 2023 16:39:31 +0200
-Message-Id: <20230703143931.1825624-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
+Date: Mon,  3 Jul 2023 17:57:54 +0200
+Message-Id: <20230703155754.26709-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1688395175; x=1690987175;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OjTIxziakMGpcbKRDOhcD7tvB4coI8aZwmeiG0CxFiw=;
- b=brFnJg9KnkKisA2GQcQjjeHV0TBUlwl54WomOaLoVYpz5k4ZfLPhYbt1WFQ5C+7jFd
- gMxfeT7kFxLvA3mPbOPIXpzjvaSeePcrt2x8MQ2Ak7vJOThwcVVe0F9KH6aDKuA4005R
- 9LhmZB8qKW6cOHb4dSpoEBwlmw1+EOkfztzHQ=
+ d=kuhls.net; 
+ s=kas202306131828; t=1688399874;
+ bh=jCLYuQYQjo/QRvnIc/bd7SSweBaYtXSqxw+mMnVxpc8=;
+ h=From:To:Subject:Date:From;
+ b=nOUniNVL+ItA6ku48fHCeHApU9IDTdKD7It4T2v19iKsusRYa+A2gp4ud5FzEOOxR
+ 5QFnxxls3i/4l6Vdzf1HAyh70ayjlER2KonLUkllkAsnOI4fNxm6gS1VM1fieQ+bWB
+ 0ea/yhf6P9OvxdJLrruLSxDw7M6UN2CyiebRk0+krlMmyxMnMhSISmJBMboVZqQIFI
+ SP60G5idFx2VpwxccHd/vigf9ve7ON6BWut6Jd6z1PMJtMV7exQtn0HlA4CuOELkC9
+ dglkD8L/h4XYUDwEGrSpNEI0LUkLysvJcVF3r83r2eBRBTallNgGKdTzK2qlUfE3DY
+ YCtIIlSFd1z1w==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=brFnJg9K
-Subject: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.5.109
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=nOUniNVL
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: security bump version
+ to 10.01.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +76,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.109
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/uuu/uuu.hash | 2 +-
- package/uuu/uuu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index a35970c54fda..f42e92a3793b 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  f95ef6e5f4feb8b3e8d2c1163c35415263c82ac4ba3a51bcf4e3d59d3eebd063  uuu_source-uuu_1.5.104.tar.gz
-+sha256  6c99b82c55202f43583dc41198225dea7d5b050e33e13946751911e473aed4a5  uuu_source-uuu_1.5.109.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
- sha256  f68fb8c8002c797a14e63f91963ac247034fdfd44275e4f4a3226111cd0423db  README.md
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 07dd6ce5b345..14a8a5ef025d 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index 30c45a5a74..2e4b6ac750 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10011/SHA512SUMS
+-sha512  d944be9e8aef68d1176d64c40db6fa86d55d0c9e30047f2147c02806ab61cfe9ac2cb00d4e5b218ff3c51cc6ed47ceffe1bac4dd9d4cc1760b7974f30c6c2735  ghostscript-10.01.1.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10012/SHA512SUMS
++sha512  ee20f0e12f553a3d04578e71a0d45defebc71117ce4dc2c14043985bfe7348ad7f8b2fe98fc9b4f5b935ecb32e50dc340be67d6ef58190542ec6d0f9da1de380  ghostscript-10.01.2.tar.xz
+ 
+ # Hash for license file:
+ sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index d215afccd2..8a39d4b695 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UUU_VERSION = 1.5.104
-+UUU_VERSION = 1.5.109
- UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+-GHOSTSCRIPT_VERSION = 10.01.1
++GHOSTSCRIPT_VERSION = 10.01.2
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
 -- 
-2.32.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
