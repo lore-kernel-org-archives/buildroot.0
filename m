@@ -1,71 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58236C001B0
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 19:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDC5BC001B0
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 19:16:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E54C460AAD;
-	Mon,  3 Jul 2023 19:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E54C460AAD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4ED9381DD8;
+	Mon,  3 Jul 2023 19:16:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ED9381DD8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id caqU9JDoV3VX; Mon,  3 Jul 2023 19:09:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GsZLB0tjYLBi; Mon,  3 Jul 2023 19:16:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E3A4607FE;
-	Mon,  3 Jul 2023 19:09:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E3A4607FE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ABA671BF34B
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:09:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EC3F81DAB;
+	Mon,  3 Jul 2023 19:16:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EC3F81DAB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 306751BF34B
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6DA77405C4
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:09:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DA77405C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1715E40C94
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:16:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1715E40C94
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gk4vXxw4701k for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 19:09:20 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 078FC405B7
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 078FC405B7
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 19:09:19 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B89A2240003;
- Mon,  3 Jul 2023 19:09:16 +0000 (UTC)
-Date: Mon, 3 Jul 2023 21:09:15 +0200
-To: Ignacy =?UTF-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-Message-ID: <20230703210915.1a409e96@windsurf>
-In-Reply-To: <20230703105819.flmwndqvctpjuolz@zenon.in.qult.net>
-References: <20230703105819.flmwndqvctpjuolz@zenon.in.qult.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HnEb3gwimGD8 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 19:16:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BE6B40C2A
+Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8BE6B40C2A
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 19:16:21 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.103.145])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id GP22qXlySDAUdGP23qwwhR; Mon, 03 Jul 2023 21:16:19 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Mon,  3 Jul 2023 21:16:17 +0200
+Message-Id: <20230703191617.1338283-3-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230703191617.1338283-1-giulio.benetti@benettiengineering.com>
+References: <20230703191617.1338283-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688411357;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tijjixEoGzviNUr3TT6ajbumcGYLdzlHncz5xbPftP8=;
- b=SRnSQEjeZXuwYlwv57YoIwxqsgERQc41ko2DHRcxw7sQFYIG8cJrfAnyJ4jufZGoBjMz0f
- i43N7iNWHnIOj4zRWsoZ55McbjhquGdFFRQkPS5jTht0NuynKsobL2a2Soc6T2HevEE15A
- sPUPmJlaih4R8wI8e8j7kdkQPnn93JHYD7xgzQPAJsXBP17GztMwwXDnnxZ8Bh5DiCfIke
- N42fvD84gaomhqrjPZbBcl/LCrFysXVbyraIwlMDTJXFinXfZh8NhWYxBie0bXmfOBTm4E
- 0TQ1gELWX0CHf8tbMUCnVTE/C8RUDFNpCPpbFG8SVKwTFhKLrqzcazlyciFkqQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SRnSQEje
-Subject: Re: [Buildroot] [PATCH] package/iproute2: add optional dependency
- on libbpf
+X-CMAE-Envelope: MS4xfMIfhXRklOmqRoVjl386vc2kHf5TmsYTDvZh4+7MIritEe2E6+cTAClNcINdsUbzJX3iuTtp+wfKQ7XaOeI7giVOJoBTWhuMcL3gqc+u4kRH1tpKbaXg
+ PuEgYmcy79AAt6fxixCtq7vEPgPUjCyEIA+jNr/vA4ajdMn5O6sR+pzlhcDhRGoabESMVOCiIsLc7Ty75YKyWcPlRbnlKYAc9Y1tNufpipcCQ89kKGCTgauS
+ z6jMmit4DOUJuDJ+h03IODvpZsFGS6CVPb36V4wMnGuTI3IzELvkFIpAAky3UKwtm/bmd54pGLkLMs0Krz3ziLN4oZLUTeqEDGL8FEHq5pnD08NPB9lxhHEz
+ Jk7dUykK
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1688411779; bh=egWIXdGXKNI18DwrjMKOQMK4nQBw1O/eAbYAsX/yX3M=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=M8anpoaxQ2cX5ZM2l+BtQcWF9YB6RThAszAmZfuNm15l/FW0kMG8/+5iYZQDMEQQ0
+ xN+uGeYNPNoRPFVOTrZEcDaRaeqGI9dYz9gVS7GLZc/74fy09mLUJqehqrwWXXzRCu
+ WwKT29OmIDQyrD9ypsPqsOdG9okVQqUXqxcZkkM/vpH4qYf/Eci1bDCx5w0TXVkJop
+ Ov0mcKsMFqM4BbnLzlAbdr4YOIweuosNiefCXDTar3cm+IixHqldKN8/V+R2bFdwM1
+ fWHr1H6VTv4d34aKNTNoA7LvcqHqw93rDrk0WbiUIyvhfJoWo1AMWf4hGjG8I8W1l/
+ 5NRnOgmDcoSsw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=M8anpoax
+Subject: [Buildroot] [PATCH] package/rtl8821cu: bump to version 2023-06-24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,33 +75,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Christian Stewart <christian@aperture.us>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSWduYWN5LAoKVGhhbmtzIGZvciB0aGUgcGF0Y2ghCgpPbiBNb24sIDMgSnVsIDIwMjMg
-MTI6NTg6MTkgKzAyMDAKSWduYWN5IEdhd8SZZHpraSA8aWduYWN5Lmdhd2VkemtpQGdyZWVuLWNv
-bW11bmljYXRpb25zLmZyPiB3cm90ZToKCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTElCQlBGKSx5
-KQo+ICtJUFJPVVRFMl9ERVBFTkRFTkNJRVMgKz0gbGliYnBmCj4gK2VuZGlmCgpDb3VsZCB5b3Ug
-dGVzdCBhbiBpbXByb3ZlZCB2ZXJzaW9uIHRoYXQgcGFzc2VzIExJQkJQRl9GT1JDRT1vbiBpbiB0
-aGUKZW5hYmxlZCBjYXNlIGFuZCBMSUJCUEZfRk9SQ0U9b2ZmIGluIHRoZSBkaXNhYmxlZCBjYXNl
-PwoKQWNjb3JkaW5nIHRvIHRoZSBjb25maWd1cmUgc2NyaXB0OgoKY2hlY2tfZm9yY2VfbGliYnBm
-X29uKCkKewogICAgIyBpZiBzZXQgTElCQlBGX0ZPUkNFPW9uIGJ1dCBubyBsaWJicGYgc3VwcG9y
-dCwganVzdCBleGlzdCB0aGUgY29uZmlnCiAgICAjIHByb2Nlc3MgdG8gbWFrZSBzdXJlIHdlIGRv
-bid0IGJ1aWxkIHdpdGhvdXQgbGliYnBmLgogICAgaWYgWyAiJExJQkJQRl9GT1JDRSIgPSBvbiBd
-OyB0aGVuCiAgICAgICAgZWNobyAiICBMSUJCUEZfRk9SQ0U9b24gc2V0LCBidXQgY291bGRuJ3Qg
-ZmluZCBhIHVzYWJsZSBsaWJicGYiCiAgICAgICAgZXhpdCAxCiAgICBmaQp9CgpjaGVja19saWJi
-cGYoKQp7CiAgICAjIGlmIHNldCBMSUJCUEZfRk9SQ0U9b2ZmLCBkaXNhYmxlIGxpYmJwZiBlbnRp
-cmVseQogICAgaWYgWyAiJExJQkJQRl9GT1JDRSIgPSBvZmYgXTsgdGhlbgogICAgICAgIGVjaG8g
-Im5vIgogICAgICAgIHJldHVybgogICAgZmkKCk9mIGNvdXJzZSwgYm90aCB0aGUgZW5hYmxlZCBh
-bmQgZGlzYWJsZWQgY2FzZSBuZWVkIHRvIGJlIHZlcmlmaWVkCmJlZm9yZSBzdWJtaXR0aW5nIHYy
-IDotKQoKVGhhbmtzIGEgbG90IQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25l
-ciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcg
-YW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+With this version we can build with Linux 6.4.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/rtl8821cu/rtl8821cu.hash | 2 +-
+ package/rtl8821cu/rtl8821cu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
+index 45460d6d12..84c724c044 100644
+--- a/package/rtl8821cu/rtl8821cu.hash
++++ b/package/rtl8821cu/rtl8821cu.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  32589c3ac3ffde6de3ecaca83570ab07a2b92a66e3265294b0469375b007a480  rtl8821cu-80781de376007ecd778dfb2bef05533e3a6cc7c6.tar.gz
++sha256  78a8e730ad1ec05b10c4ee97b5cf0a8f5bcd1654b2c5332533c5cf4bd77078d8  rtl8821cu-dc9ee6c6a8b47d0e365fcf1977439c7243da71d5.tar.gz
+ sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
+diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
+index 953da1f01c..2a42a0f28e 100644
+--- a/package/rtl8821cu/rtl8821cu.mk
++++ b/package/rtl8821cu/rtl8821cu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8821CU_VERSION = 80781de376007ecd778dfb2bef05533e3a6cc7c6
++RTL8821CU_VERSION = dc9ee6c6a8b47d0e365fcf1977439c7243da71d5
+ RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
+ RTL8821CU_LICENSE = GPL-2.0
+ RTL8821CU_LICENSE_FILES = LICENSE
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
