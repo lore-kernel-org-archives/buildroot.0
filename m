@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE120C001B0
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 20:03:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56CEDC001B0
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 20:03:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E2BC80C31;
-	Mon,  3 Jul 2023 20:03:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E2BC80C31
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10CC281C40;
+	Mon,  3 Jul 2023 20:03:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10CC281C40
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LBeuK8s4Sv_v; Mon,  3 Jul 2023 20:03:38 +0000 (UTC)
+	with ESMTP id EtBUPGVNPj3d; Mon,  3 Jul 2023 20:03:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA70381776;
-	Mon,  3 Jul 2023 20:03:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA70381776
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 940591BF34B
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:03:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67708817B3;
+	Mon,  3 Jul 2023 20:03:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67708817B3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E07F51BF34B
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A8F381424
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:03:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A8F381424
+ by smtp4.osuosl.org (Postfix) with ESMTP id B389F4091C
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:03:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B389F4091C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KaAAOPblMBW4 for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 20:03:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8838D80C31
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8838D80C31
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 20:03:32 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:d686:7886:a85d:fb8a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 99894200586;
- Mon,  3 Jul 2023 22:03:27 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 03 Jul 2023 22:03:27 +0200
-Date: Mon, 3 Jul 2023 22:03:27 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230703200327.GJ2510@scaer>
-References: <20230702144829.3356214-1-bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Igt9p2RjUjJG for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 20:03:42 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 704A8408EF
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 704A8408EF
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 20:03:42 +0000 (UTC)
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 600982000A;
+ Mon,  3 Jul 2023 20:03:40 +0000 (UTC)
+Date: Mon, 3 Jul 2023 22:03:39 +0200
+To: Marcin Niestroj <m.niestroj@grinn-global.com>
+Message-ID: <20230703220339.62e71e11@windsurf>
+In-Reply-To: <20230702122236.1113430-1-m.niestroj@grinn-global.com>
+References: <20230702122236.1113430-1-m.niestroj@grinn-global.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230702144829.3356214-1-bernd@kuhls.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1688414609;
- bh=fV1NReQ9N/WsGdh/ZVuli5tlqpaaI5usKJrrbXQOJYw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ocsG4wtTS3WrM75gZjmojLodIo5+y1TyDkpEkUE++xNqsJ4VJ7VI2s4mMElVYifeG
- UAaaTS0fFmGIVEO8IIT52zJKThG81iyTkPRBBaXdcSjVEPiwIEA0qL1m85jSYnbIN3
- U+adG5uISb7mGg2IfQ7tixhrqbV2Bkby0EKxgDHRMm0tv+TB7UFdjxDs1gjwWlo8ty
- KSDwUp7ri5YU9JRXt2AVV94BWkYQQqGjQW7IQO88AZerxvpmrQGRtlnp93Y3KfjIu+
- 4I6ZDtCKEh1X5kBZshzioIcoA8RCGCPYur44/aABC21V8p9RJzP1wgxkT/z8cadA4Y
- 8kc3k+JS9HJIw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ocsG4wtT
-Subject: Re: [Buildroot] [PATCH 1/1] libgcrypt: disable assembly for i386
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1688414620;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=c42YAqOfBPKwRjZTH88H7rdHBb+z3GMS+H3NLiC1vPs=;
+ b=HaM0A4qT9KMRj6UQ9zGrgfG7xeWZgcUc8UNVxyw4cXCVX2N6DOr3U1wLVLJquClAMX2+i/
+ /deaE2V9oN6y/NFDV+LCIeo3haJZzHnygFYTO7a/jLzhwl4QmgKrEqQun300M1XKrjkCAr
+ Py+l7iflPDkT/cs/3jXcoOlPzCOjztwq3mh9bA3P9WsI9yAIFnJVzyYPbM760wY+Xhotsj
+ JNOYENNghrxbSqfqJCoyeIrhETeCmnSPtWdNeJb6YBw8lgVruQFUqMX1S3eSou3Bi13jd7
+ uGamI5oDS0QBfiovfuRmRllPNbNCEqXsFa2LtVQNJ8fU89FS7YlxYaTvesfJog==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HaM0A4qT
+Subject: Re: [Buildroot] [PATCH] configs/chiliboard: uboot needs openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,65 +76,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+On Sun,  2 Jul 2023 14:22:35 +0200
+Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
 
-On 2023-07-02 16:48 +0200, Bernd Kuhls spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/3df/3df96fe36802d8c6ac5487bf3d7d7b6c97591d5e/
+> Fixes uboot build errors:
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>   In file included from tools/imagetool.h:24,
+>                    from tools/aisimage.c:7:
+>   include/image.h:1383:12: fatal error: openssl/evp.h: No such file or directory
+>    1383 | #  include <openssl/evp.h>
+>         |
+> 
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  package/libgcrypt/libgcrypt.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-> index 4fffe5360e..bd7b1aa091 100644
-> --- a/package/libgcrypt/libgcrypt.mk
-> +++ b/package/libgcrypt/libgcrypt.mk
-> @@ -21,8 +21,8 @@ LIBGCRYPT_CONF_OPTS = \
->  	$(if $(BR2_OPTIMIZE_0),--disable-ppc-crypto-support,) \
->  	--with-gpg-error-prefix=$(STAGING_DIR)/usr
->  
-> -# Libgcrypt doesn't support assembly for coldfire
-> -ifeq ($(BR2_m68k_cf),y)
-> +# Libgcrypt doesn't support assembly for coldfire & i386
+>  configs/grinn_chiliboard_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-This is relatively weird, especially, since they do have upstream commit
-that try to make it work on "old CPUs":
+Applied to master, thanks.
 
-    a5d126c61cc0  configure: fix avx512 check for i386
-    f01d4b7a601f  mpi/longlong.h: i386: use tzcnt instruction for trailing zeros
-
-So maybe this is a bug that should be reported and fixed upstream?
-
-Regards,
-Yann E. MORIN.
-
-> +ifeq ($(BR2_i386)$(BR2_m68k_cf),y)
->  LIBGCRYPT_CONF_OPTS += --disable-asm
->  endif
->  
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
