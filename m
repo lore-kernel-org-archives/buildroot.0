@@ -4,71 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9281AC001B0
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 19:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A9B2C001B3
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 19:27:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3212B81418;
-	Mon,  3 Jul 2023 19:23:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3212B81418
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13E5481DFB;
+	Mon,  3 Jul 2023 19:27:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13E5481DFB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s2XSDO3gYB9W; Mon,  3 Jul 2023 19:23:54 +0000 (UTC)
+	with ESMTP id 1i4pFjd3hgjj; Mon,  3 Jul 2023 19:27:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 601438140D;
-	Mon,  3 Jul 2023 19:23:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 601438140D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8B0711BF34B
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:23:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4642981DF1;
+	Mon,  3 Jul 2023 19:27:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4642981DF1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B229B1BF34B
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:27:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63D038140D
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63D038140D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7EB47606FF
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:27:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EB47606FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hDlWf5duMkCF for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 19:23:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1vOW6_X0r6Nb for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 19:27:02 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B6B9813E9
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3B6B9813E9
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 19:23:50 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 73B6DD41B7
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 19:17:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3411C60595
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3411C60595
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 19:27:01 +0000 (UTC)
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C6E20240004;
- Mon,  3 Jul 2023 19:17:04 +0000 (UTC)
-Date: Mon, 3 Jul 2023 21:17:03 +0200
-To: Charles Hardin <ckhardin@gmail.com>
-Message-ID: <20230703211703.2f60078d@windsurf>
-In-Reply-To: <20230702201736.72396-1-ckhardin@gmail.com>
-References: <20230620173813.4590-2-ckhardin@gmail.com>
- <20230702201736.72396-1-ckhardin@gmail.com>
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 71DB160004;
+ Mon,  3 Jul 2023 19:27:00 +0000 (UTC)
+Date: Mon, 3 Jul 2023 21:26:59 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230703212659.1c808a80@windsurf>
+In-Reply-To: <20230702181727.570560-1-bernd@kuhls.net>
+References: <20230702181727.570560-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688411825;
+ d=bootlin.com; s=gm1; t=1688412420;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=1vFDP5IWS0n69SXm9F618G1S/LQUKhRX9wdMFf8dbjU=;
- b=L4IQ0CZ1AcXyXv7b9qoLV+86KN7de2A40mS/DgnIVTJW2+lr+iaSdxmDtrr1UErHhYHCFH
- So968bYV8yeKhO/xPy5K5cfY0UuhfEQczwmxwKxrUeP2VuTKBq5fbrHV7jRgyD9mFZtvXF
- jJs+LtvIMwcAcl3ZxVjhIdLiwNvoZTyCf8H5/15do9BIvSFp3w6NXirAhoAVoeK1y4P8dp
- rtUyp2uGzNrFw6nkNiU5bk6DZop1H07zNY3bktZ3mE9gh8jFY7bMNuIvCiVJdbyLslms6b
- licyWZU/E8mENrmsGR2BBkuNmFDLDdg/n3ozizAQRIdvbFYQLVlWBialGGEdDQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=qCjWw+sX3hv2f/lyMYmuMCW/09MICCzq/hHDUvViMEo=;
+ b=cz0qVqR/SeEtzsm6TxWq8OyShTi17ThjjUnAEYF0sbOf3Rol2DErcXUrU9lNbD7AQeGMOY
+ lzy7o11J/ar0C1frxvJEHcDuOtWQN/5BIpCrw5H8yMDwqhVzxEulVtCFqWanvUVJ0jiCXD
+ w/IOwHt5i56otDou3Z8EW5IGI6E4EgTs93M8EQ+EHebBIkgFnGf8uSa3Fz1/bMN7x8DnUy
+ xyEYCrGNyK/Tv5342HRcotFBuMkohxQmfdCbI+ybsatGc5PPwKbUeS/8OGeQpY3Lxt0bDW
+ D9mRGN9i0IVNpBIqQnVogP835Vi0MyO6vIvA43l/TdXSpFDTVmxj1IbsB53ktw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=L4IQ0CZ1
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/bluez-alsa: allow a
- samplerate conversion for audio playback
+ header.s=gm1 header.b=cz0qVqR/
+Subject: Re: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 23.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,26 +84,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  2 Jul 2023 13:17:36 -0700
-Charles Hardin <ckhardin@gmail.com> wrote:
+On Sun,  2 Jul 2023 20:17:27 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> In the case of the bluetooth audio then incoming stream will be coming
-> from bluetooth devices at varying sample rates like (44.1, 48, 96, 192 kHz)
-> and the odds of a sound device matching that samplerate exactly
-> is a bit slim. So in the case of a bluez audio playback the system will
-> need to do a samplerate conversion.
+> Release notes:
+> http://stellarium.org/release/2023/03/26/stellarium-23.1.html
+> http://stellarium.org/release/2023/07/02/stellarium-23.2.html
 > 
-> Thus when enabling bluez-alsa and the alsa plugins select libsamplerate
-> to support the shift from the incoming samplerates to an often fix-rated
-> audio device.
+> Removed patch which is included in this release.
 > 
-> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
-> Changes v1 -> v2:
->   - moved the samplerate selection to bluez-alsa
+>  .checkpackageignore                           |  1 -
+>  .../stellarium/0001-add-missing-include.patch | 32 -------------------
+>  package/stellarium/stellarium.hash            |  2 +-
+>  package/stellarium/stellarium.mk              |  2 +-
+>  4 files changed, 2 insertions(+), 35 deletions(-)
+>  delete mode 100644 package/stellarium/0001-add-missing-include.patch
 
-I've added a small comment in the Config.in file to explain this
-select, and applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
