@@ -4,47 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86109C001B3
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 18:29:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F0FC30654
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 18:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E91F60A7E;
-	Mon,  3 Jul 2023 18:29:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E91F60A7E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7822860A7E;
+	Mon,  3 Jul 2023 18:42:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7822860A7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XkFwzh4JvSIQ; Mon,  3 Jul 2023 18:29:35 +0000 (UTC)
+	with ESMTP id snsxdSvcCT3D; Mon,  3 Jul 2023 18:42:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A26A60D78;
-	Mon,  3 Jul 2023 18:29:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A26A60D78
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A72291BF39A
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:29:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B114660A9B;
+	Mon,  3 Jul 2023 18:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B114660A9B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E03601BF39A
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:42:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8DAE98133F
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:29:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DAE98133F
+ by smtp2.osuosl.org (Postfix) with ESMTP id B8D4240420
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:42:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8D4240420
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ckvGiUchq24f for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 18:29:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6E408133C
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 18:29:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6E408133C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B08CA863E5; Mon,  3 Jul 2023 18:29:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 3 Jul 2023 20:20:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c15e60c106bc852a4cd1f987357580e70e6c28ef
-X-Git-Newrev: 3b2913552ee4e304d4d86e577b237652a8f0a99f
-X-Patchwork-Hint: ignore
-Message-Id: <20230703182930.B08CA863E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools: add missing
- dependency on host-python-wheel
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HTbea6cBNsRo for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 18:42:33 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6624D40280
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6624D40280
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 18:42:33 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:d686:7886:a85d:fb8a])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 2BCC02003D6;
+ Mon,  3 Jul 2023 20:42:24 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 03 Jul 2023 20:42:23 +0200
+Date: Mon, 3 Jul 2023 20:42:23 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+Message-ID: <20230703184223.GB2510@scaer>
+References: <20230629053130.3976-1-jeanmichel.hautbois@yoseli.org>
+ <20230629053130.3976-3-jeanmichel.hautbois@yoseli.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230629053130.3976-3-jeanmichel.hautbois@yoseli.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1688409750;
+ bh=ETxTxMf2EfufxAPEcMkUq9nDJdPlsk830gkkrXCq8Lo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DbPh8vvsie6M1e3coPDEtI+rQyX44ACae9+jUbDm4waCg+kmi50YWO/9AFnEAz0pr
+ z1qor3hOMxgc2d946KrzkH6c/Akje7d8olqLt4GRpBoQDxmYzj0f9qXaGtR7QRp+wY
+ J8FxgQwhorbpMn7CABC0p9hOlKRznh+c6yv2e3fVpmHFAvjbKCL4Bpgzx6mYKN0wxB
+ qB0aUUObuluJl6Xz8HWM50L6rUq9fmAEQR64qOTJcJKYIXWG4Vie4S+V5iks2beUJg
+ dgM87Zlg9RFGut16Fhpyw0Adtwk7hYw1OS4czgzyu0XGNnrVTKiqsmqU2yRcgEZhtZ
+ 6D6iep9/M39sQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DbPh8vvs
+Subject: Re: [Buildroot] [PATCH 2/3] board: add the qemu board support for
+ mcf54418
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,64 +78,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b2913552ee4e304d4d86e577b237652a8f0a99f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Jean-Michel, All,
 
-While migrating to pep517 build backend the host-python-wheel
-dependency has been added to host-python-setuptools but
-not to python-setuptools. Note that host-python-wheel is not really
-needed during the build of (target) setuptools, but the setup.py script
-checks if the dependency is present in the host directory.
+On 2023-06-29 07:31 +0200, Jean-Michel Hautbois spake thusly:
+> The Coldfire MCF54418 needs a board to give the proper linux defconfig
+> to buildroot. Add it based on a simplified Linux stmark2_defconfig file.
+> 
+> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+> ---
+>  board/qemu/m68k-mcf54418/linux.config | 23 +++++++++++++++++++++++
 
-To make everything consistent, add host-python-wheel as a build
-dependency, and BR2_PACKAGE_PYTHON_WHEEL as a runtime dependency.
+This file is unused as of this patch; it only gets used in patch 3, when
+you eventually do add the qemu defcconfig, which is where you should
+also add the corresponding kernel config.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4537951715
+No need to rsend, these two can be squashed together when applying.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-[Arnout: also add runtime dependency on the target package.]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/python-setuptools/Config.in            | 3 ++-
- package/python-setuptools/python-setuptools.mk | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/python-setuptools/Config.in b/package/python-setuptools/Config.in
-index 28228534f8..73368c1a49 100644
---- a/package/python-setuptools/Config.in
-+++ b/package/python-setuptools/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_PYTHON_SETUPTOOLS
- 	bool "python-setuptools"
--	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
-+	select BR2_PACKAGE_PYTHON_WHEEL # runtime
- 	help
- 	  Download, build, install, upgrade, and uninstall Python
- 	  packages.
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index d957930455..39ead10f55 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -12,6 +12,7 @@ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
- PYTHON_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
- PYTHON_SETUPTOOLS_SETUP_TYPE = pep517
-+PYTHON_SETUPTOOLS_DEPENDENCIES = host-python-wheel
- HOST_PYTHON_SETUPTOOLS_DEPENDENCIES = host-python-wheel
- 
- $(eval $(python-package))
+>  1 file changed, 23 insertions(+)
+>  create mode 100644 board/qemu/m68k-mcf54418/linux.config
+> 
+> diff --git a/board/qemu/m68k-mcf54418/linux.config b/board/qemu/m68k-mcf54418/linux.config
+> new file mode 100644
+> index 0000000000..e950052061
+> --- /dev/null
+> +++ b/board/qemu/m68k-mcf54418/linux.config
+> @@ -0,0 +1,23 @@
+> +CONFIG_COLDFIRE=y
+> +CONFIG_M5441x=y
+> +CONFIG_CLOCK_FREQ=240000000
+> +CONFIG_STMARK2=y
+> +CONFIG_UBOOT=y
+> +CONFIG_RAMBASE=0x40000000
+> +CONFIG_RAMSIZE=0x8000000
+> +CONFIG_VECTORBASE=0x40000000
+> +CONFIG_KERNELBASE=0x40001000
+> +# CONFIG_BLK_DEV_BSG is not set
+> +CONFIG_BINFMT_FLAT=y
+> +CONFIG_SERIAL_MCF=y
+> +CONFIG_SERIAL_MCF_BAUDRATE=115200
+> +CONFIG_SERIAL_MCF_CONSOLE=y
+> +CONFIG_BOOTPARAM=y
+> +CONFIG_BOOTPARAM_STRING="console=ttyS0,115200"
+> +CONFIG_NET=y
+> +CONFIG_PACKET=y
+> +CONFIG_UNIX=y
+> +CONFIG_INET=y
+> +CONFIG_NETDEVICES=y
+> +CONFIG_NET_VENDOR_FREESCALE=y
+> +CONFIG_FEC=y
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
