@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 112E2EB64DC
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 15:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EA1AEB64DC
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 16:00:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 609F28203C;
-	Mon,  3 Jul 2023 15:58:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 609F28203C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9427F8204D;
+	Mon,  3 Jul 2023 16:00:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9427F8204D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gJuo_-FTaQV1; Mon,  3 Jul 2023 15:58:03 +0000 (UTC)
+	with ESMTP id z5WTBTbOgm6Y; Mon,  3 Jul 2023 16:00:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 093F782040;
-	Mon,  3 Jul 2023 15:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 093F782040
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BA97B1BF59D
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 15:57:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0E318203C;
+	Mon,  3 Jul 2023 16:00:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0E318203C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F6231BF59D
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 16:00:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A18BB82040
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 15:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A18BB82040
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9F904091B
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 16:00:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9F904091B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NmfOFYSvgBCj for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 15:57:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qyIaGhWOht1r for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 16:00:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 538A88203C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D02BF40761
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 538A88203C
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 15:57:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D02BF40761
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 16:00:44 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4AB46A4C00CE
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 17:57:54 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36824)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E0C21A4C01AB
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 18:00:42 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49464)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qGLw2-0008Gc-0E
- for buildroot@buildroot.org; Mon, 03 Jul 2023 17:57:54 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qGLyk-0000JR-2D
+ for buildroot@buildroot.org; Mon, 03 Jul 2023 18:00:42 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon,  3 Jul 2023 17:57:54 +0200
-Message-Id: <20230703155754.26709-1-bernd@kuhls.net>
+Date: Mon,  3 Jul 2023 18:00:42 +0200
+Message-Id: <20230703160042.31567-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1688399874;
- bh=jCLYuQYQjo/QRvnIc/bd7SSweBaYtXSqxw+mMnVxpc8=;
+ s=kas202306131828; t=1688400042;
+ bh=ATnT+pl58BXzd6WhK35eX1o5QpBZkeuY6daRFd6AM6c=;
  h=From:To:Subject:Date:From;
- b=nOUniNVL+ItA6ku48fHCeHApU9IDTdKD7It4T2v19iKsusRYa+A2gp4ud5FzEOOxR
- 5QFnxxls3i/4l6Vdzf1HAyh70ayjlER2KonLUkllkAsnOI4fNxm6gS1VM1fieQ+bWB
- 0ea/yhf6P9OvxdJLrruLSxDw7M6UN2CyiebRk0+krlMmyxMnMhSISmJBMboVZqQIFI
- SP60G5idFx2VpwxccHd/vigf9ve7ON6BWut6Jd6z1PMJtMV7exQtn0HlA4CuOELkC9
- dglkD8L/h4XYUDwEGrSpNEI0LUkLysvJcVF3r83r2eBRBTallNgGKdTzK2qlUfE3DY
- YCtIIlSFd1z1w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=su6xi0Mnx3DO35SbJaM3PZ8u8qqIggX1JCX+xbIPVUOUFiP3/GyG7YiaDJZrFT4gj
+ FL5GNeSlYdjAoHvJjPXXOcENpNrO/oeiDeVhQ6iRSYyrVj1yBMkvrNRH/XCc0UxHjI
+ ViXFGdZwUANHHfDADx/DFLEJ01dTGHIm1OEA/82R8sWJkN/uSAQ9X8ZBw1lXJbmcw/
+ P51u7QV2JKKiwokHfgn86XOIIYTUnAD6TnAOIS0P8DK3dQMk9HQkm0sHokkbhww3p0
+ WpXVUa/Ht2LyIw3Zg5cKv2os6ihB1rzQcjP2DV9Q7wUINpuQETNNrj5eBvK9XEOKGJ
+ UYuFHv9wsOVoQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=nOUniNVL
-Subject: [Buildroot] [PATCH 1/1] package/ghostscript: security bump version
- to 10.01.2
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=su6xi0Mn
+Subject: [Buildroot] [PATCH 1/1] package/libcodec2: bump version to 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,37 +80,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes: https://github.com/drowe67/codec2/releases/tag/v1.1.1
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ghostscript/ghostscript.hash | 4 ++--
- package/ghostscript/ghostscript.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcodec2/libcodec2.hash | 2 +-
+ package/libcodec2/libcodec2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index 30c45a5a74..2e4b6ac750 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10011/SHA512SUMS
--sha512  d944be9e8aef68d1176d64c40db6fa86d55d0c9e30047f2147c02806ab61cfe9ac2cb00d4e5b218ff3c51cc6ed47ceffe1bac4dd9d4cc1760b7974f30c6c2735  ghostscript-10.01.1.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10012/SHA512SUMS
-+sha512  ee20f0e12f553a3d04578e71a0d45defebc71117ce4dc2c14043985bfe7348ad7f8b2fe98fc9b4f5b935ecb32e50dc340be67d6ef58190542ec6d0f9da1de380  ghostscript-10.01.2.tar.xz
- 
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index d215afccd2..8a39d4b695 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
+diff --git a/package/libcodec2/libcodec2.hash b/package/libcodec2/libcodec2.hash
+index b2de750c34..edaa275bbc 100644
+--- a/package/libcodec2/libcodec2.hash
++++ b/package/libcodec2/libcodec2.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d56ba661008a780b823d576a5a2742c94d0b0507574643a7d4f54c76134826a3  libcodec2-1.1.0.tar.gz
++sha256  44015b071968d98ee326012c498db6a8308bed1a7a914ecb6d4d8e2a354a4611  libcodec2-1.1.1.tar.gz
+ sha256  9ebb6f82b7380a62ac74c5f0322c88e6744dedf2ebe1f54d6f088282b39844bf  COPYING
+diff --git a/package/libcodec2/libcodec2.mk b/package/libcodec2/libcodec2.mk
+index 66758a1697..295dd8983f 100644
+--- a/package/libcodec2/libcodec2.mk
++++ b/package/libcodec2/libcodec2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GHOSTSCRIPT_VERSION = 10.01.1
-+GHOSTSCRIPT_VERSION = 10.01.2
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+-LIBCODEC2_VERSION = 1.1.0
++LIBCODEC2_VERSION = 1.1.1
+ LIBCODEC2_SITE = $(call github,drowe67,codec2,v$(LIBCODEC2_VERSION))
+ LIBCODEC2_LICENSE = LGPL-2.1
+ LIBCODEC2_LICENSE_FILES = COPYING
 -- 
 2.39.2
 
