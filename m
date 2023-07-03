@@ -1,68 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F05F1C3063F
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 18:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D008C001B3
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 20:41:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DD44405FD;
-	Mon,  3 Jul 2023 18:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DD44405FD
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0D6B60EA4;
+	Mon,  3 Jul 2023 20:41:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0D6B60EA4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BaSOm7skWDO6; Mon,  3 Jul 2023 18:02:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Hx99-XCRDluK; Mon,  3 Jul 2023 20:41:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B5AAF4032B;
-	Mon,  3 Jul 2023 18:02:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5AAF4032B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6D1471BF86C
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:02:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 404F660E34;
+	Mon,  3 Jul 2023 20:41:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 404F660E34
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 240151BF357
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:41:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5351281EF9
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:02:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5351281EF9
+ by smtp3.osuosl.org (Postfix) with ESMTP id F156060E34
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:41:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F156060E34
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qxL5U8sKMkK9 for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 18:02:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4986F81F28
- for <buildroot@uclibc.org>; Mon,  3 Jul 2023 18:02:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4986F81F28
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 38184863D3; Mon,  3 Jul 2023 18:02:15 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SejgFkWOik_h for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 20:41:09 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACC3160BC1
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ACC3160BC1
+ for <buildroot@uclibc.org>; Mon,  3 Jul 2023 20:41:09 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qGQM7-0006tk-DH
+ for buildroot@uclibc.org; Mon, 03 Jul 2023 22:41:07 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Mon, 03 Jul 2023 18:02:14 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Outdated package
-X-Bugzilla-Version: 2023.05
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: arnout@mind.be
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-15673-163-XfLa7B1zuN@https.bugs.busybox.net/>
-In-Reply-To: <bug-15673-163@https.bugs.busybox.net/>
-References: <bug-15673-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15673] PKGCONF_SITE in pkgconf.mk points to parked
- domain
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Mon, 03 Jul 2023 22:40:52 +0200
+Message-ID: <pan$99b05$4b40dd80$a4d6fb63$35dc9f8a@ID-313208.user.individual.net>
+References: <20230703202011.1995452-1-bernd@kuhls.net>
+ <20230703203026.GL2510__34801.2332267658$1688416254$gmane$org@scaer>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 1/1] package/libnatpmp: fix header install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,22 +64,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15673
+Am Mon, 3 Jul 2023 22:30:26 +0200 schrieb Yann E. MORIN:
 
-Arnout Vandecappelle <arnout@mind.be> changed:
+> So it means 0e258b6190a5 (package/libnatpmp: bump version to 20230423)
+> was not build-tested before being submitted? At least transmission
+> unonditionally uses it, so a runtime test of transmission would catch
+> it.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Hi Yann,
 
---- Comment #5 from Arnout Vandecappelle <arnout@mind.be> ---
-Fixed on master with commit 
-https://gitlab.com/buildroot.org/buildroot/-/commit/ef95ec920cbae32e5a525d887b7a279440d96f11
+I build-tested libnatpmp, which showed no errors because the tarball, 
+contrary to https://github.com/miniupnp/libnatpmp, contains declspec.h 
+which is unused by libnatpmp now so I did not catch the change of the 
+header file.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+At this stage I did not build-test its dependee package transmission, 
+only later when build-testing all my stuff I noticed the problem and sent 
+the patch right away.
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
