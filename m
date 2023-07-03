@@ -4,46 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0FE9C001B3
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 17:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E94FC001B3
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 17:51:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3432640C2A;
-	Mon,  3 Jul 2023 17:50:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3432640C2A
+	by smtp2.osuosl.org (Postfix) with ESMTP id A688A40C94;
+	Mon,  3 Jul 2023 17:51:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A688A40C94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hwYterT2dE1B; Mon,  3 Jul 2023 17:50:19 +0000 (UTC)
+	with ESMTP id 6P7f7GqzqoNt; Mon,  3 Jul 2023 17:51:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62A8440280;
-	Mon,  3 Jul 2023 17:50:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62A8440280
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 560901BF86C
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 17:50:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E63FE405DF;
+	Mon,  3 Jul 2023 17:51:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E63FE405DF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 55DE01BF86C
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 17:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FFA581BC6
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 17:50:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FFA581BC6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2ED0A405DF
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 17:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2ED0A405DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lifb7FzMUfgF for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 17:50:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0CB168202A
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 17:50:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CB168202A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED5D9863D0; Mon,  3 Jul 2023 17:50:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 3 Jul 2023 19:48:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b335bd18a07363d53b6dc0faa82e26f068d0ae7b
-X-Git-Newrev: ef95ec920cbae32e5a525d887b7a279440d96f11
-X-Patchwork-Hint: ignore
-Message-Id: <20230703175014.ED5D9863D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkgconf: fix download URL
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q6r_7EV4izO7 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 17:51:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB2F340280
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BB2F340280
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 17:51:33 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-9936b3d0286so142905966b.0
+ for <buildroot@buildroot.org>; Mon, 03 Jul 2023 10:51:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1688406692; x=1690998692;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=AxqPNzvS2y26UIZKWZaapw0BsQYlyqYSsnckIq/4xUY=;
+ b=ZWSYK5MDwSOgXU2ctAbB5nZet1E7GsilmtTQnKmD5MhD0TOHJf9oOJIeZEpkbC11PD
+ 2CoBNGsABMd/tgafQJ2WkRb57mHfPbjTQqXR7Pm/ja1iCpasabMhaUt7tkA8m9CLX8T5
+ HPgvIbN7MQ6hexWgS8/AYlkL1bs1+0HmLjxHduUJoqnuE3smYODIh6tcHbgDRLHPdgrj
+ yke+Z6apKTfNehO4tpO0xfHV0ezvNvdHsIsKOXNJUly9EpzOwSiTP+2757j7s9/szjqi
+ 5bMEmJzxS10ftVj32pxt8etpwwhQhzG5Z3wkvCwDRTurcw6ufzvVQ074ZOCA3tgeP2M7
+ adEQ==
+X-Gm-Message-State: AC+VfDwfrwbB1glurmtyNOPb6ONj8u3oUPeON2D5gwDySIYgs6VmcUsr
+ 0GjTaN4kKOaexftTALOxEeBqxA==
+X-Google-Smtp-Source: APBJJlH2SoG+KdQcETRJ+gWcharprvXgImtM2JiZQj6KBU8NGbRsr75+yduEKX+HjmPdk4A31Zfj1w==
+X-Received: by 2002:a17:906:b313:b0:992:ba2c:2e0d with SMTP id
+ n19-20020a170906b31300b00992ba2c2e0dmr8548838ejz.68.1688406691837; 
+ Mon, 03 Jul 2023 10:51:31 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49?
+ (ptr-9fplejo7y5h55ppcgnd.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49])
+ by smtp.gmail.com with ESMTPSA id
+ xa10-20020a170907b9ca00b00988955f7b5esm12298553ejc.157.2023.07.03.10.51.31
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 03 Jul 2023 10:51:31 -0700 (PDT)
+Message-ID: <d8abf6ce-9237-2d54-4fc9-e3dee1c1bdc1@mind.be>
+Date: Mon, 3 Jul 2023 19:51:29 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-GB
+To: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>,
+ buildroot@buildroot.org
+References: <20230703091001.12573-1-sebastien.szymanski@armadeus.com>
+In-Reply-To: <20230703091001.12573-1-sebastien.szymanski@armadeus.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1688406692; x=1690998692;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=AxqPNzvS2y26UIZKWZaapw0BsQYlyqYSsnckIq/4xUY=;
+ b=S4CIbY5/9wvQ8c/4oQG4htPR2pzVVnkac5g4m5MIc5jynpXKR6CbUgogvyQ8p9Ww/b
+ tSak6yKICtJSq8poEeFbzrC6Rq5+oMoiIjSlYGP5Yy0zDVQouyIQyevdT0P7FOGwCkVN
+ Tk2YR7PuTYdmsZBxBFwgmnAw/wQOT73pKCNzWaF53zxZeszpAPm1XLpTOuXHthMG56hD
+ n4RrxwTa2x4wWxlhMHcC9KNdEDG8MQeM6OPiDeI0gizpXqHhIxfb2DfZgk8lCsHls7H6
+ fKk5pSUe0wODebQSUGRc6uFIJzOrdLpJhiVshY9L/qi2pHjcLabpnPzqf4Y7OLjOrfY2
+ erRg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=S4CIbY5/
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkgconf: fix broken URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,59 +103,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5853175782623293317=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5853175782623293317==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ef95ec920cbae32e5a525d887b7a279440d96f11
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Due to problems with the registrar (dynadot) [1], the dereferenced.org
-domain got stolen and is up for auction. While sorting that out, the
-official download site has changed to a different domain [2]. Update
-PKGCONF_SITE to the new location.
-
-There's an upstream bug to track the issue [3].
-
-[1] https://social.treehouse.systems/@ariadne/110643909699308207
-[2] https://github.com/pkgconf/pkgconf/commit/437c2a3218bfcb1cae7fa38a4ccd0cb29575ff07
-[3] https://github.com/pkgconf/pkgconf/issues/302
-
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=15673
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/pkgconf/pkgconf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index e9587fae6b..1d73b691e1 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PKGCONF_VERSION = 1.6.3
--PKGCONF_SITE = https://distfiles.dereferenced.org/pkgconf
-+PKGCONF_SITE = https://distfiles.ariadne.space/pkgconf
- PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.xz
- PKGCONF_LICENSE = pkgconf license
- PKGCONF_LICENSE_FILES = COPYING
-
---===============5853175782623293317==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5853175782623293317==--
+CgpPbiAwMy8wNy8yMDIzIDExOjEwLCBTw6liYXN0aWVuIFN6eW1hbnNraSB3cm90ZToKPiBSZWxl
+YXNlIHRhcmJhbGwgbG9jYXRpb24gaGFzIGNoYW5nZWQgWzFdLCB1cGRhdGUgUEtHQ09ORl9TSVRF
+Lgo+IAo+IFsxXSBodHRwczovL2dpdGh1Yi5jb20vcGtnY29uZi9wa2djb25mL2NvbW1pdC80Mzdj
+MmEzMjE4YmZjYjFjYWU3ZmEzOGE0Y2NkMGNiMjk1NzVmZjA3Cj4gCj4gU2lnbmVkLW9mZi1ieTog
+U8OpYmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgoK
+ICBJIGhhZCB0aGUgc2FtZSBjb21taXQsIGJ1dCBJIGZvcmdvdCB0byBwcmVzcyBlbnRlciBhZnRl
+ciBnaXQgc2VuZC1lbWFpbCA6LU8KCiAgSSBoYWQgYSBzbGlnaHRseSBtb3JlIGV4dGVuc2l2ZSBz
+byBJIGNvcGllZCB0aGF0IGFuZCBhcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKICBSZWdhcmRz
+LAogIEFybm91dAoKPiAtLS0KPiAgIHBhY2thZ2UvcGtnY29uZi9wa2djb25mLm1rIHwgMiArLQo+
+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvcGtnY29uZi9wa2djb25mLm1rIGIvcGFja2FnZS9wa2djb25mL3Br
+Z2NvbmYubWsKPiBpbmRleCBlOTU4N2ZhZTZiMmMuLjFkNzNiNjkxZTE3MyAxMDA2NDQKPiAtLS0g
+YS9wYWNrYWdlL3BrZ2NvbmYvcGtnY29uZi5tawo+ICsrKyBiL3BhY2thZ2UvcGtnY29uZi9wa2dj
+b25mLm1rCj4gQEAgLTUsNyArNSw3IEBACj4gICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAg
+Cj4gICBQS0dDT05GX1ZFUlNJT04gPSAxLjYuMwo+IC1QS0dDT05GX1NJVEUgPSBodHRwczovL2Rp
+c3RmaWxlcy5kZXJlZmVyZW5jZWQub3JnL3BrZ2NvbmYKPiArUEtHQ09ORl9TSVRFID0gaHR0cHM6
+Ly9kaXN0ZmlsZXMuYXJpYWRuZS5zcGFjZS9wa2djb25mCj4gICBQS0dDT05GX1NPVVJDRSA9IHBr
+Z2NvbmYtJChQS0dDT05GX1ZFUlNJT04pLnRhci54ego+ICAgUEtHQ09ORl9MSUNFTlNFID0gcGtn
+Y29uZiBsaWNlbnNlCj4gICBQS0dDT05GX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
