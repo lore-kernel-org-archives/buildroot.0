@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57C44C001B0
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 19:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA08DC001B0
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 19:56:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3FA081EDE;
-	Mon,  3 Jul 2023 19:56:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3FA081EDE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 794C881FA0;
+	Mon,  3 Jul 2023 19:56:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 794C881FA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C2Pckt6AOAeq; Mon,  3 Jul 2023 19:56:37 +0000 (UTC)
+	with ESMTP id 7Qy1V9g1cDmQ; Mon,  3 Jul 2023 19:56:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EACF81E89;
-	Mon,  3 Jul 2023 19:56:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EACF81E89
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 794B31BF34B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96DF781EE4;
+	Mon,  3 Jul 2023 19:56:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96DF781EE4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 917F91BF951
  for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52F3481E89
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79122405FD
  for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 19:56:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52F3481E89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79122405FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GOw5u8aq2FY4 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ugkha0I4kh4n for <buildroot@lists.busybox.net>;
  Mon,  3 Jul 2023 19:56:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E74781D3A
+ by smtp2.osuosl.org (Postfix) with ESMTP id A111E40420
  for <buildroot@buildroot.org>; Mon,  3 Jul 2023 19:56:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E74781D3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A111E40420
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C8D386542; Mon,  3 Jul 2023 19:56:33 +0000 (UTC)
+ id 8FCF486545; Mon,  3 Jul 2023 19:56:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 3 Jul 2023 21:54:55 +0200
+Date: Mon, 3 Jul 2023 21:56:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a21733f839478d902f3eab287a82b456e55f708
-X-Git-Newrev: 81b25fe881bb771d6510098fd564d1743e289042
+X-Git-Oldrev: 2bc29d4eecb2aab67564cddf3afe3b297d51045c
+X-Git-Newrev: 7cac499ec46655a491e59b5bbc2a83a2137099bd
 X-Patchwork-Hint: ignore
-Message-Id: <20230703195633.7C8D386542@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dos2unix: bump version to 7.5.0
+Message-Id: <20230703195633.8FCF486545@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.68
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +64,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81b25fe881bb771d6510098fd564d1743e289042
+commit: https://git.buildroot.net/buildroot/commit/?id=7cac499ec46655a491e59b5bbc2a83a2137099bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://waterlan.home.xs4all.nl/dos2unix/ChangeLog.txt
+Changelog:
+https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog
 
-Updated license hash due to upstream commit which update project URLs
-and copyright year:
-https://sourceforge.net/p/dos2unix/dos2unix/ci/c5acfaf73db3686cf49a46705f00ad8eeb3f7151/
-https://sourceforge.net/p/dos2unix/dos2unix/ci/59510e21846bb9c7c2efdf326dd33d573883f611/
+Removed patch which is included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dos2unix/dos2unix.hash | 6 +++---
- package/dos2unix/dos2unix.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../bluez5_utils-headers/bluez5_utils-headers.mk   |  2 +-
+ package/bluez5_utils/0001-musl-max-input.patch     | 37 ----------------------
+ package/bluez5_utils/bluez5_utils.hash             |  2 +-
+ package/bluez5_utils/bluez5_utils.mk               |  2 +-
+ 4 files changed, 3 insertions(+), 40 deletions(-)
 
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index a16c1aecac..032c8ea2d2 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.3.tar.gz.asc
--sha256  b68db41956daf933828423aa30510e00c12d29ef5916e715e8d4e694fe66ca72  dos2unix-7.4.3.tar.gz
--sha256  275ce1371734904b275e83bf760e3e6d2a520614545a3850c9568d1892b940fd  COPYING.txt
-+# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.0.tar.gz.asc
-+sha256  7a3b01d01e214d62c2b3e04c3a92e0ddc728a385566e4c0356efa66fd6eb95af  dos2unix-7.5.0.tar.gz
-+sha256  6009a35c7aaee9888fd4844972c37b84bce22e7407893727c70f4f3560ae3eac  COPYING.txt
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index f16a527f2e..6d1e70cf26 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 8ca3764935..0790dd7e0e 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--DOS2UNIX_VERSION = 7.4.3
-+DOS2UNIX_VERSION = 7.5.0
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.66
++BLUEZ5_UTILS_HEADERS_VERSION = 5.68
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/0001-musl-max-input.patch b/package/bluez5_utils/0001-musl-max-input.patch
+deleted file mode 100644
+index 8612bac07f..0000000000
+--- a/package/bluez5_utils/0001-musl-max-input.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From ca6546fe521360fcf905bc115b893f322e706cb2 Mon Sep 17 00:00:00 2001
+-From: Sam James <sam@gentoo.org>
+-Date: Tue, 31 Jan 2023 05:52:58 +0000
+-Subject: shared: define MAX_INPUT for musl
+-
+-musl systems don't have MAX_INPUT. Just define it to _POSIX_MAX_INPUT
+-which musl does have if it's not already defined.
+-
+-Note that on glibc, the values match anyway (as of glibc-2.36), and
+-indeed POSIX_MAX_INPUT has the same value on musl too.
+-
+-Bug: https://bugs.gentoo.org/888467
+-Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=ca6546fe521360fcf905bc115b893f322e706cb2
+-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+----
+- src/shared/util.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/src/shared/util.c b/src/shared/util.c
+-index 2f0ae0e86..b466fb001 100644
+---- a/src/shared/util.c
+-+++ b/src/shared/util.c
+-@@ -28,6 +28,11 @@
+- #include <sys/random.h>
+- #endif
+- 
+-+/* define MAX_INPUT for musl */
+-+#ifndef MAX_INPUT
+-+#define MAX_INPUT _POSIX_MAX_INPUT
+-+#endif
+-+
+- #include "src/shared/util.h"
+- 
+- void *util_malloc(size_t size)
+--- 
+-cgit 
+-
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 9467647592..45952e60f1 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  39fea64b590c9492984a0c27a89fc203e1cdc74866086efb8f4698677ab2b574  bluez-5.66.tar.xz
++sha256  fc505e6445cb579a55cacee6821fe70d633921522043d322b696de0a175ff933  bluez-5.68.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 37a2e79a7a..1e87041610 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.66
++BLUEZ5_UTILS_VERSION = 5.68
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
