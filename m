@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F0FC30654
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 18:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C00D5C001B3
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 18:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7822860A7E;
-	Mon,  3 Jul 2023 18:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7822860A7E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4615C60AAD;
+	Mon,  3 Jul 2023 18:45:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4615C60AAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id snsxdSvcCT3D; Mon,  3 Jul 2023 18:42:36 +0000 (UTC)
+	with ESMTP id A1m5S-G0I3iR; Mon,  3 Jul 2023 18:45:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B114660A9B;
-	Mon,  3 Jul 2023 18:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B114660A9B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E03601BF39A
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:42:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7604460A7E;
+	Mon,  3 Jul 2023 18:45:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7604460A7E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2569D1BF39A
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:45:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B8D4240420
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8D4240420
+ by smtp3.osuosl.org (Postfix) with ESMTP id F266F60AAD
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:45:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F266F60AAD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HTbea6cBNsRo for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 18:42:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6624D40280
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6624D40280
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 18:42:33 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:d686:7886:a85d:fb8a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 2BCC02003D6;
- Mon,  3 Jul 2023 20:42:24 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 03 Jul 2023 20:42:23 +0200
-Date: Mon, 3 Jul 2023 20:42:23 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-Message-ID: <20230703184223.GB2510@scaer>
-References: <20230629053130.3976-1-jeanmichel.hautbois@yoseli.org>
- <20230629053130.3976-3-jeanmichel.hautbois@yoseli.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230629053130.3976-3-jeanmichel.hautbois@yoseli.org>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1688409750;
- bh=ETxTxMf2EfufxAPEcMkUq9nDJdPlsk830gkkrXCq8Lo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DbPh8vvsie6M1e3coPDEtI+rQyX44ACae9+jUbDm4waCg+kmi50YWO/9AFnEAz0pr
- z1qor3hOMxgc2d946KrzkH6c/Akje7d8olqLt4GRpBoQDxmYzj0f9qXaGtR7QRp+wY
- J8FxgQwhorbpMn7CABC0p9hOlKRznh+c6yv2e3fVpmHFAvjbKCL4Bpgzx6mYKN0wxB
- qB0aUUObuluJl6Xz8HWM50L6rUq9fmAEQR64qOTJcJKYIXWG4Vie4S+V5iks2beUJg
- dgM87Zlg9RFGut16Fhpyw0Adtwk7hYw1OS4czgzyu0XGNnrVTKiqsmqU2yRcgEZhtZ
- 6D6iep9/M39sQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DbPh8vvs
-Subject: Re: [Buildroot] [PATCH 2/3] board: add the qemu board support for
- mcf54418
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mq8lXDjbokZA for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 18:45:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2345F60A7E
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 18:45:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2345F60A7E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 10CE18643F; Mon,  3 Jul 2023 18:45:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 3 Jul 2023 20:43:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 28fe2d493b3f08153b866a3d6656fb7c487dae38
+X-Git-Newrev: 83cc31689655da15754a3e873b10857ba37877ba
+X-Patchwork-Hint: ignore
+Message-Id: <20230703184521.10CE18643F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
+ 0.9.77
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,82 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Jean-Michel, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=83cc31689655da15754a3e873b10857ba37877ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-06-29 07:31 +0200, Jean-Michel Hautbois spake thusly:
-> The Coldfire MCF54418 needs a board to give the proper linux defconfig
-> to buildroot. Add it based on a simplified Linux stmark2_defconfig file.
-> 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-> ---
->  board/qemu/m68k-mcf54418/linux.config | 23 +++++++++++++++++++++++
+Release notes:
+https://lists.gnu.org/archive/html/libmicrohttpd/2023-05/msg00008.html
 
-This file is unused as of this patch; it only gets used in patch 3, when
-you eventually do add the qemu defcconfig, which is where you should
-also add the corresponding kernel config.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-No need to rsend, these two can be squashed together when applying.
-
-Regards,
-Yann E. MORIN.
-
->  1 file changed, 23 insertions(+)
->  create mode 100644 board/qemu/m68k-mcf54418/linux.config
-> 
-> diff --git a/board/qemu/m68k-mcf54418/linux.config b/board/qemu/m68k-mcf54418/linux.config
-> new file mode 100644
-> index 0000000000..e950052061
-> --- /dev/null
-> +++ b/board/qemu/m68k-mcf54418/linux.config
-> @@ -0,0 +1,23 @@
-> +CONFIG_COLDFIRE=y
-> +CONFIG_M5441x=y
-> +CONFIG_CLOCK_FREQ=240000000
-> +CONFIG_STMARK2=y
-> +CONFIG_UBOOT=y
-> +CONFIG_RAMBASE=0x40000000
-> +CONFIG_RAMSIZE=0x8000000
-> +CONFIG_VECTORBASE=0x40000000
-> +CONFIG_KERNELBASE=0x40001000
-> +# CONFIG_BLK_DEV_BSG is not set
-> +CONFIG_BINFMT_FLAT=y
-> +CONFIG_SERIAL_MCF=y
-> +CONFIG_SERIAL_MCF_BAUDRATE=115200
-> +CONFIG_SERIAL_MCF_CONSOLE=y
-> +CONFIG_BOOTPARAM=y
-> +CONFIG_BOOTPARAM_STRING="console=ttyS0,115200"
-> +CONFIG_NET=y
-> +CONFIG_PACKET=y
-> +CONFIG_UNIX=y
-> +CONFIG_INET=y
-> +CONFIG_NETDEVICES=y
-> +CONFIG_NET_VENDOR_FREESCALE=y
-> +CONFIG_FEC=y
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index ce30e2ba11..a4c8fbca5b 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f0b1547b5a42a6c0f724e8e1c1cb5ce9c4c35fb495e7d780b9930d35011ceb4c  libmicrohttpd-0.9.76.tar.gz
++sha256  9e7023a151120060d2806a6ea4c13ca9933ece4eacfc5c9464d20edddb76b0a0  libmicrohttpd-0.9.77.tar.gz
+ sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 4e7b72b65c..72b2bbafd8 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.76
++LIBMICROHTTPD_VERSION = 0.9.77
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_CPE_ID_VENDOR = gnu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
