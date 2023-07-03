@@ -4,70 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96215C001B0
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 20:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E0DCC001B0
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 20:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35EA560E4B;
-	Mon,  3 Jul 2023 20:16:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35EA560E4B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14E3460E0A;
+	Mon,  3 Jul 2023 20:20:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E3460E0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P8oTQ4RKVAX4; Mon,  3 Jul 2023 20:16:45 +0000 (UTC)
+	with ESMTP id VV0W0V58-r4v; Mon,  3 Jul 2023 20:20:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77B4060E0A;
-	Mon,  3 Jul 2023 20:16:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77B4060E0A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C5B11BF357
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:16:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6676060B0D;
+	Mon,  3 Jul 2023 20:20:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6676060B0D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B2821BF357
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2566D60E87
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:16:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2566D60E87
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5D6240497
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5D6240497
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C1HccM40QPnH for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 20:16:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 806vVUluJP29 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 20:20:16 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2685B60E0A
-Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2685B60E0A
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 20:16:40 +0000 (UTC)
-Received: from [192.168.50.162] ([146.241.103.145])
- by Aruba Outgoing Smtp  with ESMTPSA
- id GPyQqYTtPDAUdGPyQqxKza; Mon, 03 Jul 2023 22:16:39 +0200
-Message-ID: <9aa3488e-4648-25a4-0b20-e0498d469610@benettiengineering.com>
-Date: Mon, 3 Jul 2023 22:16:38 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13EA7400D1
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 13EA7400D1
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 20:20:15 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9C50FA4C0160
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 22:20:11 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43374)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qGQ1r-0003MQ-1M
+ for buildroot@buildroot.org; Mon, 03 Jul 2023 22:20:11 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Mon,  3 Jul 2023 22:20:11 +0200
+Message-Id: <20230703202011.1995452-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230703191617.1338283-1-giulio.benetti@benettiengineering.com>
- <20230703191617.1338283-2-giulio.benetti@benettiengineering.com>
- <20230703215917.16bfa729@windsurf>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230703215917.16bfa729@windsurf>
-X-CMAE-Envelope: MS4xfG4b1iWxPVX4xvePkR1p7WlHo54PCgeHcBANQzfTTttU7C56RZOWWz67qpm2jClkVt+RvlpA629FDf5KlJmXsK9t5YaGbCGoQKUzCFXE6ng4HTgJibn6
- Mf+LM/F1SfPPEYHTqvZ0xs7ig5P7Nh2JYPkAbQDj1pJVoMppTvQnhg+6jUWi5cjGGqYtjuRIeoehs5gm1PXJA/pl3BjVqQV2RrgNQhJuFCXb3A1PQiXwQKZk
- cFf7zYt4bAo2bGl6Zxz764jxx64YeGn2Cfv8zjV49p1w3VRnLsaHPSRlB8m3Bq1i/63kZD9Kkk/xs+WEMWjBYtumM5tWG7kOHeM115nupYA=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1688415399; bh=5YSnE20H9JvUH6/8reyq+m1mTcwIC8WUk83KqKGSZtY=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Cff89AJqKhUexc/R2W+1X9MeOYhKmt6o+2UGT9hiDt7TsXqCxdJKGzzRc2aPK//wp
- qUpWVqgQeWPzZjdSeXllrnCNd4h2VISJ+KHpRpo8XYZH1HcyaUG/I1c0z3ylmsnZe7
- IvtBzhAFowGbTNGhYNe4F92jw+J26kYGFQSyU5YYMMVar56QZC+6Q2S10jx/5BGPg4
- UFqZD9i6RZrZLgm0QG08aCuaeD24cPTCmw+SiJkJYVEKe+ExIFiwiqUKXRrs5BAcHb
- jJgexKUnTLnVbGBYROy/od8Rc7B1w4kY8iwddAorxMu1pzfDe/cgV9VCf9PF/PbPUO
- aaleP8uFBucKQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Cff89AJq
-Subject: Re: [Buildroot] [PATCH] package/rtl8812au-aircrack-ng: bump to
- version 2023-07-03
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1688415611;
+ bh=Lh2njAG2BwE2OC7dKmVQc16DhDxAhe6aHRdZhgZdCxA=;
+ h=From:To:Subject:Date:From;
+ b=W701+7JBZUEtvO+NiSHMomL4+rueaZcLvBN8TGcrmF+j4ldJoXTlqVy7TE2+Ltpmu
+ su1tUe4PNJdMEJ5cbKqen+/sZLI6gGyvee+28Cs0/ksIFRY7KIRQ7ST/817qVsCkYf
+ Lu1jkhpSy1peSsWdwFhcBYxcpbslA04SS+SJQrwK1b31X4KL9SQ8A3bL5tx4N9M5mz
+ mvP1FgItMzHdrx4rz8hUn9cGQa1BeK8197CFzJ2nozAG/IUkLhj2z8mCVI0jsHyZeG
+ DlldHkBWHtfD0/ouj/oick2tVoP631bUvx67j7Cksv587AQKGD3ymHsFX9ld3csNpg
+ iQSwnwbm9UfFw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=W701+7JB
+Subject: [Buildroot] [PATCH 1/1] package/libnatpmp: fix header install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,33 +75,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/07/23 21:59, Thomas Petazzoni via buildroot wrote:
-> On Mon,  3 Jul 2023 21:16:16 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> This version fix build failure on Linux version < 5.15.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>   package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash | 2 +-
->>   package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk   | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> This patch doesn't apply cleanly on the current master. Are you sure
-> it's based on master?
+Upstream renamed declspec.h to natpmp_declspec.h
+https://github.com/miniupnp/libnatpmp/commit/1d113363980a98a5868ff2c2b05d7c94e3a18a70
 
-I've give a try to this on master and it applies correctly.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/libnatpmp/libnatpmp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/libnatpmp/libnatpmp.mk b/package/libnatpmp/libnatpmp.mk
+index 3a625ea0fe..99d46d814a 100644
+--- a/package/libnatpmp/libnatpmp.mk
++++ b/package/libnatpmp/libnatpmp.mk
+@@ -18,7 +18,7 @@ endef
+ define LIBNATPMP_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		PREFIX=$(STAGING_DIR) \
+-		HEADERS='declspec.h natpmp.h' \
++		HEADERS='natpmp_declspec.h natpmp.h' \
+ 		$(TARGET_CONFIGURE_OPTS) install
+ endef
+ 
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
