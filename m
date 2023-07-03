@@ -4,69 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E778C001B0
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 20:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06EBCC001DD
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 20:03:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD61381FBF;
-	Mon,  3 Jul 2023 20:02:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD61381FBF
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEADE81F2F;
+	Mon,  3 Jul 2023 20:03:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEADE81F2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rSHkEjM4TmXc; Mon,  3 Jul 2023 20:02:59 +0000 (UTC)
+	with ESMTP id MoAv-1l5_u6h; Mon,  3 Jul 2023 20:03:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0267E81EAE;
-	Mon,  3 Jul 2023 20:02:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0267E81EAE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E7881BF34B
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:02:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0A3881EDE;
+	Mon,  3 Jul 2023 20:03:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0A3881EDE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 460CB1BF34B
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:03:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37FCA60BE9
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:02:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37FCA60BE9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1F4B6409F8
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 20:03:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F4B6409F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7pfsBwdcS2po for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 20:02:49 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18D4A60DC6
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 18D4A60DC6
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 20:02:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i4DDw4vdQfEZ for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 20:03:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A38F6405FD
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A38F6405FD
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 20:03:21 +0000 (UTC)
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C888EE0007;
- Mon,  3 Jul 2023 20:02:45 +0000 (UTC)
-Date: Mon, 3 Jul 2023 22:02:44 +0200
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 73429C0003;
+ Mon,  3 Jul 2023 20:03:18 +0000 (UTC)
+Date: Mon, 3 Jul 2023 22:03:17 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230703220244.156783b7@windsurf>
-In-Reply-To: <20230702150232.3414717-1-bernd@kuhls.net>
-References: <20230702150232.3414717-1-bernd@kuhls.net>
+Message-ID: <20230703220317.3c5850b4@windsurf>
+In-Reply-To: <20230702154715.3422865-1-bernd@kuhls.net>
+References: <20230702154715.3422865-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688414566;
+ d=bootlin.com; s=gm1; t=1688414598;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=aiBM8lU/69gyVdfUBdaDSGBXUs9Oif1cTTZzDdmXLi4=;
- b=HjivfDCI+ZAX1TQeKqvqQ7QSdKIxuHsMNO87hrh6GsNxw2sw/oINDaYD1HqDrHK7+7jS1a
- +4ehojGpi1mR1LCTrHdn/JcvoB4Fz3IfsXj3U6nek+uVRkQJA/wNW+rean+5Xe9Ul79eyc
- oSWJxH9DhRz6qqYj4ZU1Lez3t+ahqlQ3COvhmCfrCdEmikUTBXidEB1LRqkN5FXIgyAS7N
- r5b07ALcGx9wlmgJysrRhNGkt6gSQpFRbgU3htS54lcSlWo+61WgcE5JHCgwFIKBuGG/ts
- 0oRyDtruaUvaogGRzN/XhmXBmgHa4x4a1vINErjPpzXRBvpwDTWPt0pf6Z21WA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=pjYTvr9LvWwkIJieSQOqWmK18Lsiw39FScgM4IdXIhI=;
+ b=mc9O3OkPNXQkO5ZoJGLkZXh/IW7ZImIkmtUdw9hyVkjFcbP9MBcXVHZ/8QjCZ6DD3mfiFw
+ MDRKMpGS1tHb5rlmrp/dniY4dlcG7IBYSEst1DXVn00pbsMfwJdlOKE4MYPWDaWB2JNyGg
+ RASZVm8B1+sQv8Z6u4vKk2V8OaNS7JZ9lpFrPdOhbKR1hgkld8nrJ7ve48O9iApbyGmTup
+ EMgvxK8CAX/5hZTu4ksEmnR2Y87jyITAJ1U3PGLFvXWAEb6ihUxcfBMDbE9yDjgpgy/qCo
+ ThIVftJUs5DfW0XG/q5wdUNOXOaqWYobpPbtU322T8yD4kfELUlqUmgSF4n2KQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HjivfDCI
-Subject: Re: [Buildroot] [PATCH 1/1] package/sconeserver: re-add dependency
- to pcre
+ header.s=gm1 header.b=mc9O3OkP
+Subject: Re: [Buildroot] [PATCH 1/1] package/autoconf-archive: bump version
+ to 2023.02.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,31 +79,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Simon Dawson <spdawson@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  2 Jul 2023 17:02:32 +0200
+On Sun,  2 Jul 2023 17:47:15 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> While pcre was an optional dependency with autoconf [1] upstream removed
-> the HAVE_LIBPCRE defines with the introduction of cmake [2] breaking the
-> build without pcre after buildroot switched to cmake with commit
-> 8b42bbf30a914b0fd40a4518e61ac7bc511a7deb.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/a15/a15db87c8cec195905b6bcc2cbd3da59ad8aa3b9/
-> 
-> [1] https://github.com/sconemad/sconeserver/commit/98ec61436c9ea68ffe2d70a818c1175dcafa2a79
-> [2] https://github.com/sconemad/sconeserver/commit/0cb655721d7f8aa5d6d14fc1dfce18c518ce2419
+> Added sha1 hash provided by upstream.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/sconeserver/Config.in      | 1 +
->  package/sconeserver/sconeserver.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+>  package/autoconf-archive/autoconf-archive.hash | 4 +++-
+>  package/autoconf-archive/autoconf-archive.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
