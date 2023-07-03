@@ -4,65 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BCD6EB64DC
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 10:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07169EB64DC
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 10:58:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD456408AF;
-	Mon,  3 Jul 2023 10:29:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD456408AF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EDC2409BD;
+	Mon,  3 Jul 2023 10:58:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EDC2409BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ryjNT4P5zVW; Mon,  3 Jul 2023 10:29:15 +0000 (UTC)
+	with ESMTP id ZTQem08gjljj; Mon,  3 Jul 2023 10:58:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 01F51408D5;
-	Mon,  3 Jul 2023 10:29:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01F51408D5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BF4881BF30C
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 10:29:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFE8C405F0;
+	Mon,  3 Jul 2023 10:58:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFE8C405F0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 355F21BF30C
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 10:58:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 969A340285
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 10:29:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 969A340285
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C21981D16
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 10:58:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C21981D16
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ENqJdsd1UEM2 for <buildroot@lists.busybox.net>;
- Mon,  3 Jul 2023 10:29:10 +0000 (UTC)
-X-Greylist: delayed 00:59:45 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A6BA40281
-Received: from 7.mo560.mail-out.ovh.net (7.mo560.mail-out.ovh.net
- [188.165.48.182])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A6BA40281
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 10:29:09 +0000 (UTC)
-Received: from director11.ghost.mail-out.ovh.net (unknown [10.108.20.39])
- by mo560.mail-out.ovh.net (Postfix) with ESMTP id 11C77265E6
- for <buildroot@buildroot.org>; Mon,  3 Jul 2023 09:10:07 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-dkn7g (unknown [10.110.171.191])
- by director11.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B7F471FD7A;
- Mon,  3 Jul 2023 09:10:06 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.102])
- by ghost-submission-6684bf9d7b-dkn7g with ESMTPSA
- id StD1DG6QomRGCwAA4D5dJw
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Mon, 03 Jul 2023 09:10:06 +0000
-X-OVh-ClientIp: 92.148.253.243
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 88qYRdpb-FfD for <buildroot@lists.busybox.net>;
+ Mon,  3 Jul 2023 10:58:25 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38FC7817B5
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 38FC7817B5
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 10:58:25 +0000 (UTC)
+Received: from mail.qult.net (unknown [78.193.33.39])
+ by smtp6-g21.free.fr (Postfix) with ESMTPS id EB08D780512
+ for <buildroot@buildroot.org>; Mon,  3 Jul 2023 12:58:19 +0200 (CEST)
+Received: from zenon.in.qult.net ([192.168.64.1])
+ by mail.qult.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+ (Exim 4.90_1)
+ (envelope-from <ignacy.gawedzki@green-communications.fr>)
+ id 1qGHG7-0004jp-M3
+ for buildroot@buildroot.org; Mon, 03 Jul 2023 12:58:19 +0200
+Received: from ig by zenon.in.qult.net with local (Exim 4.96)
+ (envelope-from <ignacy.gawedzki@green-communications.fr>)
+ id 1qGHG7-00GGH7-0J for buildroot@buildroot.org;
+ Mon, 03 Jul 2023 12:58:19 +0200
+Date: Mon, 3 Jul 2023 12:58:19 +0200
+From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
 To: buildroot@buildroot.org
-Date: Mon,  3 Jul 2023 11:10:00 +0200
-Message-Id: <20230703091001.12573-1-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.39.3
+Message-ID: <20230703105819.flmwndqvctpjuolz@zenon.in.qult.net>
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 10407255790497688555
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedruddvgdduudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpefhheeiveegjeetiedukedugfeileeigeeludeifeekleeuleefgfdvfefhgfehjeenucffohhmrghinhepghhithhhuhgsrdgtohhmpdguvghrvghfvghrvghntggvugdrohhrghdprghrihgrughnvgdrshhprggtvgenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrddutddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehiedtpdhmohguvgepshhmthhpohhuth
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-102R004a17a03e9-9f71-4101-8cf5-e1c1e9fab4c1,
- 576E54CDB430C06E22A30D999DF6CF62A23EFA74)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: [Buildroot] [PATCH 1/1] package/pkgconf: fix broken URL
+Content-Disposition: inline
+Subject: [Buildroot] [PATCH] package/iproute2: add optional dependency on
+ libbpf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,26 +67,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVsZWFzZSB0YXJiYWxsIGxvY2F0aW9uIGhhcyBjaGFuZ2VkIFsxXSwgdXBkYXRlIFBLR0NPTkZf
-U0lURS4KClsxXSBodHRwczovL2dpdGh1Yi5jb20vcGtnY29uZi9wa2djb25mL2NvbW1pdC80Mzdj
-MmEzMjE4YmZjYjFjYWU3ZmEzOGE0Y2NkMGNiMjk1NzVmZjA3CgpTaWduZWQtb2ZmLWJ5OiBTw6li
-YXN0aWVuIFN6eW1hbnNraSA8c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+Ci0tLQog
-cGFja2FnZS9wa2djb25mL3BrZ2NvbmYubWsgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3BrZ2NvbmYvcGtn
-Y29uZi5tayBiL3BhY2thZ2UvcGtnY29uZi9wa2djb25mLm1rCmluZGV4IGU5NTg3ZmFlNmIyYy4u
-MWQ3M2I2OTFlMTczIDEwMDY0NAotLS0gYS9wYWNrYWdlL3BrZ2NvbmYvcGtnY29uZi5taworKysg
-Yi9wYWNrYWdlL3BrZ2NvbmYvcGtnY29uZi5tawpAQCAtNSw3ICs1LDcgQEAKICMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjCiAKIFBLR0NPTkZfVkVSU0lPTiA9IDEuNi4zCi1QS0dDT05GX1NJVEUgPSBo
-dHRwczovL2Rpc3RmaWxlcy5kZXJlZmVyZW5jZWQub3JnL3BrZ2NvbmYKK1BLR0NPTkZfU0lURSA9
-IGh0dHBzOi8vZGlzdGZpbGVzLmFyaWFkbmUuc3BhY2UvcGtnY29uZgogUEtHQ09ORl9TT1VSQ0Ug
-PSBwa2djb25mLSQoUEtHQ09ORl9WRVJTSU9OKS50YXIueHoKIFBLR0NPTkZfTElDRU5TRSA9IHBr
-Z2NvbmYgbGljZW5zZQogUEtHQ09ORl9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwotLSAKMi4zOS4z
-CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+The configure script will automatically detect used pkg-config if
+libbpf is available.
+
+Signed-off-by: Ignacy Gaw=EAdzki <ignacy.gawedzki@green-communications.fr>
+---
+ package/iproute2/iproute2.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 15af076db9..096e650b1d 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -38,6 +38,10 @@ ifeq ($(BR2_PACKAGE_BERKELEYDB_COMPAT185),y)
+ IPROUTE2_DEPENDENCIES +=3D berkeleydb
+ endif
+ =
+
++ifeq ($(BR2_PACKAGE_LIBBPF),y)
++IPROUTE2_DEPENDENCIES +=3D libbpf
++endif
++
+ define IPROUTE2_CONFIGURE_CMDS
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
+ 	$(IPROUTE2_DISABLE_IPTABLES)
+-- =
+
+2.39.2
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
