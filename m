@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8369EC001DD
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 18:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98425C001B3
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jul 2023 18:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30FCA60A9B;
-	Mon,  3 Jul 2023 18:45:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30FCA60A9B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B8A660A9D;
+	Mon,  3 Jul 2023 18:46:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B8A660A9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cE_Oy8rvmFZt; Mon,  3 Jul 2023 18:45:49 +0000 (UTC)
+	with ESMTP id 1TdWV-K65eYy; Mon,  3 Jul 2023 18:46:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D79460BCC;
-	Mon,  3 Jul 2023 18:45:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D79460BCC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 579281BF955
- for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:45:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8566B60AB9;
+	Mon,  3 Jul 2023 18:46:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8566B60AB9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C5761BF39A
+ for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:45:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D19940914
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1CA6060A7E
  for <buildroot@lists.busybox.net>; Mon,  3 Jul 2023 18:45:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D19940914
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CA6060A7E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id umypIoZ3sbxP for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sgpiUNvBAjfH for <buildroot@lists.busybox.net>;
  Mon,  3 Jul 2023 18:45:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B3DB40912
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D9DB60A9B
  for <buildroot@buildroot.org>; Mon,  3 Jul 2023 18:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B3DB40912
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D9DB60A9B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06E8D8643B; Mon,  3 Jul 2023 18:45:21 +0000 (UTC)
+ id 1BB4686441; Mon,  3 Jul 2023 18:45:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 3 Jul 2023 20:43:12 +0200
+Date: Mon, 3 Jul 2023 20:43:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3b2913552ee4e304d4d86e577b237652a8f0a99f
-X-Git-Newrev: 28fe2d493b3f08153b866a3d6656fb7c487dae38
+X-Git-Oldrev: 83cc31689655da15754a3e873b10857ba37877ba
+X-Git-Newrev: 9d9c384ac180f04fa546a268d99cd74f88972083
 X-Patchwork-Hint: ignore
-Message-Id: <20230703184521.06E8D8643B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libks: bump version to 1.8.3
+Message-Id: <20230703184521.1BB4686441@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libminiupnpc: bump to version 2.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28fe2d493b3f08153b866a3d6656fb7c487dae38
+commit: https://git.buildroot.net/buildroot/commit/?id=9d9c384ac180f04fa546a268d99cd74f88972083
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog:
+http://miniupnp.free.fr/files/changelog.php?file=miniupnpc-2.2.5.tar.gz
+
+Updated license hash due to reformat of license file:
+https://github.com/miniupnp/miniupnp/commit/af812c877532f2432b0566633e1e539797ef9c13
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libks/libks.hash | 2 +-
- package/libks/libks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libminiupnpc/libminiupnpc.hash | 4 ++--
+ package/libminiupnpc/libminiupnpc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libks/libks.hash b/package/libks/libks.hash
-index dba442bdd2..998811bc90 100644
---- a/package/libks/libks.hash
-+++ b/package/libks/libks.hash
+diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
+index 5dca8dd6cf..db6b01f0c9 100644
+--- a/package/libminiupnpc/libminiupnpc.hash
++++ b/package/libminiupnpc/libminiupnpc.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  131d7896c81a7f3c9bf06860e4f564ca558d4be1614568fec688b3eb66d38107  libks-1.8.2.tar.gz
-+sha256  c677c36a0d8ceca2e53e07d1de66b87045ac2784df458d012557e2432692528b  libks-1.8.3.tar.gz
- sha256  1d1327f37b58a4c9ce520fcf9dd3f348c7c639229ee7aed41c47164a8f7836cd  copyright
-diff --git a/package/libks/libks.mk b/package/libks/libks.mk
-index c4f0cd5c78..b17812619d 100644
---- a/package/libks/libks.mk
-+++ b/package/libks/libks.mk
+-sha256  481a5e4aede64e9ef29895b218836c3608d973e77a35b4f228ab1f3629412c4b  miniupnpc-2.2.4.tar.gz
+-sha256  a0f853256954f388ce4fab5faaef6a1f5bcd5e682c3c7c70b07b7130e932a021  LICENSE
++sha256  38acd5f4602f7cf8bcdc1ec30b2d58db2e9912e5d9f5350dd99b06bfdffb517c  miniupnpc-2.2.5.tar.gz
++sha256  e143c6e207d0bb874c4be76b57689ffa408063a37a735c6dcec3dc600cb522c5  LICENSE
+diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
+index 9dc5c719a9..59b593cb36 100644
+--- a/package/libminiupnpc/libminiupnpc.mk
++++ b/package/libminiupnpc/libminiupnpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBKS_VERSION = 1.8.2
-+LIBKS_VERSION = 1.8.3
- LIBKS_SITE = $(call github,signalwire,libks,v$(LIBKS_VERSION))
- LIBKS_LICENSE = MIT
- LIBKS_LICENSE_FILES = copyright
+-LIBMINIUPNPC_VERSION = 2.2.4
++LIBMINIUPNPC_VERSION = 2.2.5
+ LIBMINIUPNPC_SOURCE = miniupnpc-$(LIBMINIUPNPC_VERSION).tar.gz
+ LIBMINIUPNPC_SITE = http://miniupnp.free.fr/files
+ LIBMINIUPNPC_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
