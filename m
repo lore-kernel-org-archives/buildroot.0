@@ -4,66 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFC3AEB64D9
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jul 2023 06:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E85EB64D9
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jul 2023 10:50:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F405481BD9;
-	Tue,  4 Jul 2023 06:19:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F405481BD9
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADAB881F6A;
+	Tue,  4 Jul 2023 10:50:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADAB881F6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OIDx7fbMplQS; Tue,  4 Jul 2023 06:19:54 +0000 (UTC)
+	with ESMTP id DYXcrae3YrSh; Tue,  4 Jul 2023 10:50:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E82481494;
-	Tue,  4 Jul 2023 06:19:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E82481494
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5C1881EAE;
+	Tue,  4 Jul 2023 10:50:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5C1881EAE
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9DEBE1BF286
- for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 06:19:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67C741BF23C
+ for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 10:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 778AD40182
- for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 06:19:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 778AD40182
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E550402DC
+ for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 10:50:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E550402DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ksc3ofRNNKKd for <buildroot@lists.busybox.net>;
- Tue,  4 Jul 2023 06:19:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 222B3400BF
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 222B3400BF
- for <buildroot@buildroot.org>; Tue,  4 Jul 2023 06:19:49 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b71b.dip0.t-ipconnect.de [84.161.183.27])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EC314A4C00CE;
- Tue,  4 Jul 2023 08:19:44 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41740)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qGZO4-0002kN-25;
- Tue, 04 Jul 2023 08:19:44 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Tue,  4 Jul 2023 08:19:44 +0200
-Message-Id: <20230704061944.496211-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id 1uwDfsnV8uxO for <buildroot@lists.busybox.net>;
+ Tue,  4 Jul 2023 10:50:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB8440217
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
+ [IPv6:2a00:1450:4864:20::136])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0DB8440217
+ for <buildroot@buildroot.org>; Tue,  4 Jul 2023 10:50:29 +0000 (UTC)
+Received: by mail-lf1-x136.google.com with SMTP id
+ 2adb3069b0e04-4fb41682472so8232367e87.2
+ for <buildroot@buildroot.org>; Tue, 04 Jul 2023 03:50:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1688467828; x=1691059828;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=2473dXsQP5oUF5kauf+3GGstdSogQlJSEgBoiQk5YUM=;
+ b=TyioANRVBLDtvA8lYAhq63dH62xspf/x9UqQ3EwIrxzwFc3ssseYfdwMbfV8/jiTcy
+ ZCwSKK2cWeUR7XFPSIJ1AAVlRujFbvOLJYU6dYEeN9oZJyClGcSbjZgNZcXC558WfHev
+ kNOLxoLCVYY5GmRFdtHZhS1OflJEkvS9ogPBwDqeRFUl2GjkMIpGHvqQhiYZ+YZMNEiz
+ Cq0yilJdIR6xInKlX0USWlZaDNIF/4+k0ZPls+KWrY1tA77Ym5C23/RY25tENP758lY/
+ R8C3V7R1+2ZPy2lUEDEDZIdEkiTzfOKY1Gx8CHP5ArB8+v2gRSUzvCfytlfddvJdq1NW
+ IDPA==
+X-Gm-Message-State: ABy/qLZpRP8kMC39hRezTUCcwTm7EIRnksjCzAjB+llEewaUh1k4dSDP
+ m4nR7+rhU+aHB9tDqKiGDVtv7zbyVDLM3ca032CqsA==
+X-Google-Smtp-Source: APBJJlGkDSGz4XKQVmGHEXRdHAlcTZZGzdyBXboQUc+fD1qePML2xxY/KC0gpBgh9K5Gyd6ljXnq6Bp8P/1BrbDDms0=
+X-Received: by 2002:a19:2d05:0:b0:4fb:8e1b:ba05 with SMTP id
+ k5-20020a192d05000000b004fb8e1bba05mr9652978lfj.11.1688467827749; Tue, 04 Jul
+ 2023 03:50:27 -0700 (PDT)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+References: <20230608085015.1075425-1-sebastian.weyer@smile.fr>
+ <20230703224149.51f6ac85@windsurf>
+In-Reply-To: <20230703224149.51f6ac85@windsurf>
+From: Sebastian WEYER <sebastian.weyer@smile.fr>
+Date: Tue, 4 Jul 2023 12:50:16 +0200
+Message-ID: <CADSVbUsPFy5-CZ22BUU_dYAGc-=ycpJYAKSmdj7nYm96Nn5PBQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1688451584;
- bh=9+qjadvdDH8L8MPcdVDE/YwWSaD8XvR/J9YOGLTewH8=;
- h=From:To:Cc:Subject:Date:From;
- b=v0jBPMBY/cb3wZnv+GN8c9n/qnnM5tUUTUdmeGH4lFSUHHaiuep7vb0HnPFkg4iLO
- ebG3oA+U+1s7tyRCblvK8GFzytkQLD0VCQinVfphYQejCGea63mZHettwpwcpX3uIK
- cjrHKka3kSMHbJxIMLBCe0NKFqi3T2h86+MqWH33XDgXzcxOD5GS3zF/Yi5tTnjQ4j
- HCBHBch5OBIcQynl/d6Xh0YXEBsusR8F7JqYa3ywFP7FgYtsoYDUpcrLacN+MsLiz4
- NP+H9cJF+LxAhIoRKvSYl34Ai+XfH7pRxZ9qwI5Cnod1mlfSn6ZYjtF7ZMfPxoFmEP
- Vh/1dQWS1Qt6g==
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1688467828; x=1691059828;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=2473dXsQP5oUF5kauf+3GGstdSogQlJSEgBoiQk5YUM=;
+ b=cOJfSLI6hJoi9/HYB6mAHGwtrAJPOSvRNkS6rOjsjajTaC0jld9x9riKW7/Oj+E/rk
+ NHt5pxj/MxAM6REfldNF5hhJgv1uFBNjHYL8IwBK+Hs772vJ7WmPjo98ret7CMQFixp4
+ 5HcYw8Gt2FwDSakMRxsBpQAG994ffgvFcK5RkM0fPMf+RGVqwP3MHYy0ayshYjia37Wt
+ xNUu7dw64i/EjOPi/0xUnrJCVzogvNd0uE/+2I7ywC4hRW23uYhfgwrDyaS+RwKSfmgn
+ F0zQJt99T5oPdVOeHjokU4GF1Li//OBolZzcSwZaJ2SvxOoDeTwLHk61kYGd80k9MDyo
+ vQWA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=v0jBPMBY
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix cross build
+ dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
+ header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
+ header.s=20221208 header.b=cOJfSLI6
+Subject: Re: [Buildroot] [PATCH 1/1] package/rust-bindgen: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,84 +92,199 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Bis <marcin@bis.org.pl>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============3490743070337992167=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix build error introduced by bumping bluez5_utils to 5.68 with buildroot
-commit 7cac499ec46655a491e59b5bbc2a83a2137099bd due to upstream commit
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/configure.ac?id=1106b28be85ac9586d1758839226e163e9030ee2
+--===============3490743070337992167==
+Content-Type: multipart/alternative; boundary="000000000000168f3205ffa70def"
 
-Fixes:
-http://autobuild.buildroot.net/results/564/564952e0f9c7f69ef266d7df455ca033fb52d9f7/
+--000000000000168f3205ffa70def
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- .../0001-configure-Check-ell-path.patch       | 35 +++++++++++++++++++
- package/bluez5_utils/bluez5_utils.mk          |  2 ++
- 2 files changed, 37 insertions(+)
- create mode 100644 package/bluez5_utils/0001-configure-Check-ell-path.patch
+Hello Thomas,
 
-diff --git a/package/bluez5_utils/0001-configure-Check-ell-path.patch b/package/bluez5_utils/0001-configure-Check-ell-path.patch
-new file mode 100644
-index 0000000000..3e5f7c6516
---- /dev/null
-+++ b/package/bluez5_utils/0001-configure-Check-ell-path.patch
-@@ -0,0 +1,35 @@
-+From 124187ef9abed60a7c40f751153e9c4516cd1f91 Mon Sep 17 00:00:00 2001
-+From: Rudi Heitbaum <rudi@heitbaum.com>
-+Date: Sat, 1 Jul 2023 01:31:20 +0000
-+Subject: [PATCH] configure: Check ell path
-+
-+Use of AC_CHECK_FILE prevents cross compilation.
-+Instead use test to support cross compiling.
-+
-+Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-+
-+Upstream: https://github.com/bluez/bluez/pull/546
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index eff297960..bc7edfcd3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -298,9 +298,10 @@ if (test "${enable_external_ell}" = "yes"); then
-+ 	AC_SUBST(ELL_LIBS)
-+ fi
-+ if (test "${enable_external_ell}" != "yes"); then
-+-	AC_CHECK_FILE(${srcdir}/ell/ell.h, dummy=yes,
-+-			AC_CHECK_FILE(${srcdir}/../ell/ell/ell.h, dummy=yes,
-+-				AC_MSG_ERROR(ELL source is required or use --enable-external-ell)))
-++	if (test ! -f ${srcdir}/ell/ell.h) &&
-++			(test ! -f ${srcdir}/../ell/ell/ell.h); then
-++				AC_MSG_ERROR(ELL source is required or use --enable-external-ell)
-++	fi
-+ fi
-+ AM_CONDITIONAL(EXTERNAL_ELL, test "${enable_external_ell}" = "yes" ||
-+ 				(test "${enable_btpclient}" != "yes" &&
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 1e87041610..82800c0430 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -9,6 +9,8 @@ BLUEZ5_UTILS_VERSION = 5.68
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
-+# 0001-configure-Check-ell-path.patch
-+BLUEZ5_UTILS_AUTORECONF = YES
- BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
- BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
- BLUEZ5_UTILS_CPE_ID_VENDOR = bluez
--- 
-2.39.2
+Thank you for your feedback.
+It was an oversight to leave the comment as is, as initially the package
+was added with a version <0.63.0.
+Do you think a comment explaining the command line options being deprecated
+should stay? Also considering that the Kernel still uses these options for
+its Rust modules.
+
+Best regards,
+Sebastian
+
+On Mon, Jul 3, 2023 at 10:42=E2=80=AFPM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello Sebastian, Hello Romain,
+>
+> On Thu,  8 Jun 2023 10:50:15 +0200
+> Sebastian Weyer <sebastian.weyer@smile.fr> wrote:
+>
+> > +#When updating to a version >0.63.0, pay attention to the command line
+> > +#arguments --blacklist* and --whitelist* which are deprecated from
+> 0.63.0
+> > +#onwards but are still used when compiling the Linux Kernel as of the
+> time
+> > +#of this comment
+> > +RUST_BINDGEN_VERSION =3D 0.65.1
+>
+> The comment above this version variable is confusing: it says to be
+> careful when updating to a version >0.63.0, but the patch already
+> includes a version greater than 0.63.0. So?
+>
+> Also: space after # sign in comments.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
+
+
+--=20
+[image: eco] Pour la plan=C3=A8te, n'imprimez ce mail que si c'est n=C3=A9c=
+essaire
+[image: SMILE] <http://www.smile.eu/>
+
+10-12 Rue Nicolas Appert
+44100 NANTES
+*Sebastian WEYER*
+Stagiaire production
+
+[image: email] sebastian.weyer@smile.fr
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+--000000000000168f3205ffa70def
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello Thomas,<div><br></div><div>Thank you for your feedba=
+ck.</div><div>It was an oversight to leave the comment as is, as initially =
+the package was added with a version &lt;0.63.0.</div><div>Do you think a c=
+omment explaining the command line options being deprecated should stay? Al=
+so considering that the Kernel still uses these options for its Rust module=
+s.</div><div><br></div><div>Best regards,</div><div>Sebastian</div></div><b=
+r><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, =
+Jul 3, 2023 at 10:42=E2=80=AFPM Thomas Petazzoni &lt;<a href=3D"mailto:thom=
+as.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; wrote:<br></=
+div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bor=
+der-left:1px solid rgb(204,204,204);padding-left:1ex">Hello Sebastian, Hell=
+o Romain,<br>
+<br>
+On Thu,=C2=A0 8 Jun 2023 10:50:15 +0200<br>
+Sebastian Weyer &lt;<a href=3D"mailto:sebastian.weyer@smile.fr" target=3D"_=
+blank">sebastian.weyer@smile.fr</a>&gt; wrote:<br>
+<br>
+&gt; +#When updating to a version &gt;0.63.0, pay attention to the command =
+line<br>
+&gt; +#arguments --blacklist* and --whitelist* which are deprecated from 0.=
+63.0<br>
+&gt; +#onwards but are still used when compiling the Linux Kernel as of the=
+ time<br>
+&gt; +#of this comment<br>
+&gt; +RUST_BINDGEN_VERSION =3D 0.65.1<br>
+<br>
+The comment above this version variable is confusing: it says to be<br>
+careful when updating to a version &gt;0.63.0, but the patch already<br>
+includes a version greater than 0.63.0. So?<br>
+<br>
+Also: space after # sign in comments.<br>
+<br>
+Thanks!<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div><br clear=3D"all"><div><br></div><span class=3D"gmail_si=
+gnature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_signature"><d=
+iv dir=3D"ltr">
+    <img src=3D"http://ftp.smile.fr/client/Communication/signature/img/eco.=
+png" alt=3D"eco" width=3D"13" height=3D"11">
+            Pour la plan=C3=A8te, n&#39;imprimez ce mail que si c&#39;est n=
+=C3=A9cessaire
+    <table style=3D"padding:20px" border=3D"0"><tbody><tr><td style=3D"font=
+-size:13px;color:rgb(255,128,84);text-align:center;padding-right:30px"><a h=
+ref=3D"http://www.smile.eu/" target=3D"_blank">
+                    <img style=3D"max-width: 100%; height: auto;" src=3D"ht=
+tp://ftp.smile.fr/client/Communication/signature/img/Logo-new.png" alt=3D"S=
+MILE">
+                </a><br><br>
+                    <p style=3D"line-height:15px">10-12 Rue Nicolas Appert<=
+br>
+44100 NANTES</p>
+            </td>
+            <td style=3D"border-left:1px solid rgb(59,127,254);padding-left=
+:20px;font-size:13px;color:rgb(255,128,84)">
+                <div style=3D"color:rgb(255,128,84);font-size:14px">
+                    <b>Sebastian WEYER</b>
+                </div>
+                <div style=3D"color:rgb(59,127,254);font-size:13px">
+                    Stagiaire production<br>
+                   =20
+                </div><br>
+                <div style=3D"color:rgb(59,127,254);font-size:13px">
+                    <span style=3D"white-space:nowrap"><img style=3D"margin=
+-right: 5px;" src=3D"http://ftp.smile.fr/client/Communication/signature/img=
+/mail.png" alt=3D"email" width=3D"12" height=3D"10">
+                        <a href=3D"mailto:sebastian.weyer@smile.fr" style=
+=3D"color:rgb(59,127,254);font-size:13px;text-decoration:none" target=3D"_b=
+lank">sebastian.weyer@smile.fr</a>
+                    </span>
+                     <br>
+                                                    <span style=3D"white-sp=
+ace:nowrap"><img style=3D"margin-right: 5px;" src=3D"http://ftp.smile.fr/cl=
+ient/Communication/signature/img/web.png" alt=3D"url" width=3D"12" height=
+=3D"12">
+<a href=3D"http://www.smile.eu" style=3D"color:rgb(59,127,254);font-size:13=
+px;text-decoration:none" target=3D"_blank">http://www.smile.eu</a> =20
+                  </span>
+                                </div>
+
+                <br>
+                <div>
+                    <span><a style=3D"margin-right:5px" href=3D"https://twi=
+tter.com/GroupeSmile" target=3D"_blank"><img src=3D"http://ftp.smile.fr/cli=
+ent/Communication/signature/img/rs-twitter.png" alt=3D"Twitter" style=3D"ma=
+x-width: 100%; height: auto;"></a></span>
+                    <span><a style=3D"margin-right:5px" href=3D"https://www=
+.linkedin.com/company/smile" target=3D"_blank"><img src=3D"http://ftp.smile=
+.fr/client/Communication/signature/img/rs-linkedin.png" alt=3D"LinkedIn" st=
+yle=3D"max-width: 100%; height: auto;"></a></span>
+                    <span><a style=3D"margin-right:5px" href=3D"https://git=
+hub.com/Smile-SA" target=3D"_blank"><img src=3D"http://ftp.smile.fr/client/=
+Communication/signature/img/rs-github.png" alt=3D"Github" style=3D"max-widt=
+h: 100%; height: auto;"></a></span>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table></div></div>
+
+--000000000000168f3205ffa70def--
+
+--===============3490743070337992167==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3490743070337992167==--
