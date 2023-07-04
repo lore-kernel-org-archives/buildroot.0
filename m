@@ -1,99 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C860EB64D9
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jul 2023 20:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0C7EEB64D9
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jul 2023 20:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9404940969;
-	Tue,  4 Jul 2023 20:36:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9404940969
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6BFA440576;
+	Tue,  4 Jul 2023 20:47:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BFA440576
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eyDWlQFqmPoa; Tue,  4 Jul 2023 20:36:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YIElupbLT3RZ; Tue,  4 Jul 2023 20:47:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66B744096C;
-	Tue,  4 Jul 2023 20:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66B744096C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 41D221BF42E
- for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 20:36:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7C8540135;
+	Tue,  4 Jul 2023 20:47:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7C8540135
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C7741BF42E
+ for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 20:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 192404096C
- for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 20:36:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 192404096C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55800815AD
+ for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 20:47:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55800815AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id am7OdlUbitPq for <buildroot@lists.busybox.net>;
- Tue,  4 Jul 2023 20:36:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8C8tCpnmZphs for <buildroot@lists.busybox.net>;
+ Tue,  4 Jul 2023 20:47:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 134F440969
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 134F440969
- for <buildroot@buildroot.org>; Tue,  4 Jul 2023 20:36:08 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id
- 4fb4d7f45d1cf-51d9865b8a2so6753372a12.3
- for <buildroot@buildroot.org>; Tue, 04 Jul 2023 13:36:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C5DD81518
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2C5DD81518
+ for <buildroot@buildroot.org>; Tue,  4 Jul 2023 20:47:28 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-51cb40f13f6so7503297a12.2
+ for <buildroot@buildroot.org>; Tue, 04 Jul 2023 13:47:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1688502967; x=1691094967;
+ d=1e100.net; s=20221208; t=1688503647; x=1691095647;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=OAoLdQoMhyZU5fDw400FizMz8tCa9O4UEKDEMb0AXfc=;
- b=bGh1naCNGM+iOibJKuphIfP6FUyDs8Ty/apnSigLr5RBEgkdICOMCkmGlAnjTMEmVs
- 75+08eT10WdECu4IIXuDvZvQTGKOGPFaF6IR0KsHIJKl0axM8Fl4ttK/XCI8e5c8pMXP
- B/9oBQ5Cc2dTqZVZkd0VdbxGlk3LTyN7x172gDgKiFDuvJzPONLRZUqJAY79nozaRhPn
- udshN1m9Pkic5khgOfI3ML1xuur4Kkc/XtU/Hvwut7NzoXnNXZPNecAWa4fyZHHjxDTE
- bxNlpWSvRw0iJXsTn4i+Inok25UnbE+hf3Cf+JBPBOjkiaSANnwdmd421SSFgnz5MKp6
- QbrQ==
-X-Gm-Message-State: ABy/qLZ15c5kA1xy1AliV0ySpS8VZ15AegJKOiXJcZKfmm8UnUMteVX2
- 1MbbRFkOdqpHOT79AbVoV3Babw==
-X-Google-Smtp-Source: APBJJlErPFviAGrC2TLf4wSPngpRCQRwNot/ybiFrtmf16jQL1nDk8PF5adMI3ZL7PY9F5BTqc7VoQ==
-X-Received: by 2002:a17:906:393:b0:98e:26ae:9b01 with SMTP id
- b19-20020a170906039300b0098e26ae9b01mr9625897eja.65.1688502967053; 
- Tue, 04 Jul 2023 13:36:07 -0700 (PDT)
+ bh=f82N0rm6ErDmXlDDHEEWtk7CEXPlJfodBx5N47wSdY4=;
+ b=L6yvTCtiv3ctXqwRT/7AB86/wG16mHZsVzBdSFKwXqZq3q35eH2bmvfuV4lPN5G5Da
+ M+nakvyHS6rwMSv9arltVB8NQOJu4PXZORdOuSPC7AUtM49skK4g9n9ZmHwxaa2kGIwB
+ iN+Z0FGB5ez9qA/MN2tCBy1vrW3W8LiNvBnKyCwmdDTJLPPNublIHncD5mq245y24pbn
+ zsdDc6vuKpBYchkPCwLNyrHKMwOxEWbdcFmD0KqOPcMWtGRjk2UxkFX5akAnUn0ihICD
+ +aXPjWKGt30OT5GWfdqxqN+RXpnW4Ok4pJfD1uNMWPQy84VnPQShjXTD/CPmibV5GA7D
+ +FHg==
+X-Gm-Message-State: ABy/qLbHQtkaOdVlEMLUGUfBGG1Jf1Yl0mVMzpCu05kABuFrx4/gzud4
+ YF114rGmNVKLgvMwffClf878WQ==
+X-Google-Smtp-Source: APBJJlEezpqD4uhjr6E8XwCkNyvDuqrzxpiq0UnNPAFWC1+i6f9+gQYWfaNon5V6EUDm2Z+ycBIibg==
+X-Received: by 2002:a05:6402:612:b0:51d:b0a4:1d44 with SMTP id
+ n18-20020a056402061200b0051db0a41d44mr9812752edv.29.1688503646812; 
+ Tue, 04 Jul 2023 13:47:26 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49?
  (ptr-9fplejo7y5h55ppcgnd.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49])
  by smtp.gmail.com with ESMTPSA id
- lf29-20020a170907175d00b0099329b3ab67sm4974302ejc.71.2023.07.04.13.36.06
+ b5-20020aa7cd05000000b0051da8fd7570sm6931224edw.41.2023.07.04.13.47.25
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 04 Jul 2023 13:36:06 -0700 (PDT)
-Message-ID: <ee18c683-0968-e9a8-e46a-f08d591d798d@mind.be>
-Date: Tue, 4 Jul 2023 22:36:04 +0200
+ Tue, 04 Jul 2023 13:47:26 -0700 (PDT)
+Message-ID: <c3fb3900-18cb-acf0-8bc2-63069fe3a22e@mind.be>
+Date: Tue, 4 Jul 2023 22:47:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
 Content-Language: en-GB
-To: Sebastian WEYER <sebastian.weyer@smile.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230608085015.1075425-1-sebastian.weyer@smile.fr>
- <20230703224149.51f6ac85@windsurf>
- <CADSVbUsPFy5-CZ22BUU_dYAGc-=ycpJYAKSmdj7nYm96Nn5PBQ@mail.gmail.com>
- <20230704153345.153f73ac@windsurf>
- <CADSVbUvonajc2AXV8pZq9_8zxADf0zcW95p-ygSvwqMJSWu-yA@mail.gmail.com>
-In-Reply-To: <CADSVbUvonajc2AXV8pZq9_8zxADf0zcW95p-ygSvwqMJSWu-yA@mail.gmail.com>
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>, buildroot@buildroot.org
+References: <20230626070536.311268-1-gwenj@trabucayre.com>
+In-Reply-To: <20230626070536.311268-1-gwenj@trabucayre.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1688502967; x=1691094967;
+ d=mind.be; s=google; t=1688503647; x=1691095647;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=OAoLdQoMhyZU5fDw400FizMz8tCa9O4UEKDEMb0AXfc=;
- b=Vi8fVDKQOYGneXq77MaED49RXZkUZn/MYRHXcAD5UptHanL6NQOAUB3GAHp1PN4+Gf
- vPL4TK3axhQKzN4VrRTCs5Yn+GhgjbS20tXUF9SDZgIEEYguVYmfKkd+AzhR2nOZ5GQw
- N9p3/ZjJlTvtGeiSpWjtuMee/SaBOjNaXpQ8AZtfgYAFJUZhdKxUtwVF7HmKJFL/L84J
- +LishwzZxxuDjOG8i3L8/Tb9C5EUjffop6BzDMMNoDfgE6RR/TKczj0IjNQxmwOZSAYd
- MGrVb/0z3oH5JqunW+PF1J+YaUIBEFUA/BJh1rKnUhSpyQGig7PLMovNkptK3LgI/doZ
- yzBQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=f82N0rm6ErDmXlDDHEEWtk7CEXPlJfodBx5N47wSdY4=;
+ b=bH6Xu+M/gSg/mwhzjQ4EVmnqtSF8NSzvnBXA4KIynmIS3ykuKhycnDJt9YU5pcVu9B
+ XIubyN7C31ZhJYIK2II7pxhCObjj00ofiAvk2nWtuTHYWkQd4D0Cg80nstZTmqzHusLY
+ GTpxrxmJMrrpxMkNnD0iTGE5GbsdE4IypdNW4MbVKfAJCdWwB/ph6d0s6gzAIidd3bm+
+ 4HwBpQXHuc3wWfGBYiTs+ZVKdhZWIAjDWi4ygVQEaAvBhauiH2jWahxkBm6It7+a7FaQ
+ mzB4xNjpeiddhUXCgH9Et2tMB4l8ggYh2qi49IFFliN26uJltfz65P2AjTy/J7aY2I7u
+ l+Bg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Vi8fVDKQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/rust-bindgen: new host package
+ header.a=rsa-sha256 header.s=google header.b=bH6Xu+M/
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/gnuradio: fix build with
+ python-pybind > 2.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,62 +103,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBbU2ViYXN0aWVuLCBwbGVhc2UgZG9uJ3QgdG9wLXBvc3QsIGJ1dCByZXBseSBpbmxpbmUgbGlr
-ZSBJIGRvIGJlbG93LiBOb3RlIHRoYXQgCnRoaXMgcmVxdWlyZXMgY29uZmlndXJpbmcgeW91ciBt
-YWlsZXIgdG8gcXVvdGUgcmVwbGllcyBwcm9wZXJseS5dCgoKT24gMDQvMDcvMjAyMyAxNjoyNCwg
-U2ViYXN0aWFuIFdFWUVSIHdyb3RlOgo+IEhlbGxvIFRob21hcywKPiAKPiBZZXMsIHRoZSBrZXJu
-ZWwgb25seSBzdXBwb3J0cyBiaW5kZ2VuIGluIHZlcnNpb24gMC41Ni4wIChyZWxlYXNlZCBpbiBO
-b3ZlbWJlciAKPiAyMDIwISkuCj4gU2luY2UgdGhlIHN1cHBvcnQgZm9yIFJ1c3QgaW4gdGhlIGtl
-cm5lbCBmb3Igbm93IGlzIG9ubHkgdmVyeSBydWRpbWVudGFyeSBhbmQgCj4gdGhpcyBpcyBub3Qg
-dGhlIG9ubHkgZGlmZmljdWx0eSAobGFjayBvZiBtaW5pbXVtIHZlcnNpb24gb2YgcnVzdGMgZm9y
-IGV4YW1wbGUgCj4gYW5kIGxhY2sgb2YgYXJjaGl0ZWN0dXJlIHN1cHBvcnQpIEkgdGhpbmsgZm9y
-IG5vdyBpdCBpcyBub3QgdGhhdCBiaWcgb2YgYSBkZWFsLgoKICBJIGJlbGlldmUgYXQgdGhpcyBw
-b2ludCB0aGUga2VybmVsIHJ1c3Qgc3VwcG9ydCByZXF1aXJlcyBhIHZlcnkgc3BlY2lmaWMgcnVz
-dCAKaW5zdGFsbGF0aW9uIChub3QganVzdCBmb3IgYmluZGdlbiksIHNvIGluZGVlZCBJIGRvbid0
-IHRoaW5rIHdlIHNob3VsZCB0YWtlIHRoYXQgCmludG8gYWNjb3VudC4gSWYgd2Ugd2FudCB0byBi
-ZSBhYmxlIHRvIGJ1aWxkIHRoZSBrZXJuZWwgcnVzdCBzdXBwb3J0IEkgdGhpbmsgCndlJ2xsIG5l
-ZWQgdmVyc2lvbi1waW5uZWQgZHVwbGljYXRlcyBvZiBhIGJ1bmNoIG9mIHBhY2thZ2VzLiBBbmQg
-Zm9yIHRoZSB0aW1lIApiZWluZyBpdCdzIHZlcnkgaGFyZCB0byBkbyB0aGF0IGJlY2F1c2UgdGhl
-IHJlcXVpcmVkIHJ1c3QgdmVyc2lvbiB3aWxsIHByb2JhYmx5IApkZXBlbmQgb24gdGhlIGtlcm5l
-bCB2ZXJzaW9uLgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAKPiBCZXN0IHJlZ2FyZHMsCj4gU2Vi
-YXN0aWFuCj4gCj4gCj4gT24gVHVlLCBKdWwgNCwgMjAyMyBhdCAzOjMz4oCvUE0gVGhvbWFzIFBl
-dGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbSAKPiA8bWFpbHRvOnRob21hcy5w
-ZXRhenpvbmlAYm9vdGxpbi5jb20+PiB3cm90ZToKPiAKPiAgICAgSGVsbG8gU2ViYXN0aWFuLAo+
-IAo+ICAgICBPbiBUdWUsIDQgSnVsIDIwMjMgMTI6NTA6MTYgKzAyMDAKPiAgICAgU2ViYXN0aWFu
-IFdFWUVSIDxzZWJhc3RpYW4ud2V5ZXJAc21pbGUuZnIgPG1haWx0bzpzZWJhc3RpYW4ud2V5ZXJA
-c21pbGUuZnI+Pgo+ICAgICB3cm90ZToKPiAKPiAgICAgID4gVGhhbmsgeW91IGZvciB5b3VyIGZl
-ZWRiYWNrLgo+ICAgICAgPiBJdCB3YXMgYW4gb3ZlcnNpZ2h0IHRvIGxlYXZlIHRoZSBjb21tZW50
-IGFzIGlzLCBhcyBpbml0aWFsbHkgdGhlIHBhY2thZ2UKPiAgICAgID4gd2FzIGFkZGVkIHdpdGgg
-YSB2ZXJzaW9uIDwwLjYzLjAuCj4gICAgICA+IERvIHlvdSB0aGluayBhIGNvbW1lbnQgZXhwbGFp
-bmluZyB0aGUgY29tbWFuZCBsaW5lIG9wdGlvbnMgYmVpbmcgZGVwcmVjYXRlZAo+ICAgICAgPiBz
-aG91bGQgc3RheT8gQWxzbyBjb25zaWRlcmluZyB0aGF0IHRoZSBLZXJuZWwgc3RpbGwgdXNlcyB0
-aGVzZSBvcHRpb25zIGZvcgo+ICAgICAgPiBpdHMgUnVzdCBtb2R1bGVzLgo+IAo+ICAgICBBaCwg
-c28gdGhlIHByb3Bvc2VkIHZlcnNpb24gb2YgcnVzdC1iaW5kZ2VuIHdvdWxkIG5vdCB3b3JrIHRv
-IHN1cHBvcnQKPiAgICAgdGhlIGluLWtlcm5lbCBSdXN0IHN1cHBvcnQ/IFRoaXMgaXMgYSBiaXQg
-dW5mb3J0dW5hdGUuCj4gCj4gICAgIFJlZ2FyZGluZyB0aGUgY29tbWVudCwgSSdtIG5vdCBzdXJl
-IHRoZXkgbWFrZSBzZW5zZS4gSWYgd2Ugc3RhcnQKPiAgICAgZG9jdW1lbnRpbmcgYWxsIHdoYXQn
-cyBubyBsb25nZXIgc3VwcG9ydGVkIGJ5IGEgZ2l2ZW4gcGFja2FnZSwKPiAgICAgQnVpbGRyb290
-IHdvdWxkIGJlIGZ1bGwgb2YgY29tbWVudHMgcmVsYXRlZCB0byBvYnNvbGV0ZSBmZWF0dXJlcyA6
-LSkKPiAKPiAgICAgVGhvbWFzCj4gICAgIC0tIAo+ICAgICBUaG9tYXMgUGV0YXp6b25pLCBjby1v
-d25lciBhbmQgQ0VPLCBCb290bGluCj4gICAgIEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5n
-aW5lZXJpbmcgYW5kIHRyYWluaW5nCj4gICAgIGh0dHBzOi8vYm9vdGxpbi5jb20gPGh0dHBzOi8v
-Ym9vdGxpbi5jb20+Cj4gCj4gCj4gCj4gLS0gCj4gZWNvIFBvdXIgbGEgcGxhbsOodGUsIG4naW1w
-cmltZXogY2UgbWFpbCBxdWUgc2kgYydlc3QgbsOpY2Vzc2FpcmUKPiBTTUlMRSA8aHR0cDovL3d3
-dy5zbWlsZS5ldS8+Cj4gCj4gMTAtMTIgUnVlIE5pY29sYXMgQXBwZXJ0Cj4gNDQxMDAgTkFOVEVT
-Cj4gCj4gCQo+ICpTZWJhc3RpYW4gV0VZRVIqCj4gU3RhZ2lhaXJlIHByb2R1Y3Rpb24KPiAKPiBl
-bWFpbCBzZWJhc3RpYW4ud2V5ZXJAc21pbGUuZnIgPG1haWx0bzpzZWJhc3RpYW4ud2V5ZXJAc21p
-bGUuZnI+Cj4gdXJsIGh0dHA6Ly93d3cuc21pbGUuZXUgPGh0dHA6Ly93d3cuc21pbGUuZXU+Cj4g
-Cj4gVHdpdHRlciA8aHR0cHM6Ly90d2l0dGVyLmNvbS9Hcm91cGVTbWlsZT4gTGlua2VkSW4gCj4g
-PGh0dHBzOi8vd3d3LmxpbmtlZGluLmNvbS9jb21wYW55L3NtaWxlPiBHaXRodWIgPGh0dHBzOi8v
-Z2l0aHViLmNvbS9TbWlsZS1TQT4KPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 26/06/2023 09:05, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Since commit 0e82c360942907f5a2f379e64e0d211aaff80774 (and since release
+> 2.10.1), a new variable called PYBIND11_PYTHONLIBS_OVERWRITE was introduced
+> and set to ON by default.
+> 
+> According to comment before this option:
+> "Overwrite cached values read from Python library (classic search). Turn off if
+> cross-compiling and manually setting these values."
+> 
+> In buildroot's context this option must be disabled to keep variables
+> provided by buildroot and lib/app.
+
+  I guess something similar should be done for all users of pybind. And indeed, 
+I see that zxing-cpp suffers from the same issue [1]. For some reason 
+python-scipy doesn't have autobuild failures though.
+
+> 
+> This issue affect branches: master, next and tags 2023.02.x, 2023.05.
+
+  This kind of comment should not be in the commit message itself, but rather 
+under the --- line.
+
+> 
+> Fix:
+
+  And this should be Fixes: (so it gets picked up by patchwork)
+
+> - http://autobuild.buildroot.net/results/7423df5db5237d94bb49e32698828d4fe470e39b/
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+[1] 
+http://autobuild.buildroot.net/results/7dc/7dc04cb67280073d24dc550e5ed8aa3673a9c6b1//
+
+
+> ---
+> Changes v1 -> v2:
+> - move PYBIND11_PYTHONLIBS_OVERWRITE option to python support section
+> ---
+>   package/gnuradio/gnuradio.mk | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+> index d9218b533d..1453b78493 100644
+> --- a/package/gnuradio/gnuradio.mk
+> +++ b/package/gnuradio/gnuradio.mk
+> @@ -116,6 +116,9 @@ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+>   GNURADIO_DEPENDENCIES += python3 python-pybind \
+>   	host-python-numpy host-python-packaging
+>   GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
+> +# mandatory to avoid pybind11 to overwrite variables provided
+> +# by gnuradio and buildroot
+> +GNURADIO_CONF_OPTS += -DPYBIND11_PYTHONLIBS_OVERWRITE=OFF
+>   # mandatory to install python modules in site-packages and to use
+>   # correct path for python libraries
+>   GNURADIO_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
