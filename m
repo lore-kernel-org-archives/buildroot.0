@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83A32EB64D9
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jul 2023 20:52:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 245C4EB64D9
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jul 2023 20:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EA5040A04;
-	Tue,  4 Jul 2023 20:52:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EA5040A04
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF88A40C94;
+	Tue,  4 Jul 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF88A40C94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xslyIK6oFbxW; Tue,  4 Jul 2023 20:52:22 +0000 (UTC)
+	with ESMTP id lW75iMYdqOgi; Tue,  4 Jul 2023 20:52:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E67F40CA7;
-	Tue,  4 Jul 2023 20:52:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E67F40CA7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E1BB1BF42E
+	by smtp2.osuosl.org (Postfix) with ESMTP id E385340B91;
+	Tue,  4 Jul 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E385340B91
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B83B01BF95D
  for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 20:52:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74D7A60F3D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AD7640576
  for <buildroot@lists.busybox.net>; Tue,  4 Jul 2023 20:52:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74D7A60F3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7AD7640576
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MwXc8VSHEawn for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3r3VTcSaRI74 for <buildroot@lists.busybox.net>;
  Tue,  4 Jul 2023 20:52:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5146960BC4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5884B400FB
  for <buildroot@buildroot.org>; Tue,  4 Jul 2023 20:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5146960BC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5884B400FB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D7F786620; Tue,  4 Jul 2023 20:52:18 +0000 (UTC)
+ id 46D2186623; Tue,  4 Jul 2023 20:52:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Jul 2023 22:38:56 +0200
+Date: Tue, 4 Jul 2023 22:44:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5673ea3ce4d4dd721bb17fc8d5b1283f5c1080b4
-X-Git-Newrev: 21f6859647a9ebab2fc09824403514cbaea523a4
+X-Git-Oldrev: 21f6859647a9ebab2fc09824403514cbaea523a4
+X-Git-Newrev: 11aa7ac8fa3a21dc2476dd09539ea3cf3e48f03d
 X-Patchwork-Hint: ignore
-Message-Id: <20230704205218.3D7F786620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/petitboot: fix install
+Message-Id: <20230704205218.46D2186623@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuradio: fix build with
+ python-pybind > 2.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,36 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21f6859647a9ebab2fc09824403514cbaea523a4
+commit: https://git.buildroot.net/buildroot/commit/?id=11aa7ac8fa3a21dc2476dd09539ea3cf3e48f03d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-buildroot commit 4c8ab13b960edcd290ea5ca7a7e739cb993fb863 added a link
-of /usr/sbin/pb-udhcpc in
-$(TARGET_DIR)/usr/share/udhcpc/default.script.d/ without creating that
-directory first.
+Since commit 0e82c360942907f5a2f379e64e0d211aaff80774 (and since release
+2.10.1), a new variable called PYBIND11_PYTHONLIBS_OVERWRITE was introduced
+and set to ON by default.
+
+According to comment before this option:
+"Overwrite cached values read from Python library (classic search). Turn off if
+cross-compiling and manually setting these values."
+
+In buildroot's context this option must be disabled to keep variables
+provided by buildroot and lib/app.
 
 Fixes:
-http://autobuild.buildroot.net/results/778/77802098355dd99a9e7e6d9178f900a9a8fe72a3/
+- http://autobuild.buildroot.net/results/7423df5db5237d94bb49e32698828d4fe470e39b/
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Laurent Vivier <laurent@vivier.eu>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/petitboot/petitboot.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gnuradio/gnuradio.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-index 4d56b73938..8b4c14207e 100644
---- a/package/petitboot/petitboot.mk
-+++ b/package/petitboot/petitboot.mk
-@@ -55,6 +55,7 @@ define PETITBOOT_POST_INSTALL
- 		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
- 	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
- 		$(TARGET_DIR)/etc/init.d/S15pb-discover
-+	mkdir -p $(TARGET_DIR)/usr/share/udhcpc/default.script.d/
- 	ln -sf /usr/sbin/pb-udhcpc \
- 		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
- endef
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index d9218b533d..1453b78493 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -116,6 +116,9 @@ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+ GNURADIO_DEPENDENCIES += python3 python-pybind \
+ 	host-python-numpy host-python-packaging
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
++# mandatory to avoid pybind11 to overwrite variables provided
++# by gnuradio and buildroot
++GNURADIO_CONF_OPTS += -DPYBIND11_PYTHONLIBS_OVERWRITE=OFF
+ # mandatory to install python modules in site-packages and to use
+ # correct path for python libraries
+ GNURADIO_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
