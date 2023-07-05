@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B949EC0015E
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 06:22:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EEE1EB64DD
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 06:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EED3B4005F;
-	Wed,  5 Jul 2023 06:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EED3B4005F
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4C8F415EC;
+	Wed,  5 Jul 2023 06:22:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4C8F415EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I03w2E587rb1; Wed,  5 Jul 2023 06:22:13 +0000 (UTC)
+	with ESMTP id V4kgEGOLnNny; Wed,  5 Jul 2023 06:22:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DF12408C9;
-	Wed,  5 Jul 2023 06:22:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DF12408C9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2FCF01BF842
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 06:22:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58138408E9;
+	Wed,  5 Jul 2023 06:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58138408E9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D6351BF842
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 06:22:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09E1F8175C
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 06:22:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09E1F8175C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66A4740517
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 06:22:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66A4740517
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lbsM6N1D7Raf for <buildroot@lists.busybox.net>;
- Wed,  5 Jul 2023 06:22:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4TeeeUyQcq80 for <buildroot@lists.busybox.net>;
+ Wed,  5 Jul 2023 06:22:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F39E4813FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F67A400D9
 Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F39E4813FA
- for <buildroot@buildroot.org>; Wed,  5 Jul 2023 06:22:07 +0000 (UTC)
-Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout02.mail.de (Postfix) with ESMTP id D6FA2A0648;
- Wed,  5 Jul 2023 08:22:04 +0200 (CEST)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4F67A400D9
+ for <buildroot@buildroot.org>; Wed,  5 Jul 2023 06:22:11 +0000 (UTC)
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout02.mail.de (Postfix) with ESMTP id 3F8F2A06EF;
+ Wed,  5 Jul 2023 08:22:09 +0200 (CEST)
 Received: from smtp04.mail.de (smtp04.bt.mail.de [10.0.121.214])
- by postfix01.mail.de (Postfix) with ESMTP id BCA23801E8;
- Wed,  5 Jul 2023 08:22:04 +0200 (CEST)
+ by postfix03.mail.de (Postfix) with ESMTP id 1CDD48006A;
+ Wed,  5 Jul 2023 08:22:09 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (No client certificate requested)
- by smtp04.mail.de (Postfix) with ESMTPSA id 3CEDFC00A9;
- Wed,  5 Jul 2023 08:21:58 +0200 (CEST)
+ by smtp04.mail.de (Postfix) with ESMTPSA id E4177C00A9;
+ Wed,  5 Jul 2023 08:22:06 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Wed,  5 Jul 2023 08:21:40 +0200
-Message-Id: <20230705062142.10968-1-kilian.zinnecker@mail.de>
+Date: Wed,  5 Jul 2023 08:21:41 +0200
+Message-Id: <20230705062142.10968-2-kilian.zinnecker@mail.de>
 In-Reply-To: <c30c93e29177a1dc15446eff427c7ca8@umbiko.net>
 References: <c30c93e29177a1dc15446eff427c7ca8@umbiko.net>
 MIME-Version: 1.0
@@ -60,22 +60,22 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 4485
-X-purgate-ID: 154282::1688538124-9F7E8C09-33E873C8/0/0
+X-purgate-size: 2754
+X-purgate-ID: 154282::1688538128-9F7E8C09-B65C55DF/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1688538124;
- bh=C4Gmz9K7ZLDhMowgprcrgUlf0k5US6klJlRt54B7Zd4=;
+ d=mail.de; s=mailde202009; t=1688538129;
+ bh=TiFZYKSeeHsb6lzU73QISiXnXSCoE5gmvNGGLm0TNe4=;
  h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
- b=B9tXHXfSbkFFy1gSU/qnfTPVQGeFCcUE6Bk9pwMiQpugm9WlcBzbdy6jb9/4ZFydJ
- nhv/vnQQVYKkspKAc7ev6Ui4twK4YKW13AD9KH0FNWRj/5XX4jGP7YEARy7NM9pE9c
- yq8t6dhcq1tiLG5ohU5hCWx1hdyRhWNtb0Y8NDIysuZ5jdRbVntpWUI3VE9P0/RFE+
- eECI571OUVl43GGP9AZs5Fon/d/3b3/z5WHvP/9ZNffR+3JbNLJHSZY9WC7r0jlxHH
- 00G4tMpOH6Z9Rif2+p7eZhmQefi8/bpwnRwuqS99g5p4fADSuMFGlgwyRiq7H27Kvq
- DiyhXqxpT/NKQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Bn1qmaHg4nwuBxAqjZMkBVeLRcL0T0WYBUOX4Xi+aiGT0X2ye98VD8zbfpX7vzHKf
+ 1Pv32Ai/cI9Zk/CFuAO2CO7x0AEsKaATv3ldHDCXaItE8+pyfPQ1ViG3roqJlh0LpW
+ HhEIfsusBFDHRxhlmmQRnj6DL33uv12EzRl2r7Zt4CQzBBuwBO+wsxquBAU9pF4FfK
+ e8rZ02LXnXK283FCTGRtraUvph3kTKOIdPAWW+C0IXhMIDLQuYrtHkB4/85eGa/8TF
+ 8e3lrnfyXxCwYXyGpET1cdhh7EIoQecLXP9BOgHwYogPtFQIjDQYbb+xpHJ3tyWUxG
+ +PzEoqfbQzarw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=B9tXHXfS
-Subject: [Buildroot] [PATCH v3 1/3] package: add rockchip-rkbin package
+ header.a=rsa-sha256 header.s=mailde202009 header.b=Bn1qmaHg
+Subject: [Buildroot] [PATCH v3 2/3] configs: add rock5b/rock5b_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,132 +98,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a package for the Rockchip ATF binary blobs. These
-binaries are currently needed if U-Boot is built for the Rockchip
-RK3588 SoC. In addition the uboot package is modified such, that it
-can depend on the rockchip-rkbin package and in that case
-automatically obtain the needed binary blobs.
+This patch adds the defconfig file needed to build u-boot, kernel
+and rootfs for the Rock 5B. In addition it adds a kernel config
+fragment file, which activates the needed ethernet driver support.
 
 Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
 ---
- DEVELOPERS                               |  3 +++
- boot/uboot/Config.in                     |  9 +++++++++
- boot/uboot/uboot.mk                      | 10 ++++++++++
- package/Config.in                        |  1 +
- package/rockchip-rkbin/Config.in         |  6 ++++++
- package/rockchip-rkbin/rockchip-rkbin.mk | 23 +++++++++++++++++++++++
- 6 files changed, 52 insertions(+)
- create mode 100644 package/rockchip-rkbin/Config.in
- create mode 100644 package/rockchip-rkbin/rockchip-rkbin.mk
+ DEVELOPERS                        |  2 ++
+ board/radxa/rock5b/linux.fragment |  1 +
+ configs/rock5b_defconfig          | 37 +++++++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+)
+ create mode 100644 board/radxa/rock5b/linux.fragment
+ create mode 100644 configs/rock5b_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 188c579010..8e603ff3f8 100644
+index 8e603ff3f8..e626937183 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1776,6 +1776,9 @@ F:	package/ramsmp/
- N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
- F:	package/libcamera/
+@@ -1778,6 +1778,8 @@ F:	package/libcamera/
  
-+N:	Kilian Zinnecker <kilian.zinnecker@mail.de>
-+F:	package/rockchip-rkbin/
-+
+ N:	Kilian Zinnecker <kilian.zinnecker@mail.de>
+ F:	package/rockchip-rkbin/
++F:	configs/rock5b_defconfig
++F:	board/radxa/rock5b/
+ 
  N:	Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
  F:	package/wqy-zenhei/
- 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 085397d03d..8ec095a735 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -262,6 +262,15 @@ config BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE
- 	  This option makes sure that the i.MX firmwares are copied into
- 	  the U-Boot source directory.
- 
-+config BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN
-+	bool "U-Boot needs rockchip-rkbin"
-+	depends on BR2_PACKAGE_ROCKCHIP_RKBIN
-+	help
-+	  U-Boot currently needs binary blobs during build for the
-+	  Rockchip RK3588 SoC.
-+	  This option makes sure that the needed binary blobs are copied
-+	  into the U-Boot source directory.
-+
- menu "U-Boot binary format"
- 
- config BR2_TARGET_UBOOT_FORMAT_AIS
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 4eae8e95c3..4ef0a7bc2a 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -207,6 +207,16 @@ endef
- UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_IMX_FW_FILES
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN),y)
-+UBOOT_DEPENDENCIES += rockchip-rkbin
-+
-+define UBOOT_COPY_RKBIN_FW_FILES
-+	cp $(BINARIES_DIR)/bl31.bin $(@D)
-+	cp $(BINARIES_DIR)/ddr.bin $(@D)
-+endef
-+UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_RKBIN_FW_FILES
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
- endif
-diff --git a/package/Config.in b/package/Config.in
-index bff090a661..80221d0406 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -581,6 +581,7 @@ endmenu
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rockchip-mali/Config.in"
-+	source "package/rockchip-rkbin/Config.in"
- 	source "package/rpi-userland/Config.in"
- 	source "package/rs485conf/Config.in"
- 	source "package/rtc-tools/Config.in"
-diff --git a/package/rockchip-rkbin/Config.in b/package/rockchip-rkbin/Config.in
+diff --git a/board/radxa/rock5b/linux.fragment b/board/radxa/rock5b/linux.fragment
 new file mode 100644
-index 0000000000..d8072002ca
+index 0000000000..811d42a79b
 --- /dev/null
-+++ b/package/rockchip-rkbin/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ROCKCHIP_RKBIN
-+	bool "Rockchip RKBIN binary blobs"
-+	depends on BR2_arm || BR2_aarch64
-+	help
-+	  This package provides binary blobs, currently needed by
-+	  u-boot for the Rockchip RK3588 SoC.
-diff --git a/package/rockchip-rkbin/rockchip-rkbin.mk b/package/rockchip-rkbin/rockchip-rkbin.mk
++++ b/board/radxa/rock5b/linux.fragment
+@@ -0,0 +1 @@
++CONFIG_R8169=y
+diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
 new file mode 100644
-index 0000000000..ac50c8931d
+index 0000000000..8107bbd0a6
 --- /dev/null
-+++ b/package/rockchip-rkbin/rockchip-rkbin.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# rockchip-rkbin
-+#
-+################################################################################
-+
-+
-+ROCKCHIP_RKBIN_VERSION = d6ccfe401ca84a98ca3b85c12b9554a1a43a166c
-+ROCKCHIP_RKBIN_SITE = https://github.com/rockchip-linux/rkbin.git
-+ROCKCHIP_RKBIN_SITE_METHOD = git
-+
-+ROCKCHIP_RKBIN_INSTALL_STAGING = YES
-+ROCKCHIP_RKBIN_INSTALL_TARGET = NO
-+
-+RK3588_DDRFW = rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.11.bin
-+RK3588_BL3FW = rk3588_bl31_v1.38.elf
-+
-+define ROCKCHIP_RKBIN_INSTALL_STAGING_CMDS
-+	cp $(@D)/bin/rk35/$(RK3588_BL3FW) $(BINARIES_DIR)/bl31.bin
-+	cp $(@D)/bin/rk35/$(RK3588_DDRFW) $(BINARIES_DIR)/ddr.bin
-+endef
-+
-+$(eval $(generic-package))
++++ b/configs/rock5b_defconfig
+@@ -0,0 +1,37 @@
++BR2_aarch64=y
++BR2_cortex_a76_a55=y
++BR2_KERNEL_HEADERS_5_10=y
++BR2_TARGET_GENERIC_HOSTNAME="rock5b"
++BR2_TARGET_GENERIC_ISSUE="Rock 5b"
++BR2_SYSTEM_DHCP="eth0"
++BR2_USE_WCHAR
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/radxa/kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52f51a2b5ba178f331af62260d2da86d7472c14b"
++BR2_LINUX_KERNEL_DEFCONFIG="rockchip_linux"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3588-rock-5b"
++BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/linux.fragment"
++BR2_PACKAGE_AVAHI=y
++BR2_PACKAGE_AVAHI_DAEMON=y
++BR2_PACKAGE_OPENSSH=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07-rc4"
++BR2_PACKAGE_ROCKCHIP_RKBIN=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
++BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="BL31=bl31.bin ROCKCHIP_TPL=ddr.bin"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_DTC=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 2.34.1
 
