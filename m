@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1312EB64DA
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 12:19:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACF61EB64DA
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 12:19:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CDE840BC9;
-	Wed,  5 Jul 2023 12:19:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CDE840BC9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5883340B85;
+	Wed,  5 Jul 2023 12:19:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5883340B85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0JCKzj1NHfox; Wed,  5 Jul 2023 12:19:07 +0000 (UTC)
+	with ESMTP id ZFcmNv34lcU5; Wed,  5 Jul 2023 12:19:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6789A40CAA;
-	Wed,  5 Jul 2023 12:19:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6789A40CAA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D271A1BF95D
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 12:18:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3519240C5A;
+	Wed,  5 Jul 2023 12:19:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3519240C5A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B88E91BF28E
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 12:18:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB25B401BE
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 12:18:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB25B401BE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92D65811F6
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 12:18:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92D65811F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8RH2qZ63dvcT for <buildroot@lists.busybox.net>;
- Wed,  5 Jul 2023 12:18:42 +0000 (UTC)
-X-Greylist: delayed 00:07:12 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06A2A40121
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 06A2A40121
- for <buildroot@buildroot.org>; Wed,  5 Jul 2023 12:18:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v5k7CkrJ9Ajy for <buildroot@lists.busybox.net>;
+ Wed,  5 Jul 2023 12:18:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E804781066
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E804781066
+ for <buildroot@buildroot.org>; Wed,  5 Jul 2023 12:18:45 +0000 (UTC)
 Received: from unknown (HELO opfedv3rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 05 Jul 2023 14:11:26 +0200
+ 05 Jul 2023 14:11:33 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
  ([x.x.x.x]) by opfedv3rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jul 2023 14:11:27 +0200
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jul 2023 14:11:33 +0200
 Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 5 Jul 2023 14:11:24 +0200
+ 15.1.2507.27; Wed, 5 Jul 2023 14:11:30 +0200
 Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Wed, 05 Jul 2023 14:11:20 +0200
+ Wed, 05 Jul 2023 14:11:27 +0200
 From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.01,182,1684792800"; d="scan'208";a="10788099"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684792800"; d="scan'208";a="10788166"
 To: <buildroot@buildroot.org>
-Date: Wed, 5 Jul 2023 14:11:13 +0200
-Message-ID: <6ac4f542d50eb5563d27a35d99c5b0933eb51563.1688559056.git.yann.morin@orange.com>
+Date: Wed, 5 Jul 2023 14:11:14 +0200
+Message-ID: <b1388fcaee6d79d0845a49632b5b9326050ed219.1688559056.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1688559056.git.yann.morin@orange.com>
 References: <cover.1688559056.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
+X-Originating-IP: [10.115.27.51]
 X-ClientProxiedBy: OPE16NORMBX503.corporate.adroot.infra.ftgroup
  (10.115.26.27) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1688559522; x=1720095522;
+ t=1688559526; x=1720095526;
  h=to:cc:subject:date:message-id:in-reply-to:references:
  mime-version:content-transfer-encoding:from;
- bh=kitA/wWjQJeRxyQE0ZzXB/KAYD94Yd/ZDD2VpnLZWRA=;
- b=a6KYRM1+dCEpihnKHrYFgCLwFXKJZCsVywIpVmC0YB6zQDBlv/uzcSSj
- KvGgbVhH6LwpeB25K0quWEA5DOi2h7TWKeee28QizQag/zOLHJ2vNUP4C
- XVQZGUJ+PG9xdPlEFAqRGIIbWj534JxIImiGjrfUcEpAXR8twMvh9goDL
- 2f0cMXDqK3tyXFNwP+7om0YdoeDtOhFImHhtMBM6cMnBA3qyjQSscR0Hr
- MyNB4hz4oP8qiH5Y7AxZ8+N9FwTU9Wj+fqubGtMiSbfbOtqjTMiWkHeoT
- 4rGAQtCi3UpzSDnIinYlzRFf+xjh35TGhPa0L6mkkNeY3RVk57GhwkEzh
- A==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=CZUSxxgyTxUhGPl8pCS9JkUBnG6CN8cRCyf6aRX2lmE=;
+ b=Bl6gAMNk+By3RkILoLPNtUTt9zAGl7OY4uX873lf3KDqLGlKWMkaGqpQ
+ wr5cOXiRoX6sqySjsxM0L3AdGeTQEwofKayRHmrATNkTguGo1oM4BPz/e
+ YN9M4R1Jy/KlOk3JHXVYXWvKR3dZx+LAV0OXZD1rCqPhrqcYyVkAWi37p
+ 4ArS1HmOp8RRqOSW2f9Su1rkRqzmHjoFJqEdwJGEWWELISneNDTJiFZXd
+ b5kzA/wKHUYBPJdV8CyovswfPtHh0pcx3ddzCDljsQsAzukNV3071FTtf
+ Y9Dvs2b+3BTBPzOiqwJ6l0VvZxRMp42At3Y1fLyezc4HYezKJDEKt65hU
+ g==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=a6KYRM1+
-Subject: [Buildroot] [PATCH 2/3] support/download: use svn credentials to
- retrieve revision date
+ header.a=rsa-sha256 header.s=orange002 header.b=Bl6gAMNk
+Subject: [Buildroot] [PATCH 3/3] support/download: add support to exclude
+ svn externals
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,68 +95,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When an svn repository requires credentials, and they are passed
-in _DL_OPTS, they must be used also to retrieve the revision date.
+Like git which can have submodules, subversion can have externals. The
+default behaviour for subversion is to retrieve all the externals,
+unless told otherwise.
 
-One could argue that credentials should not be handled in _DL_OPTS, but
-rather that they be fed through other means (e.g. by pre-authenticating
-manually once in an interactive session, or by filling them in the usual
-~/svn/auth/* mechanisms for a CI).
+For some repositories, the externals may be huge (e.g. a dataset or some
+assets) and may not be required for building the package. In such a
+case, retrieving the externals is both a waste of network bandwitdh and
+time, and a waste of disk storage.
 
-However, some public facing repositories are using authentication, even
-though the credentials are public. This is the case for example for:
-    http://software.rtcm-ntrip.org/
+Like for git submodules and git lfs, add an option that packages can set
+to specify whether they want externals or not.
 
-In such a case, it does make sense to pass credentials via _DL_OPTS,
-because they are not really, even really not, secret.
-
-Another use-case (e.g. for a CI) is to pass the credentials as
-environment variables, with _DL_OPTS not hard-coded in the .mk file.
-
-However, _DL_OPTS may contain options that are not valid for 'svn info',
-as they are meant to be passed to 'svn export' in the first place. Since
-the only options common to 'svn info' and 'svn export' are the
-credentials, we just extract those and pass them to 'svn info'.
+Since we've so far been retrieving externals, we keep that the default,
+and packages can opt-out (rather than the opt-in for git submodules or
+git lfs).
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 ---
- support/download/svn | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ docs/manual/adding-packages-generic.txt | 6 ++++++
+ package/pkg-download.mk                 | 1 +
+ package/pkg-generic.mk                  | 9 +++++++++
+ support/download/svn                    | 6 +++++-
+ 4 files changed, 21 insertions(+), 1 deletion(-)
 
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index fbe37f9ca9..299017f9d2 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -347,6 +347,12 @@ not and can not work as people would expect it should:
+   Git LFS to store large files out of band.  This is only available for
+   packages downloaded with git (i.e. when +LIBFOO_SITE_METHOD=git+).
+ 
+++ +LIBFOO_SVN_EXTERNAL+ can be set to +YES+ (the default) to specify
++  whether to retrieve the svn external references, or to +NO+ to avoid
++  retrieving those externals. Note that, contrary to other similar
++  options like +LIBFOO_GIT_SUBMODULES+ or +LIBFOO_GIT_LFS+, the default
++  here is to actually retrieve the externals; this is a legacy heritage.
++
+ * +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
+   (directories) that tar must strip from file names on extraction.
+   The tarball for most packages has one leading component named
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 0718f21aad..5a311a95c6 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -119,6 +119,7 @@ define DOWNLOAD
+ 		-n '$($(2)_BASENAME_RAW)' \
+ 		-N '$($(2)_RAWNAME)' \
+ 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
++		$(if $(filter YES,$($(2)_SVN_EXTERNALS)),-r) \
+ 		$(if $($(2)_GIT_SUBMODULES),-r) \
+ 		$(if $($(2)_GIT_LFS),-l) \
+ 		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 5d1c1da128..2be3e1fed9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -643,6 +643,15 @@ ifndef $(2)_GIT_SUBMODULES
+  endif
+ endif
+ 
++ifndef $(2)_SVN_EXTERNALS
++ ifdef $(3)_SVN_EXTERNALS
++  $(2)_SVN_EXTERNALS = $$($(3)_SVN_EXTERNALS)
++ else
++  # Legacy: we used to always use externals by default
++  $(2)_SVN_EXTERNALS = YES
++ endif
++endif
++
+ # Do not accept to download git submodule if not using the git method
+ ifneq ($$($(2)_GIT_SUBMODULES),)
+  ifneq ($$($(2)_SITE_METHOD),git)
 diff --git a/support/download/svn b/support/download/svn
-index d9325b7478..3e08a0ef36 100755
+index 3e08a0ef36..1decb2310b 100755
 --- a/support/download/svn
 +++ b/support/download/svn
-@@ -54,12 +54,28 @@ _plain_svn() {
+@@ -16,6 +16,7 @@ set -e
+ #   -u URI      Checkout from repository at URI.
+ #   -c REV      Use revision REV.
+ #   -n NAME     Use basename NAME.
++#   -r          Recursive, i.e. use externals
+ #
+ # Environment:
+ #   SVN      : the svn command to call
+@@ -24,6 +25,7 @@ set -e
+ . "${0%/*}/helpers"
  
- _svn export --ignore-keywords ${quiet} "${@}" "'${uri}@${rev}'" "'${basename}'"
+ quiet=
++externals=--ignore-externals
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  quiet=-q;;
+@@ -31,6 +33,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     u)  uri="${OPTARG}";;
+     c)  rev="${OPTARG}";;
+     n)  basename="${OPTARG}";;
++    r)  externals=;;
+     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
+     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
+     esac
+@@ -52,7 +55,8 @@ _plain_svn() {
+     eval ${SVN} "${@}"
+ }
  
-+# For 'svn info', we only need the credentials, if any; other options
-+# would be invalid, as they are intended for 'svn export'.
-+# We can also consume the positional parameters, as we'll no longer
-+# be calling any other remote-reaching svn command.
-+creds=
-+while [ ${#} -gt 0 ]; do
-+    case "${1}" in
-+    --username=*)   creds+=" ${1}"; shift;;
-+    --password=*)   creds+=" ${1}"; shift;;
-+    --username)     creds+=" ${1} ${2}"; shift 2;;
-+    --password)     creds+=" ${1} ${2}"; shift 2;;
-+    *)              shift;;
-+    esac
-+done
-+
- # Get the date of the revision, to generate reproducible archives.
- # The output format is YYYY-MM-DDTHH:MM:SS.mmmuuuZ (i.e. always in the
- # UTC timezone), which we can feed as-is to the --mtime option for tar.
- # In case there is a redirection (e.g. http -> https), just keep the
- # last line (svn outputs everything on stdout)
--date="$( _plain_svn info "'${uri}@${rev}'" \
-+# shellcheck disable=SC2086 # creds may be empty
-+date="$( _plain_svn info ${creds} "'${uri}@${rev}'" \
-         |sed -r -e '/^Last Changed Date: /!d; s///'
-        )"
+-_svn export --ignore-keywords ${quiet} "${@}" "'${uri}@${rev}'" "'${basename}'"
++# shellcheck disable=SC2086 # externals and quiet may be empty
++_svn export --ignore-keywords ${quiet} ${externals} "${@}" "'${uri}@${rev}'" "'${basename}'"
  
+ # For 'svn info', we only need the credentials, if any; other options
+ # would be invalid, as they are intended for 'svn export'.
 -- 
 2.34.1
 
