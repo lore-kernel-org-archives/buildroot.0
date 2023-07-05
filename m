@@ -4,66 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B1B9EB64DA
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 16:29:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF26EB64DA
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 16:46:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D46A741799;
-	Wed,  5 Jul 2023 16:29:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D46A741799
+	by smtp4.osuosl.org (Postfix) with ESMTP id C41A5417A3;
+	Wed,  5 Jul 2023 16:46:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C41A5417A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GwK8FttY0RpD; Wed,  5 Jul 2023 16:29:45 +0000 (UTC)
+	with ESMTP id aJD0TSOK-9ma; Wed,  5 Jul 2023 16:46:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CCD57405C8;
-	Wed,  5 Jul 2023 16:29:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCD57405C8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 514131BF59F
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 16:29:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86C5C417B2;
+	Wed,  5 Jul 2023 16:46:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86C5C417B2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 206311BF59F
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 16:46:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37600607BC
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 16:29:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37600607BC
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECB8941799
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 16:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECB8941799
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wdJexIkZimUR for <buildroot@lists.busybox.net>;
- Wed,  5 Jul 2023 16:29:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PUjUB2z5WlqX for <buildroot@lists.busybox.net>;
+ Wed,  5 Jul 2023 16:46:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4669F60759
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4669F60759
- for <buildroot@buildroot.org>; Wed,  5 Jul 2023 16:29:41 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6cfe4.dip0.t-ipconnect.de [79.214.207.228])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2DCC3A4C0EF9
- for <buildroot@buildroot.org>; Wed,  5 Jul 2023 18:29:37 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35380)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qH5No-0007zI-33
- for buildroot@buildroot.org; Wed, 05 Jul 2023 18:29:36 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EE6B41798
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9EE6B41798
+ for <buildroot@buildroot.org>; Wed,  5 Jul 2023 16:46:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 035A61BF207;
+ Wed,  5 Jul 2023 16:46:21 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qH5e0-002of8-Q8; Wed, 05 Jul 2023 18:46:20 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed,  5 Jul 2023 18:29:36 +0200
-Message-Id: <20230705162936.1258747-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Wed,  5 Jul 2023 18:46:14 +0200
+Message-Id: <20230705164616.671351-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1688574577;
- bh=v8q23neke6OrWoLZy0FlRdso/SYNrODhsEgsNNr80Yw=;
- h=From:To:Subject:Date:From;
- b=v/7850pYgCc0osoAVQ6GlFDZQQKQK9/qEJqutzLFeoUBSFyCipcFkP5UVRWcqBEfd
- 6EHFwtOu08YtvIB4w90D8i1wzgnlSd2b3wIfMjq4SwAGLpzNc3sLGV64AMFKvAt5xL
- 3gp4awIE93SLzGSO8/SU7mmBmzy+QaxiPms00/G1U7qcYrxU5GswaZpTb2MrBj/x6n
- JzUwxMXwEAnrQC9E/0qc2aBoH0M6NyNtb+nJHXvS2/Y5fRr6zur1PDjRZfHrp3rXY9
- U9mMhjPMXz7TPw8dls6kB7T9zuFWBvFBHnC69g/8k1IyCy1F184XqDtuWbW92yc7mw
- MxzPLa9rBDthA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=v/7850pY
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.18.4
+Subject: [Buildroot] [PATCH 1/3] board/raspberry: handle dtb overlays for
+ all variants
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,46 +60,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Martin Bark <martin@barkynet.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.18.4.html
+Most rpi defconfigs use dtb overlays, but not rpi0 / rpi2 - Making it harder
+to use overlays on those boards as the genimage files have to be tweaked.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+To fix this, create the rpi-firmware/overlays directory in the post-build
+script if needed and unconditionally include it in the genimage files so
+rpi0/rpi2 works consistently with the other variants.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/raspberrypi/genimage-raspberrypi0.cfg | 1 +
+ board/raspberrypi/genimage-raspberrypi2.cfg | 1 +
+ board/raspberrypi/post-build.sh             | 3 +++
+ 3 files changed, 5 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 05563d00cf..cc7eee620f 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.18.3.tar.asc
--sha256  c67e1453165a3918ffffad600236ca3966b47bde4798e89ae600ae3903ccc32c  samba-4.18.3.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.18.4.tar.asc
-+sha256  6ba7b3503cc59c9ff4f6fcb1b510c2c855fff93e0b366ab891a32a4732e88e53  samba-4.18.4.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 75938e21a8..a14cc63c01 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.18.3
-+SAMBA4_VERSION = 4.18.4
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/board/raspberrypi/genimage-raspberrypi0.cfg b/board/raspberrypi/genimage-raspberrypi0.cfg
+index 1fa3f5096f..313f85f651 100644
+--- a/board/raspberrypi/genimage-raspberrypi0.cfg
++++ b/board/raspberrypi/genimage-raspberrypi0.cfg
+@@ -7,6 +7,7 @@ image boot.vfat {
+ 			"rpi-firmware/config.txt",
+ 			"rpi-firmware/fixup.dat",
+ 			"rpi-firmware/start.elf",
++			"rpi-firmware/overlays",
+ 			"zImage"
+ 		}
+ 	}
+diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
+index acd23e7ca8..dad9275537 100644
+--- a/board/raspberrypi/genimage-raspberrypi2.cfg
++++ b/board/raspberrypi/genimage-raspberrypi2.cfg
+@@ -7,6 +7,7 @@ image boot.vfat {
+ 			"rpi-firmware/config.txt",
+ 			"rpi-firmware/fixup.dat",
+ 			"rpi-firmware/start.elf",
++			"rpi-firmware/overlays",
+ 			"zImage"
+ 		}
+ 	}
+diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+index 5e5eb71100..b24256fcea 100755
+--- a/board/raspberrypi/post-build.sh
++++ b/board/raspberrypi/post-build.sh
+@@ -9,3 +9,6 @@ if [ -e ${TARGET_DIR}/etc/inittab ]; then
+ 	sed -i '/GENERIC_SERIAL/a\
+ tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
+ fi
++
++# exnsure overlays exists for genimage
++mkdir -p "${BINARIES_DIR}/rpi-firmware/overlays"
 -- 
-2.39.2
+2.30.2
 
 _______________________________________________
 buildroot mailing list
