@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C704C001B0
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 19:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED05C001B0
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 19:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 643B5414BA;
-	Wed,  5 Jul 2023 19:07:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 643B5414BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id F28BD414B5;
+	Wed,  5 Jul 2023 19:09:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F28BD414B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7TKfWEnXaLGT; Wed,  5 Jul 2023 19:07:32 +0000 (UTC)
+	with ESMTP id JUq8LEB_c0kk; Wed,  5 Jul 2023 19:09:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C15FA40C28;
-	Wed,  5 Jul 2023 19:07:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C15FA40C28
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 97FE41BF59E
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 19:07:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E110403AE;
+	Wed,  5 Jul 2023 19:09:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E110403AE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 74F7D1BF59E
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 19:09:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 715BA40C28
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 19:07:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 715BA40C28
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DD836106E
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 19:09:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DD836106E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RDRokAi9BNHU for <buildroot@lists.busybox.net>;
- Wed,  5 Jul 2023 19:07:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FRQcD_0Tub4D for <buildroot@lists.busybox.net>;
+ Wed,  5 Jul 2023 19:09:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A24334026F
- for <buildroot@uclibc.org>; Wed,  5 Jul 2023 19:07:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A24334026F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E4B260F26
+ for <buildroot@uclibc.org>; Wed,  5 Jul 2023 19:09:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E4B260F26
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 907D3865F6; Wed,  5 Jul 2023 19:07:29 +0000 (UTC)
+ id 7AABA8648B; Wed,  5 Jul 2023 19:09:25 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 05 Jul 2023 19:07:29 +0000
+Date: Wed, 05 Jul 2023 19:09:25 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -48,14 +48,14 @@ X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: jbglaw@lug-owl.de
-X-Bugzilla-Status: REOPENED
+X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-15658-163-mFzUVfhuxf@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status
+Message-ID: <bug-15658-163-P4S5Y4CEhH@https.bugs.busybox.net/>
 In-Reply-To: <bug-15658-163@https.bugs.busybox.net/>
 References: <bug-15658-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -85,12 +85,10 @@ Jan-Benedict Glaw <jbglaw@lug-owl.de> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         Resolution|FIXED                       |---
-             Status|RESOLVED                    |REOPENED
+             Status|REOPENED                    |NEW
 
---- Comment #8 from Jan-Benedict Glaw <jbglaw@lug-owl.de> ---
-Hits on --target=i686-pc-msdosdjgpp as well
-(http://toolchain.lug-owl.de/laminar/jobs/binutils-i686-pc-msdosdjgpp/38).
+--- Comment #9 from Jan-Benedict Glaw <jbglaw@lug-owl.de> ---
+Sorry, that former comment was ment for a different ticket!
 
 -- 
 You are receiving this mail because:
