@@ -1,79 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD191EB64DA
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 10:09:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 249E5C0015E
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 12:18:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A77A408F2;
-	Wed,  5 Jul 2023 10:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A77A408F2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6697140BC1;
+	Wed,  5 Jul 2023 12:18:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6697140BC1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fD9F1Kj73p8P; Wed,  5 Jul 2023 12:18:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DF0740B42;
+	Wed,  5 Jul 2023 12:18:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DF0740B42
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BD791BF28E
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 12:18:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63B4140136
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 12:18:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63B4140136
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J559QiVGBhtv; Wed,  5 Jul 2023 10:09:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DA5F408E6;
-	Wed,  5 Jul 2023 10:09:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DA5F408E6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E50F1BF82D
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 10:09:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 853D9813DD
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 10:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 853D9813DD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IPK81632OQQo for <buildroot@lists.busybox.net>;
- Wed,  5 Jul 2023 10:09:11 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEF12813CD
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEF12813CD
- for <buildroot@buildroot.org>; Wed,  5 Jul 2023 10:09:10 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-3fbc59de009so68366645e9.3
- for <buildroot@buildroot.org>; Wed, 05 Jul 2023 03:09:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1688551748; x=1691143748;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=fUwsSY658LKK1It63wCmQ+KR6YS4r31thqugB8d/4bo=;
- b=fNIR+hOD1zYKqFNvsCbBhwriUzONtiijtWNGNPdPOoOy8aM5/jT4GXGLjdMA8mPQV9
- ZkQInJAD3S7jNvvR4c3jR+yirCXXyRqgB+2E7cL17esyG9MBEJnqyvxv4UCcmoOfXJHG
- dw5u5vAQNn9KdfwkEHHOA3965D8O1cPT2aed9sqA5BZ/j5Nmp/Vp4WcwC78savQR8KR4
- Z+07x04LWmuVglVrbPWmEux3FVIKwAajQyJYdKCDw7OVTLDQ3NqaIw8kpcRXLYiTkTGv
- R1DLiGeiHGk+QwPLBqNMT/61o1HQX4QUM+DgTLQXH85cx/ljnQDeoEB2xtNE0IKUh+Gf
- nf7g==
-X-Gm-Message-State: AC+VfDwI2Y/fo99cPZ4tsoMBdj6oYlb/8pqQ2XOszETR8SZwSu8s8Ghp
- 9K2hIHypM8kYgFDzkMhULET2ZMag2FjbP4cK4VTA9pFf+qcI97PoqMnFsw==
-X-Google-Smtp-Source: ACHHUZ5zkJBYfpvKgmp2PpnxEORzmbaFc4gfkQKghdc82nR6/oiZ0cEY6qALQSnUOtFZZXHRdt6PsZwnl2rQJg8KDJU=
-X-Received: by 2002:a7b:c847:0:b0:3fb:be07:5343 with SMTP id
- c7-20020a7bc847000000b003fbbe075343mr13046579wml.27.1688551747840; Wed, 05
- Jul 2023 03:09:07 -0700 (PDT)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yeg2ar-0yUW2 for <buildroot@lists.busybox.net>;
+ Wed,  5 Jul 2023 12:18:25 +0000 (UTC)
+X-Greylist: delayed 00:07:09 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B93F5400F8
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.237])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B93F5400F8
+ for <buildroot@buildroot.org>; Wed,  5 Jul 2023 12:18:24 +0000 (UTC)
+Received: from unknown (HELO opfedv3rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 05 Jul 2023 14:11:12 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0b.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jul 2023 14:11:13 +0200
+Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 5 Jul 2023 14:11:10 +0200
+Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
+ Wed, 05 Jul 2023 14:11:06 +0200
+From: yann.morin@orange.com
+X-IronPort-AV: E=Sophos;i="6.01,183,1684792800"; d="scan'208";a="10754201"
+To: <buildroot@buildroot.org>
+Date: Wed, 5 Jul 2023 14:11:06 +0200
+Message-ID: <cover.1688559056.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Wed, 5 Jul 2023 12:08:56 +0200
-Message-ID: <CAOf5uwmYNk+28CEYS-_tcGWVsw7-pWYCY2YCJXQzuijep5A5eg@mail.gmail.com>
-To: Buildroot Mailing List <buildroot@buildroot.org>
+X-Patchwork-Hint: ignore
+X-Originating-IP: [10.115.26.51]
+X-ClientProxiedBy: OPE16NORMBX105.corporate.adroot.infra.ftgroup (10.115.27.2)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1688551748; x=1691143748;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=fUwsSY658LKK1It63wCmQ+KR6YS4r31thqugB8d/4bo=;
- b=D9B1WZiDfaBrYk2Z2lYcbO6R7eNtFu26fX0xzKhyZdguvp0UU3CEaqsIfrt3LhfFgj
- 8IV3k0JYOTLmsj0MqBe33lWABu549znNcxDnqD6V9ZdqtWXRsu5i/sgud4USgBN4x+0J
- rjXJiORGvZvKlQScQe1ayqDN8V24pNK6zTQzs=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=D9B1WZiD
-Subject: [Buildroot] external toolchain license collection
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1688559505; x=1720095505;
+ h=to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding:from;
+ bh=1l9kYwYS923ywnN88vpeOfqFghkRBuPyjSYXxw4RZX8=;
+ b=rjwfzQE39WVi5mP7+1KcVVYrbCXgU9+N03JqtITFQIbiR1Xj0jDsiUix
+ hnM86RDYUcNCD+ntOCKJ58pZJjzbMdiHeaCvlZmBtSqh6FVtdD01S2CPK
+ w+p28g2ui10dYL4iLtPH71poITkVpQwzVnyBUt94iOMmgNnZQCDrdM2Ww
+ qWK3CzeGZ3mDpL7GiIlqU+QciC4Wkt2UPqIb4V0uGKsn0+Ni8sWLUjuu9
+ qOYClb7UNa+cvir1Y6cblTZjpmuGm3Lk/KB14ev1hIaZh2TkRGu3QAE/o
+ LJdLOu+eUXd/TGxdLE7SOY8TRqdQhRPU5BDHdXXSEs+PToEEv/jWGmXdL
+ g==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=rjwfzQE3
+Subject: [Buildroot] [PATCH 0/3] support/download: enhance svn backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,20 +87,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E . MORIN" <yann.morin@orange.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all
+Hello All!
 
-Is there a way to collect the license of an external toolchain and put
-it in the buildroot bundle?
-For instance we have some packages like libuclic and other libraries
-that are put in the target but even those licenses should appear. Is
-something I miss?
+This small series enhances the svn backend with two new features:
+  - properly use credentials to retrieve changeset info
+  - allow skipping svn-externals
 
-Michael
+Additionally, it also adds shellcheck fixes/exceptions, so that script
+does not end up on the list of derelict scripts.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 11aa7ac8fa3a21dc2476dd09539ea3cf3e48f03d
+
+  package/gnuradio: fix build with python-pybind > 2.10.0 (2023-07-04 22:44:08 +0200)
+
+
+are available as patches in this mail series,
+
+for you to apply patches up to b1388fcaee6d79d0845a49632b5b9326050ed219
+
+  support/download: add support to exclude svn externals (2023-07-05 13:51:22 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      support/download: fix shellcheck errors in svn backend
+      support/download: use svn credentials to retrieve revision date
+      support/download: add support to exclude svn externals
+
+ docs/manual/adding-packages-generic.txt |  6 ++++++
+ package/pkg-download.mk                 |  1 +
+ package/pkg-generic.mk                  |  9 +++++++++
+ support/download/svn                    | 28 +++++++++++++++++++++++++---
+ 4 files changed, 41 insertions(+), 3 deletions(-)
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
