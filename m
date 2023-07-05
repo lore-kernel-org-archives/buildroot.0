@@ -4,53 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A45EEB64DA
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 16:46:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B51EB64DA
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jul 2023 16:58:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7CB3417D4;
-	Wed,  5 Jul 2023 16:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7CB3417D4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7610940080;
+	Wed,  5 Jul 2023 16:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7610940080
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4gDg8V7qvTqZ; Wed,  5 Jul 2023 16:46:43 +0000 (UTC)
+	with ESMTP id 70pMIWjiteFY; Wed,  5 Jul 2023 16:58:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74EC5416E5;
-	Wed,  5 Jul 2023 16:46:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74EC5416E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8A6A402DE;
+	Wed,  5 Jul 2023 16:58:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8A6A402DE
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 88C4F1BF59F
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 16:46:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D9431BF95D
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 16:58:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62C764148A
- for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 16:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62C764148A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 478FA404C9
+ for <buildroot@lists.busybox.net>; Wed,  5 Jul 2023 16:58:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 478FA404C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id knWD0b7pjUdj for <buildroot@lists.busybox.net>;
- Wed,  5 Jul 2023 16:46:28 +0000 (UTC)
+ with ESMTP id HOZyGB5Xj4JR for <buildroot@lists.busybox.net>;
+ Wed,  5 Jul 2023 16:58:51 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A353404C9
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5A353404C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E383840102
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E383840102
+ for <buildroot@buildroot.org>; Wed,  5 Jul 2023 16:58:50 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::228])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 8954CD1677
  for <buildroot@buildroot.org>; Wed,  5 Jul 2023 16:46:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AD700E000B;
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C0A91BF210;
  Wed,  5 Jul 2023 16:46:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peko@48ers.dk>)
- id 1qH5e1-002ofC-83; Wed, 05 Jul 2023 18:46:21 +0200
+ id 1qH5e1-002ofH-M8; Wed, 05 Jul 2023 18:46:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed,  5 Jul 2023 18:46:15 +0200
-Message-Id: <20230705164616.671351-2-peter@korsgaard.com>
+Date: Wed,  5 Jul 2023 18:46:16 +0200
+Message-Id: <20230705164616.671351-3-peter@korsgaard.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230705164616.671351-1-peter@korsgaard.com>
 References: <20230705164616.671351-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/3] board/raspberrypi/post-image.sh: generate
- genimage config from template if not present
+Subject: [Buildroot] [PATCH 3/3] board/raspberrypi: drop variant-specific
+ genimage files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,91 +64,473 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The rpi genimage configurations are all identical, except for the boot
-partition files, which include:
+Now that we have a template generating an equivalent genimage configuration.
 
-- Device tree files (*.dtb)
-- rpi-firmware files (rpi-firmware/*)
-- Kernel image (Image/zImage)
+The generated genimage is identical to these +/- file ordering and a
+trailing comma / newline that is ignored by genimage, E.G. for rpi3-64:
 
-All of these are quite simple to figure out programatically based on the
-content of BINARIES_DIR, so extend post-image.sh to fall back to generating
-a genimage configuration based on genimage.cfg.in if a board specific one
-does not exist.
+@@ -8,9 +8,10 @@
+                        "rpi-firmware/cmdline.txt",
+                        "rpi-firmware/config.txt",
+                        "rpi-firmware/fixup.dat",
+-                       "rpi-firmware/start.elf",
+                        "rpi-firmware/overlays",
+-                       "Image"
++                       "rpi-firmware/start.elf",
++                       "Image",
++
+                }
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/genimage.cfg.in | 25 +++++++++++++++++++++++++
- board/raspberrypi/post-image.sh   | 17 +++++++++++++++++
- 2 files changed, 42 insertions(+)
- create mode 100644 board/raspberrypi/genimage.cfg.in
+ board/raspberrypi/genimage-raspberrypi.cfg    | 33 ------------------
+ board/raspberrypi/genimage-raspberrypi0.cfg   | 32 -----------------
+ board/raspberrypi/genimage-raspberrypi0w.cfg  | 32 -----------------
+ board/raspberrypi/genimage-raspberrypi2.cfg   | 32 -----------------
+ .../raspberrypi/genimage-raspberrypi3-64.cfg  | 34 -------------------
+ board/raspberrypi/genimage-raspberrypi3.cfg   | 34 -------------------
+ .../raspberrypi/genimage-raspberrypi4-64.cfg  | 31 -----------------
+ board/raspberrypi/genimage-raspberrypi4.cfg   | 31 -----------------
+ .../genimage-raspberrypicm4io-64.cfg          | 31 -----------------
+ .../raspberrypi/genimage-raspberrypicm4io.cfg | 31 -----------------
+ .../genimage-raspberrypizero2w.cfg            | 32 -----------------
+ 11 files changed, 353 deletions(-)
+ delete mode 100644 board/raspberrypi/genimage-raspberrypi.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypi0.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypi0w.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypi2.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypi3-64.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypi3.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypi4-64.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypi4.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypicm4io-64.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypicm4io.cfg
+ delete mode 100644 board/raspberrypi/genimage-raspberrypizero2w.cfg
 
-diff --git a/board/raspberrypi/genimage.cfg.in b/board/raspberrypi/genimage.cfg.in
-new file mode 100644
-index 0000000000..fd38b86a0c
---- /dev/null
-+++ b/board/raspberrypi/genimage.cfg.in
-@@ -0,0 +1,25 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+#BOOT_FILES#
-+		}
-+	}
-+
-+	size = 32M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index 6cad20fb9e..9b9eac972b 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -7,6 +7,23 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
- GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
- GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
-+# generate genimage from template if a board specific variant doesn't exists
-+if [ ! -e "${GENIMAGE_CFG}" ]; then
-+	GENIMAGE_CFG="${BINARIES_DIR}/genimage.cfg"
-+	FILES=()
-+
-+	for i in "${BINARIES_DIR}"/*.dtb "${BINARIES_DIR}"/rpi-firmware/*; do
-+		FILES+=( "${i#${BINARIES_DIR}/}" )
-+	done
-+
-+	KERNEL=$(sed -n 's/^kernel=//p' "${BINARIES_DIR}/rpi-firmware/config.txt")
-+	FILES+=( "${KERNEL}" )
-+
-+	BOOT_FILES=$(printf '\\t\\t\\t"%s",\\n' "${FILES[@]}")
-+	sed "s|#BOOT_FILES#|${BOOT_FILES}|" "${BOARD_DIR}/genimage.cfg.in" \
-+		> "${GENIMAGE_CFG}"
-+fi
-+
- # Pass an empty rootpath. genimage makes a full copy of the given rootpath to
- # ${GENIMAGE_TMP}/root so passing TARGET_DIR would be a waste of time and disk
- # space. We don't rely on genimage to build the rootfs image, just to insert a
+diff --git a/board/raspberrypi/genimage-raspberrypi.cfg b/board/raspberrypi/genimage-raspberrypi.cfg
+deleted file mode 100644
+index 04be16cce6..0000000000
+--- a/board/raspberrypi/genimage-raspberrypi.cfg
++++ /dev/null
+@@ -1,33 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2708-rpi-b.dtb",
+-			"bcm2708-rpi-b-plus.dtb",
+-			"bcm2708-rpi-cm.dtb",
+-			"rpi-firmware/bootcode.bin",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup.dat",
+-			"rpi-firmware/start.elf",
+-			"zImage"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypi0.cfg b/board/raspberrypi/genimage-raspberrypi0.cfg
+deleted file mode 100644
+index 313f85f651..0000000000
+--- a/board/raspberrypi/genimage-raspberrypi0.cfg
++++ /dev/null
+@@ -1,32 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2708-rpi-zero.dtb",
+-			"rpi-firmware/bootcode.bin",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup.dat",
+-			"rpi-firmware/start.elf",
+-			"rpi-firmware/overlays",
+-			"zImage"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypi0w.cfg b/board/raspberrypi/genimage-raspberrypi0w.cfg
+deleted file mode 100644
+index de7652f99e..0000000000
+--- a/board/raspberrypi/genimage-raspberrypi0w.cfg
++++ /dev/null
+@@ -1,32 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2708-rpi-zero-w.dtb",
+-			"rpi-firmware/bootcode.bin",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup.dat",
+-			"rpi-firmware/start.elf",
+-			"rpi-firmware/overlays",
+-			"zImage"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
+deleted file mode 100644
+index dad9275537..0000000000
+--- a/board/raspberrypi/genimage-raspberrypi2.cfg
++++ /dev/null
+@@ -1,32 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2709-rpi-2-b.dtb",
+-			"rpi-firmware/bootcode.bin",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup.dat",
+-			"rpi-firmware/start.elf",
+-			"rpi-firmware/overlays",
+-			"zImage"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+deleted file mode 100644
+index 8cbcd91638..0000000000
+--- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
++++ /dev/null
+@@ -1,34 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2710-rpi-3-b.dtb",
+-			"bcm2710-rpi-3-b-plus.dtb",
+-			"bcm2837-rpi-3-b.dtb",
+-			"rpi-firmware/bootcode.bin",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup.dat",
+-			"rpi-firmware/start.elf",
+-			"rpi-firmware/overlays",
+-			"Image"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
+deleted file mode 100644
+index a617823379..0000000000
+--- a/board/raspberrypi/genimage-raspberrypi3.cfg
++++ /dev/null
+@@ -1,34 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2710-rpi-3-b.dtb",
+-			"bcm2710-rpi-3-b-plus.dtb",
+-			"bcm2710-rpi-cm3.dtb",
+-			"rpi-firmware/bootcode.bin",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup.dat",
+-			"rpi-firmware/start.elf",
+-			"rpi-firmware/overlays",
+-			"zImage"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypi4-64.cfg b/board/raspberrypi/genimage-raspberrypi4-64.cfg
+deleted file mode 100644
+index 3ae938db20..0000000000
+--- a/board/raspberrypi/genimage-raspberrypi4-64.cfg
++++ /dev/null
+@@ -1,31 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2711-rpi-4-b.dtb",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup4.dat",
+-			"rpi-firmware/start4.elf",
+-			"rpi-firmware/overlays",
+-			"Image"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypi4.cfg b/board/raspberrypi/genimage-raspberrypi4.cfg
+deleted file mode 100644
+index 2e578ad556..0000000000
+--- a/board/raspberrypi/genimage-raspberrypi4.cfg
++++ /dev/null
+@@ -1,31 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2711-rpi-4-b.dtb",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup4.dat",
+-			"rpi-firmware/start4.elf",
+-			"rpi-firmware/overlays",
+-			"zImage"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypicm4io-64.cfg b/board/raspberrypi/genimage-raspberrypicm4io-64.cfg
+deleted file mode 100644
+index 73d31a57ba..0000000000
+--- a/board/raspberrypi/genimage-raspberrypicm4io-64.cfg
++++ /dev/null
+@@ -1,31 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2711-rpi-cm4.dtb",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup4.dat",
+-			"rpi-firmware/start4.elf",
+-			"rpi-firmware/overlays",
+-			"Image"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypicm4io.cfg b/board/raspberrypi/genimage-raspberrypicm4io.cfg
+deleted file mode 100644
+index 4d09b03556..0000000000
+--- a/board/raspberrypi/genimage-raspberrypicm4io.cfg
++++ /dev/null
+@@ -1,31 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2711-rpi-cm4.dtb",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup4.dat",
+-			"rpi-firmware/start4.elf",
+-			"rpi-firmware/overlays",
+-			"zImage"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/raspberrypi/genimage-raspberrypizero2w.cfg b/board/raspberrypi/genimage-raspberrypizero2w.cfg
+deleted file mode 100644
+index b510fea563..0000000000
+--- a/board/raspberrypi/genimage-raspberrypizero2w.cfg
++++ /dev/null
+@@ -1,32 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"bcm2710-rpi-zero-2-w.dtb",
+-			"rpi-firmware/bootcode.bin",
+-			"rpi-firmware/cmdline.txt",
+-			"rpi-firmware/config.txt",
+-			"rpi-firmware/fixup.dat",
+-			"rpi-firmware/start.elf",
+-			"rpi-firmware/overlays",
+-			"zImage"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
 -- 
 2.30.2
 
