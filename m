@@ -1,50 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0097AEB64DC
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 12:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 033C7EB64DC
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 15:30:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8753E40A6A;
-	Thu,  6 Jul 2023 12:08:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8753E40A6A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vdZCP20inOsl; Thu,  6 Jul 2023 12:08:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C91E741532;
-	Thu,  6 Jul 2023 12:08:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C91E741532
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 939441BF85D
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 12:08:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6DAFF60B45
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 12:08:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DAFF60B45
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76AFB60F6E;
+	Thu,  6 Jul 2023 15:30:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76AFB60F6E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ujxYlo0pqJAq for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 12:08:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A198460B3D
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 12:08:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A198460B3D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F67D8690B; Thu,  6 Jul 2023 12:08:23 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XJ9hZUEW7Gsh; Thu,  6 Jul 2023 15:30:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEB4660D52;
+	Thu,  6 Jul 2023 15:30:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEB4660D52
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F10E1BF39F
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:30:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25C2B40A76
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:30:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25C2B40A76
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UjAxKyfBtVoe for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 15:30:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D52EE40012
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D52EE40012
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 15:30:13 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 891DA40008;
+ Thu,  6 Jul 2023 15:30:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qHQvp-003oYX-4T; Thu, 06 Jul 2023 17:30:09 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 14:02:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6021f3678b44d43da7057e3135da842cde1ffa05
-X-Git-Newrev: a7e4f557f5c5874c84d6ae2e28d752603e18ab3f
-X-Patchwork-Hint: ignore
-Message-Id: <20230706120823.8F67D8690B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/busybox: bump version to 1.36.1
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20230624141847.3243715-1-bernd@kuhls.net>
+Date: Thu, 06 Jul 2023 17:30:09 +0200
+In-Reply-To: <20230624141847.3243715-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sat, 24 Jun 2023 16:18:46 +0200")
+Message-ID: <87sfa1ys5a.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/heimdal: Use perl module
+ JSON:PP, part of core, instead of JSON package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,47 +66,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7e4f557f5c5874c84d6ae2e28d752603e18ab3f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/busybox/busybox.hash | 4 ++--
- package/busybox/busybox.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/48b/48b52d205150e30e522b40d1c7b51f339ae8b0db/
 
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 6d1c36906d..6eba365ecc 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,5 +1,5 @@
--# From https://busybox.net/downloads/busybox-1.35.0.tar.bz2.sha256
--sha256  542750c8af7cb2630e201780b4f99f3dcceeb06f505b479ec68241c1e6af61a5  busybox-1.36.0.tar.bz2
-+# From https://busybox.net/downloads/busybox-1.36.1.tar.bz2.sha256
-+sha256  b8cc24c9574d809e7279c3be349795c5d5ceb6fdf19ca709f80cde50e47de314  busybox-1.36.1.tar.bz2
- # Locally computed
- sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
- sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index fd4f3c17c5..eb5e7ad922 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUSYBOX_VERSION = 1.36.0
-+BUSYBOX_VERSION = 1.36.1
- BUSYBOX_SITE = https://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+ > This patch ports the existing patch for the samba4 package:
+ > https://git.busybox.net/buildroot/tree/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > ---
+ > v2: Fix typo in title, add upstream URL (Yann)
+
+Committed to 2023.02.x and 2023.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
