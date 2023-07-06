@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3202EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 15:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 040C8EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 15:34:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42FEA600CD;
-	Thu,  6 Jul 2023 15:33:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42FEA600CD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96D696101D;
+	Thu,  6 Jul 2023 15:34:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96D696101D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9qPc4mvLOyvP; Thu,  6 Jul 2023 15:33:20 +0000 (UTC)
+	with ESMTP id 8uEzNTt_wzt7; Thu,  6 Jul 2023 15:34:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8215060F6E;
-	Thu,  6 Jul 2023 15:33:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8215060F6E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3126D1BF39F
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:33:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DC326100B;
+	Thu,  6 Jul 2023 15:34:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DC326100B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 049491BF39F
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:34:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A6CA82218
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:33:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A6CA82218
+ by smtp3.osuosl.org (Postfix) with ESMTP id D057660F9A
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:34:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D057660F9A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uVQ-TmGvyLpn for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 15:33:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fjv2kcZ48bCn for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 15:34:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ECC881D7D
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3ECC881D7D
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 15:33:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0B3E6100B
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F0B3E6100B
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 15:34:48 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B5F0FF808;
- Thu,  6 Jul 2023 15:33:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A17AF20009;
+ Thu,  6 Jul 2023 15:34:45 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qHQym-003ogH-Un; Thu, 06 Jul 2023 17:33:12 +0200
+ id 1qHR0G-003ok0-Dr; Thu, 06 Jul 2023 17:34:44 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20230623071136.126003-1-james.hilliard1@gmail.com>
-Date: Thu, 06 Jul 2023 17:33:12 +0200
-In-Reply-To: <20230623071136.126003-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Fri, 23 Jun 2023 01:11:36 -0600")
-Message-ID: <87o7kpys07.fsf@48ers.dk>
+To: Fabio Estevam <festevam@gmail.com>
+References: <20230622164951.1213353-1-festevam@gmail.com>
+Date: Thu, 06 Jul 2023 17:34:44 +0200
+In-Reply-To: <20230622164951.1213353-1-festevam@gmail.com> (Fabio Estevam's
+ message of "Thu, 22 Jun 2023 13:49:51 -0300")
+Message-ID: <87jzvdyrxn.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
- version 39.0.2
+Subject: Re: [Buildroot] [PATCH] configs/mx53loco: select
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,17 +66,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Jan-Benedict Glaw <jbglaw@lug-owl.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > Select  BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following
+ > build error:
 
-Committed to 2023.02.x and 2023.05.x, thanks.
+ > include/image.h:1383:12: fatal error: openssl/evp.h: No such file or directory
+
+ > Reported-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+
+Committed to 2023.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
