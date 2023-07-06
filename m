@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AECE4EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9C7AEB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FD2440237;
-	Thu,  6 Jul 2023 08:58:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FD2440237
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51C3F417E2;
+	Thu,  6 Jul 2023 08:58:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51C3F417E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eyAOtJ9T2JyT; Thu,  6 Jul 2023 08:58:21 +0000 (UTC)
+	with ESMTP id hXqssoAlAhWs; Thu,  6 Jul 2023 08:58:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41965400C1;
-	Thu,  6 Jul 2023 08:58:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41965400C1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F27611BF97E
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 288404007C;
+	Thu,  6 Jul 2023 08:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 288404007C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A0A01BF97F
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA39B8188B
+ by smtp4.osuosl.org (Postfix) with ESMTP id E481840237
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA39B8188B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E481840237
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 67UT6sEzwedj for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qE5ZrqLSzo9L for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 08:56:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B9ACF817A8
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED8F4417FA
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9ACF817A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED8F4417FA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9AF6867CB; Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
+ id DD53B867CC; Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 10:33:42 +0200
+Date: Thu, 6 Jul 2023 10:47:35 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: d918568a15cc00a0c718a475b6c755fcdc8e0d1e
-X-Git-Newrev: 584d553f39090f78ce74ac21bb843cb422b48c49
+X-Git-Oldrev: 945555e7ffd4eda1c8293a7bf8545c89361b8642
+X-Git-Newrev: 0605f6d05d9412883b09fadeda0c991a24798cdb
 X-Patchwork-Hint: ignore
-Message-Id: <20230706085635.A9AF6867CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] support/testing: add
- python-docker test
+Message-Id: <20230706085635.DD53B867CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libxslt: bump to
+ version 1.1.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,87 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=584d553f39090f78ce74ac21bb843cb422b48c49
+commit: https://git.buildroot.net/buildroot/commit/?id=0605f6d05d9412883b09fadeda0c991a24798cdb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Python-docker needs a working docker setup to do anything useful, so add it
-to the existing docker_compose (which tests docker and docker-compose)
-rather than adding a completely new test.
+Release notes:
+https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.38.news
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0bb63c6f5adc07532da494d1118dd7b6f061fb00)
+(cherry picked from commit 6794f14d485dbfd93ef167ba46d24e7095003729)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/sample_python_docker.py | 12 ++++++++++++
- support/testing/tests/package/test_docker_compose.py  | 10 +++++++++-
- 2 files changed, 21 insertions(+), 1 deletion(-)
+ package/libxslt/libxslt.hash | 4 ++--
+ package/libxslt/libxslt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_docker.py b/support/testing/tests/package/sample_python_docker.py
-new file mode 100644
-index 0000000000..a69097b412
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_docker.py
-@@ -0,0 +1,12 @@
-+import docker
-+
-+client = docker.from_env()
-+info = client.info()
-+images = client.images.list()
-+
-+assert len(images) > 0
-+
-+print('Version:', info['ServerVersion'])
-+print('Images:')
-+for i in images:
-+    print(i.tags[0])
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 38b669fc6d..16027c9c3a 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -4,6 +4,8 @@ import infra.basetest
+diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
+index c771e1fd7e..458c1388d3 100644
+--- a/package/libxslt/libxslt.hash
++++ b/package/libxslt/libxslt.hash
+@@ -1,5 +1,5 @@
+-# from https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.37.sha256sum
+-sha256  3a4b27dc8027ccd6146725950336f1ec520928f320f144eb5fa7990ae6123ab4  libxslt-1.1.37.tar.xz
++# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.38.sha256sum
++sha256  1f32450425819a09acaff2ab7a5a7f8a2ec7956e505d7beeb45e843d0e1ecab1  libxslt-1.1.38.tar.xz
  
+ # Hash for license file:
+ sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  COPYING
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 95b0325c94..ec066fbfa2 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- class TestDockerCompose(infra.basetest.BRTest):
-+    scripts = ["conf/docker-compose.yml",
-+               "tests/package/sample_python_docker.py"]
-     config = \
-         """
-         BR2_x86_64=y
-@@ -18,6 +20,8 @@ class TestDockerCompose(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DOCKER=y
-         BR2_PACKAGE_CA_CERTIFICATES=y
-         BR2_PACKAGE_DOCKER_CLI=y
-         BR2_PACKAGE_DOCKER_COMPOSE=y
-@@ -27,7 +31,7 @@ class TestDockerCompose(infra.basetest.BRTest):
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """.format(
-             infra.filepath("tests/package/copy-sample-script-to-target.sh"),
--            infra.filepath("conf/docker-compose.yml"),
-+            " ".join([infra.filepath(i) for i in scripts]),
-             infra.filepath("conf/docker-compose-kernel.config"))
- 
-     def wait_for_dockerd(self):
-@@ -46,6 +50,9 @@ class TestDockerCompose(infra.basetest.BRTest):
-         self.assertRunOk('wget -q -O /tmp/busybox http://127.0.0.1/busybox', 120)
-         self.assertRunOk('cmp /bin/busybox /tmp/busybox', 120)
- 
-+    def python_docker_test(self):
-+        self.assertRunOk('python3 ./sample_python_docker.py', 120)
-+
-     def test_run(self):
-         kernel = os.path.join(self.builddir, "images", "bzImage")
-         rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
-@@ -62,3 +69,4 @@ class TestDockerCompose(infra.basetest.BRTest):
-         self.wait_for_dockerd()
-         self.docker_test()
-         self.docker_compose_test()
-+        self.python_docker_test()
+-LIBXSLT_VERSION = 1.1.37
++LIBXSLT_VERSION = 1.1.38
+ LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
+ LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
+ LIBXSLT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
