@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0DE2EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 15:36:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7820EEB64DC
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 15:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 597A360FF4;
-	Thu,  6 Jul 2023 15:36:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 597A360FF4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C1A560F6E;
+	Thu,  6 Jul 2023 15:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C1A560F6E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ss4YEjN06Dfy; Thu,  6 Jul 2023 15:36:15 +0000 (UTC)
+	with ESMTP id dZR3RJIyQ8bq; Thu,  6 Jul 2023 15:36:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9467E60F6E;
-	Thu,  6 Jul 2023 15:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9467E60F6E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD17B1BF39F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4428A61108;
+	Thu,  6 Jul 2023 15:36:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4428A61108
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B076F1BF97D
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 944438224A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 860D440A88
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:36:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 944438224A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 860D440A88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i73FAxi8q_HC for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SgJZUo6XsJuL for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 15:36:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A7EB821B2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B10340A76
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 15:36:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A7EB821B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B10340A76
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 45EFB86918; Thu,  6 Jul 2023 15:36:11 +0000 (UTC)
+ id 529168691A; Thu,  6 Jul 2023 15:36:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 17:12:34 +0200
+Date: Thu, 6 Jul 2023 17:32:31 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 94a381ed47fd536a3b383bd8433d16766c2b3195
-X-Git-Newrev: df7c755a55d532e565500a5b1cd855d35c2c1fbc
+X-Git-Oldrev: df7c755a55d532e565500a5b1cd855d35c2c1fbc
+X-Git-Newrev: d24a21ff539b4c4bcec6bfe8bc169ab25fd02998
 X-Patchwork-Hint: ignore
-Message-Id: <20230706153611.45EFB86918@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/heimdal: Use perl
- module JSON:PP, part of core, instead of JSON package
+Message-Id: <20230706153611.529168691A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/python-cryptography: bump to version 39.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,87 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df7c755a55d532e565500a5b1cd855d35c2c1fbc
+commit: https://git.buildroot.net/buildroot/commit/?id=d24a21ff539b4c4bcec6bfe8bc169ab25fd02998
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/48b/48b52d205150e30e522b40d1c7b51f339ae8b0db/
-
-This patch ports the existing patch for the samba4 package:
-https://git.busybox.net/buildroot/tree/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 770f097ee6f22e48ee4ceba517bd8bb75bc419fa)
+(cherry picked from commit adabd0b8b03c36c660784b685a49ac7d41c9b472)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...dule-JSON-PP-part-of-core-instead-of-JSON.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch b/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch
-new file mode 100644
-index 0000000000..7323ac70df
---- /dev/null
-+++ b/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch
-@@ -0,0 +1,57 @@
-+From f6fdb0a28e3bfcb3fd0aa1c81ad59c5411c0d660 Mon Sep 17 00:00:00 2001
-+From: Andrew Sim <andrewsimz@gmail.com>
-+Date: Sat, 10 Jun 2023 09:00:24 +0200
-+Subject: [PATCH] Use perl module JSON:PP, part of core, instead of JSON
-+ package
-+
-+This patch removes the need for an external package.
-+
-+Ported from
-+https://github.com/openwrt/packages/blob/master/net/samba4/patches/105-perl-json-pp.patch
-+https://github.com/openwrt/packages/commit/402f4ba4eff65b80a9deaa6085256112bec4d67b#diff-208d4e0345c9d29fbec23d6f655ba794afd3052f5cb8dd73944db72ce81b847b
-+
-+Upstream: https://github.com/heimdal/heimdal/pull/1176
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ cf/make-proto.pl | 4 ++--
-+ configure.ac     | 1 -
-+ 2 files changed, 2 insertions(+), 3 deletions(-)
-+
-+diff --git a/cf/make-proto.pl b/cf/make-proto.pl
-+index 36a040ce6..4af21916b 100644
-+--- a/cf/make-proto.pl
-++++ b/cf/make-proto.pl
-+@@ -4,7 +4,7 @@
-+ use Getopt::Std;
-+ use File::Compare;
-+ 
-+-use JSON;
-++use JSON::PP
-+ 
-+ my $comment = 0;
-+ my $doxygen = 0;
-+@@ -70,7 +70,7 @@ if($opt_x) {
-+     my $EXP;
-+     local $/;
-+     open(EXP, '<', $opt_x) || die "open ${opt_x}";
-+-    my $obj = JSON->new->utf8->decode(<EXP>);
-++    my $obj = JSON::PP->new->utf8->decode(<EXP>);
-+     close $EXP;
-+ 
-+     foreach my $x (keys %$obj) {
-+diff --git a/configure.ac b/configure.ac
-+index cedb4c01f..cecd030e6 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -56,7 +56,6 @@ if ! test -f "$srcdir/lib/asn1/der-protos.h" ||
-+     AC_KRB_PROG_PERL
-+     AC_KRB_PERL_MOD(Getopt::Std)
-+     AC_KRB_PERL_MOD(File::Compare)
-+-    AC_KRB_PERL_MOD(JSON)
-+ fi
-+ 
-+ AC_KRB_PROG_YACC
-+-- 
-+2.39.2
-+
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index a23944a06f..e083014750 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  531348679f144d118156be5b17ddac750974cdcd9f44bb0a7cfd7ddcfee79c80  cryptography-39.0.1.tar.gz
++sha256  405c9a6271e1a088ea0b432bc2094e2e8baadb2241e192ce9c73a7cc9793b127  cryptography-39.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index a130b2d10d..67aa20742d 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CRYPTOGRAPHY_VERSION = 39.0.1
++PYTHON_CRYPTOGRAPHY_VERSION = 39.0.2
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/6a/f5/a729774d087e50fffd1438b3877a91e9281294f985bda0fd15bf99016c78
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/fa/f3/f4b8c175ea9a1de650b0085858059050b7953a93d66c97ed89b93b232996
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
