@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42225EB64DD
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECB04EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:31:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFA04610A9;
-	Thu,  6 Jul 2023 08:30:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFA04610A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 936B261098;
+	Thu,  6 Jul 2023 08:31:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 936B261098
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RNeaknAaHnBJ; Thu,  6 Jul 2023 08:30:57 +0000 (UTC)
+	with ESMTP id yeiNWpz_xVgg; Thu,  6 Jul 2023 08:31:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 394FA610A3;
-	Thu,  6 Jul 2023 08:30:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 394FA610A3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1AE491BF575
+	by smtp3.osuosl.org (Postfix) with ESMTP id A30EF610A8;
+	Thu,  6 Jul 2023 08:31:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A30EF610A8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6584E1BF575
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E861940463
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E861940463
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4AF8E409AA
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:30:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AF8E409AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xR1wGgamG_vr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O_uafZTMLWtL for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19D7E402F4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29CA540570
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19D7E402F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29CA540570
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0850A86717; Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
+ id 1596086719; Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 10:24:52 +0200
+Date: Thu, 6 Jul 2023 10:25:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6f4e0e38f865f61d9ea5de8b07eaceec96863fd6
-X-Git-Newrev: dc4d70ff1f828b92219f0915e6a296f3ab60edb6
+X-Git-Oldrev: dc4d70ff1f828b92219f0915e6a296f3ab60edb6
+X-Git-Newrev: 3512b76f2ec3612a3329bad6da5e82064fd06e6a
 X-Patchwork-Hint: ignore
-Message-Id: <20230706083053.0850A86717@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libva-utils: bump version to 2.19.0
+Message-Id: <20230706083053.1596086719@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 3}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc4d70ff1f828b92219f0915e6a296f3ab60edb6
+commit: https://git.buildroot.net/buildroot/commit/?id=3512b76f2ec3612a3329bad6da5e82064fd06e6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://github.com/intel/libva-utils/blob/v2.19-branch/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libva-utils/libva-utils.hash | 2 +-
- package/libva-utils/libva-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 3cde9cd284..e46a0522f8 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c4c0555c96ca678f9ac47fbb56f0ae56ca39fd50fe3553bae5cb13117bfcb406  libva-utils-2.18.2.tar.gz
-+sha256  4135992ab534d0cfd71a93c28e1a22f79c0003cf8d157ffd4621e5e482191b4f  libva-utils-2.19.0.tar.gz
- sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index 38d46a08c9..4b2f5907ea 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 315af971db..fba0e1244b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--LIBVA_UTILS_VERSION = 2.18.2
-+LIBVA_UTILS_VERSION = 2.19.0
- LIBVA_UTILS_SITE = $(call github,intel,libva-utils,$(LIBVA_UTILS_VERSION))
- LIBVA_UTILS_LICENSE = MIT
- LIBVA_UTILS_LICENSE_FILES = COPYING
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.3.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.3.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index f49ab52afb..d6371a4906 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  41ecf21399b17ab85163750ba22347d09b54fa099b80b63d0e2ef0066129b13e  linux-6.3.9.tar.xz
+-sha256  be368143bc5d0dc73dd3e8c6191630c1620520379baf6f47c16116b2c0bc26ac  linux-6.1.35.tar.xz
++sha256  e0a9ad8692b2191cbd33db371a780a3fe375de90123a307ecd874c0860cd46e3  linux-6.3.10.tar.xz
++sha256  d8ca0e300f30b9ff70c6e1497c638a1dac1407f45d3655e9c62c6e45a08afe6b  linux-6.1.36.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  4e6bf4dadb04d5d11d1d4cc37c0eabcf33bc333b7dd3dc2143c3099a823eb5b3  linux-5.15.118.tar.xz
+-sha256  280662ec8dc8738cf947ad66e748141abd58cbe3b5ed66b7f2b153222b7c7090  linux-5.10.185.tar.xz
+-sha256  3abed132e76c6575733acba39eaa54f6d8f4b1dc951b0e601a33959743b13e35  linux-5.4.248.tar.xz
++sha256  7aa5a0fd3520947e5599e811d28acdc30e36446c016c7dcee3793e6d1cbecfcf  linux-5.15.119.tar.xz
++sha256  1e60296a135d272bb7ce645f6ae68fbd4ffd1972cb4b82c38c6faa1172481be3  linux-5.10.186.tar.xz
++sha256  dc5458462c6edbe3473fc6dee80fbe0841df7c177fe0546c2f131e5918f5351d  linux-5.4.249.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  286a9b8c75bff7bdf66985e12a3a650b2bd638a776a5a6e93415930855662a73  linux-4.19.287.tar.xz
+-sha256  aca4750f02f4090b753c1445db44dfa90de535eca73a7b0a7aa4453f65ba1ff9  linux-4.14.319.tar.xz
++sha256  33ebd0c445b58c814428558496b65a192410f000096b0e2e6f5d813ecd95e3eb  linux-4.19.288.tar.xz
++sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 10e33a7306..baeabd94db 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -396,13 +396,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.319"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.287"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.248"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.185"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.118"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.35"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.3.9"		if BR2_KERNEL_HEADERS_6_3
++	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.288"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.249"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.186"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.119"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.36"	if BR2_KERNEL_HEADERS_6_1
++	default "6.3.10"	if BR2_KERNEL_HEADERS_6_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
