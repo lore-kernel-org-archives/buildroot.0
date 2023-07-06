@@ -4,55 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6EBBEB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:52:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35592EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48F3F405E1;
-	Thu,  6 Jul 2023 08:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48F3F405E1
+	by smtp4.osuosl.org (Postfix) with ESMTP id C03BB40629;
+	Thu,  6 Jul 2023 08:52:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C03BB40629
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qqHYWlMFyVLN; Thu,  6 Jul 2023 08:52:01 +0000 (UTC)
+	with ESMTP id QdVmjHZXsCBl; Thu,  6 Jul 2023 08:52:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DC2540542;
-	Thu,  6 Jul 2023 08:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DC2540542
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 19EE71BF575
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:51:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBA6E40542;
+	Thu,  6 Jul 2023 08:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBA6E40542
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AAEEF1BF575
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:52:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7CE760B99
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7CE760B99
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84E5A817FF
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84E5A817FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eXZxcqtpccQb for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 08:51:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e5YVXw6qr3sp for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 08:52:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F05460AAA
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F05460AAA
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95ED7817A8
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 95ED7817A8
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:52:47 +0000 (UTC)
 X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 667FD2000A
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:51:52 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A3D33C0003;
+ Thu,  6 Jul 2023 08:52:45 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1qHKiN-003A9L-GO
- for buildroot@buildroot.org; Thu, 06 Jul 2023 10:51:51 +0200
+ (envelope-from <peter@korsgaard.com>)
+ id 1qHKjE-003ACv-LD; Thu, 06 Jul 2023 10:52:44 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-References: <20230618114558.8584883BB1@busybox.osuosl.org>
-Date: Thu, 06 Jul 2023 10:51:51 +0200
-In-Reply-To: <20230618114558.8584883BB1@busybox.osuosl.org> (Peter Korsgaard's
- message of "Sun, 18 Jun 2023 13:26:44 +0200")
-Message-ID: <87y1jt4e3c.fsf@48ers.dk>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20230610085443.3241799-1-bernd.kuhls@t-online.de>
+ <87bkhdhuul.fsf@48ers.dk>
+Date: Thu, 06 Jul 2023 10:52:44 +0200
+In-Reply-To: <87bkhdhuul.fsf@48ers.dk> (Peter Korsgaard's message of "Sun, 18
+ Jun 2023 13:29:22 +0200")
+Message-ID: <87ttuh4e1v.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{14,
- 19}.x / 5.{4, 10, 15}.x / 6.{1, 3}.x series
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcap: security bump version
+ to 2.69
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,6 +67,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -71,11 +75,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=ed4792aaec66c963ca780b256c6c9f487a432c6b
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> Fixes
+ >> - CVE-2023-2602
+ >> https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=bc6b36682f188020ee4770fae1d41bde5b2c97bb
+ >> - CVE-2023-2603
+ >> https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=422bec25ae4a1ab03fd4d6f728695ed279173b18
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> Updated license hash due to an upstream commit which added a SPDX header:
+ >> https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=70998415a87587f31063a26a1e52c6f7806b7834
+
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+ > Committed, thanks.
 
 Committed to 2023.02.x and 2023.05.x, thanks.
 
