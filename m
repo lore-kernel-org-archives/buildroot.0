@@ -4,70 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D3C7EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 20:28:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720E9EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 20:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA28860BFC;
-	Thu,  6 Jul 2023 20:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA28860BFC
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD44660B95;
+	Thu,  6 Jul 2023 20:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD44660B95
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aVj9mrITCdgm; Thu,  6 Jul 2023 20:28:57 +0000 (UTC)
+	with ESMTP id NbIxN4OhcX6l; Thu,  6 Jul 2023 20:46:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AF6B60B33;
-	Thu,  6 Jul 2023 20:28:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AF6B60B33
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1C3C60BBB;
+	Thu,  6 Jul 2023 20:46:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1C3C60BBB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 530E11BF4DB
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 20:28:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 465E11BF4DB
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 20:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C85060B33
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 20:28:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C85060B33
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2CF5C60BBB
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 20:46:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CF5C60BBB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hq1q90LUcuew for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 20:28:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A74460AE8
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0A74460AE8
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 20:28:52 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:7ae6:b65b:4981:3222])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id AC5B319F59D;
- Thu,  6 Jul 2023 22:28:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 06 Jul 2023 22:28:40 +0200
-Date: Thu, 6 Jul 2023 22:28:40 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20230706202840.GB2664@scaer>
-References: <20230703182930.B08CA863E5@busybox.osuosl.org>
- <20230703205631.4dd121b0@windsurf>
- <38008674-4a63-4223-84d1-c55aa52f023b@mind.be>
+ with ESMTP id nqgyT9mTiDJH for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 20:46:17 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1270C60B95
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1270C60B95
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 20:46:16 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cfe4.dip0.t-ipconnect.de [79.214.207.228])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 00BFCA4C035C
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 22:46:14 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56256)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qHVrf-00052k-1R
+ for buildroot@buildroot.org; Thu, 06 Jul 2023 22:46:13 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu,  6 Jul 2023 22:46:10 +0200
+Message-Id: <20230706204611.3130492-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <38008674-4a63-4223-84d1-c55aa52f023b@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1688675330;
- bh=ioPj/HlRSxfZlhgA+jNLNgQJciPu2l5MO3RNK6cckmA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=VMmU1Y4FXh90GvmmdTOsa30w1fQFxkgvlCWTe3TXp4sh+V5Y/TOg41Jcyxce3shtc
- JVPpBMqZEpWrgM0bQBJBSg4fTrb0E6x4ibOymZ6nK8dIlUxN6sZC3oW/vrl5PFwGgc
- t6L3H5WX6Dz2PUX7GUQqryri3ylqFfyH6kdxbAt5Z5jg9RTPgnDh/wC2jpww72COeU
- bbsRxVXaIds0mFI5Pzfaa0lykcBjNxlp2ruTrgaQCIISb1ipsosrx10mxI5djyjjWY
- sSHoTUVNkIQEmGyP0yRFbJRhx8Rb0MNdbv2P//NDNLI7pCmbDu7p/APtyl49KBbTqq
- ITghsTTXbKG7A==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1688676374;
+ bh=vpdM2VxlK6fZF6gCZ6uvdPSsyZ85QM/uGmDRsNtZVGA=;
+ h=From:To:Subject:Date:From;
+ b=DJMhGK4VpMAeD+9bAFPQP9+AqsroTbW9qkgIlrJjqmnQKiGWtTzWohh9Tc7krpPDq
+ Q08WQw3HIw1Qj17nxbuIbEr1h7mvov5HBy3eGMy8WfZeB9DWRQRJrtFbZ/VHjyzejj
+ aJLmYZG9XDzjvNxJQRCOOG4ZXDtKxKuLbVPSrh0xeL8yO+YqJ51hMG5Z8t2a6WY7sp
+ 8psmnY1kslxbQmLzI7NzIroteQ2KZoq1gKwSUCt2S7t4cRUbul90F9ANL2Ek5FoWn1
+ IvmYCmfymRiQxtG5HtcDnX2o0E4OXoImTKuZqUM3vPXhF2DOUoPlyH+YWYmnfC+Ivn
+ u+cjSAZbSpDsg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VMmU1Y4F
-Subject: Re: [Buildroot] [git commit] package/python-setuptools: add missing
- dependency on host-python-wheel
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=DJMhGK4V
+Subject: [Buildroot] [PATCH v2 1/2] package/ocf-linux: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,96 +75,257 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
+Fixes:
+http://autobuild.buildroot.net/results/88b/88b5d14b315af1669fff04f8c11c321cc4c107c7/
 
-On 2023-07-04 22:28 +0200, Arnout Vandecappelle spake thusly:
-> On 03/07/2023 20:56, Thomas Petazzoni wrote:
-> >On Mon, 3 Jul 2023 20:20:31 +0200
-> >Arnout Vandecappelle via buildroot <buildroot@buildroot.org> wrote:
-> >Hu, this was not in the patch from Romain I believe.
-> >>+	select BR2_PACKAGE_PYTHON_WHEEL # runtime
-> >This is not correct, there is no such symbol in Buildroot, and it
-> >causes a check-symbol error:
-> >https://gitlab.com/buildroot.org/buildroot/-/jobs/4586144848
-> >What was the motivation behind this additional select?
-> 
->  Because setuptools has a runtime dependency on wheel. The pep517
-> infrastructure does a build-time check of this runtime dependency, but due
-> to the way we run python, the build-time check looks at what is installed
-> for the host, not what is installed for the target. Therefore, we have a
-> dependency on host-python-wheel instead of target python-wheel.
-> 
->  Since setuptools clearly defines that it has a dependency on wheel, I
-> thought it logical that we would reflect that dependency in Buildroot as
-> well. It is really a runtime dependency, not a build-time dependency, so I
-> added this select like we do for runtime dependencies.
-> 
->  Of course, I didn't notice that we don't have a target python-wheel
-> package, so it doesn't actually work.
-> 
->  So, dropping this select I'm pretty sure is going to break something, at
+The package seems to be unmainted, asking for support of kernels >= 5.6
+a year ago was unanswered:
+https://sourceforge.net/p/ocf-linux/mailman/message/37662698/
 
-Dropping the select can not break anything: there is no package to
-select to begin with. So it can't be more broken than it was before the
-select was introduced.
+This patch follow Thomas' suggestion to remove the package:
+https://lists.buildroot.org/pipermail/buildroot/2022-November/654688.html
 
-Of course, if we really need wheel as a target package, then it should
-be made such a package before we can select it.
+Remove the virtual package cryptodev which is not needed anymore.
 
-Although having sheel on the target jsut because some (most?) packages
-have a spurious dependency on it, would be seriously a shame...
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: removed legacy handling for the virtual package (Arnout)
 
-> some point. I've looked a bit closer now, and it turns out that wheel is
-> actually only imported in one specific function, in the "editable_wheel"
-> command. So it's quite unlikely anyone will ever see this breakage.
-> 
->  However, now I look a bit more in detail at it, it looks like this commit
-> is in fact bogus, and Yann's original comment that the wheel dependency
-> should be added to the infrastructure is in fact correct. From the
-> documentation:
-> 
->    Historically this documentation has unnecessarily listed ``wheel``
->    in the ``requires`` list, and many projects still do that. This is
->    not recommended. The backend automatically adds ``wheel`` dependency
->    when it is required, and listing it explicitly causes it to be
->    unnecessarily required for source distribution builds.
-> 
-> And it's pretty clear what is adding this dependency: the pep517 infra calls
-> the build with
-> 
->    python -m build -n -w
-> 
-> The "-w" stands for "build a wheel" and I guess it's obvious that that
-> implies a dependency on host-python-wheel? And I guess that the relatively
-> few pep517 packages we have already have a setuptools-based package (and
-> therefore host-python-setuptools and host-python-wheel) somewhere in their
-> dependency chain.
-> 
->  So, I do think this dependency should move the the pkg-python infra _for
-> pep517 packages_, as Yann originally commented.
+ Config.in.legacy                           |  6 +++
+ package/Config.in                          |  2 +-
+ package/cryptodev-linux/Config.in          | 14 ++++++
+ package/cryptodev-linux/cryptodev-linux.mk |  2 -
+ package/cryptodev/Config.in                | 50 ----------------------
+ package/cryptodev/cryptodev.mk             |  7 ---
+ package/libopenssl/libopenssl.mk           |  6 +--
+ package/ocf-linux/ocf-linux.hash           |  2 -
+ package/ocf-linux/ocf-linux.mk             | 26 -----------
+ package/openswan/openswan.mk               |  3 --
+ 10 files changed, 24 insertions(+), 94 deletions(-)
+ create mode 100644 package/cryptodev-linux/Config.in
+ delete mode 100644 package/cryptodev/Config.in
+ delete mode 100644 package/cryptodev/cryptodev.mk
+ delete mode 100644 package/ocf-linux/ocf-linux.hash
+ delete mode 100644 package/ocf-linux/ocf-linux.mk
 
-I'd defer to James to find a better solution, because I don't grasp even
-partially all this pep517-introduced pain...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d3a67aba83..bbf83d8389 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2023.08"
+ 
++config BR2_PACKAGE_OCF_LINUX
++	bool "ocf-linux has been removed"
++	select BR2_LEGACY
++	help
++	  ocf-linux is incompatible with newer kernels.
++
+ config BR2_BINUTILS_VERSION_2_37_X
+ 	bool "binutils 2.37.x has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index bff090a661..3abbce72a1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1474,7 +1474,7 @@ menu "Crypto"
+ 	source "package/beecrypt/Config.in"
+ 	source "package/botan/Config.in"
+ 	source "package/ca-certificates/Config.in"
+-	source "package/cryptodev/Config.in"
++	source "package/cryptodev-linux/Config.in"
+ 	source "package/cryptopp/Config.in"
+ 	source "package/gcr/Config.in"
+ 	source "package/gnutls/Config.in"
+diff --git a/package/cryptodev-linux/Config.in b/package/cryptodev-linux/Config.in
+new file mode 100644
+index 0000000000..89964ab058
+--- /dev/null
++++ b/package/cryptodev-linux/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_CRYPTODEV_LINUX
++	bool "cryptodev-linux"
++	depends on !BR2_microblaze
++	depends on BR2_LINUX_KERNEL
++	help
++	  Cryptodev-linux is a device that allows access to Linux kernel
++	  cryptographic drivers; thus allowing userspace applications
++	  to take advantage of hardware accelerators.
++
++	  http://cryptodev-linux.org/index.html
++
++comment "cryptodev-linux needs a Linux kernel to be built"
++	depends on !BR2_microblaze
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index d0c3bc5218..5a9e6ad233 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -11,8 +11,6 @@ CRYPTODEV_LINUX_LICENSE = GPL-2.0+
+ CRYPTODEV_LINUX_LICENSE_FILES = COPYING
+ CRYPTODEV_LINUX_CPE_ID_VENDOR = cryptodev-linux
+ 
+-CRYPTODEV_LINUX_PROVIDES = cryptodev
+-
+ define CRYPTODEV_LINUX_MODULE_GEN_VERSION_H
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) version.h
+ endef
+diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
+deleted file mode 100644
+index d1e64498a8..0000000000
+--- a/package/cryptodev/Config.in
++++ /dev/null
+@@ -1,50 +0,0 @@
+-comment "cryptodev needs a Linux kernel to be built"
+-	depends on !BR2_LINUX_KERNEL
+-
+-config BR2_PACKAGE_CRYPTODEV
+-	bool "cryptodev"
+-	depends on BR2_LINUX_KERNEL
+-	help
+-	  Select the desired cryptodev implementation.
+-
+-if BR2_PACKAGE_CRYPTODEV
+-
+-choice
+-	prompt "cryptodev variant"
+-	default BR2_PACKAGE_CRYPTODEV_LINUX if !BR2_microblaze
+-	help
+-	  Select the cryptodev implementation.
+-
+-config BR2_PACKAGE_CRYPTODEV_LINUX
+-	bool "cryptodev-linux"
+-	depends on !BR2_microblaze
+-	select BR2_PACKAGE_HAS_CRYPTODEV
+-	help
+-	  Cryptodev-linux is a device that allows access to Linux kernel
+-	  cryptographic drivers; thus allowing userspace applications
+-	  to take advantage of hardware accelerators.
+-
+-	  http://cryptodev-linux.org/index.html
+-
+-config BR2_PACKAGE_OCF_LINUX
+-	bool "ocf-linux"
+-	select BR2_PACKAGE_HAS_CRYPTODEV
+-	help
+-	  OCF-Linux is a Linux port of the OpenBSD/FreeBSD Cryptographic
+-	  Framework (OCF). This port aims to bring full asynchronous
+-	  HW/SW crypto acceleration to the Linux kernel and applications
+-	  running under Linux.
+-
+-	  http://ocf-linux.sourceforge.net/
+-
+-endchoice
+-
+-config BR2_PACKAGE_HAS_CRYPTODEV
+-	bool
+-
+-config BR2_PACKAGE_PROVIDES_CRYPTODEV
+-	string
+-	default "cryptodev-linux" if BR2_PACKAGE_CRYPTODEV_LINUX
+-	default "ocf-linux"       if BR2_PACKAGE_OCF_LINUX
+-
+-endif
+diff --git a/package/cryptodev/cryptodev.mk b/package/cryptodev/cryptodev.mk
+deleted file mode 100644
+index 969d1bd17a..0000000000
+--- a/package/cryptodev/cryptodev.mk
++++ /dev/null
+@@ -1,7 +0,0 @@
+-################################################################################
+-#
+-# cryptodev
+-#
+-################################################################################
+-
+-$(eval $(virtual-package))
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 178979f43b..cd3ba3df30 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -29,8 +29,8 @@ ifeq ($(BR2_USE_MMU),)
+ LIBOPENSSL_CFLAGS += -DHAVE_FORK=0 -DOPENSSL_NO_MADVISE
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAS_CRYPTODEV),y)
+-LIBOPENSSL_DEPENDENCIES += cryptodev
++ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
++LIBOPENSSL_DEPENDENCIES += cryptodev-linux
+ endif
+ 
+ # fixes the following build failures:
+@@ -76,7 +76,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			$(if $(BR2_TOOLCHAIN_HAS_LIBATOMIC),-latomic) \
+ 			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
+ 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
+-			$(if $(BR2_PACKAGE_HAS_CRYPTODEV),enable-devcryptoeng) \
++			$(if $(BR2_PACKAGE_CRYPTODEV_LINUX),enable-devcryptoeng) \
+ 			no-rc5 \
+ 			enable-camellia \
+ 			no-tests \
+diff --git a/package/ocf-linux/ocf-linux.hash b/package/ocf-linux/ocf-linux.hash
+deleted file mode 100644
+index 747bbcab56..0000000000
+--- a/package/ocf-linux/ocf-linux.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed:
+-sha256  3d7984754d58ced5695889744caf1e18a53f5d2e35ed40cc04d3595e59b7431f  ocf-linux-20171122.tar.gz
+diff --git a/package/ocf-linux/ocf-linux.mk b/package/ocf-linux/ocf-linux.mk
+deleted file mode 100644
+index 52169eda4f..0000000000
+--- a/package/ocf-linux/ocf-linux.mk
++++ /dev/null
+@@ -1,26 +0,0 @@
+-################################################################################
+-#
+-# ocf-linux
+-#
+-################################################################################
+-
+-OCF_LINUX_VERSION = 20171122
+-OCF_LINUX_SITE = http://downloads.sourceforge.net/project/ocf-linux/ocf-linux/$(OCF_LINUX_VERSION)
+-OCF_LINUX_INSTALL_STAGING = YES
+-
+-OCF_LINUX_PROVIDES = cryptodev
+-
+-OCF_LINUX_MODULE_SUBDIRS = ocf
+-OCF_LINUX_MODULE_MAKE_OPTS = \
+-	CONFIG_OCF_OCF=m \
+-	CONFIG_OCF_CRYPTOSOFT=m \
+-	CONFIG_OCF_BENCH=m \
+-	CONFIG_OCF_OCFNULL=m
+-
+-define OCF_LINUX_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 644 $(@D)/ocf/cryptodev.h \
+-		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
+-endef
+-
+-$(eval $(kernel-module))
+-$(eval $(generic-package))
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index bb56e4516c..4c6a779f0d 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -25,9 +25,6 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENSWAN_DEPENDENCIES += openssl
+ OPENSWAN_MAKE_OPTS += HAVE_OPENSSL=true
+-ifeq ($(BR2_PACKAGE_OCF_LINUX),y)
+-OPENSWAN_MAKE_OPTS += HAVE_OCF=true
+-endif
+ endif
+ 
+ define OPENSWAN_BUILD_CMDS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
