@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 755D3EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FBDDEB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11AF241798;
-	Thu,  6 Jul 2023 08:55:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11AF241798
+	by smtp4.osuosl.org (Postfix) with ESMTP id 102CB41799;
+	Thu,  6 Jul 2023 08:55:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 102CB41799
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fBLVbYx52kEJ; Thu,  6 Jul 2023 08:55:37 +0000 (UTC)
+	with ESMTP id jp0J_rIx9lcI; Thu,  6 Jul 2023 08:55:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1E51405D8;
-	Thu,  6 Jul 2023 08:55:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1E51405D8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 17B8A1BF97D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C211F40542;
+	Thu,  6 Jul 2023 08:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C211F40542
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AC401BF575
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:55:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E59F560B99
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E59F560B99
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30BB3405D8
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30BB3405D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tJGIz8Tkr0qr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rTxOH3hK2dhI for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 08:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2612060AAA
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2612060AAA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C2C940261
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:55:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C2C940261
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14C50867AF; Thu,  6 Jul 2023 08:55:15 +0000 (UTC)
+ id E6404867AA; Thu,  6 Jul 2023 08:55:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 10:43:18 +0200
+Date: Thu, 6 Jul 2023 10:34:11 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 8258204b63aa2cee9dc8658efa19a3f52b6b05ef
-X-Git-Newrev: 8c6a443a4c387e023ec772db5f6657994e6c0aca
+X-Git-Oldrev: c92cc8796ed951f0604e9272677a9cdfcd93680f
+X-Git-Newrev: 4dd25fa7e1b63aae272f7501be0c85cd82383f12
 X-Patchwork-Hint: ignore
-Message-Id: <20230706085515.14C50867AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libgcrypt: bump
- to version 1.10.2
+Message-Id: <20230706085514.E6404867AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] support/testing: add
+ python-docker test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c6a443a4c387e023ec772db5f6657994e6c0aca
+commit: https://git.buildroot.net/buildroot/commit/?id=4dd25fa7e1b63aae272f7501be0c85cd82383f12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Release notes:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS;h=c9a239615f8070427a96688b1be40a81e59e9b8a;hb=1c5cbacf3d88dded5063e959ee68678ff7d0fa56
+Python-docker needs a working docker setup to do anything useful, so add it
+to the existing docker_compose (which tests docker and docker-compose)
+rather than adding a completely new test.
 
-Added upstream sha1 & sha256 hashes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9440d72ca9b95be2214a51d092ba59d0653f6148)
+Reviewed-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0bb63c6f5adc07532da494d1118dd7b6f061fb00)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgcrypt/libgcrypt.hash | 8 ++++----
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ support/testing/tests/package/sample_python_docker.py | 12 ++++++++++++
+ support/testing/tests/package/test_docker_compose.py  | 10 +++++++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 96f5e6b76c..cfbf9eaf17 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,5 +1,5 @@
--# Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.1.tar.bz2.sig
--# using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  ef14ae546b0084cd84259f61a55e07a38c3b53afc0f546bffcef2f01baffe9de  libgcrypt-1.10.1.tar.bz2
-+# From https://www.gnupg.org/download/integrity_check.html
-+sha1  0b9555960d84a09ea14e52360808f2e02e9c12d2  libgcrypt-1.10.2.tar.bz2
-+sha256  3b9c02a004b68c256add99701de00b383accccf37177e0d6c58289664cce0c03  libgcrypt-1.10.2.tar.bz2
-+# Locally calculated
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 9232debb3a..4fffe5360e 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/sample_python_docker.py b/support/testing/tests/package/sample_python_docker.py
+new file mode 100644
+index 0000000000..a69097b412
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_docker.py
+@@ -0,0 +1,12 @@
++import docker
++
++client = docker.from_env()
++info = client.info()
++images = client.images.list()
++
++assert len(images) > 0
++
++print('Version:', info['ServerVersion'])
++print('Images:')
++for i in images:
++    print(i.tags[0])
+diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
+index 38b669fc6d..16027c9c3a 100644
+--- a/support/testing/tests/package/test_docker_compose.py
++++ b/support/testing/tests/package/test_docker_compose.py
+@@ -4,6 +4,8 @@ import infra.basetest
  
--LIBGCRYPT_VERSION = 1.10.1
-+LIBGCRYPT_VERSION = 1.10.2
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ 
+ class TestDockerCompose(infra.basetest.BRTest):
++    scripts = ["conf/docker-compose.yml",
++               "tests/package/sample_python_docker.py"]
+     config = \
+         """
+         BR2_x86_64=y
+@@ -18,6 +20,8 @@ class TestDockerCompose(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DOCKER=y
+         BR2_PACKAGE_CA_CERTIFICATES=y
+         BR2_PACKAGE_DOCKER_CLI=y
+         BR2_PACKAGE_DOCKER_COMPOSE=y
+@@ -27,7 +31,7 @@ class TestDockerCompose(infra.basetest.BRTest):
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """.format(
+             infra.filepath("tests/package/copy-sample-script-to-target.sh"),
+-            infra.filepath("conf/docker-compose.yml"),
++            " ".join([infra.filepath(i) for i in scripts]),
+             infra.filepath("conf/docker-compose-kernel.config"))
+ 
+     def wait_for_dockerd(self):
+@@ -46,6 +50,9 @@ class TestDockerCompose(infra.basetest.BRTest):
+         self.assertRunOk('wget -q -O /tmp/busybox http://127.0.0.1/busybox', 120)
+         self.assertRunOk('cmp /bin/busybox /tmp/busybox', 120)
+ 
++    def python_docker_test(self):
++        self.assertRunOk('python3 ./sample_python_docker.py', 120)
++
+     def test_run(self):
+         kernel = os.path.join(self.builddir, "images", "bzImage")
+         rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
+@@ -62,3 +69,4 @@ class TestDockerCompose(infra.basetest.BRTest):
+         self.wait_for_dockerd()
+         self.docker_test()
+         self.docker_compose_test()
++        self.python_docker_test()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
