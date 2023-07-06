@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4627EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FE47EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:52:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58728401CA;
-	Thu,  6 Jul 2023 11:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58728401CA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E84141559;
+	Thu,  6 Jul 2023 11:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E84141559
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9zW-cMnsVv0n; Thu,  6 Jul 2023 11:52:36 +0000 (UTC)
+	with ESMTP id 1TgSHNxXXKHV; Thu,  6 Jul 2023 11:52:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53F6B41556;
-	Thu,  6 Jul 2023 11:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53F6B41556
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 17B751BF97D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 655044155E;
+	Thu,  6 Jul 2023 11:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 655044155E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 769011BF345
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1D9C4168B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D67140136
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1D9C4168B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D67140136
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id azCbzipPFLEl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jsu4smw8m9m1 for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B54D740886
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7DAF4027F
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B54D740886
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7DAF4027F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4B10868EE; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
+ id B8485868F1; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 13:39:14 +0200
+Date: Thu, 6 Jul 2023 13:45:30 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 3a8384bc40c263acca12af28910bf2c80061833e
-X-Git-Newrev: 7511b1793292e02e10eafbe5ac31303c9274a8b5
+X-Git-Oldrev: 6e248a121c5b57e6980a213ed7b311dce4194ae6
+X-Git-Newrev: 214a6454c61392fa533f12d7dae3096d2fd56508
 X-Patchwork-Hint: ignore
-Message-Id: <20230706115153.A4B10868EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/python-requests:
- security bump to version 2.31.0
+Message-Id: <20230706115153.B8485868F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/kodi: fix build
+ error with flatbuffers 23.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7511b1793292e02e10eafbe5ac31303c9274a8b5
+commit: https://git.buildroot.net/buildroot/commit/?id=214a6454c61392fa533f12d7dae3096d2fd56508
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fixes the following security issue:
+Fixes build error with defconfig
 
-- CVE-2023-32681: Unintended leak of Proxy-Authorization header
-  https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_PY_ONLY=y
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit c94922beac62e66a993e0a6bc14567af4827d8d1)
-[Peter: mark as security bump]
+caused by bumping flatbuffers to version >= 23.x in commit
+3d1ee7d624b71009ff61d4fa5ed860c52eb89b47
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 35b57c9e879389bcec045bc00d3c1e0761379ad1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-requests/python-requests.hash | 4 ++--
- package/python-requests/python-requests.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...atBuffer-Remove-forward-declararion-of-Fl.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index b6f696000b..c4aeabb25d 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5  09b752e0b0a672d805ae54455c128d42  requests-2.28.2.tar.gz
--sha256  98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf  requests-2.28.2.tar.gz
-+md5  941e175c276cd7d39d098092c56679a4  requests-2.31.0.tar.gz
-+sha256  942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1  requests-2.31.0.tar.gz
- # Locally computed sha256 checksums
- sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 8f9f4b2db4..2c74db3711 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_REQUESTS_VERSION = 2.28.2
-+PYTHON_REQUESTS_VERSION = 2.31.0
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/ee/391076f5937f0a8cdf5e53b701ffc91753e87b07d66bae4a09aa671897bf
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/be/10918a2eac4ae9f02f6cfe6414b7a155ccd8f7f9d4380d62fd5b955065c3
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+diff --git a/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch b/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
+new file mode 100644
+index 0000000000..87df0e4c9a
+--- /dev/null
++++ b/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
+@@ -0,0 +1,42 @@
++From 07d8c98a0a65e005b85ef70e06eb1b9bbe7f764c Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Markus=20H=C3=A4rer?= <markus.haerer@gmx.net>
++Date: Sun, 28 May 2023 00:49:40 +0200
++Subject: [PATCH] SavestateFlatBuffer: Remove forward declararion of
++ FlatBufferBuilder
++
++This caused a compiler error with recent faltbuffers because the type changed:
++
++In file included from xbmc/cores/RetroPlayer/savestates/SavestateDatabase.cpp:12:
++xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h:19:7: error: definition of type 'FlatBufferBuilder' conflicts with type alias of the same name
++class FlatBufferBuilder;
++      ^
++/usr/include/flatbuffers/flatbuffer_builder.h:1414:7: note: 'FlatBufferBuilder' declared here
++using FlatBufferBuilder = FlatBufferBuilderImpl<false>;
++      ^
++1 error generated.
++
++(cherry picked from commit 351184d7e4e3edc447d04a297769eb41a477ba68)
++
++Upstream: https://github.com/xbmc/xbmc/commit/07d8c98a0a65e005b85ef70e06eb1b9bbe7f764c
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h b/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
++index cb93e6bbc2e12..fa42a9bad7034 100644
++--- a/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
+++++ b/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
++@@ -14,11 +14,6 @@
++ 
++ #include <flatbuffers/flatbuffers.h>
++ 
++-namespace flatbuffers
++-{
++-class FlatBufferBuilder;
++-}
++-
++ namespace KODI
++ {
++ namespace RETRO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
