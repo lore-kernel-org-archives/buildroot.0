@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B598EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:50:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50ACEEB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:51:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5879414E9;
-	Thu,  6 Jul 2023 11:50:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5879414E9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0384A40139;
+	Thu,  6 Jul 2023 11:51:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0384A40139
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id masyRR23RXuE; Thu,  6 Jul 2023 11:50:55 +0000 (UTC)
+	with ESMTP id mE-2tK6Tg_va; Thu,  6 Jul 2023 11:51:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E6A040139;
-	Thu,  6 Jul 2023 11:50:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E6A040139
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BC1EC1BF97D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D2AA4154E;
+	Thu,  6 Jul 2023 11:51:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D2AA4154E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CEBA81BF97E
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A346960B9A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D78F401CA
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:50:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A346960B9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D78F401CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 79KoXFxgiBRe for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k8IdZ_DSa-yy for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 11:50:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD03A60B45
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5E2740139
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 11:50:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD03A60B45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5E2740139
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA5A1868C9; Thu,  6 Jul 2023 11:50:36 +0000 (UTC)
+ id A0F19868C6; Thu,  6 Jul 2023 11:50:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 13:46:48 +0200
+Date: Thu, 6 Jul 2023 13:41:57 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: dd653e4e6af1de9c47e711637e2f22ef01daf928
-X-Git-Newrev: 94a381ed47fd536a3b383bd8433d16766c2b3195
+X-Git-Oldrev: 74fa4b795fed372c16bd31ffd281432b2e89a473
+X-Git-Newrev: 18fb407dc4fca2fc89e824fe0a5fcbb17407e5db
 X-Patchwork-Hint: ignore
-Message-Id: <20230706115036.BA5A1868C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/fftw: bump
- version to 3.3.10
+Message-Id: <20230706115036.A0F19868C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python-requests:
+ security bump to version 2.31.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94a381ed47fd536a3b383bd8433d16766c2b3195
+commit: https://git.buildroot.net/buildroot/commit/?id=18fb407dc4fca2fc89e824fe0a5fcbb17407e5db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Release notes: http://fftw.org/release-notes.html
+Fixes the following security issue:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d521d6b756864b926f5eb98c111a8989347ee0e6)
+- CVE-2023-32681: Unintended leak of Proxy-Authorization header
+  https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit c94922beac62e66a993e0a6bc14567af4827d8d1)
+[Peter: mark as security bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fftw/fftw.hash | 6 +++---
- package/fftw/fftw.mk   | 2 +-
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fftw/fftw.hash b/package/fftw/fftw.hash
-index b07aad8f18..9e7364d76c 100644
---- a/package/fftw/fftw.hash
-+++ b/package/fftw/fftw.hash
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index b6f696000b..c4aeabb25d 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
 @@ -1,5 +1,5 @@
--# From http://www.fftw.org/fftw-3.3.8.tar.gz.md5sum
--md5  8aac833c943d8e90d51b697b27d4384d  fftw-3.3.8.tar.gz
-+# From http://fftw.org/fftw-3.3.10.tar.gz.md5sum
-+md5  8ccbf6a5ea78a16dbc3e1306e234cc5c  fftw-3.3.10.tar.gz
- # Locally computed
--sha256  6113262f6e92c5bd474f2875fa1b01054c4ad5040f6b0da7c03c98821d9ae303  fftw-3.3.7.tar.gz
-+sha256  56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467  fftw-3.3.10.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 279244a5dc..1bb537aeb8 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5  09b752e0b0a672d805ae54455c128d42  requests-2.28.2.tar.gz
+-sha256  98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf  requests-2.28.2.tar.gz
++md5  941e175c276cd7d39d098092c56679a4  requests-2.31.0.tar.gz
++sha256  942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1  requests-2.31.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 8f9f4b2db4..2c74db3711 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--FFTW_VERSION = 3.3.8
-+FFTW_VERSION = 3.3.10
- FFTW_SITE = http://www.fftw.org
- FFTW_INSTALL_STAGING = YES
- FFTW_LICENSE = GPL-2.0+
+-PYTHON_REQUESTS_VERSION = 2.28.2
++PYTHON_REQUESTS_VERSION = 2.31.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/ee/391076f5937f0a8cdf5e53b701ffc91753e87b07d66bae4a09aa671897bf
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/be/10918a2eac4ae9f02f6cfe6414b7a155ccd8f7f9d4380d62fd5b955065c3
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
