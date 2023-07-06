@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 499C3EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 19:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08B2CEB64DC
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 19:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF92641596;
-	Thu,  6 Jul 2023 19:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF92641596
+	by smtp2.osuosl.org (Postfix) with ESMTP id 966E3415A0;
+	Thu,  6 Jul 2023 19:18:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 966E3415A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XwQTEvVoRGMe; Thu,  6 Jul 2023 19:10:12 +0000 (UTC)
+	with ESMTP id hEYwB3x_14UA; Thu,  6 Jul 2023 19:18:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E694740476;
-	Thu,  6 Jul 2023 19:10:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E694740476
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5541F1BF4E6
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 19:10:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3C8940962;
+	Thu,  6 Jul 2023 19:18:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3C8940962
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 123E41BF4E6
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 19:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E68782210
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 19:10:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E68782210
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC77A60B57
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 19:18:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC77A60B57
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UrsdKDbib5nc for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 19:10:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WArFn1BmJGXg for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 19:18:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ADE382204
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8ADE382204
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 19:10:07 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-9741caaf9d4so127348466b.0
- for <buildroot@buildroot.org>; Thu, 06 Jul 2023 12:10:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55FEB60B3D
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 55FEB60B3D
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 19:18:33 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id
+ 4fb4d7f45d1cf-51e35791a83so785888a12.2
+ for <buildroot@buildroot.org>; Thu, 06 Jul 2023 12:18:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1688670605; x=1691262605;
+ d=1e100.net; s=20221208; t=1688671111; x=1691263111;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=VGD/MF/ZQ4PqSVicR2zfkvxMN50JRZsjAjmd2jnY1bw=;
- b=c98dGYpoYbnGfcgq/Ny0C0bN+7vGjMkJPsnblyiaQKGpSNQtZ9GUvwFsE/gbTdpy71
- WlcXMhi3e9snfDPQ4+m9IZDJNcHjvNe87UPIN5QQuqGU8s12/lo8LDLgNOwtFUCnK5N0
- 1xaDyWNk8i6BereU5h3mPhtteynDPw7EM8QUPvHwwWGRl0hOpbEEIN2ziOIT4aruHWRI
- ThFoa/fbbyywhTYl3u8B7nQ67YcKYe2jIZOmzua3Zidu6iYn0+PNketNERLBX1U3KwnZ
- va2btq4J9LqD432AWR4xIY6Iqrr8Yxh8kwh+D1Y1CASNnBVnwhwSuN1AXINeyMMtzQi/
- 5bHg==
-X-Gm-Message-State: ABy/qLYBvEtOFynplRZwPnyDmpP5gx1f9c7esy+VdQy/ETen7Xn6/1qa
- Ow1OIe7PS/Jr58n/QzitSoexQeehNM7yrT5sxkU=
-X-Google-Smtp-Source: APBJJlHjT+GUmHm7tna+qYXpOIK3QGhNwzYKRx7KUXrBfmLNX3Doan/GeQ/qdTH9oUpKwIAatx28BQ==
-X-Received: by 2002:a17:906:7a1d:b0:96f:7b4a:2904 with SMTP id
- d29-20020a1709067a1d00b0096f7b4a2904mr2791775ejo.3.1688670605420; 
- Thu, 06 Jul 2023 12:10:05 -0700 (PDT)
+ bh=ql3SG9YomwzezwTP6CNJhPXsT1OoKQwcW56ikJdUAfM=;
+ b=f9Txv+MnP4IZPb3VMqHOG7koAOV8Ncx9mwcxDVbSY3nMdFX2PXEIgSUFFIBBgyvXUI
+ zal+29YFsNqehFtYpOR+BhoUmyyoUF4YQ42fr8f8kKPlpIAngRgmGzjrhXLOl6yk/uuG
+ XSNU4efoxsMZCPucUbZ+/IetBW+1dlzc7skgwZsMxNjwBLf2exV80JlWva4gMaShvo2v
+ NZ1oRdZR77fYYMYEvuz45hq8WnLUesLpa+ymWmmQOWmBCqaECKc10HwriTske+BFkqBa
+ BYa683je122wYtApyzTVjPzJ7nlXWZCappOajJDx0NlFcKgdRdKBtzrNjhT6dc9PwvGN
+ lkbA==
+X-Gm-Message-State: ABy/qLb0m3VmEHO2qa2ZPZTvO8qZjKhYsp+NqFe9eHSH70xO5uHpRxrC
+ H2GBv43rdNKT6Jsunv6E3lvV4uNP3EU7yYnFYdg=
+X-Google-Smtp-Source: APBJJlH+Ae0jUOcNBGA8CgLu7/2cSryJ4fNauaO8kuDLVaohsi+6//fR2/916wiwFsT9DByzZdctJQ==
+X-Received: by 2002:a17:906:6d49:b0:991:f427:2fe7 with SMTP id
+ a9-20020a1709066d4900b00991f4272fe7mr1913831ejt.62.1688671111385; 
+ Thu, 06 Jul 2023 12:18:31 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49?
  (ptr-9fplejo7y5h55ppcgnd.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49])
  by smtp.gmail.com with ESMTPSA id
- le26-20020a170907171a00b00987e2f84768sm1163484ejc.0.2023.07.06.12.10.04
+ pj13-20020a170906d78d00b0098df7d0e09asm1142906ejb.205.2023.07.06.12.18.30
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 06 Jul 2023 12:10:04 -0700 (PDT)
-Message-ID: <401f56d4-3694-35ba-0f08-935bdec2b665@mind.be>
-Date: Thu, 6 Jul 2023 21:10:02 +0200
+ Thu, 06 Jul 2023 12:18:30 -0700 (PDT)
+Message-ID: <eb58a86c-4792-fc4c-cdfa-42487c3347c4@mind.be>
+Date: Thu, 6 Jul 2023 21:18:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
 Content-Language: en-GB
-To: Guillermo G <ggalan3@gmail.com>, buildroot@buildroot.org
-References: <CAMMZEfypg2ibkon3n34gRqqZzfL7Y0JMGvKU2WJx_ko4LigU9g@mail.gmail.com>
-In-Reply-To: <CAMMZEfypg2ibkon3n34gRqqZzfL7Y0JMGvKU2WJx_ko4LigU9g@mail.gmail.com>
+To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+References: <CAOf5uwmYNk+28CEYS-_tcGWVsw7-pWYCY2YCJXQzuijep5A5eg@mail.gmail.com>
+In-Reply-To: <CAOf5uwmYNk+28CEYS-_tcGWVsw7-pWYCY2YCJXQzuijep5A5eg@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1688670605; x=1691262605;
+ d=mind.be; s=google; t=1688671111; x=1691263111;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=VGD/MF/ZQ4PqSVicR2zfkvxMN50JRZsjAjmd2jnY1bw=;
- b=do3lU2YdPr8TEG5jnTp9HlRkIUwgb+E2y812+oUQnBH3PfnIQT7Oj1MKGgumZB6g5j
- 3A4Cei29N8HQIEpkEAQAkmyG439ygZNuXFagPzzwj6RfCK/LyrqsDZexXUoo9SnD3Ecx
- qMsXAcX6DfUoakbYIY0XJlxYNCsOWl+BI6g/Q/XFFAHTkLB58eLgIsq0ul7QpC0JaeFh
- eNs4NtzByY05EATOjNVmWtgC2fc2KpRE4s8vRKS1wVNz2k7VgaX5wzFnZ0Xkh7sdIkEA
- dEuJ7BTiJL6CrEozW4WqJGp0esZyHgzCaZszfjhaFzpyTCa8WiREi/UW6i055no+hjtl
- ZmBQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ql3SG9YomwzezwTP6CNJhPXsT1OoKQwcW56ikJdUAfM=;
+ b=RsgfCqfkoSBbBwvh5NYAcAK/rWeRNP6RQ6bT+KjOgt6GkC8nWRvjBj5Y54RwYy8MNS
+ TWgF+duyfeXnESGrx4nihrOmFxagy6klQYGiJ/rvlthskq086EV62XzCmelMKM49IPE8
+ mhpY4I1LdzA2U7kBLRz8Ic9xwhUlOi6/3xajaWAw6gnFZFehtB1Y9HRrfKQ0mRNG2OtX
+ uXv95NBVQ+026p9KAFUNbaeR8mXDlmeNv+U2SnqvIGGmCu8ykiGYI+AyFEgbhfS+aCs8
+ 3ZhmW7yg7oxpeuZgURMZsVUcQVv/NiXBSwJpWQ/1kFyUGqQndeh+nGACXh4WQFFRNj2u
+ UXig==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=do3lU2Yd
-Subject: Re: [Buildroot] ffmpeg: disable mmal in 64bit arm
+ header.a=rsa-sha256 header.s=google header.b=RsgfCqfk
+Subject: Re: [Buildroot] external toolchain license collection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,71 +110,28 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/07/2023 10:58, Guillermo G wrote:
-> Hello! This is my first time writing to the buildroot mailing list, so first 
-> thanks everyone for all the work that goes into this project, it's really great.
+On 05/07/2023 12:08, Michael Nazzareno Trimarchi wrote:
+> Hi all
 > 
-> I have found a possible error in the ffmpeg configuration (present in 2023.02.1 
-> but also in master). Specifically in package/ffmpeg/ffmpeg.mk - Line 284 
-> <https://github.com/buildroot/buildroot/blob/11aa7ac8fa3a21dc2476dd09539ea3cf3e48f03d/package/ffmpeg/ffmpeg.mk#L284>.
-> 
-> I am building for a 64bit ARM target, and mmal is not available for 64bit ARM 
-> <https://github.com/raspberrypi/userland/issues/688>, therefore my build crashes 
-> because it automatically sets the option --enable-mmal.
-> I modified line 285 manually to --disable-mmal which results in a working build 
-> and a working ffmpeg buildroot (tested), but I was wondering if it could be 
-> fixed for other users.
-> 
-> @fhunleth <https://github.com/fhunleth> from the Nerves project helped me out to 
-> come up with a patch proposal 
-> <https://gist.github.com/guillego/6e6c47c93f845d4477c0307dc4c1c772> so that it 
-> gets disabled for 64 bit arm targets.
+> Is there a way to collect the license of an external toolchain and put
+> it in the buildroot bundle?
+> For instance we have some packages like libuclic and other libraries
+> that are put in the target but even those licenses should appear. Is
+> something I miss?
 
-  Bernd sent a patch [1] that does more or less that.
+  For the existing predefined external toolchains we indeed don't have any 
+license information. For a custom external toolchain that you specify through 
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_* there's no way to specify it either. However, if 
+you create your own predefined toolchain in a BR2_EXTERNAL, you can set its 
+_LICENSE and _LICENSE_FILES and that should work. Make sure you also set 
+_ACTUAL_SOURCE_TARBALL. Note that the license files are fetched from the 
+_SOURCE, not the _ACTUAL_SOURCE_TARBALL.
 
-  Applied to master, thanks.
+  It would be good if we would add _LICENSE and _LICENSE_FILES for the 
+predefined toolchains.
 
   Regards,
   Arnout
-
-[1] 
-https://patchwork.ozlabs.org/project/buildroot/patch/20230705161042.700055-1-bernd@kuhls.net/
-
-
-> 
-> I've never submitted a patch so I thought it would be best to first search in 
-> the mailing list and since I didn't find anything, send an email to see what you 
-> think.
-> 
-> Additional details:
-> 
->   * Host: Mac OS. Apple Silicon M1.
->   * Buildroot version: 23.02.1
->   * Target: Raspberry Pi 3A+/Zero 2W
->   * Package for which the build fails: ffmpeg 4.4.4
->   * Error message (simplified):
-> 
-> -----
->  >>> ffmpeg 4.4.4 Patching libtool
->  >>> ffmpeg 4.4.4 Configuring
-> [...ommited verbose...]
-> ERROR: mmal not found
-> 
-> make[1]: *** [package/pkg-generic.mk:283 <http://pkg-generic.mk:283>: 
-> /nerves/build/build/ffmpeg-4.4.4/.stamp_configured] Error 1
-> make: *** [Makefile:23: _all] Error 2
-> -----
-> 
-> Thanks a lot!
-> 
-> Best,
-> 
-> Guillermo
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
