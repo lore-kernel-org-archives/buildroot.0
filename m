@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C646FC04A94
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 09:26:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6F2BEB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 09:26:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6EE5540891;
-	Thu,  6 Jul 2023 09:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EE5540891
+	by smtp4.osuosl.org (Postfix) with ESMTP id 799A041716;
+	Thu,  6 Jul 2023 09:26:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 799A041716
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FQQQRLWy6UhT; Thu,  6 Jul 2023 09:26:31 +0000 (UTC)
+	with ESMTP id IvQ4bQXOBTXn; Thu,  6 Jul 2023 09:26:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10EBD408B4;
-	Thu,  6 Jul 2023 09:26:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10EBD408B4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C0FF71BF3EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C7EB408B4;
+	Thu,  6 Jul 2023 09:26:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C7EB408B4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EFA4A1BF97D
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 09:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B3F981FCA
+ by smtp2.osuosl.org (Postfix) with ESMTP id C99A64031D
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 09:26:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B3F981FCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C99A64031D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AlSafoJAFBgA for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vlxq_ccRDTBc for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 09:26:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C870181FBE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D140540292
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 09:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C870181FBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D140540292
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8041867E0; Thu,  6 Jul 2023 09:26:17 +0000 (UTC)
+ id C1662867E1; Thu,  6 Jul 2023 09:26:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 11:24:02 +0200
+Date: Thu, 6 Jul 2023 11:24:40 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 05eed171de96d199210d6d18632a25d9c0755470
-X-Git-Newrev: 08f414e1ed116f9a5cba024c1c2c6f0346bb61ad
+X-Git-Oldrev: 08f414e1ed116f9a5cba024c1c2c6f0346bb61ad
+X-Git-Newrev: bbb1a6e7152491a6a2cb75da7fc6dd8954a05a26
 X-Patchwork-Hint: ignore
-Message-Id: <20230706092617.B8041867E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/ghostscript:
- security bump version to 10.01.1
+Message-Id: <20230706092617.C1662867E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python3: security
+ bump version to 3.11.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08f414e1ed116f9a5cba024c1c2c6f0346bb61ad
+commit: https://git.buildroot.net/buildroot/commit/?id=bbb1a6e7152491a6a2cb75da7fc6dd8954a05a26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Switch tarball to .xz
+Rebased two patches.
 
-Fixes CVE-2023-28879:
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28879
+Changelog:
+https://docs.python.org/release/3.11.4/whatsnew/changelog.html#python-3-11-4
 
-Release notes:
-https://ghostscript.readthedocs.io/en/latest/News.html?utm_source=ghostscript&utm_medium=website&utm_content=inline-link
+Fixes the following security problems:
+
+- gh-99889: Fixed a security in flaw in uu.decode() that could allow for
+  directory traversal based on the input if no out_file was specified.
+
+- gh-104049: Do not expose the local on-disk location in directory
+  indexes   produced by http.client.SimpleHTTPRequestHandler.
+
+- gh-102153: urllib.parse.urlsplit() now strips leading C0 control and
+  space characters following the specification for URLs defined by WHATWG
+  in response to CVE-2023-24329. Patch by Illia Volochii.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1116fd46a477c58472e98b797dc67c96020883e1)
+(cherry picked from commit b7b11d7e94e316632fcc8ec49831e7b372cc055a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ghostscript/ghostscript.hash | 4 ++--
- package/ghostscript/ghostscript.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ .../python3/0012-Add-an-option-to-disable-lib2to3.patch   |  8 +++++---
+ .../0014-Add-an-option-to-disable-the-tk-module.patch     | 15 +++++++++------
+ package/python3/python3.hash                              |  2 +-
+ package/python3/python3.mk                                |  2 +-
+ 4 files changed, 16 insertions(+), 11 deletions(-)
 
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index ca26a38a02..30c45a5a74 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9561/SHA512SUMS
--sha512  f498384af80654c040635564b8bc9a64c4bb5b0769bb00aade4042bbe9117c482362dc1a1fac72db3ce9487dd5a5bb8fb81b35b360680fe598df33dfbbe79499  ghostscript-9.56.1.tar.gz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10011/SHA512SUMS
-+sha512  d944be9e8aef68d1176d64c40db6fa86d55d0c9e30047f2147c02806ab61cfe9ac2cb00d4e5b218ff3c51cc6ed47ceffe1bac4dd9d4cc1760b7974f30c6c2735  ghostscript-10.01.1.tar.xz
- 
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 5bf8b08966..03fc9ef016 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,8 @@
- #
+diff --git a/package/python3/0012-Add-an-option-to-disable-lib2to3.patch b/package/python3/0012-Add-an-option-to-disable-lib2to3.patch
+index 0085d5a63f..228b86a90b 100644
+--- a/package/python3/0012-Add-an-option-to-disable-lib2to3.patch
++++ b/package/python3/0012-Add-an-option-to-disable-lib2to3.patch
+@@ -12,6 +12,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ [ Adam Duskett: ported to Python 3.10.0 ]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
++[ Bernd Kuhls: ported to Python 3.11.4]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  Makefile.pre.in | 17 ++++++++++++-----
+  configure.ac    |  6 ++++++
+@@ -48,9 +50,9 @@ index 403380e181..f5d0573067 100644
+ -		lib2to3/tests/data \
+ -		lib2to3/tests/data/fixers \
+ -		lib2to3/tests/data/fixers/myfixes \
+- 		test test/audiodata \
+- 		test/capath test/cjkencodings \
+- 		test/data test/decimaltestdata \
++ 		test \
++ 		test/audiodata \
++ 		test/capath \
+ @@ -2013,6 +2010,14 @@ ifeq (@PYDOC@,yes)
+  LIBSUBDIRS += pydoc_data
+  endif
+diff --git a/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
+index 04f7e34435..b89e1d27bc 100644
+--- a/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
++++ b/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
+@@ -9,6 +9,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ [ Adam Duskett: ported to Python 3.10.0 ]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
++[ Bernd Kuhls: ported to Python 3.11.4]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  Makefile.pre.in | 10 +++++++---
+  configure.ac    |  9 +++++++++
+@@ -26,14 +28,15 @@ index 9f4cdf14cf..4f83911200 100644
+  		tomllib \
+  		turtledemo \
+  		unittest \
+-@@ -2001,8 +2000,6 @@ TESTSUBDIRS=	ctypes/test \
+- 		test/tracedmodules \
+- 		test/xmltestdata test/xmltestdata/c14n-20 \
++@@ -2038,9 +2038,6 @@
++ 		test/xmltestdata \
++ 		test/xmltestdata/c14n-20 \
+  		test/ziptestdata \
+--		tkinter/test tkinter/test/test_tkinter \
++-		tkinter/test \
++-		tkinter/test/test_tkinter \
+ -		tkinter/test/test_ttk \
+- 		unittest/test unittest/test/testmock
+- 
++ 		unittest/test \
++ 		unittest/test/testmock
+  ifeq (@PYDOC@,yes)
+ @@ -2021,6 +2018,13 @@ ifeq (@SQLITE3@,yes)
+  LIBSUBDIRS += sqlite3
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index b04ee7fa2c..6c43e01a44 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8a5db99c961a7ecf27c75956189c9602c968751f11dbeae2b900dbff1c085b5e  Python-3.11.3.tar.xz
++sha256  2f0e409df2ab57aa9fc4cbddfb976af44e4e55bf6f619eee6bc5c2297264a7f6  Python-3.11.4.tar.xz
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index ece5cad93e..bdb7cfd22f 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GHOSTSCRIPT_VERSION = 9.56.1
-+GHOSTSCRIPT_VERSION = 10.01.1
-+GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
+ PYTHON3_VERSION_MAJOR = 3.11
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
