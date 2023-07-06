@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9179EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5331EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A71440584;
-	Thu,  6 Jul 2023 11:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A71440584
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7413C41572;
+	Thu,  6 Jul 2023 11:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7413C41572
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YuCc-IAcvehP; Thu,  6 Jul 2023 11:51:57 +0000 (UTC)
+	with ESMTP id N53-g6lZnEP5; Thu,  6 Jul 2023 11:52:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CFE34027F;
-	Thu,  6 Jul 2023 11:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CFE34027F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9DE5F1BF345
+	by smtp2.osuosl.org (Postfix) with ESMTP id 94DEE40472;
+	Thu,  6 Jul 2023 11:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94DEE40472
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BBB211BF97D
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7772B40472
+ by smtp1.osuosl.org (Postfix) with ESMTP id A360B82093
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7772B40472
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A360B82093
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jjnojhUfnlaX for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LBFIRJI9v7ML for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE52C40136
+ by smtp1.osuosl.org (Postfix) with ESMTP id D79AF8136D
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE52C40136
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D79AF8136D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE5B6868F0; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
+ id C3791868F2; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 13:43:39 +0200
-Subject: [git commit branch/2023.05.x] DEVELOPERS: remove José Pekkarinen
+Date: Thu, 6 Jul 2023 13:46:53 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 7511b1793292e02e10eafbe5ac31303c9274a8b5
-X-Git-Newrev: 6e248a121c5b57e6980a213ed7b311dce4194ae6
+X-Git-Oldrev: 214a6454c61392fa533f12d7dae3096d2fd56508
+X-Git-Newrev: a3726f9b5ef8738080f3ae08315bf8044065a71d
 X-Patchwork-Hint: ignore
-Message-Id: <20230706115153.AE5B6868F0@busybox.osuosl.org>
+Message-Id: <20230706115153.C3791868F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/fftw: bump
+ version to 3.3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,65 +58,52 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3511584260031669471=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3511584260031669471==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6e248a121c5b57e6980a213ed7b311dce4194ae6
+commit: https://git.buildroot.net/buildroot/commit/?id=a3726f9b5ef8738080f3ae08315bf8044065a71d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-E-mails are bouncing:
-
-<jose.pekkarinen@unikie.com>: host ASPMX.L.GOOGLE.com[74.125.133.26] said:
-    550-5.1.1 The email account that you tried to reach does not exist. Please
-    try 550-5.1.1 double-checking the recipient's email address for typos or
-    550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
+Release notes: http://fftw.org/release-notes.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5206492d6a749191fc9395479438a35007417cc2)
+(cherry picked from commit d521d6b756864b926f5eb98c111a8989347ee0e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 13 -------------
- 1 file changed, 13 deletions(-)
+ package/fftw/fftw.hash | 6 +++---
+ package/fftw/fftw.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 78b5abbb21..29d367647a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1619,19 +1619,6 @@ N:	José Luis Salvador Rufo <salvador.joseluis@gmail.com>
- F:	package/zfs/
- F:	support/testing/tests/package/test_zfs.py
+diff --git a/package/fftw/fftw.hash b/package/fftw/fftw.hash
+index b07aad8f18..9e7364d76c 100644
+--- a/package/fftw/fftw.hash
++++ b/package/fftw/fftw.hash
+@@ -1,5 +1,5 @@
+-# From http://www.fftw.org/fftw-3.3.8.tar.gz.md5sum
+-md5  8aac833c943d8e90d51b697b27d4384d  fftw-3.3.8.tar.gz
++# From http://fftw.org/fftw-3.3.10.tar.gz.md5sum
++md5  8ccbf6a5ea78a16dbc3e1306e234cc5c  fftw-3.3.10.tar.gz
+ # Locally computed
+-sha256  6113262f6e92c5bd474f2875fa1b01054c4ad5040f6b0da7c03c98821d9ae303  fftw-3.3.7.tar.gz
++sha256  56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467  fftw-3.3.10.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index 279244a5dc..1bb537aeb8 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	José Pekkarinen <jose.pekkarinen@unikie.com>
--F:	package/alfred/
--F:	package/avocado/
--F:	package/bmx7/
--F:	package/opensc/
--F:	package/python-aexpect/
--F:	package/python-alembic/
--F:	package/python-lark/
--F:	package/softhsm2/
--F:	support/testing/tests/package/sample_python_aexpect.py
--F:	support/testing/tests/package/test_avocado.py
--F:	support/testing/tests/package/test_python_aexpect.py
--
- N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/at-spi2-core/
- F:	package/clang/
-
---===============3511584260031669471==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-FFTW_VERSION = 3.3.8
++FFTW_VERSION = 3.3.10
+ FFTW_SITE = http://www.fftw.org
+ FFTW_INSTALL_STAGING = YES
+ FFTW_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3511584260031669471==--
