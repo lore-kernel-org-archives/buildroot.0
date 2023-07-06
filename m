@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50ACEEB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9179EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0384A40139;
-	Thu,  6 Jul 2023 11:51:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0384A40139
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A71440584;
+	Thu,  6 Jul 2023 11:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A71440584
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mE-2tK6Tg_va; Thu,  6 Jul 2023 11:51:08 +0000 (UTC)
+	with ESMTP id YuCc-IAcvehP; Thu,  6 Jul 2023 11:51:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D2AA4154E;
-	Thu,  6 Jul 2023 11:51:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D2AA4154E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9CFE34027F;
+	Thu,  6 Jul 2023 11:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CFE34027F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CEBA81BF97E
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:50:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9DE5F1BF345
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D78F401CA
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:50:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D78F401CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7772B40472
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7772B40472
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k8IdZ_DSa-yy for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 11:50:36 +0000 (UTC)
+ with ESMTP id jjnojhUfnlaX for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B5E2740139
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 11:50:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5E2740139
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE52C40136
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE52C40136
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0F19868C6; Thu,  6 Jul 2023 11:50:36 +0000 (UTC)
+ id AE5B6868F0; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 13:41:57 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 74fa4b795fed372c16bd31ffd281432b2e89a473
-X-Git-Newrev: 18fb407dc4fca2fc89e824fe0a5fcbb17407e5db
+Date: Thu, 6 Jul 2023 13:43:39 +0200
+Subject: [git commit branch/2023.05.x] DEVELOPERS: remove José Pekkarinen
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 7511b1793292e02e10eafbe5ac31303c9274a8b5
+X-Git-Newrev: 6e248a121c5b57e6980a213ed7b311dce4194ae6
 X-Patchwork-Hint: ignore
-Message-Id: <20230706115036.A0F19868C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python-requests:
- security bump to version 2.31.0
+Message-Id: <20230706115153.AE5B6868F0@busybox.osuosl.org>
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,58 +57,65 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3511584260031669471=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18fb407dc4fca2fc89e824fe0a5fcbb17407e5db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+--===============3511584260031669471==
+Content-Type: text/plain
 
-Fixes the following security issue:
+commit: https://git.buildroot.net/buildroot/commit/?id=6e248a121c5b57e6980a213ed7b311dce4194ae6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-- CVE-2023-32681: Unintended leak of Proxy-Authorization header
-  https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q
+E-mails are bouncing:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit c94922beac62e66a993e0a6bc14567af4827d8d1)
-[Peter: mark as security bump]
+<jose.pekkarinen@unikie.com>: host ASPMX.L.GOOGLE.com[74.125.133.26] said:
+    550-5.1.1 The email account that you tried to reach does not exist. Please
+    try 550-5.1.1 double-checking the recipient's email address for typos or
+    550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5206492d6a749191fc9395479438a35007417cc2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-requests/python-requests.hash | 4 ++--
- package/python-requests/python-requests.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index b6f696000b..c4aeabb25d 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5  09b752e0b0a672d805ae54455c128d42  requests-2.28.2.tar.gz
--sha256  98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf  requests-2.28.2.tar.gz
-+md5  941e175c276cd7d39d098092c56679a4  requests-2.31.0.tar.gz
-+sha256  942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1  requests-2.31.0.tar.gz
- # Locally computed sha256 checksums
- sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 8f9f4b2db4..2c74db3711 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 78b5abbb21..29d367647a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1619,19 +1619,6 @@ N:	José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+ F:	package/zfs/
+ F:	support/testing/tests/package/test_zfs.py
  
--PYTHON_REQUESTS_VERSION = 2.28.2
-+PYTHON_REQUESTS_VERSION = 2.31.0
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/ee/391076f5937f0a8cdf5e53b701ffc91753e87b07d66bae4a09aa671897bf
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9d/be/10918a2eac4ae9f02f6cfe6414b7a155ccd8f7f9d4380d62fd5b955065c3
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+-N:	José Pekkarinen <jose.pekkarinen@unikie.com>
+-F:	package/alfred/
+-F:	package/avocado/
+-F:	package/bmx7/
+-F:	package/opensc/
+-F:	package/python-aexpect/
+-F:	package/python-alembic/
+-F:	package/python-lark/
+-F:	package/softhsm2/
+-F:	support/testing/tests/package/sample_python_aexpect.py
+-F:	support/testing/tests/package/test_avocado.py
+-F:	support/testing/tests/package/test_python_aexpect.py
+-
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
+ F:	package/at-spi2-core/
+ F:	package/clang/
+
+--===============3511584260031669471==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3511584260031669471==--
