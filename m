@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FE47EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C6BEB64DC
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 11:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E84141559;
-	Thu,  6 Jul 2023 11:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E84141559
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8539D40A87;
+	Thu,  6 Jul 2023 11:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8539D40A87
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1TgSHNxXXKHV; Thu,  6 Jul 2023 11:52:49 +0000 (UTC)
+	with ESMTP id vmkO9w_rO6bK; Thu,  6 Jul 2023 11:53:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 655044155E;
-	Thu,  6 Jul 2023 11:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 655044155E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 769011BF345
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B34C4151B;
+	Thu,  6 Jul 2023 11:53:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B34C4151B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 07A681BF345
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D67140136
+ by smtp1.osuosl.org (Postfix) with ESMTP id B872D82144
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 11:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D67140136
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B872D82144
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jsu4smw8m9m1 for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id joh3SPeKOPgK for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 11:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C7DAF4027F
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1151813C2
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7DAF4027F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1151813C2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8485868F1; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
+ id D046F868EE; Thu,  6 Jul 2023 11:51:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 13:45:30 +0200
+Date: Thu, 6 Jul 2023 13:47:37 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 6e248a121c5b57e6980a213ed7b311dce4194ae6
-X-Git-Newrev: 214a6454c61392fa533f12d7dae3096d2fd56508
+X-Git-Oldrev: a3726f9b5ef8738080f3ae08315bf8044065a71d
+X-Git-Newrev: 1d030119fc6571b615fb8bf7b65d286ff7e56df2
 X-Patchwork-Hint: ignore
-Message-Id: <20230706115153.B8485868F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/kodi: fix build
- error with flatbuffers 23.x
+Message-Id: <20230706115153.D046F868EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/mesa3d: fix
+ 002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,81 +63,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=214a6454c61392fa533f12d7dae3096d2fd56508
+commit: https://git.buildroot.net/buildroot/commit/?id=1d030119fc6571b615fb8bf7b65d286ff7e56df2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fixes build error with defconfig
+Update 002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch to
+fix an syntax error introduced by commit 'package/{mesa3d, mesa3d-headers}:
+bump version to 23.1.0' ([1])
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON3_PY_ONLY=y
+Fixes:
 
-caused by bumping flatbuffers to version >= 23.x in commit
-3d1ee7d624b71009ff61d4fa5ed860c52eb89b47
+  .../build/mesa3d-23.1.2/src/gallium/drivers/vc4/meson.build:87:76: ERROR:
+  Trying to compare values of different types (UserFeatureOption, str) using !=.
+  This was deprecated and undefined behavior previously and is as of 0.60.0 a hard error.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[1] https://git.buildroot.net/buildroot/commit/?id=e6203db11ed40122a2d9f29012db5683a7eb10d0
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 35b57c9e879389bcec045bc00d3c1e0761379ad1)
+(cherry picked from commit da19c18af2d531b63b6d54f02dc2f16785756e66)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...atBuffer-Remove-forward-declararion-of-Fl.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ ...on-option-to-disable-optional-neon-suppor.patch | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch b/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
-new file mode 100644
-index 0000000000..87df0e4c9a
---- /dev/null
-+++ b/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
-@@ -0,0 +1,42 @@
-+From 07d8c98a0a65e005b85ef70e06eb1b9bbe7f764c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Markus=20H=C3=A4rer?= <markus.haerer@gmx.net>
-+Date: Sun, 28 May 2023 00:49:40 +0200
-+Subject: [PATCH] SavestateFlatBuffer: Remove forward declararion of
-+ FlatBufferBuilder
-+
-+This caused a compiler error with recent faltbuffers because the type changed:
-+
-+In file included from xbmc/cores/RetroPlayer/savestates/SavestateDatabase.cpp:12:
-+xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h:19:7: error: definition of type 'FlatBufferBuilder' conflicts with type alias of the same name
-+class FlatBufferBuilder;
-+      ^
-+/usr/include/flatbuffers/flatbuffer_builder.h:1414:7: note: 'FlatBufferBuilder' declared here
-+using FlatBufferBuilder = FlatBufferBuilderImpl<false>;
-+      ^
-+1 error generated.
-+
-+(cherry picked from commit 351184d7e4e3edc447d04a297769eb41a477ba68)
-+
-+Upstream: https://github.com/xbmc/xbmc/commit/07d8c98a0a65e005b85ef70e06eb1b9bbe7f764c
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h b/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
-+index cb93e6bbc2e12..fa42a9bad7034 100644
-+--- a/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
-++++ b/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
-+@@ -14,11 +14,6 @@
-+ 
-+ #include <flatbuffers/flatbuffers.h>
-+ 
-+-namespace flatbuffers
-+-{
-+-class FlatBufferBuilder;
-+-}
-+-
-+ namespace KODI
-+ {
-+ namespace RETRO
+diff --git a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+index a5564fcf3a..430bd3b4b9 100644
+--- a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
++++ b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+@@ -1,4 +1,4 @@
+-From e3b47c1b84964c62b3e1fa782f1ffa4be0ae62f9 Mon Sep 17 00:00:00 2001
++From f719e942dde0a46a9ff0080001cb3466012ffcc0 Mon Sep 17 00:00:00 2001
+ From: Peter Seiderer <ps.report@gmx.net>
+ Date: Mon, 9 Mar 2020 13:01:14 +0100
+ Subject: [PATCH] vc4: add meson option to disable optional neon support
+@@ -11,6 +11,8 @@ Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ [rebased for 20.2.0, 20.3.0, 21.1.0 & 23.1.0]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[fix syntax error after previous rebases]
+ ---
+  meson_options.txt                    | 7 +++++++
+  src/gallium/drivers/vc4/meson.build  | 4 ++--
+@@ -18,25 +20,25 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  3 files changed, 11 insertions(+), 4 deletions(-)
+ 
+ diff --git a/meson_options.txt b/meson_options.txt
+-index a39596a6f19..0f6b6c62b55 100644
++index 8e0bf2a..1cf0e07 100644
+ --- a/meson_options.txt
+ +++ b/meson_options.txt
+-@@ -117,6 +117,13 @@
++@@ -116,6 +116,13 @@ option(
++   description : 'enable gallium va frontend.',
+  )
+  
+- option(
+++option(
+ +  'gallium-vc4-neon',
+ +  type : 'feature',
+ +  deprecated: {'true': 'enabled', 'false': 'disabled'},
+ +  description : 'enable gallium vc4 optional neon support.',
+ +)
+ +
+-+option(
++ option(
+    'va-libs-path',
+    type : 'string',
+-   value : '',
+ diff --git a/src/gallium/drivers/vc4/meson.build b/src/gallium/drivers/vc4/meson.build
+-index 5ce5af5f6b4..e3f7d8d62ae 100644
++index 84da951..7f950de 100644
+ --- a/src/gallium/drivers/vc4/meson.build
+ +++ b/src/gallium/drivers/vc4/meson.build
+ @@ -84,7 +84,7 @@ files_libvc4 = files(
+@@ -44,7 +46,7 @@ index 5ce5af5f6b4..e3f7d8d62ae 100644
+  
+  libvc4_neon = []
+ -if host_machine.cpu_family() == 'arm'
+-+if host_machine.cpu_family() == 'arm' and get_option('gallium-vc4-neon') != 'disabled'
+++if host_machine.cpu_family() == 'arm' and not get_option('gallium-vc4-neon').disabled()
+    libvc4_neon = static_library(
+      'vc4_neon',
+      'vc4_tiling_lt_neon.c',
+@@ -58,7 +60,7 @@ index 5ce5af5f6b4..e3f7d8d62ae 100644
+  
+  if dep_simpenrose.found()
+ diff --git a/src/gallium/drivers/vc4/vc4_tiling.h b/src/gallium/drivers/vc4/vc4_tiling.h
+-index 66767e7f1f8..7446f1c3d0c 100644
++index 5afe329..919b299 100644
+ --- a/src/gallium/drivers/vc4/vc4_tiling.h
+ +++ b/src/gallium/drivers/vc4/vc4_tiling.h
+ @@ -89,7 +89,7 @@ vc4_load_lt_image(void *dst, uint32_t dst_stride,
+@@ -80,5 +82,5 @@ index 66767e7f1f8..7446f1c3d0c 100644
+                  vc4_store_lt_image_neon(dst, dst_stride, src, src_stride,
+                                          cpp, box);
+ -- 
+-2.25.1
++2.41.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
