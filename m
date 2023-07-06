@@ -4,59 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4788EB64DC
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 09:25:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB549EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 09:25:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D2E1402D8;
-	Thu,  6 Jul 2023 09:25:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D2E1402D8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CD6140313;
+	Thu,  6 Jul 2023 09:25:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CD6140313
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6ythQ07mRZuY; Thu,  6 Jul 2023 09:25:15 +0000 (UTC)
+	with ESMTP id zYoAc5jSrCr1; Thu,  6 Jul 2023 09:25:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15490408C0;
-	Thu,  6 Jul 2023 09:25:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15490408C0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6B5FE1BF3EB
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 09:25:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A129E408B4;
+	Thu,  6 Jul 2023 09:25:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A129E408B4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 150D61BF3EB
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 09:25:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 453FE610A2
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 09:25:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 453FE610A2
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC68A40900
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 09:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC68A40900
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2EHFILMA78Ol for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 09:25:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4948B60B32
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4948B60B32
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 09:25:03 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1946EE0011;
- Thu,  6 Jul 2023 09:25:00 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qHLER-003BDP-Sf; Thu, 06 Jul 2023 11:24:59 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yY5efJTEubxR for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 09:25:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30BBC402D8
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 09:25:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30BBC402D8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1A2C9867D4; Thu,  6 Jul 2023 09:25:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20230608165305.451682-1-bernd.kuhls@t-online.de>
- <87v8flf150.fsf@48ers.dk>
-Date: Thu, 06 Jul 2023 11:24:59 +0200
-In-Reply-To: <87v8flf150.fsf@48ers.dk> (Peter Korsgaard's message of "Sun, 18
- Jun 2023 13:41:47 +0200")
-Message-ID: <87h6qh4ck4.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: security bump version
- to 3.11.4
+To: buildroot@buildroot.org
+Date: Thu, 6 Jul 2023 11:23:57 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 91c51b76c7b6b190751bd3b3a18adc1d0d3db142
+X-Git-Newrev: ba378b79b241381b74800262373c1c85db91d233
+X-Patchwork-Hint: ignore
+Message-Id: <20230706092513.1A2C9867D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/ghostscript:
+ security bump version to 10.01.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,40 +57,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ba378b79b241381b74800262373c1c85db91d233
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Rebased two patches.
- >> Changelog:
- >> https://docs.python.org/release/3.11.4/whatsnew/changelog.html#python-3-11-4
+Switch tarball to .xz
 
- >> Fixes the following security problems:
+Fixes CVE-2023-28879:
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28879
 
- >> - gh-99889: Fixed a security in flaw in uu.decode() that could allow for
- >> directory traversal based on the input if no out_file was specified.
+Release notes:
+https://ghostscript.readthedocs.io/en/latest/News.html?utm_source=ghostscript&utm_medium=website&utm_content=inline-link
 
- >> - gh-104049: Do not expose the local on-disk location in directory
- >> indexes   produced by http.client.SimpleHTTPRequestHandler.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1116fd46a477c58472e98b797dc67c96020883e1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
- >> - gh-102153: urllib.parse.urlsplit() now strips leading C0 control and
- >> space characters following the specification for URLs defined by WHATWG
- >> in response to CVE-2023-24329. Patch by Illia Volochii.
-
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
- > Committed, thanks.
-
-Committed to 2023.02.x and 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index ca26a38a02..30c45a5a74 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9561/SHA512SUMS
+-sha512  f498384af80654c040635564b8bc9a64c4bb5b0769bb00aade4042bbe9117c482362dc1a1fac72db3ce9487dd5a5bb8fb81b35b360680fe598df33dfbbe79499  ghostscript-9.56.1.tar.gz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10011/SHA512SUMS
++sha512  d944be9e8aef68d1176d64c40db6fa86d55d0c9e30047f2147c02806ab61cfe9ac2cb00d4e5b218ff3c51cc6ed47ceffe1bac4dd9d4cc1760b7974f30c6c2735  ghostscript-10.01.1.tar.xz
+ 
+ # Hash for license file:
+ sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 364fa1469a..d215afccd2 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-GHOSTSCRIPT_VERSION = 9.56.1
++GHOSTSCRIPT_VERSION = 10.01.1
++GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
