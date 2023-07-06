@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CD5BEB64DC
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 15:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A580DEB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 15:37:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAF1B61123;
-	Thu,  6 Jul 2023 15:37:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAF1B61123
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D95261120;
+	Thu,  6 Jul 2023 15:37:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D95261120
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nuhX4CKAO3Zc; Thu,  6 Jul 2023 15:37:39 +0000 (UTC)
+	with ESMTP id 3KdsZVZ0lQP1; Thu,  6 Jul 2023 15:37:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28E206111E;
-	Thu,  6 Jul 2023 15:37:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28E206111E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 716A01BF97D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FD6561026;
+	Thu,  6 Jul 2023 15:37:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FD6561026
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9CA5E1BF39F
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:37:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BAF641565
+ by smtp1.osuosl.org (Postfix) with ESMTP id 83C3782265
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 15:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BAF641565
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83C3782265
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dyuaEpnq4o4H for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rgNBZHsoFhF3 for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 15:37:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80AB940A88
+ by smtp1.osuosl.org (Postfix) with ESMTP id 781F08224A
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 15:37:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80AB940A88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 781F08224A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F68E86925; Thu,  6 Jul 2023 15:37:22 +0000 (UTC)
+ id 689B486924; Thu,  6 Jul 2023 15:37:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 17:33:45 +0200
+Date: Thu, 6 Jul 2023 17:32:36 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 6ff5b03f930b0eb0c7f9b3d16f494a7f29960d48
-X-Git-Newrev: 71eb15a51fc1b6a16fb8024aec94836303970b88
+X-Git-Oldrev: 01ae565de7f6199ec857e664b09456180790b74f
+X-Git-Newrev: 6ff5b03f930b0eb0c7f9b3d16f494a7f29960d48
 X-Patchwork-Hint: ignore
-Message-Id: <20230706153722.6F68E86925@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] configs/mx53loco: select
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+Message-Id: <20230706153722.689B486924@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x]
+ package/python-cryptography: bump to version 39.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71eb15a51fc1b6a16fb8024aec94836303970b88
+commit: https://git.buildroot.net/buildroot/commit/?id=6ff5b03f930b0eb0c7f9b3d16f494a7f29960d48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Select  BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following
-build error:
-
-include/image.h:1383:12: fatal error: openssl/evp.h: No such file or directory
-
-Reported-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 044c38b71d8cda99e893f0bdcfb18992a229d017)
+(cherry picked from commit adabd0b8b03c36c660784b685a49ac7d41c9b472)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/mx53loco_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 212a032d84..d03c7d0916 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -24,6 +24,7 @@ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index a23944a06f..e083014750 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  531348679f144d118156be5b17ddac750974cdcd9f44bb0a7cfd7ddcfee79c80  cryptography-39.0.1.tar.gz
++sha256  405c9a6271e1a088ea0b432bc2094e2e8baadb2241e192ce9c73a7cc9793b127  cryptography-39.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index a130b2d10d..67aa20742d 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Kernel
- BR2_LINUX_KERNEL=y
+-PYTHON_CRYPTOGRAPHY_VERSION = 39.0.1
++PYTHON_CRYPTOGRAPHY_VERSION = 39.0.2
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/6a/f5/a729774d087e50fffd1438b3877a91e9281294f985bda0fd15bf99016c78
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/fa/f3/f4b8c175ea9a1de650b0085858059050b7953a93d66c97ed89b93b232996
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
