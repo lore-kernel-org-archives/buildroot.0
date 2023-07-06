@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B13EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 10:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD878EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 10:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0777E41834;
-	Thu,  6 Jul 2023 10:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0777E41834
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6761040590;
+	Thu,  6 Jul 2023 10:53:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6761040590
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KpC47o0sXsGd; Thu,  6 Jul 2023 10:52:52 +0000 (UTC)
+	with ESMTP id ardCaSUzbjGu; Thu,  6 Jul 2023 10:53:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D273241835;
-	Thu,  6 Jul 2023 10:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D273241835
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E45F01BF28A
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 10:52:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 721CF41871;
+	Thu,  6 Jul 2023 10:53:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 721CF41871
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 17D611BF97D
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 10:52:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE78181FAA
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5743610C2
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 10:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE78181FAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5743610C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QTlmNSwfSJ9D for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7Llik4VPM6MY for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 10:52:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0CF881369
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0514D610B8
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 10:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0CF881369
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0514D610B8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E0D0086812; Thu,  6 Jul 2023 10:52:49 +0000 (UTC)
+ id E965086814; Thu,  6 Jul 2023 10:52:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 12:32:13 +0200
+Date: Thu, 6 Jul 2023 12:34:45 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 748007faee8cd229d21e4cea15d8a966dd79a74f
-X-Git-Newrev: 77379306610d4b519a7f483ad91571470b3fd13d
+X-Git-Oldrev: 77379306610d4b519a7f483ad91571470b3fd13d
+X-Git-Newrev: 157ecd6d6e2856a1b8ae95d167e1cc459bb47914
 X-Patchwork-Hint: ignore
-Message-Id: <20230706105249.E0D0086812@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/jhead: security
- bump to version 3.08
+Message-Id: <20230706105249.E965086814@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] {linux,
+ linux-headers}: bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1, 3}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77379306610d4b519a7f483ad91571470b3fd13d
+commit: https://git.buildroot.net/buildroot/commit/?id=157ecd6d6e2856a1b8ae95d167e1cc459bb47914
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fixes the following security issue:
-
-- CVE-2022-41751: Jhead 3.06.0.1 allows attackers to execute arbitrary OS
-  commands by placing them in a JPEG filename and then using the
-  regeneration -rgt50 option.
-
-Update readme.txt hash after a minor tweak of the text:
-https://github.com/Matthias-Wandel/jhead/commit/a0eed69daa6ad4b824eb81fb6e3be95de3f783c2
-
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 39ffadd6ae8c472e083c431a957ec575c1cebce2)
+(cherry picked from commit 88108f9793f5824fa058b878974f234ebe834325)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jhead/jhead.hash | 4 ++--
- package/jhead/jhead.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/jhead/jhead.hash b/package/jhead/jhead.hash
-index bd9c8560d5..1fe856198d 100644
---- a/package/jhead/jhead.hash
-+++ b/package/jhead/jhead.hash
-@@ -1,3 +1,3 @@
- # Locally calculated from download (no sig, hash)
--sha256  5c5258c3d7a840bf831e22174e4a24cb1de3baf442f7cb73d5ab31b4ae0b0058  jhead-3.06.0.1.tar.gz
--sha256  8b709512c737fc0c1e1024800b9a44c54d14ab02132c636a66c3ac66955c3e95  readme.txt
-+sha256  999a81b489c7b2a7264118f194359ecf4c1b714996a2790ff6d5d2f3940f1e9f  jhead-3.08.tar.gz
-+sha256  b3971a74d00c834bc7f112d8a0027b25663fd1637a21381a3e5df4bd2b614dff  readme.txt
-diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
-index a206e2fe34..f07739bc21 100644
---- a/package/jhead/jhead.mk
-+++ b/package/jhead/jhead.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 69bf91bbf9..70591f4a25 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--JHEAD_VERSION = 3.06.0.1
-+JHEAD_VERSION = 3.08
- JHEAD_SITE = $(call github,Matthias-Wandel,jhead,$(JHEAD_VERSION))
- JHEAD_LICENSE = Public Domain
- JHEAD_LICENSE_FILES = readme.txt
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.3.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.3.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 20e67fc4d1..ee510f836d 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  fe369743996c522a7b473e99dcf8f88847bd5cc88546fd3b7a41d9fe5a5b97a9  linux-6.3.7.tar.xz
+-sha256  b87d6ba8ea7328e8007a7ea9171d1aa0d540d95eacfcab09578e0a3b623dd2cd  linux-6.1.33.tar.xz
++sha256  927ba93d3da556c8e30b2640aa3f19c3c3cda66c655754e0798024020e2981b4  patch-6.3.8.xz
++sha256  84c638ee9a36e30ef879e2944c5adfc2523a5a1553951b40e8cf4d873426d90a  patch-6.1.33.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  f617c9d1bb5326cc93495938f43eb8cb9aea9d2f451e5a99bce2893f296e179a  linux-5.15.116.tar.xz
+-sha256  409497c635caf49614de21950ec091eb621a5d5fe1f63fc418ef68ac38b56119  linux-5.10.183.tar.xz
+-sha256  0938790a858fd0af6aa6b27a3bdf4c5d4a46aba60e6178156980d58bef7ed9ea  linux-5.4.246.tar.xz
++sha256  c8c39191dc89ccb8f0fd05e4b06c9bcc77672156bdc64fe445d2109c116a3432  patch-5.15.117.xz
++sha256  1bde9f3d8bace93e634ca0841fca14fcbd7b6d53cf877ee3e7f18778bf842455  patch-5.10.184.xz
++sha256  5e627d9086f539e65c91f6e5c59c8bb66b59f9d369173dc0ccb14f70795d1876  patch-5.4.247.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  aaa1775359c7a066ec70852ea2709fe7e7109517b7d895f34e237132db8edc16  linux-4.19.285.tar.xz
+-sha256  8cf28f5aae6f77fa718861c415d646a189a7f9493ef0ccb461575a092af03c30  linux-4.14.317.tar.xz
++sha256  663669feee6ad4814704bf6dcc89ebbf64e1862f4dc231bc6327e33acea99823  patch-4.19.286.xz
++sha256  faa5db19c03aaa96417c2c3e76fbc10886d25b9f26179ff653e3c29f6707840f  patch-4.14.318.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 00ec22d606..5b16e659df 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -396,13 +396,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.317"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.285"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.246"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.183"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.116"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.33"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.3.7"		if BR2_KERNEL_HEADERS_6_3
++	default "4.14.318"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.286"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.247"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.184"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.117"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.34"	if BR2_KERNEL_HEADERS_6_1
++	default "6.3.8"		if BR2_KERNEL_HEADERS_6_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
