@@ -4,48 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9BCEB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:59:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6AEAEB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 09:25:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D5B541798;
-	Thu,  6 Jul 2023 08:59:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D5B541798
+	by smtp4.osuosl.org (Postfix) with ESMTP id 435DE40357;
+	Thu,  6 Jul 2023 09:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 435DE40357
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NK2BTfGbjnmT; Thu,  6 Jul 2023 08:59:31 +0000 (UTC)
+	with ESMTP id p-ROB049ZOpt; Thu,  6 Jul 2023 09:25:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DAC8416E5;
-	Thu,  6 Jul 2023 08:59:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DAC8416E5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 621321BF575
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39258402F0;
+	Thu,  6 Jul 2023 09:25:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39258402F0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F014C1BF3EB
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 09:24:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26B7040463
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26B7040463
+ by smtp1.osuosl.org (Postfix) with ESMTP id D78668135B
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 09:24:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D78668135B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 29X0pdIHxq-x for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D92464036A
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D92464036A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C881D867CE; Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K2ey7B-t-HTJ for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 09:24:57 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62DB981351
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 62DB981351
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 09:24:57 +0000 (UTC)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92DC1E0009;
+ Thu,  6 Jul 2023 09:24:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qHLEM-003BDH-Jv; Thu, 06 Jul 2023 11:24:54 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 10:43:03 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 1eee210297d113043c321674cc3869ccf92f9f57
-X-Git-Newrev: 4b8eaecbddfc53a4686a583977409c03d141521d
-X-Patchwork-Hint: ignore
-Message-Id: <20230706085635.C881D867CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libgcrypt: bump
- to version 1.10.2
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20230610153819.936259-1-bernd.kuhls@t-online.de>
+ <87zg4xf173.fsf@48ers.dk>
+Date: Thu, 06 Jul 2023 11:24:54 +0200
+In-Reply-To: <87zg4xf173.fsf@48ers.dk> (Peter Korsgaard's message of "Sun, 18
+ Jun 2023 13:40:32 +0200")
+Message-ID: <87left4ck9.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/ghostscript: security bump
+ version to 10.01.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,56 +66,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b8eaecbddfc53a4686a583977409c03d141521d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Release notes:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS;h=c9a239615f8070427a96688b1be40a81e59e9b8a;hb=1c5cbacf3d88dded5063e959ee68678ff7d0fa56
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> Switch tarball to .xz
+ >> Fixes CVE-2023-28879:
+ >> https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28879
 
-Added upstream sha1 & sha256 hashes.
+ >> Release notes:
+ >> https://ghostscript.readthedocs.io/en/latest/News.html?utm_source=ghostscript&utm_medium=website&utm_content=inline-link
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9440d72ca9b95be2214a51d092ba59d0653f6148)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgcrypt/libgcrypt.hash | 8 ++++----
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 96f5e6b76c..cfbf9eaf17 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,5 +1,5 @@
--# Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.1.tar.bz2.sig
--# using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  ef14ae546b0084cd84259f61a55e07a38c3b53afc0f546bffcef2f01baffe9de  libgcrypt-1.10.1.tar.bz2
-+# From https://www.gnupg.org/download/integrity_check.html
-+sha1  0b9555960d84a09ea14e52360808f2e02e9c12d2  libgcrypt-1.10.2.tar.bz2
-+sha256  3b9c02a004b68c256add99701de00b383accccf37177e0d6c58289664cce0c03  libgcrypt-1.10.2.tar.bz2
-+# Locally calculated
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 9232debb3a..4fffe5360e 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGCRYPT_VERSION = 1.10.1
-+LIBGCRYPT_VERSION = 1.10.2
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ > Committed, thanks.
+
+Committed to 2023.02.x and 2023.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
