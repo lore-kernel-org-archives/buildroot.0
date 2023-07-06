@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD878EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 10:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96D25EB64DC
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 10:53:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6761040590;
-	Thu,  6 Jul 2023 10:53:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6761040590
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BB5E41887;
+	Thu,  6 Jul 2023 10:53:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BB5E41887
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ardCaSUzbjGu; Thu,  6 Jul 2023 10:53:07 +0000 (UTC)
+	with ESMTP id 2kMLJIgVPOch; Thu,  6 Jul 2023 10:53:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 721CF41871;
-	Thu,  6 Jul 2023 10:53:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 721CF41871
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 17D611BF97D
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1DD741877;
+	Thu,  6 Jul 2023 10:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1DD741877
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D16F1BF28A
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 10:52:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5743610C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id D05434027F
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 10:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5743610C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D05434027F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Llik4VPM6MY for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TdQDGCOH9fwE for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 10:52:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0514D610B8
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 10:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0514D610B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1767F405A8
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 10:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1767F405A8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E965086814; Thu,  6 Jul 2023 10:52:49 +0000 (UTC)
+ id 07BDC86817; Thu,  6 Jul 2023 10:52:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 12:34:45 +0200
+Date: Thu, 6 Jul 2023 12:47:10 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 77379306610d4b519a7f483ad91571470b3fd13d
-X-Git-Newrev: 157ecd6d6e2856a1b8ae95d167e1cc459bb47914
+X-Git-Oldrev: f7ae6d3148f6428383209ca5745d2d09eea39a62
+X-Git-Newrev: 6e537234e4a2a4c2d3c69c19d221e6f628f5558b
 X-Patchwork-Hint: ignore
-Message-Id: <20230706105249.E965086814@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] {linux,
- linux-headers}: bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1, 3}.x series
+Message-Id: <20230706105250.07BDC86817@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/hwdata: install
+ to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,82 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=157ecd6d6e2856a1b8ae95d167e1cc459bb47914
+commit: https://git.buildroot.net/buildroot/commit/?id=6e537234e4a2a4c2d3c69c19d221e6f628f5558b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 88108f9793f5824fa058b878974f234ebe834325)
+hwdata provides a .pc file, which other packages can look up to find the
+location where hwdata files are, and use them at build time.
+
+This is the case for the upcoming libdisplay-info package, which
+requires the hwdata's PNP IDs at build time.
+
+However, installing the .pc file is not enough. Indeed, meson (which
+libdisplay-info uses) will look for the corresponding data files in
+datadir, which it locates relative to the sysroot, which is our staging.
+
+So, we also need to install the hwdata files in staging.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit f36c57728aa43df2355db731d90712a5a29cc501)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ package/hwdata/hwdata.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 69bf91bbf9..70591f4a25 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 755a9c93f1..cbac3a22d4 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -8,6 +8,7 @@ HWDATA_VERSION = 0.369
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
++HWDATA_INSTALL_STAGING = YES
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.3.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.3.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 20e67fc4d1..ee510f836d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  fe369743996c522a7b473e99dcf8f88847bd5cc88546fd3b7a41d9fe5a5b97a9  linux-6.3.7.tar.xz
--sha256  b87d6ba8ea7328e8007a7ea9171d1aa0d540d95eacfcab09578e0a3b623dd2cd  linux-6.1.33.tar.xz
-+sha256  927ba93d3da556c8e30b2640aa3f19c3c3cda66c655754e0798024020e2981b4  patch-6.3.8.xz
-+sha256  84c638ee9a36e30ef879e2944c5adfc2523a5a1553951b40e8cf4d873426d90a  patch-6.1.33.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  f617c9d1bb5326cc93495938f43eb8cb9aea9d2f451e5a99bce2893f296e179a  linux-5.15.116.tar.xz
--sha256  409497c635caf49614de21950ec091eb621a5d5fe1f63fc418ef68ac38b56119  linux-5.10.183.tar.xz
--sha256  0938790a858fd0af6aa6b27a3bdf4c5d4a46aba60e6178156980d58bef7ed9ea  linux-5.4.246.tar.xz
-+sha256  c8c39191dc89ccb8f0fd05e4b06c9bcc77672156bdc64fe445d2109c116a3432  patch-5.15.117.xz
-+sha256  1bde9f3d8bace93e634ca0841fca14fcbd7b6d53cf877ee3e7f18778bf842455  patch-5.10.184.xz
-+sha256  5e627d9086f539e65c91f6e5c59c8bb66b59f9d369173dc0ccb14f70795d1876  patch-5.4.247.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  aaa1775359c7a066ec70852ea2709fe7e7109517b7d895f34e237132db8edc16  linux-4.19.285.tar.xz
--sha256  8cf28f5aae6f77fa718861c415d646a189a7f9493ef0ccb461575a092af03c30  linux-4.14.317.tar.xz
-+sha256  663669feee6ad4814704bf6dcc89ebbf64e1862f4dc231bc6327e33acea99823  patch-4.19.286.xz
-+sha256  faa5db19c03aaa96417c2c3e76fbc10886d25b9f26179ff653e3c29f6707840f  patch-4.14.318.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 00ec22d606..5b16e659df 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -396,13 +396,13 @@ endchoice
+ HWDATA_FILES = \
+ 	$(if $(BR2_PACKAGE_HWDATA_IAB_OUI_TXT),iab.txt oui.txt) \
+@@ -15,7 +16,22 @@ HWDATA_FILES = \
+ 	$(if $(BR2_PACKAGE_HWDATA_PNP_IDS),pnp.ids) \
+ 	$(if $(BR2_PACKAGE_HWDATA_USB_IDS),usb.ids)
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.317"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.285"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.246"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.183"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.116"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.33"	if BR2_KERNEL_HEADERS_6_1
--	default "6.3.7"		if BR2_KERNEL_HEADERS_6_3
-+	default "4.14.318"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.286"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.247"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.184"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.117"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.34"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.3.8"		if BR2_KERNEL_HEADERS_6_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++define HWDATA_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
++endef
++
++define HWDATA_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) hwdata.pc
++endef
++
+ ifneq ($(strip $(HWDATA_FILES)),)
++define HWDATA_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/hwdata.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/hwdata.pc
++	$(INSTALL) -d -m 755 $(STAGING_DIR)/usr/share/hwdata
++	$(INSTALL) -m 644 -t $(STAGING_DIR)/usr/share/hwdata \
++		$(addprefix $(@D)/,$(HWDATA_FILES))
++endef
+ define HWDATA_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/hwdata
+ 	$(INSTALL) -m 644 -t $(TARGET_DIR)/usr/share/hwdata \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
