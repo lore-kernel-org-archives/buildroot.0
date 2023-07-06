@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECB04EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78496EB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 936B261098;
-	Thu,  6 Jul 2023 08:31:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 936B261098
+	by smtp3.osuosl.org (Postfix) with ESMTP id 213F2610A5;
+	Thu,  6 Jul 2023 08:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 213F2610A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yeiNWpz_xVgg; Thu,  6 Jul 2023 08:31:09 +0000 (UTC)
+	with ESMTP id 1ERiq-KTIEHI; Thu,  6 Jul 2023 08:31:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A30EF610A8;
-	Thu,  6 Jul 2023 08:31:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A30EF610A8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5553F610A9;
+	Thu,  6 Jul 2023 08:31:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5553F610A9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6584E1BF575
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:30:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6EA901BF575
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:30:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4AF8E409AA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73FEA40570
  for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:30:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AF8E409AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73FEA40570
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O_uafZTMLWtL for <buildroot@lists.busybox.net>;
+ with ESMTP id y_lxyGRTLXvC for <buildroot@lists.busybox.net>;
  Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29CA540570
+ by smtp4.osuosl.org (Postfix) with ESMTP id 48432408FF
  for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29CA540570
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48432408FF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1596086719; Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
+ id 380A386717; Thu,  6 Jul 2023 08:30:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 10:25:21 +0200
+Date: Thu, 6 Jul 2023 10:30:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dc4d70ff1f828b92219f0915e6a296f3ab60edb6
-X-Git-Newrev: 3512b76f2ec3612a3329bad6da5e82064fd06e6a
+X-Git-Oldrev: f1970c666a4cc4f679365a5c2d93bf8ec5cf71fd
+X-Git-Newrev: f059c876f76ebef26802b5476dffcf8a17799f38
 X-Patchwork-Hint: ignore
-Message-Id: <20230706083053.1596086719@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{14,
- 19}.x / 5.{4, 10, 15}.x / 6.{1, 3}.x series
+Message-Id: <20230706083053.380A386717@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
+ 23.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3512b76f2ec3612a3329bad6da5e82064fd06e6a
+commit: https://git.buildroot.net/buildroot/commit/?id=f059c876f76ebef26802b5476dffcf8a17799f38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 315af971db..fba0e1244b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.3.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.3.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index f49ab52afb..d6371a4906 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  41ecf21399b17ab85163750ba22347d09b54fa099b80b63d0e2ef0066129b13e  linux-6.3.9.tar.xz
--sha256  be368143bc5d0dc73dd3e8c6191630c1620520379baf6f47c16116b2c0bc26ac  linux-6.1.35.tar.xz
-+sha256  e0a9ad8692b2191cbd33db371a780a3fe375de90123a307ecd874c0860cd46e3  linux-6.3.10.tar.xz
-+sha256  d8ca0e300f30b9ff70c6e1497c638a1dac1407f45d3655e9c62c6e45a08afe6b  linux-6.1.36.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  4e6bf4dadb04d5d11d1d4cc37c0eabcf33bc333b7dd3dc2143c3099a823eb5b3  linux-5.15.118.tar.xz
--sha256  280662ec8dc8738cf947ad66e748141abd58cbe3b5ed66b7f2b153222b7c7090  linux-5.10.185.tar.xz
--sha256  3abed132e76c6575733acba39eaa54f6d8f4b1dc951b0e601a33959743b13e35  linux-5.4.248.tar.xz
-+sha256  7aa5a0fd3520947e5599e811d28acdc30e36446c016c7dcee3793e6d1cbecfcf  linux-5.15.119.tar.xz
-+sha256  1e60296a135d272bb7ce645f6ae68fbd4ffd1972cb4b82c38c6faa1172481be3  linux-5.10.186.tar.xz
-+sha256  dc5458462c6edbe3473fc6dee80fbe0841df7c177fe0546c2f131e5918f5351d  linux-5.4.249.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  286a9b8c75bff7bdf66985e12a3a650b2bd638a776a5a6e93415930855662a73  linux-4.19.287.tar.xz
--sha256  aca4750f02f4090b753c1445db44dfa90de535eca73a7b0a7aa4453f65ba1ff9  linux-4.14.319.tar.xz
-+sha256  33ebd0c445b58c814428558496b65a192410f000096b0e2e6f5d813ecd95e3eb  linux-4.19.288.tar.xz
-+sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index b4129eb3bf..81fa5ba027 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 10e33a7306..baeabd94db 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -396,13 +396,13 @@ endchoice
+-sha256  3796fea4201e24310b3d100b64cfb288fb92b93ce9de54526efa43e2ea68853a  intel-media-23.2.1.tar.gz
++sha256  dfcf2facc4f8bf3df6b147222786032be195874adacc2f4071fc6c91a0abdf0a  intel-media-23.2.4.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 6895d60be6..dc63bb6239 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.319"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.287"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.248"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.185"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.118"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.35"	if BR2_KERNEL_HEADERS_6_1
--	default "6.3.9"		if BR2_KERNEL_HEADERS_6_3
-+	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.288"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.249"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.186"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.119"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.36"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.3.10"	if BR2_KERNEL_HEADERS_6_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 23.2.1
++INTEL_MEDIADRIVER_VERSION = 23.2.4
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
