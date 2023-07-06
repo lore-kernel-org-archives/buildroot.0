@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E1CEB64DC
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9BCEB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 08:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 849BD417BE;
-	Thu,  6 Jul 2023 08:59:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 849BD417BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D5B541798;
+	Thu,  6 Jul 2023 08:59:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D5B541798
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2mZ429-iza1M; Thu,  6 Jul 2023 08:59:17 +0000 (UTC)
+	with ESMTP id NK2BTfGbjnmT; Thu,  6 Jul 2023 08:59:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A181417D3;
-	Thu,  6 Jul 2023 08:59:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A181417D3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DAC8416E5;
+	Thu,  6 Jul 2023 08:59:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DAC8416E5
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 51DE31BF575
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 621321BF575
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E753A404F9
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E753A404F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26B7040463
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 08:56:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26B7040463
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T3x5LQjwPNYs for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 08:56:36 +0000 (UTC)
+ with ESMTP id 29X0pdIHxq-x for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 17A364055E
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:56:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17A364055E
+ by smtp2.osuosl.org (Postfix) with ESMTP id D92464036A
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D92464036A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0795C867CB; Thu,  6 Jul 2023 08:56:36 +0000 (UTC)
+ id C881D867CE; Thu,  6 Jul 2023 08:56:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jul 2023 10:53:47 +0200
+Date: Thu, 6 Jul 2023 10:43:03 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 1dc0ad4993a5e367f420a10dfd3685add2f9c055
-X-Git-Newrev: 91c51b76c7b6b190751bd3b3a18adc1d0d3db142
+X-Git-Oldrev: 1eee210297d113043c321674cc3869ccf92f9f57
+X-Git-Newrev: 4b8eaecbddfc53a4686a583977409c03d141521d
 X-Patchwork-Hint: ignore
-Message-Id: <20230706085636.0795C867CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libgtk3: bump to
- version 3.24.38
+Message-Id: <20230706085635.C881D867CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libgcrypt: bump
+ to version 1.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91c51b76c7b6b190751bd3b3a18adc1d0d3db142
+commit: https://git.buildroot.net/buildroot/commit/?id=4b8eaecbddfc53a4686a583977409c03d141521d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Release notes:
+https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS;h=c9a239615f8070427a96688b1be40a81e59e9b8a;hb=1c5cbacf3d88dded5063e959ee68678ff7d0fa56
+
+Added upstream sha1 & sha256 hashes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 043d0e6f6ca0e99ab36bf845a56a416850d70fb1)
+(cherry picked from commit 9440d72ca9b95be2214a51d092ba59d0653f6148)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libgcrypt/libgcrypt.hash | 8 ++++----
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 22c37bf605..4d6c210c62 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 96f5e6b76c..cfbf9eaf17 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
 @@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.37.sha256sum
--sha256  6745f0b4c053794151fd0f0e2474b077cccff5f83e9dd1bf3d39fe9fe5fb7f57  gtk+-3.24.37.tar.xz
-+# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.38.sha256sum
-+sha256  ce11decf018b25bdd8505544a4f87242854ec88be054d9ade5f3a20444dd8ee7  gtk+-3.24.38.tar.xz
- 
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 8291b8d356..6655a0d097 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
+-# Locally calculated after checking signature
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.1.tar.bz2.sig
+-# using key 6DAA6E64A76D2840571B4902528897B826403ADA
+-sha256  ef14ae546b0084cd84259f61a55e07a38c3b53afc0f546bffcef2f01baffe9de  libgcrypt-1.10.1.tar.bz2
++# From https://www.gnupg.org/download/integrity_check.html
++sha1  0b9555960d84a09ea14e52360808f2e02e9c12d2  libgcrypt-1.10.2.tar.bz2
++sha256  3b9c02a004b68c256add99701de00b383accccf37177e0d6c58289664cce0c03  libgcrypt-1.10.2.tar.bz2
++# Locally calculated
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 9232debb3a..4fffe5360e 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).37
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).38
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+-LIBGCRYPT_VERSION = 1.10.1
++LIBGCRYPT_VERSION = 1.10.2
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
