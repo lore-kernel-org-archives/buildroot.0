@@ -4,66 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CD55EB64D9
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 17:01:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 403CDEB64D9
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jul 2023 17:01:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C199A41595;
-	Thu,  6 Jul 2023 17:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C199A41595
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB1AB415A0;
+	Thu,  6 Jul 2023 17:01:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB1AB415A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Za0_166O4E4L; Thu,  6 Jul 2023 17:01:23 +0000 (UTC)
+	with ESMTP id qH10u1f4Chku; Thu,  6 Jul 2023 17:01:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9DB34159A;
-	Thu,  6 Jul 2023 17:01:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9DB34159A
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5B07415AB;
+	Thu,  6 Jul 2023 17:01:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5B07415AB
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 34C731BF3DE
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 17:01:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 411ED1BF3DE
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 17:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E0DD41594
- for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 17:01:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E0DD41594
+ by smtp2.osuosl.org (Postfix) with ESMTP id 198D6415AB
+ for <buildroot@lists.busybox.net>; Thu,  6 Jul 2023 17:01:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 198D6415AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0RW01vW6DIfM for <buildroot@lists.busybox.net>;
- Thu,  6 Jul 2023 17:01:21 +0000 (UTC)
+ with ESMTP id dH81ba68P1zU for <buildroot@lists.busybox.net>;
+ Thu,  6 Jul 2023 17:01:33 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFA3141588
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0576E415A1
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EFA3141588
- for <buildroot@buildroot.org>; Thu,  6 Jul 2023 17:01:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0576E415A1
+ for <buildroot@buildroot.org>; Thu,  6 Jul 2023 17:01:32 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cfe4.dip0.t-ipconnect.de [79.214.207.228])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id BBDB5A4C0EBF;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C3FB4A4C0EF5;
  Thu,  6 Jul 2023 19:01:18 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36788)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qHSM2-0007xh-1K;
+ (envelope-from <bernd@kuhls.net>) id 1qHSM2-0007xh-1j;
  Thu, 06 Jul 2023 19:01:18 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu,  6 Jul 2023 19:01:05 +0200
-Message-Id: <20230706170106.10825-1-bernd@kuhls.net>
+Date: Thu,  6 Jul 2023 19:01:06 +0200
+Message-Id: <20230706170106.10825-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230706170106.10825-1-bernd@kuhls.net>
+References: <20230706170106.10825-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1688662878;
- bh=nlpaB5tQ+KgtB1TYosuvoiniBbRH6/hHrefyDFQOpZo=;
- h=From:To:Cc:Subject:Date:From;
- b=Qnntrd8jvWR/6RFZqb5VJT/esnQkekmxN5ImsFzExTTIQelkUc1MYlDKarKtonLXA
- Vc+Y9+i5k8cIN8JfUBTPFFOZfif93amlltAS/4JYOvROlthMK4xBZ/fbBOhcbt/7m4
- fsjyl1zwz8xLziFfUzLh+p7zK8YUZpKT+NcJEAKHUMSU+n216tvGNxJiR6PJbTt1K3
- ZR3kjdpe0f1j9kD2vv2PXGRbnj9GHM8aCePEaNN+93Ga3XKDxdmTiE40L5AcpOn9AA
- QnPpisMAIx9U0E2yjYrYxoAYtNE94f3XWVGTIX8ljMVBlbWcWLDXFNSJ7hfhcoMtYP
- oWvzI9e8GSCAA==
+ bh=8HGJUHz0NPFiqRHcgRZj+Thgy1vJQ1ejfdTZFjGDKrc=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=knOZlKdTjB9YxXrpJ2ziflj3g7zF+xWnLSiRt8qQWAF2m2a1BI0TSKwY9Q6pYYDNy
+ GyFJctD0bBgf6k62gh9Tmh95/p6UU7D8Nyl/e2HVih0y407WXGcFxSCDMByaaYaMdu
+ rrkw+qORGM9EJHYTXeATaGREECvqXzR88xbGZewpxTfTzRDp+Tgtip4iz97dlIqcTA
+ zof6+eAbFYqmQv1Op8OIZHuxpVNv3HscxiDpIRcMA0X6lVVfQDS7mvS0cToNqdKUTZ
+ uz4x0Dr7AdeSWSy0I3YXs732ivhIvht7gPSiY/K71aFt8qey396WsIKUdWdp3saDTn
+ rQk9lPf/qC4NA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=Qnntrd8j
-Subject: [Buildroot] [PATCH v2 1/2] package/onevpl: new package
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=knOZlKdT
+Subject: [Buildroot] [PATCH v2 2/2] package/onevpl-intel-gpu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,185 +78,79 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Samuel Martin <s.martin49@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: no changes
-
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- .../0001-Don-t-force-fstack-protector.patch   | 32 ++++++++++++++
- package/onevpl/Config.in                      | 26 +++++++++++
- package/onevpl/onevpl.hash                    |  3 ++
- package/onevpl/onevpl.mk                      | 43 +++++++++++++++++++
- 6 files changed, 106 insertions(+)
- create mode 100644 package/onevpl/0001-Don-t-force-fstack-protector.patch
- create mode 100644 package/onevpl/Config.in
- create mode 100644 package/onevpl/onevpl.hash
- create mode 100644 package/onevpl/onevpl.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 188c579010..891b9f3b48 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -411,6 +411,7 @@ F:	package/mesa3d/
- F:	package/minidlna/
- F:	package/mjpg-streamer/
- F:	package/nut/
-+F:	package/onevpl/
- F:	package/perl-crypt-openssl-guess/
- F:	package/perl-crypt-openssl-random/
- F:	package/perl-crypt-openssl-rsa/
-diff --git a/package/Config.in b/package/Config.in
-index bff090a661..caed8ed904 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1633,6 +1633,7 @@ menu "Graphics"
- 	source "package/libvips/Config.in"
- 	source "package/libwpe/Config.in"
- 	source "package/menu-cache/Config.in"
-+	source "package/onevpl/Config.in"
- 	source "package/opencl-clhpp/Config.in"
- 	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
-diff --git a/package/onevpl/0001-Don-t-force-fstack-protector.patch b/package/onevpl/0001-Don-t-force-fstack-protector.patch
-new file mode 100644
-index 0000000000..14948e28cc
---- /dev/null
-+++ b/package/onevpl/0001-Don-t-force-fstack-protector.patch
-@@ -0,0 +1,32 @@
-+From 682a9eabc71c2e33ebbbba2e75d0ba7caa08c7c8 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 8 May 2023 20:03:22 +0200
-+Subject: [PATCH] Don't force -fstack-protector
-+
-+This allows the environment to decide whether SSP should be used or
-+not, for example to support toolchains that don't have SSP support.
-+
-+Upstream: Not applicable
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ cmake/CompileOptions.cmake | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/cmake/CompileOptions.cmake b/cmake/CompileOptions.cmake
-+index 9923f1c..5b24622 100644
-+--- a/cmake/CompileOptions.cmake
-++++ b/cmake/CompileOptions.cmake
-+@@ -54,9 +54,6 @@ else()
-+       add_definitions("-D_FORTIFY_SOURCE=2")
-+     endif()
-+   endif()
-+-  if(NOT MINGW)
-+-    add_compile_options("-fstack-protector-strong")
-+-  endif()
-+   if(NOT MINGW)
-+     add_link_options("-Wl,-z,relro,-z,now,-z,noexecstack")
-+   endif()
-+-- 
-+2.39.2
-+
-diff --git a/package/onevpl/Config.in b/package/onevpl/Config.in
-new file mode 100644
-index 0000000000..65a34185e3
---- /dev/null
-+++ b/package/onevpl/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_ARCH_IS_64
-+	default y if BR2_arm
-+
-+config BR2_PACKAGE_ONEVPL
-+	bool "onevpl"
-+	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_LIBDRM_INTEL if BR2_PACKAGE_LIBVA
-+	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	help
-+	  oneAPI Video Processing Library (oneVPL) dispatcher,
-+	  tools, and examples
-+
-+	  https://github.com/oneapi-src/oneVPL
-+
-+comment "onevpl needs a toolchain w/ dynamic library, gcc >= 7, C++, threads"
-+	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/onevpl/onevpl.hash b/package/onevpl/onevpl.hash
-new file mode 100644
-index 0000000000..405c4ebe53
---- /dev/null
-+++ b/package/onevpl/onevpl.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  6378539dfd15c08aad4b7756c0dd694430c789a0aa2ebaf4352de18e59ab54e9  onevpl-2023.3.0.tar.gz
-+sha256  bf1cfac2e2792b6e1e995ce103d70796aecaf2ec7e4c5fe5474f7acec7b4a677  LICENSE
-diff --git a/package/onevpl/onevpl.mk b/package/onevpl/onevpl.mk
-new file mode 100644
-index 0000000000..abf94da0e2
---- /dev/null
-+++ b/package/onevpl/onevpl.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# onevpl
-+#
-+################################################################################
-+
-+ONEVPL_VERSION = 2023.3.0
-+ONEVPL_SITE = $(call github,oneapi-src,oneVPL,v$(ONEVPL_VERSION))
-+ONEVPL_LICENSE = MIT
-+ONEVPL_LICENSE_FILES = LICENSE
-+ONEVPL_INSTALL_STAGING = YES
-+ONEVPL_DEPENDENCIES = host-pkgconf
-+
-+ONEVPL_CONF_OPTS = \
-+	-DINSTALL_EXAMPLE_CODE=OFF
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+ONEVPL_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="-latomic"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBVA),y)
-+ONEVPL_CONF_OPTS += -DENABLE_VA=ON
-+ONEVPL_DEPENDENCIES += libva
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_VA=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+ONEVPL_CONF_OPTS += -DENABLE_WAYLAND=ON
-+ONEVPL_DEPENDENCIES += wayland wayland-protocols
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_WAYLAND=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+ONEVPL_CONF_OPTS += -DENABLE_X11=ON
-+ONEVPL_DEPENDENCIES += libxcb xlib_libX11
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_X11=OFF
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.39.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTogQmVybmQgS3VobHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgoKU2lnbmVkLW9mZi1i
+eTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLS0tCnYyOiBidW1wIHRvIDIzLjIuNAoK
+IERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIHBh
+Y2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIHBhY2th
+Z2Uvb25ldnBsLWludGVsLWdwdS9Db25maWcuaW4gICAgICAgICAgICB8IDIzICsrKysrKysrKysr
+KysrKysrKysKIC4uLi9vbmV2cGwtaW50ZWwtZ3B1L29uZXZwbC1pbnRlbC1ncHUuaGFzaCAgICB8
+ICAzICsrKwogcGFja2FnZS9vbmV2cGwtaW50ZWwtZ3B1L29uZXZwbC1pbnRlbC1ncHUubWsgIHwg
+MTMgKysrKysrKysrKysKIDUgZmlsZXMgY2hhbmdlZCwgNDEgaW5zZXJ0aW9ucygrKQogY3JlYXRl
+IG1vZGUgMTAwNjQ0IHBhY2thZ2Uvb25ldnBsLWludGVsLWdwdS9Db25maWcuaW4KIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBwYWNrYWdlL29uZXZwbC1pbnRlbC1ncHUvb25ldnBsLWludGVsLWdwdS5oYXNo
+CiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9vbmV2cGwtaW50ZWwtZ3B1L29uZXZwbC1pbnRl
+bC1ncHUubWsKCmRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwppbmRleCA4OTFi
+OWYzYjQ4Li5mNmExNTRhNGEwIDEwMDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBiL0RFVkVMT1BF
+UlMKQEAgLTQxMiw2ICs0MTIsNyBAQCBGOglwYWNrYWdlL21pbmlkbG5hLwogRjoJcGFja2FnZS9t
+anBnLXN0cmVhbWVyLwogRjoJcGFja2FnZS9udXQvCiBGOglwYWNrYWdlL29uZXZwbC8KK0Y6CXBh
+Y2thZ2Uvb25ldnBsLWludGVsLWdwdS8KIEY6CXBhY2thZ2UvcGVybC1jcnlwdC1vcGVuc3NsLWd1
+ZXNzLwogRjoJcGFja2FnZS9wZXJsLWNyeXB0LW9wZW5zc2wtcmFuZG9tLwogRjoJcGFja2FnZS9w
+ZXJsLWNyeXB0LW9wZW5zc2wtcnNhLwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9w
+YWNrYWdlL0NvbmZpZy5pbgppbmRleCBjYWVkOGVkOTA0Li43YjNlZGQ0NDk2IDEwMDY0NAotLS0g
+YS9wYWNrYWdlL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL0NvbmZpZy5pbgpAQCAtMTYzNCw2ICsx
+NjM0LDcgQEAgbWVudSAiR3JhcGhpY3MiCiAJc291cmNlICJwYWNrYWdlL2xpYndwZS9Db25maWcu
+aW4iCiAJc291cmNlICJwYWNrYWdlL21lbnUtY2FjaGUvQ29uZmlnLmluIgogCXNvdXJjZSAicGFj
+a2FnZS9vbmV2cGwvQ29uZmlnLmluIgorCXNvdXJjZSAicGFja2FnZS9vbmV2cGwtaW50ZWwtZ3B1
+L0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2Uvb3BlbmNsLWNsaHBwL0NvbmZpZy5pbiIKIAlz
+b3VyY2UgInBhY2thZ2Uvb3BlbmN2My9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL29wZW5j
+djQvQ29uZmlnLmluIgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9vbmV2cGwtaW50ZWwtZ3B1L0NvbmZp
+Zy5pbiBiL3BhY2thZ2Uvb25ldnBsLWludGVsLWdwdS9Db25maWcuaW4KbmV3IGZpbGUgbW9kZSAx
+MDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYTBjYTllM2Q3ZAotLS0gL2Rldi9udWxsCisrKyBiL3Bh
+Y2thZ2Uvb25ldnBsLWludGVsLWdwdS9Db25maWcuaW4KQEAgLTAsMCArMSwyMyBAQAorY29uZmln
+IEJSMl9QQUNLQUdFX09ORVZQTF9JTlRFTF9HUFUKKwlib29sICJvbmV2cGwtaW50ZWwtZ3B1Igor
+CWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfT05FVlBMX0FSQ0hfU1VQUE9SVFMgIyBvbmV2cGwKKwlk
+ZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUCAjIG9uZXZwbAorCWRlcGVuZHMgb24gIUJS
+Ml9TVEFUSUNfTElCUyAjIG9uZXZwbAorCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9HQ0NfQVRf
+TEVBU1RfNyAjIG9uZXZwbAorCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ18xICMg
+aW50ZWwtbWVkaWFkcml2ZXIgLT4gbWVzYTNkCisJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hB
+U19USFJFQURTICMgb25ldnBsCisJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURT
+X05QVEwgIyBpbnRlbC1tZWRpYWRyaXZlciAtPiBtZXNhM2QKKwlzZWxlY3QgQlIyX1BBQ0tBR0Vf
+SU5URUxfTUVESUFEUklWRVIgIyBydW50aW1lCisJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlZBCisJ
+c2VsZWN0IEJSMl9QQUNLQUdFX09ORVZQTAorCWhlbHAKKwkgIEludGVswq4gb25lVlBMIEdQVSBS
+dW50aW1lIGlzIGEgUnVudGltZSBpbXBsZW1lbnRhdGlvbiBvZgorCSAgb25lVlBMIEFQSSBmb3Ig
+SW50ZWwgR2VuIEdQVXMsIHN0YXJ0aW5nIHdpdGggVGlnZXIgTGFrZS4KKworCSAgaHR0cHM6Ly9n
+aXRodWIuY29tL29uZWFwaS1zcmMvb25lVlBMLWludGVsLWdwdQorCitjb21tZW50ICJvbmV2cGwt
+aW50ZWwtZ3B1IG5lZWRzIGEgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSwgZ2NjID49IDcs
+IEMrKywgTlBUTCIKKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX09ORVZQTF9BUkNIX1NVUFBPUlRT
+CisJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19TWU5DXzEKKwlkZXBlbmRzIG9uIEJSMl9T
+VEFUSUNfTElCUyB8fCAhQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNyB8fCBcCisJCSFCUjJf
+SU5TVEFMTF9MSUJTVERDUFAgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKZGlmZiAtLWdp
+dCBhL3BhY2thZ2Uvb25ldnBsLWludGVsLWdwdS9vbmV2cGwtaW50ZWwtZ3B1Lmhhc2ggYi9wYWNr
+YWdlL29uZXZwbC1pbnRlbC1ncHUvb25ldnBsLWludGVsLWdwdS5oYXNoCm5ldyBmaWxlIG1vZGUg
+MTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjViNWNjOWEwMDIKLS0tIC9kZXYvbnVsbAorKysgYi9w
+YWNrYWdlL29uZXZwbC1pbnRlbC1ncHUvb25ldnBsLWludGVsLWdwdS5oYXNoCkBAIC0wLDAgKzEs
+MyBAQAorIyBMb2NhbGx5IGNvbXB1dGVkCitzaGEyNTYgIDc3YTc2ODY0NWMzMjNkZmQzZTM5NWU2
+ZTdlMWFmZjg4NmE3ZDNhZjc1ZmI5ZjM4ZWU5ZTcwMTRkMTFlNjM1NmYgIG9uZXZwbC1pbnRlbC1n
+cHUtMjMuMi40LnRhci5negorc2hhMjU2ICBjMzFjM2NjNWZkNjZkMTI1MGRiY2ExYzNkOTAxMWE5
+Zjg3NDUzNzQ0MmFjNzFjOGRlODBmMmYwZmVkMTNmMjk3ICBMSUNFTlNFCmRpZmYgLS1naXQgYS9w
+YWNrYWdlL29uZXZwbC1pbnRlbC1ncHUvb25ldnBsLWludGVsLWdwdS5tayBiL3BhY2thZ2Uvb25l
+dnBsLWludGVsLWdwdS9vbmV2cGwtaW50ZWwtZ3B1Lm1rCm5ldyBmaWxlIG1vZGUgMTAwNjQ0Cmlu
+ZGV4IDAwMDAwMDAwMDAuLmVjODg5YWM0YjIKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL29u
+ZXZwbC1pbnRlbC1ncHUvb25ldnBsLWludGVsLWdwdS5tawpAQCAtMCwwICsxLDEzIEBACisjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIworIworIyBvbmV2cGwtaW50ZWwtZ3B1CisjCisjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIworCitPTkVWUExfSU5URUxfR1BVX1ZFUlNJT04gPSAyMy4yLjQKK09ORVZQ
+TF9JTlRFTF9HUFVfU0lURSA9ICQoY2FsbCBnaXRodWIsb25lYXBpLXNyYyxvbmVWUEwtaW50ZWwt
+Z3B1LGludGVsLW9uZXZwbC0kKE9ORVZQTF9JTlRFTF9HUFVfVkVSU0lPTikpCitPTkVWUExfSU5U
+RUxfR1BVX0xJQ0VOU0UgPSBNSVQKK09ORVZQTF9JTlRFTF9HUFVfTElDRU5TRV9GSUxFUyA9IExJ
+Q0VOU0UKK09ORVZQTF9JTlRFTF9HUFVfREVQRU5ERU5DSUVTID0gbGlidmEgb25ldnBsCisKKyQo
+ZXZhbCAkKGNtYWtlLXBhY2thZ2UpKQotLSAKMi4zOS4yCgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
