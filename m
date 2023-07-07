@@ -1,97 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A3BEEB64D9
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jul 2023 19:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F524EB64D9
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jul 2023 20:05:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 252E9405D4;
-	Fri,  7 Jul 2023 19:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 252E9405D4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85FE782E4C;
+	Fri,  7 Jul 2023 20:05:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85FE782E4C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ew367eDY8huo; Fri,  7 Jul 2023 20:05:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A03C582E9D;
+	Fri,  7 Jul 2023 20:05:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A03C582E9D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BB2C01BF405
+ for <buildroot@lists.busybox.net>; Fri,  7 Jul 2023 20:05:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A2FB14019D
+ for <buildroot@lists.busybox.net>; Fri,  7 Jul 2023 20:05:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2FB14019D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZoXrifRzQntj; Fri,  7 Jul 2023 19:08:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67404403A7;
-	Fri,  7 Jul 2023 19:08:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67404403A7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C644A1BF2B6
- for <buildroot@lists.busybox.net>; Fri,  7 Jul 2023 19:08:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE366611FB
- for <buildroot@lists.busybox.net>; Fri,  7 Jul 2023 19:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE366611FB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vozXG_GLR2Hf for <buildroot@lists.busybox.net>;
- Fri,  7 Jul 2023 19:08:07 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tWotFiaykToD for <buildroot@lists.busybox.net>;
+ Fri,  7 Jul 2023 20:05:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A29560F27
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A29560F27
- for <buildroot@buildroot.org>; Fri,  7 Jul 2023 19:08:07 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id
- 2adb3069b0e04-4fa48b5dc2eso3653580e87.1
- for <buildroot@buildroot.org>; Fri, 07 Jul 2023 12:08:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C8B4400AB
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5C8B4400AB
+ for <buildroot@buildroot.org>; Fri,  7 Jul 2023 20:05:23 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-3142ee41fd2so2380289f8f.3
+ for <buildroot@buildroot.org>; Fri, 07 Jul 2023 13:05:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1688756885; x=1691348885;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=uk2B/vaRL2RIMu8jSxs95+Ttfi7Lwir2fU13c/yDySs=;
- b=E8epeHEMfjYXrmtjyh2bxRJ76X6lxaC2x4dCMCEzI5y8dkvTV+Ss1RP4wMkSkfVAAA
- S1pdnUJKpt2rsCjq5Nx2NomZBBE2vqtni5DhhVhDRIzz0eFk3gd8uYWHVJtZWfL/aBwV
- kWooT3RS5Q04jkmD583BWu1KXzWQsRfqO+9j0vsBsd3k3XAyvg0j9oLzShJmLyG35nrV
- O/R4lkWHEstaHYzh2Hd91XepbxJA9skTii+wUbKqrio3rRtUSlCuGjndQN4KliQNKGvA
- FIDiKv7CQ7LXlO0azQG+BHxTxPg5+E9prNMJsj4G1ZrabeeYesvtSjlhElDCQ/Xodr8i
- EIbw==
-X-Gm-Message-State: ABy/qLY4qeQlT89ZNmPiiZK48QJ7/Z3y/DkWPigLAdJZvyMuvvkk9UN9
- P38DOxdX/c/evYK0L12ZbZzS6rwZD1Trg/i02jWRQQ==
-X-Google-Smtp-Source: APBJJlHWsngUCWTtxwv/KN1shp8AxTvO9oyEAJkgmZmoJ/+vgs/fK+xaq/7jXPQeiaU9Xx3R/We8fw==
-X-Received: by 2002:a05:6512:a90:b0:4f8:770f:1b08 with SMTP id
- m16-20020a0565120a9000b004f8770f1b08mr5438145lfu.13.1688756884631; 
- Fri, 07 Jul 2023 12:08:04 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com.
- [209.85.128.46]) by smtp.gmail.com with ESMTPSA id
- l15-20020aa7d94f000000b0051dd16f7e50sm2343883eds.44.2023.07.07.12.08.03
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 07 Jul 2023 12:08:04 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id
- 5b1f17b1804b1-3fbc6ab5ff5so24395105e9.1
- for <buildroot@buildroot.org>; Fri, 07 Jul 2023 12:08:03 -0700 (PDT)
-X-Received: by 2002:a1c:7c08:0:b0:3fb:b6f3:e528 with SMTP id
- x8-20020a1c7c08000000b003fbb6f3e528mr4788526wmc.25.1688756883453; Fri, 07 Jul
- 2023 12:08:03 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1688760321; x=1691352321;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=1QJo8zBqak/TFu40YctyZLN2bRS2YjZ8MkK3TRQuBDo=;
+ b=ilj7wjz/cQOlRe70cORtphCYJ56w1vKj59LK8oCyMEjkzCPylqaVGuOnrSSJ7h222z
+ opF1BsaVXWqcNhI2wKsH4oUY+uPb8RwdRox8xQOZ3X7ldygYHQiMpX5CRXKQckndFjKh
+ EnYAYDXxJYumGmZ1p1Gsh0nOhuH6+Qm1XcNcpwWm+IhGNJeKh2EEoCNvAbzS3e4AdSz+
+ NClbWKPU19XYhqi3oY8IosAjzPMp25C/N14qeH3lBH0J4k8d54XA8ZVbuQALupM4WS0g
+ L1idoXoETDN36RBAG6ngWpda3mTizZb4kND30MdcKMtlbeI8bYpOQJ9dLm/KVmxO7Hd0
+ AIuA==
+X-Gm-Message-State: ABy/qLaUCJq7T9cBKQGqqfz0UhxJIpA2LJbhK+vKUYQqa5gts/7UvD3Y
+ log8ssHGCT4W3ZyFOwlEY2HimSuXKlMa555j1wt4U4o+
+X-Google-Smtp-Source: APBJJlGUvy2/Emtit6S/lN7O9X5pIb5bGfiyeurw8tMlF75cb9d97pamwG+PbZNrYCpu7wbgoTtJZkqhgn8NQgf97H4=
+X-Received: by 2002:a05:6000:150:b0:306:46c4:d313 with SMTP id
+ r16-20020a056000015000b0030646c4d313mr4764491wrx.28.1688760321027; Fri, 07
+ Jul 2023 13:05:21 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230707185106.98208-1-ckhardin@gmail.com>
  <CA+h8R2ro85otAvxzWshcrrwPVyrAiZ0vEdtrMNKXLX8mvOBwdA@mail.gmail.com>
-In-Reply-To: <CA+h8R2ro85otAvxzWshcrrwPVyrAiZ0vEdtrMNKXLX8mvOBwdA@mail.gmail.com>
-Date: Fri, 7 Jul 2023 12:07:52 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2qsM9OGKgvHz_oZBSD+t4-oMjK+TMu34AneoaJVnPsnDA@mail.gmail.com>
-Message-ID: <CA+h8R2qsM9OGKgvHz_oZBSD+t4-oMjK+TMu34AneoaJVnPsnDA@mail.gmail.com>
-To: Charles Hardin <ckhardin@gmail.com>
+ <CA+h8R2qsM9OGKgvHz_oZBSD+t4-oMjK+TMu34AneoaJVnPsnDA@mail.gmail.com>
+In-Reply-To: <CA+h8R2qsM9OGKgvHz_oZBSD+t4-oMjK+TMu34AneoaJVnPsnDA@mail.gmail.com>
+From: Charles Hardin <ckhardin@gmail.com>
+Date: Fri, 7 Jul 2023 13:05:09 -0700
+Message-ID: <CAN=fXj0yUyOncAf40AUnjt6=23ZQhqdBU7aoihfW1wViYjqWTw@mail.gmail.com>
+To: Christian Stewart <christian@aperture.us>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1688756885; x=1691348885;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=uk2B/vaRL2RIMu8jSxs95+Ttfi7Lwir2fU13c/yDySs=;
- b=xfexHHQ6UTttASmSqUbEqt5fQ3ai7UppkvFWPEbr/76Q2PfFZCUg1nXK+zx6hIPzab
- T53MLQHzn67p7/Mzez3oVsXYh3Tk9gUxP2D6qMLpLrVpTelyosWpHg7Y/RotM3amnNEX
- zsBwjBtwloQ/S1vZKM39z4VtqNdrMmgVokM4qlRZpLQQ1/yFV8TtkLNufih6VCUaEjXL
- Rvn/3D9hfetVSV6tWo5raJoVHLfiexVajvAE6id5A1l6fMKJN9iDpsXjhAGy+hswIVNB
- MICFu80puhhdyM529J2mZKpl746jrURb/jT5qgZWYZ5um3jzrDBCMSB7veNp9D2XeYnY
- nuEQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=xfexHHQ6
+ d=gmail.com; s=20221208; t=1688760321; x=1691352321;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=1QJo8zBqak/TFu40YctyZLN2bRS2YjZ8MkK3TRQuBDo=;
+ b=pPJm6FyD1ZV1nypHutM6bdspkw8WxjGHTobrAeDnUoyUdIKNI8ICJMsQVrXJJarqXr
+ Q2DwR6BL8H1TobdUZxaCU2Klo3gJi054NfYgnewFxSNvB7a8lILxIoCh2/Fm6CzQRgMG
+ ZuRW4OMn/ujjErrDmWPHoCKGAYVNqiihBgCWhc/hMFWaYX+iogLmNY5z94QJEmG++YE4
+ 2DHry23GfZvFnIlFRpjhgynUTbzHhpfTWtlrpq+arOSPxG3A0fnUF6OU53cu3ws7JWGa
+ oZ6gwMbibKiDX+L2rd4sa8TiMvaEdZj8hrv4r3N3Y+NttlWnCi3wo1zBz7wdXX0tCl2M
+ x25A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=pPJm6FyD
 Subject: Re: [Buildroot] [PATCH 1/1] package/go-native: add a new download
  only package for go compilers
 X-BeenThere: buildroot@buildroot.org
@@ -105,40 +93,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
 Cc: Anisse Astier <anisse@astier.eu>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1483389492269236767=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQ2hhcmxlcywKCgpPbiBGcmksIEp1bCA3LCAyMDIzIGF0IDEyOjA04oCvUE0gQ2hyaXN0aWFu
-IFN0ZXdhcnQgPGNocmlzdGlhbkBhcGVydHVyZS51cz4gd3JvdGU6Cj4gVGhpcyBpcyBub3QgbmVj
-ZXNzYXJ5IHdpdGggdGhpcyBwYXRjaCBzZXJpZXM6Cj4KPiBodHRwczovL3BhdGNod29yay5vemxh
-YnMub3JnL3Byb2plY3QvYnVpbGRyb290L2xpc3QvP3Nlcmllcz0zNTg0NTEKPgo+IFdlIGNhbiBj
-b3JyZWN0bHkgYm9vdHN0cmFwIG9uIGFybTY0LgoKSSBzaG91bGQgY2xhcmlmeTogYWN0dWFsbHkg
-Z28gYm9vdHN0cmFwIHN0YWdlMSBjYW5ub3Qgd29yayBvbiBhcm02NAooeW91J3JlIGNvcnJlY3Qg
-b24gdGhpcykuCgpJIGhhZCBzdWJtaXR0ZWQgdGhpcyBwYXRjaCBhcyB3ZWxsIHRvIHVzZSB0aGUg
-aG9zdCAiZ28iIGluIHRoaXMgY2FzZToKCmh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJv
-amVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyMzAyMTUwNzMyNTYuMTg2NDc2LTMtY2hyaXN0aWFuQHBh
-cmFsLmluLwoKU2ltaWxhciB0byBob3cgd2UgdXNlIGhvc3QgZ2NjLgoKSG93ZXZlciwgSSB1bmRl
-cnN0YW5kIHRoYXQgeW91ciBzZXJpZXMgaW50ZW5kcyB0byBhZGQgZG93bmxvYWRpbmcgdGhlCmJp
-bmFyaWVzIGZvciB0aGUgR28gY29tcGlsZXIgdG8gQnVpbGRyb290IGFzIHdlbGwuCgpUaGlzIGlz
-IHBvdGVudGlhbGx5IHVzZWZ1bCBidXQgSSBzdGlsbCBzdWJtaXQgdGhhdCB3ZSBuZWVkIHRvIG1l
-cmdlCnRoZSBhYm92ZSBzZXJpZXMgdXBkYXRpbmcgdG8gR28gMS4yMCBhbmQgc3BsaXR0aW5nIHRo
-ZSBib290c3RyYXAgaW50bwp0d28gcGhhc2VzIGJlZm9yZSBtZXJnaW5nIHRoZSBnby1uYXRpdmUg
-c2VyaWVzLgoKSSdsbCBzdGFydCB0ZXN0aW5nIHlvdXIgcGF0Y2ggYXMgd2VsbC4KClRoYW5rcywK
-Q2hyaXN0aWFuCgo+IE9uIEZyaSwgSnVsIDcsIDIwMjMgYXQgMTE6NTHigK9BTSBDaGFybGVzIEhh
-cmRpbiA8Y2toYXJkaW5AZ21haWwuY29tPiB3cm90ZToKPiA+Cj4gPiBUaGUgZ28tbmF0aXZlIGlz
-IG1haW5seSBmb3IgdGhlIGFhcmNoNjQgc3VwcG9ydCBzaW5jZSB0aGF0IHdhcwo+ID4gYWRkZWQg
-YWZ0ZXIgdGhlIGdvLWJvb3RzdHJhcCB3cml0dGVuIGluIEMgd2FzIGRyb3BwZWQuIFNvLCB0bwo+
-ID4gZ2V0IGEgY3Jvc3MgY29tcGlsZXIgZm9yIGdvIGEgaG9zdC9uYXRpdmUgY29tcGlsZXIgbmVl
-ZHMgdG8gYmUKPiA+IGF2YWlsYWJsZSB0byBnZW5lcmF0ZSB0aGUgc2V0dXAgZm9yIHRoZSBuZWVk
-ZWQgdGFyZ2V0LiBUaGlzIGlzCj4gPiB1c2luZyB0aGUgc2FtZSBnbyB2ZXJzaW9uIGFzIHRoZSBl
-eHBlY3RlZCBjcm9zcy1jb21waWxlciB0bwo+ID4ga2VlcCB0aGUgcGFja2FnZXMgaW4gc3luYy4g
-QSBzcGVjaWZpYyB2ZXJzaW9uIGNvdWxkIGJlIHVzZWQuCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+--===============1483389492269236767==
+Content-Type: multipart/alternative; boundary="0000000000000bb0f005ffeb2727"
+
+--0000000000000bb0f005ffeb2727
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Christian
+
+On Fri, Jul 7, 2023 at 12:08=E2=80=AFPM Christian Stewart <christian@apertu=
+re.us>
+wrote:
+
+> Hi Charles,
+>
+>
+> On Fri, Jul 7, 2023 at 12:04=E2=80=AFPM Christian Stewart <christian@aper=
+ture.us>
+> wrote:
+> > This is not necessary with this patch series:
+> >
+> > https://patchwork.ozlabs.org/project/buildroot/list/?series=3D358451
+> >
+> > We can correctly bootstrap on arm64.
+>
+> I should clarify: actually go bootstrap stage1 cannot work on arm64
+> (you're correct on this).
+>
+> I had submitted this patch as well to use the host "go" in this case:
+>
+>
+> https://patchwork.ozlabs.org/project/buildroot/patch/20230215073256.18647=
+6-3-christian@paral.in/
+>
+> Similar to how we use host gcc.
+>
+>
+Weird - i was looking for a fix and never saw - perhaps i didn't have the
+magic google search keywords. So, this was "our fix" to just get something
+working specifically on a aarch64 builds. This is our annual timeline of
+let's take our patches we have locally and send them upstream to see what
+happens and see if we can drop our local patches in favor of upstream fixes=
+.
+
+
+> However, I understand that your series intends to add downloading the
+> binaries for the Go compiler to Buildroot as well.
+>
+> This is potentially useful but I still submit that we need to merge
+> the above series updating to Go 1.20 and splitting the bootstrap into
+> two phases before merging the go-native series.
+>
+>
+I just went for a quick and dirty to just use a native instead of doing the
+bootstrap - we have a major issue in that we don't have many x86_64 build
+systems anymore and we are having to move to aarch64 builds almost
+exclusively. So, not having a way to get the compiler going was becoming a
+headache.
+
+
+> I'll start testing your patch as well.
+>
+>
+This is not meant to replace - more of a - here is a way that worked for
+us, if there is a better way that fits into buildroot then please just
+merge that. Right now we don't have anything in the proper mainline so
+everything is a deviation at this time.
+
+
+> Thanks,
+> Christian
+>
+> > On Fri, Jul 7, 2023 at 11:51=E2=80=AFAM Charles Hardin <ckhardin@gmail.=
+com>
+> wrote:
+> > >
+> > > The go-native is mainly for the aarch64 support since that was
+> > > added after the go-bootstrap written in C was dropped. So, to
+> > > get a cross compiler for go a host/native compiler needs to be
+> > > available to generate the setup for the needed target. This is
+> > > using the same go version as the expected cross-compiler to
+> > > keep the packages in sync. A specific version could be used.
+>
+
+--0000000000000bb0f005ffeb2727
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr">Christian</div><br><div class=3D"gmail_qu=
+ote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Jul 7, 2023 at 12:08=E2=
+=80=AFPM Christian Stewart &lt;<a href=3D"mailto:christian@aperture.us">chr=
+istian@aperture.us</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote=
+" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);=
+padding-left:1ex">Hi Charles,<br>
+<br>
+<br>
+On Fri, Jul 7, 2023 at 12:04=E2=80=AFPM Christian Stewart &lt;<a href=3D"ma=
+ilto:christian@aperture.us" target=3D"_blank">christian@aperture.us</a>&gt;=
+ wrote:<br>
+&gt; This is not necessary with this patch series:<br>
+&gt;<br>
+&gt; <a href=3D"https://patchwork.ozlabs.org/project/buildroot/list/?series=
+=3D358451" rel=3D"noreferrer" target=3D"_blank">https://patchwork.ozlabs.or=
+g/project/buildroot/list/?series=3D358451</a><br>
+&gt;<br>
+&gt; We can correctly bootstrap on arm64.<br>
+<br>
+I should clarify: actually go bootstrap stage1 cannot work on arm64<br>
+(you&#39;re correct on this).<br>
+<br>
+I had submitted this patch as well to use the host &quot;go&quot; in this c=
+ase:<br>
+<br>
+<a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/20230215073=
+256.186476-3-christian@paral.in/" rel=3D"noreferrer" target=3D"_blank">http=
+s://patchwork.ozlabs.org/project/buildroot/patch/20230215073256.186476-3-ch=
+ristian@paral.in/</a><br>
+<br>
+Similar to how we use host gcc.<br>
+<br></blockquote><div><br></div><div>Weird=C2=A0- i was looking for a fix a=
+nd never saw - perhaps i didn&#39;t have the magic google search keywords. =
+So, this was &quot;our fix&quot; to just get something working specifically=
+ on a aarch64 builds. This is our annual timeline of let&#39;s take our pat=
+ches we have locally and send them upstream to see what happens and see if =
+we can drop our local patches in favor of upstream fixes.</div><div>=C2=A0<=
+/div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bo=
+rder-left:1px solid rgb(204,204,204);padding-left:1ex">
+However, I understand that your series intends to add downloading the<br>
+binaries for the Go compiler to Buildroot as well.<br>
+<br>
+This is potentially useful but I still submit that we need to merge<br>
+the above series updating to Go 1.20 and splitting the bootstrap into<br>
+two phases before merging the go-native series.<br>
+<br></blockquote><div><br></div><div>I just went for a quick and dirty to j=
+ust use a native instead of doing the bootstrap - we have a major issue in =
+that we don&#39;t have many x86_64 build systems anymore and we are having =
+to move to aarch64 builds almost exclusively. So, not having a way to get t=
+he compiler going was becoming a headache.</div><div>=C2=A0</div><blockquot=
+e class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px s=
+olid rgb(204,204,204);padding-left:1ex">
+I&#39;ll start testing your patch as well.<br>
+<br></blockquote><div><br></div><div>This is not meant to replace - more of=
+ a - here is a way that worked for us, if there is a better way that fits i=
+nto buildroot then please just merge that. Right now we don&#39;t have anyt=
+hing in the proper mainline so everything is a deviation at this time.</div=
+><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px=
+ 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+Thanks,<br>
+Christian<br>
+<br>
+&gt; On Fri, Jul 7, 2023 at 11:51=E2=80=AFAM Charles Hardin &lt;<a href=3D"=
+mailto:ckhardin@gmail.com" target=3D"_blank">ckhardin@gmail.com</a>&gt; wro=
+te:<br>
+&gt; &gt;<br>
+&gt; &gt; The go-native is mainly for the aarch64 support since that was<br=
+>
+&gt; &gt; added after the go-bootstrap written in C was dropped. So, to<br>
+&gt; &gt; get a cross compiler for go a host/native compiler needs to be<br=
+>
+&gt; &gt; available to generate the setup for the needed target. This is<br=
+>
+&gt; &gt; using the same go version as the expected cross-compiler to<br>
+&gt; &gt; keep the packages in sync. A specific version could be used.<br>
+</blockquote></div></div>
+
+--0000000000000bb0f005ffeb2727--
+
+--===============1483389492269236767==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1483389492269236767==--
