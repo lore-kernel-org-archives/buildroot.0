@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA1CEEB64DA
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 15:43:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16451EB64DA
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 16:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96EDE60B30;
-	Sat,  8 Jul 2023 15:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96EDE60B30
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B319415F1;
+	Sat,  8 Jul 2023 16:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B319415F1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v9X9mgUhKHt4; Sat,  8 Jul 2023 16:36:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A714415F2;
+	Sat,  8 Jul 2023 16:36:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A714415F2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 969851BF47A
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 16:36:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E4AA60B42
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 16:36:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E4AA60B42
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CXnULe2xmzym; Sat,  8 Jul 2023 15:43:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D770A60D58;
-	Sat,  8 Jul 2023 15:43:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D770A60D58
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CDF361BF863
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 15:42:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B63E8403CC
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 15:42:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B63E8403CC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8epeT_eHoq9E for <buildroot@lists.busybox.net>;
- Sat,  8 Jul 2023 15:42:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2F1C40004
- for <buildroot@buildroot.org>; Sat,  8 Jul 2023 15:42:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2F1C40004
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB8D585EDE; Sat,  8 Jul 2023 15:42:49 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6V1fmO0nQwg7 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jul 2023 16:36:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37E2860B38
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 37E2860B38
+ for <buildroot@buildroot.org>; Sat,  8 Jul 2023 16:36:46 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cfe4.dip0.t-ipconnect.de [79.214.207.228])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 80C29A4C0C68
+ for <buildroot@buildroot.org>; Sat,  8 Jul 2023 18:36:44 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41128)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qIAvM-000729-0x
+ for buildroot@buildroot.org; Sat, 08 Jul 2023 18:36:44 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jul 2023 17:42:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 40c7d10b2be015ef13557adb5841fa7d2795048b
-X-Git-Newrev: 3ca3304276bd155d3d29fb87f227866bd7f32ec7
-X-Patchwork-Hint: ignore
-Message-Id: <20230708154249.CB8D585EDE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: bump version to 8.2.8
+Date: Sat,  8 Jul 2023 18:36:44 +0200
+Message-Id: <20230708163644.710352-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: +++++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1688834204;
+ bh=kg5QI6PyYjRi2qFFeZEZIyTuybQeBJ9dVb25E7pz9kI=;
+ h=From:To:Subject:Date:From;
+ b=Gd7Mb4wxSl9UYH4EfzT1RJGw2UI2c/Rpri/qBU4Ph1DXistDPoBoH9OMzAx3d11Z0
+ yimI6mJrmlbELoyCun6XrggStbkNQVRzVXs5ddf60lL0f2KiR5I0qCzkurir1uMu1Y
+ f9obhHrWLymUbBExfuS3k8GnF6Q0TL1Cg0sOc3iIS9ZZQoaiIl003JZ620tLr6bwM1
+ jJM+OMt4FSVX6bKeBD7ys7huoP+GFgod91x4TJZ6TEasmPkToAtXP0KmJzMCEFO8WA
+ RWXK5AUJP5fE2lEARIML6xlfzWLSrjHV94Csdh+g4+2nkxG6XOZZ0EMMqsgCWeKlHD
+ ygroZ1qpJh/QA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=Gd7Mb4wx
+Subject: [Buildroot] [PATCH 1/1] fs/ubifs: increase logical eraseblock size
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +75,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ca3304276bd155d3d29fb87f227866bd7f32ec7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This value is unchanged since 2008 and too small for current images.
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.2.8
+Fixes:
+http://autobuild.buildroot.net/results/f72/f72918d63510b170e5da01bfa9c247cf9dcf507f/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+There is no particular reason for the new value, it was just the first
+value I found working for this defconfig while increasing it in steps
+of 0x10000.
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 4fe77f1c5b..9fb4aebec1 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  4b9fb3dcd7184fe7582d7e44544ec7c5153852a2528de3b6754791258ffbdfa0  php-8.2.7.tar.xz
-+sha256  cfe1055fbcd486de7d3312da6146949aae577365808790af6018205567609801  php-8.2.8.tar.xz
+ fs/ubifs/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index e79ab9a17e..bad26bf99f 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -7,7 +7,7 @@ if BR2_TARGET_ROOTFS_UBIFS
  
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 3bb27f1306..6a2a6ae71b 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.2.7
-+PHP_VERSION = 8.2.8
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
+ 	hex "logical eraseblock size"
+-	default 0x1f800
++	default 0x3f800
+ 	help
+ 	  Logical eraseblock (LEB) size. The value provided here is
+ 	  passed to the -e/--leb-size option of mkfs.ubifs.
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
