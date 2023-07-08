@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 858B4EB64DA
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 19:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 499B4EB64DA
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 19:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 274D3402E8;
-	Sat,  8 Jul 2023 19:44:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 274D3402E8
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA44D400CB;
+	Sat,  8 Jul 2023 19:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA44D400CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ISOm5FItor4D; Sat,  8 Jul 2023 19:44:58 +0000 (UTC)
+	with ESMTP id Zf4zaCv4tLve; Sat,  8 Jul 2023 19:45:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49F68400CB;
-	Sat,  8 Jul 2023 19:44:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49F68400CB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2492F1BF2B9
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED2F5405A5;
+	Sat,  8 Jul 2023 19:45:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED2F5405A5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 386C81BF863
  for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:44:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 001A6819B4
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:44:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 001A6819B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 138FD60ACC
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:44:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 138FD60ACC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pp7WAFgsxZKq for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id arN5K2VcfVK1 for <buildroot@lists.busybox.net>;
  Sat,  8 Jul 2023 19:44:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BADBC81985
+X-Greylist: delayed 00:09:16 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B39A660A9D
 Received: from iodev.co.uk (iodev.co.uk [46.30.189.100])
- by smtp1.osuosl.org (Postfix) with ESMTP id BADBC81985
+ by smtp3.osuosl.org (Postfix) with ESMTP id B39A660A9D
  for <buildroot@buildroot.org>; Sat,  8 Jul 2023 19:44:53 +0000 (UTC)
 Received: from localhost (80.red-83-50-209.dynamicip.rima-tde.net
- [83.50.209.80]) by iodev.co.uk (Postfix) with ESMTPSA id B84DF1E99BF;
- Sat,  8 Jul 2023 21:35:29 +0200 (CEST)
+ [83.50.209.80]) by iodev.co.uk (Postfix) with ESMTPSA id 3DB0F1E99C2;
+ Sat,  8 Jul 2023 21:36:09 +0200 (CEST)
 From: Ismael Luceno <ismael@iodev.co.uk>
 To: buildroot@buildroot.org
-Date: Sat,  8 Jul 2023 21:35:20 +0200
-Message-Id: <20230708193520.31844-1-ismael@iodev.co.uk>
+Date: Sat,  8 Jul 2023 21:36:06 +0200
+Message-Id: <20230708193606.32014-1-ismael@iodev.co.uk>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Spam: Yes
 Subject: [Buildroot] [PATCH] package/pounce: New package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -136,7 +135,7 @@ index 000000000000..a827bd389f40
 +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
 diff --git a/package/pounce/pounce.mk b/package/pounce/pounce.mk
 new file mode 100644
-index 000000000000..b9a0bf06a8d9
+index 000000000000..b0a28efd91bd
 --- /dev/null
 +++ b/package/pounce/pounce.mk
 @@ -0,0 +1,14 @@
@@ -147,7 +146,7 @@ index 000000000000..b9a0bf06a8d9
 +################################################################################
 +
 +POUNCE_VERSION = 3.1
-+POUNCE_SITE = https://git.causal.agency/pounce/
++POUNCE_SITE = https://git.causal.agency/pounce/snapshot
 +POUNCE_SOURCE = pounce-$(POUNCE_VERSION).tar.gz
 +POUNCE_LICENSE = GPL-3.0+
 +POUNCE_LICENSE_FILES = LICENSE
