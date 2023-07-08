@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B807EB64DA
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 15:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 843EFEB64DA
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 15:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAEC360BF8;
-	Sat,  8 Jul 2023 15:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAEC360BF8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E77660B4C;
+	Sat,  8 Jul 2023 15:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E77660B4C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EXegtiAEUz3c; Sat,  8 Jul 2023 15:42:37 +0000 (UTC)
+	with ESMTP id jE37o_2VXLAo; Sat,  8 Jul 2023 15:42:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF5760B1C;
-	Sat,  8 Jul 2023 15:42:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EF5760B1C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 970981BF4E5
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 15:42:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DF1C60B30;
+	Sat,  8 Jul 2023 15:42:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DF1C60B30
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C8FAD1BF4E5
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 15:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 724FA403CC
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 15:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 724FA403CC
+ by smtp1.osuosl.org (Postfix) with ESMTP id A444281E1A
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 15:42:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A444281E1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rCwU9y5Hbycv for <buildroot@lists.busybox.net>;
- Sat,  8 Jul 2023 15:42:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63CBB40004
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 63CBB40004
- for <buildroot@buildroot.org>; Sat,  8 Jul 2023 15:42:34 +0000 (UTC)
-X-GND-Sasl: peter@korsgaard.com
-X-GND-Sasl: peter@korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 38E7BE0004;
- Sat,  8 Jul 2023 15:42:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qIA4s-003rLM-2v; Sat, 08 Jul 2023 17:42:30 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y1H-QEY6feBa for <buildroot@lists.busybox.net>;
+ Sat,  8 Jul 2023 15:42:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D68AD81DFC
+ for <buildroot@buildroot.org>; Sat,  8 Jul 2023 15:42:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D68AD81DFC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C26AF85EDB; Sat,  8 Jul 2023 15:42:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230707053442.192171-1-bernd@kuhls.net>
-Date: Sat, 08 Jul 2023 17:42:30 +0200
-In-Reply-To: <20230707053442.192171-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Fri, 7 Jul 2023 07:34:42 +0200")
-Message-ID: <877craz9y1.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.2.8
+To: buildroot@buildroot.org
+Date: Sat, 8 Jul 2023 17:41:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a7e4f557f5c5874c84d6ae2e28d752603e18ab3f
+X-Git-Newrev: 40c7d10b2be015ef13557adb5841fa7d2795048b
+X-Patchwork-Hint: ignore
+Message-Id: <20230708154249.C26AF85EDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dfu-programmer: link with -latomic
+ if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,21 +57,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=40c7d10b2be015ef13557adb5841fa7d2795048b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changelog: https://www.php.net/ChangeLog-8.php#8.2.8
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes:
+http://autobuild.buildroot.net/results/e2b/e2b813fdcbb3862366609affe88551c3036b21b8/
 
-Committed, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dfu-programmer/dfu-programmer.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dfu-programmer/dfu-programmer.mk b/package/dfu-programmer/dfu-programmer.mk
+index 3b1589125c..707e143eb3 100644
+--- a/package/dfu-programmer/dfu-programmer.mk
++++ b/package/dfu-programmer/dfu-programmer.mk
+@@ -18,4 +18,8 @@ endef
+ 
+ DFU_PROGRAMMER_POST_PATCH_HOOKS == DFU_PROGRAMMER_ADD_MISSING_FILE
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++DFU_PROGRAMMER_CONF_OPTS += LIBS=-latomic
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
