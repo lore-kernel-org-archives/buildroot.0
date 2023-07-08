@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 111D9EB64DA
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 19:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57509EB64DA
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 19:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8206E40327;
-	Sat,  8 Jul 2023 19:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8206E40327
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00CA6409B5;
+	Sat,  8 Jul 2023 19:42:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00CA6409B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AhBzo8yW9SiC; Sat,  8 Jul 2023 19:42:36 +0000 (UTC)
+	with ESMTP id 7q_p7OZlxokh; Sat,  8 Jul 2023 19:42:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6DFB405A5;
-	Sat,  8 Jul 2023 19:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6DFB405A5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A8DF01BF2B9
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:42:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FD58405FA;
+	Sat,  8 Jul 2023 19:42:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FD58405FA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9621B1BF2B9
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:42:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 83DB460ACC
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:42:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83DB460ACC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 71F7D81F04
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:42:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71F7D81F04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TYLiBxKsj_Iy for <buildroot@lists.busybox.net>;
- Sat,  8 Jul 2023 19:42:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XBsJFA_UIkGH for <buildroot@lists.busybox.net>;
+ Sat,  8 Jul 2023 19:42:44 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BFBE60A9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EC9081E76
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8BFBE60A9D
- for <buildroot@buildroot.org>; Sat,  8 Jul 2023 19:42:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8EC9081E76
+ for <buildroot@buildroot.org>; Sat,  8 Jul 2023 19:42:44 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cfe4.dip0.t-ipconnect.de [79.214.207.228])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id F1A53A4C0E88;
- Sat,  8 Jul 2023 21:41:50 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 0F2F8A4C0EF5;
+ Sat,  8 Jul 2023 21:41:51 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:43470)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qIDoU-0005KE-0N;
+ (envelope-from <bernd@kuhls.net>) id 1qIDoT-0005KE-37;
  Sat, 08 Jul 2023 21:41:50 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  8 Jul 2023 21:41:49 +0200
-Message-Id: <20230708194149.3441129-6-bernd@kuhls.net>
+Date: Sat,  8 Jul 2023 21:41:47 +0200
+Message-Id: <20230708194149.3441129-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230708194149.3441129-1-bernd@kuhls.net>
 References: <20230708194149.3441129-1-bernd@kuhls.net>
@@ -53,19 +53,19 @@ MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1688845310;
- bh=qyRqvdcAN+eHGmfRU6flR9enrr2wee8e2SLL1DWZ5OU=;
+ s=kas202306131828; t=1688845311;
+ bh=5df64PyHz5eiMw+QxFhqeP2xxHDIf0jfN/H6X0NaBoU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=igEGmMmMMnWw8KFoiSvk91AZdiFvc2U5FO109EV063PlN2GVMNdC/NX80wZHK6I0R
- xJ9ta0oIfekN80jXvNM4q2AI07CrRNgrPjtAPSDpIX51RILGIny2gmdYnfw42ByNFr
- oZraff14LHUHPOv6RgQrr1yiPltN0LpIO4mzyJqf642xWqdwv6sxnUCoW35QfOBiKy
- MrrkHgXLPaX/I072gnsQcA1iOPTjMcqCTzu2UAq4TQpLDA2BVXvdmOsjkQknXBB6+r
- o3D4DJCRDptLwgbis1S3P6dvZz2EDPkPeydGlvux2t8oXoeG6qvcsqNtECox7W00Eb
- jEcanUQaaQmfw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=wL4s5ImMIUfg+iKYMUoQopdG6ZKUpltZqfE6bllK0qdaCAG8EdqxAKWSv1yjSgjhi
+ HHiIrQD/Z5Jv/ode3fKIhDf0ScW0w4Qa3ZTOzbLB1cljPRa/I8+lxAiDCqXaGMXXPa
+ flciKUFGEIyO85zwm38+9oR93Jj5E+Wac6sdIAsYJs18nGVHHyrK/zQj9GAgoUUZaG
+ f8qxyUTC+1Dm/lOndImtkh0GbscolBTmPXERNf4attIsG/p6rc9PkfmbtzOTsVaRNO
+ 6k/7tFMTuFD99bWuI8j5liQrN67W3xMedGislAaGVhkWkN7k47pyouGZ3+tvQXJ4fb
+ P+F+gjEDSQ7sg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=igEGmMmM
-Subject: [Buildroot] [PATCH 6/6] package/perl-uri: bump version to 5.19
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=wL4s5ImM
+Subject: [Buildroot] [PATCH 4/6] package/perl-net-dns: bump version to 1.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,42 +84,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Removed md5 hash.
 
-Switch to new maintainer repo as indicated by metacpan.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/perl-uri/perl-uri.hash | 3 +--
- package/perl-uri/perl-uri.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/perl-net-dns/perl-net-dns.hash | 3 +--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index daf043347f..eaf57623b3 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index a98ac3525d..f6292d242a 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,6 +1,5 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  63675c429cfb1df73d7d21a9302e1000  URI-5.17.tar.gz
--sha256  5f7e42b769cb27499113cfae4b786c37d49e7c7d32dbb469602cd808308568f8  URI-5.17.tar.gz
-+sha256  8fed5f819905c8a8e18f4447034322d042c3536b43c13ac1f09ba92e1a50a394  URI-5.19.tar.gz
+-md5  b70b74481908d995f57569ab7cfe6432  Net-DNS-1.36.tar.gz
+-sha256  143ba0e530f8b727be61ec052974cbf52df5b0afc0582d75b04809e0b2a95ebe  Net-DNS-1.36.tar.gz
++sha256  e99cdedf9f0d60dca16f613e488c5b7f123c2fb24b3346d580cfe7da40851ac6  Net-DNS-1.39.tar.gz
  
  # computed by scancpan
- sha256  d4f0b7a8771dcb1eee79a38c2e466eb997e23565a6687dd1900a2027eabe12a0  LICENSE
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index d4bfcb44ef..a7fab863a6 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,9 +4,9 @@
+ sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index f4c20c07ad..2626c22d64 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_URI_VERSION = 5.17
-+PERL_URI_VERSION = 5.19
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
--PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
-+PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SI/SIMBABQUE
- PERL_URI_LICENSE = Artistic or GPL-1.0+
- PERL_URI_LICENSE_FILES = LICENSE
- PERL_URI_DISTNAME = URI
+-PERL_NET_DNS_VERSION = 1.36
++PERL_NET_DNS_VERSION = 1.39
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 -- 
 2.39.2
 
