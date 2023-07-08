@@ -4,69 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1902EB64DA
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 19:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 858B4EB64DA
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 19:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 748AE409E1;
-	Sat,  8 Jul 2023 19:43:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 748AE409E1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 274D3402E8;
+	Sat,  8 Jul 2023 19:44:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 274D3402E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tnyr47mIZQGQ; Sat,  8 Jul 2023 19:43:01 +0000 (UTC)
+	with ESMTP id ISOm5FItor4D; Sat,  8 Jul 2023 19:44:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A01B7405B3;
-	Sat,  8 Jul 2023 19:43:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A01B7405B3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 49F68400CB;
+	Sat,  8 Jul 2023 19:44:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49F68400CB
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 875DE1BF2B9
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:42:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2492F1BF2B9
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:44:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FDAC81F04
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FDAC81F04
+ by smtp1.osuosl.org (Postfix) with ESMTP id 001A6819B4
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:44:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 001A6819B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6j2QUVIbknRG for <buildroot@lists.busybox.net>;
- Sat,  8 Jul 2023 19:42:56 +0000 (UTC)
+ with ESMTP id Pp7WAFgsxZKq for <buildroot@lists.busybox.net>;
+ Sat,  8 Jul 2023 19:44:53 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BB1881E76
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8BB1881E76
- for <buildroot@buildroot.org>; Sat,  8 Jul 2023 19:42:56 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6cfe4.dip0.t-ipconnect.de [79.214.207.228])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 21E81A4C0EF6;
- Sat,  8 Jul 2023 21:41:51 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43470)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qIDoT-0005KE-2w;
- Sat, 08 Jul 2023 21:41:49 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BADBC81985
+Received: from iodev.co.uk (iodev.co.uk [46.30.189.100])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BADBC81985
+ for <buildroot@buildroot.org>; Sat,  8 Jul 2023 19:44:53 +0000 (UTC)
+Received: from localhost (80.red-83-50-209.dynamicip.rima-tde.net
+ [83.50.209.80]) by iodev.co.uk (Postfix) with ESMTPSA id B84DF1E99BF;
+ Sat,  8 Jul 2023 21:35:29 +0200 (CEST)
+From: Ismael Luceno <ismael@iodev.co.uk>
 To: buildroot@buildroot.org
-Date: Sat,  8 Jul 2023 21:41:46 +0200
-Message-Id: <20230708194149.3441129-3-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230708194149.3441129-1-bernd@kuhls.net>
-References: <20230708194149.3441129-1-bernd@kuhls.net>
+Date: Sat,  8 Jul 2023 21:35:20 +0200
+Message-Id: <20230708193520.31844-1-ismael@iodev.co.uk>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1688845311;
- bh=q/IgfaIX8CtWnY9bbOIjaN2e4fg1ep8jHBC7qPbMAvQ=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=XL+NwEYbBHvmeae/3iPOlZDzM43bF7NZEVPTjwh5WJjjSBbM+72ZDEJNYQN5jA1IW
- hzZBoEp4X9P/2iPBhvQZ9S3p/ifK7Z4cgvCGsXR3sTn18mfpDVl01n04ZX6/JmIqe5
- GcBqTRwAuz4yHegzmAJeLSqD3rVY7Z5ZykZNF6nEuMNSm/3QKWTBZ9S9yZbtMDjnij
- 7QsGYQ4wA6BeMkdpJZi+ZpimWlAIFFYF+TnZbR+bSU+qlz37aySdJvI2RRz76hpP5W
- +gE23m7VIU2jm+LOC+oapuKEZ/KyIWm/Pk95B6z9hakTKJSfchMpd7hZHfur61qW5b
- 5JYiCRrqGZoZg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=XL+NwEYb
-Subject: [Buildroot] [PATCH 3/6] package/perl-mail-dkim: bump version to
- 1.20230630
+X-Spam: Yes
+Subject: [Buildroot] [PATCH] package/pounce: New package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,46 +57,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Ismael Luceno <ismael@iodev.co.uk>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed md5 hash.
+Simple IRC bouncer.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 ---
- package/perl-mail-dkim/perl-mail-dkim.hash | 3 +--
- package/perl-mail-dkim/perl-mail-dkim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/pounce/Config.in   | 18 ++++++++++++++++++
+ package/pounce/pounce.hash |  3 +++
+ package/pounce/pounce.mk   | 14 ++++++++++++++
+ 5 files changed, 37 insertions(+)
+ create mode 100644 package/pounce/Config.in
+ create mode 100644 package/pounce/pounce.hash
+ create mode 100644 package/pounce/pounce.mk
 
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index 6edeaa9d8b..5b0e77294d 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
-@@ -1,6 +1,5 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  5a0dec58f0c2526521b2952a3c126906  Mail-DKIM-1.20220520.tar.gz
--sha256  8ac4b8c84bbfad00a3d24bf676493d207dd3cd4a735efabb9e17181534f23646  Mail-DKIM-1.20220520.tar.gz
-+sha256  0fa09a93a00f43ac91017a91628265ae7d47deb507e2770532bbb2597550d3d4  Mail-DKIM-1.20230630.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 188c579010a5..cbcd7a7527ea 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1322,6 +1322,7 @@ F:	package/exempi/
+ N:	Ismael Luceno <ismael@iodev.co.uk>
+ F:	package/axel/
+ F:	package/mawk/
++F:	package/pounce/
  
- # computed by scancpan
- sha256  ffaa40feb768566e52d93879fedd2c5483828b6de483874f30a0a4425351555f  LICENSE
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index f3383a02bf..4f4d86ee10 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_MAIL_DKIM_VERSION = 1.20220520
-+PERL_MAIL_DKIM_VERSION = 1.20230630
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
- PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
- PERL_MAIL_DKIM_LICENSE = Artistic or GPL-1.0+
+ N:	Jagan Teki <jagan@amarulasolutions.com>
+ F:	board/amarula/
+diff --git a/package/Config.in b/package/Config.in
+index bff090a66163..b2bda179a402 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2444,6 +2444,7 @@ endif
+ 	source "package/phytool/Config.in"
+ 	source "package/pimd/Config.in"
+ 	source "package/pixiewps/Config.in"
++	source "package/pounce/Config.in"
+ 	source "package/pound/Config.in"
+ 	source "package/pppd/Config.in"
+ 	source "package/pptp-linux/Config.in"
+diff --git a/package/pounce/Config.in b/package/pounce/Config.in
+new file mode 100644
+index 000000000000..83bb66643652
+--- /dev/null
++++ b/package/pounce/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_POUNCE
++	bool "pounce"
++	select BR2_PACKAGE_LIBRESSL
++	help
++	  pounce is a multi-client, TLS-only IRC bouncer. It maintains a
++	  persistent connection to an IRC server, acting as a proxy and
++	  buffer for a number of clients. When a client connects, any
++	  messages received since it last disconnected will be relayed to
++	  it. Unlike some other bouncers, pounce uses a single buffer for
++	  all IRC messages, which acts as a queue from which each client
++	  reads messages independently.
++
++	  pounce speaks regular modern IRC to both servers and clients, using
++	  the server-time extension to indicate when messages originally
++	  occurred. Clients identify themselves to pounce by their IRC
++	  usernames.
++
++	  https://git.causal.agency/pounce/
+diff --git a/package/pounce/pounce.hash b/package/pounce/pounce.hash
+new file mode 100644
+index 000000000000..a827bd389f40
+--- /dev/null
++++ b/package/pounce/pounce.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  97f245556b1cc940553fca18f4d7d82692e6c11a30f612415e5e391e5d96604e  pounce-3.1.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/pounce/pounce.mk b/package/pounce/pounce.mk
+new file mode 100644
+index 000000000000..b9a0bf06a8d9
+--- /dev/null
++++ b/package/pounce/pounce.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# pounce
++#
++################################################################################
++
++POUNCE_VERSION = 3.1
++POUNCE_SITE = https://git.causal.agency/pounce/
++POUNCE_SOURCE = pounce-$(POUNCE_VERSION).tar.gz
++POUNCE_LICENSE = GPL-3.0+
++POUNCE_LICENSE_FILES = LICENSE
++POUNCE_DEPENDENCIES = libressl
++
++$(eval $(autotools-package))
 -- 
-2.39.2
+2.40.1
 
 _______________________________________________
 buildroot mailing list
