@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 499B4EB64DA
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 19:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 534EAEB64DA
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jul 2023 20:04:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA44D400CB;
-	Sat,  8 Jul 2023 19:45:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA44D400CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1F7E60A9D;
+	Sat,  8 Jul 2023 20:04:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1F7E60A9D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zf4zaCv4tLve; Sat,  8 Jul 2023 19:45:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aQW-f_xwOics; Sat,  8 Jul 2023 20:04:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED2F5405A5;
-	Sat,  8 Jul 2023 19:45:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED2F5405A5
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE40D607DE;
+	Sat,  8 Jul 2023 20:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE40D607DE
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 386C81BF863
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:44:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67F241BF3DF
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 20:04:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 138FD60ACC
- for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 19:44:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 138FD60ACC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3ED91607DE
+ for <buildroot@lists.busybox.net>; Sat,  8 Jul 2023 20:04:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ED91607DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id arN5K2VcfVK1 for <buildroot@lists.busybox.net>;
- Sat,  8 Jul 2023 19:44:53 +0000 (UTC)
-X-Greylist: delayed 00:09:16 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B39A660A9D
-Received: from iodev.co.uk (iodev.co.uk [46.30.189.100])
- by smtp3.osuosl.org (Postfix) with ESMTP id B39A660A9D
- for <buildroot@buildroot.org>; Sat,  8 Jul 2023 19:44:53 +0000 (UTC)
-Received: from localhost (80.red-83-50-209.dynamicip.rima-tde.net
- [83.50.209.80]) by iodev.co.uk (Postfix) with ESMTPSA id 3DB0F1E99C2;
- Sat,  8 Jul 2023 21:36:09 +0200 (CEST)
-From: Ismael Luceno <ismael@iodev.co.uk>
+ with ESMTP id R-vMQgTRJwvw for <buildroot@lists.busybox.net>;
+ Sat,  8 Jul 2023 20:04:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FFD1607C0
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3FFD1607C0
+ for <buildroot@buildroot.org>; Sat,  8 Jul 2023 20:04:50 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cfe4.dip0.t-ipconnect.de [79.214.207.228])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8D99AA4C0930;
+ Sat,  8 Jul 2023 22:04:47 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55090)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qIEAh-0000uD-12;
+ Sat, 08 Jul 2023 22:04:47 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  8 Jul 2023 21:36:06 +0200
-Message-Id: <20230708193606.32014-1-ismael@iodev.co.uk>
-X-Mailer: git-send-email 2.40.1
+Date: Sat,  8 Jul 2023 22:04:41 +0200
+Message-Id: <20230708200447.3919009-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/pounce: New package
+X-Spamd-Bar: --
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1688846687;
+ bh=Zwo3oJWdf6sUCcNLUVHhSxbxhM+mbgjtZywXzbdVCFU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=OdwYu44X1B2UJxxk9YnfSsMVuHpV2Ng3hltBnXoENBVFVwHSq71XoBeofUvNDRl0B
+ gh8WNTD6CZKUmJ12xWhMEOAXe2lLcTSRLYTcItOIkNgZtjjJ+3/04ya67gI9RqRtEE
+ urLJshcKhk1S7TKqe0nLEVsP7ZzdPQHE/3dHqiHx8MsvVuSX85P0U5wa+PmGSdXh7f
+ 0h0+GbsRe2DU16vdNADyjUeVarVZP3HhsqoNMKnK87VmGH2gMhH50Ea4q47457EoCr
+ uhfgfXhCtKme+O+1IyifY/AWfcifNijPLRuQPA1p2ZJdsVUo2XgR7MyspfvFanwg4F
+ a/pTW4s6bzLaw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=OdwYu44X
+Subject: [Buildroot] [PATCH 1/7] package/libde265: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,105 +75,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ismael Luceno <ismael@iodev.co.uk>
+Cc: Pieter De Gendt <pieter.degendt@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Simple IRC bouncer.
+Optional dependency of the upcoming libheif package.
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/pounce/Config.in   | 18 ++++++++++++++++++
- package/pounce/pounce.hash |  3 +++
- package/pounce/pounce.mk   | 14 ++++++++++++++
- 5 files changed, 37 insertions(+)
- create mode 100644 package/pounce/Config.in
- create mode 100644 package/pounce/pounce.hash
- create mode 100644 package/pounce/pounce.mk
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/libde265/Config.in     | 12 ++++++++++++
+ package/libde265/libde265.hash |  3 +++
+ package/libde265/libde265.mk   | 13 +++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/libde265/Config.in
+ create mode 100644 package/libde265/libde265.hash
+ create mode 100644 package/libde265/libde265.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 188c579010a5..cbcd7a7527ea 100644
+index 188c579010..53a58923e3 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1322,6 +1322,7 @@ F:	package/exempi/
- N:	Ismael Luceno <ismael@iodev.co.uk>
- F:	package/axel/
- F:	package/mawk/
-+F:	package/pounce/
- 
- N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/amarula/
+@@ -366,6 +366,7 @@ F:	package/libcdio/
+ F:	package/libcec/
+ F:	package/libcodec2/
+ F:	package/libcrossguid/
++F:	package/libde265/
+ F:	package/libdeflate/
+ F:	package/libdrm/
+ F:	package/libdvbcsa/
 diff --git a/package/Config.in b/package/Config.in
-index bff090a66163..b2bda179a402 100644
+index 3abbce72a1..58d02a5918 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2444,6 +2444,7 @@ endif
- 	source "package/phytool/Config.in"
- 	source "package/pimd/Config.in"
- 	source "package/pixiewps/Config.in"
-+	source "package/pounce/Config.in"
- 	source "package/pound/Config.in"
- 	source "package/pppd/Config.in"
- 	source "package/pptp-linux/Config.in"
-diff --git a/package/pounce/Config.in b/package/pounce/Config.in
+@@ -1831,6 +1831,7 @@ menu "Multimedia"
+ 	source "package/libbluray/Config.in"
+ 	source "package/libcamera/Config.in"
+ 	source "package/libcamera-apps/Config.in"
++	source "package/libde265/Config.in"
+ 	source "package/libdvbcsa/Config.in"
+ 	source "package/libdvbpsi/Config.in"
+ 	source "package/libdvbsi/Config.in"
+diff --git a/package/libde265/Config.in b/package/libde265/Config.in
 new file mode 100644
-index 000000000000..83bb66643652
+index 0000000000..2436beff41
 --- /dev/null
-+++ b/package/pounce/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_POUNCE
-+	bool "pounce"
-+	select BR2_PACKAGE_LIBRESSL
++++ b/package/libde265/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBDE265
++	bool "libde265"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	help
-+	  pounce is a multi-client, TLS-only IRC bouncer. It maintains a
-+	  persistent connection to an IRC server, acting as a proxy and
-+	  buffer for a number of clients. When a client connects, any
-+	  messages received since it last disconnected will be relayed to
-+	  it. Unlike some other bouncers, pounce uses a single buffer for
-+	  all IRC messages, which acts as a queue from which each client
-+	  reads messages independently.
++	  libde265 is an open source implementation of the h.265 video
++	  codec.
 +
-+	  pounce speaks regular modern IRC to both servers and clients, using
-+	  the server-time extension to indicate when messages originally
-+	  occurred. Clients identify themselves to pounce by their IRC
-+	  usernames.
++	  https://github.com/strukturag/libde265
 +
-+	  https://git.causal.agency/pounce/
-diff --git a/package/pounce/pounce.hash b/package/pounce/pounce.hash
++comment "libde265 needs a toolchain w/ threads, C++"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libde265/libde265.hash b/package/libde265/libde265.hash
 new file mode 100644
-index 000000000000..a827bd389f40
+index 0000000000..168b5db395
 --- /dev/null
-+++ b/package/pounce/pounce.hash
++++ b/package/libde265/libde265.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  97f245556b1cc940553fca18f4d7d82692e6c11a30f612415e5e391e5d96604e  pounce-3.1.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/pounce/pounce.mk b/package/pounce/pounce.mk
++sha256  62185ea2182e68cf68bba20cc6eb4c287407b509cf0a827d7ddb75614db77b5c  libde265-1.0.12.tar.gz
++sha256  02cc1585a20677992e0ba578fa692635dc193735f2691dc81de924b51c4e8020  COPYING
+diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
 new file mode 100644
-index 000000000000..b0a28efd91bd
+index 0000000000..60424c0de6
 --- /dev/null
-+++ b/package/pounce/pounce.mk
-@@ -0,0 +1,14 @@
++++ b/package/libde265/libde265.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# pounce
++# libde265
 +#
 +################################################################################
 +
-+POUNCE_VERSION = 3.1
-+POUNCE_SITE = https://git.causal.agency/pounce/snapshot
-+POUNCE_SOURCE = pounce-$(POUNCE_VERSION).tar.gz
-+POUNCE_LICENSE = GPL-3.0+
-+POUNCE_LICENSE_FILES = LICENSE
-+POUNCE_DEPENDENCIES = libressl
++LIBDE265_VERSION = 1.0.12
++LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
++LIBDE265_LICENSE = LGPL-3.0+
++LIBDE265_LICENSE_FILES = COPYING
++LIBDE265_INSTALL_STAGING = YES
 +
-+$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
-2.40.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
