@@ -4,68 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA927EB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:30:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B62FEB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:30:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96E6960644;
-	Sun,  9 Jul 2023 16:30:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96E6960644
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3878160741;
+	Sun,  9 Jul 2023 16:30:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3878160741
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZtXf9TjsSPxc; Sun,  9 Jul 2023 16:29:59 +0000 (UTC)
+	with ESMTP id YKq9jr7e2yA7; Sun,  9 Jul 2023 16:30:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBDE160D9D;
-	Sun,  9 Jul 2023 16:29:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBDE160D9D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB8D51BF423
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:29:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88E14606F5;
+	Sun,  9 Jul 2023 16:30:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88E14606F5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E26E1BF423
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85EF4409A7
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:29:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85EF4409A7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76F2D81882
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:30:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76F2D81882
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Y6b0lZxGSs2 for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 16:29:47 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E54B1409A5
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E54B1409A5
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:29:46 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9F0CE1BF205;
- Sun,  9 Jul 2023 16:29:43 +0000 (UTC)
-Date: Sun, 9 Jul 2023 18:29:42 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230709182942.2ef996fd@windsurf>
-In-Reply-To: <20230709095058.1547133-2-bernd@kuhls.net>
-References: <20230709095058.1547133-1-bernd@kuhls.net>
- <20230709095058.1547133-2-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688920184;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=y6//M43TIRAXzPIxjToXa9lkIY1jlpm89aJNfrFEAkE=;
- b=GFZVfTWrZdj1Xip83AE/ocywq0ZaEJog6CcJrmrLrnhxLxZmZpJFkxBZfW6QdM9uLo11Mz
- 9GDAxFYY6rqD8qp3rUEZvqMYuHnjoLeM2eny3UibhVemOKx1N2ddqkIpxf2G7leceEr3oP
- oauZqDlBrgfX7DY/G4Brxyb3UPeENDZzaIDQVAciZRI/CfRPYDl8F6qcTnNlE/L4+Bvyee
- xCmzDohr86BQYfYn05MdAedTmspnJbS0a91sKfNsxH7KkBG0cCFm/tdf5GeXziEw/AxsHc
- drKIdSTb9XzWjnslV4vDc+R9gmO3dxQzk5sI5yHLSxGmH/e8p9NXkVvrtPB9/Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GFZVfTWr
-Subject: Re: [Buildroot] [PATCH 2/2] package/fwts: bump version to 23.07.00
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 78o50lqaeqv1 for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 16:30:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFC9B81871
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFC9B81871
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9FDE586942; Sun,  9 Jul 2023 16:30:23 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 9 Jul 2023 18:30:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a749a93b7def81096f33310a5892f677c9fc8bb1
+X-Git-Newrev: af5ccec266dbb7925ac12622f379dacb20087ddd
+X-Patchwork-Hint: ignore
+Message-Id: <20230709163023.9FDE586942@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/genrandconfig: disable cramfs images
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,35 +57,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  9 Jul 2023 11:50:58 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=af5ccec266dbb7925ac12622f379dacb20087ddd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> https://wiki.ubuntu.com/FirmwareTestSuite/ReleaseNotes
-> 
-> Updated license hash due to copyright year bump and formatting changes:
-> https://git.launchpad.net/fwts/commit/debian/copyright?id=64d2ea181d887d877104cd08defbd3427015070a
-> https://git.launchpad.net/fwts/commit/debian/copyright?id=88edd4da5885e182a339c57c4d70768f6fab695b
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/fwts/fwts.hash | 4 ++--
->  package/fwts/fwts.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes build error:
 
-Applied to master, thanks.
+  warning: estimate of required size (upper bound) is 1374MB, but
+  maximum image size is 272MB, we might die prematurely
+  mkcramfs: filesystem too big
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+http://autobuild.buildroot.net/results/d47/d47f9b462707dffe1b6665f143701303b04e2adc/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 2b0baedf31..0938260c1b 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -512,6 +512,9 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_TARGET_OPTEE_OS=y\n')
+         configlines.remove('BR2_TARGET_OPTEE_OS_PLATFORM=""\n')
+ 
++    if 'BR2_TARGET_ROOTFS_CRAMFS=y\n' in configlines:
++        configlines.remove('BR2_TARGET_ROOTFS_CRAMFS=y\n')
++
+     if 'BR2_TARGET_ROOTFS_EXT2=y\n' in configlines and \
+        'BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n' in configlines:
+         configlines.remove('BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
