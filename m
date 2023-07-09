@@ -4,46 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A052EB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:29:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BDD1EB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:29:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC0D360591;
-	Sun,  9 Jul 2023 16:29:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC0D360591
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15D8D60BFE;
+	Sun,  9 Jul 2023 16:29:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15D8D60BFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9-x9IX9kLRt8; Sun,  9 Jul 2023 16:29:31 +0000 (UTC)
+	with ESMTP id VggJeSm4a1-d; Sun,  9 Jul 2023 16:29:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFFE160757;
-	Sun,  9 Jul 2023 16:29:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFFE160757
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4001F1BF423
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:29:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58654606A9;
+	Sun,  9 Jul 2023 16:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58654606A9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B1401BF423
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2511D40017
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:29:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2511D40017
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6C09409A7
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:29:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6C09409A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fo_9jzBK60Xk for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 16:29:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CDB14011C
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:29:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CDB14011C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B6A28693A; Sun,  9 Jul 2023 16:29:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 9 Jul 2023 18:28:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a239f14efdd4eb0fcbf89d403cde4dd31205a41
-X-Git-Newrev: a749a93b7def81096f33310a5892f677c9fc8bb1
-X-Patchwork-Hint: ignore
-Message-Id: <20230709162916.2B6A28693A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fwts: bump version to 23.07.00
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3CgJDAgZxtPe for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 16:29:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19F36409A5
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 19F36409A5
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:29:42 +0000 (UTC)
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C46C01C0006;
+ Sun,  9 Jul 2023 16:29:39 +0000 (UTC)
+Date: Sun, 9 Jul 2023 18:29:38 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230709182938.00cef6ca@windsurf>
+In-Reply-To: <20230709095058.1547133-1-bernd@kuhls.net>
+References: <20230709095058.1547133-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1688920180;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=cgGr8ub514a9jFmgBgdkrdV/fBbTAQjVDT3roaN41AY=;
+ b=KQ23wzZ8kjWnSIl5/5Ejb5dyW7kdmOtqju99wpwfW4e6uoM2ycc/7uJWQIObZSFCVRNFdH
+ cL7MvbG5y7oMjpnbztIzpvjo+s99hTDWIWSDcGmdIwuxXdi1KzvTAvZjmDCaDkHAfbkJze
+ XRqJYVHfwqspywcFQ2CmEpAnCjxuRHTmvk67NQlgivsc/6UsvNuHiYrtK3U/lFLmORbRR7
+ pGFLldcKqlUzaxWmrd/PUpMbKIItb0hbv1volG1fAPv+ips7NpHgS0GeUWL9l1wYuWVjD0
+ zg0tYN7dtJxbL4d2aQWxXfBSZZjKMpkRZmaIOzDxGnAA5/7X9SWN+RzJis09kQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=KQ23wzZ8
+Subject: Re: [Buildroot] [PATCH 1/2] package/fwts: Fix build with
+ BR2_OPTIMIZE_0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,54 +79,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a749a93b7def81096f33310a5892f677c9fc8bb1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  9 Jul 2023 11:50:57 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Release notes:
-https://wiki.ubuntu.com/FirmwareTestSuite/ReleaseNotes
+> Fixes:
+> http://autobuild.buildroot.net/results/fab/fabd031d38cb618cdb11b4a86cd853b0da61695b/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/fwts/fwts.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Updated license hash due to copyright year bump and formatting changes:
-https://git.launchpad.net/fwts/commit/debian/copyright?id=64d2ea181d887d877104cd08defbd3427015070a
-https://git.launchpad.net/fwts/commit/debian/copyright?id=88edd4da5885e182a339c57c4d70768f6fab695b
+I've applied, but of course it isn't really nice. Has this issue been
+reported upstream?
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/fwts/fwts.hash | 4 ++--
- package/fwts/fwts.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thanks!
 
-diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
-index 612bc768dd..8525d47ecb 100644
---- a/package/fwts/fwts.hash
-+++ b/package/fwts/fwts.hash
-@@ -1,5 +1,5 @@
- # Hash from: http://fwts.ubuntu.com/release/SHA256SUMS
--sha256  fee1c323fb9725c2b99c348c434d63196391cad66566d34b42707e55d14d7f25  fwts-V22.09.00.tar.gz
-+sha256  a15e11c42856e9dfcf7ac23ed370618d2777eb996dd7843accf12d45b21b551c  fwts-V23.07.00.tar.gz
- 
- # Hash for license file
--sha256  fbbea748555635dd8c7e6e2f99cddd778f5ee3f9e3510775183bf9799076e5e5  debian/copyright
-+sha256  b9e44b1f9f65178e037a59a31b051b51dbd6a531d27c8775d3438a6ce53fc874  debian/copyright
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index 3af54a1afd..f06609777d 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FWTS_VERSION = 22.09.00
-+FWTS_VERSION = 23.07.00
- FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
- FWTS_SITE = http://fwts.ubuntu.com/release
- FWTS_STRIP_COMPONENTS = 0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
