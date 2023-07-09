@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5CC2EB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 09:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66EAFEB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 09:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39C6960773;
-	Sun,  9 Jul 2023 09:16:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C6960773
+	by smtp3.osuosl.org (Postfix) with ESMTP id D525F60864;
+	Sun,  9 Jul 2023 09:25:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D525F60864
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9pfd_XfdtsGt; Sun,  9 Jul 2023 09:16:30 +0000 (UTC)
+	with ESMTP id sbi59lIBIHa1; Sun,  9 Jul 2023 09:25:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61F0160777;
-	Sun,  9 Jul 2023 09:16:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61F0160777
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE648605F6;
+	Sun,  9 Jul 2023 09:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE648605F6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AC3C21BF57F
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 09:16:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 08A921BF57F
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 09:25:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92B1F60777
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 09:16:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92B1F60777
+ by smtp3.osuosl.org (Postfix) with ESMTP id E393460773
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 09:25:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E393460773
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BtbCB8_06ccb for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 09:16:26 +0000 (UTC)
+ with ESMTP id Kxvp4ZReex63 for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 09:24:59 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C677560773
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 761A4605F6
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C677560773
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 09:16:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 761A4605F6
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 09:24:59 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0896.dip0.t-ipconnect.de [91.58.8.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8D69EA4C00F9;
- Sun,  9 Jul 2023 11:16:22 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39874)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B0C55A4C00F9
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 11:24:56 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49250)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qIQWk-0000oY-15;
- Sun, 09 Jul 2023 11:16:22 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qIQf2-0002H2-0z
+ for buildroot@buildroot.org; Sun, 09 Jul 2023 11:24:56 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  9 Jul 2023 11:16:22 +0200
-Message-Id: <20230709091622.1022345-1-bernd@kuhls.net>
+Date: Sun,  9 Jul 2023 11:24:56 +0200
+Message-Id: <20230709092456.1035068-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1688894182;
- bh=5BjmSWmXbt8B6JdP+Z+C7wMcifMvO2Zezj2z1E7pYgc=;
- h=From:To:Cc:Subject:Date:From;
- b=yiiKl4+Xdp4Tn+DwCTjhpjXDpmfHOWHTGuMmunk/DY1sxH7CSb/gaGwkcPWbmei+Y
- RP7HuTxksHH7q3+pherghRs83ofCClrGEoL+uaoxUcQ1CyWDKoEShc5B4KD6FVQO5J
- kGL2LWQMIIEimkj4G9e2FIfzi00eG36Gd8vL+IQo2pXXk23qtBzkDpW32XeapxK/p/
- haLQ3Mm8Ek4kgYWqktd3laVKF3Dr1tBgeq0I0UTbWDkGTFy/TU0WoGRury0VFiVifv
- GyreaLbNZbAz79VpODrgmbOWCDdW4OCCfxYli6LMfjY0n7FXMy7uwWVomLx7pVLoBB
- q6SxTLtKhgyFA==
+ s=kas202306131828; t=1688894696;
+ bh=X9stIVqp8tcAyyIEUnKnsWAs6aOJeOCVjPUrZRUrkcw=;
+ h=From:To:Subject:Date:From;
+ b=fg7zzvn4n0f4QjuUS0HLRFXgQVYp64gQJER2nqadERt7syqNQ8Jqza8RQmu0RqAA7
+ 7zSyVO5p0uak6OxU1R54dz9rWRB4TnD7o2cOmJq2HblMvJCm8I9n5ZfoOmWZxre0Dp
+ rKpotcUbAROkTsKkysX2zDuc/vwo0/T83qEj7m0cBT0sDkEUJIDSWAh5Bqwd/0vEmU
+ m/pXnn9HDxfv07m/dyQCxK/rs1Pbkz3q6d2cMvh4iL3hD+p/2/Dpj7q+dA9LOTRTUQ
+ ai/8knUaijzDjE99DUs0R0aGVbn8y3pmLwYBJqCJ4v3uJ51WLAr/OVVmHY/Khotlgr
+ rbl5BLpW0ytCQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=yiiKl4+X
-Subject: [Buildroot] [PATCH 1/1] package/shadow: Fix yescrypt-only build
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=fg7zzvn4
+Subject: [Buildroot] [PATCH 1/1] package/zlib-ng: bump version to 2.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,65 +75,235 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/afd/afd5d59f94986593cd697148f4cce2bf70e4d81b/
+Removed all patches because they are included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../shadow/0001-Fix-yescrypt-support.patch    | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/shadow/0001-Fix-yescrypt-support.patch
+ ...rd-for-vec_sumsu-to-prevent-undefine.patch | 27 ------
+ ...ix-version-in-zlib.pc-when-building-.patch | 53 -----------
+ ...-sys-auxv.h-exists-at-configure-time.patch | 90 -------------------
+ package/zlib-ng/zlib-ng.hash                  |  2 +-
+ package/zlib-ng/zlib-ng.mk                    |  2 +-
+ 5 files changed, 2 insertions(+), 172 deletions(-)
+ delete mode 100644 package/zlib-ng/0001-Use-static-keyword-for-vec_sumsu-to-prevent-undefine.patch
+ delete mode 100644 package/zlib-ng/0002-CMakeLists.txt-fix-version-in-zlib.pc-when-building-.patch
+ delete mode 100644 package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch
 
-diff --git a/package/shadow/0001-Fix-yescrypt-support.patch b/package/shadow/0001-Fix-yescrypt-support.patch
-new file mode 100644
-index 0000000000..e346a2ece0
---- /dev/null
-+++ b/package/shadow/0001-Fix-yescrypt-support.patch
-@@ -0,0 +1,38 @@
-+From 7a63017b3c873a59e3482322b7824160a8c8ca67 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sun, 9 Jul 2023 10:55:03 +0200
-+Subject: [PATCH] Fix yescrypt support
-+
-+Fixes build error:
-+newusers.c: In function 'update_passwd':
-+newusers.c:433:21: error: 'sflg' undeclared (first use in this function); did you mean 'rflg'?
-+
-+introduced by
-+https://github.com/shadow-maint/shadow/commit/5cd04d03f94622c12220d4a6352824af081b8531
-+which forgot to define sflg for these configure options:
-+
-+--without-sha-crypt --without-bcrypt --with-yescrypt
-+
-+Upstream: https://github.com/shadow-maint/shadow/pull/748
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/newusers.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/newusers.c b/src/newusers.c
-+index 7cb8434b..08f79798 100644
-+--- a/src/newusers.c
-++++ b/src/newusers.c
-+@@ -60,7 +60,7 @@ static bool rflg = false;	/* create a system account */
-+ #ifndef USE_PAM
-+ static /*@null@*//*@observer@*/char *crypt_method = NULL;
-+ #define cflg (NULL != crypt_method)
-+-#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT)
-++#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT) || defined(USE_YESCRYPT)
-+ static bool sflg = false;
-+ #endif
-+ #ifdef USE_SHA_CRYPT
-+-- 
-+2.39.2
-+
+diff --git a/package/zlib-ng/0001-Use-static-keyword-for-vec_sumsu-to-prevent-undefine.patch b/package/zlib-ng/0001-Use-static-keyword-for-vec_sumsu-to-prevent-undefine.patch
+deleted file mode 100644
+index cc103215de..0000000000
+--- a/package/zlib-ng/0001-Use-static-keyword-for-vec_sumsu-to-prevent-undefine.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 677f56825f7080403e18e57ffe8177f3df290f20 Mon Sep 17 00:00:00 2001
+-From: Nathan Moinvaziri <nathan@nathanm.com>
+-Date: Sun, 23 Jan 2022 12:59:01 -0800
+-Subject: [PATCH] Use static keyword for vec_sumsu to prevent undefined
+- reference error when g++ linking.
+-
+-Signed-off-by: Joel Stanley <joel@jms.id.au>
+----
+- arch/power/adler32_power8.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/arch/power/adler32_power8.c b/arch/power/adler32_power8.c
+-index 029aa3a84c57..fc4086322efc 100644
+---- a/arch/power/adler32_power8.c
+-+++ b/arch/power/adler32_power8.c
+-@@ -44,7 +44,7 @@
+- #include "adler32_p.h"
+- 
+- /* Vector across sum unsigned int (saturate).  */
+--inline vector unsigned int vec_sumsu(vector unsigned int __a, vector unsigned int __b) {
+-+static inline vector unsigned int vec_sumsu(vector unsigned int __a, vector unsigned int __b) {
+-     __b = vec_sld(__a, __a, 8);
+-     __b = vec_add(__b, __a);
+-     __a = vec_sld(__b, __b, 4);
+--- 
+-2.35.1
+-
+diff --git a/package/zlib-ng/0002-CMakeLists.txt-fix-version-in-zlib.pc-when-building-.patch b/package/zlib-ng/0002-CMakeLists.txt-fix-version-in-zlib.pc-when-building-.patch
+deleted file mode 100644
+index 749c45ddca..0000000000
+--- a/package/zlib-ng/0002-CMakeLists.txt-fix-version-in-zlib.pc-when-building-.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 9fcc446306f27eb253545540ce28403874b899fa Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 27 May 2022 23:25:21 +0200
+-Subject: [PATCH] CMakeLists.txt: fix version in zlib.pc when building
+- statically
+-
+-When building statically (i.e. with BUILD_SHARED_LIBS=OFF),
+-ZLIB_FULL_VERSION is not set resulting in an empty version in zlib.pc
+-and the following build failure with transmission:
+-
+-checking for ZLIB... configure: error: Package requirements (zlib >= 1.2.3) were not met:
+-
+-Package dependency requirement 'zlib >= 1.2.3' could not be satisfied.
+-Package 'zlib' has version '', required version is '>= 1.2.3'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/b3b882482f517726e5c780ba4c37818bd379df82
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/zlib-ng/zlib-ng/pull/1278]
+----
+- CMakeLists.txt | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index a62a95e..6a26d59 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -150,8 +150,10 @@ if(ZLIB_COMPAT)
+-     add_definitions(-DZLIB_COMPAT)
+-     set(WITH_GZFILEOP ON)
+-     set(SUFFIX "")
+-+    set(ZLIB_FULL_VERSION ${ZLIB_HEADER_VERSION}.zlib-ng)
+- else()
+-     set(SUFFIX "-ng")
+-+    set(ZLIB_FULL_VERSION ${ZLIBNG_HEADER_VERSION})
+- endif()
+- 
+- if(WITH_GZFILEOP)
+-@@ -1068,10 +1070,8 @@ if(NOT DEFINED BUILD_SHARED_LIBS OR BUILD_SHARED_LIBS)
+-     set_target_properties(zlib PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
+- 
+-     if(ZLIB_COMPAT)
+--        set(ZLIB_FULL_VERSION ${ZLIB_HEADER_VERSION}.zlib-ng)
+-         set_target_properties(zlib PROPERTIES SOVERSION 1)
+-     else()
+--        set(ZLIB_FULL_VERSION ${ZLIBNG_HEADER_VERSION})
+-         set_target_properties(zlib PROPERTIES SOVERSION 2)
+-     endif()
+- 
+--- 
+-2.35.1
+-
+diff --git a/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch b/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch
+deleted file mode 100644
+index ba8297cda7..0000000000
+--- a/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch
++++ /dev/null
+@@ -1,90 +0,0 @@
+-From e1baa6b439c06f3d0e6be3e381cc746ffb55aee1 Mon Sep 17 00:00:00 2001
+-From: Mika Lindqvist <postmaster@raasu.org>
+-Date: Wed, 13 Apr 2022 01:22:29 +0300
+-Subject: [PATCH] Check that sys/auxv.h exists at configure time and add
+- preprocessor define for it. * Protect including sys/auxv.h in all relevant
+- files with the new preprocessor define * Test for both existence of both
+- sys/auxv.h and getauxval() with both cmake and configure
+-
+-[Ben Hutchings: Backport to 2.0.6:
+- - Drop the s390 changes
+- - Change some filenames]
+-
+-Backported from: e1baa6b439c06f3d0e6be3e381cc746ffb55aee1
+-Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
+----
+- CMakeLists.txt        |    4 ++++
+- arch/arm/armfeature.c |    2 +-
+- arch/power/power.c    |    5 ++++-
+- configure             |   13 +++++++++++++
+- 4 files changed, 22 insertions(+), 2 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 0dd196130..e4e4b7332 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -338,6 +338,10 @@ endif()
+- #
+- # Check for standard/system includes
+- #
+-+check_include_file(sys/auxv.h  HAVE_SYS_AUXV_H)
+-+if(HAVE_SYS_AUXV_H)
+-+    add_definitions(-DHAVE_SYS_AUXV_H)
+-+endif()
+- check_include_file(sys/sdt.h   HAVE_SYS_SDT_H)
+- if(HAVE_SYS_SDT_H)
+-     add_definitions(-DHAVE_SYS_SDT_H)
+-diff --git a/arch/arm/arm_features.c b/arch/arm/arm_features.c
+-index 195c94992..f6b67687f 100644
+---- a/arch/arm/armfeature.c
+-+++ b/arch/arm/armfeature.c
+-@@ -1,6 +1,6 @@
+- #include "../../zutil.h"
+- 
+--#if defined(__linux__)
+-+#if defined(__linux__) && defined(HAVE_SYS_AUXV_H)
+- #  include <sys/auxv.h>
+- #  ifdef ARM_ASM_HWCAP
+- #    include <asm/hwcap.h>
+-diff --git a/arch/power/power_features.c b/arch/power/power_features.c
+-index 9186b40d8..65599d9a7 100644
+---- a/arch/power/power.c
+-+++ b/arch/power/power.c
+-@@ -1,9 +1,12 @@
+- /* POWER feature check
+-  * Copyright (C) 2020 Matheus Castanho <msc@linux.ibm.com>, IBM
+-+ * Copyright (C) 2021-2022 Mika T. Lindqvist <postmaster@raasu.org>
+-  * For conditions of distribution and use, see copyright notice in zlib.h
+-  */
+- 
+--#include <sys/auxv.h>
+-+#ifdef HAVE_SYS_AUXV_H
+-+#  include <sys/auxv.h>
+-+#endif
+- #include "../../zutil.h"
+- 
+- Z_INTERNAL int power_cpu_has_arch_2_07;
+-diff --git a/configure b/configure
+-index aed1909cc..a357e1c8a 100755
+---- a/configure
+-+++ b/configure
+-@@ -776,6 +776,19 @@ else
+-   echo "Checking for strerror... No." | tee -a configure.log
+- fi
+- 
+-+# check for getauxval() for architecture feature detection at run-time
+-+cat > $test.c <<EOF
+-+#include <sys/auxv.h>
+-+int main() { return getauxval(0); }
+-+EOF
+-+if try $CC $CFLAGS -o $test $test.c $LDSHAREDLIBC; then
+-+  echo "Checking for getauxval() in sys/auxv.h... Yes." | tee -a configure.log
+-+  CFLAGS="${CFLAGS} -DHAVE_SYS_AUXV_H"
+-+  SFLAGS="${SFLAGS} -DHAVE_SYS_AUXV_H"
+-+else
+-+  echo "Checking for getauxval() in sys/auxv.h... No." | tee -a configure.log
+-+fi
+-+
+- # We need to remove zconf.h from source directory if building outside of it
+- if [ "$SRCDIR" != "$BUILDDIR" ]; then
+-     rm -f $SRCDIR/zconf${SUFFIX}.h
+diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
+index a799cfe253..a2fe98435c 100644
+--- a/package/zlib-ng/zlib-ng.hash
++++ b/package/zlib-ng/zlib-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8258b75a72303b661a238047cb348203d88d9dddf85d480ed885f375916fcab6  zlib-ng-2.0.6.tar.gz
++sha256  d20e55f89d71991c59f1c5ad1ef944815e5850526c0d9cd8e504eaed5b24491a  zlib-ng-2.1.3.tar.gz
+ sha256  d3c80be055d94d798eaa786116e84fa0b010bc11420b5d2060d978ea77845436  LICENSE.md
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index aa65d8437d..23f1bd2158 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZLIB_NG_VERSION = 2.0.6
++ZLIB_NG_VERSION = 2.1.3
+ ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
+ ZLIB_NG_LICENSE = Zlib
+ ZLIB_NG_LICENSE_FILES = LICENSE.md
 -- 
 2.39.2
 
