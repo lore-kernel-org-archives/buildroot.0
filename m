@@ -4,69 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBBE3EB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:55:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75D06EB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 17:17:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 763136072A;
-	Sun,  9 Jul 2023 16:55:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 763136072A
+	by smtp3.osuosl.org (Postfix) with ESMTP id F014F606FF;
+	Sun,  9 Jul 2023 17:16:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F014F606FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CXEupFLThvza; Sun,  9 Jul 2023 16:55:11 +0000 (UTC)
+	with ESMTP id e4fBPim6UvKI; Sun,  9 Jul 2023 17:16:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1640606EC;
-	Sun,  9 Jul 2023 16:55:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1640606EC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AE0C11BF423
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:55:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CC95606ED;
+	Sun,  9 Jul 2023 17:16:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CC95606ED
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 62A941BF289
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 17:16:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94226606EC
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:55:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94226606EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A36C4059D
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 17:16:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A36C4059D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pPzELPTOvU38 for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 16:55:07 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B17960681
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0B17960681
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:55:06 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::224])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id E85CFD0822
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:47:13 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD417E0003;
- Sun,  9 Jul 2023 16:47:07 +0000 (UTC)
-Date: Sun, 9 Jul 2023 18:47:06 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230709184706.40d4259f@windsurf>
-In-Reply-To: <20230709081924.802356-1-bernd@kuhls.net>
-References: <20230709081924.802356-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cqLzhIhXAW5Z for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 17:16:55 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 139644054E
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 139644054E
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 17:16:54 +0000 (UTC)
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout02.mail.de (Postfix) with ESMTP id 536B8A2D0F;
+ Sun,  9 Jul 2023 19:16:53 +0200 (CEST)
+Received: from smtp02.mail.de (smtp02.bt.mail.de [10.0.121.212])
+ by postfix01.mail.de (Postfix) with ESMTP id 374DA80290;
+ Sun,  9 Jul 2023 19:16:53 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp02.mail.de (Postfix) with ESMTPSA id 00255A01A6;
+ Sun,  9 Jul 2023 19:16:51 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Sun, 09 Jul 2023 19:16:51 +0200
+Message-ID: <3238022.aeNJFYEL58@kilian-aisec>
+In-Reply-To: <20230707075339.7207-1-robertoxmed@gmail.com>
+References: <20230707075339.7207-1-robertoxmed@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688921228;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=r+Lt5TejJ0L6ny0I3jssEJIR7nMbf+ybWUYPjYc+w8o=;
- b=W73CN9zY8zZI2lOBEfTDTlQKqwIU6tXbMAG5c2JUJ2cvY1vp863Yg6i/DlvBaab7bQC0W+
- HMIBIqARAB96TdxKAzKObgzH4It0BcsNINeoP+MkdIOkY80B9z2l3TUNifp7LRCQhBR/T1
- BSleYf09m51eMawmQqXjkPRH5UBd50I4UnKKABsCo9W4mZ97KYOwAhbPO56SxSL/dlyRIw
- J8BXroITSBJ9YQ2YNKiCUNJFh1ZnZM5g9ztFlCI8cBAXFqZTrPIlpgc1rQGutofCkSaWxY
- 6VtgjOrX6wk3CTgKdqL+MNYw6BgKPRUUCLHwxBCDGcvdn6tkP/SwY5PjHnOBMw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=W73CN9zY
-Subject: Re: [Buildroot] [PATCH 1/1] package/valgrind: bump version to 3.21.0
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 365
+X-purgate-ID: 154282::1688923013-737FC199-CB3622AD/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1688923013;
+ bh=f3/GmdvVJX1VhizJaZKoKgu2zrSHsgQY/nHQYLz6sA0=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=iYgIVGbv32098lCg5Qv79WI+7xTaVpevvJiAH0Bo/cSibmw6RtZZP61Bv2hojU5NH
+ LzuMotTV4HNEIF514EOzlytQ3is5kz23MGUwp5x8PIIjtJEGc5bMBIzX0GXgQx9dr6
+ eKg1HSDTRUeOfKtrjGkXHJRcwNHDhmTbb0539hYMeIEYf9eSJBx4oVGvTCjwizLcle
+ tPKAzJnKdfR+8S3iAdcq1TkoycynPHBU3SMTnfVNpmTzLcSoq6hD8O2W1TbRmeesNl
+ AOppbCyyQgW+rmGjIUfv0TrzXEEIh0hf0HZdPtwja2ZAWMeDNinX6ZBTMCPGQTbPtb
+ oFV9gS7FPcwCA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key)
+ header.d=mail.de header.i=@mail.de header.a=rsa-sha256 header.s=mailde202009
+ header.b=iYgIVGbv
+Subject: Re: [Buildroot] [PATCH 1/1] configs/roc_pc_rk3399: Bring back the
+ configuration for the rockchip rk3399 built by firefly.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,34 +89,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Roberto Medina <robertoxmed@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  9 Jul 2023 10:19:24 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Hello Roberto, All,
 
-> Added sha1 hash provided by upstream, removed md5 hash.
-> 
-> Release notes: https://valgrind.org/docs/manual/dist.news.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/valgrind/valgrind.hash | 4 ++--
->  package/valgrind/valgrind.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
 
-Applied to master, thanks.
+The current buildroot release uses U-Boot 2022.04 as default. Why is there a 
+different, older version of U-Boot used (or needed)? If there are no technical 
+reasons, I would recommend using a recent (default) U-Boot.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+Kilian
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
