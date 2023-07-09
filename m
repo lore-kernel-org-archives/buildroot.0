@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE1ABEB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 08:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5CC2EB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 09:16:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EDF660AEF;
-	Sun,  9 Jul 2023 08:19:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EDF660AEF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39C6960773;
+	Sun,  9 Jul 2023 09:16:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C6960773
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l-7gypXmBc89; Sun,  9 Jul 2023 08:19:30 +0000 (UTC)
+	with ESMTP id 9pfd_XfdtsGt; Sun,  9 Jul 2023 09:16:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86AC060AA5;
-	Sun,  9 Jul 2023 08:19:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86AC060AA5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 57A781BF41F
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 08:19:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61F0160777;
+	Sun,  9 Jul 2023 09:16:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61F0160777
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AC3C21BF57F
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 09:16:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F299414C2
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 08:19:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F299414C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92B1F60777
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 09:16:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92B1F60777
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ySzabcgZ8vSa for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 08:19:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BtbCB8_06ccb for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 09:16:26 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8D07414C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C677560773
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D8D07414C0
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 08:19:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C677560773
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 09:16:25 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0896.dip0.t-ipconnect.de [91.58.8.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 09252A4C07E7
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 10:19:25 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46974)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8D69EA4C00F9;
+ Sun,  9 Jul 2023 11:16:22 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39874)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qIPdc-0007kX-2V
- for buildroot@buildroot.org; Sun, 09 Jul 2023 10:19:24 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qIQWk-0000oY-15;
+ Sun, 09 Jul 2023 11:16:22 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  9 Jul 2023 10:19:24 +0200
-Message-Id: <20230709081924.802356-1-bernd@kuhls.net>
+Date: Sun,  9 Jul 2023 11:16:22 +0200
+Message-Id: <20230709091622.1022345-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1688890765;
- bh=XY94Uf5AcrJO4xYSpQE2meQRQkxUrIsFnB/2qjWOOGs=;
- h=From:To:Subject:Date:From;
- b=lT1e/KcUWZzyUPnEfpqvgtIqSCX59EyrnOZWnwLIj2edIM71prYt8YEdUo5E60/Qh
- D4P/vobYfJOwbZsBBfmGUHrrf3XqYEO5rXcTxPo3Iv6SsXJbVG92lu/k7b0huOaq5D
- GCjJXeJZ+koAev1Effe3MNBdeP21rTqmSKWoMjPcxNbM1n+NbVl2si3o6ZA2mi6Hzx
- 2TaqR9MSlHotOxun8711S3yzA0V09w2jX/7g+nzTaDcC4rIxkde9dkYnmTPIdpAXAC
- ZDnsI2RqNGbE1TlKqYSiDA37H9PE/L+OjE+mJvkihcOCIku5uoeoi0tKV23X1fXrsn
- a/Yn7PwaqI05A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=kas202306131828; t=1688894182;
+ bh=5BjmSWmXbt8B6JdP+Z+C7wMcifMvO2Zezj2z1E7pYgc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=yiiKl4+Xdp4Tn+DwCTjhpjXDpmfHOWHTGuMmunk/DY1sxH7CSb/gaGwkcPWbmei+Y
+ RP7HuTxksHH7q3+pherghRs83ofCClrGEoL+uaoxUcQ1CyWDKoEShc5B4KD6FVQO5J
+ kGL2LWQMIIEimkj4G9e2FIfzi00eG36Gd8vL+IQo2pXXk23qtBzkDpW32XeapxK/p/
+ haLQ3Mm8Ek4kgYWqktd3laVKF3Dr1tBgeq0I0UTbWDkGTFy/TU0WoGRury0VFiVifv
+ GyreaLbNZbAz79VpODrgmbOWCDdW4OCCfxYli6LMfjY0n7FXMy7uwWVomLx7pVLoBB
+ q6SxTLtKhgyFA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=lT1e/KcU
-Subject: [Buildroot] [PATCH 1/1] package/valgrind: bump version to 3.21.0
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=yiiKl4+X
+Subject: [Buildroot] [PATCH 1/1] package/shadow: Fix yescrypt-only build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,48 +75,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added sha1 hash provided by upstream, removed md5 hash.
-
-Release notes: https://valgrind.org/docs/manual/dist.news.html
+Fixes:
+http://autobuild.buildroot.net/results/afd/afd5d59f94986593cd697148f4cce2bf70e4d81b/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/valgrind/valgrind.hash | 4 ++--
- package/valgrind/valgrind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../shadow/0001-Fix-yescrypt-support.patch    | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/shadow/0001-Fix-yescrypt-support.patch
 
-diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
-index 83717f26f3..d406babe35 100644
---- a/package/valgrind/valgrind.hash
-+++ b/package/valgrind/valgrind.hash
-@@ -1,7 +1,7 @@
- # From https://valgrind.org/downloads/current.html
--md5  e3ca8e03c6c527e80e7da5135a1b6beb  valgrind-3.20.0.tar.bz2
-+sha1  817d769743d278b5d07526e85115082054e9bf9c  valgrind-3.21.0.tar.bz2
- # locally computed
--sha256  8536c031dbe078d342f121fa881a9ecd205cb5a78e639005ad570011bdb9f3c6  valgrind-3.20.0.tar.bz2
-+sha256  10ce1618bb3e33fad16eb79552b0a3e1211762448a0d7fce11c8a6243b9ac971  valgrind-3.21.0.tar.bz2
- 
- # License files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 98beb7ffef..4c4c3ce543 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VALGRIND_VERSION = 3.20.0
-+VALGRIND_VERSION = 3.21.0
- VALGRIND_SITE = https://sourceware.org/pub/valgrind
- VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
+diff --git a/package/shadow/0001-Fix-yescrypt-support.patch b/package/shadow/0001-Fix-yescrypt-support.patch
+new file mode 100644
+index 0000000000..e346a2ece0
+--- /dev/null
++++ b/package/shadow/0001-Fix-yescrypt-support.patch
+@@ -0,0 +1,38 @@
++From 7a63017b3c873a59e3482322b7824160a8c8ca67 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sun, 9 Jul 2023 10:55:03 +0200
++Subject: [PATCH] Fix yescrypt support
++
++Fixes build error:
++newusers.c: In function 'update_passwd':
++newusers.c:433:21: error: 'sflg' undeclared (first use in this function); did you mean 'rflg'?
++
++introduced by
++https://github.com/shadow-maint/shadow/commit/5cd04d03f94622c12220d4a6352824af081b8531
++which forgot to define sflg for these configure options:
++
++--without-sha-crypt --without-bcrypt --with-yescrypt
++
++Upstream: https://github.com/shadow-maint/shadow/pull/748
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/newusers.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/newusers.c b/src/newusers.c
++index 7cb8434b..08f79798 100644
++--- a/src/newusers.c
+++++ b/src/newusers.c
++@@ -60,7 +60,7 @@ static bool rflg = false;	/* create a system account */
++ #ifndef USE_PAM
++ static /*@null@*//*@observer@*/char *crypt_method = NULL;
++ #define cflg (NULL != crypt_method)
++-#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT)
+++#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT) || defined(USE_YESCRYPT)
++ static bool sflg = false;
++ #endif
++ #ifdef USE_SHA_CRYPT
++-- 
++2.39.2
++
 -- 
 2.39.2
 
