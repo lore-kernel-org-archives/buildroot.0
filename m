@@ -4,46 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3803BEB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:32:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A9ABEB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:32:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA4F56073F;
-	Sun,  9 Jul 2023 16:32:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA4F56073F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48975606FF;
+	Sun,  9 Jul 2023 16:32:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48975606FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KoElXkW8Yauf; Sun,  9 Jul 2023 16:32:09 +0000 (UTC)
+	with ESMTP id vgK3pFQURlyw; Sun,  9 Jul 2023 16:32:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5A1D606F5;
-	Sun,  9 Jul 2023 16:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5A1D606F5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E71201BF423
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:32:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8300260757;
+	Sun,  9 Jul 2023 16:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8300260757
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C3AEB1BF423
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFE0C409B6
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:32:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFE0C409B6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C01C6073F
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:32:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C01C6073F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ak73rmjnf-x0 for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 16:32:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC4EC409B0
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC4EC409B0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9878886954; Sun,  9 Jul 2023 16:32:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 9 Jul 2023 18:31:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af5ccec266dbb7925ac12622f379dacb20087ddd
-X-Git-Newrev: 76059865ad2e99375fb5ba4b93ed0464cb14734b
-X-Patchwork-Hint: ignore
-Message-Id: <20230709163204.9878886954@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dahdi-linux: fix build on Linux 6.4
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PnlCXa4YIrCq for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 16:32:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D13E606A9
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7D13E606A9
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:32:05 +0000 (UTC)
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 81E5C1C000D;
+ Sun,  9 Jul 2023 16:32:03 +0000 (UTC)
+Date: Sun, 9 Jul 2023 18:32:02 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230709183202.0fe56bdd@windsurf>
+In-Reply-To: <20230709151919.1694148-1-bernd@kuhls.net>
+References: <20230709151919.1694148-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1688920323;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=pHCjJ/sORV1oLISnMrWE/+6e4liUNpp000whvXLBX/8=;
+ b=RUpa4VCfqr4vXgGE7RA31sLSEjGbcga8D2j2GsQDXPmdIPlou3b5uKPpoezqzcHaNRjM7H
+ RzFN9q6SNS4UNFpG6NcurC4TdC0Xp9rckw9UmFrh6wryOcXJZdBOvJQNDK7+Au+eLsnnvI
+ pL5XrFtPbpBSSj/LsDnqx0wU+2wPxjs76UbOCqOFlZNbMZYITN553wddZ5Tv9HVm0sWqdc
+ YtMvtUtX4Avy74GfArKeYB36E3Z/FQSqU9D+YZrlUMECODsgf6ezGvoqNTC8kY5U6Ijpb3
+ e1v3sJT4AOc1Fo4UfM4xn3Hb+qM0W+kH7aQGd62OdhTcVegJBWtBRInxM06i+A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RUpa4VCf
+Subject: Re: [Buildroot] [PATCH 1/1] package/dahdi-linux: Fix build on Linux
+ 6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,99 +80,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76059865ad2e99375fb5ba4b93ed0464cb14734b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  9 Jul 2023 17:19:19 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/8b1/8b140b7f4d2f2b3080cab90906c3cebea0e510c5/
+> Fixes:
+> http://autobuild.buildroot.net/results/8b1/8b140b7f4d2f2b3080cab90906c3cebea0e510c5/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  .../0006-Fix-build-on-Linux-6.4.patch         | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../dahdi-linux/0006-Fix-build-on-Linux-6.4.patch  | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch b/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch
-new file mode 100644
-index 0000000000..992cb4d513
---- /dev/null
-+++ b/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch
-@@ -0,0 +1,69 @@
-+From b393e59d7eb2951e2fb279fca1c4756ea165aeee Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sun, 9 Jul 2023 17:14:31 +0200
-+Subject: [PATCH] Fix build on Linux 6.4
-+
-+Needed after upstream changes in kernel 6.4:
-+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/diff/include/linux/device/class.h?id=1aaba11da9aa
-+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=48380368dec14859723b9e3fbd43e042638d9a76
-+
-+Upstream: https://github.com/asterisk/dahdi-linux/pull/22
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ drivers/dahdi/dahdi-sysfs-chan.c  | 4 ++++
-+ drivers/dahdi/voicebus/voicebus.c | 4 ++++
-+ drivers/dahdi/wctdm24xxp/base.c   | 4 ++++
-+ 3 files changed, 12 insertions(+)
-+
-+diff --git a/drivers/dahdi/dahdi-sysfs-chan.c b/drivers/dahdi/dahdi-sysfs-chan.c
-+index a91e6ed..b18b5f9 100644
-+--- a/drivers/dahdi/dahdi-sysfs-chan.c
-++++ b/drivers/dahdi/dahdi-sysfs-chan.c
-+@@ -482,7 +482,11 @@ int __init dahdi_sysfs_chan_init(const struct file_operations *fops)
-+ 	}
-+ 	should_cleanup.channel_driver = 1;
-+ 
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
-+ 	dahdi_class = class_create(THIS_MODULE, "dahdi");
-++#else
-++	dahdi_class = class_create("dahdi");
-++#endif
-+ 	if (IS_ERR(dahdi_class)) {
-+ 		res = PTR_ERR(dahdi_class);
-+ 		dahdi_err("%s: class_create(dahi_chan) failed. Error: %d\n",
-+diff --git a/drivers/dahdi/voicebus/voicebus.c b/drivers/dahdi/voicebus/voicebus.c
-+index 8a1f7a6..d141aaf 100644
-+--- a/drivers/dahdi/voicebus/voicebus.c
-++++ b/drivers/dahdi/voicebus/voicebus.c
-+@@ -1135,7 +1135,11 @@ static void vb_stop_txrx_processors(struct voicebus *vb)
-+  */
-+ void voicebus_stop(struct voicebus *vb)
-+ {
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
-+ 	static DEFINE_SEMAPHORE(stop);
-++#else
-++	static DEFINE_SEMAPHORE(stop, 1);
-++#endif
-+ 
-+ 	down(&stop);
-+ 
-+diff --git a/drivers/dahdi/wctdm24xxp/base.c b/drivers/dahdi/wctdm24xxp/base.c
-+index a28e249..4392b45 100644
-+--- a/drivers/dahdi/wctdm24xxp/base.c
-++++ b/drivers/dahdi/wctdm24xxp/base.c
-+@@ -224,7 +224,11 @@ mod_hooksig(struct wctdm *wc, struct wctdm_module *mod, enum dahdi_rxsig rxsig)
-+ }
-+ 
-+ struct wctdm *ifaces[WC_MAX_IFACES];
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
-+ DEFINE_SEMAPHORE(ifacelock);
-++#else
-++DEFINE_SEMAPHORE(ifacelock, 1);
-++#endif
-+ 
-+ static void wctdm_release(struct wctdm *wc);
-+ 
-+-- 
-+2.39.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
