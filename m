@@ -4,69 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0277EB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3803BEB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:32:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CBB06072A;
-	Sun,  9 Jul 2023 16:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CBB06072A
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA4F56073F;
+	Sun,  9 Jul 2023 16:32:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA4F56073F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QLzMm5TcwWKc; Sun,  9 Jul 2023 16:31:37 +0000 (UTC)
+	with ESMTP id KoElXkW8Yauf; Sun,  9 Jul 2023 16:32:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80792606F5;
-	Sun,  9 Jul 2023 16:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80792606F5
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5A1D606F5;
+	Sun,  9 Jul 2023 16:32:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5A1D606F5
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CCC191BF423
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:31:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E71201BF423
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:32:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A3D3F409B6
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:31:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3D3F409B6
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFE0C409B6
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:32:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFE0C409B6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O--rspQFaz1z for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 16:31:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D84A9409B0
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D84A9409B0
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:31:32 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 6E59CD02D1
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:28:21 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 69CFCFF804;
- Sun,  9 Jul 2023 16:28:15 +0000 (UTC)
-Date: Sun, 9 Jul 2023 18:28:14 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230709182814.6723f5fd@windsurf>
-In-Reply-To: <20230709100930.3224540-1-bernd@kuhls.net>
-References: <20230709100930.3224540-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688920095;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Ri/QP5ZhstRmi7+I4uFBtjCbj3QGG5yVWgh6OSDoz9E=;
- b=CbW/zdbPL1J71G3pWui37N5HeqEL12uuZFt3PAJziO6Sh1hGIAKOfVCVLKWmDtcYZwEXJo
- XSwtfX3tkh5OKJDquZ5FTmeZAVM2ezdrGvker0AEMR3gDSNud5IZB751BI7Zup5+fvm4QZ
- EN+W+rsiLKsVCOSGcBuUkOMrOsDfNejNyFsH0liMSwqhmD/XbRQcUMMaMtp+98Omm2FTde
- K++c1Gg2D0YplyCfGOEA58omf1tV5J5sSwFR9nKuN27imekAMKncX8t/e9o7p2l8TxdfOg
- Xdmznbl3ldeVidQLA+pOlZjFmiEvnAAq0JimqAAmVszOeBmMncA15xABbYEd9A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CbW/zdbP
-Subject: Re: [Buildroot] [PATCH 1/1] package/musl: bump version to 1.2.4
+ with ESMTP id ak73rmjnf-x0 for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 16:32:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC4EC409B0
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:32:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC4EC409B0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9878886954; Sun,  9 Jul 2023 16:32:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 9 Jul 2023 18:31:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: af5ccec266dbb7925ac12622f379dacb20087ddd
+X-Git-Newrev: 76059865ad2e99375fb5ba4b93ed0464cb14734b
+X-Patchwork-Hint: ignore
+Message-Id: <20230709163204.9878886954@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dahdi-linux: fix build on Linux 6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,36 +57,99 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  9 Jul 2023 12:09:30 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=76059865ad2e99375fb5ba4b93ed0464cb14734b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Removed patch which is included in this release.
-> 
-> Switched _SITE according to http://www.musl-libc.org/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  .checkpackageignore                           |  1 -
->  ...rameter-name-in-internal-netlink.h-R.patch | 33 -------------------
->  package/musl/Config.in                        |  2 +-
->  package/musl/musl.hash                        |  4 +--
->  package/musl/musl.mk                          |  4 +--
->  5 files changed, 5 insertions(+), 39 deletions(-)
->  delete mode 100644 package/musl/0003-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
+Fixes:
+http://autobuild.buildroot.net/results/8b1/8b140b7f4d2f2b3080cab90906c3cebea0e510c5/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../dahdi-linux/0006-Fix-build-on-Linux-6.4.patch  | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch b/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch
+new file mode 100644
+index 0000000000..992cb4d513
+--- /dev/null
++++ b/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch
+@@ -0,0 +1,69 @@
++From b393e59d7eb2951e2fb279fca1c4756ea165aeee Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sun, 9 Jul 2023 17:14:31 +0200
++Subject: [PATCH] Fix build on Linux 6.4
++
++Needed after upstream changes in kernel 6.4:
++https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/diff/include/linux/device/class.h?id=1aaba11da9aa
++https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=48380368dec14859723b9e3fbd43e042638d9a76
++
++Upstream: https://github.com/asterisk/dahdi-linux/pull/22
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ drivers/dahdi/dahdi-sysfs-chan.c  | 4 ++++
++ drivers/dahdi/voicebus/voicebus.c | 4 ++++
++ drivers/dahdi/wctdm24xxp/base.c   | 4 ++++
++ 3 files changed, 12 insertions(+)
++
++diff --git a/drivers/dahdi/dahdi-sysfs-chan.c b/drivers/dahdi/dahdi-sysfs-chan.c
++index a91e6ed..b18b5f9 100644
++--- a/drivers/dahdi/dahdi-sysfs-chan.c
+++++ b/drivers/dahdi/dahdi-sysfs-chan.c
++@@ -482,7 +482,11 @@ int __init dahdi_sysfs_chan_init(const struct file_operations *fops)
++ 	}
++ 	should_cleanup.channel_driver = 1;
++ 
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
++ 	dahdi_class = class_create(THIS_MODULE, "dahdi");
+++#else
+++	dahdi_class = class_create("dahdi");
+++#endif
++ 	if (IS_ERR(dahdi_class)) {
++ 		res = PTR_ERR(dahdi_class);
++ 		dahdi_err("%s: class_create(dahi_chan) failed. Error: %d\n",
++diff --git a/drivers/dahdi/voicebus/voicebus.c b/drivers/dahdi/voicebus/voicebus.c
++index 8a1f7a6..d141aaf 100644
++--- a/drivers/dahdi/voicebus/voicebus.c
+++++ b/drivers/dahdi/voicebus/voicebus.c
++@@ -1135,7 +1135,11 @@ static void vb_stop_txrx_processors(struct voicebus *vb)
++  */
++ void voicebus_stop(struct voicebus *vb)
++ {
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
++ 	static DEFINE_SEMAPHORE(stop);
+++#else
+++	static DEFINE_SEMAPHORE(stop, 1);
+++#endif
++ 
++ 	down(&stop);
++ 
++diff --git a/drivers/dahdi/wctdm24xxp/base.c b/drivers/dahdi/wctdm24xxp/base.c
++index a28e249..4392b45 100644
++--- a/drivers/dahdi/wctdm24xxp/base.c
+++++ b/drivers/dahdi/wctdm24xxp/base.c
++@@ -224,7 +224,11 @@ mod_hooksig(struct wctdm *wc, struct wctdm_module *mod, enum dahdi_rxsig rxsig)
++ }
++ 
++ struct wctdm *ifaces[WC_MAX_IFACES];
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
++ DEFINE_SEMAPHORE(ifacelock);
+++#else
+++DEFINE_SEMAPHORE(ifacelock, 1);
+++#endif
++ 
++ static void wctdm_release(struct wctdm *wc);
++ 
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
