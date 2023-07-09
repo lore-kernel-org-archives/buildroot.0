@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75D06EB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 17:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C96EB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 17:39:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F014F606FF;
-	Sun,  9 Jul 2023 17:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F014F606FF
+	by smtp3.osuosl.org (Postfix) with ESMTP id A313060750;
+	Sun,  9 Jul 2023 17:39:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A313060750
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e4fBPim6UvKI; Sun,  9 Jul 2023 17:16:59 +0000 (UTC)
+	with ESMTP id 4PK_NRIM21CJ; Sun,  9 Jul 2023 17:39:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CC95606ED;
-	Sun,  9 Jul 2023 17:16:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CC95606ED
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0369E60746;
+	Sun,  9 Jul 2023 17:39:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0369E60746
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 62A941BF289
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 17:16:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 944871BF289
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 17:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A36C4059D
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 17:16:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A36C4059D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 787D240960
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 17:39:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 787D240960
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cqLzhIhXAW5Z for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 17:16:55 +0000 (UTC)
+ with ESMTP id XwFWjBmpWgrA for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 17:39:28 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 139644054E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A19C940953
 Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 139644054E
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 17:16:54 +0000 (UTC)
-Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout02.mail.de (Postfix) with ESMTP id 536B8A2D0F;
- Sun,  9 Jul 2023 19:16:53 +0200 (CEST)
-Received: from smtp02.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix01.mail.de (Postfix) with ESMTP id 374DA80290;
- Sun,  9 Jul 2023 19:16:53 +0200 (CEST)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A19C940953
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 17:39:28 +0000 (UTC)
+Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
+ by shout02.mail.de (Postfix) with ESMTP id 0E451A0647;
+ Sun,  9 Jul 2023 19:39:27 +0200 (CEST)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix02.mail.de (Postfix) with ESMTP id DB723A00E2;
+ Sun,  9 Jul 2023 19:39:26 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (No client certificate requested)
- by smtp02.mail.de (Postfix) with ESMTPSA id 00255A01A6;
- Sun,  9 Jul 2023 19:16:51 +0200 (CEST)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 9AB3D10012D;
+ Sun,  9 Jul 2023 19:39:26 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Sun, 09 Jul 2023 19:16:51 +0200
-Message-ID: <3238022.aeNJFYEL58@kilian-aisec>
+Date: Sun, 09 Jul 2023 19:39:26 +0200
+Message-ID: <8241193.T7Z3S40VBb@kilian-aisec>
 In-Reply-To: <20230707075339.7207-1-robertoxmed@gmail.com>
 References: <20230707075339.7207-1-robertoxmed@gmail.com>
 MIME-Version: 1.0
@@ -60,22 +60,22 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 365
-X-purgate-ID: 154282::1688923013-737FC199-CB3622AD/0/0
+X-purgate-size: 190
+X-purgate-ID: 154282::1688924366-5F7FA7B6-C71C10BA/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1688923013;
- bh=f3/GmdvVJX1VhizJaZKoKgu2zrSHsgQY/nHQYLz6sA0=;
+ d=mail.de; s=mailde202009; t=1688924366;
+ bh=EQy8CSbx0En2zBFtjmL+HjxQe3WVFGlg78o7iyUQmho=;
  h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=iYgIVGbv32098lCg5Qv79WI+7xTaVpevvJiAH0Bo/cSibmw6RtZZP61Bv2hojU5NH
- LzuMotTV4HNEIF514EOzlytQ3is5kz23MGUwp5x8PIIjtJEGc5bMBIzX0GXgQx9dr6
- eKg1HSDTRUeOfKtrjGkXHJRcwNHDhmTbb0539hYMeIEYf9eSJBx4oVGvTCjwizLcle
- tPKAzJnKdfR+8S3iAdcq1TkoycynPHBU3SMTnfVNpmTzLcSoq6hD8O2W1TbRmeesNl
- AOppbCyyQgW+rmGjIUfv0TrzXEEIh0hf0HZdPtwja2ZAWMeDNinX6ZBTMCPGQTbPtb
- oFV9gS7FPcwCA==
+ b=VdNP9IHhDmeoV9Qv34DfBRs3XlSxD3Q5+cFKYOjj1yXG5EE8f4IWtrWnHdvndLNC/
+ w7+H0UU7Sby4ZgOQf1ULBur5VwZ6KzJhYbtaiFWHpXxvfTIhpP9LYXpjkixOl9qQik
+ X1CsYjvu75sjvoe8XDcghAlwS+HIVcQnH/XV6/G0cyKe8hmma6TqSX55oF9TkPDq8W
+ 2PftGzgCliySgK/BlNri7g8DneCV1o7mDSF5Jw8Ps9jO3jmp2KHUX3n63E5Q8lcf1E
+ kV2StntCROyXQV5gtrq2e21DbAN6Erd88Z5psf3ij9TvU2koPS7FuI2etOyHUUuHe1
+ hdx3aocCUzs/w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=fail reason="signature verification failed" (2048-bit key)
  header.d=mail.de header.i=@mail.de header.a=rsa-sha256 header.s=mailde202009
- header.b=iYgIVGbv
+ header.b=VdNP9IHh
 Subject: Re: [Buildroot] [PATCH 1/1] configs/roc_pc_rk3399: Bring back the
  configuration for the rockchip rk3399 built by firefly.
 X-BeenThere: buildroot@buildroot.org
@@ -97,14 +97,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Roberto, All,
+Hi Roberto, all,
 
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
-
-The current buildroot release uses U-Boot 2022.04 as default. Why is there a 
-different, older version of U-Boot used (or needed)? If there are no technical 
-reasons, I would recommend using a recent (default) U-Boot.
+...
+> Signed-off-by: Roberto Medina <robertoxmed@gmail.com>
+...
+Tested-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+	build test only
 
 Best regards,
 Kilian
