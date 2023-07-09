@@ -4,69 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A9ABEB64DC
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:32:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8907DEB64DC
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jul 2023 16:40:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48975606FF;
-	Sun,  9 Jul 2023 16:32:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48975606FF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09AE8605B0;
+	Sun,  9 Jul 2023 16:40:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09AE8605B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vgK3pFQURlyw; Sun,  9 Jul 2023 16:32:21 +0000 (UTC)
+	with ESMTP id ApltY_2CwVIG; Sun,  9 Jul 2023 16:40:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8300260757;
-	Sun,  9 Jul 2023 16:32:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8300260757
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C3AEB1BF423
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:32:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AC8F606A9;
+	Sun,  9 Jul 2023 16:40:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AC8F606A9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 201DF1BF423
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:40:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C01C6073F
- for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:32:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C01C6073F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05C57409B0
+ for <buildroot@lists.busybox.net>; Sun,  9 Jul 2023 16:40:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05C57409B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PnlCXa4YIrCq for <buildroot@lists.busybox.net>;
- Sun,  9 Jul 2023 16:32:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D13E606A9
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7D13E606A9
- for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:32:05 +0000 (UTC)
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 81E5C1C000D;
- Sun,  9 Jul 2023 16:32:03 +0000 (UTC)
-Date: Sun, 9 Jul 2023 18:32:02 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230709183202.0fe56bdd@windsurf>
-In-Reply-To: <20230709151919.1694148-1-bernd@kuhls.net>
-References: <20230709151919.1694148-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1688920323;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=pHCjJ/sORV1oLISnMrWE/+6e4liUNpp000whvXLBX/8=;
- b=RUpa4VCfqr4vXgGE7RA31sLSEjGbcga8D2j2GsQDXPmdIPlou3b5uKPpoezqzcHaNRjM7H
- RzFN9q6SNS4UNFpG6NcurC4TdC0Xp9rckw9UmFrh6wryOcXJZdBOvJQNDK7+Au+eLsnnvI
- pL5XrFtPbpBSSj/LsDnqx0wU+2wPxjs76UbOCqOFlZNbMZYITN553wddZ5Tv9HVm0sWqdc
- YtMvtUtX4Avy74GfArKeYB36E3Z/FQSqU9D+YZrlUMECODsgf6ezGvoqNTC8kY5U6Ijpb3
- e1v3sJT4AOc1Fo4UfM4xn3Hb+qM0W+kH7aQGd62OdhTcVegJBWtBRInxM06i+A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RUpa4VCf
-Subject: Re: [Buildroot] [PATCH 1/1] package/dahdi-linux: Fix build on Linux
- 6.4
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kT4lvrOyH-v3 for <buildroot@lists.busybox.net>;
+ Sun,  9 Jul 2023 16:40:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FDBA400BD
+ for <buildroot@buildroot.org>; Sun,  9 Jul 2023 16:40:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FDBA400BD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3923286966; Sun,  9 Jul 2023 16:40:08 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 9 Jul 2023 18:39:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 76059865ad2e99375fb5ba4b93ed0464cb14734b
+X-Git-Newrev: c1a7079a2387738044dd76105267d6477418df48
+X-Patchwork-Hint: ignore
+Message-Id: <20230709164008.3923286966@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d-demos: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,31 +57,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  9 Jul 2023 17:19:19 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c1a7079a2387738044dd76105267d6477418df48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
-> http://autobuild.buildroot.net/results/8b1/8b140b7f4d2f2b3080cab90906c3cebea0e510c5/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  .../0006-Fix-build-on-Linux-6.4.patch         | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch
+Reference:
+https://gitlab.freedesktop.org/mesa/demos/-/blob/main/meson.build#L21
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/90e/90e98fa0f37462cadea0fcbff9feabad5554587d/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d-demos/Config.in | 6 ++++++
+ package/piglit/Config.in       | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/mesa3d-demos/Config.in b/package/mesa3d-demos/Config.in
+index b716cf5799..7848bb6faf 100644
+--- a/package/mesa3d-demos/Config.in
++++ b/package/mesa3d-demos/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MESA3D_DEMOS
+ 	bool "mesa3d-demos"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES \
+ 		|| BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBOPENVG
+ 	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_XORG7 && BR2_PACKAGE_HAS_LIBGL
+@@ -10,3 +11,8 @@ config BR2_PACKAGE_MESA3D_DEMOS
+ 	  OpenGL demos from the Mesa 3D project.
+ 
+ 	  http://mesa3d.org
++
++comment "mesa3d-demos needs a toolchain with C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES \
++		|| BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBOPENVG
+diff --git a/package/piglit/Config.in b/package/piglit/Config.in
+index 5e957a555a..22d1c7c28e 100644
+--- a/package/piglit/Config.in
++++ b/package/piglit/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_PIGLIT
+ 		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
+ 		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
+ 		BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
+-	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
++	depends on BR2_INSTALL_LIBSTDCPP # mesa3d-demos, python-numpy
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+ 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_LIBPNG
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
