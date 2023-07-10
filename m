@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1359FC001DF
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 20:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F0BCEB64DA
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 20:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0A91404DD;
-	Mon, 10 Jul 2023 20:08:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0A91404DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28C0C40B9E;
+	Mon, 10 Jul 2023 20:08:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28C0C40B9E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AOzK_zeC_nvM; Mon, 10 Jul 2023 20:08:11 +0000 (UTC)
+	with ESMTP id oXdo4Sf74hpV; Mon, 10 Jul 2023 20:08:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E94ED4049D;
-	Mon, 10 Jul 2023 20:08:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E94ED4049D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB15C1BF399
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 20:08:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C14E40B85;
+	Mon, 10 Jul 2023 20:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C14E40B85
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 833C61BF399
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 20:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A3E940335
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 20:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A3E940335
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CF3982047
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 20:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CF3982047
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IfnDFUberBn4 for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 20:08:07 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 53D734177A
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 20:08:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53D734177A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FFF886CEA; Mon, 10 Jul 2023 20:08:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 22:02:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 168e5848addda21067d3b8791e9b781847daa30f
-X-Git-Newrev: f8e000b1866fdc2dbb2c57fbfe66f62a80167f18
-X-Patchwork-Hint: ignore
-Message-Id: <20230710200807.3FFF886CEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bpftool: enable support for
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3cG_vslKsPfL for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 20:08:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 070E681ECF
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 070E681ECF
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 20:08:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1E659240002;
+ Mon, 10 Jul 2023 20:08:10 +0000 (UTC)
+Date: Mon, 10 Jul 2023 22:08:10 +0200
+To: Ignacy =?UTF-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
+Message-ID: <20230710220810.2cc28384@windsurf>
+In-Reply-To: <20230705080328.uodcxfs7o6a5cmqd@zenon.in.qult.net>
+References: <20230705080328.uodcxfs7o6a5cmqd@zenon.in.qult.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689019691;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3RJBEeWEkzyIKe0WMNP5lteI70P7pyj2FQgmI+8uwAY=;
+ b=MmFuOOPtBRZ9Eh+409cYqkICkrYuCEoYZlB8f/UglfnREiJ9xQgb2IXGagTu/uOZGqsq6x
+ hNLEBh3t1vQEUk+B1RHXDMphcsxxZ1h+afNSp/3Wk8fXwU9afAMM4euL5enq0Hz5dvHlgv
+ +LeOpSYJO9F84+IkUjWV1QfYv5CxhvECFPSCBYFPO2RsRG07nuwaNKpyJVxUrMQE+IVBOB
+ v8mUtAFrwdNElS3Ov4kPKixSnS237CwX9K8QNcUmUtXMTOxSQz7tDRi66fSiZvnGvZEbgU
+ nupMtSHlrrWHxciKsiTtZUSmiGrK+Pk4CvXHx7fKcOvt/SDA8f+6P0cKa47SrQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=MmFuOOPt
+Subject: Re: [Buildroot] [RFC 1/1] package/bpftool: enable support for
  arm/armeb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,48 +78,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5380887807823413328=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5380887807823413328==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f8e000b1866fdc2dbb2c57fbfe66f62a80167f18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The local copy bpftool uses now compiles fine on both arm and armeb.
-Add these archs to BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS.
-
-Signed-off-by: Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bpftool/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/bpftool/Config.in b/package/bpftool/Config.in
-index 461be9e5b4..d131ec566e 100644
---- a/package/bpftool/Config.in
-+++ b/package/bpftool/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
- 	bool
- 	# see libbpf/src/bpf.c
- 	default y if BR2_arc
-+	default y if BR2_arm || BR2_armeb
- 	default y if BR2_aarch64 || BR2_aarch64_be
- 	default y if BR2_i386 || BR2_x86_64
- 	default y if BR2_sparc || BR2_sparc64
-
---===============5380887807823413328==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5380887807823413328==--
+T24gV2VkLCA1IEp1bCAyMDIzIDEwOjAzOjI4ICswMjAwCklnbmFjeSBHYXfEmWR6a2kgPGlnbmFj
+eS5nYXdlZHpraUBncmVlbi1jb21tdW5pY2F0aW9ucy5mcj4gd3JvdGU6Cgo+IFRoZSBsb2NhbCBj
+b3B5IGJwZnRvb2wgdXNlcyBub3cgY29tcGlsZXMgZmluZSBvbiBib3RoIGFybSBhbmQgYXJtZWIu
+Cj4gQWRkIHRoZXNlIGFyY2hzIHRvIEJSMl9QQUNLQUdFX0JQRlRPT0xfQVJDSF9TVVBQT1JUUy4K
+PiAKPiBTaWduZWQtb2ZmLWJ5OiBJZ25hY3kgR2F3xJlkemtpIDxpZ25hY3kuZ2F3ZWR6a2lAZ3Jl
+ZW4tY29tbXVuaWNhdGlvbnMuZnI+Cj4gLS0tCj4gIHBhY2thZ2UvYnBmdG9vbC9Db25maWcuaW4g
+fCAxICsKPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCgpBcHBsaWVkIHRvIG1hc3Rl
+ciwgdGhhbmtzLgoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1i
+ZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
