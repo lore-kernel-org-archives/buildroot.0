@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37098EB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 17:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E97BEEB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 17:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D95C481FB4;
-	Mon, 10 Jul 2023 17:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D95C481FB4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 950328211C;
+	Mon, 10 Jul 2023 17:46:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 950328211C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id olW_xlu0LC4h; Mon, 10 Jul 2023 17:45:40 +0000 (UTC)
+	with ESMTP id uxZw7Yhpq6fH; Mon, 10 Jul 2023 17:46:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBEA5820F4;
-	Mon, 10 Jul 2023 17:45:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBEA5820F4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80C011BF955
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:45:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AD48820F1;
+	Mon, 10 Jul 2023 17:46:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AD48820F1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A9B141BF3D4
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:45:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67BE560F39
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7ED1D4177F
  for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:45:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67BE560F39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7ED1D4177F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 70pntwBVaYaR for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kIOsGAlLLadD for <buildroot@lists.busybox.net>;
  Mon, 10 Jul 2023 17:45:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53385606E6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50FF241794
  for <buildroot@buildroot.org>; Mon, 10 Jul 2023 17:45:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53385606E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FF241794
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 40C9C86C7A; Mon, 10 Jul 2023 17:45:25 +0000 (UTC)
+ id 29E2E86C79; Mon, 10 Jul 2023 17:45:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 19:44:57 +0200
+Date: Mon, 10 Jul 2023 19:43:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c1b141c2900fa8085b1bc148ad54c2e7ff85a96
-X-Git-Newrev: 506f018b3a8709190f79f19c8d7824b3cfa18191
+X-Git-Oldrev: c7d1e92b1cbbb67cebea8e43d087fcc1aab657e7
+X-Git-Newrev: 4c1b141c2900fa8085b1bc148ad54c2e7ff85a96
 X-Patchwork-Hint: ignore
-Message-Id: <20230710174525.40C9C86C7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libasplib: remove package
+Message-Id: <20230710174525.29E2E86C79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi: bump version to 20.2-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,177 +63,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=506f018b3a8709190f79f19c8d7824b3cfa18191
+commit: https://git.buildroot.net/buildroot/commit/?id=4c1b141c2900fa8085b1bc148ad54c2e7ff85a96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added in 2015 to be used by Kodi ADSP addons these efforts have stopped:
-https://forum.kodi.tv/showthread.php?tid=252871&pid=3053658#pid3053658
-so this package is no longer needed.
+Removed patch which is included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
- Config.in.legacy                                   |  6 ++++
- DEVELOPERS                                         |  1 -
- package/Config.in                                  |  1 -
- ...0001-asplib_CPUTimer.h-Fix-time.h-include.patch | 39 ----------------------
- package/libasplib/Config.in                        | 11 ------
- package/libasplib/libasplib.hash                   |  3 --
- package/libasplib/libasplib.mk                     | 21 ------------
- 8 files changed, 6 insertions(+), 77 deletions(-)
+ .../kodi-jsonschemabuilder.mk                      |  2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk   |  2 +-
+ ...atBuffer-Remove-forward-declararion-of-Fl.patch | 42 ----------------------
+ package/kodi/kodi.hash                             |  2 +-
+ package/kodi/kodi.mk                               |  2 +-
+ 5 files changed, 4 insertions(+), 46 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b583c3db6a..3d8924c4e8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -687,7 +687,6 @@ package/libabseil-cpp/0001-force-position-independent-code.patch Upstream
- package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch Upstream
- package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch Upstream
- package/libart/0001-art-config-cross.patch Sob Upstream
--package/libasplib/0001-asplib_CPUTimer.h-Fix-time.h-include.patch Upstream
- package/libatasmart/0001-strpool-cross-flags.patch Upstream
- package/libavl/0001-fix-makefile.patch Upstream
- package/libb64/0001-Integer-overflows.patch Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d3a67aba83..7184d0a8b9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 72a2f05bd6..569bde8cd2 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
- comment "Legacy options removed in 2023.08"
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 20.1-Nexus
++KODI_JSONSCHEMABUILDER_VERSION = 20.2-Nexus
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index cb6b04d069..44eba85d75 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
  
-+config BR2_PACKAGE_LIBASPLIB
-+	bool "libasplib removed"
-+	select BR2_LEGACY
-+	help
-+	  libasplib is no longer needed.
-+
- config BR2_BINUTILS_VERSION_2_37_X
- 	bool "binutils 2.37.x has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 188c579010..e716642c6b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -357,7 +357,6 @@ F:	package/kodi*
- F:	package/lame/
- F:	package/leafnode2/
- F:	package/libaacs/
--F:	package/libasplib/
- F:	package/libass/
- F:	package/libbdplus/
- F:	package/libbluray/
-diff --git a/package/Config.in b/package/Config.in
-index bff090a661..9cdbd677ff 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1405,7 +1405,6 @@ menu "Audio/Sound"
- 	source "package/caps/Config.in"
- 	source "package/fdk-aac/Config.in"
- 	source "package/libao/Config.in"
--	source "package/libasplib/Config.in"
- 	source "package/libbroadvoice/Config.in"
- 	source "package/libcdaudio/Config.in"
- 	source "package/libcddb/Config.in"
-diff --git a/package/libasplib/0001-asplib_CPUTimer.h-Fix-time.h-include.patch b/package/libasplib/0001-asplib_CPUTimer.h-Fix-time.h-include.patch
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 20.1-Nexus
++KODI_TEXTUREPACKER_VERSION = 20.2-Nexus
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch b/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
 deleted file mode 100644
-index e0d0beccff..0000000000
---- a/package/libasplib/0001-asplib_CPUTimer.h-Fix-time.h-include.patch
+index 87df0e4c9a..0000000000
+--- a/package/kodi/0003-SavestateFlatBuffer-Remove-forward-declararion-of-Fl.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From 7291289ba0c052e45e2a0330642318798d6a4caf Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 27 Jan 2017 16:02:27 +0100
--Subject: [PATCH] asplib_CPUTimer.h: Fix time.h include
+@@ -1,42 +0,0 @@
+-From 07d8c98a0a65e005b85ef70e06eb1b9bbe7f764c Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Markus=20H=C3=A4rer?= <markus.haerer@gmx.net>
+-Date: Sun, 28 May 2023 00:49:40 +0200
+-Subject: [PATCH] SavestateFlatBuffer: Remove forward declararion of
+- FlatBufferBuilder
 -
--According to https://linux.die.net/man/3/clock_gettime time.h needs to
--be included instead of sys/time.h.
+-This caused a compiler error with recent faltbuffers because the type changed:
 -
--This patch fixes a build error found by buildroot autobuilders:
+-In file included from xbmc/cores/RetroPlayer/savestates/SavestateDatabase.cpp:12:
+-xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h:19:7: error: definition of type 'FlatBufferBuilder' conflicts with type alias of the same name
+-class FlatBufferBuilder;
+-      ^
+-/usr/include/flatbuffers/flatbuffer_builder.h:1414:7: note: 'FlatBufferBuilder' declared here
+-using FlatBufferBuilder = FlatBufferBuilderImpl<false>;
+-      ^
+-1 error generated.
 -
--http://autobuild.buildroot.net/results/cc0/cc0b928ee24a526b7c82fd3f391e2be024a14578//
+-(cherry picked from commit 351184d7e4e3edc447d04a297769eb41a477ba68)
 -
--/home/peko/autobuild/instance-1/output/build/libasplib-be7fac89218a84b75f7598e3d76625ece99296f2/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.cpp: In member function 'void asplib::CCPUTimer::start_Timer()':
--/home/peko/autobuild/instance-1/output/build/libasplib-be7fac89218a84b75f7598e3d76625ece99296f2/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.cpp:69:19: error: 'CLOCK_REALTIME' was not declared in this scope
--     clock_gettime(CLOCK_REALTIME, &m_startTime);
+-Upstream: https://github.com/xbmc/xbmc/commit/07d8c98a0a65e005b85ef70e06eb1b9bbe7f764c
 -
--Patch sent upstream: https://github.com/AchimTuran/asplib/pull/34
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ----
-- asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h | 5 -----
+- 1 file changed, 5 deletions(-)
 -
--diff --git a/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h b/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h
--index a61ff49..a9676e0 100644
----- a/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h
--+++ b/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h
--@@ -29,7 +29,7 @@
--   #include <windows.h>
--   #include <time.h>
-- #elif defined(TARGET_LINUX)
---  #include <sys/time.h>
--+  #include <time.h>
-- #endif
+-diff --git a/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h b/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
+-index cb93e6bbc2e12..fa42a9bad7034 100644
+---- a/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
+-+++ b/xbmc/cores/RetroPlayer/savestates/SavestateFlatBuffer.h
+-@@ -14,11 +14,6 @@
 - 
-- namespace asplib
---- 
--2.11.0
--
-diff --git a/package/libasplib/Config.in b/package/libasplib/Config.in
-deleted file mode 100644
-index 89d5448473..0000000000
---- a/package/libasplib/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_LIBASPLIB
--	bool "libasplib"
--	depends on BR2_INSTALL_LIBSTDCPP
--	help
--	  asplib (Achim's Signal Processing LIBrary), is a small and
--	  lightweight C++ library for digital signal processing.
--
--	  https://github.com/AchimTuran/asplib
--
--comment "asplib needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libasplib/libasplib.hash b/package/libasplib/libasplib.hash
-deleted file mode 100644
-index 251a50ee45..0000000000
---- a/package/libasplib/libasplib.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  68e117348fa17592dde7672477e927119a0e477103ced1d3a57d92e30880a147  libasplib-be7fac89218a84b75f7598e3d76625ece99296f2.tar.gz
--sha256  12ac5047f2af0522f06798b1589ffc4599bc29c91f954d7874e0320634e777c0  LICENSE
-diff --git a/package/libasplib/libasplib.mk b/package/libasplib/libasplib.mk
-deleted file mode 100644
-index 5da85abe0c..0000000000
---- a/package/libasplib/libasplib.mk
-+++ /dev/null
-@@ -1,21 +0,0 @@
--################################################################################
--#
--# libasplib
--#
--################################################################################
--
--LIBASPLIB_VERSION = be7fac89218a84b75f7598e3d76625ece99296f2
--LIBASPLIB_SITE = $(call github,AchimTuran,asplib,$(LIBASPLIB_VERSION))
--LIBASPLIB_LICENSE = GPL-3.0+
--LIBASPLIB_LICENSE_FILES = LICENSE
--LIBASPLIB_INSTALL_STAGING = YES
--
--LIBASPLIB_CONF_OPTS = \
--	-DASPLIB_MODULES_TO_BUILD=some \
--	-DBUILD_BIQUAD=ON \
--	-DBUILD_IIR=ON \
--	-DBUILD_LOGGER=ON \
--	-DBUILD_SIGNALS=ON \
--	-DBUILD_TIMER=ON
--
--$(eval $(cmake-package))
+- #include <flatbuffers/flatbuffers.h>
+- 
+--namespace flatbuffers
+--{
+--class FlatBufferBuilder;
+--}
+--
+- namespace KODI
+- {
+- namespace RETRO
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index ea9a588aeb..37fbf0c004 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  cd4158b2bc2d9593ad2f5c1cd2494957ab726b13d8379bbfb09d7d36df7b7d7e  kodi-20.1-Nexus.tar.gz
++sha256  4e81abf81172812bc8891f69a7a80a2b846298cecaae7b5009725e28a3040c23  kodi-20.2-Nexus.tar.gz
+ sha256  f38c4a4e7a4f4da6d8e83b8852489aa3bb6588a915dc41f5ee89d9aad305a06e  kodi-libdvdcss-1.4.3-Next-Nexus-Alpha2-2.tar.gz
+ sha256  584f62a3896794408d46368e2ecf2c6217ab9c676ce85921b2d68b8961f49dfc  kodi-libdvdnav-6.1.1-Next-Nexus-Alpha2-2.tar.gz
+ sha256  719130091e3adc9725ba72df808f24a14737a009dca5a4c38c601c0c76449b62  kodi-libdvdread-6.1.3-Next-Nexus-Alpha2-2.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 70ed270555..7cbc1df40a 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION_MAJOR = 20.1
++KODI_VERSION_MAJOR = 20.2
+ KODI_VERSION_NAME = Nexus
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
