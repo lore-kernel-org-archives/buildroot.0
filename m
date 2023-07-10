@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17F6DEB64DA
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 17:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1678EB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 17:31:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B82A08203F;
-	Mon, 10 Jul 2023 17:30:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B82A08203F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FC4981A39;
+	Mon, 10 Jul 2023 17:31:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FC4981A39
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 82GgYA51-ueq; Mon, 10 Jul 2023 17:30:00 +0000 (UTC)
+	with ESMTP id P3FHFqnJ4VQ4; Mon, 10 Jul 2023 17:31:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BCBF8203B;
-	Mon, 10 Jul 2023 17:29:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BCBF8203B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9F9531BF3D4
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:29:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1CFD817AD;
+	Mon, 10 Jul 2023 17:31:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1CFD817AD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 968E21BF3D4
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:31:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83EE1409A3
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:29:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83EE1409A3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 707C0817AD
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:31:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 707C0817AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dqK0o1w20ZoE for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 17:29:54 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DD9840023
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1DD9840023
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 17:29:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B8BC1FF806;
- Mon, 10 Jul 2023 17:29:50 +0000 (UTC)
-Date: Mon, 10 Jul 2023 19:29:49 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230710192949.1dac4ce4@windsurf>
-In-Reply-To: <20230703202020.1340395-1-giulio.benetti@benettiengineering.com>
-References: <20230703202020.1340395-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689010191;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=t7iEwvhhsXy0FIYfGltErwHpbHRB5QKvIRexvkLpWLI=;
- b=JMeM7PwERhSRMGK6pRjSF899+cPG7viN6NfomoatkBW/W4MmnksJFnTMTGwuKKOE79Un/E
- k/+I1QLS0ZVXgLu8pkVeeSJ7FjBOLSE+BhjoJb9G1rPFQ2z5XlTEV2eGmmDXsnUx3ouA/O
- CBv5+XqLs1RiYbWkvW5d9xaAzfsegb583h24YyYtDph94v2Yy3EskqlE1iOEDzbVvUj2Mb
- 4beDBbwA1x1oNtspMMrzjVgFO1sXHj25qVgsdlx92RAMWBAX8xlXB6LbWcA9WePHeMl72h
- 8T9El0ftSIH8HOJhpdJL8+6tZ3lEMONjH+1bMvznU8EtCBf9H1hs62iK+GZ6+g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JMeM7PwE
-Subject: Re: [Buildroot] [PATCH v2] package/rtl8192eu: bump to version
- 2023-06-23 on branch 5.11.2.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1tx5Hgr0b2qO for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 17:31:03 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B21B8813FE
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 17:31:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B21B8813FE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A26BE86BDA; Mon, 10 Jul 2023 17:31:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 10 Jul 2023 19:30:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f12f54998a70cf30323b9eda9ea9cc95453d11d6
+X-Git-Newrev: ff2c69a9009341f9bd9e3a99cc984d36cfa395a6
+X-Patchwork-Hint: ignore
+Message-Id: <20230710173103.A26BE86BDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iproute2: add optional dependency
+ on libbpf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,37 +58,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6506506666574855718=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  3 Jul 2023 22:20:20 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+--===============6506506666574855718==
+Content-Type: text/plain
 
-> Drop local patch that has been upstreamed.
-> It now supports building with Linux version > 6.1
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-> V1->V2:
-> * merge pending patch with this one since this one is not applicable alone
-> ---
->  ...02-Fix-conflicting-get_ra-on-PowerPC.patch | 124 ------------------
->  package/rtl8192eu/rtl8192eu.hash              |   2 +-
->  package/rtl8192eu/rtl8192eu.mk                |   2 +-
->  3 files changed, 2 insertions(+), 126 deletions(-)
->  delete mode 100644 package/rtl8192eu/0002-Fix-conflicting-get_ra-on-PowerPC.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=ff2c69a9009341f9bd9e3a99cc984d36cfa395a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/iproute2/iproute2.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 15af076db9..49a65516d6 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -38,8 +38,16 @@ ifeq ($(BR2_PACKAGE_BERKELEYDB_COMPAT185),y)
+ IPROUTE2_DEPENDENCIES += berkeleydb
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBBPF),y)
++IPROUTE2_DEPENDENCIES += libbpf
++IPROUTE2_CONFIGURE_OPTS += --libbpf_force on
++else
++IPROUTE2_CONFIGURE_OPTS += --libbpf_force off
++endif
++
+ define IPROUTE2_CONFIGURE_CMDS
+-	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
++	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure \
++		$(IPROUTE2_CONFIGURE_OPTS)
+ 	$(IPROUTE2_DISABLE_IPTABLES)
+ endef
+ 
+
+--===============6506506666574855718==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6506506666574855718==--
