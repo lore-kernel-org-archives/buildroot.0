@@ -4,85 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08247EB64DA
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 21:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA944EB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 21:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78750417A1;
-	Mon, 10 Jul 2023 21:27:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78750417A1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47FB04179D;
+	Mon, 10 Jul 2023 21:27:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47FB04179D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 09Tzk0zfmeZI; Mon, 10 Jul 2023 21:27:13 +0000 (UTC)
+	with ESMTP id kkndPLUUFyMZ; Mon, 10 Jul 2023 21:27:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 950AB4179C;
-	Mon, 10 Jul 2023 21:27:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 950AB4179C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B64071BF33B
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 21:27:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14B7641794;
+	Mon, 10 Jul 2023 21:27:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14B7641794
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C9381BF33B
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 21:27:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C97E81EEB
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 21:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C97E81EEB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 340174179C
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 21:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 340174179C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sS9QUFPRHysE for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 21:27:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF32981EE4
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EF32981EE4
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 21:27:09 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id
- e9e14a558f8ab-345fcf8951fso16709165ab.1
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 14:27:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689024428; x=1691616428;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=AsDrH/IZadTkynNNmnxJN8P/7G5I8xNUspNOcBw+xUQ=;
- b=WC5khwgcKXwUCdiTUVuwNMhxJcsNiSXQ+TVgwFbidZUEdpHev7Wv8CsWAv7wOvg/E6
- /tUddveYjhNEG9dA7qEQ1QiYy73gM9n+UmDsYsOLfx0vZyknZn6UJbbt6lWv67lGkuzw
- YhIcTjXSCLXTq17/E4WElB9A8Ng7DMEHzmC8BJ5iacdZWHprn/zD0Wco/Lpcki5p4atz
- 7pfOmiU2Q02RWzxDaG35eSFTmEl89sVOxyU4nyKDNhx7NfkMbDFal81avy7MfsDwkHGB
- eZeGLXrPLO+iMfhHcegKTF3XiH1CcPNyEPVIpbTp9tvxkIW3QBMBF+hxHwerS9G9w/2j
- qI1g==
-X-Gm-Message-State: ABy/qLZWSQMwKHJIfWmIIiHd88iitBbny53M8WQTshvSFxsrWu+CBksV
- R9H5uXWLjrvMejSGqa61+WRUxRg3nMM=
-X-Google-Smtp-Source: APBJJlGeC1pt9fqb8MTX0fdFSfeKRSkRKS92nYG0ZIYfwYy3sll32i0viPAqoGQj6yMgaJ2ZmxDU7A==
-X-Received: by 2002:a92:c688:0:b0:345:ced4:b340 with SMTP id
- o8-20020a92c688000000b00345ced4b340mr14612030ilg.8.1689024428550; 
- Mon, 10 Jul 2023 14:27:08 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-225-212.hlrn.qwest.net.
- [71.218.225.212]) by smtp.gmail.com with ESMTPSA id
- v24-20020a02cbb8000000b0041f552e4aa2sm101973jap.135.2023.07.10.14.27.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 10 Jul 2023 14:27:08 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 15:26:53 -0600
-Message-Id: <20230710212653.3153894-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yvXb8PJT_YAo for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 21:27:15 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0ADF41805
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A0ADF41805
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 21:27:14 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5FA3A20005;
+ Mon, 10 Jul 2023 21:27:11 +0000 (UTC)
+Date: Mon, 10 Jul 2023 23:27:09 +0200
+To: Thomas Huth <huth@tuxfamily.org>
+Message-ID: <20230710232709.5b8a3eca@windsurf>
+In-Reply-To: <20221015060411.326933-1-huth@tuxfamily.org>
+References: <20221015060411.326933-1-huth@tuxfamily.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689024428; x=1691616428;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AsDrH/IZadTkynNNmnxJN8P/7G5I8xNUspNOcBw+xUQ=;
- b=F24PI0cjMME7qWCHDTBDitsEoNCXu/PxbIz1YdtfYIocJPvUCfbkg92tqnRilweLXI
- QJDwK1ldio5CM05qizbDxOFXJ8lAtpi9etFO0Xe1cYN8Q4nUgu9+sCJrP6odIM2bsNLQ
- GaeLYlW9jLdL2K7GSvfVcdN5fkgUfbXWLZGZoVkgMy55HnG4wv4XAEhrywC+po2Wn7Ow
- Tlkm30pTe3xJdtFgnfToLtJyPNrBtHjRqxxV9bno2NQX0i0UCk4Gkl6OprWH9BvikJ3y
- 4/HkauFmAGKR5MBv0BdXj3gd5KYuaD4MlB5XJed7EhGL4MwQWS5zq8DBFSfdKV/A4a/v
- 4DKA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=F24PI0cj
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Remove Michael Rommel
+ d=bootlin.com; s=gm1; t=1689024432;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=q17wq+XW/tuCN4adzcrDYqzrF89EtPjzHINACLE3mGM=;
+ b=fMrFMwUswPp3Elg5twmlHovwJgtlp05MrO1lUoSBYrkxEhM9Sapxyoyp4/MymCSq8JRb94
+ s5ER5BNXM+qAIJoTMMXaYAkdi+kGLKRM3Puo4jolVntIGF+9tf4PZY1n2m/VVrLNWpIojw
+ cMqkATHrqLM6us8DeCtUPpmrfEY9hCuG57GdxrGojlO+U4f+/ph0wMUnG7K/an2YqwqdZp
+ HWGhosJ8mJNNrQyQBHHXIc3XAq8aO6OuKne+0u5cJiKl42FrPKM1rERBnVvJGLzkRbLJMH
+ ms8MEhX5SROUG9FY+hjBFFvJWCz8WVBV9N2I4/8xi5kax29JZeKUAvF8No2e0g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fMrFMwUs
+Subject: Re: [Buildroot] [PATCH] package/frotz: Add a missing dependency to
+ the Makefile to fix build problems
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,43 +76,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: rommel@layer-7.net, James Hilliard <james.hilliard1@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removal requested via email:
+Hello Thomas,
 
-could you somehow please remove me as maintainer from this package.
-I am since many years not using builtroot anymore and have no longer
-systems with which I could do patch requests.
-I am going into retirement.
+On Sat, 15 Oct 2022 08:04:11 +0200
+Thomas Huth <huth@tuxfamily.org> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- DEVELOPERS | 5 -----
- 1 file changed, 5 deletions(-)
+> There are currently some build jobs failing where blorblib is built before
+> hash.h has been created. This patch should hopefully fix these issues.
+> 
+> Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+> ---
+>  See e.g. here for a failed build:
+>  http://autobuild.buildroot.net/results/9cd213ce2d36f797041c7b21044c2b2c223dd546/build-end.log
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3237c90c39..95f5305d6c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2079,11 +2079,6 @@ F:	package/protobuf/
- F:	package/re2/
- F:	package/spdlog/
- 
--N:	Michael Rommel <rommel@layer-7.net>
--F:	package/knock/
--F:	package/python-crc16/
--F:	package/python-pyzmq/
--
- N:	Michael Trimarchi <michael@amarulasolutions.com>
- F:	board/bsh/
- F:	configs/imx8mn_bsh_smm_s2_defconfig
+I believe this kind of issue dates back from when James was testing
+with --shuffle=random. So I tried to reproduce locally by doing several
+builds of frotz with "make --shuffle=random", and I was not able to
+reproduce. I'm not really keen on adding a patch that "hopefully fix
+these issues", without being able to reproduce them and confidently say
+that the patch fixes the issue.
+
+So for now, I've marked the patch as Rejected, but we can always
+revisit that if we get a way of reproducing the issue, and therefore
+confirming that the problem no longer occurs thanks to the patch.
+
+Thanks,
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
