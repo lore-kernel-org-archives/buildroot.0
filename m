@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C608EB64DA
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 19:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4F55EB64DA
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 19:32:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A214140B5D;
-	Mon, 10 Jul 2023 19:24:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A214140B5D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59D1840B91;
+	Mon, 10 Jul 2023 19:32:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59D1840B91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vtbPkz_w1aEa; Mon, 10 Jul 2023 19:24:04 +0000 (UTC)
+	with ESMTP id K_BiuO7JnNj2; Mon, 10 Jul 2023 19:32:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E94CD40291;
-	Mon, 10 Jul 2023 19:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E94CD40291
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 63A0C1BF3A1
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 19:24:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 938D240B7B;
+	Mon, 10 Jul 2023 19:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 938D240B7B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CBAB1BF3A1
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 19:32:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D43440B5D
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 19:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D43440B5D
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA41E4187D
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 19:32:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA41E4187D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dE8tQ4JEhew7 for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 19:24:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F97F40291
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 19:24:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F97F40291
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C92486CD1; Mon, 10 Jul 2023 19:24:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 21:23:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 70ff5377f233ff936d31956b4c2747280d25d289
-X-Git-Newrev: 794b9e993273fbaa4e814f9a4b3e62c633d8d117
-X-Patchwork-Hint: ignore
-Message-Id: <20230710192400.6C92486CD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-seco: add the
- imx8dxl b0 revsision ahab image
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RU3EpX2ywZOy for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 19:32:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8720041876
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8720041876
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 19:32:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6724C240003;
+ Mon, 10 Jul 2023 19:32:24 +0000 (UTC)
+Date: Mon, 10 Jul 2023 21:32:23 +0200
+To: Charles Hardin <ckhardin@gmail.com>
+Message-ID: <20230710213223.5b49c915@windsurf>
+In-Reply-To: <20230620171943.3999-1-ckhardin@gmail.com>
+References: <20230620171943.3999-1-ckhardin@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689017544;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=w5vTBM+GlQGlJyTut5nW338cbnVz1QdyLwnHXgzfmxE=;
+ b=Kr2zgumR8RigAPzXtvmmWJ3+6J8SOKIQb8y7uQLqRlPqezCsU8QR5yTslGOLECwwtemzJq
+ PPPs/ijXhok8ISKyv7iEUFJETIRhOkT1v5dh0IMlKWqRsKARoj9ffVKMy8U4fIBFBXK11u
+ MQBzVLUbejTZ2cYH88Wmz2I9PAG4JvVBgWJOeyXCRwKN8CyKF8mfseM4QdWwsfjXjbccV9
+ kp5b7SGLtsCVa5vMeNsXkSjK7GHcS5hliGwALDetLUds6kkV7abiLGpzhEIzMlEC09Ln3M
+ 4nSpwB/fDob39X6/bRDAFujd9hudzwjVKFXeobQ7I082ve1Nqj29/1Ks4Rp9cw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Kr2zgumR
+Subject: Re: [Buildroot] [PATCH 1/1] packages/imx-seco: add the imx8dxl b0
+ revsision ahab image
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,63 +78,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Maeva Manuel <maeva.manuel@oss.nxp.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=794b9e993273fbaa4e814f9a4b3e62c633d8d117
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Charles,
 
-Update the selection of the ahab container images for the imx8dxl
-asics. The initial support assumed these were imx8 but this is
-actually the imx8x architecture as well. This was fixed when run on
-the first tests against the imx8dxl SoCs.
+On Tue, 20 Jun 2023 10:19:43 -0700
+Charles Hardin <ckhardin@gmail.com> wrote:
 
-Files from upstream:
-    mx8dxla0-ahab-container.img
-    mx8dxla1-ahab-container.img
-    mx8dxlb0-ahab-container.img
+> Update the selection of the ahab container images for the imx8dxl
+> asics. The initial support assumed these were imx8 but this is
+> actually the imx8x architecture as well. This was fixed when run on
+> the first tests against the imx8dxl SoCs.
+> 
+> Files from upstream:
+>     mx8dxla0-ahab-container.img
+>     mx8dxla1-ahab-container.img
+>     mx8dxlb0-ahab-container.img
+> 
+> The B0 revision should be considered the latest
+> 
+> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+> ---
+>  package/freescale-imx/imx-seco/Config.in | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 
-The B0 revision should be considered the latest
+I've applied, but I would have preferred two patches: one fixing the
+existing entries, one adding the new entry, as these are completely
+different things.
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/freescale-imx/imx-seco/Config.in | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/package/freescale-imx/imx-seco/Config.in b/package/freescale-imx/imx-seco/Config.in
-index 867ffe1bb0..41f8444651 100644
---- a/package/freescale-imx/imx-seco/Config.in
-+++ b/package/freescale-imx/imx-seco/Config.in
-@@ -22,11 +22,15 @@ choice
- 
- config BR2_PACKAGE_IMX_SECO_MX8DXLA0
- 	bool "imx-seco-mx8dxla0"
--	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
-+	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 
- config BR2_PACKAGE_IMX_SECO_MX8DXLA1
- 	bool "imx-seco-mx8dxla1"
--	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
-+	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+
-+config BR2_PACKAGE_IMX_SECO_MX8DXLB0
-+	bool "imx-seco-mx8dxlb0"
-+	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 
- config BR2_PACKAGE_IMX_SECO_MX8QMB0
- 	bool "imx-seco-mx8qmb0"
-@@ -46,6 +50,7 @@ config BR2_PACKAGE_IMX_SECO_AHAB_CONTAINER_IMAGE
- 	string
- 	default "mx8dxla0-ahab-container.img" if BR2_PACKAGE_IMX_SECO_MX8DXLA0
- 	default "mx8dxla1-ahab-container.img" if BR2_PACKAGE_IMX_SECO_MX8DXLA1
-+	default "mx8dxlb0-ahab-container.img" if BR2_PACKAGE_IMX_SECO_MX8DXLB0
- 	default "mx8qmb0-ahab-container.img" if BR2_PACKAGE_IMX_SECO_MX8QMB0
- 	default "mx8qxb0-ahab-container.img" if BR2_PACKAGE_IMX_SECO_MX8QXB0
- 	default "mx8qxc0-ahab-container.img" if BR2_PACKAGE_IMX_SECO_MX8QXC0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
