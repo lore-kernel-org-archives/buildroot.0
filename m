@@ -4,85 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 460DCEB64DA
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 19:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD33CC0015E
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 20:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0A4F40B93;
-	Mon, 10 Jul 2023 19:58:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0A4F40B93
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8246B40B91;
+	Mon, 10 Jul 2023 20:00:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8246B40B91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x-yEBHYVZfNQ; Mon, 10 Jul 2023 19:58:55 +0000 (UTC)
+	with ESMTP id tRbQfxdb2ek7; Mon, 10 Jul 2023 20:00:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7A1540A65;
-	Mon, 10 Jul 2023 19:58:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7A1540A65
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A152B1BF3A1
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 19:58:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1CE740B98;
+	Mon, 10 Jul 2023 20:00:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1CE740B98
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F389F1BF3A1
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 20:00:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 796A8416B7
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 19:58:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 796A8416B7
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7FA98203F
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 20:00:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7FA98203F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BnnHWPqVVy-d for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 19:58:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4ECCB416C3
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com
- [IPv6:2001:4860:4864:20::2a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4ECCB416C3
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 19:58:51 +0000 (UTC)
-Received: by mail-oa1-x2a.google.com with SMTP id
- 586e51a60fabf-1b060bce5b0so4230824fac.3
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 12:58:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689019130; x=1691611130;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=8JAlZDh0dITh5K8kwvKwDxWFmfE1ZBFRvddDUwVcNNU=;
- b=DmINX8oHDgH/IlKD4qRsHYJiaGnaJK9FjEPBjaNUgr1QsGUCZoh2LHJPotW52C3IpH
- ov/lsxJVYa9lB5yDBy1Uqx51JYxAUNFnR1/wwsj9ktnKXM7Tcl1p7pNzbBGk4nd9JVJm
- TORtnSDM9w9cwgd9GTf3MVImMQwTOhEC8PEQatM5v6lltSMdbMVzj1mRleTqx2JwRFkM
- ooLaOSJFQvjoSHtJTZysIKhYD1EF5ddxEFNVAzbCYKkHED14x5iO/GuQEhHqzkP1UXpS
- jgP0Q3sypi+HZV+NC2fEtOrKRXdNYM/Ehy5FD7Al5zuvIcpEJ27IjBd4C1/C7qHu8Ddz
- VaRw==
-X-Gm-Message-State: ABy/qLZFtqINMBN8US03cGNOgdAb2hA3T/m5WAV2gwxDMgGCZX8xRqsk
- 8M46QpNlrE1u7JqfYQT6pNMIr/J9nedQ/TgbTi0=
-X-Google-Smtp-Source: APBJJlHyxw496JLei1P7XDlG9cpDhkyhP+PDmtOc/emq+gyCUeXvVPcK6pMynPID8t69iRNmE4Qv83ced7mOGlKHY9Q=
-X-Received: by 2002:a05:6870:1f87:b0:1b3:9e41:de07 with SMTP id
- go7-20020a0568701f8700b001b39e41de07mr15269058oac.36.1689019130192; Mon, 10
- Jul 2023 12:58:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230627072640.2437216-1-james.hilliard1@gmail.com>
- <20230627072640.2437216-2-james.hilliard1@gmail.com>
- <20230710200146.33aa4362@windsurf>
-In-Reply-To: <20230710200146.33aa4362@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 10 Jul 2023 13:58:38 -0600
-Message-ID: <CADvTj4ruzjfhJ-Ns9rPYhrW4oGWGqCkf66gUjTT+DR+DB8C3Xw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689019130; x=1691611130;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=8JAlZDh0dITh5K8kwvKwDxWFmfE1ZBFRvddDUwVcNNU=;
- b=TJGyIVM5dIPvFaQa5fUqokjE9CFCWBHij73YOnpZ9n5FwksDCJh3rtq7G8bfdcPcIK
- gbQwVZJbXfjvKMMNmGxDrZ1U/utadlNy84gta5Su8JNxFHyibXYvylhNVb/18gz3Pslb
- +Enp8p1w7kbC81qtHAjyLjjbgFpnQ3pzLTDv6TRoL/Nzpw+IbIMXUbHBjKmYw8YYC2lK
- pGA84gdFBZgA4circGnZ2cHd+82P0Ke5ipF91Gj3iloI0gQsA0OIpcy6BBtwAphCsWwh
- U4xxBlSfbafj5jlGJSa9snp3l+ZZKkmC39AuX2zH84a/c6WxHfdKbjA0bk7ooCfs0V9S
- IKYw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=TJGyIVM5
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-terminaltables: fix
- build backend
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nsM0Foz4XpNH for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 20:00:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 90F3F82051
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 20:00:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90F3F82051
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 79B4386CE4; Mon, 10 Jul 2023 20:00:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 10 Jul 2023 21:58:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 794b9e993273fbaa4e814f9a4b3e62c633d8d117
+X-Git-Newrev: 168e5848addda21067d3b8791e9b781847daa30f
+X-Patchwork-Hint: ignore
+Message-Id: <20230710200005.79B4386CE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/unzip: configure with
+ LARGE_FILE_SUPPORT by default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,32 +56,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBKdWwgMTAsIDIwMjMgYXQgMTI6MDHigK9QTSBUaG9tYXMgUGV0YXp6b25pCjx0aG9t
-YXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKPgo+IEhlbGxvIEphbWVzLAo+Cj4gT24g
-VHVlLCAyNyBKdW4gMjAyMyAwMToyNjo0MCAtMDYwMAo+IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5o
-aWxsaWFyZDFAZ21haWwuY29tPiB3cm90ZToKPgo+ID4gV2UgbmVlZCB0byBtaWdyYXRlIHB5dGhv
-bi10ZXJtaW5hbHRhYmxlcyB0byB0aGUgcGVwNTE3IHBvZXRyeS1jb3JlCj4gPiBiYWNrZW5kIGFz
-IHNldHVwdG9vbHMgaXMgbm90IHN1cHBvcnRlZC4KPiA+Cj4gPiBVcHN0cmVhbSBoYXMgbWVyZ2Vk
-IGEgcGF0Y2ggcmVwbGFjaW5nIHBvZXRyeSB3aXRoIHBvZXRyeS1jb3JlLCBob3dldmVyCj4gPiB3
-ZSBjYW4gbm90IGJhY2twb3J0IHRoaXMgdXNpbmcgYSBwYXRjaCBmaWxlIGR1ZSB0byBDUkxGIGxp
-bmUgZW5kaW5nCj4gPiBpc3N1ZXMgc28gd2Ugd2lsbCBoYXZlIHRvIGFwcGx5IHRoZSBjaGFuZ2Ug
-aW4gdGhlIHBhdGNoIHVzaW5nIHNlZAo+ID4gaW5zdGVhZC4KPiA+Cj4gPiBTZWUgdXBzdHJlYW0g
-Y29tbWl0Ogo+ID4gaHR0cHM6Ly9naXRodWIuY29tL21hdHRoZXdkZWFubWFydGluL3Rlcm1pbmFs
-dGFibGVzL2NvbW1pdC85ZTNkZGEwZWZiNTRmZWU2OTM0Yzc0NGExM2E3MzM2ZDI0YzZlOWU5Cj4g
-Pgo+ID4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFp
-bC5jb20+Cj4KPiBXaGF0IGlzIHRoZSBtb3RpdmF0aW9uIHRvIGRvIHRoaXMsIGlmIHRoZSBjdXJy
-ZW50IHZlcnNpb24gb2YKPiBweXRob24tdGVybWluYWx0YWJsZXMgYnVpbGRzIGZpbmUgd2l0aCBz
-ZXR1cHRvb2xzPwoKSXQgZG9lc24ndCBidWlsZCBpbiBjb21iaW5hdGlvbiB3aXRoIHBlcDUxNyBz
-ZXR1cHRvb2xzIHNpbmNlIHRoZSBweXByb2plY3QudG9tbApzcGVjaWZpZXMgcG9ldHJ5IGFzIHRo
-ZSBidWlsZCBiYWNrZW5kIGFuZCBub3Qgc2V0dXB0b29scy4KCj4KPiBUaG9tYXMKPiAtLQo+IFRo
-b21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51
-eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwo+IGh0dHBzOi8vYm9vdGxpbi5j
-b20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=168e5848addda21067d3b8791e9b781847daa30f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Buildroot always enable largefile support in the toolchain, and thus
+the associated definitions are always on. This leads to a problem in
+unzip that on a 32-bit arch with these flags being passed in
+
+   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+
+but the LARGE_FILE_SUPPORT define not being set will cause a size
+mismatch on the comparison of the zipfiles:
+
+    $ unzip test.zip
+    Archive: test.zip
+    error: invalid zip file with overlapped components (possible zip bomb)
+
+The simple solution is just enable LARGE_FILE_SUPPORT to enable large
+file support. In order to avoid redefinition warnings, we undefine
+_LARGEFILE_SOURCE and _LARGEFILE64_SOURCE.
+
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/unzip/unzip.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+index 44cc2013fb..14ccedd48f 100644
+--- a/package/unzip/unzip.mk
++++ b/package/unzip/unzip.mk
+@@ -28,4 +28,18 @@ UNZIP_IGNORE_CVES = \
+ 	CVE-2022-0529 \
+ 	CVE-2022-0530
+ 
++# unzip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE when
++# necessary, redefining it on the command line causes some warnings.
++UNZIP_TARGET_CFLAGS = \
++	$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
++
++# unzip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE when
++# necessary, redefining it on the command line causes some warnings.
++UNZIP_TARGET_CXXFLAGS = \
++	$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE,$(TARGET_CXXFLAGS))
++
++UNZIP_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(UNZIP_TARGET_CFLAGS) -DLARGE_FILE_SUPPORT" \
++	-DCMAKE_CXX_FLAGS="$(UNZIP_TARGET_CXXFLAGS) -DLARGE_FILE_SUPPORT"
++
+ $(eval $(cmake-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
