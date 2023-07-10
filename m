@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 874AFEB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4338CEB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F359405AE;
-	Mon, 10 Jul 2023 16:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F359405AE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DA0940886;
+	Mon, 10 Jul 2023 16:39:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DA0940886
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u1bK08oh-Ytt; Mon, 10 Jul 2023 16:39:38 +0000 (UTC)
+	with ESMTP id ngTusKV1XXmw; Mon, 10 Jul 2023 16:39:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFF084053D;
-	Mon, 10 Jul 2023 16:39:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFF084053D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4A1871BF414
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:39:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6938640583;
+	Mon, 10 Jul 2023 16:39:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6938640583
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5550A1BF414
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:39:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3199F81F97
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3199F81F97
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2061D40489
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:39:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2061D40489
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nlMHnfhyMOQq for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 16:39:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4BD7B81F31
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BD7B81F31
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3925886B3B; Mon, 10 Jul 2023 16:39:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 18:39:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 88a2e0c473fe78ba571bf48fb4e9cc94c86a3df4
-X-Git-Newrev: 025ce96406309d1dd4411ae253e5cc6a8cdb9aec
-X-Patchwork-Hint: ignore
-Message-Id: <20230710163934.3925886B3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/emlog: fix build on Linux 6.4
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QbFdA8qmWwhf for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 16:39:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3CAE4013F
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C3CAE4013F
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:39:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 928F0E0004;
+ Mon, 10 Jul 2023 16:39:36 +0000 (UTC)
+Date: Mon, 10 Jul 2023 18:39:35 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230710183935.6d59f61e@windsurf>
+In-Reply-To: <20230708111431.425846-1-bernd@kuhls.net>
+References: <20230708111431.425846-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689007177;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Eu8MA87Uv3slyvVH2fpG+krAnS235/LIqW2h+OUlHEw=;
+ b=NxPyEotfHGiDXBYzHhSKufAKYswVf/3EiEhK36R175+nuJzpCH2/Hr4SdalXmAq5mTDDpc
+ 8fiO0XIhoXPxdu7i0SfDxxV4dfWtagYUWC1cC8ENzY+mTF1Oagq3a9PsKQlyqcUNt2s8db
+ Jvoq4LguaWzshb9toKdUKFTMCoSxu2Zd+A5H/FidwThD0KSWmA14bJ1UBQkC45Mhsq3Dig
+ w0UHMLKv/vC4UzcswwOA2ccsqBYbKElrNTSGIaa56XWXugt9bAlLtwEIn1M3R3PRc02ipg
+ kvGLweq5CrNYYB85dRCyLXcOXDubi/WhOLgrhQkMMqmacjj8/GqvAIs6g/Py2w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=NxPyEotf
+Subject: Re: [Buildroot] [PATCH 1/1] package/emlog: Fix build on Linux 6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,64 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Joris Lijssens <joris.lijssens@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=025ce96406309d1dd4411ae253e5cc6a8cdb9aec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  8 Jul 2023 13:14:31 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/f6c/f6c52f58c3c016cee59d2dfe513c449d96dc3b09/
+> Fixes:
+> http://autobuild.buildroot.net/results/f6c/f6c52f58c3c016cee59d2dfe513c449d96dc3b09/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  .../emlog/0001-Fix-build-on-Linux-6.4.patch   | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/emlog/0001-Fix-build-on-Linux-6.4.patch
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/emlog/0001-Fix-build-on-Linux-6.4.patch | 34 +++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/emlog/0001-Fix-build-on-Linux-6.4.patch b/package/emlog/0001-Fix-build-on-Linux-6.4.patch
-new file mode 100644
-index 0000000000..65440c1933
---- /dev/null
-+++ b/package/emlog/0001-Fix-build-on-Linux-6.4.patch
-@@ -0,0 +1,34 @@
-+From 32ec7f7b4eb1466100d59aaea8855d770af54327 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 8 Jul 2023 13:10:24 +0200
-+Subject: [PATCH] Fix build on Linux 6.4
-+
-+Needed after upstream changes in kernel 6.4:
-+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/diff/include/linux/device/class.h?id=1aaba11da9aa
-+
-+Upstream: https://github.com/nicupavel/emlog/pull/15
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ emlog.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/emlog.c b/emlog.c
-+index 4462466..2ead738 100644
-+--- a/emlog.c
-++++ b/emlog.c
-+@@ -500,7 +500,11 @@ static int __init emlog_init(void)
-+ 
-+     pr_info("version %s running, major is %u, MINOR is %u, max size %d K.\n", EMLOG_VERSION, (unsigned)MAJOR(emlog_dev_type), (unsigned)MINOR(emlog_dev_type), emlog_max_size);
-+ 
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
-+     emlog_class = class_create(THIS_MODULE, DEVICE_NAME);
-++#else
-++    emlog_class = class_create(DEVICE_NAME);
-++#endif
-+     if (emlog_class == NULL) {
-+         pr_err("Can not class_create.\n");
-+         ret_val = -4; goto emlog_init_error;
-+-- 
-+2.39.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
