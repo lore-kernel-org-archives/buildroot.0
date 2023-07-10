@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A129EB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 854BDEB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2C4460FD4;
-	Mon, 10 Jul 2023 16:09:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2C4460FD4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 378E260FCD;
+	Mon, 10 Jul 2023 16:10:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 378E260FCD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rkQPar_o5ynq; Mon, 10 Jul 2023 16:09:47 +0000 (UTC)
+	with ESMTP id wZ779u6v0mOA; Mon, 10 Jul 2023 16:10:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D889960FCE;
-	Mon, 10 Jul 2023 16:09:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D889960FCE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E00FD1BF955
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:09:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5961660FC6;
+	Mon, 10 Jul 2023 16:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5961660FC6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 16F1F1BF414
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:09:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B9F0381F42
+ by smtp4.osuosl.org (Postfix) with ESMTP id F06F941761
  for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:09:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9F0381F42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F06F941761
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aYI_44Lw0Diy for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 16:09:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0b28Ft1GtsI7 for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 16:09:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D731581F2C
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB5284175B
  for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:09:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D731581F2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB5284175B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5D2686A5F; Mon, 10 Jul 2023 16:09:31 +0000 (UTC)
+ id D83F686A63; Mon, 10 Jul 2023 16:09:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 18:07:27 +0200
+Date: Mon, 10 Jul 2023 18:07:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8caa83002edb57e4b8817ad204cd3e8022aff39a
-X-Git-Newrev: 737dc627324dec90b007c2ddf96a10402c43b56f
+X-Git-Oldrev: 38efcd326205baa0d2dfaf021836f5ac870edf45
+X-Git-Newrev: ccdeeb03c3312347fcf7ad8d153dedd9ff32ba2e
 X-Patchwork-Hint: ignore
-Message-Id: <20230710160931.C5D2686A5F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-mail-dkim: bump version to
- 1.20230630
+Message-Id: <20230710160931.D83F686A63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-net-http: bump version to 6.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=737dc627324dec90b007c2ddf96a10402c43b56f
+commit: https://git.buildroot.net/buildroot/commit/?id=ccdeeb03c3312347fcf7ad8d153dedd9ff32ba2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Removed md5 hash.
@@ -72,35 +71,35 @@ Removed md5 hash.
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-mail-dkim/perl-mail-dkim.hash | 3 +--
- package/perl-mail-dkim/perl-mail-dkim.mk   | 2 +-
+ package/perl-net-http/perl-net-http.hash | 3 +--
+ package/perl-net-http/perl-net-http.mk   | 2 +-
  2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index 6edeaa9d8b..5b0e77294d 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
+diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
+index f02fd90808..094b9e5da0 100644
+--- a/package/perl-net-http/perl-net-http.hash
++++ b/package/perl-net-http/perl-net-http.hash
 @@ -1,6 +1,5 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  5a0dec58f0c2526521b2952a3c126906  Mail-DKIM-1.20220520.tar.gz
--sha256  8ac4b8c84bbfad00a3d24bf676493d207dd3cd4a735efabb9e17181534f23646  Mail-DKIM-1.20220520.tar.gz
-+sha256  0fa09a93a00f43ac91017a91628265ae7d47deb507e2770532bbb2597550d3d4  Mail-DKIM-1.20230630.tar.gz
+-md5  1d46019fb8559070a5ec1d838b690657  Net-HTTP-6.22.tar.gz
+-sha256  62faf9a5b84235443fe18f780e69cecf057dea3de271d7d8a0ba72724458a1a2  Net-HTTP-6.22.tar.gz
++sha256  0d65c09dd6c8589b2ae1118174d3c1a61703b6ecfc14a3442a8c74af65e0c94e  Net-HTTP-6.23.tar.gz
  
  # computed by scancpan
- sha256  ffaa40feb768566e52d93879fedd2c5483828b6de483874f30a0a4425351555f  LICENSE
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index f3383a02bf..4f4d86ee10 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
+ sha256  0ed700a4bfc022e999d83407f71ab62ead96662d8f7bbebfd857376bf3ed6528  LICENSE
+diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
+index b4cef6188b..08e81f95a1 100644
+--- a/package/perl-net-http/perl-net-http.mk
++++ b/package/perl-net-http/perl-net-http.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAIL_DKIM_VERSION = 1.20220520
-+PERL_MAIL_DKIM_VERSION = 1.20230630
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
- PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
- PERL_MAIL_DKIM_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_HTTP_VERSION = 6.22
++PERL_NET_HTTP_VERSION = 6.23
+ PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
+ PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_NET_HTTP_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
