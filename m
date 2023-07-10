@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBDBBEB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 17:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB5AEB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 17:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85B418210A;
-	Mon, 10 Jul 2023 17:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85B418210A
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC13080C18;
+	Mon, 10 Jul 2023 17:48:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC13080C18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HDmVusD5PDGU; Mon, 10 Jul 2023 17:48:25 +0000 (UTC)
+	with ESMTP id ckLJPPNTFdEI; Mon, 10 Jul 2023 17:48:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2848820EE;
-	Mon, 10 Jul 2023 17:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2848820EE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18CE38106A;
+	Mon, 10 Jul 2023 17:48:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18CE38106A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 946D81BF3D4
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:48:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 16F701BF3D4
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:48:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DAD2820EE
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DAD2820EE
+ by smtp1.osuosl.org (Postfix) with ESMTP id E4F34820EE
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 17:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4F34820EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ttJVglijl8wr for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 17:48:21 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 497E3820DB
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 497E3820DB
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 17:48:21 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 62ACF1C0004;
- Mon, 10 Jul 2023 17:48:19 +0000 (UTC)
-Date: Mon, 10 Jul 2023 19:48:18 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230710194818.7b366a18@windsurf>
-In-Reply-To: <20230626200550.13214-1-ju.o@free.fr>
-References: <20230611203909.113108-1-ju.o@free.fr>
- <20230626200550.13214-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689011299;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4san9wbY5CSVCzx/n7vnhJ9RnX3jSthZKVp/jtMm5vs=;
- b=feXezOxSZT8iKYsma/Mnyt1XRJJjxqg9FgK/T7XsPH9ebH88hfLHy+dfvHmbmejxo/75Vs
- 5CJjKkZYMTo5S69kZSZ2OnCADpVen3UYkGCgasHi17wheHATFNd9doRZqmHmY7rUqtCE5v
- c7w4fl4/Z1VDQcZ3qHpn4BHXtrmJ4hEBJdHsXPcSQU92UWN97d722u8tpVVCcH7qLPDC66
- 1xYpUcERqIczgMXKtc7DBwprAhDNPdn1l9+RSoqTDV69C6mWAqso8L8bmV0zmtfDhQ2T6S
- FxVwgx5N2BIOy2K1t0wvFO6lB2ebZqyDg/JLCEIOn1pnt1zMSPc4Z7cqRZ+lrw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=feXezOxS
-Subject: Re: [Buildroot] [PATCH 2/2]
+ with ESMTP id n2u5YT5ikMOa for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 17:48:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 265A3820DB
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 17:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 265A3820DB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 16A3D86C9B; Mon, 10 Jul 2023 17:48:23 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 10 Jul 2023 19:48:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2b6ea18e47c88b899ac45d8e60d3a7bc2f983d66
+X-Git-Newrev: 3435d52bab9c04d8ee214f3958be3bccd6ec83d1
+X-Patchwork-Hint: ignore
+Message-Id: <20230710174823.16A3D86C9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
  support/testing/tests/package/test_dos2unix.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -79,29 +58,85 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 26 Jun 2023 22:05:50 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3435d52bab9c04d8ee214f3958be3bccd6ec83d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  DEVELOPERS                                    |  1 +
->  .../testing/tests/package/test_dos2unix.py    | 45 +++++++++++++++++++
->  2 files changed, 46 insertions(+)
->  create mode 100644 support/testing/tests/package/test_dos2unix.py
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                     |  1 +
+ support/testing/tests/package/test_dos2unix.py | 45 ++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 086e0478eb..c1819954ae 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1729,6 +1729,7 @@ F:	support/testing/tests/package/sample_python_pyalsa.py
+ F:	support/testing/tests/package/sample_python_spake2.py
+ F:	support/testing/tests/package/test_ddrescue.py
+ F:	support/testing/tests/package/test_ddrescue/
++F:	support/testing/tests/package/test_dos2unix.py
+ F:	support/testing/tests/package/test_gnupg2.py
+ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
+diff --git a/support/testing/tests/package/test_dos2unix.py b/support/testing/tests/package/test_dos2unix.py
+new file mode 100644
+index 0000000000..af5850ae3e
+--- /dev/null
++++ b/support/testing/tests/package/test_dos2unix.py
+@@ -0,0 +1,45 @@
++import os
++
++import infra.basetest
++
++
++class TestDos2Unix(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_DOS2UNIX=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can run. This test also checks that we're
++        # using the real "dos2unix" rather than the applet provided in
++        # BusyBox, since the "--version" option is recognized by the
++        # real dos2unix and return an error in BusyBox.
++        self.assertRunOk("dos2unix --version")
++
++        # Create a text file with UNIX new-lines
++        self.assertRunOk("echo -e 'Hello\\nBuildroot' > original.txt")
++
++        # Convert the original UNIX file to DOS
++        self.assertRunOk("unix2dos -n original.txt dos.txt")
++
++        # DOS file is expected to be different than the UNIX file
++        _, exit_code = self.emulator.run("cmp original.txt dos.txt")
++        self.assertNotEqual(exit_code, 0)
++
++        # The "cat -A" command should print '^M$' for CR-LF
++        self.assertRunOk("cat -A dos.txt | grep -Fq '^M$'")
++
++        # Convert back DOS file to UNIX
++        self.assertRunOk("dos2unix -n dos.txt unix.txt")
++
++        # "unix.txt" should be identical to "original.txt"
++        self.assertRunOk("cmp original.txt unix.txt")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
