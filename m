@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00833EB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 21:41:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA79AEB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 21:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BC48417D5;
-	Mon, 10 Jul 2023 21:41:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BC48417D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CE07418A4;
+	Mon, 10 Jul 2023 21:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CE07418A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s7vIxpOtZ-VB; Mon, 10 Jul 2023 21:41:42 +0000 (UTC)
+	with ESMTP id WQalmY8Xa3hd; Mon, 10 Jul 2023 21:45:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99BE0417F6;
-	Mon, 10 Jul 2023 21:41:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99BE0417F6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9EDC91BF33B
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 21:41:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4246E417F6;
+	Mon, 10 Jul 2023 21:45:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4246E417F6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E60C51BF33B
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 21:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 787FB401B7
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 21:41:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 787FB401B7
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCC8360F4D
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 21:45:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCC8360F4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VyBxL6cvNn3H for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 21:41:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7CE9400DD
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E7CE9400DD
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 21:41:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u-g-CMdmeDjm for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 21:45:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1F5860F46
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C1F5860F46
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 21:45:05 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:6136:4573:86f4:937d])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 0ACDF200402;
- Mon, 10 Jul 2023 23:41:28 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id B2C8220039E;
+ Mon, 10 Jul 2023 23:45:00 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 10 Jul 2023 23:41:27 +0200
-Date: Mon, 10 Jul 2023 23:41:27 +0200
+ Mon, 10 Jul 2023 23:45:00 +0200
+Date: Mon, 10 Jul 2023 23:45:00 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20230710214127.GB188780@scaer>
-References: <20230710094148.308395-1-heiko.thiery@gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230710214500.GC188780@scaer>
+References: <20230710212653.3153894-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230710094148.308395-1-heiko.thiery@gmail.com>
+In-Reply-To: <20230710212653.3153894-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1689025294;
- bh=OVYT0ZSFvzfzV/BOqOBFyE9qXgoh+mHfVP8XKe2S5rs=;
+ d=free.fr; s=smtp-20201208; t=1689025503;
+ bh=AE8xMkan2LGFqBYkjEZ9+qy/xGuroshkbS6ZTV/ATzo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MTc9Lej9joSO2lEjhANYaHV/Zk7oFhfvNrcbprfCPSfk+TjJ2btbYrHtrRahNm1r7
- 0QxJ0nHEVTB4RAHGFsij/Gtj3RXlBOQrsO1G0+V4ymDL1PmzlzdTdNhEd4SGfaEcBh
- m9wdROoHsVRv1CmpBMrc9saru52xUyI+LgPBLQkws5M5AAbicELGm+lb+zUmh8ACrg
- jCjenyXwEYT/sPKbqFCqlpuADNY49toRwcVGh2H1eVH50559n+oMs2uCBLpVLm101s
- igYiCB5hfBoqMavZAFz3G1NzKl6Jym4WNrj0wrz9koXkdkkus3cmI8ezXqUv2x/Nws
- Lcs+3eWRj+Osg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=I2VhIglj/h630A3SofWmULwkPmKELdfP1yEyb3r5/ndw6elNe8NGbtjicDCd/zRsQ
+ 0tJVb4R8I1EhBQzzqpgFV5MfQUbk2PQ6d8+RGyuBiFSHyYg/PwBQ6SnzjZo46Ap9Jf
+ YSgBFAnlon/dEHkgSd0NhlcohZVwC9SxIJ2rSi2EO2nheQcWbOLvOTBd/fLHPtIX3W
+ ObOL2xNfrA3JqnmsuJq6T5pa9lSLrC33oAXUP4H+F/en/A96dmvKSpPwpYG+GHPfSF
+ 6xRq1gSQmCNMoHii/iKcxLfivDXjNrB4Kkn6WIZGQhEW5zbGCtTi8ci1ItOugWq+XX
+ yVzWubFAS0d1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MTc9Lej9
-Subject: Re: [Buildroot] [PATCH v2] boot/arm-trusted-firmware: fix build
- issue with binutils 2.39+
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=I2VhIglj
+Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: Remove Michael Rommel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,547 +76,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+Cc: rommel@layer-7.net, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Heiko, All,
+James, :icheal, All,
 
-On 2023-07-10 11:41 +0200, Heiko Thiery spake thusly:
-> The new version of binutils introduces a new warning when linking. The
-> new warninng is enabled by default. To fix the issue this warning is
-> disabled by adding the patches to the arm-trusted-firmware package
-> v{2.2..2.8}. This is a backport of an upstream commit [1]
+On 2023-07-10 15:26 -0600, James Hilliard spake thusly:
+> Removal requested via email:
 > 
-> Since there are too many defconfigs that use the arm-trusted-firmware
-> package, it is not practical to create a global-patch-dir for all of them.
-> Therefore the patches are only in the package directory.
+> could you somehow please remove me as maintainer from this package.
+> I am since many years not using builtroot anymore and have no longer
+> systems with which I could do patch requests.
+> I am going into retirement.
 > 
-> [1] https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4603996186
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4603996189
-> 
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Cc: Romain Naour <romain.naour@smile.fr>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> 
-> ---
-> v2: change the commit message to state why we add the patch to the
->     package directory
-> ---
->  ...-add-support-for-new-binutils-versio.patch | 58 +++++++++++++++++
->  ...dd-support-for-new-binutils-versions.patch | 62 +++++++++++++++++++
->  ...dd-support-for-new-binutils-versions.patch | 62 +++++++++++++++++++
->  ...dd-support-for-new-binutils-versions.patch | 62 +++++++++++++++++++
->  ...dd-support-for-new-binutils-versions.patch | 62 +++++++++++++++++++
->  ...dd-support-for-new-binutils-versions.patch | 62 +++++++++++++++++++
->  ...dd-support-for-new-binutils-versions.patch | 62 +++++++++++++++++++
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-    $ make check-package
-    boot/arm-trusted-firmware/v2.2/0001-PATCH-feat-build-add-support-for-new-binutils-versio.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    boot/arm-trusted-firmware/v2.3/0001-feat-build-add-support-for-new-binutils-versions.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    boot/arm-trusted-firmware/v2.4/0001-feat-build-add-support-for-new-binutils-versions.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    boot/arm-trusted-firmware/v2.5/0001-feat-build-add-support-for-new-binutils-versions.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    boot/arm-trusted-firmware/v2.6/0001-feat-build-add-support-for-new-binutils-versions.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    boot/arm-trusted-firmware/v2.7/0001-feat-build-add-support-for-new-binutils-versions.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-    boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
-
-I fixed that, and applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  7 files changed, 430 insertions(+)
->  create mode 100644 boot/arm-trusted-firmware/v2.2/0001-PATCH-feat-build-add-support-for-new-binutils-versio.patch
->  create mode 100644 boot/arm-trusted-firmware/v2.3/0001-feat-build-add-support-for-new-binutils-versions.patch
->  create mode 100644 boot/arm-trusted-firmware/v2.4/0001-feat-build-add-support-for-new-binutils-versions.patch
->  create mode 100644 boot/arm-trusted-firmware/v2.5/0001-feat-build-add-support-for-new-binutils-versions.patch
->  create mode 100644 boot/arm-trusted-firmware/v2.6/0001-feat-build-add-support-for-new-binutils-versions.patch
->  create mode 100644 boot/arm-trusted-firmware/v2.7/0001-feat-build-add-support-for-new-binutils-versions.patch
->  create mode 100644 boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch
+> ---
+>  DEVELOPERS | 5 -----
+>  1 file changed, 5 deletions(-)
 > 
-> diff --git a/boot/arm-trusted-firmware/v2.2/0001-PATCH-feat-build-add-support-for-new-binutils-versio.patch b/boot/arm-trusted-firmware/v2.2/0001-PATCH-feat-build-add-support-for-new-binutils-versio.patch
-> new file mode 100644
-> index 0000000000..2375de0eef
-> --- /dev/null
-> +++ b/boot/arm-trusted-firmware/v2.2/0001-PATCH-feat-build-add-support-for-new-binutils-versio.patch
-> @@ -0,0 +1,58 @@
-> +From 5e1beb793c06352e87c46eca1144ff1fe8555103 Mon Sep 17 00:00:00 2001
-> +From: Heiko Thiery <heiko.thiery@gmail.com>
-> +Date: Mon, 10 Jul 2023 10:43:03 +0200
-> +Subject: [PATCH] [PATCH] feat(build): add support for new binutils versions
-> +
-> +Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-> +of a new warning when linking the bl*.elf in the form:
-> +
-> +  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-> +  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> +  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-> +  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-> +
-> +These new warnings are enbaled by default to secure elf binaries:
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-> +
-> +Fix it in a similar way to what the Linux kernel does, see:
-> +https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-> +
-> +Following the reasoning there, we set "-z noexecstack" for all linkers
-> +(although LLVM's LLD defaults to it) and optional add
-> +--no-warn-rwx-segments since this a ld.bfd related.
-> +
-> +Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> +Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-> +Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + Makefile | 7 ++++++-
-> + 1 file changed, 6 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 721246d51..5893cf422 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -297,11 +297,16 @@ endif
-> + 
-> + GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-> + 
-> ++TF_LDFLAGS              +=      -z noexecstack
-> ++
-> + ifneq ($(findstring armlink,$(notdir $(LD))),)
-> + TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-> + TF_LDFLAGS		+=	--remove --info=unused,unusedsymbols
-> + else
-> +-TF_LDFLAGS		+=	--fatal-warnings -O1
-> ++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-> ++# are not loaded by a elf loader.
-> ++TF_LDFLAGS              +=      $(call ld_option, --no-warn-rwx-segments)
-> ++TF_LDFLAGS              +=      -O1
-> + TF_LDFLAGS		+=	--gc-sections
-> + endif
-> + TF_LDFLAGS		+=	$(TF_LDFLAGS_$(ARCH))
-> +-- 
-> +2.30.2
-> +
-> diff --git a/boot/arm-trusted-firmware/v2.3/0001-feat-build-add-support-for-new-binutils-versions.patch b/boot/arm-trusted-firmware/v2.3/0001-feat-build-add-support-for-new-binutils-versions.patch
-> new file mode 100644
-> index 0000000000..9b5a9dba97
-> --- /dev/null
-> +++ b/boot/arm-trusted-firmware/v2.3/0001-feat-build-add-support-for-new-binutils-versions.patch
-> @@ -0,0 +1,62 @@
-> +From 0f75b03c008eacb9818af3a56dc088e72a623d17 Mon Sep 17 00:00:00 2001
-> +From: Marco Felsch <m.felsch@pengutronix.de>
-> +Date: Wed, 9 Nov 2022 12:59:09 +0100
-> +Subject: [PATCH] feat(build): add support for new binutils versions
-> +
-> +Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-> +of a new warning when linking the bl*.elf in the form:
-> +
-> +  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-> +  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> +  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-> +  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-> +
-> +These new warnings are enbaled by default to secure elf binaries:
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-> +
-> +Fix it in a similar way to what the Linux kernel does, see:
-> +https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-> +
-> +Following the reasoning there, we set "-z noexecstack" for all linkers
-> +(although LLVM's LLD defaults to it) and optional add
-> +--no-warn-rwx-segments since this a ld.bfd related.
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +[Retrieved and rebased from
-> +https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c]
-> +Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> +Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-> +Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-> +---
-> + Makefile | 7 ++++++-
-> + 1 file changed, 6 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 1ddb7b844..470956b19 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -416,6 +416,8 @@ endif
-> + 
-> + GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-> + 
-> ++TF_LDFLAGS		+=	-z noexecstack
-> ++
-> + # LD = armlink
-> + ifneq ($(findstring armlink,$(notdir $(LD))),)
-> + TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-> +@@ -442,7 +444,10 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-> + 
-> + # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-> + else
-> +-TF_LDFLAGS		+=	--fatal-warnings -O1
-> ++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-> ++# are not loaded by a elf loader.
-> ++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
-> ++TF_LDFLAGS		+=	-O1
-> + TF_LDFLAGS		+=	--gc-sections
-> + # ld.lld doesn't recognize the errata flags,
-> + # therefore don't add those in that case
-> +-- 
-> +2.30.2
-> +
-> diff --git a/boot/arm-trusted-firmware/v2.4/0001-feat-build-add-support-for-new-binutils-versions.patch b/boot/arm-trusted-firmware/v2.4/0001-feat-build-add-support-for-new-binutils-versions.patch
-> new file mode 100644
-> index 0000000000..9b5a9dba97
-> --- /dev/null
-> +++ b/boot/arm-trusted-firmware/v2.4/0001-feat-build-add-support-for-new-binutils-versions.patch
-> @@ -0,0 +1,62 @@
-> +From 0f75b03c008eacb9818af3a56dc088e72a623d17 Mon Sep 17 00:00:00 2001
-> +From: Marco Felsch <m.felsch@pengutronix.de>
-> +Date: Wed, 9 Nov 2022 12:59:09 +0100
-> +Subject: [PATCH] feat(build): add support for new binutils versions
-> +
-> +Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-> +of a new warning when linking the bl*.elf in the form:
-> +
-> +  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-> +  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> +  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-> +  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-> +
-> +These new warnings are enbaled by default to secure elf binaries:
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-> +
-> +Fix it in a similar way to what the Linux kernel does, see:
-> +https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-> +
-> +Following the reasoning there, we set "-z noexecstack" for all linkers
-> +(although LLVM's LLD defaults to it) and optional add
-> +--no-warn-rwx-segments since this a ld.bfd related.
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +[Retrieved and rebased from
-> +https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c]
-> +Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> +Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-> +Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-> +---
-> + Makefile | 7 ++++++-
-> + 1 file changed, 6 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 1ddb7b844..470956b19 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -416,6 +416,8 @@ endif
-> + 
-> + GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-> + 
-> ++TF_LDFLAGS		+=	-z noexecstack
-> ++
-> + # LD = armlink
-> + ifneq ($(findstring armlink,$(notdir $(LD))),)
-> + TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-> +@@ -442,7 +444,10 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-> + 
-> + # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-> + else
-> +-TF_LDFLAGS		+=	--fatal-warnings -O1
-> ++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-> ++# are not loaded by a elf loader.
-> ++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
-> ++TF_LDFLAGS		+=	-O1
-> + TF_LDFLAGS		+=	--gc-sections
-> + # ld.lld doesn't recognize the errata flags,
-> + # therefore don't add those in that case
-> +-- 
-> +2.30.2
-> +
-> diff --git a/boot/arm-trusted-firmware/v2.5/0001-feat-build-add-support-for-new-binutils-versions.patch b/boot/arm-trusted-firmware/v2.5/0001-feat-build-add-support-for-new-binutils-versions.patch
-> new file mode 100644
-> index 0000000000..9b5a9dba97
-> --- /dev/null
-> +++ b/boot/arm-trusted-firmware/v2.5/0001-feat-build-add-support-for-new-binutils-versions.patch
-> @@ -0,0 +1,62 @@
-> +From 0f75b03c008eacb9818af3a56dc088e72a623d17 Mon Sep 17 00:00:00 2001
-> +From: Marco Felsch <m.felsch@pengutronix.de>
-> +Date: Wed, 9 Nov 2022 12:59:09 +0100
-> +Subject: [PATCH] feat(build): add support for new binutils versions
-> +
-> +Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-> +of a new warning when linking the bl*.elf in the form:
-> +
-> +  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-> +  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> +  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-> +  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-> +
-> +These new warnings are enbaled by default to secure elf binaries:
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-> +
-> +Fix it in a similar way to what the Linux kernel does, see:
-> +https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-> +
-> +Following the reasoning there, we set "-z noexecstack" for all linkers
-> +(although LLVM's LLD defaults to it) and optional add
-> +--no-warn-rwx-segments since this a ld.bfd related.
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +[Retrieved and rebased from
-> +https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c]
-> +Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> +Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-> +Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-> +---
-> + Makefile | 7 ++++++-
-> + 1 file changed, 6 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 1ddb7b844..470956b19 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -416,6 +416,8 @@ endif
-> + 
-> + GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-> + 
-> ++TF_LDFLAGS		+=	-z noexecstack
-> ++
-> + # LD = armlink
-> + ifneq ($(findstring armlink,$(notdir $(LD))),)
-> + TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-> +@@ -442,7 +444,10 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-> + 
-> + # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-> + else
-> +-TF_LDFLAGS		+=	--fatal-warnings -O1
-> ++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-> ++# are not loaded by a elf loader.
-> ++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
-> ++TF_LDFLAGS		+=	-O1
-> + TF_LDFLAGS		+=	--gc-sections
-> + # ld.lld doesn't recognize the errata flags,
-> + # therefore don't add those in that case
-> +-- 
-> +2.30.2
-> +
-> diff --git a/boot/arm-trusted-firmware/v2.6/0001-feat-build-add-support-for-new-binutils-versions.patch b/boot/arm-trusted-firmware/v2.6/0001-feat-build-add-support-for-new-binutils-versions.patch
-> new file mode 100644
-> index 0000000000..9b5a9dba97
-> --- /dev/null
-> +++ b/boot/arm-trusted-firmware/v2.6/0001-feat-build-add-support-for-new-binutils-versions.patch
-> @@ -0,0 +1,62 @@
-> +From 0f75b03c008eacb9818af3a56dc088e72a623d17 Mon Sep 17 00:00:00 2001
-> +From: Marco Felsch <m.felsch@pengutronix.de>
-> +Date: Wed, 9 Nov 2022 12:59:09 +0100
-> +Subject: [PATCH] feat(build): add support for new binutils versions
-> +
-> +Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-> +of a new warning when linking the bl*.elf in the form:
-> +
-> +  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-> +  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> +  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-> +  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-> +
-> +These new warnings are enbaled by default to secure elf binaries:
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-> +
-> +Fix it in a similar way to what the Linux kernel does, see:
-> +https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-> +
-> +Following the reasoning there, we set "-z noexecstack" for all linkers
-> +(although LLVM's LLD defaults to it) and optional add
-> +--no-warn-rwx-segments since this a ld.bfd related.
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +[Retrieved and rebased from
-> +https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c]
-> +Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> +Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-> +Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-> +---
-> + Makefile | 7 ++++++-
-> + 1 file changed, 6 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 1ddb7b844..470956b19 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -416,6 +416,8 @@ endif
-> + 
-> + GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-> + 
-> ++TF_LDFLAGS		+=	-z noexecstack
-> ++
-> + # LD = armlink
-> + ifneq ($(findstring armlink,$(notdir $(LD))),)
-> + TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-> +@@ -442,7 +444,10 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-> + 
-> + # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-> + else
-> +-TF_LDFLAGS		+=	--fatal-warnings -O1
-> ++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-> ++# are not loaded by a elf loader.
-> ++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
-> ++TF_LDFLAGS		+=	-O1
-> + TF_LDFLAGS		+=	--gc-sections
-> + # ld.lld doesn't recognize the errata flags,
-> + # therefore don't add those in that case
-> +-- 
-> +2.30.2
-> +
-> diff --git a/boot/arm-trusted-firmware/v2.7/0001-feat-build-add-support-for-new-binutils-versions.patch b/boot/arm-trusted-firmware/v2.7/0001-feat-build-add-support-for-new-binutils-versions.patch
-> new file mode 100644
-> index 0000000000..9b5a9dba97
-> --- /dev/null
-> +++ b/boot/arm-trusted-firmware/v2.7/0001-feat-build-add-support-for-new-binutils-versions.patch
-> @@ -0,0 +1,62 @@
-> +From 0f75b03c008eacb9818af3a56dc088e72a623d17 Mon Sep 17 00:00:00 2001
-> +From: Marco Felsch <m.felsch@pengutronix.de>
-> +Date: Wed, 9 Nov 2022 12:59:09 +0100
-> +Subject: [PATCH] feat(build): add support for new binutils versions
-> +
-> +Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-> +of a new warning when linking the bl*.elf in the form:
-> +
-> +  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-> +  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> +  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-> +  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-> +
-> +These new warnings are enbaled by default to secure elf binaries:
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-> +
-> +Fix it in a similar way to what the Linux kernel does, see:
-> +https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-> +
-> +Following the reasoning there, we set "-z noexecstack" for all linkers
-> +(although LLVM's LLD defaults to it) and optional add
-> +--no-warn-rwx-segments since this a ld.bfd related.
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +[Retrieved and rebased from
-> +https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c]
-> +Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> +Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-> +Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-> +---
-> + Makefile | 7 ++++++-
-> + 1 file changed, 6 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 1ddb7b844..470956b19 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -416,6 +416,8 @@ endif
-> + 
-> + GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-> + 
-> ++TF_LDFLAGS		+=	-z noexecstack
-> ++
-> + # LD = armlink
-> + ifneq ($(findstring armlink,$(notdir $(LD))),)
-> + TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-> +@@ -442,7 +444,10 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-> + 
-> + # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-> + else
-> +-TF_LDFLAGS		+=	--fatal-warnings -O1
-> ++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-> ++# are not loaded by a elf loader.
-> ++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
-> ++TF_LDFLAGS		+=	-O1
-> + TF_LDFLAGS		+=	--gc-sections
-> + # ld.lld doesn't recognize the errata flags,
-> + # therefore don't add those in that case
-> +-- 
-> +2.30.2
-> +
-> diff --git a/boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch b/boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch
-> new file mode 100644
-> index 0000000000..9b5a9dba97
-> --- /dev/null
-> +++ b/boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch
-> @@ -0,0 +1,62 @@
-> +From 0f75b03c008eacb9818af3a56dc088e72a623d17 Mon Sep 17 00:00:00 2001
-> +From: Marco Felsch <m.felsch@pengutronix.de>
-> +Date: Wed, 9 Nov 2022 12:59:09 +0100
-> +Subject: [PATCH] feat(build): add support for new binutils versions
-> +
-> +Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-> +of a new warning when linking the bl*.elf in the form:
-> +
-> +  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-> +  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> +  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-> +  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-> +
-> +These new warnings are enbaled by default to secure elf binaries:
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> + - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-> +
-> +Fix it in a similar way to what the Linux kernel does, see:
-> +https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-> +
-> +Following the reasoning there, we set "-z noexecstack" for all linkers
-> +(although LLVM's LLD defaults to it) and optional add
-> +--no-warn-rwx-segments since this a ld.bfd related.
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +[Retrieved and rebased from
-> +https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c]
-> +Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> +Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-> +Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-> +---
-> + Makefile | 7 ++++++-
-> + 1 file changed, 6 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 1ddb7b844..470956b19 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -416,6 +416,8 @@ endif
-> + 
-> + GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-> + 
-> ++TF_LDFLAGS		+=	-z noexecstack
-> ++
-> + # LD = armlink
-> + ifneq ($(findstring armlink,$(notdir $(LD))),)
-> + TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-> +@@ -442,7 +444,10 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-> + 
-> + # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-> + else
-> +-TF_LDFLAGS		+=	--fatal-warnings -O1
-> ++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-> ++# are not loaded by a elf loader.
-> ++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
-> ++TF_LDFLAGS		+=	-O1
-> + TF_LDFLAGS		+=	--gc-sections
-> + # ld.lld doesn't recognize the errata flags,
-> + # therefore don't add those in that case
-> +-- 
-> +2.30.2
-> +
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 3237c90c39..95f5305d6c 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2079,11 +2079,6 @@ F:	package/protobuf/
+>  F:	package/re2/
+>  F:	package/spdlog/
+>  
+> -N:	Michael Rommel <rommel@layer-7.net>
+> -F:	package/knock/
+> -F:	package/python-crc16/
+> -F:	package/python-pyzmq/
+> -
+>  N:	Michael Trimarchi <michael@amarulasolutions.com>
+>  F:	board/bsh/
+>  F:	configs/imx8mn_bsh_smm_s2_defconfig
 > -- 
-> 2.30.2
+> 2.34.1
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
