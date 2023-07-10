@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8F20EB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06AC6EB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:14:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4749760FDE;
-	Mon, 10 Jul 2023 16:14:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4749760FDE
+	by smtp3.osuosl.org (Postfix) with ESMTP id A965F61007;
+	Mon, 10 Jul 2023 16:14:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A965F61007
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P0H5R4XfFMnP; Mon, 10 Jul 2023 16:14:14 +0000 (UTC)
+	with ESMTP id apW1JkHlPBjl; Mon, 10 Jul 2023 16:14:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE3360FDB;
-	Mon, 10 Jul 2023 16:14:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DE3360FDB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C3BA01BF414
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:14:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E08A860FE5;
+	Mon, 10 Jul 2023 16:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E08A860FE5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1305D1BF414
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA41960FE0
+ by smtp1.osuosl.org (Postfix) with ESMTP id E14FD81F03
  for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:14:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA41960FE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E14FD81F03
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eLsACocOe4Yb for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vPYMp0gpYJnK for <buildroot@lists.busybox.net>;
  Mon, 10 Jul 2023 16:14:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2A5F60FD7
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:14:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2A5F60FD7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1DA2081ECA
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:14:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DA2081ECA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD68A86B17; Mon, 10 Jul 2023 16:14:10 +0000 (UTC)
+ id 0A70486B1A; Mon, 10 Jul 2023 16:14:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 18:10:15 +0200
+Date: Mon, 10 Jul 2023 18:12:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6e0f16e2b0a358f60a682952d45b329d8e73f670
-X-Git-Newrev: e97efdeef9a5a61cbd3c246aa605a88c5dfaf905
+X-Git-Oldrev: 6ca47ce9bdb38f522500e5b5290f75ed09b47bd3
+X-Git-Newrev: c19594a10f94c65d52c4996dccc576ca917433d0
 X-Patchwork-Hint: ignore
-Message-Id: <20230710161410.DD68A86B17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wine: bump to version 8.0.1
+Message-Id: <20230710161411.0A70486B1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libkrb5: bump to 1.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +58,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7787351735475630277=="
+Content-Type: multipart/mixed; boundary="===============3136259952402396996=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7787351735475630277==
+--===============3136259952402396996==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e97efdeef9a5a61cbd3c246aa605a88c5dfaf905
+commit: https://git.buildroot.net/buildroot/commit/?id=c19594a10f94c65d52c4996dccc576ca917433d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The hash of the NOTICE file has changed due to:
+
+ - Update in copyright year
+
+ - Addition of a BSD-2-Clause license, so no change from that perspective
 
 Signed-off-by: André Zwing <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libkrb5/libkrb5.hash | 4 ++--
+ package/libkrb5/libkrb5.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index b87964da12..58261d3b18 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index 94dfa2ed6e..22178d0dec 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
 @@ -1,5 +1,5 @@
  # Locally calculated after checking pgp signature
--sha256  0272c20938f8721ae4510afaa8b36037457dd57661e4d664231079b9e91c792e  wine-8.0.tar.xz
-+sha256  22035f3836b4f9c3b1940ad90f9b9e3c1be09234236d2a80d893180535c75b7d  wine-8.0.1.tar.xz
- # Locally calculated
- sha256  e237fa56668030e928551ddd60f05df5fe957f75eab874bbd017e085ed722e7c  COPYING.LIB
- sha256  793d045546467c8f49e35fbd6e02859e57e78f8bb53571e8200bffd0e966dfa8  LICENSE
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index a629bf0dd6..ccaeadff5e 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,7 +4,7 @@
+-sha256  704aed49b19eb5a7178b34b2873620ec299db08752d6a8574f95d41879ab8851  krb5-1.20.1.tar.gz
++sha256  69f8aaff85484832df67a4bbacd99b9259bd95aab8c651fbbe65cdc9620ea93b  krb5-1.21.tar.gz
+ 
+ # Hash for license file:
+-sha256  cfadcf7b2ead2f3af793c25c00638c9908ac0023b101695f40cb9a03b16811dc  NOTICE
++sha256  0d5373486138cb176c063db98274b4c4ab6ef3518c4191360736384b780306c2  NOTICE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index 9bacfaee58..62a34b2379 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--WINE_VERSION = 8.0
-+WINE_VERSION = 8.0.1
- WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
- WINE_SITE = https://dl.winehq.org/wine/source/8.0
- WINE_LICENSE = LGPL-2.1+
+-LIBKRB5_VERSION_MAJOR = 1.20
+-LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).1
+-LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
++LIBKRB5_VERSION = 1.21
++LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION)
+ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+ LIBKRB5_SUBDIR = src
+ LIBKRB5_LICENSE = MIT, BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, others
 
---===============7787351735475630277==
+--===============3136259952402396996==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -111,4 +121,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7787351735475630277==--
+--===============3136259952402396996==--
