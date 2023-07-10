@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5198EB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48FB1EB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:10:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74FE760FC6;
-	Mon, 10 Jul 2023 16:10:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74FE760FC6
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6E1860FF8;
+	Mon, 10 Jul 2023 16:10:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6E1860FF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RSBlTpaBoynW; Mon, 10 Jul 2023 16:10:38 +0000 (UTC)
+	with ESMTP id bOMOsPhEXi8W; Mon, 10 Jul 2023 16:10:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9E0160FC8;
-	Mon, 10 Jul 2023 16:10:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9E0160FC8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2CE0A1BF414
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:09:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3991A60FCF;
+	Mon, 10 Jul 2023 16:10:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3991A60FCF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BC3C11BF414
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:09:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7196E404AE
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:09:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7196E404AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 932E881F42
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:09:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 932E881F42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MLfQYeV6rgPZ for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 16:09:31 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C494640350
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:09:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C494640350
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0F2E86A5A; Mon, 10 Jul 2023 16:09:31 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 18:07:25 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 88c7359f65381d49fa497f9e33bf54bb31a14e6c
-X-Git-Newrev: 40370b86929ff659301c2e8bcc4dea3bb2370525
-X-Patchwork-Hint: ignore
-Message-Id: <20230710160931.B0F2E86A5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-html-parser: bump version to
- 3.81
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id duREGCKcNj7i for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 16:09:48 +0000 (UTC)
+X-Greylist: delayed 23:22:37 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06FB981F40
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 06FB981F40
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:09:47 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6DD23E0002;
+ Mon, 10 Jul 2023 16:09:44 +0000 (UTC)
+Date: Mon, 10 Jul 2023 18:09:43 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230710180943.7c1eebc1@windsurf>
+In-Reply-To: <20230708194149.3441129-1-bernd@kuhls.net>
+References: <20230708194149.3441129-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689005385;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AFscVIzakcV0oG4l5gf//jeqV8ktvn9/PNQIPPbILTE=;
+ b=fldw/lKTTrEgitqz5JSmtVLBehfzUmd81LmBSMyOKa5ay89Xfp4O5qPoWEc/3yvfMN9ws6
+ fE1JdlH5M7TPFynK3VXIAAYSKMtDxJoUm5nz65TX5yB6lBbKWL29SfSGRvrHl13efo7cm0
+ IdJnRva08NgFuHoXGx6DxYfTlC+IkLqLi5PMss+HK15113DK0ltpV8RGEX7lgAXVE+8o5C
+ R89A8ubFOFnO+cmlY0cRLHMVrfB/6wrt7G/+GaYdCPD1CkTJqWh11NKQ2F+MY9CCsChsEJ
+ g0Re6MHkOUWRMFxFViOH0uouC40DdE2I2JI1yXRNNZzwmiBBuyxixyscXr3REA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fldw/lKT
+Subject: Re: [Buildroot] [PATCH 1/6] package/perl-html-parser: bump version
+ to 3.81
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +78,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40370b86929ff659301c2e8bcc4dea3bb2370525
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  8 Jul 2023 21:41:44 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Removed md5 hash.
+> Removed md5 hash.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/perl-html-parser/perl-html-parser.hash | 3 +--
+>  package/perl-html-parser/perl-html-parser.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 3 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/perl-html-parser/perl-html-parser.hash | 3 +--
- package/perl-html-parser/perl-html-parser.mk   | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Series applied, thanks!
 
-diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
-index ccd115d6c9..fbdffa03d6 100644
---- a/package/perl-html-parser/perl-html-parser.hash
-+++ b/package/perl-html-parser/perl-html-parser.hash
-@@ -1,6 +1,5 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  8e7151d08f30457a2ba80020b936285f  HTML-Parser-3.80.tar.gz
--sha256  63411db03016747e37c2636db11b05f8cc71608ef5bff36d04ddb0dc92f7835b  HTML-Parser-3.80.tar.gz
-+sha256  c0910a5c8f92f8817edd06ccfd224ba1c2ebe8c10f551f032587a1fc83d62ff2  HTML-Parser-3.81.tar.gz
- 
- # computed by scancpan
- sha256  9081922eb873ec1809c20672a7385a65f3c6b1163166bf69b2bbe986fb5b0159  LICENSE
-diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
-index 1e1f8e6050..50efaa273a 100644
---- a/package/perl-html-parser/perl-html-parser.mk
-+++ b/package/perl-html-parser/perl-html-parser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_HTML_PARSER_VERSION = 3.80
-+PERL_HTML_PARSER_VERSION = 3.81
- PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
- PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
