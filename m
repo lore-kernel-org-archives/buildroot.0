@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C429CEB64DA
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FE71EB64DA
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78D2460FD5;
-	Mon, 10 Jul 2023 16:12:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78D2460FD5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D82160FC8;
+	Mon, 10 Jul 2023 16:13:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D82160FC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KGKq25BGDpqM; Mon, 10 Jul 2023 16:12:55 +0000 (UTC)
+	with ESMTP id RYUFlSOxUoeO; Mon, 10 Jul 2023 16:13:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C52FB60FBB;
-	Mon, 10 Jul 2023 16:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C52FB60FBB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2C25C1BF414
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:12:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CD3760F4D;
+	Mon, 10 Jul 2023 16:13:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CD3760F4D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F3BFD1BF414
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:13:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 032E741761
- for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 032E741761
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFD4060F39
+ for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:13:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFD4060F39
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fV1Aax_-4szw for <buildroot@lists.busybox.net>;
- Mon, 10 Jul 2023 16:12:53 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B25C44175B
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B25C44175B
- for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:12:52 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D1AD1BF208;
- Mon, 10 Jul 2023 16:12:49 +0000 (UTC)
-Date: Mon, 10 Jul 2023 18:12:47 +0200
-To: =?UTF-8?B?QW5kcsOp?= Zwing <nerv@dawncrow.de>
-Message-ID: <20230710181247.29206ab0@windsurf>
-In-Reply-To: <20230707171529.1924168-1-nerv@dawncrow.de>
-References: <20230707171529.1924168-1-nerv@dawncrow.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id foavX5_wKa-6 for <buildroot@lists.busybox.net>;
+ Mon, 10 Jul 2023 16:13:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B030760B01
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B030760B01
+ for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:13:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 69F0A1C0005;
+ Mon, 10 Jul 2023 16:13:46 +0000 (UTC)
+Date: Mon, 10 Jul 2023 18:13:44 +0200
+To: Heiko Thiery <heiko.thiery@gmail.com>
+Message-ID: <20230710181342.2f439cf7@windsurf>
+In-Reply-To: <20230710122306.511354-1-heiko.thiery@gmail.com>
+References: <20230710122306.511354-1-heiko.thiery@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689005570;
+ d=bootlin.com; s=gm1; t=1689005626;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=NwXSHodtzB/4i7LlNquOqxmSmtFGOPo2Qrlrtmpps5c=;
- b=GiXD/b4SH91lPUi3jslLJ/BDDLyEaeU98QRrERsSmKXkyxOm74LrZWn9HSDUUqRcLxWY5b
- N3id/1Z2pjvpxDheSJXL3+avzz9LGs+IdNKTfFpbuGl63BYKDjDR6LRRzVpXUumOA3ZhgY
- 7i3c6ZZ7O3NOpneI0FbFa8bLqYiPxjfA4135ZnBKaRJcOP9vSA+MEqgsWkGDzeF40NmbZs
- xrA0W4i5tIdQ35q/+xgUs/ZSUBozBMKvkByJLVyS6zzQl9/GZek2XKxI3za9n6sYru2hdH
- PatwuEl4jXXFU5Apch64h0TwybuY9QQLWXmlqVSTCHnphDQr+1nuBRbACL6jHw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=4zQoxL8LBh8NXPId89MGV8YgWY7il8JIejLY0c9y7S4=;
+ b=Rzo/rXR3TNAZ9pFiJ0sHkkxGuWWgky0sezg+h1Pc0o1xR0AtJgbuRp5Pq9odqxDhPCHow2
+ ivZQP6WBmzbXfV/vrU1Qp57vSSpiH56ilFFnjlSJ6Dee1+dHqWryt46JNiKmSMBQ/WFee5
+ WLm6uSeG+qHl+4IBLz1qn8tiWH0B02LbYtmo/0h8gBUC5Jv7y4yw84k11ZUG/J9WiYBK2C
+ kTKV+nWt2pregO11cOL7wtRR+qFKkcQPza6g8HEU6jMq780W4K4XlUq2b8Xb+qlwD/1SxJ
+ g2kburWb6a8HNZbxBHtcFzof+BCebc4AZ1EAo3K32qprC4vtiEouW5Q4Xa2nSQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GiXD/b4S
-Subject: Re: [Buildroot] [PATCH] package/libkrb5: bump to 1.21
+ header.s=gm1 header.b=Rzo/rXR3
+Subject: Re: [Buildroot] [PATCH] package/rauc: bump to version 1.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,22 +77,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Andrey Yurovsky <yurovsky@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCAgNyBKdWwgMjAyMyAxOToxNToyOSArMDIwMApBbmRyw6kgWndpbmcgPG5lcnZAZGF3
-bmNyb3cuZGU+IHdyb3RlOgoKPiBUaGUgaGFzaCBvZiB0aGUgTk9USUNFIGZpbGUgaGFzIGNoYW5n
-ZWQgZHVlIHRvOgo+IAo+ICAtIFVwZGF0ZSBpbiBjb3B5cmlnaHQgeWVhcgo+IAo+ICAtIEFkZGl0
-aW9uIG9mIGEgQlNELTItQ2xhdXNlIGxpY2Vuc2UsIHNvIG5vIGNoYW5nZSBmcm9tIHRoYXQgcGVy
-c3BlY3RpdmUKPiAKPiBTaWduZWQtb2ZmLWJ5OiBBbmRyw6kgWndpbmcgPG5lcnZAZGF3bmNyb3cu
-ZGU+Cj4gLS0tCj4gIHBhY2thZ2UvbGlia3JiNS9saWJrcmI1Lmhhc2ggfCA0ICsrLS0KPiAgcGFj
-a2FnZS9saWJrcmI1L2xpYmtyYjUubWsgICB8IDUgKystLS0KPiAgMiBmaWxlcyBjaGFuZ2VkLCA0
-IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtz
-LgoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGlu
-dXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On Mon, 10 Jul 2023 14:23:07 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
+
+> This release version inludes several enhancements and bugfixes.
+> 
+> https://github.com/rauc/rauc/releases/tag/v1.10
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  package/rauc/rauc.hash | 2 +-
+>  package/rauc/rauc.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
