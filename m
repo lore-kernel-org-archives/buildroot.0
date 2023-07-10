@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CA19EB64D9
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16061EB64D9
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jul 2023 16:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48C5C60FD8;
-	Mon, 10 Jul 2023 16:14:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48C5C60FD8
+	by smtp3.osuosl.org (Postfix) with ESMTP id BECB060F9C;
+	Mon, 10 Jul 2023 16:14:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BECB060F9C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6AFm3aEqLyvi; Mon, 10 Jul 2023 16:14:39 +0000 (UTC)
+	with ESMTP id XZ1ltw3_CqSe; Mon, 10 Jul 2023 16:14:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B17B60FE7;
-	Mon, 10 Jul 2023 16:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B17B60FE7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 22A561BF955
+	by smtp3.osuosl.org (Postfix) with ESMTP id 150346100E;
+	Mon, 10 Jul 2023 16:14:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 150346100E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BF9D1BF95F
  for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 091A9416B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 03A9860FD7
  for <buildroot@lists.busybox.net>; Mon, 10 Jul 2023 16:14:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 091A9416B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03A9860FD7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zMYUycHZa9hQ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9bgERwwD-8uQ for <buildroot@lists.busybox.net>;
  Mon, 10 Jul 2023 16:14:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B805416A5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 10EBE60FDB
  for <buildroot@buildroot.org>; Mon, 10 Jul 2023 16:14:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B805416A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10EBE60FDB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E919186B18; Mon, 10 Jul 2023 16:14:10 +0000 (UTC)
+ id F3B7386A59; Mon, 10 Jul 2023 16:14:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 10 Jul 2023 18:10:42 +0200
+Date: Mon, 10 Jul 2023 18:11:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e97efdeef9a5a61cbd3c246aa605a88c5dfaf905
-X-Git-Newrev: c143e7ed41c83e872994399fd96e7d4d1569034c
+X-Git-Oldrev: c143e7ed41c83e872994399fd96e7d4d1569034c
+X-Git-Newrev: 6ca47ce9bdb38f522500e5b5290f75ed09b47bd3
 X-Patchwork-Hint: ignore
-Message-Id: <20230710161410.E919186B18@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.20.0
+Message-Id: <20230710161410.F3B7386A59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hwloc: bump version to 2.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c143e7ed41c83e872994399fd96e7d4d1569034c
+commit: https://git.buildroot.net/buildroot/commit/?id=6ca47ce9bdb38f522500e5b5290f75ed09b47bd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
+Removed md5 hash.
+
+Changelog: https://github.com/open-mpi/hwloc/blob/v2.9/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xmrig/xmrig.hash | 2 +-
- package/xmrig/xmrig.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/hwloc/hwloc.hash | 5 ++---
+ package/hwloc/hwloc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-index 4eccef4806..eab24a7eab 100644
---- a/package/xmrig/xmrig.hash
-+++ b/package/xmrig/xmrig.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8c7e48690c8e0f6cbc22c2ad2093328152e34208d1c33dc24008dfcab22ea3eb  xmrig-6.19.3.tar.gz
-+sha256  86c62eb6db83981b21ac1faac69c28fee2952cbbc207ea7476707d4f1799633f  xmrig-6.20.0.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-index a49580fc7f..982ccc8c5d 100644
---- a/package/xmrig/xmrig.mk
-+++ b/package/xmrig/xmrig.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
+index 963a1fd930..d40315a3af 100644
+--- a/package/hwloc/hwloc.hash
++++ b/package/hwloc/hwloc.hash
+@@ -1,6 +1,5 @@
+ # From https://www.open-mpi.org/software/hwloc/v2.9/
+-md5  49869a8e19754299db512572abc5eb2b  hwloc-2.9.0.tar.bz2
+-sha1  ee178b64234fdbf70f576b79963459ab80880583  hwloc-2.9.0.tar.bz2
+-sha256  2070e963596a2421b9af8eca43bdec113ee1107aaf7ccb475d4d3767a8856887  hwloc-2.9.0.tar.bz2
++sha1  be2a4f299c0da7670d39724986268bfa3fac6aee  hwloc-2.9.2.tar.bz2
++sha256  0a87fdf677f8b00b567d229b6320bf6b25c693edaa43e0b85268d999d6b060cf  hwloc-2.9.2.tar.bz2
+ # Locally computed
+ sha256  d79a936a42f3c6cb7c8375a023d43f4435f4664d3a5a2ea6b4623cff83c7fc06  COPYING
+diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
+index c97e46999c..6f3b8069e6 100644
+--- a/package/hwloc/hwloc.mk
++++ b/package/hwloc/hwloc.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XMRIG_VERSION = 6.19.3
-+XMRIG_VERSION = 6.20.0
- XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
- XMRIG_LICENSE = GPL-3.0+
- XMRIG_LICENSE_FILES = LICENSE
+ HWLOC_VERSION_MAJOR = 2.9
+-HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).0
++HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).2
+ HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
+ HWLOC_SITE = https://download.open-mpi.org/release/hwloc/v$(HWLOC_VERSION_MAJOR)
+ HWLOC_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
