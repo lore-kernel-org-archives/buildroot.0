@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19809C001DF
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 17:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25039EB64DD
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 17:20:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF97141DFE;
-	Tue, 11 Jul 2023 17:20:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF97141DFE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8284841DFE;
+	Tue, 11 Jul 2023 17:20:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8284841DFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZMo5JP91Pxtg; Tue, 11 Jul 2023 17:20:43 +0000 (UTC)
+	with ESMTP id dPPqCvBdPSfS; Tue, 11 Jul 2023 17:20:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0C8941DF9;
-	Tue, 11 Jul 2023 17:20:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0C8941DF9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EF4331BF3E5
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:20:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9150441E2A;
+	Tue, 11 Jul 2023 17:20:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9150441E2A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C79E1BF97C
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:20:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D557D6100B
+ by smtp4.osuosl.org (Postfix) with ESMTP id D95024183B
  for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:20:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D557D6100B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D95024183B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B1wqKERI4EDV for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wXPfO-gjeMWr for <buildroot@lists.busybox.net>;
  Tue, 11 Jul 2023 17:20:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5E4461000
+ by smtp4.osuosl.org (Postfix) with ESMTP id E30F941806
  for <buildroot@buildroot.org>; Tue, 11 Jul 2023 17:20:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5E4461000
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E30F941806
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D46CA86DDA; Tue, 11 Jul 2023 17:20:39 +0000 (UTC)
+ id CC70986DE6; Tue, 11 Jul 2023 17:20:39 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 11 Jul 2023 19:19:37 +0200
+Date: Tue, 11 Jul 2023 19:19:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dd5c058a992dc5475daa69774caae06f62863135
-X-Git-Newrev: adc566856e95990ede1174faa0a2ff031b15d356
+X-Git-Oldrev: 89ffd9a47901b2361ca8581640b829bbbdad90e2
+X-Git-Newrev: dd5c058a992dc5475daa69774caae06f62863135
 X-Patchwork-Hint: ignore
-Message-Id: <20230711172039.D46CA86DDA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/beaglebone_qt5_defconfig: build
- am335x-bonegreen-wireless
+Message-Id: <20230711172039.CC70986DE6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglebone: uboot needs OpenSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +62,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adc566856e95990ede1174faa0a2ff031b15d356
+commit: https://git.buildroot.net/buildroot/commit/?id=dd5c058a992dc5475daa69774caae06f62863135
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build the am335x-bonegreen-wireless.dtb device tree.
-  The genimage script which is shared between beaglebone and
-  beaglebone_qt5 was updated to support the bonegreen-wireless.
+Regression builds failed to build uboot due to missing OpenSSL
+  library.
 
 Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/beaglebone_qt5_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/beaglebone_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index ff03a05a8e..0038acfcfd 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.7
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-sgx.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_FBV=y
- BR2_PACKAGE_QT5=y
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 3e7ad8d402..7e006e7a85 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -37,6 +37,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
