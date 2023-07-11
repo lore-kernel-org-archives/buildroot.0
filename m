@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0426EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 22:01:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9DCFEB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 22:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5021E41E93;
-	Tue, 11 Jul 2023 22:01:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5021E41E93
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8600E41E98;
+	Tue, 11 Jul 2023 22:01:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8600E41E98
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jou9xanzP1vB; Tue, 11 Jul 2023 22:01:41 +0000 (UTC)
+	with ESMTP id xJ_QcU_kKcxH; Tue, 11 Jul 2023 22:01:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A69341E75;
-	Tue, 11 Jul 2023 22:01:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A69341E75
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5566041EA5;
+	Tue, 11 Jul 2023 22:01:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5566041EA5
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 37EB61BF32D
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 22:01:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D59A61BF32D
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 22:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D8D241E75
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 22:01:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D8D241E75
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D7C841E5D
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 22:01:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D7C841E5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8tPnNt392YsO for <buildroot@lists.busybox.net>;
- Tue, 11 Jul 2023 22:01:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CEDA741E5D
- for <buildroot@buildroot.org>; Tue, 11 Jul 2023 22:01:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEDA741E5D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB46C86E6E; Tue, 11 Jul 2023 22:01:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 11 Jul 2023 23:53:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee2f9c920ab33d23e07e439f440d549eb1bb4e09
-X-Git-Newrev: 21764235cb7f7fb767ea4b5d825e39c711aee235
-X-Patchwork-Hint: ignore
-Message-Id: <20230711220137.BB46C86E6E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{libuv,
+ with ESMTP id T7VB8ez_ymb9 for <buildroot@lists.busybox.net>;
+ Tue, 11 Jul 2023 22:01:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD28B41EA4
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD28B41EA4
+ for <buildroot@buildroot.org>; Tue, 11 Jul 2023 22:01:51 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FC021BF207;
+ Tue, 11 Jul 2023 22:01:48 +0000 (UTC)
+Date: Wed, 12 Jul 2023 00:01:47 +0200
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230712000147.55686040@windsurf>
+In-Reply-To: <20230610093042.3292143-1-bernd.kuhls@t-online.de>
+References: <20230610093042.3292143-1-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689112909;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=i1HBnziNjNpgZ7vaCnX+l/0ZJbpKQiBJxPB12xrjYBo=;
+ b=Ys1PmMnx+/QCcFTgpnkDo1nUEP02equ3RmQSX83gKfhDeMmT7wMQbQD7P2HYDU6GadwUyQ
+ EsvYXXBl8RWl7YbEvhvu29KeG+nrI9c4J1z/GSjA0gkxnPezjWmx0N73VFTdykxINnjzch
+ oGRVVW2t9IzyX71j2BZaUH/itX45qlw0m1/6O9AyQ/X2Htuyca8LFRk7n8T198URcR+6yz
+ 2k/kKX3u4jO08btwHrs7bqENnw7ySeylgv16mfuYGgDC75udFqTlFIHKUV7PtjhO/McOWd
+ uOQt8QIJzvVbAfH2EIvwLt/bJQ6WxL7gYxy7g2Zz44pkFvzJVO7Qke8w+ZlyHQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Ys1PmMnx
+Subject: Re: [Buildroot] [PATCH 1/1] package/{libuv,
  uvw}: bump to versions 1.45.0, 3.1.0_libuv_v1.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,84 +78,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21764235cb7f7fb767ea4b5d825e39c711aee235
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 10 Jun 2023 11:30:42 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Updated license hashes due to upstream commits:
-- various cleanups, parts of old license file was moved to LICENSE-extra
-  https://github.com/libuv/libuv/commits/v1.x/LICENSE
-- copyright year bump
-  https://github.com/skypjack/uvw/commit/68803053f42bb3b0e139a984837a5539e5da7fe6
+> Updated license hashes due to upstream commits:
+> - various cleanups, parts of old license file was moved to LICENSE-extra
+>   https://github.com/libuv/libuv/commits/v1.x/LICENSE
+> - copyright year bump
+>   https://github.com/skypjack/uvw/commit/68803053f42bb3b0e139a984837a5539e5da7fe6
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libuv/libuv.hash | 5 +++--
+>  package/libuv/libuv.mk   | 4 ++--
+>  package/uvw/uvw.hash     | 4 ++--
+>  package/uvw/uvw.mk       | 2 +-
+>  4 files changed, 8 insertions(+), 7 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libuv/libuv.hash | 5 +++--
- package/libuv/libuv.mk   | 4 ++--
- package/uvw/uvw.hash     | 4 ++--
- package/uvw/uvw.mk       | 2 +-
- 4 files changed, 8 insertions(+), 7 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index b0fa0ff5be..3ca184feaf 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,4 @@
- # Locally calculated
--sha256  e6e2ba8b4c349a4182a33370bb9be5e23c51b32efb9b9e209d0e8556b73a48da  libuv-1.44.2.tar.gz
--sha256  95b8b163c60d17cfce3cef61a2d8a9cf70137502c8fb5f3d93cd2fc529fa98c8  LICENSE
-+sha256  458e34d5ef7f3c0394a2bfd8c39d757cb1553baa5959b9b4b45df63aa027a228  libuv-1.45.0.tar.gz
-+sha256  16de0c32b265cb7d46a6d3bd614f259dd4d693a5e26b3407b04aae8d73041f0c  LICENSE
-+sha256  262c44bd2cdba037e6d2a82fba15f5800d292bc993a6f5d6b6ea487744d02836  LICENSE-extra
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index c169b76a6a..640c5bb1ce 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,13 +6,13 @@
- 
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.44.2
-+LIBUV_VERSION = 1.45.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
- LIBUV_AUTORECONF = YES
- LIBUV_LICENSE = BSD-2-Clause, BSD-3-Clause, ISC, MIT
--LIBUV_LICENSE_FILES = LICENSE
-+LIBUV_LICENSE_FILES = LICENSE LICENSE-extra
- LIBUV_CPE_ID_VENDOR = libuv
- 
- # Upstream needs tests to be run sequentially. This is the default in
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index a0c74bbe05..8e54ea7d60 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3460842778e91e7d2fae4201e49e4521e9d94fbbf3891ae6c52d3c9fc0673598  uvw-2.12.1_libuv_v1.44.tar.gz
--sha256  1e3b8fb895c0396aaa2138ff82c02968524e220645b21b0a4ac765858a898732  LICENSE
-+sha256  0a612bd243150fbbe1365cdaf48203d32061c1d14f93825a31876b183922f93b  uvw-3.1.0_libuv_v1.45.tar.gz
-+sha256  e2a4062818ab05e2a0908737ad49b7c01202247364e900167ac81105de8713f3  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index b6c2135d6f..364a2eded4 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UVW_VERSION = 2.12.1_libuv_v1.44
-+UVW_VERSION = 3.1.0_libuv_v1.45
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
