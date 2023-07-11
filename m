@@ -1,63 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6430DEB64DD
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 10:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9F3FEB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 12:29:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D19B74015D;
-	Tue, 11 Jul 2023 10:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D19B74015D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D08360E3B;
+	Tue, 11 Jul 2023 12:29:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D08360E3B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RdvBuaItZacG; Tue, 11 Jul 2023 12:29:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FF3D60E8D;
+	Tue, 11 Jul 2023 12:29:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FF3D60E8D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9432F1BF2C8
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 12:29:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B72B404E1
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 12:29:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B72B404E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ahDUCxiCcHDt; Tue, 11 Jul 2023 10:50:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B684D4094D;
-	Tue, 11 Jul 2023 10:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B684D4094D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 45C651BF3F9
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 10:50:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F77581E85
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 10:50:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F77581E85
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yS9AJU1AX7En for <buildroot@lists.busybox.net>;
- Tue, 11 Jul 2023 10:50:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E34A81E75
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
- [IPv6:2607:f8b0:4864:20::22f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E34A81E75
- for <buildroot@buildroot.org>; Tue, 11 Jul 2023 10:50:36 +0000 (UTC)
-Received: by mail-oi1-x22f.google.com with SMTP id
- 5614622812f47-3a04e5baffcso4556702b6e.3
- for <buildroot@buildroot.org>; Tue, 11 Jul 2023 03:50:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689072636; x=1691664636;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=mOe7eif1JlcC3YZ6mU+JPGNZXngbaiGtD/UMbe3KzUU=;
- b=kxg2NRWG94VJ9DEUJXynWb5uRAJOAnDdk1qBlEQT0I+qEP3/crfg3Bfy8uMg39VV5b
- pfdVBiNNmsq4m336GxnXaOBoESzQZIO4lLdjlSUYklvdCk0N+6baZgUUns/Z44wK1d+C
- fNp8seHEDr1gcwqznbFs9mFmtXXRq6LVXRMpzGzvQVvMZctkYLHXcUOHGLL51BpC7gKC
- 5VO0S705jjVVxDbO9egfnlrDm0/tfJscnLrMRJBhW2nC7voqa9DYA7BjxSXZfSfxNy9u
- rx+Sr6u90EydHwKtTbzXNCHKCSYMYDNheYVyqMMeMwZNX2E2DFd6pYzq6vj+todE5gbR
- 5yzA==
-X-Gm-Message-State: ABy/qLZL7P4I+7l3GyoCM+yZ1/Ua54zEBVFNpgK1t506k3vo+A4GmOe2
- flP3uyBd5x0q0GyosjYV6jMB2YUja5+7YijLC1pV7NE4Bl4=
-X-Google-Smtp-Source: APBJJlFfkaNoH57+tVEwLuVIOIJccEJdrqUCBt8gPDk+piKIcU5X4qEDTu3r8OvUhqAhJsQQ0Aq3Meh26A+1YFBQCVM=
-X-Received: by 2002:a05:6870:46aa:b0:1b0:233e:406d with SMTP id
- a42-20020a05687046aa00b001b0233e406dmr17390445oap.23.1689072635975; Tue, 11
- Jul 2023 03:50:35 -0700 (PDT)
-MIME-Version: 1.0
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1Q9XlZ7C8y9G for <buildroot@lists.busybox.net>;
+ Tue, 11 Jul 2023 12:29:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98299404A8
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 98299404A8
+ for <buildroot@buildroot.org>; Tue, 11 Jul 2023 12:29:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 915A4C000F;
+ Tue, 11 Jul 2023 12:29:26 +0000 (UTC)
+Date: Tue, 11 Jul 2023 14:29:25 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230711142925.3051cd21@windsurf>
+In-Reply-To: <CADvTj4pt0RjvYoF3Wvxa7QsPbNJQre7J3Vb8sp6ckvR86Yrvsw@mail.gmail.com>
 References: <20230627072640.2437216-1-james.hilliard1@gmail.com>
  <20230627072640.2437216-2-james.hilliard1@gmail.com>
  <20230710200146.33aa4362@windsurf>
@@ -67,26 +51,27 @@ References: <20230627072640.2437216-1-james.hilliard1@gmail.com>
  <20230711100053.1d9d3671@windsurf>
  <CADvTj4p1kQLf9J=s_xqHVZVeSwHUVVMBSMHPJsA-JT2oHHNCrQ@mail.gmail.com>
  <20230711115458.34cc38a9@windsurf>
-In-Reply-To: <20230711115458.34cc38a9@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 11 Jul 2023 04:50:23 -0600
-Message-ID: <CADvTj4pt0RjvYoF3Wvxa7QsPbNJQre7J3Vb8sp6ckvR86Yrvsw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ <CADvTj4pt0RjvYoF3Wvxa7QsPbNJQre7J3Vb8sp6ckvR86Yrvsw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689072636; x=1691664636;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mOe7eif1JlcC3YZ6mU+JPGNZXngbaiGtD/UMbe3KzUU=;
- b=b7F9ERZAUnskvu40JM3lA72mPKT1Bqlmnqt3B3G7M4Mu9HgIoEDjlUgasrPzKBOOdu
- WUvHPhPz2wVTB1ACULgmk7XXK9HgkQorsOHdPqw3RUvEVQ5T/DK3w9mcd460wKExwR+l
- n1SWpCBBkWbNAgw3CvCd09jmP+pQiRfqXb4dx0wt2Lbyzz5s2Ut22Qqw9NtnqAJJ5S71
- CCzZjx1agbIDUkkJeed2EiZ1dNAvo5TlS45q10KYjbHe90CPA92W/5+3cP3kk5hYpBeP
- 65oQ01wu5S/P9d1r6fuw298Lqfz+xoB6jnUA0bOOpZTI863tVyqQ4z/UqiHMbmyDeGJA
- a+sQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=b7F9ERZA
+ d=bootlin.com; s=gm1; t=1689078566;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=RSb7iPbG9oxPoiO9tJOfb6VlhNfLnNSg470LDCgzDF8=;
+ b=aBxpnhWI2LnXgntHdtOOADDjmMzmH4qltBS9GHsaoMx8GyWS4UUrniFKghcTsiLoB8RoB7
+ cumnIwL5zZoKPcnooNYhyxjVcPjUE78b5WqgIHOCr3lRu0ToE3F8KdqlY+lfTpLgHfhRco
+ CdTQlcAhy9crajXL/9PJszm2HZO6qFWbQBxkaf5solo6xDOci3heTs7FCRDlO2CFM24Pkv
+ pq8E6NAaDtFqAk4TnhboHr+Zm1IG2g6fTBZTME4MQpz1g9q6l27ivMlQO/rVbuA1msBsys
+ 3nyDrb6ZLQhgKnin2NaEL4Fn+VpL5Omypwll8vG/OPwLYpdD2OIay/ZRHJjXOA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=aBxpnhWI
 Subject: Re: [Buildroot] [PATCH 2/2] package/python-terminaltables: fix
  build backend
 X-BeenThere: buildroot@buildroot.org
@@ -100,62 +85,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCBKdWwgMTEsIDIwMjMgYXQgMzo1NeKAr0FNIFRob21hcyBQZXRhenpvbmkKPHRob21h
-cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gT24gVHVlLCAxMSBKdWwgMjAyMyAw
-Mzo0MzoyNiAtMDYwMAo+IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29t
-PiB3cm90ZToKPgo+ID4gVGhpcyBzZXJpZXMgY2FuIGJlIHJldmlld2VkIGVudGlyZWx5IGluZGVw
-ZW5kZW50bHkgb2YgdGhlIG90aGVyIG9uZSwgSQo+ID4gd2VudCBhaGVhZCBhbmQgbWFya2VkIHRo
-ZSBmaW5hbCBwZXA1MTcgc2V0dXB0b29scyBtaWdyYXRpb24gcGF0Y2ggYXMKPiA+IGRlZmVycmVk
-IGZvciBub3cgc28gdGhhdCB0aGVyZSBhcmVuJ3QgZGVwZW5kZW5jeSBvcmRlcmluZyBpc3N1ZXMg
-b3IKPiA+IGNvbmZ1c2lvbiByZWdhcmRpbmcgdGhlIHJlbGF0aW9uIG9mIHRoaXMgc2VyaWVzIHRv
-IHRoZSBvdGhlciBvbmUuCj4KPiBUaGlzIGlzIGEgYmFkIGlkZWEsIHdoaWNoIGNhdXNlcyBldmVu
-IG1vcmUgY29uZnVzaW9uLCBhcyB3ZSBkb24ndAo+IHVuZGVyc3RhbmQgKndoeSogeW91J3JlIG1h
-a2luZyB0aG9zZSBjaGFuZ2VzLgoKVGhlIGJ1aWxkIHN5c3RlbSBpcyBzdXBwb3NlZCB0byBiZSBw
-b2V0cnkvcG9ldHJ5LWNvcmUsIG5vdCBzZXR1cHRvb2xzLCBwb2V0cnkKaXMgdGhlIGNvcnJlY3Qg
-YmFja2VuZCBzcGVjaWZpZWQgaW4gdGhlIHB5cHJvamVjdC50b21sLCB0aGUgc2Rpc3QgaGFzCmEg
-c2V0dXB0b29scwpzaGltIGZvciBiYWNrd2FyZHMgY29tcGF0aWJpbGl0eSBhcHBhcmVudGx5LCB0
-aGlzIHNoaW0gaXNuJ3QgZXZlbiBjaGVja2VkIGludG8KdmVyc2lvbiBjb250cm9sIGZvciB0aGUg
-cHJvamVjdCBzbyB3ZSBzaG91bGRuJ3QgYmUgdXNpbmcgaXQgYXMgaXQncwpub3QgcmVhbGx5IHRo
-ZQpjb3JyZWN0IHdheSB0byBiZSBidWlsZGluZyBhIHBvZXRyeSBiYXNlZCBwYWNrYWdlLgoKaHR0
-cHM6Ly9naXRodWIuY29tL21hdHRoZXdkZWFubWFydGluL3Rlcm1pbmFsdGFibGVzL2Jsb2IvdjMu
-MS4xMC9weXByb2plY3QudG9tbCNMNjQtTDY2Cgo+Cj4gQ291bGQgeW91IGluc3RlYWQgZG8gd2hh
-dCB3ZSBzdWdnZXN0LCBpLmUgcmVzZW5kIG9uZSBzaW5nbGUgZnVsbCBzZXJpZXMKPiB0aGF0IGlu
-Y2x1ZGUgYWxsIGNoYW5nZXMsIGluY2x1ZGluZyB0aGUgZmluYWwgY2hhbmdlIG9mIHRoZSBQRVA1
-MTcKPiBzZXR1cHRvb2xzIG1pZ3JhdGlvbiwgdG9nZXRoZXIgd2l0aCBhIGNvdmVyIGxldHRlcj8K
-CkkgbWVhbiwgdGhpcyBpcyBqdXN0IGEgYnVnIHRoYXQgZGlkbid0IGdldCBub3RpY2VkIGVhcmxp
-ZXIsIEkganVzdCBoYWRuJ3QgY2F1Z2h0Cml0IGJlZm9yZSBJIGRpZCBteSBwZXA1MTcgbWlncmF0
-aW9uLCB0aGUgZml4IGlzIHRoZSBzYW1lIHdoZXRoZXIgb3Igbm90CnRoZSBwZXA1MTcgcGF0Y2gg
-aXMgbWVyZ2VkLgoKSWYgSSBoYWQgY2F1Z2h0IHRoZXNlIGJ1Z3MgYmVmb3JlIHNlbmRpbmcgdGhl
-IHNldHVwdG9vbHMgcGVwNTE3IG1pZ3JhdGlvbgpzZXJpZXMgSSB3b3VsZCBoYXZlIGRlZmVycmVk
-IHRoZSBmaW5hbCBtaWdyYXRpb24gcGF0Y2ggdGhlcmUgdG8gYXZvaWQgdGhpcwpzb3J0IG9mIGNv
-bmZ1c2lvbi4KCj4KPiBJJ3ZlIGFscmVhZHkgYXNrZWQgdGhpcyBpbiAzIHNlcGFyYXRlIGUtbWFp
-bHMsIGJ1dCB5b3UgaW5zaXN0IG9uIG5vdAo+IGRvaW5nIHdoYXQgaXMgcmVxdWVzdGVkIHRvIGdl
-dCB5b3VyIGNoYW5nZXMgaW50ZWdyYXRlZCA6LS8KCkkndmUgc2VudCBhIGJ1bmNoIG9mIHBhdGNo
-ZXMgdGhhdCBlZmZlY3RpdmVseSBkbyB0aGUgc2FtZSB0aGluZyBhcyB0aGlzIG9uZQp3aGljaCBo
-YXZlIGJlZW4gbWVyZ2VkIGluZGVwZW5kZW50bHksIHNvIG90aGVyIHRoYW4gdGhlIGRlcGVuZGVu
-Y3kKb3JkZXJpbmcgSSBkb24ndCBzZWUgaG93IHRoaXMgaXMgcmVsYXRlZCB0byB0aGUgc2V0dXB0
-b29scyBwZXA1MTcgbWlncmF0aW9uCnBhdGNoLiBUbyBtZSBpdCBzZWVtcyB0aGF0IEkgYWNjaWRl
-bnRhbGx5IGNyZWF0ZWQgYSBidW5jaCBvZiB1bm5lY2Vzc2FyeQpjb25mdXNpb24gYnkgc2VuZGlu
-ZyBteSBzZXR1cHRvb2xzIHBlcDUxNyBtaWdyYXRpb24gcGF0Y2ggdG9vIGVhcmx5IHdoZW4KSSBz
-aG91bGQgaGF2ZSBqdXN0IHdhaXRlZCB1bnRpbCBkZXBlbmRlbmN5IGZpeGVzIGxpa2UgdGhpcyB3
-ZXJlIG1lcmdlZC4KCkknbSBraW5kIG9mIHB1c2hpbmcgYmFjayBhIGJpdCBoZXJlIHNpbmNlIG1h
-a2luZyBhIGdpYW50IHBhdGNoIHNlcmllcyB3b3VsZApqdXN0IGVuZCB1cCBtYWtpbmcgcmV2aWV3
-aW5nL3JlYmFzaW5nIGEgbG90IG1vcmUgY29uZnVzaW5nIElNTy4KCklmIHRoaXMgd2FzIGEgY2hh
-bmdlIHRoYXQgY291bGRuJ3QgYmUganVzdGlmaWVkIGluZGVwZW5kZW50bHkgSSB3b3VsZCBhZ3Jl
-ZQp0aGF0IGl0IHNob3VsZCBiZSBpbiBhIHNlcmllcyB3aXRoIG90aGVycy4KCkkgdGhpbmsgdGhl
-cmUgYWxzbyBtaWdodCBiZSBzb21ldGhpbmcgd3Jvbmcgd2l0aCBob3cgSSdtIG1hbmFnaW5nIG15
-CnBhdGNoIHNlcmllcyB3aXRoIGdpdCBhcyB0aGV5IHNlZW0gdG8gYmUgc2lnbmlmaWNhbnRseSBl
-YXNpZXIgZm9yIG90aGVycyB0bwptYW5hZ2UuIEV2ZXJ5IHRpbWUgSSBkZWFsIHdpdGggYSBsYXJn
-ZSBzZXJpZXMgaXQgZmVlbHMgbGlrZSBpdCdzIGEgbG90IGhhcmRlcgp0aGFuIGl0IHNob3VsZCBi
-ZS4KCj4KPiBUaG9tYXMKPiAtLQo+IFRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8s
-IEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFp
-bmluZwo+IGh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Hello James,
+
+On Tue, 11 Jul 2023 04:50:23 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
+
+> > This is a bad idea, which causes even more confusion, as we don't
+> > understand *why* you're making those changes.  
+> 
+> The build system is supposed to be poetry/poetry-core, not setuptools, poetry
+> is the correct backend specified in the pyproject.toml, the sdist has
+> a setuptools
+> shim for backwards compatibility apparently, this shim isn't even checked into
+> version control for the project so we shouldn't be using it as it's
+> not really the
+> correct way to be building a poetry based package.
+
+This is the information that I would like to see in the commit log.
+Right now this series only looks like useless change: we have a package
+that works, you're suggesting to make some changes, but we don't
+understand why.
+
+You should probably realize that we are not in your mind, we don't know
+what your "agenda" is and why you're proposing certain changes. So try
+to put yourself in our position: what are the relevant information that
+the maintainers will need to understand the motivation for my change,
+and the implementation of it. And while doing it, you should consider
+that we (maintainers, or at least, me personally) are relatively
+stupid, so adding more context than less context is very relevant.
+
+I think you have an "agenda" of where you want to see Buildroot
+Python's support to go, and this is excellent. We really, truly value
+this kind of long-term contributions that improve Buildroot. However,
+to make this work, you need to communicate this agenda more clearly:
+what are the mid/long-term goals, and how the immediate contributions
+fit within those mid/long-term goals. This will tremendously help us
+understand where you're going and buy your contributions :-)
+
+> > Could you instead do what we suggest, i.e resend one single full series
+> > that include all changes, including the final change of the PEP517
+> > setuptools migration, together with a cover letter?  
+> 
+> I mean, this is just a bug that didn't get noticed earlier, I just hadn't caught
+> it before I did my pep517 migration, the fix is the same whether or not
+> the pep517 patch is merged.
+
+OK. It isn't clear in your commit log which "bug" is that, and what is
+the impact. For example, is this a "bug" serious enough that the fix
+needs to be backported to our LTS branch?
+
+> I've sent a bunch of patches that effectively do the same thing as this one
+> which have been merged independently, so other than the dependency
+> ordering I don't see how this is related to the setuptools pep517 migration
+> patch. To me it seems that I accidentally created a bunch of unnecessary
+> confusion by sending my setuptools pep517 migration patch too early when
+> I should have just waited until dependency fixes like this were merged.
+
+Well, your commit log says:
+
+"""
+We need to migrate python-terminaltables to the pep517 poetry-core
+backend as setuptools is not supported.
+"""
+
+You say that setuptools is not supported, but it is clearly incorrect,
+as the current package builds fine with setuptools. So my reading of
+the commit log was that it was needed for the upcoming PEP517
+setuptools migration.
+
+> I'm kind of pushing back a bit here since making a giant patch series would
+> just end up making reviewing/rebasing a lot more confusing IMO.
+
+It's really not, as it allows us to see the big picture. And when there
+is a series of 20 patches that we're not yet ready to merge in full, we
+do merge the first patches to reduce the backlog on the submitter side.
+But seeing the full patch series allows us to understand the big
+picture.
+
+Alternatively, just make it very very clear in the commit log why this
+preliminary change is needed, and how it fits in the big picture of
+where you're going.
+
+> If this was a change that couldn't be justified independently I would agree
+> that it should be in a series with others.
+
+As it is justified today in its current commit log, it really doesn't
+appear like it is justified independently.
+
+> I think there also might be something wrong with how I'm managing my
+> patch series with git as they seem to be significantly easier for others to
+> manage. Every time I deal with a large series it feels like it's a lot harder
+> than it should be.
+
+Managing a large patch series requires a bit of effort indeed, but
+shouldn't be that difficult. I suppose you are efficiently/aggressively
+using "git rebase -i" to rework/rebase your stack of patches?
+
+As said above, I think it all boils down to providing more context in
+the commit logs as to why a change is needed and proposed. This will
+help us a lot, and will in the end reduce the workload on your side
+because your patches will be merged much faster, and with less back and
+forth over e-mail to collect the missing information from you.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
