@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 587F5EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 17:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9406EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 17:22:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E56F941E28;
-	Tue, 11 Jul 2023 17:22:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E56F941E28
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7291641E31;
+	Tue, 11 Jul 2023 17:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7291641E31
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KLJELPC97Z2S; Tue, 11 Jul 2023 17:22:17 +0000 (UTC)
+	with ESMTP id oXgJeNVuxhyp; Tue, 11 Jul 2023 17:22:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C529A41E0E;
-	Tue, 11 Jul 2023 17:22:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C529A41E0E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 06D371BF3E5
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:22:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A72941E2B;
+	Tue, 11 Jul 2023 17:22:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A72941E2B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FA521BF3E5
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:22:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4347408BA
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4347408BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 54F9441E42
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:22:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54F9441E42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SkK_R8wOYGoJ for <buildroot@lists.busybox.net>;
- Tue, 11 Jul 2023 17:22:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16EBD4013B
- for <buildroot@buildroot.org>; Tue, 11 Jul 2023 17:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16EBD4013B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06DB086DEB; Tue, 11 Jul 2023 17:22:15 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 11 Jul 2023 19:21:56 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: adc566856e95990ede1174faa0a2ff031b15d356
-X-Git-Newrev: b17ed57763c4809f4541b4abe6a7a0e2349e6f90
-X-Patchwork-Hint: ignore
-Message-Id: <20230711172215.06DB086DEB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/yavta: update _SITE URL
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VM9FlUXcFKWB for <buildroot@lists.busybox.net>;
+ Tue, 11 Jul 2023 17:22:33 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CC6041E38
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2CC6041E38
+ for <buildroot@buildroot.org>; Tue, 11 Jul 2023 17:22:33 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:be68:b46e:ab7b:a099])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id E963D13F8D9;
+ Tue, 11 Jul 2023 19:22:27 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 11 Jul 2023 19:22:27 +0200
+Date: Tue, 11 Jul 2023 19:22:27 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: =?utf-8?Q?S=C3=A9bastien?= Szymanski <sebastien.szymanski@armadeus.com>
+Message-ID: <20230711172227.GF188780@scaer>
+References: <20230710174542.16516-1-sebastien.szymanski@armadeus.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230710174542.16516-1-sebastien.szymanski@armadeus.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1689096151;
+ bh=sgpSjsQ426xNvxmNokKmXdvdlBlXyQQtWoR0bpdEs9U=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DlNtmayLQ90pBvM6Os+IGqmG8Izlg7gUuG7Xx8Ub3zKO29vG2ctZHjPuquAwOfYip
+ +3B8qvg6/u8mfVSHezH+/stC3aBjMx4locsMTp/7hd46w/1VXL2PIL7vXt1zvyMIzH
+ n+9Bz/8/mf2J2pIAZOuX7BGcLSx4/qwykXYIyAl9h0mA2YBbb5WVSPEpX7D2MP91ur
+ ISKrYJD1VjW5pYq1UcQ7iOqpRQFBed4w/2A6SjZmuf5ghQM4QLJ2/uZDQHRORnMjDo
+ Eb6kzVHTh/grVrs4Q+sAoFqLFJORl/gVsZd85EA0/ms9cV0XQYLEaOZvLOvc6lGMsu
+ 68524dN0jh37A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DlNtmayL
+Subject: Re: [Buildroot] [PATCH 1/1] package/yavta: update _SITE URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,50 +76,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0668321827166461480=="
+Cc: Patrick Gerber <kpa_info@yahoo.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0668321827166461480==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b17ed57763c4809f4541b4abe6a7a0e2349e6f90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It looks like the project moved to https://git.ideasonboard.org/yavta.git.
-
-Update YAVA_SITE URL accordingly.
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/yavta/yavta.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/yavta/yavta.mk b/package/yavta/yavta.mk
-index d16bee69b1..db481b77b9 100644
---- a/package/yavta/yavta.mk
-+++ b/package/yavta/yavta.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- YAVTA_VERSION = 583bedefc2a247d2cfd32d1b4a0abbe3e2015c70
--YAVTA_SITE = https://git.ideasonboard.org/git/yavta.git
-+YAVTA_SITE = https://git.ideasonboard.org/yavta.git
- YAVTA_SITE_METHOD = git
- YAVTA_LICENSE = GPL-2.0+
- YAVTA_LICENSE_FILES = COPYING.GPL
-
---===============0668321827166461480==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0668321827166461480==--
+U8OpYmFzdGllbiwgQWxsLAoKT24gMjAyMy0wNy0xMCAxOTo0NSArMDIwMCwgU8OpYmFzdGllbiBT
+enltYW5za2kgc3Bha2UgdGh1c2x5Ogo+IEl0IGxvb2tzIGxpa2UgdGhlIHByb2plY3QgbW92ZWQg
+dG8gaHR0cHM6Ly9naXQuaWRlYXNvbmJvYXJkLm9yZy95YXZ0YS5naXQuCj4gCj4gVXBkYXRlIFlB
+VkFfU0lURSBVUkwgYWNjb3JkaW5nbHkuCj4gCj4gU2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBT
+enltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgoKQXBwbGllZCB0byBt
+YXN0ZXIsIHRoYW5rcy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0tLQo+ICBwYWNrYWdl
+L3lhdnRhL3lhdnRhLm1rIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyks
+IDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS95YXZ0YS95YXZ0YS5tayBi
+L3BhY2thZ2UveWF2dGEveWF2dGEubWsKPiBpbmRleCBkMTZiZWU2OWIxMTcuLmRiNDgxYjc3Yjk1
+NyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3lhdnRhL3lhdnRhLm1rCj4gKysrIGIvcGFja2FnZS95
+YXZ0YS95YXZ0YS5tawo+IEBAIC01LDcgKzUsNyBAQAo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+Iwo+ICAKPiAgWUFWVEFfVkVSU0lPTiA9IDU4M2JlZGVmYzJhMjQ3ZDJjZmQzMmQxYjRhMGFiYmUz
+ZTIwMTVjNzAKPiAtWUFWVEFfU0lURSA9IGh0dHBzOi8vZ2l0LmlkZWFzb25ib2FyZC5vcmcvZ2l0
+L3lhdnRhLmdpdAo+ICtZQVZUQV9TSVRFID0gaHR0cHM6Ly9naXQuaWRlYXNvbmJvYXJkLm9yZy95
+YXZ0YS5naXQKPiAgWUFWVEFfU0lURV9NRVRIT0QgPSBnaXQKPiAgWUFWVEFfTElDRU5TRSA9IEdQ
+TC0yLjArCj4gIFlBVlRBX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HLkdQTAo+IC0tIAo+IDIuNDEu
+MAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4g
+YnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0t
+LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4t
+LS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRk
+ZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3
+NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAg
+ICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAg
+QUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEt
+Z2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4g
+IHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0t
+LS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
