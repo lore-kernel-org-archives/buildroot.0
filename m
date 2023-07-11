@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E087BEB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 21:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29437EB64DD
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 21:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C01D41E75;
-	Tue, 11 Jul 2023 21:03:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C01D41E75
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7F72403A8;
+	Tue, 11 Jul 2023 21:03:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7F72403A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QaxAHlMwvdCu; Tue, 11 Jul 2023 21:03:29 +0000 (UTC)
+	with ESMTP id nwh8gTkR5Zen; Tue, 11 Jul 2023 21:03:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BA0641E5E;
-	Tue, 11 Jul 2023 21:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BA0641E5E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AD7AF1BF48B
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:03:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC6C540880;
+	Tue, 11 Jul 2023 21:03:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC6C540880
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F8751BF48B
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:03:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EE08605B0
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:03:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EE08605B0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23318403A8
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:03:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23318403A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X1ULj_EjJ-qm for <buildroot@lists.busybox.net>;
- Tue, 11 Jul 2023 21:03:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OvIelSbja-FQ for <buildroot@lists.busybox.net>;
+ Tue, 11 Jul 2023 21:03:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB16F60E38
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AB16F60E38
- for <buildroot@buildroot.org>; Tue, 11 Jul 2023 21:03:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E81C60003;
- Tue, 11 Jul 2023 21:03:15 +0000 (UTC)
-Date: Tue, 11 Jul 2023 23:03:15 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B766C418F3
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B766C418F3
+ for <buildroot@buildroot.org>; Tue, 11 Jul 2023 21:03:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 30D9F40003;
+ Tue, 11 Jul 2023 21:03:32 +0000 (UTC)
+Date: Tue, 11 Jul 2023 23:03:30 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230711230315.5a4f2772@windsurf>
-In-Reply-To: <20230705161042.700055-1-bernd@kuhls.net>
-References: <20230705161042.700055-1-bernd@kuhls.net>
+Message-ID: <20230711230330.45b961b3@windsurf>
+In-Reply-To: <20230705162011.1224688-1-bernd@kuhls.net>
+References: <20230705162011.1224688-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689109397;
+ d=bootlin.com; s=gm1; t=1689109412;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=aVLAcxxW6nZzBghTTK0bmavoDvTKyQMcIS3mJgyjBvk=;
- b=MlBurZHQZuc+MzUDRTZ4elZY4lNJWDC5QfYcVPzsLyc/q6pZmLtZsGIfKAK1eDYeFdsNTV
- yznF+7MSytW5IesdNOLz2KviVMAc+fexVRktDxbod0LZyYlPMBItci8ag7qOhDtynrzXHl
- lSdTZWkf4rffdNOegdfKyoMG/6J30yIecEkml5GTbsM4232Th1lgGQcJAR8rV1eYtVRhGp
- VLJX1v53Bx/13vkRWdS25fRVZI7Z6MIrRUaF0rlzp3zJSVh5F3WcDnsSyZ8j99PiIJkWDr
- p9ouYPWfIVTJLnoxm7UIiNWuif9Xpna9Owuz53drzcHVJtHey1sjt2W9bITfRw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=oynWkvZRIzRo92VXt1DimTH/Gpl3ExzxgBy1tXxJuBg=;
+ b=aIe3KnUtbDcPWGJFWMcnK5vl4xDPb5f1s7W9oR8OnFQHIqwMFyGbtwe+Y0beSRyFk/RKLs
+ MrafK4efEZ8a1kF5rVxkuoS5IdG4XZcnoBncoxO8wdqD/INOTfsDTvVZMffu8PxMpu9E+f
+ vXKY+ord7BsrHgWPbGTRHbKybrgM/TpfSTGL7CDEOTfkDgdR+QP0UIRqe71UYoSUQP8dOR
+ AAfRuXUEgDm5XyC2EYgnLdO8u7JV7xTr2IX9Eg9/bSshfAQu1OXNdZcLf+GQadO4bI7F05
+ e5cSog664UlnYlkxIFCBKBjf2y61rz49fhsvJvcyjzms/PGXrLcYLG3KUSQTXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MlBurZHQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: mmal is not available
- on aarch64
+ header.s=gm1 header.b=aIe3KnUt
+Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: force arm mode instead
+ of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,28 +78,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Guillermo G <ggalan3@gmail.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  5 Jul 2023 18:10:42 +0200
+On Wed,  5 Jul 2023 18:20:11 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
+> Fix the following build failure:
+> /tmp/ccw5V2Ti.s: Assembler messages:
+> /tmp/ccw5V2Ti.s:2013: Error: selected processor does not support `itt gt' in Thumb mode
+> /tmp/ccw5V2Ti.s:2014: Error: Thumb does not support conditional execution
+> /tmp/ccw5V2Ti.s:2015: Error: Thumb does not support conditional execution
+> /tmp/ccw5V2Ti.s:2017: Error: selected processor does not support `it le' in Thumb mode
+> /tmp/ccw5V2Ti.s:2018: Error: Thumb does not support conditional execution
+> /tmp/ccw5V2Ti.s:2020: Error: selected processor does not support `it gt' in Thumb mode
+> /tmp/ccw5V2Ti.s:2021: Error: Thumb does not support conditional execution
+> 
 > Fixes:
-> http://autobuild.buildroot.net/results/aa5/aa589b38e1591a0ec4d400891bf86f5138cf4542/
+> http://autobuild.buildroot.net/results/3fc/3fc68f756cf1661673941c411c4a2477e901e361/
 > 
-> For details see:
-> https://lists.buildroot.org/pipermail/buildroot/2023-July/669839.html
-> https://github.com/raspberrypi/userland/issues/688
-> 
-> Reported-by: Guillermo G <ggalan3@gmail.com>
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/ffmpeg/ffmpeg.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  package/ffmpeg/ffmpeg.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 Applied to master, thanks.
 
