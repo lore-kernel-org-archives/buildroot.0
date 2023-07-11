@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F707EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 21:44:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37C3AEB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 21:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0801841E75;
-	Tue, 11 Jul 2023 21:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0801841E75
+	by smtp4.osuosl.org (Postfix) with ESMTP id B27C741E80;
+	Tue, 11 Jul 2023 21:48:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B27C741E80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9P1pgzSeRfVk; Tue, 11 Jul 2023 21:44:23 +0000 (UTC)
+	with ESMTP id OZk2wqoIIlnZ; Tue, 11 Jul 2023 21:48:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C90CD41E70;
-	Tue, 11 Jul 2023 21:44:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C90CD41E70
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 31CFC1BF32D
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:44:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE52441E7A;
+	Tue, 11 Jul 2023 21:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE52441E7A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E3711BF32D
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B91A4000B
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:44:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B91A4000B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44F1F83A41
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:47:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44F1F83A41
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PgytXiYG4pGZ for <buildroot@lists.busybox.net>;
- Tue, 11 Jul 2023 21:44:12 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9A31402F2
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A9A31402F2
- for <buildroot@buildroot.org>; Tue, 11 Jul 2023 21:44:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 11DC620007;
- Tue, 11 Jul 2023 21:44:07 +0000 (UTC)
-Date: Tue, 11 Jul 2023 23:44:07 +0200
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Message-ID: <20230711234407.3c2177a6@windsurf>
-In-Reply-To: <20230706222607.287386-1-alexander.sverdlin@gmail.com>
-References: <20230706222607.287386-1-alexander.sverdlin@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689111848;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aeOZTr655PFNjfLXgMAdCNfCU4WT3SqGAUkL++eVDUI=;
- b=Dza9/4ox0MmBNXMUFcGZiN8cw5nYXfhdxnNSPQxKRQAl4axm405lgamBVnzEJkL8mSNsBP
- px4wpB01QWlHj/WztooMgKRvxSDey3wOAJUovYXc9y5OMyCYHOSB7SHqhaYX/bCbVla/Dk
- nZDJ0RvxHLQqCZiy34W5lVhimxsKgB7coxt4uDKleuxtWaQbRxG/Ppfd6BqlkgdzLhGJLV
- QwbBurxfyK6bijHNxJzi0uakjbNACS/uhIuzmWwrZlHzPJ7059iHD6a/P/NSm/KIrZ84iz
- NOrJmNxwVn73JJ9irdPIne6jcTNdEC20rhn8dAnZxyA+RaEf+gD9tZpcWjLWfg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Dza9/4ox
-Subject: Re: [Buildroot] [PATCH] linux: add support for vendor dirs for
- appended DTBs
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5CBWtczmhxNs for <buildroot@lists.busybox.net>;
+ Tue, 11 Jul 2023 21:47:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8087983A3F
+ for <buildroot@buildroot.org>; Tue, 11 Jul 2023 21:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8087983A3F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6F3E486E58; Tue, 11 Jul 2023 21:47:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 11 Jul 2023 23:47:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8ebfce3c70df968fb5c3b9f5c1f9ba5f904cf630
+X-Git-Newrev: 947cf4125e87eaa193de37d3a3fc5fcb885ad531
+X-Patchwork-Hint: ignore
+Message-Id: <20230711214758.6F3E486E58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cryptodev-linux: bump version to
+ 1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,38 +58,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  7 Jul 2023 00:26:07 +0200
-Alexander Sverdlin <alexander.sverdlin@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=947cf4125e87eaa193de37d3a3fc5fcb885ad531
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Take the basename of the appended DTBs to workaround the following problem:
-> 
-> (cd .../arch/arm/boot; for dtb in cirrus/ep93xx-edb9302
->  do if test -e ${dtb}.dtb ; then dtbpath=${dtb}.dtb
->  else dtbpath=dts/${dtb}.dtb ; fi
->  cat zImage ${dtbpath} > zImage.${dtb} || exit 1; done)
-> /bin/sh: line 1: zImage.cirrus/ep93xx-edb9302: No such file or directory
-> 
-> Necessary to support ARM Linux starting from commit 724ba6751532
-> ("ARM: dts: Move .dts files to vendor sub-directories"), i.e. Linux v6.4+.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> ---
->  linux/linux.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Changelog:
+https://github.com/cryptodev-linux/cryptodev-linux/blob/master/NEWS
+"* Fix compilation issues against Linux kernel 6.3"
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/9b9/9b9ad744d8a37fc46726461551a2dcb3c26a1341/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cryptodev-linux/cryptodev-linux.hash | 2 +-
+ package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
+index d649e8934a..300aa3bcd4 100644
+--- a/package/cryptodev-linux/cryptodev-linux.hash
++++ b/package/cryptodev-linux/cryptodev-linux.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f51c2254749233b1b1d7ec9445158bd709f124f88e1c650fe2faac83c3a81938  cryptodev-linux-1.12.tar.gz
++sha256  33b7915c46eb39a37110e88c681423c0dd0df25d784b6e1475ac3196367f0db5  cryptodev-linux-1.13.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index 5a9e6ad233..580ea89520 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRYPTODEV_LINUX_VERSION = 1.12
++CRYPTODEV_LINUX_VERSION = 1.13
+ CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,cryptodev-linux-$(CRYPTODEV_LINUX_VERSION))
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
