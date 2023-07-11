@@ -4,67 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9406EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 17:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA495EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 18:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7291641E31;
-	Tue, 11 Jul 2023 17:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7291641E31
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EA5B41369;
+	Tue, 11 Jul 2023 18:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EA5B41369
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oXgJeNVuxhyp; Tue, 11 Jul 2023 17:22:37 +0000 (UTC)
+	with ESMTP id MnaiG1i-owfu; Tue, 11 Jul 2023 18:04:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A72941E2B;
-	Tue, 11 Jul 2023 17:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A72941E2B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6FA521BF3E5
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:22:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 286F341496;
+	Tue, 11 Jul 2023 18:04:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 286F341496
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F3971BF31F
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 18:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 54F9441E42
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 17:22:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54F9441E42
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18CDF81ED0
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 18:04:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18CDF81ED0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VM9FlUXcFKWB for <buildroot@lists.busybox.net>;
- Tue, 11 Jul 2023 17:22:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CC6041E38
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2CC6041E38
- for <buildroot@buildroot.org>; Tue, 11 Jul 2023 17:22:33 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:be68:b46e:ab7b:a099])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E963D13F8D9;
- Tue, 11 Jul 2023 19:22:27 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 11 Jul 2023 19:22:27 +0200
-Date: Tue, 11 Jul 2023 19:22:27 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?Q?S=C3=A9bastien?= Szymanski <sebastien.szymanski@armadeus.com>
-Message-ID: <20230711172227.GF188780@scaer>
-References: <20230710174542.16516-1-sebastien.szymanski@armadeus.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mB40Q7c3eyLU for <buildroot@lists.busybox.net>;
+ Tue, 11 Jul 2023 18:04:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A678581E9B
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A678581E9B
+ for <buildroot@busybox.net>; Tue, 11 Jul 2023 18:04:42 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-3fb4146e8fcso43654125e9.0
+ for <buildroot@busybox.net>; Tue, 11 Jul 2023 11:04:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1689098681; x=1691690681;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Rzdv52F5M+6lxCWMF5NBVP3tqj3HHLaYwnu1BGkEJlA=;
+ b=VlEWjsKzxAZdvTiGul4IqjnZBi5tWk+/7PvwFfmhiXM6/UYJR++N9L1M0lO65pCZQl
+ kUUl9VJsUKJdnROjOywcYY3ytW84ploqbJabeI0bmmDNM5s5iDnAdqkYskjJQ0LlsASc
+ pveS2EGC88RHsinlLh/cDV7fbB+KOccCBFyM+zuTgygzzrHPwF2zEL33DxBFjKe1eSm9
+ qoA5leWDZ8BjRjw+qrwSCugadMOKLjRp8/HsvUrDNGdGJutQbLlZJBuY2kMZs/3aP6ph
+ 8rJJq/w+kWRlWQFJiv7br1WwopxNUvEuJw2B7jz1/IP3B77hT5LJai/I93xahkFoyV2F
+ fUZg==
+X-Gm-Message-State: ABy/qLaTWhrhJredDjoU+Bq/7rAElD6FDDS1r/Yvr77W1FjjlmFzE2ha
+ gZNqeR2lkewnwso1WOzhk9whpdgganA=
+X-Google-Smtp-Source: APBJJlHjRcy7vVXZIpe+GuANNbwi6k1AUqNH1SsH0hvAHWFuGnlxTEU7VYlJG0XJ1QVTQBu6WWCDqg==
+X-Received: by 2002:a05:600c:1c1b:b0:3f7:e78e:8a41 with SMTP id
+ j27-20020a05600c1c1b00b003f7e78e8a41mr18871154wms.18.1689098680501; 
+ Tue, 11 Jul 2023 11:04:40 -0700 (PDT)
+Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ t24-20020a1c7718000000b003fba6709c68sm3084859wmi.47.2023.07.11.11.04.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 11 Jul 2023 11:04:40 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Tue, 11 Jul 2023 20:04:22 +0200
+Message-Id: <20230711180422.565252-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230710174542.16516-1-sebastien.szymanski@armadeus.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1689096151;
- bh=sgpSjsQ426xNvxmNokKmXdvdlBlXyQQtWoR0bpdEs9U=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DlNtmayLQ90pBvM6Os+IGqmG8Izlg7gUuG7Xx8Ub3zKO29vG2ctZHjPuquAwOfYip
- +3B8qvg6/u8mfVSHezH+/stC3aBjMx4locsMTp/7hd46w/1VXL2PIL7vXt1zvyMIzH
- n+9Bz/8/mf2J2pIAZOuX7BGcLSx4/qwykXYIyAl9h0mA2YBbb5WVSPEpX7D2MP91ur
- ISKrYJD1VjW5pYq1UcQ7iOqpRQFBed4w/2A6SjZmuf5ghQM4QLJ2/uZDQHRORnMjDo
- Eb6kzVHTh/grVrs4Q+sAoFqLFJORl/gVsZd85EA0/ms9cV0XQYLEaOZvLOvc6lGMsu
- 68524dN0jh37A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DlNtmayL
-Subject: Re: [Buildroot] [PATCH 1/1] package/yavta: update _SITE URL
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1689098681; x=1691690681;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Rzdv52F5M+6lxCWMF5NBVP3tqj3HHLaYwnu1BGkEJlA=;
+ b=SzZXSXtD2eRhSRxZb+n56B1vCaiIUJSSbfOGKqfU04FsaDwE3WTu44Px5AawGZ3ECd
+ o68RPfAMNsSW+NcC8duH6rUIJZ3xjhYBibNt8dNWXj3IH/zZwZOZxAyxqoi6mKHbaMD+
+ efY31fUzwKQAGsAly8Ms6Mf/pXrDphtXf82dS42eX/mmzZ+4vIFWdvE6+9xj65T8xYFp
+ s4LM0Nq+PisoWkFvLnUnmyppJzFN8HQ9Mk9TDS9oC/iWxj9l2wHjK5QDMZbkElxgLyCv
+ tX2+wOF8IBE4gpOLb58rIqq0/+Cf6PGHc3a0qIvjHPRkEjqhuin3BO90zlXRDYfYIrHu
+ hbFQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=SzZXSXtD
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
+ and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,41 +95,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Patrick Gerber <kpa_info@yahoo.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U8OpYmFzdGllbiwgQWxsLAoKT24gMjAyMy0wNy0xMCAxOTo0NSArMDIwMCwgU8OpYmFzdGllbiBT
-enltYW5za2kgc3Bha2UgdGh1c2x5Ogo+IEl0IGxvb2tzIGxpa2UgdGhlIHByb2plY3QgbW92ZWQg
-dG8gaHR0cHM6Ly9naXQuaWRlYXNvbmJvYXJkLm9yZy95YXZ0YS5naXQuCj4gCj4gVXBkYXRlIFlB
-VkFfU0lURSBVUkwgYWNjb3JkaW5nbHkuCj4gCj4gU2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBT
-enltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgoKQXBwbGllZCB0byBt
-YXN0ZXIsIHRoYW5rcy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0tLQo+ICBwYWNrYWdl
-L3lhdnRhL3lhdnRhLm1rIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyks
-IDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS95YXZ0YS95YXZ0YS5tayBi
-L3BhY2thZ2UveWF2dGEveWF2dGEubWsKPiBpbmRleCBkMTZiZWU2OWIxMTcuLmRiNDgxYjc3Yjk1
-NyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3lhdnRhL3lhdnRhLm1rCj4gKysrIGIvcGFja2FnZS95
-YXZ0YS95YXZ0YS5tawo+IEBAIC01LDcgKzUsNyBAQAo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-Iwo+ICAKPiAgWUFWVEFfVkVSU0lPTiA9IDU4M2JlZGVmYzJhMjQ3ZDJjZmQzMmQxYjRhMGFiYmUz
-ZTIwMTVjNzAKPiAtWUFWVEFfU0lURSA9IGh0dHBzOi8vZ2l0LmlkZWFzb25ib2FyZC5vcmcvZ2l0
-L3lhdnRhLmdpdAo+ICtZQVZUQV9TSVRFID0gaHR0cHM6Ly9naXQuaWRlYXNvbmJvYXJkLm9yZy95
-YXZ0YS5naXQKPiAgWUFWVEFfU0lURV9NRVRIT0QgPSBnaXQKPiAgWUFWVEFfTElDRU5TRSA9IEdQ
-TC0yLjArCj4gIFlBVlRBX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HLkdQTAo+IC0tIAo+IDIuNDEu
-MAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4g
-YnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0t
-LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4t
-LS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRk
-ZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3
-NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAg
-ICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAg
-QUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEt
-Z2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4g
-IHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0t
-LS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
+ configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index a38f3a1c5..d817e1dd1 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.22"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.38"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -45,7 +45,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 74b6a764c..88967e70c 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.22"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.38"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -45,7 +45,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
