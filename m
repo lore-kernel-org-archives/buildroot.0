@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B47F4EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 21:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F707EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 21:44:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C47A41E51;
-	Tue, 11 Jul 2023 21:44:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C47A41E51
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0801841E75;
+	Tue, 11 Jul 2023 21:44:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0801841E75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gm5nr1aVDUGf; Tue, 11 Jul 2023 21:44:09 +0000 (UTC)
+	with ESMTP id 9P1pgzSeRfVk; Tue, 11 Jul 2023 21:44:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2227441907;
-	Tue, 11 Jul 2023 21:44:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2227441907
+	by smtp4.osuosl.org (Postfix) with ESMTP id C90CD41E70;
+	Tue, 11 Jul 2023 21:44:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C90CD41E70
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB62B1BF32D
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:44:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 31CFC1BF32D
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:44:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4F4640493
- for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:44:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4F4640493
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B91A4000B
+ for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:44:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B91A4000B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 76AZY_Q6GQGF for <buildroot@lists.busybox.net>;
- Tue, 11 Jul 2023 21:44:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D66DE4152B
- for <buildroot@buildroot.org>; Tue, 11 Jul 2023 21:44:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D66DE4152B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE8B186E45; Tue, 11 Jul 2023 21:44:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 11 Jul 2023 23:32:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 18a6d6db685e939cb42cb66755668e8f91bc6340
-X-Git-Newrev: 8d2a51dc8de7fc1072e1f7b1923d45d4f4694175
-X-Patchwork-Hint: ignore
-Message-Id: <20230711214405.BE8B186E45@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] linux: add support for vendor dirs for
+ with ESMTP id PgytXiYG4pGZ for <buildroot@lists.busybox.net>;
+ Tue, 11 Jul 2023 21:44:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9A31402F2
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A9A31402F2
+ for <buildroot@buildroot.org>; Tue, 11 Jul 2023 21:44:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 11DC620007;
+ Tue, 11 Jul 2023 21:44:07 +0000 (UTC)
+Date: Tue, 11 Jul 2023 23:44:07 +0200
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Message-ID: <20230711234407.3c2177a6@windsurf>
+In-Reply-To: <20230706222607.287386-1-alexander.sverdlin@gmail.com>
+References: <20230706222607.287386-1-alexander.sverdlin@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689111848;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=aeOZTr655PFNjfLXgMAdCNfCU4WT3SqGAUkL++eVDUI=;
+ b=Dza9/4ox0MmBNXMUFcGZiN8cw5nYXfhdxnNSPQxKRQAl4axm405lgamBVnzEJkL8mSNsBP
+ px4wpB01QWlHj/WztooMgKRvxSDey3wOAJUovYXc9y5OMyCYHOSB7SHqhaYX/bCbVla/Dk
+ nZDJ0RvxHLQqCZiy34W5lVhimxsKgB7coxt4uDKleuxtWaQbRxG/Ppfd6BqlkgdzLhGJLV
+ QwbBurxfyK6bijHNxJzi0uakjbNACS/uhIuzmWwrZlHzPJ7059iHD6a/P/NSm/KIrZ84iz
+ NOrJmNxwVn73JJ9irdPIne6jcTNdEC20rhn8dAnZxyA+RaEf+gD9tZpcWjLWfg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Dza9/4ox
+Subject: Re: [Buildroot] [PATCH] linux: add support for vendor dirs for
  appended DTBs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,45 +78,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d2a51dc8de7fc1072e1f7b1923d45d4f4694175
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  7 Jul 2023 00:26:07 +0200
+Alexander Sverdlin <alexander.sverdlin@gmail.com> wrote:
 
-Take the basename of the appended DTBs to workaround the following problem:
+> Take the basename of the appended DTBs to workaround the following problem:
+> 
+> (cd .../arch/arm/boot; for dtb in cirrus/ep93xx-edb9302
+>  do if test -e ${dtb}.dtb ; then dtbpath=${dtb}.dtb
+>  else dtbpath=dts/${dtb}.dtb ; fi
+>  cat zImage ${dtbpath} > zImage.${dtb} || exit 1; done)
+> /bin/sh: line 1: zImage.cirrus/ep93xx-edb9302: No such file or directory
+> 
+> Necessary to support ARM Linux starting from commit 724ba6751532
+> ("ARM: dts: Move .dts files to vendor sub-directories"), i.e. Linux v6.4+.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+>  linux/linux.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-(cd .../arch/arm/boot; for dtb in cirrus/ep93xx-edb9302
- do if test -e ${dtb}.dtb ; then dtbpath=${dtb}.dtb
- else dtbpath=dts/${dtb}.dtb ; fi
- cat zImage ${dtbpath} > zImage.${dtb} || exit 1; done)
-/bin/sh: line 1: zImage.cirrus/ep93xx-edb9302: No such file or directory
+Applied to master, thanks.
 
-Necessary to support ARM Linux starting from commit 724ba6751532
-("ARM: dts: Move .dts files to vendor sub-directories"), i.e. Linux v6.4+.
-
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 1c4fe45ac9..1db5c6046d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -468,7 +468,7 @@ define LINUX_APPEND_DTB
- 			else \
- 				dtbpath=dts/$${dtb}.dtb ; \
- 			fi ; \
--			cat zImage $${dtbpath} > zImage.$${dtb} || exit 1; \
-+			cat zImage $${dtbpath} > zImage.$$(basename $${dtb}) || exit 1; \
- 		done)
- endef
- ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
