@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58546EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 21:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 753ABEB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jul 2023 21:03:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5DB941E7A;
-	Tue, 11 Jul 2023 21:02:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5DB941E7A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 004B441E7D;
+	Tue, 11 Jul 2023 21:03:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 004B441E7D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bphBUxHgQ_8H; Tue, 11 Jul 2023 21:02:47 +0000 (UTC)
+	with ESMTP id gZGaBTjRaR4v; Tue, 11 Jul 2023 21:03:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3AF741E77;
-	Tue, 11 Jul 2023 21:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3AF741E77
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 451FC1BF48B
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8B1E41E8A;
+	Tue, 11 Jul 2023 21:03:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8B1E41E8A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 712C81BF95F
  for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E3944152B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4745E41E77
  for <buildroot@lists.busybox.net>; Tue, 11 Jul 2023 21:02:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E3944152B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4745E41E77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r46DbLCDIn7c for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h__aRYhM4NdE for <buildroot@lists.busybox.net>;
  Tue, 11 Jul 2023 21:02:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 603A240452
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68D8A41E76
  for <buildroot@buildroot.org>; Tue, 11 Jul 2023 21:02:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 603A240452
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68D8A41E76
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4BA3F86E35; Tue, 11 Jul 2023 21:02:44 +0000 (UTC)
+ id 55A1A86E37; Tue, 11 Jul 2023 21:02:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 11 Jul 2023 23:02:26 +0200
+Date: Tue, 11 Jul 2023 23:02:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 665303586a1eddd08f44bfce2239a68e0c593810
-X-Git-Newrev: c2d37c58f274ae25b963fec53aa2d5a057527af5
+X-Git-Oldrev: c2d37c58f274ae25b963fec53aa2d5a057527af5
+X-Git-Newrev: c8cc28b5ced34677a39de8e7bcc9a96d6e8df9fe
 X-Patchwork-Hint: ignore
-Message-Id: <20230711210244.4BA3F86E35@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ffmpeg: mmal is not available on
- aarch64
+Message-Id: <20230711210244.55A1A86E37@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ffmpeg: force arm mode instead of
+ Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2d37c58f274ae25b963fec53aa2d5a057527af5
+commit: https://git.buildroot.net/buildroot/commit/?id=c8cc28b5ced34677a39de8e7bcc9a96d6e8df9fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix the following build failure:
+/tmp/ccw5V2Ti.s: Assembler messages:
+/tmp/ccw5V2Ti.s:2013: Error: selected processor does not support `itt gt' in Thumb mode
+/tmp/ccw5V2Ti.s:2014: Error: Thumb does not support conditional execution
+/tmp/ccw5V2Ti.s:2015: Error: Thumb does not support conditional execution
+/tmp/ccw5V2Ti.s:2017: Error: selected processor does not support `it le' in Thumb mode
+/tmp/ccw5V2Ti.s:2018: Error: Thumb does not support conditional execution
+/tmp/ccw5V2Ti.s:2020: Error: selected processor does not support `it gt' in Thumb mode
+/tmp/ccw5V2Ti.s:2021: Error: Thumb does not support conditional execution
+
 Fixes:
-http://autobuild.buildroot.net/results/aa5/aa589b38e1591a0ec4d400891bf86f5138cf4542/
+http://autobuild.buildroot.net/results/3fc/3fc68f756cf1661673941c411c4a2477e901e361/
 
-For details see:
-https://lists.buildroot.org/pipermail/buildroot/2023-July/669839.html
-https://github.com/raspberrypi/userland/issues/688
-
-Reported-by: Guillermo G <ggalan3@gmail.com>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ffmpeg/ffmpeg.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/ffmpeg/ffmpeg.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 59e13b503e..9d9209706a 100644
+index 9d9209706a..ce285bcc60 100644
 --- a/package/ffmpeg/ffmpeg.mk
 +++ b/package/ffmpeg/ffmpeg.mk
-@@ -282,9 +282,14 @@ FFMPEG_CONF_OPTS += --disable-vdpau
+@@ -554,6 +554,10 @@ FFMPEG_CONF_OPTS += --disable-optimizations
+ FFMPEG_CFLAGS += -O0
  endif
  
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--FFMPEG_CONF_OPTS += --enable-mmal --enable-omx --enable-omx-rpi \
-+FFMPEG_CONF_OPTS += --enable-omx --enable-omx-rpi \
- 	--extra-cflags=-I$(STAGING_DIR)/usr/include/IL
- FFMPEG_DEPENDENCIES += rpi-userland
-+ifeq ($(BR2_arm),y)
-+FFMPEG_CONF_OPTS += --enable-mmal
-+else
-+FFMPEG_CONF_OPTS += --disable-mmal
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++FFMPEG_CFLAGS += -marm
 +endif
- else
- FFMPEG_CONF_OPTS += --disable-mmal --disable-omx --disable-omx-rpi
- endif
++
+ FFMPEG_CONF_ENV += CFLAGS="$(FFMPEG_CFLAGS)"
+ FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
