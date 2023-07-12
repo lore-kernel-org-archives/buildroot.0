@@ -4,68 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCF90EB64DD
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 18:43:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A8AAEB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 18:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80ED5612FE;
-	Wed, 12 Jul 2023 18:43:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80ED5612FE
+	by smtp3.osuosl.org (Postfix) with ESMTP id E41A4612E8;
+	Wed, 12 Jul 2023 18:48:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E41A4612E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oomHWl0z6qU5; Wed, 12 Jul 2023 18:43:10 +0000 (UTC)
+	with ESMTP id MYNo0JkfOdLA; Wed, 12 Jul 2023 18:48:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F179612F7;
-	Wed, 12 Jul 2023 18:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F179612F7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8AD951BF3BA
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 18:43:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 302D8612D6;
+	Wed, 12 Jul 2023 18:48:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 302D8612D6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E767B1BF3BA
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 18:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71043612FB
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 18:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71043612FB
+ by smtp1.osuosl.org (Postfix) with ESMTP id C06FB81EC2
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 18:48:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C06FB81EC2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i-xbxKW59kBE for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 18:43:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4E13612DA
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D4E13612DA
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 18:43:05 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:e245:939f:c022:28d9])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id D39BC13F8AA;
- Wed, 12 Jul 2023 20:42:59 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 12 Jul 2023 20:42:59 +0200
-Date: Wed, 12 Jul 2023 20:42:59 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230712184259.GG188780@scaer>
-References: <20230712171342.1204890-1-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230712171342.1204890-1-bernd@kuhls.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1689187383;
- bh=P3vROa2C4+6gospyLltqCUOaZg5LPAB0dgMbr2gV0NM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uNMsQDoEw0+6xpFA8GKqBIZj/kpauUigW6N5mtHW+eexxmOs8wav7C5akJyddSJba
- AHVTPGK6RDEVv0Cx8YHAIZnkVV3yma+NCPpIPTPIdLFVpQ6MFCP+iF8RAD3OyYcHHy
- tZtabWQXl6SLLR8wOKNmIuLyCRRoNjNL2wcLylxRYVe5XZ4Daxo0ZO/KIciUWsHF55
- 5Id1IOHIZk647MxtsjSAAffRyrF+R4lfwD4l0vHmYK/aqpe7Z5FW0A7DbXOX38ZlWP
- RVLdWVTJFsqrFn/IJ7i0Yswh7RelJmZmtTm3Hqhx/PjGFdLN77DnjS9DLj+Ad2wBZ1
- I6S3Poy6XDf8g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uNMsQDoE
-Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d-demos: fix glx-detection
- without glvnd
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VubY0c_D0Af5 for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 18:48:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 115CD81EB5
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 18:48:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 115CD81EB5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id ED78D86EB5; Wed, 12 Jul 2023 18:48:41 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 12 Jul 2023 20:48:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d7f3b78979308d1ec8776a20ba2654da566e922d
+X-Git-Newrev: 08eb63dfdf45885830a0bcedf94c4e1d40231a25
+X-Patchwork-Hint: ignore
+Message-Id: <20230712184841.ED78D86EB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/olimex_stmp157: bump Linux and
+ U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,98 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Spenser Gilliland <spenser@gillilanding.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=08eb63dfdf45885830a0bcedf94c4e1d40231a25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-07-12 19:13 +0200, Bernd Kuhls spake thusly:
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4621046326
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/olimex_stmp157_olinuxino_lime_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...eson-fix-glx-detection-without-glvnd.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/mesa3d-demos/0002-meson-fix-glx-detection-without-glvnd.patch
-> 
-> diff --git a/package/mesa3d-demos/0002-meson-fix-glx-detection-without-glvnd.patch b/package/mesa3d-demos/0002-meson-fix-glx-detection-without-glvnd.patch
-> new file mode 100644
-> index 0000000000..37a60efdd7
-> --- /dev/null
-> +++ b/package/mesa3d-demos/0002-meson-fix-glx-detection-without-glvnd.patch
-> @@ -0,0 +1,47 @@
-> +From e16117fc92688d76a042ad2c590c77d5a987a4ac Mon Sep 17 00:00:00 2001
-> +From: Erik Faye-Lund <erik.faye-lund@collabora.com>
-> +Date: Fri, 24 Mar 2023 13:31:58 +0100
-> +Subject: [PATCH] meson: fix glx-detection without glvnd
-> +
-> +When build without GLVND, Mesa provides GLX as a part of libGL, just
-> +like XQuartz does on MacOS. There's nothing really macOS specific about
-> +this fallback, so let's drop the condition.
-> +
-> +And just for good measure, let's add in dep_gl as a dependency for
-> +the header-check here, in case some one decides to install libGL outside
-> +of the default include directory.
-> +
-> +Fixes: 34300551 ("meson: explicitly check for glx dependency")
-> +Closes: https://gitlab.freedesktop.org/mesa/demos/-/issues/36
-> +Reviewed-by: Hoe Hao Cheng <haochengho12907@gmail.com>
-> +
-> +Upstream: https://gitlab.freedesktop.org/mesa/demos/-/commit/e16117fc92688d76a042ad2c590c77d5a987a4ac
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + meson.build | 9 +++++----
-> + 1 file changed, 5 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index c1853f94..bc3278e1 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -99,10 +99,11 @@ if not dep_glu.found() and host_machine.system() != 'darwin'
-> + endif
-> + 
-> + dep_glx = dependency('glx', required: false, disabler : true)
-> +-if not dep_glx.found() and host_machine.system() == 'darwin'
-> +-  # xquartz doesn't have a glx.pc, but it does have the header. And all the
-> +-  # symbols reside in libGL, so let's just use that.
-> +-  if cc.check_header('GL/glx.h', dependencies: dep_x11)
-> ++if not dep_glx.found()
-> ++  # Both Mesa build without GLVND and XQuartz lacks a glx.pc, but does
-> ++  # provide the header. And all the symbols reside in libGL, so let's
-> ++  # just use that.
-> ++  if cc.check_header('GL/glx.h', dependencies: [dep_x11, dep_gl])
-> +     dep_glx = dep_gl
-> +   endif
-> + endif
-> +-- 
-> +GitLab
-> +
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
+index 3b56fefeca..dc726359a0 100644
+--- a/configs/olimex_stmp157_olinuxino_lime_defconfig
++++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
+@@ -17,8 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/stmp1_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/OLIMEX/linux-olimex.git"
+-# branch release-20230217-v5.10.105
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c5a31724bdfaac894553b51c5a0fb92c1f10f3db"
++# branch release-20230622-v5.10.180
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fc74113e14d76aea9482264ff42e07397b94553d"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/stmp1_olinuxino/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -35,8 +35,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/OLIMEX/u-boot-olinuxino.git"
+-# release-20230110, based on 2021.04
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="9a49a20f71c698f538defbb69a6c6cb657d4315f"
++# release-20230515, based on 2021.04
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="efadf793a0a5924e2c96362dc1df3e56622ebb97"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="STM32-OLinuXino-LIME"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
