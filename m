@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF00EB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC2C4EB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 20:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BADB7418BB;
-	Wed, 12 Jul 2023 19:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BADB7418BB
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC96741D64;
+	Wed, 12 Jul 2023 20:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC96741D64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3cWDqq-HJflT; Wed, 12 Jul 2023 19:58:40 +0000 (UTC)
+	with ESMTP id LSezCFc6rjn4; Wed, 12 Jul 2023 20:56:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D5E741BA1;
-	Wed, 12 Jul 2023 19:58:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D5E741BA1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8876C41D77;
+	Wed, 12 Jul 2023 20:56:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8876C41D77
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DDD311BF3BD
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:58:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 040C71BF400
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 20:56:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B70A061274
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:58:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B70A061274
+ by smtp3.osuosl.org (Postfix) with ESMTP id D1BA760F0B
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 20:56:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1BA760F0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0FndW-t2VnbG for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 19:58:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EA80606AA
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7EA80606AA
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:58:36 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:e245:939f:c022:28d9])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id CCF2B13F895;
- Wed, 12 Jul 2023 21:58:29 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 12 Jul 2023 21:58:29 +0200
-Date: Wed, 12 Jul 2023 21:58:29 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230712195829.GJ188780@scaer>
-References: <20230610181914.541374-1-james.hilliard1@gmail.com>
- <87wn0atuu1.fsf@tarshish>
- <CADvTj4o15zSrqaWixSWjLJKEdJ7E3uaV2yoGwUXE_Q8pwaNFQQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CADvTj4o15zSrqaWixSWjLJKEdJ7E3uaV2yoGwUXE_Q8pwaNFQQ@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1689191913;
- bh=fD3BSMIBbPviLwrDG7UQG7NY/LHolauAe5lagkKotc0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ovZ/hOdWYE03SSmhz5G5vg9mgdw0Y3eW97tT+LUBra/61BHcEMNhGkKoLhmaqYL2o
- gJbHFPD9HYycKxcTPkkRq/gIz1zHe6oPjiTlv1ebngW271wWAUDJOYkcvO4HpgVJBB
- i3DbArlsbZxEPT49X1VOb2z2nbj5wQ/HSI7roTxryabSuUliEODS2EtSGS8nGyfx0B
- ilOLl4bWUwpmMZRdpbssHc6o3Pceg64jm6uCqI2sNy31+VvoRjfkt41t8y+dDPLUo/
- BEqz4QuOSDPqUjEw4Cv+TV8Jdqy8XOecA49jz9oF6tPS1zvF074VEfyhd0C20AEg/a
- Q1uF+Hxjh3NSA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ovZ/hOdW
-Subject: Re: [Buildroot] [PATCH 1/1] package/strace: use bundled headers
+ with ESMTP id jPH-Jfl-9VS9 for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 20:56:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A8CF5612AD
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 20:56:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8CF5612AD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 95ECB86F26; Wed, 12 Jul 2023 20:56:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 12 Jul 2023 22:55:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 490882ada94cf98da145feb4e7e47302aa31104f
+X-Git-Newrev: 800c7de810f943ad6fd6ee404c92e6fac01c693a
+X-Patchwork-Hint: ignore
+Message-Id: <20230712205604.95ECB86F26@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-hiredis: bump to version
+ 2.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,74 +56,129 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SmFtZXMsIEFsbCwKCk9uIDIwMjMtMDYtMTEgMDA6MDIgLTA2MDAsIEphbWVzIEhpbGxpYXJkIHNw
-YWtlIHRodXNseToKPiBPbiBTYXQsIEp1biAxMCwgMjAyMyBhdCAxMTo0NuKAr1BNIEJhcnVjaCBT
-aWFjaCA8YmFydWNoQHRrb3MuY28uaWw+IHdyb3RlOgo+ID4gT24gU2F0LCBKdW4gMTAgMjAyMywg
-SmFtZXMgSGlsbGlhcmQgd3JvdGU6Cj4gPiA+IERldGFpbHM6IGh0dHBzOi8vZ2l0aHViLmNvbS9z
-dHJhY2Uvc3RyYWNlL2lzc3Vlcy8yNTMKCkl0IGlzIG11Y2ggYmV0dGVyIHRvICphbHNvKiBwcm92
-aWRlIGEgbGl0dGxlIHN1bW1hcnkgYWJvdXQgdGhlIGFjdHVhbAppc3N1ZSBhbmQgdGhlIHN1Z2dl
-c3RlZCBmaXgsIHNvIHRoYXQ6CgogMS4gd2UgZG9uJ3QgaGF2ZSB0byBnbyBjaGFzaW5nIHRoYXQg
-aW5mb3JtYXRpb24gd2hlbiByZXZpZXdpbmcgdGhlCiAgICBwYXRjaDsKCiAyLiB3ZSBhY3R1YWxs
-eSBrZWVwIHRoYXQgaW5mb3JtYXRpb24gaW4gb3VyIHRyZWUsIGluIGNhc2UgdGhlIHJlbW90ZQog
-ICAgVVJMIGRpc2FwZWFycyAodGhlcmUgaGF2ZSBhbHJlYWR5IGJlZW4gY2FzZXMgd2hlcmUgdGhl
-IHJlcG8KICAgIG1haW50YWluZXIganVzdCBkZWxldGVkIGV2ZXJ5dGhpbmcpCgo+ID4gR2l0aHVi
-IGlzc3VlICMyNTMgeW91IGxpbmtlZCB0byBtZW50aW9ucyAtLWVuYWJsZS1idW5kbGVkIGFzIGEK
-PiA+IHdvcmthcm91bmQuIFNob3VsZG4ndCB3ZSBiYWNrcG9ydCB1cHN0cmVhbSBjb21taXQgOGY2
-OTEyMDZlNGFhNzYKPiA+IGluc3RlYWQ/Cj4gPiAgIGh0dHBzOi8vZ2l0aHViLmNvbS9zdHJhY2Uv
-c3RyYWNlL2NvbW1pdC84ZjY5MTIwNmU0YWE3NjljYzk5ZTI2NGYxYzE1YWU2OTU2Nzg5ZjkxCj4g
-PiBCdXQgdGhlbiBhZ2FpbiBtYXliZSB3ZSBkbyB3YW50IHRvIGhhcmRjb2RlIC0tZW5hYmxlLWJ1
-bmRsZWQgZm9yCj4gPiBjb25zaXN0ZW5jeT8KPiBTZWVtcyBidW5kbGVkIG1heSBiZSBsZXNzIGxp
-a2VseSB0byBicmVhayBpbiB0aGUgZnV0dXJlLgoKVGhpcyBpcyBub3QgdmVyeSBhZmZpcm1hdGl2
-ZS4KCkluZGVlZCwgZnJvbSB3aGF0IEkgdW5lcnN0b29kLCB0aGVyZSB3YXMgYW4gYWN0dWFsIGJ1
-ZyBpbiBzdHJhY2Uncwpjb25maWd1cmUgc2NyaXB0LCBhbmQgdGhleSBmaXhlZCBpdCB3aXRoIHRo
-ZSBjb21taXQgQmFydWNoIHBvaW50ZWQgdG8uCgpTbyB0aGUgbmF0dXJhbCBleHBlY3RhdGlvbiBp
-cyB0aGF0IHdlIGRvIGJhY2twb3J0IHRoZSBmaXgsIHJhdGhlciB0aGFuCnBhcGVyIG92ZXIgdGhl
-IGlzc3VlLgoKSG93ZXZlciwgaW4gdGhhdCBjYXNlLCBJIGJlbGlldmUgdGhhdCBpbmRlZWQsIHVz
-aW5nIHRoZSBidW5kbGVkIGhlYWRlcnMKaXMgdGhlIGJldHRlciBzb2x1dGlvbiwgYnV0IGZvciBh
-IHRvdGFsbHkgZGlmZmVyZW50IHJlYXNvbi4gSW5kZWVkLApzdHJhY2UgbmVlZHMgdGhlIGhlYWRl
-cnMgb2YgdGhlIHJ1bm5pbmcga2VybmVsLCBub3QgdGhvc2UgdGhhdCB3ZXJlIHVzZWQKdG8gYnVp
-bGQgdGhlIHRvb2xjaGFpbi4gVGhlIHJ1bm5pbmcga2VybmVsIGlzIG9mdGVuIG1vcmUgcmVjZW50
-IHRoYW4KdGhlIG9uZSB1c2VkIGluIHRoZSB0b29sY2hhaW4sIHNvIHdlIGRvIHdhbnQgdGhlIG1v
-c3QgdXAtdG8tZGF0ZQpoZWFkZXJzLgoKU28sIHdlIHdhbnQgdG8gdXNlIHN0cmFjZSBidW5kbGVk
-IGhlYWRlcnMgZm9yIHRoaXMgcmVhc29uOiB0byBoYXZlIHRoZQptb3N0IHVwLXRvLWRhdGUgaGVh
-ZGVycy4KClNvLCBjb3VsZCB5b3UgcGxlYXNlIG1hc2ggdGhpcyB1cCB0aW50byBhIHByb3BlciBj
-b21taXQgbG9nIGFuZCByZXNwaW4sCnBsZWFzZT8KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+
-ID4gPgo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQx
-QGdtYWlsLmNvbT4KPiA+ID4gLS0tCj4gPiA+ICBwYWNrYWdlL3N0cmFjZS9zdHJhY2UubWsgfCAy
-ICstCj4gPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkK
-PiA+ID4KPiA+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc3RyYWNlL3N0cmFjZS5tayBiL3BhY2th
-Z2Uvc3RyYWNlL3N0cmFjZS5tawo+ID4gPiBpbmRleCA2NTE0YmZlMzU0Li45ZjZiMzMzMzE4IDEw
-MDY0NAo+ID4gPiAtLS0gYS9wYWNrYWdlL3N0cmFjZS9zdHJhY2UubWsKPiA+ID4gKysrIGIvcGFj
-a2FnZS9zdHJhY2Uvc3RyYWNlLm1rCj4gPiA+IEBAIC0xMCw3ICsxMCw3IEBAIFNUUkFDRV9TSVRF
-ID0gaHR0cHM6Ly9naXRodWIuY29tL3N0cmFjZS9zdHJhY2UvcmVsZWFzZXMvZG93bmxvYWQvdiQo
-U1RSQUNFX1ZFUlNJCj4gPiA+ICBTVFJBQ0VfTElDRU5TRSA9IExHUEwtMi4xKwo+ID4gPiAgU1RS
-QUNFX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HIExHUEwtMi4xLW9yLWxhdGVyCj4gPiA+ICBTVFJB
-Q0VfQ1BFX0lEX1ZFTkRPUiA9IHN0cmFjZV9wcm9qZWN0Cj4gPiA+IC1TVFJBQ0VfQ09ORl9PUFRT
-ID0gLS1lbmFibGUtbXBlcnM9bm8KPiA+ID4gK1NUUkFDRV9DT05GX09QVFMgPSAtLWVuYWJsZS1i
-dW5kbGVkPXllcyAtLWVuYWJsZS1tcGVycz1ubwo+ID4gPgo+ID4gPiAgaWZlcSAoJChCUjJfUEFD
-S0FHRV9MSUJVTldJTkQpLHkpCj4gPiA+ICBTVFJBQ0VfREVQRU5ERU5DSUVTICs9IGxpYnVud2lu
-ZAo+ID4KPiA+Cj4gPiAtLQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICB+LiAufiAgIFRrIE9wZW4gU3lzdGVtcwo+ID4gPX0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1vb08tLVUtLU9vby0tLS0tLS0t
-LS0tLXs9Cj4gPiAgICAtIGJhcnVjaEB0a29zLmNvLmlsIC0gdGVsOiArOTcyLjUyLjM2OC40NjU2
-LCBodHRwOi8vd3d3LnRrb3MuY28uaWwgLQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0t
-Li0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJ
-TiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNw
-aXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FN
-UEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0t
-LS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwK
-fCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAg
-IHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4t
-LS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=800c7de810f943ad6fd6ee404c92e6fac01c693a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The existing patch is removed as it has been applied upstream in
+commit
+https://github.com/redis/hiredis-py/commit/d4d701a06560ce76a4eaba3ac309ff70e37b3190.
+
+The license file has changed, it is now named LICENSE, and the
+contents are not the same even though it still contains the
+BSD-3-Clause license.
+
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |  1 -
+ .../0001-setup.py-fix-build-with-gcc-4.8.patch     | 43 ----------------------
+ package/python-hiredis/python-hiredis.hash         |  6 +--
+ package/python-hiredis/python-hiredis.mk           |  6 +--
+ 4 files changed, 6 insertions(+), 50 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 52d748fa45..23b0171792 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1239,7 +1239,6 @@ package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.pat
+ package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch Upstream
+ package/python-daphne/0001-remove-pytest-runner-requirement.patch Upstream
+ package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch Upstream
+-package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch Upstream
+ package/python-m2crypto/0001-Mitigate-the-Bleichenbacher-timing-attacks-in-the-RSA-decryption-API-CVE-2020-25657.patch Upstream
+ package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch Upstream
+ package/python-pylibftdi/0001-do-not-use-find-library.patch Upstream
+diff --git a/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 93f9440a74..0000000000
+--- a/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 204898e28c7650089bf664eea8adfc16a22ba4f4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 6 Apr 2021 10:37:49 +0200
+-Subject: [PATCH] setup.py: fix build with gcc 4.8
+-
+-Fix the following build failure on gcc 4.8 which is raised since version
+-2.0.0 and
+-https://github.com/redis/hiredis-py/commit/9084152f624e8e593b4e86ddf8bd13329fdfc043:
+-
+-vendor/hiredis/read.c: In function 'redisReaderFree':
+-vendor/hiredis/read.c:646:9: error: 'for' loop initial declarations are only allowed in C99 mode
+-         for (int i = 0; i < r->tasks; i++) {
+-         ^
+-vendor/hiredis/read.c:646:9: note: use option -std=c99 or -std=gnu99 to compile your code
+-
+-This build failure is raised because hiredis source code is built
+-without C99:
+-https://github.com/redis/hiredis/commit/13a35bdb64615e381c5e1151cdd4e78bba71a6db
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/redis/hiredis-py/pull/110]
+----
+- setup.py | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/setup.py b/setup.py
+-index d83153b..1f623c9 100755
+---- a/setup.py
+-+++ b/setup.py
+-@@ -13,6 +13,7 @@ def version():
+- ext = Extension("hiredis.hiredis",
+-   sources=sorted(glob.glob("src/*.c") +
+-                  ["vendor/hiredis/%s.c" % src for src in ("alloc", "read", "sds")]),
+-+  extra_compile_args=["-std=c99"],
+-   include_dirs=["vendor"])
+- 
+- setup(
+--- 
+-2.30.2
+-
+diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
+index 2e73d2f37b..372f2f50ae 100644
+--- a/package/python-hiredis/python-hiredis.hash
++++ b/package/python-hiredis/python-hiredis.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/hiredis/json
+-md5  0ab76a8b29deb737c9bfc7f631969e38  hiredis-2.0.0.tar.gz
+-sha256  81d6d8e39695f2c37954d1011c0480ef7cf444d4e3ae24bc5e89ee5de360139a  hiredis-2.0.0.tar.gz
++md5  670a932c2972cbd88f910c2b29f85c3c  hiredis-2.2.3.tar.gz
++sha256  e75163773a309e56a9b58165cf5a50e0f84b755f6ff863b2c01a38918fe92daa  hiredis-2.2.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256  70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
++sha256  65d467915fa36249f60e6942c9d44dfe54d75882e6b66e94fc6c3971fcde1722  LICENSE
+ sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
+diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
+index 55f9a09f55..5aceb15ae1 100644
+--- a/package/python-hiredis/python-hiredis.mk
++++ b/package/python-hiredis/python-hiredis.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_HIREDIS_VERSION = 2.0.0
++PYTHON_HIREDIS_VERSION = 2.2.3
+ PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
+-PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/0c/39/eae11344d69ba435ec13d6bcc1a9eea3d2278324506fcd0e52d1ed8958c8
++PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/b0/04/dab6792584fc548803ffa50b5bb2b99f01d3ab04d7c7f64e85f1a22fb847
+ PYTHON_HIREDIS_SETUP_TYPE = setuptools
+ PYTHON_HIREDIS_LICENSE = BSD-3-Clause
+-PYTHON_HIREDIS_LICENSE_FILES = COPYING vendor/hiredis/COPYING
++PYTHON_HIREDIS_LICENSE_FILES = LICENSE vendor/hiredis/COPYING
+ 
+ $(eval $(python-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
