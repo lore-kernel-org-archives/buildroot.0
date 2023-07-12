@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2559FEB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21FE1EB64DD
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:28:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A34541EAD;
-	Wed, 12 Jul 2023 19:28:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A34541EAD
+	by smtp4.osuosl.org (Postfix) with ESMTP id B173C404CC;
+	Wed, 12 Jul 2023 19:28:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B173C404CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kVfJmm5N1YIR; Wed, 12 Jul 2023 19:28:01 +0000 (UTC)
+	with ESMTP id 2c8V7iCNG6_W; Wed, 12 Jul 2023 19:28:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36B584194F;
-	Wed, 12 Jul 2023 19:28:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36B584194F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EDF021BF97D
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:27:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B188405A4;
+	Wed, 12 Jul 2023 19:28:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B188405A4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 086571BF3BD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C787261267
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:27:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C787261267
+ by smtp2.osuosl.org (Postfix) with ESMTP id D69A24012B
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D69A24012B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QeSzUHhBQT4E for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4LKde79qgkLl for <buildroot@lists.busybox.net>;
  Wed, 12 Jul 2023 19:27:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5BFA61203
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0264740A61
  for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5BFA61203
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0264740A61
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2DE986ED1; Wed, 12 Jul 2023 19:27:44 +0000 (UTC)
+ id E583186ED3; Wed, 12 Jul 2023 19:27:44 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 12 Jul 2023 21:27:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13cdadb317c8b489b3dfd6c75aa0018f033c29bf
-X-Git-Newrev: f2b5dc42abe5da70c09c8bdcb6cf2d5809d569a9
+X-Git-Oldrev: 392f88becd87f12c5faf7fe4e3232ba60f50ad1a
+X-Git-Newrev: 199a4d1dd1556878f6d0868ef638baa1607ad3d0
 X-Patchwork-Hint: ignore
-Message-Id: <20230712192744.D2DE986ED1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-date-manip: bump to version
- 6.92
+Message-Id: <20230712192744.E583186ED3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-mojolicious: bump to version
+ 9.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2b5dc42abe5da70c09c8bdcb6cf2d5809d569a9
+commit: https://git.buildroot.net/buildroot/commit/?id=199a4d1dd1556878f6d0868ef638baa1607ad3d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-date-manip/perl-date-manip.hash | 6 +++---
- package/perl-date-manip/perl-date-manip.mk   | 2 +-
+ package/perl-mojolicious/perl-mojolicious.hash | 6 +++---
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
-index 9762e7bc6c..72741e413d 100644
---- a/package/perl-date-manip/perl-date-manip.hash
-+++ b/package/perl-date-manip/perl-date-manip.hash
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index 989eaf3419..6d8f500150 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  f9fe372c7abaf90e9da2ee7c3a4d32ff  Date-Manip-6.89.tar.gz
--sha256  5caaa9cd1e2b0a1b84124c373e02e89b17c89fdb8fc5bc5f75ac41d304a37617  Date-Manip-6.89.tar.gz
+-md5  523193316a839ff56a447f0f0c2e5b36  Mojolicious-9.31.tar.gz
+-sha256  cb96ccd7a5319321ec6f57633c88bf17193d45169f4d7846da254bb6f9ed8312  Mojolicious-9.31.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  3ac4e55802837c396a30860492f33e67  Date-Manip-6.92.tar.gz
-+sha256  ab962bd39ca09ec6fcfe7e5a6912af71b0c1f6f03e4ed2bef6e4471c9d367a13  Date-Manip-6.92.tar.gz
++md5  e06ce611dd2444f2ca5b74f3a910b679  Mojolicious-9.32.tar.gz
++sha256  bc04c552ee24eaecc45feb8709d49c2901bc26fb82b4a1a8e17574e1cca083dc  Mojolicious-9.32.tar.gz
  
  # computed by scancpan
- sha256  8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d  LICENSE
-diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
-index 6eab7790cf..8739caefd4 100644
---- a/package/perl-date-manip/perl-date-manip.mk
-+++ b/package/perl-date-manip/perl-date-manip.mk
+ sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index 618327d09d..63b02a5181 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DATE_MANIP_VERSION = 6.89
-+PERL_DATE_MANIP_VERSION = 6.92
- PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
- PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
- PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
+-PERL_MOJOLICIOUS_VERSION = 9.31
++PERL_MOJOLICIOUS_VERSION = 9.32
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
