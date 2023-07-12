@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1CECEB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 21:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89689EB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 21:34:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C66541736;
-	Wed, 12 Jul 2023 21:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C66541736
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37E7B405A1;
+	Wed, 12 Jul 2023 21:34:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37E7B405A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 21HE8_UC6u11; Wed, 12 Jul 2023 21:27:07 +0000 (UTC)
+	with ESMTP id saLgpS6sfNjy; Wed, 12 Jul 2023 21:34:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C31A44172A;
-	Wed, 12 Jul 2023 21:27:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C31A44172A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D31E1BF3A8
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:24:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FFA1416DA;
+	Wed, 12 Jul 2023 21:34:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FFA1416DA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BFA1B1BF3A8
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CDB4583BE3
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:24:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDB4583BE3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99948416E4
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:34:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99948416E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XmIJ-d5ETttv for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 21:24:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B44EE83BD1
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B44EE83BD1
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 21:24:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B6E7E0006;
- Wed, 12 Jul 2023 21:24:34 +0000 (UTC)
-Date: Wed, 12 Jul 2023 23:24:33 +0200
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230712232433.6fc72760@windsurf>
-In-Reply-To: <20230608232859.1245497-1-romain.naour@gmail.com>
-References: <20230608232859.1245497-1-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689197085;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=1ZePx3KNmeOcju6xLsbMxa519ph620zyjfsHFP6NJME=;
- b=ZZQ5zwXsbdMrWC9ZFAyL+Kmzf3G+gQ254AAJKiQUlA3dlTXlkQa8Tl4oulrNaIPmo8/eAV
- SSl/U6KE/wiQJJeytj5+DjztZSlUdk9+E2vVFsl2lB3mNxhYVIIvjkMzfRIAnaRsnOpTye
- EBHErn15SesaRzXKCXSu+INIdsyQBQXCuc3D/hAQa3pMdtIAjGsLrPp84msHlv/uaTd+w0
- d+M1ycf0CFlFPDMFP+zwwNzoFYR1gHxKmhO8Vzn8xLoLNdYdaSUiQFw77qV/uP/naK68cT
- jxAJBx2rM2PvcdwHoyTEg8mNmHz168FsghGHkWoHNra1vQctbhgflZXzrUOuHw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZZQ5zwXs
-Subject: Re: [Buildroot] [PATCH v2 01/17] package/python-iptables: fix
- _find_library()
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lmg-HWt_ApJG for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 21:34:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0FF4416DA
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 21:34:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0FF4416DA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CE64C86F40; Wed, 12 Jul 2023 21:34:17 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 12 Jul 2023 23:33:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 109f22283c3048d425fb4f0443c2191aabec2079
+X-Git-Newrev: 61bfe280d1dd2a822310796456041329bfa0596e
+X-Patchwork-Hint: ignore
+Message-Id: <20230712213417.CE64C86F40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-waipu: bump version to
+ 20.9.0-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,61 +58,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  9 Jun 2023 01:28:43 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=61bfe280d1dd2a822310796456041329bfa0596e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> While the commit [1] already fixed some runtime issue with
-> uClibc toolchain, the same test TestPythonPy3Iptables fail
-> with Glibc toolchain.
-> 
->   xtables_version = 12
->   if xtables_version:
->       _searchlib = "libxtables.so.%s" % (xtables_version,)
->   else:
->       _searchlib = "xtables"
->   _lib_xtables, xtables_version = find_library(_searchlib)
-> 
->   _lib_xtables and xtables_version are null with glibc
-> 
-> The implementation of find_library() rely on the custom
-> _find_library() that try to use the IPTABLES_LIBDIR
-> environment variable (that does not exist in the context
-> of Buildroot).
-> 
-> Within the scope of buildroot we can determine what
-> IPTABLES_LIBDIR should be at build time and replace the
-> calls to os.environ.get('IPTABLES_LIBDIR', None) with
-> the correct value.
-> 
-> [1] d341ec035067120b456f669a826e26eb594c0237
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> I don't know why TestPythonPy3Iptables pass succesfully
-> with a uClibc toolchain but not with a glibc toolchain.
-> The current python code searching for xtables, modules
-> and libraries seems fragile...
-> ---
->  package/python-iptables/python-iptables.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+ package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-There hasn't been much feedback on the overall principle, but I found
-it reasonable: we're using glibc as the default C library now, so it
-kind of makes sense to use it primarily in our test cases.
-
-So I've applied the entire series, thanks for this work! 
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+index cdcaeeff9d..ed447ce61f 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5dfe9f891edefd5334c7a45593651634b43e1fdbea5a1b396131a45f5928f4aa  kodi-pvr-waipu-20.8.1-Nexus.tar.gz
++sha256  3a0a1dffe1bb8711dd6747b02a51aee6a0bce40ca6822cc2ab7f04b4b5acb82f  kodi-pvr-waipu-20.9.0-Nexus.tar.gz
+ sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+index 41f9e82814..b098e10929 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_WAIPU_VERSION = 20.8.1-Nexus
++KODI_PVR_WAIPU_VERSION = 20.9.0-Nexus
+ KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
+ KODI_PVR_WAIPU_LICENSE = GPL-2.0+
+ KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
