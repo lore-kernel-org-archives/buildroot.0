@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B08F7EB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 21:02:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98659EB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 21:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F45541F8C;
-	Wed, 12 Jul 2023 21:02:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F45541F8C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30486416BF;
+	Wed, 12 Jul 2023 21:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30486416BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nuVUdaz4jPxE; Wed, 12 Jul 2023 21:02:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hbZpqFikGU-o; Wed, 12 Jul 2023 21:23:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4082441F94;
-	Wed, 12 Jul 2023 21:02:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4082441F94
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 035D21BF400
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:02:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 89C43416C6;
+	Wed, 12 Jul 2023 21:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89C43416C6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D63EB1BF3A8
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D141561282
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:02:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D141561282
+ by smtp2.osuosl.org (Postfix) with ESMTP id B03A0416C2
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:23:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B03A0416C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n17iS5jGK6EP for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 21:02:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bIoyQ0skxj-v for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 21:23:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 016FB60F0B
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 21:02:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 016FB60F0B
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED65840AF5
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 21:23:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED65840AF5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E53EB86F34; Wed, 12 Jul 2023 21:02:30 +0000 (UTC)
+ id DBFBF86F39; Wed, 12 Jul 2023 21:23:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 12 Jul 2023 23:00:54 +0200
+Date: Wed, 12 Jul 2023 23:22:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 53ab50bb39ba9a6b1f287a2e6ee8aa98b5aa32be
-X-Git-Newrev: 7aa9c8f8c0f99d29581d1e3f691afe0471de858e
+X-Git-Oldrev: a00d82f9e7a3d94bf54aadda7fc81d2599be226c
+X-Git-Newrev: c2ba654925585f1579c1bd65185c04eef4e4cc74
 X-Patchwork-Hint: ignore
-Message-Id: <20230712210230.E53EB86F34@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-redis: bump to version 4.5.5
+Message-Id: <20230712212318.DBFBF86F39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: TestPythonPy3Boto3:
+ increase ext2 size to 250M
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +64,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aa9c8f8c0f99d29581d1e3f691afe0471de858e
+commit: https://git.buildroot.net/buildroot/commit/?id=c2ba654925585f1579c1bd65185c04eef4e4cc74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+We are going to update the toolchain used by the Buildroot testsuite
+and this update will increase the size of the rootfs over 120M.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-redis/python-redis.hash | 4 ++--
- package/python-redis/python-redis.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/testing/tests/package/test_python_boto3.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
-index 209ff35b78..e27f87bd50 100644
---- a/package/python-redis/python-redis.hash
-+++ b/package/python-redis/python-redis.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/redis/json
--md5  4ab691af57ac346c2e630ce2787a424f  redis-4.4.0.tar.gz
--sha256  7b8c87d19c45d3f1271b124858d2a5c13160c4e74d4835e28273400fa34d5228  redis-4.4.0.tar.gz
-+md5  ad365234df634680d15294ddc87c42de  redis-4.5.5.tar.gz
-+sha256  dc87a0bdef6c8bfe1ef1e1c40be7034390c2ae02d92dcd0c7ca1729443899880  redis-4.5.5.tar.gz
- # Locally computed sha256 checksums
- sha256  7801a39e3a1aec58a7ea7c9f4dc1238cf0922c36a1fc8eff0bb7d684ff6dd354  LICENSE
-diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
-index bbbd6f1df2..186702dc83 100644
---- a/package/python-redis/python-redis.mk
-+++ b/package/python-redis/python-redis.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_REDIS_VERSION = 4.4.0
-+PYTHON_REDIS_VERSION = 4.5.5
- PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
--PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/7a/05/671367bb466b3301bc4543fdad6ac107214ca327c8d97165b30246d87e88
-+PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/53/30/128c5599bc3fa61488866be0228326b3e486be34480126f70e572043adf8
- PYTHON_REDIS_SETUP_TYPE = setuptools
- PYTHON_REDIS_LICENSE = MIT
- PYTHON_REDIS_LICENSE_FILES = LICENSE
+diff --git a/support/testing/tests/package/test_python_boto3.py b/support/testing/tests/package/test_python_boto3.py
+index 126ddae63a..02a1f69d40 100644
+--- a/support/testing/tests/package/test_python_boto3.py
++++ b/support/testing/tests/package/test_python_boto3.py
+@@ -9,7 +9,7 @@ class TestPythonPy3Boto3(TestPythonPackageBase):
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_BOTO3=y
+         BR2_TARGET_ROOTFS_EXT2=y
+-        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++        BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+         """
+     sample_scripts = ["tests/package/sample_python_boto3.py"]
+     timeout = 10
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
