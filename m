@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E054EB64DD
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 10:05:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFE9BEB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 10:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92FC8612AF;
-	Wed, 12 Jul 2023 10:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92FC8612AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DB4D611A9;
+	Wed, 12 Jul 2023 10:06:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DB4D611A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LIAk2Hf7T8CE; Wed, 12 Jul 2023 10:05:46 +0000 (UTC)
+	with ESMTP id o691VikyQMww; Wed, 12 Jul 2023 10:06:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6C1B612AC;
-	Wed, 12 Jul 2023 10:05:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6C1B612AC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D39A1BF409
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 10:05:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6396B61097;
+	Wed, 12 Jul 2023 10:06:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6396B61097
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D4611BF409
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 10:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35E9041B1A
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 10:05:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35E9041B1A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1693140142
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 10:06:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1693140142
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kz0uR-YCcu7a for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 10:05:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3315941B55
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 10:05:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3315941B55
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 208EE86EA2; Wed, 12 Jul 2023 10:05:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 12 Jul 2023 12:05:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bb3273ba9bec6b45f94edab9a83646f1363444b4
-X-Git-Newrev: 876ad67ac07be4b7900a4ea6464e7459e2b40604
-X-Patchwork-Hint: ignore
-Message-Id: <20230712100516.208EE86EA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: TestGlxinfo: bump the
- toolchain to x86 core2 Bootlin toolchain stable 2022.08-1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p35aQfrblsvi for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 10:06:32 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0788140136
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0788140136
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 10:06:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9602D60005;
+ Wed, 12 Jul 2023 10:05:58 +0000 (UTC)
+Date: Wed, 12 Jul 2023 12:05:57 +0200
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20230712120557.143513ff@windsurf>
+In-Reply-To: <20230611115748.801929-1-romain.naour@gmail.com>
+References: <20230611115748.801929-1-romain.naour@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689156389;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=NrEGTMcoVGUNFA+8MSiXN1RnfQxDViZFIcNs1tIOIZo=;
+ b=QHE7k7zSpa3c2rB2nelUIrNsYCTz84GNtHasIoaUMm8nTjzEhDa5cc1vHQZeqoKczpARfe
+ ry8aTiWjAhL7lwRRiNjJbBXqrzpSGlJQrdYi33FQwMf4NrXoXkepic2oaw3ldjmioVbjEl
+ evlX8yiMoZvhkpAfpyEOVDyOgh/LpGi0tvdoZhdzxfirmax2z/K/Bf6oZY/DuTqxcNQhwd
+ YTqYm7LKPt3DgDtnbrputRiSL5x6k0mZag1eXHnrPMUZRuM/QYFV+di10kdKDaFA4PA8wz
+ o7iBCTaYNbDHmWYcbpOxBlZlHvVxp83u36kBhoLq/7tg/71/6rcSpUjMk1DBYw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=QHE7k7zS
+Subject: Re: [Buildroot] [PATCH 1/2] support/testing: TestGlxinfo: bump
+ kernel version to 6.1.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +78,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=876ad67ac07be4b7900a4ea6464e7459e2b40604
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Romain,
 
-This new Bootlin toolchain stable 2022.08-1 is based on gcc 11.3.0,
-linux headers 4.9.327, glibc 2.35 and binutils 2.38.
+On Sun, 11 Jun 2023 13:57:47 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-Nowadays Bootlin toolchains are packaged in Buildroot and we can
-directly select them from BASIC_TOOLCHAIN_CONFIG and avoid
-setting the toolchain parameters (BR2_TOOLCHAIN_EXTERNAL_CUSTOM...).
+> The kernel 6.1.x is the latest LTS version.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  support/testing/tests/package/test_glxinfo.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/tests/package/test_glxinfo.py | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+Thanks, I've applied both. However, did you notice that this GlxInfo
+test is currently broken? See
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4621046326. It fails
+at runtime because the glxinfo command cannot be found in the
+filesystem (I have not investigated further than that).
 
-diff --git a/support/testing/tests/package/test_glxinfo.py b/support/testing/tests/package/test_glxinfo.py
-index c7d62a690b..6bedee5298 100644
---- a/support/testing/tests/package/test_glxinfo.py
-+++ b/support/testing/tests/package/test_glxinfo.py
-@@ -10,14 +10,8 @@ class TestGlxinfo(infra.basetest.BRTest):
-         """
-         BR2_x86_core2=y
-         BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-core2/tarballs/x86-core2--glibc--bleeding-edge-2018.11-1.tar.bz2"
--        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
--        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
--        BR2_TOOLCHAIN_EXTERNAL_CXX=y
--        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
--        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_GLIBC_STABLE=y
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
