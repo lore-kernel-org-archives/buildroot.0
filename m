@@ -4,75 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60E3EEB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 12:52:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5874EB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 12:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AA1682324;
-	Wed, 12 Jul 2023 12:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AA1682324
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D618832A9;
+	Wed, 12 Jul 2023 12:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D618832A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CCwyBnYQtXtk; Wed, 12 Jul 2023 12:52:35 +0000 (UTC)
+	with ESMTP id rIRtRwUiCoA1; Wed, 12 Jul 2023 12:53:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2352182871;
-	Wed, 12 Jul 2023 12:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2352182871
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7BA682341;
+	Wed, 12 Jul 2023 12:53:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7BA682341
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1960B1BF3C1
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 12:52:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 14E6B1BF3C1
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 12:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E62A9409EA
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 12:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E62A9409EA
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0BEF40150
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 12:52:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0BEF40150
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6PGeDuADN6Pm for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 12:52:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B78C40150
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.154.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8B78C40150
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 12:52:30 +0000 (UTC)
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; d="scan'208";a="161006287"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
- by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 12 Jul 2023 05:52:29 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 12 Jul 2023 05:52:01 -0700
-Received: from jamie-dev.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Wed, 12 Jul 2023 05:51:59 -0700
-To: <buildroot@buildroot.org>
-Date: Wed, 12 Jul 2023 13:51:53 +0100
-Message-ID: <20230712125154.1361000-2-jamie.gibbons@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230712125154.1361000-1-jamie.gibbons@microchip.com>
-References: <20230712125154.1361000-1-jamie.gibbons@microchip.com>
+ with ESMTP id EmyhBTkJJtBa for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 12:52:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AC1340063
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6AC1340063
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 12:52:57 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-3143b88faebso7777317f8f.3
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 05:52:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1689166375; x=1691758375;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=4/I94ZuaojfJk7vrBiIgPf4DSYu2j/rfPXUyw3PdvFk=;
+ b=Oo0X0KOA7yUXAuKYXFT2VHhJDXB4lPxwXa1t34mx9f4WjjjHcRlG8neQc9NzAdtHfL
+ s2SOiy/MkCko7LSGz5sgCXqwWgN2P85kqyPHH+hYXRV0PclWXMGVQmWDLm6noh8SrlVY
+ UXQWoSeqsvZmN4p+XIFRoj1dpROjAEhGvUZu1QyX1PdsQFZ36BSXIRV162klFjpYYDzC
+ h3IqBo/7WCehF1dAxfNnHzw2nSs58oQILZUT726yUuIZGyfmA6JuSptONFKkn6nOxr0E
+ HgKIqxdUc+ayFImBjhBjT32oDJMS/T9R9dnwSna0hIeOmp+4G4ZtMuF5/t5zIy7aRfFd
+ q7fg==
+X-Gm-Message-State: ABy/qLZUtzVVUU/J1DpngXJlDG0b5xzUVKmD9B/ralsmBPInPVljdCy8
+ N4Awz4tD3yUfvyOLs2PTYaJu5+Q2FrZvVxN0pz0=
+X-Google-Smtp-Source: APBJJlE0uFmzUnM2lnqzKCaauTXi5lhytY+dCmsyAktWg7vjN/Rq+2SFFDKD1/4HaxRzgoFvu5i1LA==
+X-Received: by 2002:adf:fc10:0:b0:311:1dba:ca65 with SMTP id
+ i16-20020adffc10000000b003111dbaca65mr18346826wrr.51.1689166375286; 
+ Wed, 12 Jul 2023 05:52:55 -0700 (PDT)
+Received: from [10.5.2.165]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ c17-20020a056000105100b0031433d8af0dsm5055190wrx.18.2023.07.12.05.52.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 12 Jul 2023 05:52:55 -0700 (PDT)
+Message-ID: <4be832e6-521d-67a7-17c0-6f3bcac3587b@smile.fr>
+Date: Wed, 12 Jul 2023 14:52:54 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1689166350; x=1720702350;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=ks7LVJL/qk/g/zK8MGCFUixLqA7zrxe5QF93m0pFPxg=;
- b=pbuxoWAafTp5+V3j/AMLtPysTx2Cw6d66+XbC8PhgZiwQNrqCu+WxBPU
- t8rZlKOZH0RAgYduHqKAu/lJp935KIP5/U1VuJ/uS4WNxuQf96P3M+zqE
- JYycs9sdnydzGvfjXhHaw6149svgawMDOWfDKmWMlWLy0U5un4mGGlLxV
- k4gbkEJ0LRn8RtQc+tp8vWuArCdXnaQUBza4nGvcqNwgrD6WmIpplYuvy
- lqJTfbyEXOFP1T2phCs+lxPVFWYT9BAiyHThmoJA1lhOTurMJKf8j0cmy
- 04K8t/G1399B716LqPKAee7kvEopiDnKFipVicCasQPLJEnEjCkTsY1hW
- g==;
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>
+References: <20230611115748.801929-1-romain.naour@gmail.com>
+ <20230712120557.143513ff@windsurf>
+Content-Language: fr, en-US
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20230712120557.143513ff@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1689166375; x=1691758375;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=4/I94ZuaojfJk7vrBiIgPf4DSYu2j/rfPXUyw3PdvFk=;
+ b=EXiwS2MYSvzhdcmCKO51qgT9GZEwTFP0L1eTa0s9lDqyxQBOBvenyMOCYoHygN8kxA
+ pEhuysuwY2VU+b3QFDgFWCcXzSPtc45A8O1K2FIuNbdyHPPm0zgpCfQGhuPfSTOBtrDe
+ U2jMD8hfvULN/Gi7Zp5MG/JNHWO5z0Mlwpc/ob2+/wRxSiSsMP5K90PeMVSDbdX67PaR
+ D9QMyVbgl4XKe30KCgklznAEkIpWtyooc4QRUJhuhQpO6G3bHMxwh7PfB6xu9d+azBpA
+ wUdRNva+KPXvkYJhT8LJbJFKNvVmwKPIWfTe9ZLTCSi082R1R2F0e2ho+uTp5YGsEyqi
+ sOsw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com
- header.a=rsa-sha256 header.s=mchp header.b=pbuxoWAa
-Subject: [Buildroot] [PATCH v3 1/2] package/microchip-hss-payload-generator:
- add host package
+ dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
+ header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
+ header.s=20221208 header.b=EXiwS2MY
+Subject: Re: [Buildroot] [PATCH 1/2] support/testing: TestGlxinfo: bump
+ kernel version to 6.1.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,116 +104,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jamie Gibbons via buildroot <buildroot@buildroot.org>
-Reply-To: Jamie Gibbons <jamie.gibbons@microchip.com>
-Cc: Conor Dooley <Conor.Dooley@microchip.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Valentina Fernandez <valentina.fernandezalanis@microchip.com>, Jamie
- Gibbons <jamie.gibbons@microchip.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Buildroot icicle kit configuration uses the Hart Software Service's
-(HSS) payload generator tool. This tool creates a formatted payload
-image for the HSS zero-stage bootloader on PolarFire SoC, given a
-configuration file and a set of ELF binaries. The configuration
-file is used to map the ELF binaries or binary blobs to the
-individual application harts (U54s). Add the HSS payload generator as a
-host package to support this.
-
-Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
-Reviewed-by: Valentina Fernandez <valentina.fernandezalanis@microchip.com>
----
- DEVELOPERS                                    |  3 +++
- package/Config.in.host                        |  1 +
- .../Config.in.host                            | 11 ++++++++
- .../microchip-hss-payload-generator.mk        | 25 +++++++++++++++++++
- 4 files changed, 40 insertions(+)
- create mode 100644 package/microchip-hss-payload-generator/Config.in.host
- create mode 100644 package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0918e9f721..2f039a2405 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1459,6 +1459,9 @@ F:	package/pangomm/
- F:	package/rpm/
- F:	package/yad/
- 
-+N:	Jamie Gibbons <jamie.gibbons@microchip.com>
-+F:	package/microchip-hss-payload-generator
-+
- N:	Jan Heylen <jan.heylen@nokia.com>
- F:	package/opentracing-cpp/
- 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index dcadbfdfc1..42856c09df 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -58,6 +58,7 @@ menu "Host utilities"
- 	source "package/mender-artifact/Config.in.host"
- 	source "package/meson-tools/Config.in.host"
- 	source "package/mfgtools/Config.in.host"
-+	source "package/microchip-hss-payload-generator/Config.in.host"
- 	source "package/mkpasswd/Config.in.host"
- 	source "package/moby-buildkit/Config.in.host"
- 	source "package/mosquitto/Config.in.host"
-diff --git a/package/microchip-hss-payload-generator/Config.in.host b/package/microchip-hss-payload-generator/Config.in.host
-new file mode 100644
-index 0000000000..6584692729
---- /dev/null
-+++ b/package/microchip-hss-payload-generator/Config.in.host
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR
-+	bool "host microchip-hss-payload-generator"
-+	help
-+	  Microchip PolarFire SoC Payload Generator. This tool creates a
-+	  formatted payload image for the HSS zero-stage bootloader on
-+	  PolarFire SoC, given a configuration file and a set of ELF
-+	  binaries. The configuration file is used to map the ELF
-+	  binaries or binary blobs to the individual application harts
-+	  (U54s).
-+
-+	  https://github.com/polarfire-soc/hart-software-services.git
-diff --git a/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk b/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
-new file mode 100644
-index 0000000000..df62e121e7
---- /dev/null
-+++ b/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# microchip-hss-payload-generator
-+#
-+################################################################################
-+
-+HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_VERSION = 2023.06
-+HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_SITE = $(call github,polarfire-soc,hart-software-services,v$(HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_VERSION))
-+HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_LICENSE = MIT
-+HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_LICENSE_FILES = LICENSE.md
-+HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_DEPENDENCIES = host-elfutils host-libyaml host-openssl
-+
-+define HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_BUILD_CMDS
-+	$(MAKE) -C $(@D)/tools/hss-payload-generator \
-+		HOST_INCLUDES="$(HOST_CPPFLAGS)" \
-+		LDFLAGS="$(HOST_LDFLAGS)"
-+endef
-+
-+define HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 \
-+		$(@D)/tools/hss-payload-generator/hss-payload-generator \
-+		$(HOST_DIR)/bin/hss-payload-generator
-+endef
-+
-+$(eval $(host-generic-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKTGUgMTIvMDcvMjAyMyDDoCAxMjowNSwgVGhvbWFzIFBldGF6em9uaSB2
+aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gSGVsbG8gUm9tYWluLAo+IAo+IE9uIFN1biwgMTEg
+SnVuIDIwMjMgMTM6NTc6NDcgKzAyMDAKPiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFp
+bC5jb20+IHdyb3RlOgo+IAo+PiBUaGUga2VybmVsIDYuMS54IGlzIHRoZSBsYXRlc3QgTFRTIHZl
+cnNpb24uCj4+Cj4+IFNpZ25lZC1vZmYtYnk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQGdt
+YWlsLmNvbT4KPj4gLS0tCj4+ICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X2ds
+eGluZm8ucHkgfCAyICstCj4+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVs
+ZXRpb24oLSkKPiAKPiBUaGFua3MsIEkndmUgYXBwbGllZCBib3RoLiBIb3dldmVyLCBkaWQgeW91
+IG5vdGljZSB0aGF0IHRoaXMgR2x4SW5mbwo+IHRlc3QgaXMgY3VycmVudGx5IGJyb2tlbj8gU2Vl
+Cj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy80NjIx
+MDQ2MzI2LiBJdCBmYWlscwo+IGF0IHJ1bnRpbWUgYmVjYXVzZSB0aGUgZ2x4aW5mbyBjb21tYW5k
+IGNhbm5vdCBiZSBmb3VuZCBpbiB0aGUKPiBmaWxlc3lzdGVtIChJIGhhdmUgbm90IGludmVzdGln
+YXRlZCBmdXJ0aGVyIHRoYW4gdGhhdCkuCgpUaGlzIGlzIHNvbWV0aGluZyBuZXcsIEknbSB3b25k
+ZXJpbmcgaWYgaXQncyByZWxhdGVkIHRvIHRoZSByZWNlbnQgbWVzYTNkLWRlbW8KdmVyc2lvbiBi
+dW1wIHRvIDkuMC4wPwoKSSdsbCB0YWtlIGEgbG9vay4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoK
+PiAKPiBCZXN0IHJlZ2FyZHMsCj4gCj4gVGhvbWFzCgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
