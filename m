@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3C6DEB64DD
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:30:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8922AEB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A16C841EAF;
-	Wed, 12 Jul 2023 19:30:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A16C841EAF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3413641EFA;
+	Wed, 12 Jul 2023 19:31:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3413641EFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yA-AIKWkW-cG; Wed, 12 Jul 2023 19:30:45 +0000 (UTC)
+	with ESMTP id SheODRVW6P3G; Wed, 12 Jul 2023 19:30:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B480940542;
-	Wed, 12 Jul 2023 19:30:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B480940542
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CB1901BF3BD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C95640313;
+	Wed, 12 Jul 2023 19:30:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C95640313
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F24391BF97D
  for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:30:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A468D401B2
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA96D61267
  for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A468D401B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA96D61267
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C0pBj42-gqSy for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GO8aN-6IqsXA for <buildroot@lists.busybox.net>;
  Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D675E4012B
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE29461203
  for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D675E4012B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE29461203
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2E4C86EE3; Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
+ id B638886EE2; Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 12 Jul 2023 21:29:52 +0200
+Date: Wed, 12 Jul 2023 21:29:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 170c218e4403944eae58bb80cc5cf1d198883a7c
-X-Git-Newrev: 1b52f1e0b0cdd7b54acb63354e12c0e61d1b122f
+X-Git-Oldrev: 199a4d1dd1556878f6d0868ef638baa1607ad3d0
+X-Git-Newrev: 170c218e4403944eae58bb80cc5cf1d198883a7c
 X-Patchwork-Hint: ignore
-Message-Id: <20230712193041.C2E4C86EE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: test_perftest: update
- test kernel to 6.1.33
+Message-Id: <20230712193041.B638886EE2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perftest: bump to version
+ 23.04.0-0.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,28 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b52f1e0b0cdd7b54acb63354e12c0e61d1b122f
+commit: https://git.buildroot.net/buildroot/commit/?id=170c218e4403944eae58bb80cc5cf1d198883a7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For release note, see:
+https://github.com/linux-rdma/perftest/releases/tag/23.04.0-0.23
+
+Note: the version scheme changed since the previous version, from
+"v4.5-0.20" to "23.04.0-0.23" (the "v" was removed).
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_perftest.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/perftest/perftest.hash | 2 +-
+ package/perftest/perftest.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/package/test_perftest.py b/support/testing/tests/package/test_perftest.py
-index 680b70d784..08089456c2 100644
---- a/support/testing/tests/package/test_perftest.py
-+++ b/support/testing/tests/package/test_perftest.py
-@@ -12,7 +12,7 @@ class TestPerftest(infra.basetest.BRTest):
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.91"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.33"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
+diff --git a/package/perftest/perftest.hash b/package/perftest/perftest.hash
+index 4333231c44..a9ea10ef44 100644
+--- a/package/perftest/perftest.hash
++++ b/package/perftest/perftest.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  32e667dac1c0dd41a3951c5a54b961a8e28db5d9478caea2dfc268a312968c99  perftest-4.5-0.20.tar.gz
++sha256  c76f0fd5524a3486c335897357c596d0a6d4f82680f93fc1bc7120670fabd5f9  perftest-23.04.0-0.23.tar.gz
+ sha256  763adb7d5094f2127b026adea8701f042d28d4b1f6fb8b6e828989227a9cf7f5  COPYING
+diff --git a/package/perftest/perftest.mk b/package/perftest/perftest.mk
+index 7ad20d0974..7101e318aa 100644
+--- a/package/perftest/perftest.mk
++++ b/package/perftest/perftest.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PERFTEST_VERSION = 4.5-0.20
+-PERFTEST_SITE = $(call github,linux-rdma,perftest,v$(PERFTEST_VERSION))
++PERFTEST_VERSION = 23.04.0-0.23
++PERFTEST_SITE = $(call github,linux-rdma,perftest,$(PERFTEST_VERSION))
+ PERFTEST_LICENSE = GPL-2.0 or BSD-2-Clause
+ PERFTEST_LICENSE_FILES = COPYING
+ PERFTEST_DEPENDENCIES = pciutils rdma-core
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
