@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A64DCEB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:50:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAA29EB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EF71408B6;
-	Wed, 12 Jul 2023 19:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EF71408B6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4369741F14;
+	Wed, 12 Jul 2023 19:50:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4369741F14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LHGzROg-5RZd; Wed, 12 Jul 2023 19:50:03 +0000 (UTC)
+	with ESMTP id ci6bQPTS52Tm; Wed, 12 Jul 2023 19:50:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DB3341F0E;
-	Wed, 12 Jul 2023 19:50:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DB3341F0E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0EAD61BF3BD
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:49:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3190C41F1C;
+	Wed, 12 Jul 2023 19:50:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3190C41F1C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3526E1BF3BD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB739408A1
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:49:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB739408A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id D690A40347
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:49:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D690A40347
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zVkFppV6pCZ5 for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 19:49:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB4964007B
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:49:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB4964007B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4E6286EFC; Wed, 12 Jul 2023 19:49:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 12 Jul 2023 21:48:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c337d25c05951b9bc8858b568203078e008d882
-X-Git-Newrev: fb4cf1cbe8f83df4811b71fb9c5ff567b5c68924
-X-Patchwork-Hint: ignore
-Message-Id: <20230712194945.C4E6286EFC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/icu: bump to version 73-2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7DP-1HXfXMZa for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 19:49:50 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1BDC4015A
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E1BDC4015A
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:49:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A8F7AFF802;
+ Wed, 12 Jul 2023 19:49:46 +0000 (UTC)
+Date: Wed, 12 Jul 2023 21:49:45 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230712214945.727d7b41@windsurf>
+In-Reply-To: <20230712070335.1648184-1-james.hilliard1@gmail.com>
+References: <20230712070335.1648184-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689191387;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=sguImbY/Dgi2SB5VPC4b0nFUvoga9HV9+uhmwSKC/vY=;
+ b=m+t/l8xGcPRh2uap8XEYi17coF5E3Nm3349DaXWu/bx7CDNJzkmofZdQH/xNW7iPxgfQeH
+ DHu88aqBR5IfJ605QOblE0X6xwGNxXvNKKiJ50p0/w46Z0psf4JYvxYa6X2MpjLSfTYmDe
+ 1WmTvpaQJQ9icLdNgeVr0B1sZH1kKvBQylRljC5gD+EtDEi50C+HD4JJpwaF5bQvubp5VT
+ AAlOdWJC9+6Q+ysGCem4JfwaNP0Qp1/BMDahe3fO3dMXt86BfsBRMKBfqSpqaKpIZRtwUY
+ zWB7UIaqjVYJXIpXZ4zGMooYGCFwSwSnOW2WpZsNFS5kDz3OK4M3acs6VW1KPQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=m+t/l8xG
+Subject: Re: [Buildroot] [PATCH 1/1] package/icu: bump to version 73-2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,44 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb4cf1cbe8f83df4811b71fb9c5ff567b5c68924
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 12 Jul 2023 01:03:35 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/icu/icu.hash | 2 +-
- package/icu/icu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/icu/icu.hash | 2 +-
+>  package/icu/icu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/icu/icu.hash b/package/icu/icu.hash
-index 77d5a9269c..0948bf495e 100644
---- a/package/icu/icu.hash
-+++ b/package/icu/icu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a457431de164b4aa7eca00ed134d00dfbf88a77c6986a10ae7774fc076bb8c45  icu4c-73_1-src.tgz
-+sha256  818a80712ed3caacd9b652305e01afc7fa167e6f2e94996da44b90c2ab604ce1  icu4c-73_2-src.tgz
- sha256  f3005e195ff74d8812cc1f182a1c446fab678d70a10e3dada497585befee5416  LICENSE
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index 96ac5cef61..d4be2e4e8f 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -7,7 +7,7 @@
- # Git tags (and therefore versions on release-monitoring.org) use the
- # XX-Y format, but the tarballs are named XX_Y and the containing
- # directories XX.Y.
--ICU_VERSION = 73-1
-+ICU_VERSION = 73-2
- ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
- ICU_SITE = \
- 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
