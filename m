@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE818EB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 13:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 490BEEB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 13:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2ECB5611B4;
-	Wed, 12 Jul 2023 13:46:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ECB5611B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id E864E60AAA;
+	Wed, 12 Jul 2023 13:55:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E864E60AAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QTXguHluOdQA; Wed, 12 Jul 2023 13:46:36 +0000 (UTC)
+	with ESMTP id BWv4yJ3_ka5X; Wed, 12 Jul 2023 13:55:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50DBA611B1;
-	Wed, 12 Jul 2023 13:46:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50DBA611B1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 414F91BF3CB
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 13:46:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE59260AD4;
+	Wed, 12 Jul 2023 13:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE59260AD4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ACD941BF3CB
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 13:55:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B56340518
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 13:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B56340518
+ by smtp3.osuosl.org (Postfix) with ESMTP id 86DB060AAA
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 13:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86DB060AAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QM13dOdfEcvy for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 13:46:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 980F240165
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 980F240165
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 13:46:30 +0000 (UTC)
-Received: from [172.25.4.220] ([151.79.164.54])
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nvM6m03T2SdD for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 13:55:00 +0000 (UTC)
+X-Greylist: delayed 00:07:05 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CF3260AD4
+Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7CF3260AD4
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 13:54:58 +0000 (UTC)
+Received: from [172.25.4.220] ([212.103.203.10])
  by Aruba Outgoing Smtp  with ESMTPSA
- id JaAlqNaf01ZFgJaAmqzuVb; Wed, 12 Jul 2023 15:46:28 +0200
-Message-ID: <7774d2a3-145f-44a3-e744-ae213a387e71@benettiengineering.com>
-Date: Wed, 12 Jul 2023 15:46:27 +0200
+ id JaC7qHIWjkCHeJaC8qLlOz; Wed, 12 Jul 2023 15:47:52 +0200
+Message-ID: <10cb6c33-59f0-1d21-a472-cecca1d821c5@benettiengineering.com>
+Date: Wed, 12 Jul 2023 15:47:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
 Content-Language: en-US, it
 To: Jamie Gibbons <jamie.gibbons@microchip.com>, buildroot@buildroot.org
 References: <20230712125154.1361000-1-jamie.gibbons@microchip.com>
- <20230712125154.1361000-2-jamie.gibbons@microchip.com>
+ <20230712125154.1361000-3-jamie.gibbons@microchip.com>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230712125154.1361000-2-jamie.gibbons@microchip.com>
-X-CMAE-Envelope: MS4xfKw/AGDZ3nAp24mRBE3rSJ3dliivR3x9LOFolCBrxnXLqxu5ljbnSheRFpLfCld9LlBDPyD9LepOjzPsSGd0H3tL6JGY/6W89dS0ZQgBUMGdJ5llJyrC
- +NpDwNIAT58KWfpPAvlnGTy1kZ500cSqOCHpzk91iMD5Ks5ezum4Nul4tuY46qCvb8wtB8AA9Ple6n9+SIyWWbJshIb9WCTrvQE2+LnLjGZ6PVXrfBTBnIry
- TG7Z9FhC74/Nc2NDYcCHn49pBr1s5DKphA4nOtWQkyAPuRahTCwjoz6pjT4knHS5Xb1DxXp+4QAXOfs7ItWbS/HrT1wkZqX0cflsBQ3xZnPxZVYr/+BKzYFh
- VLMFH8wuJeeXIUHFRoGLbnj3R4215lWBP50XnPZb3ptFHIVbRMxX4prX9ydia/AsST5HMPOCJAtvwZVUMzYiTXfRe1GQORdGWCmk8BRV8KYhxAmLQCzE5zpN
- wztwjV9GFcgGickl
+In-Reply-To: <20230712125154.1361000-3-jamie.gibbons@microchip.com>
+X-CMAE-Envelope: MS4xfOvZqJK2IRGqJnyQ3rQoztiUCWuSzu3O636aUxtup0bwYLD0SM/blaTdtVbkg+zsyROOcVHSJpORBdnJJShFPd8U5g8UQvYJeLUz87o0PH4rzYwYmN2z
+ mFY4hcwgnq+4mz/KfPWDYwaOulMb1I38J1FRUJqdPHrZSDheuryB9aBglPYvtQp2op43WzAeQKWjtzgbOLHkbAK6+i4VtR753d5WE1WvUM0alDnICWbVop4p
+ 0M/Bj/zJ2wizU4o7s1DSOLI7xeGjeZ74g7QoqAVKltdU9TFCMuPd3ep35f1mzF/L3GGu+ndBS2uKIu/cYkeWBU69bDFpPCc6S8xwoSRCOYjXWVTglx6XLBAy
+ f1DQo9nbw58IBLBJDXymQngFceYO3NjIBlKneACGGnIXa8blrl6/d7L+XUxLzsS/4OVpgzYiOqCppMj/pb7RomizGt9WHdJo9g2BmPEle66vdoRCGRcYaKqV
+ EHjY8b8K8clUYM1j
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1689169588; bh=RCNkCjal9iI4CzStgMv6OZ2rVnnEnrteabSP5duSx/8=;
+ t=1689169672; bh=uwc22Tt+5bpjapjUFBvc4Xa5dPGlOlF56XxaRe+nvoA=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=XBoSCmkDLJE2gXQRIBkgS4e1VlUqb1l3TEWiZBbxXhXGiB643KToBqRfUzRU/Iws1
- hQG8TeDjyvBrRrpBkWo6NDuQHLBq+NQ30SGQ30vk460sb9U/O1IPoDR30jdds/s/k1
- fGi+l0ws7SMQ0/yeIMqx8JH2G+H3/79idd1mdZx4ZjJ2OUsh4xPmu/QYJ1QsuT+xMp
- ieh3v7esBhXOL53MtJDXH364rrdLsQAzy6s6eecQzQaq//dHHRdhPmW8yQrBYUZLiq
- qALq8/PW/dCztx2yH3Ei9tvwbbPloBGAabsbaE2TVnHz15qkJbu/xvzfJpSDzHe0aT
- OXuZ+EplnM3gw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=cM7BwUuKBKvhmQ1mU8+qxDbjd5j7emsousCJn6KxeRi/IwHwIBcBiSQ++5YjmsjiZ
+ RdRNvAAUikHakT/b91SCAWugI7o+xCQOL6NIRggXuCK6sSoI3vEkWFyd6LFAxZPomK
+ XjcCMSf25UAJdPeF8kKE3TM0BktcO4Xirm0MDDmMLNjHrIoRJ0lpL+HMAib3gLBOR0
+ CuyjwjdDOn3pDZlghSZbPtSI70rP70Loc+jNc41pfHjUmMWvele9d1zvnctMPXZRHF
+ 1JTuZgeLCee8+D3kDKcVSfsS4SraFSAbOhWeFYy6BiGWjsr+ZlYizjrtjfAQhTW4Xy
+ 4wdP3ek525Fgw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=XBoSCmkD
-Subject: Re: [Buildroot] [PATCH v3 1/2]
- package/microchip-hss-payload-generator: add host package
+ header.a=rsa-sha256 header.s=a1 header.b=cM7BwUuK
+Subject: Re: [Buildroot] [PATCH v3 2/2] configs/microchip_mpfs_icicle: add
+ support for Microchip's Icicle Kit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,7 +80,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
+Cc: Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>,
  Conor Dooley <Conor.Dooley@microchip.com>,
  Ludovic Desroches <ludovic.desroches@microchip.com>,
  Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -91,112 +91,384 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 On 12/07/23 14:51, Jamie Gibbons via buildroot wrote:
-> The Buildroot icicle kit configuration uses the Hart Software Service's
-> (HSS) payload generator tool. This tool creates a formatted payload
-> image for the HSS zero-stage bootloader on PolarFire SoC, given a
-> configuration file and a set of ELF binaries. The configuration
-> file is used to map the ELF binaries or binary blobs to the
-> individual application harts (U54s). Add the HSS payload generator as a
-> host package to support this.
+> Add support for the icicle kit, the main development board for
+> Microchip's PolarFire SoC.
+> 
+> The configuration file is microchip_mpfs_icicle_defconfig. It builds a
+> bootable kernel image with an embedded root file system. The image
+> built can be flashed to the board using the eMMC or an SD card.
+> 
+> The yaml configuration file is used by the hss payload generator. It
+> maps the ELF binaries or binary blobs to the individual application
+> harts (U54s).
+> 
+> The image generator script sets the partitions of the image.
+> 
+> The kernel fragment file ses additional configurations for the icicle
+> kit in buildroot that are not in the default configuration.
+> 
+> The image tree souce file creates a FIT image.
+> 
+> The post image script creates the payload using the payload generator
+> host package and finally, creates the FIT image using the ITS after the
+> kernel build.
+> 
+> The U-Boot script and additional U-Boot configurations ensure that
+> U-Boot behaves as expected for the icicle kit and boots the FIT image.
+> 
+> The readme.txt file documents how to build and boot the icicle kit with
+> this configuration.
 > 
 > Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
-> Reviewed-by: Valentina Fernandez <valentina.fernandezalanis@microchip.com>
 
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-For next time remember to report the changes on every patch too, not
-only on the cover letter.
+Same here for V1->V2 changes.
+
+Also, it's ok to drop the partition-type-uuid in genimage.cfg if it's
+the default value.
 
 Thank you
-
 Best regards
 -- 
 CEO/CTO@Benetti Engineering sas
 
 > ---
->   DEVELOPERS                                    |  3 +++
->   package/Config.in.host                        |  1 +
->   .../Config.in.host                            | 11 ++++++++
->   .../microchip-hss-payload-generator.mk        | 25 +++++++++++++++++++
->   4 files changed, 40 insertions(+)
->   create mode 100644 package/microchip-hss-payload-generator/Config.in.host
->   create mode 100644 package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
+>   DEVELOPERS                                    |  2 +
+>   board/microchip/mpfs_icicle/README.txt        | 62 +++++++++++++++++++
+>   board/microchip/mpfs_icicle/config.yaml       | 28 +++++++++
+>   board/microchip/mpfs_icicle/genimage.cfg      | 34 ++++++++++
+>   board/microchip/mpfs_icicle/linux.fragment    |  1 +
+>   board/microchip/mpfs_icicle/mpfs_icicle.its   | 53 ++++++++++++++++
+>   board/microchip/mpfs_icicle/post-image.sh     | 13 ++++
+>   board/microchip/mpfs_icicle/uboot-env.txt     | 16 +++++
+>   .../mpfs_icicle/uboot-fragment-rootfs.config  |  3 +
+>   configs/microchip_mpfs_icicle_defconfig       | 34 ++++++++++
+>   10 files changed, 246 insertions(+)
+>   create mode 100644 board/microchip/mpfs_icicle/README.txt
+>   create mode 100644 board/microchip/mpfs_icicle/config.yaml
+>   create mode 100644 board/microchip/mpfs_icicle/genimage.cfg
+>   create mode 100644 board/microchip/mpfs_icicle/linux.fragment
+>   create mode 100644 board/microchip/mpfs_icicle/mpfs_icicle.its
+>   create mode 100755 board/microchip/mpfs_icicle/post-image.sh
+>   create mode 100644 board/microchip/mpfs_icicle/uboot-env.txt
+>   create mode 100644 board/microchip/mpfs_icicle/uboot-fragment-rootfs.config
+>   create mode 100644 configs/microchip_mpfs_icicle_defconfig
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0918e9f721..2f039a2405 100644
+> index 2f039a2405..8df10aca21 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1459,6 +1459,9 @@ F:	package/pangomm/
->   F:	package/rpm/
+> @@ -1460,6 +1460,8 @@ F:	package/rpm/
 >   F:	package/yad/
 >   
-> +N:	Jamie Gibbons <jamie.gibbons@microchip.com>
-> +F:	package/microchip-hss-payload-generator
-> +
->   N:	Jan Heylen <jan.heylen@nokia.com>
->   F:	package/opentracing-cpp/
+>   N:	Jamie Gibbons <jamie.gibbons@microchip.com>
+> +F:	board/microchip/mpfs_icicle
+> +F:	configs/microchip_mpfs_icicle_defconfig
+>   F:	package/microchip-hss-payload-generator
 >   
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index dcadbfdfc1..42856c09df 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -58,6 +58,7 @@ menu "Host utilities"
->   	source "package/mender-artifact/Config.in.host"
->   	source "package/meson-tools/Config.in.host"
->   	source "package/mfgtools/Config.in.host"
-> +	source "package/microchip-hss-payload-generator/Config.in.host"
->   	source "package/mkpasswd/Config.in.host"
->   	source "package/moby-buildkit/Config.in.host"
->   	source "package/mosquitto/Config.in.host"
-> diff --git a/package/microchip-hss-payload-generator/Config.in.host b/package/microchip-hss-payload-generator/Config.in.host
+>   N:	Jan Heylen <jan.heylen@nokia.com>
+> diff --git a/board/microchip/mpfs_icicle/README.txt b/board/microchip/mpfs_icicle/README.txt
 > new file mode 100644
-> index 0000000000..6584692729
+> index 0000000000..de20ecc410
 > --- /dev/null
-> +++ b/package/microchip-hss-payload-generator/Config.in.host
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR
-> +	bool "host microchip-hss-payload-generator"
-> +	help
-> +	  Microchip PolarFire SoC Payload Generator. This tool creates a
-> +	  formatted payload image for the HSS zero-stage bootloader on
-> +	  PolarFire SoC, given a configuration file and a set of ELF
-> +	  binaries. The configuration file is used to map the ELF
-> +	  binaries or binary blobs to the individual application harts
-> +	  (U54s).
+> +++ b/board/microchip/mpfs_icicle/README.txt
+> @@ -0,0 +1,62 @@
+> +Microchip PolarFire SoC Icicle Kit
+> +==================================
 > +
-> +	  https://github.com/polarfire-soc/hart-software-services.git
-> diff --git a/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk b/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
+> +This file describes how to use the pre-defined Buildroot
+> +configuration for Microchip's PolarFire SoC Icicle Kit.
+> +
+> +Further information about the PolarFire SoC Icicle Kit can be found
+> +at https://github.com/polarfire-soc/polarfire-soc-documentation
+> +
+> +Building
+> +========
+> +
+> +Configure Buildroot using the default board configuration:
+> +
+> +  '$ make microchip_mpfs_icicle_defconfig'
+> +
+> +Customise the build as necessary:
+> +
+> +  '$ make menuconfig'
+> +
+> +Start the build:
+> +
+> +  '$ make'
+> +
+> +Result of the build
+> +===================
+> +
+> +Once the build has finished you will have the following files:
+> +
+> +    output/images/
+> +    +-- boot.scr
+> +    +-- boot.vfat
+> +    +-- Image
+> +    +-- mpfs_icicle.itb
+> +    +-- mpfs_icicle.its
+> +    +-- mpfs-icicle-kit.dtb
+> +    +-- payload.bin
+> +    +-- rootfs.ext2
+> +    +-- rootfs.ext4
+> +    +-- rootfs.tar
+> +    +-- sdcard.img
+> +    +-- u-boot.bin
+> +
+> +
+> +Creating a bootable SD card with genimage
+> +=========================================
+> +
+> +By default Buildroot builds a SD card image for you. The first partition
+> +of this image contains a U-Boot binary, embedded in a Hart Software
+> +Services (HSS) payload. The second partition contains a FAT filesystem
+> +with a U-Boot env and an ITB file containing the kernel and the device
+> +tree. The third partition contains the file system. This image can be
+> +written directly to the eMMC or an SD card. All you need to do is dd the
+> +image to the eMMC or your SD card, which can be done with the following
+> +command on your development host:
+> +
+> +  '$ sudo dd if=output/images/sdcard.img of=/dev/sdb bs=1M'
+> +
+> +For instructions on how to transfer the image to the eMMC/SD, please refer to
+> +the "Programming the Linux image" section of our guide on updating
+> +PolarFire SoC dev kits:
+> +https://github.com/polarfire-soc/polarfire-soc-documentation/blob/master/reference-designs-fpga-and-development-kits/updating-mpfs-kit.md.
+> diff --git a/board/microchip/mpfs_icicle/config.yaml b/board/microchip/mpfs_icicle/config.yaml
 > new file mode 100644
-> index 0000000000..df62e121e7
+> index 0000000000..5fccdfd34f
 > --- /dev/null
-> +++ b/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
+> +++ b/board/microchip/mpfs_icicle/config.yaml
+> @@ -0,0 +1,28 @@
 > +#
-> +# microchip-hss-payload-generator
+> +# HSS Payload Generator - buildroot configuration file
 > +#
-> +################################################################################
 > +
-> +HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_VERSION = 2023.06
-> +HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_SITE = $(call github,polarfire-soc,hart-software-services,v$(HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_VERSION))
-> +HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_LICENSE = MIT
-> +HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_LICENSE_FILES = LICENSE.md
-> +HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_DEPENDENCIES = host-elfutils host-libyaml host-openssl
+> +# First, we can optionally set a name for our image, otherwise one will be created dynamically
+> +set-name: 'PolarFire-SoC-HSS::U-Boot'
 > +
-> +define HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_BUILD_CMDS
-> +	$(MAKE) -C $(@D)/tools/hss-payload-generator \
-> +		HOST_INCLUDES="$(HOST_CPPFLAGS)" \
-> +		LDFLAGS="$(HOST_LDFLAGS)"
-> +endef
+> +#
+> +# Next, we'll define the entry point addresses for each hart, as follows:
+> +#
+> +hart-entry-points: {u54_1: '0x80200000', u54_2: '0x80200000', u54_3: '0x80200000', u54_4: '0x80200000'}
+> +#
+> +# Finally, we'll define a payloads (source binary file) that will be placed at certain regions in memory
+> +# The payload section is defined with the keyword payloads, and then a number of individual
+> +# payload descriptors.
+> +#
+> +# Each payload has a name (path to its ELF/bin file), an owner-hart, and optionally 1-3 secondary-harts.
+> +#
+> +# Additionally, it has a privilege mode in which it will start execution.
+> +#  * Valid privilege modes are PRV_M, PRV_S and PRV_U.
+> +#
+> +#
+> +# In this case, the only payload is the u-boot s-mode binary.
+> +#
+> +# Case only matters for the ELF path names, not the keywords.
+> +#
+> +payloads:
+> +  u-boot.bin: {exec-addr: '0x80200000', owner-hart: u54_1, secondary-hart: u54_2, secondary-hart: u54_3, secondary-hart: u54_4, priv-mode: prv_s}
+> diff --git a/board/microchip/mpfs_icicle/genimage.cfg b/board/microchip/mpfs_icicle/genimage.cfg
+> new file mode 100644
+> index 0000000000..6955d3365a
+> --- /dev/null
+> +++ b/board/microchip/mpfs_icicle/genimage.cfg
+> @@ -0,0 +1,34 @@
+> +# Image for eMMC or SDCard boot on the Microchip PolarFire SOC Icicle Board
+> +#
+> +image boot.vfat {
+> +	vfat {
+> +		files = {
+> +			 "mpfs_icicle.itb",
+> +		}
 > +
-> +define HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_INSTALL_CMDS
-> +	$(INSTALL) -D -m 755 \
-> +		$(@D)/tools/hss-payload-generator/hss-payload-generator \
-> +		$(HOST_DIR)/bin/hss-payload-generator
-> +endef
+> +		file boot.scr {
+> +			image = "boot.scr"
+> +		}
+> +	}
+> +	size = 60M
+> +}
 > +
-> +$(eval $(host-generic-package))
+> +image sdcard.img {
+> +	hdimage {
+> +		gpt = true
+> +	}
+> +
+> +	partition uboot {
+> +		partition-type-uuid = 21686148-6449-6E6F-744E-656564454649
+> +		image = "payload.bin"
+> +	}
+> +
+> +	partition kernel {
+> +		bootable = "true"
+> +		image = "boot.vfat"
+> +	}
+> +
+> +	partition root {
+> +		image = "rootfs.ext4"
+> +	}
+> +}
+> diff --git a/board/microchip/mpfs_icicle/linux.fragment b/board/microchip/mpfs_icicle/linux.fragment
+> new file mode 100644
+> index 0000000000..0cecddb61b
+> --- /dev/null
+> +++ b/board/microchip/mpfs_icicle/linux.fragment
+> @@ -0,0 +1 @@
+> +CONFIG_POLARFIRE_SOC_DMA_NONCOHERENT=y
+> diff --git a/board/microchip/mpfs_icicle/mpfs_icicle.its b/board/microchip/mpfs_icicle/mpfs_icicle.its
+> new file mode 100644
+> index 0000000000..a62b079fa1
+> --- /dev/null
+> +++ b/board/microchip/mpfs_icicle/mpfs_icicle.its
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Flattened Image Tree file for Icicle Kit
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +
+> +/ {
+> +	description = "U-Boot fitImage for the MPFS";
+> +	address-cells = <1>;
+> +
+> +		images {
+> +			kernel {
+> +				description = "Linux kernel";
+> +				data = /incbin/("./Image");
+> +				type = "kernel";
+> +				arch = "riscv";
+> +				os = "linux";
+> +				compression = "none";
+> +				load = <0x80200000>;
+> +				entry = <0x80200000>;
+> +				hash-1 {
+> +					algo = "sha256";
+> +				};
+> +			};
+> +			base_fdt {
+> +				description = "Flattened Device Tree blob";
+> +				data = /incbin/("./mpfs-icicle-kit.dtb");
+> +				type = "flat_dt";
+> +				arch = "riscv";
+> +				compression = "none";
+> +				load = <0x8a000000>;
+> +				hash-1 {
+> +					algo = "sha256";
+> +				};
+> +			};
+> +		};
+> +
+> +		configurations {
+> +			default = "kernel_dtb";
+> +			kernel_dtb {
+> +				description = "1 Linux kernel, FDT blob";
+> +				kernel = "kernel";
+> +				fdt = "base_fdt";
+> +			};
+> +
+> +			base_dtb {
+> +				description = "Base FDT blob for MPFS Icicle board";
+> +				fdt = "base_fdt";
+> +			};
+> +		};
+> +};
+> diff --git a/board/microchip/mpfs_icicle/post-image.sh b/board/microchip/mpfs_icicle/post-image.sh
+> new file mode 100755
+> index 0000000000..54cc6d71f8
+> --- /dev/null
+> +++ b/board/microchip/mpfs_icicle/post-image.sh
+> @@ -0,0 +1,13 @@
+> +#!/usr/bin/env bash
+> +
+> +BASE_DIR=$(pwd)
+> +HSS_PAYLOAD_GENERATOR=$HOST_DIR/bin/hss-payload-generator
+> +MKIMAGE=$HOST_DIR/bin/mkimage
+> +GENIMAGE=${BASE_DIR}/support/scripts/genimage.sh
+> +GENIMAGE_CFG=${BASE_DIR}/$2
+> +
+> +cd "${BINARIES_DIR}" || exit
+> +${HSS_PAYLOAD_GENERATOR} -c "${BASE_DIR}"/board/microchip/mpfs_icicle/config.yaml payload.bin
+> +cp "${BASE_DIR}"/board/microchip/mpfs_icicle/mpfs_icicle.its ./
+> +${MKIMAGE} -f mpfs_icicle.its mpfs_icicle.itb
+> +${GENIMAGE} -c "${GENIMAGE_CFG}"
+> diff --git a/board/microchip/mpfs_icicle/uboot-env.txt b/board/microchip/mpfs_icicle/uboot-env.txt
+> new file mode 100644
+> index 0000000000..8a655085ed
+> --- /dev/null
+> +++ b/board/microchip/mpfs_icicle/uboot-env.txt
+> @@ -0,0 +1,16 @@
+> +# this assumes ${scriptaddr} is already set!!
+> +
+> +# Try to boot a fitImage from eMMC/SD
+> +
+> +setenv fdt_high 0xffffffffffffffff
+> +setenv initrd_high 0xffffffffffffffff
+> +
+> +load mmc 0:${distro_bootpart} ${scriptaddr} mpfs_icicle.itb;
+> +bootm start ${scriptaddr}#kernel_dtb;
+> +bootm loados ${scriptaddr};
+> +# Try to load a ramdisk if available inside fitImage
+> +bootm ramdisk;
+> +bootm prep;
+> +fdt set /soc/ethernet@20112000 mac-address ${icicle_mac_addr0};
+> +fdt set /soc/ethernet@20110000 mac-address ${icicle_mac_addr1};
+> +bootm go;
+> diff --git a/board/microchip/mpfs_icicle/uboot-fragment-rootfs.config b/board/microchip/mpfs_icicle/uboot-fragment-rootfs.config
+> new file mode 100644
+> index 0000000000..e2a5eb9438
+> --- /dev/null
+> +++ b/board/microchip/mpfs_icicle/uboot-fragment-rootfs.config
+> @@ -0,0 +1,3 @@
+> +CONFIG_USE_BOOTARGS=y
+> +CONFIG_BOOTARGS="root=/dev/mmcblk0p3 rootwait uio_pdrv_genirq.of_id=generic-uio"
+> +CONFIG_MPFS_PRIORITISE_QSPI_BOOT=n
+> diff --git a/configs/microchip_mpfs_icicle_defconfig b/configs/microchip_mpfs_icicle_defconfig
+> new file mode 100644
+> index 0000000000..9ad1bf66d8
+> --- /dev/null
+> +++ b/configs/microchip_mpfs_icicle_defconfig
+> @@ -0,0 +1,34 @@
+> +BR2_riscv=y
+> +BR2_riscv_custom=y
+> +BR2_RISCV_ISA_CUSTOM_RVM=y
+> +BR2_RISCV_ISA_CUSTOM_RVF=y
+> +BR2_RISCV_ISA_CUSTOM_RVD=y
+> +BR2_RISCV_ISA_CUSTOM_RVC=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+> +BR2_TARGET_GENERIC_HOSTNAME="mpfs_icicle"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/microchip/mpfs_icicle/post-image.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="board/microchip/mpfs_icicle/genimage.cfg"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux-6.1-mchp+fpga)/linux4microchip+fpga-2023.06.tar.gz"
+> +BR2_LINUX_KERNEL_DEFCONFIG="mpfs"
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/microchip/mpfs_icicle/linux.fragment"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="microchip/mpfs-icicle-kit"
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,polarfire-soc,u-boot)linux4microchip+fpga-2023.06.tar.gz"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="microchip_mpfs_icicle"
+> +BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/microchip/mpfs_icicle/uboot-fragment-rootfs.config"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/microchip/mpfs_icicle/uboot-env.txt"
 
+-- 
+CEO/CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
