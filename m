@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89689EB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 21:34:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7434EB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 21:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 37E7B405A1;
-	Wed, 12 Jul 2023 21:34:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37E7B405A1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E321416CF;
+	Wed, 12 Jul 2023 21:34:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E321416CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id saLgpS6sfNjy; Wed, 12 Jul 2023 21:34:21 +0000 (UTC)
+	with ESMTP id 1hjNm9a7fjCc; Wed, 12 Jul 2023 21:34:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FFA1416DA;
-	Wed, 12 Jul 2023 21:34:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FFA1416DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id CAD2F416D7;
+	Wed, 12 Jul 2023 21:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAD2F416D7
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BFA1B1BF3A8
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:34:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7DC121BF3A8
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:34:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99948416E4
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:34:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99948416E4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 558C1416D7
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:34:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 558C1416D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lmg-HWt_ApJG for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 21:34:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0FF4416DA
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 21:34:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0FF4416DA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE64C86F40; Wed, 12 Jul 2023 21:34:17 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 12 Jul 2023 23:33:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 109f22283c3048d425fb4f0443c2191aabec2079
-X-Git-Newrev: 61bfe280d1dd2a822310796456041329bfa0596e
-X-Patchwork-Hint: ignore
-Message-Id: <20230712213417.CE64C86F40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-waipu: bump version to
- 20.9.0-Nexus
+ with ESMTP id rF-ByqpPQ2uY for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 21:34:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14BD7401E1
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 14BD7401E1
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 21:34:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9E87C40003;
+ Wed, 12 Jul 2023 21:34:21 +0000 (UTC)
+Date: Wed, 12 Jul 2023 23:34:20 +0200
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230712233420.2f6a5381@windsurf>
+In-Reply-To: <20230523161522.1275284-1-bernd.kuhls@t-online.de>
+References: <20230523161522.1275284-1-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689197673;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+hF8DsBxibWviIsk2z1k1jQwhSQIS9XqgSTHgYKTGlU=;
+ b=lMC1PpP/9MHdi24n5sf3aYBamU6qd3KQReKXFzcmSjtAfj5h+lz6wI4+aspDyuBYOFqz+t
+ oaLwL/Djh8Qivqxj7GnVaYMvH26X/UoeKIJ+OUSlgPjwfuGuTw5ddMQN8fPZ27FkFpcdt+
+ 1w5Vl0aHVvIwEaWNb68C/v1XAntPbbIchXw8E419m4AOHWd/yJCcU7WaN2SsMejDxvzSKK
+ 3mWZx30vgkHTRZFi+DKy8bZJ98opEpmDHNpjZScEetr8fc4debXc8/8eMSbybfpk5tx7g6
+ qm5rBsyOYVM8VPRE6lAX09EOjzPrQ2NLtJNQO38stQn6dgOAcbmA9r52g80e1w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=lMC1PpP/
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-waipu: bump
+ version to 20.9.0-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61bfe280d1dd2a822310796456041329bfa0596e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 23 May 2023 18:15:22 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+>  package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-index cdcaeeff9d..ed447ce61f 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5dfe9f891edefd5334c7a45593651634b43e1fdbea5a1b396131a45f5928f4aa  kodi-pvr-waipu-20.8.1-Nexus.tar.gz
-+sha256  3a0a1dffe1bb8711dd6747b02a51aee6a0bce40ca6822cc2ab7f04b4b5acb82f  kodi-pvr-waipu-20.9.0-Nexus.tar.gz
- sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-index 41f9e82814..b098e10929 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_WAIPU_VERSION = 20.8.1-Nexus
-+KODI_PVR_WAIPU_VERSION = 20.9.0-Nexus
- KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
- KODI_PVR_WAIPU_LICENSE = GPL-2.0+
- KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
