@@ -4,85 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 403EAEB64D9
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 07:04:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27FD4EB64D9
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 08:35:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93A29808A1;
-	Wed, 12 Jul 2023 07:04:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93A29808A1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 937FE81FE0;
+	Wed, 12 Jul 2023 08:35:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 937FE81FE0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RifbifdFXzRO; Wed, 12 Jul 2023 07:03:58 +0000 (UTC)
+	with ESMTP id aWS1nD1HFaGq; Wed, 12 Jul 2023 08:35:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDA1883B23;
-	Wed, 12 Jul 2023 07:03:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDA1883B23
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E8B1B1BF47D
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 07:03:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66A3C8214F;
+	Wed, 12 Jul 2023 08:35:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66A3C8214F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BBB6F1BF853
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 08:35:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 96DFA83AC6
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 07:03:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96DFA83AC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id A102441E52
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 08:35:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A102441E52
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rdKTaLbyW1uX for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 07:03:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0E9283AC5
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D0E9283AC5
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 07:03:38 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id
- ca18e2360f4ac-78360b822abso227455339f.2
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 00:03:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689145417; x=1691737417;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7TX/LasGRU35wwLvq/9CY7jTzNwht5Bto8S6CRPUd7I=;
- b=Csel2fXMYhdAyacuXAUevHIw7aTffrW2wHMdP6jPdQPheOoKxLaYN8+jvmzIAJbu4z
- 8dwkQgYm5CPCgqONvTk5kBiRw7A8JZZdZLkOZ/BaU5NUd1++w0YV6LiKnTogbeqFBI42
- uicgAPFzH8kjPICVV2XEpSjcguDyrK6v+G4Ltt53RIO7lWsm50FvYOX9+3yrNjL6hmmz
- hNrgNqs6L3GJ237Ujm7uUEZ4RHtr18NF4G9AGOclYtMJOPbD2rI3229PxaKjGjfIfDnV
- g/DNumnWHvI4yo7ch0+UlYBgBReMtl7zMMmpXyyJcjjHmWyMusF0HfVVXS335jCbu3Bz
- dvjw==
-X-Gm-Message-State: ABy/qLac03EITMfZA0DFUNhZfFFHD0+ZatNVXvoGqO/hFUJgX6TTUtEl
- ykRAZ88DcGP5V7Bn2pvxtOfSthE8oyg=
-X-Google-Smtp-Source: APBJJlHqSI1pvm/tLASNOT4ecoqaIs56SX3YtCh2Q38cSaTDnOcPenDEDE9nYXaMZOyuQIyu/yb8tw==
-X-Received: by 2002:a92:c68c:0:b0:342:7948:80dd with SMTP id
- o12-20020a92c68c000000b00342794880ddmr16267144ilg.18.1689145417206; 
- Wed, 12 Jul 2023 00:03:37 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-225-212.hlrn.qwest.net.
- [71.218.225.212]) by smtp.gmail.com with ESMTPSA id
- t9-20020a02ab89000000b0042af7792d7dsm992131jan.97.2023.07.12.00.03.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Jul 2023 00:03:36 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 12 Jul 2023 01:03:35 -0600
-Message-Id: <20230712070335.1648184-1-james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o0pEIqJUlcN7 for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 08:35:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0843B41E3A
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
+ [68.232.154.123])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0843B41E3A
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 08:35:15 +0000 (UTC)
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; d="scan'208";a="219974825"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+ by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
+ 12 Jul 2023 01:35:13 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 12 Jul 2023 01:35:11 -0700
+Received: from jamie-dev.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Wed, 12 Jul 2023 01:35:10 -0700
+To: <buildroot@buildroot.org>
+Date: Wed, 12 Jul 2023 09:34:53 +0100
+Message-ID: <20230712083455.2349333-1-jamie.gibbons@microchip.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689145417; x=1691737417;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7TX/LasGRU35wwLvq/9CY7jTzNwht5Bto8S6CRPUd7I=;
- b=k9Qew68TUGqejjsfMhvuxKNagQgra455XBXB/IZXEecgkTpWmQKe3LdRsqxgUmE+7L
- L96EZ63T3mLxsXzE8sXd6hRUwhxSw+sQpVdYLSRqannaQ08w3zgYrwDcZK1WmQBtj5/N
- SCcy2MuYvtKTZps+UHO7uAJ+dNi2IXq1GD53SFPsNvzKpTE02m5IqZJTxzv4+RZH/jNH
- ZebnJQ68okRF6a8vRVzVkV/85e/KfXh/3utDCF2z+Q17MeJODA0mEv2OgqZfYRhur8Vp
- JJ44nTmpKced1C8F2dyyRg1sAAv1CD/pMwhUEGqws28KGCofYdqK78j9rl6vRtl9j+0S
- 9rtw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=k9Qew68T
-Subject: [Buildroot] [PATCH 1/1] package/icu: bump to version 73-2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1689150916; x=1720686916;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=FAn3Xnvg4jqKrp9FvtqwnGDw1jMdqJHC63UByQnRS54=;
+ b=N59Eul99dAjh8l2/YMoFlJVqozWPNGddMldCL4JVJ4YCPhJnqWuTuI6H
+ S3PwMJK8r2M4kHuQYfaWwl0GvNzLqdgJB+S8m0FqB2h1UPWR7m/fKBlcr
+ BnSReP2JBA2JR0k7bYOkF9o4UTdOpqNlndnhdp4cA6fhSR+gCLbR8osQa
+ egvRB6wZ/6x0gmUw+TqIUxuyotEJSKXevis1j/bcCRMa3zCuunBpnQP5e
+ AVcRtiiNKU9xxE9TkWlVP603hoGQFIz6/UqFSWw94ECfmhD6ZhbHGp/BE
+ hPQ6+xh+HQwR5YQjIRKfaZ9CEw8qd6uR83ryG38QUtDHW+zengtt6//u+
+ w==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com
+ header.a=rsa-sha256 header.s=mchp header.b=N59Eul99
+Subject: [Buildroot] [PATCH v2 0/2] Add Microchip PolarFire SoC Icicle Kit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,40 +81,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Jamie Gibbons via buildroot <buildroot@buildroot.org>
+Reply-To: Jamie Gibbons <jamie.gibbons@microchip.com>
+Cc: Conor Dooley <Conor.Dooley@microchip.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>, Jamie
+ Gibbons <jamie.gibbons@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/icu/icu.hash | 2 +-
- package/icu/icu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi all,
 
-diff --git a/package/icu/icu.hash b/package/icu/icu.hash
-index 77d5a9269c..0948bf495e 100644
---- a/package/icu/icu.hash
-+++ b/package/icu/icu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a457431de164b4aa7eca00ed134d00dfbf88a77c6986a10ae7774fc076bb8c45  icu4c-73_1-src.tgz
-+sha256  818a80712ed3caacd9b652305e01afc7fa167e6f2e94996da44b90c2ab604ce1  icu4c-73_2-src.tgz
- sha256  f3005e195ff74d8812cc1f182a1c446fab678d70a10e3dada497585befee5416  LICENSE
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index 96ac5cef61..d4be2e4e8f 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -7,7 +7,7 @@
- # Git tags (and therefore versions on release-monitoring.org) use the
- # XX-Y format, but the tarballs are named XX_Y and the containing
- # directories XX.Y.
--ICU_VERSION = 73-1
-+ICU_VERSION = 73-2
- ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
- ICU_SITE = \
- 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
+The following patch series is to add support for Microchip's PolarFire SoC
+development board, the icicle kit. We are adding all the necessary supporting
+files, including a new defconfig and one required host package, the
+hss-payload-generator. I look forward to recieving your feedback on the series.
+
+Regards,
+Jamie
+
+Changes v1 -> v2:
+- cleanup package makefile file
+- update U-Boot and kernel versions
+- add to Developers
+
+Jamie Gibbons (2):
+  package/microchip-hss-payload-generator: add host package
+  configs/microchip_mpfs_icicle: add support for Microchip's Icicle Kit
+
+ DEVELOPERS                                    |  5 ++
+ board/microchip/mpfs_icicle/README.txt        | 62 +++++++++++++++++++
+ board/microchip/mpfs_icicle/config.yaml       | 28 +++++++++
+ board/microchip/mpfs_icicle/genimage.cfg      | 36 +++++++++++
+ board/microchip/mpfs_icicle/linux.fragment    |  1 +
+ board/microchip/mpfs_icicle/mpfs_icicle.its   | 53 ++++++++++++++++
+ board/microchip/mpfs_icicle/post-image.sh     | 13 ++++
+ board/microchip/mpfs_icicle/uboot-env.txt     | 16 +++++
+ .../mpfs_icicle/uboot-fragment-rootfs.config  |  3 +
+ configs/microchip_mpfs_icicle_defconfig       | 33 ++++++++++
+ package/Config.in.host                        |  1 +
+ .../Config.in.host                            | 10 +++
+ .../microchip-hss-payload-generator.mk        | 24 +++++++
+ 13 files changed, 285 insertions(+)
+ create mode 100644 board/microchip/mpfs_icicle/README.txt
+ create mode 100644 board/microchip/mpfs_icicle/config.yaml
+ create mode 100644 board/microchip/mpfs_icicle/genimage.cfg
+ create mode 100644 board/microchip/mpfs_icicle/linux.fragment
+ create mode 100644 board/microchip/mpfs_icicle/mpfs_icicle.its
+ create mode 100755 board/microchip/mpfs_icicle/post-image.sh
+ create mode 100644 board/microchip/mpfs_icicle/uboot-env.txt
+ create mode 100644 board/microchip/mpfs_icicle/uboot-fragment-rootfs.config
+ create mode 100644 configs/microchip_mpfs_icicle_defconfig
+ create mode 100644 package/microchip-hss-payload-generator/Config.in.host
+ create mode 100644 package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
+
 -- 
 2.34.1
 
