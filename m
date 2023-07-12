@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8922AEB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0226EB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:33:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3413641EFA;
-	Wed, 12 Jul 2023 19:31:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3413641EFA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96CF441899;
+	Wed, 12 Jul 2023 19:33:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96CF441899
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SheODRVW6P3G; Wed, 12 Jul 2023 19:30:59 +0000 (UTC)
+	with ESMTP id ZGcA0Jjy62dA; Wed, 12 Jul 2023 19:33:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C95640313;
-	Wed, 12 Jul 2023 19:30:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C95640313
+	by smtp4.osuosl.org (Postfix) with ESMTP id A79394188C;
+	Wed, 12 Jul 2023 19:33:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A79394188C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F24391BF97D
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:30:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6BBFF1BF3BD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:33:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA96D61267
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA96D61267
+ by smtp3.osuosl.org (Postfix) with ESMTP id 37DF160E02
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37DF160E02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GO8aN-6IqsXA for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE29461203
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE29461203
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B638886EE2; Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 12 Jul 2023 21:29:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 199a4d1dd1556878f6d0868ef638baa1607ad3d0
-X-Git-Newrev: 170c218e4403944eae58bb80cc5cf1d198883a7c
-X-Patchwork-Hint: ignore
-Message-Id: <20230712193041.B638886EE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perftest: bump to version
+ with ESMTP id 5wQHt8HvgPo2 for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 19:33:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EB3160DA0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7EB3160DA0
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:33:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DE57E40003;
+ Wed, 12 Jul 2023 19:33:41 +0000 (UTC)
+Date: Wed, 12 Jul 2023 21:33:40 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230712213340.44501479@windsurf>
+In-Reply-To: <20230610165813.357109-1-ju.o@free.fr>
+References: <20230610165813.357109-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689190422;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=f7mZ1ngN9On6sUG+St47X+Gupr+b9HtNG1xbEdgvOIo=;
+ b=p3MwmF6nIoXf5AT1FgZzgnOk7xsTD+qkXof0rCTYxVdZazBi+hytNHuRq15hYF4VhDEFop
+ UoVAgrXfPKzPyrzV/a4f+agZ5zRyRsBoysnxNopJFwjbfHog/fADitScbNsEV0En7cXlyJ
+ GsD0JMv61FBhbRknbRJ2DWfrZT0ldxSKIatplon/tsMllBvUpROK7yrUlB0gC/M8KxsMge
+ Ww5X5gYdtsPy7GKR0oqvWHV2buIZvTYTuN7HeBlDlbAQHsv2RnWCGNj7RSc5yvYCLb0H0G
+ 2U3Hl7QfOBSsj1p1nGszgXBZU//cUXMGBmM0xmGSHKcwE/xz7vKnugP5wc9Xrw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=p3MwmF6n
+Subject: Re: [Buildroot] [PATCH 1/2] package/perftest: bump to version
  23.04.0-0.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,52 +78,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=170c218e4403944eae58bb80cc5cf1d198883a7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 10 Jun 2023 18:58:12 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-For release note, see:
-https://github.com/linux-rdma/perftest/releases/tag/23.04.0-0.23
+> For release note, see:
+> https://github.com/linux-rdma/perftest/releases/tag/23.04.0-0.23
+> 
+> Note: the version scheme changed since the previous version, from
+> "v4.5-0.20" to "23.04.0-0.23" (the "v" was removed).
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  package/perftest/perftest.hash | 2 +-
+>  package/perftest/perftest.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Note: the version scheme changed since the previous version, from
-"v4.5-0.20" to "23.04.0-0.23" (the "v" was removed).
+Both applied, thanks!
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/perftest/perftest.hash | 2 +-
- package/perftest/perftest.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/perftest/perftest.hash b/package/perftest/perftest.hash
-index 4333231c44..a9ea10ef44 100644
---- a/package/perftest/perftest.hash
-+++ b/package/perftest/perftest.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  32e667dac1c0dd41a3951c5a54b961a8e28db5d9478caea2dfc268a312968c99  perftest-4.5-0.20.tar.gz
-+sha256  c76f0fd5524a3486c335897357c596d0a6d4f82680f93fc1bc7120670fabd5f9  perftest-23.04.0-0.23.tar.gz
- sha256  763adb7d5094f2127b026adea8701f042d28d4b1f6fb8b6e828989227a9cf7f5  COPYING
-diff --git a/package/perftest/perftest.mk b/package/perftest/perftest.mk
-index 7ad20d0974..7101e318aa 100644
---- a/package/perftest/perftest.mk
-+++ b/package/perftest/perftest.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PERFTEST_VERSION = 4.5-0.20
--PERFTEST_SITE = $(call github,linux-rdma,perftest,v$(PERFTEST_VERSION))
-+PERFTEST_VERSION = 23.04.0-0.23
-+PERFTEST_SITE = $(call github,linux-rdma,perftest,$(PERFTEST_VERSION))
- PERFTEST_LICENSE = GPL-2.0 or BSD-2-Clause
- PERFTEST_LICENSE_FILES = COPYING
- PERFTEST_DEPENDENCIES = pciutils rdma-core
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
