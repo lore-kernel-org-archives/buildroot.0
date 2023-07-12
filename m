@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58AEBEB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 21:39:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F457EB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 21:41:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 084B6416D8;
-	Wed, 12 Jul 2023 21:39:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 084B6416D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4FDF416C7;
+	Wed, 12 Jul 2023 21:41:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4FDF416C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vctE6-RxWDNr; Wed, 12 Jul 2023 21:39:23 +0000 (UTC)
+	with ESMTP id k37hGTn_K1PZ; Wed, 12 Jul 2023 21:41:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D82A416F1;
-	Wed, 12 Jul 2023 21:39:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D82A416F1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9E5061BF3A8
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:39:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C1F6416C4;
+	Wed, 12 Jul 2023 21:41:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C1F6416C4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 92CF71BF3A8
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 776F060AEC
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:39:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 776F060AEC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C45783BFC
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 21:41:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C45783BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PQC4WqZP7-iY for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 21:39:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AB7F60AE6
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6AB7F60AE6
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 21:39:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 43EF5240002;
- Wed, 12 Jul 2023 21:39:06 +0000 (UTC)
-Date: Wed, 12 Jul 2023 23:39:05 +0200
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20230712233905.2a4358a8@windsurf>
-In-Reply-To: <20230523195411.231639-1-bernd.kuhls@t-online.de>
-References: <20230523195411.231639-1-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689197957;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=fppTJLYhs1B1TF3xFkN7HBba+34kmL+tCQwGlZum+L4=;
- b=L5nhMzJy4gn3tWAHAV98Gn6vSlgxrRpFPYM71NvlUbkCUbVQYo8Uh7kB0CpDp59Uw62RqB
- Xwld8pEnJ4jp48Ufumrqelf9TY+vu4qDifhhZt29b/fvYkaG9SxaLI3lOQtGbYjmpZRCXE
- ox+SxtkugPB7ui50vcOWEi048a8ePZcKYeol5h8MBrrT/RyDb5eDwituldUsHLX37SgU1g
- XmIkOZLNzaocBtNOqZ38DBGkcupJVcZo/Kqvo+wjX8FzB3XzXlgnzXMRkfhiBe/WyydwX6
- sIbGu3BXZC2w/uUUHjzNHVmLqQs7L2n84fb8Xu/lv7R+h0X140T/i2oH75hw3A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=L5nhMzJy
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/eudev: bump version to
- 3.2.12
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9aG924NFAJ6w for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 21:41:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D4C283BFB
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 21:41:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D4C283BFB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7A4E786F4D; Wed, 12 Jul 2023 21:41:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 12 Jul 2023 23:41:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: da2a418ff980dd8deffd8e73050d2333ae4ecfd0
+X-Git-Newrev: 5444dd5e0f0a672d164f9d7362a949c103620a6d
+X-Patchwork-Hint: ignore
+Message-Id: <20230712214137.7A4E786F4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: install keyboard maps only
+ if necessary
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,34 +58,70 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 23 May 2023 21:54:11 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5444dd5e0f0a672d164f9d7362a949c103620a6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> https://github.com/eudev-project/eudev/releases/tag/v3.2.12
-> 
-> Removed patch 0001, a different fix was applied in 2015:
-> https://github.com/eudev-project/eudev/commit/c7badd37d3ac5b06b1fb170b7dfc8ed7c00ce64b
-> 
-> Removed patch 0002 which is included in this release.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> Build-tested using this defconfig:
+They are required only for system emulation, so pull a patch already
+reviewed upstream that makes the installation conditional:
 
-Applied to master, thanks.
+    https://patchwork.kernel.org/project/qemu-devel/patch/20230327172147.196607-1-casantos@redhat.com/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...n-install-keyboard-maps-only-if-necessary.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/package/qemu/0003-meson-install-keyboard-maps-only-if-necessary.patch b/package/qemu/0003-meson-install-keyboard-maps-only-if-necessary.patch
+new file mode 100644
+index 0000000000..8ba7f3cf15
+--- /dev/null
++++ b/package/qemu/0003-meson-install-keyboard-maps-only-if-necessary.patch
+@@ -0,0 +1,38 @@
++From 9d9b74f806f5dbca53df6630c1a0591eaedd4500 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@redhat.com>
++Date: Sun, 1 Jan 2023 21:00:57 -0300
++Subject: [PATCH] meson: install keyboard maps only if necessary
++
++They are required only for system emulation (i.e. have_system is true).
++
++Upstream: https://patchwork.kernel.org/project/qemu-devel/patch/20230327172147.196607-1-casantos@redhat.com/
++Signed-off-by: Carlos Santos <casantos@redhat.com>
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
++---
++ pc-bios/keymaps/meson.build | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/pc-bios/keymaps/meson.build b/pc-bios/keymaps/meson.build
++index 158a3b410c..bff3083313 100644
++--- a/pc-bios/keymaps/meson.build
+++++ b/pc-bios/keymaps/meson.build
++@@ -47,7 +47,7 @@ if native_qemu_keymap.found()
++                        build_by_default: true,
++                        output: km,
++                        command: [native_qemu_keymap, '-f', '@OUTPUT@', args.split()],
++-                       install: true,
+++                       install: have_system,
++                        install_dir: qemu_datadir / 'keymaps')
++   endforeach
++ 
++@@ -56,4 +56,6 @@ else
++   install_data(keymaps.keys(), install_dir: qemu_datadir / 'keymaps')
++ endif
++ 
++-install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
+++if have_system
+++  install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
+++endif
++-- 
++2.31.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
