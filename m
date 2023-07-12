@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7D49EB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3041FEB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6497F41F12;
-	Wed, 12 Jul 2023 19:51:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6497F41F12
+	by smtp4.osuosl.org (Postfix) with ESMTP id D209F41C5E;
+	Wed, 12 Jul 2023 19:51:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D209F41C5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IhAZsdG-iwJh; Wed, 12 Jul 2023 19:51:08 +0000 (UTC)
+	with ESMTP id iLQpj_vDblGw; Wed, 12 Jul 2023 19:51:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DBE141C3F;
-	Wed, 12 Jul 2023 19:51:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DBE141C3F
+	by smtp4.osuosl.org (Postfix) with ESMTP id C335B4007B;
+	Wed, 12 Jul 2023 19:51:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C335B4007B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A0D331BF3BD
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:51:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 501241BF3BD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:51:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A355404AE
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:51:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A355404AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17D4F403A5
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:51:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17D4F403A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6ZJgoDHew_mH for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 19:51:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 675704015A
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 675704015A
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:51:05 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9BCC760004;
- Wed, 12 Jul 2023 19:51:01 +0000 (UTC)
-Date: Wed, 12 Jul 2023 21:51:00 +0200
+ with ESMTP id 3GSg24LaGvV5 for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 19:51:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E4964015A
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2E4964015A
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:51:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 060071BF205;
+ Wed, 12 Jul 2023 19:51:11 +0000 (UTC)
+Date: Wed, 12 Jul 2023 21:51:10 +0200
 To: Christian Stewart via buildroot <buildroot@buildroot.org>
-Message-ID: <20230712215100.4f35aa53@windsurf>
-In-Reply-To: <20230711221456.1703814-1-christian@aperture.us>
-References: <20230711221456.1703814-1-christian@aperture.us>
+Message-ID: <20230712215110.1ee1ba3b@windsurf>
+In-Reply-To: <20230711224332.1799239-1-christian@aperture.us>
+References: <20230711224332.1799239-1-christian@aperture.us>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689191462;
+ d=bootlin.com; s=gm1; t=1689191472;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=+rF1RAB8P2uHSYrOIpuJqqjk/H0ZlDtEDuLuBoldr8c=;
- b=aknPTD1Ie/Zciip/yZjPR9HztAC9N8+X/MUJ/we2D+p5w2ILcHAiwGHDLt5MysHxbP/q6q
- fsE4I5hH9YKVN34kwOdsF47t2CKUpF8KKihJGm9OoYGl/nI9iV5nR8QmeZu3zvy2xsE3Uk
- 1QJUt54P5VfMzTOEKDZZ1FMCZdgOj8J9tEoyQ9+ki0dOriAtT5XGLrjZM7Tkp2vCH9aP6k
- RrIXurb3U1CwyOxiXE/czxmwv77OVMxLl0RLLrAOcy4TZtmiX1ocztzNoB/HW+ulbeNk7j
- PeT5JJR3WCFdNTnTFjk78iUHbJqKY5/xzb8rEeXXQXfJd7hUfemtg16J2KkUHw==
+ bh=KhyoU61PJamwWCMX3EmzWoGywrX5h2qygzvuK6rbahQ=;
+ b=kAinseB3E9Pk5OHXeWWa6ylHqHPYsfQY+PqUlyqVoKW0BP3pnPe0u+8gAQgePb1tfHOZsa
+ KihSZHXYzwAIKgPDDcSvrHYbj8a+mLX7ozJIasZqMHY4cJZN97olsCWHSKEuo0moz+AiYa
+ t/8vllC3cD8MJJQUL+efawB9qsdoSLWnSfDbPej2gFAGTU84mZM1oxnEHqPKnBH07ZuY2K
+ dt0DQ1WI3cDOBKnIXIVbvq99KOotAKcL0lyxcYOpBgwHrVL1mFFE54Gvj4ABZhJV1tp4zF
+ rImD96LA9xN66Hm426Z+nHXZWqnmULKyqQ3j5V64z+GrX3/GWSghzfOdz88Mlw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aknPTD1I
-Subject: Re: [Buildroot] [PATCH 1/1] package/go: security bump to version
- 1.19.11
+ header.s=gm1 header.b=kAinseB3
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/docker-engine: bump version
+ to v24.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,29 +78,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 11 Jul 2023 15:14:56 -0700
+On Tue, 11 Jul 2023 15:43:31 -0700
 Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-> go1.19.11 (released 2023-07-11) includes a security fix to the net/http package,
-> as well as bug fixes to cgo, the cover tool, the go command, the runtime, and
-> the go/printer package.
-> 
-> CVE-2023-29406 and Go issue https://go.dev/issue/60374
+> https://github.com/moby/moby/releases/tag/v24.0.4
 > 
 > Signed-off-by: Christian Stewart <christian@aperture.us>
 > ---
->  package/go/go.hash | 2 +-
->  package/go/go.mk   | 2 +-
+>  package/docker-engine/docker-engine.hash | 2 +-
+>  package/docker-engine/docker-engine.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks.
 
 Thomas
 -- 
