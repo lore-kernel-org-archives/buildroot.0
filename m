@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6377EEB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:29:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3C6DEB64DD
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:30:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10B604062B;
-	Wed, 12 Jul 2023 19:29:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B604062B
+	by smtp4.osuosl.org (Postfix) with ESMTP id A16C841EAF;
+	Wed, 12 Jul 2023 19:30:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A16C841EAF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1bjZubqgEmeH; Wed, 12 Jul 2023 19:29:22 +0000 (UTC)
+	with ESMTP id yA-AIKWkW-cG; Wed, 12 Jul 2023 19:30:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2B2A4195A;
-	Wed, 12 Jul 2023 19:29:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2B2A4195A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 049E81BF3BD
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:29:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B480940542;
+	Wed, 12 Jul 2023 19:30:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B480940542
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CB1901BF3BD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:30:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD2DA83A9C
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:29:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD2DA83A9C
+ by smtp2.osuosl.org (Postfix) with ESMTP id A468D401B2
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:30:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A468D401B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XiaFXFOfoJiE for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 19:29:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFAA882BF4
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFAA882BF4
- for <buildroot@busybox.net>; Wed, 12 Jul 2023 19:29:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 54C1E240002;
- Wed, 12 Jul 2023 19:29:15 +0000 (UTC)
-Date: Wed, 12 Jul 2023 21:29:14 +0200
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20230712212914.6ee4ab6d@windsurf>
-In-Reply-To: <20230609162018.1231615-1-francois.perrad@gadz.org>
-References: <20230609162018.1231615-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689190156;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BvtvcvHxoq2I9VSVbauiJNGLTCGnoCN+DJOawZhzVjI=;
- b=Yax650Le5e9NYKDauNm1FbxMkvAfx0o/qUEcGprtoeR6h1laZD+vOaDCjkY6nbJox8Pddo
- 9XThZQtnNLzraSeIZmpYruIHppgv5E4zBsxJTWkwgpjdB+EpZuMK5kd4N7YxTOjp2jq4rf
- FcUxQU7+Hal8ODuu63SPbjG+t3sWayOeBg6xK7rvCh5c+IvdFVwkURpq7Zwt+lzBXm53Em
- bLu18EXQc/jZ58Mz1xmUbd/mnAxrB6CiovADmIRYW42FzdvKAjqRp3lCyik6lktr4WYUwt
- Mq3nWni79TgueYcQQrt+ABvlOX0JE7SbDpnJKNiMtfCBoBu+be5Ifq0HBvVbMw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Yax650Le
-Subject: Re: [Buildroot] [PATCH 1/8] package/perl-data-optlist: bump to
- version 0.114
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C0pBj42-gqSy for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D675E4012B
+ for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D675E4012B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C2E4C86EE3; Wed, 12 Jul 2023 19:30:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 12 Jul 2023 21:29:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 170c218e4403944eae58bb80cc5cf1d198883a7c
+X-Git-Newrev: 1b52f1e0b0cdd7b54acb63354e12c0e61d1b122f
+X-Patchwork-Hint: ignore
+Message-Id: <20230712193041.C2E4C86EE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test_perftest: update
+ test kernel to 6.1.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,32 +58,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  9 Jun 2023 18:20:11 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1b52f1e0b0cdd7b54acb63354e12c0e61d1b122f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl-data-optlist/perl-data-optlist.hash | 6 +++---
->  package/perl-data-optlist/perl-data-optlist.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/package/test_perftest.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I've applied to master patches 1, 2, 3 and 6 of this series. I've
-marked patches 4, 5, 7 and 8 as Superseded as we already applied
-similar patches doing the same version bumps.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/testing/tests/package/test_perftest.py b/support/testing/tests/package/test_perftest.py
+index 680b70d784..08089456c2 100644
+--- a/support/testing/tests/package/test_perftest.py
++++ b/support/testing/tests/package/test_perftest.py
+@@ -12,7 +12,7 @@ class TestPerftest(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.91"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.33"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
