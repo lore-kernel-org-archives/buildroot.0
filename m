@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1633DEB64DA
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6377EEB64DA
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jul 2023 19:29:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A67B541EC3;
-	Wed, 12 Jul 2023 19:28:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A67B541EC3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10B604062B;
+	Wed, 12 Jul 2023 19:29:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B604062B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EYFhf7I8FxAd; Wed, 12 Jul 2023 19:28:29 +0000 (UTC)
+	with ESMTP id 1bjZubqgEmeH; Wed, 12 Jul 2023 19:29:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9ABE04050E;
-	Wed, 12 Jul 2023 19:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ABE04050E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 107651BF3BD
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:27:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2B2A4195A;
+	Wed, 12 Jul 2023 19:29:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2B2A4195A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 049E81BF3BD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:29:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA2E2403A5
- for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:27:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA2E2403A5
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD2DA83A9C
+ for <buildroot@lists.busybox.net>; Wed, 12 Jul 2023 19:29:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD2DA83A9C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6KgNy_bGurtH for <buildroot@lists.busybox.net>;
- Wed, 12 Jul 2023 19:27:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE3CF40A55
- for <buildroot@buildroot.org>; Wed, 12 Jul 2023 19:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE3CF40A55
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC57686ED2; Wed, 12 Jul 2023 19:27:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 12 Jul 2023 21:27:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f2b5dc42abe5da70c09c8bdcb6cf2d5809d569a9
-X-Git-Newrev: 392f88becd87f12c5faf7fe4e3232ba60f50ad1a
-X-Patchwork-Hint: ignore
-Message-Id: <20230712192744.DC57686ED2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-gd: bump to version 2.77
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XiaFXFOfoJiE for <buildroot@lists.busybox.net>;
+ Wed, 12 Jul 2023 19:29:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFAA882BF4
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AFAA882BF4
+ for <buildroot@busybox.net>; Wed, 12 Jul 2023 19:29:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 54C1E240002;
+ Wed, 12 Jul 2023 19:29:15 +0000 (UTC)
+Date: Wed, 12 Jul 2023 21:29:14 +0200
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230712212914.6ee4ab6d@windsurf>
+In-Reply-To: <20230609162018.1231615-1-francois.perrad@gadz.org>
+References: <20230609162018.1231615-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689190156;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=BvtvcvHxoq2I9VSVbauiJNGLTCGnoCN+DJOawZhzVjI=;
+ b=Yax650Le5e9NYKDauNm1FbxMkvAfx0o/qUEcGprtoeR6h1laZD+vOaDCjkY6nbJox8Pddo
+ 9XThZQtnNLzraSeIZmpYruIHppgv5E4zBsxJTWkwgpjdB+EpZuMK5kd4N7YxTOjp2jq4rf
+ FcUxQU7+Hal8ODuu63SPbjG+t3sWayOeBg6xK7rvCh5c+IvdFVwkURpq7Zwt+lzBXm53Em
+ bLu18EXQc/jZ58Mz1xmUbd/mnAxrB6CiovADmIRYW42FzdvKAjqRp3lCyik6lktr4WYUwt
+ Mq3nWni79TgueYcQQrt+ABvlOX0JE7SbDpnJKNiMtfCBoBu+be5Ifq0HBvVbMw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Yax650Le
+Subject: Re: [Buildroot] [PATCH 1/8] package/perl-data-optlist: bump to
+ version 0.114
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,63 +78,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=392f88becd87f12c5faf7fe4e3232ba60f50ad1a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  9 Jun 2023 18:20:11 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/perl-gd/Config.in    | 2 +-
- package/perl-gd/perl-gd.hash | 6 +++---
- package/perl-gd/perl-gd.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl-data-optlist/perl-data-optlist.hash | 6 +++---
+>  package/perl-data-optlist/perl-data-optlist.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
-index 044e601021..bff6244d98 100644
---- a/package/perl-gd/Config.in
-+++ b/package/perl-gd/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_PERL_GD
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_GD
- 	help
--	  Perl interface to the gd2 graphics library.
-+	  Perl interface to the libgd graphics library.
- 
- 	  https://metacpan.org/release/GD
- 
-diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
-index 97f1da821a..fd9321be60 100644
---- a/package/perl-gd/perl-gd.hash
-+++ b/package/perl-gd/perl-gd.hash
-@@ -1,6 +1,6 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--md5  fb4bacab10ed4f28d52c2aabdaf866bb  GD-2.76.tar.gz
--sha256  693d9e3d709e9188a682cb9090a77b70aac12a04e84128677577b94e4331775b  GD-2.76.tar.gz
-+# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  da3f969367ea2e6d217ec05d3b98bc6f  GD-2.77.tar.gz
-+sha256  b56c88b8ef3be016ce29bb62dd1f1b6f6b5fbcaa57fea59e9468af6901016fb5  GD-2.77.tar.gz
- 
- # computed by scancpan
- sha256  1e2250289d6df4ba1c24f7550982d7ffaff2c97cd02e847659406e1afd28e83f  LICENSE
-diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
-index cd32c7fb8f..17c24bc971 100644
---- a/package/perl-gd/perl-gd.mk
-+++ b/package/perl-gd/perl-gd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_GD_VERSION = 2.76
-+PERL_GD_VERSION = 2.77
- PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
- PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
- PERL_GD_DEPENDENCIES = host-perl-extutils-pkgconfig zlib gd
+I've applied to master patches 1, 2, 3 and 6 of this series. I've
+marked patches 4, 5, 7 and 8 as Superseded as we already applied
+similar patches doing the same version bumps.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
