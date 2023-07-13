@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B520C001B0
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 21:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93328C001DE
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 21:11:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9948B40B29;
-	Thu, 13 Jul 2023 21:11:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9948B40B29
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1BE4E4050C;
+	Thu, 13 Jul 2023 21:11:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BE4E4050C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rjTrgtwoEbvx; Thu, 13 Jul 2023 21:11:16 +0000 (UTC)
+	with ESMTP id n9Xaw3hpWan0; Thu, 13 Jul 2023 21:11:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CFE4F4044A;
-	Thu, 13 Jul 2023 21:11:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFE4F4044A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8190B1BF383
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5AA0F405AA;
+	Thu, 13 Jul 2023 21:11:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AA0F405AA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E856A1BF383
  for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 687BA40B29
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFB0B42166
  for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:11:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 687BA40B29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFB0B42166
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cUiXf9vQM_tt for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BVozumHmTaPv for <buildroot@lists.busybox.net>;
  Thu, 13 Jul 2023 21:11:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5D2C404CA
+ by smtp4.osuosl.org (Postfix) with ESMTP id B063C42144
  for <buildroot@buildroot.org>; Thu, 13 Jul 2023 21:11:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5D2C404CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B063C42144
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93C0987000; Thu, 13 Jul 2023 21:11:13 +0000 (UTC)
+ id 9DE7887001; Thu, 13 Jul 2023 21:11:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 13 Jul 2023 23:01:58 +0200
+Date: Thu, 13 Jul 2023 23:02:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fe7d5e9695f057ad0e0fa9ff2a45c3150591665b
-X-Git-Newrev: 320cba89512b36b26c7e9447e0f726cc9add8fb3
+X-Git-Oldrev: 320cba89512b36b26c7e9447e0f726cc9add8fb3
+X-Git-Newrev: 83f11700fe7743aee243ced057873e105889b36a
 X-Patchwork-Hint: ignore
-Message-Id: <20230713211113.93C0987000@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-firmware: Add Broadcom BNX2
+Message-Id: <20230713211113.9DE7887001@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: add QCA9377 BT
  firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -64,52 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=320cba89512b36b26c7e9447e0f726cc9add8fb3
+commit: https://git.buildroot.net/buildroot/commit/?id=83f11700fe7743aee243ced057873e105889b36a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Deploy firmware files as well.
+
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-firmware/Config.in         | 7 ++++++-
+ package/linux-firmware/Config.in         | 5 +++++
  package/linux-firmware/linux-firmware.mk | 6 ++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 4b415a7da2..72a5bcddcd 100644
+index 72a5bcddcd..3ae72564cc 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -449,8 +449,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_BROADCOM_TIGON3
- 	  Firmware files for Broadcom Tigon3 ethernet cards
- 	  (tigon)
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X
-+config BR2_PACKAGE_LINUX_FIRMWARE_BNX2
- 	bool "Broadcom NetXtremeII"
-+	help
-+	  Firmware files for Broadcom NetXtreme ethernet cards (bnx2)
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X
-+	bool "Broadcom NetXtremeII 10Gb"
+@@ -69,6 +69,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT
  	help
- 	  Firmware files for Broadcom NetXtreme 10Gb ethernet cards
- 	  (bnx2x)
+ 	  Firmware files for QCA Rome 6174A bluetooth support.
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_9377_BT
++	bool "Qualcomm Atheros QCA9377 Bluetooth"
++	help
++	  Firmware files for QCA9377 bluetooth support.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_AR3011
+ 	bool "Qualcomm Atheros 3011"
+ 	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 393f82774d..1819ae71f0 100644
+index 1819ae71f0..9383b20c15 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -527,6 +527,12 @@ LINUX_FIRMWARE_FILES += tigon/*
- # which is installed unconditionally
+@@ -65,6 +65,12 @@ LINUX_FIRMWARE_FILES += qca/rampatch_usb_00000302.bin qca/nvm_usb_00000302.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2),y)
-+LINUX_FIRMWARE_FILES += bnx2/*
-+# No license file; the license is in the file WHENCE
-+# which is installed unconditionally
++# Qualcomm Atheros QCA9377 Bluetooth
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_9377_BT),y)
++LINUX_FIRMWARE_FILES += qca/rampatch_00230302.bin qca/nvm_00230302.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
- LINUX_FIRMWARE_FILES += bnx2x/*
- # No license file; the license is in the file WHENCE
+ # Realtek 87xx Bluetooth
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX_BT),y)
+ LINUX_FIRMWARE_FILES += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
