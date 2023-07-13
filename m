@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 204EFC001E0
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 21:33:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BAE7C001E0
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 21:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BABD4209A;
-	Thu, 13 Jul 2023 21:33:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BABD4209A
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC4E34216A;
+	Thu, 13 Jul 2023 21:33:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC4E34216A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fuNhADcDxtGE; Thu, 13 Jul 2023 21:33:27 +0000 (UTC)
+	with ESMTP id E1U9rIbQIBcQ; Thu, 13 Jul 2023 21:33:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F2A24214B;
-	Thu, 13 Jul 2023 21:33:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F2A24214B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DE204219D;
+	Thu, 13 Jul 2023 21:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DE204219D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1954A1BF383
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:33:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 628201BF383
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6F7C83EA7
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:33:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6F7C83EA7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3CA1581384
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:33:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CA1581384
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S2oQzNjnf1T4 for <buildroot@lists.busybox.net>;
- Thu, 13 Jul 2023 21:33:22 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2901683D13
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2901683D13
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 21:33:22 +0000 (UTC)
+ with ESMTP id FHk1CSSq0h8l for <buildroot@lists.busybox.net>;
+ Thu, 13 Jul 2023 21:33:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82F9C81349
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 82F9C81349
+ for <buildroot@buildroot.org>; Thu, 13 Jul 2023 21:33:34 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 63EB313F8B7;
- Thu, 13 Jul 2023 23:33:19 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A842A13F87C;
+ Thu, 13 Jul 2023 23:33:31 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 13 Jul 2023 23:33:13 +0200
-Message-ID: <20230713213313.105116-1-ju.o@free.fr>
+Date: Thu, 13 Jul 2023 23:33:25 +0200
+Message-ID: <20230713213325.105157-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1689284000;
- bh=Gbsb3RbDNvuDTwcFmn3USTVSv4VnzHR+T8XKBZh4xI8=;
+ d=free.fr; s=smtp-20201208; t=1689284012;
+ bh=ia95ugCyJH/L+umd8HRmWQIoLOi6Xd0fj9+rgN4x8Ac=;
  h=From:To:Cc:Subject:Date:From;
- b=WpSdrpiIrKMmUdSsU1o8Q495eDK4oobRTPXWAuzaO3LtRS/C0mmVSL5g+kQd1OzWw
- gFzQdhpFm5SQY96zBWsd1zh1tv418917xguPzRPoIqSq8OX4ZnQuKIY9w9jQ6mX8EG
- oZ8R30milF5PXVAL7ULp4pUsOfPrnYlLLhgrpVKELFNdpeaDCAcX7tQgSjUiXiXXN1
- jIh7k/KKP5ekgJMqrRwLRhXD5hP4aG5g0iLDrZ/Dov/pgQjYPBbZ+YbRDdYJzuRZt5
- +f1kXuAaWTVpGxcCRooAQLJQudwyICulrPQvJTTa3uKkWUH4uDQC+gCVZYgl+hjlC3
- Z8JQUC4tKowow==
+ b=Cn85SGzg6fj8pUi1sSFYoAG8ND+FcW+RoFKA/nrcFHwnZ/vmrHQg0LqBqWIo1Lxcv
+ niv8ouLnTwrfALWBbswCnGnsmWyJYuCDYKz+QaVvRk3WX4FiQsHpOZBxyqHMpcqwKt
+ ow0iCVdQXfPGej3qEIDgYa5Zsvbn+6wk/bcHGOn6BSIKr8zfELcOzRdaxu+y9KzN4T
+ d6JOvvi8I5wJ6Ghk3CRx/03ifDXhQnvUTigcPTYMoi+g4W+6L/erKvHtMBeFXGurda
+ BIOpBX775G+207K/DJEItFFAhcuOuJ1tPjCc7EDX1gFawDrwzWFkaC7xtJVi8O0RWP
+ flwoy1RC2kVpw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=WpSdrpiI
-Subject: [Buildroot] [PATCH 1/1] support/testing/tests/package/test_lz4.py:
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Cn85SGzg
+Subject: [Buildroot] [PATCH 1/1] support/testing/tests/package/test_zstd.py:
  new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -80,40 +80,40 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                |  1 +
- support/testing/tests/package/test_lz4.py | 11 +++++++++++
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_zstd.py | 11 +++++++++++
  2 files changed, 12 insertions(+)
- create mode 100644 support/testing/tests/package/test_lz4.py
+ create mode 100644 support/testing/tests/package/test_zstd.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 0918e9f721..d9e81989a8 100644
+index 0918e9f721..b9bb95a074 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1742,6 +1742,7 @@ F:	support/testing/tests/package/test_kexec.py
- F:	support/testing/tests/package/test_kexec/
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lsof.py
-+F:	support/testing/tests/package/test_lz4.py
- F:	support/testing/tests/package/test_mtools.py
- F:	support/testing/tests/package/test_ncdu.py
- F:	support/testing/tests/package/test_octave.py
-diff --git a/support/testing/tests/package/test_lz4.py b/support/testing/tests/package/test_lz4.py
+@@ -1762,6 +1762,7 @@ F:	support/testing/tests/package/test_stress_ng.py
+ F:	support/testing/tests/package/test_xz.py
+ F:	support/testing/tests/package/test_z3.py
+ F:	support/testing/tests/package/test_z3/
++F:	support/testing/tests/package/test_zstd.py
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+diff --git a/support/testing/tests/package/test_zstd.py b/support/testing/tests/package/test_zstd.py
 new file mode 100644
-index 0000000000..988200250a
+index 0000000000..24dc5fb90d
 --- /dev/null
-+++ b/support/testing/tests/package/test_lz4.py
++++ b/support/testing/tests/package/test_zstd.py
 @@ -0,0 +1,11 @@
 +from tests.package.test_compressor_base import TestCompressorBase
 +
 +
-+class TestLz4(TestCompressorBase):
++class TestZstd(TestCompressorBase):
 +    __test__ = True
 +    config = TestCompressorBase.config + \
 +        """
-+        BR2_PACKAGE_LZ4=y
-+        BR2_PACKAGE_LZ4_PROGS=y
++        BR2_PACKAGE_ZSTD=y
 +        """
-+    compress_cmd = "lz4"
++    compress_cmd = "zstd"
++    compressed_file_ext = ".zst"
 -- 
 2.41.0
 
