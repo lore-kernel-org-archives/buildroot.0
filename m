@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DDF4C001DE
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:26:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82A92C0015E
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:29:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 374A8417D6;
-	Thu, 13 Jul 2023 20:26:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 374A8417D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DC804178E;
+	Thu, 13 Jul 2023 20:29:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DC804178E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nx94Qp2ZMKZW; Thu, 13 Jul 2023 20:26:41 +0000 (UTC)
+	with ESMTP id x3wCOYurhNKe; Thu, 13 Jul 2023 20:29:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B06141796;
-	Thu, 13 Jul 2023 20:26:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B06141796
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 78EC81BF3D0
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:26:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6913A41760;
+	Thu, 13 Jul 2023 20:29:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6913A41760
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EEE6D1BF3D0
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:29:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5F56E83EDD
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F56E83EDD
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5C8B4178C
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5C8B4178C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bozKxbFP90gp for <buildroot@lists.busybox.net>;
- Thu, 13 Jul 2023 20:26:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3FCA83EDF
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F3FCA83EDF
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:26:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3AB7240009;
- Thu, 13 Jul 2023 20:26:03 +0000 (UTC)
-Date: Thu, 13 Jul 2023 22:26:02 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230713222602.74bdb3b0@windsurf>
-In-Reply-To: <20230713102320.124607-1-giulio.benetti@benettiengineering.com>
-References: <20230713102320.124607-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689279963;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Ha94FUnb844psfnYd+Z/MoDJI1Bd2usWlLBk0rAznd4=;
- b=SSe1N8MauAkoncHnpgMJC+i2h9P4F2gqab8Zpcs7nkXeNs2bsNJ6UrWnUnJycsINdu0ED1
- 1bM7lzZvy4rf1m5vAkxAnivW29j0qCMRXDaT2hUqnIUcE9gLj9tBwrZVciM+f9kF2NE5tD
- WkCvcMJ8GHfJiesJwy/lTVdMN8ihqaQM6IllzKtc22Gz5LiWTFnJ0LY6UR4ZzQrDyuPkwd
- pVfhk81CJymWRwd4lRCMvr8tj+y3HY+nEEzptE1IvXkrbxXzTCXPRwmb3bQuv/gS5qDTTL
- mTYeJMFebG779hXGylMWqmRrXujdf3O6mME0+Z8ZMGER9ldipwQVtIC3Rq57gA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SSe1N8Ma
-Subject: Re: [Buildroot] [PATCH] package/sunxi-mali-utgard-driver: bump to
- version 2023-07-13
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uoCuizUbyVxh for <buildroot@lists.busybox.net>;
+ Thu, 13 Jul 2023 20:29:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0726541760
+ for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0726541760
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E9A1C86FDE; Thu, 13 Jul 2023 20:29:00 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 13 Jul 2023 22:27:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d3534eca22827e69872f2cb7280bb6b0ccd0962d
+X-Git-Newrev: effe9f895e6642a2a92df1f283f5afc609d774fb
+X-Patchwork-Hint: ignore
+Message-Id: <20230713202900.E9A1C86FDE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ghostscript: security bump version
+ to 10.01.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,30 +58,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 13 Jul 2023 12:23:20 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=effe9f895e6642a2a92df1f283f5afc609d774fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> With this patch Linux 6.3 is supported.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash | 2 +-
->  package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes CVE-2023-36664:
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-36664
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index 30c45a5a74..2e4b6ac750 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10011/SHA512SUMS
+-sha512  d944be9e8aef68d1176d64c40db6fa86d55d0c9e30047f2147c02806ab61cfe9ac2cb00d4e5b218ff3c51cc6ed47ceffe1bac4dd9d4cc1760b7974f30c6c2735  ghostscript-10.01.1.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10012/SHA512SUMS
++sha512  ee20f0e12f553a3d04578e71a0d45defebc71117ce4dc2c14043985bfe7348ad7f8b2fe98fc9b4f5b935ecb32e50dc340be67d6ef58190542ec6d0f9da1de380  ghostscript-10.01.2.tar.xz
+ 
+ # Hash for license file:
+ sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index d215afccd2..8a39d4b695 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GHOSTSCRIPT_VERSION = 10.01.1
++GHOSTSCRIPT_VERSION = 10.01.2
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
