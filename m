@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37FEDC001B0
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:25:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3AB3C001B0
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:25:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7F4B405B3;
-	Thu, 13 Jul 2023 20:25:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7F4B405B3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 82B21417AA;
+	Thu, 13 Jul 2023 20:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82B21417AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bN1TIw8_ecoY; Thu, 13 Jul 2023 20:25:13 +0000 (UTC)
+	with ESMTP id iyPfM82KqDfY; Thu, 13 Jul 2023 20:25:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BE1D416F0;
-	Thu, 13 Jul 2023 20:25:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BE1D416F0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5A3311BF980
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:24:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3FFB417BE;
+	Thu, 13 Jul 2023 20:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3FFB417BE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 04E8C1BF3D0
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:24:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3251940575
+ by smtp4.osuosl.org (Postfix) with ESMTP id B68BF42151
  for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:24:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3251940575
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B68BF42151
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b1MeaMtOak8L for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1QA9qukAw2MO for <buildroot@lists.busybox.net>;
  Thu, 13 Jul 2023 20:24:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6770340B29
+ by smtp4.osuosl.org (Postfix) with ESMTP id B35AC42150
  for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:24:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6770340B29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B35AC42150
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 552BB86FCE; Thu, 13 Jul 2023 20:24:06 +0000 (UTC)
+ id AF98B86FCB; Thu, 13 Jul 2023 20:24:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 13 Jul 2023 22:10:11 +0200
+Date: Thu, 13 Jul 2023 22:23:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 764664285872ef62999b9e70736a2468195321d2
-X-Git-Newrev: 3d07ba0f28c3668b20ca92406951b0bf92dd542e
+X-Git-Oldrev: 13a59c31822a4efdb55079db4bce4d4c71c05721
+X-Git-Newrev: f77320b1072d81f9b69e31341d319d0ec906abf6
 X-Patchwork-Hint: ignore
-Message-Id: <20230713202406.552BB86FCE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-werkzeug: bump version to
- 2.3.6
+Message-Id: <20230713202406.AF98B86FCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jinja2: update project URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d07ba0f28c3668b20ca92406951b0bf92dd542e
+commit: https://git.buildroot.net/buildroot/commit/?id=f77320b1072d81f9b69e31341d319d0ec906abf6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- update project URL (where the old one re-directs to)
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 4 ++--
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-jinja2/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 0b60a40066..07b6f2f40d 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/werkzeug/json
--md5  28c3ec6a4b1ce8f06c85612c1dfa351a  Werkzeug-2.2.3.tar.gz
--sha256  2e1ccc9417d4da358b9de6f174e3ac094391ea1d4fbef2d667865d819dfd0afe  Werkzeug-2.2.3.tar.gz
-+md5  de26f240d6f95689a8d15170c2d958b6  Werkzeug-2.3.6.tar.gz
-+sha256  98c774df2f91b05550078891dee5f0eb0cb797a522c757a2452b9cee5b202330  Werkzeug-2.2.3.tar.gz
- # Locally computed sha256 checksums
- sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 0dd27d145f..3b7c663437 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/python-jinja2/Config.in b/package/python-jinja2/Config.in
+index 84a46bd264..5623d4723c 100644
+--- a/package/python-jinja2/Config.in
++++ b/package/python-jinja2/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_PYTHON_JINJA2
+ 	  provides a Django inspired non-XML syntax but supports
+ 	  inline expressions and an optional sandboxed environment.
  
--PYTHON_WERKZEUG_VERSION = 2.2.3
-+PYTHON_WERKZEUG_VERSION = 2.3.6
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/02/3c/baaebf3235c87d61d6593467056d5a8fba7c75ac838b8d100a5e64eba7a0
-+PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/d1/7e/c35cea5749237d40effc50ed1a1c7518d9f2e768fcf30b4e9ea119e74975
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
+-	  http://jinja.pocoo.org/
++	  https://jinja.palletsprojects.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
