@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A46AC001DE
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:29:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 778FBC001DF
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:30:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03133417AF;
-	Thu, 13 Jul 2023 20:29:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03133417AF
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED46241760;
+	Thu, 13 Jul 2023 20:30:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED46241760
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p5kQYUerAX24; Thu, 13 Jul 2023 20:29:17 +0000 (UTC)
+	with ESMTP id BOz3RASBLIWD; Thu, 13 Jul 2023 20:30:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 205B1417A1;
-	Thu, 13 Jul 2023 20:29:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 205B1417A1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8FA201BF3D0
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:29:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 297A540575;
+	Thu, 13 Jul 2023 20:30:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 297A540575
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E10781BF3D0
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 664CD41760
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:29:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 664CD41760
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C3C742151
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:30:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C3C742151
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GFoV-3cK8Cz7 for <buildroot@lists.busybox.net>;
- Thu, 13 Jul 2023 20:29:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F309A40B96
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:29:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F309A40B96
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF64686FDD; Thu, 13 Jul 2023 20:29:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 13 Jul 2023 22:27:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 636264541fa14640989f308b0a5d2490c3c26e29
-X-Git-Newrev: d3534eca22827e69872f2cb7280bb6b0ccd0962d
-X-Patchwork-Hint: ignore
-Message-Id: <20230713202900.DF64686FDD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lrCqc6wwsd2S for <buildroot@lists.busybox.net>;
+ Thu, 13 Jul 2023 20:30:37 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2D3F42152
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F2D3F42152
+ for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:30:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0FEE660004;
+ Thu, 13 Jul 2023 20:30:33 +0000 (UTC)
+Date: Thu, 13 Jul 2023 22:30:32 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230713223032.5bb36539@windsurf>
+In-Reply-To: <20230713201808.65932-1-ju.o@free.fr>
+References: <20230713201808.65932-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689280234;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8NzkHZHYlvMFbwYPIjtQejOMy019fLdCRslJ5GTtsJE=;
+ b=ObWe97lFUmdVv7ZhHCXBjdo6CLT8VdeIMK1Giu+LAC9o10yJ62sohoc53R2DsJ4CwNtk+Q
+ i4aYDW2hCPn5MIhoXODQ1GQv035af0oXaY0K5BKWN+Q/Nj5+WOCcVbYLrzm6V7jpayTGmr
+ 3MGJ4MJrw2AHJIYyUGXGtKjyAGQN99iKjAMkJECmEWkWjZfP6qvHuhGWhYk4N1kS0Zx1jl
+ Jbcsmd7TxVEMFvO5cicvHFm94vzk1v371zJRi5bU5ZECFb4zVUEW77+JQja366vcqtTfUQ
+ JIs49aoXRBOLmeQSXMcSsORRcr05XBaIx9AG46iG3abvBOEcTEp3r0rTB77Fsw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ObWe97lF
+Subject: Re: [Buildroot] [PATCH 1/1]
  support/testing/tests/package/test_acpica.py: run runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,148 +78,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3534eca22827e69872f2cb7280bb6b0ccd0962d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 13 Jul 2023 22:18:08 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  2 +
- support/testing/tests/package/test_acpica.py       | 91 ++++++++++++++++++++++
- .../test_acpica/rootfs-overlay/root/dsdt.asl       |  9 +++
- 3 files changed, 102 insertions(+)
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  DEVELOPERS                                    |  2 +
+>  support/testing/tests/package/test_acpica.py  | 91 +++++++++++++++++++
+>  .../test_acpica/rootfs-overlay/root/dsdt.asl  |  9 ++
+>  3 files changed, 102 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_acpica.py
+>  create mode 100644 support/testing/tests/package/test_acpica/rootfs-overlay/root/dsdt.asl
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c3c5a7022d..476f092a16 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1728,6 +1728,8 @@ F:	support/testing/tests/package/sample_python_gnupg.py
- F:	support/testing/tests/package/sample_python_hwdata.py
- F:	support/testing/tests/package/sample_python_pyalsa.py
- F:	support/testing/tests/package/sample_python_spake2.py
-+F:	support/testing/tests/package/test_acpica.py
-+F:	support/testing/tests/package/test_acpica/
- F:	support/testing/tests/package/test_bzip2.py
- F:	support/testing/tests/package/test_compressor_base.py
- F:	support/testing/tests/package/test_ddrescue.py
-diff --git a/support/testing/tests/package/test_acpica.py b/support/testing/tests/package/test_acpica.py
-new file mode 100644
-index 0000000000..f7dd64d7f0
---- /dev/null
-+++ b/support/testing/tests/package/test_acpica.py
-@@ -0,0 +1,91 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestAcpica(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_ACPICA=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+           # overlay to add an ASL source file
-+           infra.filepath("tests/package/test_acpica/rootfs-overlay"))
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check a program can execute
-+        self.assertRunOk("iasl -v")
-+
-+        # Check "acpiexamples" demo is running
-+        self.assertRunOk("acpiexamples")
-+
-+        # Check "acpihelp" convert error code 0x1 to AE_ERROR
-+        self.assertRunOk("acpihelp -e 1 | grep -F AE_ERROR")
-+
-+        # Check "acpihelp" convert 0xA3 opcode to NoOpOp
-+        self.assertRunOk("acpihelp -o 0xA3 | grep -F NoOpOp")
-+
-+        # Compile a simple ASL file
-+        # The output file is automatically set to "dsdt.aml"
-+        self.assertRunOk("iasl dsdt.asl")
-+
-+        # Evaluate the AML with acpiexec
-+        # STR0 is expected to be "Hello Buildroot!"
-+        cmd = "acpiexec -b 'evaluate STR0' dsdt.aml"
-+        cmd += " | grep -F '\"Hello Buildroot!\"'"
-+        self.assertRunOk(cmd)
-+
-+        # INT1 is exepcted to be 12345678
-+        cmd = "acpiexec -b 'evaluate INT1' dsdt.aml"
-+        cmd += " | grep -F 12345678"
-+        self.assertRunOk(cmd)
-+
-+        # Evalute the TEST method which prints its argument
-+        cmd = "acpiexec -b 'evaluate TST2 \"Hello World\"' dsdt.aml"
-+        cmd += " | grep -F 'Arg0=Hello World'"
-+        self.assertRunOk(cmd)
-+
-+        # dump aml to text
-+        self.assertRunOk("acpidump -f dsdt.aml -o dsdt.dump")
-+
-+        # Rebuild dump to binary with acpixtract
-+        # Output is implicitly into the dsdt.dat file
-+        self.assertRunOk("acpixtract -a dsdt.dump")
-+
-+        # Compare with acpibin
-+        # The rebuilt dsdt.dat is expected to be the same
-+        cmd = "acpibin -a dsdt.aml dsdt.dat"
-+        cmd += " | grep -F 'Files compare exactly'"
-+        self.assertRunOk(cmd)
-+
-+        # Compare with cmp, to check acpibin
-+        self.assertRunOk("cmp dsdt.aml dsdt.dat")
-+
-+        # Disassemble the compiled ASL
-+        # Output file is implicitly "dsdt.dsl", we rename it to
-+        # "disa.dsl" to make sure it will not clash with the original
-+        # file, when recompiling.
-+        self.assertRunOk("iasl dsdt.aml && mv -v dsdt.dsl disa.dsl")
-+
-+        # Disassembled output should contain our string
-+        self.assertRunOk("grep STR0 disa.dsl | grep '\"Hello Buildroot!\"'")
-+
-+        # Recompile the disassembled file
-+        self.assertRunOk("iasl disa.dsl")
-+
-+        # Compare the first compiled file with the one recompiled from
-+        # the disassembly. There are expected to be identical.
-+        cmd = "acpibin -a dsdt.aml disa.aml"
-+        cmd += " | grep -F 'Files compare exactly'"
-+        self.assertRunOk(cmd)
-+
-+        # Also compare with "cmp"
-+        self.assertRunOk("cmp dsdt.aml disa.aml")
-diff --git a/support/testing/tests/package/test_acpica/rootfs-overlay/root/dsdt.asl b/support/testing/tests/package/test_acpica/rootfs-overlay/root/dsdt.asl
-new file mode 100644
-index 0000000000..24f51565be
---- /dev/null
-+++ b/support/testing/tests/package/test_acpica/rootfs-overlay/root/dsdt.asl
-@@ -0,0 +1,9 @@
-+DefinitionBlock ("", "DSDT", 2, "", "", 0x0)
-+{
-+    Name (STR0, "Hello Buildroot!")
-+    Name (INT1, 0x12345678)
-+    Method (TST2, 1)
-+    {
-+        printf ("Arg0=%o", Arg0)
-+    }
-+}
+Applied to master, thanks. Sadly, I only spotted the minor typo in the
+commit title after pushing :)
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
