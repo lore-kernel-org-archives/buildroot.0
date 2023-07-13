@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1092C001DC
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E094C001DC
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:24:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55219416F0;
-	Thu, 13 Jul 2023 20:20:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55219416F0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0619740B96;
+	Thu, 13 Jul 2023 20:24:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0619740B96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Klq5dnJc04Ih; Thu, 13 Jul 2023 20:20:34 +0000 (UTC)
+	with ESMTP id jZHL4BDN8fbD; Thu, 13 Jul 2023 20:24:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FDAE40B96;
-	Thu, 13 Jul 2023 20:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FDAE40B96
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 80B031BF3D0
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:20:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4103E405B3;
+	Thu, 13 Jul 2023 20:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4103E405B3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 40DFF1BF3D0
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:24:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 59B6983EDC
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:20:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59B6983EDC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 191CD405B3
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:24:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 191CD405B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VSEzxffEQ7cq for <buildroot@lists.busybox.net>;
- Thu, 13 Jul 2023 20:20:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2ADB83ECA
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D2ADB83ECA
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:20:29 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0896.dip0.t-ipconnect.de [91.58.8.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C519DA4C0160
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 22:20:24 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36476)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qK2nY-0003ZC-0n
- for buildroot@buildroot.org; Thu, 13 Jul 2023 22:20:24 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gmO-1wQMFlcM for <buildroot@lists.busybox.net>;
+ Thu, 13 Jul 2023 20:24:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58D7840575
+ for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:24:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58D7840575
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 46A4286FCC; Thu, 13 Jul 2023 20:24:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 13 Jul 2023 22:20:24 +0200
-Message-Id: <20230713202024.1662441-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1689279624;
- bh=uoIOMklHgBvMq24nYVXfHxrve4yPIyxnq6XFgZPhyMQ=;
- h=From:To:Subject:Date:From;
- b=oU+mvOi3tAz1MhAZu+hruV01GhGEWHll2SRq5n06yMY+csTaaEs+4bAshqTIHddoa
- 1PGgC+gJUvWm4j88HBpE8jxzSMm11CM8DJ1RYedLyqIN0mqjIs0HoYg76pyEykUMkw
- Eo1yFa5qcgiPfFKBBD9L4NZkiqLyYGS/cIf1INZzSJ0OKJ57gqNMoMAV5lehzSdKP2
- pyVZD0yh4FUFF2I0gNrY0Yp9X2WAfm1tGLpywfh5cMUCVNPEahccJLaIfUUwYE4v+P
- BfezOQkl/q6W5cDQFsD6Q/4mQ1iazFU06q+3YnwJQFj0GG2YrepmhAC4+d1mR3+vmK
- yihS8npl4WcqQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=oU+mvOi3
-Subject: [Buildroot] [PATCH 1/1] package/ghostscript: security bump version
- to 10.01.2
+Date: Thu, 13 Jul 2023 22:10:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b324c880426a3126767d43bd3018431eef5fe7e6
+X-Git-Newrev: 764664285872ef62999b9e70736a2468195321d2
+X-Patchwork-Hint: ignore
+Message-Id: <20230713202406.46A4286FCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pytz: bump version to 2023.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,48 +55,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2023-36664:
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-36664
+commit: https://git.buildroot.net/buildroot/commit/?id=764664285872ef62999b9e70736a2468195321d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ghostscript/ghostscript.hash | 4 ++--
- package/ghostscript/ghostscript.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pytz/python-pytz.hash | 4 ++--
+ package/python-pytz/python-pytz.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index 30c45a5a74..2e4b6ac750 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
+diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
+index 6d6e1b606c..861f9d6f35 100644
+--- a/package/python-pytz/python-pytz.hash
++++ b/package/python-pytz/python-pytz.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10011/SHA512SUMS
--sha512  d944be9e8aef68d1176d64c40db6fa86d55d0c9e30047f2147c02806ab61cfe9ac2cb00d4e5b218ff3c51cc6ed47ceffe1bac4dd9d4cc1760b7974f30c6c2735  ghostscript-10.01.1.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10012/SHA512SUMS
-+sha512  ee20f0e12f553a3d04578e71a0d45defebc71117ce4dc2c14043985bfe7348ad7f8b2fe98fc9b4f5b935ecb32e50dc340be67d6ef58190542ec6d0f9da1de380  ghostscript-10.01.2.tar.xz
- 
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index d215afccd2..8a39d4b695 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/pytz/json
+-md5  3b9356e4dcd441df922cc01e8eb15983  pytz-2022.7.tar.gz
+-sha256  7ccfae7b4b2c067464a6733c6261673fdb8fd1be905460396b97a073e9fa683a  pytz-2022.7.tar.gz
++md5  fe54c8f8a1544b4e78b523b264ab071b  pytz-2023.3.tar.gz
++sha256  1d8ce29db189191fb55338ee6d0387d82ab59f3d00eac103412d64e0ebd0c588  pytz-2023.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
+diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
+index 057a3ef173..4754efe41a 100644
+--- a/package/python-pytz/python-pytz.mk
++++ b/package/python-pytz/python-pytz.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--GHOSTSCRIPT_VERSION = 10.01.1
-+GHOSTSCRIPT_VERSION = 10.01.2
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
--- 
-2.39.2
-
+-PYTHON_PYTZ_VERSION = 2022.7
++PYTHON_PYTZ_VERSION = 2023.3
+ PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
+-PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/6d/37/54f2d7c147e42dc85ffbc6910862bb4f141fb3fc14d9a88efaa1a76c7df2
++PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/5e/32/12032aa8c673ee16707a9b6cdda2b09c0089131f35af55d443b6a9c69c1d
+ PYTHON_PYTZ_SETUP_TYPE = setuptools
+ PYTHON_PYTZ_LICENSE = MIT
+ PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
