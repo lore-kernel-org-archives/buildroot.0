@@ -1,69 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76987C001B0
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 21:25:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C8FC001E0
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 21:33:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B92D405B3;
-	Thu, 13 Jul 2023 21:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B92D405B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D2A441591;
+	Thu, 13 Jul 2023 21:33:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D2A441591
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xBCTc45EhxZ9; Thu, 13 Jul 2023 21:25:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vo5H86QaYh1V; Thu, 13 Jul 2023 21:33:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 602EC405AA;
-	Thu, 13 Jul 2023 21:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 602EC405AA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 23D521BF383
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:25:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C45040499;
+	Thu, 13 Jul 2023 21:33:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C45040499
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C57D1BF383
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:33:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D411660E22
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:25:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D411660E22
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6636483D13
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 21:33:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6636483D13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YVUPqj5OZqdn for <buildroot@lists.busybox.net>;
- Thu, 13 Jul 2023 21:25:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85AAA60D78
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 85AAA60D78
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 21:25:21 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 84C411C0002;
- Thu, 13 Jul 2023 21:25:19 +0000 (UTC)
-Date: Thu, 13 Jul 2023 23:25:18 +0200
-To: Viacheslav Bocharov via buildroot <buildroot@buildroot.org>
-Message-ID: <20230713232518.7aed05dc@windsurf>
-In-Reply-To: <20221125102650.2804226-1-adeep@lexina.in>
-References: <20221125102650.2804226-1-adeep@lexina.in>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vJO6AeQ5JvN6 for <buildroot@lists.busybox.net>;
+ Thu, 13 Jul 2023 21:33:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7617783EAC
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7617783EAC
+ for <buildroot@buildroot.org>; Thu, 13 Jul 2023 21:33:10 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9445413F87C;
+ Thu, 13 Jul 2023 23:33:05 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 13 Jul 2023 23:32:56 +0200
+Message-ID: <20230713213256.105060-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689283519;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=p/SQ46t8MEMBV81gwA4/Q9KCJwMsW3Hg9/a7H5tg1MM=;
- b=prghZL41RS9sKxgqRvOYe8VXizMqtFNigxXWiF0hORMdR5GyJ0SNF23lLsCnvWQlcrw3/H
- cI0C97gY9b60s3Xhy516BRxvmPdtg5ys5GWA6PrER/q+c7Y1YcviZ/e/tJ15IxWqgNZP+Y
- oYvbCZkg1g7q0L2OzPFgOLnLkZT94XlsSu+2dAGg/DLuSCh2XRwNqbTTzIiZ4CmLlzeg0j
- Wkcx8YWoDAsUwHaAFQyXZGZSIzL9zt85gh3Uztku4AtTuVqZ0ndoAR7BckPrQkiRKUD1Ij
- x3DCd6JLwWFoEuZTt2qiUVH2x/xSMowHFp0KX5mtJAZI6GJ8V3D/rxWKnfKCCQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=prghZL41
-Subject: Re: [Buildroot] [PATCH] rtl8822cs: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1689283986;
+ bh=A79HkVWX700WGjjhVxMSzMkDzh9id3k9bLj2SDE28e0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=MnqQoHUVRWXRZpoIrxhw+QgTlmZEn8lpmmmrMckUUvfTFKXGW/lXE0s6y3RnOeiXT
+ xLbuVnzN+6Pv3RCkiSF0aBV/au2ys+8CmoSvjyCqNzt3zxnOYoyLuHRDK0r7rO2+ET
+ q+ApdzAaD6fbkpkwUU4HE9CBgOMuUvhj1vX5/o5O+fBnd/M1sMjuj3i/NMV41Ohps+
+ osszh+K31BE2bi8BaUPr6+wqumhkoSlbjQkZ6Y+VyZOx9rBfx008H9ohaJNQ8j4ALM
+ Q1CjOBsmV56aBegIg7wcRCyPfrAR5yD1UnnQ+vrnvPAbzx66fuPri8eZeOfHCSCbNm
+ YRqWutHi43OWA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=MnqQoHUV
+Subject: [Buildroot] [PATCH 1/1]
+ support/testing/tests/package/test_brotli.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,138 +72,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Viacheslav Bocharov <adeep@lexina.in>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Viacheslav,
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                   |  1 +
+ support/testing/tests/package/test_brotli.py | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
+ create mode 100644 support/testing/tests/package/test_brotli.py
 
-On Fri, 25 Nov 2022 13:26:50 +0300
-Viacheslav Bocharov via buildroot <buildroot@buildroot.org> wrote:
-
-> This package adds the rtl88822cs WiFi driver.
->    repo: https://github.com/jethome-ru/rtl88x2cs.git
->    branch: tune_for_jethub
-> 
-> Driver is known to support Realtek RTL8822CS SDIO WiFi/BT chip.
-> 
-> Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
-
-Sorry for the super long delay, but good news: I have now applied your
-patch! I made some changes, which I will explain below for your
-reference.
-
-First, the commit title should have been:
-
-	package/rtl8822cs: new package
-
-> diff --git a/package/rtl8822cs/Config.in b/package/rtl8822cs/Config.in
-> new file mode 100644
-> index 0000000000..c887ae7e02
-> --- /dev/null
-> +++ b/package/rtl8822cs/Config.in
-> @@ -0,0 +1,12 @@
-> +comment "RTL8822CS needs a Linux kernel to be built"
-
-rtl8822cs in lower-case, like the package name.
-
-> +	depends on !BR2_s390x
-> +	depends on !BR2_LINUX_KERNEL
-> +
-> +config BR2_PACKAGE_RTL8822CS
-> +	bool "Realtek RTL8822CS SDIO Wi-Fi driver"
-
-Just:
-
-	bool "rtl8822cs"
-
-like the package name.
-
-> +	depends on !BR2_s390x
-> +	depends on BR2_LINUX_KERNEL
-> +	help
-> +          Realtek RTL8822CS Wi-Fi driver as a kernel module (JetHome repository)
-
-Line was slightly too long, so I wrapped it. You can run "make
-check-package" to get this kind of sanity checking.
-
-> +
-> +          https://github.com/jethome-ru/rtl88x2cs/
-> diff --git a/package/rtl8822cs/rtl8822cs.hash b/package/rtl8822cs/rtl8822cs.hash
-> new file mode 100644
-> index 0000000000..11633e1633
-> --- /dev/null
-> +++ b/package/rtl8822cs/rtl8822cs.hash
-> @@ -0,0 +1 @@
-> +sha256 4cd97adcf44dc4196fce6f87e68370ad588b19bbc38b246615f9c05739f7bd00  rtl8822cs-db8dc6c7ae1a75af3f6d7fa4f05456c76f5cab3e.tar.gz
-
-         ^^ we want two spaces as a separator
-
-Also, we want a comment that says where the hash comes from. In this case:
-
-# Locally calculated
-
-> diff --git a/package/rtl8822cs/rtl8822cs.mk b/package/rtl8822cs/rtl8822cs.mk
-> new file mode 100644
-> index 0000000000..799a07823d
-> --- /dev/null
-> +++ b/package/rtl8822cs/rtl8822cs.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# Realtek RTL8822CS driver
-
-Just:
-
-# rtl8822cs
-
-(i.e, just the package name)
-
-> +#
-> +################################################################################
-> +
-> +RTL8822CS_VERSION = db8dc6c7ae1a75af3f6d7fa4f05456c76f5cab3e
-
-I updated that to a newer commit that has fixes to build with Linux >= 6.3.
-
-> +RTL8822CS_SITE = $(call github,jethome-ru,rtl88x2cs,$(RTL8822CS_VERSION))
-> +RTL8822CS_LICENSE = GPL-2.0
-
-It would be nice to ask the maintainer of this github repo to add a
-license file.
-
-> +
-> +RTL8822CS_MODULE_MAKE_OPTS = \
-> +	CONFIG_RTL8822CS=m \
-> +	KVER=$(LINUX_VERSION_PROBED) \
-> +	KSRC=$(LINUX_DIR)
-> +
-> +define RTL8822CS_LINUX_CONFIG_FIXUPS
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MAC80211)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MMC)
-> +endef
-> +
-> +
-
-One too many newline here.
-
-As I said: I fixed all those minor details and applied to our master
-branch.
-
-Thanks for your contribution!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0918e9f721..e8078e3e3c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1728,6 +1728,7 @@ F:	support/testing/tests/package/sample_python_gnupg.py
+ F:	support/testing/tests/package/sample_python_hwdata.py
+ F:	support/testing/tests/package/sample_python_pyalsa.py
+ F:	support/testing/tests/package/sample_python_spake2.py
++F:	support/testing/tests/package/test_brotli.py
+ F:	support/testing/tests/package/test_bzip2.py
+ F:	support/testing/tests/package/test_compressor_base.py
+ F:	support/testing/tests/package/test_ddrescue.py
+diff --git a/support/testing/tests/package/test_brotli.py b/support/testing/tests/package/test_brotli.py
+new file mode 100644
+index 0000000000..779b956cb3
+--- /dev/null
++++ b/support/testing/tests/package/test_brotli.py
+@@ -0,0 +1,13 @@
++from tests.package.test_compressor_base import TestCompressorBase
++
++
++class TestBrotli(TestCompressorBase):
++    __test__ = True
++    config = TestCompressorBase.config + \
++        """
++        BR2_PACKAGE_BROTLI=y
++        """
++    compress_cmd = "brotli"
++    decompress_cmd = "brotli -d"
++    compressed_file_ext = ".br"
++    timeout = 60
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
