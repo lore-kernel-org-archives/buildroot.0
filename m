@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D69DC0015E
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDA19C001B0
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 20:58:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26379417EE;
-	Thu, 13 Jul 2023 20:31:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26379417EE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3697E4050C;
+	Thu, 13 Jul 2023 20:58:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3697E4050C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yZnBD_2VRVNV; Thu, 13 Jul 2023 20:31:49 +0000 (UTC)
+	with ESMTP id ID2wnLdHsAxk; Thu, 13 Jul 2023 20:58:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 57425417C7;
-	Thu, 13 Jul 2023 20:31:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57425417C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74F8640497;
+	Thu, 13 Jul 2023 20:58:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74F8640497
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1D3731BF3D0
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:31:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DD671BF3D0
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 005D942152
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 005D942152
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12E4D41C0A
+ for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 20:58:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12E4D41C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nkVlldHYgQV3 for <buildroot@lists.busybox.net>;
- Thu, 13 Jul 2023 20:31:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2AEA42151
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A2AEA42151
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:31:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CA29A1C0003;
- Thu, 13 Jul 2023 20:31:33 +0000 (UTC)
-Date: Thu, 13 Jul 2023 22:31:32 +0200
+ with ESMTP id Gm0q4gf2APHA for <buildroot@lists.busybox.net>;
+ Thu, 13 Jul 2023 20:58:53 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7108341B4F
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7108341B4F
+ for <buildroot@buildroot.org>; Thu, 13 Jul 2023 20:58:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 60B53FF804;
+ Thu, 13 Jul 2023 20:58:50 +0000 (UTC)
+Date: Thu, 13 Jul 2023 22:58:49 +0200
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20230713223132.0202ca4e@windsurf>
-In-Reply-To: <20230608190234.3523884-1-bernd.kuhls@t-online.de>
-References: <20230608190234.3523884-1-bernd.kuhls@t-online.de>
+Message-ID: <20230713225849.6ff97822@windsurf>
+In-Reply-To: <20230608191301.3527479-1-bernd.kuhls@t-online.de>
+References: <20230608191301.3527479-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689280294;
+ d=bootlin.com; s=gm1; t=1689281930;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=bkSmpFzfKYddyURE+8ttCoJUS8lscJVmoXXOcN4AS+s=;
- b=MMzeE8XfScb95K/YfxSAHdtGYBKyGsoXbULwImAvxt4GGJgfMQdkDcUbHShLZqtXgf1ncv
- XAlIlvDtQ3uFH4rvPY2UZIse4q+GSciuG5ipiLCQhVM3E2jrzc+7Rp3+NrdXiA5c3NqCKE
- R6BRN7YZNm0AetOlxAruP8jDII4YCRn5XXcCKLvxugbV1BVZ2zVfxc6b/xJo2nldq0YDMa
- 8Ej+vwy2NtkZf21ADk7Dzsl8Sf0vpHBOWMpqDEEijU4sytlzEGOle2Bmg2V0jwbMKy0tlW
- 7iAT97ZiwpgMbAynARsOlVPOFHiH1tAJv3mbcKASR+qvzpa5sSIzt05cjnK4Ag==
+ bh=psh3ahRCiw06ku+Wzd6IBg9qT7+C+/GVCsdKdxQJsk0=;
+ b=MxAyl41nAyzrtSS/+aaAPYCJ8gge8vezxC5uGEkzHeu13PUz5aRcFhPwhb1Nn9tQym9K48
+ o5oeKWEyHiovjMkyoLcxL6pyhNb5g43drHTx/C1mmnnpd0hCgKQbnGsQEkMCWF7C24z5F3
+ Ntao2chHzwSobgXeWs2mL4/DXDBnX6hMCERFJ4Q23QANnNLCpC1JRRxT1ILM+CK273LuzP
+ cdiRGsO7vebwtT/b+dvkmggmFLmBzINOsZQrb/aTl1fAkkGwbk3QXf0CCYlW6gIHHkvzBn
+ tbWLx89IQpKwD7xk27f0v+sRmkeoXER+AudTl0ZTzi+01HkxA8coVHTGzL//NA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MMzeE8Xf
-Subject: Re: [Buildroot] [PATCH 1/1] package/libfribidi: bump to version
- 1.0.13
+ header.s=gm1 header.b=MxAyl41n
+Subject: Re: [Buildroot] [PATCH 1/1] package/linux-firmware: bump version to
+ 20230515
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,23 +78,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mikhail Boiko <mikhailboiko85@gmail.com>, buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  8 Jun 2023 21:02:34 +0200
+On Thu,  8 Jun 2023 21:13:01 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Release notes:
-> https://github.com/fribidi/fribidi/releases/tag/v1.0.13
+> Updated license hashes due to upstream commits:
+> 
+> - copyright year bumps
+>   https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/LICENSE.amdgpu?id=d0598c3b82f24f3ed811f5505f4090924c4da626
+>   https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/LICENCE.qat_firmware?id=24c9df9b942518717dd53966712df69ac35c8b90
+> 
+> - other changes
+>   https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/LICENCE.qat_firmware?id=588dd07134daf4b0f6f74698f24eeb74ebe90012
+>   https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/WHENCE
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libfribidi/libfribidi.hash | 2 +-
->  package/libfribidi/libfribidi.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/linux-firmware/linux-firmware.hash | 8 ++++----
+>  package/linux-firmware/linux-firmware.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
