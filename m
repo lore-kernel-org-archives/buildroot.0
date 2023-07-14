@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48885EB64DC
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 10:22:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96C89EB64DA
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 10:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 007ED61425;
-	Fri, 14 Jul 2023 10:22:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 007ED61425
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50A3B6141A;
+	Fri, 14 Jul 2023 10:22:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50A3B6141A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m3829Elccyut; Fri, 14 Jul 2023 10:22:26 +0000 (UTC)
+	with ESMTP id HNpT8zQpNBkc; Fri, 14 Jul 2023 10:22:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32FD161429;
-	Fri, 14 Jul 2023 10:22:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32FD161429
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 07DD41BF983
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 10:21:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8628F61458;
+	Fri, 14 Jul 2023 10:22:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8628F61458
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F3C261BF313
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 10:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5E4E61411
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 10:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5E4E61411
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA0D8841B0
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 10:21:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA0D8841B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e8NIxCMbrrmN for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 10:21:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gqmmJEEz6XMm for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 10:21:55 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A2D56143F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5B72841AC
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A2D56143F
- for <buildroot@buildroot.org>; Fri, 14 Jul 2023 10:21:49 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 95914240004;
- Fri, 14 Jul 2023 10:21:47 +0000 (UTC)
-Date: Fri, 14 Jul 2023 12:21:46 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230714122146.4073ba02@windsurf>
-In-Reply-To: <20230713214616.463353-1-james.hilliard1@gmail.com>
-References: <20230713214616.463353-1-james.hilliard1@gmail.com>
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E5B72841AC
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 10:21:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EACB1240004;
+ Fri, 14 Jul 2023 10:21:52 +0000 (UTC)
+Date: Fri, 14 Jul 2023 12:21:52 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230714122152.4793da68@windsurf>
+In-Reply-To: <20230713213325.105157-1-ju.o@free.fr>
+References: <20230713213325.105157-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689330107;
+ d=bootlin.com; s=gm1; t=1689330113;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=YxRkI9nZBYaotQrmKF98t6AHD2Y0A9jolFkhfkqWWpo=;
- b=PCxtFqku5Z43eDxWY3YtK8oUBjSwn+4ul9NHwqty9DoO8CfdAXbRpyYOGUWxkChSW9Dc5O
- c92L9VFEJ2J5FHqvFjN1wqt6446iMvMEeQdgpNUTslNOKHSyCc2dK76Xr5FOUffTyj5Cqt
- wHE2/Ax8FxXeOs0+RqaStxb8IWXMJtkkVUUnC3PGoAvfWMyGon2IfB/4ivgDuZrGP56p/v
- Rawpw/jNQhVJ9644E30nfL2dQO3EmIXxvjiS01jSI1JlOSkURPC2Eadw4hLEXSjv9PdOba
- Pst7k7mG3Z8kYH2pEj1bjF+WVKiD5M0+70hUi47FQGlSZNYJSYvt+eqHb5qh9g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=n2KHS0lGAykm4ofXBVotNqh4RtRk5A1NxafQjKERCAI=;
+ b=XsW42LWtvYR44tgs0A4ZhE2A2nkmRABpKTnRjAT6Ugbcg+0W0F0ZQHcHEDTAemWVGe7ym+
+ kzVQUDY8dTbyna45vDDMZEIdubvjV80SL1/a6YDay6SuhY9mR5uWa1OQgp5kymsoTK9viD
+ mEWZ+6HprUubUPa9xHRGuaGx9eBvVClfvph4uYNQy46jeOkOTddcAd0E0rh1C0VYgm5BwZ
+ ndmRPzCPdLxsrnCk+71ODtxcWNoBw4YjXrctlyX3uu85UT0TW8ipN5PfUDvh8i0Sz8aRtJ
+ p4xtt8UJ/lFZgrZHmghsLXDSlGENRMNL4vmwVP265Nmm7ccu8dk41QCG2/3xow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PCxtFqku
-Subject: Re: [Buildroot] [PATCH 1/1] package/strace: bump to version 6.4
+ header.s=gm1 header.b=XsW42LWt
+Subject: Re: [Buildroot] [PATCH 1/1]
+ support/testing/tests/package/test_zstd.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,14 +84,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 13 Jul 2023 15:46:16 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Thu, 13 Jul 2023 23:33:25 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/strace/strace.hash | 4 ++--
->  package/strace/strace.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  DEVELOPERS                                 |  1 +
+>  support/testing/tests/package/test_zstd.py | 11 +++++++++++
+>  2 files changed, 12 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_zstd.py
 
 Applied to master, thanks.
 
