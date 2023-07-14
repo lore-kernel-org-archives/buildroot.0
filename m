@@ -1,68 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29257EB64DA
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 04:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D01F4EB64DC
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 16:25:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CEA583D1D;
-	Fri, 14 Jul 2023 04:32:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CEA583D1D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6902A61470;
+	Fri, 14 Jul 2023 16:25:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6902A61470
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h9ei1LDRP0yV; Fri, 14 Jul 2023 04:32:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0G44oeX9ubLY; Fri, 14 Jul 2023 16:25:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC02083CEC;
-	Fri, 14 Jul 2023 04:32:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC02083CEC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2B0C51BF384
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 04:32:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9A8360BC7;
+	Fri, 14 Jul 2023 16:25:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9A8360BC7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C8A391BF369
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 16:25:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04A1A401C2
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 04:32:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04A1A401C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE24D42161
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 16:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE24D42161
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vgpnSP8sp2Ki for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 04:32:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 402E240124
- for <buildroot@uclibc.org>; Fri, 14 Jul 2023 04:32:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 402E240124
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 3092386CC7; Fri, 14 Jul 2023 04:32:11 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hve2E52SWhxq for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 16:25:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE5A642157
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE5A642157
+ for <buildroot@uclibc.org>; Fri, 14 Jul 2023 16:25:25 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qKLbe-0004ZF-Qy
+ for buildroot@uclibc.org; Fri, 14 Jul 2023 18:25:22 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Fri, 14 Jul 2023 04:32:11 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: renchunhui2@huawei.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: version
-Message-ID: <bug-15685-163-0aRwbPGUhJ@https.bugs.busybox.net/>
-In-Reply-To: <bug-15685-163@https.bugs.busybox.net/>
-References: <bug-15685-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15685] Buildroot fails to build due to
- host-ncurses' tic crashing on _nc_disable_period
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Fri, 14 Jul 2023 18:24:57 +0200
+Message-ID: <pan$2bb42$b9659503$d206750d$74bf77a7@ID-313208.user.individual.net>
+References: <BE1P281MB166840C4621F6F53B7B1B3FEEC5FA@BE1P281MB1668.DEUP281.PROD.OUTLOOK.COM>
+ <87v8fjpoqi.fsf@48ers.dk>
+ <d23d2495-f724-98b8-1f09-23a3914f3510__44327.5294079044$1687426363$gmane$org@rotronics.co.uk>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] OpenSSL v3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,17 +65,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15685
+Am Thu, 22 Jun 2023 10:24:28 +0100 schrieb Danny Wood:
 
-chunren_r <renchunhui2@huawei.com> changed:
+> Attached is a patch I have made to build v3.0.9 of OpenSSL (LTS until
+> 2026).
+> 
+> Everything in my build tree compiled fine with the new version
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Version|2023.02.2                   |unspecified
+Hi Danny,
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+uploaded your patch so it appears in patchworks:
+https://patchwork.ozlabs.org/project/buildroot/patch/
+20230714162339.1907504-1-bernd@kuhls.net/
+
+It works fine for me as well.
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
