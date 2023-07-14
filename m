@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 413D6EB64DA
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 04:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 357B1EB64DA
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 05:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A142140124;
-	Fri, 14 Jul 2023 04:54:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A142140124
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83BB040AA3;
+	Fri, 14 Jul 2023 05:02:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83BB040AA3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1i6iSHGQj5hZ; Fri, 14 Jul 2023 04:54:23 +0000 (UTC)
+	with ESMTP id nHjCJZQcgQVA; Fri, 14 Jul 2023 05:02:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF42B40150;
-	Fri, 14 Jul 2023 04:54:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF42B40150
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0C5731BF384
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 04:54:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2572401E1;
+	Fri, 14 Jul 2023 05:02:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2572401E1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AF091BF384
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 05:02:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAB6E40124
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 04:54:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAB6E40124
+ by smtp4.osuosl.org (Postfix) with ESMTP id 703844208B
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 05:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 703844208B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2_SwQLfLhmJP for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 04:54:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WSNpzo8aqTDh for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 05:02:54 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76055401C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C7D84207B
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76055401C2
- for <buildroot@buildroot.org>; Fri, 14 Jul 2023 04:54:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4C7D84207B
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 05:02:53 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0896.dip0.t-ipconnect.de [91.58.8.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 92CC4A4C00C8;
- Fri, 14 Jul 2023 06:54:15 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45654)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DF4A8A4C00C8
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 07:02:51 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34020)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qKAop-0004Yg-15;
- Fri, 14 Jul 2023 06:54:15 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qKAx9-00065f-21
+ for buildroot@buildroot.org; Fri, 14 Jul 2023 07:02:51 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jul 2023 06:54:15 +0200
-Message-Id: <20230714045415.2365259-1-bernd@kuhls.net>
+Date: Fri, 14 Jul 2023 07:02:51 +0200
+Message-Id: <20230714050251.3063758-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1689310455;
- bh=AkiX6GUBqYpOvnUJ4C9E5YHadrUEGzgvC2HfHm5ml04=;
- h=From:To:Cc:Subject:Date:From;
- b=ZJvJPZtcSIQWuUl6X4H24zvgOvy4MAbvVInSXqo/Wvxdd4H6dcBK9Xwhsq+4+uF3T
- tUT+3PDHPHgaph+LFS/NVBOn4DYXgkJzKiOt2ejhsAnZLwOIciifKHIL0SbrSsj2Tq
- sAtv3U4FDRFdNYp03bFJJAe6ONrLI/zJh2bU8xYd01hF7RI/fxJvwzmylo+WQLhvvf
- cZQbD3kkhDQjalfRQNnIW31l6kopVh9ED2YfOhsSCPbBLLI8YNmk6QdBGs1AFaErAJ
- dwZVROBuaQB4qb/55o0UYqRuOa4a0SM5UmVuvtpFiOqCU3QvaY9pOHd2E8uOLUO++g
- Y7Mk1+2qhf2AA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202306131828; t=1689310971;
+ bh=9dak+dkfJW00yuDc9mOfLuLde2h/jfTbhJyRrOwLkGQ=;
+ h=From:To:Subject:Date:From;
+ b=Ki5iXRROwNc5aNqsfE045yiEA5iGXexmgL4prsrLu101X6R2PcAWuZ4fBvs+jMEs+
+ fMWFWjFTY6l0miiT4Vv+h06fDHTlnKmhTbg7HAADHH5gA3FVps5sYZ121ndjeCDUbC
+ If7Idtw4q3kAnVUarRZWzwWsz6K9CfVLroLa4R8udmxGRRYbBYbwSyUT1ERaHhdSMA
+ t6gNHej2ln+SQYnJIljPW4UBJVibkr8NVKXB303mWaAX9Rklo0gOxS6D5+244TtrhB
+ F0nP9IIfqo+KuAWWImMXpM7kwcQ1gIcusUB2dGaQQr6nRO7XGpDDUv5a/dNs73V36l
+ KU7wEHIIjQ6rw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=ZJvJPZtc
-Subject: [Buildroot] [PATCH 1/1] package/intel-mediadriver: bump version to
- 23.3.0
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=Ki5iXRRO
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{3,
+ 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,7 +76,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -84,32 +83,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 81fa5ba027..d22732b99f 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  dfcf2facc4f8bf3df6b147222786032be195874adacc2f4071fc6c91a0abdf0a  intel-media-23.2.4.tar.gz
-+sha256  2d0e8892199f1f2365fd8729776bdfd9968a97a63ce1e759b3724bff57e9fc08  intel-media-23.3.0.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index daddf9f8a9..77de031a45 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+diff --git a/linux/Config.in b/linux/Config.in
+index 17bf808cdc..cd0a6a38f6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 23.2.4
-+INTEL_MEDIADRIVER_VERSION = 23.3.0
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.4.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index a4542b94b6..c8e72d31a8 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  a326ab224176c5b17c73c9ccad85f32e49b6e4e764861d57595727b7ef10062c  linux-6.4.2.tar.xz
+-sha256  cb7fdefc207dd4e8ef947fccd687126425edce0138ca11191bc0590c678e6cd7  linux-6.3.12.tar.xz
++sha256  7134ed29360df6f37a26410630283f0592c91a6d2178a9648226d30ddf8c88a1  linux-6.4.3.tar.xz
++sha256  ea460560e2898022c5f3c4649908694dcd75a094ffde726e8c6ca5e0a09491fb  linux-6.3.13.tar.xz
+ sha256  f9a4f91b609f7d332a5f2be01ab86336fa00149fae6bdc19f16fa19f78802d43  linux-6.1.38.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  6499089eae6b271063cb3e873ab7f4ba0543cfb21dcc9c54d9bcf5357db683f6  linux-5.15.120.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1944d47e4e..d886a4659b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -410,8 +410,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.10.186"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.120"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.38"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.3.12"	if BR2_KERNEL_HEADERS_6_3
+-	default "6.4.2"		if BR2_KERNEL_HEADERS_6_4
++	default "6.3.13"	if BR2_KERNEL_HEADERS_6_3
++	default "6.4.3"		if BR2_KERNEL_HEADERS_6_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
 2.39.2
 
