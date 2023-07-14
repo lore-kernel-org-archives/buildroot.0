@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6D83EB64DA
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 07:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB8FEB64DA
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 07:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43F2E81E9D;
-	Fri, 14 Jul 2023 07:04:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43F2E81E9D
+	by smtp1.osuosl.org (Postfix) with ESMTP id C88AD83C8B;
+	Fri, 14 Jul 2023 07:34:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C88AD83C8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UWxoHfut3Z3s; Fri, 14 Jul 2023 07:03:59 +0000 (UTC)
+	with ESMTP id LsBl_w3Ajumw; Fri, 14 Jul 2023 07:34:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 465FE81E8E;
-	Fri, 14 Jul 2023 07:03:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 465FE81E8E
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF46C83FEE;
+	Fri, 14 Jul 2023 07:34:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF46C83FEE
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C67EB1BF419
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 07:03:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7852B1BF36A
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 07:34:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0670416F4
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 07:03:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0670416F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5079B41730
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 07:34:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5079B41730
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AuB6WWUdPOKz for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 07:03:55 +0000 (UTC)
+ with ESMTP id o8VROFoFmEWa for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 07:34:05 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CFB9416F3
-Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7CFB9416F3
- for <buildroot@buildroot.org>; Fri, 14 Jul 2023 07:03:55 +0000 (UTC)
-Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout02.mail.de (Postfix) with ESMTP id 92DA3A042E;
- Fri, 14 Jul 2023 09:03:53 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5181417AB
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D5181417AB
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 07:34:04 +0000 (UTC)
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout01.mail.de (Postfix) with ESMTP id 18C28A2D6F;
+ Fri, 14 Jul 2023 09:34:03 +0200 (CEST)
 Received: from smtp02.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix01.mail.de (Postfix) with ESMTP id 75F5E80172;
- Fri, 14 Jul 2023 09:03:53 +0200 (CEST)
+ by postfix03.mail.de (Postfix) with ESMTP id ECA9680219;
+ Fri, 14 Jul 2023 09:34:02 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (No client certificate requested)
- by smtp02.mail.de (Postfix) with ESMTPSA id 9D3EEA031A;
- Fri, 14 Jul 2023 09:03:52 +0200 (CEST)
+ by smtp02.mail.de (Postfix) with ESMTPSA id 1A726A01BA;
+ Fri, 14 Jul 2023 09:34:02 +0200 (CEST)
 To: buildroot@buildroot.org,
  Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Date: Fri, 14 Jul 2023 09:03:52 +0200
-Message-ID: <1857024.tdWV9SEqCh@kilian-aisec>
-In-Reply-To: <f345dbb5-066f-fbbc-4018-7205b3fdfc61@theobroma-systems.com>
-References: <20230709123355.17002-1-kilian.zinnecker@mail.de>
- <20230709123355.17002-2-kilian.zinnecker@mail.de>
- <f345dbb5-066f-fbbc-4018-7205b3fdfc61@theobroma-systems.com>
+Date: Fri, 14 Jul 2023 09:34:01 +0200
+Message-ID: <5848067.MhkbZ0Pkbq@kilian-aisec>
+In-Reply-To: <c3191f37-551a-0a9b-6fb0-c8662d6faac2@theobroma-systems.com>
+References: <c30c93e29177a1dc15446eff427c7ca8@umbiko.net>
+ <6573492.4vTCxPXJkl@kilian-aisec>
+ <c3191f37-551a-0a9b-6fb0-c8662d6faac2@theobroma-systems.com>
 MIME-Version: 1.0
 X-purgate: clean
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
@@ -63,22 +63,22 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 5416
-X-purgate-ID: 154282::1689318233-697F8199-8ACCC0F0/0/0
+X-purgate-size: 6653
+X-purgate-ID: 154282::1689320042-197F8199-D9695BB3/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1689318233;
- bh=COqlWRI0XbusrLrtspPJEyZ49fILZxZlVbWOa+yGj54=;
+ d=mail.de; s=mailde202009; t=1689320043;
+ bh=Vm8v1DlRN1fw5rwRcLex3pCZrMZjQfPonxPWhufuESU=;
  h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=w/3eonwXhBC8hcbsxZfztAvgxVouM1zwihgu/vvIkHD4/T+om7VZjnHVKiPs4smIf
- BK2sGIy78631YD2Z7Kgs7au/02tT/n8fIzEF1HX4lj/UcnAS78AV5IoQaz8pM0DNWy
- wSJioLYq3/rJmXwFNDGWlrVXtOKI1xfB8C9xjGcvAU20e802QbcFh0pE+QGMLPq9sz
- zrlKd8mhPlp3cQNSocvYFZQoHteE7QySmHxR/YVGfRbrudqvCj6T7m13kaK7D/Wxe8
- Enq9mrmltJkmmQu2I2CjXj0mDfu4cy067chBeZVDqFXeAaTH8kyMg+VIfm5wCuS3zG
- 7bzDWWwHZmodQ==
+ b=SI4SNlQx02atScWyq3a/bMSRq4tg8Fqx8k8vpCv5P2a1CFQAl4mPTAovotTfAw4/L
+ 8v3xsTIhSatutSXb9G7L72wMmezVfCHa+barZMfQgjheWuxCQKrjB9d8vNTg5l2lQA
+ f/0F5nULj1W7rO+XJWRhDKwpKIaWWVUwp+IDXHAYt4bOmtvt3ex7Web1zJ/CI3DoKv
+ tBuLbpsZh+hgZDY5OsfhNxtOlB/nV655q5QojZSs3qW99y/Lolf6TmxeAC7U9B7cdF
+ eAf0dZkTaRCQW4NwYYPhXnQpvReNAfEHVZKvaQGmdUNG4gEBlFXxFbJFsbS9eHUEsy
+ Uy0KuSzU1Om5w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=w/3eonwX
-Subject: Re: [Buildroot] [PATCH v5 1/3] package: add rockchip-rkbin package
+ header.a=rsa-sha256 header.s=mailde202009 header.b=SI4SNlQx
+Subject: Re: [Buildroot] [PATCH v3 1/3] package: add rockchip-rkbin package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,8 +92,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
 Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Andreas Ziegler <br015@umbiko.net>,
+Cc: Andreas Ziegler <br015@umbiko.net>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -102,155 +102,146 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Quentin,
 
-> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_OPTEE_FILE),y)
-> > +UBOOT_DEPENDENCIES += optee-os
+> U-Boot, for all RK3568 and RK3588 based boards, currently requires blobs
+> from rkbin. Therefore, to build U-Boot properly, we need this package.
+> Since there are publicly available boards based on RK3568, I assume we
+> may eventually get support by someone (not necessarily you) for those.
+> Therefore, I suggested we remove the mention to RK3588 as this is not
+> specific to this SoC from Rockchip. No expectation from me on what
+> you're going to do next :)
+
+I think we agree here and as you know the rockchip-rkbin package is now able 
+to also be used for other Rockchip SoCs.
+
+> >> I would highly recommend to keep the same file extension to not confuse
+> >> people since the OP-TEE binary apparently has different formats which we
+> >> can (more easily) distinguish from their file extension (though IIRC,
+> >> reading the header may be enough).
+> > 
+> > Thanks.
 > 
-> I think this is a mistake? We want to use the one from rockchip-=rkbin
-> package and so we don't need to build optee-os package dont' we?
-
-Yes, a copy-paste mistake. Fixed in v6, thanks.
-
-> > +if BR2_PACKAGE_ROCKCHIP_RKBIN
-> > +
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_LATEST_VERSION
-> > +	bool "d6ccfe401ca84a98ca3b85c12b9554a1a43a166c"
-> > +
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
-> > +	bool "Custom version"
-> > +	help
-> > +	  This option allows to use a specific version.
-> > +
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE
-> > +	string "Rockchip rkbin version"
-> > +	depends on BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
-> > +
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_VERSION
-> > +	string
-> > +	default "d6ccfe401ca84a98ca3b85c12b9554a1a43a166c" \
-> > +		if BR2_PACKAGE_ROCKCHIP_RKBIN_LATEST_VERSION
+> Just to make things a bit clearer here, I commented on bl31.bin file
+> extension while saying something about OP-TEE binary, the former is TF-A
+> blob while the latter is bl32.bin.
 > 
-> It'd be nice if we could reuse the version already in
-> BR2_PACKAGE_ROCKCHIP_RKBIN_LATEST_VERSION symbol but I looked 5min and
-> didn't find anything :/
-
-I removed the LATEST_VERSION now anyway: Rockchip renames the binaries, so an 
-option to use the lastes version would anyway not be stable, as the blob names 
-will then change unpredictably and defconfigs will break. So there is now the 
-default version of the package, or a custom version, if somebody wants to use 
-it.
-
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE
-> > +	bool "Rockchip rkbin tpl file"
-> > +	default n
-> > +
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME
-> > +	string "ddr.bin file path"
-> > +	depends on BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE
-> > +	help
-> > +	  Full path to the tpl file inside the rkbin repository. The
-> > +	  specified file will be copied and used by U-Boot as tpl.
-> > +
+> Also, I was wrong, the file extension isn't used for detecting the file
+> format of OP-TEE OS blob, U-Boot tries to detect an ELF, if not, starts
+> to parse the blob "header" to detect if it's v1 or v2 format.
 > 
-> I think we can merge those two together? If it's an empty string, then
-> we don't use it?
+> But better keep the same file extension though :)
+
+Yes, I agree: it is still beneficial, if the true file extension is kept, even 
+if it is technically not needed. In v6 of the patches I implemented it such, 
+that the file extension is kept.
+
+> >> I can think of two ways of doing this: create a
+> >> subdir after each SoC part number in BINARIES_DIR (e.g.
+> >> BINARIES_DIR/rk3588/bl31.elf) or have the part number in the filename
+> >> (e.g. rk3588_bl31.elf).
+> >> This should allow to install the binary blobs from all SoC supported in
+> >> RKBIN without having to deal with Kconfig options.
+> > 
+> > How so? Because we would then copy all blobs at once into the BINARIES_DIR
+> > everytime?
 > 
-> ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL),"")
-> instead of
-> ifeq ($((BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE),y)
+> Indeed. Then we wouldn't need to care on the rkbin side which blobs to
+> install in BINARIES_DIR. Inside u-boot.mk either, as I would pass the
+> proper path as part of BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS like you did here?
+
+I actually don't like copying ALL Rockchip blobs into BINARIES_DIR everytime: 
+Imagine this would become the common case for multiple packages. It would 
+create a mess in my opinion. And it also is not needed: The package is now 
+implemented such, that a user can optionally specify which blobs are needed 
+and only those specified binaries are copied into BINARIES_DIR, with a generic 
+name, while keeping the original file extension and also uboot now 
+automatically identifies the binary, even so that the file extension can be 
+different. What's not to like? ;)
+
+> >> Looking at the code above, if we want to keep it a bit automagical,
+> >> maybe having the RKBIN binaries called bl31.bin and tee.elf and have a
+> >> Kconfig option for the RKBIN package to select which SoC binary blobs to
+> >> install would be best.
+> > 
+> > In the readme of the rkbin repository they present their file naming
+> > scheme. However, I don't think I like making use of it:
+> > 
+> > 1. We introduce a lot of Kconfig code for some logic that adds choices and
+> > selects files within the rkbin repository. But in the end the user still
+> > has to make the decision, which files are to use, anyway. Then the user
+> > can also just directly specify the true filename in the board defconfig
+> > or .config.
+> What I had in mind was to have a select Kconfig option:
+> choice
+> config BR2_RK3588
+> config BR2_RK3568
+> enchoide
 > 
-> Just a suggestion.
-
-I understand your point, but I actually do like it better the other way: There 
-is one option to tell, whether one wants to use any of the binaries and 
-another to tell which binary that is. This way I can toggle the option in 
-menuconfig without having to erase or retype rather long file paths.
-
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE
-> > +	bool "Rockchip rkbin bl31 file"
-> > +	default n
-> > +
+> and then in rockchip-rkbin (pseudo-code):
 > 
-> Shoudl this depends on !BR2_TARGET_UBOOT_NEEDS_ATF_BL31 ?
+> if BR2_RK3588
+>      install bin/rk35/rk3588_bl31_v1.38.elf $(BINARIES_DIR)/bl31.elf
+>      install bin/rk35/rk3588_bl32_v1.13.bin $(BINARIES_DIR)/tee.elf #add
+> support for tee.bin in U-Boot mk?
+>      install bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.11.bin
+> $(BINARIES_DIR)/ddr.bin
+> elif BR2_RK3568
+> ....
+> fi
 
-I don't actually see much benefit. Ok, it would maybe prevent a rare error if 
-someone has a misconfigured defconfig, but then one could introduce all kinds of 
-error checks all over the place, e.g., some check, that it is not an IMX SoC 
-etc..
+I don't like this: This would mean that we basically write down into the mk 
+each binary for each SoC. If then rockchip decides to "update" a binary by 
+simply renaming it (they have done this before, look at the git history), then 
+the package is broken until some maintainer fixes it again. We would produce 
+alot of code with imho no real benefit. In my oppinion: Whoever wants to use a 
+blob from the repository should simply define which blob is the desired one.
 
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_OPTEE_FILE
-> > +	bool "Rockchip rkbin optee file"
-> > +	default n
-> > +
-> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_OPTEE_FILENAME
-> > +	string "optee.elf file path"
-> > +	depends on BR2_PACKAGE_ROCKCHIP_RKBIN_OPTEE_FILE
-> > +	help
-> > +	  Full path to the optee file inside the rkbin repository.
-> > +          The specified file will be copied and used by U-Boot as
-> > +          optee.
+> The important part would be for the destination filename to match what's
+> expected in boot/u-boot/u-boot.mk:
 > 
-> Issue around the indent, probably tabs vs spaces?
-
-Yes, thanks, fixed it in v6.
-
-> Also, to U-Boot, it's a tee not op-tee. OP-TEE OS is just a possible
-> implementation of a tee OS. You could have something else than OP-TEE OS
-> (though I am personally not aware of any).
-
-Ok, I changed it to only "tee" in v6.
-
-> > +ROCKCHIP_RKBIN_LICENSE = PROPRIETARY
-> > +ROCKCHIP_RKBIN_REDISTRIBUTE = NO
-> > +
+> UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.elf
+> [...]
+> UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
 > 
-> I think it's fine to redistribute it since it's already public? Any
-> reason not to?
-
-I don't think, that because it is on github, that this implies allowance to 
-redistribute. And as I don't know whether it is allowed to redistribute, I go 
-with "NO".
-
-
-> > +ROCKCHIP_RKBIN_INSTALL_STAGING = YES
+> in that scenario, we wouldn't even need to adapt U-Boot makefile other
+> than allowing to depend on rockchip-rkbin rather than trusted-firmware-arm.
 > 
-> I think this is incorrect and should rather be:
-> ROCKCHIP_RKBIN_INSTALL_IMAGES_CMDS?
-
-I agree. Fixed in v6.
-
-> > +ROCKCHIP_RKBIN_INSTALL_TARGET = NO
-> > +
-> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE),y)
-> > +ROCKCHIP_RKBIN_BL31_FILENAME = $(call
-> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME)) +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE),y)
-> > +ROCKCHIP_RKBIN_TPL_FILENAME = $(call
-> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME)) +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_OPTEE_FILE),y)
-> > +ROCKCHIP_RKBIN_OPTEE_FILENAME = $(call
-> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_OPTEE_FILENAME)) +endif
-> > +
-> > +define ROCKCHIP_RKBIN_INSTALL_STAGING_CMDS
-> > +	$(if $(filter y, $(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE)), \
-> > +		cp $(@D)/$(ROCKCHIP_RKBIN_BL31_FILENAME) $
-(BINARIES_DIR)/bl31.elf)
-> > +	$(if $(filter y, $(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE)), \
-> > +		cp $(@D)/$(ROCKCHIP_RKBIN_TPL_FILENAME) $
-(BINARIES_DIR)/ddr.bin)
-> > +	$(if $(filter y, $(BR2_PACKAGE_ROCKCHIP_RKBIN_OPTEE_FILE)), \
-> > +		cp $(@D)/$(ROCKCHIP_RKBIN_OPTEE_FILENAME) $
-(BINARIES_DIR)/tee.elf)
+> > 2. We add a lot dependency: Rockchip may remove or rename files in their
+> > git reblobitory as they like. If we (or any other users) then want to use
+> > a newer commit of their reblobitory, e.g., to use newer blobs, and the
+> > file name / path scheme breaks, we have to fix that again.
 > 
-> I honestly would prefer to keep the original file extension. Not sure
-> how to handle this on U-Boot package makefile side though.
+> This is the responsibility of the package maintainer, like for any other
+> package. I do agree though that the name of the installed binaries
+> should stay consistent between new versions, so that we only need to
+> update rockchip-rkbin and not any other package that depends on it.
 
-I did figure out how to handle different file extensions. Added this in v6.
+This takes unnecessary burden on the maintainer, and that is a bad thing in my 
+opinion. I really think it is a huge plus, if a package is designed such, that 
+it does not need much maintenance and that it is unlikely by design that it 
+breaks due to external reasons (e.g., Rockchip unpredictably deciding to 
+rename their blobs). After all, you never know, whether there is still a 
+maintainer in the future who has time to maintain (or even wants to).
+
+> > 
+> > Thinking out loud:
+> > 
+> > For the rockchip-rkbin package we could feature:
+> > 
+> > * custom git version option (then defconfigs could freeze the repo
+> > version)
+> > * option to specify tpl file name
+> > * option to specify bl31 file name
+> > * option to specify op-tee file name
+> 
+> Well.. that's one thing I completely forgot about. Maybe people don't
+> want to update rockchip-rkbin for their boards... SO yeah, I guess those
+> 4 options actually make more sense than trying to be smart and have a
+> select for each SoC.
+
+Yes, I like this, too. I implemented it like this in v6 (and v5).
 
 Best regards,
 Kilian
-
 
 
 _______________________________________________
