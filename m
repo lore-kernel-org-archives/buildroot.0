@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D01F4EB64DC
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 16:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83445EB64DC
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 16:34:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6902A61470;
-	Fri, 14 Jul 2023 16:25:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6902A61470
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AA8A6146C;
+	Fri, 14 Jul 2023 16:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AA8A6146C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0G44oeX9ubLY; Fri, 14 Jul 2023 16:25:28 +0000 (UTC)
+	with ESMTP id ksvBXKqOGtMx; Fri, 14 Jul 2023 16:34:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9A8360BC7;
-	Fri, 14 Jul 2023 16:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9A8360BC7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C8A391BF369
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 16:25:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BD7160BA3;
+	Fri, 14 Jul 2023 16:34:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BD7160BA3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E9221BF369
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 16:34:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE24D42161
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 16:25:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE24D42161
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5504B41858
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 16:34:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5504B41858
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hve2E52SWhxq for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 16:25:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AWT9ScKHRsoL for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 16:34:45 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE5A642157
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95E3E4016B
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AE5A642157
- for <buildroot@uclibc.org>; Fri, 14 Jul 2023 16:25:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 95E3E4016B
+ for <buildroot@uclibc.org>; Fri, 14 Jul 2023 16:34:45 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qKLbe-0004ZF-Qy
- for buildroot@uclibc.org; Fri, 14 Jul 2023 18:25:22 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qKLkg-0007LI-UE
+ for buildroot@uclibc.org; Fri, 14 Jul 2023 18:34:42 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Fri, 14 Jul 2023 18:24:57 +0200
-Message-ID: <pan$2bb42$b9659503$d206750d$74bf77a7@ID-313208.user.individual.net>
-References: <BE1P281MB166840C4621F6F53B7B1B3FEEC5FA@BE1P281MB1668.DEUP281.PROD.OUTLOOK.COM>
- <87v8fjpoqi.fsf@48ers.dk>
- <d23d2495-f724-98b8-1f09-23a3914f3510__44327.5294079044$1687426363$gmane$org@rotronics.co.uk>
+Date: Fri, 14 Jul 2023 18:34:19 +0200
+Message-ID: <pan$4e5b3$92dac13b$5af1097b$cb35c2af@ID-313208.user.individual.net>
+References: <20230714143752.10215-1-tianyuanhao3__11301.4103307918$1689345521$gmane$org@163.com>
 Mime-Version: 1.0
 User-Agent: Pan/0.148 (Chamechaude; a70bd74)
-Subject: Re: [Buildroot] OpenSSL v3.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/linux-firmware: move old
+ Mediatek WiFi firmware to mediatek
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,22 +64,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Thu, 22 Jun 2023 10:24:28 +0100 schrieb Danny Wood:
+Am Fri, 14 Jul 2023 14:37:52 +0000 schrieb TIAN Yuanhao:
 
-> Attached is a patch I have made to build v3.0.9 of OpenSSL (LTS until
-> 2026).
+> See:
+> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-
+firmware.git/commit/?id=8451c2b1d529dc1a49328ac9235d3cf5bb8a8fcb
 > 
-> Everything in my build tree compiled fine with the new version
+> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 
-Hi Danny,
+Tested-by: Bernd Kuhls <bernd@kuhls.net>
+[build-tested]
 
-uploaded your patch so it appears in patchworks:
-https://patchwork.ozlabs.org/project/buildroot/patch/
-20230714162339.1907504-1-bernd@kuhls.net/
-
-It works fine for me as well.
-
-Regards, Bernd
+Fixes:
+http://autobuild.buildroot.net/results/fd2/
+fd237455c59686d04a795af8b7e54e9f4678d073//
 
 _______________________________________________
 buildroot mailing list
