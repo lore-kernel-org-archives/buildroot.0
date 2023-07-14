@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09236EB64DC
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 21:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20A03C0015E
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 21:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA2CD400D1;
-	Fri, 14 Jul 2023 21:27:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA2CD400D1
+	by smtp2.osuosl.org (Postfix) with ESMTP id D01E740993;
+	Fri, 14 Jul 2023 21:27:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D01E740993
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nmz2YXoHbUTW; Fri, 14 Jul 2023 21:27:00 +0000 (UTC)
+	with ESMTP id zFhGNLfLMB0W; Fri, 14 Jul 2023 21:27:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF10C40993;
-	Fri, 14 Jul 2023 21:26:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF10C40993
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E158E1BF97F
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:26:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CFBF405C4;
+	Fri, 14 Jul 2023 21:27:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CFBF405C4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EF3A1BF97F
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:26:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ADA1760B24
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4415F400D1
  for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADA1760B24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4415F400D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CVP5HTFn9HZq for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 21:26:20 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8CCA607F1
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A8CCA607F1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mySkp9KzuvQ5 for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 21:26:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 813D340327
  for <buildroot@buildroot.org>; Fri, 14 Jul 2023 21:26:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 32004E0002;
- Fri, 14 Jul 2023 21:26:16 +0000 (UTC)
-Date: Fri, 14 Jul 2023 23:26:15 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230714232615.610d9745@windsurf>
-In-Reply-To: <20230714164203.9881-1-ju.o@free.fr>
-References: <20230714164203.9881-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689369976;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=o2TbajmI9tnQKztD3Y9WqQzOpZSyeenUiBezhIe4Q5w=;
- b=P3/qvlhsTKarbXqv4R0hodkiRahKO0kNkekuJonHm03wbHMJ81GPFQiKVZJYikqypY18pp
- DC30PovxNQGcOiSc/+5cvtCdNPFhTNyTEzTq/cUIp1xX8pk5pHmbBWWbClozCLQc1AFOcq
- QyU7htpxu9nruzYaXT1W1NWEz46nsn+qbzIacIq5eWD2wH7zsheEse6chLTezCyzdOKbwI
- tZQMyAcJizHh9BYAdzrdqtRLNE8++BB6k1DhAoHy2C8Kaats5P2pFnbb5PvM3fc9umdiFX
- X8cx5eR31yHKYtTp5v5js2Bt37BxnjizCZWjfwpve60cuF3u7UXed9WzYyYGUg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=P3/qvlhs
-Subject: Re: [Buildroot] [PATCH 1/1]
- support/testing/tests/package/test_lzop.py: new runtime test
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 813D340327
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6E131870E9; Fri, 14 Jul 2023 21:26:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 14 Jul 2023 23:26:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2fd06a0e57278891cd29f3497a5d23692716e253
+X-Git-Newrev: 9b31b643825e5ffa0e5849b622de4925b5b73cb9
+X-Patchwork-Hint: ignore
+Message-Id: <20230714212619.6E131870E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/genrandconfig: increase default
+ target ubifs image size
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,29 +58,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 14 Jul 2023 18:42:03 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9b31b643825e5ffa0e5849b622de4925b5b73cb9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  DEVELOPERS                                 |  1 +
->  support/testing/tests/package/test_lzop.py | 12 ++++++++++++
->  2 files changed, 13 insertions(+)
->  create mode 100644 support/testing/tests/package/test_lzop.py
+The new value is calculated based on:
+ROOTFS_SIZE = 5G (see commit 3c98eb26db6501a373cc405c80505ba72fde9e96)
+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE = 0x1f800
 
-Applied to master, thanks.
+5G / 0x1f800 = 41610
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+http://autobuild.buildroot.net/results/f72/f72918d63510b170e5da01bfa9c247cf9dcf507f/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 0938260c1b..60922e871c 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -525,6 +525,11 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_TARGET_ROOTFS_F2FS_SIZE="100M"\n')
+         configlines.append('BR2_TARGET_ROOTFS_F2FS_SIZE="%s"\n' % ROOTFS_SIZE)
+ 
++    if 'BR2_TARGET_ROOTFS_UBIFS=y\n' in configlines and \
++       'BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n' in configlines:
++        configlines.remove('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n')
++        configlines.append('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=41610\n')
++
+     if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
+        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
+         configlines.remove('BR2_TARGET_S500_BOOTLOADER=y\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
