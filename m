@@ -1,88 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 317B2C0015E
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jul 2023 22:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 413D6EB64DA
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 04:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E49C42028;
-	Thu, 13 Jul 2023 22:33:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E49C42028
+	by smtp2.osuosl.org (Postfix) with ESMTP id A142140124;
+	Fri, 14 Jul 2023 04:54:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A142140124
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TIEuOGSwxYMd; Thu, 13 Jul 2023 22:33:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1i6iSHGQj5hZ; Fri, 14 Jul 2023 04:54:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94CCB41DBD;
-	Thu, 13 Jul 2023 22:33:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94CCB41DBD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B77201BF37E
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 22:33:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF42B40150;
+	Fri, 14 Jul 2023 04:54:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF42B40150
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C5731BF384
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 04:54:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 90CF960BDA
- for <buildroot@lists.busybox.net>; Thu, 13 Jul 2023 22:33:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90CF960BDA
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAB6E40124
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 04:54:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAB6E40124
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iWt3utirzc78 for <buildroot@lists.busybox.net>;
- Thu, 13 Jul 2023 22:33:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33BDE60B0D
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com
- [IPv6:2001:4860:4864:20::33])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 33BDE60B0D
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 22:33:18 +0000 (UTC)
-Received: by mail-oa1-x33.google.com with SMTP id
- 586e51a60fabf-1b00b0ab0daso989661fac.0
- for <buildroot@buildroot.org>; Thu, 13 Jul 2023 15:33:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689287597; x=1691879597;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=EJV9OdmN/62BOYexIZnkIgnJ98bVzZF2uIH9pKoNDgs=;
- b=KHW406uZUH3z2C8ERHWhNdzJga6vtM07byjr0gWmMMavXdwlm+FEu7nPCj9eXk0T8N
- fqwAu5m5Vot49QDmbLlR3+3vL3PqUNesmRfeKlbedpSXggpFSAegCHUSTDDYlODlrR05
- GF0emBFSxtkqsWheCmxYuzx1jOqAxcuY/MINiBgZ8cGLjdYi44Gu2SxRlHREugTrzFXT
- xeAI1OjbbNRb/SWNgu5sb8aiO4C7juSH6DLk+8gHrdq6sydaMSwP4HIb60K4qLRKx7nY
- xv/CUThg+mc/yIfTfX8Y80cu7N4Ap2jlIXTw72/SkXRGeboh8B4K6FqSC96Hre5K8/jt
- 1xew==
-X-Gm-Message-State: ABy/qLbFTnp79vNCO1YNhvHbfUFRsJxgIoxw3ma5D9Ns965PE6RM1M+A
- W3BqYBlhKBrknPM4CTR6s3dp2SL/J+3zoNb22BU=
-X-Google-Smtp-Source: APBJJlHzoq/w6zpGGG0hWTEQ0Q0w1Eh1da8Dp1z3zgpshPOxY7fxnvoJGNzngsirIXrKnd6AqAe9zJyKCfWwEk44tD4=
-X-Received: by 2002:a05:6870:1487:b0:1b0:2d17:9a80 with SMTP id
- k7-20020a056870148700b001b02d179a80mr3429137oab.0.1689287597114; Thu, 13 Jul
- 2023 15:33:17 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2_SwQLfLhmJP for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 04:54:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76055401C2
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 76055401C2
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 04:54:19 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0896.dip0.t-ipconnect.de [91.58.8.150])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 92CC4A4C00C8;
+ Fri, 14 Jul 2023 06:54:15 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45654)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qKAop-0004Yg-15;
+ Fri, 14 Jul 2023 06:54:15 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Fri, 14 Jul 2023 06:54:15 +0200
+Message-Id: <20230714045415.2365259-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20221018034605.800593-1-james.hilliard1@gmail.com>
- <20230212094205.GK2796@scaer> <7d630b5f-69b3-6129-2426-7e9b7499f6d3@mind.be>
- <e5f2f930-d17f-a2e7-6c8b-0d59d2379ecf@mind.be>
-In-Reply-To: <e5f2f930-d17f-a2e7-6c8b-0d59d2379ecf@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 13 Jul 2023 16:33:05 -0600
-Message-ID: <CADvTj4rbJTvFmh3kh1LZh2pTF4_=TE8q+xhELyKzyPHQM63aKg@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689287597; x=1691879597;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=EJV9OdmN/62BOYexIZnkIgnJ98bVzZF2uIH9pKoNDgs=;
- b=amEDU/oGByr9MmOJ+t/sQ2i9uxJffrcc14Vzk7DX3zSU1p0BhH3ab4qWMnAxT8mpXV
- p1gIMMf4spjzXEdM8mgyG0AW6q3ArIqXZMy+PDXKQ8t/pFp1SJcol3yjQagKDSbRMB1S
- 7oj+dfOPFr0FhqhFfhdei7cCi3hFD+8rIEwoOeRM2y/FIHpbI5mlpJncgl8CBfNhh4nA
- VN3WUZHFq2lOh3aE7q1IfA0Yy4sDVzNf/IdvW1/lWe/tZ2pnLIfDmNHmz6XgMhAVq10P
- OyGaL42K7AH6F4SoCKGEFgcSNEsEo6gbF6HTpJbs406vkYi/7JUTgXZ57ylGvBjCMNYh
- 1YBA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=amEDU/oG
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix rule order
- for re{install, build, configure}
+ d=kuhls.net; 
+ s=kas202306131828; t=1689310455;
+ bh=AkiX6GUBqYpOvnUJ4C9E5YHadrUEGzgvC2HfHm5ml04=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ZJvJPZtcSIQWuUl6X4H24zvgOvy4MAbvVInSXqo/Wvxdd4H6dcBK9Xwhsq+4+uF3T
+ tUT+3PDHPHgaph+LFS/NVBOn4DYXgkJzKiOt2ejhsAnZLwOIciifKHIL0SbrSsj2Tq
+ sAtv3U4FDRFdNYp03bFJJAe6ONrLI/zJh2bU8xYd01hF7RI/fxJvwzmylo+WQLhvvf
+ cZQbD3kkhDQjalfRQNnIW31l6kopVh9ED2YfOhsSCPbBLLI8YNmk6QdBGs1AFaErAJ
+ dwZVROBuaQB4qb/55o0UYqRuOa4a0SM5UmVuvtpFiOqCU3QvaY9pOHd2E8uOLUO++g
+ Y7Mk1+2qhf2AA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=ZJvJPZtc
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediadriver: bump version to
+ 23.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,42 +76,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCBGZWIgMTQsIDIwMjMgYXQgMjoyNeKAr1BNIEFybm91dCBWYW5kZWNhcHBlbGxlIDxh
-cm5vdXRAbWluZC5iZT4gd3JvdGU6Cj4KPgo+IE9uIDE0LzAyLzIwMjMgMjI6MjIsIEFybm91dCBW
-YW5kZWNhcHBlbGxlIHdyb3RlOgo+IFsxXQo+ID4gIEkgbWF5IGJlIHN0dXBpZCwgYnV0IHdoYXQg
-d2Ugd2FudCBpcyB0byBoYXZlIGFuIG9yZGVyaW5nIGJldHdlZW4KPiA+IGNsZWFuLWZvci1yZWlu
-c3RhbGwgYW5kICQoMSksIHJpZ2h0PyBTbywgbGV0J3MgdXNlIGFuIG9yZGVyaW5nIGRlcGVuZGVu
-Y3k/Cj4gPgo+ID4gJCgxKS1yZWluc3RhbGw6ICAgICAgICAkKDEpLWNsZWFuLWZvci1yZWluc3Rh
-bGwgJCgxKQo+ID4gJCgxKTogICAgICAgICAgICAgJCgxKS1jbGVhbi1mb3ItcmVpbnN0YWxsCj4K
-Pgo+ICAgR2FoLCBJIGZvcmdvdCB0aGUgYWN0dWFsIG9yZGVyLW9ubHkgYml0Li4uCj4KPiAkKDEp
-LXJlaW5zdGFsbDogICAkKDEpLWNsZWFuLWZvci1yZWluc3RhbGwgJCgxKQo+ICQoMSk6ICAgICAg
-ICAgICB8ICQoMSktY2xlYW4tZm9yLXJlaW5zdGFsbAoKVGhpcyBkb2Vzbid0IHNlZW0gdG8gd29y
-aywgaXQgZW5kcyB1cCBjbGVhbmluZyBhIGJ1bmNoIG9mIGFkZGl0aW9uYWwgdGFyZ2V0cwpsaWtl
-IHRoZSBza2VsZXRvbiBhbmQgdG9vbGNoYWluIHRoYXQgc2hvdWxkbid0IGJlIGNsZWFuZWQgd2hl
-biBkb2luZyBhIHJlaW5zdGFsbApmb3Igc2F5IGEgbm9ybWFsIHB5dGhvbiBwYWNrYWdlLgoKPgo+
-Cj4gICBSZWdhcmRzLAo+ICAgQXJub3V0Cj4KPgo+ID4KPiA+Cj4gPiAgUmVnYXJkcywKPiA+ICBB
-cm5vdXQKPiA+Cj4gPj4+ICAgICAkKDEpLWNsZWFuLWZvci1yZWJ1aWxkOiAkKDEpLWNsZWFuLWZv
-ci1yZWluc3RhbGwKPiA+Pj4gICAgICAgICAgICAgICBybSAtZiAkJCgkKDIpX1RBUkdFVF9CVUlM
-RCkKPiA+Pj4gICAtJCgxKS1yZWJ1aWxkOiAgICAgICAgJCgxKS1jbGVhbi1mb3ItcmVidWlsZCAk
-KDEpCj4gPj4+ICskKDEpLXJlYnVpbGQ6OiAgICAgICAgJCgxKS1jbGVhbi1mb3ItcmVidWlsZAo+
-ID4+PiArJCgxKS1yZWJ1aWxkOjogICAgICAgICQoMSkKPiA+Pj4gICAgICQoMSktY2xlYW4tZm9y
-LXJlY29uZmlndXJlOiAkKDEpLWNsZWFuLWZvci1yZWJ1aWxkCj4gPj4+ICAgICAgICAgICAgICAg
-cm0gLWYgJCQoJCgyKV9UQVJHRVRfQ09ORklHVVJFKQo+ID4+PiAgIC0kKDEpLXJlY29uZmlndXJl
-OiAgICAkKDEpLWNsZWFuLWZvci1yZWNvbmZpZ3VyZSAkKDEpCj4gPj4+ICskKDEpLXJlY29uZmln
-dXJlOjogICAgJCgxKS1jbGVhbi1mb3ItcmVjb25maWd1cmUKPiA+Pj4gKyQoMSktcmVjb25maWd1
-cmU6OiAgICAkKDEpCj4gPj4+ICAgICAjIGRlZmluZSB0aGUgUEtHIHZhcmlhYmxlIGZvciBhbGwg
-dGFyZ2V0cywgY29udGFpbmluZyB0aGUKPiA+Pj4gICAjIHVwcGVyY2FzZSBwYWNrYWdlIHZhcmlh
-YmxlIHByZWZpeAo+ID4+PiAtLQo+ID4+PiAyLjM0LjEKPiA+Pj4KPiA+Pj4gX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+Pj4gYnVpbGRyb290IG1haWxp
-bmcgbGlzdAo+ID4+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4+PiBodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiA+PgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index 81fa5ba027..d22732b99f 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  dfcf2facc4f8bf3df6b147222786032be195874adacc2f4071fc6c91a0abdf0a  intel-media-23.2.4.tar.gz
++sha256  2d0e8892199f1f2365fd8729776bdfd9968a97a63ce1e759b3724bff57e9fc08  intel-media-23.3.0.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index daddf9f8a9..77de031a45 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
+ 
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 23.2.4
++INTEL_MEDIADRIVER_VERSION = 23.3.0
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
