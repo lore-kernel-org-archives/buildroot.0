@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E6A5EB64DC
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 18:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48FD5EB64DC
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 20:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC83F41889;
-	Fri, 14 Jul 2023 18:24:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC83F41889
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HHf6M_Rc7OQl; Fri, 14 Jul 2023 18:24:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27DBF4176C;
-	Fri, 14 Jul 2023 18:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27DBF4176C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 936351BF836
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 18:24:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B3BF417A3
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 18:24:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B3BF417A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A6C141299;
+	Fri, 14 Jul 2023 20:18:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A6C141299
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0V4RXwy_dAfZ for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 18:24:06 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VJLuQeD-X0UJ; Fri, 14 Jul 2023 20:18:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 848B64136C;
+	Fri, 14 Jul 2023 20:18:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 848B64136C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C5811BF3EF
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 20:18:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72D6D812A9
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 20:18:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72D6D812A9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id egH21_sHd5Sb for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 20:18:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6D0141903
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE89C8126A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A6D0141903
- for <buildroot@buildroot.org>; Fri, 14 Jul 2023 18:24:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AE89C8126A
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 20:18:33 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0896.dip0.t-ipconnect.de [91.58.8.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B1AF9A4C00B8
- for <buildroot@buildroot.org>; Fri, 14 Jul 2023 20:24:00 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40238)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 097FFA4C029A
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 22:18:31 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57190)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qKNSS-0001ZC-1X
- for buildroot@buildroot.org; Fri, 14 Jul 2023 20:24:00 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qKPFG-0004VB-2Z
+ for buildroot@buildroot.org; Fri, 14 Jul 2023 22:18:30 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jul 2023 20:24:00 +0200
-Message-Id: <20230714182400.3801854-1-bernd@kuhls.net>
+Date: Fri, 14 Jul 2023 22:18:30 +0200
+Message-Id: <20230714201830.504801-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1689359040;
- bh=+zfbaH8A25x1ovfqi4BQqUGakNGj+UVQYZzkv1IketI=;
+ s=kas202306131828; t=1689365911;
+ bh=odyXV7PS6b7McaCUYOvYHVpJiCFW/HMR3U7376f6BZU=;
  h=From:To:Subject:Date:From;
- b=tJa+DaHVHZa2pOUqtnfFGvIC5p1Dyjj0OqdTd6awygz7QLwHBJnCN3G7xSmcLQtRn
- 4+0x1WKMV3g1JBhPofzLXxU3uIALtjMjKbgzOYvZqljoAwWKeQyR+z7KsHYfkWa9K1
- rGpLWJRqKRhIWC5JKEq0DcDFvqwKben7luAcvdyR+6Wjs/5u8NE5SqGvz3KhwKiSst
- A+DV+5TXhIsDjJJ1CH0hooI8pa310r30bv+CBNO1q+Nf6JIQC3cVXRdNmeaD9cfuo4
- z1bkkVjA+128gTXiUVyU/gNgr858ZUtZafhUx2gv6BHxQxLin/5fqcNDuyHwR/3/uU
- uOZIvQaG8q04w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=uCTFPD4yO+a8AcASNg7xd1ye7Y++jkNBqX0Qaec4Cfd35ew6AOBp03sq6o5Y8MEdE
+ o9Vw9MnnZr+Mk/GWGuedRAKUk1efG1et1XnaUVn2SJomrFqtTz9lsijRWAQtssYOWi
+ R8oEkdFsMg5ijz7pEc6BVdVl6h72yVs8LN5cSO/1s7Gxq2cmw9M2PXcADSu6vmzpKH
+ JJsv1VIRqJ+XxYpMZ3hlWMu5GpJ51/uroJRwZPQumezaQ21Ip2dy1HMPhHbiTgbQ0t
+ W0eyee/NiO0c0n2qRvm+rFj1tzJPQL8UXD+4s2IP0nCjvFXN7k5UlEVme0WvW++yDv
+ BHL7eTfD5HpWA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=tJa+DaHV
-Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: increase default
- target ubifs image size
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=uCTFPD4y
+Subject: [Buildroot] [PATCH 1/1] package/elfutils: fix build without c++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,39 +80,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The new value is calculated based on:
-ROOTFS_SIZE = 5G (see commit 3c98eb26db6501a373cc405c80505ba72fde9e96)
-BR2_TARGET_ROOTFS_UBIFS_LEBSIZE = 0x1f800
-
-5G / 0x1f800 = 41610
+The version bump to 0.189 with commit
+258c27f6335aa66ce634c93b82ab146bf65f7f2 introduced an error when
+libstdc++ support is not available and --disable-demangler was not used:
+https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=73e212b0a778c6dbe84f79b7eb2647dea50ea16f
 
 Fixes:
-http://autobuild.buildroot.net/results/f72/f72918d63510b170e5da01bfa9c247cf9dcf507f/
+http://autobuild.buildroot.net/results/cd4/cd4ca1a2b2eabe6937cb920cda5d8e566216546e/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Suggested by Thomas:
-https://lists.buildroot.org/pipermail/buildroot/2023-July/670125.html
+ package/elfutils/elfutils.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- utils/genrandconfig | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 0938260c1b..60922e871c 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -525,6 +525,11 @@ def fixup_config(sysinfo, configfile):
-         configlines.remove('BR2_TARGET_ROOTFS_F2FS_SIZE="100M"\n')
-         configlines.append('BR2_TARGET_ROOTFS_F2FS_SIZE="%s"\n' % ROOTFS_SIZE)
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 336544e125..0757851b72 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -66,6 +66,12 @@ ELFUTILS_DEPENDENCIES += argp-standalone
+ ELFUTILS_CONF_OPTS += --disable-symbol-versioning
+ endif
  
-+    if 'BR2_TARGET_ROOTFS_UBIFS=y\n' in configlines and \
-+       'BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n' in configlines:
-+        configlines.remove('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n')
-+        configlines.append('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=41610\n')
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++ELFUTILS_CONF_OPTS += --enable-demangler
++else
++ELFUTILS_CONF_OPTS += --disable-demangler
++endif
 +
-     if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
-        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
-         configlines.remove('BR2_TARGET_S500_BOOTLOADER=y\n')
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ ELFUTILS_DEPENDENCIES += bzip2
+ ELFUTILS_CONF_OPTS += --with-bzlib
 -- 
 2.39.2
 
