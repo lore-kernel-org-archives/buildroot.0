@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D64C1C001B0
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 21:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5399BEB64DC
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 21:23:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A37D40B9C;
-	Fri, 14 Jul 2023 21:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A37D40B9C
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1DBE405B9;
+	Fri, 14 Jul 2023 21:23:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1DBE405B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6-omXfk51cGe; Fri, 14 Jul 2023 21:22:04 +0000 (UTC)
+	with ESMTP id JpFaS8xr_6rI; Fri, 14 Jul 2023 21:23:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF67540948;
-	Fri, 14 Jul 2023 21:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF67540948
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8DD871BF97F
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:21:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 46D354052F;
+	Fri, 14 Jul 2023 21:23:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D354052F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A7C71BF97F
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:23:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7378B40A71
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:21:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7378B40A71
+ by smtp4.osuosl.org (Postfix) with ESMTP id 408ED418FC
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:23:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 408ED418FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fs1lz6kH7qFM for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 21:21:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9469C405B9
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9469C405B9
- for <buildroot@buildroot.org>; Fri, 14 Jul 2023 21:21:47 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4DA701BF203;
- Fri, 14 Jul 2023 21:21:44 +0000 (UTC)
-Date: Fri, 14 Jul 2023 23:21:43 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230714232143.087381be@windsurf>
-In-Reply-To: <20230714205431.783961-1-bernd@kuhls.net>
-References: <20230714205431.783961-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689369704;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=FXYRnRVwkeF2/vO5hxsFNZlhHu1OU8CQLCc1YiD3z48=;
- b=CT36JyD3LIZ4feR0hUvIJ7SPlqc5saBusX0wXhfVJuDpVIxTaxpXykoBokvb+sNyy+T8Ka
- EOyloXPEB+/VhGEjVdthT1GHL2moBnnUQKyIAvQEB7H1Hk/IBH2xkZhSeXpZ+Ybc7B0vCd
- 8RAc0PqndYl1pr13AkUqwjsGYzrTsCVuV4NzUU/BJCrEnGVgk9Sx2gCKkIkIx8hn88Y+OB
- 8bStbwCcYni/QADJv8thF0J39p3IQnyLOSIiDPTEIymy/Zl/6qKoaA3CJTEBFrdbyXiEby
- mslPzKZAmfqK09ynyNdEkJj+nAVJNCPcVg77RMMRmCRV6w0IqUd6yVmGPsg1Dw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CT36JyD3
-Subject: Re: [Buildroot] [PATCH 1/1] package/tovid: remove package
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KquRWIgmOXyj for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 21:23:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F844418F8
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 21:23:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F844418F8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2BEB7870B9; Fri, 14 Jul 2023 21:23:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 14 Jul 2023 23:22:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7be241b49cc1f537963b708ea5f26694385626e8
+X-Git-Newrev: f41fd3daf314ed84181d968ea7f5336d20ffde5b
+X-Patchwork-Hint: ignore
+Message-Id: <20230714212340.2BEB7870B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: fix old Mediatek
+ WiFi firmware location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,51 +58,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Steve Kenton <skenton@ou.edu>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 14 Jul 2023 22:54:31 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f41fd3daf314ed84181d968ea7f5336d20ffde5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Build is broken:
-> "It seems that you are using `distutils.command.build` to add
-> new subcommands. Using `distutils` directly is considered deprecated,
-> please use `setuptools.command.build`.
-> 
-> By 2023-Dec-13, you need to update your project and remove deprecated
-> calls or your builds will no longer be supported."
-> 
-> The last commit for this package occured on May, 30th, 2016.
-> The last issue was opened Jan, 31st, 2017 and was unanswered.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/b57/b571d7838950e0b5ca67106cbcd9ba61b4f04a48/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  Config.in.legacy                 |  6 ++++
->  DEVELOPERS                       |  1 -
->  package/Config.in                |  1 -
->  package/tovid/0001-manpage.patch | 25 ----------------
->  package/tovid/Config.in          | 50 --------------------------------
->  package/tovid/tovid.hash         |  3 --
->  package/tovid/tovid.mk           | 13 ---------
->  7 files changed, 6 insertions(+), 93 deletions(-)
->  delete mode 100644 package/tovid/0001-manpage.patch
->  delete mode 100644 package/tovid/Config.in
->  delete mode 100644 package/tovid/tovid.hash
->  delete mode 100644 package/tovid/tovid.mk
+The old Mediatek WiFi firmware was moved into a mediatek/
+subdirectory, see
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=8451c2b1d529dc1a49328ac9235d3cf5bb8a8fcb
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  http://autobuild.buildroot.net/results/fd237455c59686d04a795af8b7e54e9f4678d073/
+
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 9383b20c15..068de3859e 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -348,7 +348,7 @@ endif
+ 
+ # MT7601
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U),y)
+-LINUX_FIRMWARE_FILES += mt7601u.bin
++LINUX_FIRMWARE_FILES += mediatek/mt7601u.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
+ endif
+ 
+@@ -360,13 +360,13 @@ endif
+ 
+ # MT7650
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7650),y)
+-LINUX_FIRMWARE_FILES += mt7650.bin
++LINUX_FIRMWARE_FILES += mediatek/mt7650.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
+ endif
+ 
+ # MT76x2e
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT76X2E),y)
+-LINUX_FIRMWARE_FILES += mt7662.bin mt7662_rom_patch.bin
++LINUX_FIRMWARE_FILES += mediatek/mt7662.bin mediatek/mt7662_rom_patch.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
