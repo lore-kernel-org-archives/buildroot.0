@@ -1,84 +1,135 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB8FEB64DA
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 07:34:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8629BC001DF
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 08:09:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C88AD83C8B;
-	Fri, 14 Jul 2023 07:34:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C88AD83C8B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 087E461360;
+	Fri, 14 Jul 2023 08:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 087E461360
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LsBl_w3Ajumw; Fri, 14 Jul 2023 07:34:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id U0tZeUM3yjID; Fri, 14 Jul 2023 08:09:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF46C83FEE;
-	Fri, 14 Jul 2023 07:34:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF46C83FEE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7852B1BF36A
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 07:34:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60CC960B1C;
+	Fri, 14 Jul 2023 08:09:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60CC960B1C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E5EDE1BF31B
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 08:09:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5079B41730
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 07:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5079B41730
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD5254191C
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 08:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD5254191C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o8VROFoFmEWa for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 07:34:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5181417AB
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D5181417AB
- for <buildroot@buildroot.org>; Fri, 14 Jul 2023 07:34:04 +0000 (UTC)
-Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout01.mail.de (Postfix) with ESMTP id 18C28A2D6F;
- Fri, 14 Jul 2023 09:34:03 +0200 (CEST)
-Received: from smtp02.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix03.mail.de (Postfix) with ESMTP id ECA9680219;
- Fri, 14 Jul 2023 09:34:02 +0200 (CEST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (No client certificate requested)
- by smtp02.mail.de (Postfix) with ESMTPSA id 1A726A01BA;
- Fri, 14 Jul 2023 09:34:02 +0200 (CEST)
-To: buildroot@buildroot.org,
- Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Date: Fri, 14 Jul 2023 09:34:01 +0200
-Message-ID: <5848067.MhkbZ0Pkbq@kilian-aisec>
-In-Reply-To: <c3191f37-551a-0a9b-6fb0-c8662d6faac2@theobroma-systems.com>
-References: <c30c93e29177a1dc15446eff427c7ca8@umbiko.net>
- <6573492.4vTCxPXJkl@kilian-aisec>
- <c3191f37-551a-0a9b-6fb0-c8662d6faac2@theobroma-systems.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dZyCk_e9t_ua for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 08:09:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF92741F6A
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com
+ (mail-dbaeur03on20609.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe1a::609])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CF92741F6A
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 08:09:11 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OIM34hlehps7K87GNceAtjf3gWVRP0QWmcG5PWKm2YgUJ4bZzrNFI6v68805y1I9Ov1KglLixT+Dft9Y8rrxpH5nvB5bnJDoxKYH8zaGWv/qV2Tc3tgdQWRUJiwj4KRr4UIbizidTohMSEMUMdVvrSpcPO3wuNaOY6JeXnWTDWn+E3nF2XIxflEsp4qMx3mQuAKrdCAPJvJ8JVqUJUuYgDjwhrRdDF26uKLLxbkYgboNFYAcD+NRUnABQuuBg3bldCqFSGRHgek79NxNxeOREHjL+jSgQz+3WDOSA1EE0Wh7qWmsEItfmJa85cohkVgPwAwZOWvbsiXerqKDj44P6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Si0XVqdmTNxFWJj6mMA3silNUkxVq5WvxF2YXt/fPBs=;
+ b=h2Ye0TER4CPlOHHE/JJcGujkC+jMu9RKWetiVcUt89vpzX40k7kdi+WMMLgYIbKhKdVegHY5LRB1VG1pXDmxm4MHN2AxLWGIqd/BtyEKwlTOLCTMM9qYrgwDPA6e7SKan4NOjiMjyrMrSJEwdKK3Ma/E9EE5oxEN0fuOa/KXem+9DfMi5BICPZUON1baiXVMkGINZEn35UDRIGg3gq/aYyPQRhkHDUo8ZMLovqRRjC5KAJdNcWW3BIesfCp5TH+y9dcOSmjzvCo25XAzvOK1pB3l//K3eT9Hk4HGpKQY/r/+WkqZVf85dCWkkhnMT7psg0pk+7deUsDFP079jcWrQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
+ dkim=pass header.d=abatec.at; arc=none
+Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
+ by PR3P190MB0937.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:8b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.27; Fri, 14 Jul
+ 2023 08:09:07 +0000
+Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+ ([fe80::601b:b544:2969:e9ed]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+ ([fe80::601b:b544:2969:e9ed%4]) with mapi id 15.20.6588.027; Fri, 14 Jul 2023
+ 08:09:07 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH] DEVELOPERS: update entry for Daniel Lang
+Thread-Index: AQHZtipRN3ddXaT94EqoLbVqkoWHfg==
+Date: Fri, 14 Jul 2023 08:09:07 +0000
+Message-ID: <VI1P190MB0493A6312E7B102252192A259F34A@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1P190MB0493:EE_|PR3P190MB0937:EE_
+x-ms-office365-filtering-correlation-id: f5167ae5-f732-41e0-29a8-08db844198d6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JGANjh8sfjnsyAeu8ppbpo+GeBWmoIU3bFxOGQ5+G93VhmJSe41LD5fFJEcko8F6dIFhRiQd9HsMT2laTSq+LTGrWQbuS/WhwnW2ppdc7u5EQbngoP5Vibamuy52Vj7Js/GctwO+cPXM5+gE1egTqXI3FTAjhJZ1CzvYQBBVrqfAg1xgnjbmJtU8n/tuxbblWnUeny3ErrvQrkHy9HStGP6dzFcAcB5IXFIHwtvrg27dBHGmhffmgIM5WIxlbHwbxI19j/HLkH2Wv2GFVzLTsavNKHVILYZoL038hvoTW4nTFH6wnO+WXDhZMUz9utQSomcaYvBP4t8lPmfLqBMszmHxQ1zKrn6aV/QlgqgfQQwkbfq5SwJMQ+aj1MSSNkrUs52IP1XjYdXwSWG7J7xKmIOlmESJqCTjSErL5P4gIlBJuAft+ahCdbDn0f+epRvT3J/IN67NE6N76Qtp7hgLSoClBj/FPhLshlNMkflzD5lFdFtrBw0pZ6YDBubXAbSdUTt1VQWtxImPx75bjtAE0x+HtKXC0jGrwoC5KAnU8148CtDEtzDdhVW24saMR8hmvoqCva6dRT0aEM5DJnJqWubt8ZoynpNKORcZEsXykztG9yxhETJHmR0tY4180qlr
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230028)(4636009)(136003)(396003)(39840400004)(366004)(346002)(376002)(451199021)(2906002)(55016003)(38100700002)(122000001)(83380400001)(186003)(9686003)(6506007)(33656002)(5660300002)(86362001)(52536014)(38070700005)(8676002)(8936002)(4744005)(478600001)(41300700001)(7696005)(71200400001)(316002)(6916009)(76116006)(64756008)(66446008)(66476007)(66556008)(66946007);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?sucBF87AAh3ELZIooK8bIU49Qph+sblNOPSXj8CEd+sHNtB47lJBaF2lvi?=
+ =?iso-8859-1?Q?SFLrHO3RJ7nUs2YDEZr36EEwKBLB7asvVDyBGmULrUjUeI/fdXugj9mEIx?=
+ =?iso-8859-1?Q?45QabOYaA0AR0586FZdM6gh2f2qCdhxi9+fNDAkPzZlGfEne/JwbOwTKlQ?=
+ =?iso-8859-1?Q?6V5pD/Cxp6uwdT7AgKFuP0QIZ6UTfDaj2VZWxapq5WUaCjINLWcQUAT6B1?=
+ =?iso-8859-1?Q?Fiwv/6SscfzN0YZhyRyy+fvJiVpWjZ4KN5ANmmT7HveGdqufxokpyvSL8o?=
+ =?iso-8859-1?Q?xlEGiIWc3CF+ichR7i67KvamLVebT8x+2zHQ0QfYYfLegGCReS3OWo/vvp?=
+ =?iso-8859-1?Q?JnfhjEb08DQG4/LjTblLWEVVBqqg7omaXz72TpCytPzBW4+lWLKYB/Xs1n?=
+ =?iso-8859-1?Q?uaYD5j8srr2M1kMfwOROmj5Ysh9tlGukjrMtVYcOjkNN9P3ql9xh79tDYc?=
+ =?iso-8859-1?Q?RyJf0jw3qtjS7l3C8sW/uF0Oiei0rMWJQ01flFkphCLa2N9emmeQemGHyW?=
+ =?iso-8859-1?Q?jEHVssO5bJLjUUbQq0S8Dowl/9W2fEUz/1uIfggm18HCBBvwPu2Yomkr9Z?=
+ =?iso-8859-1?Q?6U2ImZLDT5KIzscrjRhFGIcE78kr9xYNjK6ruNyuO1kSJiYnYnHZRrb4o7?=
+ =?iso-8859-1?Q?I3oZPollibSX+/HFxA2x+srKxZPBw+yC4Vc8hGWhgvpt3DiSMVJZmWu2dr?=
+ =?iso-8859-1?Q?RMNDZQtRqL47F8ooZ52VG1M9WnJ2UQZd+Ddwb6qZA18joDNbL61vYyFz0k?=
+ =?iso-8859-1?Q?fbO3vvs5Sr9laFAB0tsKbwU6ot0HaEhscZvXXuGLQsUafRKkvrMNNuCtGC?=
+ =?iso-8859-1?Q?C+j4Km7hw66ks3zfHXWELnp7NlijQ4mwV94praOBfRrXK8CkyfricvO9DF?=
+ =?iso-8859-1?Q?mhFzDF77NkcTM/yaS00oncaBc8fM310xDbHaGwTQ9+n9jKHXX/8Ml7x3cU?=
+ =?iso-8859-1?Q?/+wyj30oT19RKFjdKe6/hgRdE1gTgLecdgHc8JJtV9kwSdf8ko++0kgl5P?=
+ =?iso-8859-1?Q?mGltsuSOvpSqZStP4mJNsIsr+0wjCmZRG8kR/q7yZtvnt8dJPU5su73TDD?=
+ =?iso-8859-1?Q?AUsaHu3UfsupFF+MhxAXdI9N3qKeMJIgROzWCH89+brZ3fNufdk07faLhk?=
+ =?iso-8859-1?Q?xP/WxfkKacbREjp4k23brrFyMLpGF6SNZm2OdmspVhXG9X1xk1LUemjt5c?=
+ =?iso-8859-1?Q?WWMbdT+TqSO8sblSmtspx9fwOMTnweYnb6OZeTp0GTFynJxkVzxGKOUZ6L?=
+ =?iso-8859-1?Q?c8rAbkXc+YpePScXz6/NcEFfoDYTrDdsThAAOA3UI30LQZEtXGPoVoEdYV?=
+ =?iso-8859-1?Q?1FKHS6ZgN0205AIYSUvVvUCLTHcq62DHx4Q9/5SOwbA6tdeWdxUvIQ+8zq?=
+ =?iso-8859-1?Q?kz5iIcmYYscyLBRPjBEgHiLB32OqVf8nBRMZSTpHr87OSU8QpOzinFiJ9p?=
+ =?iso-8859-1?Q?KumBrqtSKxXBtIDmi+e+fIsKEQRwKaM+lcUyLZ3AGQ9XpaK9S8WL6DixSB?=
+ =?iso-8859-1?Q?vJC+5/vviDybtLIJf9FsaqiUr/V+ctK3p9SeBOdROXfoJtB7mBhEXIUWbN?=
+ =?iso-8859-1?Q?FOOXwTCM0HiPy2xR8jJ7+HsHJ4fmaKb8DEVQZ9TG6egJ5WLVK1HBUxDO1Q?=
+ =?iso-8859-1?Q?Gb21zwOccA6sVO3902V0hHZ5ydSed0MefzEAKU59JH624RZ7zjWoxxNZqg?=
+ =?iso-8859-1?Q?32F7reTJTx79Y3XjWI4=3D?=
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 6653
-X-purgate-ID: 154282::1689320042-197F8199-D9695BB3/0/0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1689320043;
- bh=Vm8v1DlRN1fw5rwRcLex3pCZrMZjQfPonxPWhufuESU=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=SI4SNlQx02atScWyq3a/bMSRq4tg8Fqx8k8vpCv5P2a1CFQAl4mPTAovotTfAw4/L
- 8v3xsTIhSatutSXb9G7L72wMmezVfCHa+barZMfQgjheWuxCQKrjB9d8vNTg5l2lQA
- f/0F5nULj1W7rO+XJWRhDKwpKIaWWVUwp+IDXHAYt4bOmtvt3ex7Web1zJ/CI3DoKv
- tBuLbpsZh+hgZDY5OsfhNxtOlB/nV655q5QojZSs3qW99y/Lolf6TmxeAC7U9B7cdF
- eAf0dZkTaRCQW4NwYYPhXnQpvReNAfEHVZKvaQGmdUNG4gEBlFXxFbJFsbS9eHUEsy
- Uy0KuSzU1Om5w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=SI4SNlQx
-Subject: Re: [Buildroot] [PATCH v3 1/3] package: add rockchip-rkbin package
+X-OriginatorOrg: abatec.at
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5167ae5-f732-41e0-29a8-08db844198d6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2023 08:09:07.4839 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZTqflkDkSPDcg3GBwkeVhgAeYL67RnKeNzSOP6R9HOXGFzgJ/wYnTEn7TlsFJ5RpkWbZOfnrnYvd5v+q7MP9pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P190MB0937
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=abatec.at; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Si0XVqdmTNxFWJj6mMA3silNUkxVq5WvxF2YXt/fPBs=;
+ b=1kx8yhVrsoFKCfE5pMDm8/r2JxStVRZBIaRUdNoeIysT9clm1f4Bvk4pk8GghukM9yfrjMSsh5f8yUcArf/j6uLAEdE8XJwO7mbxy0eDUvgGfR2UK6O/wZt+gCdEtpWuzQuHII0fzH65H8/MOBxO0vy0ofO/3lq2gvcyChitix0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
+ header.s=selector1 header.b=1kx8yhVr
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=abatec.at;
+Subject: [Buildroot] [PATCH] DEVELOPERS: update entry for Daniel Lang
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,160 +141,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Cc: Andreas Ziegler <br015@umbiko.net>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Lang Daniel via buildroot <buildroot@buildroot.org>
+Reply-To: Lang Daniel <d.lang@abatec.at>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Quentin,
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+---
+ DEVELOPERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> U-Boot, for all RK3568 and RK3588 based boards, currently requires blobs
-> from rkbin. Therefore, to build U-Boot properly, we need this package.
-> Since there are publicly available boards based on RK3568, I assume we
-> may eventually get support by someone (not necessarily you) for those.
-> Therefore, I suggested we remove the mention to RK3588 as this is not
-> specific to this SoC from Rockchip. No expectation from me on what
-> you're going to do next :)
-
-I think we agree here and as you know the rockchip-rkbin package is now able 
-to also be used for other Rockchip SoCs.
-
-> >> I would highly recommend to keep the same file extension to not confuse
-> >> people since the OP-TEE binary apparently has different formats which we
-> >> can (more easily) distinguish from their file extension (though IIRC,
-> >> reading the header may be enough).
-> > 
-> > Thanks.
-> 
-> Just to make things a bit clearer here, I commented on bl31.bin file
-> extension while saying something about OP-TEE binary, the former is TF-A
-> blob while the latter is bl32.bin.
-> 
-> Also, I was wrong, the file extension isn't used for detecting the file
-> format of OP-TEE OS blob, U-Boot tries to detect an ELF, if not, starts
-> to parse the blob "header" to detect if it's v1 or v2 format.
-> 
-> But better keep the same file extension though :)
-
-Yes, I agree: it is still beneficial, if the true file extension is kept, even 
-if it is technically not needed. In v6 of the patches I implemented it such, 
-that the file extension is kept.
-
-> >> I can think of two ways of doing this: create a
-> >> subdir after each SoC part number in BINARIES_DIR (e.g.
-> >> BINARIES_DIR/rk3588/bl31.elf) or have the part number in the filename
-> >> (e.g. rk3588_bl31.elf).
-> >> This should allow to install the binary blobs from all SoC supported in
-> >> RKBIN without having to deal with Kconfig options.
-> > 
-> > How so? Because we would then copy all blobs at once into the BINARIES_DIR
-> > everytime?
-> 
-> Indeed. Then we wouldn't need to care on the rkbin side which blobs to
-> install in BINARIES_DIR. Inside u-boot.mk either, as I would pass the
-> proper path as part of BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS like you did here?
-
-I actually don't like copying ALL Rockchip blobs into BINARIES_DIR everytime: 
-Imagine this would become the common case for multiple packages. It would 
-create a mess in my opinion. And it also is not needed: The package is now 
-implemented such, that a user can optionally specify which blobs are needed 
-and only those specified binaries are copied into BINARIES_DIR, with a generic 
-name, while keeping the original file extension and also uboot now 
-automatically identifies the binary, even so that the file extension can be 
-different. What's not to like? ;)
-
-> >> Looking at the code above, if we want to keep it a bit automagical,
-> >> maybe having the RKBIN binaries called bl31.bin and tee.elf and have a
-> >> Kconfig option for the RKBIN package to select which SoC binary blobs to
-> >> install would be best.
-> > 
-> > In the readme of the rkbin repository they present their file naming
-> > scheme. However, I don't think I like making use of it:
-> > 
-> > 1. We introduce a lot of Kconfig code for some logic that adds choices and
-> > selects files within the rkbin repository. But in the end the user still
-> > has to make the decision, which files are to use, anyway. Then the user
-> > can also just directly specify the true filename in the board defconfig
-> > or .config.
-> What I had in mind was to have a select Kconfig option:
-> choice
-> config BR2_RK3588
-> config BR2_RK3568
-> enchoide
-> 
-> and then in rockchip-rkbin (pseudo-code):
-> 
-> if BR2_RK3588
->      install bin/rk35/rk3588_bl31_v1.38.elf $(BINARIES_DIR)/bl31.elf
->      install bin/rk35/rk3588_bl32_v1.13.bin $(BINARIES_DIR)/tee.elf #add
-> support for tee.bin in U-Boot mk?
->      install bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.11.bin
-> $(BINARIES_DIR)/ddr.bin
-> elif BR2_RK3568
-> ....
-> fi
-
-I don't like this: This would mean that we basically write down into the mk 
-each binary for each SoC. If then rockchip decides to "update" a binary by 
-simply renaming it (they have done this before, look at the git history), then 
-the package is broken until some maintainer fixes it again. We would produce 
-alot of code with imho no real benefit. In my oppinion: Whoever wants to use a 
-blob from the repository should simply define which blob is the desired one.
-
-> The important part would be for the destination filename to match what's
-> expected in boot/u-boot/u-boot.mk:
-> 
-> UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.elf
-> [...]
-> UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
-> 
-> in that scenario, we wouldn't even need to adapt U-Boot makefile other
-> than allowing to depend on rockchip-rkbin rather than trusted-firmware-arm.
-> 
-> > 2. We add a lot dependency: Rockchip may remove or rename files in their
-> > git reblobitory as they like. If we (or any other users) then want to use
-> > a newer commit of their reblobitory, e.g., to use newer blobs, and the
-> > file name / path scheme breaks, we have to fix that again.
-> 
-> This is the responsibility of the package maintainer, like for any other
-> package. I do agree though that the name of the installed binaries
-> should stay consistent between new versions, so that we only need to
-> update rockchip-rkbin and not any other package that depends on it.
-
-This takes unnecessary burden on the maintainer, and that is a bad thing in my 
-opinion. I really think it is a huge plus, if a package is designed such, that 
-it does not need much maintenance and that it is unlikely by design that it 
-breaks due to external reasons (e.g., Rockchip unpredictably deciding to 
-rename their blobs). After all, you never know, whether there is still a 
-maintainer in the future who has time to maintain (or even wants to).
-
-> > 
-> > Thinking out loud:
-> > 
-> > For the rockchip-rkbin package we could feature:
-> > 
-> > * custom git version option (then defconfigs could freeze the repo
-> > version)
-> > * option to specify tpl file name
-> > * option to specify bl31 file name
-> > * option to specify op-tee file name
-> 
-> Well.. that's one thing I completely forgot about. Maybe people don't
-> want to update rockchip-rkbin for their boards... SO yeah, I guess those
-> 4 options actually make more sense than trying to be smart and have a
-> select for each SoC.
-
-Yes, I like this, too. I implemented it like this in v6 (and v5).
-
-Best regards,
-Kilian
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0918e9f721..32d0a5d0ee 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -649,7 +649,7 @@ F:  package/odroidc2-firmware/
+ N:      Daniel J. Leach <dleach@belcan.com>
+ F:      package/dacapo/
+ 
+-N:     Daniel Lang <d.lang@abatec.at>
++N:     Daniel Lang <dalang@gmx.at>
+ F:      package/atkmm/
+ F:      package/atkmm2_28/
+ F:      package/cairomm/
+@@ -663,6 +663,7 @@ F:  package/libsigc2/
+ F:      package/paho-mqtt-cpp/
+ F:      package/pangomm/
+ F:      package/pangomm2_46/
++F:     package/sam-ba
+ 
+ N:      Damien Lanson <damien@kal-host.com>
+ F:      package/libvdpau/
+-- 
+2.25.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
