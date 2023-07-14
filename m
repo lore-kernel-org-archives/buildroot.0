@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20A03C0015E
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 21:27:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD03EB64DC
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jul 2023 21:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D01E740993;
-	Fri, 14 Jul 2023 21:27:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D01E740993
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3714440A71;
+	Fri, 14 Jul 2023 21:27:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3714440A71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zFhGNLfLMB0W; Fri, 14 Jul 2023 21:27:12 +0000 (UTC)
+	with ESMTP id VNXU2x2We_mR; Fri, 14 Jul 2023 21:27:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1CFBF405C4;
-	Fri, 14 Jul 2023 21:27:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CFBF405C4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5EF3A1BF97F
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:26:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A3CC40A67;
+	Fri, 14 Jul 2023 21:27:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A3CC40A67
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D1001BF97F
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:26:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4415F400D1
- for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4415F400D1
+ by smtp1.osuosl.org (Postfix) with ESMTP id DAF878226E
+ for <buildroot@lists.busybox.net>; Fri, 14 Jul 2023 21:26:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAF878226E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mySkp9KzuvQ5 for <buildroot@lists.busybox.net>;
- Fri, 14 Jul 2023 21:26:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 813D340327
- for <buildroot@buildroot.org>; Fri, 14 Jul 2023 21:26:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 813D340327
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E131870E9; Fri, 14 Jul 2023 21:26:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 14 Jul 2023 23:26:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2fd06a0e57278891cd29f3497a5d23692716e253
-X-Git-Newrev: 9b31b643825e5ffa0e5849b622de4925b5b73cb9
-X-Patchwork-Hint: ignore
-Message-Id: <20230714212619.6E131870E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/genrandconfig: increase default
- target ubifs image size
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9LaKB4IGJx8i for <buildroot@lists.busybox.net>;
+ Fri, 14 Jul 2023 21:26:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C89318224A
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C89318224A
+ for <buildroot@buildroot.org>; Fri, 14 Jul 2023 21:26:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9C0D6FF805;
+ Fri, 14 Jul 2023 21:26:21 +0000 (UTC)
+Date: Fri, 14 Jul 2023 23:26:20 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230714232620.030c4b85@windsurf>
+In-Reply-To: <20230714164219.9934-1-ju.o@free.fr>
+References: <20230714164219.9934-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689369981;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ePfMlJU247Jdm7UGdR9lImm1PTt0jTKOPVp7pgLeZI4=;
+ b=Vl8SQHr0spwPCGAnbrqHVCStEYWSOGPeLSfYTERvLwBZ5+IWp0anDeQUUub0IF+4J8ax/5
+ bs/+IK8oIJ0GU2Au9qwJCrFQpQrtoP1zbSSU4c7Om1TxMZsGOZz77TDp7BEY8vF7EPl/Ip
+ Tbuytoq3Ey/Ru50VsOZkPZMfUahvhZTppYm7h+18c7q8k9VNERzN4s1Hb6whzwZMggkNZS
+ H0P7vjRiRkXyZg5z+rCeZ2hJvHW7lPcHQz5JmoL4sRQrFtRRpyZo/CB8xjTw5bW/G3lAMj
+ M+Z350F+YXVVV4rkJtGU5Vc7As6TocZ9D+X4Tg0eC2QWHSZytazVOeSllCvaYA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Vl8SQHr0
+Subject: Re: [Buildroot] [PATCH 1/1]
+ support/testing/tests/package/test_pigz.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +78,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b31b643825e5ffa0e5849b622de4925b5b73cb9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 14 Jul 2023 18:42:19 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-The new value is calculated based on:
-ROOTFS_SIZE = 5G (see commit 3c98eb26db6501a373cc405c80505ba72fde9e96)
-BR2_TARGET_ROOTFS_UBIFS_LEBSIZE = 0x1f800
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  DEVELOPERS                                 |  1 +
+>  support/testing/tests/package/test_pigz.py | 12 ++++++++++++
+>  2 files changed, 13 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_pigz.py
 
-5G / 0x1f800 = 41610
+Applied to master, thanks.
 
-Fixes:
-http://autobuild.buildroot.net/results/f72/f72918d63510b170e5da01bfa9c247cf9dcf507f/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/genrandconfig | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 0938260c1b..60922e871c 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -525,6 +525,11 @@ def fixup_config(sysinfo, configfile):
-         configlines.remove('BR2_TARGET_ROOTFS_F2FS_SIZE="100M"\n')
-         configlines.append('BR2_TARGET_ROOTFS_F2FS_SIZE="%s"\n' % ROOTFS_SIZE)
- 
-+    if 'BR2_TARGET_ROOTFS_UBIFS=y\n' in configlines and \
-+       'BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n' in configlines:
-+        configlines.remove('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n')
-+        configlines.append('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=41610\n')
-+
-     if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
-        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
-         configlines.remove('BR2_TARGET_S500_BOOTLOADER=y\n')
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
