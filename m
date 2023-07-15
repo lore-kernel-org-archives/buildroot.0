@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D07F4C001DC
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 19:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9621DC0015E
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 19:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84E7081DF3;
-	Sat, 15 Jul 2023 19:48:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84E7081DF3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EFDA819BE;
+	Sat, 15 Jul 2023 19:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EFDA819BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a8VD3624iHYV; Sat, 15 Jul 2023 19:48:12 +0000 (UTC)
+	with ESMTP id XSzb2NNaky3E; Sat, 15 Jul 2023 19:48:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88B6B819BE;
-	Sat, 15 Jul 2023 19:48:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88B6B819BE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 566D41BF2E5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19F25819C8;
+	Sat, 15 Jul 2023 19:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19F25819C8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E0C461BF2E5
  for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3AF82404FE
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AF82404FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id B53B2607B5
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:47:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B53B2607B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EgAABBLIkukB for <buildroot@lists.busybox.net>;
- Sat, 15 Jul 2023 19:47:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wcI8N86jMrjm for <buildroot@lists.busybox.net>;
+ Sat, 15 Jul 2023 19:47:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E307D400E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D9F2607A4
 Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E307D400E5
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 19:47:44 +0000 (UTC)
-Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
- by shout01.mail.de (Postfix) with ESMTP id CCEB6A03D1;
- Sat, 15 Jul 2023 21:47:42 +0200 (CEST)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5D9F2607A4
+ for <buildroot@buildroot.org>; Sat, 15 Jul 2023 19:47:46 +0000 (UTC)
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout01.mail.de (Postfix) with ESMTP id C4134A03D2;
+ Sat, 15 Jul 2023 21:47:43 +0200 (CEST)
 Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
- by postfix02.mail.de (Postfix) with ESMTP id AD6D9A03C3;
- Sat, 15 Jul 2023 21:47:42 +0200 (CEST)
+ by postfix03.mail.de (Postfix) with ESMTP id A2304801C7;
+ Sat, 15 Jul 2023 21:47:43 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 3E268100136;
- Sat, 15 Jul 2023 21:47:42 +0200 (CEST)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 2F029100136;
+ Sat, 15 Jul 2023 21:47:43 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Sat, 15 Jul 2023 21:47:33 +0200
-Message-Id: <20230715194735.15286-2-kilian.zinnecker@mail.de>
+Date: Sat, 15 Jul 2023 21:47:35 +0200
+Message-Id: <20230715194735.15286-4-kilian.zinnecker@mail.de>
 In-Reply-To: <20230715194735.15286-1-kilian.zinnecker@mail.de>
 References: <20230715194735.15286-1-kilian.zinnecker@mail.de>
 MIME-Version: 1.0
@@ -60,22 +60,22 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 6059
-X-purgate-ID: 154282::1689450462-3D7FE7B6-94AE93DB/2/53637512152
+X-purgate-size: 7960
+X-purgate-ID: 154282::1689450463-3D7FE7B6-1ACC1873/2/53637512154
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1689450462;
- bh=R1qUqj1NGtXc9PsVcNkmnXipKDvW15OvPYLkEY1s1Nk=;
+ d=mail.de; s=mailde202009; t=1689450463;
+ bh=1m7s3k+RATCWnxB/rbBN+5q12Rv3SLq1d+Z4e6u3RWQ=;
  h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
- b=Dit30KEes96y/J5hT2ZAR0vituxQbMIaqx+cpPtXU2FWQqZ5vApeRdp++yPTWvHqo
- 0Z0xR7napJQQzFahZNcRvmuqBYDbWloSYH84rOHpJU9OdFNOMF+9kauv3NWDZOWt1z
- dmRW3gC8VrW3O7qZP0kyjZCq35NbJqFD4O1EClbC7O2BOoYOnXSI/27D6gQt+nltNY
- /PjKRY67gpN3tT2esTSC8EvnbCr/9+3Hqtn9aY6hPMZcji50EpMwhSOHjXmzY5+nfR
- mBg0WmgzLJH3PXw9h6Fafkxyma6Uh66ljkz2F8Xc50QvdOKSwK4wksDKrjFrIOogxv
- tE5jASPdUM5lg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=D5RGjMBsTikmEmQ0eWsvvBcCAy1TRqHpeXm6dn6d5YRv9SbXi6asZj1uKehOvOrgS
+ 2xYQj/g5Q0w+Qm2ZP06k42qzVym/eMy5Wtp/48UTWppmpnivwpvgHLnEZPhh3atGit
+ VT/glsRv8fQt3J0PxfsUc6LFgHFMdFOoPvJGG7J2pXxHIbcqrWlefVKw9uoU0HexlQ
+ FGmKVO2IFW7S88MA2BlpR4qD/oQK2R3A0f/LjmZM7/fhiBGsKasw29XlXP8lTM6J0S
+ L2xXlLuXKDB+wwM+m75juqlrrKkegAUbj9h0FhCkoSVxn7vt3tQww3b/d15xBpIZlZ
+ L8n0wn4bBgkJQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=Dit30KEe
-Subject: [Buildroot] [PATCH v7 1/3] package/rockchip-rkbin: new package
+ header.a=rsa-sha256 header.s=mailde202009 header.b=D5RGjMBs
+Subject: [Buildroot] [PATCH v7 3/3] configs/rock5b: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,171 +94,146 @@ Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Andreas Ziegler <br015@umbiko.net>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Kilian Zinnecker <kilian.zinnecker@mail.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a package for the Rockchip ATF binary blobs. These
-binaries are needed to build U-Boot for some Rockchip SoCs (e.g.,
-RK3588). One can config a custom version and manually define which
-blobs (for bl31, tpl and optee) to use from the repository.
-
-Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
----
- DEVELOPERS                                 |  3 ++
- package/Config.in                          |  1 +
- package/rockchip-rkbin/Config.in           | 47 ++++++++++++++++++++++
- package/rockchip-rkbin/rockchip-rkbin.hash |  2 +
- package/rockchip-rkbin/rockchip-rkbin.mk   | 46 +++++++++++++++++++++
- 5 files changed, 99 insertions(+)
- create mode 100644 package/rockchip-rkbin/Config.in
- create mode 100644 package/rockchip-rkbin/rockchip-rkbin.hash
- create mode 100644 package/rockchip-rkbin/rockchip-rkbin.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 405ccd645a..d506e82ff8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1797,6 +1797,9 @@ F:	package/ramsmp/
- N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
- F:	package/libcamera/
- 
-+N:	Kilian Zinnecker <kilian.zinnecker@mail.de>
-+F:	package/rockchip-rkbin/
-+
- N:	Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
- F:	package/wqy-zenhei/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 57d3646566..1e076d40a8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -580,6 +580,7 @@ endmenu
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rockchip-mali/Config.in"
-+	source "package/rockchip-rkbin/Config.in"
- 	source "package/rpi-userland/Config.in"
- 	source "package/rs485conf/Config.in"
- 	source "package/rtc-tools/Config.in"
-diff --git a/package/rockchip-rkbin/Config.in b/package/rockchip-rkbin/Config.in
-new file mode 100644
-index 0000000000..08ca5d4d98
---- /dev/null
-+++ b/package/rockchip-rkbin/Config.in
-@@ -0,0 +1,47 @@
-+config BR2_PACKAGE_ROCKCHIP_RKBIN
-+	bool "rockchip-rkbin"
-+	depends on BR2_arm || BR2_aarch64
-+	help
-+	  This package provides Rockchip SoC binary blobs for U-Boot.
-+
-+if BR2_PACKAGE_ROCKCHIP_RKBIN
-+
-+config BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
-+	bool "Use a custom version"
-+	help
-+	  This option allows to use a specific version.
-+if BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
-+
-+config BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE
-+	string "Rockchip rkbin version"
-+	depends on BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
-+
-+endif # BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
-+
-+config BR2_PACKAGE_ROCKCHIP_RKBIN_VERSION
-+	string
-+	default "d6ccfe401ca84a98ca3b85c12b9554a1a43a166c" \
-+		if !BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
-+	default BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE \
-+		if BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
-+
-+config BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME
-+	string "Rockchip rkbin tpl file path"
-+	help
-+	  Full path to the tpl file inside the rkbin repository. The
-+	  specified file will be copied and used by U-Boot as tpl.
-+
-+config BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME
-+	string "Rockchip rkbin bl31 file path"
-+	help
-+	  Full path to the bl31 file inside the rkbin repository. The
-+	  specified file will be copied and used by U-Boot as bl31.
-+
-+config BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME
-+	string "Rockchip rkbin tee file path"
-+	help
-+	  Full path to the TEE file inside the rkbin repository.
-+	  The specified file will be copied and used by U-Boot as
-+	  TEE.
-+
-+endif # BR2_PACKAGE_ROCKCHIP_RKBIN
-diff --git a/package/rockchip-rkbin/rockchip-rkbin.hash b/package/rockchip-rkbin/rockchip-rkbin.hash
-new file mode 100644
-index 0000000000..71ac3ea259
---- /dev/null
-+++ b/package/rockchip-rkbin/rockchip-rkbin.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  6f7b58fe35108101031ebfd3cc6eb7a186f258a1cdbd93c4256888997ab52c8f  rockchip-rkbin-d6ccfe401ca84a98ca3b85c12b9554a1a43a166c-br1.tar.gz
-diff --git a/package/rockchip-rkbin/rockchip-rkbin.mk b/package/rockchip-rkbin/rockchip-rkbin.mk
-new file mode 100644
-index 0000000000..e80aaefab8
---- /dev/null
-+++ b/package/rockchip-rkbin/rockchip-rkbin.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# rockchip-rkbin
-+#
-+################################################################################
-+
-+ROCKCHIP_RKBIN_VERSION = $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_VERSION))
-+ROCKCHIP_RKBIN_SITE = https://github.com/rockchip-linux/rkbin.git
-+ROCKCHIP_RKBIN_SITE_METHOD = git
-+ROCKCHIP_RKBIN_LICENSE = PROPRIETARY
-+ROCKCHIP_RKBIN_REDISTRIBUTE = NO
-+
-+ROCKCHIP_RKBIN_INSTALL_IMAGES = YES
-+ROCKCHIP_RKBIN_INSTALL_TARGET = NO
-+
-+ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME),"")
-+ROCKCHIP_RKBIN_BL31_FILENAME = $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME))
-+endif
-+
-+ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME),"")
-+ROCKCHIP_RKBIN_TPL_FILENAME = $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME))
-+endif
-+
-+ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME),"")
-+ROCKCHIP_RKBIN_TEE_FILENAME = $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME))
-+endif
-+
-+define ROCKCHIP_RKBIN_INSTALL_IMAGES_CMDS
-+	$(if $(ROCKCHIP_RKBIN_BL31_FILENAME), \
-+		cp $(@D)/$(ROCKCHIP_RKBIN_BL31_FILENAME) $(BINARIES_DIR)/${ROCKCHIP_RKBIN_BL31_FILENAME##*/})
-+	$(if $(ROCKCHIP_RKBIN_TPL_FILENAME), \
-+		cp $(@D)/$(ROCKCHIP_RKBIN_TPL_FILENAME) $(BINARIES_DIR)/${ROCKCHIP_RKBIN_TPL_FILENAME##*/})
-+	$(if $(ROCKCHIP_RKBIN_TEE_FILENAME), \
-+		cp $(@D)/$(ROCKCHIP_RKBIN_TEE_FILENAME) $(BINARIES_DIR)/${ROCKCHIP_RKBIN_TEE_FILENAME##*/})
-+endef
-+
-+ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE)),)
-+$(error No custom rockchip-rkbin version specified. Check your BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE setting)
-+endif
-+ifeq ($(BR_BUILDING),y)
-+BR_NO_CHECK_HASH_FOR += rockchip-rkbin-$(ROCKCHIP_RKBIN_VERSION)-br1.tar.gz
-+endif
-+endif
-+
-+$(eval $(generic-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBwYXRjaCBhZGRzIHRoZSBkZWZjb25maWcgZmlsZSBuZWVkZWQgdG8gYnVpbGQgdS1ib290
+LCBrZXJuZWwKYW5kIHJvb3RmcyBmb3IgdGhlIFJvY2sgNUIuIEluIGFkZGl0aW9uIGl0IGFkZHMg
+YSBrZXJuZWwgY29uZmlnCmZyYWdtZW50IGZpbGUsIHdoaWNoIGFjdGl2YXRlcyB0aGUgbmVlZGVk
+IGV0aGVybmV0IGRyaXZlciBzdXBwb3J0LgpJdCBhbHNvIGFkZHMgYSByZWFkbWUgYW5kIHBvc3Qg
+aW1hZ2Ugc2NyaXB0cywgbmVlZGVkIHRvIGdlbmVyYXRlIGFuCnNkY2FyZC5pbWcgZmlsZSwgd2hp
+Y2ggY2FuIGJlIGZsYXNoZWQgb24gYW4gU0QgY2FyZCB0byBib290IHRoZQpSYWR4YSBSb2NrIDVC
+LgoKU2lnbmVkLW9mZi1ieTogS2lsaWFuIFppbm5lY2tlciA8a2lsaWFuLnppbm5lY2tlckBtYWls
+LmRlPgotLS0KIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICsKIGJvYXJk
+L3JhZHhhL3JvY2s1Yi9ib290LmNtZCAgICAgICB8ICAzICsrCiBib2FyZC9yYWR4YS9yb2NrNWIv
+Z2VuaW1hZ2UuY2ZnICAgfCAzNCArKysrKysrKysrKysrKysrKwogYm9hcmQvcmFkeGEvcm9jazVi
+L2xpbnV4LmZyYWdtZW50IHwgIDEgKwogYm9hcmQvcmFkeGEvcm9jazViL3Bvc3QtaW1hZ2Uuc2gg
+IHwgIDYgKysrCiBib2FyZC9yYWR4YS9yb2NrNWIvcmVhZG1lLnR4dCAgICAgfCA2MiArKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrCiBib2FyZC9yYWR4YS9yb2NrNWIvcm9jazViLml0cyAg
+ICAgfCA0NiArKysrKysrKysrKysrKysrKysrKysrKwogY29uZmlncy9yb2NrNWJfZGVmY29uZmln
+ICAgICAgICAgIHwgNDIgKysrKysrKysrKysrKysrKysrKysrCiA4IGZpbGVzIGNoYW5nZWQsIDE5
+NiBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvcmFkeGEvcm9jazViL2Jv
+b3QuY21kCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvcmFkeGEvcm9jazViL2dlbmltYWdlLmNm
+ZwogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3JhZHhhL3JvY2s1Yi9saW51eC5mcmFnbWVudAog
+Y3JlYXRlIG1vZGUgMTAwNzU1IGJvYXJkL3JhZHhhL3JvY2s1Yi9wb3N0LWltYWdlLnNoCiBjcmVh
+dGUgbW9kZSAxMDA2NDQgYm9hcmQvcmFkeGEvcm9jazViL3JlYWRtZS50eHQKIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBib2FyZC9yYWR4YS9yb2NrNWIvcm9jazViLml0cwogY3JlYXRlIG1vZGUgMTAwNjQ0
+IGNvbmZpZ3Mvcm9jazViX2RlZmNvbmZpZwoKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZF
+TE9QRVJTCmluZGV4IGQ1MDZlODJmZjguLmQ4NjU3NTE4YzMgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BF
+UlMKKysrIGIvREVWRUxPUEVSUwpAQCAtMTc5OSw2ICsxNzk5LDggQEAgRjoJcGFja2FnZS9saWJj
+YW1lcmEvCiAKIE46CUtpbGlhbiBaaW5uZWNrZXIgPGtpbGlhbi56aW5uZWNrZXJAbWFpbC5kZT4K
+IEY6CXBhY2thZ2Uvcm9ja2NoaXAtcmtiaW4vCitGOgljb25maWdzL3JvY2s1Yl9kZWZjb25maWcK
+K0Y6CWJvYXJkL3JhZHhhL3JvY2s1Yi8KIAogTjoJS2xhdXMgSGVpbnJpY2ggS2l3aSA8a2xhdXNA
+bGludXgudm5ldC5pYm0uY29tPgogRjoJcGFja2FnZS93cXktemVuaGVpLwpkaWZmIC0tZ2l0IGEv
+Ym9hcmQvcmFkeGEvcm9jazViL2Jvb3QuY21kIGIvYm9hcmQvcmFkeGEvcm9jazViL2Jvb3QuY21k
+Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjlhM2U3M2UwMDMKLS0tIC9k
+ZXYvbnVsbAorKysgYi9ib2FyZC9yYWR4YS9yb2NrNWIvYm9vdC5jbWQKQEAgLTAsMCArMSwzIEBA
+CitzZXRlbnYgYm9vdGFyZ3Mgcm9vdD0vZGV2L21tY2JsazBwMiBydyByb290ZnN0eXBlPWV4dDQg
+Y2xraW5faHo9KDI1MDAwMDAwKSBlYXJseWNvbiBjbGtfaWdub3JlX3VudXNlZCBlYXJseXByaW50
+ayBjb25zb2xlPXR0eVMyLDE1MDAwMDBuOCByb290d2FpdAorZmF0bG9hZCBtbWMgMToxICR7bG9h
+ZGFkZHJ9IGltYWdlLml0YgorYm9vdG0gJHtsb2FkYWRkcn0KZGlmZiAtLWdpdCBhL2JvYXJkL3Jh
+ZHhhL3JvY2s1Yi9nZW5pbWFnZS5jZmcgYi9ib2FyZC9yYWR4YS9yb2NrNWIvZ2VuaW1hZ2UuY2Zn
+Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjI5NDMyMzJmYzMKLS0tIC9k
+ZXYvbnVsbAorKysgYi9ib2FyZC9yYWR4YS9yb2NrNWIvZ2VuaW1hZ2UuY2ZnCkBAIC0wLDAgKzEs
+MzQgQEAKKyMgU0QgY2FyZCBpbWFnZSBmb3IgUmFkeGEgUm9jayA1YgorCitpbWFnZSBib290LnZm
+YXQgeworCXZmYXQgeworCQlmaWxlcyA9IHsKKwkJCSJpbWFnZS5pdGIiLAorCQkJImJvb3Quc2Ny
+IgorCQl9CisJfQorCXNpemUgPSAxNk0KK30KKworaW1hZ2Ugc2RjYXJkLmltZyB7CisJaGRpbWFn
+ZSB7CisJCXBhcnRpdGlvbi10YWJsZS10eXBlID0gImh5YnJpZCIKKwl9CisKKwlwYXJ0aXRpb24g
+dWJvb3QgeworCQlpbi1wYXJ0aXRpb24tdGFibGUgPSAiZmFsc2UiCisJCWltYWdlID0gInUtYm9v
+dC1yb2NrY2hpcC5iaW4iCisJCW9mZnNldCA9IDMySworCX0KKworCXBhcnRpdGlvbiBib290IHsK
+KwkJcGFydGl0aW9uLXR5cGUgPSAiMHhDIgorCQlib290YWJsZSA9ICJ0cnVlIgorCQlpbWFnZSA9
+ICJib290LnZmYXQiCisJfQorCisJcGFydGl0aW9uIHJvb3RmcyB7CisJCXBhcnRpdGlvbi10eXBl
+ID0gMHg4MworCQlpbWFnZSA9ICJyb290ZnMuZXh0MiIKKwl9Cit9CmRpZmYgLS1naXQgYS9ib2Fy
+ZC9yYWR4YS9yb2NrNWIvbGludXguZnJhZ21lbnQgYi9ib2FyZC9yYWR4YS9yb2NrNWIvbGludXgu
+ZnJhZ21lbnQKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uODExZDQyYTc5
+YgotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL3JhZHhhL3JvY2s1Yi9saW51eC5mcmFnbWVudApA
+QCAtMCwwICsxIEBACitDT05GSUdfUjgxNjk9eQpkaWZmIC0tZ2l0IGEvYm9hcmQvcmFkeGEvcm9j
+azViL3Bvc3QtaW1hZ2Uuc2ggYi9ib2FyZC9yYWR4YS9yb2NrNWIvcG9zdC1pbWFnZS5zaApuZXcg
+ZmlsZSBtb2RlIDEwMDc1NQppbmRleCAwMDAwMDAwMDAwLi5jMGY2M2FiM2EyCi0tLSAvZGV2L251
+bGwKKysrIGIvYm9hcmQvcmFkeGEvcm9jazViL3Bvc3QtaW1hZ2Uuc2gKQEAgLTAsMCArMSw2IEBA
+CisjIS91c3IvYmluL2VudiBiYXNoCisKK2d6aXAgLWZrICR7QklOQVJJRVNfRElSfS9JbWFnZQor
+Y3AgYm9hcmQvcmFkeGEvcm9jazViL3JvY2s1Yi5pdHMgJHtCSU5BUklFU19ESVJ9CisoY2QgJEJJ
+TkFSSUVTX0RJUiAmJiBta2ltYWdlIC1mIHJvY2s1Yi5pdHMgaW1hZ2UuaXRiKQorc3VwcG9ydC9z
+Y3JpcHRzL2dlbmltYWdlLnNoIC1jIGJvYXJkL3JhZHhhL3JvY2s1Yi9nZW5pbWFnZS5jZmcKZGlm
+ZiAtLWdpdCBhL2JvYXJkL3JhZHhhL3JvY2s1Yi9yZWFkbWUudHh0IGIvYm9hcmQvcmFkeGEvcm9j
+azViL3JlYWRtZS50eHQKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYWUz
+NjVkNGZlNQotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL3JhZHhhL3JvY2s1Yi9yZWFkbWUudHh0
+CkBAIC0wLDAgKzEsNjIgQEAKK1JBRFhBIFJPQ0sgNUIKKz09PT09PT09PT09PT09CitodHRwczov
+L3dpa2kucmFkeGEuY29tL1JvY2s1L2hhcmR3YXJlLzViCisKK0J1aWxkOgorPT09PT09CisgICQg
+bWFrZSByb2NrNWJfZGVmY29uZmlnCisgICQgbWFrZQorCitGaWxlcyBjcmVhdGVkIGluIG91dHB1
+dCBkaXJlY3RvcnkKKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQorCitvdXRwdXQv
+aW1hZ2VzCisuCivilJzilIDilIAgSW1hZ2UKK+KUnOKUgOKUgCBJbWFnZS5negor4pSc4pSA4pSA
+IGJvb3Quc2NyCivilJzilIDilIAgYm9vdC52ZmF0CivilJzilIDilIAgaW1hZ2UuaXRiCivilJzi
+lIDilIAgcmszNTg4LXJvY2stNWIuZHRiCivilJzilIDilIAgcmszNTg4X2JsMzFfdjEuMzguZWxm
+CivilJzilIDilIAgcmszNTg4X2Rkcl9scDRfMjExMk1Iel9scDVfMjczNk1Iel92MS4xMS5iaW4K
+K+KUnOKUgOKUgCByb2NrNWIuaXRzCivilJzilIDilIAgcm9vdGZzLmV4dDIKK+KUnOKUgOKUgCBy
+b290ZnMuZXh0NAor4pSc4pSA4pSAIHJvb3Rmcy50YXIKK+KUnOKUgOKUgCBzZGNhcmQuaW1nCivi
+lJzilIDilIAgdS1ib290LXJvY2tjaGlwLmJpbgor4pSU4pSA4pSAIHUtYm9vdC5iaW4KKworQ3Jl
+YXRpbmcgYm9vdGFibGUgU0QgY2FyZDoKKz09PT09PT09PT09PT09PT09PT09PT09PT09CisKK1Np
+bXBseSBpbnZva2UgKGFzIHJvb3QpCisKK3N1ZG8gZGQgaWY9b3V0cHV0L2ltYWdlcy9zZGNhcmQu
+aW1nIG9mPS9kZXYvc2RYICYmIHN5bmMKKworV2hlcmUgWCBpcyB5b3VyIFNEIGNhcmQgZGV2aWNl
+LgorCitCb290aW5nOgorPT09PT09PT0KKworU2VyaWFsIGNvbnNvbGU6CistLS0tLS0tLS0tLS0t
+LS0KK1RoZSBSb2NrIDVCIGhhcyBhIDQwLXBpbiBHUElPIGhlYWRlci4gSXRzIGxheW91dCBjYW4g
+YmUgc2VlbiBoZXJlOgoraHR0cHM6Ly93aWtpLnJhZHhhLmNvbS9Sb2NrNS9oYXJkd2FyZS81Yi9n
+cGlvCisKK1RoZSBVYXJ0IHBpbnMgYXJlIGFzIGZvbGxvd3M6CisKK3BpbiA2OiAgZ25kCitwaW4g
+ODogIHR4CitwaW4gMTA6IHJ4CisKK0JhdWRyYXRlIGZvciB0aGlzIGJvYXJkIGlzIDE1MDAwMDAu
+CisKK0xvZ2luOgorLS0tLS0tCitFbnRlciAncm9vdCcgYXMgbG9naW4gdXNlciwgYW5kIHRoZSBw
+cm9tcHQgaXMgcmVhZHkuCisKK3dpa2kgbGluazoKKy0tLS0tLS0tLS0KK2h0dHBzOi8vZm9ydW0u
+cmFkeGEuY29tL2Mvcm9jazUKZGlmZiAtLWdpdCBhL2JvYXJkL3JhZHhhL3JvY2s1Yi9yb2NrNWIu
+aXRzIGIvYm9hcmQvcmFkeGEvcm9jazViL3JvY2s1Yi5pdHMKbmV3IGZpbGUgbW9kZSAxMDA2NDQK
+aW5kZXggMDAwMDAwMDAwMC4uZDczNjU5YTU2ZQotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL3Jh
+ZHhhL3JvY2s1Yi9yb2NrNWIuaXRzCkBAIC0wLDAgKzEsNDYgQEAKKy9kdHMtdjEvOworCisvIHsK
+KwlkZXNjcmlwdGlvbiA9ICJSb2NrIDVCIEZJVCBJbWFnZSI7CisJI2FkZHJlc3MtY2VsbHMgPSA8
+MT47CisKKwlpbWFnZXMgeworCQlrZXJuZWwgeworCQkJZGVzY3JpcHRpb24gPSAiS2VybmVsIjsK
+KwkJCWRhdGEgPSAvaW5jYmluLygiSW1hZ2UuZ3oiKTsKKwkJCXR5cGUgPSAia2VybmVsIjsKKwkJ
+CWFyY2ggPSAiYXJtNjQiOworCQkJb3MgPSAibGludXgiOworCQkJY29tcHJlc3Npb24gPSAiZ3pp
+cCI7CisJCQlsb2FkID0gPDB4MGEyMDAwMDA+OworCQkJZW50cnkgPSA8MHgwYTIwMDAwMD47CisJ
+CQloYXNoIHsKKwkJCQlhbGdvID0gInNoYTI1NiI7CisJCQl9OworCQl9OworCQlmZHQgeworCQkJ
+ZGVzY3JpcHRpb24gPSAiRGV2aWNlIFRyZWUiOworCQkJZGF0YSA9IC9pbmNiaW4vKCJyazM1ODgt
+cm9jay01Yi5kdGIiKTsKKwkJCXR5cGUgPSAiZmxhdF9kdCI7CisJCQlhcmNoID0gImFybTY0IjsK
+KwkJCWNvbXByZXNzaW9uID0gIm5vbmUiOworCQkJbG9hZCA9IDwweDBlMDAwMDAwPjsKKwkJCWVu
+dHJ5ID0gPDB4MGUwMDAwMDA+OworCQkJaGFzaCB7CisJCQkJYWxnbyA9ICJzaGEyNTYiOworCQkJ
+fTsKKwkJfTsKKwl9OworCisJY29uZmlndXJhdGlvbnMgeworCQlkZWZhdWx0ID0gInN0YW5kYXJk
+IjsKKwkJc3RhbmRhcmQgeworCQkJZGVzY3JpcHRpb24gPSAiU3RhbmRhcmQgQm9vdCI7CisJCQlr
+ZXJuZWwgPSAia2VybmVsIjsKKwkJCWZkdCA9ICJmZHQiOworCQkJaGFzaCB7CisJCQkJYWxnbyA9
+ICJzaGEyNTYiOworCQkJfTsKKwkJfTsKKwl9OworfTsKZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvcm9j
+azViX2RlZmNvbmZpZyBiL2NvbmZpZ3Mvcm9jazViX2RlZmNvbmZpZwpuZXcgZmlsZSBtb2RlIDEw
+MDY0NAppbmRleCAwMDAwMDAwMDAwLi5kOTI3ZjFmODYyCi0tLSAvZGV2L251bGwKKysrIGIvY29u
+Zmlncy9yb2NrNWJfZGVmY29uZmlnCkBAIC0wLDAgKzEsNDIgQEAKK0JSMl9hYXJjaDY0PXkKK0JS
+Ml9jb3J0ZXhfYTc2X2E1NT15CitCUjJfS0VSTkVMX0hFQURFUlNfNV8xMD15CitCUjJfUk9PVEZT
+X1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9yYWR4YS9yb2NrNWIvcG9zdC1pbWFnZS5zaCIKK0JS
+Ml9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iIgorQlIyX1RBUkdFVF9HRU5FUklDX0hPU1ROQU1F
+PSJyb2NrNWIiCitCUjJfVEFSR0VUX0dFTkVSSUNfSVNTVUU9IldlbGNvbWUgdG8gdGhlIHJvY2s1
+YiBib2FyZCIKK0JSMl9TWVNURU1fREhDUD0iZXRoMCIKK0JSMl9MSU5VWF9LRVJORUw9eQorQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fR0lUPXkKK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1JFUE9f
+VVJMPSJodHRwczovL2dpdGh1Yi5jb20vcmFkeGEva2VybmVsLmdpdCIKK0JSMl9MSU5VWF9LRVJO
+RUxfQ1VTVE9NX1JFUE9fVkVSU0lPTj0iNTJmNTFhMmI1YmExNzhmMzMxYWY2MjI2MGQyZGE4NmQ3
+NDcyYzE0YiIKK0JSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJyb2NrY2hpcF9saW51eCIKK0JS
+Ml9MSU5VWF9LRVJORUxfRFRTX1NVUFBPUlQ9eQorQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRT
+X05BTUU9InJvY2tjaGlwL3JrMzU4OC1yb2NrLTViIgorQlIyX0xJTlVYX0tFUk5FTF9EVEJfT1ZF
+UkxBWV9TVVBQT1JUPXkKK0JSMl9MSU5VWF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJi
+b2FyZC9yYWR4YS9yb2NrNWIvbGludXguZnJhZ21lbnQiCitCUjJfVEFSR0VUX1JPT1RGU19FWFQy
+PXkKK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15CitCUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJ
+WkU9IjI1ME0iCitCUjJfVEFSR0VUX1VCT09UPXkKK0JSMl9UQVJHRVRfVUJPT1RfQlVJTERfU1lT
+VEVNX0tDT05GSUc9eQorQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTj15CitCUjJfVEFS
+R0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDIzLjA3IgorQlIyX1RBUkdFVF9VQk9P
+VF9CT0FSRF9ERUZDT05GSUc9InJvY2s1Yi1yazM1ODgiCitCUjJfVEFSR0VUX1VCT09UX05FRURT
+X1BZTElCRkRUPXkKK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfT1BFTlNTTD15CitCUjJfVEFSR0VU
+X1VCT09UX05FRURTX1BZRUxGVE9PTFM9eQorQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19ST0NLQ0hJ
+UF9SS0JJTj15CitCUjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTX0ZJVF9TVVBQT1JUPXkKK0JS
+Ml9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFNfQk9PVF9TQ1JJUFQ9eQorQlIyX1BBQ0tBR0VfSE9T
+VF9VQk9PVF9UT09MU19CT09UX1NDUklQVF9TT1VSQ0U9ImJvYXJkL3JhZHhhL3JvY2s1Yi9ib290
+LmNtZCIKK0JSMl9QQUNLQUdFX0hPU1RfRE9TRlNUT09MUz15CitCUjJfUEFDS0FHRV9IT1NUX0RU
+Qz15CitCUjJfUEFDS0FHRV9IT1NUX0dFTklNQUdFPXkKK0JSMl9QQUNLQUdFX0hPU1RfTVRPT0xT
+PXkKK0JSMl9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFM9eQorQlIyX1BBQ0tBR0VfUk9DS0NISVBf
+UktCSU49eQorQlIyX1BBQ0tBR0VfUk9DS0NISVBfUktCSU5fQ1VTVE9NX1ZFUlNJT049eQorQlIy
+X1BBQ0tBR0VfUk9DS0NISVBfUktCSU5fQ1VTVE9NX1ZFUlNJT05fVkFMVUU9Ijc4Y2JiYzRmOWMz
+NmI3N2E2MjAxMzJhZDM4ZDJjNjgyM2I0YjI1ZmUiCitCUjJfUEFDS0FHRV9ST0NLQ0hJUF9SS0JJ
+Tl9UUExfRklMRU5BTUU9ImJpbi9yazM1L3JrMzU4OF9kZHJfbHA0XzIxMTJNSHpfbHA1XzI3MzZN
+SHpfdjEuMTEuYmluIgorQlIyX1BBQ0tBR0VfUk9DS0NISVBfUktCSU5fQkwzMV9GSUxFTkFNRT0i
+YmluL3JrMzUvcmszNTg4X2JsMzFfdjEuMzguZWxmIgotLSAKMi4zNC4xCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
