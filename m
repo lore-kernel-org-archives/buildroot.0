@@ -1,85 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F66AC0015E
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 18:36:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE5FDC0015E
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 19:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCEAE40946;
-	Sat, 15 Jul 2023 18:36:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCEAE40946
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09C278198D;
+	Sat, 15 Jul 2023 19:47:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09C278198D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LQmZfrDUBgdQ; Sat, 15 Jul 2023 19:47:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D51B2819BE;
+	Sat, 15 Jul 2023 19:47:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D51B2819BE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D3C021BF2E5
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:47:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B836640945
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:47:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B836640945
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cRarhH6uR3VY; Sat, 15 Jul 2023 18:36:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E4F14094A;
-	Sat, 15 Jul 2023 18:35:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E4F14094A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F1C51BF3F7
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 18:35:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55A594013F
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 18:35:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55A594013F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sssuM02OvVDy for <buildroot@lists.busybox.net>;
- Sat, 15 Jul 2023 18:35:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BD21400E5
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
- [IPv6:2a00:1450:4864:20::132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5BD21400E5
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 18:35:54 +0000 (UTC)
-Received: by mail-lf1-x132.google.com with SMTP id
- 2adb3069b0e04-4fb5bcb9a28so4946399e87.3
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 11:35:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689446152; x=1692038152;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=o2FMBPc2xm058vos6lw59eJ0cpZP+OamtxnaLeUeOtE=;
- b=BFxGL/cA0yDx3i4kNxrNitnhMoOnYkyJldL6fFn4uUZI74Qgkig6KR/P3Lrje9GcH/
- ctTjT9Hx5PBWvJc+zE4OHvxOOELybt2rr5zON3yTUOx4bnNYObTRpvBnRyd/RvvTx0Nd
- orXHnf1mQDo62BCjzUnSKbeF8Bz3cjcR6rEvmJPapRl1ZoortMQWZOwe8cDRgcgfReT/
- HbrIk/AUI0vjFk7NeLP6uYTD1xuzpE+xgt4Fs6C6IP9gJZ0KDAS7MPmMB8tuKIPHjmxa
- sxOo1mzMnGP17MOXqo3QwwurPLJdFc0pEM9em3osfwY0fuNQK4FZUZxTM0TMSx4GA8vs
- txkw==
-X-Gm-Message-State: ABy/qLbS+JlgxyljOc6D0zlLtSAU+STzeEx27avuZ/TiJJYzJwDmPtkO
- MQBHTdDn33lxhpPNPvMxmp+EGSx4fEBKA1+AMz8=
-X-Google-Smtp-Source: APBJJlHBWNbiTT/DPaLBGEV1WtiAQYUsS66yqpeHDV9vhHdv/Gtr3dNE/tNrhJwvlcV+LXisGdoQg3E6PWZBb14/DZ4=
-X-Received: by 2002:a05:6512:3e2:b0:4fb:8c27:4def with SMTP id
- n2-20020a05651203e200b004fb8c274defmr5089742lfq.8.1689446151754; Sat, 15 Jul
- 2023 11:35:51 -0700 (PDT)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I3mNIdZ15h0E for <buildroot@lists.busybox.net>;
+ Sat, 15 Jul 2023 19:47:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E91B40942
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7E91B40942
+ for <buildroot@buildroot.org>; Sat, 15 Jul 2023 19:47:06 +0000 (UTC)
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout02.mail.de (Postfix) with ESMTP id 8A936A03C9;
+ Sat, 15 Jul 2023 21:47:04 +0200 (CEST)
+Received: from smtp03.mail.de (smtp03.bt.mail.de [10.0.121.213])
+ by postfix03.mail.de (Postfix) with ESMTP id 6BFFF801D0;
+ Sat, 15 Jul 2023 21:47:04 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp03.mail.de (Postfix) with ESMTPSA id 34A4CA025D;
+ Sat, 15 Jul 2023 21:47:02 +0200 (CEST)
+To: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Date: Sat, 15 Jul 2023 21:47:01 +0200
+Message-ID: <3751483.kQq0lBPeGt@kilian-aisec>
+In-Reply-To: <20230714234326.1ab918e8@windsurf>
+References: <20230714064413.11433-1-kilian.zinnecker@mail.de>
+ <20230714064413.11433-2-kilian.zinnecker@mail.de>
+ <20230714234326.1ab918e8@windsurf>
 MIME-Version: 1.0
-References: <CAFSsvmqOZCu+nRz4Ym-h1zHV53BEgdGkLahXpaiDu=-T17qNpA@mail.gmail.com>
- <877cr1f8il.fsf@48ers.dk>
-In-Reply-To: <877cr1f8il.fsf@48ers.dk>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 15 Jul 2023 11:35:40 -0700
-Message-ID: <CAFSsvmrKm3QVhiZYJRe-UBmX5TEkdrCKdHy+xJ242ng=wdQctw@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689446152; x=1692038152;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=o2FMBPc2xm058vos6lw59eJ0cpZP+OamtxnaLeUeOtE=;
- b=fsDRQtIpYeIgr/YUFwEhl7sX9s1YnEmQ0mmBy4niitrNbG+t6w1goqzuN1QmNxKRyS
- 7QpfMj7U93HFx4IlSfAaoyB0ArvdgOTyOuo+PQ0qg+ygHNOlJh0J+Je6lBpUBxjY1EoJ
- 0vdkkRW1l9Vl+oI4jRyAym7VwXBrJBkTkIoDHvVX9FqKqY7+yUldvsUYCOS9L6zPi4Ui
- uIJv0Xy4B2amPp0j3c6jYEPseT0A8tsEo9cXssCBaHO2mdBbcEfi8Sgrm1tL9MDiW8ii
- 4yr1/gVjGUNpVXjDAMDeUjmVtZkdgxU2htjnjjuB1oqy0SVDJN+nG67ns2GjfUiQH8CL
- 19wQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=fsDRQtIp
-Subject: Re: [Buildroot] Flutter-engine package help wanted.
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 10821
+X-purgate-ID: 154282::1689450424-C1B4A647-D5AB6A9B/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1689450424;
+ bh=7W1dK+qg269AJT7ryFZF0w1CC0W62cTaH9i1Q2eMjeQ=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=dy9lA0JngbxDrkpOqblv2oNDZGxP1rPyGkIESzKP3AyOrNzQJXzJWICdP8Rhq+qzc
+ TpxtlJ6os5vxYptCq/MTdJZHpZwvcnW7/kNxw5lFxUdzZXT4iLL0a983NPloRnzeqN
+ WfNL1QTRqauHuaWgL8pp9IkULoyPJxlExqbBnxAfZVqUORmh5Jedg1ZjcUn27J5ABQ
+ hLi7xS9Xy1DKYtKUqJqUw0OXCARqnr8bjGwZttSFReokB15LQsuJHILkgXjsYCP2CF
+ FMD0vAnqgubDqbH/VrZy3vN7OUURBOe3ytR/EiJLtHgxVYboCvLJt9c3gYgq0J1/c/
+ N2R8c0pUyoCmg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
+ header.a=rsa-sha256 header.s=mailde202009 header.b=dy9lA0Jn
+Subject: Re: [Buildroot] [PATCH v6 1/3] package: add rockchip-rkbin package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,115 +89,312 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============5650947855964220512=="
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+ Andreas Ziegler <br015@umbiko.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5650947855964220512==
-Content-Type: multipart/alternative; boundary="000000000000be1a3006008ad587"
+Hello Thomas,
 
---000000000000be1a3006008ad587
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> Thanks for your work! See below some comments.
 
-Hey Peter!
+Thank you for your review and feedback!
 
-One thought I had that I didn=E2=80=99t bring up in the first email: Anothe=
-r
-possible solution is to create and upload a tarball to the buildroot
-sources server, but each tarball is around 2.1GiB in size!
+> Nit: the commit title should be:
+> 
+> 	package/rockchip-rkbin: new package
 
-I have been using meta-flutter to port the package to Buildroot, but
-haven=E2=80=99t quite got it to compile yet!
+Thanks, will be fixed in a new patch revision.
 
-Adam
-On Sat, Jul 15, 2023 at 9:24 AM Peter Korsgaard <peter@korsgaard.com> wrote=
-:
+> > +ifeq ($(BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN),y)
+> > +UBOOT_DEPENDENCIES += rockchip-rkbin
+> > +define UBOOT_INSTALL_UBOOT_ROCKCHIP_BIN
+> > +	$(INSTALL) -D -m 0644 $(@D)/u-boot-rockchip.bin $(BINARIES_DIR)/
+> 
+> We need a full destination path here: $(BINARIES_DIR)/u-boot/rockchip.bin
 
-> >>>>> "Adam" =3D=3D Adam Duskett <aduskett@gmail.com> writes:
->
->  > Hello! I have a task to port Flutter to Buildroot and to make the
-> packages
->  > suitable for the master branch.
->
-> [snip lots of details]
->
-> Gaah, sounds like a big mess :/ Oh well, I guess that is life. Good luck
-> with it ;)
->
-> I take it that you have already looked at
-> https://github.com/sony/flutter-embedded-linux and the meta-flutter
-> layer? From a quick look it seems to largely do the same (but skip the
-> reproducible tarball).
->
-> I take it that you have already played around with Flutter? How useful
-> (features, but also size and build time) is it in the context of
-> Buildroot?
->
-> --
-> Bye, Peter Korsgaard
->
+Thanks, will also be fixed.
 
---000000000000be1a3006008ad587
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE),y)
+> > +UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31${suffix $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME))}
+> What is this ${...} ?
 
-<div dir=3D"auto">Hey Peter!</div><div dir=3D"auto"><br></div><div dir=3D"a=
-uto">One thought I had that I didn=E2=80=99t bring up in the first email: A=
-nother possible solution is to create and upload a tarball to the buildroot=
- sources server, but each tarball is around 2.1GiB in size!</div><div dir=
-=3D"auto"><br></div><div dir=3D"auto">I have been using meta-flutter to por=
-t the package to Buildroot, but haven=E2=80=99t quite got it to compile yet=
-!</div><div dir=3D"auto"><br></div><div dir=3D"auto">Adam</div><div dir=3D"=
-auto"><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On S=
-at, Jul 15, 2023 at 9:24 AM Peter Korsgaard &lt;<a href=3D"mailto:peter@kor=
-sgaard.com">peter@korsgaard.com</a>&gt; wrote:<br></div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left-width:1px;bo=
-rder-left-style:solid;padding-left:1ex;border-left-color:rgb(204,204,204)">=
-&gt;&gt;&gt;&gt;&gt; &quot;Adam&quot; =3D=3D Adam Duskett &lt;<a href=3D"ma=
-ilto:aduskett@gmail.com" target=3D"_blank">aduskett@gmail.com</a>&gt; write=
-s:<br>
-<br>
-=C2=A0&gt; Hello! I have a task to port Flutter to Buildroot and to make th=
-e packages<br>
-=C2=A0&gt; suitable for the master branch.<br>
-<br>
-[snip lots of details]<br>
-<br>
-Gaah, sounds like a big mess :/ Oh well, I guess that is life. Good luck<br=
->
-with it ;)<br>
-<br>
-I take it that you have already looked at<br>
-<a href=3D"https://github.com/sony/flutter-embedded-linux" rel=3D"noreferre=
-r" target=3D"_blank">https://github.com/sony/flutter-embedded-linux</a> and=
- the meta-flutter<br>
-layer? From a quick look it seems to largely do the same (but skip the<br>
-reproducible tarball).<br>
-<br>
-I take it that you have already played around with Flutter? How useful<br>
-(features, but also size and build time) is it in the context of<br>
-Buildroot?<br>
-<br>
--- <br>
-Bye, Peter Korsgaard<br>
-</blockquote></div></div>
+My intention was to rename the binaries to a generic file name (e.g., 
+"bl31.xyz" and "tpl.xyz"), while keeping the file type extension. However, I 
+now changed this anyway: The original file names are preserved. Hence there is 
+no more need for special file type extension anymore and this code has changed
+anyway.
 
---000000000000be1a3006008ad587--
+> > +endif
+> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE),y)
+> > +UBOOT_MAKE_OPTS += ROCKCHIP_TPL=$(BINARIES_DIR)/ddr${suffix $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME))} +endif
+> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILE),y)
+> > +$BOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee${suffix $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME))}
+>    ^^ typo, should be UBOOT_MAKE_OPTS
+> 
+> > +endif
+> > +endif
+> > +
+> 
+> These changes to boot/uboot/ should be in a separate patch, after the
+> patch adding rockchip-rkbin.
 
---===============5650947855964220512==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Yes, that makes sense. In the next version these changes are put in a separate 
+patch.
+
+> > +config BR2_PACKAGE_ROCKCHIP_RKBIN
+> > +	bool "Rockchip rkbin binary blobs"
+> 
+> Just:
+> 
+> 	bool "rockchip-rkbin"
+
+Done, thanks.
+
+> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_VERSION
+> > +	string
+> > +	default "d6ccfe401ca84a98ca3b85c12b9554a1a43a166c" \
+> > +		if !BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
+> > +	default BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE \
+> > +		if BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
+> 
+> Is it really likely that a different version, but from the same Git
+> repository will be needed?
+
+Yes, I actually believe that in this case, this is a valuable feature: I 
+deliberately implemented the package such, that the user will define which 
+binaries they want to use, by specifying the binary file path. The problem now 
+is, that the Rockchip maintainers of the repository remove or rename the 
+binaries between different commits. If we bump this package, we can look for 
+all official buildroot board defconfigs and change the binary names specified 
+inside those. However, if someone uses their own personal defconfig for some 
+own board (e.g., some company which develop custom boards), then their 
+defconfigs may break, if we bump the version. Even worse: What if Rockchip 
+removes a TPL with some specific frequency, needed by someone? This feature 
+allows people to specify commits, where their desired binaries are present.
+
+I don't think this is needed in general for packages. But in this specific 
+case, where different binaries may only be present in different commits, I think 
+it is a appropriate. However, if you really don't like this, then it would 
+also be ok for me to drop this.
+
+> I see in your defconfig you're using a
+> different version than the default used here. Why?
+
+Between default commit of the package and the one I chose in the defconfig, the 
+binaries needed for the Rock5B actually did not change. I just chose a 
+different commit to show and reassure myself, that this feature works, i.e., I 
+correctly copied the code from the uboot.mk.
+
+> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE
+> > +	bool "Rockchip rkbin tpl file"
+> > +	default n
+> "default n" is never needed, as it's the default.
+
+Thanks, removed.
+
+> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE
+> > +	bool "Rockchip rkbin bl31 file"
+> > +	default n
+> > +
+> > +if BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE
+> > +
+> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME
+> > +	string "bl31.elf file path"
+> > +	help
+> > +	  Full path to the bl31 file inside the rkbin repository. The
+> > +	  specified file will be copied and used by U-Boot as bl31.
+> > +
+> > +endif # BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE
+> > +
+> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILE
+> > +	bool "Rockchip rkbin optee file"
+> > +	default n
+> > +
+> > +if BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILE
+> > +
+> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME
+> > +	string "tee.elf file path"
+> > +	help
+> > +	  Full path to the TEE file inside the rkbin repository.
+> > +	  The specified file will be copied and used by U-Boot as
+> > +	  TEE.
+> > +endif # BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILE
+> 
+> For those 3 files, do we really need a boolean + a string option? Can't
+> we simply rely on string options: if the value is empty, there's no
+> TPL/BL31/TEE, if the value is non-empty, use the file provided.
+
+I actually like it this way. But you are not the first one who suggested that 
+simply checking, whether the string is empty or not is a better way to go: 
+Quentin Schulz also shares your opinion. So I changed it accordingly.
+
+> > +# Locally computed
+> > +sha256  6f7b58fe35108101031ebfd3cc6eb7a186f258a1cdbd93c4256888997ab52c8f 
+> > rockchip-rkbin-d6ccfe401ca84a98ca3b85c12b9554a1a43a166c-br1.tar.gz +
+> 
+> Nit: useless empty new line.
+
+Thanks, removed.
+
+> > +#########################################################################
+> > ####### +#
+> > +# rockchip-rkbin
+> > +#
+> > +#########################################################################
+> > ####### +
+> > +
+> 
+> Nit: only one empty new line.
+
+Also removed.
+
+> > +ROCKCHIP_RKBIN_VERSION = $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_VERSION)) +ROCKCHIP_RKBIN_SITE =
+> > https://github.com/rockchip-linux/rkbin.git +ROCKCHIP_RKBIN_SITE_METHOD =
+> > git
+> 
+> Any reason not to use:
+> 
+> ROCKCHIP_RKBIN_SITE = $(call
+> github,rockchip-linux,rkbin,$(ROCKCHIP_RKBIN_VERSION))
+> 
+>  ?
+
+If I use $(call github,rockchip-linux,rkbin,$(ROCKCHIP_RKBIN_VERSION)) I, the 
+following error occurs on my PC:
+
+fatal: repository 'https://github.com/rockchip-linux/rkbin/archive/
+78cbbc4f9c36b77a620132ad38d2c6823b4b25fe/' not found
+
+I am not familiar with this, to be honest, so I don't know how to fix this, 
+other than using the URL directly.
+
+> > +ROCKCHIP_RKBIN_LICENSE = PROPRIETARY
+> > +ROCKCHIP_RKBIN_REDISTRIBUTE = NO
+> 
+> This is the problematic part I believe. What is the license of this
+> stuff? Without any license, nobody is allowed to redistribute it. So as
+> it is, all images produced by Buildroot with this package cannot be
+> redistributed, making them quite useless, unless it's used by a
+> hobbyist building his own images for his own usage, without any
+> redistribution.
+> 
+> We have the same issue with some Amlogic blobs I believe. Blobs are
+> annoying, but they are even more annoying when there's no license
+> attached to them that allows redistribution.
+
+Well, that seems to be unfortunate. I guess then, there is no point in 
+integrating all this into buildroot, if the binaries are not allowed to be 
+redistributed?
+
+I wrote an email to some of the Rockchip contributors of the rkbin repository, 
+asking them what the license is, regarding the binaries. I hope to get an 
+answer soon, and that a LICENSE file is added to the repository. Let's see ...
+
+> > +ROCKCHIP_RKBIN_INSTALL_IMAGES = YES
+> > +ROCKCHIP_RKBIN_INSTALL_TARGET = NO
+> > +
+> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE),y)
+> > +ROCKCHIP_RKBIN_BL31_FILENAME = $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME))
+> > +BL31_EXTENSION=${suffix $(ROCKCHIP_RKBIN_BL31_FILENAME)}
+> 
+> All variables must be prefixed with the package name. Again this
+> ${suffix ...} thing, weird.
+
+Fixed the variable naming and the "suffix" is not there anymore.
+
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE),y)
+> > +ROCKCHIP_RKBIN_TPL_FILENAME = $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME))
+> > +TPL_EXTENSION=${suffix $(ROCKCHIP_RKBIN_TPL_FILENAME)}
+> 
+> All variables must be prefixed with the package name.
+
+Also fixed.
+
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILE),y)
+> > +ROCKCHIP_RKBIN_TEE_FILENAME = $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME))
+> > +TEE_EXTENSION=${suffix $(ROCKCHIP_RKBIN_TEE_FILENAME)}
+> 
+> All variables must be prefixed with the package name.
+
+And this, too.
+
+> > +endif
+> > +
+> > +define ROCKCHIP_RKBIN_INSTALL_IMAGES_CMDS
+> > +	$(if $(filter y, $(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILE)), \
+> > +		cp $(@D)/$(ROCKCHIP_RKBIN_BL31_FILENAME)
+> > $(BINARIES_DIR)/bl31$(BL31_EXTENSION)) +	$(if $(filter y,
+> > $(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILE)), \
+> > +		cp $(@D)/$(ROCKCHIP_RKBIN_TPL_FILENAME)
+> > $(BINARIES_DIR)/ddr$(TPL_EXTENSION)) +	$(if $(filter y,
+> > $(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILE)), \
+> > +		cp $(@D)/$(ROCKCHIP_RKBIN_TEE_FILENAME)
+> > $(BINARIES_DIR)/tee$(TEE_EXTENSION))
+> The filter y construct is a bit useless, you can just do:
+> 
+> 	$(if $(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILE),\
+> 		do something)
+
+Thanks! I changed this part as well. It now actually checks for the string, as 
+the bools were removed (see above).
+
+> > +ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION),y)
+> > +ifeq ($(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE)),)
+> > +$(error No custom rockchip-rkbin version specified. Check your
+> > BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE setting) +endif
+> > +ROCKCHIP_SOURCE = rockchip-rkbin-$(ROCKCHIP_RKBIN_VERSION)-br1.tar.gz
+> 
+> Hum, I wonder why this needs to be defined. It seems to work for U-Boot
+> without having to define UBOOT_SOURCE in uboot.mk, the infrastructure
+> does it for you.
+
+Well, this ROCKCHIP_SOURCE is just there, because I copied this part of code 
+from the uboot.mk, and there there was this variable. But I agree, it is not 
+needed and I removed it.
+
+> > +BR_NO_CHECK_HASH_FOR += $(ROCKCHIP_SOURCE)
+> > +endif
+> 
+> This check should be enclosed in a:
+> 
+> ifeq ($(BR_BUILDING),y)
+> ...
+> endif
+> 
+> condition.
+
+Added, thanks!
+
+> Overall, mostly cosmetic comments that I could have solved myself, but
+> the licensing problem is much more significant and I cannot resolve it.
+
+Well, as said before, maybe we get some clarification about this in the future. 
+At least I hope so, because else this whole board support effort would probably 
+then be pointless after all :D
+
+Best regards,
+Kilian
+
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5650947855964220512==--
