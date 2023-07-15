@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69BF9C001DC
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 15:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A94CDC0015E
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 15:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06E07605BE;
-	Sat, 15 Jul 2023 15:31:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06E07605BE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31E3660776;
+	Sat, 15 Jul 2023 15:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31E3660776
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aLuJYfbissM7; Sat, 15 Jul 2023 15:31:12 +0000 (UTC)
+	with ESMTP id Vb72QLU4jBbQ; Sat, 15 Jul 2023 15:49:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7174605E0;
-	Sat, 15 Jul 2023 15:31:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7174605E0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04DCC60777;
+	Sat, 15 Jul 2023 15:49:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04DCC60777
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C05B41BF408
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 15:31:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F22EA1BF408
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 15:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 984F8410A5
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 15:31:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 984F8410A5
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB0B740948
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 15:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB0B740948
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D0Su7w_4Rx3G for <buildroot@lists.busybox.net>;
- Sat, 15 Jul 2023 15:31:08 +0000 (UTC)
+ with ESMTP id ebI6C9NwUPrH for <buildroot@lists.busybox.net>;
+ Sat, 15 Jul 2023 15:49:26 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D062A410A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0346640947
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D062A410A4
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 15:31:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0346640947
+ for <buildroot@buildroot.org>; Sat, 15 Jul 2023 15:49:25 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0896.dip0.t-ipconnect.de [91.58.8.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 02011A4C04DB;
- Sat, 15 Jul 2023 17:31:05 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34776)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3B66CA4C04DB;
+ Sat, 15 Jul 2023 17:49:23 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60116)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qKhEe-0007MS-1w;
- Sat, 15 Jul 2023 17:31:04 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qKhWM-00022u-2W;
+ Sat, 15 Jul 2023 17:49:23 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jul 2023 17:31:04 +0200
-Message-Id: <20230715153104.3020767-1-bernd@kuhls.net>
+Date: Sat, 15 Jul 2023 17:49:22 +0200
+Message-Id: <20230715154922.3711825-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1689435065;
- bh=33BpN7gGcNZFWIS6WO0iMdZMB7frdC5EggyTNh+T6Qg=;
+ s=kas202306131828; t=1689436163;
+ bh=ciBVV8WenHUY7pNrLQp/M7xnLoYAu21DGiI3mtFM/9c=;
  h=From:To:Cc:Subject:Date:From;
- b=OaouJFBD5lawxxRyOpMQEh5XuZ9XsWY3o1b6NKheX1DJTP+bUigH+VLIku/4SqAzg
- 567CAnIKmnQT/UinAivQRkyY7k58/+zGnmSGjeOnyJMmrGvDiN0GLHXEaU6ayuTPBT
- jQSRGXtxvfkreV5aROzbaesYgiifeVGhj/PTghUJihOEU+wXf8uL9fbMVxaGeckyo7
- caS8xF+qJDcH+fSsuw9392Fdii5S/hDnFvnpV7cRm77fuNfJb2sO6ZCHe2VtqQogP4
- hlBJRsuClUNMo3whCxhQZoeoK9f94hqOvb8aZm/QBLeaWk2gGrUpn3CvK53sEaNl7Q
- O1dvlfgG4IrWg==
+ b=VVbAbKVAHiXnXAA8yRjLQryOtuTIWdxqSQswayIJTO/1VidvG4MCbNvcDSzlGycNS
+ LwYKxz8J51gdqNCztWZqm24XPfSKzF+DPt3fPlyM1gdvIPahofV5Qw/mfoWpq5Rd3a
+ z5C3y1ZwH1t9Jwd3ARJOW8ZDOhJEw70Az8Px/uCCpLR8wMlyDG6tJ57vyQmEpFDT+W
+ zFMgru86+UUA15v9Zi5aNW6i4JEOX2ELT/ZQR7tA8bqqFNJucoyeaWOGtqyDpEcdhD
+ JJWECfP2moEztQFXMABDxpP1z2Dh3/poOX2Ww5+SyIDiv0r3RE8MbuKv84OCwbfM4O
+ IOqVikhgfhiow==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=OaouJFBD
-Subject: [Buildroot] [PATCH v2 20/20] package/erlang: bump version to 26.0.2
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=VVbAbKVA
+Subject: [Buildroot] [PATCH v3 20/20] package/erlang: bump version to 26.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,19 +91,35 @@ Removed all patches.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
+v3: removed patches from .checkpackageignore
 v2: added dependency to wchar
 
+ .checkpackageignore                           |  3 -
  ...truct-libatomic_ops-we-do-require-CA.patch | 70 -------------------
  ...ulator-reorder-inclued-headers-paths.patch | 46 ------------
  ...0003-crypto-Fixes-for-LibreSSL-3-5-0.patch | 30 --------
  package/erlang/Config.in                      |  6 +-
  package/erlang/erlang.hash                    |  4 +-
  package/erlang/erlang.mk                      | 13 +---
- 6 files changed, 8 insertions(+), 161 deletions(-)
+ 7 files changed, 8 insertions(+), 164 deletions(-)
  delete mode 100644 package/erlang/0001-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch
  delete mode 100644 package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch
  delete mode 100644 package/erlang/0003-crypto-Fixes-for-LibreSSL-3-5-0.patch
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a762d8e98b..ae90976e12 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -413,9 +413,6 @@ package/empty/0001-respect-LDFLAGS.patch Upstream
+ package/erlang-p1-sip/0001-correct-include.patch Upstream
+ package/erlang-p1-xmpp/0001-fix-includes.patch Upstream
+ package/erlang-rebar/0001-src-rebar_port_compiler-add-fPIC-to-LDFLAGS-by-defau.patch Upstream
+-package/erlang/0001-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch Upstream
+-package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch Upstream
+-package/erlang/0003-crypto-Fixes-for-LibreSSL-3-5-0.patch Upstream
+ package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch Upstream
+ package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch Upstream
+ package/eudev/S10udev ConsecutiveEmptyLines Indent Shellcheck Variables
 diff --git a/package/erlang/0001-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch b/package/erlang/0001-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch
 deleted file mode 100644
 index 8e401430fe..0000000000
