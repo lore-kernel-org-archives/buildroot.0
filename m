@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E96C0015E
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 19:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94146C001DC
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 19:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1E4E819D2;
-	Sat, 15 Jul 2023 19:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1E4E819D2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A252819BE;
+	Sat, 15 Jul 2023 19:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A252819BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JRtFP7hMlq4b; Sat, 15 Jul 2023 19:49:56 +0000 (UTC)
+	with ESMTP id 8RqGCx8599a0; Sat, 15 Jul 2023 19:51:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 222328175A;
-	Sat, 15 Jul 2023 19:49:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 222328175A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87F058148F;
+	Sat, 15 Jul 2023 19:51:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87F058148F
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 57F891BF2E5
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:49:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 288D81BF2E5
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 313368175A
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 313368175A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 01B798148F
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 19:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01B798148F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ysJr1d2ZedWP for <buildroot@lists.busybox.net>;
- Sat, 15 Jul 2023 19:49:53 +0000 (UTC)
+ with ESMTP id yXocnMfAbYKQ for <buildroot@lists.busybox.net>;
+ Sat, 15 Jul 2023 19:51:24 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70C768148F
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 70C768148F
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 19:49:53 +0000 (UTC)
-Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
- by shout01.mail.de (Postfix) with ESMTP id B3AA5A03D9;
- Sat, 15 Jul 2023 21:49:51 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4732780BD3
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4732780BD3
+ for <buildroot@buildroot.org>; Sat, 15 Jul 2023 19:51:24 +0000 (UTC)
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout02.mail.de (Postfix) with ESMTP id 8DA1BA014C;
+ Sat, 15 Jul 2023 21:51:22 +0200 (CEST)
 Received: from smtp03.mail.de (smtp03.bt.mail.de [10.0.121.213])
- by postfix02.mail.de (Postfix) with ESMTP id 97CF7A03C3;
- Sat, 15 Jul 2023 21:49:51 +0200 (CEST)
+ by postfix01.mail.de (Postfix) with ESMTP id 71764801AB;
+ Sat, 15 Jul 2023 21:51:22 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (No client certificate requested)
- by smtp03.mail.de (Postfix) with ESMTPSA id 38608A01B2;
- Sat, 15 Jul 2023 21:49:51 +0200 (CEST)
+ by smtp03.mail.de (Postfix) with ESMTPSA id EA282A0124;
+ Sat, 15 Jul 2023 21:51:21 +0200 (CEST)
 To: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Date: Sat, 15 Jul 2023 21:49:50 +0200
-Message-ID: <9137639.CDJkKcVGEf@kilian-aisec>
-In-Reply-To: <20230714234440.46a85e82@windsurf>
+Date: Sat, 15 Jul 2023 21:51:21 +0200
+Message-ID: <5851324.MhkbZ0Pkbq@kilian-aisec>
+In-Reply-To: <20230714234703.78d5acc9@windsurf>
 References: <20230714064413.11433-1-kilian.zinnecker@mail.de>
- <20230714064413.11433-3-kilian.zinnecker@mail.de>
- <20230714234440.46a85e82@windsurf>
+ <20230714064413.11433-4-kilian.zinnecker@mail.de>
+ <20230714234703.78d5acc9@windsurf>
 MIME-Version: 1.0
 X-purgate: clean
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
@@ -62,22 +62,24 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 710
-X-purgate-ID: 154282::1689450591-B97F8647-C5B7DD25/0/0
+X-purgate-size: 731
+X-purgate-ID: 154282::1689450682-C0B48647-FC173900/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1689450591;
- bh=YZEckPfm6Y37xUJUDXIkIOK2AQNbLPiPM5sYJyG8KdI=;
+ d=mail.de; s=mailde202009; t=1689450682;
+ bh=bLEkABs66XFRbbmayH1AuZZWdP5v5v56DhAt9Fwp5ao=;
  h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=DXPYXDn1y4uKEFh2LsdnIDdV9JS2x8Ivx32sXsmJ9p57spnXKYyQsG/pg7+RAtNDc
- kTKNo8owbHa7qP8jO9qehsRjTOcwcyyjmq0Aim+BvIytkI3y1D2NaHEQdXC3LhAczT
- HjroTwsUw7ciOuTabKkD/Lj5Q6txlU5KzyOWSQIZsR8trSK/craKfXAYtVW61QV+oA
- Y5MQuO2e9qdIFU3Enj2ImSYuzbd7NZkj13tIbKWIlL9qb10uCUY7b+py1pAXR+2cJS
- swsnuy4h3LiyfSuf4ey7fQKPeErOmsDvzxJ3x8xfXvWfyNC7gueUaXyp2hFTJtTAzw
- Gz8gHJ3w/F82A==
+ b=iiyX6tmJYWvEfEMQ8eIOEGKNboPuH/UUrj3d7KuyA8Ubz2RBYNdSGEVv3wKeVWlIO
+ PSpaIYfG6pmxIN51mpPMhAQaKrYG8BdEdUPI2xWxuXYC8kHcqK/ur2SfXjLZOQ2Q9M
+ E9MvLiV/6ORfqBopzMrzKPq8b27w6oX0uFS0GSumT/xSs21Ox99sWK9znGIxdHKtSs
+ u3UOJUV41Oh0gwwpDHLUbZxiN9De57hKloSdkB4/Av0HOYtU3/dFxbq7dQdJ4eCtEh
+ 4D+hvcJJ4qQkgXdUiXcG0RMGEbxd74tgUtnd0lmJ++M0d1v6z0R1bgRSeF8RGTArIV
+ nGHas/9jwF9tQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=DXPYXDn1
-Subject: Re: [Buildroot] [PATCH v6 2/3] configs: add rock5b/rock5b_defconfig
+ dkim=fail reason="signature verification failed" (2048-bit key)
+ header.d=mail.de header.i=@mail.de header.a=rsa-sha256 header.s=mailde202009
+ header.b=iiyX6tmJ
+Subject: Re: [Buildroot] [PATCH v6 3/3] board/radxa/rock5b: Add sdcard image
+ scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,36 +104,30 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Thomas,
 
-> The commit title should be:
+> > Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
 > 
-> 	configs/rock5b: new defconfig
+> This should be squashed in the patch adding the defconfig. Indeed
+> without this, the defconfig doesn't produce anything that can easily be
+> booted.
 
-Thanks, fixed  in v7.
+Makes sense. In v7 the files in the board directory and the defconfig are one 
+commit.
 
-> > +BR2_TARGET_GENERIC_HOSTNAME="rock5b"
-> > +BR2_TARGET_GENERIC_ISSUE="Welcome to the rock5b board"
-> > +BR2_SYSTEM_DHCP="eth0"
-> > +BR2_USE_WCHAR
+> > +rm -rf "${GENIMAGE_TMP}"
+> > +
+> > +genimage \
+> > +  --rootpath "${TARGET_DIR}" \
+> > +  --tmppath "${GENIMAGE_TMP}" \
+> > +  --inputpath "${BINARIES_DIR}" \
+> > +  --outputpath "${BINARIES_DIR}" \
+> > +  --config "${GENIMAGE_CFG}"
 > 
-> Not needed, especially since it has probably no effect.
+> Perhaps you could simply call ./support/scripts/genimage.sh directly?
 
-Thanks, also fixed in v7.
+Yes, totally right. I fixed it.
 
-> > +BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
-> > +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/linux.fragment
-> > "
-> > +BR2_PACKAGE_AVAHI=y
-> > +BR2_PACKAGE_AVAHI_DAEMON=y
-> > +BR2_PACKAGE_OPENSSH=y
-> 
-> Please drop those 3 options, we want a minimal configuration.
-
-Thanks, this one as well.
-
-Best regards,
+Thanks and best regards,
 Kilian
-
-
 
 
 _______________________________________________
